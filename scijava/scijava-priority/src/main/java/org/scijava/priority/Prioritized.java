@@ -34,7 +34,7 @@ package org.scijava.priority;
  * 
  * @author Curtis Rueden
  */
-public interface Prioritized extends Comparable<Prioritized> {
+public interface Prioritized<T extends Prioritized<T>> extends Comparable<T> {
 
 	/**
 	 * Gets the sort priority of the object.
@@ -43,17 +43,10 @@ public interface Prioritized extends Comparable<Prioritized> {
 	 */
 	double getPriority();
 
-	/**
-	 * Sets the sort priority of the object.
-	 * 
-	 * @see Priority
-	 */
-	void setPriority(double priority);
-
 	// -- Comparable methods --
 
 	@Override
-	default int compareTo(final Prioritized that) {
+	default int compareTo(final T that) {
 		if (that == null) return 1;
 
 		// compare priorities

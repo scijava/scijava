@@ -8,32 +8,19 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.discovery.Discoverer;
 import org.scijava.function.Producer;
-import org.scijava.log2.Logger;
-import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.api.OpWrapper;
 import org.scijava.ops.api.features.MatchingRoutine;
-import org.scijava.ops.engine.DefaultOpEnvironment;
-import org.scijava.ops.engine.DefaultOpHistory;
 import org.scijava.parse2.Parser;
-import org.scijava.types.DefaultTypeReifier;
-import org.scijava.types.TypeReifier;
 
 public class TherapiBasedOpTest {
 
 	protected static OpEnvironment ops;
-	protected static OpHistory history;
-	protected static Logger logger;
-	protected static TypeReifier types;
 	protected static Parser parser;
 
 	@BeforeAll
 	public static void setUp() {
-		logger = new StderrLoggerFactory().create();
-		types = new DefaultTypeReifier(logger, Discoverer.using(
-			ServiceLoader::load));
 		parser = ServiceLoader.load(Parser.class).findFirst().get();
 		ops = barebonesEnvironment();
 		ops.registerInfosFrom(new TherapiBasedOpTest());
@@ -43,11 +30,9 @@ public class TherapiBasedOpTest {
 	@AfterAll
 	public static void tearDown() {
 		ops = null;
-		logger = null;
 	}
 
 	protected static OpEnvironment barebonesEnvironment()
-
 	{
 		// register needed classes in StaticDiscoverer
 		Discoverer d2 = Discoverer.using(ServiceLoader::load).onlyFor( //
@@ -55,10 +40,8 @@ public class TherapiBasedOpTest {
 				MatchingRoutine.class, //
 				OpInfoGenerator.class //
 		);
-
-		history = new DefaultOpHistory();
-		// return Op Environment
-		return new DefaultOpEnvironment(types, logger, history, d2);
+		ops = OpEnvironment.getEnvironment(d2);
+		return ops;
 	}
 
 	private static final String FIELD_STRING = "This OpField is discoverable using Therapi!";

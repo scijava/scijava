@@ -3,4 +3,4 @@
 org.scijava.ops.engine.impl.OpClassOpInfoGenerator
 org.scijava.ops.engine.impl.OpCollectionInfoGenerator
 org.scijava.ops.engine.impl.TherapiOpInfoGenerator
-org.scijava.ops.engine.reduce.ReducedOpInfoGenerator
+org.scijava.ops.engine.matcher.reduce.ReducedOpInfoGenerator

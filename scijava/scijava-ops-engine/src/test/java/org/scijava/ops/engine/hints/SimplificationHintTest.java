@@ -11,9 +11,9 @@ import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.engine.conversionLoss.impl.IdentityLossReporter;
-import org.scijava.ops.engine.simplify.PrimitiveArraySimplifiers;
-import org.scijava.ops.engine.simplify.PrimitiveSimplifiers;
+import org.scijava.ops.engine.matcher.simplify.IdentityLossReporter;
+import org.scijava.ops.engine.matcher.simplify.PrimitiveArraySimplifiers;
+import org.scijava.ops.engine.matcher.simplify.PrimitiveSimplifiers;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 

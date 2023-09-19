@@ -2,6 +2,11 @@
 package org.scijava.ops.api;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.ServiceLoader;
+
+import org.scijava.discovery.Discoverer;
+import org.scijava.priority.Prioritized;
 
 /**
  * Log describing each execution of an Op. This class is designed to answer two
@@ -21,7 +26,17 @@ import java.util.List;
  *
  * @author Gabe Selzer
  */
-public interface OpHistory {
+public interface OpHistory extends Prioritized<OpHistory> {
+
+	static OpHistory getOpHistory() {
+		Optional<OpHistory> historyOptional = Discoverer //
+				.using(ServiceLoader::load) //
+				.discoverMax(OpHistory.class);
+		if (historyOptional.isEmpty()){
+			throw new RuntimeException("No OpEnvironment provided!");
+		}
+		return historyOptional.get();
+	}
 
 	// -- USER API -- //
 

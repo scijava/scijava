@@ -13,7 +13,7 @@ Variables:
 
 from scyjava import jimport
 from types import MethodType
-env=jimport('org.scijava.ops.engine.DefaultOpEnvironment')()
+env=jimport('org.scijava.ops.engine.impl.DefaultOpEnvironment')()
 
 op_names={str(name) for info in env.infos() for name in info.names()}
 

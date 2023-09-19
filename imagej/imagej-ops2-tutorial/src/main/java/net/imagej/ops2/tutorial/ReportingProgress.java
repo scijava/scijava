@@ -5,12 +5,10 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.engine.DefaultOpEnvironment;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.progress.Progress;
 import org.scijava.progress.ProgressListener;
-import org.scijava.progress.Task;
 import org.scijava.types.Nil;
 
 /**
@@ -87,7 +85,7 @@ public class ReportingProgress implements OpCollection {
 	};
 
 	public static void main(String... args) {
-		OpEnvironment ops = new DefaultOpEnvironment();
+		OpEnvironment ops = OpEnvironment.getEnvironment();
 
 		// ProgressListeners consume task updates.
 		// This ProgressListener simply prints out the status of the Op

@@ -3,17 +3,17 @@ package net.imagej.ops2.tutorial;
 
 import java.util.function.BiFunction;
 
+import org.scijava.function.Computers;
+import org.scijava.function.Inplaces;
+import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpClass;
+import org.scijava.types.Nil;
+
 import net.imglib2.Interval;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.type.logic.BitType;
-import org.scijava.function.Computers;
-import org.scijava.function.Inplaces;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.engine.DefaultOpEnvironment;
-import org.scijava.ops.spi.Op;
-import org.scijava.ops.spi.OpClass;
-import org.scijava.types.Nil;
 
 /**
  * A tutorial describing the major flavors of Ops
@@ -29,7 +29,7 @@ public class OpTypes {
 		
 		We will showcase each of the types below.
 		 */
-		OpEnvironment ops = new DefaultOpEnvironment();
+		OpEnvironment ops = OpEnvironment.getEnvironment();
 
 		/**
 		 * The most basic category of Ops are Functions.

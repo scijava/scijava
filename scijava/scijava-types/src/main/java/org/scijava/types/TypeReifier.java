@@ -1,7 +1,5 @@
 package org.scijava.types;
 
-import com.google.common.reflect.TypeToken;
-
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -12,6 +10,8 @@ import java.util.Optional;
 
 import org.scijava.log2.Logger;
 import org.scijava.types.extractors.IterableTypeExtractor;
+
+import com.google.common.reflect.TypeToken;
 
 public interface TypeReifier {
 

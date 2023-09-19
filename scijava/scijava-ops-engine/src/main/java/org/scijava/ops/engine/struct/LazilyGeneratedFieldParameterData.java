@@ -1,10 +1,6 @@
 
 package org.scijava.ops.engine.struct;
 
-import com.github.therapi.runtimejavadoc.FieldJavadoc;
-import com.github.therapi.runtimejavadoc.OtherJavadoc;
-import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -16,9 +12,12 @@ import java.util.stream.Collectors;
 import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.function.Producer;
 import org.scijava.ops.engine.OpUtils;
-import org.scijava.ops.engine.reduce.ReductionUtils;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.types.inference.InterfaceInference;
+
+import com.github.therapi.runtimejavadoc.FieldJavadoc;
+import com.github.therapi.runtimejavadoc.OtherJavadoc;
+import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
 
 /**
  * Lazily generates the parameter data for a {@link List} of
@@ -224,27 +223,27 @@ public class LazilyGeneratedFieldParameterData implements ParameterData {
 		catch (IllegalArgumentException | IllegalAccessException exc) {
 			// TODO Auto-generated catch block
 			problems.add(new ValidityProblem(exc));
-			return ReductionUtils.generateAllRequiredArray(opParams);
+			return FunctionalParameters.generateAllRequiredArray(opParams);
 		}
-		List<Method> fMethodsWithOptionals = ReductionUtils.fMethodsWithOptional(fieldClass);
+		List<Method> fMethodsWithOptionals = FunctionalParameters.fMethodsWithOptional(fieldClass);
 		Class<?> fIface = OpUtils.findFunctionalInterface(fieldClass);
-		List<Method> fIfaceMethodsWithOptionals = ReductionUtils.fMethodsWithOptional(fIface);
+		List<Method> fIfaceMethodsWithOptionals = FunctionalParameters.fMethodsWithOptional(fIface);
 
 		if (fMethodsWithOptionals.isEmpty() && fIfaceMethodsWithOptionals.isEmpty()) {
-			return ReductionUtils.generateAllRequiredArray(opParams);
+			return FunctionalParameters.generateAllRequiredArray(opParams);
 		}
 		if (!fMethodsWithOptionals.isEmpty() && !fIfaceMethodsWithOptionals.isEmpty()) {
 			problems.add(new ValidityProblem(
 					"Multiple methods from the op type have optional parameters!"));
-			return ReductionUtils.generateAllRequiredArray(opParams);
+			return FunctionalParameters.generateAllRequiredArray(opParams);
 		}
 		if (fMethodsWithOptionals.isEmpty()) {
-			return ReductionUtils.findParameterOptionality(fIfaceMethodsWithOptionals.get(0));
+			return FunctionalParameters.findParameterOptionality(fIfaceMethodsWithOptionals.get(0));
 		}
 		if (fIfaceMethodsWithOptionals.isEmpty()) {
-			return ReductionUtils.findParameterOptionality(fMethodsWithOptionals.get(0));
+			return FunctionalParameters.findParameterOptionality(fMethodsWithOptionals.get(0));
 		}
-		return ReductionUtils.generateAllRequiredArray(opParams);
+		return FunctionalParameters.generateAllRequiredArray(opParams);
 	}
 
 

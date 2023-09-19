@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 
 import org.scijava.discovery.Discoverer;
 import org.scijava.log2.Logger;
-import org.scijava.types.extractors.IterableTypeExtractor;
 
 public class DefaultTypeReifier implements TypeReifier {
 
@@ -93,17 +92,17 @@ public class DefaultTypeReifier implements TypeReifier {
 	 * specific sorts of objects.
 	 * </p>
 	 * <p>
-	 * For example, {@link IterableTypeExtractor} knows how to guess a {@code T}
-	 * for any {@code Iterable<T>} by examining the type of the elements in its
-	 * iteration. (Of course, this may be inaccurate if the elements in the
-	 * iteration are heterogeneously typed, but for many use cases this guess is
-	 * better than nothing.)
+	 * For example, {@link org.scijava.types.extractors.IterableTypeExtractor}
+	 * knows how to guess a {@code T} for any {@code Iterable<T>} by examining the
+	 * type of the elements in its iteration. (Of course, this may be inaccurate
+	 * if the elements in the iteration are heterogeneously typed, but for many
+	 * use cases this guess is better than nothing.)
 	 * </p>
 	 * <p>
 	 * In this way, the behavior of the generic type extraction is fully
 	 * extensible, since additional {@link TypeExtractor} plugins can always be
-	 * introduced which extract types more intelligently in cases where more
-	 * <em>a priori</em> knowledge about that type is available at runtime.
+	 * introduced which extract types more intelligently in cases where more <em>a
+	 * priori</em> knowledge about that type is available at runtime.
 	 * </p>
 	 */
 	@Override
@@ -145,5 +144,4 @@ public class DefaultTypeReifier implements TypeReifier {
 		}
 		return c;
 	}
-
 }

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.engine.DefaultOpEnvironment;
 import org.scijava.types.Nil;
 
 import net.imglib2.img.Img;
@@ -25,7 +24,7 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 public class ParallelComputation {
 
 	public static void main(String... args) {
-		OpEnvironment ops = new DefaultOpEnvironment();
+		OpEnvironment ops = OpEnvironment.getEnvironment();
 		// To compute tasks using Parallelization, we must first gather a list of
 		// parameters.
 		List<Double> fillValues = Arrays.asList(1.0, 2.0, 3.0, 4.0);

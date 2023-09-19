@@ -3,7 +3,6 @@ package net.imagej.ops2.tutorial;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.engine.DefaultOpEnvironment;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpMethod;
 
@@ -60,7 +59,7 @@ public class OpParallelization implements OpCollection {
 	}
 
 	public static void main(String... args) {
-		OpEnvironment ops = new DefaultOpEnvironment();
+		OpEnvironment ops = OpEnvironment.getEnvironment();
 
 		// First, we show parallelization at work for our per-pixel Op.
 		// SciJava Ops understands how to apply that Op to each pixel of the input

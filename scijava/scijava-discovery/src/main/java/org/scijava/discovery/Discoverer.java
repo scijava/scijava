@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
 import java.util.function.Function;
@@ -171,5 +173,32 @@ public interface Discoverer {
 				return d.discover(c);
 			}
 		};
+	}
+	/**
+	 * Finds the maximum implementation of any {@link Comparable} {@code c}.
+	 *
+	 * @param c the {@link Class}, extending {@link Comparable} that the returned
+	 *          implementation <b>must</b> implement
+	 * @param <U> the {@link Type} of {@code c}
+	 * @return the maximum implementation of {@code c}
+	 */
+	default <U extends Comparable<U>> Optional<U> discoverMax(Class<U> c) {
+		List<U> discoveries = discover(c);
+		// NB: natural order sorts in ascending order
+		return discoveries.stream().max(Comparator.naturalOrder());
+	}
+
+	/**
+	 * Finds the minimum implementation of any {@link Comparable} {@code c}.
+	 *
+	 * @param c the {@link Class}, extending {@link Comparable} that the returned
+	 *          implementation <b>must</b> implement
+	 * @param <U> the {@link Type} of {@code c}
+	 * @return the minimum implementation of {@code c}
+	 */
+	default <U extends Comparable<U>> Optional<U> discoverMin(Class<U> c) {
+		List<U> discoveries = discover(c);
+		// NB: natural order sorts in ascending order
+		return discoveries.stream().min(Comparator.naturalOrder());
 	}
 }

@@ -34,8 +34,7 @@ package org.scijava.priority;
  * 
  * @author Johannes Schindelin
  * @author Curtis Rueden
- * @see org.scijava.Prioritized#getPriority()
- * @see org.scijava.plugin.Plugin#priority()
+ * @see org.scijava.priority.Prioritized#getPriority()
  */
 public final class Priority {
 
@@ -100,7 +99,7 @@ public final class Priority {
 	 *         have the same priority.
 	 * @see org.scijava.util.ClassUtils#compare(Class, Class)
 	 */
-	public static int compare(final Prioritized p1, final Prioritized p2) {
+	public static <T extends Prioritized<T>> int compare(final Prioritized<T> p1, final Prioritized<T> p2) {
 		final double priority1 =
 			p1 == null ? Double.NEGATIVE_INFINITY : p1.getPriority();
 		final double priority2 =
@@ -110,48 +109,4 @@ public final class Priority {
 		// rather than the typical natural ordering of smaller values first.
 		return priority1 > priority2 ? -1 : 1;
 	}
-
-	/**
-	 * Injects the specified priority into the given object. Note that this is
-	 * only possible if the given object implements the {@link Prioritized}
-	 * interface.
-	 * 
-	 * @param o The object to which the priority should be assigned.
-	 * @return true If the priority was successfully injected.
-	 */
-	public static boolean inject(final Object o, final double priority) {
-		if (!(o instanceof Prioritized)) return false;
-		((Prioritized) o).setPriority(priority);
-		return true;
-	}
-
-	// -- Deprecated --
-
-	/** @deprecated Use {@link #FIRST} instead. */
-	@Deprecated
-	public static final double FIRST_PRIORITY = Double.POSITIVE_INFINITY;
-
-	/** @deprecated Use {@link #VERY_HIGH} instead. */
-	@Deprecated
-	public static final double VERY_HIGH_PRIORITY = +10000;
-
-	/** @deprecated Use {@link #HIGH} instead. */
-	@Deprecated
-	public static final double HIGH_PRIORITY = +100;
-
-	/** @deprecated Use {@link #NORMAL} instead. */
-	@Deprecated
-	public static final double NORMAL_PRIORITY = 0;
-
-	/** @deprecated Use {@link #LOW} instead. */
-	@Deprecated
-	public static final double LOW_PRIORITY = -100;
-
-	/** @deprecated Use {@link #VERY_LOW} instead. */
-	@Deprecated
-	public static final double VERY_LOW_PRIORITY = -10000;
-
-	/** @deprecated Use {@link #LAST} instead. */
-	@Deprecated
-	public static final double LAST_PRIORITY = Double.NEGATIVE_INFINITY;
 }

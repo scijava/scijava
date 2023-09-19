@@ -31,8 +31,12 @@ package org.scijava.ops.api;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Optional;
+import java.util.ServiceLoader;
 import java.util.Set;
 
+import org.scijava.discovery.Discoverer;
+import org.scijava.priority.Prioritized;
 import org.scijava.types.Nil;
 
 /**
@@ -57,7 +61,28 @@ import org.scijava.types.Nil;
  * @author Curtis Rueden
  * @author Gabriel Selzer
  */
-public interface OpEnvironment {
+public interface OpEnvironment extends Prioritized<OpEnvironment> {
+
+	static OpEnvironment getBareEnvironment() {
+		Optional<OpEnvironment> opsOptional = Discoverer //
+				.using(ServiceLoader::load) //
+				.discoverMax(OpEnvironment.class);
+		return opsOptional.orElseThrow( //
+				() -> new RuntimeException("No OpEnvironment Provided!") //
+		);
+	}
+
+	static OpEnvironment getEnvironment() {
+		OpEnvironment ops = getBareEnvironment();
+		ops.discoverEverything();
+		return ops;
+	}
+
+	static OpEnvironment getEnvironment(Discoverer... discoverers) {
+		OpEnvironment ops = getBareEnvironment();
+		ops.discoverUsing(discoverers);
+		return ops;
+	}
 
 	/** The available ops for this environment. */
 	List<OpInfo> infos();
@@ -67,6 +92,12 @@ public interface OpEnvironment {
 	List<OpInfo> infos(Hints hints);
 
 	List<OpInfo> infos(String name, Hints hints);
+
+	void discoverUsing(Discoverer... d);
+
+	void discoverEverything();
+
+	OpHistory history();
 
 	// TODO: Add interface method: OpInfo info(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType);
 

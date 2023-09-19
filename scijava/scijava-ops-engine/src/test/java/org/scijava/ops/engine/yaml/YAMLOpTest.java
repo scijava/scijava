@@ -13,7 +13,7 @@ import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.api.OpWrapper;
 import org.scijava.ops.api.features.MatchingRoutine;
-import org.scijava.ops.engine.DefaultOpEnvironment;
+import org.scijava.ops.engine.impl.DefaultOpEnvironment;
 
 /**
  * Tests discovery via YAML metadata.

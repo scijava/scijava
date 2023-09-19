@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 
 import org.scijava.function.Functions;
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.engine.DefaultOpEnvironment;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpMethod;
 import org.scijava.ops.spi.Optional;
@@ -65,7 +64,7 @@ public class OpReduction implements OpCollection {
 
 	public static void main(String... args) {
 		// Create the OpEnvironment
-		OpEnvironment ops = new DefaultOpEnvironment();
+		OpEnvironment ops = OpEnvironment.getEnvironment();
 
 		// Define some data
 		Double first = 1.;

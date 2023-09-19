@@ -42,26 +42,19 @@ import org.junit.jupiter.api.Test;
 import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.ManualDiscoverer;
 import org.scijava.function.Producer;
-import org.scijava.log2.Logger;
-import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.ops.api.InfoChainGenerator;
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.api.OpWrapper;
 import org.scijava.ops.api.features.MatchingConditions;
 import org.scijava.ops.api.features.MatchingRoutine;
-import org.scijava.ops.engine.DefaultOpEnvironment;
-import org.scijava.ops.engine.DefaultOpHistory;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpField;
-import org.scijava.types.DefaultTypeReifier;
 import org.scijava.types.Nil;
-import org.scijava.types.TypeReifier;
 
 public class OpCachingTest implements OpCollection {
 
@@ -69,11 +62,6 @@ public class OpCachingTest implements OpCollection {
 
 	@BeforeEach
 	public void setUp() {
-		Logger logger = new StderrLoggerFactory().create();
-		TypeReifier types = new DefaultTypeReifier(logger, Discoverer.using(
-			ServiceLoader::load));
-		OpHistory history = new DefaultOpHistory();
-
 		Discoverer serviceLoading = Discoverer.using(ServiceLoader::load) //
 				.onlyFor( //
 						OpWrapper.class, //
@@ -86,8 +74,7 @@ public class OpCachingTest implements OpCollection {
 		discoverer.register(new OpCachingTest());
 		discoverer.register(new ComplicatedOp());
 
-		// return Op Environment
-		ops = new DefaultOpEnvironment(types, logger, history, serviceLoading, discoverer);
+		ops = OpEnvironment.getEnvironment(serviceLoading, discoverer);
 	}
 
 	/**

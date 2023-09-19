@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 import java.util.function.BiFunction;
 
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.engine.DefaultOpEnvironment;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpMethod;
@@ -53,7 +52,7 @@ public class WritingOpCollections implements OpCollection {
 	}
 
 	public static void main(String... args){
-		OpEnvironment ops = new DefaultOpEnvironment();
+		OpEnvironment ops = OpEnvironment.getEnvironment();
 
 		Double result = ops.binary("test.opField.power") //
 				.input(2.0, 10.0) //

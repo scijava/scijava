@@ -1,25 +1,15 @@
 package net.imagej.ops2.tutorial;
 
-import io.scif.img.ImgOpener;
-import io.scif.img.SCIFIOImgPlus;
-import net.imglib2.IterableInterval;
-import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.algorithm.neighborhood.RectangleNeighborhoodFactory;
-import net.imglib2.algorithm.neighborhood.RectangleShape;
-import net.imglib2.algorithm.neighborhood.Shape;
-import net.imglib2.img.Img;
-import net.imglib2.img.array.ArrayImg;
-import net.imglib2.outofbounds.OutOfBoundsBorderFactory;
-import net.imglib2.outofbounds.OutOfBoundsFactory;
-import net.imglib2.type.numeric.integer.ByteType;
-import net.imglib2.type.numeric.integer.IntType;
-import net.imglib2.type.numeric.integer.UnsignedByteType;
 import org.scijava.Context;
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.engine.DefaultOpEnvironment;
 import org.scijava.types.Nil;
 
-import java.util.Random;
+import io.scif.img.ImgOpener;
+import net.imglib2.algorithm.neighborhood.RectangleShape;
+import net.imglib2.img.Img;
+import net.imglib2.outofbounds.OutOfBoundsBorderFactory;
+import net.imglib2.type.numeric.integer.IntType;
+import net.imglib2.type.numeric.integer.UnsignedByteType;
 
 public class OpsIntro {
 
@@ -48,11 +38,11 @@ public class OpsIntro {
 		/*
 		The OpEnvironment is the core of ImageJ Ops2. It is a collection of Ops,
 		along with API for accessing Ops, adding new Ops, and other utilities.
-
-		The DefaultOpEnvironment is the recommended OpEnvironment for beginners,
-		and can be created using the line below:
+		
+		The easiest way to obtain an OpEnvironment is to use the following static
+		method.
 		*/
-		OpEnvironment ops = new DefaultOpEnvironment();
+		OpEnvironment ops = OpEnvironment.getEnvironment();
 
 		/*
 		OpEnvironments contain Ops, and there are a lot of them.

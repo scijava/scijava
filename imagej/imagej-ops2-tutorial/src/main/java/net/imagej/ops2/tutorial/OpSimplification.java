@@ -5,7 +5,6 @@ import java.lang.reflect.Field;
 import java.util.function.BiFunction;
 
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.engine.DefaultOpEnvironment;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 
@@ -43,7 +42,7 @@ public class OpSimplification implements OpCollection {
 
 	public static void main(String... args) {
 		// Create the OpEnvironment
-		OpEnvironment ops = new DefaultOpEnvironment();
+		OpEnvironment ops = OpEnvironment.getEnvironment();
 		// Call the Op on some inputs
 		Integer first = 1;
 		Integer second = 2;

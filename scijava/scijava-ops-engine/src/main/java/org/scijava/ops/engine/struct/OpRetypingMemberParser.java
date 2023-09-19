@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.scijava.ops.engine.simplify.SimplifiedOpInfo;
+import org.scijava.ops.engine.matcher.simplify.SimplifiedOpInfo;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;

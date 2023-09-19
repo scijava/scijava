@@ -179,12 +179,7 @@ public class ShuffledView<T> extends AbstractInterval implements
 		}
 
 		@Override
-		public Sampler<T> copy() {
-			throw new UnsupportedOperationException();
-		}
-
-		@Override
-		public RandomAccess<T> copyRandomAccess() {
+		public ShuffledRandomAccess copy() {
 			throw new UnsupportedOperationException();
 		}
 	}

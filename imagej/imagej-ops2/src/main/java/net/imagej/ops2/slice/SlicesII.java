@@ -202,11 +202,6 @@ public class SlicesII<T> extends AbstractInterval implements IterableInterval<Ra
 		}
 
 		@Override
-		public Sampler<RandomAccessibleInterval<T>> copy() {
-			return copyCursor();
-		}
-
-		@Override
 		public RandomAccessibleInterval<T> next() {
 			fwd();
 			return get();
@@ -218,9 +213,8 @@ public class SlicesII<T> extends AbstractInterval implements IterableInterval<Ra
 		}
 
 		@Override
-		public Cursor<RandomAccessibleInterval<T>> copyCursor() {
+		public SlicesIICursor copy() {
 			return new SlicesIICursor(this);
 		}
 	}
-
 }

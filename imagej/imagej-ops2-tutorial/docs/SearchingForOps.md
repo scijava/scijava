@@ -5,46 +5,42 @@ As the `OpEnvironment` is fully extensible, different `OpEnvironment`s might con
 Users can query the `OpEnvironment` for Ops matching a given name using the method `OpEnvironment.descriptions(String)`. The following SciJava script queries an `OpEnvironment` for all Ops matching the name `filter.gauss`:
 
 ```groovy
-import org.scijava.ops.engine.DefaultOpEnvironment
-ops = new DefaultOpEnvironment()
+import org.scijava.ops.api.OpEnvironment
+ops = OpEnvironment.getEnvironment()
 
 print(ops.descriptions("filter.gauss"))
 ```
 This script yields the following printout:
 ```groovy
 [filter.gauss(
-	 Inputs:
-		net.imglib2.RandomAccessibleInterval<T> input1
-		java.util.concurrent.ExecutorService input2
-		double[] input3
-		net.imglib2.outofbounds.OutOfBoundsFactory<T, net.imglib2.RandomAccessibleInterval<T>> input4?
-	 Containers (I/O):
-		net.imglib2.RandomAccessibleInterval<T> container1
+        Inputs:
+                net.imglib2.RandomAccessibleInterval<I> input1
+        double[] input2
+                net.imglib2.outofbounds.OutOfBoundsFactory<I, net.imglib2.RandomAccessibleInterval<I>> input3?
+        Containers (I/O):
+        net.imglib2.RandomAccessibleInterval<O> container1
 )
-, filter.gauss(
-	 Inputs:
-		net.imglib2.RandomAccessibleInterval<T> input1
-		java.util.concurrent.ExecutorService input2
-		double[] input3
-	 Containers (I/O):
-		net.imglib2.RandomAccessibleInterval<T> container1
+ , filter.gauss(
+        Inputs:
+                net.imglib2.RandomAccessibleInterval<I> input1
+        double[] input2
+                Containers (I/O):
+        net.imglib2.RandomAccessibleInterval<O> container1
 )
-, filter.gauss(
-	 Inputs:
-		net.imglib2.RandomAccessibleInterval<T> input1
-		java.util.concurrent.ExecutorService input2
-		java.lang.Double input3
-		net.imglib2.outofbounds.OutOfBoundsFactory<T, net.imglib2.RandomAccessibleInterval<T>> input4?
-	 Containers (I/O):
-		net.imglib2.RandomAccessibleInterval<T> container1
+ , filter.gauss(
+        Inputs:
+                net.imglib2.RandomAccessibleInterval<I> input1
+        java.lang.Double input2
+                net.imglib2.outofbounds.OutOfBoundsFactory<I, net.imglib2.RandomAccessibleInterval<I>> input3?
+        Containers (I/O):
+        net.imglib2.RandomAccessibleInterval<O> container1
 )
-, filter.gauss(
-	 Inputs:
-		net.imglib2.RandomAccessibleInterval<T> input1
-		java.util.concurrent.ExecutorService input2
-		java.lang.Double input3
-	 Containers (I/O):
-		net.imglib2.RandomAccessibleInterval<T> container1
+ , filter.gauss(
+        Inputs:
+                net.imglib2.RandomAccessibleInterval<I> input1
+        java.lang.Double input2
+                Containers (I/O):
+        net.imglib2.RandomAccessibleInterval<O> container1
 )
 ]
 ```

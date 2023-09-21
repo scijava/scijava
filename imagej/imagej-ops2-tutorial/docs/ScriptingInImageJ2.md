@@ -7,9 +7,8 @@ Using SciJava Ops and ImageJ Ops2 within scripts provide the most powerful aspec
 To run Ops, scripts must first create an `OpEnvironment`. The following line will create a new `OpEnvironment` containing all Ops available in the environment:
 
 ```groovy
-import org.scijava.ops.engine.DefaultOpEnvironment
-
-ops = new DefaultOpEnvironment()
+import org.scijava.ops.api.OpEnvironment
+ops = OpEnvironment.getEnvironment()
 ```
 
 ## Obtaining inputs
@@ -28,7 +27,7 @@ For more information on SciJava scripting parameters, please visit [this page](h
 
 The OpBuilder syntax should be used to retrieve and execute Ops from the `OpEnvironment`. The following line executes a Gaussian Blur on an input image using a `filter.gauss` Op:
 ```groovy
-out = ops.op("filter.gauss").arity3().input(imgInput, ts.getExecutorService(), new Double(3.0)).apply()
+out = ops.op("filter.gauss").arity2().input(imgInput, new Double(3.0)).apply()
 ```
 
 ## Putting it all together
@@ -41,9 +40,9 @@ The below script can be pasted into the Script Editor. **Ensure that the Script 
 #@output Img out
 
 // Obtain an OpEnvironment
-import org.scijava.ops.engine.DefaultOpEnvironment
-ops = new DefaultOpEnvironment()
+import org.scijava.ops.api.OpEnvironment
+ops = OpEnvironment.getEnvironment()
 
 // Call some Ops!
-out = ops.op("filter.gauss").arity3().input(imgInput, ts.getExecutorService(), new Double(3.0)).apply()
+out = ops.op("filter.gauss").arity2().input(imgInput, new Double(3.0)).apply()
 ```

@@ -65,13 +65,7 @@ import net.imglib2.util.Intervals;
 import org.scijava.common3.MersenneTwisterFast;
 
 public class TestImgGeneration {
-
-	private static int seed;
-	
-	private static int pseudoRandom() {
-		return seed = 3170425 * seed + 132102;
-	}
-
+	private static int SEED = 17;
 	public static ArrayImg<BitType, LongArray> bitArray(
 		final boolean fill, final long... dims)
 	{
@@ -152,10 +146,8 @@ public class TestImgGeneration {
 			dims))];
 
 		if (fill) {
-			seed = 17;
-			for (int i = 0; i < array.length; i++) {
-				array[i] = (byte) pseudoRandom();
-			}
+			Random r = new Random(SEED);
+			r.nextBytes(array);
 		}
 
 		return ArrayImgs.bytes(array, dims);
@@ -168,10 +160,8 @@ public class TestImgGeneration {
 			dims))];
 
 		if (fill) {
-			seed = 17;
-			for (int i = 0; i < array.length; i++) {
-				array[i] = (byte) pseudoRandom();
-			}
+			Random r = new Random(SEED);
+			r.nextBytes(array);
 		}
 
 		return ArrayImgs.unsignedBytes(array, dims);
@@ -184,9 +174,9 @@ public class TestImgGeneration {
 			dims))];
 
 		if (fill) {
-			seed = 17;
+			Random r = new Random(SEED);
 			for (int i = 0; i < array.length; i++) {
-				array[i] = pseudoRandom() / Integer.MAX_VALUE;
+				array[i] = r.nextInt();
 			}
 		}
 
@@ -200,9 +190,9 @@ public class TestImgGeneration {
 			dims))];
 
 		if (fill) {
-			seed = 17;
+			Random r = new Random(SEED);
 			for (int i = 0; i < array.length; i++) {
-				array[i] = pseudoRandom() / Integer.MAX_VALUE;
+				array[i] = r.nextInt();
 			}
 		}
 
@@ -215,9 +205,10 @@ public class TestImgGeneration {
 		final CellImg<ByteType, ?> img = new CellImgFactory<>(new ByteType()).create(dims);
 
 		if (fill) {
+			Random r = new Random(SEED);
 			final Cursor<ByteType> c = img.cursor();
 			while (c.hasNext())
-				c.next().set((byte) pseudoRandom());
+				c.next().set((byte) r.nextInt());
 		}
 
 		return img;
@@ -229,9 +220,10 @@ public class TestImgGeneration {
 		final CellImg<ByteType, ?> img = new CellImgFactory<>(new ByteType(), cellDims).create(dims);
 
 		if (fill) {
+			Random r = new Random(SEED);
 			final Cursor<ByteType> c = img.cursor();
 			while (c.hasNext())
-				c.next().set((byte) pseudoRandom());
+				c.next().set((byte) r.nextInt());
 		}
 
 		return img;
@@ -244,9 +236,9 @@ public class TestImgGeneration {
 			new FinalInterval(dims))];
 
 		if (fill) {
-			seed = 17;
+			Random r = new Random(SEED);
 			for (int i = 0; i < array.length; i++) {
-				array[i] = (double) pseudoRandom() / (double) Integer.MAX_VALUE;
+				array[i] = r.nextDouble();
 			}
 		}
 
@@ -260,9 +252,9 @@ public class TestImgGeneration {
 			dims))];
 
 		if (fill) {
-			seed = 17;
+			Random r = new Random(SEED);
 			for (int i = 0; i < array.length; i++) {
-				array[i] = pseudoRandom() / Integer.MAX_VALUE;
+				array[i] = r.nextLong();
 			}
 		}
 
@@ -276,9 +268,9 @@ public class TestImgGeneration {
 			dims))];
 
 		if (fill) {
-			seed = 17;
+			Random r = new Random(SEED);
 			for (int i = 0; i < array.length; i++) {
-				array[i] = pseudoRandom() / Integer.MAX_VALUE;
+				array[i] = r.nextLong();
 			}
 		}
 
@@ -292,9 +284,9 @@ public class TestImgGeneration {
 			new FinalInterval(dims))];
 
 		if (fill) {
-			seed = 17;
+			Random r = new Random(SEED);
 			for (int i = 0; i < array.length; i++) {
-				array[i] = (short) (pseudoRandom() / Integer.MAX_VALUE);
+				array[i] = (short) r.nextInt();
 			}
 		}
 
@@ -308,9 +300,9 @@ public class TestImgGeneration {
 			new FinalInterval(dims))];
 
 		if (fill) {
-			seed = 17;
+			Random r = new Random(SEED);
 			for (int i = 0; i < array.length; i++) {
-				array[i] = (short) (pseudoRandom() / Integer.MAX_VALUE);
+				array[i] = (short) r.nextInt();
 			}
 		}
 
@@ -325,9 +317,9 @@ public class TestImgGeneration {
 			dims))];
 
 		if (fill) {
-			seed = 17;
+			Random r = new Random(SEED);
 			for (int i = 0; i < array.length; i++) {
-				array[i] = (long) (pseudoRandom() / Integer.MAX_VALUE % Math.pow(2, nbits)) ;
+				array[i] = (long) (r.nextInt() % Math.pow(2, nbits)) ;
 			}
 		}
 
@@ -384,9 +376,9 @@ public class TestImgGeneration {
 			new FinalInterval(dims))];
 
 		if (fill) {
-			seed = 17;
+			Random r = new Random(SEED);
 			for (int i = 0; i < array.length; i++) {
-				array[i] = (float) pseudoRandom() / (float) Integer.MAX_VALUE;
+				array[i] = (float) r.nextFloat();
 			}
 		}
 

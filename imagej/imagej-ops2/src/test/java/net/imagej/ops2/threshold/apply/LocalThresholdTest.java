@@ -352,7 +352,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 		opToTest.compute(in, new RectangleShape(1, false),
 				new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(Boundary.SINGLE), out);
 
-		assertEquals(false, out.firstElement().get());
+		assertEquals(true, out.firstElement().get());
 	}
 
 	/**
@@ -410,7 +410,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 		opToTest.compute(in, new RectangleShape(1, false),
 				new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(Boundary.SINGLE), out);
 
-		assertEquals(false, out.firstElement().get());
+		assertEquals(true, out.firstElement().get());
 	}
 
 	/**
@@ -589,7 +589,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 		opToTest.compute(in, new RectangleShape(1, false),
 				new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(Boundary.SINGLE), out);
 
-		assertEquals(false, out.firstElement().get());
+		assertEquals(true, out.firstElement().get());
 	}
 
 	/**
@@ -671,7 +671,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 		opToTest.compute(in, new RectangleShape(1, false),
 				new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(Boundary.SINGLE), out);
 
-		assertEquals(false, out.firstElement().get());
+		assertEquals(true, out.firstElement().get());
 	}
 
 	/**
@@ -690,7 +690,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 		opToTest.compute(in, new RectangleShape(1, false),
 				new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(Boundary.SINGLE), out);
 
-		assertEquals(false, out.firstElement().get());
+		assertEquals(true, out.firstElement().get());
 	}
 
 	/**
@@ -774,7 +774,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 		opToTest.compute(in, new RectangleShape(1, false),
 				new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(Boundary.SINGLE), out);
 
-		assertEquals(false, out.firstElement().get());
+		assertEquals(true, out.firstElement().get());
 	}
 
 	/**
@@ -797,7 +797,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 
 		opToTest.compute(in, new RectangleShape(2, false), out);
 
-		assertEquals(false, out.firstElement().get());
+		assertEquals(true, out.firstElement().get());
 	}
 
 	// /**
@@ -858,7 +858,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 		opToTest.compute(in, new RectangleShape(1, false),
 				new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(Boundary.SINGLE), out);
 
-		assertEquals(false, out.firstElement().get());
+		assertEquals(true, out.firstElement().get());
 	}
 
 	/**
@@ -877,7 +877,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 		opToTest.compute(in, new RectangleShape(1, false),
 				new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(Boundary.SINGLE), out);
 
-		assertEquals(false, out.firstElement().get());
+		assertEquals(true, out.firstElement().get());
 	}
 
 	/**
@@ -896,7 +896,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 		opToTest.compute(in, new RectangleShape(1, false),
 				new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(Boundary.SINGLE), out);
 
-		assertEquals(false, out.firstElement().get());
+		assertEquals(true, out.firstElement().get());
 	}
 
 	/**
@@ -915,7 +915,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 		opToTest.compute(in, new RectangleShape(1, false),
 				new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(Boundary.SINGLE), out);
 
-		assertEquals(false, out.firstElement().get());
+		assertEquals(true, out.firstElement().get());
 	}
 
 	// @Test(expected = IllegalArgumentException.class)

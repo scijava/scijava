@@ -74,8 +74,9 @@ public class CopyIITest extends AbstractOpTest {
 
 	@Test
 	public void copyIINoOutputTest() {
-		IterableInterval<DoubleType> output = ops.op("copy").arity1().input(input)
-				.outType(new Nil<IterableInterval<DoubleType>>() {}).apply();
+		var nil = new Nil<IterableInterval<DoubleType>>() {};
+		var op = ops.op("copy").arity1().inType(nil).outType(nil).function();
+		IterableInterval<DoubleType> output = op.apply(input);
 
 		Cursor<DoubleType> inc = input.localizingCursor();
 		Cursor<DoubleType> out = output.cursor();

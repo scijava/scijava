@@ -50,8 +50,8 @@ public class ComputeShanbhagThreshold<T extends RealType<T>> extends
 	/**
 	 * TODO
 	 *
-	 * @param inputHistogram
-	 * @param output
+	 * @param hist the input {@link Histogram1d}
+	 * @return the Shanbhag threshold value
 	 */
 	@Override
 	public long computeBin(final Histogram1d<T> hist) {

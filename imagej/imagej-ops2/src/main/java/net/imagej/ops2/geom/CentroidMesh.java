@@ -54,8 +54,8 @@ public class CentroidMesh implements Function<Mesh, RealLocalizable> {
 	/**
 	 * TODO
 	 *
-	 * @param input
-	 * @param centroid
+	 * @param input the {@link Mesh} input
+	 * @return the centroid, represented as a {@link RealLocalizable}
 	 */
 	@Override
 	public RealLocalizable apply(final Mesh input) {

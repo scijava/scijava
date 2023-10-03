@@ -55,7 +55,7 @@ public class DefaultMaximumFeret implements Function<Polygon2D, Pair<RealLocaliz
 	 * TODO
 	 *
 	 * @param input
-	 * @param maximumFeret
+	 * @return the maximum feret of the input polygon, stored as a {@link Pair}
 	 */
 	@Override
 	public Pair<RealLocalizable, RealLocalizable> apply(Polygon2D input) {

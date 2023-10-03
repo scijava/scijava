@@ -50,8 +50,8 @@ public class ComputeOtsuThreshold<T extends RealType<T>> extends
 	/**
 	 * TODO
 	 *
-	 * @param inputHistogram
-	 * @param output
+	 * @param hist the {@link Histogram1d}
+	 * @return the Otsu threshold value
 	 */
 	@Override
 	public long computeBin(final Histogram1d<T> hist) {

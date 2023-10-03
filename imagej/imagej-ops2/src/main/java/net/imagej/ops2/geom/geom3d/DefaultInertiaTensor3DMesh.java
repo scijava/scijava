@@ -55,8 +55,8 @@ public class DefaultInertiaTensor3DMesh implements Function<Mesh, RealMatrix> {
 	/**
 	 * TODO
 	 *
-	 * @param input
-	 * @param inertiaTensor
+	 * @param input the {@link Mesh}
+	 * @return the 2nd multi variate, stored within a {@link RealMatrix} inertiaTensor
 	 */
 	@Override
 	public RealMatrix apply(final Mesh input) {

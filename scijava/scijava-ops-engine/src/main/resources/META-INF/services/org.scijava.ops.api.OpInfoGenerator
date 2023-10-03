@@ -2,5 +2,4 @@
 # Instead, modify and re-run <basedir>/bin/generate-meta-inf.sh from the top-level
 org.scijava.ops.engine.impl.OpClassOpInfoGenerator
 org.scijava.ops.engine.impl.OpCollectionInfoGenerator
-org.scijava.ops.engine.impl.TherapiOpInfoGenerator
 org.scijava.ops.engine.matcher.reduce.ReducedOpInfoGenerator

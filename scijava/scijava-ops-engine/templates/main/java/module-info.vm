@@ -5,27 +5,15 @@ module org.scijava.ops.engine {
  * corresponding template in templates/ and rerun bin/generate.groovy.
  */
 
-## Determines all packages in the module
-#set($packages = $modulePackages.call("src/main/java/org/scijava"))
-## Defines the packages that should be exported to org.scijava
-#set($scijavaPackages = ["org.scijava.ops.engine", "org.scijava.ops.engine.impl", "org.scijava.ops.engine.matcher.impl", "org.scijava.ops.engine.conversionLoss.impl"])
-## Defines the packages that should be exported to therapi.runtime.javadoc
-#set($therapiPackages = $modulePackages.call("src/main/java/org/scijava"))
-
 	exports org.scijava.ops.engine;
 	exports org.scijava.ops.engine.conversionLoss;
 	exports org.scijava.ops.engine.util;
-
-#foreach($package in $packages)
-	opens $package to $opensToString.call($package, $scijavaPackages, $therapiPackages);
-#end
 
 	requires java.compiler;
 
 	requires org.scijava.common3;
 	requires org.scijava.collections;
 	requires org.scijava.discovery;
-	requires org.scijava.discovery.therapi;
 	requires org.scijava.function;
 	requires org.scijava.log2;
 	requires org.scijava.meta;
@@ -39,7 +27,6 @@ module org.scijava.ops.engine {
 	requires org.javassist;
 	requires org.yaml.snakeyaml;
 
-	requires therapi.runtime.javadoc;
 
 	uses javax.annotation.processing.Processor;
 	uses org.scijava.discovery.Discoverer;
@@ -52,12 +39,10 @@ module org.scijava.ops.engine {
 	uses org.scijava.ops.engine.matcher.reduce.InfoReducer;
 	uses org.scijava.ops.spi.Op;
 	uses org.scijava.ops.spi.OpCollection;
-	uses org.scijava.parse2.Parser;
-	uses org.scijava.types.TypeReifier;
 	uses org.scijava.types.TypeExtractor;
 
 	provides org.scijava.discovery.Discoverer with
- 		org.scijava.ops.engine.impl.TherapiOpInfoDiscoverer;
+		org.scijava.ops.engine.yaml.YAMLOpInfoDiscoverer;
 
 	provides org.scijava.ops.api.InfoChainGenerator with
 		org.scijava.ops.engine.matcher.adapt.AdaptationInfoChainGenerator,
@@ -73,7 +58,6 @@ module org.scijava.ops.engine {
 	provides org.scijava.ops.api.OpInfoGenerator with
 	    org.scijava.ops.engine.impl.OpClassOpInfoGenerator,
 	    org.scijava.ops.engine.impl.OpCollectionInfoGenerator,
-		org.scijava.ops.engine.impl.TherapiOpInfoGenerator,
 		org.scijava.ops.engine.matcher.reduce.ReducedOpInfoGenerator;
 
 	provides org.scijava.ops.api.OpWrapper with

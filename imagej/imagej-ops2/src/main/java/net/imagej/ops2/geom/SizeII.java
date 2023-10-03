@@ -45,8 +45,8 @@ public class SizeII implements Function<IterableInterval<?>, DoubleType> {
 	/**
 	 * TODO
 	 *
-	 * @param input
-	 * @param size
+	 * @param input the {@link IterableInterval} to count over
+	 * @return the size
 	 */
 	@Override
 	public DoubleType apply(IterableInterval<?> input) {

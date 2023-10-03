@@ -58,7 +58,7 @@ public class DefaultMinimumFeret implements Function<Polygon2D, Pair<RealLocaliz
 	 * TODO
 	 *
 	 * @param input
-	 * @param minFeret
+	 * @return the minimum feret of {@code input}
 	 */
 	@Override
 	public Pair<RealLocalizable, RealLocalizable> apply(Polygon2D input) {

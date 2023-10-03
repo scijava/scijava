@@ -55,8 +55,8 @@ public class DefaultMinMax<I extends RealType<I>> implements Function<RandomAcce
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
-	 * @param minMax
+	 * @param input the {@link RandomAccessibleInterval} to iterate over
+	 * @return the minimum and the maximum of the input data
 	 */
 	@Override
 	public Pair<I, I> apply(final RandomAccessibleInterval<I> input) {

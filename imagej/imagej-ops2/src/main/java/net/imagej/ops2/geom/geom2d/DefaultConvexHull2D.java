@@ -51,8 +51,9 @@ public class DefaultConvexHull2D implements Function<Polygon2D, Polygon2D> {
 	/**
 	 * TODO
 	 *
-	 * @param input
-	 * @param convexHull
+	 * @param input the input {@link Polygon2D}
+	 * @return the convex hull of the input {@link Polygon2D}, as another
+	 *         {@link Polygon2D}
 	 */
 	@Override
 	public Polygon2D apply(final Polygon2D input) {

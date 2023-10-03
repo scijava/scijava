@@ -55,16 +55,4 @@ public class ModuleTest {
 		}
 	}
 
-	@Test
-	public void testTherapiExports() {
-		Set<String> packages = new HashSet<>();
-		findPackageNames(packages, moduleBaseDirectory);
-
-		Set<String> exportedPackages = getPackagesExported("src/main/java/module-info.java");
-
-		assertTrue(packages.equals(exportedPackages),
-				"module-info.java does not export all packages to therapi.runtime.javadoc,"
-						+ " use bin/generate-groovy.sh to update the list!");
-	}
-
 }

@@ -58,8 +58,8 @@ public class DefaultInertiaTensor3D<B extends BooleanType<B>> implements Functio
 	/**
 	 * TODO
 	 *
-	 * @param iterableRegion
-	 * @param inertiaTensor
+	 * @param input an {@link IterableRegion} input
+	 * @return the second multi variate
 	 */
 	@Override
 	public RealMatrix apply(final IterableRegion<B> input) {

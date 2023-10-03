@@ -52,8 +52,9 @@ public class IterableMinMax<I extends RealType<I>> implements Function<Iterable<
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
-	 * @param minMax
+	 * @param input the {@link Iterable} to compute over
+	 * @return the minimum and maximum of the {@code input}, partitioned within a
+	 *         {@link Pair}
 	 */
 	@Override
 	public Pair<I, I> apply(final Iterable<I> input) {

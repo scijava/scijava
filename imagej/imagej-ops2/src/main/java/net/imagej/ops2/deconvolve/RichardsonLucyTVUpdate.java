@@ -71,7 +71,7 @@ public class RichardsonLucyTVUpdate<T extends RealType<T> & NativeType<T>, I ext
 	 * @param correction
 	 * @param regularizationFactor
 	 * @param variation (required = false)
-	 * @return estimate
+	 * @param estimate
 	 */
 	@Override
 	public void compute(final I correction, final Float regularizationFactor, @Optional RandomAccessibleInterval<T> variation, final I estimate) {

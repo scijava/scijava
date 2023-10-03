@@ -49,8 +49,8 @@ public class CentroidLabelRegion implements Function<LabelRegion<?>, RealLocaliz
 	/**
 	 * TODO
 	 *
-	 * @param input
-	 * @param centroid
+	 * @param input a {@link LabelRegion}
+	 * @return the centroid of the input, as a {@link RealLocalizable}
 	 */
 	@Override
 	public RealLocalizable apply(final LabelRegion<?> input) {

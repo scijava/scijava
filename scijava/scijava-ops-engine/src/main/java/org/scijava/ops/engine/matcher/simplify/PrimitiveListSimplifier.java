@@ -15,7 +15,7 @@ import org.scijava.ops.spi.OpClass;
 public class PrimitiveListSimplifier<T extends Number> implements Function<List<T>, List<Number>>, Op {
 
 	@Override
-	/*
+	/**
 	* @param t the input List
 	* @return a List whose elements have been simplified
 	*/

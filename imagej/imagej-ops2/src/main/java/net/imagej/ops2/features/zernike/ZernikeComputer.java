@@ -48,10 +48,10 @@ public class ZernikeComputer<T extends RealType<T>>
 	/**
 	 * TODO
 	 *
-	 * @param input
-	 * @param order
-	 * @param repetition
-	 * @param zernikeMoment
+	 * @param ii the {@link IterableInterval| to iterate over
+	 * @param order the order of the moment to compute
+	 * @param repetition the repetition of the moment to compute
+	 * @return the zernike moment
 	 */
 	@Override
 	public ZernikeMoment apply(final IterableInterval<T> ii, final Integer order, final Integer repetition) {

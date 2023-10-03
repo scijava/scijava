@@ -111,7 +111,6 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	/**
 	 * @input source
 	 * @input strels
-	 * @input minVal
 	 * @input numThreads
 	 * @container target
 	 * @implNote op names='morphology.dilate'

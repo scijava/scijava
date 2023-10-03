@@ -91,7 +91,7 @@ public class Closes<T extends RealType<T> & Comparable<T>, R extends RealType<R>
 	 * @input source
 	 * @input strels
 	 * @input numThreads
-	 * @output result
+	 * @container result
 	 * @implNote op names='morphology.close'
 	 */
 	@SuppressWarnings("unchecked")

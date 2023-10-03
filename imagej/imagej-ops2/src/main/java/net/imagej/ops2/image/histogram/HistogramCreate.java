@@ -55,8 +55,9 @@ public class HistogramCreate<T extends RealType<T>> implements BiFunction<Iterab
 	/**
 	 * TODO
 	 *
-	 * @param input
-	 * @param numBins
+	 * @param input the iterable to feed into the {@link Histogram1d}
+	 * @param numBins the number of bins in the resulting {@link Histogram1d}
+	 * @return a histogram
 	 */
 	@Override
 	public Histogram1d<T> apply(final Iterable<T> input, @Optional Integer numBins) {

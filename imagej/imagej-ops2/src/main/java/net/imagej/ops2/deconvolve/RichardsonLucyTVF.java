@@ -182,6 +182,7 @@ public class RichardsonLucyTVF<I extends RealType<I> & NativeType<I>, O extends 
 	 * @param borderSize (required = false)
 	 * @param obfInput (required = false)
 	 * @param obfKernel (required = false)
+	 * @return the deconvolution of the input data
 	 */
 	@Override
 	public RandomAccessibleInterval<O> apply(RandomAccessibleInterval<I> input, RandomAccessibleInterval<K> kernel,

@@ -50,8 +50,8 @@ public class ComputeMomentsThreshold<T extends RealType<T>> extends
 	/**
 	 * TODO
 	 *
-	 * @param inputHistogram
-	 * @param output
+	 * @param hist the {@link Histogram1d}
+	 * @return the Moments threshold value
 	 */
 	@Override
 	public long computeBin(final Histogram1d<T> hist) {

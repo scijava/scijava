@@ -50,8 +50,8 @@ public class ComputeRosinThreshold<T extends RealType<T>> extends AbstractComput
 	/**
 	 * TODO
 	 *
-	 * @param inputHistogram
-	 * @param output
+	 * @param histo the {@link Histogram1d}
+	 * @return the Rosin threshold value
 	 */
 	@Override
 	public long computeBin(final Histogram1d<T> histo) {

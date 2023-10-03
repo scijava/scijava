@@ -67,8 +67,7 @@ public class Gaussians {
 	 *          calculation is affected outside the input bounds. (required =
 	 *          false)
 	 * @param output the output image
-	 * @implNote op names='filter.gauss',
-	 *           type='org.scijava.function.Computers$Arity3'
+	 * @implNote op names='filter.gauss'
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <I extends NumericType<I>, O extends NumericType<O>> void
@@ -107,8 +106,7 @@ public class Gaussians {
 	 *          calculation is affected outside the input bounds. (required =
 	 *          false)
 	 * @param output the preallocated output image
-	 * @implNote op names='filter.gauss',
-	 *           type='org.scijava.function.Computers$Arity3'
+	 * @implNote op names='filter.gauss'
 	 */
 	public static <I extends NumericType<I>, O extends NumericType<O>> void
 		gaussRAISingleSigma( //

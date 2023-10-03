@@ -69,10 +69,11 @@ public class DefaultVoxelization3D
 	/**
 	 * TODO
 	 *
-	 * @param input
+	 * @param input the input {@link Mesh}
 	 * @param width (required = false)
 	 * @param height (required = false)
 	 * @param depth (required = false)
+	 * @return the voxelization of {@code input}
 	 */
 	@Override
 	public RandomAccessibleInterval<BitType> apply(final Mesh input,

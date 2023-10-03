@@ -74,8 +74,8 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 	/**
 	 * TODO
 	 *
-	 * @param input
-	 * @param convexHull
+	 * @param input the input {@link Mesh}
+	 * @return the convex hull
 	 */
 	@Override
 	public Mesh apply(final Mesh input) {
@@ -617,8 +617,8 @@ class DefaultConvexHull3DEpsilon implements Function<Mesh, Double>
 	/**
 	 * TODO
 	 *
-	 * @param input
-	 * @param epsilon
+	 * @param input the input {@link Mesh}
+	 * @return the convex hull epsilon
 	 */
 	@Override
 	public Double apply(final Mesh input) {

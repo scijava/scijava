@@ -52,8 +52,8 @@ public class DefaultCenterOfGravity<T extends RealType<T>> implements Function<I
 	/**
 	 * TODO
 	 *
-	 * @param input
-	 * @param centerOfGravity
+	 * @param input the input {@link IterableInterval}
+	 * @return the center of gravity, as a {@link RealLocalizable}
 	 */
 	@Override
 	public RealLocalizable apply(final IterableInterval<T> input) {

@@ -31,16 +31,3 @@ import java.util.HashSet;
   return set;
 }
 ```
-
-opensToString = ```
-import java.util.HashSet;
-{ p, scijavaPackages, therapiPackages ->
-	set = new HashSet<>();
-	if (scijavaPackages.contains(p))
-		set.add("org.scijava");
-	if (therapiPackages.contains(p))
-		set.add("therapi.runtime.javadoc");
-	String packageString = set.toArray().toString();
-	return packageString.substring(1, packageString.length() - 1);
-}
-```

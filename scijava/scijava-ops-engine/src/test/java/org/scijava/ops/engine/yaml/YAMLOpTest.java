@@ -64,7 +64,7 @@ public class YAMLOpTest {
 	}
 
 	@Test
-	public void testYAMLFunction() {
+	public void testYAMLField() {
 		Double sum = env.op("example.mul").arity2().input(2., 3.).outType(Double.class)
 			.apply();
 		Assertions.assertEquals(6., sum, 1e-6);

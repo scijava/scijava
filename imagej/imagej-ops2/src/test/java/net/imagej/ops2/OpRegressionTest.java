@@ -31,8 +31,6 @@ package net.imagej.ops2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.Objects;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.OpInfo;
@@ -41,7 +39,7 @@ public class OpRegressionTest extends AbstractOpTest {
 
 	@Test
 	public void opDiscoveryRegressionIT() {
-		long expected = 1465;
+		long expected = 1466;
 		long actual = ops.infos().size();
 		assertEquals(expected, actual);
 	}

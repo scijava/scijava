@@ -227,7 +227,7 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 	 * @param lowerThreshold
 	 * @param higherThreshold
 	 * @param ridgeLengthMin
-	 * @param ridges
+	 * @return the {@link List} of ridges
 	 */
 	@Override
 	public List<DefaultWritablePolyline> apply(final RandomAccessibleInterval<T> input, final Double width,

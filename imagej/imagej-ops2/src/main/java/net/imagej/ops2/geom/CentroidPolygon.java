@@ -53,7 +53,7 @@ public class CentroidPolygon implements Function<Polygon2D, RealLocalizable> {
 	 * TODO
 	 *
 	 * @param input
-	 * @param centroid
+	 * @return the centroid, as a {@link RealLocalizable}
 	 */
 	@Override
 	public RealLocalizable apply(final Polygon2D input) {

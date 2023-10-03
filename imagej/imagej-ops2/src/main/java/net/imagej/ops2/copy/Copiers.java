@@ -1,5 +1,10 @@
 package net.imagej.ops2.copy;
 
+import java.lang.reflect.Array;
+
+import org.scijava.function.Computers;
+import org.scijava.ops.spi.OpDependency;
+
 import net.imglib2.Dimensions;
 import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessibleInterval;
@@ -13,11 +18,6 @@ import net.imglib2.type.Type;
 import net.imglib2.type.numeric.IntegerType;
 import net.imglib2.util.Intervals;
 import net.imglib2.util.Util;
-import org.scijava.function.Computers;
-import org.scijava.ops.engine.util.Maps;
-import org.scijava.ops.spi.OpDependency;
-
-import java.lang.reflect.Array;
 
 public class Copiers {
 
@@ -28,7 +28,7 @@ public class Copiers {
      * @param <T> the {@link Type} of the objects involved
      * @param input the input {@link Type}
      * @param output the {@link Type} that will be filled with the value of {@code input}
-     * @implNote op names='copy, copy.type', type='org.scijava.function.Computers$Arity1'
+     * @implNote op names='copy, copy.type'
      */
     public static <T extends Type<T>> void copyType(final T input, final T output) {
         output.set(input);
@@ -39,10 +39,11 @@ public class Copiers {
      * {@link RandomAccessibleInterval}
      *
      * @param <T> the element type of each image
+     * @param copier a {@link Computers.Arity1} that knows how to copy each pixel.
      * @param input the {@link RandomAccessibleInterval} whose data will be copied
      * @param copy  the {@link RandomAccessibleInterval} that will be filled with the contents of {@code input}
      * @author Christian Dietz (University of Konstanz)
-     * @implNote op names='copy, copy.rai, copy.img', priority='10.0', type='org.scijava.function.Computers$Arity1'
+     * @implNote op names='copy, copy.rai, copy.img', priority='10.0'
      */
     public static <T> void copyRAI( //
                                     final @OpDependency(name = "copy") Computers.Arity1<T, T> copier, //
@@ -62,7 +63,7 @@ public class Copiers {
      * @param input         the {@link ImgLabeling} to copy
      * @param output        the destination container of the copy operation
      * @author Christian Dietz (University of Konstanz)
-     * @implNote op names='copy, copy.imgLabeling', type='org.scijava.function.Computers$Arity1'
+     * @implNote op names='copy, copy.imgLabeling'
      */
     public static <T extends IntegerType<T> & NativeType<T>, L> void copyImgLabeling( //
       final @OpDependency(name = "copy") Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> raiCopier,  //
@@ -85,7 +86,7 @@ public class Copiers {
      * @param <L> the type of the {@link LabelingMapping} elements
      * @param input the {@link LabelingMapping} to copy
      * @param output the destination container of the copy operation
-     * @implNote op names='copy, copy.labelingMapping', priority='10000.', type='org.scijava.function.Computers$Arity1'
+     * @implNote op names='copy, copy.labelingMapping', priority='10000.'
      */
     public static <L> void copyLabelingMapping(final LabelingMapping<L> input, final LabelingMapping<L> output) {
         output.setLabelSets(input.getLabelSets());
@@ -99,7 +100,7 @@ public class Copiers {
      * @param <A> the type of the backing data storage for each image
      * @param input the {@link ArrayImg} to copy
      * @param output the destination container of the copy operation
-     * @implNote op names='copy, copy.img', priority='10000.', type='org.scijava.function.Computers$Arity1'
+     * @implNote op names='copy, copy.img', priority='10000.'
      */
     public static <T extends NativeType<T>, A extends ArrayDataAccess<A>> void copyArrayImage( //
            final ArrayImg<T, A> input,
@@ -115,7 +116,6 @@ public class Copiers {
 
     /**
      * Copies an {@link IterableInterval} into another {@link IterableInterval}
-     * TODO: Can we delete this in favor of some lifting operation?
      *
      * @author Christian Dietz (University of Konstanz)
      * @param <T> the element type of the {@link IterableInterval}s
@@ -125,14 +125,13 @@ public class Copiers {
      * @implNote op names='copy, copy.iterableInterval, copy.img', priority='1.0'
      */
     public static <T> void copyIterableInterval( //
-        @OpDependency(name = "copy.type") final Computers.Arity1<T, T> copier, //
+        @OpDependency(name = "copy.type") final Computers.Arity1<Iterable<T>, Iterable<T>> copier, //
         final IterableInterval<T> input, //
         final IterableInterval<T> output
     ) {
         if (!input.iterationOrder().equals(output.iterationOrder()))
             throw new IllegalArgumentException("input and output must be of the same dimensions!");
-        Computers.Arity1<Iterable<T>, Iterable<T>> mapped = Maps.ComputerMaps.Iterables.liftBoth(copier);
-        mapped.compute(input, output);
+        copier.compute(input, output);
     }
 
     private static void ensureEqualDimensions(Dimensions d1, Dimensions d2) {

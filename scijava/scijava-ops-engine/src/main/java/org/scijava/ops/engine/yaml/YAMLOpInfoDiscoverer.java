@@ -1,6 +1,9 @@
 
 package org.scijava.ops.engine.yaml;
 
+import static org.scijava.ops.engine.yaml.YAMLUtils.subMap;
+import static org.scijava.ops.engine.yaml.YAMLUtils.value;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
@@ -44,10 +47,9 @@ public class YAMLOpInfoDiscoverer implements Discoverer {
 				parse(opInfos, opFiles.nextElement());
 			}
 			catch (IOException e) {
-				new IllegalArgumentException( //
+				throw new IllegalArgumentException( //
 					"Could not read Op YAML file " + opFile.toString() + ": ", //
-					e) //
-						.printStackTrace();
+					e);
 			}
 		});
 		return (List<U>) opInfos;
@@ -62,27 +64,24 @@ public class YAMLOpInfoDiscoverer implements Discoverer {
 		try {
 			return Thread.currentThread() //
 				.getContextClassLoader() //
-				.getResources("ops.yaml");
+				.getResources("op.yaml");
 		}
 		catch (IOException e) {
 			throw new RuntimeException("Could not load Op YAML files!", e);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private void parse(List<OpInfo> infos, final URL url)
 			throws IOException
 	{
-		Map<String, Object> yamlData = yaml.load(url.openStream());
+		List<Map<String, Object>> yamlData = yaml.load(url.openStream());
 
-		for ( //
-		Map<String, Object> op : //
-		(List<Map<String, Object>>) yamlData.get("ops")) //
+		for (Map<String, Object> op : yamlData)
 		{
 			Map<String, Object> opData = subMap(op, "op");
 			String identifier = value(opData, "source");
 			try {
-				URI uri = new URI(identifier.replaceAll("\\s*", ""));
+				URI uri = new URI(identifier);
 				Optional<YAMLOpInfoCreator> c = creators.stream() //
 					.filter(f -> f.canCreateFrom(uri)) //
 					.findFirst();
@@ -92,38 +91,9 @@ public class YAMLOpInfoDiscoverer implements Discoverer {
 				// TODO: Use SciJava Log2's Logger to notify the user.
 				// See https://github.com/scijava/scijava/issues/106 for discussion
 				// and progress
-				System.out.println("Could not add op " + identifier + ":");
-				e.printStackTrace();
+				throw new IllegalArgumentException(e);
 			}
 		}
-	}
-
-	private static Map<String, Object> subMap(final Map<String, Object> map,
-		String key)
-	{
-		if (!map.containsKey(key)) {
-			throw new IllegalArgumentException("YAML map " + map +
-				" does not contain key " + key);
-		}
-		Object value = map.get(key);
-		if (!(value instanceof Map)) {
-			throw new IllegalArgumentException("YAML map " + map +
-				" has a non-map value for key " + key);
-		}
-		return (Map<String, Object>) value;
-	}
-
-	private static String value(final Map<String, Object> map, String key) {
-		if (!map.containsKey(key)) {
-			throw new IllegalArgumentException("YAML map " + map +
-				" does not contain key " + key);
-		}
-		Object value = map.get(key);
-		if (!(value instanceof String)) {
-			throw new IllegalArgumentException("YAML map " + map +
-				" has a non-string value for key " + key);
-		}
-		return (String) value;
 	}
 
 }

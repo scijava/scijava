@@ -47,6 +47,11 @@ public class ComputePercentileThreshold<T extends RealType<T>> extends
 	AbstractComputeThresholdHistogram<T>
 {
 
+	/**
+	 *
+	 * @param hist the {@link Histogram1d}
+	 * @return the Percentile threshold value
+	 */
 	@Override
 	public long computeBin(final Histogram1d<T> hist) {
 		final long[] histogram = hist.toLongArray();

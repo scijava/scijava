@@ -71,7 +71,7 @@ public class Table2Ds<B extends BooleanType<B>> {
 
 	/**
 	 * @input input
-	 * @output result
+	 * @container result
 	 * @implNote op names='morphology.branchpoints'
 	 */
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> branchPointsComputer = Branchpoints::branchpoints;
@@ -85,7 +85,7 @@ public class Table2Ds<B extends BooleanType<B>> {
 
 	/**
 	 * @input input
-	 * @output result
+	 * @container result
 	 * @implNote op names='morphology.bridge'
 	 */
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> bridgeComputer = Bridge::bridge;
@@ -99,7 +99,7 @@ public class Table2Ds<B extends BooleanType<B>> {
 
 	/**
 	 * @input input
-	 * @output result
+	 * @container result
 	 * @implNote op names='morphology.clean'
 	 */
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> cleanComputer = Clean::clean;
@@ -113,7 +113,7 @@ public class Table2Ds<B extends BooleanType<B>> {
 
 	/**
 	 * @input input
-	 * @output result
+	 * @container result
 	 * @implNote op names='morphology.endpoints'
 	 */
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> endpointsComputer = Endpoints::endpoints;
@@ -127,7 +127,7 @@ public class Table2Ds<B extends BooleanType<B>> {
 
 	/**
 	 * @input input
-	 * @output result
+	 * @container result
 	 * @implNote op names='morphology.fill'
 	 */
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> fillComputer = Fill::fill;
@@ -141,7 +141,7 @@ public class Table2Ds<B extends BooleanType<B>> {
 
 	/**
 	 * @input input
-	 * @output result
+	 * @container result
 	 * @implNote op names='morphology.hbreak'
 	 */
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> hbreakComputer = Hbreak::hbreak;
@@ -155,7 +155,7 @@ public class Table2Ds<B extends BooleanType<B>> {
 
 	/**
 	 * @input input
-	 * @output result
+	 * @container result
 	 * @implNote op names='morphology.life'
 	 */
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> lifeComputer = Life::life;
@@ -169,7 +169,7 @@ public class Table2Ds<B extends BooleanType<B>> {
 
 	/**
 	 * @input input
-	 * @output result
+	 * @container result
 	 * @implNote op names='morphology.majority'
 	 */
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> majorityComputer = Majority::majority;
@@ -183,7 +183,7 @@ public class Table2Ds<B extends BooleanType<B>> {
 
 	/**
 	 * @input input
-	 * @output result
+	 * @container result
 	 * @implNote op names='morphology.remove'
 	 */
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> removeComputer = Remove::remove;
@@ -197,7 +197,7 @@ public class Table2Ds<B extends BooleanType<B>> {
 
 	/**
 	 * @input input
-	 * @output result
+	 * @container result
 	 * @implNote op names='morphology.spur'
 	 */
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> spurComputer = Spur::spur;
@@ -211,7 +211,7 @@ public class Table2Ds<B extends BooleanType<B>> {
 
 	/**
 	 * @input input
-	 * @output result
+	 * @container result
 	 * @implNote op names='morphology.thicken'
 	 */
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> thickenComputer = Thicken::thicken;
@@ -225,7 +225,7 @@ public class Table2Ds<B extends BooleanType<B>> {
 
 	/**
 	 * @input input
-	 * @output result
+	 * @container result
 	 * @implNote op names='morphology.thin'
 	 */
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> thinComputer = Thin::thin;
@@ -239,7 +239,7 @@ public class Table2Ds<B extends BooleanType<B>> {
 
 	/**
 	 * @input input
-	 * @output result
+	 * @container result
 	 * @implNote op names='morphology.vbreak'
 	 */
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> vbreakComputer = Vbreak::vbreak;

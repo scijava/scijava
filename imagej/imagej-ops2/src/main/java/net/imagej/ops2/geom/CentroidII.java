@@ -50,7 +50,7 @@ public class CentroidII implements Function<IterableInterval<?>, RealLocalizable
 	 * TODO
 	 *
 	 * @param input
-	 * @param centroid
+	 * @return the centroid of the input {@link IterableInterval}
 	 */
 	@Override
 	public RealLocalizable apply(final IterableInterval<?> input) {

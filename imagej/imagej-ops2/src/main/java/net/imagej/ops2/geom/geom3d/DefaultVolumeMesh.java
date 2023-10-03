@@ -48,7 +48,7 @@ public class DefaultVolumeMesh implements Function<Mesh, DoubleType> {
 	 * TODO
 	 *
 	 * @param input
-	 * @param volume
+	 * @return the volume
 	 */
 	@Override
 	public DoubleType apply(final Mesh input) {

@@ -15,17 +15,13 @@ import org.scijava.ops.engine.OpUtils;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.types.inference.InterfaceInference;
 
-import com.github.therapi.runtimejavadoc.FieldJavadoc;
-import com.github.therapi.runtimejavadoc.OtherJavadoc;
-import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
-
 /**
  * Lazily generates the parameter data for a {@link List} of
  * {@link FunctionalMethodType}s. <b>If</b> there exists a <b>full</b> set of
  * {@code @param} and {@code @return} tags, the javadoc will be used to create
  * the parameter names and descriptions. Otherwise, reasonable defaults will be
  * used.
- * 
+ *
  * @author Gabriel Selzer
  */
 public class LazilyGeneratedFieldParameterData implements ParameterData {
@@ -39,45 +35,6 @@ public class LazilyGeneratedFieldParameterData implements ParameterData {
 		this.fieldInstance = fieldInstance;
 	}
 
-	/**
-	 * Determines whether {@code doc} has enough
-	 * {@code @input/@container/@mutable} tags to satisfy the number of inputs to
-	 * the Op ({@code numIns}), as well as enough
-	 * {@code @container/@mutable/@output} taglets to satisfy the number of Op
-	 * outputs ({@code numOuts}).
-	 * 
-	 * @param doc the {@link OtherJavadoc}s found by the javadoc parser.
-	 * @param numIns the desired number of inputs
-	 * @param numOuts the desired number of outputs
-	 * @return true iff there are {@code numIns} inputs and {@code numOuts}
-	 *         outputs
-	 */
-	private static boolean hasCustomJavadoc(List<OtherJavadoc> doc, long numIns,
-		long numOuts)
-	{
-		int ins = 0, outs = 0;
-		for (OtherJavadoc other : doc) {
-			switch (other.getName()) {
-				case "input":
-					ins++;
-					break;
-				case "container":
-				case "mutable":
-					ins++;
-					outs++;
-					break;
-				case "output":
-					outs++;
-					break;
-			}
-		}
-		// We require as many input/container/mutable taglets as there are
-		// parameters
-		boolean sufficientIns = ins == numIns;
-		// We require one container/mutable/output taglet
-		boolean sufficientOuts = outs == numOuts;
-		return sufficientIns && sufficientOuts;
-	}
 
 	public static MethodParamInfo getInfo(List<FunctionalMethodType> fmts,
 		FieldInstance fieldInstance)
@@ -92,7 +49,6 @@ public class LazilyGeneratedFieldParameterData implements ParameterData {
 		if (paramDataMap.containsKey(fieldInstance)) return;
 
 		Method sam = InterfaceInference.singularAbstractMethod(fieldInstance.field().getType());
-		FieldJavadoc doc = RuntimeJavadoc.getJavadoc(fieldInstance.field());
 		long numIns = sam.getParameterCount();
 		long numOuts = 1; // There is always one output
 
@@ -100,61 +56,14 @@ public class LazilyGeneratedFieldParameterData implements ParameterData {
 		Boolean[] paramOptionality = getParameterOptionality(fieldInstance.instance(),
 				fieldInstance.field(), (int) numIns, new ArrayList<>());
 
-		if (hasCustomJavadoc(doc.getOther(), numIns, numOuts)) {
-			paramDataMap.put(fieldInstance, javadocFieldParamInfo(fmts, doc, paramOptionality));
-		}
-		else {
-			paramDataMap.put(fieldInstance, synthesizedMethodParamInfo(fmts, paramOptionality));
-		}
+		paramDataMap.put(fieldInstance, synthesizedMethodParamInfo(fmts, paramOptionality));
 	}
 
-	private static MethodParamInfo javadocFieldParamInfo(
-		List<FunctionalMethodType> fmts, FieldJavadoc doc, Boolean[] paramOptionality)
-	{
-		Map<FunctionalMethodType, String> fmtNames = new HashMap<>(fmts.size());
-		Map<FunctionalMethodType, String> fmtDescriptions = new HashMap<>(fmts.size());
-		Map<FunctionalMethodType, Boolean> fmtOptionality = new HashMap<>(fmts.size());
-
-		List<OtherJavadoc> others = doc.getOther();
-		int otherIndex = 0;
-		int outputs = 0;
-		for(int i = 0; i < fmts.size(); i++) {
-			FunctionalMethodType fmt = fmts.get(i);
-			OtherJavadoc other = others.get(otherIndex++);
-			String name = other.getName();
-			while (!validParameterTag(name)) {
-				other = others.get(otherIndex++);
-				name = other.getName();
-			}
-
-			// if the taglet is not output, it should have a name and description
-				String param = other.getComment().toString();
-				int space = param.indexOf(" ");
-			if (!name.equals("output")) {
-				if (space != -1) {
-					fmtNames.put(fmt, param.substring(0, param.indexOf(" ")));
-					fmtDescriptions.put(fmt, param.substring(param.indexOf(" ") + 1));
-				}
-				else {
-					fmtNames.put(fmt, param);
-					fmtDescriptions.put(fmt, "");
-				}
-				fmtOptionality.put(fmt, paramOptionality[i]);
-			}
-			// if the taglet is an output, it should just have a description
-			else {
-				fmtNames.put(fmt, "output" + ++outputs);
-				fmtDescriptions.put(fmt, param);
-			}
-		}
-
-		return new MethodParamInfo(fmtNames, fmtDescriptions, fmtOptionality);
-	}
 
 	/**
 	 * Determines if {@code tagType} is one of the tags that we are interested in
 	 * scraping.
-	 * 
+	 *
 	 * @param tagType the tag we might need to scrape
 	 * @return true iff it is interesting to us
 	 */

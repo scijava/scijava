@@ -43,7 +43,7 @@ import org.scijava.ops.spi.OpDependency;
  * 
  * @author Andreas Graumann (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
- *@implNote op names='features.haralick.sumAverage'
+ * @implNote op names='features.haralick.sumAverage'
  */
 public class DefaultSumAverage<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 

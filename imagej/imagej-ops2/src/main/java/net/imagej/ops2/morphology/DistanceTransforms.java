@@ -52,7 +52,6 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	/**
 	 * @mutable source
 	 * @input distanceType
-	 * @input executorService
 	 * @input numTasks
 	 * @input weights
 	 * @implNote op names='morphology.distanceTransform'
@@ -75,7 +74,6 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	/**
 	 * @input source
 	 * @input distanceType
-	 * @input executorService
 	 * @input numTasks
 	 * @input weights
 	 * @container target
@@ -96,7 +94,6 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	/**
 	 * @mutable source
 	 * @input distance
-	 * @input executorService
 	 * @input numTasks
 	 * @implNote op names='morphology.distanceTransform'
 	 */
@@ -105,7 +102,7 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 					.execute(() -> DistanceTransform.transform(source, distance, Parallelization.getExecutorService(), numTasks));
 
 	/**
-	 * @mutable source
+	 * @input source
 	 * @input distance
 	 * @container target
 	 * @implNote op names='morphology.distanceTransform'
@@ -113,9 +110,8 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	public final Computers.Arity2<RandomAccessibleInterval<T>, Distance, RandomAccessibleInterval<T>> transformComputerDistance = (in1, in2, out) -> DistanceTransform.transform(in1, out, in2);
 
 	/**
-	 * @mutable source
+	 * @input source
 	 * @input distance
-	 * @input executorService
 	 * @input numTasks
 	 * @container target
 	 * @implNote op names='morphology.distanceTransform'

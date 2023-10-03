@@ -5,38 +5,15 @@ module org.scijava.ops.engine {
  * corresponding template in templates/ and rerun bin/generate.groovy.
  */
 
-
 	exports org.scijava.ops.engine;
 	exports org.scijava.ops.engine.conversionLoss;
 	exports org.scijava.ops.engine.util;
-
-	opens org.scijava.ops.engine.util.internal to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.monitor to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine to therapi.runtime.javadoc, org.scijava;
-	opens org.scijava.ops.engine.matcher.reduce to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.matcher.adapt to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.create to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.matcher.impl to therapi.runtime.javadoc, org.scijava;
-	opens org.scijava.ops.engine.conversionLoss to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.log to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.copy to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.impl to therapi.runtime.javadoc, org.scijava;
-	opens org.scijava.ops.engine.yaml to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.matcher.simplify to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.struct to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.adapt.complexLift to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.adapt.lift to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.adapt.functional to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.stats to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.util to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.math to therapi.runtime.javadoc;
 
 	requires java.compiler;
 
 	requires org.scijava.common3;
 	requires org.scijava.collections;
 	requires org.scijava.discovery;
-	requires org.scijava.discovery.therapi;
 	requires org.scijava.function;
 	requires org.scijava.log2;
 	requires org.scijava.meta;
@@ -50,7 +27,6 @@ module org.scijava.ops.engine {
 	requires org.javassist;
 	requires org.yaml.snakeyaml;
 
-	requires therapi.runtime.javadoc;
 
 	uses javax.annotation.processing.Processor;
 	uses org.scijava.discovery.Discoverer;
@@ -63,12 +39,10 @@ module org.scijava.ops.engine {
 	uses org.scijava.ops.engine.matcher.reduce.InfoReducer;
 	uses org.scijava.ops.spi.Op;
 	uses org.scijava.ops.spi.OpCollection;
-	uses org.scijava.parse2.Parser;
-	uses org.scijava.types.TypeReifier;
 	uses org.scijava.types.TypeExtractor;
 
 	provides org.scijava.discovery.Discoverer with
- 		org.scijava.ops.engine.impl.TherapiOpInfoDiscoverer;
+		org.scijava.ops.engine.yaml.YAMLOpInfoDiscoverer;
 
 	provides org.scijava.ops.api.InfoChainGenerator with
 		org.scijava.ops.engine.matcher.adapt.AdaptationInfoChainGenerator,
@@ -84,7 +58,6 @@ module org.scijava.ops.engine {
 	provides org.scijava.ops.api.OpInfoGenerator with
 	    org.scijava.ops.engine.impl.OpClassOpInfoGenerator,
 	    org.scijava.ops.engine.impl.OpCollectionInfoGenerator,
-		org.scijava.ops.engine.impl.TherapiOpInfoGenerator,
 		org.scijava.ops.engine.matcher.reduce.ReducedOpInfoGenerator;
 
 	provides org.scijava.ops.api.OpWrapper with

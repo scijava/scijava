@@ -53,7 +53,7 @@ public interface OpHistory extends Prioritized<OpHistory> {
 	 * Returns the hierarchy of {@link OpInfo}s describing the dependency chain of
 	 * the {@link Object} {@code op}.
 	 * 
-	 * @param op the {@Obect} returned by a matching call. NB {@code op}
+	 * @param op the {@link Object} returned by a matching call. NB {@code op}
 	 *          <b>must</b> be the {@link Object} returned by the outermost
 	 *          matching call, as the dependency {@link Object}s are not recorded.
 	 * @return the {@link InfoChain} describing the dependency chain
@@ -79,5 +79,28 @@ public interface OpHistory extends Prioritized<OpHistory> {
 	 * @param output the {@link Object} output of {@code e}
 	 */
 	void logOutput(RichOp<?> op, Object output);
+
+	/**
+	 * Tells the {@link OpHistory} to ignore executions of {@code op}
+	 * 
+	 * @param op the Op to ignore
+	 */
+	void ignore(RichOp<?> op);
+
+	/**
+	 * Returns true iff the {@link OpHistory} is recording executions of
+	 * {@code op}
+	 * 
+	 * @param op an Op
+	 */
+	boolean attendingTo(RichOp<?> op);
+
+	/**
+	 * Tells the {@link OpHistory} to pay attention to and record executions of
+	 * {@code op}
+	 * 
+	 * @param op an Op
+	 */
+	void attend(RichOp<?> op);
 
 }

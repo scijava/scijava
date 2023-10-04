@@ -58,17 +58,16 @@ import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInstance;
-import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.OpRef;
 import org.scijava.ops.api.OpRetrievalException;
 import org.scijava.ops.api.RichOp;
+import org.scijava.ops.engine.BaseOpHints.Adaptation;
+import org.scijava.ops.engine.BaseOpHints.DependencyMatching;
+import org.scijava.ops.engine.BaseOpHints.Simplification;
 import org.scijava.ops.engine.DependencyMatchingException;
 import org.scijava.ops.engine.InfoChainGenerator;
 import org.scijava.ops.engine.MatchingConditions;
 import org.scijava.ops.engine.OpCandidate;
-import org.scijava.ops.engine.BaseOpHints.Adaptation;
-import org.scijava.ops.engine.BaseOpHints.DependencyMatching;
-import org.scijava.ops.engine.BaseOpHints.Simplification;
 import org.scijava.ops.engine.OpDependencyMember;
 import org.scijava.ops.engine.OpInfoGenerator;
 import org.scijava.ops.engine.OpUtils;
@@ -504,12 +503,10 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			// obtain the generic type of the Op w.r.t. the Wrapper class
 			Type reifiedSuperType = Types.getExactSuperType(instance.getType(),
 				wrapper);
-			OpMetadata metadata = new OpMetadata(reifiedSuperType, instance
-				.infoChain(), hints, history);
 			// wrap the Op
 			final OpWrapper<T> opWrapper = (OpWrapper<T>) wrappers.get(Types.raw(
 				reifiedSuperType));
-			return opWrapper.wrap(instance, metadata);
+			return opWrapper.wrap(instance, this, hints);
 		}
 		catch (IllegalArgumentException | SecurityException exc) {
 			throw new IllegalArgumentException(exc.getMessage() != null ? exc

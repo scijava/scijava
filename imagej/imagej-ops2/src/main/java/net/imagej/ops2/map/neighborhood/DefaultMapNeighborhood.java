@@ -30,8 +30,7 @@
 package net.imagej.ops2.map.neighborhood;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.api.APIHints;
-import org.scijava.ops.api.OpMetadata;
+import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.RichOp;
 
 import net.imglib2.Cursor;
@@ -55,6 +54,7 @@ import net.imglib2.view.Views;
 public class DefaultMapNeighborhood<I, O> implements
 	Computers.Arity3<RandomAccessibleInterval<I>, Shape, Computers.Arity1<Iterable<I>, O>, IterableInterval<O>>
 {
+
 	/**
 	 * TODO
 	 *
@@ -116,23 +116,19 @@ class MapNeighborhoodAllRAI<I, O> implements
 
 		boolean restoreRecording = true;
 		if (op instanceof RichOp) {
-			OpMetadata metadata = ((RichOp) op).metadata();
-			if (metadata.hints().contains(APIHints.History.SKIP_RECORDING)) {
-				restoreRecording = false;
-			} else {
-				metadata.setHints(metadata.hints().plus(APIHints.History.SKIP_RECORDING));
-			}
+			RichOp<?> richOp = (RichOp<?>) op;
+			OpHistory history = richOp.env().history();
+			restoreRecording = history.attendingTo(richOp);
+			history.ignore(richOp);
 		}
 
 		LoopBuilder.setImages(neighborhoodInput, out).multiThreaded()
-			.forEachPixel((neighborhood, outPixel) -> {
-				op.compute(neighborhood, outPixel);
-			});
+			.forEachPixel(op::compute);
 
 		if (restoreRecording && op instanceof RichOp) {
-			OpMetadata metadata = ((RichOp) op).metadata();
-
-			metadata.setHints(metadata.hints().minus( APIHints.History.SKIP_RECORDING));
+			RichOp<?> richOp = (RichOp<?>) op;
+			OpHistory history = richOp.env().history();
+			history.attend(richOp);
 		}
 	}
 

@@ -18,6 +18,7 @@ module org.scijava.ops.engine {
 	requires org.scijava.function;
 	requires org.scijava.log2;
 	requires org.scijava.meta;
+	requires org.scijava.parsington;
 	requires org.scijava.priority;
 	requires org.scijava.progress;
 	requires org.scijava.struct;
@@ -28,11 +29,11 @@ module org.scijava.ops.engine {
 	requires org.javassist;
 	requires org.yaml.snakeyaml;
 
-	requires org.scijava.parsington;
 
 	uses javax.annotation.processing.Processor;
 	uses org.scijava.discovery.Discoverer;
 	uses org.scijava.ops.engine.InfoChainGenerator;
+	uses org.scijava.ops.api.OpEnvironment;
 	uses org.scijava.ops.engine.OpInfoGenerator;
 	uses org.scijava.ops.engine.OpWrapper;
 	uses org.scijava.ops.engine.matcher.MatchingRoutine;

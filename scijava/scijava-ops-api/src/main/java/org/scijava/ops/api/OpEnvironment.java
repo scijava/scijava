@@ -146,7 +146,7 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 * @return an instance of an Op aligning with the search parameters
 	 */
 	 InfoChain infoChain(final String opName, final Nil<?> specialType,
-		final Nil<?>[] inTypes, final Nil<?> ouType);
+		final Nil<?>[] inTypes, final Nil<?> outType);
 
 	/**
 	 * Returns an {@link InfoChain} fitting the provided arguments.

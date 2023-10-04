@@ -18,6 +18,7 @@ module org.scijava.ops.engine {
 	requires org.scijava.function;
 	requires org.scijava.log2;
 	requires org.scijava.meta;
+	requires org.scijava.parsington;
 	requires org.scijava.priority;
 	requires org.scijava.progress;
 	requires org.scijava.struct;
@@ -43,7 +44,7 @@ module org.scijava.ops.engine {
 	uses org.scijava.types.TypeExtractor;
 
 	provides org.scijava.discovery.Discoverer with
-		org.scijava.ops.engine.yaml.YAMLOpInfoDiscoverer;
+		org.scijava.ops.engine.yaml.impl.YAMLOpInfoDiscoverer;
 
 	provides org.scijava.ops.engine.InfoChainGenerator with
 		org.scijava.ops.engine.matcher.adapt.AdaptationInfoChainGenerator,

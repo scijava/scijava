@@ -6,10 +6,9 @@ import java.lang.reflect.Type;
 import org.scijava.types.GenericTyped;
 
 /**
- * An {@link OpInstance} with state (i.e. an {@link OpMetadata})
+ * An {@link OpInstance} with state
  * <p>
  * Each {@link RichOp} has <b>one</b> {@link OpInstance}, and <b>one</b>
- * {@link OpMetadata}.
  * </p>
  * 
  * @author Gabriel Selzer
@@ -19,8 +18,17 @@ public interface RichOp<T> extends GenericTyped {
 
 	OpInstance<T> instance();
 
+	OpEnvironment env();
+
+	Hints hints();
+
 	default T op() {
 		return instance().op();
+	}
+
+	@Override
+	default Type getType() {
+		return instance().getType();
 	}
 
 	default InfoChain infoChain() {
@@ -34,15 +42,8 @@ public interface RichOp<T> extends GenericTyped {
 	 */
 	T asOpType();
 
-	OpMetadata metadata();
-
 	void preprocess(Object... inputs);
 
 	void postprocess(Object output);
-
-	@Override
-	default Type getType() {
-		return metadata().type();
-	}
 
 }

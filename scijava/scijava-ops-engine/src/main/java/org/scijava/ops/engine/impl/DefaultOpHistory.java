@@ -3,8 +3,10 @@ package org.scijava.ops.engine.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
 
 import org.scijava.ops.api.InfoChain;
@@ -43,6 +45,8 @@ public class DefaultOpHistory implements OpHistory {
 	 */
 	private final Map<RichOp<?>, InfoChain> dependencyChain = new WeakHashMap<>();
 
+	private final Set<RichOp<?>> ignoredOps = new HashSet<>();
+
 	private final Map<Object, List<RichOp<?>>> mutationMap = new WeakHashMap<>();
 
 	// -- USER API -- //
@@ -63,7 +67,10 @@ public class DefaultOpHistory implements OpHistory {
 
 	@Override
 	public InfoChain opExecutionChain(Object op) {
-		return dependencyChain.get(op);
+		if (op instanceof RichOp<?>) {
+			return dependencyChain.get(op);
+		}
+		throw new IllegalArgumentException("Object " +  op + " is not an Op known to this OpHistory!"); 
 	}
 
 	// -- HISTORY MAINTENANCE API -- //
@@ -75,8 +82,23 @@ public class DefaultOpHistory implements OpHistory {
 
 	@Override
 	public void logOutput(RichOp<?> op, Object output) {
-		if (!mutationMap.containsKey(output)) updateList(output);
+		if (!mutationMap.containsKey(output) && !ignoredOps.contains(op)) updateList(output);
 		resolveExecution(op, output);
+	}
+
+	@Override
+	public void ignore(RichOp<?> op) {
+		ignoredOps.add(op);
+	}
+
+	@Override
+	public boolean attendingTo(RichOp<?> op) {
+		return !ignoredOps.contains(op);
+	}
+
+	@Override
+	public void attend(RichOp<?> op) {
+		ignoredOps.remove(op);
 	}
 
 	// -- HELPER METHODS -- //
@@ -97,12 +119,8 @@ public class DefaultOpHistory implements OpHistory {
 		}
 	}
 
-	public void resetHistory() {
-		mutationMap.clear();
-		dependencyChain.clear();
-	}
-
-	@Override public double getPriority() {
+	@Override
+	public double getPriority() {
 		return Priority.VERY_LOW;
 	}
 }

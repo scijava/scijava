@@ -16,6 +16,7 @@ import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.InfoTree;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.Ops;
 import org.scijava.ops.api.RichOp;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaFunction;

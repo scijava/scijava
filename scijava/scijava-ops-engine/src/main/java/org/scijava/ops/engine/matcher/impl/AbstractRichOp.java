@@ -25,6 +25,8 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 	private final OpEnvironment env;
 	private final Hints hints;
 
+	public boolean record = true;
+
 	public AbstractRichOp(final OpInstance<T> instance, final OpEnvironment env, final Hints hints) {
 		this.instance = instance;
 		this.env = env;
@@ -54,10 +56,20 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 
 	@Override
 	public void postprocess(Object output) {
-		if (env.history().attendingTo(this)) {
+		if (record) {
 			env.history().logOutput(this, output);
 		}
 		Progress.complete();
+	}
+
+	@Override
+	public boolean isRecordingExecutions() {
+		return record;
+	}
+
+	@Override
+	public void recordExecutions(boolean record) {
+		this.record = record;
 	}
 
 }

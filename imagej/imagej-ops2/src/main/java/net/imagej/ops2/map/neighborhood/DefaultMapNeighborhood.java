@@ -30,8 +30,7 @@
 package net.imagej.ops2.map.neighborhood;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.api.OpHistory;
-import org.scijava.ops.api.RichOp;
+import org.scijava.ops.api.Ops;
 
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
@@ -114,21 +113,18 @@ class MapNeighborhoodAllRAI<I, O> implements
 		RandomAccessibleInterval<Neighborhood<I>> neighborhoodInput = Views
 			.interval(in2.neighborhoodsRandomAccessibleSafe(in1), in1);
 
-		boolean restoreRecording = true;
-		if (op instanceof RichOp) {
-			RichOp<?> richOp = (RichOp<?>) op;
-			OpHistory history = richOp.env().history();
-			restoreRecording = history.attendingTo(richOp);
-			history.ignore(richOp);
+		// Temporarily disable recording history
+		boolean isRecording = Ops.isRecordingExecutions(op);
+		if (isRecording) {
+			Ops.recordExecutions(op, false);
 		}
 
 		LoopBuilder.setImages(neighborhoodInput, out).multiThreaded()
 			.forEachPixel(op::compute);
 
-		if (restoreRecording && op instanceof RichOp) {
-			RichOp<?> richOp = (RichOp<?>) op;
-			OpHistory history = richOp.env().history();
-			history.attend(richOp);
+		// Re-enable recording history if necessary
+		if (isRecording) {
+			Ops.recordExecutions(op, true);
 		}
 	}
 

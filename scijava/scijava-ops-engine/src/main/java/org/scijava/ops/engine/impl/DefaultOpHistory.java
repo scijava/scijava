@@ -45,8 +45,6 @@ public class DefaultOpHistory implements OpHistory {
 	 */
 	private final Map<RichOp<?>, InfoTree> dependencyChain = new WeakHashMap<>();
 
-	private final Set<RichOp<?>> ignoredOps = new HashSet<>();
-
 	private final Map<Object, List<RichOp<?>>> mutationMap = new WeakHashMap<>();
 
 	// -- USER API -- //
@@ -82,23 +80,8 @@ public class DefaultOpHistory implements OpHistory {
 
 	@Override
 	public void logOutput(RichOp<?> op, Object output) {
-		if (!mutationMap.containsKey(output) && !ignoredOps.contains(op)) updateList(output);
+		if (!mutationMap.containsKey(output)) updateList(output);
 		resolveExecution(op, output);
-	}
-
-	@Override
-	public void ignore(RichOp<?> op) {
-		ignoredOps.add(op);
-	}
-
-	@Override
-	public boolean attendingTo(RichOp<?> op) {
-		return !ignoredOps.contains(op);
-	}
-
-	@Override
-	public void attend(RichOp<?> op) {
-		ignoredOps.remove(op);
 	}
 
 	// -- HELPER METHODS -- //

@@ -31,8 +31,7 @@ package net.imagej.ops2.map.neighborhood;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpHistory;
-import org.scijava.ops.api.RichOp;
+import org.scijava.ops.api.Ops;
 
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
@@ -120,21 +119,18 @@ class MapNeighborhoodWithCenterAllRAI<I, O> implements
 		RandomAccessibleInterval<Neighborhood<I>> neighborhoodInput = Views
 			.interval(in2.neighborhoodsRandomAccessibleSafe(in1), in1);
 
-		boolean restoreRecording = true;
-		if (centerAwareOp instanceof RichOp) {
-			RichOp<?> richOp = (RichOp<?>) centerAwareOp;
-			OpHistory history = richOp.env().history();
-			restoreRecording = history.attendingTo(richOp);
-			history.ignore(richOp);
+		// Temporarily disable recording history
+		boolean isRecording = Ops.isRecordingExecutions(centerAwareOp);
+		if (isRecording) {
+			Ops.recordExecutions(centerAwareOp, false);
 		}
 
 		LoopBuilder.setImages(neighborhoodInput, in1, out).multiThreaded()
 			.forEachPixel(centerAwareOp::compute);
 
-		if (restoreRecording && centerAwareOp instanceof RichOp) {
-			RichOp<?> richOp = (RichOp<?>) centerAwareOp;
-			OpHistory history = richOp.env().history();
-			history.attend(richOp);
+		// Re-enable recording history if necessary
+		if (isRecording) {
+			Ops.recordExecutions(centerAwareOp, true);
 		}
 	}
 

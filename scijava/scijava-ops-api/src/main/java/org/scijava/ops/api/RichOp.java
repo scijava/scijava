@@ -46,4 +46,7 @@ public interface RichOp<T> extends GenericTyped {
 
 	void postprocess(Object output);
 
+	boolean isRecordingExecutions();
+
+	void recordExecutions(boolean record);
 }

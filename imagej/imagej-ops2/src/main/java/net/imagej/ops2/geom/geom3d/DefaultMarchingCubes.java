@@ -29,8 +29,6 @@
 
 package net.imagej.ops2.geom.geom3d;
 
-import java.util.function.Function;
-
 import net.imagej.mesh2.Mesh;
 import net.imagej.mesh2.NaiveDoubleMesh;
 import net.imglib2.Cursor;
@@ -43,8 +41,7 @@ import net.imglib2.view.Views;
 
 import org.apache.commons.math3.util.MathArrays;
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.Optional;
+import org.scijava.ops.spi.Nullable;
 
 /**
  * This is a marching cubes implementation. It is inspired by Paul Bourke's
@@ -73,7 +70,7 @@ public class DefaultMarchingCubes<T extends BooleanType<T>>
 	 */
 	@Override
 	public Mesh apply(final RandomAccessibleInterval<T> input,
-			@Optional Double isolevel, @Optional VertexInterpolator interpolatorClass) {
+			@Nullable Double isolevel, @Nullable VertexInterpolator interpolatorClass) {
 
 		// ensure validity of inputs
 		if (input.numDimensions() != 3)

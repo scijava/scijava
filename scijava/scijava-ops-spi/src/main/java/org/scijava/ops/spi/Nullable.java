@@ -6,43 +6,43 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation to mark a parameter as optional: Ops with optional parameters
- * should be callable <b>with or without</b> their Optional arguments
+ * Annotation to mark a parameter as nullable: Ops with nullable parameters
+ * should be callable <b>with or without</b> their Nullable arguments
  * <p>
  * This annotation should only be specified on <b>one</b> of the signatures of
  * the method (only on the {@link FunctionalInterface}'s method, or only on the
  * Op implementation, etc) for purposes of simplicity and readability. Writing
  *
  * <pre>
- * public interface BiFunctionWithOptional&lt;I1, I2, I3, O&gt; extends
+ * public interface BiFunctionWithNullable&lt;I1, I2, I3, O&gt; extends
  * 	Functions.Arity3&lt;&gt;
  * {
  *
- * 	public O apply(I1 in1, I2 in2, @Optional I3 in3);
+ * 	public O apply(I1 in1, I2 in2, @Nullable I3 in3);
  * }
  * </pre>
  *
  * and then writing an implementation
  *
  * <pre>
- * public class Impl implements BiFunctionWithOptional&lt;Double, Double, Double, Double&gt; {
- * 	public Double apply(Double in1, @Optional Double in2, Double in3) {
+ * public class Impl implements BiFunctionWithNullable&lt;Double, Double, Double, Double&gt; {
+ * 	public Double apply(Double in1, @Nullable Double in2, Double in3) {
  * 	...
  * 	}
  * }
  * </pre>
  *
- * is confusing and hard to read. Which parameters are optional in this case? Is
- * it obvious that {@code in3} is optional just by looking at {@code Impl}? For
+ * is confusing and hard to read. Which parameters are nullable in this case? Is
+ * it obvious that {@code in3} is nullable just by looking at {@code Impl}? For
  * this reason, it should be enforced that the annotation is only on one of the
  * method signatures.
  * <br/><br/>
  * Note also that annotations are currently (as of Java 11) not supported on lambdas.
- * Optional parameters are supported on interfaces and class implementations (including
- * anonymous classes) but the following will not recognize the optionality of {@code in}:
+ * Nullable parameters are supported on interfaces and class implementations (including
+ * anonymous classes) but the following will not recognize the nullability of {@code in}:
  * <pre>
- * &#64;OpField(names = "optionalLambda")
- * public final Function<Integer, Float> optionalLambda = (&#64;Optional Integer in) -> {
+ * &#64;OpField(names = "nullableLambda")
+ * public final Function<Integer, Float> nullableLambda = (&#64;Nullable Integer in) -> {
  * 	Integer nonNullIn = in == null ? 0 : in;
  * 	return nonNullIn + 0.5f;
  * };
@@ -56,6 +56,6 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
-public @interface Optional {
+public @interface Nullable {
 
 }

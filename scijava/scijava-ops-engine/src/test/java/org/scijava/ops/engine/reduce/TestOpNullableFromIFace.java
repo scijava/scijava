@@ -4,9 +4,9 @@ package org.scijava.ops.engine.reduce;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
 
-@OpClass(names = "test.optionalOr")
-public class TestOpOptionalFromIFace implements //
-	BiFunctionWithOptional<Boolean, Boolean, Boolean, Boolean>, Op
+@OpClass(names = "test.nullableOr")
+public class TestOpNullableFromIFace implements //
+		BiFunctionWithNullable<Boolean, Boolean, Boolean, Boolean>, Op
 {
 
 	/**

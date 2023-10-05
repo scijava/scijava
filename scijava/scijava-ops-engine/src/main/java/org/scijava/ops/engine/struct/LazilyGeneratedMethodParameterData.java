@@ -53,16 +53,16 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 		Map<FunctionalMethodType, String> fmtNames = info.getFmtNames();
 		Map<FunctionalMethodType, String> fmtDescriptions = info
 			.getFmtDescriptions();
-		Map<FunctionalMethodType, Boolean> fmtOptionality = info
-			.getFmtOptionality();
+		Map<FunctionalMethodType, Boolean> fmtNullability = info
+			.getFmtNullability();
 		// determine the Op inputs/outputs
 		long numOpParams = m.getParameterCount();
 		long numReturns = m.getReturnType() == void.class ? 0 : 1;
-		Boolean[] paramOptionality = getParameterOptionality(m, opType,
+		Boolean[] paramNullability = getParameterNullability(m, opType,
 			(int) numOpParams, new ArrayList<>());
 
 		addSynthesizedMethodParamInfo(fmtNames, fmtDescriptions, fmts,
-			fmtOptionality, paramOptionality);
+			fmtNullability, paramNullability);
 	}
 
 	public static synchronized void generateMethodParamInfo(
@@ -75,10 +75,10 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 		long numReturns = m.getReturnType() == void.class ? 0 : 1;
 
 		opType = OpUtils.findFunctionalInterface(opType);
-		Boolean[] paramOptionality = getParameterOptionality(m, opType,
+		Boolean[] paramNullability = getParameterNullability(m, opType,
 			(int) numOpParams, new ArrayList<>());
 
-		paramDataMap.put(m, synthesizedMethodParamInfo(fmts, paramOptionality));
+		paramDataMap.put(m, synthesizedMethodParamInfo(fmts, paramNullability));
 	}
 
 
@@ -86,18 +86,18 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 		Map<FunctionalMethodType, String> fmtNames,
 		Map<FunctionalMethodType, String> fmtDescriptions,
 		List<FunctionalMethodType> fmts,
-		Map<FunctionalMethodType, Boolean> fmtOptionality,
-		Boolean[] paramOptionality)
+		Map<FunctionalMethodType, Boolean> fmtNullability,
+		Boolean[] paramNullability)
 	{
 		int ins, outs, containers, mutables;
 		ins = outs = containers = mutables = 1;
-		int optionalIndex = 0;
+		int nullableIndex = 0;
 		for (FunctionalMethodType fmt : fmts) {
 			fmtDescriptions.put(fmt, "");
 			switch (fmt.itemIO()) {
 				case INPUT:
 					fmtNames.put(fmt, "input" + ins++);
-					fmtOptionality.put(fmt, paramOptionality[optionalIndex++]);
+					fmtNullability.put(fmt, paramNullability[nullableIndex++]);
 					break;
 				case OUTPUT:
 					fmtNames.put(fmt, "output" + outs++);
@@ -115,18 +115,18 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 	}
 
 	private static MethodParamInfo synthesizedMethodParamInfo(
-		List<FunctionalMethodType> fmts, Boolean[] paramOptionality)
+		List<FunctionalMethodType> fmts, Boolean[] paramNullability)
 	{
 		Map<FunctionalMethodType, String> fmtNames = new HashMap<>(fmts.size());
 		Map<FunctionalMethodType, String> fmtDescriptions = new HashMap<>(fmts
 			.size());
-		Map<FunctionalMethodType, Boolean> fmtOptionality = new HashMap<>(fmts
+		Map<FunctionalMethodType, Boolean> fmtNullability = new HashMap<>(fmts
 			.size());
 
 		addSynthesizedMethodParamInfo(fmtNames, fmtDescriptions, fmts,
-			fmtOptionality, paramOptionality);
+			fmtNullability, paramNullability);
 
-		return new MethodParamInfo(fmtNames, fmtDescriptions, fmtOptionality);
+		return new MethodParamInfo(fmtNames, fmtDescriptions, fmtNullability);
 	}
 
 	@Override
@@ -141,43 +141,43 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 			.collect(Collectors.toList());
 	}
 
-	private static Boolean[] getParameterOptionality(Method m, Class<?> opType,
+	private static Boolean[] getParameterNullability(Method m, Class<?> opType,
 		int opParams, List<ValidityProblem> problems)
 	{
-		boolean opMethodHasOptionals = FunctionalParameters.hasOptionalAnnotations(m);
-		List<Method> fMethodsWithOptionals = FunctionalParameters.fMethodsWithOptional(
+		boolean opMethodHasNullables = FunctionalParameters.hasNullableAnnotations(m);
+		List<Method> fMethodsWithNullables = FunctionalParameters.fMethodsWithNullable(
 			opType);
 		// the number of parameters we need to determine
 
 		// Ensure only the Op method OR ONE of its op type's functional methods have
-		// Optionals
-		if (opMethodHasOptionals && !fMethodsWithOptionals.isEmpty()) {
+		// Nullables
+		if (opMethodHasNullables && !fMethodsWithNullables.isEmpty()) {
 			problems.add(new ValidityProblem(
-				"Both the OpMethod and its op type have optional parameters!"));
+				"Both the OpMethod and its op type have nullable parameters!"));
 			return FunctionalParameters.generateAllRequiredArray(opParams);
 		}
-		if (fMethodsWithOptionals.size() > 1) {
+		if (fMethodsWithNullables.size() > 1) {
 			problems.add(new ValidityProblem(
-				"Multiple methods from the op type have optional parameters!"));
+				"Multiple methods from the op type have nullable parameters!"));
 			return FunctionalParameters.generateAllRequiredArray(opParams);
 		}
 
-		// return the optionality of each parameter of the Op
-		if (opMethodHasOptionals) return getOpMethodOptionals(m, opParams);
-		if (fMethodsWithOptionals.size() > 0) return FunctionalParameters
-			.findParameterOptionality(fMethodsWithOptionals.get(0));
+		// return the nullability of each parameter of the Op
+		if (opMethodHasNullables) return getOpMethodNullables(m, opParams);
+		if (fMethodsWithNullables.size() > 0) return FunctionalParameters
+			.findParameterNullability(fMethodsWithNullables.get(0));
 		return FunctionalParameters.generateAllRequiredArray(opParams);
 	}
 
-	private static Boolean[] getOpMethodOptionals(Method m, int opParams) {
+	private static Boolean[] getOpMethodNullables(Method m, int opParams) {
 		int[] paramIndex = mapFunctionalParamsToIndices(m.getParameters());
 		Boolean[] arr = FunctionalParameters.generateAllRequiredArray(opParams);
 		// check parameters on m
-		Boolean[] mOptionals = FunctionalParameters.findParameterOptionality(m);
-		for (int i = 0; i < mOptionals.length; i++) {
+		Boolean[] mNullables = FunctionalParameters.findParameterNullability(m);
+		for (int i = 0; i < mNullables.length; i++) {
 			int index = paramIndex[i];
 			if (index == -1) continue;
-			arr[index] |= mOptionals[i];
+			arr[index] |= mNullables[i];
 		}
 		return arr;
 	}

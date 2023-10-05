@@ -46,8 +46,8 @@ import net.imglib2.util.Util;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.Optional;
 
 /**
  * Richardson Lucy function op that operates on (@link RandomAccessibleInterval)
@@ -197,9 +197,9 @@ public class RichardsonLucyF<I extends RealType<I> & NativeType<I>, O extends Re
 	public RandomAccessibleInterval<O> apply(RandomAccessibleInterval<I> input, RandomAccessibleInterval<K> kernel,
 			O outType, C complexType, Integer maxIterations,
 			Boolean nonCirculant, Boolean accelerate,
-			@Optional long[] borderSize,
-			@Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,
-			@Optional OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel)
+			@Nullable long[] borderSize,
+			@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,
+			@Nullable OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel)
 	{
 		if (obfInput == null)
 			obfInput = new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(input).createVariable());

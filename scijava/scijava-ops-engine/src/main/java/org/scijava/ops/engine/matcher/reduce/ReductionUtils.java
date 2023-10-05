@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.scijava.ops.engine.OpUtils;
-import org.scijava.ops.spi.Optional;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.struct.Member;
 import org.scijava.types.Types;
 import org.scijava.types.inference.InterfaceInference;
@@ -195,7 +195,7 @@ public class ReductionUtils {
 	 * Creates the functional method of a reduced Op. This functional method must:
 	 * <ol>
 	 * <li>Call the {@code Op} using the required <b>pure</b> inputs, followed by
-	 * {@code null} {@link Optional} <b>pure</b> arguments, followed by the i/o
+	 * {@code null} {@link Nullable} <b>pure</b> arguments, followed by the i/o
 	 * argument (iff it exists).
 	 * </ol>
 	 * <b>NB</b> The Javassist compiler
@@ -240,16 +240,16 @@ public class ReductionUtils {
 			.count();
 		long neededOptionals = totalOptionals - info.paramsReduced();
 		int reducedArg = 0;
-		int optionals = 0;
+		int nullables = 0;
 		for (i = 0; i < totalArgs; i++) {
-			// NB due to our optionality paradigm (if there are n optional parameters,
+			// NB due to our nullability paradigm (if there are n nullable parameters,
 			// they must be the last n), we just need to pass null for the last n
 			// arguments
 			if (totalArguments.get(i).isRequired()) {
 				sb.append(" in" + reducedArg++);
-			} else if (optionals < neededOptionals) {
+			} else if (nullables < neededOptionals) {
 				sb.append(" in" + reducedArg++);
-				optionals++;
+				nullables++;
 			}
 			else {
 				sb.append(" null");

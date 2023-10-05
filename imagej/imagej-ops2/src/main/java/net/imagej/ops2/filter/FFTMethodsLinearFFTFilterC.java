@@ -37,8 +37,8 @@ import net.imglib2.util.Util;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.Optional;
 
 /**
  * Convolve op for (@link RandomAccessibleInterval)
@@ -84,7 +84,8 @@ public class FFTMethodsLinearFFTFilterC<I extends RealType<I>, O extends RealTyp
 	public void compute(final RandomAccessibleInterval<I> in, final RandomAccessibleInterval<K> kernel,
 			final Boolean performInputFFT, final Boolean performKernelFFT,
 			final Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> frequencyOp,
-			@Optional RandomAccessibleInterval<C> fftInput, @Optional RandomAccessibleInterval<C> fftKernel,
+			@Nullable RandomAccessibleInterval<C> fftInput, @Nullable
+	RandomAccessibleInterval<C> fftKernel,
 			final RandomAccessibleInterval<O> out) {
 		final C fftType = Util.getTypeFromInterval(fftInput);
 

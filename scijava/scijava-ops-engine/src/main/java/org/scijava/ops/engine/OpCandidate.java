@@ -282,15 +282,15 @@ public class OpCandidate {
 			return null;
 		}
 
-		// pad optional parameters with null (from right to left)
+		// pad nullable parameters with null (from right to left)
 		final int argsToPad = inputCount - args.length;
-		final int optionalCount = inputCount - requiredCount;
-		final int optionalsToFill = optionalCount - argsToPad;
+		final int nullableCount = inputCount - requiredCount;
+		final int nullablesToFill = nullableCount - argsToPad;
 		final Object[] paddedArgs = new Object[inputCount];
-		int argIndex = 0, paddedIndex = 0, optionalIndex = 0;
+		int argIndex = 0, paddedIndex = 0, nullableIndex = 0;
 		for (final Member<?> item : members) {
-			if (!item.isRequired() && optionalIndex++ >= optionalsToFill) {
-				// skip this optional parameter (pad with null)
+			if (!item.isRequired() && nullableIndex++ >= nullablesToFill) {
+				// skip this nullable parameter (pad with null)
 				paddedIndex++;
 				continue;
 			}

@@ -9,49 +9,49 @@ import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpMethod;
-import org.scijava.ops.spi.Optional;
+import org.scijava.ops.spi.Nullable;
 
 import java.util.Arrays;
 
-public class OptionalArgumentsTest extends AbstractTestEnvironment //
+public class NullableArgumentsTest extends AbstractTestEnvironment //
 		 implements OpCollection{
 
 	@BeforeAll
 	public static void addNeededOps() {
-		ops.register(new OptionalArgumentsTest());
-		ops.register(new TestOpOptionalArg());
+		ops.register(new NullableArgumentsTest());
+		ops.register(new TestOpNullableArg());
 	}
 
 
 	@Test
-	public void testClassWithTwoOptionals() {
-		Double sum = ops.op("test.optionalAdd").arity3().input(2.0, 5.0, 7.0).outType(Double.class).apply();
+	public void testClassWithTwoNullables() {
+		Double sum = ops.op("test.nullableAdd").arity3().input(2.0, 5.0, 7.0).outType(Double.class).apply();
 		Double expected = 14.0;
 		Assertions.assertEquals(expected, sum);
 	}
 
 	@Test
-	public void testClassWithOneOptional() {
-		Double sum = ops.op("test.optionalAdd").arity2().input(2.0, 5.0).outType(Double.class).apply();
+	public void testClassWithOneNullable() {
+		Double sum = ops.op("test.nullableAdd").arity2().input(2.0, 5.0).outType(Double.class).apply();
 		Double expected = 7.0;
 		Assertions.assertEquals(expected, sum);
 	}
 
 	@Test
-	public void testClassWithoutOptionals() {
-		Double sum = ops.op("test.optionalAdd").arity1().input(2.0).outType(Double.class).apply();
+	public void testClassWithoutNullables() {
+		Double sum = ops.op("test.nullableAdd").arity1().input(2.0).outType(Double.class).apply();
 		Double expected = 2.0;
 		Assertions.assertEquals(expected, sum);
 	}
 
-	@OpField(names = "test.optionalMultiply")
-	public final Computers.Arity3<Double[], Double[], Double[], Double[]> optionalField =
+	@OpField(names = "test.nullableMultiply")
+	public final Computers.Arity3<Double[], Double[], Double[], Double[]> nullableField =
 		new Computers.Arity3<>()
 		{
 
 			@Override
-			public void compute(Double[] in1, @Optional Double[] in2,
-				@Optional Double[] in3, Double[] out)
+			public void compute(Double[] in1, @Nullable Double[] in2,
+				@Nullable Double[] in3, Double[] out)
 		{
 				if (in2 == null) {
 					in2 = new Double[in1.length];
@@ -68,59 +68,60 @@ public class OptionalArgumentsTest extends AbstractTestEnvironment //
 		};
 
 	@Test
-	public void testFieldWithTwoOptionals() {
+	public void testFieldWithTwoNullables() {
 		Double[] d1 = {2.0};
 		Double[] d2 = {5.0};
 		Double[] d3 = {7.0};
 		Double[] o = {50.0};
-		ops.op("test.optionalMultiply").arity3().input(d1, d2, d3).output(o).compute();
+		ops.op("test.nullableMultiply").arity3().input(d1, d2, d3).output(o).compute();
 		Double expected = 70.0;
 		Assertions.assertEquals(expected, o[0]);
 	}
 
 	@Test
-	public void testFieldWithOneOptional() {
+	public void testFieldWithOneNullable() {
 		Double[] d1 = {2.0};
 		Double[] d2 = {5.0};
 		Double[] o = {50.0};
-		ops.op("test.optionalMultiply").arity2().input(d1, d2).output(o).compute();
+		ops.op("test.nullableMultiply").arity2().input(d1, d2).output(o).compute();
 		Double expected = 10.0;
 		Assertions.assertEquals(expected, o[0]);
 	}
 
 	@Test
-	public void testFieldWithoutOptionals() {
+	public void testFieldWithoutNullables() {
 		Double[] d1 = {2.0};
 		Double[] o = {50.0};
-		ops.op("test.optionalMultiply").arity1().input(d1).output(o).compute();
+		ops.op("test.nullableMultiply").arity1().input(d1).output(o).compute();
 		Double expected = 2.0;
 		Assertions.assertEquals(expected, o[0]);
 	}
 
-	@OpMethod(names = "test.optionalConcatenate", type = Functions.Arity3.class)
-	public static String optionalMethod(String in1, @Optional String in2, @Optional String in3) {
+	@OpMethod(names = "test.nullableConcatenate", type = Functions.Arity3.class)
+	public static String nullableMethod(String in1, @Nullable
+	String in2, @Nullable String in3) {
 		if (in2 == null) in2 = "";
 		if (in3 == null) in3 = "";
 		return in1.concat(in2).concat(in3);
 	}
 
 	@Test
-	public void testMethodWithTwoOptionals() {
-		String out = ops.op("test.optionalConcatenate").arity3().input("a", "b", "c").outType(String.class).apply();
+	public void testMethodWithTwoNullables() {
+		String out = ops.op("test.nullableConcatenate").arity3().input("a", "b", "c").outType(String.class).apply();
 		String expected = "abc";
 		Assertions.assertEquals(expected, out);
 	}
 
 	@Test
-	public void testMethodWithOneOptional() {
-		String out = ops.op("test.optionalConcatenate").arity2().input("a", "b").outType(String.class).apply();
+	public void testMethodWithOneNullable() {
+		String out = ops.op("test.nullableConcatenate").arity2().input("a", "b").outType(String.class).apply();
 		String expected = "ab";
 		Assertions.assertEquals(expected, out);
 	}
 
 	@Test
-	public void testMethodWithoutOptionals() {
-		String out = ops.op("test.optionalConcatenate").arity1().input("a").outType(String.class).apply();
+	public void testMethodWithoutNullables() {
+		String out = ops.op("test.nullableConcatenate").arity1().input("a").outType(String.class).apply();
 		String expected = "a";
 		Assertions.assertEquals(expected, out);
 	}

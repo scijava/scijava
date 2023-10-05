@@ -10,15 +10,15 @@ public class MethodParamInfo {
 
 	private final Map<FunctionalMethodType, String> fmtNames;
 	private final Map<FunctionalMethodType, String> fmtDescriptions;
-	private final Map<FunctionalMethodType, Boolean> fmtOptionality;
+	private final Map<FunctionalMethodType, Boolean> fmtNullability;
 
 	public MethodParamInfo(final Map<FunctionalMethodType, String> fmtNames,
 		final Map<FunctionalMethodType, String> fmtDescriptions,
-		final Map<FunctionalMethodType, Boolean> fmtOptionality)
+		final Map<FunctionalMethodType, Boolean> fmtNullability)
 	{
 		this.fmtNames = fmtNames;
 		this.fmtDescriptions = fmtDescriptions;
-		this.fmtOptionality = fmtOptionality;
+		this.fmtNullability = fmtNullability;
 	}
 
 	public String name(FunctionalMethodType fmt) {
@@ -42,11 +42,11 @@ public class MethodParamInfo {
 		return fmtDescriptions;
 	}
 
-	public Map<FunctionalMethodType, Boolean> getFmtOptionality() {
-		return fmtOptionality;
+	public Map<FunctionalMethodType, Boolean> getFmtNullability() {
+		return fmtNullability;
 	}
 
 	public Boolean optionality(FunctionalMethodType fmt) {
-		return fmtOptionality.getOrDefault(fmt, false);
+		return fmtNullability.getOrDefault(fmt, false);
 	}
 }

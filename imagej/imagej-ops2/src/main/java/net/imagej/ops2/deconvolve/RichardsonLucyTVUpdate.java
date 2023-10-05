@@ -45,7 +45,7 @@ import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.Optional;
+import org.scijava.ops.spi.Nullable;
 
 /**
  * Implements update step for Richardson-Lucy algorithm with total variation
@@ -74,7 +74,8 @@ public class RichardsonLucyTVUpdate<T extends RealType<T> & NativeType<T>, I ext
 	 * @param estimate
 	 */
 	@Override
-	public void compute(final I correction, final Float regularizationFactor, @Optional RandomAccessibleInterval<T> variation, final I estimate) {
+	public void compute(final I correction, final Float regularizationFactor, @Nullable
+	RandomAccessibleInterval<T> variation, final I estimate) {
 
 		if (variation == null) {
 			Type<T> type = Util.getTypeFromInterval(correction);

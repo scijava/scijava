@@ -32,7 +32,6 @@ package net.imagej.ops2.threshold.localNiblack;
 import java.util.Arrays;
 import java.util.function.Function;
 
-import net.imagej.ops2.filter.CenterAwareNeighborhoodBasedFilter;
 import net.imagej.ops2.threshold.ApplyLocalThresholdIntegral;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.RectangleNeighborhood;
@@ -45,8 +44,8 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.composite.Composite;
 
 import org.scijava.function.Computers;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.Optional;
 
 /**
  * @implNote op names='threshold.localNiblack', priority='-100.'
@@ -80,7 +79,7 @@ public class LocalNiblackThreshold<T extends RealType<T>> extends
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
 		final Shape inputNeighborhoodShape, final Double c, final Double k,
-		@Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
+		@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final RandomAccessibleInterval<BitType> output)
 	{
 		// Use integral images for sufficiently large windows.

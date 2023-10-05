@@ -44,8 +44,8 @@ import net.imglib2.type.logic.BitType;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.scijava.function.Functions;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.Optional;
 
 /**
  * <p>
@@ -77,7 +77,7 @@ public class DefaultVoxelization3D
 	 */
 	@Override
 	public RandomAccessibleInterval<BitType> apply(final Mesh input,
-			@Optional Integer width, @Optional Integer height, @Optional Integer depth) {
+			@Nullable Integer width, @Nullable Integer height, @Nullable Integer depth) {
 		if (width == null)
 			width = 10;
 		if (height == null)

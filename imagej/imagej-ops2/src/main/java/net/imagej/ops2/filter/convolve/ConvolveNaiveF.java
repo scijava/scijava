@@ -44,8 +44,8 @@ import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.Optional;
 
 /**
  * Convolves an image naively (no FFTs).
@@ -99,7 +99,7 @@ public class ConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & Nativ
 	 */
 	@Override
 	public RandomAccessibleInterval<O> apply(final RandomAccessibleInterval<I> input,
-			final RandomAccessibleInterval<K> kernel, @Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obf,
+			final RandomAccessibleInterval<K> kernel, @Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obf,
 			final O outType) {
 
 		// conforms only if the kernel is sufficiently small

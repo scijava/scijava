@@ -5,9 +5,9 @@ import java.lang.reflect.Method;
 
 import org.scijava.function.Functions;
 import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpMethod;
-import org.scijava.ops.spi.Optional;
 
 /**
  * One powerful feature of SciJava Ops is the ability to transform individual
@@ -15,16 +15,16 @@ import org.scijava.ops.spi.Optional;
  * calls with just one implementation.
  * <p>
  * Another transformation is called "reduction". This type of transformation
- * allows marked "Optional" parameters to be omitted from Op requests, <b>in a
+ * allows marked "Nullable" parameters to be omitted from Op requests, <b>in a
  * right-to-left order</b>. For example, if the rightmost parameter to an Op is
- * marked as Optional, then it can be provided, or omitted, in Op signatures. If
- * the rightmost <b>two</b> parameters are both marked as Optional, then both
+ * marked as Nullable, then it can be provided, or omitted, in Op signatures. If
+ * the rightmost <b>two</b> parameters are both marked as Nullable, then both
  * can be provided, both can be omitted, or only the rightmost parameter can be
  * omitted.
  * <p>
- * Within Ops declaring Optional parameters, omitted parameters are given
+ * Within Ops declaring Nullable parameters, omitted parameters are given
  * {@code null} arguments. The Op is thus responsible for null-checking any
- * parameters it declares as Optional.
+ * parameters it declares as Nullable.
  * <p>
  * Below, we can see how this works by calling the above Method Op, normally
  * requiring three parameters, with only two parameters.
@@ -40,8 +40,8 @@ public class OpReduction implements OpCollection {
 	 * @return the sum of the passed numbers.
 	 */
 	@OpMethod(names = "tutorial.reduce", type = Functions.Arity3.class)
-	public static Double optionalMethod(Double in1, @Optional Double in2,
-		@Optional Double in3)
+	public static Double nullableMethod(Double in1, @Nullable Double in2,
+		@Nullable Double in3)
 	{
 		// neither were given
 		if (in2 == null && in3 == null) {
@@ -74,7 +74,7 @@ public class OpReduction implements OpCollection {
 		// -- CALL WITH ALL THREE PARAMETERS -- //
 
 		// Ask for an Op of name "tutorial.reduce"
-		Double noOptional = ops.ternary("tutorial.reduce") //
+		Double noNullable = ops.ternary("tutorial.reduce") //
 			// With our two Double inputs
 			.input(first, second, third) //
 			// And get a Double out
@@ -85,7 +85,7 @@ public class OpReduction implements OpCollection {
 		// -- CALL WITH ONE OPTIONAL PARAMETER -- //
 
 		// Ask for an Op of name "tutorial.reduce"
-		Double oneOptional = ops.binary("tutorial.reduce") //
+		Double oneNullable = ops.binary("tutorial.reduce") //
 			// With our two Double inputs
 			.input(first, second) //
 			// And get a Double out
@@ -96,7 +96,7 @@ public class OpReduction implements OpCollection {
 		// -- CALL WITH TWO OPTIONAL PARAMETERS -- //
 
 		// Ask for an Op of name "tutorial.reduce"
-		Double twoOptional = ops.unary("tutorial.reduce") //
+		Double twoNullable = ops.unary("tutorial.reduce") //
 			// With our two Double inputs
 			.input(first) //
 			// And get a Double out

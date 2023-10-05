@@ -98,7 +98,7 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	 * @see NeighborhoodFilters#defaultMax(Computers.Arity1, Neighborhood, Object)
 	 */
 	@Test
-	public void testMaxFilterOptional() {
+	public void testMaxFilterNullable() {
 		ops.op("filter.max").arity2().input(in, shape).output(out).compute();
 	}
 
@@ -124,7 +124,7 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	 * @see NeighborhoodFilters#defaultMean(Computers.Arity1, Neighborhood, Object)
 	 */
 	@Test
-	public void testMeanFilterOptional() {
+	public void testMeanFilterNullable() {
 		ops.op("filter.mean").arity2().input(in, shape).output(out).compute();
 	}
 
@@ -151,7 +151,7 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	 * @see NeighborhoodFilters#defaultMedian(Computers.Arity1, Neighborhood, Object)
 	 */
 	@Test
-	public void testMedianFilterOptional() {
+	public void testMedianFilterNullable() {
 		ops.op("filter.median").arity2().input(in, shape).output(out).compute();
 	}
 
@@ -176,7 +176,7 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	 * @see NeighborhoodFilters#defaultMinimum(Computers.Arity1, Neighborhood, Object)
 	 */
 	@Test
-	public void testMinFilterOptional() {
+	public void testMinFilterNullable() {
 		ops.op("filter.min").arity2().input(in, shape).output(out).compute();
 	}
 
@@ -190,7 +190,7 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void testSigmaFilterOptional() {
+	public void testSigmaFilterNullable() {
 		ops.op("filter.sigma").arity4().input(in, shape, 1.0, 0.0).output(out).compute();
 	}
 
@@ -212,7 +212,7 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void testVarianceFilterOptional() {
+	public void testVarianceFilterNullable() {
 		ops.op("filter.variance").arity2().input(in, shape).output(out).compute();
 	}
 

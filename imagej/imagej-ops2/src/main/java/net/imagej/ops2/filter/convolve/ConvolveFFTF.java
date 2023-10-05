@@ -45,8 +45,8 @@ import net.imglib2.util.Util;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.Optional;
 
 /**
  * Convolve op for (@link Img)
@@ -93,8 +93,8 @@ public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealT
 	public RandomAccessibleInterval<O> apply(final RandomAccessibleInterval<I> input,
 			final RandomAccessibleInterval<K> kernel,
 			final O outType, final C complexType,
-			@Optional final long[] borderSize,
-			@Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput) {
+			@Nullable final long[] borderSize,
+			@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput) {
 
 		RandomAccessibleInterval<O> output = outputCreator.apply(input, outType);
 

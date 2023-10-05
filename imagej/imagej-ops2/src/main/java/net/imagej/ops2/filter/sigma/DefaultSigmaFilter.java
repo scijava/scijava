@@ -39,7 +39,7 @@ import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.Optional;
+import org.scijava.ops.spi.Nullable;
 
 /**
  * Default implementation of {@link SigmaFilterOp}.
@@ -71,7 +71,7 @@ public class DefaultSigmaFilter<T extends RealType<T>, V extends RealType<V>> im
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
 			final Double range, final Double minPixelFraction,
-			@Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
+			@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 			final RandomAccessibleInterval<V> output) {
 		if (outOfBoundsFactory == null)
 			outOfBoundsFactory = new OutOfBoundsMirrorFactory<>(

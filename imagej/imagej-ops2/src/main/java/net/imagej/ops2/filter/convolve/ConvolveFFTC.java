@@ -36,7 +36,7 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.Optional;
+import org.scijava.ops.spi.Nullable;
 
 /**
  * Convolve op for (@link RandomAccessibleInterval)
@@ -74,7 +74,7 @@ public class ConvolveFFTC<I extends RealType<I>, O extends RealType<O>, K extend
 	@Override
 	public void compute(RandomAccessibleInterval<I> in, RandomAccessibleInterval<K> kernel,
 			RandomAccessibleInterval<C> fftInput, RandomAccessibleInterval<C> fftKernel,
-			@Optional Boolean performInputFFT, @Optional Boolean performKernelFFT, RandomAccessibleInterval<O> out) {
+			@Nullable Boolean performInputFFT, @Nullable Boolean performKernelFFT, RandomAccessibleInterval<O> out) {
 		if (performInputFFT == null) performInputFFT = true;
 		if (performKernelFFT == null) performKernelFFT = true;
 		linearFilter.compute(in, kernel, performInputFFT, performKernelFFT, mul, fftInput, fftKernel, out);

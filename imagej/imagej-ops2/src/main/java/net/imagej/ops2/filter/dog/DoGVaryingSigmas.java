@@ -37,7 +37,7 @@ import net.imglib2.type.numeric.NumericType;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.Optional;
+import org.scijava.ops.spi.Nullable;
 
 /**
  * Difference of Gaussians (DoG) implementation where sigmas can vary by
@@ -71,7 +71,7 @@ public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>> implemen
 	@Override
 	public void compute(final RandomAccessibleInterval<T> t, final double[] sigmas1, //
 			final double[] sigmas2, //
-			@Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> fac, //
+			@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> fac, //
 			final RandomAccessibleInterval<T> output) {
 		if (sigmas1.length != sigmas2.length || sigmas1.length != t.numDimensions())
 			throw new IllegalArgumentException("Do not have enough sigmas to apply to each dimension of the input!");
@@ -111,7 +111,7 @@ class DoGSingleSigma<T extends NumericType<T> & NativeType<T>> implements
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input, final Double sigma1, final Double sigma2,
-			@Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> oobf,
+			@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> oobf,
 			RandomAccessibleInterval<T> out) {
 		double[] sigmas1 = new double[input.numDimensions()];
 		double[] sigmas2 = new double[input.numDimensions()];

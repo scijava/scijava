@@ -12,7 +12,7 @@ import org.scijava.function.Container;
 import org.scijava.function.Mutable;
 import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.engine.util.internal.AnnotationUtils;
-import org.scijava.ops.spi.Optional;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Structs;
@@ -103,22 +103,22 @@ public class FunctionalParameters {
 	}
 
 
-	public static Boolean hasOptionalAnnotations(Method m) {
+	public static Boolean hasNullableAnnotations(Method m) {
 		return Arrays.stream(m.getParameters()).anyMatch(p -> p.isAnnotationPresent(
-				Optional.class));
+				Nullable.class));
 	}
 
-	public static Boolean[] findParameterOptionality(Method m) {
+	public static Boolean[] findParameterNullability(Method m) {
 		return Arrays.stream(m.getParameters()).map(p -> p.isAnnotationPresent(
-				Optional.class)).toArray(Boolean[]::new);
+				Nullable.class)).toArray(Boolean[]::new);
 	}
 
-	public static List<Method> fMethodsWithOptional(Class<?> opClass) {
+	public static List<Method> fMethodsWithNullable(Class<?> opClass) {
 		Method superFMethod = OpUtils.findFunctionalMethod(opClass);
 		return Arrays.stream(opClass.getMethods()) //
 				.filter(m -> m.getName().equals(superFMethod.getName())) //
 				.filter(m -> m.getParameterCount() == superFMethod.getParameterCount()) //
-				.filter(m -> hasOptionalAnnotations(m)) //
+				.filter(m -> hasNullableAnnotations(m)) //
 				.collect(Collectors.toList());
 	}
 

@@ -35,7 +35,7 @@ import java.lang.reflect.TypeVariable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.scijava.ops.api.OpRef;
+import org.scijava.ops.api.OpRequest;
 import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.types.Types;
 import org.scijava.types.inference.GenericAssignability;
@@ -44,14 +44,14 @@ import org.scijava.types.inference.GenericAssignability;
  * Data structure which identifies an Op by name and/or type(s) and/or argument
  * type(s), along with a list of input arguments.
  * <p>
- * With the help of the {@link OpMatcher}, an {@code OpRef} holds all
+ * With the help of the {@link OpMatcher}, an {@link OpRequest} holds all
  * information needed to create an appropriate Op.
  * </p>
  *
  * @author Christian Dietz (University of Konstanz)
  * @author Curtis Rueden
  */
-public class DefaultOpRef implements OpRef {
+public class DefaultOpRequest implements OpRequest {
 
 	/** Name of the op, or null for any name. */
 	private final String name;
@@ -67,23 +67,23 @@ public class DefaultOpRef implements OpRef {
 
 	// -- Static construction methods --
 
-	public static DefaultOpRef fromTypes(final String name, final Type type,
+	public static DefaultOpRequest fromTypes(final String name, final Type type,
 		final Type outType, final Type... args)
 	{
-		return new DefaultOpRef(name, type, outType, OpRef.filterNulls(args));
+		return new DefaultOpRequest(name, type, outType, OpRequest.filterNulls(args));
 	}
 
 	// -- Constructor --
 
 	/**
-	 * Creates a new op reference.
+	 * Creates a new op request.
 	 *
 	 * @param name name of the op, or null for any name.
 	 * @param type type which the ops must match.
 	 * @param outType the op's required output type.
 	 * @param args arguments to the op.
 	 */
-	public DefaultOpRef(final String name, final Type type, final Type outType,
+	public DefaultOpRequest(final String name, final Type type, final Type outType,
 		final Type[] args)
 	{
 		this.name = name;
@@ -92,7 +92,7 @@ public class DefaultOpRef implements OpRef {
 		this.args = args;
 	}
 
-	// -- OpRef methods --
+	// -- OpRequest methods --
 
 	/** Gets the name of the op. */
 	@Override
@@ -126,9 +126,9 @@ public class DefaultOpRef implements OpRef {
 	@Override
 	public String getLabel() {
 		final StringBuilder sb = new StringBuilder();
-		OpRef.append(sb, name);
+		OpRequest.append(sb, name);
 		if (type != null) {
-			OpRef.append(sb, Types.name(type));
+			OpRequest.append(sb, Types.name(type));
 		}
 		return sb.toString();
 	}
@@ -166,17 +166,17 @@ public class DefaultOpRef implements OpRef {
 
 	@Override
 	public String toString() {
-		return refString();
+		return requestString();
 	}
 
 	@Override
 	public boolean equals(final Object obj) {
-		return refEquals(obj);
+		return requestEquals(obj);
 	}
 
 	@Override
 	public int hashCode() {
-		return refHashCode();
+		return requestHashCode();
 	}
 
 }

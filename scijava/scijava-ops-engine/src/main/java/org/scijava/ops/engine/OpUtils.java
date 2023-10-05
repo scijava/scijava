@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 import org.scijava.common3.validity.ValidityException;
 import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpRef;
+import org.scijava.ops.api.OpRequest;
 import org.scijava.struct.Member;
 import org.scijava.struct.MemberInstance;
 import org.scijava.struct.Struct;
@@ -135,9 +135,9 @@ public final class OpUtils {
 		return members.stream().map(m -> m.getType()).toArray(Type[]::new);
 	}
 
-	public static Class<?> findFirstImplementedFunctionalInterface(final OpRef opRef) {
+	public static Class<?> findFirstImplementedFunctionalInterface(final OpRequest opRequest) {
 		final Class<?> functionalInterface = OpUtils
-			.findFunctionalInterface(Types.raw(opRef.getType()));
+			.findFunctionalInterface(Types.raw(opRequest.getType()));
 		if (functionalInterface != null) {
 			return functionalInterface;
 		}

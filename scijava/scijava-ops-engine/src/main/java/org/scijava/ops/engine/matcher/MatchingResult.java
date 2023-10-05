@@ -9,12 +9,12 @@ import org.scijava.ops.api.OpRetrievalException;
 import org.scijava.ops.engine.OpCandidate;
 import org.scijava.ops.engine.OpCandidate.StatusCode;
 import org.scijava.ops.engine.OpDescription;
-import org.scijava.ops.api.OpRef;
+import org.scijava.ops.api.OpRequest;
 
 /**
  * Class representing the result from type matching done by a
  * {@link MatchingRoutine}. Contains the original candidates which match the
- * types specified by {@link OpRef} and the final matches that match all inputs,
+ * types specified by {@link OpRequest} and the final matches that match all inputs,
  * outputs, and arguments.
  * 
  * @author David Kolb
@@ -23,19 +23,19 @@ public class MatchingResult {
 
 	private final List<OpCandidate> candidates;
 	private final List<OpCandidate> matches;
-	private final List<OpRef> originalQueries;
+	private final List<OpRequest> originalQueries;
 
-	public static MatchingResult empty(final List<OpRef> originalQueries) {
-		return new MatchingResult(new ArrayList<OpCandidate>(), new ArrayList<OpCandidate>(), originalQueries);
+	public static MatchingResult empty(final List<OpRequest> originalQueries) {
+		return new MatchingResult(new ArrayList<>(), new ArrayList<>(), originalQueries);
 	}
 	
-	public MatchingResult(final List<OpCandidate> candidates, final List<OpCandidate> matches, final List<OpRef> originalQueries) {
+	public MatchingResult(final List<OpCandidate> candidates, final List<OpCandidate> matches, final List<OpRequest> originalQueries) {
 		this.candidates = candidates;
 		this.matches = matches;
 		this.originalQueries = originalQueries;
 	}
 
-	public List<OpRef> getOriginalQueries() {
+	public List<OpRequest> getOriginalQueries() {
 		return originalQueries;
 	}
 
@@ -88,14 +88,14 @@ public class MatchingResult {
 		List<OpCandidate> candidates = res.getCandidates();
 		List<OpCandidate> matches = res.getMatches();
 	
-		final OpRef ref = res.getOriginalQueries().get(0);
+		final OpRequest request = res.getOriginalQueries().get(0);
 		if (matches.isEmpty()) {
 			// no matches
-			sb.append("No matching '" + ref.getLabel() + "' op\n");
+			sb.append("No matching '" + request.getLabel() + "' op\n");
 		} else {
 			// multiple matches
 			final double priority = matches.get(0).priority();
-			sb.append("Multiple '" + ref.getLabel() + "' ops of priority " + priority +
+			sb.append("Multiple '" + request.getLabel() + "' ops of priority " + priority +
 					":\n");
 			if (typeCheckingIncomplete(matches)) {
 				sb.append("Incomplete output type checking may have occured!\n");
@@ -110,7 +110,7 @@ public class MatchingResult {
 		// fail, with information about the request and candidates
 		sb.append("\n");
 		sb.append("Request:\n");
-		sb.append("-\t" + ref.toString() + "\n");
+		sb.append("-\t" + request + "\n");
 		sb.append("\n");
 		sb.append("Candidates:\n");
 		if (candidates.isEmpty()) {

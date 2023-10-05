@@ -1,7 +1,7 @@
 package org.scijava.ops.api;
 
 /**
- * Indicates that no op satisfying an {@link OpRef} could be retrieved.
+ * Indicates that no op satisfying an {@link OpRequest} could be retrieved.
  * 
  * @author David Kolb
  */

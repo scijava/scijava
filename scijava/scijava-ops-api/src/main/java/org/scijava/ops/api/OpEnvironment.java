@@ -45,7 +45,7 @@ import org.scijava.types.Nil;
  * <ul>
  * <li>The pool of available ops, from which candidates are chosen.</li>
  * <li>Type-safe, built-in method signatures for all op implementations.</li>
- * <li>Selection (a.k.a. "matching") of op implementations from {@link OpRef}
+ * <li>Selection (a.k.a. "matching") of op implementations from {@link OpRequest}
  * descriptors.</li>
  * </ul>
  * <p>

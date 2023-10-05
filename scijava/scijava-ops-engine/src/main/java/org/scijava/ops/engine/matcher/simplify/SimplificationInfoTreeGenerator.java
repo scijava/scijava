@@ -21,17 +21,17 @@ public class SimplificationInfoTreeGenerator implements InfoTreeGenerator {
 		int compIndex = 0;
 
 		// Proceed to input simplifiers
-		List<InfoTree> refSimplifiers = new ArrayList<>();
-		String refSimpComp = components.get(compIndex);
-		while (refSimpComp.startsWith(
+		List<InfoTree> reqSimplifiers = new ArrayList<>();
+		String reqSimpComp = components.get(compIndex);
+		while (reqSimpComp.startsWith(
 			SimplifiedOpInfo.INPUT_SIMPLIFIER_DELIMITER))
 		{
-			String refSimpSignature = refSimpComp.substring(
+			String reqSimpSignature = reqSimpComp.substring(
 				SimplifiedOpInfo.INPUT_SIMPLIFIER_DELIMITER.length());
-			InfoTree refSimpChain = InfoTreeGenerator.generateDependencyTree(
-				refSimpSignature, idMap, generators);
-			refSimplifiers.add(refSimpChain);
-			refSimpComp = components.get(++compIndex);
+			InfoTree reqSimpChain = InfoTreeGenerator.generateDependencyTree(
+				reqSimpSignature, idMap, generators);
+			reqSimplifiers.add(reqSimpChain);
+			reqSimpComp = components.get(++compIndex);
 		}
 
 		// Proceed to input simplifiers
@@ -48,7 +48,7 @@ public class SimplificationInfoTreeGenerator implements InfoTreeGenerator {
 			infoFocuserComp = components.get(++compIndex);
 		}
 
-		if (infoFocusers.size() != refSimplifiers.size())
+		if (infoFocusers.size() != reqSimplifiers.size())
 			throw new IllegalArgumentException("Signature " + signature +
 				" does not have the same number of input simplifiers and input focusers!");
 
@@ -102,7 +102,7 @@ public class SimplificationInfoTreeGenerator implements InfoTreeGenerator {
 
 
 		SimplificationMetadata metadata = new SimplificationMetadata(originalChain
-			.info(), refSimplifiers, infoFocusers, outputSimplifierChain,
+			.info(), reqSimplifiers, infoFocusers, outputSimplifierChain,
 			outputFocuserChain, copierChain);
 		OpInfo baseInfo = new SimplifiedOpInfo(originalChain.info(), metadata, Double.MIN_VALUE);
 		return new InfoTree(baseInfo, originalChain.dependencies());

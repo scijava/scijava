@@ -38,14 +38,14 @@ import java.util.Map;
 
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpRef;
+import org.scijava.ops.api.OpRequest;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.types.Types;
 
 /**
- * Container class for a possible operation match between an {@link OpRef} and
+ * Container class for a possible operation match between an {@link OpRequest} and
  * an {@link OpInfo}.
  *
  * @author Curtis Rueden
@@ -65,7 +65,7 @@ public class OpCandidate {
 	}
 
 	private final OpEnvironment env;
-	private final OpRef ref;
+	private final OpRequest request;
 	private final OpInfo info;
 
 	private final Map<TypeVariable<?>, Type> typeVarAssigns;
@@ -76,27 +76,27 @@ public class OpCandidate {
 	private Member<?> statusItem;
 
 	/** (Null-)Padded arguments of the op if the op has not required parameters.
-	 * If the op does not, this will be the same as {@link #ref}.getArgs(). */
+	 * If the op does not, this will be the same as {@link #request}.getArgs(). */
 	private final Type[] paddedArgs;
 
-	public OpCandidate(final OpEnvironment env, final OpRef ref, final OpInfo info,
+	public OpCandidate(final OpEnvironment env, final OpRequest request, final OpInfo info,
 		final Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
 		this.env = env;
-		this.ref = ref;
+		this.request = request;
 		this.info = info;
 		this.typeVarAssigns = typeVarAssigns;
 
-		this.paddedArgs = padTypes(this, getRef().getArgs());
-		this.reifiedType = getReifiedType(ref, info, typeVarAssigns);
+		this.paddedArgs = padTypes(this, getRequest().getArgs());
+		this.reifiedType = getReifiedType(request, info, typeVarAssigns);
 	}
 
-	public OpCandidate(final OpEnvironment env, final OpRef ref, final OpInfo info) {
-			this(env, ref, info, typeVarAssignsFromRefAndInfo(ref, info));
+	public OpCandidate(final OpEnvironment env, final OpRequest request, final OpInfo info) {
+			this(env, request, info, typeVarAssignsFromRequestAndInfo(request, info));
 	}
 
-	public static Type getReifiedType(OpRef ref, OpInfo info, Map<TypeVariable<?>, Type> typeVarAssigns) {
-		Type exactSuperType = Types.getExactSuperType(info.opType(), Types.raw(ref.getType()));
+	public static Type getReifiedType(OpRequest request, OpInfo info, Map<TypeVariable<?>, Type> typeVarAssigns) {
+		Type exactSuperType = Types.getExactSuperType(info.opType(), Types.raw(request.getType()));
 		return Types.mapVarToTypes(exactSuperType, typeVarAssigns);
 	}
 
@@ -105,9 +105,9 @@ public class OpCandidate {
 		return env;
 	}
 
-	/** Gets the op reference describing the desired match. */
-	public OpRef getRef() {
-		return ref;
+	/** Gets the op request describing the desired match. */
+	public OpRequest getRequest() {
+		return request;
 	}
 
 	/** Gets the {@link OpInfo} metadata describing the op to match against. */
@@ -237,11 +237,11 @@ public class OpCandidate {
 	}
 
 	// -- Helper methods -- //
-	private static Map<TypeVariable<?>, Type> typeVarAssignsFromRefAndInfo(final OpRef ref, final OpInfo info) {
+	private static Map<TypeVariable<?>, Type> typeVarAssignsFromRequestAndInfo(final OpRequest request, final OpInfo info) {
 		Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
-		if (!ref.typesMatch(info.opType(), typeVarAssigns))
+		if (!request.typesMatch(info.opType(), typeVarAssigns))
 			throw new IllegalArgumentException(
-					"OpInfo " + info + " cannot satisfy the requirements contained within OpRef " + ref);
+					"OpInfo " + info + " cannot satisfy the requirements contained within OpRequest " + request);
 		return typeVarAssigns;
 	}
 

@@ -4,25 +4,25 @@ package org.scijava.ops.engine;
 import java.util.Objects;
 
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.OpRef;
+import org.scijava.ops.api.OpRequest;
 
 public class MatchingConditions {
 
-	private final OpRef ref;
+	private final OpRequest request;
 	private final Hints hints;
 
-	private MatchingConditions(OpRef ref, Hints hints) {
-		this.ref = ref;
+	private MatchingConditions(OpRequest request, Hints hints) {
+		this.request = request;
 		this.hints = hints;
 	}
 
-	public static MatchingConditions from(OpRef r, Hints h) {
+	public static MatchingConditions from(OpRequest request, Hints h) {
 		Hints hintCopy = h.copy();
-		return new MatchingConditions(r, hintCopy);
+		return new MatchingConditions(request, hintCopy);
 	}
 
-	public OpRef ref() {
-		return ref;
+	public OpRequest request() {
+		return request;
 	}
 
 	public Hints hints() {
@@ -33,13 +33,13 @@ public class MatchingConditions {
 	public boolean equals(Object that) {
 		if (!(that instanceof MatchingConditions)) return false;
 		MatchingConditions thoseConditions = (MatchingConditions) that;
-		return ref().equals(thoseConditions.ref()) && hints().equals(
+		return request().equals(thoseConditions.request()) && hints().equals(
 			thoseConditions.hints());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(ref(), hints());
+		return Objects.hash(request(), hints());
 	}
 
 }

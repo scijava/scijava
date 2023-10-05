@@ -44,7 +44,7 @@ import org.scijava.types.Types;
  * @author Christian Dietz (University of Konstanz)
  * @author Curtis Rueden
  */
-public interface OpRef {
+public interface OpRequest {
 
 	// -- OpRef methods --
 
@@ -77,7 +77,7 @@ public interface OpRef {
 
 	// -- Object methods --
 
-	default String refString() {
+	default String requestString() {
 		String n = getName() == null ? "" : "Name: \"" + getName() + "\", Types: ";
 		n += getType() + "\n";
 		n += "Input Types: \n";
@@ -93,14 +93,14 @@ public interface OpRef {
 		return n.substring(0, n.length() - 1);
 	}
 
-	default boolean refEquals(final Object obj) {
+	default boolean requestEquals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		final OpRef other = (OpRef) obj;
+		final OpRequest other = (OpRequest) obj;
 		if (!Objects.equals(getName(), other.getName()))
 			return false;
 		if (!Objects.equals(getType(), other.getType()))
@@ -112,7 +112,7 @@ public interface OpRef {
 		return true;
 	}
 
-	default int refHashCode() {
+	default int requestHashCode() {
 		return Arrays.deepHashCode(new Object[] {getName(), getType(), getOutType(), getArgs()});
 	}
 

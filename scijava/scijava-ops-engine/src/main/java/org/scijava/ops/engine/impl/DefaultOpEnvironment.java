@@ -58,7 +58,7 @@ import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInstance;
-import org.scijava.ops.api.OpRef;
+import org.scijava.ops.api.OpRequest;
 import org.scijava.ops.api.OpRetrievalException;
 import org.scijava.ops.api.RichOp;
 import org.scijava.ops.engine.BaseOpHints.Adaptation;
@@ -75,8 +75,8 @@ import org.scijava.ops.engine.OpWrapper;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.engine.matcher.impl.DefaultOpMatcher;
-import org.scijava.ops.engine.matcher.impl.DefaultOpRef;
-import org.scijava.ops.engine.matcher.impl.InfoMatchingOpRef;
+import org.scijava.ops.engine.matcher.impl.DefaultOpRequest;
+import org.scijava.ops.engine.matcher.impl.InfoMatchingOpRequest;
 import org.scijava.ops.engine.matcher.impl.OpClassInfo;
 import org.scijava.ops.engine.struct.FunctionalParameters;
 import org.scijava.ops.spi.Op;
@@ -123,7 +123,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	private Map<String, OpInfo> idDirectory;
 
 	/**
-	 * Map containing pairs of {@link MatchingConditions} (i.e. the {@link OpRef}
+	 * Map containing pairs of {@link MatchingConditions} (i.e. the {@link OpRequest}
 	 * and {@link Hints} used to find an Op) and the {@link OpInstance} (wrapping an Op
 	 * with its backing {@link OpInfo}) that matched those requests. Used to
 	 * quickly return Ops when the matching conditions are identical to those of a
@@ -367,9 +367,9 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	private <T> RichOp<T> findOp(final String opName, final Nil<T> specialType,
 		final Nil<?>[] inTypes, final Nil<?> outType, Hints hints)
 	{
-		final OpRef ref = DefaultOpRef.fromTypes(opName, specialType.getType(),
+		final OpRequest request = DefaultOpRequest.fromTypes(opName, specialType.getType(),
 			outType != null ? outType.getType() : null, toTypes(inTypes));
-		MatchingConditions conditions = generateCacheHit(ref, hints);
+		MatchingConditions conditions = generateCacheHit(request, hints);
 		return (RichOp<T>) wrapViaCache(conditions);
 	}
 
@@ -377,8 +377,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	private <T> OpInstance<T> findOp(final OpInfo info, final Nil<T> specialType,
 		Hints hints) throws OpRetrievalException
 	{
-		OpRef ref = new InfoMatchingOpRef(info, specialType);
-		MatchingConditions conditions = insertCacheHit(ref, hints, info);
+		OpRequest request = new InfoMatchingOpRequest(info, specialType);
+		MatchingConditions conditions = insertCacheHit(request, hints, info);
 		return (OpInstance<T>) getInstance(conditions);
 	}
 
@@ -395,20 +395,21 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * This Op instance is put into the {@link #opCache}, and is retrievable via
 	 * {@link DefaultOpEnvironment#wrapViaCache(MatchingConditions)}
 	 * 
-	 * @param ref the {@link OpRef} request
+	 * @param request the {@link OpRequest} request
 	 * @param hints the {@link Hints} containing matching preferences
 	 * @param info the {@link OpInfo} describing the Op that should match these
 	 *          conditions1
 	 * @return the {@link MatchingConditions} that will return the Op described by
 	 *         {@code info} from the op cache
 	 */
-	private MatchingConditions insertCacheHit(final OpRef ref, final Hints hints,
-		final OpInfo info)
-	{
-		MatchingConditions conditions = MatchingConditions.from(ref, hints);
+	private MatchingConditions insertCacheHit(final OpRequest request, //
+		final Hints hints, //
+		final OpInfo info //
+	)	{
+		MatchingConditions conditions = MatchingConditions.from(request, hints);
 
-		// create new OpCandidate from ref and info
-		OpCandidate candidate = new OpCandidate(this, ref, info);
+		// create new OpCandidate from request and info
+		OpCandidate candidate = new OpCandidate(this, request, info);
 
 		instantiateAndCache(conditions, candidate);
 
@@ -416,26 +417,26 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	/**
-	 * Finds an Op instance matching the request described by {@link OpRef}
-	 * {@code ref} and stores this Op in {@link #opCache}. NB the return must be an
+	 * Finds an Op instance matching the request described by {@link OpRequest}
+	 * {@code request} and stores this Op in {@link #opCache}. NB the return must be an
 	 * {@link Object} here (instead of some type variable T where T is the Op
-	 * type) since there is no way to ensure that the {@code OpRef} can provide
-	 * that T (since the OpRef could require that the Op returned is of multiple
+	 * type) since there is no way to ensure that the {@link OpRequest} can provide
+	 * that T (since the {@link OpRequest} could require that the Op returned is of multiple
 	 * types).
 	 * 
-	 * @param ref the {@link OpRef} request
+	 * @param request the {@link OpRequest} request
 	 * @param hints the {@link Hints} containing matching preferences
 	 * @return the {@link MatchingConditions} that will return the Op found from
 	 *         the op cache
 	 */
-	private MatchingConditions generateCacheHit(OpRef ref, Hints hints) {
-		MatchingConditions conditions = MatchingConditions.from(ref, hints);
-		// see if the ref has been matched already
+	private MatchingConditions generateCacheHit(OpRequest request, Hints hints) {
+		MatchingConditions conditions = MatchingConditions.from(request, hints);
+		// see if the request has been matched already
 		OpInstance<?> cachedOp = getInstance(conditions);
 		if (cachedOp != null) return conditions;
 
 		// obtain suitable OpCandidate
-		OpCandidate candidate = findOpCandidate(conditions.ref(), conditions
+		OpCandidate candidate = findOpCandidate(conditions.request(), conditions
 			.hints());
 
 		instantiateAndCache(conditions, candidate);
@@ -457,8 +458,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		return opCache.get(conditions);
 	}
 
-	private OpCandidate findOpCandidate(OpRef ref, Hints hints) {
-		return matcher.match(MatchingConditions.from(ref, hints), this);
+	private OpCandidate findOpCandidate(OpRequest request, Hints hints) {
+		return matcher.match(MatchingConditions.from(request, hints), this);
 	}
 
 	/**
@@ -580,7 +581,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		final List<RichOp<?>> dependencyChains = new ArrayList<>();
 
 		for (final OpDependencyMember<?> dependency : OpUtils.dependenciesOf(info)) {
-			final OpRef dependencyRef = inferOpRef(dependency, typeVarAssigns);
+			final OpRequest dep = inferOpRequest(dependency, typeVarAssigns);
 			try {
 				// TODO: Consider a new Hint implementation
 				Hints hintsCopy = hints.plus(DependencyMatching.IN_PROGRESS,
@@ -589,13 +590,13 @@ public class DefaultOpEnvironment implements OpEnvironment {
 					hintsCopy = hintsCopy.plus(Adaptation.FORBIDDEN);
 				}
 
-				MatchingConditions conditions = generateCacheHit(dependencyRef,
+				MatchingConditions conditions = generateCacheHit(dep,
 					hintsCopy);
 				dependencyChains.add(wrapViaCache(conditions));
 			}
 			catch (final OpRetrievalException e) {
 				String message = DependencyMatchingException.message(info
-					.implementationName(), dependency.getKey(), dependencyRef);
+					.implementationName(), dependency.getKey(), dep);
 				if (e instanceof DependencyMatchingException) {
 					throw new DependencyMatchingException(message,
 						(DependencyMatchingException) e);
@@ -606,13 +607,13 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		return dependencyChains;
 	}
 
-	private OpRef inferOpRef(OpDependencyMember<?> dependency,
+	private OpRequest inferOpRequest(OpDependencyMember<?> dependency,
 		Map<TypeVariable<?>, Type> typeVarAssigns) 
 	{
 		final Type mappedDependencyType = Types.mapVarToTypes(new Type[] {
 			dependency.getType() }, typeVarAssigns)[0];
 		final String dependencyName = dependency.getDependencyName();
-		return inferOpRef(mappedDependencyType, dependencyName,
+		return inferOpRequest(mappedDependencyType, dependencyName,
 			typeVarAssigns);
 	}
 
@@ -627,13 +628,13 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 
 	/**
-	 * Tries to infer a {@link OpRef} from a functional Op type. E.g. the type:
+	 * Tries to infer a {@link OpRequest} from a functional Op type. E.g. the type:
 	 * 
 	 * <pre>
 	 * Computer&lt;Double[], Double[]&gt
 	 * </pre>
 	 * 
-	 * Will result in the following {@link OpRef}:
+	 * Will result in the following {@link OpRequest}:
 	 * 
 	 * <pre>
 	 * Name: 'specified name'
@@ -651,7 +652,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * @param typeVarAssigns the mappings of {@link TypeVariable}s to {@link Type}s 
 	 * @return null if the specified type has no functional method
 	 */
-	private OpRef inferOpRef(Type type, String name, Map<TypeVariable<?>, Type> typeVarAssigns) {
+	private OpRequest inferOpRequest(Type type, String name, Map<TypeVariable<?>, Type> typeVarAssigns) {
 		List<FunctionalMethodType> fmts = FunctionalParameters.findFunctionalMethodTypes(type);
 
 		EnumSet<ItemIO> inIos = EnumSet.of(ItemIO.INPUT, ItemIO.CONTAINER, ItemIO.MUTABLE);
@@ -679,7 +680,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			error += ". This is not supported.";
 			throw new OpRetrievalException(error);
 		}
-		return new DefaultOpRef(name, type, mappedOutputs[0], mappedInputs);
+		return new DefaultOpRequest(name, type, mappedOutputs[0], mappedInputs);
 	}
 
 	private synchronized void initOpDirectory() {

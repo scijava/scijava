@@ -37,14 +37,14 @@ import java.util.List;
 import org.scijava.ops.api.OpRetrievalException;
 import org.scijava.ops.engine.OpCandidate;
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpRef;
+import org.scijava.ops.api.OpRequest;
 import org.scijava.ops.engine.MatchingConditions;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.engine.matcher.OpMatcher;
 
 /**
  * Default implementation of {@link OpMatcher}. Used for finding Ops which match
- * a {@link OpRef request}.
+ * a {@link OpRequest request}.
  *
  * @author David Kolb
  */

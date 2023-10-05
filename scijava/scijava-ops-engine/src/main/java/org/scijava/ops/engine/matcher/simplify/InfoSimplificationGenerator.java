@@ -12,7 +12,8 @@ import java.util.Optional;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpRef;
+import org.scijava.ops.api.OpRequest;
+import org.scijava.struct.Member;
 import org.scijava.types.Types;
 
 
@@ -44,63 +45,63 @@ public class InfoSimplificationGenerator {
 		return info;
 	}
 
-	public SimplifiedOpInfo generateSuitableInfo(OpEnvironment env, OpRef originalRef, Hints hints) {
-		SimplifiedOpRef simpleRef = SimplifiedOpRef.simplificationOf(env, originalRef, hints);
-		return generateSuitableInfo(simpleRef);
+	public SimplifiedOpInfo generateSuitableInfo(OpEnvironment env, OpRequest originalReq, Hints hints) {
+		SimplifiedOpRequest
+				simpleReq = SimplifiedOpRequest.simplificationOf(env, originalReq, hints);
+		return generateSuitableInfo(simpleReq);
 	}
 
-	public SimplifiedOpInfo generateSuitableInfo(SimplifiedOpRef ref) {
-		if(!Types.isAssignable(Types.raw(info.opType()), ref.rawType()))
-				throw new IllegalArgumentException("OpInfo and OpRef do not share an Op type");
-		TypePair[] argPairings = generatePairings(ref);
-		TypePair outPairing = generateOutPairing(ref);
-		Map<TypePair, ChainCluster> pathways = findPathways(ref, argPairings, outPairing);
+	public SimplifiedOpInfo generateSuitableInfo(SimplifiedOpRequest req) {
+		if(!Types.isAssignable(Types.raw(info.opType()), req.rawType()))
+				throw new IllegalArgumentException("OpInfo and OpRequest do not share an Op type");
+		TypePair[] argPairings = generatePairings(req);
+		TypePair outPairing = generateOutPairing(req);
+		Map<TypePair, ChainCluster> pathways = findPathways(req, argPairings, outPairing);
 		validateClusters(pathways);
 
 		Map<TypePair, MutatorChain> chains = new HashMap<>();
 		pathways.forEach((pair, cluster) -> chains.put(pair, resolveCluster(cluster)));
 
-		SimplificationMetadata metadata = new SimplificationMetadata(ref, info, argPairings, outPairing, chains);
+		SimplificationMetadata metadata = new SimplificationMetadata(req, info, argPairings, outPairing, chains);
 		return new SimplifiedOpInfo(info, env, metadata);
 	}
 
-	private TypePair[] generatePairings(SimplifiedOpRef ref)
+	private TypePair[] generatePairings(SimplifiedOpRequest req)
 	{
-		Type[] originalArgs = ref.srcRef().getArgs();
-		Type[] originalParams = info.inputs().stream().map(m -> m.getType())
+		Type[] originalArgs = req.srcReq().getArgs();
+		Type[] originalParams = info.inputs().stream().map(Member::getType)
 			.toArray(Type[]::new);
 		TypePair[] pairings = Streams.zip(Arrays.stream(originalArgs), Arrays
-			.stream(originalParams), (from, to) -> new TypePair(from, to)).toArray(
+			.stream(originalParams), TypePair::new).toArray(
 				TypePair[]::new);
 		return pairings;
 	}
 
-	private TypePair generateOutPairing(SimplifiedOpRef ref) {
-		return new TypePair(info.output().getType(), ref.srcRef().getOutType());
+	private TypePair generateOutPairing(SimplifiedOpRequest req) {
+		return new TypePair(info.output().getType(), req.srcReq().getOutType());
 	}
 
-	private Map<TypePair, ChainCluster> findPathways(SimplifiedOpRef ref, TypePair[] argPairings, TypePair outPairing) {
-		if (ref.srcRef().getArgs().length != info.inputs().size())
+	private Map<TypePair, ChainCluster> findPathways(SimplifiedOpRequest req, TypePair[] argPairings, TypePair outPairing) {
+		if (req.srcReq().getArgs().length != info.inputs().size())
 			throw new IllegalArgumentException(
-				"ref and info must have the same number of arguments!");
-		int numInputs = ref.srcRef().getArgs().length;
+				"req and info must have the same number of arguments!");
+		int numInputs = req.srcReq().getArgs().length;
 
 		Map<TypePair, ChainCluster> pathways = new HashMap<>();
 
-		List<List<OpInfo>> infoFocusers = focuserSets;
 		for (int i = 0; i < numInputs; i++) {
 			TypePair pairing = argPairings[i];
-			if (pathways.keySet().contains(pairing)) continue;
-			List<OpInfo> simplifiers = ref.simplifierSets().get(i);
-			List<OpInfo> focusers = infoFocusers.get(i);
+			if (pathways.containsKey(pairing)) continue;
+			List<OpInfo> simplifiers = req.simplifierSets().get(i);
+			List<OpInfo> focusers = focuserSets.get(i);
 			ChainCluster cluster = ChainCluster.generateCluster(pairing, simplifiers, focusers, env);
 			pathways.put(pairing, cluster);
 		}
 
-		if(!pathways.keySet().contains(outPairing)) {
-			List<OpInfo> simplifiers = outputSimplifiers;
-			List<OpInfo> focusers = ref.outputFocusers();
-			ChainCluster cluster = ChainCluster.generateCluster(outPairing, simplifiers, focusers, env);
+		if(!pathways.containsKey(outPairing)) {
+			List<OpInfo> focusers = req.outputFocusers();
+			ChainCluster cluster = ChainCluster.generateCluster(outPairing,
+					outputSimplifiers, focusers, env);
 			pathways.put(outPairing, cluster);
 		}
 
@@ -109,7 +110,7 @@ public class InfoSimplificationGenerator {
 
 	/**
 	 * If any clusters have no chains from the input type to the output type, then
-	 * there does not exist a simplification pathway to mutate the ref type into
+	 * there does not exist a simplification pathway to mutate the request type into
 	 * the info type. Thus the arg types do not "match"
 	 */
 	private void validateClusters(Map<TypePair, ChainCluster> pathways) {

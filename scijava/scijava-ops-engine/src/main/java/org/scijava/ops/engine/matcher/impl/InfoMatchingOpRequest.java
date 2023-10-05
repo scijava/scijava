@@ -7,13 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpRef;
+import org.scijava.ops.api.OpRequest;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 import org.scijava.types.inference.GenericAssignability;
 
 
-public class InfoMatchingOpRef implements OpRef {
+public class InfoMatchingOpRequest implements OpRequest {
 
 	/** Name of the op, or null for any name. */
 	private final String name;
@@ -33,7 +33,7 @@ public class InfoMatchingOpRef implements OpRef {
 	 */
 	private final Map<TypeVariable<?>, Type> map = new HashMap<>();
 
-	public InfoMatchingOpRef(OpInfo info, Nil<?> specialType) {
+	public InfoMatchingOpRequest(OpInfo info, Nil<?> specialType) {
 		this.name = info.names().get(0);
 		Type from = specialType.getType();
 		Type to = info.opType();
@@ -77,9 +77,9 @@ public class InfoMatchingOpRef implements OpRef {
 	@Override
 	public String getLabel() {
 		final StringBuilder sb = new StringBuilder();
-		OpRef.append(sb, name);
+		OpRequest.append(sb, name);
 		if (type != null) {
-			OpRef.append(sb, Types.name(type));
+			OpRequest.append(sb, Types.name(type));
 		}
 		return sb.toString();
 	}
@@ -113,17 +113,17 @@ public class InfoMatchingOpRef implements OpRef {
 
 	@Override
 	public String toString() {
-		return refString();
+		return requestString();
 	}
 
 	@Override
 	public boolean equals(final Object obj) {
-		return refEquals(obj);
+		return requestEquals(obj);
 	}
 
 	@Override
 	public int hashCode() {
-		return refHashCode();
+		return requestHashCode();
 	}
 
 }

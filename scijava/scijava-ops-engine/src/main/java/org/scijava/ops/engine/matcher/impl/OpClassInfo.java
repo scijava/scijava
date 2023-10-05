@@ -152,7 +152,7 @@ public class OpClassInfo implements OpInfo {
 				dependencyMember.createInstance(op).set(dependencies.get(i));
 			}
 			catch (final Exception ex) {
-				// TODO: Improve error message. Used to include exact OpRef of Op
+				// TODO: Improve error message. Used to include exact OpRequest of Op
 				// dependency.
 				throw new IllegalStateException(
 					"Exception trying to inject Op dependency field.\n" +

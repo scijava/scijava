@@ -1,7 +1,7 @@
 
 package org.scijava.ops.engine;
 
-import org.scijava.ops.api.OpRef;
+import org.scijava.ops.api.OpRequest;
 import org.scijava.ops.api.OpRetrievalException;
 
 /**
@@ -28,7 +28,7 @@ public class DependencyMatchingException extends OpRetrievalException {
 		super(message);
 	}
 
-	public static String message(String dependentOp, final String dependencyName, OpRef dependency) {
+	public static String message(String dependentOp, final String dependencyName, OpRequest dependency) {
 		return "Could not instantiate dependency of: " + dependentOp + 
 				"\nDependency identifier: " + dependencyName + //
 				"\n\nAttempted request:\n" + dependency;

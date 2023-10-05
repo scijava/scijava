@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  * A data structure wrangling a hierarchy of {@link OpInfo}s, created for every
  * Op match and called upon to instantiate any number of {@link OpInstance}s.
  * 
- * This {@link InfoChain} contains:
+ * This {@link InfoTree} contains:
  * <ol>
  * <li>An {@link OpInfo} describing the Op</li>
  * <li>A {@link List} of {@link OpInfo}s that should be mapped to the Op
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * Op</b>.</li>
  * </ol>
  * <p>
- * This {@link InfoChain} is also able to generate a {@link String} uniquely
+ * This {@link InfoTree} is also able to generate a {@link String} uniquely
  * identifying itself.
  * </p>
  * <b>NOTE</b>: This class is <b>not</b> responsible for generating
@@ -28,35 +28,35 @@ import java.util.stream.Collectors;
  * @author Gabriel Selzer
  * @see RichOp#infoChain()
  */
-public class InfoChain {
+public class InfoTree {
 
 	public static final Character DEP_START_DELIM = '{';
 	public static final Character DEP_END_DELIM = '}';
 
-	private final List<InfoChain> dependencies;
+	private final List<InfoTree> dependencies;
 	private String id;
 
 	private final OpInfo info;
 
-	public InfoChain(OpInfo info) {
+	public InfoTree(OpInfo info) {
 		this.info = info;
 		this.dependencies = Collections.emptyList();
 	}
 
-	public InfoChain(OpInfo info, List<InfoChain> dependencies) {
+	public InfoTree(OpInfo info, List<InfoTree> dependencies) {
 		this.info = info;
 		this.dependencies = new ArrayList<>(dependencies);
 	}
 
-	public List<InfoChain> dependencies() {
+	public List<InfoTree> dependencies() {
 		return dependencies;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		// Since the id is unique, we can check equality on that
-		if (!(obj instanceof InfoChain)) return false;
-		return signature().equals(((InfoChain) obj).signature());
+		if (!(obj instanceof InfoTree)) return false;
+		return signature().equals(((InfoTree) obj).signature());
 	}
 
 	@Override
@@ -69,9 +69,9 @@ public class InfoChain {
 	 * Builds a String uniquely identifying this tree of Ops. As each
 	 * {@link OpInfo#id()} should be unique to <b>that</b> {@link OpInfo}, we can
 	 * use those to uniquely identify a hierarchy of {@link OpInfo}s, and thus by
-	 * extension a unique {@link InfoChain}.
+	 * extension a unique {@link InfoTree}.
 	 *
-	 * @return a {@link String} uniquely identifying this {@link InfoChain}
+	 * @return a {@link String} uniquely identifying this {@link InfoTree}
 	 */
 	public String signature() {
 		if (id == null) generateSignature();
@@ -102,7 +102,7 @@ public class InfoChain {
 		if (id != null) return;
 		String s = info().id();
 		s = s.concat(String.valueOf(DEP_START_DELIM));
-		for (InfoChain dependency : dependencies()) {
+		for (InfoTree dependency : dependencies()) {
 			s = s.concat(dependency.signature());
 		}
 		id = s.concat(String.valueOf(DEP_END_DELIM));

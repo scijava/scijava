@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Computers.Arity1;
-import org.scijava.ops.api.InfoChain;
+import org.scijava.ops.api.InfoTree;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.struct.Member;
 import org.scijava.types.Types;
@@ -29,16 +29,16 @@ public class SimplificationMetadata {
 	private final MutatorChain[] argChains;
 	private final MutatorChain outChain;
 
-	private final List<InfoChain> refSimplifiers;
+	private final List<InfoTree> refSimplifiers;
 	private final List<Function<?, ?>> inputSimplifiers;
-	private final List<InfoChain> infoFocusers;
+	private final List<InfoTree> infoFocusers;
 	private final List<Function<?, ?>> inputFocusers;
-	private final InfoChain infoSimplifier;
+	private final InfoTree infoSimplifier;
 	private final Function<?, ?> outputSimplifier;
-	private final InfoChain refFocuser;
+	private final InfoTree refFocuser;
 	private final Function<?, ?> outputFocuser;
 
-	private final Optional<InfoChain> copyOpChain;
+	private final Optional<InfoTree> copyOpChain;
 
 	private final int numInputs;
 
@@ -69,7 +69,7 @@ public class SimplificationMetadata {
 		numInputs = refSimplifiers.size();
 	}
 
-	public SimplificationMetadata(OpInfo info, List<InfoChain> refSimplifiers, List<InfoChain> infoFocusers, InfoChain infoSimplifier, InfoChain refFocuser, Optional<InfoChain> outputCopier) {
+	public SimplificationMetadata(OpInfo info, List<InfoTree> refSimplifiers, List<InfoTree> infoFocusers, InfoTree infoSimplifier, InfoTree refFocuser, Optional<InfoTree> outputCopier) {
 		this.info = info;
 		this.opType = Types.raw(info.opType());
 		
@@ -94,8 +94,8 @@ public class SimplificationMetadata {
 
 		List<MutatorChain> inputChains = new ArrayList<>();
 		for (int i = 0; i < numInputs; i++) {
-			InfoChain simplifier = this.refSimplifiers.get(i);
-			InfoChain focuser = this.infoFocusers.get(i);
+			InfoTree simplifier = this.refSimplifiers.get(i);
+			InfoTree focuser = this.infoFocusers.get(i);
 			Type inType = simplifier.info().inputs().get(0).getType();
 			Type outType = focuser.info().output().getType();
 			inputChains.add(new CompleteMutatorChain(simplifier, focuser, new TypePair(inType, outType)));
@@ -107,22 +107,22 @@ public class SimplificationMetadata {
 		this.outChain = new CompleteMutatorChain(this.infoSimplifier, this.refFocuser, new TypePair(inType, outType));
 	}
 
-	private static List<Function<?, ?>> inputSimplifiers(List<InfoChain> refSimplifiers)
+	private static List<Function<?, ?>> inputSimplifiers(List<InfoTree> refSimplifiers)
 	{
 		return refSimplifiers.stream().map(chain -> (Function<?, ?>) chain.newInstance().op()).collect(Collectors.toList());
 	}
 
-	private static List<Function<?, ?>> inputFocusers(List<InfoChain> infoFocusers)
+	private static List<Function<?, ?>> inputFocusers(List<InfoTree> infoFocusers)
 	{
 		return infoFocusers.stream().map(chain -> (Function<?, ?>) chain.newInstance().op()).collect(Collectors.toList());
 	}
 
-	private static Function<?, ?> outputSimplifier(InfoChain infoSimplifier)
+	private static Function<?, ?> outputSimplifier(InfoTree infoSimplifier)
 	{
 		return (Function<?, ?>) infoSimplifier.newInstance().op();
 	}
 
-	private static Function<?, ?> outputFocuser(InfoChain refFocuser)
+	private static Function<?, ?> outputFocuser(InfoTree refFocuser)
 	{
 		return (Function<?, ?>) refFocuser.newInstance().op();
 	}
@@ -187,7 +187,7 @@ public class SimplificationMetadata {
 		return copyOpChain.isPresent();
 	}
 
-	public InfoChain copyOpChain() {
+	public InfoTree copyOpChain() {
 		return copyOpChain.get();
 	}
 
@@ -276,7 +276,7 @@ public class SimplificationMetadata {
 		return refSimplifiers.stream().map(chain -> chain.info()).collect(Collectors.toList());
 	}
 
-	protected List<InfoChain> inputSimplifierChains() {
+	protected List<InfoTree> inputSimplifierChains() {
 		return refSimplifiers;
 	}
 
@@ -284,7 +284,7 @@ public class SimplificationMetadata {
 		return infoFocusers.stream().map(chain -> chain.info()).collect(Collectors.toList());
 	}
 
-	protected List<InfoChain> inputFocuserChains() {
+	protected List<InfoTree> inputFocuserChains() {
 		return infoFocusers;
 	}
 
@@ -292,7 +292,7 @@ public class SimplificationMetadata {
 		return infoSimplifier.info();
 	}
 
-	protected InfoChain outputSimplifierChain() {
+	protected InfoTree outputSimplifierChain() {
 		return infoSimplifier;
 	}
 
@@ -300,7 +300,7 @@ public class SimplificationMetadata {
 		return refFocuser.info();
 	}
 
-	protected InfoChain outputFocuserChain() {
+	protected InfoTree outputFocuserChain() {
 		return refFocuser;
 	}
 

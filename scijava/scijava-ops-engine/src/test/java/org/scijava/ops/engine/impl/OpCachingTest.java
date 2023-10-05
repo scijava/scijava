@@ -44,7 +44,7 @@ import org.scijava.discovery.ManualDiscoverer;
 import org.scijava.function.Producer;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInstance;
-import org.scijava.ops.engine.InfoChainGenerator;
+import org.scijava.ops.engine.InfoTreeGenerator;
 import org.scijava.ops.engine.OpInfoGenerator;
 import org.scijava.ops.engine.OpWrapper;
 import org.scijava.ops.engine.MatchingConditions;
@@ -67,7 +67,7 @@ public class OpCachingTest implements OpCollection {
 						OpWrapper.class, //
 						MatchingRoutine.class, //
 						OpInfoGenerator.class, //
-						InfoChainGenerator.class //
+						InfoTreeGenerator.class //
 				);
 		// register needed classes in StaticDiscoverer
 		ManualDiscoverer discoverer = new ManualDiscoverer();
@@ -125,7 +125,7 @@ public class OpCachingTest implements OpCollection {
 		String newString = "This Op invaded the cache!";
 		Producer<String> newProducer = () -> newString;
 		OpInstance<?> invaderInstance = OpInstance.of(newProducer, cachedInstance
-			.infoChain(), new Nil<Producer<String>>()
+			.infoTree(), new Nil<Producer<String>>()
 		{}.getType());
 		opCache.replace(cachedConditions, invaderInstance);
 

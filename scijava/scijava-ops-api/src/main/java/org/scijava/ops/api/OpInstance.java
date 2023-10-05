@@ -8,7 +8,7 @@ import org.scijava.types.GenericTyped;
 
 /**
  * An instance of an {@link OpInfo}. They can be constructed directly, but are
- * easily generated from {@link InfoChain}s.
+ * easily generated from {@link InfoTree}s.
  * <p>
  * Each {@link OpInstance} has an Op and its corresponding {@link OpInfo}.
  * </p>
@@ -18,10 +18,10 @@ import org.scijava.types.GenericTyped;
 public class OpInstance<T> implements GenericTyped {
 
 	private final T op;
-	private final InfoChain info;
+	private final InfoTree info;
 	private final Type reifiedType;
 
-	public OpInstance(final T op, final InfoChain backingInfo,
+	public OpInstance(final T op, final InfoTree backingInfo,
 		final Type reifiedType)
 	{
 		this.op = op;
@@ -29,7 +29,7 @@ public class OpInstance<T> implements GenericTyped {
 		this.reifiedType = reifiedType;
 	}
 
-	public static <T> OpInstance<T> of(T op, InfoChain backingInfo,
+	public static <T> OpInstance<T> of(T op, InfoTree backingInfo,
 		final Type reifiedType)
 	{
 		return new OpInstance<>(op, backingInfo, reifiedType);
@@ -39,7 +39,7 @@ public class OpInstance<T> implements GenericTyped {
 		return op;
 	}
 
-	public InfoChain infoChain() {
+	public InfoTree infoTree() {
 		return info;
 	}
 
@@ -47,7 +47,7 @@ public class OpInstance<T> implements GenericTyped {
 	public boolean equals(Object that) {
 		if (!(that instanceof OpInstance)) return false;
 		OpInstance<?> thatInstance = (OpInstance<?>) that;
-		boolean infosEqual = infoChain().equals(thatInstance.infoChain());
+		boolean infosEqual = infoTree().equals(thatInstance.infoTree());
 		boolean objectsEqual = op().equals(thatInstance.op());
 		boolean typesEqual = getType().equals(thatInstance.getType());
 		return infosEqual && objectsEqual && typesEqual;
@@ -55,7 +55,7 @@ public class OpInstance<T> implements GenericTyped {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(infoChain(), op(), getType());
+		return Objects.hash(infoTree(), op(), getType());
 	}
 
 	@Override

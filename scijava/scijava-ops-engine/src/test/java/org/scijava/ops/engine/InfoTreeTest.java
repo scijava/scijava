@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Producer;
-import org.scijava.ops.api.InfoChain;
+import org.scijava.ops.api.InfoTree;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
@@ -18,15 +18,15 @@ import org.scijava.ops.spi.OpField;
 import org.scijava.types.Nil;
 
 /**
- * Tests the functionality of {@link InfoChain} instantiation.
+ * Tests the functionality of {@link InfoTree} instantiation.
  *
  * @author Gabriel Selzer
  */
-public class InfoChainTest extends AbstractTestEnvironment implements OpCollection {
+public class InfoTreeTest extends AbstractTestEnvironment implements OpCollection {
 
 	@BeforeAll
 	public static void addNeededOps() {
-		ops.register(new InfoChainTest());
+		ops.register(new InfoTreeTest());
 		ops.register(new ComplexOp());
 	}
 
@@ -38,9 +38,9 @@ public class InfoChainTest extends AbstractTestEnvironment implements OpCollecti
 	@Test
 	public void testInfoChainInstantiation() {
 		OpInfo info = singularInfoOfName("test.infoChain");
-		InfoChain chain = new InfoChain(info);
+		InfoTree tree = new InfoTree(info);
 		Nil<Producer<String>> nil = new Nil<>() {};
-		Producer<String> op = ops.opFromInfoChain(chain, nil);
+		Producer<String> op = ops.opFromInfoChain(tree, nil);
 		Assertions.assertEquals(S, op.create());
 	}
 
@@ -48,15 +48,15 @@ public class InfoChainTest extends AbstractTestEnvironment implements OpCollecti
 	public void testInfoChainWithDependenciesInstantiation() {
 		// Find dependency
 		OpInfo info = singularInfoOfName("test.infoChain");
-		InfoChain dependencyChain = new InfoChain(info);
+		InfoTree dependencyChain = new InfoTree(info);
 
 		// Find dependent Op
 		OpInfo baseInfo = singularInfoOfName("test.infoChainBase");
-		InfoChain chain = new InfoChain(baseInfo, Collections.singletonList(
+		InfoTree tree = new InfoTree(baseInfo, Collections.singletonList(
 			dependencyChain));
 
 		Nil<Producer<String>> nil = new Nil<>() {};
-		Producer<String> op = ops.opFromInfoChain(chain, nil);
+		Producer<String> op = ops.opFromInfoChain(tree, nil);
 		Assertions.assertEquals(S, op.create());
 	}
 

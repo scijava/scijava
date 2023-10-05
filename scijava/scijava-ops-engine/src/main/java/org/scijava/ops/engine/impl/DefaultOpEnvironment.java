@@ -53,7 +53,7 @@ import org.scijava.log2.Logger;
 import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.InfoChain;
+import org.scijava.ops.api.InfoTree;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfo;
@@ -65,7 +65,7 @@ import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.engine.BaseOpHints.DependencyMatching;
 import org.scijava.ops.engine.BaseOpHints.Simplification;
 import org.scijava.ops.engine.DependencyMatchingException;
-import org.scijava.ops.engine.InfoChainGenerator;
+import org.scijava.ops.engine.InfoTreeGenerator;
 import org.scijava.ops.engine.MatchingConditions;
 import org.scijava.ops.engine.OpCandidate;
 import org.scijava.ops.engine.OpDependencyMember;
@@ -238,45 +238,40 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@Override
-	public InfoChain infoChain(String opName, Nil<?> specialType,
+	public InfoTree infoTree(String opName, Nil<?> specialType,
 		Nil<?>[] inTypes, Nil<?> outType)
 	{
-		return infoChain(opName, specialType, inTypes, outType, getDefaultHints());
+		return infoTree(opName, specialType, inTypes, outType, getDefaultHints());
 	}
 
 	@Override
-	public InfoChain infoChain(String opName, Nil<?> specialType,
+	public InfoTree infoTree(String opName, Nil<?> specialType,
 		Nil<?>[] inTypes, Nil<?> outType, Hints hints)
 	{
 		return findOp(opName, specialType, inTypes, outType, hints).infoChain();
 	}
 
 	@Override
-	public InfoChain chainFromInfo(OpInfo info, Nil<?> specialType) {
-		return findOp(info, specialType, getDefaultHints()).infoChain();
-	}
-
-	@Override
-	public InfoChain chainFromInfo(OpInfo info, Nil<?> specialType, Hints hints) {
-		return findOp(info, specialType, hints).infoChain();
+	public InfoTree treeFromInfo(OpInfo info, Nil<?> specialType, Hints hints) {
+		return findOp(info, specialType, hints).infoTree();
 	}
 
 	@Override
 	public <T> T opFromSignature(final String signature,
 		final Nil<T> specialType)
 	{
-		InfoChain info = chainFromID(signature);
+		InfoTree info = treeFromID(signature);
 		return opFromInfoChain(info, specialType);
 	}
 
 	@Override
-	public <T> T opFromInfoChain(final InfoChain chain,
+	public <T> T opFromInfoChain(final InfoTree tree,
 		final Nil<T> specialType)
 	{
 		if (!(specialType.getType() instanceof ParameterizedType))
 			throw new IllegalArgumentException("TODO");
 		@SuppressWarnings("unchecked")
-		OpInstance<T> instance = (OpInstance<T>) chain.newInstance(specialType.getType());
+		OpInstance<T> instance = (OpInstance<T>) tree.newInstance(specialType.getType());
 		Hints hints = getDefaultHints();
 		RichOp<T> wrappedOp = wrapOp(instance, hints);
 		return wrappedOp.asOpType();
@@ -284,15 +279,15 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@Override
-	public InfoChain chainFromID(String signature) {
+	public InfoTree treeFromID(String signature) {
 		if (idDirectory == null) initIdDirectory();
-		List<InfoChainGenerator> infoChainGenerators = discoverers.stream() //
-				.flatMap(d -> d.discover(InfoChainGenerator.class).stream()) //
+		List<InfoTreeGenerator> infoTreeGenerators = discoverers.stream() //
+				.flatMap(d -> d.discover(InfoTreeGenerator.class).stream()) //
 				.collect(Collectors.toList());
 
-		InfoChainGenerator genOpt = InfoChainGenerator.findSuitableGenerator(
-			signature, infoChainGenerators);
-		return genOpt.generate(signature, idDirectory, infoChainGenerators);
+		InfoTreeGenerator genOpt = InfoTreeGenerator.findSuitableGenerator(
+			signature, infoTreeGenerators);
+		return genOpt.generate(signature, idDirectory, infoTreeGenerators);
 	}
 
 	@Override
@@ -478,7 +473,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		Hints hints)
 	{
 		final List<RichOp<?>> conditions = resolveOpDependencies(candidate, hints);
-		InfoChain adaptorChain = new DependencyRichOpInfoChain(candidate
+		InfoTree adaptorChain = new DependencyRichOpInfoTree(candidate
 			.opInfo(), conditions);
 		return adaptorChain.newInstance(candidate.getType());
 	}
@@ -498,7 +493,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 		try {
 			// find the opWrapper that wraps this type of Op
-			Class<?> wrapper = getWrapperClass(instance.op(), instance.infoChain()
+			Class<?> wrapper = getWrapperClass(instance.op(), instance.infoTree()
 				.info());
 			// obtain the generic type of the Op w.r.t. the Wrapper class
 			Type reifiedSuperType = Types.getExactSuperType(instance.getType(),

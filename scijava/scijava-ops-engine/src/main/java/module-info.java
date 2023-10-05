@@ -1,3 +1,8 @@
+import org.scijava.ops.engine.InfoTreeGenerator;
+import org.scijava.ops.engine.impl.DefaultInfoTreeGenerator;
+import org.scijava.ops.engine.matcher.adapt.AdaptationInfoTreeGenerator;
+import org.scijava.ops.engine.matcher.simplify.SimplificationInfoTreeGenerator;
+
 module org.scijava.ops.engine {
 
 /*
@@ -32,7 +37,7 @@ module org.scijava.ops.engine {
 
 	uses javax.annotation.processing.Processor;
 	uses org.scijava.discovery.Discoverer;
-	uses org.scijava.ops.engine.InfoChainGenerator;
+	uses InfoTreeGenerator;
 	uses org.scijava.ops.api.OpEnvironment;
 	uses org.scijava.ops.engine.OpInfoGenerator;
 	uses org.scijava.ops.engine.OpWrapper;
@@ -46,10 +51,7 @@ module org.scijava.ops.engine {
 	provides org.scijava.discovery.Discoverer with
 		org.scijava.ops.engine.yaml.impl.YAMLOpInfoDiscoverer;
 
-	provides org.scijava.ops.engine.InfoChainGenerator with
-		org.scijava.ops.engine.matcher.adapt.AdaptationInfoChainGenerator,
-		org.scijava.ops.engine.impl.DefaultInfoChainGenerator,
-		org.scijava.ops.engine.matcher.simplify.SimplificationInfoChainGenerator;
+	provides InfoTreeGenerator with AdaptationInfoTreeGenerator, DefaultInfoTreeGenerator, SimplificationInfoTreeGenerator;
 
 	provides org.scijava.ops.api.OpEnvironment with
 	    org.scijava.ops.engine.impl.DefaultOpEnvironment;

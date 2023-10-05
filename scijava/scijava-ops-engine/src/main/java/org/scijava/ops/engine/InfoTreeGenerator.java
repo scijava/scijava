@@ -6,43 +6,43 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.scijava.ops.api.InfoChain;
+import org.scijava.ops.api.InfoTree;
 import org.scijava.ops.api.OpInfo;
 
-public interface InfoChainGenerator {
+public interface InfoTreeGenerator {
 
 
 	/**
-	 * Generates an {@link InfoChain}. This {@link InfoChainGenerator} is only
-	 * responsible for generating the <b>outer layer</b> of the {@link InfoChain},
+	 * Generates an {@link InfoTree}. This {@link InfoTreeGenerator} is only
+	 * responsible for generating the <b>outer layer</b> of the {@link InfoTree},
 	 * and delegates to {@code generators} to
 	 * 
-	 * @param signature the signature for which an {@link InfoChainGenerator} must be generated
+	 * @param signature the signature for which an {@link InfoTreeGenerator} must be generated
 	 * @param idMap the available {@link OpInfo}s, keyed by their id
-	 * @param generators the available {@link InfoChainGenerator}s
-	 * @return an {@link InfoChain} matching the specifications of
+	 * @param generators the available {@link InfoTreeGenerator}s
+	 * @return an {@link InfoTree} matching the specifications of
 	 *         {@code signature}
 	 */
-	InfoChain generate(String signature, Map<String, OpInfo> idMap,
-		Collection<InfoChainGenerator> generators);
+	InfoTree generate(String signature, Map<String, OpInfo> idMap,
+		Collection<InfoTreeGenerator> generators);
 
 	/**
-	 * Filters through a list of {@link InfoChainGenerator}s to find the generator
+	 * Filters through a list of {@link InfoTreeGenerator}s to find the generator
 	 * best suited towards generating {@code signature}
 	 * <p>
 	 * 
 	 * @param signature the signature that must be generated
-	 * @param generators the list of {@link InfoChainGenerator}s
-	 * @return the {@link InfoChainGenerator} best suited to the task
+	 * @param generators the list of {@link InfoTreeGenerator}s
+	 * @return the {@link InfoTreeGenerator} best suited to the task
 	 */
-	static InfoChainGenerator findSuitableGenerator(String signature,
-		Collection<InfoChainGenerator> generators)
+	static InfoTreeGenerator findSuitableGenerator(String signature,
+		Collection<InfoTreeGenerator> generators)
 	{
-		List<InfoChainGenerator> suitableGenerators = generators.stream() //
+		List<InfoTreeGenerator> suitableGenerators = generators.stream() //
 			.filter(g -> g.canGenerate(signature)) //
 			.collect(Collectors.toList());
 		if (suitableGenerators.size() == 0) throw new IllegalArgumentException(
-			"No InfoChainGenerator in given collection " + generators +
+			"No InfoTreeGenerator in given collection " + generators +
 				" is able to reify signature " + signature);
 		if (suitableGenerators.size() > 1) throw new IllegalArgumentException(
 			"Signature " + signature +
@@ -50,10 +50,10 @@ public interface InfoChainGenerator {
 		return suitableGenerators.get(0);
 	}
 
-	static InfoChain generateDependencyChain(String subsignature,
-		Map<String, OpInfo> idMap, Collection<InfoChainGenerator> generators)
+	static InfoTree generateDependencyTree(String subsignature,
+		Map<String, OpInfo> idMap, Collection<InfoTreeGenerator> generators)
 	{
-		InfoChainGenerator genOpt = InfoChainGenerator
+		InfoTreeGenerator genOpt = InfoTreeGenerator
 			.findSuitableGenerator(subsignature, generators);
 		return genOpt.generate(subsignature, idMap, generators);
 	}
@@ -67,12 +67,12 @@ public interface InfoChainGenerator {
 	 * @return a signature contained withing {@code signature}
 	 */
 	static String subSignatureFrom(String signature, int start) {
-		int depsStart = signature.indexOf(InfoChain.DEP_START_DELIM, start);
+		int depsStart = signature.indexOf(InfoTree.DEP_START_DELIM, start);
 		int depth = 0;
 		for (int i = depsStart; i < signature.length(); i++) {
 			char ch = signature.charAt(i);
-			if (ch == InfoChain.DEP_START_DELIM) depth++;
-			else if (ch == InfoChain.DEP_END_DELIM) {
+			if (ch == InfoTree.DEP_START_DELIM) depth++;
+			else if (ch == InfoTree.DEP_END_DELIM) {
 				depth--;
 				if (depth == 0) {
 					int depsEnd = i;
@@ -86,13 +86,13 @@ public interface InfoChainGenerator {
 	}
 
 	/**
-	 * Describes whether this {@link InfoChainGenerator} is designed to generate
-	 * the <b>outer layer</b> of the {@link InfoChain}
+	 * Describes whether this {@link InfoTreeGenerator} is designed to generate
+	 * the <b>outer layer</b> of the {@link InfoTree}
 	 *
 	 * @param signature the signature to use as the template for the
-	 *          {@link InfoChain}
-	 * @return true iff this {@link InfoChainGenerator} can generate the outer
-	 *         layer of the {@link InfoChain}
+	 *          {@link InfoTree}
+	 * @return true iff this {@link InfoTreeGenerator} can generate the outer
+	 *         layer of the {@link InfoTree}
 	 */
 	boolean canGenerate(String signature);
 

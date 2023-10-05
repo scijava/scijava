@@ -6,18 +6,18 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.scijava.ops.api.InfoChain;
-import org.scijava.ops.engine.InfoChainGenerator;
+import org.scijava.ops.api.InfoTree;
+import org.scijava.ops.engine.InfoTreeGenerator;
 import org.scijava.ops.api.OpInfo;
 
-public class DefaultInfoChainGenerator implements InfoChainGenerator {
+public class DefaultInfoTreeGenerator implements InfoTreeGenerator {
 
 	@Override
-	public InfoChain generate(String signature, Map<String, OpInfo> idMap,
-		Collection<InfoChainGenerator> generators)
+	public InfoTree generate(String signature, Map<String, OpInfo> idMap,
+		Collection<InfoTreeGenerator> generators)
 	{
-		int dependencyStart = signature.indexOf(InfoChain.DEP_START_DELIM);
-		int dependencyEnd = signature.lastIndexOf(InfoChain.DEP_END_DELIM);
+		int dependencyStart = signature.indexOf(InfoTree.DEP_START_DELIM);
+		int dependencyEnd = signature.lastIndexOf(InfoTree.DEP_END_DELIM);
 		String infoID = signature.substring(0, dependencyStart);
 		OpInfo info = idMap.get(infoID);
 		if (info == null) throw new IllegalArgumentException(
@@ -25,12 +25,12 @@ public class DefaultInfoChainGenerator implements InfoChainGenerator {
 		String dependencySignature = signature.substring(dependencyStart + 1,
 			dependencyEnd);
 		List<String> dependencies = getDependencies(dependencySignature);
-		List<InfoChain> dependencyChains = new ArrayList<>();
+		List<InfoTree> dependencyChains = new ArrayList<>();
 		for (String dep : dependencies) {
-			dependencyChains.add(InfoChainGenerator.generateDependencyChain(dep,
+			dependencyChains.add(InfoTreeGenerator.generateDependencyTree(dep,
 				idMap, generators));
 		}
-		return new InfoChain(info, dependencyChains);
+		return new InfoTree(info, dependencyChains);
 	}
 
 	private List<String> getDependencies(String signature) {
@@ -40,8 +40,8 @@ public class DefaultInfoChainGenerator implements InfoChainGenerator {
 
 		for (int i = 0; i < signature.length(); i++) {
 			char ch = signature.charAt(i);
-			if (ch == InfoChain.DEP_START_DELIM) parenDepth++;
-			else if (ch == InfoChain.DEP_END_DELIM) {
+			if (ch == InfoTree.DEP_START_DELIM) parenDepth++;
+			else if (ch == InfoTree.DEP_END_DELIM) {
 				parenDepth--;
 				if (parenDepth == 0) {
 					splits.add(signature.substring(start, i + 1));

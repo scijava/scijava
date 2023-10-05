@@ -1,13 +1,13 @@
 package org.scijava.ops.engine.matcher.simplify;
 
-import org.scijava.ops.api.InfoChain;
+import org.scijava.ops.api.InfoTree;
 
 public class CompleteMutatorChain extends MutatorChain {
 
-	private final InfoChain simpleChain;
-	private final InfoChain focusChain;
+	private final InfoTree simpleChain;
+	private final InfoTree focusChain;
 
-	public CompleteMutatorChain(InfoChain simplifier, InfoChain focuser,
+	public CompleteMutatorChain(InfoTree simplifier, InfoTree focuser,
 		TypePair ioTypes)
 	{
 		super(simplifier.info(), focuser.info(), ioTypes, null);
@@ -16,12 +16,12 @@ public class CompleteMutatorChain extends MutatorChain {
 	}
 
 	@Override
-	public InfoChain simplifier() {
+	public InfoTree simplifier() {
 		return simpleChain;
 	}
 
 	@Override
-	public InfoChain focuser() {
+	public InfoTree focuser() {
 		return focusChain;
 	}
 

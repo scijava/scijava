@@ -6,43 +6,43 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.scijava.ops.api.InfoChain;
-import org.scijava.ops.engine.InfoChainGenerator;
+import org.scijava.ops.api.InfoTree;
+import org.scijava.ops.engine.InfoTreeGenerator;
 import org.scijava.ops.api.OpInfo;
 
-public class SimplificationInfoChainGenerator implements InfoChainGenerator {
+public class SimplificationInfoTreeGenerator implements InfoTreeGenerator {
 
 	@Override
-	public InfoChain generate(String signature, Map<String, OpInfo> idMap,
-		Collection<InfoChainGenerator> generators)
+	public InfoTree generate(String signature, Map<String, OpInfo> idMap,
+		Collection<InfoTreeGenerator> generators)
 	{
 		// get the list of components
 		List<String> components = parseComponents(signature.substring(SimplifiedOpInfo.IMPL_DECLARATION.length()));
 		int compIndex = 0;
 
 		// Proceed to input simplifiers
-		List<InfoChain> refSimplifiers = new ArrayList<>();
+		List<InfoTree> refSimplifiers = new ArrayList<>();
 		String refSimpComp = components.get(compIndex);
 		while (refSimpComp.startsWith(
 			SimplifiedOpInfo.INPUT_SIMPLIFIER_DELIMITER))
 		{
 			String refSimpSignature = refSimpComp.substring(
 				SimplifiedOpInfo.INPUT_SIMPLIFIER_DELIMITER.length());
-			InfoChain refSimpChain = InfoChainGenerator.generateDependencyChain(
+			InfoTree refSimpChain = InfoTreeGenerator.generateDependencyTree(
 				refSimpSignature, idMap, generators);
 			refSimplifiers.add(refSimpChain);
 			refSimpComp = components.get(++compIndex);
 		}
 
 		// Proceed to input simplifiers
-		List<InfoChain> infoFocusers = new ArrayList<>();
+		List<InfoTree> infoFocusers = new ArrayList<>();
 		String infoFocuserComp = components.get(compIndex);
 		while (infoFocuserComp.startsWith(
 			SimplifiedOpInfo.INPUT_FOCUSER_DELIMITER))
 		{
 			String infoFocSignature = infoFocuserComp.substring(
 				SimplifiedOpInfo.INPUT_FOCUSER_DELIMITER.length());
-			InfoChain infoFocChain = InfoChainGenerator.generateDependencyChain(
+			InfoTree infoFocChain = InfoTreeGenerator.generateDependencyTree(
 				infoFocSignature, idMap, generators);
 			infoFocusers.add(infoFocChain);
 			infoFocuserComp = components.get(++compIndex);
@@ -60,8 +60,8 @@ public class SimplificationInfoChainGenerator implements InfoChainGenerator {
 				SimplifiedOpInfo.OUTPUT_SIMPLIFIER_DELIMITER + ")");
 		String outSimpSignature = outSimpComp.substring(
 			SimplifiedOpInfo.OUTPUT_SIMPLIFIER_DELIMITER.length());
-		InfoChain outputSimplifierChain = InfoChainGenerator
-			.generateDependencyChain(outSimpSignature, idMap, generators);
+		InfoTree outputSimplifierChain = InfoTreeGenerator
+			.generateDependencyTree(outSimpSignature, idMap, generators);
 
 		// Proceed to output focuser
 		String outFocComp = components.get(compIndex++);
@@ -71,11 +71,11 @@ public class SimplificationInfoChainGenerator implements InfoChainGenerator {
 				SimplifiedOpInfo.OUTPUT_FOCUSER_DELIMITER + ")");
 		String outFocSignature = outFocComp.substring(
 			SimplifiedOpInfo.OUTPUT_FOCUSER_DELIMITER.length());
-		InfoChain outputFocuserChain = InfoChainGenerator.generateDependencyChain(
+		InfoTree outputFocuserChain = InfoTreeGenerator.generateDependencyTree(
 			outFocSignature, idMap, generators);
 
 		// Proceed to output copier
-		Optional<InfoChain> copierChain;
+		Optional<InfoTree> copierChain;
 		String outCopyComp = components.get(compIndex++);
 		if (!outCopyComp.startsWith(SimplifiedOpInfo.OUTPUT_COPIER_DELIMITER))
 			throw new IllegalArgumentException("Signature " + signature +
@@ -85,7 +85,7 @@ public class SimplificationInfoChainGenerator implements InfoChainGenerator {
 			SimplifiedOpInfo.OUTPUT_COPIER_DELIMITER.length());
 		if (outCopySignature.isEmpty()) copierChain = Optional.empty();
 		else {
-			copierChain = Optional.of(InfoChainGenerator.generateDependencyChain(
+			copierChain = Optional.of(InfoTreeGenerator.generateDependencyTree(
 				outCopySignature, idMap, generators));
 		}
 
@@ -97,7 +97,7 @@ public class SimplificationInfoChainGenerator implements InfoChainGenerator {
 				SimplifiedOpInfo.ORIGINAL_INFO + ")");
 		String originalSignature = originalComponent.substring(
 			SimplifiedOpInfo.ORIGINAL_INFO.length());
-		InfoChain originalChain = InfoChainGenerator.generateDependencyChain(
+		InfoTree originalChain = InfoTreeGenerator.generateDependencyTree(
 			originalSignature, idMap, generators);
 
 
@@ -105,14 +105,14 @@ public class SimplificationInfoChainGenerator implements InfoChainGenerator {
 			.info(), refSimplifiers, infoFocusers, outputSimplifierChain,
 			outputFocuserChain, copierChain);
 		OpInfo baseInfo = new SimplifiedOpInfo(originalChain.info(), metadata, Double.MIN_VALUE);
-		return new InfoChain(baseInfo, originalChain.dependencies());
+		return new InfoTree(baseInfo, originalChain.dependencies());
 	}
 
 	List<String> parseComponents(String signature) {
 		List<String> components = new ArrayList<>();
 		String s = signature;
 		while(s.length() > 0) {
-			String subSignatureFrom = InfoChainGenerator.subSignatureFrom(s, 0);
+			String subSignatureFrom = InfoTreeGenerator.subSignatureFrom(s, 0);
 			components.add(subSignatureFrom);
 			s = s.substring(subSignatureFrom.length());
 		}

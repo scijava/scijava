@@ -14,7 +14,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.InfoChain;
+import org.scijava.ops.api.InfoTree;
 import org.scijava.ops.api.OpRetrievalException;
 import org.scijava.ops.engine.OpCandidate;
 import org.scijava.ops.engine.OpCandidate.StatusCode;
@@ -91,18 +91,18 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 				// resolve adaptor dependencies
 				final Map<TypeVariable<?>, Type> adaptorBounds = new HashMap<>();
 				final Map<TypeVariable<?>, Type> dependencyBounds = new HashMap<>();
-				List<InfoChain> depChains = OpUtils.dependenciesOf(adaptor).stream() //
+				List<InfoTree> depTrees = OpUtils.dependenciesOf(adaptor).stream() //
 					.map(d -> {
 						OpRef ref = inferOpRef(d, map);
 						Nil<?> type = Nil.of(ref.getType());
 						Nil<?>[] args = Arrays.stream(ref.getArgs()).map(Nil::of).toArray(
 							Nil[]::new);
 						Nil<?> outType = Nil.of(ref.getOutType());
-						InfoChain chain = env.infoChain(ref.getName(), type, args, outType,
+						InfoTree tree = env.infoTree(ref.getName(), type, args, outType,
 							adaptationHints);
 						// Check if the bounds of the dependency can inform the type of the
 						// adapted Op
-						final Type matchedOpType = chain.info().opType();
+						final Type matchedOpType = tree.info().opType();
 						// Find adaptor type variable bounds fulfilled by matched Op
 						GenericAssignability.inferTypeVariables( //
 							new Type[] { d.getType() }, //
@@ -128,9 +128,9 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 							}
 						}
 						dependencyBounds.clear();
-						return chain;
+						return tree;
 					}).collect(Collectors.toList());
-				InfoChain adaptorChain = new InfoChain(adaptor, depChains);
+				InfoTree adaptorChain = new InfoTree(adaptor, depTrees);
 
 				// grab the first type parameter from the OpInfo and search for
 				// an Op that will then be adapted (this will be the only input of the

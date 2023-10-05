@@ -133,7 +133,7 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 		final Nil<?>[] inTypes, final Nil<?> outType, Hints hints);
 
 	/**
-	 * Returns an {@link InfoChain} fitting the provided arguments. NB
+	 * Returns an {@link InfoTree} fitting the provided arguments. NB
 	 * implementations of this method likely depend on the {@link Hints} set by
 	 * {@link OpEnvironment#setDefaultHints(Hints)}, which provides no guarantee
 	 * of thread-safety. Users interested in parallel Op matching should consider
@@ -145,11 +145,11 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 * @param outType the return of the Op (note that it may also be an argument)
 	 * @return an instance of an Op aligning with the search parameters
 	 */
-	 InfoChain infoChain(final String opName, final Nil<?> specialType,
+	 InfoTree infoTree(final String opName, final Nil<?> specialType,
 		final Nil<?>[] inTypes, final Nil<?> outType);
 
 	/**
-	 * Returns an {@link InfoChain} fitting the provided arguments.
+	 * Returns an {@link InfoTree} fitting the provided arguments.
 	 *
 	 * @param opName the name of the Op
 	 * @param specialType the generic {@link Type} of the Op
@@ -158,10 +158,10 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 * @param hints the {@link Hints} that should guide this matching call
 	 * @return an instance of an Op aligning with the search parameters
 	 */
-	InfoChain infoChain(final String opName, final Nil<?> specialType,
+	InfoTree infoTree(final String opName, final Nil<?> specialType,
 		final Nil<?>[] inTypes, final Nil<?> outType, Hints hints);
 
-	<T> T opFromInfoChain(InfoChain chain, Nil<T> specialType);
+	<T> T opFromInfoChain(InfoTree tree, Nil<T> specialType);
 
 	/**
 	 * Returns an Op fitting the provided arguments.
@@ -173,11 +173,13 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 */
 	<T> T opFromSignature(final String signature, final Nil<T> specialType);
 
-	InfoChain chainFromID(final String signature);
+	InfoTree treeFromID(final String signature);
 
-	InfoChain chainFromInfo(final OpInfo info, final Nil<?> specialType);
+	default InfoTree treeFromInfo(final OpInfo info, final Nil<?> specialType) {
+		return treeFromInfo(info, specialType, getDefaultHints());
+	}
 
-	InfoChain chainFromInfo(final OpInfo info, final Nil<?> specialType, final Hints hints);
+	InfoTree treeFromInfo(final OpInfo info, final Nil<?> specialType, final Hints hints);
 
 	/**
 	 * <p>Entry point for convenient Op calls, providing a builder-style interface

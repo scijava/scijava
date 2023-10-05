@@ -31,8 +31,8 @@ public interface RichOp<T> extends GenericTyped {
 		return instance().getType();
 	}
 
-	default InfoChain infoChain() {
-		return instance().infoChain();
+	default InfoTree infoChain() {
+		return instance().infoTree();
 	}
 
 	/**

@@ -3,22 +3,20 @@ package org.scijava.ops.engine.matcher.adapt;
 
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.scijava.ops.api.InfoChain;
-import org.scijava.ops.engine.InfoChainGenerator;
+import org.scijava.ops.api.InfoTree;
 import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.engine.InfoTreeGenerator;
 import org.scijava.types.Types;
 
-public class AdaptationInfoChainGenerator implements InfoChainGenerator {
+public class AdaptationInfoTreeGenerator implements InfoTreeGenerator {
 
 	@Override
-	public InfoChain generate(String signature, Map<String, OpInfo> idMap,
-		Collection<InfoChainGenerator> generators)
+	public InfoTree generate(String signature, Map<String, OpInfo> idMap,
+		Collection<InfoTreeGenerator> generators)
 	{
 
 		// Resolve adaptor
@@ -29,7 +27,7 @@ public class AdaptationInfoChainGenerator implements InfoChainGenerator {
 				OpAdaptationInfo.ADAPTOR);
 		String adaptorSignature = adaptorComponent.substring(
 			OpAdaptationInfo.ADAPTOR.length());
-		InfoChain adaptorChain = InfoChainGenerator.generateDependencyChain(
+		InfoTree adaptorTree = InfoTreeGenerator.generateDependencyTree(
 			adaptorSignature, idMap, generators);
 
 		// Resolve original op
@@ -40,33 +38,22 @@ public class AdaptationInfoChainGenerator implements InfoChainGenerator {
 				OpAdaptationInfo.ORIGINAL);
 		String originalSignature = originalComponent.substring(
 			OpAdaptationInfo.ORIGINAL.length());
-		InfoChain originalChain = InfoChainGenerator.generateDependencyChain(
+		InfoTree originalTree = InfoTreeGenerator.generateDependencyTree(
 			originalSignature, idMap, generators);
 
-		// Rebuild original chain with an OpAdaptationInfo
-		OpInfo originalInfo = originalChain.info();
+		// Rebuild original tree with an OpAdaptationInfo
+		OpInfo originalInfo = originalTree.info();
 		// TODO: The op type is wrong!
 		Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
-		if (!Types.isAssignable(originalInfo.opType(), adaptorChain.info().inputs()
+		if (!Types.isAssignable(originalInfo.opType(), adaptorTree.info().inputs()
 			.get(0).getType(), typeVarAssigns)) throw new IllegalArgumentException(
 				"The adaptor cannot be used on Op " + originalInfo);
-		Type adaptedOpType = Types.substituteTypeVariables(adaptorChain.info()
+		Type adaptedOpType = Types.substituteTypeVariables(adaptorTree.info()
 			.output().getType(), typeVarAssigns);
 		OpInfo adaptedInfo = new OpAdaptationInfo(originalInfo, adaptedOpType,
-			adaptorChain);
-		return new InfoChain(adaptedInfo, originalChain.dependencies());
+			adaptorTree);
+		return new InfoTree(adaptedInfo, originalTree.dependencies());
 
-	}
-
-	List<String> parseComponents(String signature) {
-		List<String> components = new ArrayList<>();
-		String s = signature;
-		while (s.length() > 0) {
-			String subSignatureFrom = InfoChainGenerator.subSignatureFrom(s, 0);
-			components.add(subSignatureFrom);
-			s = s.substring(subSignatureFrom.length());
-		}
-		return components;
 	}
 
 	@Override

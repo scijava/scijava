@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Producer;
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.InfoChain;
+import org.scijava.ops.api.InfoTree;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.RichOp;
@@ -118,7 +118,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		List<RichOp<?>> executionsUpon = ops.history().executionsUpon(s);
 		Assertions.assertEquals(1, executionsUpon.size());
 		// Assert only one info in the execution hierarchy
-		InfoChain executionHierarchy = ops.history().opExecutionChain(executionsUpon.get(
+		InfoTree executionHierarchy = ops.history().infoTree(executionsUpon.get(
 			0));
 		Assertions.assertEquals(0, executionHierarchy.dependencies().size());
 		OpInfo info = executionHierarchy.info();
@@ -148,7 +148,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		List<RichOp<?>> history2 = ops.history().executionsUpon(out2);
 
 		Assertions.assertEquals(1, history1.size());
-		InfoChain opExecutionChain = ops.history().opExecutionChain(history1.get(0));
+		InfoTree opExecutionChain = ops.history().infoTree(history1.get(0));
 		Assertions.assertEquals(0, opExecutionChain.dependencies().size());
 		String expected =
 			"public final java.util.function.Function org.scijava.ops.engine.impl.ProvenanceTest.baz";
@@ -156,7 +156,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 			.getAnnotationBearer().toString());
 
 		Assertions.assertEquals(1, history2.size());
-		opExecutionChain = ops.history().opExecutionChain(history2.get(0));
+		opExecutionChain = ops.history().infoTree(history2.get(0));
 		Assertions.assertEquals(0, opExecutionChain.dependencies().size());
 		expected =
 			"public final java.util.function.Function org.scijava.ops.engine.impl.ProvenanceTest.bar";
@@ -180,7 +180,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 	}
 
 	@Test
-	public void testMappingExecutionChain() {
+	public void testMappingInfoTree() {
 		// Run an Op call
 		int length = 200;
 		Double[] array = new Double[length];
@@ -188,22 +188,22 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		Function<Double[], Thing> mapper = ops.op("test.provenanceMapper").arity1().input(
 			array).outType(Thing.class).function();
 
-		// Get the Op execution chain associated with the above call
-		InfoChain executionChain = ops.history().opExecutionChain(mapper);
+		// Get the InfoTree associated with the above call
+		InfoTree tree = ops.history().infoTree(mapper);
 
-		// Assert the mapper is in the execution chain
+		// Assert the mapper is in the tree
 		Iterator<OpInfo> mapperInfos = ops.infos("test.provenanceMapper")
 			.iterator();
 		OpInfo mapperInfo = mapperInfos.next();
-		Assertions.assertEquals(mapperInfo, executionChain.info());
-		// Assert mapped is in the execution chain
+		Assertions.assertEquals(mapperInfo, tree.info());
+		// Assert mapped is in the tree
 		Iterator<OpInfo> mappedInfos = ops.infos("test.provenanceMapped")
 			.iterator();
 		OpInfo mappedInfo = mappedInfos.next();
-		Assertions.assertEquals(1, executionChain.dependencies().size(),
+		Assertions.assertEquals(1, tree.dependencies().size(),
 			"Expected only one dependency of the mapper Op!");
 		Assertions.assertEquals(mappedInfo,
-				executionChain.dependencies().get(0).info());
+				tree.dependencies().get(0).info());
 	}
 
 	@Test

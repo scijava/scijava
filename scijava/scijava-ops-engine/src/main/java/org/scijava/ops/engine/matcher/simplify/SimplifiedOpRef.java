@@ -11,7 +11,7 @@ import java.util.Optional;
 import org.scijava.function.Computers;
 import org.scijava.function.Computers.Arity1;
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.InfoChain;
+import org.scijava.ops.api.InfoTree;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
@@ -32,7 +32,7 @@ public class SimplifiedOpRef implements OpRef {
 	private final OpRef srcRef;
 	private final List<List<OpInfo>> simplifierSets;
 	private final List<OpInfo> outputFocusers;
-	private final Optional<InfoChain> copyOpChain;
+	private final Optional<InfoTree> copyOpChain;
 
 	private SimplifiedOpRef(OpRef ref, OpEnvironment env) {
 		// TODO: this is probably incorrect
@@ -46,7 +46,7 @@ public class SimplifiedOpRef implements OpRef {
 	}
 
 	private SimplifiedOpRef(OpRef ref, OpEnvironment env,
-		InfoChain copyOpChain)
+		InfoTree copyOpChain)
 	{
 		this.name = ref.getName();
 		this.rawType = Types.raw(ref.getType());
@@ -73,7 +73,7 @@ public class SimplifiedOpRef implements OpRef {
 		return outputFocusers;
 	}
 
-	public Optional<InfoChain> copyOpChain() {
+	public Optional<InfoTree> copyOpChain() {
 		return copyOpChain;
 	}
 
@@ -85,7 +85,7 @@ public class SimplifiedOpRef implements OpRef {
 		if (mutableIndex == -1) return new SimplifiedOpRef(ref, env);
 
 		// if the Op's output is mutable, we will also need a copy Op for it.
-		InfoChain copyOp = simplifierCopyOp(env, ref
+		InfoTree copyOp = simplifierCopyOp(env, ref
 			.getArgs()[mutableIndex], hints);
 		return new SimplifiedOpRef(ref, env, copyOp);
 	}
@@ -116,7 +116,7 @@ public class SimplifiedOpRef implements OpRef {
 	 *         {@link Type} {@code copyType}
 	 * @throws OpRetrievalException
 	 */
-	private static InfoChain simplifierCopyOp(OpEnvironment env, Type copyType, Hints hints) throws
+	private static InfoTree simplifierCopyOp(OpEnvironment env, Type copyType, Hints hints) throws
 			OpRetrievalException
 	{
 		// prevent further simplification/adaptation
@@ -126,7 +126,7 @@ public class SimplifiedOpRef implements OpRef {
 		Nil<?> copyNil = Nil.of(copyType);
 		Type copierType = Types.parameterize(Computers.Arity1.class, new Type[] {
 			copyType, copyType });
-		return env.infoChain("copy", Nil.of(copierType), new Nil<?>[] {
+		return env.infoTree("copy", Nil.of(copierType), new Nil<?>[] {
 			copyNil, copyNil }, copyNil, hintsCopy);
 	}
 

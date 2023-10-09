@@ -27,7 +27,8 @@
  * #L%
  */
 open module net.imagej.ops2 {
-	exports net.imagej.ops2;
+	// Note that opening this module is necessary to provide runtime access
+	// from the SciJava Ops Engine module.
 
 	requires java.scripting;
 	requires net.imagej.mesh2;

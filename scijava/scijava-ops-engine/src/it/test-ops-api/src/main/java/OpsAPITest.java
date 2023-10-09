@@ -1,6 +1,3 @@
-
-package org.scijava.ops.test;
-
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
@@ -13,18 +10,16 @@ import org.scijava.ops.api.OpRetrievalException;
  * Tests the ability to interact with an {@link OpEnvironment} to perform
  * all of the abilities of SciJava Ops, using only the API.
  */
-public class OpEnvironmentTest {
+public class OpsAPITest {
 
-	@Test
-	public void testOpEnvironmentObtainable() {
+	public static void testOpEnvironmentObtainable() {
 		Assertions.assertNotNull(OpEnvironment.getEnvironment());
 	}
 
 	/**
 	 * Tests that an Op can be matched and run
 	 */
-	@Test
-	public void testOpExecutions() {
+	public static void testOpExecutions() {
 		OpEnvironment ops = OpEnvironment.getEnvironment();
 		var sum = ops.op("math.add").arity2().input(5., 6.).apply();
 		Assertions.assertEquals(sum, 11.);
@@ -33,8 +28,7 @@ public class OpEnvironmentTest {
 	/**
 	 * Tests that descriptions can be obtained
 	 */
-	@Test
-	public void testOpDescriptions() {
+	public static void testOpDescriptions() {
 		OpEnvironment ops = OpEnvironment.getEnvironment();
 		var descriptions = ops.descriptions("math.add");
 		Assertions.assertInstanceOf(List.class, descriptions);
@@ -44,8 +38,7 @@ public class OpEnvironmentTest {
 	/**
 	 * Tests that hints can be declared and used to alter Op matching
 	 */
-	@Test
-	public void testOpHints() {
+	public static void testOpHints() {
 		long in = 5;
 		long exponent = 5;
 		OpEnvironment ops = OpEnvironment.getEnvironment();
@@ -65,6 +58,19 @@ public class OpEnvironmentTest {
 		// Ensure an Op matches with simplification
 		var power = ops.op("math.pow").arity2().input(in, exponent).outType(Long.class).apply();
 		Assertions.assertEquals((long) Math.pow(in, exponent), power);
+	}
+
+	public static void main(String[] args) {
+		try {
+			testOpEnvironmentObtainable();
+			testOpExecutions();
+			testOpDescriptions();
+			testOpHints();
+		}
+		catch (final Throwable t) {
+			t.printStackTrace(System.err);
+			System.exit(1);
+		}
 	}
 
 

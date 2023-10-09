@@ -105,6 +105,41 @@
 		<allowedDuplicateClasses>${scijava-ops-engine.allowedDuplicateClasses}</allowedDuplicateClasses>
 	</properties>
 
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-invoker-plugin</artifactId>
+				<version>${maven-invoker-plugin.version}</version>
+				<configuration>
+					<!-- <debug>true</debug> -->
+					<showErrors>true</showErrors>
+					<properties>
+						<scijava-maven.version>${project.version}</scijava-maven.version>
+					</properties>
+					<projectsDirectory>src/it</projectsDirectory>
+					<cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+					<pomIncludes>
+						<pomInclude>*/pom.xml</pomInclude>
+					</pomIncludes>
+					<settingsFile>src/it/settings.xml</settingsFile>
+					<localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+					<goals>
+						<goal>install</goal>
+					</goals>
+				</configuration>
+				<executions>
+					<execution>
+						<id>integration-test</id>
+						<goals>
+							<goal>install</goal>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
 	<dependencies>
 		<!-- SciJava dependencies -->
 		<dependency>

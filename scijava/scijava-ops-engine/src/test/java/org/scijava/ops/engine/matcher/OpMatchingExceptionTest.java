@@ -19,11 +19,11 @@ import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpField;
 
-public class DefaultMatchingErrorTest extends AbstractTestEnvironment implements OpCollection {
+public class OpMatchingExceptionTest extends AbstractTestEnvironment implements OpCollection {
 
 	@BeforeAll
 	public static void addNeededOps() {
-		ops.register(new DefaultMatchingErrorTest());
+		ops.register(new OpMatchingExceptionTest());
 		ops.register(new DependentOp());
 		ops.register(new FurtherDependentOp());
 		ops.register(new MissingDependencyOp());

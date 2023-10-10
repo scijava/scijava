@@ -49,7 +49,7 @@ import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.engine.struct.MethodOpDependencyMemberParser;
 import org.scijava.ops.engine.struct.MethodParameterMemberParser;
-import org.scijava.ops.engine.util.Adapt;
+import org.scijava.ops.engine.util.Lambdas;
 import org.scijava.ops.engine.util.internal.OpMethodUtils;
 import org.scijava.ops.spi.OpMethod;
 import org.scijava.priority.Priority;
@@ -205,7 +205,7 @@ public class OpMethodInfo implements OpInfo {
 		try {
 			method.setAccessible(true);
 			MethodHandle handle = MethodHandles.lookup().unreflect(method);
-			Object op = Adapt.Methods.lambdaize( //
+			Object op = Lambdas.lambdaize( //
 					Types.raw(opType), //
 					handle, //
 					OpUtils.dependenciesOf(this).stream().map(Member::getRawType).toArray(Class[]::new),

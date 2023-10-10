@@ -3,7 +3,7 @@ package org.scijava.ops.engine.matcher.simplify;
 import java.lang.reflect.Type;
 import java.util.function.Function;
 
-import org.scijava.ops.api.InfoChain;
+import org.scijava.ops.api.InfoTree;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.types.Nil;
@@ -12,9 +12,9 @@ import org.scijava.types.Types;
 public class MutatorChain implements Comparable<MutatorChain>{
 
 	private final OpInfo simplifier;
-	private InfoChain simpleChain;
+	private InfoTree simpleChain;
 	private final OpInfo focuser;
-	private InfoChain focusChain;
+	private InfoTree focusChain;
 
 	private final Type input;
 	private final Type simple;
@@ -57,7 +57,7 @@ public class MutatorChain implements Comparable<MutatorChain>{
 		return (sIdentity ? 1 : 0) + (fIdentity ? 1 : 0);
 	}
 
-	public InfoChain simplifier() {
+	public InfoTree simplifier() {
 		if (simpleChain == null) generateSimpleChain();
 		return simpleChain;
 	}
@@ -66,10 +66,10 @@ public class MutatorChain implements Comparable<MutatorChain>{
 		if (simpleChain != null) return;
 		Type[] typeArgs = { input, simple };
 		Type specialType = Types.parameterize(Function.class, typeArgs);
-		simpleChain = env.chainFromInfo(simplifier, Nil.of(specialType));
+		simpleChain = env.treeFromInfo(simplifier, Nil.of(specialType));
 	}
 
-	public InfoChain focuser() {
+	public InfoTree focuser() {
 		if (focusChain == null) generateFocusChain();
 		return focusChain;
 	}
@@ -78,7 +78,7 @@ public class MutatorChain implements Comparable<MutatorChain>{
 		if (focusChain != null) return;
 		Type[] typeArgs = { unfocused, output };
 		Type specialType = Types.parameterize(Function.class, typeArgs);
-		focusChain = env.chainFromInfo(focuser, Nil.of(specialType));
+		focusChain = env.treeFromInfo(focuser, Nil.of(specialType));
 	}
 
 	public Type inputType() {

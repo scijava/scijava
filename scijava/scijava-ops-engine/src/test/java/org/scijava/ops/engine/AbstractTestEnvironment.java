@@ -13,11 +13,10 @@ import java.util.ServiceLoader;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.scijava.discovery.Discoverer;
-import org.scijava.ops.api.InfoChainGenerator;
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpInfoGenerator;
-import org.scijava.ops.api.OpWrapper;
-import org.scijava.ops.api.features.MatchingRoutine;
+import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpCollection;
 
 public abstract class AbstractTestEnvironment {
 
@@ -50,15 +49,12 @@ public abstract class AbstractTestEnvironment {
 	}
 
 	protected static OpEnvironment barebonesEnvironment() {
-		Discoverer serviceLoading = Discoverer.using(ServiceLoader::load) //
-				.onlyFor( //
-						OpWrapper.class, //
-						MatchingRoutine.class, //
-						OpInfoGenerator.class, //
-						InfoChainGenerator.class //
-				);
-		var ops = OpEnvironment.getEnvironment(serviceLoading);
-		return ops;
+		Discoverer serviceLoading = Discoverer.using(ServiceLoader::load).except( //
+			Op.class, //
+			OpInfo.class, //
+			OpCollection.class //
+		);
+		return OpEnvironment.getEnvironment(serviceLoading);
 	}
 
 	protected static boolean arrayEquals(double[] arr1, Double... arr2) {

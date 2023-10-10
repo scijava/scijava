@@ -4,8 +4,8 @@ package org.scijava.ops.engine.matcher.simplify;
 import java.util.function.Function;
 
 import org.scijava.collections.ObjectArray;
-import org.scijava.ops.api.OpHints;
-import org.scijava.ops.api.features.BaseOpHints.Simplification;
+import org.scijava.ops.spi.OpHints;
+import org.scijava.ops.engine.BaseOpHints.Simplification;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 

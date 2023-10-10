@@ -44,7 +44,7 @@ import net.imglib2.view.Views;
 import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.Optional;
+import org.scijava.ops.spi.Nullable;
 
 /**
  * Richardson Lucy algorithm for (@link RandomAccessibleInterval) (Lucy, L. B.
@@ -138,7 +138,7 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 			Inplaces.Arity1<RandomAccessibleInterval<O>> accelerator,
 			Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> updateOp,
 			List<Inplaces.Arity1<RandomAccessibleInterval<O>>> iterativePostProcessingOps,
-			@Optional RandomAccessibleInterval<O> raiExtendedEstimate,
+			@Nullable RandomAccessibleInterval<O> raiExtendedEstimate,
 			RandomAccessibleInterval<O> out) {
 
 		// if a starting point for the estimate was not passed in then create

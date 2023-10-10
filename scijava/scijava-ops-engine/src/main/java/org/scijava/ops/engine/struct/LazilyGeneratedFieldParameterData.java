@@ -53,10 +53,10 @@ public class LazilyGeneratedFieldParameterData implements ParameterData {
 		long numOuts = 1; // There is always one output
 
 		// determine the Op inputs/outputs
-		Boolean[] paramOptionality = getParameterOptionality(fieldInstance.instance(),
+		Boolean[] paramNullability = getParameterNullability(fieldInstance.instance(),
 				fieldInstance.field(), (int) numIns, new ArrayList<>());
 
-		paramDataMap.put(fieldInstance, synthesizedMethodParamInfo(fmts, paramOptionality));
+		paramDataMap.put(fieldInstance, synthesizedMethodParamInfo(fmts, paramNullability));
 	}
 
 
@@ -76,21 +76,21 @@ public class LazilyGeneratedFieldParameterData implements ParameterData {
 	}
 
 	private static MethodParamInfo synthesizedMethodParamInfo(
-		List<FunctionalMethodType> fmts, Boolean[] paramOptionality)
+		List<FunctionalMethodType> fmts, Boolean[] paramNullability)
 	{
 		Map<FunctionalMethodType, String> fmtNames = new HashMap<>(fmts.size());
 		Map<FunctionalMethodType, String> fmtDescriptions = new HashMap<>(fmts.size());
-		Map<FunctionalMethodType, Boolean> fmtOptionality = new HashMap<>(fmts.size());
+		Map<FunctionalMethodType, Boolean> fmtNullability = new HashMap<>(fmts.size());
 
 		int ins, outs, containers, mutables;
 		ins = outs = containers = mutables = 1;
-		int optionalIndex = 0;
+		int nullableIndex = 0;
 		for (FunctionalMethodType fmt : fmts) {
 			fmtDescriptions.put(fmt, "");
 			switch (fmt.itemIO()) {
 				case INPUT:
 					fmtNames.put(fmt, "input" + ins++);
-					fmtOptionality.put(fmt, paramOptionality[optionalIndex++]);
+					fmtNullability.put(fmt, paramNullability[nullableIndex++]);
 					break;
 				case OUTPUT:
 					fmtNames.put(fmt, "output" + outs++);
@@ -105,7 +105,7 @@ public class LazilyGeneratedFieldParameterData implements ParameterData {
 					throw new RuntimeException("Unexpected ItemIO type encountered!");
 			}
 		}
-		return new MethodParamInfo(fmtNames, fmtDescriptions, fmtOptionality);
+		return new MethodParamInfo(fmtNames, fmtDescriptions, fmtNullability);
 	}
 
 	@Override
@@ -121,7 +121,7 @@ public class LazilyGeneratedFieldParameterData implements ParameterData {
 	}
 
 	// Helper methods
-	private static Boolean[] getParameterOptionality(Object instance, Field field,
+	private static Boolean[] getParameterNullability(Object instance, Field field,
 			int opParams, List<ValidityProblem> problems)
 	{
 
@@ -134,23 +134,23 @@ public class LazilyGeneratedFieldParameterData implements ParameterData {
 			problems.add(new ValidityProblem(exc));
 			return FunctionalParameters.generateAllRequiredArray(opParams);
 		}
-		List<Method> fMethodsWithOptionals = FunctionalParameters.fMethodsWithOptional(fieldClass);
+		List<Method> fMethodsWithNullables = FunctionalParameters.fMethodsWithNullable(fieldClass);
 		Class<?> fIface = OpUtils.findFunctionalInterface(fieldClass);
-		List<Method> fIfaceMethodsWithOptionals = FunctionalParameters.fMethodsWithOptional(fIface);
+		List<Method> fIfaceMethodsWithNullables = FunctionalParameters.fMethodsWithNullable(fIface);
 
-		if (fMethodsWithOptionals.isEmpty() && fIfaceMethodsWithOptionals.isEmpty()) {
+		if (fMethodsWithNullables.isEmpty() && fIfaceMethodsWithNullables.isEmpty()) {
 			return FunctionalParameters.generateAllRequiredArray(opParams);
 		}
-		if (!fMethodsWithOptionals.isEmpty() && !fIfaceMethodsWithOptionals.isEmpty()) {
+		if (!fMethodsWithNullables.isEmpty() && !fIfaceMethodsWithNullables.isEmpty()) {
 			problems.add(new ValidityProblem(
-					"Multiple methods from the op type have optional parameters!"));
+					"Multiple methods from the op type have nullable parameters!"));
 			return FunctionalParameters.generateAllRequiredArray(opParams);
 		}
-		if (fMethodsWithOptionals.isEmpty()) {
-			return FunctionalParameters.findParameterOptionality(fIfaceMethodsWithOptionals.get(0));
+		if (fMethodsWithNullables.isEmpty()) {
+			return FunctionalParameters.findParameterNullability(fIfaceMethodsWithNullables.get(0));
 		}
-		if (fIfaceMethodsWithOptionals.isEmpty()) {
-			return FunctionalParameters.findParameterOptionality(fMethodsWithOptionals.get(0));
+		if (fIfaceMethodsWithNullables.isEmpty()) {
+			return FunctionalParameters.findParameterNullability(fMethodsWithNullables.get(0));
 		}
 		return FunctionalParameters.generateAllRequiredArray(opParams);
 	}

@@ -44,8 +44,8 @@ import net.imglib2.util.Intervals;
 import net.imglib2.util.Util;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.Optional;
 
 /**
  * Correlate op for (@link Img)
@@ -91,9 +91,9 @@ implements Functions.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterva
 	@Override
 	public RandomAccessibleInterval<O> apply(final RandomAccessibleInterval<I> input,
 			final RandomAccessibleInterval<K> kernel, final O outType, final C fftType,
-			@Optional long[] borderSize,
-			@Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,
-			@Optional OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel ) {
+			@Nullable long[] borderSize,
+			@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,
+			@Nullable OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel ) {
 		
 		if(Intervals.numElements(kernel) <= 9) throw new IllegalArgumentException("The kernel is not sufficiently large -- use the naive approach instead");
 

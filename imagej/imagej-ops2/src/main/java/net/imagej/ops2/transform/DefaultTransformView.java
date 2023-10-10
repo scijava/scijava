@@ -30,7 +30,7 @@
 package net.imagej.ops2.transform;
 
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.Optional;
+import org.scijava.ops.spi.Nullable;
 
 import net.imglib2.FinalInterval;
 import net.imglib2.Interval;
@@ -74,8 +74,8 @@ public class DefaultTransformView<T extends NumericType<T> & RealType<T>>
 	public RandomAccessibleInterval<T> apply( //
 		RandomAccessibleInterval<T> input, //
 		InvertibleRealTransform transform, //
-		@Optional Interval outputInterval, //
-		@Optional InterpolatorFactory<T, RandomAccessible<T>> interpolator //
+		@Nullable Interval outputInterval, //
+		@Nullable InterpolatorFactory<T, RandomAccessible<T>> interpolator //
 	) {
 		if (outputInterval == null) {
 			outputInterval = new FinalInterval(input);

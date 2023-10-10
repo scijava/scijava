@@ -43,8 +43,8 @@ import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Functions;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.Optional;
 
 /**
  * Abstract Op used to pad the image by extending the borders optionally using
@@ -66,7 +66,7 @@ public abstract class PadInputFFT<T extends ComplexType<T>, I extends RandomAcce
 	@Override
 	@SuppressWarnings("unchecked")
 	public O apply(final I input, final Dimensions paddedDimensions, final Boolean fast,
-			@Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> obf) {
+			@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> obf) {
 
 		Dimensions paddedFFTInputDimensions;
 

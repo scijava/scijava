@@ -1,3 +1,8 @@
+import org.scijava.ops.engine.InfoTreeGenerator;
+import org.scijava.ops.engine.impl.DefaultInfoTreeGenerator;
+import org.scijava.ops.engine.matcher.adapt.AdaptationInfoTreeGenerator;
+import org.scijava.ops.engine.matcher.simplify.SimplificationInfoTreeGenerator;
+
 module org.scijava.ops.engine {
 
 /*
@@ -6,6 +11,7 @@ module org.scijava.ops.engine {
  */
 
 	exports org.scijava.ops.engine;
+	exports org.scijava.ops.engine.matcher;
 	exports org.scijava.ops.engine.conversionLoss;
 	exports org.scijava.ops.engine.util;
 
@@ -17,6 +23,7 @@ module org.scijava.ops.engine {
 	requires org.scijava.function;
 	requires org.scijava.log2;
 	requires org.scijava.meta;
+	requires org.scijava.parsington;
 	requires org.scijava.priority;
 	requires org.scijava.progress;
 	requires org.scijava.struct;
@@ -30,24 +37,21 @@ module org.scijava.ops.engine {
 
 	uses javax.annotation.processing.Processor;
 	uses org.scijava.discovery.Discoverer;
-	uses org.scijava.ops.api.InfoChainGenerator;
+	uses InfoTreeGenerator;
 	uses org.scijava.ops.api.OpEnvironment;
-	uses org.scijava.ops.api.OpInfoGenerator;
-	uses org.scijava.ops.api.OpWrapper;
-	uses org.scijava.ops.api.features.MatchingRoutine;
-	uses org.scijava.ops.api.features.YAMLOpInfoCreator;
+	uses org.scijava.ops.engine.OpInfoGenerator;
+	uses org.scijava.ops.engine.OpWrapper;
+	uses org.scijava.ops.engine.matcher.MatchingRoutine;
 	uses org.scijava.ops.engine.matcher.reduce.InfoReducer;
+	uses org.scijava.ops.engine.yaml.YAMLOpInfoCreator;
 	uses org.scijava.ops.spi.Op;
 	uses org.scijava.ops.spi.OpCollection;
 	uses org.scijava.types.TypeExtractor;
 
 	provides org.scijava.discovery.Discoverer with
-		org.scijava.ops.engine.yaml.YAMLOpInfoDiscoverer;
+		org.scijava.ops.engine.yaml.impl.YAMLOpInfoDiscoverer;
 
-	provides org.scijava.ops.api.InfoChainGenerator with
-		org.scijava.ops.engine.matcher.adapt.AdaptationInfoChainGenerator,
-		org.scijava.ops.engine.impl.DefaultInfoChainGenerator,
-		org.scijava.ops.engine.matcher.simplify.SimplificationInfoChainGenerator;
+	provides InfoTreeGenerator with AdaptationInfoTreeGenerator, DefaultInfoTreeGenerator, SimplificationInfoTreeGenerator;
 
 	provides org.scijava.ops.api.OpEnvironment with
 	    org.scijava.ops.engine.impl.DefaultOpEnvironment;
@@ -55,12 +59,12 @@ module org.scijava.ops.engine {
 	provides org.scijava.ops.api.OpHistory with
 	    org.scijava.ops.engine.impl.DefaultOpHistory;
 
-	provides org.scijava.ops.api.OpInfoGenerator with
+	provides org.scijava.ops.engine.OpInfoGenerator with
 	    org.scijava.ops.engine.impl.OpClassOpInfoGenerator,
 	    org.scijava.ops.engine.impl.OpCollectionInfoGenerator,
 		org.scijava.ops.engine.matcher.reduce.ReducedOpInfoGenerator;
 
-	provides org.scijava.ops.api.OpWrapper with
+	provides org.scijava.ops.engine.OpWrapper with
 		org.scijava.ops.engine.matcher.impl.OpWrappers.ProducerOpWrapper,
 		org.scijava.ops.engine.matcher.impl.OpWrappers.Function1OpWrapper,
 		org.scijava.ops.engine.matcher.impl.OpWrappers.Function2OpWrapper,
@@ -233,7 +237,7 @@ module org.scijava.ops.engine {
 		org.scijava.ops.engine.matcher.impl.OpWrappers.Inplace16_16OpWrapper,
 		org.scijava.ops.engine.matcher.impl.LossReporterWrapper;
 
-	provides org.scijava.ops.api.features.MatchingRoutine with
+	provides org.scijava.ops.engine.matcher.MatchingRoutine with
 		org.scijava.ops.engine.matcher.impl.RuntimeSafeMatchingRoutine,
 		org.scijava.ops.engine.matcher.adapt.AdaptationMatchingRoutine,
 		org.scijava.ops.engine.matcher.simplify.SimplificationMatchingRoutine;
@@ -493,15 +497,15 @@ module org.scijava.ops.engine {
 		org.scijava.ops.engine.adapt.functional.InplacesToFunctions.Inplace16_14ToFunction16,
 		org.scijava.ops.engine.adapt.functional.InplacesToFunctions.Inplace16_15ToFunction16,
 		org.scijava.ops.engine.adapt.functional.InplacesToFunctions.Inplace16_16ToFunction16,
-
+		org.scijava.ops.engine.eval.DefaultEval,
 		org.scijava.ops.engine.stats.Mean.MeanFunction;
 
     provides org.scijava.ops.engine.matcher.reduce.InfoReducer with //
         org.scijava.ops.engine.matcher.reduce.FunctionReducer,
         org.scijava.ops.engine.matcher.reduce.ComputerReducer;
 
-    provides org.scijava.ops.api.features.YAMLOpInfoCreator with
-        org.scijava.ops.engine.yaml.JavaClassYAMLOpInfoCreator,
-        org.scijava.ops.engine.yaml.JavaFieldYAMLOpInfoCreator,
-        org.scijava.ops.engine.yaml.JavaMethodYAMLInfoCreator;
+    provides org.scijava.ops.engine.yaml.YAMLOpInfoCreator with
+        org.scijava.ops.engine.yaml.impl.JavaClassYAMLOpInfoCreator,
+        org.scijava.ops.engine.yaml.impl.JavaFieldYAMLOpInfoCreator,
+        org.scijava.ops.engine.yaml.impl.JavaMethodYAMLInfoCreator;
 }

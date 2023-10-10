@@ -41,8 +41,8 @@ import org.scijava.common3.validity.ValidityException;
 import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.OpDependencyMember;
-import org.scijava.ops.api.OpDescription;
+import org.scijava.ops.engine.OpDependencyMember;
+import org.scijava.ops.engine.OpDescription;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.engine.struct.ClassOpDependencyMemberParser;
@@ -145,14 +145,14 @@ public class OpClassInfo implements OpInfo {
 			throw new IllegalStateException("Unable to instantiate op: '" + opClass
 				.getName() + "' Ensure that the Op has a no-args constructor.", e);
 		}
-		final List<OpDependencyMember<?>> dependencyMembers = dependencies();
+		final var dependencyMembers = OpUtils.dependenciesOf(this);
 		for (int i = 0; i < dependencyMembers.size(); i++) {
 			final OpDependencyMember<?> dependencyMember = dependencyMembers.get(i);
 			try {
 				dependencyMember.createInstance(op).set(dependencies.get(i));
 			}
 			catch (final Exception ex) {
-				// TODO: Improve error message. Used to include exact OpRef of Op
+				// TODO: Improve error message. Used to include exact OpRequest of Op
 				// dependency.
 				throw new IllegalStateException(
 					"Exception trying to inject Op dependency field.\n" +

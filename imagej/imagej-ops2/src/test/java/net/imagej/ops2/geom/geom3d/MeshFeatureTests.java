@@ -43,7 +43,8 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.scijava.ops.api.features.DependencyMatchingException;
+import org.scijava.ops.api.OpMatchingException;
+import org.scijava.ops.engine.DependencyMatchingException;
 import org.scijava.types.Nil;
 
 public class MeshFeatureTests extends AbstractFeatureTest {
@@ -61,7 +62,7 @@ public class MeshFeatureTests extends AbstractFeatureTest {
 	public void boxivityMesh() {
 		try {
 			ops.op("geom.boxivity").arity1().input(mesh).outType(DoubleType.class).apply();
-		} catch (DependencyMatchingException e) {
+		} catch (OpMatchingException e) {
 			// DefaultSmallestOrientedBoundingBox is not implemented.
 		}
 	}

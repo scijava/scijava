@@ -10,10 +10,9 @@ import java.util.stream.Collectors;
 import org.scijava.common3.validity.ValidityException;
 import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.OpDependencyMember;
-import org.scijava.ops.api.OpDescription;
+import org.scijava.ops.engine.OpDescription;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.features.BaseOpHints;
+import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.engine.struct.OpResizingMemberParser;
 import org.scijava.ops.engine.struct.RetypingRequest;
 import org.scijava.struct.FunctionalMethodType;
@@ -148,16 +147,6 @@ public class ReducedOpInfo implements OpInfo {
 	public String implementationName() {
 		// TODO: improve this name
 		return srcInfo.implementationName() + "Reduction" + paramsReduced; 
-	}
-
-	/**
-	 * Gets the op's dependencies on other ops. NB the reduction wrapper has no
-	 * dependencies, but the Op itself might. So the dependencies are actually
-	 * reflected in {@code srcInfo}
-	 */
-	@Override
-	public List<OpDependencyMember<?>> dependencies() {
-		return srcInfo().dependencies();
 	}
 
 	@Override

@@ -73,14 +73,14 @@ BiFunction<Integer, Integer, List<Integer>> op = OpEnvironment.op("math.add") //
 
 ## Reduction
 
-`DefaultOpEnvironment` supports optional parameters by enabling the retrieval Ops **with or without** their optional parameters (denoted with the `@Optional` annotation). Parameters can only be optional when **all input parameters to its right in the signature are also optional**. When a parameter is declared as optional, `null` is passed to the parameter and it is the **Op's** responsibility to replace that `null` value with a reasonable default. To prevent confusion, an optional parameter can **only** be omitted when all optional parameters to its right are **also omitted**. Thus, supposing we have some Op:
+`DefaultOpEnvironment` supports nullable parameters by enabling the retrieval Ops **with or without** their optional parameters (denoted with the `@Nullable` annotation). Parameters can only be optional when **all input parameters to its right in the signature are also optional**. When a parameter is declared as optional, `null` is passed to the parameter and it is the **Op's** responsibility to replace that `null` value with a reasonable default. To prevent confusion, an optional parameter can **only** be omitted when all optional parameters to its right are **also omitted**. Thus, supposing we have some Op:
 
 ```java
 @Plugin(type = Op.class, name = math.add)
 public class bazOp implements BiFunction<Double, Double, Double> {
 
 	@Override
-	public Double apply(Double in1, @Optional Double in2) {
+	public Double apply(Double in1, @Nullable Double in2) {
 		if (in2 == null) in2 = 0.0;
 		return in1 + in2;
 	

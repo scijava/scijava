@@ -38,7 +38,7 @@ import net.imglib2.util.Pair;
 
 import org.scijava.function.Functions;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.Optional;
+import org.scijava.ops.spi.Nullable;
 
 /**
  * Generates an ASCII version of an image.
@@ -66,7 +66,8 @@ public class DefaultASCII<T extends RealType<T>> implements Functions.Arity3<Ite
 	 * @return ASCIIArt
 	 */
 	@Override
-	public String apply(final IterableInterval<T> input, @Optional T min, @Optional T max) {
+	public String apply(final IterableInterval<T> input, @Nullable
+	T min, @Nullable T max) {
 		if (min == null || max == null) {
 			final Pair<T, T> minMax = minMaxFunc.apply(input);
 			if (min == null) min = minMax.getA();

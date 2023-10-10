@@ -29,6 +29,9 @@
 
 package net.imagej.ops2.map.neighborhood;
 
+import org.scijava.function.Computers;
+import org.scijava.ops.api.Ops;
+
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessibleInterval;
@@ -37,13 +40,8 @@ import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.view.Views;
 
-import org.scijava.function.Computers;
-import org.scijava.ops.api.OpMetadata;
-import org.scijava.ops.api.RichOp;
-import org.scijava.ops.api.features.BaseOpHints;
-
 /**
- * Evaluates a {@link UnaryComputerOp} for each {@link Neighborhood} on the
+ * Evaluates a {@link Computers.Arity1} for each {@link Neighborhood} on the
  * input {@link RandomAccessibleInterval}.
  * 
  * @author Christian Dietz (University of Konstanz)
@@ -55,6 +53,7 @@ import org.scijava.ops.api.features.BaseOpHints;
 public class DefaultMapNeighborhood<I, O> implements
 	Computers.Arity3<RandomAccessibleInterval<I>, Shape, Computers.Arity1<Iterable<I>, O>, IterableInterval<O>>
 {
+
 	/**
 	 * TODO
 	 *
@@ -114,25 +113,18 @@ class MapNeighborhoodAllRAI<I, O> implements
 		RandomAccessibleInterval<Neighborhood<I>> neighborhoodInput = Views
 			.interval(in2.neighborhoodsRandomAccessibleSafe(in1), in1);
 
-		boolean restoreRecording = true;
-		if (op instanceof RichOp) {
-			OpMetadata metadata = ((RichOp) op).metadata();
-			if (metadata.hints().contains(BaseOpHints.History.SKIP_RECORDING)) {
-				restoreRecording = false;
-			} else {
-				metadata.setHints(metadata.hints().plus(BaseOpHints.History.SKIP_RECORDING));
-			}
+		// Temporarily disable recording history
+		boolean isRecording = Ops.isRecordingExecutions(op);
+		if (isRecording) {
+			Ops.recordExecutions(op, false);
 		}
 
 		LoopBuilder.setImages(neighborhoodInput, out).multiThreaded()
-			.forEachPixel((neighborhood, outPixel) -> {
-				op.compute(neighborhood, outPixel);
-			});
+			.forEachPixel(op::compute);
 
-		if (restoreRecording && op instanceof RichOp) {
-			OpMetadata metadata = ((RichOp) op).metadata();
-
-			metadata.setHints(metadata.hints().minus( BaseOpHints.History.SKIP_RECORDING));
+		// Re-enable recording history if necessary
+		if (isRecording) {
+			Ops.recordExecutions(op, true);
 		}
 	}
 

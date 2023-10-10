@@ -45,7 +45,6 @@ import net.imglib2.view.Views;
 
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
-import org.scijava.ops.engine.util.Adapt;
 import org.scijava.ops.spi.OpDependency;
 
 /**
@@ -80,13 +79,13 @@ public class VectorAccelerator<T extends RealType<T> & NativeType<T>> implements
 	/**
 	 * TODO
 	 *
-	 * @param io
+	 * @param yk_iterated
 	 */
 	@Override
 	public void mutate(RandomAccessibleInterval<T> yk_iterated) {
 		T type = Util.getTypeFromInterval(yk_iterated);
 		factory = new ArrayImgFactory<>(type);
-		createReduced = Adapt.FunctionAdapt.asFunction(create, type, factory);
+		createReduced = in -> create.apply(in, type, factory);
 		accelerate(yk_iterated);
 	}
 

@@ -27,8 +27,9 @@
  * #L%
  */
 open module net.imagej.ops2 {
-	exports net.imagej.ops2;
-	
+	// Note that opening this module is necessary to provide runtime access
+	// from the SciJava Ops Engine module.
+
 	requires java.scripting;
 	requires net.imagej.mesh2;
 	requires net.imglib2;
@@ -41,9 +42,7 @@ open module net.imagej.ops2 {
 	requires org.scijava.function;
 	requires org.scijava.meta;
 	requires org.scijava.ops.api;
-	requires org.scijava.ops.engine;
 	requires org.scijava.ops.spi;
-	requires org.scijava.parsington;
 	requires org.scijava.priority;
 	requires org.scijava.types;
 	
@@ -64,5 +63,4 @@ open module net.imagej.ops2 {
 			net.imagej.ops2.types.OutOfBoundsRandomValueFactoryTypeExtractor,
 			net.imagej.ops2.types.RAITypeExtractor;
 
-	uses org.scijava.ops.api.features.MatchingRoutine;
 }

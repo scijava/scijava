@@ -28,8 +28,6 @@
  */
 package net.imagej.ops2.coloc.icq;
 
-import java.util.function.BiFunction;
-
 import net.imagej.ops2.coloc.ColocUtil;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
@@ -38,8 +36,8 @@ import net.imglib2.util.Pair;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.Optional;
 
 /**
  * This algorithm calculates Li et al.'s ICQ (intensity correlation quotient).
@@ -68,7 +66,8 @@ public class LiICQ<T extends RealType<T>, U extends RealType<U>, V extends RealT
 	 * @return the output
 	 */
 	@Override
-	public Double apply(final Iterable<T> image1, final Iterable<U> image2, @Optional DoubleType mean1, @Optional DoubleType mean2) {
+	public Double apply(final Iterable<T> image1, final Iterable<U> image2, @Nullable
+	DoubleType mean1, @Nullable DoubleType mean2) {
 
 		if (!ColocUtil.sameIterationOrder(image1, image2))
 			throw new IllegalArgumentException(

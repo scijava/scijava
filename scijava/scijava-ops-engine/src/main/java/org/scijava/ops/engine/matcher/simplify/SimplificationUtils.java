@@ -22,7 +22,7 @@ import org.scijava.function.Container;
 import org.scijava.function.Mutable;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpRef;
+import org.scijava.ops.api.OpRequest;
 import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.engine.util.internal.AnnotationUtils;
 import org.scijava.types.Types;
@@ -44,7 +44,7 @@ public class SimplificationUtils {
 	/**
 	 * Determines the {@link Type} of a retyped Op using its old {@code Type}, a
 	 * new set of {@code args} and a new {@code outType}. Used to create
-	 * {@link SimplifiedOpRef}s. This method assumes that:
+	 * {@link SimplifiedOpRequest}s. This method assumes that:
 	 * <ul>
 	 * <li>{@code originalOpRefType} is (or is a subtype of) some
 	 * {@link FunctionalInterface}</li>
@@ -53,12 +53,12 @@ public class SimplificationUtils {
 	 * </ul>
 	 * 
 	 * @param originalOpType - the {@link Type} declared by the source
-	 *          {@link OpRef}
+	 *          {@link OpRequest}
 	 * @param newArgs - the new argument {@link Type}s requested by the
-	 *          {@link OpRef}.
+	 *          {@link OpRequest}.
 	 * @param newOutType - the new output {@link Type} requested by the
-	 *          {@link OpRef}.
-	 * @return - a new {@code type} for a {@link SimplifiedOpRef}.
+	 *          {@link OpRequest}.
+	 * @return - a new {@code type} for a {@link SimplifiedOpRequest}.
 	 */
 	public static ParameterizedType retypeOpType(Type originalOpType, Type[] newArgs, Type newOutType) {
 			// only retype types that we know how to retype
@@ -413,7 +413,7 @@ public class SimplificationUtils {
 	 * must:
 	 * <ol>
 	 * <li>Simplify all inputs using the {@link Function}s provided by the
-	 * {@link SimplifiedOpRef}</li>
+	 * {@link SimplifiedOpRequest}</li>
 	 * <li>Focus the simplified inputs using the {@link Function}s provided by the
 	 * {@link SimplifiedOpInfo}</li>
 	 * <li>Call the {@code Op} using the focused inputs.</li>

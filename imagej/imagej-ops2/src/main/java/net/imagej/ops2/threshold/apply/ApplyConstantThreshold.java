@@ -30,14 +30,13 @@
 package net.imagej.ops2.threshold.apply;
 
 import java.util.Comparator;
+import java.util.function.Function;
+
+import org.scijava.function.Computers;
+import org.scijava.ops.spi.OpDependency;
 
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
-
-import org.scijava.function.Computers;
-import org.scijava.ops.engine.util.Adapt;
-import org.scijava.ops.engine.util.Maps;
-import org.scijava.ops.spi.OpDependency;
 
 /**
  * Applies the given threshold value to every element along the given
@@ -53,6 +52,9 @@ public class ApplyConstantThreshold<T extends RealType<T>>
 	@OpDependency(name = "threshold.apply")
 	Computers.Arity3<T, T, Comparator<? super T>, BitType> applyThreshold;
 
+	@OpDependency(name = "adapt")
+	Function<Computers.Arity1<T, BitType>, Computers.Arity1<Iterable<T>, Iterable<BitType>>> lifter;
+
 	// TODO can/should the Comparator be of <? super T> instead of just <T>?
 	/**
 	 * TODO
@@ -65,8 +67,8 @@ public class ApplyConstantThreshold<T extends RealType<T>>
 	@Override
 	public void compute(final Iterable<T> input1, final T input2, final Comparator<T> comparator,
 			final Iterable<BitType> output) {
-		Computers.Arity1<T, BitType> thresholdComputer = Adapt.ComputerAdapt.asComputer(applyThreshold, input2, comparator);
-		Computers.Arity1<Iterable<T>, Iterable<BitType>> liftedThreshold = Maps.ComputerMaps.Iterables.liftBoth(thresholdComputer);
+		Computers.Arity1<T, BitType> thresholdComputer = (in, out) -> applyThreshold.compute(in, input2, comparator, out);
+		Computers.Arity1<Iterable<T>, Iterable<BitType>> liftedThreshold = lifter.apply(thresholdComputer);
 		liftedThreshold.accept(input1, output);
 	}
 
@@ -96,7 +98,7 @@ class ApplyConstantThresholdSimple<T extends RealType<T>> implements Computers.A
 	@Override
 	public void compute(final Iterable<T> input1, final T input2, final Iterable<BitType> output) {
 
-		applyThreshold.compute(input1, input2, (in1, in2) -> in1.compareTo(in2), output);
+		applyThreshold.compute(input1, input2, Comparable::compareTo, output);
 	}
 
 }

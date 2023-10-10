@@ -42,13 +42,13 @@ import org.junit.jupiter.api.Test;
 import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.ManualDiscoverer;
 import org.scijava.function.Producer;
-import org.scijava.ops.api.InfoChainGenerator;
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.api.OpInstance;
-import org.scijava.ops.api.OpWrapper;
-import org.scijava.ops.api.features.MatchingConditions;
-import org.scijava.ops.api.features.MatchingRoutine;
+import org.scijava.ops.engine.InfoTreeGenerator;
+import org.scijava.ops.engine.OpInfoGenerator;
+import org.scijava.ops.engine.OpWrapper;
+import org.scijava.ops.engine.MatchingConditions;
+import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
 import org.scijava.ops.spi.OpCollection;
@@ -67,7 +67,7 @@ public class OpCachingTest implements OpCollection {
 						OpWrapper.class, //
 						MatchingRoutine.class, //
 						OpInfoGenerator.class, //
-						InfoChainGenerator.class //
+						InfoTreeGenerator.class //
 				);
 		// register needed classes in StaticDiscoverer
 		ManualDiscoverer discoverer = new ManualDiscoverer();
@@ -125,7 +125,7 @@ public class OpCachingTest implements OpCollection {
 		String newString = "This Op invaded the cache!";
 		Producer<String> newProducer = () -> newString;
 		OpInstance<?> invaderInstance = OpInstance.of(newProducer, cachedInstance
-			.infoChain(), new Nil<Producer<String>>()
+			.infoTree(), new Nil<Producer<String>>()
 		{}.getType());
 		opCache.replace(cachedConditions, invaderInstance);
 
@@ -151,7 +151,7 @@ public class OpCachingTest implements OpCollection {
 
 		// assert that complicatedOp is in the cache (
 		Optional<MatchingConditions> complicatedOptional = opCache.keySet().stream()
-			.filter(condition -> condition.ref().getName().equals(
+			.filter(condition -> condition.request().getName().equals(
 				"test.complicatedOp")).findFirst();
 		Assertions.assertFalse(complicatedOptional
 					.isEmpty(), "test.complicatedOp not in cache!");
@@ -161,7 +161,7 @@ public class OpCachingTest implements OpCollection {
 
 		// assert that basic Op is also in the cache
 		Optional<MatchingConditions> basicOptional = opCache.keySet().stream()
-			.filter(condition -> condition.ref().getName().equals("test.basicOp"))
+			.filter(condition -> condition.request().getName().equals("test.basicOp"))
 			.findFirst();
 		Assertions.assertFalse(basicOptional.isEmpty(),
 				"test.basicOp not in cache despite being an OpDependency of test.complicatedOp");

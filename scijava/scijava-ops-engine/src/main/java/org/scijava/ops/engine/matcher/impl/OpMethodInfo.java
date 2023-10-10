@@ -44,11 +44,12 @@ import org.scijava.common3.validity.ValidityException;
 import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.OpDescription;
+import org.scijava.ops.engine.OpDescription;
 import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.engine.struct.MethodOpDependencyMemberParser;
 import org.scijava.ops.engine.struct.MethodParameterMemberParser;
-import org.scijava.ops.engine.util.Adapt;
+import org.scijava.ops.engine.util.Lambdas;
 import org.scijava.ops.engine.util.internal.OpMethodUtils;
 import org.scijava.ops.spi.OpMethod;
 import org.scijava.priority.Priority;
@@ -204,10 +205,10 @@ public class OpMethodInfo implements OpInfo {
 		try {
 			method.setAccessible(true);
 			MethodHandle handle = MethodHandles.lookup().unreflect(method);
-			Object op = Adapt.Methods.lambdaize( //
+			Object op = Lambdas.lambdaize( //
 					Types.raw(opType), //
 					handle, //
-					dependencies().stream().map(Member::getRawType).toArray(Class[]::new),
+					OpUtils.dependenciesOf(this).stream().map(Member::getRawType).toArray(Class[]::new),
 					dependencies.toArray() //
 			);
 			return struct().createInstance(op);

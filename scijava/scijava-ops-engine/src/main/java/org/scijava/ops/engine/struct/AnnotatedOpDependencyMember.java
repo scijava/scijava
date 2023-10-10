@@ -33,7 +33,7 @@ package org.scijava.ops.engine.struct;
 import java.lang.reflect.Type;
 import java.util.function.Supplier;
 
-import org.scijava.ops.api.OpDependencyMember;
+import org.scijava.ops.engine.OpDependencyMember;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.Member;
 

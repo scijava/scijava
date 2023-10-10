@@ -13,9 +13,10 @@ import org.scijava.function.Container;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
+import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInstance;
-import org.scijava.ops.api.OpMetadata;
-import org.scijava.ops.api.OpWrapper;
+import org.scijava.ops.engine.OpWrapper;
 import org.scijava.ops.api.RichOp;
 
 public class OpWrappers {
@@ -25,8 +26,10 @@ public class OpWrappers {
 	public static class ProducerOpWrapper<T> implements OpWrapper<Producer<T>> {
 
 		@Override
-		public RichOp<Producer<T>> wrap(final OpInstance<Producer<T>> instance, //
-			final OpMetadata metadata)
+		public RichOp<Producer<T>> wrap( //
+            final OpInstance<Producer<T>> instance, //
+            final OpEnvironment env, //
+            final Hints hints)
 		{
 			class GenericTypedProducer //
 				extends AbstractRichOp<Producer<T>> //
@@ -35,7 +38,7 @@ public class OpWrappers {
 
 				public GenericTypedProducer()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -70,7 +73,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Function<I, O>> wrap( //
 			final OpInstance<Function<I, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedFunction1 //
 				extends AbstractRichOp<Function<I, O>> //
@@ -79,7 +83,7 @@ public class OpWrappers {
 
 				public GenericTypedFunction1()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -112,7 +116,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<BiFunction<I1, I2, O>> wrap( //
 			final OpInstance<BiFunction<I1, I2, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedFunction2 //
 				extends AbstractRichOp<BiFunction<I1, I2, O>> //
@@ -121,7 +126,7 @@ public class OpWrappers {
 
 				public GenericTypedFunction2()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -154,7 +159,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Functions.Arity3<I1, I2, I3, O>> wrap( //
 			final OpInstance<Functions.Arity3<I1, I2, I3, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedFunction3 //
 				extends AbstractRichOp<Functions.Arity3<I1, I2, I3, O>> //
@@ -163,7 +169,7 @@ public class OpWrappers {
 
 				public GenericTypedFunction3()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -196,7 +202,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Functions.Arity4<I1, I2, I3, I4, O>> wrap( //
 			final OpInstance<Functions.Arity4<I1, I2, I3, I4, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedFunction4 //
 				extends AbstractRichOp<Functions.Arity4<I1, I2, I3, I4, O>> //
@@ -205,7 +212,7 @@ public class OpWrappers {
 
 				public GenericTypedFunction4()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -238,7 +245,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Functions.Arity5<I1, I2, I3, I4, I5, O>> wrap( //
 			final OpInstance<Functions.Arity5<I1, I2, I3, I4, I5, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedFunction5 //
 				extends AbstractRichOp<Functions.Arity5<I1, I2, I3, I4, I5, O>> //
@@ -247,7 +255,7 @@ public class OpWrappers {
 
 				public GenericTypedFunction5()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -280,7 +288,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Functions.Arity6<I1, I2, I3, I4, I5, I6, O>> wrap( //
 			final OpInstance<Functions.Arity6<I1, I2, I3, I4, I5, I6, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedFunction6 //
 				extends AbstractRichOp<Functions.Arity6<I1, I2, I3, I4, I5, I6, O>> //
@@ -289,7 +298,7 @@ public class OpWrappers {
 
 				public GenericTypedFunction6()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -322,7 +331,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O>> wrap( //
 			final OpInstance<Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedFunction7 //
 				extends AbstractRichOp<Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O>> //
@@ -331,7 +341,7 @@ public class OpWrappers {
 
 				public GenericTypedFunction7()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -364,7 +374,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>> wrap( //
 			final OpInstance<Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedFunction8 //
 				extends AbstractRichOp<Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>> //
@@ -373,7 +384,7 @@ public class OpWrappers {
 
 				public GenericTypedFunction8()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -406,7 +417,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>> wrap( //
 			final OpInstance<Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedFunction9 //
 				extends AbstractRichOp<Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>> //
@@ -415,7 +427,7 @@ public class OpWrappers {
 
 				public GenericTypedFunction9()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -448,7 +460,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> wrap( //
 			final OpInstance<Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedFunction10 //
 				extends AbstractRichOp<Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> //
@@ -457,7 +470,7 @@ public class OpWrappers {
 
 				public GenericTypedFunction10()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -490,7 +503,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> wrap( //
 			final OpInstance<Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedFunction11 //
 				extends AbstractRichOp<Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> //
@@ -499,7 +513,7 @@ public class OpWrappers {
 
 				public GenericTypedFunction11()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -532,7 +546,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> wrap( //
 			final OpInstance<Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedFunction12 //
 				extends AbstractRichOp<Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> //
@@ -541,7 +556,7 @@ public class OpWrappers {
 
 				public GenericTypedFunction12()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -574,7 +589,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> wrap( //
 			final OpInstance<Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedFunction13 //
 				extends AbstractRichOp<Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> //
@@ -583,7 +599,7 @@ public class OpWrappers {
 
 				public GenericTypedFunction13()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -616,7 +632,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> wrap( //
 			final OpInstance<Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedFunction14 //
 				extends AbstractRichOp<Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> //
@@ -625,7 +642,7 @@ public class OpWrappers {
 
 				public GenericTypedFunction14()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -658,7 +675,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> wrap( //
 			final OpInstance<Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedFunction15 //
 				extends AbstractRichOp<Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> //
@@ -667,7 +685,7 @@ public class OpWrappers {
 
 				public GenericTypedFunction15()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -700,7 +718,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> wrap( //
 			final OpInstance<Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedFunction16 //
 				extends AbstractRichOp<Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> //
@@ -709,7 +728,7 @@ public class OpWrappers {
 
 				public GenericTypedFunction16()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -744,7 +763,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Computers.Arity0<O>> wrap( //
 			final OpInstance<Computers.Arity0<O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedComputer0 //
 				extends AbstractRichOp<Computers.Arity0<O>> //
@@ -752,7 +772,7 @@ public class OpWrappers {
 			{
 				public GenericTypedComputer0()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -784,7 +804,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Computers.Arity1<I, O>> wrap( //
 			final OpInstance<Computers.Arity1<I, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedComputer1 //
 				extends AbstractRichOp<Computers.Arity1<I, O>> //
@@ -792,7 +813,7 @@ public class OpWrappers {
 			{
 				public GenericTypedComputer1()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -824,7 +845,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Computers.Arity2<I1, I2, O>> wrap( //
 			final OpInstance<Computers.Arity2<I1, I2, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedComputer2 //
 				extends AbstractRichOp<Computers.Arity2<I1, I2, O>> //
@@ -832,7 +854,7 @@ public class OpWrappers {
 			{
 				public GenericTypedComputer2()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -864,7 +886,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Computers.Arity3<I1, I2, I3, O>> wrap( //
 			final OpInstance<Computers.Arity3<I1, I2, I3, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedComputer3 //
 				extends AbstractRichOp<Computers.Arity3<I1, I2, I3, O>> //
@@ -872,7 +895,7 @@ public class OpWrappers {
 			{
 				public GenericTypedComputer3()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -904,7 +927,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Computers.Arity4<I1, I2, I3, I4, O>> wrap( //
 			final OpInstance<Computers.Arity4<I1, I2, I3, I4, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedComputer4 //
 				extends AbstractRichOp<Computers.Arity4<I1, I2, I3, I4, O>> //
@@ -912,7 +936,7 @@ public class OpWrappers {
 			{
 				public GenericTypedComputer4()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -944,7 +968,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Computers.Arity5<I1, I2, I3, I4, I5, O>> wrap( //
 			final OpInstance<Computers.Arity5<I1, I2, I3, I4, I5, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedComputer5 //
 				extends AbstractRichOp<Computers.Arity5<I1, I2, I3, I4, I5, O>> //
@@ -952,7 +977,7 @@ public class OpWrappers {
 			{
 				public GenericTypedComputer5()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -984,7 +1009,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>> wrap( //
 			final OpInstance<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedComputer6 //
 				extends AbstractRichOp<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>> //
@@ -992,7 +1018,7 @@ public class OpWrappers {
 			{
 				public GenericTypedComputer6()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1024,7 +1050,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>> wrap( //
 			final OpInstance<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedComputer7 //
 				extends AbstractRichOp<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>> //
@@ -1032,7 +1059,7 @@ public class OpWrappers {
 			{
 				public GenericTypedComputer7()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1064,7 +1091,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>> wrap( //
 			final OpInstance<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedComputer8 //
 				extends AbstractRichOp<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>> //
@@ -1072,7 +1100,7 @@ public class OpWrappers {
 			{
 				public GenericTypedComputer8()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1104,7 +1132,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>> wrap( //
 			final OpInstance<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedComputer9 //
 				extends AbstractRichOp<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>> //
@@ -1112,7 +1141,7 @@ public class OpWrappers {
 			{
 				public GenericTypedComputer9()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1144,7 +1173,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> wrap( //
 			final OpInstance<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedComputer10 //
 				extends AbstractRichOp<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> //
@@ -1152,7 +1182,7 @@ public class OpWrappers {
 			{
 				public GenericTypedComputer10()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1184,7 +1214,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> wrap( //
 			final OpInstance<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedComputer11 //
 				extends AbstractRichOp<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> //
@@ -1192,7 +1223,7 @@ public class OpWrappers {
 			{
 				public GenericTypedComputer11()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1224,7 +1255,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> wrap( //
 			final OpInstance<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedComputer12 //
 				extends AbstractRichOp<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> //
@@ -1232,7 +1264,7 @@ public class OpWrappers {
 			{
 				public GenericTypedComputer12()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1264,7 +1296,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> wrap( //
 			final OpInstance<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedComputer13 //
 				extends AbstractRichOp<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> //
@@ -1272,7 +1305,7 @@ public class OpWrappers {
 			{
 				public GenericTypedComputer13()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1304,7 +1337,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> wrap( //
 			final OpInstance<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedComputer14 //
 				extends AbstractRichOp<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> //
@@ -1312,7 +1346,7 @@ public class OpWrappers {
 			{
 				public GenericTypedComputer14()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1344,7 +1378,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> wrap( //
 			final OpInstance<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedComputer15 //
 				extends AbstractRichOp<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> //
@@ -1352,7 +1387,7 @@ public class OpWrappers {
 			{
 				public GenericTypedComputer15()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1384,7 +1419,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> wrap( //
 			final OpInstance<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedComputer16 //
 				extends AbstractRichOp<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> //
@@ -1392,7 +1428,7 @@ public class OpWrappers {
 			{
 				public GenericTypedComputer16()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1426,7 +1462,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity1<IO>> wrap( //
 			final OpInstance<Inplaces.Arity1<IO>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace1 //
 				extends AbstractRichOp<Inplaces.Arity1<IO>> //
@@ -1434,7 +1471,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace1()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1467,7 +1504,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity2_1<IO, I2>> wrap( //
 			final OpInstance<Inplaces.Arity2_1<IO, I2>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace2_1 //
 				extends AbstractRichOp<Inplaces.Arity2_1<IO, I2>> //
@@ -1475,7 +1513,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace2_1()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1508,7 +1546,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity2_2<I1, IO>> wrap( //
 			final OpInstance<Inplaces.Arity2_2<I1, IO>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace2_2 //
 				extends AbstractRichOp<Inplaces.Arity2_2<I1, IO>> //
@@ -1516,7 +1555,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace2_2()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1549,7 +1588,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity3_1<IO, I2, I3>> wrap( //
 			final OpInstance<Inplaces.Arity3_1<IO, I2, I3>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace3_1 //
 				extends AbstractRichOp<Inplaces.Arity3_1<IO, I2, I3>> //
@@ -1557,7 +1597,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace3_1()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1590,7 +1630,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity3_2<I1, IO, I3>> wrap( //
 			final OpInstance<Inplaces.Arity3_2<I1, IO, I3>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace3_2 //
 				extends AbstractRichOp<Inplaces.Arity3_2<I1, IO, I3>> //
@@ -1598,7 +1639,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace3_2()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1631,7 +1672,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity3_3<I1, I2, IO>> wrap( //
 			final OpInstance<Inplaces.Arity3_3<I1, I2, IO>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace3_3 //
 				extends AbstractRichOp<Inplaces.Arity3_3<I1, I2, IO>> //
@@ -1639,7 +1681,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace3_3()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1672,7 +1714,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity4_1<IO, I2, I3, I4>> wrap( //
 			final OpInstance<Inplaces.Arity4_1<IO, I2, I3, I4>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace4_1 //
 				extends AbstractRichOp<Inplaces.Arity4_1<IO, I2, I3, I4>> //
@@ -1680,7 +1723,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace4_1()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1713,7 +1756,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity4_2<I1, IO, I3, I4>> wrap( //
 			final OpInstance<Inplaces.Arity4_2<I1, IO, I3, I4>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace4_2 //
 				extends AbstractRichOp<Inplaces.Arity4_2<I1, IO, I3, I4>> //
@@ -1721,7 +1765,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace4_2()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1754,7 +1798,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity4_3<I1, I2, IO, I4>> wrap( //
 			final OpInstance<Inplaces.Arity4_3<I1, I2, IO, I4>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace4_3 //
 				extends AbstractRichOp<Inplaces.Arity4_3<I1, I2, IO, I4>> //
@@ -1762,7 +1807,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace4_3()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1795,7 +1840,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity4_4<I1, I2, I3, IO>> wrap( //
 			final OpInstance<Inplaces.Arity4_4<I1, I2, I3, IO>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace4_4 //
 				extends AbstractRichOp<Inplaces.Arity4_4<I1, I2, I3, IO>> //
@@ -1803,7 +1849,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace4_4()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1836,7 +1882,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity5_1<IO, I2, I3, I4, I5>> wrap( //
 			final OpInstance<Inplaces.Arity5_1<IO, I2, I3, I4, I5>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace5_1 //
 				extends AbstractRichOp<Inplaces.Arity5_1<IO, I2, I3, I4, I5>> //
@@ -1844,7 +1891,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace5_1()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1877,7 +1924,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity5_2<I1, IO, I3, I4, I5>> wrap( //
 			final OpInstance<Inplaces.Arity5_2<I1, IO, I3, I4, I5>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace5_2 //
 				extends AbstractRichOp<Inplaces.Arity5_2<I1, IO, I3, I4, I5>> //
@@ -1885,7 +1933,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace5_2()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1918,7 +1966,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity5_3<I1, I2, IO, I4, I5>> wrap( //
 			final OpInstance<Inplaces.Arity5_3<I1, I2, IO, I4, I5>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace5_3 //
 				extends AbstractRichOp<Inplaces.Arity5_3<I1, I2, IO, I4, I5>> //
@@ -1926,7 +1975,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace5_3()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -1959,7 +2008,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity5_4<I1, I2, I3, IO, I5>> wrap( //
 			final OpInstance<Inplaces.Arity5_4<I1, I2, I3, IO, I5>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace5_4 //
 				extends AbstractRichOp<Inplaces.Arity5_4<I1, I2, I3, IO, I5>> //
@@ -1967,7 +2017,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace5_4()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2000,7 +2050,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity5_5<I1, I2, I3, I4, IO>> wrap( //
 			final OpInstance<Inplaces.Arity5_5<I1, I2, I3, I4, IO>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace5_5 //
 				extends AbstractRichOp<Inplaces.Arity5_5<I1, I2, I3, I4, IO>> //
@@ -2008,7 +2059,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace5_5()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2041,7 +2092,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity6_1<IO, I2, I3, I4, I5, I6>> wrap( //
 			final OpInstance<Inplaces.Arity6_1<IO, I2, I3, I4, I5, I6>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace6_1 //
 				extends AbstractRichOp<Inplaces.Arity6_1<IO, I2, I3, I4, I5, I6>> //
@@ -2049,7 +2101,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace6_1()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2082,7 +2134,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity6_2<I1, IO, I3, I4, I5, I6>> wrap( //
 			final OpInstance<Inplaces.Arity6_2<I1, IO, I3, I4, I5, I6>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace6_2 //
 				extends AbstractRichOp<Inplaces.Arity6_2<I1, IO, I3, I4, I5, I6>> //
@@ -2090,7 +2143,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace6_2()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2123,7 +2176,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity6_3<I1, I2, IO, I4, I5, I6>> wrap( //
 			final OpInstance<Inplaces.Arity6_3<I1, I2, IO, I4, I5, I6>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace6_3 //
 				extends AbstractRichOp<Inplaces.Arity6_3<I1, I2, IO, I4, I5, I6>> //
@@ -2131,7 +2185,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace6_3()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2164,7 +2218,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity6_4<I1, I2, I3, IO, I5, I6>> wrap( //
 			final OpInstance<Inplaces.Arity6_4<I1, I2, I3, IO, I5, I6>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace6_4 //
 				extends AbstractRichOp<Inplaces.Arity6_4<I1, I2, I3, IO, I5, I6>> //
@@ -2172,7 +2227,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace6_4()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2205,7 +2260,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity6_5<I1, I2, I3, I4, IO, I6>> wrap( //
 			final OpInstance<Inplaces.Arity6_5<I1, I2, I3, I4, IO, I6>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace6_5 //
 				extends AbstractRichOp<Inplaces.Arity6_5<I1, I2, I3, I4, IO, I6>> //
@@ -2213,7 +2269,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace6_5()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2246,7 +2302,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity6_6<I1, I2, I3, I4, I5, IO>> wrap( //
 			final OpInstance<Inplaces.Arity6_6<I1, I2, I3, I4, I5, IO>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace6_6 //
 				extends AbstractRichOp<Inplaces.Arity6_6<I1, I2, I3, I4, I5, IO>> //
@@ -2254,7 +2311,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace6_6()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2287,7 +2344,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity7_1<IO, I2, I3, I4, I5, I6, I7>> wrap( //
 			final OpInstance<Inplaces.Arity7_1<IO, I2, I3, I4, I5, I6, I7>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace7_1 //
 				extends AbstractRichOp<Inplaces.Arity7_1<IO, I2, I3, I4, I5, I6, I7>> //
@@ -2295,7 +2353,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace7_1()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2328,7 +2386,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity7_2<I1, IO, I3, I4, I5, I6, I7>> wrap( //
 			final OpInstance<Inplaces.Arity7_2<I1, IO, I3, I4, I5, I6, I7>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace7_2 //
 				extends AbstractRichOp<Inplaces.Arity7_2<I1, IO, I3, I4, I5, I6, I7>> //
@@ -2336,7 +2395,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace7_2()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2369,7 +2428,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity7_3<I1, I2, IO, I4, I5, I6, I7>> wrap( //
 			final OpInstance<Inplaces.Arity7_3<I1, I2, IO, I4, I5, I6, I7>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace7_3 //
 				extends AbstractRichOp<Inplaces.Arity7_3<I1, I2, IO, I4, I5, I6, I7>> //
@@ -2377,7 +2437,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace7_3()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2410,7 +2470,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity7_4<I1, I2, I3, IO, I5, I6, I7>> wrap( //
 			final OpInstance<Inplaces.Arity7_4<I1, I2, I3, IO, I5, I6, I7>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace7_4 //
 				extends AbstractRichOp<Inplaces.Arity7_4<I1, I2, I3, IO, I5, I6, I7>> //
@@ -2418,7 +2479,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace7_4()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2451,7 +2512,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity7_5<I1, I2, I3, I4, IO, I6, I7>> wrap( //
 			final OpInstance<Inplaces.Arity7_5<I1, I2, I3, I4, IO, I6, I7>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace7_5 //
 				extends AbstractRichOp<Inplaces.Arity7_5<I1, I2, I3, I4, IO, I6, I7>> //
@@ -2459,7 +2521,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace7_5()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2492,7 +2554,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity7_6<I1, I2, I3, I4, I5, IO, I7>> wrap( //
 			final OpInstance<Inplaces.Arity7_6<I1, I2, I3, I4, I5, IO, I7>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace7_6 //
 				extends AbstractRichOp<Inplaces.Arity7_6<I1, I2, I3, I4, I5, IO, I7>> //
@@ -2500,7 +2563,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace7_6()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2533,7 +2596,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, IO>> wrap( //
 			final OpInstance<Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, IO>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace7_7 //
 				extends AbstractRichOp<Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, IO>> //
@@ -2541,7 +2605,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace7_7()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2574,7 +2638,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8>> wrap( //
 			final OpInstance<Inplaces.Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace8_1 //
 				extends AbstractRichOp<Inplaces.Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8>> //
@@ -2582,7 +2647,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace8_1()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2615,7 +2680,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8>> wrap( //
 			final OpInstance<Inplaces.Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace8_2 //
 				extends AbstractRichOp<Inplaces.Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8>> //
@@ -2623,7 +2689,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace8_2()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2656,7 +2722,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8>> wrap( //
 			final OpInstance<Inplaces.Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace8_3 //
 				extends AbstractRichOp<Inplaces.Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8>> //
@@ -2664,7 +2731,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace8_3()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2697,7 +2764,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8>> wrap( //
 			final OpInstance<Inplaces.Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace8_4 //
 				extends AbstractRichOp<Inplaces.Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8>> //
@@ -2705,7 +2773,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace8_4()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2738,7 +2806,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8>> wrap( //
 			final OpInstance<Inplaces.Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace8_5 //
 				extends AbstractRichOp<Inplaces.Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8>> //
@@ -2746,7 +2815,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace8_5()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2779,7 +2848,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8>> wrap( //
 			final OpInstance<Inplaces.Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace8_6 //
 				extends AbstractRichOp<Inplaces.Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8>> //
@@ -2787,7 +2857,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace8_6()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2820,7 +2890,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8>> wrap( //
 			final OpInstance<Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace8_7 //
 				extends AbstractRichOp<Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8>> //
@@ -2828,7 +2899,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace8_7()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2861,7 +2932,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO>> wrap( //
 			final OpInstance<Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace8_8 //
 				extends AbstractRichOp<Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO>> //
@@ -2869,7 +2941,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace8_8()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2902,7 +2974,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9>> wrap( //
 			final OpInstance<Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace9_1 //
 				extends AbstractRichOp<Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9>> //
@@ -2910,7 +2983,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace9_1()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2943,7 +3016,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9>> wrap( //
 			final OpInstance<Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace9_2 //
 				extends AbstractRichOp<Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9>> //
@@ -2951,7 +3025,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace9_2()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -2984,7 +3058,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9>> wrap( //
 			final OpInstance<Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace9_3 //
 				extends AbstractRichOp<Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9>> //
@@ -2992,7 +3067,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace9_3()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3025,7 +3100,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9>> wrap( //
 			final OpInstance<Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace9_4 //
 				extends AbstractRichOp<Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9>> //
@@ -3033,7 +3109,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace9_4()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3066,7 +3142,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9>> wrap( //
 			final OpInstance<Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace9_5 //
 				extends AbstractRichOp<Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9>> //
@@ -3074,7 +3151,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace9_5()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3107,7 +3184,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9>> wrap( //
 			final OpInstance<Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace9_6 //
 				extends AbstractRichOp<Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9>> //
@@ -3115,7 +3193,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace9_6()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3148,7 +3226,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9>> wrap( //
 			final OpInstance<Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace9_7 //
 				extends AbstractRichOp<Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9>> //
@@ -3156,7 +3235,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace9_7()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3189,7 +3268,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9>> wrap( //
 			final OpInstance<Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace9_8 //
 				extends AbstractRichOp<Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9>> //
@@ -3197,7 +3277,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace9_8()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3230,7 +3310,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO>> wrap( //
 			final OpInstance<Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace9_9 //
 				extends AbstractRichOp<Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO>> //
@@ -3238,7 +3319,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace9_9()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3271,7 +3352,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10>> wrap( //
 			final OpInstance<Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace10_1 //
 				extends AbstractRichOp<Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10>> //
@@ -3279,7 +3361,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace10_1()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3312,7 +3394,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10>> wrap( //
 			final OpInstance<Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace10_2 //
 				extends AbstractRichOp<Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10>> //
@@ -3320,7 +3403,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace10_2()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3353,7 +3436,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10>> wrap( //
 			final OpInstance<Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace10_3 //
 				extends AbstractRichOp<Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10>> //
@@ -3361,7 +3445,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace10_3()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3394,7 +3478,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10>> wrap( //
 			final OpInstance<Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace10_4 //
 				extends AbstractRichOp<Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10>> //
@@ -3402,7 +3487,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace10_4()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3435,7 +3520,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10>> wrap( //
 			final OpInstance<Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace10_5 //
 				extends AbstractRichOp<Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10>> //
@@ -3443,7 +3529,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace10_5()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3476,7 +3562,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10>> wrap( //
 			final OpInstance<Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace10_6 //
 				extends AbstractRichOp<Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10>> //
@@ -3484,7 +3571,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace10_6()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3517,7 +3604,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10>> wrap( //
 			final OpInstance<Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace10_7 //
 				extends AbstractRichOp<Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10>> //
@@ -3525,7 +3613,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace10_7()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3558,7 +3646,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10>> wrap( //
 			final OpInstance<Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace10_8 //
 				extends AbstractRichOp<Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10>> //
@@ -3566,7 +3655,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace10_8()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3599,7 +3688,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10>> wrap( //
 			final OpInstance<Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace10_9 //
 				extends AbstractRichOp<Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10>> //
@@ -3607,7 +3697,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace10_9()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3640,7 +3730,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO>> wrap( //
 			final OpInstance<Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace10_10 //
 				extends AbstractRichOp<Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO>> //
@@ -3648,7 +3739,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace10_10()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3681,7 +3772,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11>> wrap( //
 			final OpInstance<Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace11_1 //
 				extends AbstractRichOp<Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11>> //
@@ -3689,7 +3781,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace11_1()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3722,7 +3814,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11>> wrap( //
 			final OpInstance<Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace11_2 //
 				extends AbstractRichOp<Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11>> //
@@ -3730,7 +3823,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace11_2()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3763,7 +3856,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11>> wrap( //
 			final OpInstance<Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace11_3 //
 				extends AbstractRichOp<Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11>> //
@@ -3771,7 +3865,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace11_3()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3804,7 +3898,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11>> wrap( //
 			final OpInstance<Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace11_4 //
 				extends AbstractRichOp<Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11>> //
@@ -3812,7 +3907,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace11_4()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3845,7 +3940,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11>> wrap( //
 			final OpInstance<Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace11_5 //
 				extends AbstractRichOp<Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11>> //
@@ -3853,7 +3949,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace11_5()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3886,7 +3982,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11>> wrap( //
 			final OpInstance<Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace11_6 //
 				extends AbstractRichOp<Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11>> //
@@ -3894,7 +3991,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace11_6()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3927,7 +4024,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11>> wrap( //
 			final OpInstance<Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace11_7 //
 				extends AbstractRichOp<Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11>> //
@@ -3935,7 +4033,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace11_7()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -3968,7 +4066,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11>> wrap( //
 			final OpInstance<Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace11_8 //
 				extends AbstractRichOp<Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11>> //
@@ -3976,7 +4075,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace11_8()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4009,7 +4108,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11>> wrap( //
 			final OpInstance<Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace11_9 //
 				extends AbstractRichOp<Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11>> //
@@ -4017,7 +4117,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace11_9()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4050,7 +4150,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11>> wrap( //
 			final OpInstance<Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace11_10 //
 				extends AbstractRichOp<Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11>> //
@@ -4058,7 +4159,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace11_10()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4091,7 +4192,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO>> wrap( //
 			final OpInstance<Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace11_11 //
 				extends AbstractRichOp<Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO>> //
@@ -4099,7 +4201,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace11_11()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4132,7 +4234,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>> wrap( //
 			final OpInstance<Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace12_1 //
 				extends AbstractRichOp<Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>> //
@@ -4140,7 +4243,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace12_1()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4173,7 +4276,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>> wrap( //
 			final OpInstance<Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace12_2 //
 				extends AbstractRichOp<Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>> //
@@ -4181,7 +4285,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace12_2()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4214,7 +4318,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12>> wrap( //
 			final OpInstance<Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace12_3 //
 				extends AbstractRichOp<Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12>> //
@@ -4222,7 +4327,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace12_3()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4255,7 +4360,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12>> wrap( //
 			final OpInstance<Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace12_4 //
 				extends AbstractRichOp<Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12>> //
@@ -4263,7 +4369,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace12_4()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4296,7 +4402,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12>> wrap( //
 			final OpInstance<Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace12_5 //
 				extends AbstractRichOp<Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12>> //
@@ -4304,7 +4411,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace12_5()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4337,7 +4444,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12>> wrap( //
 			final OpInstance<Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace12_6 //
 				extends AbstractRichOp<Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12>> //
@@ -4345,7 +4453,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace12_6()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4378,7 +4486,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12>> wrap( //
 			final OpInstance<Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace12_7 //
 				extends AbstractRichOp<Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12>> //
@@ -4386,7 +4495,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace12_7()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4419,7 +4528,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12>> wrap( //
 			final OpInstance<Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace12_8 //
 				extends AbstractRichOp<Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12>> //
@@ -4427,7 +4537,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace12_8()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4460,7 +4570,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12>> wrap( //
 			final OpInstance<Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace12_9 //
 				extends AbstractRichOp<Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12>> //
@@ -4468,7 +4579,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace12_9()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4501,7 +4612,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12>> wrap( //
 			final OpInstance<Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace12_10 //
 				extends AbstractRichOp<Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12>> //
@@ -4509,7 +4621,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace12_10()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4542,7 +4654,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12>> wrap( //
 			final OpInstance<Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace12_11 //
 				extends AbstractRichOp<Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12>> //
@@ -4550,7 +4663,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace12_11()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4583,7 +4696,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO>> wrap( //
 			final OpInstance<Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace12_12 //
 				extends AbstractRichOp<Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO>> //
@@ -4591,7 +4705,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace12_12()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4624,7 +4738,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> wrap( //
 			final OpInstance<Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace13_1 //
 				extends AbstractRichOp<Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> //
@@ -4632,7 +4747,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace13_1()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4665,7 +4780,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> wrap( //
 			final OpInstance<Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace13_2 //
 				extends AbstractRichOp<Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> //
@@ -4673,7 +4789,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace13_2()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4706,7 +4822,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> wrap( //
 			final OpInstance<Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace13_3 //
 				extends AbstractRichOp<Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> //
@@ -4714,7 +4831,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace13_3()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4747,7 +4864,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13>> wrap( //
 			final OpInstance<Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace13_4 //
 				extends AbstractRichOp<Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13>> //
@@ -4755,7 +4873,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace13_4()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4788,7 +4906,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13>> wrap( //
 			final OpInstance<Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace13_5 //
 				extends AbstractRichOp<Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13>> //
@@ -4796,7 +4915,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace13_5()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4829,7 +4948,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13>> wrap( //
 			final OpInstance<Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace13_6 //
 				extends AbstractRichOp<Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13>> //
@@ -4837,7 +4957,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace13_6()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4870,7 +4990,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13>> wrap( //
 			final OpInstance<Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace13_7 //
 				extends AbstractRichOp<Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13>> //
@@ -4878,7 +4999,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace13_7()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4911,7 +5032,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13>> wrap( //
 			final OpInstance<Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace13_8 //
 				extends AbstractRichOp<Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13>> //
@@ -4919,7 +5041,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace13_8()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4952,7 +5074,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13>> wrap( //
 			final OpInstance<Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace13_9 //
 				extends AbstractRichOp<Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13>> //
@@ -4960,7 +5083,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace13_9()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -4993,7 +5116,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13>> wrap( //
 			final OpInstance<Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace13_10 //
 				extends AbstractRichOp<Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13>> //
@@ -5001,7 +5125,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace13_10()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5034,7 +5158,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13>> wrap( //
 			final OpInstance<Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace13_11 //
 				extends AbstractRichOp<Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13>> //
@@ -5042,7 +5167,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace13_11()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5075,7 +5200,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13>> wrap( //
 			final OpInstance<Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace13_12 //
 				extends AbstractRichOp<Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13>> //
@@ -5083,7 +5209,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace13_12()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5116,7 +5242,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO>> wrap( //
 			final OpInstance<Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace13_13 //
 				extends AbstractRichOp<Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO>> //
@@ -5124,7 +5251,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace13_13()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5157,7 +5284,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> wrap( //
 			final OpInstance<Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace14_1 //
 				extends AbstractRichOp<Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
@@ -5165,7 +5293,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace14_1()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5198,7 +5326,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> wrap( //
 			final OpInstance<Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace14_2 //
 				extends AbstractRichOp<Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
@@ -5206,7 +5335,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace14_2()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5239,7 +5368,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> wrap( //
 			final OpInstance<Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace14_3 //
 				extends AbstractRichOp<Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
@@ -5247,7 +5377,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace14_3()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5280,7 +5410,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> wrap( //
 			final OpInstance<Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace14_4 //
 				extends AbstractRichOp<Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
@@ -5288,7 +5419,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace14_4()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5321,7 +5452,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14>> wrap( //
 			final OpInstance<Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace14_5 //
 				extends AbstractRichOp<Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
@@ -5329,7 +5461,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace14_5()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5362,7 +5494,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14>> wrap( //
 			final OpInstance<Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace14_6 //
 				extends AbstractRichOp<Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14>> //
@@ -5370,7 +5503,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace14_6()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5403,7 +5536,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14>> wrap( //
 			final OpInstance<Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace14_7 //
 				extends AbstractRichOp<Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14>> //
@@ -5411,7 +5545,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace14_7()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5444,7 +5578,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14>> wrap( //
 			final OpInstance<Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace14_8 //
 				extends AbstractRichOp<Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14>> //
@@ -5452,7 +5587,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace14_8()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5485,7 +5620,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14>> wrap( //
 			final OpInstance<Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace14_9 //
 				extends AbstractRichOp<Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14>> //
@@ -5493,7 +5629,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace14_9()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5526,7 +5662,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14>> wrap( //
 			final OpInstance<Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace14_10 //
 				extends AbstractRichOp<Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14>> //
@@ -5534,7 +5671,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace14_10()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5567,7 +5704,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14>> wrap( //
 			final OpInstance<Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace14_11 //
 				extends AbstractRichOp<Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14>> //
@@ -5575,7 +5713,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace14_11()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5608,7 +5746,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14>> wrap( //
 			final OpInstance<Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace14_12 //
 				extends AbstractRichOp<Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14>> //
@@ -5616,7 +5755,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace14_12()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5649,7 +5788,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14>> wrap( //
 			final OpInstance<Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace14_13 //
 				extends AbstractRichOp<Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14>> //
@@ -5657,7 +5797,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace14_13()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5690,7 +5830,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>> wrap( //
 			final OpInstance<Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace14_14 //
 				extends AbstractRichOp<Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>> //
@@ -5698,7 +5839,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace14_14()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5731,7 +5872,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> wrap( //
 			final OpInstance<Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace15_1 //
 				extends AbstractRichOp<Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
@@ -5739,7 +5881,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace15_1()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5772,7 +5914,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> wrap( //
 			final OpInstance<Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace15_2 //
 				extends AbstractRichOp<Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
@@ -5780,7 +5923,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace15_2()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5813,7 +5956,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> wrap( //
 			final OpInstance<Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace15_3 //
 				extends AbstractRichOp<Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
@@ -5821,7 +5965,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace15_3()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5854,7 +5998,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> wrap( //
 			final OpInstance<Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace15_4 //
 				extends AbstractRichOp<Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
@@ -5862,7 +6007,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace15_4()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5895,7 +6040,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> wrap( //
 			final OpInstance<Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace15_5 //
 				extends AbstractRichOp<Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
@@ -5903,7 +6049,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace15_5()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5936,7 +6082,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15>> wrap( //
 			final OpInstance<Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace15_6 //
 				extends AbstractRichOp<Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
@@ -5944,7 +6091,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace15_6()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -5977,7 +6124,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15>> wrap( //
 			final OpInstance<Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace15_7 //
 				extends AbstractRichOp<Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15>> //
@@ -5985,7 +6133,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace15_7()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6018,7 +6166,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15>> wrap( //
 			final OpInstance<Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace15_8 //
 				extends AbstractRichOp<Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15>> //
@@ -6026,7 +6175,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace15_8()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6059,7 +6208,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15>> wrap( //
 			final OpInstance<Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace15_9 //
 				extends AbstractRichOp<Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15>> //
@@ -6067,7 +6217,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace15_9()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6100,7 +6250,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15>> wrap( //
 			final OpInstance<Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace15_10 //
 				extends AbstractRichOp<Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15>> //
@@ -6108,7 +6259,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace15_10()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6141,7 +6292,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15>> wrap( //
 			final OpInstance<Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace15_11 //
 				extends AbstractRichOp<Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15>> //
@@ -6149,7 +6301,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace15_11()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6182,7 +6334,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15>> wrap( //
 			final OpInstance<Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace15_12 //
 				extends AbstractRichOp<Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15>> //
@@ -6190,7 +6343,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace15_12()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6223,7 +6376,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15>> wrap( //
 			final OpInstance<Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace15_13 //
 				extends AbstractRichOp<Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15>> //
@@ -6231,7 +6385,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace15_13()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6264,7 +6418,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15>> wrap( //
 			final OpInstance<Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace15_14 //
 				extends AbstractRichOp<Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15>> //
@@ -6272,7 +6427,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace15_14()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6305,7 +6460,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>> wrap( //
 			final OpInstance<Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace15_15 //
 				extends AbstractRichOp<Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>> //
@@ -6313,7 +6469,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace15_15()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6346,7 +6502,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
 			final OpInstance<Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace16_1 //
 				extends AbstractRichOp<Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
@@ -6354,7 +6511,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace16_1()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6387,7 +6544,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
 			final OpInstance<Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace16_2 //
 				extends AbstractRichOp<Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
@@ -6395,7 +6553,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace16_2()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6428,7 +6586,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
 			final OpInstance<Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace16_3 //
 				extends AbstractRichOp<Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
@@ -6436,7 +6595,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace16_3()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6469,7 +6628,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
 			final OpInstance<Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace16_4 //
 				extends AbstractRichOp<Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
@@ -6477,7 +6637,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace16_4()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6510,7 +6670,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
 			final OpInstance<Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace16_5 //
 				extends AbstractRichOp<Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
@@ -6518,7 +6679,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace16_5()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6551,7 +6712,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
 			final OpInstance<Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace16_6 //
 				extends AbstractRichOp<Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
@@ -6559,7 +6721,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace16_6()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6592,7 +6754,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
 			final OpInstance<Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace16_7 //
 				extends AbstractRichOp<Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
@@ -6600,7 +6763,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace16_7()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6633,7 +6796,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
 			final OpInstance<Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace16_8 //
 				extends AbstractRichOp<Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16>> //
@@ -6641,7 +6805,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace16_8()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6674,7 +6838,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16>> wrap( //
 			final OpInstance<Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace16_9 //
 				extends AbstractRichOp<Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16>> //
@@ -6682,7 +6847,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace16_9()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6715,7 +6880,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16>> wrap( //
 			final OpInstance<Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace16_10 //
 				extends AbstractRichOp<Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16>> //
@@ -6723,7 +6889,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace16_10()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6756,7 +6922,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16>> wrap( //
 			final OpInstance<Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace16_11 //
 				extends AbstractRichOp<Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16>> //
@@ -6764,7 +6931,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace16_11()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6797,7 +6964,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16>> wrap( //
 			final OpInstance<Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace16_12 //
 				extends AbstractRichOp<Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16>> //
@@ -6805,7 +6973,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace16_12()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6838,7 +7006,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16>> wrap( //
 			final OpInstance<Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace16_13 //
 				extends AbstractRichOp<Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16>> //
@@ -6846,7 +7015,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace16_13()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6879,7 +7048,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16>> wrap( //
 			final OpInstance<Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace16_14 //
 				extends AbstractRichOp<Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16>> //
@@ -6887,7 +7057,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace16_14()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6920,7 +7090,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16>> wrap( //
 			final OpInstance<Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace16_15 //
 				extends AbstractRichOp<Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16>> //
@@ -6928,7 +7099,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace16_15()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override
@@ -6961,7 +7132,8 @@ public class OpWrappers {
 		@Override
 		public RichOp<Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>> wrap( //
 			final OpInstance<Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>> instance, //
-			final OpMetadata metadata)
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedInplace16_16 //
 				extends AbstractRichOp<Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>> //
@@ -6969,7 +7141,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace16_16()
 				{
-					super(instance, metadata);
+					super(instance, env, hints);
 				}
 
 				@Override

@@ -40,7 +40,7 @@ import net.imglib2.view.composite.Composite;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.Optional;
+import org.scijava.ops.spi.Nullable;
 
 /**
  * <p>
@@ -85,7 +85,7 @@ public class ComputeLocalSauvolaThresholdIntegral<T extends RealType<T>>
 	@Override
 	public void compute(
 		final RectangleNeighborhood<? extends Composite<DoubleType>> inputNeighborhood,
-		final T inputCenterPixel, @Optional Double k, @Optional Double r,
+		final T inputCenterPixel, @Nullable Double k, @Nullable Double r,
 		final BitType output)
 	{
 		if (k == null) k = DEFAULT_K;

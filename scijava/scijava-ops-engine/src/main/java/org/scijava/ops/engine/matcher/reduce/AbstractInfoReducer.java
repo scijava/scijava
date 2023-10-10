@@ -4,7 +4,7 @@ package org.scijava.ops.engine.matcher.reduce;
 import java.lang.reflect.Type;
 
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.features.BaseOpHints;
+import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.engine.OpUtils;
 import org.scijava.types.Types;
 

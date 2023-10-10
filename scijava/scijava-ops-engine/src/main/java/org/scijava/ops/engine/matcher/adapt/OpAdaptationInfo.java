@@ -10,13 +10,12 @@ import java.util.function.Function;
 import org.scijava.common3.validity.ValidityException;
 import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.InfoChain;
-import org.scijava.ops.api.OpDependencyMember;
-import org.scijava.ops.api.OpDescription;
+import org.scijava.ops.api.InfoTree;
+import org.scijava.ops.engine.OpDescription;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.engine.OpUtils;
-import org.scijava.ops.api.features.BaseOpHints.Adaptation;
+import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.engine.struct.FunctionalParameters;
 import org.scijava.ops.engine.struct.OpRetypingMemberParser;
 import org.scijava.ops.engine.struct.RetypingRequest;
@@ -40,14 +39,14 @@ public class OpAdaptationInfo implements OpInfo {
 	protected static final String ORIGINAL = "|OriginalOp:";
 
 	private final OpInfo srcInfo;
-	private final InfoChain adaptorChain;
+	private final InfoTree adaptorChain;
 	private final Type type;
 	private final Hints hints;
 
 	private Struct struct;
 
 	public OpAdaptationInfo(OpInfo srcInfo, Type type,
-		InfoChain adaptorChain)
+		InfoTree adaptorChain)
 	{
 		this.srcInfo = srcInfo;
 		this.adaptorChain = adaptorChain;
@@ -65,11 +64,6 @@ public class OpAdaptationInfo implements OpInfo {
 		if (!problems.isEmpty()) {
 			throw new ValidityException(problems);
 		}
-	}
-
-	@Override
-	public List<OpDependencyMember<?>> dependencies() {
-		return srcInfo.dependencies();
 	}
 
 	@Override
@@ -139,7 +133,7 @@ public class OpAdaptationInfo implements OpInfo {
 	 * For an adapted Op, we define the implementation name as the concatenation
 	 * of:
 	 * <ol>
-	 * <li>The signature of the <b>adaptor</b> {@link InfoChain}</li>
+	 * <li>The signature of the <b>adaptor</b> {@link InfoTree}</li>
 	 * <li>The adaptation delimiter</li>
 	 * <li>The implementation name of the <b>original info</b></li>
 	 * </ol>

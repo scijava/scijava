@@ -32,7 +32,6 @@ package net.imagej.ops2.segment.detectJunctions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import net.imagej.ops2.segment.detectRidges.DefaultDetectRidges;
 import net.imglib2.Interval;
@@ -44,8 +43,7 @@ import net.imglib2.roi.geom.real.WritablePolyline;
 import net.imglib2.roi.util.RealLocalizableRealPositionable;
 import net.imglib2.util.Intervals;
 
-import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.Optional;
+import org.scijava.ops.spi.Nullable;
 
 /**
  * Finds the junctions between a {@link ArrayList} of {@link WritablePolyline},
@@ -101,7 +99,8 @@ public class DefaultDetectJunctions implements BiFunction<List<? extends Writabl
 	 * @return junctions
 	 */
 	@Override
-	public List<RealPoint> apply(final List<? extends WritablePolyline> lines, @Optional Double threshold) {
+	public List<RealPoint> apply(final List<? extends WritablePolyline> lines, @Nullable
+	Double threshold) {
 
 		// check arguments for validity
 		if (lines.size() < 1)

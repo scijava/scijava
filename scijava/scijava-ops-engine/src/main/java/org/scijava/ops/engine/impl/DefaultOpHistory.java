@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import org.scijava.ops.api.InfoChain;
+import org.scijava.ops.api.InfoTree;
 import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.RichOp;
@@ -37,11 +37,11 @@ public class DefaultOpHistory implements OpHistory {
 	// -- DATA STRCUTURES -- //
 
 	/**
-	 * {@link Map} responsible for recording the {@link InfoChain} of
+	 * {@link Map} responsible for recording the {@link InfoTree} of
 	 * {@link OpInfo}s involved to produce the result of a particular matching
 	 * call
 	 */
-	private final Map<RichOp<?>, InfoChain> dependencyChain = new WeakHashMap<>();
+	private final Map<RichOp<?>, InfoTree> dependencyChain = new WeakHashMap<>();
 
 	private final Map<Object, List<RichOp<?>>> mutationMap = new WeakHashMap<>();
 
@@ -62,15 +62,18 @@ public class DefaultOpHistory implements OpHistory {
 	}
 
 	@Override
-	public InfoChain opExecutionChain(Object op) {
-		return dependencyChain.get(op);
+	public InfoTree infoTree(Object op) {
+		if (op instanceof RichOp<?>) {
+			return dependencyChain.get(op);
+		}
+		throw new IllegalArgumentException("Object " +  op + " is not an Op known to this OpHistory!"); 
 	}
 
 	// -- HISTORY MAINTENANCE API -- //
 
 	@Override
 	public void logOp(RichOp<?> op) {
-		dependencyChain.put(op, op.infoChain());
+		dependencyChain.put(op, op.infoTree());
 	}
 
 	@Override
@@ -97,12 +100,8 @@ public class DefaultOpHistory implements OpHistory {
 		}
 	}
 
-	public void resetHistory() {
-		mutationMap.clear();
-		dependencyChain.clear();
-	}
-
-	@Override public double getPriority() {
+	@Override
+	public double getPriority() {
 		return Priority.VERY_LOW;
 	}
 }

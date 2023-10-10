@@ -96,12 +96,12 @@ To conform `DefaultGaussRAI` to this schema, the following diff should be applie
         public void compute(final RandomAccessibleInterval<T> input,
 +               final ThreadService threads,
 +               final double[] sigmas,
-+               @Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBounds,
++               @Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBounds,
                 final RandomAccessibleInterval<T> output)
         {
 ```
 
-**Note**: optional parameters are denoted using the `org.scijava.ops.spi.Optional` annotation. Just like in ImageJ Ops, if the user does *not* decide to pass that parameter, it will be assigned to `null`, so leave in any null-checks for optional parameters.
+**Note**: nullable parameters are denoted using the `org.scijava.ops.spi.Nullable` annotation. Just like in ImageJ Ops, if the user does *not* decide to pass that parameter, it will be assigned to `null`, so leave in any null-checks for nullable parameters.
 
 ## 3 Implementing the right functional interface
 
@@ -174,7 +174,7 @@ public class DefaultGaussRAI<T extends NumericType<T> & NativeType<T>> implement
 	public void compute(final RandomAccessibleInterval<T> input,
 			final ThreadService threads,
 			final double[] sigmas,
-			@Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBounds,
+			@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBounds,
 			final RandomAccessibleInterval<T> output)
 	{
 

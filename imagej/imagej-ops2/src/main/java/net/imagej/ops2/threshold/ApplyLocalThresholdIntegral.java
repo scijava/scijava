@@ -53,7 +53,7 @@ import net.imglib2.view.Views;
 import net.imglib2.view.composite.Composite;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.engine.OpExecutionException;
+import org.scijava.ops.spi.OpExecutionException;
 import org.scijava.ops.spi.OpDependency;
 
 /**

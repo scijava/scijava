@@ -32,8 +32,8 @@ package net.imagej.ops2.filter.gauss;
 import java.util.Arrays;
 
 import org.scijava.concurrent.Parallelization;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.Optional;
 
 import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;
@@ -73,7 +73,7 @@ public class Gaussians {
 	public static <I extends NumericType<I>, O extends NumericType<O>> void
 		defaultGaussRAI(final RandomAccessibleInterval<I> input, //
 			final double[] sigmas, //
-			@Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> outOfBounds, //
+			@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> outOfBounds, //
 			final RandomAccessibleInterval<O> output //
 	) {
 		if (outOfBounds == null) outOfBounds = new OutOfBoundsMirrorFactory<>(
@@ -112,7 +112,7 @@ public class Gaussians {
 		gaussRAISingleSigma( //
 			final RandomAccessibleInterval<I> input, //
 			final double sigma, //
-			@Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> outOfBounds, //
+			@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> outOfBounds, //
 			final RandomAccessibleInterval<O> output //
 	) {
 		final double[] sigmas = new double[input.numDimensions()];

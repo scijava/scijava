@@ -45,7 +45,7 @@ import org.scijava.function.Computers;
 
 import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
-import org.scijava.ops.spi.Optional;
+import org.scijava.ops.spi.Nullable;
 
 /**
  * Input is a 2- or 3-dimensional grayscales image. Applies the Frangi
@@ -104,7 +104,7 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input, final Integer scale,
-			@Optional double[] spacing, final RandomAccessibleInterval<U> output) {
+			@Nullable double[] spacing, final RandomAccessibleInterval<U> output) {
 
 		if (input.numDimensions() != 2 && input.numDimensions() != 3)
 			throw new IllegalArgumentException("Currently only 2 or 3 dimensional images are supported");

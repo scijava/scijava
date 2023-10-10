@@ -29,6 +29,10 @@
 
 package net.imagej.ops2.map.neighborhood;
 
+import org.scijava.function.Computers;
+import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.Ops;
+
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccess;
@@ -37,12 +41,6 @@ import net.imglib2.algorithm.neighborhood.Neighborhood;
 import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.view.Views;
-
-import org.scijava.function.Computers;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpMetadata;
-import org.scijava.ops.api.RichOp;
-import org.scijava.ops.api.features.BaseOpHints;
 
 /**
  * Evaluates a {@link CenterAwareComputerOp} for each {@link Neighborhood} on
@@ -121,24 +119,18 @@ class MapNeighborhoodWithCenterAllRAI<I, O> implements
 		RandomAccessibleInterval<Neighborhood<I>> neighborhoodInput = Views
 			.interval(in2.neighborhoodsRandomAccessibleSafe(in1), in1);
 
-		boolean restoreRecording = true;
-		if (centerAwareOp instanceof RichOp) {
-			OpMetadata metadata = ((RichOp) centerAwareOp).metadata();
-			if (metadata.hints().contains(BaseOpHints.History.SKIP_RECORDING)) {
-				restoreRecording = false;
-			} else {
-				metadata.hints().plus(BaseOpHints.History.SKIP_RECORDING);
-			}
+		// Temporarily disable recording history
+		boolean isRecording = Ops.isRecordingExecutions(centerAwareOp);
+		if (isRecording) {
+			Ops.recordExecutions(centerAwareOp, false);
 		}
 
 		LoopBuilder.setImages(neighborhoodInput, in1, out).multiThreaded()
-			.forEachPixel((neighborhood, inPixel, outPixel) -> {
-				centerAwareOp.compute(neighborhood, inPixel, outPixel);
-			});
+			.forEachPixel(centerAwareOp::compute);
 
-		if (restoreRecording && centerAwareOp instanceof RichOp) {
-			((RichOp)centerAwareOp).metadata().hints().minus(
-					BaseOpHints.History.SKIP_RECORDING);
+		// Re-enable recording history if necessary
+		if (isRecording) {
+			Ops.recordExecutions(centerAwareOp, true);
 		}
 	}
 

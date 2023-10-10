@@ -24,7 +24,7 @@ import javax.lang.model.element.Element;
 public abstract class OpImplData {
 
 	/**
-	 * A {@link Map} used to store any implementation-specific and/or optional
+	 * A {@link Map} used to store any implementation-specific and/or nullable
 	 * tags.
 	 */
 	protected final Map<String, Object> tags = new HashMap<>();

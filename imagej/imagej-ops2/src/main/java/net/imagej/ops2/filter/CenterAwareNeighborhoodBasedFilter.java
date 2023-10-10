@@ -39,8 +39,7 @@ import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Container;
-import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.Optional;
+import org.scijava.ops.spi.Nullable;
 
 /**
  *
@@ -66,7 +65,7 @@ public class CenterAwareNeighborhoodBasedFilter<I, O> implements
 	public void compute(final RandomAccessibleInterval<I> input, //
 		final Computers.Arity2<Iterable<I>, I, O> filterOp, //
 		final Shape inputNeighborhoodShape, //
-		@Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> outOfBoundsFactory, //
+		@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> outOfBoundsFactory, //
 		@Container final RandomAccessibleInterval<O> output)
 	{
 		if (outOfBoundsFactory == null) outOfBoundsFactory =

@@ -59,8 +59,6 @@ module net.imagej.ops2.tutorial {
 	requires jama;
 	requires mines.jtk;
 
-	uses org.scijava.ops.api.features.MatchingRoutine;
-
 	provides org.scijava.ops.spi.OpCollection with
 			net.imagej.ops2.tutorial.OpAdaptation,
 			net.imagej.ops2.tutorial.OpParallelization,

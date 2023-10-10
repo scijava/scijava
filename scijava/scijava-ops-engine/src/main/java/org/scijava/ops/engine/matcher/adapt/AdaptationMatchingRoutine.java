@@ -14,20 +14,21 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.InfoChain;
-import org.scijava.ops.api.OpCandidate;
-import org.scijava.ops.api.OpCandidate.StatusCode;
-import org.scijava.ops.api.OpDependencyMember;
+import org.scijava.ops.api.InfoTree;
+import org.scijava.ops.api.OpMatchingException;
+import org.scijava.ops.engine.OpCandidate;
+import org.scijava.ops.engine.OpCandidate.StatusCode;
+import org.scijava.ops.engine.OpDependencyMember;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpRef;
-import org.scijava.ops.api.features.BaseOpHints.Adaptation;
-import org.scijava.ops.api.features.DependencyMatchingException;
-import org.scijava.ops.api.features.MatchingConditions;
-import org.scijava.ops.api.features.MatchingRoutine;
-import org.scijava.ops.api.features.OpMatcher;
-import org.scijava.ops.api.features.OpMatchingException;
-import org.scijava.ops.engine.matcher.impl.DefaultOpRef;
+import org.scijava.ops.api.OpRequest;
+import org.scijava.ops.engine.BaseOpHints.Adaptation;
+import org.scijava.ops.engine.DependencyMatchingException;
+import org.scijava.ops.engine.MatchingConditions;
+import org.scijava.ops.engine.OpUtils;
+import org.scijava.ops.engine.matcher.MatchingRoutine;
+import org.scijava.ops.engine.matcher.OpMatcher;
+import org.scijava.ops.engine.matcher.impl.DefaultOpRequest;
 import org.scijava.ops.engine.struct.FunctionalParameters;
 import org.scijava.priority.Priority;
 import org.scijava.struct.FunctionalMethodType;
@@ -78,7 +79,7 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 			Type adaptTo = adaptor.output().getType();
 			Map<TypeVariable<?>, Type> map = new HashMap<>();
 			// make sure that the adaptor outputs the correct type
-			if (!adaptOpOutputSatisfiesRefTypes(adaptTo, map, conditions.ref()))
+			if (!adaptOpOutputSatisfiesReqTypes(adaptTo, map, conditions.request()))
 				continue;
 			// make sure that the adaptor is a Function (so we can cast it later)
 			if (Types.isInstance(adaptor.opType(), Function.class)) {
@@ -90,59 +91,62 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 				// resolve adaptor dependencies
 				final Map<TypeVariable<?>, Type> adaptorBounds = new HashMap<>();
 				final Map<TypeVariable<?>, Type> dependencyBounds = new HashMap<>();
-				List<InfoChain> depChains = adaptor.dependencies().stream().map(d -> {
-					OpRef ref = inferOpRef(d, map);
-					Nil<?> type = Nil.of(ref.getType());
-					Nil<?>[] args = Arrays.stream(ref.getArgs()).map(Nil::of).toArray(
-						Nil[]::new);
-					Nil<?> outType = Nil.of(ref.getOutType());
-					InfoChain chain = env.infoChain(ref.getName(), type, args, outType,
-						adaptationHints);
-					// Check if the bounds of the dependency can inform the type of the
-					// adapted Op
-					final Type matchedOpType = chain.info().opType();
-					// Find adaptor type variable bounds fulfilled by matched Op
-					GenericAssignability.inferTypeVariables( //
-						new Type[] { d.getType() }, //
-						new Type[] { matchedOpType }, //
-						dependencyBounds //
-					);
-					for (TypeVariable<?> typeVar : map.keySet()) {
-						// Ignore TypeVariables not present in this particular dependency
-						if (!dependencyBounds.containsKey(typeVar)) continue;
-						Type matchedType = dependencyBounds.get(typeVar);
-						// Resolve any type variables from the dependency ref that we can
+				List<InfoTree> depTrees = OpUtils.dependenciesOf(adaptor).stream() //
+					.map(d -> {
+						OpRequest request = inferOpRequest(d, map);
+						Nil<?> type = Nil.of(request.getType());
+						Nil<?>[] args = Arrays.stream(request.getArgs()).map(Nil::of).toArray(
+							Nil[]::new);
+						Nil<?> outType = Nil.of(request.getOutType());
+						InfoTree tree = env.infoTree(request.getName(), type, args, outType,
+							adaptationHints);
+						// Check if the bounds of the dependency can inform the type of the
+						// adapted Op
+						final Type matchedOpType = tree.info().opType();
+						// Find adaptor type variable bounds fulfilled by matched Op
 						GenericAssignability.inferTypeVariables( //
-							new Type[] { ref.getType() }, //
+							new Type[] { d.getType() }, //
 							new Type[] { matchedOpType }, //
-							adaptorBounds //
+							dependencyBounds //
 						);
-						Type mapped = Types.mapVarToTypes(matchedType, adaptorBounds);
-						// If the type variable is more specific now, update it
-						if (mapped != null && Types.isAssignable(mapped, map.get(typeVar))) {
-							map.put(typeVar, mapped);
+						for (TypeVariable<?> typeVar : map.keySet()) {
+							// Ignore TypeVariables not present in this particular dependency
+							if (!dependencyBounds.containsKey(typeVar)) continue;
+							Type matchedType = dependencyBounds.get(typeVar);
+							// Resolve any type variables from the dependency request that we can
+							GenericAssignability.inferTypeVariables( //
+								new Type[] { request.getType() }, //
+								new Type[] { matchedOpType }, //
+								adaptorBounds //
+							);
+							Type mapped = Types.mapVarToTypes(matchedType, adaptorBounds);
+							// If the type variable is more specific now, update it
+							if (mapped != null && Types.isAssignable(mapped, map.get(
+								typeVar)))
+					{
+								map.put(typeVar, mapped);
+							}
 						}
-					}
-					dependencyBounds.clear();
-					return chain;
-				}).collect(Collectors.toList());
-				InfoChain adaptorChain = new InfoChain(adaptor, depChains);
+						dependencyBounds.clear();
+						return tree;
+					}).collect(Collectors.toList());
+				InfoTree adaptorChain = new InfoTree(adaptor, depTrees);
 
 				// grab the first type parameter from the OpInfo and search for
 				// an Op that will then be adapted (this will be the only input of the
 				// adaptor since we know it is a Function)
 				Type srcOpType = Types.substituteTypeVariables(adaptor.inputs().get(0)
 					.getType(), map);
-				final OpRef srcOpRef = inferOpRef(srcOpType, conditions.ref().getName(),
+				final OpRequest srcOpRequest = inferOpRequest(srcOpType, conditions.request().getName(),
 					map);
 				final OpCandidate srcCandidate = matcher.match(MatchingConditions.from(
-					srcOpRef, adaptationHints), env);
+						srcOpRequest, adaptationHints), env);
 				map.putAll(srcCandidate.typeVarAssigns());
 				Type adapterOpType = Types.substituteTypeVariables(adaptor.output()
 					.getType(), map);
 				OpAdaptationInfo adaptedInfo = new OpAdaptationInfo(srcCandidate
 					.opInfo(), adapterOpType, adaptorChain);
-				OpCandidate adaptedCandidate = new OpCandidate(env, conditions.ref(),
+				OpCandidate adaptedCandidate = new OpCandidate(env, conditions.request(),
 					adaptedInfo, map);
 				adaptedCandidate.setStatus(StatusCode.MATCH);
 				return adaptedCandidate;
@@ -158,25 +162,26 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 			conditions);
 	}
 
-	private OpRef inferOpRef(OpDependencyMember<?> dependency,
+	private OpRequest inferOpRequest(OpDependencyMember<?> dependency,
 		Map<TypeVariable<?>, Type> typeVarAssigns) 
 	{
 		final Type mappedDependencyType = Types.mapVarToTypes(new Type[] {
 			dependency.getType() }, typeVarAssigns)[0];
 		final String dependencyName = dependency.getDependencyName();
-		final OpRef inferredRef = inferOpRef(mappedDependencyType, dependencyName,
+		final OpRequest
+				inferred = inferOpRequest(mappedDependencyType, dependencyName,
 			typeVarAssigns);
-		if (inferredRef != null) return inferredRef;
+		if (inferred != null) return inferred;
 		throw new OpMatchingException("Could not infer functional " +
 			"method inputs and outputs of Op dependency field: " + dependency
 				.getKey());
 	}
 
-	private boolean adaptOpOutputSatisfiesRefTypes(Type adaptTo,
-		Map<TypeVariable<?>, Type> map, OpRef ref)
+	private boolean adaptOpOutputSatisfiesReqTypes(Type adaptTo,
+		Map<TypeVariable<?>, Type> map, OpRequest request)
 	{
-		Type opType = ref.getType();
-		// TODO: clean this logic -- can this just be ref.typesMatch() ?
+		Type opType = request.getType();
+		// TODO: clean this logic -- can this just be request.typesMatch() ?
 		if (opType instanceof ParameterizedType) {
 			if (!GenericAssignability.checkGenericAssignability(adaptTo,
 				(ParameterizedType) opType, map, true))
@@ -191,13 +196,13 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 	}
 
 	/**
-	 * Tries to infer a {@link OpRef} from a functional Op type. E.g. the type:
+	 * Tries to infer a {@link OpRequest} from a functional Op type. E.g. the type:
 	 * 
 	 * <pre>
 	 * Computer&lt;Double[], Double[]&gt
 	 * </pre>
 	 * 
-	 * Will result in the following {@link OpRef}:
+	 * Will result in the following {@link OpRequest}:
 	 * 
 	 * <pre>
 	 * Name: 'specified name'
@@ -214,7 +219,7 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 	 * @param name
 	 * @return null if the specified type has no functional method
 	 */
-	private OpRef inferOpRef(Type type, String name,
+	private OpRequest inferOpRequest(Type type, String name,
 		Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
 		List<FunctionalMethodType> fmts = FunctionalParameters
@@ -244,7 +249,7 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 			error += ". This is not supported.";
 			throw new OpMatchingException(error);
 		}
-		return new DefaultOpRef(name, type, mappedOutputs[0], mappedInputs);
+		return new DefaultOpRequest(name, type, mappedOutputs[0], mappedInputs);
 	}
 
 	@Override

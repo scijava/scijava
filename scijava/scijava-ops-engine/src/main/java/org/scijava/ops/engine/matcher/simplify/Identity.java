@@ -3,8 +3,8 @@ package org.scijava.ops.engine.matcher.simplify;
 
 import java.util.function.Function;
 
-import org.scijava.ops.api.OpHints;
-import org.scijava.ops.api.features.BaseOpHints.Simplification;
+import org.scijava.ops.spi.OpHints;
+import org.scijava.ops.engine.BaseOpHints.Simplification;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
 

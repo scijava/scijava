@@ -38,7 +38,7 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Pair;
 
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.Optional;
+import org.scijava.ops.spi.Nullable;
 
 /**
  * @author Martin Horn (University of Konstanz)
@@ -60,7 +60,7 @@ public class HistogramCreate<T extends RealType<T>> implements BiFunction<Iterab
 	 * @return a histogram
 	 */
 	@Override
-	public Histogram1d<T> apply(final Iterable<T> input, @Optional Integer numBins) {
+	public Histogram1d<T> apply(final Iterable<T> input, @Nullable Integer numBins) {
 		if (numBins == null)
 			numBins = DEFAULT_NUM_BINS;
 

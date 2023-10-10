@@ -3,12 +3,9 @@ package org.scijava.ops.api;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.scijava.common3.validity.ValidityException;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
@@ -34,7 +31,7 @@ public interface OpInfo extends Comparable<OpInfo> {
 	/** Gets the associated {@link Struct} metadata. */
 	Struct struct();
 
-	/** Gets the hints declared in the {@link OpHints} annotation */
+	/** Gets the hints declared by the Op */
 	Hints declaredHints();
 
 	/** Gets the op's input parameters. */
@@ -72,18 +69,6 @@ public interface OpInfo extends Comparable<OpInfo> {
 	/** Gets the op's output parameter, if there is <b>exactly</b> one. */
 	default Type outputType() {
 		return output().getType();
-	}
-
-	/** Gets the op's dependencies on other ops. */
-	default List<OpDependencyMember<?>> dependencies() {
-		return struct().members().stream() //
-			.filter(m -> m instanceof OpDependencyMember) //
-			.map(m -> (OpDependencyMember<?>) m) //
-			.collect(Collectors.toList());
-	}
-	
-	default OpCandidate createCandidate(OpEnvironment env, OpRef ref, Map<TypeVariable<?>, Type> typeVarAssigns) {
-		return new OpCandidate(env, ref, this, typeVarAssigns);
 	}
 
 	/** The op's priority. */

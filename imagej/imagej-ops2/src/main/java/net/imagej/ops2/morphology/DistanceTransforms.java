@@ -28,8 +28,7 @@
  */
 package net.imagej.ops2.morphology;
 
-import java.util.concurrent.ExecutorService;
-
+import org.scijava.concurrent.Parallelization;
 import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.spi.OpExecutionException;
@@ -39,8 +38,6 @@ import net.imglib2.algorithm.morphology.distance.Distance;
 import net.imglib2.algorithm.morphology.distance.DistanceTransform;
 import net.imglib2.algorithm.morphology.distance.DistanceTransform.DISTANCE_TYPE;
 import net.imglib2.type.numeric.RealType;
-
-import org.scijava.concurrent.Parallelization;
 
 public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 
@@ -60,20 +57,14 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	 * @implNote op names='morphology.distanceTransform'
 	 */
 	public final Inplaces.Arity4_1<RandomAccessibleInterval<T>, DISTANCE_TYPE, Integer, double[]> transformExServiceInplace = //
-		(source, distanceType, numTasks, weights) -> {
-			try {
-				DistanceTransform.transform( //
-					source, //
-					distanceType, //
-					Parallelization.getExecutorService(), //
-					numTasks, //
-					weights //
-				);
-			}
-			catch (Exception e) {
-				throw new OpExecutionException(e);
-			}
-		};
+		(source, distanceType, numTasks, weights) -> //
+		OpExecutionException.wrapAndRun(() -> DistanceTransform.transform( //
+			source, //
+			distanceType, //
+			Parallelization.getExecutorService(), //
+			numTasks, //
+			weights //
+		));
 
 	/**
 	 * @input source
@@ -94,21 +85,15 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	 * @implNote op names='morphology.distanceTransform'
 	 */
 	public final Computers.Arity4<RandomAccessibleInterval<T>, DISTANCE_TYPE, Integer, double[], RandomAccessibleInterval<U>> transformExServiceComputer = //
-		(source, distanceType, numTasks, weights, target) -> {
-			try {
-				DistanceTransform.transform( //
-					source, //
-					target, //
-					distanceType, //
-					Parallelization.getExecutorService(), //
-					numTasks, //
-					weights //
-				);
-			}
-			catch (Exception e) {
-				throw new OpExecutionException(e);
-			}
-		};
+			(source, distanceType, numTasks, weights, target) -> //
+					OpExecutionException.wrapAndRun(() -> DistanceTransform.transform( //
+							source, //
+							target, //
+							distanceType, //
+							Parallelization.getExecutorService(), //
+							numTasks, //
+							weights //
+					));
 
 	/**
 	 * @mutable source
@@ -124,19 +109,13 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	 * @implNote op names='morphology.distanceTransform'
 	 */
 	public final Inplaces.Arity3_1<RandomAccessibleInterval<T>, Distance, Integer> transformInplaceExServiceDistance = //
-		(source, distance, numTasks) -> {
-			try {
-				DistanceTransform.transform( //
-					source, //
-					distance, //
-					Parallelization.getExecutorService(), //
-					numTasks //
-				);
-			}
-			catch (Exception e) {
-				throw new OpExecutionException(e);
-			}
-		};
+			(source, distanceType, numTasks) -> //
+					OpExecutionException.wrapAndRun(() -> DistanceTransform.transform( //
+							source, //
+							distanceType, //
+							Parallelization.getExecutorService(), //
+							numTasks //
+					));
 
 	/**
 	 * @input source
@@ -154,18 +133,12 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	 * @implNote op names='morphology.distanceTransform'
 	 */
 	public final Computers.Arity3<RandomAccessibleInterval<T>, Distance, Integer, RandomAccessibleInterval<T>> transformComputerExServiceDistance = //
-		(source, distance, numTasks, target) -> {
-			try {
-				DistanceTransform.transform( //
-					source, //
-					target, //
-					distance, //
-					Parallelization.getExecutorService(), //
-					numTasks //
-				);
-			}
-			catch (Exception e) {
-				throw new OpExecutionException(e);
-			}
-		};
+			(source, distanceType, numTasks, target) -> //
+					OpExecutionException.wrapAndRun(() -> DistanceTransform.transform( //
+							source, //
+							target, //
+							distanceType, //
+							Parallelization.getExecutorService(), //
+							numTasks //
+					));
 }

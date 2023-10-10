@@ -37,8 +37,8 @@ package org.scijava.ops.spi;
 public class OpExecutionException extends RuntimeException {
 
 	/**
-	 * Constructs an {@code OpExecutionException} with the specified reason
-	 * for failure.
+	 * Constructs an {@code OpExecutionException} with the specified reason for
+	 * failure.
 	 * 
 	 * @param s the reason for the failure
 	 */
@@ -56,14 +56,56 @@ public class OpExecutionException extends RuntimeException {
 	}
 
 	/**
-	 * Constructs an {@code OpExecutionException} with the specified reason
-	 * for failure and cause.
+	 * Constructs an {@code OpExecutionException} with the specified reason for
+	 * failure and cause.
 	 * 
 	 * @param message the reason for the failure
 	 * @param cause the cause of the failure
 	 */
 	public OpExecutionException(String message, Throwable cause) {
 		super(message, cause);
+	}
+
+	/**
+	 * Runs a {@link Runnable} that throws some checked {@link Exception},
+	 * wrapping the {@link Exception} into an {@link OpExecutionException} if it
+	 * is thrown.
+	 * 
+	 * @param runnable the {@link Runnable}
+	 */
+	public static void wrapAndRun(ThrowingRunnable runnable) {
+		try {
+			runnable.run();
+		}
+		catch (Exception exc) {
+			throw new OpExecutionException(exc);
+		}
+	}
+
+	public interface ThrowingRunnable {
+
+		void run() throws Exception;
+	}
+
+	/**
+	 * Runs a {@link java.util.function.Supplier} that throws some checked
+	 * {@link Exception}, wrapping the {@link Exception} into an
+	 * {@link OpExecutionException} if it is thrown.
+	 *
+	 * @param supplier the {@link java.util.function.Supplier}
+	 */
+	public static <T> T wrapAndRun(ThrowingSupplier<T> supplier) {
+		try {
+			return supplier.get();
+		}
+		catch (Exception exc) {
+			throw new OpExecutionException(exc);
+		}
+	}
+
+	public interface ThrowingSupplier<T> {
+
+		T get() throws Exception;
 	}
 
 }

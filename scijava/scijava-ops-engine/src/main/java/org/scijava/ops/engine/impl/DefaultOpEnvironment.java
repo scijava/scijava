@@ -59,7 +59,7 @@ import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.api.OpRequest;
-import org.scijava.ops.api.OpRetrievalException;
+import org.scijava.ops.api.OpMatchingException;
 import org.scijava.ops.api.RichOp;
 import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.engine.BaseOpHints.DependencyMatching;
@@ -375,7 +375,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	@SuppressWarnings("unchecked")
 	private <T> OpInstance<T> findOp(final OpInfo info, final Nil<T> specialType,
-		Hints hints) throws OpRetrievalException
+		Hints hints) throws OpMatchingException
 	{
 		OpRequest request = new InfoMatchingOpRequest(info, specialType);
 		MatchingConditions conditions = insertCacheHit(request, hints, info);
@@ -594,7 +594,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 					hintsCopy);
 				dependencyChains.add(wrapViaCache(conditions));
 			}
-			catch (final OpRetrievalException e) {
+			catch (final OpMatchingException e) {
 				String message = DependencyMatchingException.message(info
 					.implementationName(), dependency.getKey(), dep);
 				if (e instanceof DependencyMatchingException) {
@@ -678,7 +678,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 					? "no outputs" //
 					: "multiple outputs: " + Arrays.toString(outputs);
 			error += ". This is not supported.";
-			throw new OpRetrievalException(error);
+			throw new OpMatchingException(error);
 		}
 		return new DefaultOpRequest(name, type, mappedOutputs[0], mappedInputs);
 	}

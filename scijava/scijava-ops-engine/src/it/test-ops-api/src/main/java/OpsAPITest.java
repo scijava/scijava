@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpRetrievalException;
+import org.scijava.ops.api.OpMatchingException;
 
 /**
  * Tests the ability to interact with an {@link OpEnvironment} to perform
@@ -53,7 +53,7 @@ public class OpsAPITest {
 		// Ensure an Op matches without simplification
 		// NB this call must come first, or the cache will be hit based on the previous call.
 		Hints h = new Hints("simplification.FORBIDDEN");
-		Assertions.assertThrows(OpRetrievalException.class, () -> ops.op("math.pow", h).arity2().input(in, exponent).outType(Long.class).apply());
+		Assertions.assertThrows(OpMatchingException.class, () -> ops.op("math.pow", h).arity2().input(in, exponent).outType(Long.class).apply());
 
 		// Ensure an Op matches with simplification
 		var power = ops.op("math.pow").arity2().input(in, exponent).outType(Long.class).apply();

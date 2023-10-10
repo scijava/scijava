@@ -8,7 +8,7 @@ import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRequest;
-import org.scijava.ops.api.OpRetrievalException;
+import org.scijava.ops.api.OpMatchingException;
 import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.engine.MatchingConditions;
 import org.scijava.ops.engine.matcher.impl.RuntimeSafeMatchingRoutine;
@@ -19,11 +19,11 @@ public class SimplificationMatchingRoutine extends RuntimeSafeMatchingRoutine {
 
 	@Override
 	public void checkSuitability(MatchingConditions conditions)
-		throws OpRetrievalException
+		throws OpMatchingException
 	{
 		if (conditions.hints().containsAny(BaseOpHints.Simplification.IN_PROGRESS,
 			BaseOpHints.Simplification.FORBIDDEN)) //
-			throw new OpRetrievalException(
+			throw new OpMatchingException(
 				"Simplification is not suitable: Simplification is disabled");
 	}
 

@@ -34,7 +34,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.scijava.ops.api.OpRetrievalException;
+import org.scijava.ops.api.OpMatchingException;
 import org.scijava.ops.engine.OpCandidate;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpRequest;
@@ -59,13 +59,13 @@ public class DefaultOpMatcher implements OpMatcher {
 
 	@Override
 	public OpCandidate match(MatchingConditions conditions, OpEnvironment env) {
-		List<OpRetrievalException> exceptions = new ArrayList<>(matchers.size());
+		List<OpMatchingException> exceptions = new ArrayList<>(matchers.size());
 		// in priority order, search for a match
 		for (MatchingRoutine r : matchers) {
 			try {
 				return r.match(conditions, this, env);
 			}
-			catch (OpRetrievalException e) {
+			catch (OpMatchingException e) {
 				exceptions.add(e);
 			}
 		}
@@ -74,10 +74,10 @@ public class DefaultOpMatcher implements OpMatcher {
 		throw agglomeratedException(exceptions);
 	}
 
-	private OpRetrievalException agglomeratedException(
-		List<OpRetrievalException> list)
+	private OpMatchingException agglomeratedException(
+		List<OpMatchingException> list)
 	{
-		OpRetrievalException agglomerated = new OpRetrievalException(
+		OpMatchingException agglomerated = new OpMatchingException(
 			"No MatchingRoutine was able to produce a match!");
 		for (int i = 0; i < list.size(); i++) {
 			agglomerated.addSuppressed(list.get(i));

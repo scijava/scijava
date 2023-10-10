@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import org.scijava.ops.api.OpRetrievalException;
+import org.scijava.ops.api.OpMatchingException;
 import org.scijava.ops.engine.OpCandidate;
 import org.scijava.ops.engine.OpCandidate.StatusCode;
 import org.scijava.ops.api.OpEnvironment;
@@ -34,7 +34,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 
 	@Override
 	public void checkSuitability(MatchingConditions conditions)
-		throws OpRetrievalException
+		throws OpMatchingException
 	{
 		// NB: Runtime-safe matching should always be allowed
 	}

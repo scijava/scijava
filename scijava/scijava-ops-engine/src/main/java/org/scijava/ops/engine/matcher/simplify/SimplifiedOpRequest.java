@@ -15,7 +15,7 @@ import org.scijava.ops.api.InfoTree;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRequest;
-import org.scijava.ops.api.OpRetrievalException;
+import org.scijava.ops.api.OpMatchingException;
 import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.engine.BaseOpHints.Simplification;
 import org.scijava.types.Nil;
@@ -114,10 +114,10 @@ public class SimplifiedOpRequest implements OpRequest {
 	 * @param hints
 	 * @return an {@code Op} able to copy data between {@link Object}s of
 	 *         {@link Type} {@code copyType}
-	 * @throws OpRetrievalException
+	 * @throws OpMatchingException
 	 */
 	private static InfoTree simplifierCopyOp(OpEnvironment env, Type copyType, Hints hints) throws
-			OpRetrievalException
+			OpMatchingException
 	{
 		// prevent further simplification/adaptation
 		Hints hintsCopy = hints.copy() //

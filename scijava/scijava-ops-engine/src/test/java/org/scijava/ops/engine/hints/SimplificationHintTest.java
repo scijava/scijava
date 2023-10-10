@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.spi.OpHints;
-import org.scijava.ops.api.OpRetrievalException;
+import org.scijava.ops.api.OpMatchingException;
 import org.scijava.ops.engine.BaseOpHints.Simplification;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.matcher.simplify.IdentityLossReporter;
@@ -48,7 +48,7 @@ public class SimplificationHintTest extends AbstractTestEnvironment implements O
 			throw new IllegalStateException(
 				"Simplification is forbidden - this op call should not match!");
 		}
-		catch (OpRetrievalException e) {
+		catch (OpMatchingException e) {
 		}
 
 	}
@@ -69,7 +69,7 @@ public class SimplificationHintTest extends AbstractTestEnvironment implements O
 			throw new IllegalStateException(
 				"Simplification is forbidden - this op call should not match!");
 		}
-		catch (OpRetrievalException e) {
+		catch (OpMatchingException e) {
 		}
 
 	}
@@ -97,7 +97,7 @@ public class SimplificationHintTest extends AbstractTestEnvironment implements O
 			throw new IllegalStateException(
 				"The only relevant Op is not simplifiable - this op call should not match!");
 		}
-		catch (OpRetrievalException e) {
+		catch (OpMatchingException e) {
 		}
 
 	}
@@ -119,7 +119,7 @@ public class SimplificationHintTest extends AbstractTestEnvironment implements O
 			throw new IllegalStateException(
 				"The only relevant Op is not simplifiable - this op call should not match!");
 		}
-		catch (OpRetrievalException e) {
+		catch (OpMatchingException e) {
 		}
 
 	}

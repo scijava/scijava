@@ -5,19 +5,19 @@ package org.scijava.ops.api;
  * 
  * @author David Kolb
  */
-public class OpRetrievalException extends RuntimeException {
+public class OpMatchingException extends RuntimeException {
 
 	private static final long serialVersionUID = 2334342967056340218L;
 
-	public OpRetrievalException(String message) {
+	public OpMatchingException(String message) {
 		super(message);
 	}
 
-	public OpRetrievalException(Throwable cause) {
+	public OpMatchingException(Throwable cause) {
 		super(cause);
 	}
 
-	public OpRetrievalException(String message, Throwable cause) {
+	public OpMatchingException(String message, Throwable cause) {
 		super(message, cause);
 	}
 

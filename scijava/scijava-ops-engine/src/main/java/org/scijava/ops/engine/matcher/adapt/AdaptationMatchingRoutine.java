@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.InfoTree;
-import org.scijava.ops.api.OpRetrievalException;
+import org.scijava.ops.api.OpMatchingException;
 import org.scijava.ops.engine.OpCandidate;
 import org.scijava.ops.engine.OpCandidate.StatusCode;
 import org.scijava.ops.engine.OpDependencyMember;
@@ -41,11 +41,11 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 
 	@Override
 	public void checkSuitability(MatchingConditions conditions)
-		throws OpRetrievalException
+		throws OpMatchingException
 	{
 		if (conditions.hints().containsAny(Adaptation.IN_PROGRESS,
 			Adaptation.FORBIDDEN)) //
-			throw new OpRetrievalException(
+			throw new OpMatchingException(
 				"Adaptation is not suitable: Adaptation is disabled");
 	}
 
@@ -67,11 +67,11 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 	 * @param matcher the {@link OpMatcher} performing the matching
 	 * @param env the {@link OpEnvironment} containing matchable Ops
 	 * @return an {@link OpCandidate} describing the match
-	 * @throws OpRetrievalException when no match can be found
+	 * @throws OpMatchingException when no match can be found
 	 */
 	@Override
 	public OpCandidate findMatch(MatchingConditions conditions, OpMatcher matcher,
-		OpEnvironment env) throws OpRetrievalException
+		OpEnvironment env) throws OpMatchingException
 	{
 		Hints adaptationHints = conditions.hints().plus(Adaptation.IN_PROGRESS);
 		List<DependencyMatchingException> depExceptions = new ArrayList<>();
@@ -154,11 +154,11 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 			catch (DependencyMatchingException d) {
 				depExceptions.add(d);
 			}
-			catch (OpRetrievalException | IllegalArgumentException e1) {
+			catch (OpMatchingException | IllegalArgumentException e1) {
 //				log.trace(e1);
 			}
 		}
-		throw new OpRetrievalException("Unable to find an Op adaptation for " +
+		throw new OpMatchingException("Unable to find an Op adaptation for " +
 			conditions);
 	}
 
@@ -172,7 +172,7 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 				inferred = inferOpRequest(mappedDependencyType, dependencyName,
 			typeVarAssigns);
 		if (inferred != null) return inferred;
-		throw new OpRetrievalException("Could not infer functional " +
+		throw new OpMatchingException("Could not infer functional " +
 			"method inputs and outputs of Op dependency field: " + dependency
 				.getKey());
 	}
@@ -247,7 +247,7 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 				? "no outputs" //
 				: "multiple outputs: " + Arrays.toString(outputs);
 			error += ". This is not supported.";
-			throw new OpRetrievalException(error);
+			throw new OpMatchingException(error);
 		}
 		return new DefaultOpRequest(name, type, mappedOutputs[0], mappedInputs);
 	}

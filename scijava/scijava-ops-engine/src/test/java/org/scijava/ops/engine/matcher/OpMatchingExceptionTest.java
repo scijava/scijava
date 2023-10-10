@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
-import org.scijava.ops.api.OpRetrievalException;
+import org.scijava.ops.api.OpMatchingException;
 import org.scijava.ops.engine.DependencyMatchingException;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaFunction;
@@ -50,7 +50,7 @@ public class OpMatchingExceptionTest extends AbstractTestEnvironment implements 
 				.function();
 			Assertions.fail();
 		}
-		catch (OpRetrievalException e) {
+		catch (OpMatchingException e) {
 			Assertions.assertTrue(e.getMessage().startsWith(
 				"No MatchingRoutine was able to produce a match!"));
 			Assertions.assertTrue(Arrays.stream(e.getSuppressed()).anyMatch(s -> s

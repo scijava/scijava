@@ -141,8 +141,10 @@ public class CreateTypes {
 	public final Producer<ComplexFloatType> cfloat32TypeSource = () -> new ComplexFloatType();
 
 	/**
+	 * NB higher priority to match {@code Producer<RealType>} and {@code Producer<NativeType>}
+	 *
 	 * @output output
-	 * @implNote op names='create, create.float64'
+	 * @implNote op names='create, create.float64', priority='100.'
 	 */
 	public final Producer<DoubleType> float64TypeSource = () -> new DoubleType();
 

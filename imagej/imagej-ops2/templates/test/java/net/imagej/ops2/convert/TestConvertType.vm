@@ -1,0 +1,98 @@
+package net.imagej.ops2.convert;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.math.BigInteger;
+
+import org.junit.jupiter.api.Test;
+
+import net.imagej.ops2.AbstractOpTest;
+import net.imglib2.type.logic.BitType;
+import net.imglib2.type.numeric.complex.ComplexDoubleType;
+import net.imglib2.type.numeric.complex.ComplexFloatType;
+import net.imglib2.type.numeric.integer.ByteType;
+import net.imglib2.type.numeric.integer.IntType;
+import net.imglib2.type.numeric.integer.LongType;
+import net.imglib2.type.numeric.integer.ShortType;
+import net.imglib2.type.numeric.integer.Unsigned128BitType;
+import net.imglib2.type.numeric.integer.Unsigned12BitType;
+import net.imglib2.type.numeric.integer.Unsigned2BitType;
+import net.imglib2.type.numeric.integer.Unsigned4BitType;
+import net.imglib2.type.numeric.integer.UnsignedByteType;
+import net.imglib2.type.numeric.integer.UnsignedIntType;
+import net.imglib2.type.numeric.integer.UnsignedLongType;
+import net.imglib2.type.numeric.integer.UnsignedShortType;
+import net.imglib2.type.numeric.real.DoubleType;
+import net.imglib2.type.numeric.real.FloatType;
+
+/**
+ * Tests the {@link ConvertTypes} ops.
+ *
+ * @author Alison Walter
+ */
+public class TestConvertType extends AbstractOpTest{
+
+#foreach ($bi in $biv)
+	private final BigInteger $bi.name = $bi.v;
+#end
+
+#foreach ($toType in $types)
+#set ($methodName = "Types.$toType.outMethod")
+#set ($imgLibType = "$toType.imglibT" + "Type")
+#if ($toType.op.equals("Cfloat32"))
+#set ($getR = "getRealFloat()")
+#set ($getI = "getImaginaryFloat()")
+#else
+#set ($getR = "getRealDouble()")
+#set ($getI = "getImaginaryDouble()")
+#end
+#foreach ($fromType in $types)
+#if ($fromType.built.contains("float") || $toType.built.contains("float"))
+#set ($jdocName = "ConvertTypes#complexTo$toType.op")
+#else
+#set ($className = "ConvertTypes#integerTo$toType.op")
+#end
+#set ($imgLibType2 = "$fromType.imglibT" + "Type")
+#set ($first = "true")
+	/** Tests {@link $className}. */
+	@Test
+	public void test${fromType.op}To${toType.op}() {
+
+#foreach ($value in ${fromType.values})
+#if ($first.equals("true"))
+		final $imgLibType2 b = new $imgLibType2($value.v);
+		final $imgLibType result = ops.unary("convert.$toType.built").input(b).outType(${imgLibType}.class).apply();
+#if($toType.op.contains("C"))
+		assertEquals($methodName($value.r), result.$getR, 0);
+		assertEquals($methodName($value.i), result.$getI, 0);
+#elseif ($toType.op.contains("Float"))
+		assertEquals($methodName($value.r), result.get(), 0);
+#elseif ($toType.op.equals("Uint64"))
+		assertEquals($methodName($value.r), result.getBigInteger());
+#else
+		assertEquals($methodName($value.r), result.get());
+#end
+#set ($first = "false")
+#else
+		b.set($value.v);
+#if($toType.op.contains("C"))
+		assertEquals($methodName($value.r), ops.unary("convert.$toType.built").input(b).outType(${imgLibType}.class).apply().$getR, 0);
+		assertEquals($methodName($value.i), ops.unary("convert.$toType.built").input(b).outType(${imgLibType}.class).apply().$getI, 0);
+#elseif ($toType.op.contains("Float"))
+		assertEquals($methodName($value.r), ops.unary("convert.$toType.built").input(b).outType(${imgLibType}.class).apply().get(), 0);
+#elseif ($toType.op.equals("Uint64"))
+		assertEquals($methodName($value.r), ops.unary("convert.$toType.built").input(b).outType(${imgLibType}.class).apply().getBigInteger());
+#elseif ($toType.op.equals("Uint128") && $fromType.op.equals("Uint64") && $value.s)
+		assertEquals(Types.uint64Uint128($value.r), ops.unary("convert.$toType.built").input(b).outType(${imgLibType}.class).apply().getBigInteger());
+#else
+		assertEquals($methodName($value.r), ops.unary("convert.$toType.built").input(b).outType(${imgLibType}.class).apply().get());
+#end
+#end
+
+#end
+	}
+
+#end
+#end
+}

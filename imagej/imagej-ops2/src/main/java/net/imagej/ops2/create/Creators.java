@@ -28,6 +28,7 @@
  */
 package net.imagej.ops2.create;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -214,14 +215,6 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 			.factory() //
 			.create(input.dimensionsAsLongArray());
 
-	/* IntegerType */
-
-	/**
-	 * @output integerType
-	 * @implNote op names='create, create.integerType', priority='0.'
-	 */
-	public final Producer<LongType> integerTypeSource = () -> new LongType();
-
 	/* Type */
 
 	/**
@@ -230,12 +223,6 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	 * @implNote op names='create, create.type'
 	 */
 	public final Function<T, T> typeFromSampleType = (sample) -> sample.createVariable();
-
-	/**
-	 * @output booleanType
-	 * @implNote op names='create, create.type', priority='-100.'
-	 */
-	public final Producer<BitType> booleanTypeSource = () -> new BitType();
 
 	/* ImgLabeling */
 
@@ -589,8 +576,8 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	 * @output labelingMapping
 	 * @implNote op names='create, create.labelingMapping'
 	 */
-	public final Producer<LabelingMapping<L>> labelingMappingSource = () -> new LabelingMapping<>(
-			integerTypeSource.create());
+	public final Producer<LabelingMapping<L>> labelingMappingSource = //
+		() -> new LabelingMapping<>(new LongType());
 
 	public final Function<Long, IntegerType> integerTypeFromLong = (maxValue) -> {
 		if (maxValue <= 0L)
@@ -629,29 +616,11 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	 */
 	public final Function<Class<L>, L> object = (clazz) -> {
 		try {
-			return clazz.newInstance();
-		} catch (final InstantiationException exc) {
-			throw new IllegalArgumentException(exc);
-		} catch (final IllegalAccessException exc) {
-			throw new IllegalArgumentException(exc);
+			return clazz.getDeclaredConstructor().newInstance();
+		} catch (final InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+			throw new IllegalArgumentException(e);
 		}
 	};
-
-	/* NativeType */
-
-	/**
-	 * @output nativeType
-	 * @implNote op names='create, create.nativeType', priority='100.'
-	 */
-	public final Producer<DoubleType> defaultNativeType = () -> new DoubleType();
-
-	// TODO is this a safe cast?
-	/**
-	 * @input type
-	 * @output nativeType
-	 * @implNote op names='create, create.nativeType'
-	 */
-	public final Function<Class<N>, N> nativeTypeFromClass = (clazz) -> (N) object.apply((Class<L>) clazz);
 
 	/**
 	 * @output vector3d

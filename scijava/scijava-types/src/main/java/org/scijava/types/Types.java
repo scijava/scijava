@@ -2912,7 +2912,7 @@ public final class Types {
 					if (followTypeVars) {
 						return unrollVariables(typeArguments, typeArguments.get(type), followTypeVars);
 					} else {
-						return typeArguments.get(type);
+						return typeArguments.getOrDefault(type, type);
 					}
 				}
 				if (type instanceof ParameterizedType) {

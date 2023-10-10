@@ -32,12 +32,12 @@ public class InfoTreeTest extends AbstractTestEnvironment implements OpCollectio
 
 	public static final String S = "this Op is cool";
 
-	@OpField(names = "test.infoChain")
+	@OpField(names = "test.infoTree")
 	public final Producer<String> foo = () -> S;
 
 	@Test
 	public void testInfoChainInstantiation() {
-		OpInfo info = singularInfoOfName("test.infoChain");
+		OpInfo info = singularInfoOfName("test.infoTree");
 		InfoTree tree = new InfoTree(info);
 		Nil<Producer<String>> nil = new Nil<>() {};
 		Producer<String> op = ops.opFromInfoChain(tree, nil);
@@ -47,11 +47,11 @@ public class InfoTreeTest extends AbstractTestEnvironment implements OpCollectio
 	@Test
 	public void testInfoChainWithDependenciesInstantiation() {
 		// Find dependency
-		OpInfo info = singularInfoOfName("test.infoChain");
+		OpInfo info = singularInfoOfName("test.infoTree");
 		InfoTree dependencyChain = new InfoTree(info);
 
 		// Find dependent Op
-		OpInfo baseInfo = singularInfoOfName("test.infoChainBase");
+		OpInfo baseInfo = singularInfoOfName("test.infoTreeBase");
 		InfoTree tree = new InfoTree(baseInfo, Collections.singletonList(
 			dependencyChain));
 
@@ -70,10 +70,10 @@ public class InfoTreeTest extends AbstractTestEnvironment implements OpCollectio
 
 }
 
-@OpClass(names = "test.infoChainBase")
+@OpClass(names = "test.infoTreeBase")
 class ComplexOp implements Producer<String>, Op {
 
-	@OpDependency(name = "test.infoChain")
+	@OpDependency(name = "test.infoTree")
 	private Producer<String> op;
 
 	@Override

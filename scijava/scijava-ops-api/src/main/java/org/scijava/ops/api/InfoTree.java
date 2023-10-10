@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * {@link RichOp}s.
  *
  * @author Gabriel Selzer
- * @see RichOp#infoChain()
+ * @see RichOp#infoTree()
  */
 public class InfoTree {
 

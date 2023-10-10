@@ -248,7 +248,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	public InfoTree infoTree(String opName, Nil<?> specialType,
 		Nil<?>[] inTypes, Nil<?> outType, Hints hints)
 	{
-		return findOp(opName, specialType, inTypes, outType, hints).infoChain();
+		return findOp(opName, specialType, inTypes, outType, hints).infoTree();
 	}
 
 	@Override

@@ -29,7 +29,7 @@ public class DependencyRichOpInfoTree extends InfoTree {
 	}
 
 	private static List<InfoTree> treesFrom(List<RichOp<?>> dependencies) {
-		return dependencies.stream().map(RichOp::infoChain).collect(Collectors.toList());
+		return dependencies.stream().map(RichOp::infoTree).collect(Collectors.toList());
 	}
 
 }

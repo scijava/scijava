@@ -3,10 +3,8 @@ package org.scijava.ops.engine.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.WeakHashMap;
 
 import org.scijava.ops.api.InfoTree;
@@ -75,7 +73,7 @@ public class DefaultOpHistory implements OpHistory {
 
 	@Override
 	public void logOp(RichOp<?> op) {
-		dependencyChain.put(op, op.infoChain());
+		dependencyChain.put(op, op.infoTree());
 	}
 
 	@Override

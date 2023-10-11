@@ -10,7 +10,6 @@ import java.util.function.LongFunction;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
-import org.scijava.common3.validity.ValidityException;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.OpInfoGenerator;
 import org.scijava.struct.Member;
@@ -57,14 +56,7 @@ public class ReducedOpInfoGenerator implements OpInfoGenerator {
 		InfoReducer reducer = optionalReducer.get();
 		LongFunction<OpInfo> func = l -> reducer.reduce(info, (int) l);
 		return LongStream.range(1, numReductions + 1) //
-			.mapToObj(i -> {
-				try {
-					return func.apply(i);
-				} catch(ValidityException e) {
-					// TODO: Log exception
-					return null;
-				}
-			}) //
+			.mapToObj(func) //
 			.filter(Objects::nonNull) //
 			.collect(Collectors.toList());
 	}

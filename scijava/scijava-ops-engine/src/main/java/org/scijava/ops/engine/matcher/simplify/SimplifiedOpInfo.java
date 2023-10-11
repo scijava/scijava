@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Objects;
 
 import org.scijava.common3.Comparisons;
-import org.scijava.common3.validity.ValidityException;
-import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.InfoTree;
@@ -54,7 +52,6 @@ public class SimplifiedOpInfo implements OpInfo {
 	}
 
 	public SimplifiedOpInfo(OpInfo info, SimplificationMetadata metadata, double priority) {
-		List<ValidityProblem> problems = new ArrayList<>();
 		this.srcInfo = info;
 		this.metadata = metadata;
 		// generate new input fmts
@@ -74,14 +71,10 @@ public class SimplifiedOpInfo implements OpInfo {
 		this.opType = SimplificationUtils.retypeOpType(info.opType(), inputTypes,
 			outputType);
 		RetypingRequest r = new RetypingRequest(info.struct(), fmts);
-		this.struct = Structs.from(r, opType, problems, new OpRetypingMemberParser());
+		this.struct = Structs.from(r, opType, new OpRetypingMemberParser());
 
 		this.priority = priority;
 		this.hints = srcInfo.declaredHints().plus(Simplification.FORBIDDEN);
-
-		if(!problems.isEmpty()) {
-			throw new ValidityException(problems);
-		}
 	}
 
 	public OpInfo srcInfo() {

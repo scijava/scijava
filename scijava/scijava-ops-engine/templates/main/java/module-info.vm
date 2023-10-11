@@ -6,7 +6,6 @@ module org.scijava.ops.engine {
  */
 
 	exports org.scijava.ops.engine;
-	exports org.scijava.ops.engine.matcher;
 	exports org.scijava.ops.engine.conversionLoss;
 	exports org.scijava.ops.engine.util;
 

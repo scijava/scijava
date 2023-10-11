@@ -36,25 +36,24 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.scijava.common3.validity.ValidityException;
-import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.engine.OpDescription;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.engine.OpUtils;
+import org.scijava.ops.engine.OpDescription;
+import org.scijava.ops.engine.exceptions.impl.InstanceOpMethodException;
+import org.scijava.ops.engine.exceptions.impl.PrivateOpException;
+import org.scijava.ops.engine.exceptions.impl.UnreadableOpException;
 import org.scijava.ops.engine.struct.MethodOpDependencyMemberParser;
 import org.scijava.ops.engine.struct.MethodParameterMemberParser;
 import org.scijava.ops.engine.util.Lambdas;
+import org.scijava.ops.engine.util.Ops;
 import org.scijava.ops.engine.util.internal.OpMethodUtils;
 import org.scijava.ops.spi.OpMethod;
 import org.scijava.priority.Priority;
 import org.scijava.struct.Member;
-import org.scijava.struct.MemberParser;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
@@ -94,55 +93,27 @@ public class OpMethodInfo implements OpInfo {
 		this.hints = hints;
 		this.priority = priority;
 
-		final List<ValidityProblem> problems = new ArrayList<>();
-		checkModifiers(problems);
+		checkModifiers();
 
-		this.opType = findOpType(opType, problems);
-		this.struct = generateStruct(method, opType, problems, new MethodParameterMemberParser(), new MethodOpDependencyMemberParser());
+		this.opType = OpMethodUtils.getOpMethodType(opType, method);
+		this.struct = Structs.from( //
+			method, //
+			opType, //
+			new MethodParameterMemberParser(), //
+			new MethodOpDependencyMemberParser() //
+		);
 
-		if (!problems.isEmpty()) {
-			throw new ValidityException(problems);
-		}
 	}
 
-	@SafeVarargs
-	private Struct generateStruct(Method m, Type structType,
-		List<ValidityProblem> problems,
-		MemberParser<Method, ? extends Member<?>>... memberParsers)
-	{
-		try {
-			return Structs.from(m, structType, problems, memberParsers);
-		} catch (IllegalArgumentException e) {
-			problems.add(new ValidityProblem(e));
-			return null;
-		}
-	}
-
-	private Type findOpType(Class<?> opType,
-		List<ValidityProblem> problems)
-	{
-		try {
-			return OpMethodUtils.getOpMethodType(opType,
-				method);
-		}
-		catch (IllegalArgumentException e) {
-			problems.add(new ValidityProblem(e));
-			return null;
-		}
-	}
-
-	private void checkModifiers(List<ValidityProblem> problems) {
+	private void checkModifiers() {
 		// Reject all non public methods
 		if (!Modifier.isPublic(method.getModifiers())) {
-			problems.add(new ValidityProblem("Method to parse: " + method +
-				" must be public."));
+			throw new PrivateOpException(method);
 		}
 		if (!Modifier.isStatic(method.getModifiers())) {
-			// TODO: Should throw and error if the method is not static.
 			// TODO: We can't properly infer the generic types of static methods at
 			// the moment. This might be a Java limitation.
-			problems.add(new ValidityProblem("Method to parse: " + method +
-				" must be static."));
+			throw new InstanceOpMethodException(method);
 		}
 
 		// If the Op is not in the SciJava Ops Engine module, check visibility
@@ -150,9 +121,7 @@ public class OpMethodInfo implements OpInfo {
 		if (methodModule != this.getClass().getModule()) {
 			String packageName = method.getDeclaringClass().getPackageName();
 			if (!methodModule.isOpen(packageName, methodModule)) {
-				problems.add(new ValidityProblem("Package " + packageName +
-					" is not opened to SciJava Ops Engine. Please ensure that " +
-					packageName + " is opened or exported to SciJava Ops Engine"));
+				throw new UnreadableOpException(packageName);
 			}
 		}
 	}
@@ -208,7 +177,7 @@ public class OpMethodInfo implements OpInfo {
 			Object op = Lambdas.lambdaize( //
 					Types.raw(opType), //
 					handle, //
-					OpUtils.dependenciesOf(this).stream().map(Member::getRawType).toArray(Class[]::new),
+					Ops.dependenciesOf(this).stream().map(Member::getRawType).toArray(Class[]::new),
 					dependencies.toArray() //
 			);
 			return struct().createInstance(op);

@@ -6,8 +6,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.scijava.common3.validity.ValidityException;
-import org.scijava.common3.validity.ValidityProblem;
+import org.scijava.ops.engine.exceptions.impl.FunctionalTypeOpException;
 import org.scijava.ops.engine.util.internal.OpMethodUtils;
 import org.scijava.struct.MemberParser;
 import org.scijava.types.Types;
@@ -17,7 +16,6 @@ public class MethodParameterMemberParser implements
 {
 	@Override
 	public List<SynthesizedParameterMember<?>> parse(Method source, Type structType)
-		throws ValidityException
 	{
 		if (source == null) return null;
 
@@ -27,24 +25,17 @@ public class MethodParameterMemberParser implements
 		ParameterData paramData = new LazilyGeneratedMethodParameterData(source, Types.raw(structType));
 
 		final ArrayList<SynthesizedParameterMember<?>> items = new ArrayList<>();
-		final ArrayList<ValidityProblem> problems = new ArrayList<>();
 
 		// Determine functional type
-		Type functionalType;
-		try {
-			functionalType = OpMethodUtils.getOpMethodType(Types.raw(structType), source);
-		}
-		catch (IllegalArgumentException e) {
-			problems.add(new ValidityProblem(e.getMessage()));
-			functionalType = Types.parameterizeRaw(Types.raw(structType));
-		}
+		Type functionalType = OpMethodUtils.getOpMethodType(Types.raw(structType), source);
 
 		// Parse method level @Parameter annotations.
-		FunctionalParameters.parseFunctionalParameters(items, problems, functionalType,
-			paramData);
-
-		// Fail if there were any problems.
-		if (!problems.isEmpty()) throw new ValidityException(problems);
+		try {
+			FunctionalParameters.parseFunctionalParameters(items, functionalType,
+					paramData);
+		} catch (IllegalArgumentException exc) {
+			throw new FunctionalTypeOpException(source, exc);
+		}
 
 		return items;
 	}

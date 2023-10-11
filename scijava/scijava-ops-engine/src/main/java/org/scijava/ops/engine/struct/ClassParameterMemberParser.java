@@ -8,9 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.scijava.common3.validity.ValidityException;
-import org.scijava.common3.validity.ValidityProblem;
-import org.scijava.ops.engine.OpUtils;
+import org.scijava.ops.engine.exceptions.impl.FunctionalTypeOpException;
+import org.scijava.ops.engine.util.Ops;
 import org.scijava.struct.MemberParser;
 import org.scijava.struct.Structs;
 import org.scijava.types.Types;
@@ -21,15 +20,13 @@ public class ClassParameterMemberParser implements
 
 	@Override
 	public List<SynthesizedParameterMember<?>> parse(Class<?> source, Type structType)
-		throws ValidityException
 	{
 		if (source == null) return null;
 
 		final ArrayList<SynthesizedParameterMember<?>> items = new ArrayList<>();
-		final ArrayList<ValidityProblem> problems = new ArrayList<>();
 
 		// NB: Reject abstract classes.
-		Structs.checkModifiers(source.getName() + ": ", problems, source.getModifiers(), true, Modifier.ABSTRACT);
+		Structs.checkModifiers(source.getName() + ": ", source.getModifiers(), true, Modifier.ABSTRACT);
 
 		// Obtain source's Op method.
 		Method opMethod;
@@ -37,19 +34,19 @@ public class ClassParameterMemberParser implements
 			opMethod = getDeclaredOpMethod(source);
 		}
 		catch (NoSuchMethodException e1) {
-			problems.add(new ValidityProblem("Class " + source.getName() +
-				" does not have a functional method!"));
-			throw new ValidityException(problems);
+			throw new IllegalArgumentException("Class " + source.getName() +
+				" does not have a functional method!", e1);
 		}
 
 		// obtain a parameterData
-		ParameterData paramData = new LazilyGeneratedMethodParameterData(opMethod, source);
+		Class<?> fIface = Ops.findFunctionalInterface(source);
+		ParameterData paramData = new LazilyGeneratedMethodParameterData(opMethod, fIface);
 
-		FunctionalParameters.parseFunctionalParameters(items, problems, source,
-			paramData);
-
-		// Fail if there were any problems.
-		if (!problems.isEmpty()) throw new ValidityException(problems);
+		try {
+			FunctionalParameters.parseFunctionalParameters(items, source, paramData);
+		} catch (IllegalArgumentException exc) {
+			throw new FunctionalTypeOpException(source, exc);
+		}
 
 		return items;
 	}
@@ -66,7 +63,7 @@ public class ClassParameterMemberParser implements
 	 */
 	private Method getDeclaredOpMethod(Class<?> c) throws NoSuchMethodException {
 		// NB this is the functional method w.r.t. the interface, not w.r.t. the Op
-		Method fMethod = OpUtils.findFunctionalMethod(c);
+		Method fMethod = Ops.findFunctionalMethod(c);
 		Type[] paramTypes = Types.getExactParameterTypes(fMethod, c);
 		Class<?>[] rawParamTypes = Arrays.stream(paramTypes).map(t -> Types.raw(t))
 			.toArray(Class[]::new);

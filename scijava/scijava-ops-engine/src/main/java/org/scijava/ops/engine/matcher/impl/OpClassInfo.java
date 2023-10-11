@@ -33,20 +33,17 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.scijava.common3.validity.ValidityException;
-import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.OpDependencyMember;
 import org.scijava.ops.engine.OpDescription;
-import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.engine.struct.ClassOpDependencyMemberParser;
 import org.scijava.ops.engine.struct.ClassParameterMemberParser;
+import org.scijava.ops.engine.util.Ops;
 import org.scijava.priority.Priority;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
@@ -64,7 +61,7 @@ public class OpClassInfo implements OpInfo {
 	private final List<String> names;
 	private final Class<?> opClass;
 	private final String version;
-	private Struct struct;
+	private final Struct struct;
 	private final double priority;
 	private final Hints hints;
 
@@ -83,12 +80,14 @@ public class OpClassInfo implements OpInfo {
 		this.priority = priority;
 		this.hints = hints;
 
-		List<ValidityProblem> problems = new ArrayList<>();
-		struct = Structs.from(opClass, opClass, problems, new ClassParameterMemberParser(), new ClassOpDependencyMemberParser());
-		OpUtils.ensureHasSingleOutput(struct, problems);
-		if (!problems.isEmpty()) {
-			throw new ValidityException(problems);
-		}
+		struct = Structs.from( //
+			opClass, //
+			opClass, //
+			new ClassParameterMemberParser(), //
+			new ClassOpDependencyMemberParser() //
+		);
+
+		Ops.ensureHasSingleOutput(implementationName(), struct);
 	}
 
 	// -- OpInfo methods --
@@ -145,7 +144,7 @@ public class OpClassInfo implements OpInfo {
 			throw new IllegalStateException("Unable to instantiate op: '" + opClass
 				.getName() + "' Ensure that the Op has a no-args constructor.", e);
 		}
-		final var dependencyMembers = OpUtils.dependenciesOf(this);
+		final var dependencyMembers = Ops.dependenciesOf(this);
 		for (int i = 0; i < dependencyMembers.size(); i++) {
 			final OpDependencyMember<?> dependencyMember = dependencyMembers.get(i);
 			try {

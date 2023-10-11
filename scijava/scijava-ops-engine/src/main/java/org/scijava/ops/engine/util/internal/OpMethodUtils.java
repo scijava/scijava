@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.scijava.common3.Classes;
+import org.scijava.ops.engine.exceptions.impl.FunctionalTypeOpException;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.types.Types;
 import org.scijava.types.inference.GenericAssignability;
@@ -19,16 +20,19 @@ public class OpMethodUtils {
 	public static Type getOpMethodType(Class<?> opClass, Method opMethod) {
 		// since type is a functional interface, it has (exactly) one abstract
 		// declared method (the method that our OpMethod is emulating).
-		Method abstractMethod = InterfaceInference.singularAbstractMethod(opClass);
+		Method abstractMethod;
+		try {
+			abstractMethod = InterfaceInference.singularAbstractMethod(opClass);
+		} catch (IllegalArgumentException e) {
+			throw new FunctionalTypeOpException(opMethod, e);
+
+		}
 		Type[] typeMethodParams = abstractMethod.getGenericParameterTypes();
 		java.lang.reflect.Parameter[] opMethodParams = getOpParams(opMethod
 			.getParameters());
 
 		if (typeMethodParams.length != opMethodParams.length) {
-			throw new IllegalArgumentException("Number of parameters in OpMethod" +
-				opMethod +
-				" does not match the required number of parameters for functional method of FunctionalInterface " +
-				opClass);
+			throw new FunctionalTypeOpException(opMethod, opClass);
 		}
 		Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
 

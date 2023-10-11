@@ -6,22 +6,20 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.scijava.common3.validity.ValidityException;
-import org.scijava.ops.engine.OpUtils;
 import org.scijava.common3.Annotations;
 import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.spi.OpHints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.OpInfoGenerator;
 import org.scijava.ops.engine.matcher.impl.OpFieldInfo;
 import org.scijava.ops.engine.matcher.impl.OpMethodInfo;
+import org.scijava.ops.engine.util.Ops;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
+import org.scijava.ops.spi.OpHints;
 import org.scijava.ops.spi.OpMethod;
 
 public class OpCollectionInfoGenerator implements OpInfoGenerator {
@@ -42,30 +40,15 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 		if (instance.isPresent()) {
 			final List<OpFieldInfo> fieldInfos = //
 				fields.parallelStream() //
-					.map(f -> {
-						try {
-							return generateFieldInfo(f, instance.get(), version);
-						} catch(ValidityException e) {
-							// TODO: Log exception
-							return null;
-						}
-					}) //
-					.filter(Objects::nonNull) //
+					.map(f -> generateFieldInfo(f, instance.get(), version)) //
 					.collect(Collectors.toList());
 			collectionInfos.addAll(fieldInfos);
 		}
 		// add OpMethodInfos
+		//
 		final List<OpMethodInfo> methodInfos = //
 			Annotations.getAnnotatedMethods(cls, OpMethod.class).parallelStream() //
-				.map(m -> {
-					try {
-						return generateMethodInfo(m, version);
-					} catch(ValidityException e) {
-						// TODO: Log exception
-						return null;
-					}
-				}) //
-				.filter(Objects::nonNull) //
+				.map(m -> generateMethodInfo(m, version)) //
 				.collect(Collectors.toList());
 		collectionInfos.addAll(methodInfos);
 		return collectionInfos;
@@ -86,7 +69,7 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 		final boolean isStatic = Modifier.isStatic(field.getModifiers());
 		OpField annotation = field.getAnnotation(OpField.class);
 		String unparsedOpNames = annotation.names();
-		String[] parsedOpNames = OpUtils.parseOpNames(unparsedOpNames);
+		String[] parsedOpNames = Ops.parseOpNames(unparsedOpNames);
 		double priority = annotation.priority();
 		Hints hints = formHints(field.getAnnotation(OpHints.class));
 		return new OpFieldInfo(isStatic ? null : instance, field, version, hints,
@@ -97,7 +80,7 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 		OpMethod annotation = method.getAnnotation(OpMethod.class);
 		Class<?> opType = annotation.type();
 		String unparsedOpNames = annotation.names();
-		String[] parsedOpNames = OpUtils.parseOpNames(unparsedOpNames);
+		String[] parsedOpNames = Ops.parseOpNames(unparsedOpNames);
 		Hints hints = formHints(method.getAnnotation(OpHints.class));
 		double priority = annotation.priority();
 		return new OpMethodInfo(method, opType, version, hints, priority,

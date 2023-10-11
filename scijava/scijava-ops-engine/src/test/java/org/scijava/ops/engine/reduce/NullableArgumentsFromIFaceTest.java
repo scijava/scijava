@@ -3,7 +3,13 @@ package org.scijava.ops.engine.reduce;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.scijava.ops.api.Hints;
 import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.exceptions.InvalidOpException;
+import org.scijava.ops.engine.exceptions.impl.NullablesOnMultipleMethodsException;
+import org.scijava.ops.engine.matcher.impl.OpFieldInfo;
+import org.scijava.ops.engine.matcher.impl.OpMethodInfo;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpMethod;
@@ -81,6 +87,59 @@ public class NullableArgumentsFromIFaceTest extends AbstractTestEnvironment
 		Boolean o = ops.op("test.nullableOr").arity2().input(in1, in2).outType(Boolean.class).apply();
 		Boolean expected = true;
 		Assertions.assertEquals(expected, o);
+	}
+
+	public static Boolean baz(Boolean i1, Boolean i2, @Nullable Boolean i3) {
+		if (i3 == null) i3 = false;
+		return i1 ^ i2 ^ i3;
+	}
+
+	/**
+	 * Ensures that an {@link InvalidOpException} is thrown when {@link Nullable}
+	 * parameters are on both the functional interface and on the Op.
+	 */
+	@Test
+	public void testNullablesOnOpMethodAndIFace() throws NoSuchMethodException {
+		// Find the method
+		var m = this.getClass().getDeclaredMethod(//
+			"baz", //
+			Boolean.class, //
+			Boolean.class, //
+			Boolean.class //
+		);
+		// Try to create an OpMethodInfo
+		Assertions.assertThrows(NullablesOnMultipleMethodsException.class, () ->
+			new OpMethodInfo(//
+				m, //
+				BiFunctionWithNullable.class, //
+				new Hints(), //
+				"test.optionalOnIFaceAndOp" //
+			));
+	}
+
+	public final BiFunctionWithNullable<Double, Double, Double, Double> foo = new BiFunctionWithNullable<Double, Double, Double, Double>() {
+		@Override public Double apply(Double in1, Double in2, @Nullable Double in3) {
+			if (in3 == null) in3 = 0.;
+			return in1 + in2 + in3;
+		}
+	};
+
+	/**
+	 * Ensures that an {@link InvalidOpException} is thrown when {@link Nullable}
+	 * parameters are on both the functional interface and on the Op.
+	 */
+	@Test
+	public void testNullablesOnOpFieldAndIFace() throws NoSuchFieldException {
+		// Find the method
+		var f = this.getClass().getDeclaredField("foo");
+		// Try to create an OpMethodInfo
+		Assertions.assertThrows(NullablesOnMultipleMethodsException.class,
+			() -> new OpFieldInfo(//
+				this, //
+				f, //
+				new Hints(), //
+				"test.optionalOnIFaceAndOp" //
+			));
 	}
 
 }

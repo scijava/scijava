@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.scijava.common3.validity.ValidityException;
-import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.engine.OpDescription;
 import org.scijava.ops.api.OpInfo;
@@ -38,14 +36,9 @@ public class ReducedOpInfo implements OpInfo {
 		this.reducedOpType = reducedOpType;
 		this.paramsReduced = paramsReduced;
 		this.hints = srcInfo.declaredHints().plus(BaseOpHints.Reduction.FORBIDDEN);
-		List<ValidityProblem> problems = new ArrayList<>();
 
 		RetypingRequest r = retypingRequest();
-		this.struct = Structs.from(r, reducedOpType, problems, new OpResizingMemberParser());
-
-		if (!problems.isEmpty()) {
-			throw new ValidityException(problems);
-		}
+		this.struct = Structs.from(r, reducedOpType, new OpResizingMemberParser());
 	}
 
 	/**

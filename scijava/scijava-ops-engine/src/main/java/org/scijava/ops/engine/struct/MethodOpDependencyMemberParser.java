@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.scijava.ops.engine.exceptions.impl.OpDependencyPositionException;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.MemberParser;
 
@@ -55,8 +56,9 @@ public class MethodOpDependencyMemberParser implements
 			.map(param -> param.isAnnotationPresent(OpDependency.class)).toArray(Boolean[]::new);
 		for (int i = 0; i < isDependency.length - 1; i++) {
 			if (!isDependency[i] && isDependency[i + 1]) {
-				throw new IllegalArgumentException(
-					"Op Dependencies in static methods must come before any other parameters!");
+				// OpDependencies must come first so that they can be curried within
+				// LambdaMetafactory
+				throw new OpDependencyPositionException(annotatedMethod);
 			}
 		}
 

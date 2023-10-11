@@ -5,14 +5,14 @@ import java.lang.reflect.Type;
 
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.BaseOpHints;
-import org.scijava.ops.engine.OpUtils;
+import org.scijava.ops.engine.util.Ops;
 import org.scijava.types.Types;
 
 public abstract class AbstractInfoReducer implements InfoReducer {
 
 	@Override
 	public boolean canReduce(OpInfo info) {
-		boolean isReducerType = isReducerType(OpUtils.findFunctionalInterface(Types
+		boolean isReducerType = isReducerType(Ops.findFunctionalInterface(Types
 			.raw(info.opType())));
 		boolean canReduce = info.declaredHints().containsNone(
 			BaseOpHints.Reduction.FORBIDDEN);
@@ -22,7 +22,7 @@ public abstract class AbstractInfoReducer implements InfoReducer {
 	@Override
 	public ReducedOpInfo reduce(OpInfo info, int numReductions) {
 		Type opType = info.opType();
-		Class<?> rawType = OpUtils.findFunctionalInterface(Types.raw(opType));
+		Class<?> rawType = Ops.findFunctionalInterface(Types.raw(opType));
 		int originalArity = arityOf(rawType);
 		int reducedArity = originalArity - numReductions;
 		Class<?> reducedRawType = ofArity(reducedArity);

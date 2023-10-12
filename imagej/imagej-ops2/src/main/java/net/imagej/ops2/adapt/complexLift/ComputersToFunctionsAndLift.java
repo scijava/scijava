@@ -34,11 +34,9 @@
 
 package net.imagej.ops2.adapt.complexLift;
 
-import net.imglib2.Dimensions;
-import net.imglib2.img.Img;
+import net.imglib2.RandomAccessibleInterval;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
-import org.scijava.function.Producer;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
 
@@ -47,699 +45,6531 @@ import java.util.function.Function;
 
 public class ComputersToFunctionsAndLift {
 
-	/**
-	 * Lifting function for mapping Computers Ops to Functions that operate on Imgs.
-	 *
-	 * @param <I>
-	 *            Type of the first image
-	 * @param <O>
-	 *            Type of the second image
-	 *@implNote op names='adapt', priority='-100.'
-	 */
-	public static class ImgComputer1ToFunction1AndLiftViaSource<I, O>
-			implements Function<Computers.Arity1<I, O>, Function<Img<I>, Img<O>>>,
-			Op
-	{
-		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity1<I, O>, Computers.Arity1<Img<I>, Img<O>>> lifter;
-		@OpDependency(name = "create", adaptable = false)
-		BiFunction<Dimensions, O, Img<O>> createImgFromDimsAndType;
-		@OpDependency(name = "create", adaptable = false)
-		Producer<O> outTypeProducer;
-
-		/**
-		 * @param computer the Computer to convert
-		 * @return {@code computer} as a Function
-		 */
-		@Override
-		public Function<Img<I>, Img<O>> apply(Computers.Arity1<I, O> computer) {
-			O outType = outTypeProducer.get();
-			Computers.Arity1<Img<I>, Img<O>> lifted = lifter.apply(computer);
-			return (inImg) -> {
-				Img<O> outImg = createImgFromDimsAndType.apply(inImg, outType);
-				lifted.compute(inImg, outImg);
-				return outImg;
-			};
-		}
-
-	}
 
 	/**
-	 * Lifting function for mapping Computers Ops to Functions that operate on Imgs.
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
 	 *
 	 * @param <I1>
-	 *            Type of the first image
-	 * @param <I2>
-	 *            Type of the second image
+	 *            Type of the first RAI
 	 * @param <O>
-	 *            Type of the output image
+	 *            Type of the output RAI
 	 * @implNote op names='adapt', priority='-100.'
 	 */
-	public static class ImgComputer2ToFunction2AndLiftViaSource<I1, I2, O>
-			implements Function<Computers.Arity2<I1, I2, O>, BiFunction<Img<I1>, Img<I2>, Img<O>>>,
+	 public static class RAI11ComputerToFunctionAndLiftViaSource<I1, O, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity1<I1, O>, Function<RAII1, RAIO>>,
 			Op
 	{
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity2<I1, I2, O>, Computers.Arity2<Img<I1>, Img<I2>, Img<O>>> lifter;
+		Function<Computers.Arity1<I1, O>, Computers.Arity1<RAII1, RAIO>> lifter;
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity2<Img<I1>, Img<I2>, Img<O>>, BiFunction<Img<I1>, Img<I2>, Img<O>>> adapter;
+		Function<Computers.Arity1<RAII1, RAIO>, Function<RAII1, RAIO>> adapter;
 
 		/**
 		 * @param computer the Computer to convert
 		 * @return {@code computer} as a Function
 		 */
 		@Override
-		public BiFunction<Img<I1>, Img<I2>, Img<O>> apply(Computers.Arity2<I1, I2, O> computer) {
+		public Function<RAII1, RAIO> apply(Computers.Arity1<I1, O> computer) {
 			return adapter.apply(lifter.apply(computer));
 		}
 	}
 
 	/**
-	 * Lifting function for mapping Computers Ops to Functions that operate on Imgs.
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
 	 *
 	 * @param <I1>
-	 *            Type of the first image
+	 *            Type of the first RAI
 	 * @param <I2>
-	 *            Type of the second image
-	 * @param <I3>
-	 *            Type of the third image
+	 *            The second parameter type
 	 * @param <O>
-	 *            Type of the output image
+	 *            Type of the output RAI
 	 * @implNote op names='adapt', priority='-100.'
 	 */
-	public static class ImgComputer3ToFunction3AndLiftViaSource<I1, I2, I3, O>
-			implements Function<Computers.Arity3<I1, I2, I3, O>, Functions.Arity3<Img<I1>, Img<I2>, Img<I3>, Img<O>>>,
+	 public static class RAI21ComputerToFunctionAndLiftViaSource<I1, I2, O, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity2<I1, I2, O>, BiFunction<RAII1, I2, RAIO>>,
 			Op
 	{
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity3<I1, I2, I3, O>, Computers.Arity3<Img<I1>, Img<I2>, Img<I3>, Img<O>>> lifter;
+		Function<Computers.Arity2<I1, I2, O>, Computers.Arity2<RAII1, I2, RAIO>> lifter;
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity3<Img<I1>, Img<I2>, Img<I3>, Img<O>>, Functions.Arity3<Img<I1>, Img<I2>, Img<I3>, Img<O>>> adapter;
+		Function<Computers.Arity2<RAII1, I2, RAIO>, BiFunction<RAII1, I2, RAIO>> adapter;
 
 		/**
 		 * @param computer the Computer to convert
 		 * @return {@code computer} as a Function
 		 */
 		@Override
-		public Functions.Arity3<Img<I1>, Img<I2>, Img<I3>, Img<O>> apply(Computers.Arity3<I1, I2, I3, O> computer) {
+		public BiFunction<RAII1, I2, RAIO> apply(Computers.Arity2<I1, I2, O> computer) {
 			return adapter.apply(lifter.apply(computer));
 		}
 	}
 
 	/**
-	 * Lifting function for mapping Computers Ops to Functions that operate on Imgs.
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
 	 *
 	 * @param <I1>
-	 *            Type of the first image
+	 *            Type of the first RAI
 	 * @param <I2>
-	 *            Type of the second image
+	 *            Type of the second RAI
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI22ComputerToFunctionAndLiftViaSource<I1, I2, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity2<I1, I2, O>, BiFunction<RAII1, RAII2, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity2<I1, I2, O>, Computers.Arity2<RAII1, RAII2, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity2<RAII1, RAII2, RAIO>, BiFunction<RAII1, RAII2, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public BiFunction<RAII1, RAII2, RAIO> apply(Computers.Arity2<I1, I2, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            The second parameter type
 	 * @param <I3>
-	 *            Type of the third image
+	 *            The third parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI31ComputerToFunctionAndLiftViaSource<I1, I2, I3, O, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity3<I1, I2, I3, O>, Functions.Arity3<RAII1, I2, I3, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity3<I1, I2, I3, O>, Computers.Arity3<RAII1, I2, I3, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity3<RAII1, I2, I3, RAIO>, Functions.Arity3<RAII1, I2, I3, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity3<RAII1, I2, I3, RAIO> apply(Computers.Arity3<I1, I2, I3, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            The third parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI32ComputerToFunctionAndLiftViaSource<I1, I2, I3, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity3<I1, I2, I3, O>, Functions.Arity3<RAII1, RAII2, I3, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity3<I1, I2, I3, O>, Computers.Arity3<RAII1, RAII2, I3, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity3<RAII1, RAII2, I3, RAIO>, Functions.Arity3<RAII1, RAII2, I3, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity3<RAII1, RAII2, I3, RAIO> apply(Computers.Arity3<I1, I2, I3, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI33ComputerToFunctionAndLiftViaSource<I1, I2, I3, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity3<I1, I2, I3, O>, Functions.Arity3<RAII1, RAII2, RAII3, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity3<I1, I2, I3, O>, Computers.Arity3<RAII1, RAII2, RAII3, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity3<RAII1, RAII2, RAII3, RAIO>, Functions.Arity3<RAII1, RAII2, RAII3, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity3<RAII1, RAII2, RAII3, RAIO> apply(Computers.Arity3<I1, I2, I3, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            The second parameter type
+	 * @param <I3>
+	 *            The third parameter type
 	 * @param <I4>
-	 *            Type of the fourth image
+	 *            The fourth parameter type
 	 * @param <O>
-	 *            Type of the output image
+	 *            Type of the output RAI
 	 * @implNote op names='adapt', priority='-100.'
 	 */
-	public static class ImgComputer4ToFunction4AndLiftViaSource<I1, I2, I3, I4, O>
-			implements Function<Computers.Arity4<I1, I2, I3, I4, O>, Functions.Arity4<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<O>>>,
+	 public static class RAI41ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, O, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity4<I1, I2, I3, I4, O>, Functions.Arity4<RAII1, I2, I3, I4, RAIO>>,
 			Op
 	{
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity4<I1, I2, I3, I4, O>, Computers.Arity4<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<O>>> lifter;
+		Function<Computers.Arity4<I1, I2, I3, I4, O>, Computers.Arity4<RAII1, I2, I3, I4, RAIO>> lifter;
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity4<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<O>>, Functions.Arity4<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<O>>> adapter;
+		Function<Computers.Arity4<RAII1, I2, I3, I4, RAIO>, Functions.Arity4<RAII1, I2, I3, I4, RAIO>> adapter;
 
 		/**
 		 * @param computer the Computer to convert
 		 * @return {@code computer} as a Function
 		 */
 		@Override
-		public Functions.Arity4<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<O>> apply(Computers.Arity4<I1, I2, I3, I4, O> computer) {
+		public Functions.Arity4<RAII1, I2, I3, I4, RAIO> apply(Computers.Arity4<I1, I2, I3, I4, O> computer) {
 			return adapter.apply(lifter.apply(computer));
 		}
 	}
 
 	/**
-	 * Lifting function for mapping Computers Ops to Functions that operate on Imgs.
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
 	 *
 	 * @param <I1>
-	 *            Type of the first image
+	 *            Type of the first RAI
 	 * @param <I2>
-	 *            Type of the second image
+	 *            Type of the second RAI
 	 * @param <I3>
-	 *            Type of the third image
+	 *            The third parameter type
 	 * @param <I4>
-	 *            Type of the fourth image
+	 *            The fourth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI42ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity4<I1, I2, I3, I4, O>, Functions.Arity4<RAII1, RAII2, I3, I4, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity4<I1, I2, I3, I4, O>, Computers.Arity4<RAII1, RAII2, I3, I4, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity4<RAII1, RAII2, I3, I4, RAIO>, Functions.Arity4<RAII1, RAII2, I3, I4, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity4<RAII1, RAII2, I3, I4, RAIO> apply(Computers.Arity4<I1, I2, I3, I4, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI43ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity4<I1, I2, I3, I4, O>, Functions.Arity4<RAII1, RAII2, RAII3, I4, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity4<I1, I2, I3, I4, O>, Computers.Arity4<RAII1, RAII2, RAII3, I4, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity4<RAII1, RAII2, RAII3, I4, RAIO>, Functions.Arity4<RAII1, RAII2, RAII3, I4, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity4<RAII1, RAII2, RAII3, I4, RAIO> apply(Computers.Arity4<I1, I2, I3, I4, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI44ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity4<I1, I2, I3, I4, O>, Functions.Arity4<RAII1, RAII2, RAII3, RAII4, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity4<I1, I2, I3, I4, O>, Computers.Arity4<RAII1, RAII2, RAII3, RAII4, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity4<RAII1, RAII2, RAII3, RAII4, RAIO>, Functions.Arity4<RAII1, RAII2, RAII3, RAII4, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity4<RAII1, RAII2, RAII3, RAII4, RAIO> apply(Computers.Arity4<I1, I2, I3, I4, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            The second parameter type
+	 * @param <I3>
+	 *            The third parameter type
+	 * @param <I4>
+	 *            The fourth parameter type
 	 * @param <I5>
-	 *            Type of the fifth image
+	 *            The fifth parameter type
 	 * @param <O>
-	 *            Type of the output image
+	 *            Type of the output RAI
 	 * @implNote op names='adapt', priority='-100.'
 	 */
-	public static class ImgComputer5ToFunction5AndLiftViaSource<I1, I2, I3, I4, I5, O>
-			implements Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Functions.Arity5<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<O>>>,
+	 public static class RAI51ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, O, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Functions.Arity5<RAII1, I2, I3, I4, I5, RAIO>>,
 			Op
 	{
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Computers.Arity5<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<O>>> lifter;
+		Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Computers.Arity5<RAII1, I2, I3, I4, I5, RAIO>> lifter;
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity5<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<O>>, Functions.Arity5<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<O>>> adapter;
+		Function<Computers.Arity5<RAII1, I2, I3, I4, I5, RAIO>, Functions.Arity5<RAII1, I2, I3, I4, I5, RAIO>> adapter;
 
 		/**
 		 * @param computer the Computer to convert
 		 * @return {@code computer} as a Function
 		 */
 		@Override
-		public Functions.Arity5<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<O>> apply(Computers.Arity5<I1, I2, I3, I4, I5, O> computer) {
+		public Functions.Arity5<RAII1, I2, I3, I4, I5, RAIO> apply(Computers.Arity5<I1, I2, I3, I4, I5, O> computer) {
 			return adapter.apply(lifter.apply(computer));
 		}
 	}
 
 	/**
-	 * Lifting function for mapping Computers Ops to Functions that operate on Imgs.
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
 	 *
 	 * @param <I1>
-	 *            Type of the first image
+	 *            Type of the first RAI
 	 * @param <I2>
-	 *            Type of the second image
+	 *            Type of the second RAI
 	 * @param <I3>
-	 *            Type of the third image
+	 *            The third parameter type
 	 * @param <I4>
-	 *            Type of the fourth image
+	 *            The fourth parameter type
 	 * @param <I5>
-	 *            Type of the fifth image
+	 *            The fifth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI52ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Functions.Arity5<RAII1, RAII2, I3, I4, I5, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Computers.Arity5<RAII1, RAII2, I3, I4, I5, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity5<RAII1, RAII2, I3, I4, I5, RAIO>, Functions.Arity5<RAII1, RAII2, I3, I4, I5, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity5<RAII1, RAII2, I3, I4, I5, RAIO> apply(Computers.Arity5<I1, I2, I3, I4, I5, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI53ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Functions.Arity5<RAII1, RAII2, RAII3, I4, I5, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Computers.Arity5<RAII1, RAII2, RAII3, I4, I5, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity5<RAII1, RAII2, RAII3, I4, I5, RAIO>, Functions.Arity5<RAII1, RAII2, RAII3, I4, I5, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity5<RAII1, RAII2, RAII3, I4, I5, RAIO> apply(Computers.Arity5<I1, I2, I3, I4, I5, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI54ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Functions.Arity5<RAII1, RAII2, RAII3, RAII4, I5, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Computers.Arity5<RAII1, RAII2, RAII3, RAII4, I5, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity5<RAII1, RAII2, RAII3, RAII4, I5, RAIO>, Functions.Arity5<RAII1, RAII2, RAII3, RAII4, I5, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity5<RAII1, RAII2, RAII3, RAII4, I5, RAIO> apply(Computers.Arity5<I1, I2, I3, I4, I5, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI55ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Functions.Arity5<RAII1, RAII2, RAII3, RAII4, RAII5, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Computers.Arity5<RAII1, RAII2, RAII3, RAII4, RAII5, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity5<RAII1, RAII2, RAII3, RAII4, RAII5, RAIO>, Functions.Arity5<RAII1, RAII2, RAII3, RAII4, RAII5, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity5<RAII1, RAII2, RAII3, RAII4, RAII5, RAIO> apply(Computers.Arity5<I1, I2, I3, I4, I5, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            The second parameter type
+	 * @param <I3>
+	 *            The third parameter type
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
 	 * @param <I6>
-	 *            Type of the sixth image
+	 *            The sixth parameter type
 	 * @param <O>
-	 *            Type of the output image
+	 *            Type of the output RAI
 	 * @implNote op names='adapt', priority='-100.'
 	 */
-	public static class ImgComputer6ToFunction6AndLiftViaSource<I1, I2, I3, I4, I5, I6, O>
-			implements Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Functions.Arity6<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<O>>>,
+	 public static class RAI61ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, O, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Functions.Arity6<RAII1, I2, I3, I4, I5, I6, RAIO>>,
 			Op
 	{
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Computers.Arity6<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<O>>> lifter;
+		Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Computers.Arity6<RAII1, I2, I3, I4, I5, I6, RAIO>> lifter;
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity6<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<O>>, Functions.Arity6<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<O>>> adapter;
+		Function<Computers.Arity6<RAII1, I2, I3, I4, I5, I6, RAIO>, Functions.Arity6<RAII1, I2, I3, I4, I5, I6, RAIO>> adapter;
 
 		/**
 		 * @param computer the Computer to convert
 		 * @return {@code computer} as a Function
 		 */
 		@Override
-		public Functions.Arity6<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<O>> apply(Computers.Arity6<I1, I2, I3, I4, I5, I6, O> computer) {
+		public Functions.Arity6<RAII1, I2, I3, I4, I5, I6, RAIO> apply(Computers.Arity6<I1, I2, I3, I4, I5, I6, O> computer) {
 			return adapter.apply(lifter.apply(computer));
 		}
 	}
 
 	/**
-	 * Lifting function for mapping Computers Ops to Functions that operate on Imgs.
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
 	 *
 	 * @param <I1>
-	 *            Type of the first image
+	 *            Type of the first RAI
 	 * @param <I2>
-	 *            Type of the second image
+	 *            Type of the second RAI
 	 * @param <I3>
-	 *            Type of the third image
+	 *            The third parameter type
 	 * @param <I4>
-	 *            Type of the fourth image
+	 *            The fourth parameter type
 	 * @param <I5>
-	 *            Type of the fifth image
+	 *            The fifth parameter type
 	 * @param <I6>
-	 *            Type of the sixth image
+	 *            The sixth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI62ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Functions.Arity6<RAII1, RAII2, I3, I4, I5, I6, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Computers.Arity6<RAII1, RAII2, I3, I4, I5, I6, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity6<RAII1, RAII2, I3, I4, I5, I6, RAIO>, Functions.Arity6<RAII1, RAII2, I3, I4, I5, I6, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity6<RAII1, RAII2, I3, I4, I5, I6, RAIO> apply(Computers.Arity6<I1, I2, I3, I4, I5, I6, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI63ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Functions.Arity6<RAII1, RAII2, RAII3, I4, I5, I6, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Computers.Arity6<RAII1, RAII2, RAII3, I4, I5, I6, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity6<RAII1, RAII2, RAII3, I4, I5, I6, RAIO>, Functions.Arity6<RAII1, RAII2, RAII3, I4, I5, I6, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity6<RAII1, RAII2, RAII3, I4, I5, I6, RAIO> apply(Computers.Arity6<I1, I2, I3, I4, I5, I6, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI64ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Functions.Arity6<RAII1, RAII2, RAII3, RAII4, I5, I6, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Computers.Arity6<RAII1, RAII2, RAII3, RAII4, I5, I6, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity6<RAII1, RAII2, RAII3, RAII4, I5, I6, RAIO>, Functions.Arity6<RAII1, RAII2, RAII3, RAII4, I5, I6, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity6<RAII1, RAII2, RAII3, RAII4, I5, I6, RAIO> apply(Computers.Arity6<I1, I2, I3, I4, I5, I6, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI65ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Functions.Arity6<RAII1, RAII2, RAII3, RAII4, RAII5, I6, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Computers.Arity6<RAII1, RAII2, RAII3, RAII4, RAII5, I6, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity6<RAII1, RAII2, RAII3, RAII4, RAII5, I6, RAIO>, Functions.Arity6<RAII1, RAII2, RAII3, RAII4, RAII5, I6, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity6<RAII1, RAII2, RAII3, RAII4, RAII5, I6, RAIO> apply(Computers.Arity6<I1, I2, I3, I4, I5, I6, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI66ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Functions.Arity6<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Computers.Arity6<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity6<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAIO>, Functions.Arity6<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity6<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAIO> apply(Computers.Arity6<I1, I2, I3, I4, I5, I6, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            The second parameter type
+	 * @param <I3>
+	 *            The third parameter type
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
 	 * @param <I7>
-	 *            Type of the seventh image
+	 *            The seventh parameter type
 	 * @param <O>
-	 *            Type of the output image
+	 *            Type of the output RAI
 	 * @implNote op names='adapt', priority='-100.'
 	 */
-	public static class ImgComputer7ToFunction7AndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, O>
-			implements Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Functions.Arity7<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<O>>>,
+	 public static class RAI71ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, O, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Functions.Arity7<RAII1, I2, I3, I4, I5, I6, I7, RAIO>>,
 			Op
 	{
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Computers.Arity7<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<O>>> lifter;
+		Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Computers.Arity7<RAII1, I2, I3, I4, I5, I6, I7, RAIO>> lifter;
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity7<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<O>>, Functions.Arity7<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<O>>> adapter;
+		Function<Computers.Arity7<RAII1, I2, I3, I4, I5, I6, I7, RAIO>, Functions.Arity7<RAII1, I2, I3, I4, I5, I6, I7, RAIO>> adapter;
 
 		/**
 		 * @param computer the Computer to convert
 		 * @return {@code computer} as a Function
 		 */
 		@Override
-		public Functions.Arity7<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<O>> apply(Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer) {
+		public Functions.Arity7<RAII1, I2, I3, I4, I5, I6, I7, RAIO> apply(Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer) {
 			return adapter.apply(lifter.apply(computer));
 		}
 	}
 
 	/**
-	 * Lifting function for mapping Computers Ops to Functions that operate on Imgs.
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
 	 *
 	 * @param <I1>
-	 *            Type of the first image
+	 *            Type of the first RAI
 	 * @param <I2>
-	 *            Type of the second image
+	 *            Type of the second RAI
 	 * @param <I3>
-	 *            Type of the third image
+	 *            The third parameter type
 	 * @param <I4>
-	 *            Type of the fourth image
+	 *            The fourth parameter type
 	 * @param <I5>
-	 *            Type of the fifth image
+	 *            The fifth parameter type
 	 * @param <I6>
-	 *            Type of the sixth image
+	 *            The sixth parameter type
 	 * @param <I7>
-	 *            Type of the seventh image
+	 *            The seventh parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI72ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Functions.Arity7<RAII1, RAII2, I3, I4, I5, I6, I7, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Computers.Arity7<RAII1, RAII2, I3, I4, I5, I6, I7, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity7<RAII1, RAII2, I3, I4, I5, I6, I7, RAIO>, Functions.Arity7<RAII1, RAII2, I3, I4, I5, I6, I7, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity7<RAII1, RAII2, I3, I4, I5, I6, I7, RAIO> apply(Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI73ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Functions.Arity7<RAII1, RAII2, RAII3, I4, I5, I6, I7, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Computers.Arity7<RAII1, RAII2, RAII3, I4, I5, I6, I7, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity7<RAII1, RAII2, RAII3, I4, I5, I6, I7, RAIO>, Functions.Arity7<RAII1, RAII2, RAII3, I4, I5, I6, I7, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity7<RAII1, RAII2, RAII3, I4, I5, I6, I7, RAIO> apply(Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI74ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Functions.Arity7<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Computers.Arity7<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity7<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, RAIO>, Functions.Arity7<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity7<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, RAIO> apply(Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI75ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Functions.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Computers.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, RAIO>, Functions.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, RAIO> apply(Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI76ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Functions.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Computers.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, RAIO>, Functions.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, RAIO> apply(Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI77ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Functions.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Computers.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAIO>, Functions.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAIO> apply(Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            The second parameter type
+	 * @param <I3>
+	 *            The third parameter type
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
 	 * @param <I8>
-	 *            Type of the eighth image
+	 *            The eighth parameter type
 	 * @param <O>
-	 *            Type of the output image
+	 *            Type of the output RAI
 	 * @implNote op names='adapt', priority='-100.'
 	 */
-	public static class ImgComputer8ToFunction8AndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, O>
-			implements Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Functions.Arity8<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<O>>>,
+	 public static class RAI81ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, O, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Functions.Arity8<RAII1, I2, I3, I4, I5, I6, I7, I8, RAIO>>,
 			Op
 	{
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<O>>> lifter;
+		Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<RAII1, I2, I3, I4, I5, I6, I7, I8, RAIO>> lifter;
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity8<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<O>>, Functions.Arity8<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<O>>> adapter;
+		Function<Computers.Arity8<RAII1, I2, I3, I4, I5, I6, I7, I8, RAIO>, Functions.Arity8<RAII1, I2, I3, I4, I5, I6, I7, I8, RAIO>> adapter;
 
 		/**
 		 * @param computer the Computer to convert
 		 * @return {@code computer} as a Function
 		 */
 		@Override
-		public Functions.Arity8<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<O>> apply(Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer) {
+		public Functions.Arity8<RAII1, I2, I3, I4, I5, I6, I7, I8, RAIO> apply(Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer) {
 			return adapter.apply(lifter.apply(computer));
 		}
 	}
 
 	/**
-	 * Lifting function for mapping Computers Ops to Functions that operate on Imgs.
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
 	 *
 	 * @param <I1>
-	 *            Type of the first image
+	 *            Type of the first RAI
 	 * @param <I2>
-	 *            Type of the second image
+	 *            Type of the second RAI
 	 * @param <I3>
-	 *            Type of the third image
+	 *            The third parameter type
 	 * @param <I4>
-	 *            Type of the fourth image
+	 *            The fourth parameter type
 	 * @param <I5>
-	 *            Type of the fifth image
+	 *            The fifth parameter type
 	 * @param <I6>
-	 *            Type of the sixth image
+	 *            The sixth parameter type
 	 * @param <I7>
-	 *            Type of the seventh image
+	 *            The seventh parameter type
 	 * @param <I8>
-	 *            Type of the eighth image
+	 *            The eighth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI82ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Functions.Arity8<RAII1, RAII2, I3, I4, I5, I6, I7, I8, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<RAII1, RAII2, I3, I4, I5, I6, I7, I8, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity8<RAII1, RAII2, I3, I4, I5, I6, I7, I8, RAIO>, Functions.Arity8<RAII1, RAII2, I3, I4, I5, I6, I7, I8, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity8<RAII1, RAII2, I3, I4, I5, I6, I7, I8, RAIO> apply(Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI83ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Functions.Arity8<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity8<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, RAIO>, Functions.Arity8<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity8<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, RAIO> apply(Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI84ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Functions.Arity8<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity8<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, RAIO>, Functions.Arity8<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity8<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, RAIO> apply(Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI85ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Functions.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, RAIO>, Functions.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, RAIO> apply(Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI86ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Functions.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, RAIO>, Functions.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, RAIO> apply(Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI87ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Functions.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, RAIO>, Functions.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, RAIO> apply(Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI88ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Functions.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAIO>, Functions.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAIO> apply(Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            The second parameter type
+	 * @param <I3>
+	 *            The third parameter type
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
 	 * @param <I9>
-	 *            Type of the ninth image
+	 *            The ninth parameter type
 	 * @param <O>
-	 *            Type of the output image
+	 *            Type of the output RAI
 	 * @implNote op names='adapt', priority='-100.'
 	 */
-	public static class ImgComputer9ToFunction9AndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>
-			implements Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Functions.Arity9<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<O>>>,
+	 public static class RAI91ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, O, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Functions.Arity9<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, RAIO>>,
 			Op
 	{
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<O>>> lifter;
+		Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, RAIO>> lifter;
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity9<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<O>>, Functions.Arity9<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<O>>> adapter;
+		Function<Computers.Arity9<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, RAIO>, Functions.Arity9<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, RAIO>> adapter;
 
 		/**
 		 * @param computer the Computer to convert
 		 * @return {@code computer} as a Function
 		 */
 		@Override
-		public Functions.Arity9<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<O>> apply(Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer) {
+		public Functions.Arity9<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, RAIO> apply(Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer) {
 			return adapter.apply(lifter.apply(computer));
 		}
 	}
 
 	/**
-	 * Lifting function for mapping Computers Ops to Functions that operate on Imgs.
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
 	 *
 	 * @param <I1>
-	 *            Type of the first image
+	 *            Type of the first RAI
 	 * @param <I2>
-	 *            Type of the second image
+	 *            Type of the second RAI
 	 * @param <I3>
-	 *            Type of the third image
+	 *            The third parameter type
 	 * @param <I4>
-	 *            Type of the fourth image
+	 *            The fourth parameter type
 	 * @param <I5>
-	 *            Type of the fifth image
+	 *            The fifth parameter type
 	 * @param <I6>
-	 *            Type of the sixth image
+	 *            The sixth parameter type
 	 * @param <I7>
-	 *            Type of the seventh image
+	 *            The seventh parameter type
 	 * @param <I8>
-	 *            Type of the eighth image
+	 *            The eighth parameter type
 	 * @param <I9>
-	 *            Type of the ninth image
+	 *            The ninth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI92ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Functions.Arity9<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity9<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, RAIO>, Functions.Arity9<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity9<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, RAIO> apply(Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI93ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Functions.Arity9<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity9<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, RAIO>, Functions.Arity9<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity9<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, RAIO> apply(Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI94ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Functions.Arity9<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity9<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, RAIO>, Functions.Arity9<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity9<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, RAIO> apply(Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI95ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Functions.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, RAIO>, Functions.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, RAIO> apply(Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI96ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Functions.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, RAIO>, Functions.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, RAIO> apply(Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI97ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Functions.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, RAIO>, Functions.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, RAIO> apply(Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI98ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Functions.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, RAIO>, Functions.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, RAIO> apply(Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI99ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Functions.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAIO>, Functions.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAIO> apply(Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            The second parameter type
+	 * @param <I3>
+	 *            The third parameter type
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
 	 * @param <I10>
-	 *            Type of the tenth image
+	 *            The tenth parameter type
 	 * @param <O>
-	 *            Type of the output image
+	 *            Type of the output RAI
 	 * @implNote op names='adapt', priority='-100.'
 	 */
-	public static class ImgComputer10ToFunction10AndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>
-			implements Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Functions.Arity10<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<O>>>,
+	 public static class RAI101ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Functions.Arity10<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, RAIO>>,
 			Op
 	{
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<O>>> lifter;
+		Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, RAIO>> lifter;
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity10<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<O>>, Functions.Arity10<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<O>>> adapter;
+		Function<Computers.Arity10<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, RAIO>, Functions.Arity10<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, RAIO>> adapter;
 
 		/**
 		 * @param computer the Computer to convert
 		 * @return {@code computer} as a Function
 		 */
 		@Override
-		public Functions.Arity10<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<O>> apply(Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer) {
+		public Functions.Arity10<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, RAIO> apply(Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer) {
 			return adapter.apply(lifter.apply(computer));
 		}
 	}
 
 	/**
-	 * Lifting function for mapping Computers Ops to Functions that operate on Imgs.
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
 	 *
 	 * @param <I1>
-	 *            Type of the first image
+	 *            Type of the first RAI
 	 * @param <I2>
-	 *            Type of the second image
+	 *            Type of the second RAI
 	 * @param <I3>
-	 *            Type of the third image
+	 *            The third parameter type
 	 * @param <I4>
-	 *            Type of the fourth image
+	 *            The fourth parameter type
 	 * @param <I5>
-	 *            Type of the fifth image
+	 *            The fifth parameter type
 	 * @param <I6>
-	 *            Type of the sixth image
+	 *            The sixth parameter type
 	 * @param <I7>
-	 *            Type of the seventh image
+	 *            The seventh parameter type
 	 * @param <I8>
-	 *            Type of the eighth image
+	 *            The eighth parameter type
 	 * @param <I9>
-	 *            Type of the ninth image
+	 *            The ninth parameter type
 	 * @param <I10>
-	 *            Type of the tenth image
+	 *            The tenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI102ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Functions.Arity10<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity10<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, RAIO>, Functions.Arity10<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity10<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, RAIO> apply(Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI103ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Functions.Arity10<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity10<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, RAIO>, Functions.Arity10<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity10<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, RAIO> apply(Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI104ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Functions.Arity10<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity10<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, RAIO>, Functions.Arity10<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity10<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, RAIO> apply(Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI105ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, RAIO>, Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, RAIO> apply(Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI106ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, RAIO>, Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, RAIO> apply(Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI107ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, RAIO>, Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, RAIO> apply(Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI108ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, RAIO>, Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, RAIO> apply(Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI109ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, RAIO>, Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, RAIO> apply(Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1010ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAIO>, Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAIO> apply(Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            The second parameter type
+	 * @param <I3>
+	 *            The third parameter type
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
 	 * @param <I11>
-	 *            Type of the eleventh image
+	 *            The eleventh parameter type
 	 * @param <O>
-	 *            Type of the output image
+	 *            Type of the output RAI
 	 * @implNote op names='adapt', priority='-100.'
 	 */
-	public static class ImgComputer11ToFunction11AndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>
-			implements Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Functions.Arity11<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<O>>>,
+	 public static class RAI111ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Functions.Arity11<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO>>,
 			Op
 	{
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<O>>> lifter;
+		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO>> lifter;
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity11<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<O>>, Functions.Arity11<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<O>>> adapter;
+		Function<Computers.Arity11<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO>, Functions.Arity11<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO>> adapter;
 
 		/**
 		 * @param computer the Computer to convert
 		 * @return {@code computer} as a Function
 		 */
 		@Override
-		public Functions.Arity11<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<O>> apply(Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer) {
+		public Functions.Arity11<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO> apply(Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer) {
 			return adapter.apply(lifter.apply(computer));
 		}
 	}
 
 	/**
-	 * Lifting function for mapping Computers Ops to Functions that operate on Imgs.
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
 	 *
 	 * @param <I1>
-	 *            Type of the first image
+	 *            Type of the first RAI
 	 * @param <I2>
-	 *            Type of the second image
+	 *            Type of the second RAI
 	 * @param <I3>
-	 *            Type of the third image
+	 *            The third parameter type
 	 * @param <I4>
-	 *            Type of the fourth image
+	 *            The fourth parameter type
 	 * @param <I5>
-	 *            Type of the fifth image
+	 *            The fifth parameter type
 	 * @param <I6>
-	 *            Type of the sixth image
+	 *            The sixth parameter type
 	 * @param <I7>
-	 *            Type of the seventh image
+	 *            The seventh parameter type
 	 * @param <I8>
-	 *            Type of the eighth image
+	 *            The eighth parameter type
 	 * @param <I9>
-	 *            Type of the ninth image
+	 *            The ninth parameter type
 	 * @param <I10>
-	 *            Type of the tenth image
+	 *            The tenth parameter type
 	 * @param <I11>
-	 *            Type of the eleventh image
+	 *            The eleventh parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI112ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Functions.Arity11<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity11<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO>, Functions.Arity11<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity11<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO> apply(Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI113ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Functions.Arity11<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity11<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO>, Functions.Arity11<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity11<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO> apply(Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI114ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity11<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, RAIO>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity11<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, RAIO> apply(Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI115ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, RAIO>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, RAIO> apply(Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI116ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, RAIO>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, RAIO> apply(Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI117ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, RAIO>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, RAIO> apply(Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI118ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, RAIO>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, RAIO> apply(Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI119ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, RAIO>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, RAIO> apply(Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1110ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, RAIO>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, RAIO> apply(Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            Type of the eleventh RAI
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1111ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAII11 extends RandomAccessibleInterval<I11>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAIO>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAIO> apply(Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            The second parameter type
+	 * @param <I3>
+	 *            The third parameter type
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
 	 * @param <I12>
-	 *            Type of the twelfth image
+	 *            The twelfth parameter type
 	 * @param <O>
-	 *            Type of the output image
+	 *            Type of the output RAI
 	 * @implNote op names='adapt', priority='-100.'
 	 */
-	public static class ImgComputer12ToFunction12AndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>
-			implements Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Functions.Arity12<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<O>>>,
+	 public static class RAI121ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Functions.Arity12<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>>,
 			Op
 	{
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<O>>> lifter;
+		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>> lifter;
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity12<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<O>>, Functions.Arity12<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<O>>> adapter;
+		Function<Computers.Arity12<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>, Functions.Arity12<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>> adapter;
 
 		/**
 		 * @param computer the Computer to convert
 		 * @return {@code computer} as a Function
 		 */
 		@Override
-		public Functions.Arity12<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<O>> apply(Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer) {
+		public Functions.Arity12<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO> apply(Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer) {
 			return adapter.apply(lifter.apply(computer));
 		}
 	}
 
 	/**
-	 * Lifting function for mapping Computers Ops to Functions that operate on Imgs.
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
 	 *
 	 * @param <I1>
-	 *            Type of the first image
+	 *            Type of the first RAI
 	 * @param <I2>
-	 *            Type of the second image
+	 *            Type of the second RAI
 	 * @param <I3>
-	 *            Type of the third image
+	 *            The third parameter type
 	 * @param <I4>
-	 *            Type of the fourth image
+	 *            The fourth parameter type
 	 * @param <I5>
-	 *            Type of the fifth image
+	 *            The fifth parameter type
 	 * @param <I6>
-	 *            Type of the sixth image
+	 *            The sixth parameter type
 	 * @param <I7>
-	 *            Type of the seventh image
+	 *            The seventh parameter type
 	 * @param <I8>
-	 *            Type of the eighth image
+	 *            The eighth parameter type
 	 * @param <I9>
-	 *            Type of the ninth image
+	 *            The ninth parameter type
 	 * @param <I10>
-	 *            Type of the tenth image
+	 *            The tenth parameter type
 	 * @param <I11>
-	 *            Type of the eleventh image
+	 *            The eleventh parameter type
 	 * @param <I12>
-	 *            Type of the twelfth image
+	 *            The twelfth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI122ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Functions.Arity12<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity12<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>, Functions.Arity12<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity12<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO> apply(Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI123ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Functions.Arity12<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity12<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>, Functions.Arity12<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity12<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO> apply(Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI124ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity12<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity12<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO> apply(Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI125ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, RAIO>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, RAIO> apply(Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI126ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, RAIO>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, RAIO> apply(Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI127ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, RAIO>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, RAIO> apply(Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI128ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, RAIO>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, RAIO> apply(Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI129ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, RAIO>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, RAIO> apply(Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1210ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, RAIO>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, RAIO> apply(Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            Type of the eleventh RAI
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1211ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAII11 extends RandomAccessibleInterval<I11>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, RAIO>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, RAIO> apply(Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            Type of the eleventh RAI
+	 * @param <I12>
+	 *            Type of the twelfth RAI
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1212ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAII11 extends RandomAccessibleInterval<I11>, RAII12 extends RandomAccessibleInterval<I12>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAIO>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAIO> apply(Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            The second parameter type
+	 * @param <I3>
+	 *            The third parameter type
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
 	 * @param <I13>
-	 *            Type of the thirteenth image
+	 *            The thirteenth parameter type
 	 * @param <O>
-	 *            Type of the output image
+	 *            Type of the output RAI
 	 * @implNote op names='adapt', priority='-100.'
 	 */
-	public static class ImgComputer13ToFunction13AndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>
-			implements Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<I13>, Img<O>>>,
+	 public static class RAI131ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>>,
 			Op
 	{
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<I13>, Img<O>>> lifter;
+		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>> lifter;
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity13<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<I13>, Img<O>>, Functions.Arity13<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<I13>, Img<O>>> adapter;
+		Function<Computers.Arity13<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>, Functions.Arity13<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>> adapter;
 
 		/**
 		 * @param computer the Computer to convert
 		 * @return {@code computer} as a Function
 		 */
 		@Override
-		public Functions.Arity13<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<I13>, Img<O>> apply(Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer) {
+		public Functions.Arity13<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO> apply(Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer) {
 			return adapter.apply(lifter.apply(computer));
 		}
 	}
 
 	/**
-	 * Lifting function for mapping Computers Ops to Functions that operate on Imgs.
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
 	 *
 	 * @param <I1>
-	 *            Type of the first image
+	 *            Type of the first RAI
 	 * @param <I2>
-	 *            Type of the second image
+	 *            Type of the second RAI
 	 * @param <I3>
-	 *            Type of the third image
+	 *            The third parameter type
 	 * @param <I4>
-	 *            Type of the fourth image
+	 *            The fourth parameter type
 	 * @param <I5>
-	 *            Type of the fifth image
+	 *            The fifth parameter type
 	 * @param <I6>
-	 *            Type of the sixth image
+	 *            The sixth parameter type
 	 * @param <I7>
-	 *            Type of the seventh image
+	 *            The seventh parameter type
 	 * @param <I8>
-	 *            Type of the eighth image
+	 *            The eighth parameter type
 	 * @param <I9>
-	 *            Type of the ninth image
+	 *            The ninth parameter type
 	 * @param <I10>
-	 *            Type of the tenth image
+	 *            The tenth parameter type
 	 * @param <I11>
-	 *            Type of the eleventh image
+	 *            The eleventh parameter type
 	 * @param <I12>
-	 *            Type of the twelfth image
+	 *            The twelfth parameter type
 	 * @param <I13>
-	 *            Type of the thirteenth image
+	 *            The thirteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI132ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>, Functions.Arity13<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity13<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO> apply(Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI133ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>, Functions.Arity13<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity13<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO> apply(Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI134ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity13<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO> apply(Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI135ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO> apply(Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI136ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, RAIO>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, RAIO> apply(Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI137ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, RAIO>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, RAIO> apply(Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI138ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, RAIO>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, RAIO> apply(Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI139ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, RAIO>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, RAIO> apply(Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1310ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, RAIO>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, RAIO> apply(Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            Type of the eleventh RAI
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1311ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAII11 extends RandomAccessibleInterval<I11>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, RAIO>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, RAIO> apply(Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            Type of the eleventh RAI
+	 * @param <I12>
+	 *            Type of the twelfth RAI
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1312ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAII11 extends RandomAccessibleInterval<I11>, RAII12 extends RandomAccessibleInterval<I12>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, RAIO>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, RAIO> apply(Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            Type of the eleventh RAI
+	 * @param <I12>
+	 *            Type of the twelfth RAI
+	 * @param <I13>
+	 *            Type of the thirteenth RAI
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1313ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAII11 extends RandomAccessibleInterval<I11>, RAII12 extends RandomAccessibleInterval<I12>, RAII13 extends RandomAccessibleInterval<I13>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAIO>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAIO> apply(Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            The second parameter type
+	 * @param <I3>
+	 *            The third parameter type
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
 	 * @param <I14>
-	 *            Type of the fourteenth image
+	 *            The fourteenth parameter type
 	 * @param <O>
-	 *            Type of the output image
+	 *            Type of the output RAI
 	 * @implNote op names='adapt', priority='-100.'
 	 */
-	public static class ImgComputer14ToFunction14AndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>
-			implements Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<I13>, Img<I14>, Img<O>>>,
+	 public static class RAI141ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>>,
 			Op
 	{
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<I13>, Img<I14>, Img<O>>> lifter;
+		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> lifter;
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity14<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<I13>, Img<I14>, Img<O>>, Functions.Arity14<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<I13>, Img<I14>, Img<O>>> adapter;
+		Function<Computers.Arity14<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>, Functions.Arity14<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> adapter;
 
 		/**
 		 * @param computer the Computer to convert
 		 * @return {@code computer} as a Function
 		 */
 		@Override
-		public Functions.Arity14<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<I13>, Img<I14>, Img<O>> apply(Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer) {
+		public Functions.Arity14<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO> apply(Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer) {
 			return adapter.apply(lifter.apply(computer));
 		}
 	}
 
 	/**
-	 * Lifting function for mapping Computers Ops to Functions that operate on Imgs.
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
 	 *
 	 * @param <I1>
-	 *            Type of the first image
+	 *            Type of the first RAI
 	 * @param <I2>
-	 *            Type of the second image
+	 *            Type of the second RAI
 	 * @param <I3>
-	 *            Type of the third image
+	 *            The third parameter type
 	 * @param <I4>
-	 *            Type of the fourth image
+	 *            The fourth parameter type
 	 * @param <I5>
-	 *            Type of the fifth image
+	 *            The fifth parameter type
 	 * @param <I6>
-	 *            Type of the sixth image
+	 *            The sixth parameter type
 	 * @param <I7>
-	 *            Type of the seventh image
+	 *            The seventh parameter type
 	 * @param <I8>
-	 *            Type of the eighth image
+	 *            The eighth parameter type
 	 * @param <I9>
-	 *            Type of the ninth image
+	 *            The ninth parameter type
 	 * @param <I10>
-	 *            Type of the tenth image
+	 *            The tenth parameter type
 	 * @param <I11>
-	 *            Type of the eleventh image
+	 *            The eleventh parameter type
 	 * @param <I12>
-	 *            Type of the twelfth image
+	 *            The twelfth parameter type
 	 * @param <I13>
-	 *            Type of the thirteenth image
+	 *            The thirteenth parameter type
 	 * @param <I14>
-	 *            Type of the fourteenth image
+	 *            The fourteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI142ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity14<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO> apply(Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI143ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity14<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO> apply(Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI144ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity14<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO> apply(Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI145ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO> apply(Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI146ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO> apply(Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI147ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, RAIO> apply(Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI148ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, RAIO> apply(Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI149ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, RAIO> apply(Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1410ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, RAIO> apply(Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            Type of the eleventh RAI
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1411ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAII11 extends RandomAccessibleInterval<I11>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, RAIO> apply(Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            Type of the eleventh RAI
+	 * @param <I12>
+	 *            Type of the twelfth RAI
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1412ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAII11 extends RandomAccessibleInterval<I11>, RAII12 extends RandomAccessibleInterval<I12>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, RAIO> apply(Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            Type of the eleventh RAI
+	 * @param <I12>
+	 *            Type of the twelfth RAI
+	 * @param <I13>
+	 *            Type of the thirteenth RAI
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1413ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAII11 extends RandomAccessibleInterval<I11>, RAII12 extends RandomAccessibleInterval<I12>, RAII13 extends RandomAccessibleInterval<I13>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, RAIO> apply(Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            Type of the eleventh RAI
+	 * @param <I12>
+	 *            Type of the twelfth RAI
+	 * @param <I13>
+	 *            Type of the thirteenth RAI
+	 * @param <I14>
+	 *            Type of the fourteenth RAI
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1414ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAII11 extends RandomAccessibleInterval<I11>, RAII12 extends RandomAccessibleInterval<I12>, RAII13 extends RandomAccessibleInterval<I13>, RAII14 extends RandomAccessibleInterval<I14>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAIO> apply(Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            The second parameter type
+	 * @param <I3>
+	 *            The third parameter type
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
 	 * @param <I15>
-	 *            Type of the fifteenth image
+	 *            The fifteenth parameter type
 	 * @param <O>
-	 *            Type of the output image
+	 *            Type of the output RAI
 	 * @implNote op names='adapt', priority='-100.'
 	 */
-	public static class ImgComputer15ToFunction15AndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>
-			implements Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<I13>, Img<I14>, Img<I15>, Img<O>>>,
+	 public static class RAI151ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>>,
 			Op
 	{
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<I13>, Img<I14>, Img<I15>, Img<O>>> lifter;
+		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> lifter;
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity15<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<I13>, Img<I14>, Img<I15>, Img<O>>, Functions.Arity15<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<I13>, Img<I14>, Img<I15>, Img<O>>> adapter;
+		Function<Computers.Arity15<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> adapter;
 
 		/**
 		 * @param computer the Computer to convert
 		 * @return {@code computer} as a Function
 		 */
 		@Override
-		public Functions.Arity15<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<I13>, Img<I14>, Img<I15>, Img<O>> apply(Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer) {
+		public Functions.Arity15<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO> apply(Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer) {
 			return adapter.apply(lifter.apply(computer));
 		}
 	}
 
 	/**
-	 * Lifting function for mapping Computers Ops to Functions that operate on Imgs.
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
 	 *
 	 * @param <I1>
-	 *            Type of the first image
+	 *            Type of the first RAI
 	 * @param <I2>
-	 *            Type of the second image
+	 *            Type of the second RAI
 	 * @param <I3>
-	 *            Type of the third image
+	 *            The third parameter type
 	 * @param <I4>
-	 *            Type of the fourth image
+	 *            The fourth parameter type
 	 * @param <I5>
-	 *            Type of the fifth image
+	 *            The fifth parameter type
 	 * @param <I6>
-	 *            Type of the sixth image
+	 *            The sixth parameter type
 	 * @param <I7>
-	 *            Type of the seventh image
+	 *            The seventh parameter type
 	 * @param <I8>
-	 *            Type of the eighth image
+	 *            The eighth parameter type
 	 * @param <I9>
-	 *            Type of the ninth image
+	 *            The ninth parameter type
 	 * @param <I10>
-	 *            Type of the tenth image
+	 *            The tenth parameter type
 	 * @param <I11>
-	 *            Type of the eleventh image
+	 *            The eleventh parameter type
 	 * @param <I12>
-	 *            Type of the twelfth image
+	 *            The twelfth parameter type
 	 * @param <I13>
-	 *            Type of the thirteenth image
+	 *            The thirteenth parameter type
 	 * @param <I14>
-	 *            Type of the fourteenth image
+	 *            The fourteenth parameter type
 	 * @param <I15>
-	 *            Type of the fifteenth image
+	 *            The fifteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI152ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity15<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO> apply(Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI153ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity15<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO> apply(Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI154ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity15<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO> apply(Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI155ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO> apply(Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI156ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO> apply(Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI157ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO> apply(Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI158ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, I15, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, I15, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, I15, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, I15, RAIO> apply(Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI159ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, I15, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, I15, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, I15, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, I15, RAIO> apply(Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1510ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, I15, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, I15, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, I15, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, I15, RAIO> apply(Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            Type of the eleventh RAI
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1511ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAII11 extends RandomAccessibleInterval<I11>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, I15, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, I15, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, I15, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, I15, RAIO> apply(Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            Type of the eleventh RAI
+	 * @param <I12>
+	 *            Type of the twelfth RAI
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1512ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAII11 extends RandomAccessibleInterval<I11>, RAII12 extends RandomAccessibleInterval<I12>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, I15, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, I15, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, I15, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, I15, RAIO> apply(Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            Type of the eleventh RAI
+	 * @param <I12>
+	 *            Type of the twelfth RAI
+	 * @param <I13>
+	 *            Type of the thirteenth RAI
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1513ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAII11 extends RandomAccessibleInterval<I11>, RAII12 extends RandomAccessibleInterval<I12>, RAII13 extends RandomAccessibleInterval<I13>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, I15, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, I15, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, I15, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, I15, RAIO> apply(Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            Type of the eleventh RAI
+	 * @param <I12>
+	 *            Type of the twelfth RAI
+	 * @param <I13>
+	 *            Type of the thirteenth RAI
+	 * @param <I14>
+	 *            Type of the fourteenth RAI
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1514ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAII11 extends RandomAccessibleInterval<I11>, RAII12 extends RandomAccessibleInterval<I12>, RAII13 extends RandomAccessibleInterval<I13>, RAII14 extends RandomAccessibleInterval<I14>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, I15, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, I15, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, I15, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, I15, RAIO> apply(Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            Type of the eleventh RAI
+	 * @param <I12>
+	 *            Type of the twelfth RAI
+	 * @param <I13>
+	 *            Type of the thirteenth RAI
+	 * @param <I14>
+	 *            Type of the fourteenth RAI
+	 * @param <I15>
+	 *            Type of the fifteenth RAI
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1515ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAII11 extends RandomAccessibleInterval<I11>, RAII12 extends RandomAccessibleInterval<I12>, RAII13 extends RandomAccessibleInterval<I13>, RAII14 extends RandomAccessibleInterval<I14>, RAII15 extends RandomAccessibleInterval<I15>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, RAIO> apply(Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            The second parameter type
+	 * @param <I3>
+	 *            The third parameter type
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
 	 * @param <I16>
-	 *            Type of the sixteenth image
+	 *            The sixteenth parameter type
 	 * @param <O>
-	 *            Type of the output image
+	 *            Type of the output RAI
 	 * @implNote op names='adapt', priority='-100.'
 	 */
-	public static class ImgComputer16ToFunction16AndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>
-			implements Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<I13>, Img<I14>, Img<I15>, Img<I16>, Img<O>>>,
+	 public static class RAI161ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>>,
 			Op
 	{
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<I13>, Img<I14>, Img<I15>, Img<I16>, Img<O>>> lifter;
+		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> lifter;
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Computers.Arity16<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<I13>, Img<I14>, Img<I15>, Img<I16>, Img<O>>, Functions.Arity16<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<I13>, Img<I14>, Img<I15>, Img<I16>, Img<O>>> adapter;
+		Function<Computers.Arity16<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> adapter;
 
 		/**
 		 * @param computer the Computer to convert
 		 * @return {@code computer} as a Function
 		 */
 		@Override
-		public Functions.Arity16<Img<I1>, Img<I2>, Img<I3>, Img<I4>, Img<I5>, Img<I6>, Img<I7>, Img<I8>, Img<I9>, Img<I10>, Img<I11>, Img<I12>, Img<I13>, Img<I14>, Img<I15>, Img<I16>, Img<O>> apply(Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer) {
+		public Functions.Arity16<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO> apply(Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            The third parameter type
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <I16>
+	 *            The sixteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI162ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity16<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO> apply(Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            The fourth parameter type
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <I16>
+	 *            The sixteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI163ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity16<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO> apply(Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            The fifth parameter type
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <I16>
+	 *            The sixteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI164ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity16<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO> apply(Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            The sixth parameter type
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <I16>
+	 *            The sixteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI165ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO> apply(Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            The seventh parameter type
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <I16>
+	 *            The sixteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI166ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO> apply(Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            The eighth parameter type
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <I16>
+	 *            The sixteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI167ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO> apply(Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            The ninth parameter type
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <I16>
+	 *            The sixteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI168ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO> apply(Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            The tenth parameter type
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <I16>
+	 *            The sixteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI169ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, I15, I16, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, I15, I16, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, I15, I16, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, I15, I16, RAIO> apply(Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            The eleventh parameter type
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <I16>
+	 *            The sixteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1610ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, I15, I16, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, I15, I16, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, I15, I16, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, I15, I16, RAIO> apply(Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            Type of the eleventh RAI
+	 * @param <I12>
+	 *            The twelfth parameter type
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <I16>
+	 *            The sixteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1611ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAII11 extends RandomAccessibleInterval<I11>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, I15, I16, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, I15, I16, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, I15, I16, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, I15, I16, RAIO> apply(Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            Type of the eleventh RAI
+	 * @param <I12>
+	 *            Type of the twelfth RAI
+	 * @param <I13>
+	 *            The thirteenth parameter type
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <I16>
+	 *            The sixteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1612ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAII11 extends RandomAccessibleInterval<I11>, RAII12 extends RandomAccessibleInterval<I12>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, I15, I16, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, I15, I16, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, I15, I16, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, I15, I16, RAIO> apply(Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            Type of the eleventh RAI
+	 * @param <I12>
+	 *            Type of the twelfth RAI
+	 * @param <I13>
+	 *            Type of the thirteenth RAI
+	 * @param <I14>
+	 *            The fourteenth parameter type
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <I16>
+	 *            The sixteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1613ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAII11 extends RandomAccessibleInterval<I11>, RAII12 extends RandomAccessibleInterval<I12>, RAII13 extends RandomAccessibleInterval<I13>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, I15, I16, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, I15, I16, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, I15, I16, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, I15, I16, RAIO> apply(Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            Type of the eleventh RAI
+	 * @param <I12>
+	 *            Type of the twelfth RAI
+	 * @param <I13>
+	 *            Type of the thirteenth RAI
+	 * @param <I14>
+	 *            Type of the fourteenth RAI
+	 * @param <I15>
+	 *            The fifteenth parameter type
+	 * @param <I16>
+	 *            The sixteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1614ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAII11 extends RandomAccessibleInterval<I11>, RAII12 extends RandomAccessibleInterval<I12>, RAII13 extends RandomAccessibleInterval<I13>, RAII14 extends RandomAccessibleInterval<I14>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, I15, I16, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, I15, I16, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, I15, I16, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, I15, I16, RAIO> apply(Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            Type of the eleventh RAI
+	 * @param <I12>
+	 *            Type of the twelfth RAI
+	 * @param <I13>
+	 *            Type of the thirteenth RAI
+	 * @param <I14>
+	 *            Type of the fourteenth RAI
+	 * @param <I15>
+	 *            Type of the fifteenth RAI
+	 * @param <I16>
+	 *            The sixteenth parameter type
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1615ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAII11 extends RandomAccessibleInterval<I11>, RAII12 extends RandomAccessibleInterval<I12>, RAII13 extends RandomAccessibleInterval<I13>, RAII14 extends RandomAccessibleInterval<I14>, RAII15 extends RandomAccessibleInterval<I15>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, I16, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, I16, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, I16, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, I16, RAIO> apply(Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer) {
+			return adapter.apply(lifter.apply(computer));
+		}
+	}
+
+	/**
+	 * Lifting function for mapping Computers Ops to Functions that operate on RAIs.
+	 *
+	 * @param <I1>
+	 *            Type of the first RAI
+	 * @param <I2>
+	 *            Type of the second RAI
+	 * @param <I3>
+	 *            Type of the third RAI
+	 * @param <I4>
+	 *            Type of the fourth RAI
+	 * @param <I5>
+	 *            Type of the fifth RAI
+	 * @param <I6>
+	 *            Type of the sixth RAI
+	 * @param <I7>
+	 *            Type of the seventh RAI
+	 * @param <I8>
+	 *            Type of the eighth RAI
+	 * @param <I9>
+	 *            Type of the ninth RAI
+	 * @param <I10>
+	 *            Type of the tenth RAI
+	 * @param <I11>
+	 *            Type of the eleventh RAI
+	 * @param <I12>
+	 *            Type of the twelfth RAI
+	 * @param <I13>
+	 *            Type of the thirteenth RAI
+	 * @param <I14>
+	 *            Type of the fourteenth RAI
+	 * @param <I15>
+	 *            Type of the fifteenth RAI
+	 * @param <I16>
+	 *            Type of the sixteenth RAI
+	 * @param <O>
+	 *            Type of the output RAI
+	 * @implNote op names='adapt', priority='-100.'
+	 */
+	 public static class RAI1616ComputerToFunctionAndLiftViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAII6 extends RandomAccessibleInterval<I6>, RAII7 extends RandomAccessibleInterval<I7>, RAII8 extends RandomAccessibleInterval<I8>, RAII9 extends RandomAccessibleInterval<I9>, RAII10 extends RandomAccessibleInterval<I10>, RAII11 extends RandomAccessibleInterval<I11>, RAII12 extends RandomAccessibleInterval<I12>, RAII13 extends RandomAccessibleInterval<I13>, RAII14 extends RandomAccessibleInterval<I14>, RAII15 extends RandomAccessibleInterval<I15>, RAII16 extends RandomAccessibleInterval<I16>, RAIO extends RandomAccessibleInterval<O>>
+		 implements Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, RAII16, RAIO>>,
+			Op
+	{
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, RAII16, RAIO>> lifter;
+		@OpDependency(name = "adapt", adaptable = false)
+		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, RAII16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, RAII16, RAIO>> adapter;
+
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
+		@Override
+		public Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, RAII16, RAIO> apply(Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer) {
 			return adapter.apply(lifter.apply(computer));
 		}
 	}

@@ -250,7 +250,9 @@ public class TypesTest {
 		assertTrue(Types.isAssignable(listNumber, listT));
 		assertTrue(Types.isAssignable(listInteger, listT));
 		assertTrue(Types.isAssignable(listExtendsNumber, listT));
-		assertFalse(Types.isAssignable(listExtendsNumber, listNumber));
+//		List<? extends Number> l = new ArrayList<>();
+//		List<Number> l2 = (List<Number>) l;
+		assertTrue(Types.isAssignable(listExtendsNumber, listNumber));
 
 		assertTrue(Types.isAssignable(listT, listRaw));
 		assertTrue(Types.isAssignable(listNumber, listRaw));
@@ -262,6 +264,29 @@ public class TypesTest {
 		// Nested Type Variables must be EXACTLY the same to be assignable
 		assertFalse(Types.isAssignable(listListInteger, listListRaw));
 		assertTrue(Types.isAssignable(listListRaw, listListRaw));
+	}
+
+	/** Tests {@link Types#isAssignable(Type, Type)} with type variables themselves parameterized with type variables. */
+	@Test
+	public <N extends Number, S extends String, T extends List<N>> void testIsAssignableParameterizedT() {
+		final Type t = new Nil<T>() {}.getType();
+		final Type listN = new Nil<List<N>>() {}.getType();
+		final Type listS = new Nil<List<S>>() {}.getType();
+		final Type listNumber = new Nil<List<Number>>() {}.getType();
+		final Type listInteger = new Nil<List<Integer>>() {}.getType();
+		final Type listExtendsNumber = new Nil<List<? extends Number>>() {}.getType();
+//		T list = (T) new ArrayList<N>();
+		assertTrue(Types.isAssignable(listN, t));
+//		T list = (T) new ArrayList<Number>();
+		assertTrue(Types.isAssignable(listNumber, t));
+//		T list = (T) new ArrayList<Integer>();
+		assertTrue(Types.isAssignable(listInteger, t));
+//		List<? extends Number> l = new ArrayList<Number>();
+//		T list = (T) l;
+		assertTrue(Types.isAssignable(listExtendsNumber, t));
+//		T list = (T) new ArrayList<S>();
+		assertFalse(Types.isAssignable(listS, t));
+
 	}
 
 	/** Tests {@link Types#isAssignable(Type, Type)} against {@link Object} */

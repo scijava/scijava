@@ -489,7 +489,8 @@ public class GenericAssignability {
 		else if (superInferFrom == null) {
 			// edge case 1: if inferFrom is an Object, superInferFrom will be null
 			// when type is some interface.
-			if (Object.class.equals(inferFrom)) {
+			if (Object.class.equals(inferFrom) ||
+					(inferFrom instanceof TypeVariable && Object.class.equals(((TypeVariable<?>) inferFrom).getBounds()[0]))) {
 				mapTypeVarsToAny(type, typeMappings);
 				return;
 			}

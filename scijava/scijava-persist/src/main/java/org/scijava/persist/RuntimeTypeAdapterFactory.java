@@ -1,8 +1,8 @@
 /*-
  * #%L
- * BigDataViewer-Playground
+ * Extensible serialization mechanism for persisting objects.
  * %%
- * Copyright (C) 2019 - 2021 Nicolas Chiaruttini, EPFL - Robert Haase, MPI CBG - Christian Tischer, EMBL
+ * Copyright (C) 2021 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:

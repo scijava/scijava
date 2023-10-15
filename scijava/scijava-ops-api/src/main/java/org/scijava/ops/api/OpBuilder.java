@@ -1,8 +1,8 @@
 /*
  * #%L
- * SciJava Operations: a framework for reusable algorithms.
+ * SciJava Operations API: Outward-facing Interfaces used by the SciJava Operations framework.
  * %%
- * Copyright (C) 2016 - 2019 SciJava Ops developers.
+ * Copyright (C) 2021 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:

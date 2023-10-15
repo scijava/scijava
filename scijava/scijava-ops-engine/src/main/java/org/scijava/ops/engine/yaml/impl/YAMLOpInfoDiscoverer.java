@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.ServiceLoader;
 
+import org.scijava.common3.Classes;
 import org.scijava.discovery.Discoverer;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.yaml.YAMLOpInfoCreator;
@@ -42,9 +43,10 @@ public class YAMLOpInfoDiscoverer implements Discoverer {
 		Enumeration<URL> opFiles = getOpYAML();
 		// Parse each YAML file
 		List<OpInfo> opInfos = new ArrayList<>();
-		opFiles.asIterator().forEachRemaining(opFile -> {
+		Collections.list(opFiles).stream().distinct().forEach(opFile -> {
+			System.out.println("--------> " + opFile);
 			try {
-				parse(opInfos, opFiles.nextElement());
+				parse(opInfos, opFile);
 			}
 			catch (IOException e) {
 				throw new IllegalArgumentException( //
@@ -62,9 +64,7 @@ public class YAMLOpInfoDiscoverer implements Discoverer {
 	 */
 	private Enumeration<URL> getOpYAML() {
 		try {
-			return Thread.currentThread() //
-				.getContextClassLoader() //
-				.getResources("op.yaml");
+			return Classes.classLoader().getResources("op.yaml");
 		}
 		catch (IOException e) {
 			throw new RuntimeException("Could not load Op YAML files!", e);

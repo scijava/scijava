@@ -44,7 +44,6 @@ import net.imglib2.type.numeric.real.DoubleType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.OpMatchingException;
-import org.scijava.ops.engine.DependencyMatchingException;
 import org.scijava.types.Nil;
 
 public class MeshFeatureTests extends AbstractFeatureTest {

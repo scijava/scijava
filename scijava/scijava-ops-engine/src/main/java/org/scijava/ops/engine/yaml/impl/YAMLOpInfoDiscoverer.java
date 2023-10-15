@@ -72,7 +72,6 @@ public class YAMLOpInfoDiscoverer implements Discoverer {
 		// Parse each YAML file
 		List<OpInfo> opInfos = new ArrayList<>();
 		Collections.list(opFiles).stream().distinct().forEach(opFile -> {
-			System.out.println("--------> " + opFile);
 			try {
 				parse(opInfos, opFile);
 			}

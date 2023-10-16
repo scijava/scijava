@@ -45,6 +45,13 @@ import java.util.WeakHashMap;
 public final class Progress {
 
 	/**
+	 * A record of all listeners interested in the progress of all Object
+	 * executions
+	 */
+	private static final List<ProgressListener> globalListeners =
+		new ArrayList<>();
+
+	/**
 	 * A record of all listeners interested in the progress of a given Object's
 	 * executions
 	 */
@@ -74,6 +81,19 @@ public final class Progress {
 				return new ArrayDeque<>();
 			}
 		};
+
+	/**
+	 * Records {@link ProgressListener} {@code l} as a callback for all
+	 * progressible {@link Object}s
+	 *
+	 * @param l a {@link ProgressListener} that would like to know about the
+	 *          progress of {@code progressible} {@link Object}s
+	 */
+	public static void addGlobalListener(ProgressListener l) {
+		if (!globalListeners.contains(l)) {
+			globalListeners.add(l);
+		}
+	}
 
 	/**
 	 * Records {@link ProgressListener} {@code l} as a callback for progressible
@@ -106,18 +126,21 @@ public final class Progress {
 
 	/**
 	 * Completes the current task on this {@link Thread}'s execution hierarchy,
-	 * removing it in the process. This method also takaes care to ping relevant {@link ProgressListener}s.
+	 * removing it in the process. This method also takaes care to ping relevant
+	 * {@link ProgressListener}s.
 	 * 
 	 * @see Task#complete()
 	 */
 	public static void complete() {
 		// update completed task
 		ProgressibleObject completed = progressibleStack.get().pop();
-		completed.task().complete();
-		// ping relevant listeners
-		pingListeners(completed);
-		if (progressibleStack.get().peek() != null) {
-			pingListeners(progressibleStack.get().peek());
+		if (!completed.task().isComplete()) {
+			completed.task().complete();
+			// ping relevant listeners
+			pingListeners(completed);
+			if (progressibleStack.get().peek() != null) {
+				pingListeners(progressibleStack.get().peek());
+			}
 		}
 	}
 
@@ -126,21 +149,39 @@ public final class Progress {
 	 * assumption that {@code progressible} is responsible for any calls to
 	 * {@link Progress}' progress-reporting API between the time this method is
 	 * called and the time when {@link Progress#complete()} is called.
-	 * 
-	 * @param progressible an {@link Object} that would like to report its progress.
+	 *
+	 * @param progressible an {@link Object} that would like to report its
+	 *          progress.
 	 */
-	public static void register(Object progressible) {
+	public static void register(final Object progressible) {
+		register(progressible, progressible.toString());
+	}
+
+	/**
+	 * Creates a new {@link Task} for {@code progressible}. This method makes the
+	 * assumption that {@code progressible} is responsible for any calls to
+	 * {@link Progress}' progress-reporting API between the time this method is
+	 * called and the time when {@link Progress#complete()} is called.
+	 * 
+	 * @param progressible an {@link Object} that would like to report its
+	 *          progress.
+	 * @param description a {@link String} describing {@code progressible}
+	 */
+	public static void register(final Object progressible,
+		final String description)
+	{
 		Task t;
-		if (progressibleStack.get().size() == 0) {
+		var deque = progressibleStack.get();
+		var parent = deque.peek();
+		if (parent == null) {
 			// completely new execution hierarchy
-			t = new Task();
+			t = new Task(description);
 		}
 		else {
 			// part of an existing execution hierarchy
-			ProgressibleObject parent = progressibleStack.get().peek();
-			t = parent.task().createSubtask();
+			t = parent.task().createSubtask(description);
 		}
-		progressibleStack.get().push(new ProgressibleObject(progressible, t));
+		deque.push(new ProgressibleObject(progressible, t));
 	}
 
 	/**
@@ -150,10 +191,15 @@ public final class Progress {
 	 * @param o an {@link Object} reporting its progress.
 	 */
 	private static void pingListeners(ProgressibleObject o) {
+		// Ping object-specific listeners
 		List<ProgressListener> list = progressibleListeners.getOrDefault(o.object(),
 			Collections.emptyList());
 		synchronized (list) {
 			list.forEach(l -> l.acknowledgeUpdate(o.task()));
+		}
+		// Ping global listeners
+		synchronized (globalListeners) {
+			globalListeners.forEach(l -> l.acknowledgeUpdate(o.task()));
 		}
 	}
 
@@ -202,18 +248,18 @@ public final class Progress {
 	/**
 	 * Defines the total progress of the current {@link Task}
 	 * 
-	 * @see Task#defineTotalProgress(int)
+	 * @see Task#defineTotalProgress(long)
 	 */
-	public static void defineTotalProgress(int numStages) {
+	public static void defineTotalProgress(long numStages) {
 		currentTask().defineTotalProgress(numStages);
 	}
 
 	/**
 	 * Defines the total progress of the current {@link Task}
 	 * 
-	 * @see Task#defineTotalProgress(int, int)
+	 * @see Task#defineTotalProgress(long, long)
 	 */
-	public static void defineTotalProgress(int numStages, int numSubTasks) {
+	public static void defineTotalProgress(long numStages, long numSubTasks) {
 		currentTask().defineTotalProgress(numStages, numSubTasks);
 	}
 

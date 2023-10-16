@@ -91,4 +91,9 @@ public class OpInstance<T> implements GenericTyped {
 		return reifiedType;
 	}
 
+	@Override
+	public String toString() {
+		return infoTree().info().implementationName();
+	}
+
 }

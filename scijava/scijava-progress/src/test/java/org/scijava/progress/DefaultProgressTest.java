@@ -29,8 +29,7 @@
 
 package org.scijava.progress;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -42,60 +41,8 @@ import org.junit.jupiter.api.Test;
  */
 public class DefaultProgressTest {
 
-	/**
-	 * Function that never operates its progress during its operation.
-	 * 
-	 * @input size the number of indices desired in the returned array
-	 * @output an {@code int[]} of size {@code size}
-	 */
-	public final Function<Integer, int[]> arrayCreator2 = (size) -> {
-		int[] arr = new int[size];
-		for (int i = 0; i < arr.length; i++) {
-			arr[i] = 1;
-		}
-		return arr;
-	};
-
-	/**
-	 * BiFunction that updates its progress
-	 * {@code numIterations*iterationsPerStage} times during its operation.
-	 * 
-	 * @input numStages the number of defined stages this task should perform
-	 * @input iterationsPerStage the number of times the task should update its
-	 *        progress.
-	 * @output the number of <b>total</b> iterations performed
-	 */
-	public final BiFunction<Integer, Integer, Integer> doubleIterator = (
-		numStages, iterationsPerStage) -> {
-		// set up progress reporter
-		Progress.defineTotalProgress(numStages);
-		for (int j = 0; j < numStages; j++) {
-			Progress.setStageMax(iterationsPerStage);
-
-			for (int i = 0; i < iterationsPerStage; i++) {
-				Progress.update();
-			}
-		}
-		return numStages * iterationsPerStage;
-	};
-
-	/**
-	 * Function that updates its progress {@code iterations} times during its
-	 * operation.
-	 * 
-	 * @input iterations the number of times the task should update its progress.
-	 * @output the number of iterations performed
-	 */
-	public final Function<Integer, Integer> iterator = (iterations) -> {
-		// set up progress reporter
-		Progress.defineTotalProgress(1);
-		Progress.setStageMax(iterations);
-
-		for (int i = 0; i < iterations; i++) {
-			Progress.update();
-		}
-		return iterations;
-	};
+	private static final long NUM_ITERATIONS = 100;
+	private static final long NUM_STAGES = 10;
 
 	/**
 	 * Tests progress listening when an progressible {@link Object} never
@@ -104,24 +51,23 @@ public class DefaultProgressTest {
 	 */
 	@Test
 	public void testUpdateWithoutDefinition() {
-		Function<Integer, int[]> progressible = arrayCreator2;
-
-		Progress.addListener(progressible, new ProgressListener() {
-
-			int timesUpdated = 0;
-
-			@Override
-			public void acknowledgeUpdate(Task task) {
-				if (timesUpdated > 0) Assertions.fail(
-					"If the Task doesn't call update, the listener should only be called upon the Task's completion!");
-				timesUpdated++;
-				Assertions.assertEquals(task.progress(), 1., 1e-6);
+		Supplier<Long> progressible = () -> {
+			int foo = 0;
+			for (int i = 0; i < NUM_ITERATIONS; i++) {
+				foo = foo + 1;
 			}
-
-		});
+			return NUM_ITERATIONS;
+		};
+		// Add the ProgressListener
+		var listener = new TestSuiteProgressListener(0);
+		Progress.addListener(progressible, listener);
+		// Register the Task
 		Progress.register(progressible);
-		progressible.apply(3);
+		// Run the Task
+		progressible.get();
+		// Complete the Task
 		Progress.complete();
+		Assertions.assertTrue(listener.isComplete());
 	}
 
 	/**
@@ -129,26 +75,66 @@ public class DefaultProgressTest {
 	 * and no dependencies.
 	 */
 	@Test
-	public void testSimpleReporter() {
-		// obtain the task
-		Function<Integer, Integer> progressible = iterator;
+	public void testSingleStageReporter() {
+		// Define the task
+		Supplier<Long> progressible = () -> {
+			// set up progress reporter
+			Progress.defineTotalProgress(1);
+			Progress.setStageMax(NUM_ITERATIONS);
 
-		int numIterations = 100;
-		Progress.addListener(progressible, new ProgressListener() {
-
-			double currentIterations = 1;
-			double maxIterations = numIterations;
-
-			@Override
-			public void acknowledgeUpdate(Task task) {
-				Assertions.assertEquals(Math.min(1., currentIterations++ /
-					maxIterations), task.progress(), 1e-6);
+			for (int i = 0; i < NUM_ITERATIONS; i++) {
+				Progress.update();
 			}
-		});
-		Progress.register(progressible);
-		progressible.apply(numIterations);
-		Progress.complete();
+			return NUM_ITERATIONS;
+		};
 
+		// Add the ProgressListener
+		var listener = new TestSuiteProgressListener(NUM_ITERATIONS);
+		Progress.addListener(progressible, listener);
+		// Register the Task
+		Progress.register(progressible);
+		// Run the Task
+		progressible.get();
+		// Complete the Task
+		Progress.complete();
+		Assertions.assertTrue(listener.isComplete());
+	}
+
+	/**
+	 * Tests running a progressible multiple times, and ensures progress is reset
+	 * each time.
+	 */
+	@Test
+	public void testMultipleExecutions() {
+		// Define the task
+		Supplier<Long> progressible = () -> {
+			// set up progress reporter
+			Progress.defineTotalProgress(1);
+			Progress.setStageMax(NUM_ITERATIONS);
+
+			for (int i = 0; i < NUM_ITERATIONS; i++) {
+				Progress.update();
+			}
+			return NUM_ITERATIONS;
+		};
+		// Add the ProgressListener
+		var listener = new TestSuiteProgressListener(NUM_ITERATIONS);
+		Progress.addListener(progressible, listener);
+		// Register the Task
+		Progress.register(progressible);
+		// Run the Task
+		progressible.get();
+		// Complete the Task
+		Progress.complete();
+		Assertions.assertTrue(listener.isComplete());
+		// Reset the listener
+		listener.reset();
+		// Register the Task
+		Progress.register(progressible);
+		// Run the Task
+		progressible.get();
+		// Complete the Task
+		Progress.complete();
 	}
 
 	/**
@@ -157,25 +143,97 @@ public class DefaultProgressTest {
 	 */
 	@Test
 	public void testMultiStageReporter() {
-		// obtain the task
-		BiFunction<Integer, Integer, Integer> progressible = doubleIterator;
+		// Define the task
+		Supplier<Long> progressible = () -> {
+			// set up progress reporter
+			Progress.defineTotalProgress(NUM_STAGES);
+			for (int j = 0; j < NUM_STAGES; j++) {
+				Progress.setStageMax(NUM_ITERATIONS);
 
-		int numIterations = 100;
-		int numStages = 10;
-		Progress.addListener(progressible, new ProgressListener() {
-
-			double currentIterations = 1;
-			double maxIterations = numStages * numIterations;
-
-			@Override
-			public void acknowledgeUpdate(Task task) {
-				Assertions.assertEquals(Math.min(1., currentIterations++ /
-					maxIterations), task.progress(), 1e-6);
+				for (int i = 0; i < NUM_ITERATIONS; i++) {
+					Progress.update();
+				}
 			}
-		});
+			return NUM_STAGES * NUM_ITERATIONS;
+		};
+
+		// Add the ProgressListener
+		var expected = NUM_ITERATIONS * NUM_STAGES;
+		var listener = new TestSuiteProgressListener(expected);
+		Progress.addListener(progressible, listener);
+		// Register the Task
 		Progress.register(progressible);
-		progressible.apply(numStages, numIterations);
+		// Run the Task
+		progressible.get();
+		// Complete the Task
 		Progress.complete();
+		Assertions.assertTrue(listener.isComplete());
+	}
+
+	/**
+	 * Test that {@link ProgressListener}s added at a global level can listen to a
+	 * progressible object without being explicitly linked
+	 */
+	@Test
+	public void testGlobalProgressListener() {
+		// Define the task
+		Supplier<Long> progressible = () -> {
+			// set up progress reporter
+			Progress.defineTotalProgress(1);
+			Progress.setStageMax(NUM_ITERATIONS);
+
+			for (int i = 0; i < NUM_ITERATIONS; i++) {
+				Progress.update();
+			}
+			return NUM_ITERATIONS;
+		};
+		// Add the ProgressListener
+		var id = "This is a global listener";
+		var listener = new TestSuiteProgressListener(NUM_ITERATIONS, id);
+		Progress.addGlobalListener(listener);
+		// Register the Task
+		Progress.register(progressible, id);
+		// Run the Task
+		progressible.get();
+		// Complete the Task
+		Progress.complete();
+		Assertions.assertTrue(listener.isComplete());
+	}
+
+	/**
+	 * Test that {@link ProgressListener}s added at a global level can determine
+	 * whether to listen to a {@link Task} by looking at its description.
+	 */
+	@Test
+	public void testProgressListenerIdentifiers() {
+		// Define the task
+		Supplier<Long> progressible = () -> {
+			// set up progress reporter
+			Progress.defineTotalProgress(1);
+			Progress.setStageMax(NUM_ITERATIONS);
+
+			for (int i = 0; i < NUM_ITERATIONS; i++) {
+				Progress.update();
+			}
+			return NUM_ITERATIONS;
+		};
+		// Add a ProgressListener that should acknowledge this task
+		var goodId = "This one should be listened to";
+		var goodListener = new TestSuiteProgressListener(NUM_ITERATIONS, goodId);
+		Progress.addGlobalListener(goodListener);
+		// Register the Task with goodId
+		Progress.register(progressible, goodId);
+		// Create a second global listener that will not acknowledge this task
+		var badId = "This one should not be listened to";
+		var badListener = new TestSuiteProgressListener(NUM_ITERATIONS, badId);
+		Progress.addGlobalListener(badListener);
+		// Run the Task
+		progressible.get();
+		// Complete the Task
+		Progress.complete();
+		Assertions.assertTrue(goodListener.isComplete());
+		// Assert that badListener didn't hear anything
+		Assertions.assertEquals(0., badListener.progress(), 1e-6);
 	}
 
 }

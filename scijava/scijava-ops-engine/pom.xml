@@ -174,11 +174,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-log2</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
 			<artifactId>parsington</artifactId>
 		</dependency>
 		<dependency>

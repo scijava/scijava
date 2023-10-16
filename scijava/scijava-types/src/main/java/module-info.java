@@ -38,8 +38,9 @@ module org.scijava.types {
 	requires transitive com.google.common;
 	requires transitive org.scijava.common3;
 	requires transitive org.scijava.discovery;
-	requires transitive org.scijava.log2;
 	requires org.scijava.priority;
+
+	requires org.slf4j;
 
 	uses org.scijava.types.TypeExtractor;
 

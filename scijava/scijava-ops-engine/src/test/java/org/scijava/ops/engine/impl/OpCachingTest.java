@@ -45,9 +45,9 @@ import org.scijava.function.Producer;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.engine.InfoTreeGenerator;
+import org.scijava.ops.engine.MatchingConditions;
 import org.scijava.ops.engine.OpInfoGenerator;
 import org.scijava.ops.engine.OpWrapper;
-import org.scijava.ops.engine.MatchingConditions;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
@@ -81,6 +81,7 @@ public class OpCachingTest implements OpCollection {
 	 * Basic Op used to test cache functionality. NB we use an {@link OpField}
 	 * here because we KNOW that we will only create ONE instance of this Op under
 	 * the hood.
+	 *
 	 */
 	@OpField(names = "test.basicOp")
 	public final Producer<String> basicOp = () -> "This Op should be cached";

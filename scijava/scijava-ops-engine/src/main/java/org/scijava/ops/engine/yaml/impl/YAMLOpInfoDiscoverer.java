@@ -47,6 +47,8 @@ import org.scijava.common3.Classes;
 import org.scijava.discovery.Discoverer;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.yaml.YAMLOpInfoCreator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
 /**
@@ -58,6 +60,8 @@ import org.yaml.snakeyaml.Yaml;
 public class YAMLOpInfoDiscoverer implements Discoverer {
 
 	private final Yaml yaml = new Yaml();
+
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	private final List<YAMLOpInfoCreator> creators = Discoverer.using(
 		ServiceLoader::load).discover(YAMLOpInfoCreator.class);
@@ -76,9 +80,7 @@ public class YAMLOpInfoDiscoverer implements Discoverer {
 				parse(opInfos, opFile);
 			}
 			catch (IOException e) {
-				throw new IllegalArgumentException( //
-					"Could not read Op YAML file " + opFile.toString() + ": ", //
-					e);
+				log.warn("Could not read Op YAML file " + opFile + ": ", e);
 			}
 		});
 		return (List<U>) opInfos;
@@ -94,7 +96,8 @@ public class YAMLOpInfoDiscoverer implements Discoverer {
 			return Classes.classLoader().getResources("op.yaml");
 		}
 		catch (IOException e) {
-			throw new RuntimeException("Could not load Op YAML files!", e);
+			log.error("Could not load Op YAML files!", e);
+			return Collections.emptyEnumeration();
 		}
 	}
 
@@ -115,10 +118,7 @@ public class YAMLOpInfoDiscoverer implements Discoverer {
 				if (c.isPresent()) infos.add(c.get().create(uri, opData));
 			}
 			catch (Exception e) {
-				// TODO: Use SciJava Log2's Logger to notify the user.
-				// See https://github.com/scijava/scijava/issues/106 for discussion
-				// and progress
-				throw new IllegalArgumentException(e);
+				log.warn("Could not add op " + identifier, e);
 			}
 		}
 	}

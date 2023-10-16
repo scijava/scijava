@@ -98,6 +98,7 @@
 			<version>${project.version}</version>
 		</dependency>
 
+		<!-- Third party dependencies -->
 		<!-- Test scope dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -109,5 +110,5 @@
 			<artifactId>junit-jupiter-engine</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+    </dependencies>
 </project>

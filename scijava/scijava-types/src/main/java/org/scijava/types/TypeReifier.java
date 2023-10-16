@@ -36,19 +36,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.scijava.log2.Logger;
 import org.scijava.types.extractors.IterableTypeExtractor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.reflect.TypeToken;
 
 public interface TypeReifier {
 
+	Logger log = LoggerFactory.getLogger(TypeReifier.class);
+
 	/**
 	 * Gets the type extractor which handles the given class, or null if none.
 	 */
 	Optional<TypeExtractor> getExtractor(Class<?> c);
-
-	Logger log();
 
 	/**
 	 * Extracts the generic {@link Type} of the given {@link Object}.
@@ -115,7 +116,7 @@ public interface TypeReifier {
 			// if the class is synthetic, we are probably missing something due to
 			// type erasure.
 			if (c.isSynthetic()) {
-				log().warn("Object " + o + " is synthetic. " +
+				log.warn("Object " + o + " is synthetic. " +
 					"Its type parameters are not reifiable and thus will likely cause unintended behavior!");
 			}
 			// Object has no generic parameters; we are done!

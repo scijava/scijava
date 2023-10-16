@@ -43,14 +43,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.ManualDiscoverer;
-import org.scijava.function.Consumers;
-import org.scijava.log2.Logger;
-import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.InfoTree;
@@ -58,8 +56,8 @@ import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInstance;
-import org.scijava.ops.api.OpRequest;
 import org.scijava.ops.api.OpMatchingException;
+import org.scijava.ops.api.OpRequest;
 import org.scijava.ops.api.RichOp;
 import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.engine.BaseOpHints.DependencyMatching;
@@ -89,6 +87,8 @@ import org.scijava.types.DefaultTypeReifier;
 import org.scijava.types.Nil;
 import org.scijava.types.TypeReifier;
 import org.scijava.types.Types;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Default implementation of {@link OpEnvironment}, whose ops and related state
@@ -103,8 +103,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	private final ManualDiscoverer manDiscoverer;
 
 	private final OpMatcher matcher;
-
-	private final Logger log;
 
 	private final TypeReifier typeService;
 
@@ -145,6 +143,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 */
 	private Hints environmentHints = null;
 
+	private final Logger log = LoggerFactory.getLogger(getClass());
+
 	public DefaultOpEnvironment(){
 		this(Collections.emptyList());
 	}
@@ -160,8 +160,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		this.discoverers = new ArrayList<>(discoverers);
 		this.manDiscoverer = new ManualDiscoverer();
 		this.discoverers.add(this.manDiscoverer);
-		this.log = new StderrLoggerFactory().create();
-		this.typeService = new DefaultTypeReifier(log, Discoverer.using(ServiceLoader::load));
+		this.typeService = new DefaultTypeReifier(Discoverer.using(ServiceLoader::load));
 		this.history = OpHistory.getOpHistory();
 		matcher = new DefaultOpMatcher(Discoverer.using(ServiceLoader::load).discover(
 				MatchingRoutine.class));
@@ -687,13 +686,13 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		if (opDirectory != null) return;
 		Map<String, List<OpInfo>> tmp = new HashMap<>();
 		// add all OpInfos that are directly discoverable
-		discoverers.stream().flatMap(d -> d.discover(OpInfo.class).stream()).forEach(info -> addToOpIndex.accept(tmp, info, log));
+		discoverers.stream().flatMap(d -> d.discover(OpInfo.class).stream()).forEach(info -> addToOpIndex.accept(tmp, info));
 		List<OpInfoGenerator> generators = infoGenerators();
 		discoverers.stream().flatMap(d -> d.discover(Op.class).stream()).forEach(o -> registerOpsFrom(tmp, o, generators));
 		discoverers.stream().flatMap(d -> d.discover(OpCollection.class).stream()).forEach(o -> registerOpsFrom(tmp, o, generators));
 		Set<OpInfo> infos = tmp.values().stream().flatMap(Collection::stream).map(info -> opsFromObject(info, generators)).flatMap(Collection::stream).collect(
 				Collectors.toSet());
-		infos.forEach(info -> addToOpIndex.accept(tmp, info, log));
+		infos.forEach(info -> addToOpIndex.accept(tmp, info));
 		opDirectory = tmp;
 	}
 
@@ -711,7 +710,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	private void registerOpsFrom(final Map<String, List<OpInfo>> opDirectory, final Object o, List<OpInfoGenerator> generators) {
-		opsFromObject(o, generators).forEach(info -> addToOpIndex.accept(opDirectory, info, log));
+		opsFromObject(o, generators).forEach(info -> addToOpIndex.accept(opDirectory, info));
 	}
 	
 	private List<OpInfoGenerator> infoGenerators() {
@@ -730,7 +729,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 				.forEach(info -> idDirectory.put(info.id(), info));
 	}
 
-	private final Consumers.Arity3<Map<String, List<OpInfo>>, OpInfo, Logger> addToOpIndex = (final Map<String, List<OpInfo>> directory, final OpInfo opInfo, final Logger log) -> {
+	private final BiConsumer<Map<String, List<OpInfo>>, OpInfo> addToOpIndex = (final Map<String, List<OpInfo>> directory, final OpInfo opInfo) -> {
 		if (opInfo.names() == null || opInfo.names().isEmpty()) {
 			log.error("Skipping Op " + opInfo.implementationName() + ":\n" +
 				"Op implementation must provide name.");

@@ -37,15 +37,19 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.scijava.priority.Priority;
-
-import com.google.common.reflect.TypeToken;
 import org.scijava.types.Any;
 import org.scijava.types.GenericTyped;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 import org.scijava.types.Types;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.reflect.TypeToken;
 
 public class ParameterizedTypeExtractor implements TypeExtractor {
+
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	@Override public double getPriority() {
 		return Priority.EXTREMELY_LOW;
@@ -120,7 +124,7 @@ public class ParameterizedTypeExtractor implements TypeExtractor {
 			// if the class is synthetic, we are probably missing something due to
 			// type erasure.
 			if (c.isSynthetic()) {
-				r.log().warn("Object " + o + " is synthetic. " +
+				log.warn("Object " + o + " is synthetic. " +
 					"Its type parameters are not reifiable and thus will likely cause unintended behavior!");
 			}
 			// Object has no generic parameters; we are done!

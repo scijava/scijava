@@ -48,7 +48,6 @@ module org.scijava.ops.engine {
 	requires org.scijava.collections;
 	requires org.scijava.discovery;
 	requires org.scijava.function;
-	requires org.scijava.log2;
 	requires org.scijava.meta;
 	requires org.scijava.parsington;
 	requires org.scijava.priority;
@@ -59,6 +58,7 @@ module org.scijava.ops.engine {
 	requires org.scijava.types;
 
 	requires org.javassist;
+	requires org.slf4j;
 	requires org.yaml.snakeyaml;
 
 

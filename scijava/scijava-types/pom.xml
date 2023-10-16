@@ -104,11 +104,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-log2</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
 			<artifactId>scijava-priority</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -117,6 +112,10 @@
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
 		</dependency>
 
 		<!-- Test scope dependencies -->

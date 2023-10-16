@@ -37,6 +37,7 @@ import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.progress.Progress;
 import org.scijava.progress.ProgressListener;
+import org.scijava.progress.StandardOutputProgressLogger;
 import org.scijava.types.Nil;
 
 /**
@@ -116,11 +117,9 @@ public class ReportingProgress implements OpCollection {
 		OpEnvironment ops = OpEnvironment.getEnvironment();
 
 		// ProgressListeners consume task updates.
-		// This ProgressListener simply prints out the status of the Op
-		// to the console, but we could print out something else,
-		// or pass this information somewhere else.
-		ProgressListener l = task -> //
-			 System.out.printf("Progress of %s: %.2f\n", task.description(), task.progress());
+		// This ProgressListener simply logs to standard output, but we could print
+		// out something else, or pass this information somewhere else.
+		ProgressListener l = new StandardOutputProgressLogger();
 		// To listen to Op progress updates, the ProgressListener must be registered
 		// through the Progress API. To listen to all Op executions, use the
 		// following call:

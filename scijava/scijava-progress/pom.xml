@@ -105,7 +105,6 @@
 		<allowedDuplicateClasses>${scijava-progress.allowedDuplicateClasses}</allowedDuplicateClasses>
 	</properties>
 	<dependencies>
-		<!-- SciJava dependencies -->
 		<!-- Test scope dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>

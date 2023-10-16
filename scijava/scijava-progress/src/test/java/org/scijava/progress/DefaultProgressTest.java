@@ -201,8 +201,8 @@ public class DefaultProgressTest {
 	}
 
 	/**
-	 * Test that {@link ProgressListener}s added at a global level can listen to a
-	 * progressible object without being explicitly linked
+	 * Test that {@link ProgressListener}s added at a global level can determine
+	 * whether to listen to a {@link Task} by looking at its description.
 	 */
 	@Test
 	public void testProgressListenerIdentifiers() {

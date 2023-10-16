@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,8 +30,9 @@
 package net.imagej.ops2.filter.gauss;
 
 import java.util.Arrays;
-import java.util.concurrent.ExecutorService;
 
+import org.scijava.concurrent.Parallelization;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpCollection;
 
 import net.imglib2.RandomAccessible;
@@ -42,7 +43,6 @@ import net.imglib2.exception.IncompatibleTypeException;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.outofbounds.OutOfBoundsMirrorFactory;
 import net.imglib2.outofbounds.OutOfBoundsMirrorFactory.Boundary;
-import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.NumericType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
@@ -55,65 +55,36 @@ import net.imglib2.view.Views;
 public class Gaussians {
 
 	/**
-	 * Gaussian filter, wrapping {@link Gauss3} of imglib2-algorithms. Note that
-	 * we put this at a lower priority so then if the input is a
-	 * {@link RandomAccessibleInterval} we match to
-	 * {@link Gaussians#defaultGaussRAISimple} instead.
-	 *
-	 * @author Stephan Saalfeld
-	 * @author Christian Dietz (University of Konstanz)
-	 * @param <T> type of input and output
-	 * @param input the input image
-	 * @param es the {@link ExecutorService}
-	 * @param sigmas the sigmas for the Gaussian
-	 * @param output the pre-allocated output image
-	 * @implNote op names='filter.gauss', priority='-100.',
-	 *           type='org.scijava.function.Computers$Arity3'
-	 */
-	public static <T extends NumericType<T> & NativeType<T>> void defaultGaussRA(
-		final RandomAccessible<T> input, //
-		final ExecutorService es, //
-		final double[] sigmas, //
-		final RandomAccessibleInterval<T> output //
-	) {
-		try {
-			SeparableSymmetricConvolution.convolve(Gauss3.halfkernels(sigmas), input,
-				output, es);
-		}
-		catch (final IncompatibleTypeException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	/**
 	 * Gaussian filter, wrapping {@link Gauss3} of imglib2-algorithms.
 	 *
 	 * @author Christian Dietz (University of Konstanz)
 	 * @author Stephan Saalfeld
-	 * @param <T> type of input and output
+	 * @param <I> type of input
+	 * @param <O> type of output
 	 * @param input the input image
-	 * @param es the {@link ExecutorService}
 	 * @param sigmas the sigmas for the gaussian
 	 * @param outOfBounds the {@link OutOfBoundsFactory} that defines how the
-	 *          calculation is affected outside the input bounds.
+	 *          calculation is affected outside the input bounds. (required =
+	 *          false)
 	 * @param output the output image
-	 * @implNote op names='filter.gauss',
-	 *           type='org.scijava.function.Computers$Arity4'
+	 * @implNote op names='filter.gauss'
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static <T extends NumericType<T> & NativeType<T>> void defaultGaussRAI(
-		final RandomAccessibleInterval<T> input, //
-		final ExecutorService es, //
-		final double[] sigmas, //
-		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBounds, //
-		final RandomAccessibleInterval<T> output //
+	public static <I extends NumericType<I>, O extends NumericType<O>> void
+		defaultGaussRAI(final RandomAccessibleInterval<I> input, //
+			final double[] sigmas, //
+			@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> outOfBounds, //
+			final RandomAccessibleInterval<O> output //
 	) {
+		if (outOfBounds == null) outOfBounds = new OutOfBoundsMirrorFactory<>(
+			Boundary.SINGLE);
+
 		final RandomAccessible<FloatType> eIn = //
 			(RandomAccessible) Views.extend(input, outOfBounds);
 
 		try {
 			SeparableSymmetricConvolution.convolve(Gauss3.halfkernels(sigmas), eIn,
-				output, es);
+				output, Parallelization.getExecutorService());
 		}
 		catch (final IncompatibleTypeException e) {
 			throw new RuntimeException(e);
@@ -121,82 +92,31 @@ public class Gaussians {
 	}
 
 	// -- Convenience Ops -- //
-
-	/**
-	 * Performs the above gaussian convolution with a reasonable
-	 * {@link OutOfBoundsFactory}, in the case that the user does not provide one.
-	 * 
-	 * @author Gabriel Selzer
-	 * @param <T> type of input
-	 * @param input the input image
-	 * @param es the {@link ExecutorService}
-	 * @param sigmas the sigmas for the gaussian
-	 * @param output the output image
-	 * @implNote op names='filter.gauss',
-	 *           type='org.scijava.function.Computers$Arity3'
-	 */
-	public static <T extends NumericType<T> & NativeType<T>> void
-		defaultGaussRAISimple( //
-			final RandomAccessibleInterval<T> input, //
-			final ExecutorService es, //
-			final double[] sigmas, //
-			final RandomAccessibleInterval<T> output //
-	) {
-		defaultGaussRAI(input, es, sigmas, new OutOfBoundsMirrorFactory<>(
-			Boundary.SINGLE), output);
-	}
-
 	/**
 	 * Gaussian filter which can be called with single sigma, i.e. the sigma is
 	 * the same in each dimension.
 	 *
 	 * @author Christian Dietz (University of Konstanz)
 	 * @author Stephan Saalfeld
-	 * @param <T> type of input
+	 * @param <I> type of input
+	 * @param <O> type of output
 	 * @param input the input image
-	 * @param es the {@link ExecutorService}
 	 * @param sigma the sigmas for the Gaussian
 	 * @param outOfBounds the {@link OutOfBoundsFactory} that defines how the
-	 *          calculation is affected outside the input bounds.
+	 *          calculation is affected outside the input bounds. (required =
+	 *          false)
 	 * @param output the preallocated output image
-	 * @implNote op names='filter.gauss',
-	 *           type='org.scijava.function.Computers$Arity4'
+	 * @implNote op names='filter.gauss'
 	 */
-	public static <T extends NumericType<T> & NativeType<T>> void
+	public static <I extends NumericType<I>, O extends NumericType<O>> void
 		gaussRAISingleSigma( //
-			final RandomAccessibleInterval<T> input, //
-			final ExecutorService es, //
-			final Double sigma, //
-			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBounds, //
-			final RandomAccessibleInterval<T> output //
+			final RandomAccessibleInterval<I> input, //
+			final double sigma, //
+			@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> outOfBounds, //
+			final RandomAccessibleInterval<O> output //
 	) {
 		final double[] sigmas = new double[input.numDimensions()];
 		Arrays.fill(sigmas, sigma);
-		defaultGaussRAI(input, es, sigmas, outOfBounds, output);
+		defaultGaussRAI(input, sigmas, outOfBounds, output);
 	};
-
-	/**
-	 * Gaussian filter which can be called with single sigma, i.e. the sigma is
-	 * the same in each dimension. Used when the user does not provide an
-	 * {@link OutOfBoundsFactory}
-	 *
-	 * @author Gabriel Selzer
-	 * @param <T> type of input
-	 * @param input the input image
-	 * @param es the {@link ExecutorService}
-	 * @param sigma the sigmas for the gaussian
-	 * @param output the output image
-	 * @implNote op names='filter.gauss',
-	 *           type='org.scijava.function.Computers$Arity3'
-	 */
-	public static <T extends NumericType<T> & NativeType<T>> void
-		gaussRAISingleSigmaSimple( //
-			final RandomAccessibleInterval<T> input, //
-			final ExecutorService es, //
-			final Double sigma, //
-			final RandomAccessibleInterval<T> output //
-	) {
-		gaussRAISingleSigma(input, es, sigma, new OutOfBoundsMirrorFactory<>(
-			Boundary.SINGLE), output);
-	}
 }

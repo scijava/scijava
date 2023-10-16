@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -141,8 +141,10 @@ public class CreateTypes {
 	public final Producer<ComplexFloatType> cfloat32TypeSource = () -> new ComplexFloatType();
 
 	/**
+	 * NB higher priority to match {@code Producer<RealType>} and {@code Producer<NativeType>}
+	 *
 	 * @output output
-	 * @implNote op names='create, create.float64'
+	 * @implNote op names='create, create.float64', priority='100.'
 	 */
 	public final Producer<DoubleType> float64TypeSource = () -> new DoubleType();
 

@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -38,6 +38,7 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Pair;
 
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Nullable;
 
 /**
  * @author Martin Horn (University of Konstanz)
@@ -54,12 +55,12 @@ public class HistogramCreate<T extends RealType<T>> implements BiFunction<Iterab
 	/**
 	 * TODO
 	 *
-	 * @param iterable
-	 * @param numBins
-	 * @param histogram
+	 * @param input the iterable to feed into the {@link Histogram1d}
+	 * @param numBins the number of bins in the resulting {@link Histogram1d}
+	 * @return a histogram
 	 */
 	@Override
-	public Histogram1d<T> apply(final Iterable<T> input, Integer numBins) {
+	public Histogram1d<T> apply(final Iterable<T> input, @Nullable Integer numBins) {
 		if (numBins == null)
 			numBins = DEFAULT_NUM_BINS;
 
@@ -73,24 +74,4 @@ public class HistogramCreate<T extends RealType<T>> implements BiFunction<Iterab
 		return histogram1d;
 	}
 
-}
-
-/**
- *@implNote op names='image.histogram'
- */
-class HistogramCreateSimple<T extends RealType<T>> implements Function<Iterable<T>, Histogram1d<T>> {
-
-	@OpDependency(name = "image.histogram")
-	private BiFunction<Iterable<T>, Integer, Histogram1d<T>> histogramOp;
-
-	/**
-	 * TODO
-	 *
-	 * @param iterable
-	 * @param histogram
-	 */
-	@Override
-	public Histogram1d<T> apply(final Iterable<T> input) {
-		return histogramOp.apply(input, null);
-	}
 }

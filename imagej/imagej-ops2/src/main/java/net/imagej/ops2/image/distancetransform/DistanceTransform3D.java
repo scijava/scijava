@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,8 +30,8 @@ package net.imagej.ops2.image.distancetransform;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
+
+import org.scijava.concurrent.Parallelization;
 
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
@@ -51,14 +51,14 @@ public class DistanceTransform3D {
 	 * http://fab.cba.mit.edu/classes/S62.12/docs/Meijster_distance.pdf
 	 */
 	public static <B extends BooleanType<B>, T extends RealType<T>> void compute(final RandomAccessibleInterval<B> in,
-			final ExecutorService es, final RandomAccessibleInterval<T> out) {
+			final RandomAccessibleInterval<T> out) {
 
 		// tempValues stores the integer values of the first phase, i.e. the
 		// first two scans
 		final int[][][] tempValues = new int[(int) in.dimension(0)][(int) out.dimension(1)][(int) out.dimension(2)];
 
 		// first phase
-		final List<Callable<Void>> list = new ArrayList<>();
+		final List<Runnable> list = new ArrayList<>();
 
 		for (int z = 0; z < in.dimension(2); z++) {
 			for (int y = 0; y < in.dimension(1); y++) {
@@ -66,11 +66,7 @@ public class DistanceTransform3D {
 			}
 		}
 
-		try {
-			es.invokeAll(list);
-		} catch (final InterruptedException e) {
-			throw new RuntimeException(e);
-		}
+		Parallelization.getTaskExecutor().runAll(list);
 
 		list.clear();
 
@@ -82,11 +78,7 @@ public class DistanceTransform3D {
 			}
 		}
 
-		try {
-			es.invokeAll(list);
-		} catch (final InterruptedException e) {
-			throw new RuntimeException(e);
-		}
+		Parallelization.getTaskExecutor().runAll(list);
 
 		// third phase
 		for (int x = 0; x < in.dimension(0); x++) {
@@ -96,15 +88,11 @@ public class DistanceTransform3D {
 			}
 		}
 
-		try {
-			es.invokeAll(list);
-		} catch (final InterruptedException e) {
-			e.printStackTrace();
-		}
+		Parallelization.getTaskExecutor().runAll(list);
 	}
 }
 
-class Phase1Runnable3D<B extends BooleanType<B>> implements Callable<Void> {
+class Phase1Runnable3D<B extends BooleanType<B>> implements Runnable {
 
 	private final int[][][] tempValues;
 	private final RandomAccess<B> raIn;
@@ -124,7 +112,7 @@ class Phase1Runnable3D<B extends BooleanType<B>> implements Callable<Void> {
 	}
 
 	@Override
-	public Void call() throws Exception {
+	public void run(){
 		// scan1
 		raIn.setPosition(0, 0);
 		raIn.setPosition(y, 1);
@@ -148,12 +136,11 @@ class Phase1Runnable3D<B extends BooleanType<B>> implements Callable<Void> {
 				tempValues[x][y][z] = 1 + tempValues[x + 1][y][z];
 			}
 		}
-		return null;
 	}
 
 }
 
-class Phase2Runnable3D<T extends RealType<T>> implements Callable<Void> {
+class Phase2Runnable3D<T extends RealType<T>> implements Runnable {
 
 	private final int[][][] tempValues;
 	private final int[][][] tempValues_new;
@@ -181,7 +168,7 @@ class Phase2Runnable3D<T extends RealType<T>> implements Callable<Void> {
 	}
 
 	@Override
-	public Void call() throws Exception {
+	public void run() {
 		final int[] s = new int[height];
 		final int[] t = new int[height];
 		int q = 0;
@@ -214,12 +201,11 @@ class Phase2Runnable3D<T extends RealType<T>> implements Callable<Void> {
 				q--;
 			}
 		}
-		return null;
 	}
 
 }
 
-class Phase3Runnable3D<T extends RealType<T>> implements Callable<Void> {
+class Phase3Runnable3D<T extends RealType<T>> implements Runnable {
 
 	private final RandomAccessibleInterval<T> raOut;
 	private final int[][][] tempValues;
@@ -247,7 +233,7 @@ class Phase3Runnable3D<T extends RealType<T>> implements Callable<Void> {
 	}
 
 	@Override
-	public Void call() throws Exception {
+	public void run() {
 		final int[] s = new int[deep];
 		final int[] t = new int[deep];
 		int q = 0;
@@ -284,7 +270,6 @@ class Phase3Runnable3D<T extends RealType<T>> implements Callable<Void> {
 				q--;
 			}
 		}
-		return null;
 	}
 
 }

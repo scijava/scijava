@@ -1,3 +1,31 @@
+/*-
+ * #%L
+ * SciJava Operations Engine: a framework for reusable algorithms.
+ * %%
+ * Copyright (C) 2016 - 2023 SciJava developers.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
 package org.scijava.ops.engine.util;
 
 import java.lang.invoke.MethodHandle;
@@ -28,7 +56,7 @@ public class LambdaizerTest {
 		MethodType methodTypeFunction = MethodType.methodType(void.class, String.class, long[].class);
 		MethodHandle functionHandle = lookup.findStatic(LambdaizerTest.class, "computer", methodTypeFunction);
 
-		Computers.Arity1<String, long[]> dynamicComputer = Adapt.Methods.lambdaize(Computers.Arity1.class, functionHandle);
+		Computers.Arity1<String, long[]> dynamicComputer = Lambdas.lambdaize(Computers.Arity1.class, functionHandle);
 		String input = "four";
 		long[] output = { 0 };
 		dynamicComputer.accept(input, output);
@@ -46,7 +74,7 @@ public class LambdaizerTest {
 		MethodType methodTypeFunction = MethodType.methodType(void.class, String.class, String.class, long[].class);
 		MethodHandle functionHandle = lookup.findStatic(LambdaizerTest.class, "biComputer", methodTypeFunction);
 
-		Computers.Arity2<String, String, long[]> dynamicComputer = Adapt.Methods.lambdaize(Computers.Arity2.class, functionHandle);
+		Computers.Arity2<String, String, long[]> dynamicComputer = Lambdas.lambdaize(Computers.Arity2.class, functionHandle);
 		String input = "four";
 		String input2 = "four";
 		long[] output = { 0 };
@@ -66,7 +94,7 @@ public class LambdaizerTest {
 				long[].class);
 		MethodHandle functionHandle = lookup.findStatic(LambdaizerTest.class, "computer3", methodTypeFunction);
 
-		Computers.Arity3<String, String, String, long[]> dynamicComputer = Adapt.Methods.lambdaize(Computers.Arity3.class, functionHandle);
+		Computers.Arity3<String, String, String, long[]> dynamicComputer = Lambdas.lambdaize(Computers.Arity3.class, functionHandle);
 		String input = "four";
 		String input2 = "four";
 		String input3 = "four";
@@ -90,7 +118,7 @@ public class LambdaizerTest {
 		MethodType methodTypeFunction = MethodType.methodType(long[].class, String.class);
 		MethodHandle functionHandle = lookup.findStatic(LambdaizerTest.class, "function", methodTypeFunction);
 
-		Function<String, long[]> dynamicFunction = Adapt.Methods.lambdaize(Function.class,functionHandle);
+		Function<String, long[]> dynamicFunction = Lambdas.lambdaize(Function.class,functionHandle);
 		String input = "four";
 		long[] output = dynamicFunction.apply(input);
 		assert (output[0] == 4);
@@ -108,7 +136,7 @@ public class LambdaizerTest {
 		MethodType methodTypeFunction = MethodType.methodType(long[].class, String.class, String.class);
 		MethodHandle functionHandle = lookup.findStatic(LambdaizerTest.class, "biFunction", methodTypeFunction);
 
-		BiFunction<String, String, long[]> dynamicFunction = Adapt.Methods.lambdaize(BiFunction.class, functionHandle);
+		BiFunction<String, String, long[]> dynamicFunction = Lambdas.lambdaize(BiFunction.class, functionHandle);
 		String input = "four";
 		String input2 = "four";
 		long[] output = dynamicFunction.apply(input, input2);
@@ -127,7 +155,7 @@ public class LambdaizerTest {
 		MethodType methodTypeFunction = MethodType.methodType(void.class, long[].class);
 		MethodHandle functionHandle = lookup.findStatic(LambdaizerTest.class, "inplace", methodTypeFunction);
 
-		Inplaces.Arity1<long[]> dynamicFunction = Adapt.Methods.lambdaize(Inplaces.Arity1.class, functionHandle);
+		Inplaces.Arity1<long[]> dynamicFunction = Lambdas.lambdaize(Inplaces.Arity1.class, functionHandle);
 		long[] io = { 1, 2, 3 };
 		long[] expected = { 2, 4, 6 };
 		dynamicFunction.mutate(io);
@@ -148,7 +176,7 @@ public class LambdaizerTest {
 		MethodType methodTypeFunction = MethodType.methodType(void.class, long[].class, long[].class);
 		MethodHandle functionHandle = lookup.findStatic(LambdaizerTest.class, "biInplaceFirst", methodTypeFunction);
 
-		Inplaces.Arity2_1<long[], long[]> dynamicFunction = Adapt.Methods.lambdaize(Inplaces.Arity2_1.class, functionHandle);
+		Inplaces.Arity2_1<long[], long[]> dynamicFunction = Lambdas.lambdaize(Inplaces.Arity2_1.class, functionHandle);
 		long[] io = { 1, 2, 3 };
 		long[] i2 = { 3, 6, 9 };
 		long[] expected = { 4, 8, 12 };
@@ -170,7 +198,7 @@ public class LambdaizerTest {
 		MethodType methodTypeFunction = MethodType.methodType(void.class, long[].class, long[].class);
 		MethodHandle functionHandle = lookup.findStatic(LambdaizerTest.class, "biInplaceSecond", methodTypeFunction);
 
-		Inplaces.Arity2_2<long[], long[]> dynamicFunction = Adapt.Methods.lambdaize(Inplaces.Arity2_2.class, functionHandle);
+		Inplaces.Arity2_2<long[], long[]> dynamicFunction = Lambdas.lambdaize(Inplaces.Arity2_2.class, functionHandle);
 		long[] io = { 1, 2, 3 };
 		long[] i2 = { 3, 6, 9 };
 		long[] expected = { 4, 8, 12 };

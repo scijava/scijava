@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -183,7 +183,7 @@ public final class Types {
 
 	public static float float32(final double value) { return (float) value; }
 
-	public static float float32(final BigInteger value) { return value.and(mask128).longValue(); }
+	public static float float32(final BigInteger value) { return value.and(mask128).floatValue(); }
 
 	public static float float32(final boolean value) { return value ? 1 : 0; }
 
@@ -191,7 +191,7 @@ public final class Types {
 
 	public static double float64(final double value) { return value; }
 
-	public static double float64(final BigInteger value) { return value.and(mask128).longValue(); }
+	public static double float64(final BigInteger value) { return value.and(mask128).doubleValue(); }
 
 	public static double float64(final boolean value) { return value ? 1 : 0; }
 

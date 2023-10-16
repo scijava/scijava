@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -45,12 +45,23 @@ public class MeanFilterTest extends AbstractOpTest{
 	@Test
 	public void meanFilterTest() {
 		
-		Img<ByteType> img = ops.op("create.img").input(new FinalInterval(5, 5), new ByteType()).outType(new Nil<Img<ByteType>>() {}).apply();
+		Img<ByteType> img = ops.op("create.img").arity2().input(new FinalInterval(5, 5), new ByteType()).outType(new Nil<Img<ByteType>>() {}).apply();
 		RectangleShape shape = new RectangleShape(1, false);
 		OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>> oobf = new OutOfBoundsBorderFactory<>();
-		Img<ByteType> output = ops.op("create.img").input(img).outType(new Nil<Img<ByteType>>() {}).apply();
-		ops.op("filter.mean").input(img, shape, oobf).output(output).compute();
-		
+		Img<ByteType> output = ops.op("create.img").arity1().input(img).outType(new Nil<Img<ByteType>>() {}).apply();
+		ops.op("stats.mean").arity3().input(img, shape, oobf).output(output).compute();
+
+		// Try with no OutOfBoundsFactory
+		ops.op("filter.mean").arity2().input(img, shape).output(output).compute();
 	}
 
+	@Test
+	public void rawTypeAdaptationTest() {
+
+		Img<ByteType> img = ops.op("create.img").arity2().input(new FinalInterval(5, 5), new ByteType()).outType(new Nil<Img<ByteType>>() {}).apply();
+		RectangleShape shape = new RectangleShape(1, false);
+		OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>> oobf = new OutOfBoundsBorderFactory<>();
+		var result = ops.op("filter.mean").arity3().input(img, shape, oobf).outType(Img.class).apply();
+
+	}
 }

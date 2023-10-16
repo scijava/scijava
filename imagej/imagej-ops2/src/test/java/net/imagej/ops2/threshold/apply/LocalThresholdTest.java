@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -102,10 +102,10 @@ public class LocalThresholdTest extends AbstractOpTest {
 	@BeforeEach
 	public void before() throws Exception {
 		in = TestImgGeneration.byteArray(true, new long[] { 10, 10 });
-		Pair<ByteType, ByteType> minMax = ops.op("stats.minMax").input(in).outType(new Nil<Pair<ByteType, ByteType>>() {})
+		Pair<ByteType, ByteType> minMax = ops.op("stats.minMax").arity1().input(in).outType(new Nil<Pair<ByteType, ByteType>>() {})
 				.apply();
-		normalizedIn = ops.op("create.img").input(in, new DoubleType()).outType(new Nil<Img<DoubleType>>() {}).apply();
-		ops.op("image.normalize").input(in, minMax.getA(), minMax.getB(), new DoubleType(0.0), new DoubleType(1.0))
+		normalizedIn = ops.op("create.img").arity2().input(in, new DoubleType()).outType(new Nil<Img<DoubleType>>() {}).apply();
+		ops.op("image.normalize").arity5().input(in, minMax.getA(), minMax.getB(), new DoubleType(0.0), new DoubleType(1.0))
 				.output(normalizedIn).compute();
 
 		out = in.factory().imgFactory(new BitType()).create(in, new BitType());
@@ -352,7 +352,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 		opToTest.compute(in, new RectangleShape(1, false),
 				new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(Boundary.SINGLE), out);
 
-		assertEquals(false, out.firstElement().get());
+		assertEquals(true, out.firstElement().get());
 	}
 
 	/**
@@ -410,7 +410,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 		opToTest.compute(in, new RectangleShape(1, false),
 				new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(Boundary.SINGLE), out);
 
-		assertEquals(false, out.firstElement().get());
+		assertEquals(true, out.firstElement().get());
 	}
 
 	/**
@@ -589,7 +589,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 		opToTest.compute(in, new RectangleShape(1, false),
 				new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(Boundary.SINGLE), out);
 
-		assertEquals(false, out.firstElement().get());
+		assertEquals(true, out.firstElement().get());
 	}
 
 	/**
@@ -671,7 +671,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 		opToTest.compute(in, new RectangleShape(1, false),
 				new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(Boundary.SINGLE), out);
 
-		assertEquals(false, out.firstElement().get());
+		assertEquals(true, out.firstElement().get());
 	}
 
 	/**
@@ -690,7 +690,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 		opToTest.compute(in, new RectangleShape(1, false),
 				new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(Boundary.SINGLE), out);
 
-		assertEquals(false, out.firstElement().get());
+		assertEquals(true, out.firstElement().get());
 	}
 
 	/**
@@ -774,7 +774,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 		opToTest.compute(in, new RectangleShape(1, false),
 				new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(Boundary.SINGLE), out);
 
-		assertEquals(false, out.firstElement().get());
+		assertEquals(true, out.firstElement().get());
 	}
 
 	/**
@@ -782,20 +782,22 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalSauvola() {
-		final Computers.Arity5<RandomAccessibleInterval<ByteType>, Shape, Double, Double, //
-				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, RandomAccessibleInterval<BitType>> opToTest = OpBuilder
-						.matchComputer(ops, "threshold.localSauvola", //
-								new Nil<RandomAccessibleInterval<ByteType>>() {}, //
-								new Nil<Shape>() {}, //
-								new Nil<Double>() {}, //
-								new Nil<Double>() {}, //
-								new Nil<OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>>() {}, //
-								new Nil<RandomAccessibleInterval<BitType>>() {}); //
+		Computers.Arity2<RandomAccessibleInterval<ByteType>, Shape, RandomAccessibleInterval<BitType>>
+				opToTest =
+				OpBuilder.matchComputer(ops, "threshold.localSauvola", //
+						new Nil<RandomAccessibleInterval<ByteType>>() {
 
-		opToTest.compute(in, new RectangleShape(2, false), 0.5, 0.5,
-				new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(Boundary.SINGLE), out);
+						}, //
+						new Nil<Shape>() {
 
-		assertEquals(false, out.firstElement().get());
+						}, //
+						new Nil<RandomAccessibleInterval<BitType>>() {
+
+						});//
+
+		opToTest.compute(in, new RectangleShape(2, false), out);
+
+		assertEquals(true, out.firstElement().get());
 	}
 
 	// /**
@@ -856,7 +858,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 		opToTest.compute(in, new RectangleShape(1, false),
 				new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(Boundary.SINGLE), out);
 
-		assertEquals(false, out.firstElement().get());
+		assertEquals(true, out.firstElement().get());
 	}
 
 	/**
@@ -875,7 +877,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 		opToTest.compute(in, new RectangleShape(1, false),
 				new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(Boundary.SINGLE), out);
 
-		assertEquals(false, out.firstElement().get());
+		assertEquals(true, out.firstElement().get());
 	}
 
 	/**
@@ -894,7 +896,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 		opToTest.compute(in, new RectangleShape(1, false),
 				new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(Boundary.SINGLE), out);
 
-		assertEquals(false, out.firstElement().get());
+		assertEquals(true, out.firstElement().get());
 	}
 
 	/**
@@ -913,7 +915,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 		opToTest.compute(in, new RectangleShape(1, false),
 				new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(Boundary.SINGLE), out);
 
-		assertEquals(false, out.firstElement().get());
+		assertEquals(true, out.firstElement().get());
 	}
 
 	// @Test(expected = IllegalArgumentException.class)

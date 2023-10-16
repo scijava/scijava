@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -52,8 +52,8 @@ public class DefaultCenterOfGravity<T extends RealType<T>> implements Function<I
 	/**
 	 * TODO
 	 *
-	 * @param input
-	 * @param centerOfGravity
+	 * @param input the input {@link IterableInterval}
+	 * @return the center of gravity, as a {@link RealLocalizable}
 	 */
 	@Override
 	public RealLocalizable apply(final IterableInterval<T> input) {

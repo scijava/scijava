@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,8 +29,11 @@
 
 package net.imagej.ops2.filter.dog;
 
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.scijava.types.Nil;
 
 import net.imagej.ops2.AbstractOpTest;
 import net.imagej.testutil.TestImgGeneration;
@@ -44,10 +47,6 @@ import net.imglib2.outofbounds.OutOfBoundsMirrorFactory.Boundary;
 import net.imglib2.type.numeric.integer.ByteType;
 import net.imglib2.view.Views;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.scijava.types.Nil;
-
 /**
  * Tests Difference of Gaussians (DoG) implementations.
  * 
@@ -57,8 +56,6 @@ public class DoGTest extends AbstractOpTest {
 
 	@Test
 	public void dogRAITest() {
-		ExecutorService es = threads.getExecutorService();
-
 		final double[] sigmas1 = new double[] { 1, 1 };
 		final double[] sigmas2 = new double[] { 2, 2 };
 		final long[] dims = new long[] { 10, 10 };
@@ -68,7 +65,7 @@ public class DoGTest extends AbstractOpTest {
 		final Img<ByteType> out2 = TestImgGeneration.byteArray(false, dims);
 		final OutOfBoundsFactory<ByteType, Img<ByteType>> outOfBounds = new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
 
-		ops.op("filter.DoG").input(in, sigmas1, sigmas2, outOfBounds, es).output(out1).compute();
+		ops.op("filter.DoG").arity4().input(in, sigmas1, sigmas2, outOfBounds).output(out1).compute();
 
 		// test against native imglib2 implementation
 		DifferenceOfGaussian.DoG(sigmas1, sigmas2, Views.extendMirrorSingle(in), out2,
@@ -84,12 +81,11 @@ public class DoGTest extends AbstractOpTest {
 
 	@Test
 	public void dogRAISingleSigmasTest() {
-		ExecutorService es = threads.getExecutorService();
 		final OutOfBoundsFactory<ByteType, Img<ByteType>> outOfBounds = new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
 		final RandomAccessibleInterval<ByteType> res = ops.op("create.img")
-				.input(TestImgGeneration.byteArray(true, new long[] { 10, 10 }), new ByteType())
+				.arity2().input(TestImgGeneration.byteArray(true, new long[] { 10, 10 }), new ByteType())
 				.outType(new Nil<RandomAccessibleInterval<ByteType>>() {}).apply();
-		ops.op("filter.DoG").input(TestImgGeneration.byteArray(true, new long[] { 10, 10 }), 1., 2., outOfBounds, es)
+		ops.op("filter.DoG").arity4().input(TestImgGeneration.byteArray(true, new long[] { 10, 10 }), 1., 2., outOfBounds)
 				.output(res).compute();
 
 		Assertions.assertNotNull(res);

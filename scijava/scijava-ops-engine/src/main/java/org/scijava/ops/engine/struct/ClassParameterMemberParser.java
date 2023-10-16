@@ -1,3 +1,31 @@
+/*-
+ * #%L
+ * SciJava Operations Engine: a framework for reusable algorithms.
+ * %%
+ * Copyright (C) 2016 - 2023 SciJava developers.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
 
 package org.scijava.ops.engine.struct;
 
@@ -8,9 +36,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.scijava.common3.validity.ValidityException;
-import org.scijava.common3.validity.ValidityProblem;
-import org.scijava.ops.engine.OpUtils;
+import org.scijava.ops.engine.exceptions.impl.FunctionalTypeOpException;
+import org.scijava.ops.engine.util.Ops;
 import org.scijava.struct.MemberParser;
 import org.scijava.struct.Structs;
 import org.scijava.types.Types;
@@ -21,15 +48,13 @@ public class ClassParameterMemberParser implements
 
 	@Override
 	public List<SynthesizedParameterMember<?>> parse(Class<?> source, Type structType)
-		throws ValidityException
 	{
 		if (source == null) return null;
 
 		final ArrayList<SynthesizedParameterMember<?>> items = new ArrayList<>();
-		final ArrayList<ValidityProblem> problems = new ArrayList<>();
 
 		// NB: Reject abstract classes.
-		Structs.checkModifiers(source.getName() + ": ", problems, source.getModifiers(), true, Modifier.ABSTRACT);
+		Structs.checkModifiers(source.getName() + ": ", source.getModifiers(), true, Modifier.ABSTRACT);
 
 		// Obtain source's Op method.
 		Method opMethod;
@@ -37,19 +62,19 @@ public class ClassParameterMemberParser implements
 			opMethod = getDeclaredOpMethod(source);
 		}
 		catch (NoSuchMethodException e1) {
-			problems.add(new ValidityProblem("Class " + source.getName() +
-				" does not have a functional method!"));
-			throw new ValidityException(problems);
+			throw new IllegalArgumentException("Class " + source.getName() +
+				" does not have a functional method!", e1);
 		}
 
 		// obtain a parameterData
-		ParameterData paramData = new LazilyGeneratedMethodParameterData(opMethod, source);
+		Class<?> fIface = Ops.findFunctionalInterface(source);
+		ParameterData paramData = new LazilyGeneratedMethodParameterData(opMethod, fIface);
 
-		FunctionalParameters.parseFunctionalParameters(items, problems, source,
-			paramData);
-
-		// Fail if there were any problems.
-		if (!problems.isEmpty()) throw new ValidityException(problems);
+		try {
+			FunctionalParameters.parseFunctionalParameters(items, source, paramData);
+		} catch (IllegalArgumentException exc) {
+			throw new FunctionalTypeOpException(source, exc);
+		}
 
 		return items;
 	}
@@ -66,7 +91,7 @@ public class ClassParameterMemberParser implements
 	 */
 	private Method getDeclaredOpMethod(Class<?> c) throws NoSuchMethodException {
 		// NB this is the functional method w.r.t. the interface, not w.r.t. the Op
-		Method fMethod = OpUtils.findFunctionalMethod(c);
+		Method fMethod = Ops.findFunctionalMethod(c);
 		Type[] paramTypes = Types.getExactParameterTypes(fMethod, c);
 		Class<?>[] rawParamTypes = Arrays.stream(paramTypes).map(t -> Types.raw(t))
 			.toArray(Class[]::new);

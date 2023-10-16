@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -47,6 +47,11 @@ public class ComputeMaxEntropyThreshold<T extends RealType<T>> extends
 	AbstractComputeThresholdHistogram<T>
 {
 
+	/**
+	 *
+	 * @param hist the {@link Histogram1d}
+	 * @return the Max Entropy threshold
+	 */
 	@Override
 	public long computeBin(final Histogram1d<T> hist) {
 		final long[] histogram = hist.toLongArray();

@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.scijava</groupId>
 		<artifactId>pom-scijava</artifactId>
-		<version>33.2.0</version>
+		<version>36.0.0</version>
 		<relativePath />
 	</parent>
 
@@ -45,19 +45,22 @@
 	</mailingLists>
 
 	<modules>
+		<module>imagej/imagej-ops2-tutorial</module>
 		<module>imagej/imagej-mesh2</module>
 		<module>imagej/imagej-ops2</module>
 		<module>imagej/imagej-testutil</module>
+		<module>imagej/imagej2-legacy</module>
 		<module>scijava/scijava-collections</module>
 		<module>scijava/scijava-common3</module>
+		<module>scijava/scijava-concurrent</module>
 		<module>scijava/scijava-discovery</module>
-		<module>scijava/scijava-discovery-therapi</module>
 		<module>scijava/scijava-discovery-test</module>
 		<module>scijava/scijava-function</module>
 		<module>scijava/scijava-log2</module>
 		<module>scijava/scijava-meta</module>
 		<module>scijava/scijava-ops-api</module>
 		<module>scijava/scijava-ops-engine</module>
+		<module>scijava/scijava-ops-indexer</module>
 		<module>scijava/scijava-ops-spi</module>
 		<module>scijava/scijava-parse2</module>
 		<module>scijava/scijava-persist</module>
@@ -65,7 +68,6 @@
 		<module>scijava/scijava-progress</module>
 		<module>scijava/scijava-struct</module>
 		<module>scijava/scijava-taglets</module>
-		<module>scijava/scijava-threads</module>
 		<module>scijava/scijava-testutil</module>
 		<module>scijava/scijava-types</module>
 	</modules>
@@ -88,6 +90,7 @@
 		<license.licenseName>N/A</license.licenseName>
 		<license.copyrightOwners>N/A</license.copyrightOwners>
 
+		<scijava.jvm.build.version>[11,)</scijava.jvm.build.version>
 		<scijava.jvm.version>11</scijava.jvm.version>
 		<scijava.javadoc.url.java>https://javadoc.scijava.org/Java11/</scijava.javadoc.url.java>
 		<scijava.javadoc.url.javafx>https://javadoc.scijava.org/JavaFX11/</scijava.javadoc.url.javafx>
@@ -104,12 +107,8 @@
 
 		<script-maven-plugin.version>1.0.0</script-maven-plugin.version>
 		<jruby.version>9.2.11.1</jruby.version>
-		<therapi.version>0.12.0</therapi.version>
-		<therapi-runtime-javadoc.version>${therapi.version}</therapi-runtime-javadoc.version>
-		<therapi-runtime-javadoc-scribe.version>${therapi.version}</therapi-runtime-javadoc-scribe.version>
-		<therapi.packages>-</therapi.packages>
+		<scijava.parse.ops>true</scijava.parse.ops>
 	</properties>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -117,14 +116,16 @@
 				<configuration>
 					<annotationProcessorPaths>
 						<path>
-							<groupId>com.github.therapi</groupId>
-							<artifactId>therapi-runtime-javadoc-scribe</artifactId>
-							<version>${therapi-runtime-javadoc-scribe.version}</version>
+							<groupId>org.scijava</groupId>
+							<artifactId>scijava-ops-indexer</artifactId>
+							<version>${project.version}</version>
 						</path>
 					</annotationProcessorPaths>
 					<fork>true</fork>
+					<showWarnings>true</showWarnings>
 					<compilerArgs>
-						<arg>-Ajavadoc.packages="${therapi.packages}"</arg>
+						<arg>-Aparse.ops="${scijava.parse.ops}"</arg>
+						<arg>-Aop.version="${project.version}"</arg>
 					</compilerArgs>
 				</configuration>
 			</plugin>
@@ -149,10 +150,62 @@
 						<version>2.2.0</version>
 					</dependency>
 				</dependencies>
+				<executions>
+					<execution>
+						<id>enforce-no-package-cycles</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<phase>test</phase>
+						<configuration>
+							<rules>
+								<NoPackageCyclesRule
+										implementation="org.scijava.maven.plugin.enforcer.NoPackageCyclesRule" />
+							</rules>
+						</configuration>
+					</execution>
+					<execution>
+						<id>enforce-no-subpackage-dependence</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<phase>test</phase>
+						<configuration>
+							<rules>
+								<NoSubpackageDependenceRule
+										implementation="org.scijava.maven.plugin.enforcer.NoSubpackageDependenceRule" />
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.alexecollins.maven.plugin</groupId>
+				<artifactId>script-maven-plugin</artifactId>
+				<version>${script-maven-plugin.version}</version>
 			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<configuration>
+						<links>
+							<!-- Core Java. -->
+							<link>${scijava.javadoc.url.java}</link>
+							<!-- SciJava and related projects and forks. -->
+							<link>https://javadoc.scijava.org/ImgLib2/</link>
+							<link>https://javadoc.scijava.org/SCIFIO/</link>
+							<!-- Third party projects. -->
+							<link>https://javadoc.scijava.org/Apache-Commons-Math/</link>
+							<link>https://javadoc.scijava.org/Guava/</link>
+							<link>https://javadoc.scijava.org/JAMA/</link>
+							<link>https://javadoc.scijava.org/JOML/</link>
+							<link>https://javadoc.scijava.org/Javassist/</link>
+							<link>https://javadoc.scijava.org/ojAlgo/</link>
+						</links>
+					</configuration>
+				</plugin>
 				<plugin>
 					<groupId>com.alexecollins.maven.plugin</groupId>
 					<artifactId>script-maven-plugin</artifactId>
@@ -180,19 +233,20 @@
 									end
 
 									# Read in main and test scope plugin annotations.
-									pluginsPath = 'META-INF/json/org.scijava.plugin.Plugin'
-									mainPluginsPath = "#{basedir}/target/classes/#{pluginsPath}"
-									testPluginsPath = "#{basedir}/target/test-classes/#{pluginsPath}"
-									mainPlugins = read_plugins(mainPluginsPath)
-									testPlugins = read_plugins(testPluginsPath)
+									['op.yaml', 'META-INF/json/org.scijava.plugin.Plugin'].each do |pluginsPath|
+										mainPluginsPath = "#{basedir}/target/classes/#{pluginsPath}"
+										testPluginsPath = "#{basedir}/target/test-classes/#{pluginsPath}"
+										mainPlugins = read_plugins(mainPluginsPath)
+										testPlugins = read_plugins(testPluginsPath)
 
-									# Write out unioned plugin annotations to test scope plugin annotations.
-									# Without this, the test scope code does not know of the main scope plugins.
-									allPlugins = mainPlugins.union(testPlugins)
-									unless allPlugins.empty?()
-										require 'fileutils'
-										FileUtils.mkdir_p File.dirname(testPluginsPath)
-										File.write(testPluginsPath, allPlugins.to_a.join(''))
+										# Write out unioned plugin annotations to test scope plugin annotations.
+										# Without this, the test scope code does not know of the main scope plugins.
+										allPlugins = mainPlugins.union(testPlugins)
+										unless allPlugins.empty?()
+											require 'fileutils'
+											FileUtils.mkdir_p File.dirname(testPluginsPath)
+											File.write(testPluginsPath, allPlugins.to_a.join(''))
+										end
 									end
 								</script>
 							</configuration>

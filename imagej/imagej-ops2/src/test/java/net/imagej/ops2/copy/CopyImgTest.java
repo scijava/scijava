@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -73,7 +73,7 @@ public class CopyImgTest extends AbstractOpTest {
 		copy(input, inputCopy);
 
 		final RandomAccessibleInterval<DoubleType> output =
-			ops.op("copy.img").input(input).outType(new Nil<RandomAccessibleInterval<DoubleType>>() {}).apply();
+			ops.op("copy").arity1().input(input).outType(new Nil<RandomAccessibleInterval<DoubleType>>() {}).apply();
 
 		final Cursor<DoubleType> inc = input.localizingCursor();
 		final RandomAccess<DoubleType> inCopyRA = inputCopy.randomAccess();
@@ -97,7 +97,7 @@ public class CopyImgTest extends AbstractOpTest {
 		final Img<DoubleType> output = input.factory().create(input, input
 			.firstElement());
 
-		ops.op("copy.img").input(input).output(output).compute();
+		ops.op("copy").arity1().input(input).output(output).compute();
 
 		final Cursor<DoubleType> inc = input.cursor();
 		final Cursor<DoubleType> inCopyc = inputCopy.cursor();

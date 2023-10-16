@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,7 +29,6 @@
 
 package net.imagej.ops2.deconvolve;
 
-import java.util.concurrent.ExecutorService;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -58,7 +57,7 @@ import org.scijava.ops.spi.OpDependency;
  */
 public class RichardsonLucyCorrection<I extends RealType<I>, O extends RealType<O>, C extends ComplexType<C>>
 	implements
-	Computers.Arity5<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService, RandomAccessibleInterval<O>>
+	Computers.Arity4<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<O>>
 {
 
 	/** fft of reblurred (will be computed) **/
@@ -87,26 +86,24 @@ public class RichardsonLucyCorrection<I extends RealType<I>, O extends RealType<
 	};
 
 	@OpDependency(name = "filter.correlate")
-	private Computers.Arity7<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>, //
+	private Computers.Arity6<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>, //
 		RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, //
-		Boolean, ExecutorService, RandomAccessibleInterval<O>> correlateOp;
+		Boolean, RandomAccessibleInterval<O>> correlateOp;
 
 	/**
 	 * computes the correction factor of the Richardson Lucy Algorithm
 	 *
-	 * @param input
+	 * @param observed
 	 * @param reblurred
 	 * @param fftBuffer
 	 * @param fftKernel
-	 * @param executorService
-	 * @param output
+	 * @param correction
 	 */
 	@Override
 	public void compute(RandomAccessibleInterval<I> observed,
 		RandomAccessibleInterval<O> reblurred,
 		RandomAccessibleInterval<C> fftBuffer,
 		RandomAccessibleInterval<C> fftKernel,
-		ExecutorService es,
 		RandomAccessibleInterval<O> correction)
 	{
 		// divide observed image by reblurred
@@ -115,7 +112,7 @@ public class RichardsonLucyCorrection<I extends RealType<I>, O extends RealType<
 
 		// correlate with psf to compute the correction factor
 		// Note: FFT of psf is pre-computed and set as an input parameter of the op
-		correlateOp.compute(reblurred, null, fftBuffer, fftKernel, true, false, es, correction);
+		correlateOp.compute(reblurred, null, fftBuffer, fftKernel, true, false, correction);
 
 	}
 

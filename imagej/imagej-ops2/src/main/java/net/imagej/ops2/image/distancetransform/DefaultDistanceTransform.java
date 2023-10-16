@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,8 +31,8 @@ package net.imagej.ops2.image.distancetransform;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
+
+import org.scijava.concurrent.Parallelization;
 
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
@@ -53,7 +53,7 @@ public class DefaultDistanceTransform {
 	 * Source: http://fab.cba.mit.edu/classes/S62.12/docs/Meijster_distance.pdf
 	 */
 	public static <B extends BooleanType<B>, T extends RealType<T>> void compute(final RandomAccessibleInterval<B> in,
-			final ExecutorService es, final RandomAccessibleInterval<T> out) {
+			final RandomAccessibleInterval<T> out) {
 		// stores the size of each dimension
 		final int[] dimensSizes = new int[in.numDimensions()];
 
@@ -71,7 +71,7 @@ public class DefaultDistanceTransform {
 		final int[] actualValues = new int[numPoints];
 
 		// stores each Thread to execute
-		final List<Callable<Void>> list = new ArrayList<>();
+		final List<Runnable> list = new ArrayList<>();
 
 		/*
 		 * initial phase calculates the first dimension
@@ -89,11 +89,7 @@ public class DefaultDistanceTransform {
 			}
 		}
 
-		try {
-			es.invokeAll(list);
-		} catch (final InterruptedException e) {
-			throw new RuntimeException(e);
-		}
+		Parallelization.getTaskExecutor().runAll(list);
 
 		list.clear();
 
@@ -125,11 +121,7 @@ public class DefaultDistanceTransform {
 				}
 			}
 
-			try {
-				es.invokeAll(list);
-			} catch (final InterruptedException e) {
-				throw new RuntimeException(e);
-			}
+			Parallelization.getTaskExecutor().runAll(list);
 
 			list.clear();
 		}
@@ -156,7 +148,7 @@ public class DefaultDistanceTransform {
 	}
 }
 
-class InitPhase<B extends BooleanType<B>, T extends RealType<T>> implements Callable<Void> {
+class InitPhase<B extends BooleanType<B>, T extends RealType<T>> implements Runnable {
 	private final int[] actualValues;
 	private final RandomAccess<B> raIn;
 	private final int infinite;
@@ -176,7 +168,7 @@ class InitPhase<B extends BooleanType<B>, T extends RealType<T>> implements Call
 	}
 
 	@Override
-	public Void call() throws Exception {
+	public void run() {
 		// scan1
 		positions[0] = 0;
 		raIn.setPosition(positions);
@@ -208,12 +200,11 @@ class InitPhase<B extends BooleanType<B>, T extends RealType<T>> implements Call
 						+ actualValues[IntervalIndexer.positionToIndex(temp, dimensSizes)];
 			}
 		}
-		return null;
 	}
 
 }
 
-class NextPhase<T extends RealType<T>> implements Callable<Void> {
+class NextPhase<T extends RealType<T>> implements Runnable {
 	private final int[] actualValues;
 	private final int[] dimensSizes;
 	private final int[] positions;
@@ -240,7 +231,7 @@ class NextPhase<T extends RealType<T>> implements Callable<Void> {
 	}
 
 	@Override
-	public Void call() throws Exception {
+	public void run() {
 		final int[] s = new int[dimensSizes[actualDimension]];
 		final int[] t = new int[dimensSizes[actualDimension]];
 		int q = 0;
@@ -288,7 +279,6 @@ class NextPhase<T extends RealType<T>> implements Callable<Void> {
 			positions[actualDimension] = u;
 			actualValues[IntervalIndexer.positionToIndex(positions, dimensSizes)] = newValues[u];
 		}
-		return null;
 	}
 
 }

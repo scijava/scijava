@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -32,7 +32,6 @@ package net.imagej.ops2.threshold.localSauvola;
 import java.util.Arrays;
 import java.util.function.Function;
 
-import net.imagej.ops2.filter.ApplyCenterAwareNeighborhoodBasedFilter;
 import net.imagej.ops2.threshold.ApplyLocalThresholdIntegral;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.RectangleNeighborhood;
@@ -45,6 +44,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.composite.Composite;
 
 import org.scijava.function.Computers;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 /**
@@ -64,6 +64,9 @@ public class LocalSauvolaThreshold<T extends RealType<T>> extends
 	@OpDependency(name = "threshold.localSauvola")
 	private Computers.Arity4<RectangleNeighborhood<? extends Composite<DoubleType>>, T, Double, Double, BitType> computeThresholdIntegralOp;
 
+	@OpDependency(name = "filter.applyCenterAware")
+	private Computers.Arity4<RandomAccessibleInterval<T>, Computers.Arity2<Iterable<T>, T, BitType>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<BitType>> applyFilterOp;
+
 	/**
 	 * TODO
 	 *
@@ -76,8 +79,9 @@ public class LocalSauvolaThreshold<T extends RealType<T>> extends
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
-		final Shape inputNeighborhoodShape, final Double k, final Double r,
-		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
+		final Shape inputNeighborhoodShape, @Nullable final Double k, @Nullable
+	final Double r,
+		@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final RandomAccessibleInterval<BitType> output)
 	{
 		// Use integral images for sufficiently large windows.
@@ -90,23 +94,12 @@ public class LocalSauvolaThreshold<T extends RealType<T>> extends
 				output);
 		}
 		else {
-			computeNonIntegral(input, inputNeighborhoodShape, k, r,
-				outOfBoundsFactory, computeThresholdNonIntegralOp, output);
+			final Computers.Arity2<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
+					(i1, i2, o) -> computeThresholdNonIntegralOp.compute(i1, i2, k, r, o);
+			applyFilterOp.compute(input, parametrizedComputeThresholdOp,
+					inputNeighborhoodShape, outOfBoundsFactory,
+					output);
 		}
-	}
-
-	public static <T extends RealType<T>> void computeNonIntegral(
-		final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
-		final Double k, final Double r,
-		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-		final Computers.Arity4<Iterable<T>, T, Double, Double, BitType> computeThresholdOp,
-		final RandomAccessibleInterval<BitType> output)
-	{
-		final Computers.Arity2<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
-			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, k, r, o);
-		ApplyCenterAwareNeighborhoodBasedFilter.compute(input,
-			inputNeighborhoodShape, outOfBoundsFactory,
-			parametrizedComputeThresholdOp, output);
 	}
 
 	public void computeIntegral(

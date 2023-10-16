@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -38,6 +38,7 @@ import net.imglib2.util.Pair;
 
 import org.scijava.function.Functions;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Nullable;
 
 /**
  * Generates an ASCII version of an image.
@@ -59,13 +60,14 @@ public class DefaultASCII<T extends RealType<T>> implements Functions.Arity3<Ite
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
-	 * @param min
-	 * @param max
-	 * @param ASCIIArt
+	 * @param input
+	 * @param min (required = false)
+	 * @param max (required = false)
+	 * @return ASCIIArt
 	 */
 	@Override
-	public String apply(final IterableInterval<T> input, T min, T max) {
+	public String apply(final IterableInterval<T> input, @Nullable
+	T min, @Nullable T max) {
 		if (min == null || max == null) {
 			final Pair<T, T> minMax = minMaxFunc.apply(input);
 			if (min == null) min = minMax.getA();

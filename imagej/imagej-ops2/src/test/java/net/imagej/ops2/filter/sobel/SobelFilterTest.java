@@ -1,7 +1,7 @@
 /* #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -76,7 +76,7 @@ public class SobelFilterTest extends AbstractOpTest {
 				counterY = 0;
 			}
 		}
-		RandomAccessibleInterval<FloatType> out = ops.op("filter.sobel").input(img)
+		RandomAccessibleInterval<FloatType> out = ops.op("filter.sobel").arity1().input(img)
 				.outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
 
 		RandomAccess<FloatType> outRA = out.randomAccess();

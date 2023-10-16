@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -57,7 +57,7 @@ public class MergeLabelingTest extends AbstractOpTest {
 
 	@BeforeEach
 	public void setUpTest() {
-		in1 = ops.op("create.imgLabeling").input(new FinalInterval(2, 2), new ByteType())
+		in1 = ops.op("create.imgLabeling").arity2().input(new FinalInterval(2, 2), new ByteType())
 				.outType(new Nil<ImgLabeling<Integer, ByteType>>() {}).apply();
 		RandomAccess<LabelingType<Integer>> randomAccess = in1.randomAccess();
 		randomAccess.setPosition(new int[] { 0, 0 });
@@ -69,7 +69,7 @@ public class MergeLabelingTest extends AbstractOpTest {
 		randomAccess.setPosition(new int[] { 1, 1 });
 		randomAccess.get().add(3);
 
-		in2 = ops.op("create.imgLabeling").input(new FinalInterval(2, 2), new ByteType())
+		in2 = ops.op("create.imgLabeling").arity2().input(new FinalInterval(2, 2), new ByteType())
 				.outType(new Nil<ImgLabeling<Integer, ByteType>>() {}).apply();
 		randomAccess = in2.randomAccess();
 		randomAccess.setPosition(new int[] { 0, 0 });
@@ -81,13 +81,13 @@ public class MergeLabelingTest extends AbstractOpTest {
 		randomAccess.setPosition(new int[] { 1, 1 });
 		randomAccess.get().add(13);
 
-		out = ops.op("create.imgLabeling").input(new FinalInterval(2, 2), new ByteType())
+		out = ops.op("create.imgLabeling").arity2().input(new FinalInterval(2, 2), new ByteType())
 				.outType(new Nil<ImgLabeling<Integer, ByteType>>() {}).apply();
 	}
 
 	@Test
 	public void testMerging() {
-		final ImgLabeling<Integer, ByteType> run = ops.op("labeling.merge").input(in1, in2)
+		final ImgLabeling<Integer, ByteType> run = ops.op("labeling.merge").arity2().input(in1, in2)
 				.outType(new Nil<ImgLabeling<Integer, ByteType>>() {}).apply();
 		assertTrue(run.firstElement().contains(0));
 		assertTrue(run.firstElement().contains(10));
@@ -96,14 +96,14 @@ public class MergeLabelingTest extends AbstractOpTest {
 
 	@Test
 	public void testMask() {
-		final Img<BitType> mask = ops.op("create.img").input(in1, new BitType())
+		final Img<BitType> mask = ops.op("create.img").arity2().input(in1, new BitType())
 				.outType(new Nil<Img<BitType>>() {}).apply();
 		final RandomAccess<BitType> maskRA = mask.randomAccess();
 		maskRA.setPosition(new int[] { 0, 0 });
 		maskRA.get().set(true);
 		maskRA.setPosition(new int[] { 1, 1 });
 		maskRA.get().set(true);
-		out = ops.op("labeling.merge").input(in1, in2, mask)
+		out = ops.op("labeling.merge").arity3().input(in1, in2, mask)
 				.outType(new Nil<ImgLabeling<Integer, ByteType>>() {}).apply();
 		final RandomAccess<LabelingType<Integer>> outRA = out.randomAccess();
 		outRA.setPosition(new int[] { 0, 0 });

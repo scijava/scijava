@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -37,7 +37,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test {@link CopyType}.
+ * Test {@link Copiers#copyType}.
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
  *
@@ -53,7 +53,7 @@ public class CopyTypeTest extends AbstractOpTest {
 
 	@Test
 	public void copyTypeNoOutputTest() {
-		DoubleType out = ops.op("copy.type").input(dt).outType(DoubleType.class).apply();
+		DoubleType out = ops.op("copy.type").arity1().input(dt).outType(DoubleType.class).apply();
 
 		assertEquals(dt.get(), out.get(), 0.0);
 	}
@@ -61,7 +61,7 @@ public class CopyTypeTest extends AbstractOpTest {
 	@Test
 	public void copyTypeWithOutputTest() {
 		DoubleType out = new DoubleType();
-		ops.op("copy.type").input(out).output(dt).compute();
+		ops.op("copy.type").arity1().input(out).output(dt).compute();
 
 		assertEquals(dt.get(), out.get(), 0.0);
 

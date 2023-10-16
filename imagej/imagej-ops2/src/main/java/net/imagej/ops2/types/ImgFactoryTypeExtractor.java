@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,42 +31,27 @@ package net.imagej.ops2.types;
 
 import java.lang.reflect.Type;
 
-import net.imglib2.img.ImgFactory;
-import net.imglib2.img.array.ArrayImg;
-
-import org.scijava.priority.Priority;
+import org.scijava.types.SubTypeExtractor;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 
+import net.imglib2.img.ImgFactory;
+
 /**
- * {@link TypeExtractor} plugin which operates on {@link ArrayImg} objects.
- * <p>
- * For performance reasons, we examine only the first element of the iteration,
- * which may be a more specific type than later elements. Hence the generic type
- * given by this extraction may be overly constrained.
- * </p>
+ * {@link TypeExtractor} plugin which operates on {@link ImgFactory} objects.
  *
  * @author Gabriel Selzer
  */
-public class ImgFactoryTypeExtractor implements TypeExtractor<ImgFactory<?>> {
+public class ImgFactoryTypeExtractor extends SubTypeExtractor<ImgFactory<?>> {
 
 	@Override
-	public Type reify(final TypeReifier t, final ImgFactory<?> o, final int n) {
-		if (n != 0)
-			throw new IndexOutOfBoundsException();
-
-		return t.reify(o.type());
+	protected Class<?> getRawType() {
+		return ImgFactory.class;
 	}
 
 	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Class<ImgFactory<?>> getRawType() {
-		return (Class) ImgFactory.class;
-	}
-
-	@Override
-	public double priority() {
-		return Priority.LOW;
+	protected Type[] getTypeParameters(TypeReifier r, ImgFactory<?> object) {
+		return new Type[] { r.reify(object.type()) };
 	}
 
 }

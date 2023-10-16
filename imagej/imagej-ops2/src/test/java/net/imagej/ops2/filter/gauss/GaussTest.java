@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,8 +29,6 @@
 
 package net.imagej.ops2.filter.gauss;
 
-import java.util.concurrent.ExecutorService;
-
 import net.imagej.ops2.AbstractOpTest;
 import net.imagej.testutil.TestImgGeneration;
 import net.imglib2.Cursor;
@@ -56,18 +54,14 @@ public class GaussTest extends AbstractOpTest {
 	/** Tests the Gaussian. */
 	@Test
 	public void gaussRegressionTest() {
-
-		// retrieve an ExecutorService TODO is there a better way to do this?
-		ExecutorService es = threads.getExecutorService();
-
 		final Img<ByteType> in = TestImgGeneration.byteArray(true, new long[] { 10, 10 });
-		final Img<ByteType> out1 = ops.op("create.img").input(in, Util.getTypeFromInterval(in))
+		final Img<ByteType> out1 = ops.op("create.img").arity2().input(in, Util.getTypeFromInterval(in))
 				.outType(new Nil<Img<ByteType>>() {}).apply();
 		final double sigma = 5;
-		final Img<ByteType> out2 = ops.op("create.img").input(in, Util.getTypeFromInterval(in))
+		final Img<ByteType> out2 = ops.op("create.img").arity2().input(in, Util.getTypeFromInterval(in))
 				.outType(new Nil<Img<ByteType>>() {}).apply();
 
-		ops.op("filter.gauss").input(in, es, sigma).output(out1).compute();
+		ops.op("filter.gauss").arity2().input(in, sigma).output(out1).compute();
 		try {
 			Gauss3.gauss(sigma, Views.extendMirrorSingle(in), out2);
 		} catch (IncompatibleTypeException e) {
@@ -82,6 +76,7 @@ public class GaussTest extends AbstractOpTest {
 			Assertions.assertEquals(c1.next().getRealDouble(), c2.next().getRealDouble(), 0);
 		}
 	}
+
 	//
 	// /** Tests the Gaussian matching. */
 	// @Test

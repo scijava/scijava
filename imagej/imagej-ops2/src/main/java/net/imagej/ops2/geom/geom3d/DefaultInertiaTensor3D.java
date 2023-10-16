@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -58,8 +58,8 @@ public class DefaultInertiaTensor3D<B extends BooleanType<B>> implements Functio
 	/**
 	 * TODO
 	 *
-	 * @param iterableRegion
-	 * @param inertiaTensor
+	 * @param input an {@link IterableRegion} input
+	 * @return the second multi variate
 	 */
 	@Override
 	public RealMatrix apply(final IterableRegion<B> input) {

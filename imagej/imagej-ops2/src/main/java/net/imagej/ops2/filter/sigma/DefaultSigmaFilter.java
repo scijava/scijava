@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -32,12 +32,14 @@ package net.imagej.ops2.filter.sigma;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
+import net.imglib2.outofbounds.OutOfBoundsMirrorFactory;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Nullable;
 
 /**
  * Default implementation of {@link SigmaFilterOp}.
@@ -48,7 +50,7 @@ import org.scijava.ops.spi.OpDependency;
  * @implNote op names='filter.sigma', priority='-100.'
  */
 public class DefaultSigmaFilter<T extends RealType<T>, V extends RealType<V>> implements
-		Computers.Arity5<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, Double, Double, RandomAccessibleInterval<V>> {
+		Computers.Arity5<RandomAccessibleInterval<T>, Shape, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<V>> {
 
 	@OpDependency(name = "stats.variance")
 	private Computers.Arity1<Iterable<T>, DoubleType> varianceOp;
@@ -61,20 +63,24 @@ public class DefaultSigmaFilter<T extends RealType<T>, V extends RealType<V>> im
 	 *
 	 * @param input
 	 * @param inputNeighborhoodShape
-	 * @param outOfBoundsFactory
 	 * @param range
 	 * @param minPixelFraction
+	 * @param outOfBoundsFactory (required = false)
 	 * @param output
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
-			OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory, final Double range,
-			final Double minPixelFraction, final RandomAccessibleInterval<V> output) {
+			final Double range, final Double minPixelFraction,
+			@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
+			final RandomAccessibleInterval<V> output) {
+		if (outOfBoundsFactory == null)
+			outOfBoundsFactory = new OutOfBoundsMirrorFactory<>(
+					OutOfBoundsMirrorFactory.Boundary.SINGLE);
+
 		if (range <= 0)
 			throw new IllegalArgumentException("range must be positive!");
 		Computers.Arity2<Iterable<T>, T, V> mappedOp = (in1, in2, out) -> op.compute(in1, in2, range, minPixelFraction, out);
-		RandomAccessibleInterval<T> extended = outOfBoundsFactory == null ? input
-			: Views.interval((Views.extend(input, outOfBoundsFactory)), input);
+		RandomAccessibleInterval<T> extended = Views.interval((Views.extend(input, outOfBoundsFactory)), input);
 		mapper.compute(extended, inputNeighborhoodShape, mappedOp, output);
 	}
 

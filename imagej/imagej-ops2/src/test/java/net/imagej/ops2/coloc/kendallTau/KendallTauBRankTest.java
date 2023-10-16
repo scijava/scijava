@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,11 +34,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.Iterator;
-import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 
-import net.imagej.ops2.AbstractOpTest;
+import org.junit.jupiter.api.Test;
+import org.scijava.ops.api.OpBuilder;
+import org.scijava.types.Nil;
+
 import net.imagej.ops2.AbstractColocalisationTest;
+import net.imagej.ops2.AbstractOpTest;
 import net.imagej.ops2.coloc.pValue.PValueResult;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
@@ -49,12 +52,8 @@ import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.util.IterablePair;
 import net.imglib2.util.Pair;
 
-import org.junit.jupiter.api.Test;
-import org.scijava.ops.api.OpBuilder;
-import org.scijava.types.Nil;
-
 /**
- * Tests {@link net.imagej.ops2.Ops.Coloc.KendallTau}.
+ * Tests {@link net.imagej.ops2.coloc.kendallTau.KendallTauBRank}.
  *
  * @author Ellen T Arena
  */
@@ -104,7 +103,7 @@ public class KendallTauBRankTest extends AbstractOpTest {
 			//final PairIterator<DoubleType> iter = pairIterator(values1, values2);
 			final Iterable<Pair<IntType, IntType>> iter = new IterablePair<>(ArrayImgs.ints(values1, n), ArrayImgs.ints(values2, n));
 			double kendallValue1 = calculateNaive(iter.iterator());
-			double kendallValue2 = ops.op("coloc.kendallTau").input(values1, values2).outType(Double.class).apply();
+			double kendallValue2 = ops.op("coloc.kendallTau").arity2().input(values1, values2).outType(Double.class).apply();
 			if (Double.isNaN(kendallValue1)) {
 				assertTrue(Double.isInfinite(kendallValue2) || Double.isNaN(
 					kendallValue2), "i: " + i + ", value2: " + kendallValue2);
@@ -116,7 +115,6 @@ public class KendallTauBRankTest extends AbstractOpTest {
 	
 	@Test
 	public void testPValue() {
-		ExecutorService es = threads.getExecutorService();
 		final double mean = 0.2;
 		final double spread = 0.1;
 		final double[] sigma = new double[] { 3.0, 3.0 };
@@ -133,7 +131,7 @@ public class KendallTauBRankTest extends AbstractOpTest {
 //						new Nil<BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double>>() {})
 //						.apply();
 		PValueResult value = new PValueResult();
-		ops.op("coloc.pValue").input(ch1, ch2, op, es).output(value).compute();
+		ops.op("coloc.pValue").arity3().input(ch1, ch2, op).output(value).compute();
 		assertEquals(0.75, value.getPValue(), 0.0);
 	}
 
@@ -145,7 +143,7 @@ public class KendallTauBRankTest extends AbstractOpTest {
 	}
 	
 	private <T extends RealType<T>, U extends RealType<U>> void assertTau(final double expected, final Iterable<T> img1, final Iterable<U> img2) {
-		final double kendallValue = (double) ops.op("coloc.kendallTau").input(img1, img2).apply();
+		final double kendallValue = (double) ops.op("coloc.kendallTau").arity2().input(img1, img2).apply();
 		assertEquals(expected, kendallValue, 1e-10);
 	}
 

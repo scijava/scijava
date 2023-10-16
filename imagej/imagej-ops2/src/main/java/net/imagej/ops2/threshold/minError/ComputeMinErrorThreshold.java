@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -35,7 +35,7 @@ import net.imagej.ops2.threshold.mean.ComputeMeanThreshold;
 import net.imglib2.histogram.Histogram1d;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.ops.engine.OpExecutionException;
+import org.scijava.ops.spi.OpExecutionException;
 
 // NB - this plugin adapted from Gabriel Landini's code of his AutoThreshold
 // plugin found in Fiji (version 1.14).
@@ -55,8 +55,8 @@ public class ComputeMinErrorThreshold<T extends RealType<T>> extends
 	/**
 	 * TODO
 	 *
-	 * @param inputHistogram
-	 * @param output
+	 * @param hist the {@link Histogram1d}
+	 * @return the Min Error threshold value
 	 */
 	@Override
 	public long computeBin(final Histogram1d<T> hist) {

@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,6 +44,7 @@ import net.imglib2.type.logic.BitType;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.scijava.function.Functions;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 /**
@@ -62,29 +63,21 @@ import org.scijava.ops.spi.OpDependency;
 public class DefaultVoxelization3D
 		implements Functions.Arity4<Mesh, Integer, Integer, Integer, RandomAccessibleInterval<BitType>> {
 
-	// @Parameter(itemIO = ItemIO.INPUT, required = false)
-	// private int width = 10;
-	//
-	// @Parameter(itemIO = ItemIO.INPUT, required = false)
-	// private int height = 10;
-	//
-	// @Parameter(itemIO = ItemIO.INPUT, required = false)
-	// private int depth = 10;
-
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, BitType, Img<BitType>> imgCreator;
 
 	/**
 	 * TODO
 	 *
-	 * @param input
-	 * @param width
-	 * @param height
-	 * @param depth
-	 * @param voxelizedImage
+	 * @param input the input {@link Mesh}
+	 * @param width (required = false)
+	 * @param height (required = false)
+	 * @param depth (required = false)
+	 * @return the voxelization of {@code input}
 	 */
 	@Override
-	public RandomAccessibleInterval<BitType> apply(Mesh input, Integer width, Integer height, Integer depth) {
+	public RandomAccessibleInterval<BitType> apply(final Mesh input,
+			@Nullable Integer width, @Nullable Integer height, @Nullable Integer depth) {
 		if (width == null)
 			width = 10;
 		if (height == null)

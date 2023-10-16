@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,12 +30,12 @@ package net.imagej.ops2.image.cooccurrenceMatrix;
 
 import java.util.function.Function;
 
+import org.scijava.function.Functions;
+import org.scijava.ops.spi.OpDependency;
+
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Pair;
-
-import org.scijava.function.Functions;
-import org.scijava.ops.spi.OpDependency;
 
 /**
  * Handler Op delegating between {@link CooccurrenceMatrix2D} and
@@ -55,11 +55,12 @@ public class CooccurrenceMatrix<T extends RealType<T>>
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
-	 * @param nrGreyLevels
-	 * @param distance
-	 * @param matrixOrientation
-	 * @param cooccurrenceMatrix
+	 * @param input the input data
+	 * @param nrGreyLevels the number of gray levels within the input data
+	 * @param distance the <em>number of pixels</em> in the direction specified by
+	 *          {@code orientation} to find the co-occurring pixel
+	 * @param orientation specifies the offset between the co-occurring pixels.
+	 * @return the co-occurence matrix
 	 */
 	@Override
 	public double[][] apply(RandomAccessibleInterval<T> input, Integer nrGreyLevels, Integer distance,

@@ -5,8 +5,8 @@ org.scijava.ops.engine.adapt.lift.ComputerToIterables
 org.scijava.ops.engine.adapt.lift.FunctionToArrays
 org.scijava.ops.engine.adapt.lift.FunctionToIterables
 org.scijava.ops.engine.adapt.lift.InplaceToArrays
-org.scijava.ops.engine.conversionLoss.impl.PrimitiveArrayLossReporters
-org.scijava.ops.engine.conversionLoss.impl.PrimitiveLossReporters
+org.scijava.ops.engine.matcher.simplify.PrimitiveArrayLossReporters
+org.scijava.ops.engine.matcher.simplify.PrimitiveLossReporters
 org.scijava.ops.engine.copy.CopyOpCollection
 org.scijava.ops.engine.create.CreateOpCollection
 org.scijava.ops.engine.math.Add
@@ -14,5 +14,6 @@ org.scijava.ops.engine.math.MathOpCollection
 org.scijava.ops.engine.math.Power
 org.scijava.ops.engine.math.Sqrt
 org.scijava.ops.engine.math.Zero
-org.scijava.ops.engine.simplify.PrimitiveArraySimplifiers
-org.scijava.ops.engine.simplify.PrimitiveSimplifiers
+org.scijava.ops.engine.matcher.simplify.PrimitiveArraySimplifiers
+org.scijava.ops.engine.matcher.simplify.PrimitiveSimplifiers
+org.scijava.ops.engine.stats.Size

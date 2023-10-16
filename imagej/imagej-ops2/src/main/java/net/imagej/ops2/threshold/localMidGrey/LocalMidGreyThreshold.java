@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,7 +29,6 @@
 
 package net.imagej.ops2.threshold.localMidGrey;
 
-import net.imagej.ops2.filter.ApplyCenterAwareNeighborhoodBasedFilter;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
@@ -38,6 +37,7 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Nullable;
 
 /**
  * @author Jonathan Hale
@@ -51,6 +51,9 @@ public class LocalMidGreyThreshold<T extends RealType<T>> implements
 	@OpDependency(name = "threshold.localMidGrey")
 	private Computers.Arity3<Iterable<T>, T, Double, BitType> computeThresholdOp;
 
+	@OpDependency(name = "filter.applyCenterAware")
+	private Computers.Arity4<RandomAccessibleInterval<T>, Computers.Arity2<Iterable<T>, T, BitType>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<BitType>> applyFilterOp;
+
 	/**
 	 * TODO
 	 *
@@ -63,25 +66,12 @@ public class LocalMidGreyThreshold<T extends RealType<T>> implements
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
 		final Shape inputNeighborhoodShape, final Double c,
-		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-		final RandomAccessibleInterval<BitType> output)
-	{
-		compute(input, inputNeighborhoodShape, c, outOfBoundsFactory,
-			computeThresholdOp, output);
-	}
-
-	public static <T extends RealType<T>> void compute(
-		final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
-		final Double c,
-		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-		final Computers.Arity3<Iterable<T>, T, Double, BitType> computeThresholdOp,
+		@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final RandomAccessibleInterval<BitType> output)
 	{
 		final Computers.Arity2<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
-			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, c, o);
-		ApplyCenterAwareNeighborhoodBasedFilter.compute(input,
-			inputNeighborhoodShape, outOfBoundsFactory,
-			parametrizedComputeThresholdOp, output);
+				(i1, i2, o) -> computeThresholdOp.compute(i1, i2, c, o);
+		applyFilterOp.compute(input, parametrizedComputeThresholdOp,
+			inputNeighborhoodShape, outOfBoundsFactory, output);
 	}
-
 }

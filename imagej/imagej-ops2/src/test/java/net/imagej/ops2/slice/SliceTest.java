@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -95,7 +95,7 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends Abs
 			ops.bakeLambdaType(test,
 				new Nil<Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>>>()
 				{}.getType());
-		ops.op("slice").input(in, wrapped, xyAxis, true).output(out).compute();
+		ops.op("slice").arity4().input(in, wrapped, xyAxis, true).output(out).compute();
 
 		for (final Cursor<ByteType> cur = out.cursor(); cur.hasNext();) {
 			cur.fwd();
@@ -133,7 +133,7 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends Abs
 			ops.bakeLambdaType(test,
 				new Nil<Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>>>()
 				{}.getType());
-		ops.op("slice").input(inSequence, wrapped, xyAxis, true).output(outSequence)
+		ops.op("slice").arity4().input(inSequence, wrapped, xyAxis, true).output(outSequence)
 			.compute();
 
 		for (final Cursor<ByteType> cur = outSequence.cursor(); cur.hasNext();) {

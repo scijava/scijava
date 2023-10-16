@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -32,7 +32,6 @@ package net.imagej.ops2.segment.detectJunctions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import net.imagej.ops2.segment.detectRidges.DefaultDetectRidges;
 import net.imglib2.Interval;
@@ -44,7 +43,7 @@ import net.imglib2.roi.geom.real.WritablePolyline;
 import net.imglib2.roi.util.RealLocalizableRealPositionable;
 import net.imglib2.util.Intervals;
 
-import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Nullable;
 
 /**
  * Finds the junctions between a {@link ArrayList} of {@link WritablePolyline},
@@ -60,7 +59,6 @@ import org.scijava.ops.spi.OpDependency;
  */
 public class DefaultDetectJunctions implements BiFunction<List<? extends WritablePolyline>, Double, List<RealPoint>> {
 
-	// @Parameter(required = false)
 	private double threshold = 2;
 
 	private boolean areClose(RealPoint p1, RealPoint p2) {
@@ -97,16 +95,17 @@ public class DefaultDetectJunctions implements BiFunction<List<? extends Writabl
 	 * TODO
 	 *
 	 * @param lines
-	 * @param threshold Maximum distance between polylines to be considered a junction
-	 * @param junctions
+	 * @param threshold Maximum distance between polylines to be considered a junction (required = false)
+	 * @return junctions
 	 */
 	@Override
-	public List<RealPoint> apply(final List<? extends WritablePolyline> input, final Double threshold) {
+	public List<RealPoint> apply(final List<? extends WritablePolyline> lines, @Nullable
+	Double threshold) {
 
 		// check arguments for validity
-		if (input.size() < 1)
+		if (lines.size() < 1)
 			return new ArrayList<RealPoint>();
-		if (input.get(0).vertex(0).numDimensions() != 2)
+		if (lines.get(0).vertex(0).numDimensions() != 2)
 			throw new IllegalArgumentException("Only 2-dimensional WritablePolylines are supported!");
 
 		if (threshold != null)
@@ -116,10 +115,10 @@ public class DefaultDetectJunctions implements BiFunction<List<? extends Writabl
 		// realPointCollection for our junctions.
 		List<RealPoint> output = new ArrayList<>();
 
-		for (int first = 0; first < input.size() - 1; first++) {
-			WritablePolyline firstLine = input.get(first);
-			for (int second = first + 1; second < input.size(); second++) {
-				WritablePolyline secondLine = input.get(second);
+		for (int first = 0; first < lines.size() - 1; first++) {
+			WritablePolyline firstLine = lines.get(first);
+			for (int second = first + 1; second < lines.size(); second++) {
+				WritablePolyline secondLine = lines.get(second);
 				// interval containing both plines
 				Interval intersect = Intervals.intersect(slightlyEnlarge(firstLine, 2), slightlyEnlarge(secondLine, 2));
 				// if the two do not intersect, then don't bother checking them against
@@ -312,27 +311,6 @@ public class DefaultDetectJunctions implements BiFunction<List<? extends Writabl
 			junctions.add(makeRealPoint(q2));
 			foundJunctions++;
 		}
-	}
-
-}
-
-/**
- *@implNote op names='segment.detectJunctions'
- */
-class SimpleDetectJunctions implements Function<List<? extends WritablePolyline>, List<RealPoint>> {
-
-	@OpDependency(name = "segment.detectJunctions")
-	private BiFunction<List<? extends WritablePolyline>, Double, List<RealPoint>> junctionDetector;
-
-	/**
-	 * TODO
-	 *
-	 * @param lines
-	 * @param junctions
-	 */
-	@Override
-	public List<RealPoint> apply(List<? extends WritablePolyline> t) {
-		return junctionDetector.apply(t, null);
 	}
 
 }

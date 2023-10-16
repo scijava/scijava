@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,39 +27,28 @@
  * #L%
  */
 //
-//package net.imagej.ops2.filter.convolve;
-//
-//import static org.junit.jupiter.api.Assertions.assertEquals;
-//
-//import java.util.concurrent.ExecutorService;
-//
-//import net.imagej.ops2.AbstractOpTest;
-//import net.imagej.ops2.filter.fft.CreateOutputFFTMethods;
-//import net.imagej.ops2.filter.pad.PadInputFFTMethods;
-//import net.imagej.ops2.filter.pad.PadShiftKernelFFTMethods;
-//import net.imagej.ops2.special.function.BinaryFunctionOp;
-//import net.imagej.ops2.special.function.Functions;
-//import net.imagej.ops2.special.function.UnaryFunctionOp;
-//import net.imglib2.Dimensions;
-//import net.imglib2.FinalDimensions;
-//import net.imglib2.Point;
-//import net.imglib2.RandomAccess;
-//import net.imglib2.RandomAccessibleInterval;
-//import net.imglib2.algorithm.region.hypersphere.HyperSphere;
-//import net.imglib2.img.Img;
-//import net.imglib2.img.array.ArrayImgFactory;
-//import net.imglib2.type.numeric.complex.ComplexFloatType;
-//import net.imglib2.type.numeric.integer.ByteType;
-//import net.imglib2.type.numeric.real.DoubleType;
-//import net.imglib2.type.numeric.real.FloatType;
-//import net.imglib2.view.Views;
-//
-//import org.junit.jupiter.api.Test;
-//
-///**
-// * Tests involving convolvers.
-// */
-//public class ConvolveTest extends AbstractOpTest {
+package net.imagej.ops2.filter.convolve;
+
+import net.imagej.ops2.AbstractOpTest;
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.outofbounds.OutOfBoundsFactory;
+import net.imglib2.type.numeric.complex.ComplexFloatType;
+import net.imglib2.type.numeric.real.FloatType;
+import org.junit.jupiter.api.Test;
+import org.scijava.types.Nil;
+
+/**
+ * Tests involving convolvers.
+ */
+public class ConvolveTest extends AbstractOpTest {
+
+	@Test
+	public void testConvolve() {
+		// Verify we can get a ConvolveFFTF op
+		var o = ops.op("filter.convolve").arity6().inType(new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>> () {}, Nil.of(FloatType.class
+		), Nil.of(ComplexFloatType.class), new Nil<long[]>(){}, new Nil<OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>>() {}).outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).computer();
+	}
+}
 //
 //	/** Tests that the correct convolver is selected when using a small kernel. */
 //	@Test
@@ -277,5 +266,3 @@
 //		assertEquals(min.getRealDouble(), 2.978E-7, 0.001);
 //
 //	}
-//
-//}

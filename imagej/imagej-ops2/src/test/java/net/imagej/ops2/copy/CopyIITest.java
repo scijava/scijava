@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,22 +31,27 @@ package net.imagej.ops2.copy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.scijava.function.Computers;
+import org.scijava.types.Nil;
+import org.scijava.util.MersenneTwisterFast;
+
 import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
 import net.imglib2.img.Img;
+import net.imglib2.img.array.ArrayImg;
 import net.imglib2.img.array.ArrayImgFactory;
+import net.imglib2.img.basictypeaccess.array.ArrayDataAccess;
 import net.imglib2.img.planar.PlanarImgFactory;
+import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.scijava.types.Nil;
-import org.scijava.util.MersenneTwisterFast;
 
 /**
- * Test {@link CopyII}
+ * Test {@link Copiers#copyIterableInterval(Computers.Arity1, IterableInterval, IterableInterval)}
  * 
  * @author Christian Dietz (University of Konstanz)
  */
@@ -68,9 +73,10 @@ public class CopyIITest extends AbstractOpTest {
 	}
 
 	@Test
-	public void copyRAINoOutputTest() {
-		IterableInterval<DoubleType> output = ops.op("copy.iterableInterval").input(input)
-				.outType(new Nil<IterableInterval<DoubleType>>() {}).apply();
+	public void copyIINoOutputTest() {
+		var nil = new Nil<IterableInterval<DoubleType>>() {};
+		var op = ops.op("copy").arity1().inType(nil).outType(nil).function();
+		IterableInterval<DoubleType> output = op.apply(input);
 
 		Cursor<DoubleType> inc = input.localizingCursor();
 		Cursor<DoubleType> out = output.cursor();
@@ -86,7 +92,7 @@ public class CopyIITest extends AbstractOpTest {
 	public void copyTypeTest() {
 		Img<FloatType> inputFloat = new ArrayImgFactory<>(new FloatType()).create(new int[] { 120, 100 });
 
-		Img<FloatType> output = ops.op("copy.iterableInterval").input(inputFloat)
+		Img<FloatType> output = ops.op("copy").arity1().input(inputFloat)
 				.outType(new Nil<Img<FloatType>>() {}).apply();
 
 		assertTrue(output.firstElement() instanceof FloatType,
@@ -94,10 +100,10 @@ public class CopyIITest extends AbstractOpTest {
 	}
 
 	@Test
-	public void copyRAIWithOutputTest() {
+	public void copyIIWithOutputTest() {
 		Img<DoubleType> output = input.factory().create(input, input.firstElement());
 
-		ops.op("copy.iterableInterval").input(input).output(output).compute();
+		ops.op("copy").arity1().input(input).output(output).compute();
 
 		final Cursor<DoubleType> inc = input.cursor();
 		final Cursor<DoubleType> outc = output.cursor();
@@ -105,5 +111,10 @@ public class CopyIITest extends AbstractOpTest {
 		while (inc.hasNext()) {
 			assertEquals(inc.next().get(), outc.next().get(), 0.0);
 		}
+		Img<FloatType> bar = foo();
+	}
+
+	private static <N extends NativeType<N>, A extends ArrayDataAccess<A>> ArrayImg<N, A> foo() {
+		return null;
 	}
 }

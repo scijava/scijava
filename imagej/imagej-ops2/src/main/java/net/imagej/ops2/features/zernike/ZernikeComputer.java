@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -48,10 +48,10 @@ public class ZernikeComputer<T extends RealType<T>>
 	/**
 	 * TODO
 	 *
-	 * @param input
-	 * @param order
-	 * @param repetition
-	 * @param zernikeMoment
+	 * @param ii the {@link IterableInterval| to iterate over
+	 * @param order the order of the moment to compute
+	 * @param repetition the repetition of the moment to compute
+	 * @return the zernike moment
 	 */
 	@Override
 	public ZernikeMoment apply(final IterableInterval<T> ii, final Integer order, final Integer repetition) {

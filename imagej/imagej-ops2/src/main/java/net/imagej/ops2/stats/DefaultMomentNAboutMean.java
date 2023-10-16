@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -63,8 +63,10 @@ public class DefaultMomentNAboutMean<I extends RealType<I>, O extends RealType<O
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
-	 * @param moment3AboutMean
+	 * @param input the input data
+	 * @param n the order of the moment to compute
+	 * @param output the output buffer in which the nth moment of the input data
+	 *          will be stored
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final Integer n, final O output) {

@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -202,11 +202,6 @@ public class SlicesII<T> extends AbstractInterval implements IterableInterval<Ra
 		}
 
 		@Override
-		public Sampler<RandomAccessibleInterval<T>> copy() {
-			return copyCursor();
-		}
-
-		@Override
 		public RandomAccessibleInterval<T> next() {
 			fwd();
 			return get();
@@ -218,9 +213,8 @@ public class SlicesII<T> extends AbstractInterval implements IterableInterval<Ra
 		}
 
 		@Override
-		public Cursor<RandomAccessibleInterval<T>> copyCursor() {
+		public SlicesIICursor copy() {
 			return new SlicesIICursor(this);
 		}
 	}
-
 }

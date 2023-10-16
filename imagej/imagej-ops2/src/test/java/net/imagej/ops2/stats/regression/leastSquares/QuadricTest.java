@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -61,7 +61,7 @@ public class QuadricTest extends AbstractOpTest {
 
 	@Test
 	public void testEquation() {
-		final Matrix4dc solution = ops.op("stats.leastSquares").input(unitSpherePoints).outType(Matrix4dc.class).apply();
+		final Matrix4dc solution = ops.op("stats.leastSquares").arity1().input(unitSpherePoints).outType(Matrix4dc.class).apply();
 		final double a = solution.m00();
 		final double b = solution.m11();
 		final double c = solution.m22();
@@ -86,13 +86,13 @@ public class QuadricTest extends AbstractOpTest {
 		final List<Vector3d> points = Stream.generate(Vector3d::new).limit(nPoints).collect(toList());
 
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			ops.op("stats.leastSquares").input(points).outType(Matrix4d.class).apply();
+			ops.op("stats.leastSquares").arity1().input(points).outType(Matrix4d.class).apply();
 		});
 	}
 
 	@Test
 	public void testMatrixElements() {
-		final Matrix4dc solution = ops.op("stats.leastSquares").input(unitSpherePoints).outType(Matrix4d.class).apply();
+		final Matrix4dc solution = ops.op("stats.leastSquares").arity1().input(unitSpherePoints).outType(Matrix4d.class).apply();
 
 		assertEquals(1.0, solution.m00(), 1e-12, "The matrix element is incorrect");
 		assertEquals(1.0, solution.m11(), 1e-12, "The matrix element is incorrect");

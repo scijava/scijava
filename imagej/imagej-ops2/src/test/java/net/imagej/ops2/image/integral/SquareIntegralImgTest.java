@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -65,7 +65,7 @@ public class SquareIntegralImgTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testSquareIntegralImageCorrectness() {
-		ops.op("image.squareIntegral").input(generateKnownByteArrayTestImg()).output(out).compute();
+		ops.op("image.squareIntegral").arity1().input(generateKnownByteArrayTestImg()).output(out).compute();
 
 		Img<ByteType> bytes = generateKnownSquareIntegralImage();
 

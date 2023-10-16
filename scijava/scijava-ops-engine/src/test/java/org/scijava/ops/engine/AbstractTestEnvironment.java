@@ -1,7 +1,37 @@
+/*-
+ * #%L
+ * SciJava Operations Engine: a framework for reusable algorithms.
+ * %%
+ * Copyright (C) 2016 - 2023 SciJava developers.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
 
 package org.scijava.ops.engine;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -11,32 +41,23 @@ import java.util.ServiceLoader;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.scijava.discovery.Discoverer;
-import org.scijava.discovery.ManualDiscoverer;
-import org.scijava.log2.Logger;
-import org.scijava.log2.StderrLoggerFactory;
-import org.scijava.ops.api.*;
-import org.scijava.ops.api.features.MatchingRoutine;
-import org.scijava.types.DefaultTypeReifier;
-import org.scijava.types.TypeReifier;
+import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpCollection;
 
 public abstract class AbstractTestEnvironment {
 
 	protected static OpEnvironment ops;
-	protected static OpHistory history;
-	protected static Logger logger;
-	protected static TypeReifier types;
 
 	@BeforeAll
 	public static void setUp() {
-		logger = new StderrLoggerFactory().create();
-		types = new DefaultTypeReifier(logger, Discoverer.using(ServiceLoader::load));
 		ops = barebonesEnvironment();
 	}
 
 	@AfterAll
 	public static void tearDown() {
 		ops = null;
-		logger = null;
 	}
 
 	protected static <T> Optional<T> objFromNoArgConstructor(Class<T> c) {
@@ -56,20 +77,12 @@ public abstract class AbstractTestEnvironment {
 	}
 
 	protected static OpEnvironment barebonesEnvironment() {
-		// register needed classes in StaticDiscoverer
-		ManualDiscoverer discoverer = new ManualDiscoverer();
-
-		Discoverer serviceLoading = Discoverer.using(ServiceLoader::load) //
-				.onlyFor( //
-						OpWrapper.class, //
-						MatchingRoutine.class, //
-						OpInfoGenerator.class, //
-						InfoChainGenerator.class //
-				);
-
-		history = new DefaultOpHistory();
-		// return Op Environment
-		return new DefaultOpEnvironment(types, logger, history, discoverer, serviceLoading);
+		Discoverer serviceLoading = Discoverer.using(ServiceLoader::load).except( //
+			Op.class, //
+			OpInfo.class, //
+			OpCollection.class //
+		);
+		return OpEnvironment.getEnvironment(serviceLoading);
 	}
 
 	protected static boolean arrayEquals(double[] arr1, Double... arr2) {

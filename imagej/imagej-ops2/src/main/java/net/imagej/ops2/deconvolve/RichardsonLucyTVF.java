@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,13 +31,13 @@ package net.imagej.ops2.deconvolve;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import net.imglib2.Dimensions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.ComplexType;
@@ -47,6 +47,7 @@ import net.imglib2.util.Util;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 /**
@@ -63,7 +64,7 @@ import org.scijava.ops.spi.OpDependency;
  * @implNote op names='deconvolve.richardsonLucyTV', priority='100.'
  */
 public class RichardsonLucyTVF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
-	implements Functions.Arity12<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, O, C, Integer, Boolean, Boolean, Float, ExecutorService, RandomAccessibleInterval<O>> {
+	implements Functions.Arity11<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, O, C, Integer, Boolean, Boolean, Float, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, RandomAccessibleInterval<O>> {
 
 	@OpDependency(name = "deconvolve.richardsonLucyUpdate")
 	private Computers.Arity3<RandomAccessibleInterval<O>, Float, RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> updateOp;
@@ -73,7 +74,7 @@ public class RichardsonLucyTVF<I extends RealType<I> & NativeType<I>, O extends 
 	private Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> computeEstimateOp = getComputeEstimateOp();
 
 	@OpDependency(name = "deconvolve.normalizationFactor")
-	private Inplaces.Arity6_1<RandomAccessibleInterval<O>, Dimensions, Dimensions, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService> normalizer;
+	private Inplaces.Arity5_1<RandomAccessibleInterval<O>, Dimensions, Dimensions, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> normalizer;
 
 	@OpDependency(name = "deconvolve.firstGuess")
 	private Functions.Arity3<RandomAccessibleInterval<I>, O, Dimensions, RandomAccessibleInterval<O>> firstGuess;
@@ -95,12 +96,12 @@ public class RichardsonLucyTVF<I extends RealType<I> & NativeType<I>, O extends 
 	private Functions.Arity3<Dimensions, C, Boolean, RandomAccessibleInterval<C>> createOp;
 
 	@OpDependency(name = "deconvolve.richardsonLucy")
-	private Computers.Arity13<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, //
+	private Computers.Arity12<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, //
 			RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, //
 			Boolean, C, Integer, Inplaces.Arity1<RandomAccessibleInterval<O>>, //
 			Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>>, //
 			RandomAccessibleInterval<O>, List<Inplaces.Arity1<RandomAccessibleInterval<O>>>, //
-			ExecutorService, RandomAccessibleInterval<O>> richardsonLucyOp;
+			RandomAccessibleInterval<O>> richardsonLucyOp;
 
 	private Boolean nonCirculant;
 
@@ -111,7 +112,7 @@ public class RichardsonLucyTVF<I extends RealType<I> & NativeType<I>, O extends 
 	 */
 	public Computers.Arity2<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> createFilterComputer(
 			RandomAccessibleInterval<I> raiExtendedInput, RandomAccessibleInterval<K> raiExtendedKernel,
-			RandomAccessibleInterval<C> fftImg, RandomAccessibleInterval<C> fftKernel, ExecutorService es,
+			RandomAccessibleInterval<C> fftImg, RandomAccessibleInterval<C> fftKernel,
 			RandomAccessibleInterval<O> output) {
 		
 		final C complexType = Util.getTypeFromInterval(fftImg).createVariable();
@@ -121,7 +122,7 @@ public class RichardsonLucyTVF<I extends RealType<I> & NativeType<I>, O extends 
 			// TODO should this be input and kernel instead of raiExtendedInput and
 			// raiExtendedKernel?
 			Inplaces.Arity1<RandomAccessibleInterval<O>> normalizerSimplified = (io) -> {
-				normalizer.mutate(io, raiExtendedInput, raiExtendedKernel, fftImg, fftKernel, es);
+				normalizer.mutate(io, raiExtendedInput, raiExtendedKernel, fftImg, fftKernel);
 
 			};
 
@@ -135,14 +136,14 @@ public class RichardsonLucyTVF<I extends RealType<I> & NativeType<I>, O extends 
 
 			return (input, kernel, out) -> {
 				richardsonLucyOp.compute(input, kernel, fftImg, fftKernel, true, true, complexType, maxIterations, accelerator,
-						computeEstimateOp, fg.apply(raiExtendedInput), list, es, out);
+						computeEstimateOp, fg.apply(raiExtendedInput), list, out);
 			};
 		}
 
 		// return a richardson lucy computer
 		return (input, kernel, out) -> {
 			richardsonLucyOp.compute(input, kernel, fftImg, fftKernel, true, true, complexType,maxIterations, accelerator,
-					computeEstimateOp, null, null, es, out);
+					computeEstimateOp, null, null, out);
 		};
 	}
 
@@ -151,7 +152,7 @@ public class RichardsonLucyTVF<I extends RealType<I> & NativeType<I>, O extends 
 	 * create FFT memory, create FFT filter and run it
 	 */
 	public void computeFilter(final RandomAccessibleInterval<I> input, final RandomAccessibleInterval<K> kernel,
-			RandomAccessibleInterval<O> output, long[] paddedSize, C complexType, ExecutorService es) {
+			RandomAccessibleInterval<O> output, long[] paddedSize, C complexType) {
 
 		RandomAccessibleInterval<C> fftInput = createOp.apply(new FinalDimensions(paddedSize), complexType, true);
 
@@ -162,7 +163,7 @@ public class RichardsonLucyTVF<I extends RealType<I> & NativeType<I>, O extends 
 		// memory
 		// for the FFTs
 		Computers.Arity2<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> filter = createFilterComputer(
-				input, kernel, fftInput, fftKernel, es, output);
+				input, kernel, fftInput, fftKernel, output);
 
 		filter.compute(input, kernel, output);
 	}
@@ -172,23 +173,27 @@ public class RichardsonLucyTVF<I extends RealType<I> & NativeType<I>, O extends 
 	 *
 	 * @param input
 	 * @param kernel
-	 * @param borderSize
-	 * @param obfInput
-	 * @param obfKernel
 	 * @param outType
-	 * @param fftType
+	 * @param complexType
 	 * @param maxIterations max number of iterations
 	 * @param nonCirculant indicates whether to use non-circulant edge handling
 	 * @param accelerate indicates whether or not to use acceleration
 	 * @param regularizationFactor
-	 * @param executorService
-	 * @param output
+	 * @param borderSize (required = false)
+	 * @param obfInput (required = false)
+	 * @param obfKernel (required = false)
+	 * @return the deconvolution of the input data
 	 */
 	@Override
 	public RandomAccessibleInterval<O> apply(RandomAccessibleInterval<I> input, RandomAccessibleInterval<K> kernel,
-			long[] borderSize, OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,
-			OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel, O outType, C complexType,
-			Integer maxIterations, Boolean nonCirculant, Boolean accelerate, Float regularizationFactor, ExecutorService es) {
+			O outType, C complexType, Integer maxIterations,
+			Boolean nonCirculant, Boolean accelerate, Float regularizationFactor,
+			@Nullable long[] borderSize,
+			@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,
+			@Nullable OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel)
+	{
+		if (obfInput == null)
+			obfInput = new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(input).createVariable());
 
 		this.nonCirculant = nonCirculant;
 		this.maxIterations = maxIterations;
@@ -221,7 +226,7 @@ public class RichardsonLucyTVF<I extends RealType<I> & NativeType<I>, O extends 
 
 		RandomAccessibleInterval<K> paddedKernel = padKernelOp.apply(kernel, new FinalDimensions(paddedSize));
 
-		computeFilter(paddedInput, paddedKernel, output, paddedSize, complexType, es);
+		computeFilter(paddedInput, paddedKernel, output, paddedSize, complexType);
 
 		return output;
 	}

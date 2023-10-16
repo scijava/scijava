@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -40,10 +40,11 @@ import net.imglib2.type.numeric.integer.IntType;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.scijava.function.Computers;
 import org.scijava.types.Nil;
 
 /**
- * Test {@link CopyImgLabeling}
+ * Test {@link Copiers#copyImgLabeling(Computers.Arity1, Computers.Arity1, ImgLabeling, ImgLabeling)}
  * 
  * @author Christian Dietz (University of Konstanz)
  */
@@ -54,9 +55,9 @@ public class CopyImgLabelingTest extends AbstractOpTest {
 
 	@BeforeEach
 	public void createData() {
-		input = ops.op("create.imgLabeling").input(new FinalDimensions(10, 10), new IntType())
+		input = ops.op("create.imgLabeling").arity2().input(new FinalDimensions(10, 10), new IntType())
 				.outType(new Nil<ImgLabeling<String, IntType>>() {}).apply();
-		copy = ops.op("create.imgLabeling").input(new FinalDimensions(10, 10), new IntType())
+		copy = ops.op("create.imgLabeling").arity2().input(new FinalDimensions(10, 10), new IntType())
 				.outType(new Nil<ImgLabeling<String, IntType>>() {}).apply();
 
 		final Cursor<LabelingType<String>> inc = input.cursor();
@@ -74,7 +75,7 @@ public class CopyImgLabelingTest extends AbstractOpTest {
 
 	@Test
 	public void copyImgLabeling() {
-		ops.op("copy.imgLabeling").input(input).output(copy).compute();
+		ops.op("copy").arity1().input(input).output(copy).compute();
 		assertNotNull(copy);
 
 		Cursor<LabelingType<String>> inCursor = input.cursor();

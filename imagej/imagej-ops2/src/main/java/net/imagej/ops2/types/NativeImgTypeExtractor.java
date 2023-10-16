@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,11 +31,12 @@ package net.imagej.ops2.types;
 
 import java.lang.reflect.Type;
 
-import net.imglib2.img.NativeImg;
-
 import org.scijava.priority.Priority;
+import org.scijava.types.SubTypeExtractor;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
+
+import net.imglib2.img.NativeImg;
 
 /**
  * {@link TypeExtractor} plugin which operates on {@link NativeImg} objects.
@@ -49,32 +50,23 @@ import org.scijava.types.TypeReifier;
  *
  * @author Gabriel Selzer
  */
-public class NativeImgTypeExtractor implements TypeExtractor<NativeImg<?, ?>> {
+public class NativeImgTypeExtractor extends SubTypeExtractor<NativeImg<?, ?>> {
 
 	@Override
-	public Type reify(final TypeReifier t, final NativeImg<?, ?> o, final int n) {
-		if (n < 0 || n > 1)
-			throw new IndexOutOfBoundsException();
-
-		// type of the image
-		if (n == 0) {
-			Type labelingType = t.reify(o.firstElement());
-			return labelingType;
-		}
-		// type of the backing array
-		return t.reify(o.update(o.cursor()));
+	public double getPriority() {
+		return Priority.VERY_HIGH;
 	}
 
 	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Class<NativeImg<?, ?>> getRawType() {
-		return (Class) NativeImg.class;
+	protected Class<?> getRawType() {
+		return NativeImg.class;
 	}
 
 	@Override
-	public double priority() {
-		return Priority.HIGH;
+	protected Type[] getTypeParameters(TypeReifier r, NativeImg<?, ?> object) {
+		Type componentType = r.reify(object.firstElement());
+		Type backingType = r.reify(object.update(object.cursor()));
+		return new Type[] { componentType, backingType };
 	}
-
 
 }

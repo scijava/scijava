@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -32,51 +32,43 @@ package net.imagej.ops2.types;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-import net.imglib2.roi.labeling.ImgLabeling;
-import net.imglib2.view.Views;
-
-import org.scijava.priority.Priority;
+import org.scijava.types.SubTypeExtractor;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 
+import net.imglib2.roi.labeling.ImgLabeling;
+import net.imglib2.view.Views;
+
 /**
- * {@link TypeExtractor} plugin which operates on {@link Iterable} objects.
- * <p>
- * For performance reasons, we examine only the first element of the iteration,
- * which may be a more specific type than later elements. Hence the generic type
- * given by this extraction may be overly constrained.
- * </p>
+ * {@link TypeExtractor} plugin which operates on {@link ImgLabeling} objects.
  *
  * @author Curtis Rueden
+ * @author Gabriel Selzer
  */
-public class ImgLabelingTypeExtractor implements TypeExtractor<ImgLabeling<?, ?>> {
+public class ImgLabelingTypeExtractor extends
+	SubTypeExtractor<ImgLabeling<?, ?>>
+{
 
 	@Override
-	public Type reify(final TypeReifier t, final ImgLabeling<?, ?> o, final int n) {
-		if (n < 0 || n > 1) throw new IndexOutOfBoundsException();
-		
-		if(n == 0) {
-			// o.firstElement will return a LabelingType
-			Type labelingType = t.reify(o.firstElement());
-			// sanity check
-			if(!(labelingType instanceof ParameterizedType)) throw new IllegalArgumentException("ImgLabeling is not of a LabelingType");
-			// get type arg of labelingType
-			ParameterizedType pType = (ParameterizedType) labelingType;
-			return pType.getActualTypeArguments()[0];
-		}
+	protected Class<?> getRawType() {
+		return ImgLabeling.class;
+	}
+
+	@Override
+	protected Type[] getTypeParameters(TypeReifier r, ImgLabeling<?, ?> object) {
+		// o.firstElement will return a LabelingType
+		Type labelingType = r.reify(object.firstElement());
+		// sanity check
+		if (!(labelingType instanceof ParameterizedType))
+			throw new IllegalArgumentException(
+				"ImgLabeling is not of a LabelingType");
+		// get type arg of labelingType
+		ParameterizedType pType = (ParameterizedType) labelingType;
+		Type mappingType = pType.getActualTypeArguments()[0];
 		// otherwise n == 1
-		return t.reify(Views.iterable(o.getSource()).firstElement());
-	}
-
-	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Class<ImgLabeling<?, ?>> getRawType() {
-		return (Class) ImgLabeling.class;
-	}
-
-	@Override
-	public double priority() {
-		return Priority.LOW;
+		Type elementType = r.reify(Views.iterable(object.getSource())
+			.firstElement());
+		return new Type[] { mappingType, elementType };
 	}
 
 }

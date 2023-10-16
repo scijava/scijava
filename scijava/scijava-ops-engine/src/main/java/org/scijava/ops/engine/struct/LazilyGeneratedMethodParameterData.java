@@ -1,25 +1,46 @@
+/*-
+ * #%L
+ * SciJava Operations Engine: a framework for reusable algorithms.
+ * %%
+ * Copyright (C) 2016 - 2023 SciJava developers.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
 
 package org.scijava.ops.engine.struct;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.function.Producer;
-import org.scijava.ops.engine.OpUtils;
-import org.scijava.ops.engine.reduce.ReductionUtils;
+import org.scijava.ops.engine.exceptions.impl.NullablesOnMultipleMethodsException;
+import org.scijava.ops.engine.util.Ops;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.FunctionalMethodType;
-import org.scijava.struct.ItemIO;
-
-import com.github.therapi.runtimejavadoc.MethodJavadoc;
-import com.github.therapi.runtimejavadoc.OtherJavadoc;
-import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
 
 /**
  * Lazily generates the parameter data for a {@link List} of
@@ -43,30 +64,6 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 		this.opType = opType;
 	}
 
-	/**
-	 * Determines whether {@code doc} has enough {@code @param} tags to satisfy
-	 * the number of inputs to the Op ({@code numParams}), as well as enough
-	 * {@code @return} taglets to satisfy the number of Op outputs
-	 * ({@code numReturns}).
-	 * 
-	 * @param doc the {@link OtherJavadoc}s found by the javadoc parser.
-	 * @param numParams the desired number of inputs
-	 * @param numReturns the desired number of outputs
-	 * @return true iff there are {@code numParams} inputs and {@code numReturns}
-	 *         outputs
-	 */
-	private static boolean hasVanillaJavadoc(MethodJavadoc doc, long numParams,
-		long numReturns)
-	{
-		// We require a @param tag for each of the method parameters
-		boolean sufficientParams = doc.getParams().size() == numParams;
-		// We require a @return tag for the method return iff not null
-		boolean javadocReturn = !doc.getReturns().toString().isEmpty();
-		boolean methodReturn = numReturns == 1;
-		boolean sufficientReturn = javadocReturn == methodReturn;
-		return sufficientParams && sufficientReturn;
-	}
-
 	public static MethodParamInfo getInfo(List<FunctionalMethodType> fmts,
 		Method m, Class<?> opType)
 	{
@@ -82,23 +79,16 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 		Map<FunctionalMethodType, String> fmtNames = info.getFmtNames();
 		Map<FunctionalMethodType, String> fmtDescriptions = info
 			.getFmtDescriptions();
-		Map<FunctionalMethodType, Boolean> fmtOptionality = info
-			.getFmtOptionality();
+		Map<FunctionalMethodType, Boolean> fmtNullability = info
+			.getFmtNullability();
 		// determine the Op inputs/outputs
-		MethodJavadoc doc = RuntimeJavadoc.getJavadoc(m);
 		long numOpParams = m.getParameterCount();
 		long numReturns = m.getReturnType() == void.class ? 0 : 1;
-		Boolean[] paramOptionality = getParameterOptionality(m, opType,
-			(int) numOpParams, new ArrayList<>());
+		Boolean[] paramNullability = getParameterNullability(m, opType,
+			(int) numOpParams);
 
-		if (hasVanillaJavadoc(doc, numOpParams, numReturns)) {
-			addJavadocMethodParamInfo(fmtNames, fmtDescriptions, fmts, fmtOptionality,
-				doc, m, paramOptionality);
-		}
-		else {
-			addSynthesizedMethodParamInfo(fmtNames, fmtDescriptions, fmts,
-				fmtOptionality, paramOptionality);
-		}
+		addSynthesizedMethodParamInfo(fmtNames, fmtDescriptions, fmts,
+			fmtNullability, paramNullability);
 	}
 
 	public static synchronized void generateMethodParamInfo(
@@ -107,87 +97,32 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 		if (paramDataMap.containsKey(m)) return;
 
 		// determine the Op inputs/outputs
-		MethodJavadoc doc = RuntimeJavadoc.getJavadoc(m);
 		long numOpParams = m.getParameterCount();
 		long numReturns = m.getReturnType() == void.class ? 0 : 1;
 
-		opType = OpUtils.findFunctionalInterface(opType);
-		Boolean[] paramOptionality = getParameterOptionality(m, opType,
-			(int) numOpParams, new ArrayList<>());
+		opType = Ops.findFunctionalInterface(opType);
+		Boolean[] paramNullability = getParameterNullability(m, opType,
+			(int) numOpParams);
 
-		if (hasVanillaJavadoc(doc, numOpParams, numReturns)) {
-			paramDataMap.put(m, javadocMethodParamInfo(fmts, doc, m,
-				paramOptionality));
-		}
-		else {
-			paramDataMap.put(m, synthesizedMethodParamInfo(fmts, paramOptionality));
-		}
-	}
-
-	private static void addJavadocMethodParamInfo(
-		Map<FunctionalMethodType, String> fmtNames,
-		Map<FunctionalMethodType, String> fmtDescriptions,
-		List<FunctionalMethodType> fmts,
-		Map<FunctionalMethodType, Boolean> fmtOptionality, MethodJavadoc doc,
-		Method m, Boolean[] paramOptionality)
-	{
-		// Assigns fmt inputs to javadoc params
-		List<FunctionalMethodType> params = fmts.stream().filter(fmt -> fmt
-			.itemIO() != ItemIO.OUTPUT).collect(Collectors.toList());
-		Parameter[] methodParams = m.getParameters();
-		int fmtIndex = 0;
-		for (int i = 0; i < methodParams.length; i++) {
-			Parameter methodParam = methodParams[i];
-			if (methodParam.isAnnotationPresent(OpDependency.class)) continue;
-			FunctionalMethodType fmt = params.get(fmtIndex++);
-			fmtNames.put(fmt, doc.getParams().get(i).getName());
-			fmtDescriptions.put(fmt, doc.getParams().get(i).getComment().toString());
-			fmtOptionality.put(fmt, paramOptionality[i]);
-		}
-
-		// Assigns (pure) fmt output to javadoc return
-		List<FunctionalMethodType> returns = fmts.stream().filter(fmt -> fmt
-			.itemIO() == ItemIO.OUTPUT).collect(Collectors.toList());
-		if (returns.size() > 1) throw new IllegalStateException(
-			"A method can only have one return but this one has multiple!");
-		if (returns.size() == 1) {
-			fmtNames.put(returns.get(0), "output");
-			fmtDescriptions.put(returns.get(0), doc.getReturns().toString());
-		}
-	}
-
-	private static MethodParamInfo javadocMethodParamInfo(
-		List<FunctionalMethodType> fmts, MethodJavadoc doc, Method m,
-		Boolean[] paramOptionality)
-	{
-		Map<FunctionalMethodType, String> fmtNames = new HashMap<>(fmts.size());
-		Map<FunctionalMethodType, String> fmtDescriptions = new HashMap<>(fmts
-			.size());
-		Map<FunctionalMethodType, Boolean> fmtOptionality = new HashMap<>(fmts
-			.size());
-
-		addJavadocMethodParamInfo(fmtNames, fmtDescriptions, fmts, fmtOptionality,
-			doc, m, paramOptionality);
-
-		return new MethodParamInfo(fmtNames, fmtDescriptions, fmtOptionality);
+		paramDataMap.put(m, synthesizedMethodParamInfo(fmts, paramNullability));
 	}
 
 	private static void addSynthesizedMethodParamInfo(
 		Map<FunctionalMethodType, String> fmtNames,
 		Map<FunctionalMethodType, String> fmtDescriptions,
 		List<FunctionalMethodType> fmts,
-		Map<FunctionalMethodType, Boolean> fmtOptionality,
-		Boolean[] paramOptionality)
+		Map<FunctionalMethodType, Boolean> fmtNullability,
+		Boolean[] paramNullability)
 	{
 		int ins, outs, containers, mutables;
 		ins = outs = containers = mutables = 1;
-		int optionalIndex = 0;
+		int nullableIndex = 0;
 		for (FunctionalMethodType fmt : fmts) {
 			fmtDescriptions.put(fmt, "");
 			switch (fmt.itemIO()) {
 				case INPUT:
 					fmtNames.put(fmt, "input" + ins++);
-					fmtOptionality.put(fmt, paramOptionality[optionalIndex++]);
+					fmtNullability.put(fmt, paramNullability[nullableIndex++]);
 					break;
 				case OUTPUT:
 					fmtNames.put(fmt, "output" + outs++);
@@ -205,18 +140,18 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 	}
 
 	private static MethodParamInfo synthesizedMethodParamInfo(
-		List<FunctionalMethodType> fmts, Boolean[] paramOptionality)
+		List<FunctionalMethodType> fmts, Boolean[] paramNullability)
 	{
 		Map<FunctionalMethodType, String> fmtNames = new HashMap<>(fmts.size());
 		Map<FunctionalMethodType, String> fmtDescriptions = new HashMap<>(fmts
 			.size());
-		Map<FunctionalMethodType, Boolean> fmtOptionality = new HashMap<>(fmts
+		Map<FunctionalMethodType, Boolean> fmtNullability = new HashMap<>(fmts
 			.size());
 
 		addSynthesizedMethodParamInfo(fmtNames, fmtDescriptions, fmts,
-			fmtOptionality, paramOptionality);
+			fmtNullability, paramNullability);
 
-		return new MethodParamInfo(fmtNames, fmtDescriptions, fmtOptionality);
+		return new MethodParamInfo(fmtNames, fmtDescriptions, fmtNullability);
 	}
 
 	@Override
@@ -231,43 +166,39 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 			.collect(Collectors.toList());
 	}
 
-	private static Boolean[] getParameterOptionality(Method m, Class<?> opType,
-		int opParams, List<ValidityProblem> problems)
+	private static Boolean[] getParameterNullability(Method m, Class<?> opType,
+		int opParams)
 	{
-		boolean opMethodHasOptionals = ReductionUtils.hasOptionalAnnotations(m);
-		List<Method> fMethodsWithOptionals = ReductionUtils.fMethodsWithOptional(
-			opType);
-		// the number of parameters we need to determine
+		boolean opMethodHasNullables = FunctionalParameters.hasNullableAnnotations(
+			m);
+		List<Method> fMethodsWithNullables = FunctionalParameters
+			.fMethodsWithNullable(opType);
+		if (opMethodHasNullables) {
+			fMethodsWithNullables.add(m);
+		}
 
 		// Ensure only the Op method OR ONE of its op type's functional methods have
-		// Optionals
-		if (opMethodHasOptionals && !fMethodsWithOptionals.isEmpty()) {
-			problems.add(new ValidityProblem(
-				"Both the OpMethod and its op type have optional parameters!"));
-			return ReductionUtils.generateAllRequiredArray(opParams);
-		}
-		if (fMethodsWithOptionals.size() > 1) {
-			problems.add(new ValidityProblem(
-				"Multiple methods from the op type have optional parameters!"));
-			return ReductionUtils.generateAllRequiredArray(opParams);
+		// Nullables
+		if (fMethodsWithNullables.size() > 1) {
+			throw new NullablesOnMultipleMethodsException(m, fMethodsWithNullables);
 		}
 
-		// return the optionality of each parameter of the Op
-		if (opMethodHasOptionals) return getOpMethodOptionals(m, opParams);
-		if (fMethodsWithOptionals.size() > 0) return ReductionUtils
-			.findParameterOptionality(fMethodsWithOptionals.get(0));
-		return ReductionUtils.generateAllRequiredArray(opParams);
+		// return the nullability of each parameter of the Op
+		if (opMethodHasNullables) return getOpMethodNullables(m, opParams);
+		if (!fMethodsWithNullables.isEmpty()) return FunctionalParameters
+			.findParameterNullability(fMethodsWithNullables.get(0));
+		return FunctionalParameters.generateAllRequiredArray(opParams);
 	}
 
-	private static Boolean[] getOpMethodOptionals(Method m, int opParams) {
+	private static Boolean[] getOpMethodNullables(Method m, int opParams) {
 		int[] paramIndex = mapFunctionalParamsToIndices(m.getParameters());
-		Boolean[] arr = ReductionUtils.generateAllRequiredArray(opParams);
+		Boolean[] arr = FunctionalParameters.generateAllRequiredArray(opParams);
 		// check parameters on m
-		Boolean[] mOptionals = ReductionUtils.findParameterOptionality(m);
-		for (int i = 0; i < mOptionals.length; i++) {
+		Boolean[] mNullables = FunctionalParameters.findParameterNullability(m);
+		for (int i = 0; i < mNullables.length; i++) {
 			int index = paramIndex[i];
 			if (index == -1) continue;
-			arr[index] |= mOptionals[i];
+			arr[index] |= mNullables[i];
 		}
 		return arr;
 	}

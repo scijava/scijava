@@ -1,19 +1,18 @@
 /*
  * #%L
- * ImageJ software for multidimensional image processing and analysis.
+ * SciJava Operations Engine: a framework for reusable algorithms.
  * %%
- * Copyright (C) 2014 - 2016 Board of Regents of the University of
- * Wisconsin-Madison and University of Konstanz.
+ * Copyright (C) 2016 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ * 
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -35,45 +34,29 @@ import java.lang.invoke.MethodHandles;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
-import org.scijava.common3.validity.ValidityException;
-import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.OpDependencyMember;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.engine.OpUtils;
+import org.scijava.ops.engine.OpDescription;
+import org.scijava.ops.engine.exceptions.impl.InstanceOpMethodException;
+import org.scijava.ops.engine.exceptions.impl.PrivateOpException;
+import org.scijava.ops.engine.exceptions.impl.UnreadableOpException;
 import org.scijava.ops.engine.struct.MethodOpDependencyMemberParser;
 import org.scijava.ops.engine.struct.MethodParameterMemberParser;
-import org.scijava.ops.engine.util.Adapt;
+import org.scijava.ops.engine.util.Lambdas;
+import org.scijava.ops.engine.util.Ops;
 import org.scijava.ops.engine.util.internal.OpMethodUtils;
-import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpMethod;
 import org.scijava.priority.Priority;
 import org.scijava.struct.Member;
-import org.scijava.struct.MemberParser;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
 import org.scijava.types.Types;
-import org.scijava.types.inference.InterfaceInference;
-
-import javassist.CannotCompileException;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtConstructor;
-import javassist.CtField;
-import javassist.CtMethod;
-import javassist.CtNewConstructor;
-import javassist.CtNewMethod;
-import javassist.NotFoundException;
 
 /**
  * @author Marcel Wiedenmann
@@ -83,9 +66,8 @@ public class OpMethodInfo implements OpInfo {
 	private final Method method;
 	private final String version;
 	private final List<String> names;
-	private Type opType;
-	private Struct struct;
-	private final ValidityException validityException;
+	private final Type opType;
+	private final Struct struct;
 	private final double priority;
 
 	private final Hints hints;
@@ -96,7 +78,7 @@ public class OpMethodInfo implements OpInfo {
 
 	public OpMethodInfo(final Method method, final Class<?> opType, final Hints hints, final double priority,
 			final String... names) {
-		this(method, opType, Versions.getVersion(method.getDeclaringClass()), hints, Priority.NORMAL, names);
+		this(method, opType, Versions.getVersion(method.getDeclaringClass()), hints, priority, names);
 	}
 
 	public OpMethodInfo(final Method method, final Class<?> opType, final String version, final Hints hints, final String... names) {
@@ -110,54 +92,36 @@ public class OpMethodInfo implements OpInfo {
 		this.hints = hints;
 		this.priority = priority;
 
-		final List<ValidityProblem> problems = new ArrayList<>();
-		checkModifiers(method, problems);
+		checkModifiers();
 
-		this.opType = findOpType(method, opType, problems);
-		this.struct = generateStruct(method, opType, problems, new MethodParameterMemberParser(), new MethodOpDependencyMemberParser());
+		this.opType = OpMethodUtils.getOpMethodType(opType, method);
+		this.struct = Structs.from( //
+			method, //
+			opType, //
+			new MethodParameterMemberParser(), //
+			new MethodOpDependencyMemberParser() //
+		);
 
-		validityException = problems.isEmpty() ? null : new ValidityException(
-			problems);
 	}
 
-	@SafeVarargs
-	private Struct generateStruct(Method m, Type structType,
-		List<ValidityProblem> problems,
-		MemberParser<Method, ? extends Member<?>>... memberParsers)
-	{
-		try {
-			return Structs.from(m, structType, problems, memberParsers);
-		} catch (IllegalArgumentException e) {
-			problems.add(new ValidityProblem(e));
-			return null;
-		}
-	}
-
-	private Type findOpType(Method m, Class<?> opType,
-		List<ValidityProblem> problems)
-	{
-		try {
-			return OpMethodUtils.getOpMethodType(opType,
-				method);
-		}
-		catch (IllegalArgumentException e) {
-			problems.add(new ValidityProblem(e));
-			return null;
-		}
-	}
-
-	private void checkModifiers(Method m, List<ValidityProblem> problems) {
+	private void checkModifiers() {
 		// Reject all non public methods
 		if (!Modifier.isPublic(method.getModifiers())) {
-			problems.add(new ValidityProblem("Method to parse: " + method +
-				" must be public."));
+			throw new PrivateOpException(method);
 		}
 		if (!Modifier.isStatic(method.getModifiers())) {
-			// TODO: Should throw and error if the method is not static.
 			// TODO: We can't properly infer the generic types of static methods at
 			// the moment. This might be a Java limitation.
-			problems.add(new ValidityProblem("Method to parse: " + method +
-				" must be static."));
+			throw new InstanceOpMethodException(method);
+		}
+
+		// If the Op is not in the SciJava Ops Engine module, check visibility
+		Module methodModule = method.getDeclaringClass().getModule();
+		if (methodModule != this.getClass().getModule()) {
+			String packageName = method.getDeclaringClass().getPackageName();
+			if (!methodModule.isOpen(packageName, methodModule)) {
+				throw new UnreadableOpException(packageName);
+			}
 		}
 	}
 
@@ -199,262 +163,28 @@ public class OpMethodInfo implements OpInfo {
 
 	@Override
 	public StructInstance<?> createOpInstance(
-		final List<? extends Object> dependencies)
+		final List<?> dependencies)
 	{
-
-		// Case 1: no dependencies - lambdaMetaFactory is fastest
 		// NB LambdaMetaFactory only works if this Module (org.scijava.ops.engine)
 		// can read the Module containing the Op. So we also have to check that.
 		Module methodModule = method.getDeclaringClass().getModule();
 		Module opsEngine = this.getClass().getModule();
-
-		if (opsEngine.canRead(methodModule) && dependencies.isEmpty()) {
-			try {
-				method.setAccessible(true);
-				MethodHandle handle = MethodHandles.lookup().unreflect(method);
-				Object op = Adapt.Methods.lambdaize(Types.raw(opType), handle);
-				return struct().createInstance(op);
-			}
-			catch (Throwable exc) {
-				throw new IllegalStateException("Failed to invoke Op method: " + method,
+		opsEngine.addReads(methodModule);
+		try {
+			method.setAccessible(true);
+			MethodHandle handle = MethodHandles.lookup().unreflect(method);
+			Object op = Lambdas.lambdaize( //
+					Types.raw(opType), //
+					handle, //
+					Ops.dependenciesOf(this).stream().map(Member::getRawType).toArray(Class[]::new),
+					dependencies.toArray() //
+			);
+			return struct().createInstance(op);
+		}
+		catch (Throwable exc) {
+			throw new IllegalStateException("Failed to invoke Op method: " + method,
 					exc);
-			}
 		}
-
-		// Case 2: dependenies - Javassist is best
-		try {
-			return struct().createInstance(javassistOp(method, dependencies));
-		}
-		catch (Throwable ex) {
-			throw new IllegalStateException("Failed to invoke Op method: " + method +
-				". Provided Op dependencies were: " + dependencies,
-				ex);
-		}
-		
-	}
-
-	/**
-	 * Creates a class that knows how to create a partial application of an Op,
-	 * and returns that partial application. Specifically, the class knows how to
-	 * fix all of the {@link OpDependency}s of an Op, returning an Op taking only
-	 * the primary parameters
-	 * 
-	 * @param m - the {@link OpMethod}
-	 * @param dependencies - the {@link OpDependency}s associated with {@code m}
-	 * @return a partial application of {@code m} with all {@link OpDependency}s
-	 *         injected.
-	 */
-	private Object javassistOp(Method m, List<? extends Object> dependencies)
-		throws Throwable
-	{
-		ClassPool pool = ClassPool.getDefault();
-
-		// Create wrapper class
-		String className = formClassName(m);
-		List<OpDependencyMember<?>> depMembers = dependencies();
-		Class<?> c;
-		try {
-			CtClass cc = pool.makeClass(className);
-
-			// Add implemented interface
-			CtClass jasOpType = pool.get(Types.raw(opType).getName());
-			cc.addInterface(jasOpType);
-
-			// Add Method field
-			CtField methodField = createOpMethodField(pool, cc);
-			cc.addField(methodField);
-
-			// Add OpDependency fields
-			for (int i = 0; i < depMembers.size(); i++) {
-				CtField f = createDependencyField(pool, cc, depMembers.get(i), i);
-				cc.addField(f);
-			}
-
-			// Add constructor
-			CtConstructor constructor = CtNewConstructor.make(createConstructor(
-				depMembers, cc), cc);
-			cc.addConstructor(constructor);
-
-			// add functional interface method
-			CtMethod functionalMethod = CtNewMethod.make(createFunctionalMethod(m),
-				cc);
-			cc.addMethod(functionalMethod);
-			c = cc.toClass(MethodHandles.lookup());
-		}
-		catch (Exception e) {
-			c = this.getClass().getClassLoader().loadClass(className);
-		}
-
-		// Return Op instance
-		Class<?>[] constructorClasses = constructorClasses(depMembers);
-		Object[] constructorObjects = constructorObjects(method, dependencies);
-
-		return c.getDeclaredConstructor(constructorClasses) //
-			.newInstance(constructorObjects);
-	}
-
-	private String formClassName(Method m) {
-		// package name
-		String packageName = OpMethodInfo.class.getPackageName();
-
-		// class name -> OwnerName_MethodName_Params_ReturnType
-    List<String> nameElements = new ArrayList<>();
-    nameElements.add(m.getDeclaringClass().getSimpleName());
-    nameElements.add(m.getName());
-    for(Class<?> c : m.getParameterTypes()) {
-			nameElements.add(getParameterName(c));
-    }
-    nameElements.add(m.getReturnType().getSimpleName());
-		// Return the className
-		return packageName + "." + String.join("_", nameElements);
-	}
-
-	private CtField createOpMethodField(ClassPool pool, CtClass cc) throws NotFoundException,
-			CannotCompileException
-	{
-		Class<?> depClass = Method.class;
-		CtClass fType = pool.get(depClass.getName());
-		CtField f = new CtField(fType, "opMethod", cc);
-		f.setModifiers(Modifier.PRIVATE + Modifier.FINAL);
-		return f;
-	}
-
-	private CtField createDependencyField(ClassPool pool, CtClass cc,
-		OpDependencyMember<?> dependency, int i) throws NotFoundException,
-		CannotCompileException
-	{
-		Class<?> depClass = dependency.getRawType();
-		CtClass fType = pool.get(depClass.getName());
-		CtField f = new CtField(fType, "dep" + i, cc);
-		f.setModifiers(Modifier.PRIVATE + Modifier.FINAL);
-		return f;
-	}
-
-	private String createConstructor(List<OpDependencyMember<?>> depMembers,
-		CtClass cc)
-	{
-		StringBuilder sb = new StringBuilder();
-		// constructor signature
-		sb.append("public ") //
-			.append(cc.getSimpleName()) //
-			.append("(")//
-			.append(Method.class.getName()) //
-			.append(" opMethod");
-		if (depMembers.size() > 0) {
-			sb.append(", ");
-		}
-		for (int i = 0; i < depMembers.size(); i++) {
-			Class<?> depClass = depMembers.get(i).getRawType();
-			sb.append(depClass.getName()) //
-				.append(" dep") //
-				.append(i);
-			if (i < depMembers.size() - 1) sb.append(",");
-		}
-		sb.append(") {");
-
-		// assign dependencies to field
-		sb.append("this.opMethod = opMethod;");
-		for (int i = 0; i < depMembers.size(); i++) {
-			sb.append("this.dep") //
-				.append(i) //
-				.append(" = dep") //
-				.append(i) //
-				.append(";");
-		}
-		sb.append("}");
-		return sb.toString();
-	}
-
-	private String createFunctionalMethod(Method m) {
-		StringBuilder sb = new StringBuilder();
-
-		// determine the name of the functional method
-		String methodName = InterfaceInference.singularAbstractMethod(Types.raw(
-			opType)).getName();
-
-		// method modifiers
-		boolean isVoid = m.getReturnType() == void.class;
-		sb.append("public ") //
-			.append(isVoid ? "void" : "Object") //
-			.append(" ") //
-			.append(methodName) //
-			.append("(");
-
-		// method inputs
-		int applyInputs = inputs().size();
-		for (int i = 0; i < applyInputs; i++) {
-			sb.append(" Object in") //
-				.append(i);
-			if (i < applyInputs - 1) sb.append(",");
-		}
-
-		// method body
-		sb.append(") { return opMethod.invoke(null, new Object[] {");
-		int numInputs = 0;
-		int numDependencies = 0;
-		List<Member<?>> members = struct().members().stream() //
-			.filter(member -> !(!member.isInput() && member.isOutput())) //
-			.collect(Collectors.toList());
-		Parameter[] mParams = m.getParameters();
-		for (Parameter mParam : mParams) {
-			Class<?> paramRawType = Types.raw(mParam.getParameterizedType());
-			String castClassName = paramRawType.getName();
-			if (paramRawType.isArray()) castClassName = paramRawType.getSimpleName();
-			sb.append("(") //
-				.append(castClassName) //
-				.append(") ");
-			//
-			if (mParam.getAnnotation(OpDependency.class) != null)
-				sb.append("dep") //
-					.append(numDependencies++);
-			else sb.append("in") //
-				.append(numInputs++);
-			if (numDependencies + numInputs < members.size()) sb.append(", ");
-		}
-		sb.append("}); }");
-		return sb.toString();
-	}
-	private Class<?>[] constructorClasses(List<OpDependencyMember<?>> depMembers) {
-		Class<?>[] constructorClasses = new Class<?>[depMembers.size() + 1];
-		constructorClasses[0] = Method.class;
-
-		for (int i = 0; i < depMembers.size(); i++) {
-			constructorClasses[i + 1] = depMembers.get(i).getRawType();
-		}
-		return constructorClasses;
-	}
-
-	private Object[] constructorObjects(final Method opMethod, final List<?> dependencies) {
-		Object[] constructorObjects = new Object[dependencies.size() + 1];
-		constructorObjects[0] = opMethod;
-
-		for (int i = 0; i < dependencies.size(); i++) {
-			constructorObjects[i + 1] = dependencies.get(i);
-		}
-		return constructorObjects;
-	}
-
-	/**
-	 * Returns a "simple" name for {@code Class<?> c}.
-	 * <p>
-	 * Since this should be a java identifier, it cannot have illegal characters;
-	 * thus we replace illegal characters with an underscore.
-	 * 
-	 * @param c the {@link Class} for which we need an identifier
-	 * @return a {@link String} that can identify the class
-	 */
-	private String getParameterName(Class<?> c) {
-		return c.getSimpleName().replaceAll("[^a-zA-Z0-9_]", "_");
-	}
-
-	@Override
-	public boolean isValid() {
-		return validityException == null;
-	}
-
-	@Override
-	public ValidityException getValidityException() {
-		return validityException;
 	}
 
 	@Override
@@ -499,7 +229,7 @@ public class OpMethodInfo implements OpInfo {
 
 	@Override
 	public String toString() {
-		return opString();
+		return OpDescription.basic(this);
 	}
 
 	@Override

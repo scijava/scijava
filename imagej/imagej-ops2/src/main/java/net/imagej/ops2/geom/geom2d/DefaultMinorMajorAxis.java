@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -53,10 +53,11 @@ public class DefaultMinorMajorAxis implements Function<Polygon2D, Pair<DoubleTyp
 	/**
 	 * Code taken from ImageJ1 (EllipseFitter -> getEllipseParam()) and adapted
 	 * to work with a {@link Polygon2D}
-	 * 
+	 *
+	 * @param input
 	 * @param points
 	 *            vertices of polygon in counter clockwise order.
-	 * @return minor and major axis
+	 * @return the minor and major axis
 	 */
 	private double[] getMinorMajorAxis(final Polygon2D input, final List<RealLocalizable> points) {
 		double[] moments = getMoments(input, points);
@@ -188,8 +189,8 @@ public class DefaultMinorMajorAxis implements Function<Polygon2D, Pair<DoubleTyp
 	/**
 	 * TODO
 	 *
-	 * @param input
-	 * @param minorMajorAxisPair
+	 * @param input the input {@link Polygon2D}
+	 * @return the major and minor axes, within a {@link Pair}
 	 */
 	@Override
 	public Pair<DoubleType, DoubleType> apply(final Polygon2D input) {

@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -32,11 +32,11 @@ package net.imagej.ops2.types;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-import net.imglib2.roi.labeling.LabelingMapping;
-
-import org.scijava.priority.Priority;
+import org.scijava.types.SubTypeExtractor;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
+
+import net.imglib2.roi.labeling.LabelingMapping;
 
 /**
  * {@link TypeExtractor} plugin which operates on {@link Iterable} objects.
@@ -48,35 +48,30 @@ import org.scijava.types.TypeReifier;
  *
  * @author Curtis Rueden
  */
-public class LabelingMappingTypeExtractor implements TypeExtractor<LabelingMapping<?>> {
+public class LabelingMappingTypeExtractor extends
+	SubTypeExtractor<LabelingMapping<?>>
+{
 
 	@Override
-	public Type reify(final TypeReifier t, final LabelingMapping<?> o, final int n) {
-		if (n != 0)
-			throw new IndexOutOfBoundsException();
+	protected Class<?> getRawType() {
+		return LabelingMapping.class;
+	}
 
-		// determine the type arg of the mapping through looking at the Set of Labels
-		// (o.getLabels() returns a Set<T>, which can be reified by another TypeService
-		// plugin).
-		Type labelingMappingSet = t.reify(o.getLabels());
+	@Override
+	protected Type[] getTypeParameters(TypeReifier r, LabelingMapping<?> object) {
+		// determine the type arg of the mapping through looking at the Set of
+		// Labels (object.getLabels() returns a Set<T>, which can be reified by
+		// another TypeService plugin).
+		Type labelingMappingSet = r.reify(object.getLabels());
 		// sanity check, argType will always be a set so argType should always be a
 		// ParameterizedType
 		if (!(labelingMappingSet instanceof ParameterizedType))
-			throw new IllegalArgumentException("Impossible LabelingMapping provided as input");
+			throw new IllegalArgumentException(
+				"Impossible LabelingMapping provided as input");
 		// The type arg of argType is the same type arg of o.
-		return ((ParameterizedType) labelingMappingSet).getActualTypeArguments()[0];
+		Type elementType = ((ParameterizedType) labelingMappingSet)
+			.getActualTypeArguments()[0];
+		return new Type[] { elementType };
 	}
-
-	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Class<LabelingMapping<?>> getRawType() {
-		return (Class) LabelingMapping.class;
-	}
-
-	@Override
-	public double priority() {
-		return Priority.LOW;
-	}
-
 
 }

@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,6 +43,7 @@ import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Functions;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 /**
@@ -57,11 +58,6 @@ import org.scijava.ops.spi.OpDependency;
 public abstract class PadInputFFT<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
 		implements Functions.Arity4<I, Dimensions, Boolean, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, O> {
 
-//	/**
-//	 * The OutOfBoundsFactory used to extend the image
-//	 */
-//	private OutOfBoundsFactory<T, RandomAccessibleInterval<T>> obf = null;
-
 	@OpDependency(name = "filter.padIntervalCentered")
 	private BiFunction<I, Dimensions, O> paddingIntervalCentered;
 	
@@ -70,7 +66,7 @@ public abstract class PadInputFFT<T extends ComplexType<T>, I extends RandomAcce
 	@Override
 	@SuppressWarnings("unchecked")
 	public O apply(final I input, final Dimensions paddedDimensions, final Boolean fast,
-			OutOfBoundsFactory<T, RandomAccessibleInterval<T>> obf) {
+			@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> obf) {
 
 		Dimensions paddedFFTInputDimensions;
 

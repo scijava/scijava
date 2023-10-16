@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -85,7 +85,7 @@ public class IntegralImgTest extends AbstractOpTest {
 		defaultOp.compute(in, out1);
 
 		// should match WrappedIntegralImg
-		out2 = ops.op("image.integral").input(
+		out2 = ops.op("image.integral").arity1().input(
 				in).outType(new Nil<RandomAccessibleInterval<DoubleType>>() {}).apply();
 
 		// Remove 0s from integralImg by shifting its interval by +1

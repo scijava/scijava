@@ -1,3 +1,31 @@
+/*-
+ * #%L
+ * SciJava library for generic type reasoning.
+ * %%
+ * Copyright (C) 2016 - 2023 SciJava developers.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
 
 package org.scijava.types.inference;
 
@@ -145,7 +173,7 @@ public class GenericAssignability {
 		if (!Types.isAssignable(Types.raw(src), Types.raw(dest))) return false;
 
 		// when raw types are assignable, check the type variables of src and dest
-		Type[] srcTypes = typeParamsAgainstClass(src, Types.raw(dest));
+		Type[] srcTypes = Types.typeParamsAgainstClass(src, Types.raw(dest));
 		Type[] destTypes = dest.getActualTypeArguments();
 
 		// if there are no type parameters in src (w.r.t. dest), do a basic
@@ -214,29 +242,6 @@ public class GenericAssignability {
 		if (obj instanceof ParameterizedType)
 			return (Class<?>) ((ParameterizedType) obj).getRawType();
 		return obj.getClass();
-	}
-
-	/**
-	 * Finds the type parameters of the most specific super type of the specified
-	 * subType whose erasure is the specified superErasure. Hence, will return the
-	 * type parameters of superErasure possibly narrowed down by subType. If
-	 * superErasure is not raw or not a super type of subType, an empty array will
-	 * be returned.
-	 *
-	 * @param subType the type to narrow down type parameters
-	 * @param superErasure the erasure of an super type of subType to get the
-	 *          parameters from
-	 * @return type parameters of superErasure possibly narrowed down by subType,
-	 *         or empty type array if no exists or superErasure is not a super
-	 *         type of subtype
-	 */
-	public static Type[] getParams(Class<?> subType, Class<?> superErasure) {
-		Type pt = Types.parameterizeRaw(subType);
-		Type superType = Types.getExactSuperType(pt, superErasure);
-		if (superType != null && superType instanceof ParameterizedType) {
-			return ((ParameterizedType) superType).getActualTypeArguments();
-		}
-		return new Type[0];
 	}
 
 	/**
@@ -324,28 +329,6 @@ public class GenericAssignability {
 	{
 		return Arrays.stream(typesToMap).map(type -> Types.unrollVariables(
 			typeAssigns, type, false)).toArray(Type[]::new);
-	}
-
-	/**
-	 * Obtains the type parameters of {@link Type} {@code src} <b>with respect
-	 * to</b> the {@link Class} {@code dest}. When {@code src} has no type
-	 * parameters (or is not a subclass of {@code dest}), an empty array is
-	 * returned.
-	 *
-	 * @param src - the {@code Type} whose type parameters will be returned.
-	 * @param superclass - the {@code Class} against which we want the type
-	 *          parameters of {@code src}
-	 * @return an array of {@code Type}s denoting the type
-	 */
-	public static Type[] typeParamsAgainstClass(Type src, Class<?> superclass) {
-		// only classes and ParameterizedTypes can have type parameters
-		if (!(src instanceof Class || src instanceof ParameterizedType))
-			return new Type[0];
-		Type superSrc = superType(src, superclass);
-		if (superSrc == null) return new Type[0];
-		if (superSrc instanceof ParameterizedType)
-			return ((ParameterizedType) superSrc).getActualTypeArguments();
-		return getParams(Types.raw(src), superclass);
 	}
 
 	/**
@@ -706,30 +689,6 @@ public class GenericAssignability {
 				malleability);
 		}
 		return new TypeMapping(typeVar, newType, malleability);
-	}
-
-	/**
-	 * This method is designed to handle edge cases when calling
-	 * {@link Types#getExactSuperType(Type, Class)}. When
-	 * {@code getExactSuperType} returns an error, this usually implies some funny
-	 * business going on with the {@link Type} that was passed to it. We are not
-	 * interested in supporting this business, since it usually results from poor
-	 * practice in Class construction. TODO: determine some way of conveying to
-	 * the user that GenTyRef doesn't like their inputs.
-	 *
-	 * @param src
-	 * @param superClass
-	 * @return - the supertype of {@code src} with rawtype {@code superClass}, or
-	 *         {@code null} if no such supertype exists.
-	 */
-	private static Type superType(Type src, Class<?> superClass) {
-		try {
-			return Types.getExactSuperType(src, superClass);
-		}
-		catch (AssertionError e) {
-			// can be thrown when
-			return null;
-		}
 	}
 
 	/**

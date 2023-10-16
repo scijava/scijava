@@ -1,23 +1,50 @@
+/*-
+ * #%L
+ * SciJava Operations Engine: a framework for reusable algorithms.
+ * %%
+ * Copyright (C) 2016 - 2023 SciJava developers.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
 package org.scijava.ops.engine.util;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.OpBuilder;
-import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.types.Nil;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class OpsAsParametersTest extends AbstractTestEnvironment implements OpCollection {
 
@@ -40,16 +67,13 @@ public class OpsAsParametersTest extends AbstractTestEnvironment implements OpCo
 
 	@Test
 	public void TestOpWithNonReifiableFunction() {
-
-		List<Number> list = new ArrayList<>();
-		list.add(40l);
-		list.add(20.5);
-		list.add(4.0d);
-
-		assertThrows(OpMatchingException.class, //
-				() -> ops.op("test.parameter.op").input(list, func).outType(new Nil<List<Double>>() {
-				}).apply() //
-		);
+		var list = Arrays.asList(40L, 20.5, 4.0d);
+		var actual = ops//
+			.op("test.parameter.op") //
+			.arity2().input(list, func) //
+			.outType(List.class) //
+			.apply();
+		assertEquals(Arrays.asList(40.0, 20.5, 4.0), actual);
 	}
 
 	@Test
@@ -83,7 +107,7 @@ public class OpsAsParametersTest extends AbstractTestEnvironment implements OpCo
 		});
 
 		@SuppressWarnings("unused")
-		List<Double> output = ops.op("test.parameter.op").input(list, funcClass).outType(new Nil<List<Double>>() {}).apply();
+		List<Double> output = ops.op("test.parameter.op").arity2().input(list, funcClass).outType(new Nil<List<Double>>() {}).apply();
 	}
 
 }

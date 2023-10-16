@@ -1,18 +1,18 @@
 /*
  * #%L
- * SciJava Operations: a framework for reusable algorithms.
+ * SciJava Operations Engine: a framework for reusable algorithms.
  * %%
- * Copyright (C) 2018 SciJava developers.
+ * Copyright (C) 2016 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ * 
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -42,17 +42,19 @@ import org.junit.jupiter.api.Test;
 import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.ManualDiscoverer;
 import org.scijava.function.Producer;
-import org.scijava.log2.Logger;
-import org.scijava.log2.StderrLoggerFactory;
-import org.scijava.ops.api.*;
-import org.scijava.ops.api.features.MatchingConditions;
-import org.scijava.ops.api.features.MatchingRoutine;
-import org.scijava.ops.engine.DefaultOpEnvironment;
-import org.scijava.ops.engine.DefaultOpHistory;
-import org.scijava.ops.spi.*;
-import org.scijava.types.DefaultTypeReifier;
+import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.OpInstance;
+import org.scijava.ops.engine.InfoTreeGenerator;
+import org.scijava.ops.engine.OpInfoGenerator;
+import org.scijava.ops.engine.OpWrapper;
+import org.scijava.ops.engine.MatchingConditions;
+import org.scijava.ops.engine.matcher.MatchingRoutine;
+import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpClass;
+import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.OpField;
 import org.scijava.types.Nil;
-import org.scijava.types.TypeReifier;
 
 public class OpCachingTest implements OpCollection {
 
@@ -60,25 +62,19 @@ public class OpCachingTest implements OpCollection {
 
 	@BeforeEach
 	public void setUp() {
-		Logger logger = new StderrLoggerFactory().create();
-		TypeReifier types = new DefaultTypeReifier(logger, Discoverer.using(
-			ServiceLoader::load));
-		OpHistory history = new DefaultOpHistory();
-
 		Discoverer serviceLoading = Discoverer.using(ServiceLoader::load) //
 				.onlyFor( //
 						OpWrapper.class, //
 						MatchingRoutine.class, //
 						OpInfoGenerator.class, //
-						InfoChainGenerator.class //
+						InfoTreeGenerator.class //
 				);
 		// register needed classes in StaticDiscoverer
 		ManualDiscoverer discoverer = new ManualDiscoverer();
 		discoverer.register(new OpCachingTest());
 		discoverer.register(new ComplicatedOp());
 
-		// return Op Environment
-		ops = new DefaultOpEnvironment(types, logger, history, serviceLoading, discoverer);
+		ops = OpEnvironment.getEnvironment(serviceLoading, discoverer);
 	}
 
 	/**
@@ -113,7 +109,7 @@ public class OpCachingTest implements OpCollection {
 	{
 		// put the Op in the cache
 		DefaultOpEnvironment defOpEnv = getDefaultOpEnv();
-		Producer<String> op = defOpEnv.op("test.basicOp").input().outType(
+		Producer<String> op = defOpEnv.op("test.basicOp").arity0().outType(
 			String.class).producer();
 
 		Map<MatchingConditions, OpInstance<?>> opCache = getOpCache(defOpEnv);
@@ -129,11 +125,11 @@ public class OpCachingTest implements OpCollection {
 		String newString = "This Op invaded the cache!";
 		Producer<String> newProducer = () -> newString;
 		OpInstance<?> invaderInstance = OpInstance.of(newProducer, cachedInstance
-			.infoChain(), new Nil<Producer<String>>()
+			.infoTree(), new Nil<Producer<String>>()
 		{}.getType());
 		opCache.replace(cachedConditions, invaderInstance);
 
-		Producer<String> invadedOp = defOpEnv.op("test.basicOp").input().outType(
+		Producer<String> invadedOp = defOpEnv.op("test.basicOp").arity0().outType(
 			String.class).producer();
 		Assertions.assertEquals(newProducer.create(), invadedOp.create(),
 			"Op returned did not match the Op inserted into the cache!");
@@ -145,7 +141,7 @@ public class OpCachingTest implements OpCollection {
 	{
 		// put the Op in the cache
 		DefaultOpEnvironment defOpEnv = getDefaultOpEnv();
-		Producer<String> op = defOpEnv.op("test.complicatedOp").input().outType(
+		Producer<String> op = defOpEnv.op("test.complicatedOp").arity0().outType(
 			String.class).producer();
 
 		Map<MatchingConditions, OpInstance<?>> opCache = getOpCache(defOpEnv);
@@ -155,7 +151,7 @@ public class OpCachingTest implements OpCollection {
 
 		// assert that complicatedOp is in the cache (
 		Optional<MatchingConditions> complicatedOptional = opCache.keySet().stream()
-			.filter(condition -> condition.ref().getName().equals(
+			.filter(condition -> condition.request().getName().equals(
 				"test.complicatedOp")).findFirst();
 		Assertions.assertFalse(complicatedOptional
 					.isEmpty(), "test.complicatedOp not in cache!");
@@ -165,7 +161,7 @@ public class OpCachingTest implements OpCollection {
 
 		// assert that basic Op is also in the cache
 		Optional<MatchingConditions> basicOptional = opCache.keySet().stream()
-			.filter(condition -> condition.ref().getName().equals("test.basicOp"))
+			.filter(condition -> condition.request().getName().equals("test.basicOp"))
 			.findFirst();
 		Assertions.assertFalse(basicOptional.isEmpty(),
 				"test.basicOp not in cache despite being an OpDependency of test.complicatedOp");

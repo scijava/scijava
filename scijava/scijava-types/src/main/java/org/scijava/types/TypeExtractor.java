@@ -1,8 +1,8 @@
 /*
  * #%L
- * SciJava Operations: a framework for reusable algorithms.
+ * SciJava library for generic type reasoning.
  * %%
- * Copyright (C) 2016 - 2019 SciJava Ops developers.
+ * Copyright (C) 2016 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,9 +29,10 @@
 
 package org.scijava.types;
 
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
+
+import org.scijava.priority.Prioritized;
+import org.scijava.priority.Priority;
 
 /**
  * A plugin for extracting generic {@link Type} from instances at runtime.
@@ -43,63 +44,14 @@ import java.lang.reflect.TypeVariable;
  *
  * @author Curtis Rueden
  */
-public interface TypeExtractor<T> extends Comparable<TypeExtractor<?>> {
+public interface TypeExtractor extends Prioritized<TypeExtractor> {
 
-	/**
-	 * Extracts the generic type of the given object.
-	 * 
-	 * @param r a {@link TypeReifier}
-	 * @param o Object for which the type should be reified.
-	 * @return The object's generic {@link Type}, or {@code null} if the object is
-	 *         not supported by this extractor.
-	 */
-	default ParameterizedType reify(final TypeReifier r, final T o) {
-		final TypeVariable<Class<T>>[] typeVars = getRawType().getTypeParameters();
-		if (typeVars.length == 0) {
-			throw new IllegalStateException("Class " + getRawType().getName() + " is not a parameterized type");
-		}
-		final Type[] types = new Type[typeVars.length];
-		for (int i = 0; i < types.length; i++) {
-			types[i] = reify(r, o, i);
-			if (types[i] == null)
-				types[i] = new Any();
-		}
-		return Types.parameterize(getRawType(), types);
-	}
+	boolean canReify(final TypeReifier r, final Class<?> object);
 
-	/**
-	 * Extracts the generic type of the given object's Nth type parameter, with
-	 * respect to the class handled by this type extractor.
-	 * 
-	 * @param r a {@link TypeReifier}
-	 * @param o Object for which the type should be reified.
-	 * @param n Index of the type parameter whose type should be extracted.
-	 * @return The reified Nth type parameter, or {@code null} if the extractor
-	 *         cannot process the object.
-	 * @throws IndexOutOfBoundsException     if {@code n} is less than 0, or greater
-	 *                                       than
-	 *                                       {@code getType().getTypeParameters().length}.
-	 * @throws UnsupportedOperationException if the supported class does not have
-	 *                                       any type parameters.
-	 */
-	default Type reify(final TypeReifier r, final T o, final int n) {
-		final Type type = reify(r, o);
-		if (!(type instanceof ParameterizedType)) {
-			throw new UnsupportedOperationException("Not a parameterized type");
-		}
-		final ParameterizedType pType = (ParameterizedType) type;
-		return pType.getActualTypeArguments()[n];
-	}
-
-	/** Gets the {@link Class} handled by this type extractor. */
-	Class<T> getRawType();
-
-	/** Gets the priority of this type extractor */
-	double priority();
+	Type reify(final TypeReifier r, final Object object);
 
 	@Override
-	default int compareTo(TypeExtractor<?> o) {
-		return Double.compare(priority(), o.priority());
+	default double getPriority() {
+		return Priority.NORMAL;
 	}
-
 }

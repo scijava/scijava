@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,8 +30,6 @@ package net.imagej.ops2.image.watershed;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.concurrent.ExecutorService;
-
 import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccess;
@@ -54,93 +52,89 @@ import org.scijava.types.Nil;
  **/
 public class WatershedBinaryTest extends AbstractOpTest {
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void test() {
 		// load test image
 		Img<FloatType> watershedTestImg = openRelativeFloatImg(WatershedTest.class, "watershed_test_image.png");
 
-		// retrieve an ExecutorService TODO is there a better way to do this?
-		ExecutorService es = threads.getExecutorService();
-
 		// threshold it
 		RandomAccessibleInterval<BitType> thresholdedImg = ops.op("create.img")
-				.input(watershedTestImg, new BitType()).outType(new Nil<RandomAccessibleInterval<BitType>>() {})
+				.arity2().input(watershedTestImg, new BitType()).outType(new Nil<RandomAccessibleInterval<BitType>>() {})
 				.apply();
-		ops.op("threshold.apply").input(Views.flatIterable(watershedTestImg), new FloatType(1))
+		ops.op("threshold.apply").arity2().input(Views.flatIterable(watershedTestImg), new FloatType(1))
 				.output(Views.flatIterable(thresholdedImg)).compute();
 
 		// compute inverted distance transform and smooth it with gaussian
 		// filtering
 		final RandomAccessibleInterval<FloatType> distMap = ops.op("create.img")
-				.input(thresholdedImg, new FloatType()).outType(new Nil<RandomAccessibleInterval<FloatType>>() {})
+				.arity2().input(thresholdedImg, new FloatType()).outType(new Nil<RandomAccessibleInterval<FloatType>>() {})
 				.apply();
-		ops.op("image.distanceTransform").input(thresholdedImg, es).output(distMap).compute();
+		ops.op("image.distanceTransform").arity1().input(thresholdedImg).output(distMap).compute();
 		final RandomAccessibleInterval<FloatType> invertedDistMap = ops.op("create.img")
-				.input(distMap, new FloatType()).outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
+				.arity2().input(distMap, new FloatType()).outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
 		double[] sigma = { 3.0, 3.0, 0.0 };
-		ops.op("image.invert").input(distMap).output(invertedDistMap)
+		ops.op("image.invert").arity1().input(distMap).output(invertedDistMap)
 				.compute();
 
 		final RandomAccessibleInterval<FloatType> gauss = ops.op("create.img")
-				.input(invertedDistMap, new FloatType()).outType(new Nil<RandomAccessibleInterval<FloatType>>() {})
+				.arity2().input(invertedDistMap, new FloatType()).outType(new Nil<RandomAccessibleInterval<FloatType>>() {})
 				.apply();
-		ops.op("filter.gauss").input(invertedDistMap, es, new double[] { sigma[0], sigma[1] }).output(gauss)
+		ops.op("filter.gauss").arity2().input(invertedDistMap, new double[] { sigma[0], sigma[1] }).output(gauss)
 				.compute();
 
 		// compute result
 		final ImgLabeling<Integer, IntType> out1 = ops.op("image.watershed")
-				.input(thresholdedImg, true, false, sigma, thresholdedImg, es)
+				.arity5().input(thresholdedImg, true, false, sigma, thresholdedImg)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		final ImgLabeling<Integer, IntType> expOut1 = ops.op("image.watershed")
-				.input(gauss, true, false, thresholdedImg).outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
+				.arity4().input(gauss, true, false, thresholdedImg).outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		assertResults(expOut1, out1);
 
 		final ImgLabeling<Integer, IntType> out2 = ops.op("image.watershed")
-				.input(thresholdedImg, true, false, sigma, es).outType(new Nil<ImgLabeling<Integer, IntType>>() {})
+				.arity4().input(thresholdedImg, true, false, sigma).outType(new Nil<ImgLabeling<Integer, IntType>>() {})
 				.apply();
 
-		final ImgLabeling<Integer, IntType> expOut2 = ops.op("image.watershed").input(gauss, true, false)
+		final ImgLabeling<Integer, IntType> expOut2 = ops.op("image.watershed").arity3().input(gauss, true, false)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		assertResults(expOut2, out2);
 
 		// compute result
 		final ImgLabeling<Integer, IntType> out3 = ops.op("image.watershed")
-				.input(thresholdedImg, true, true, sigma, thresholdedImg, es)
+				.arity5().input(thresholdedImg, true, true, sigma, thresholdedImg)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		final ImgLabeling<Integer, IntType> expOut3 = ops.op("image.watershed")
-				.input(gauss, true, true, thresholdedImg).outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
+				.arity4().input(gauss, true, true, thresholdedImg).outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		assertResults(expOut3, out3);
 
 		final ImgLabeling<Integer, IntType> out4 = ops.op("image.watershed")
-				.input(thresholdedImg, true, true, sigma, es).outType(new Nil<ImgLabeling<Integer, IntType>>() {})
+				.arity4().input(thresholdedImg, true, true, sigma).outType(new Nil<ImgLabeling<Integer, IntType>>() {})
 				.apply();
 
-		final ImgLabeling<Integer, IntType> expOut4 = ops.op("image.watershed").input(gauss, true, true)
+		final ImgLabeling<Integer, IntType> expOut4 = ops.op("image.watershed").arity3().input(gauss, true, true)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		assertResults(expOut4, out4);
 
 		// compute result
 		final ImgLabeling<Integer, IntType> out5 = ops.op("image.watershed")
-				.input(thresholdedImg, false, true, sigma, thresholdedImg, es)
+				.arity5().input(thresholdedImg, false, true, sigma, thresholdedImg)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		final ImgLabeling<Integer, IntType> expOut5 = ops.op("image.watershed")
-				.input(gauss, false, true, thresholdedImg).outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
+				.arity4().input(gauss, false, true, thresholdedImg).outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		assertResults(expOut5, out5);
 
 		final ImgLabeling<Integer, IntType> out6 = ops.op("image.watershed")
-				.input(thresholdedImg, false, true, sigma, es).outType(new Nil<ImgLabeling<Integer, IntType>>() {})
+				.arity4().input(thresholdedImg, false, true, sigma).outType(new Nil<ImgLabeling<Integer, IntType>>() {})
 				.apply();
 
-		final ImgLabeling<Integer, IntType> expOut6 = ops.op("image.watershed").input(gauss, false, true)
+		final ImgLabeling<Integer, IntType> expOut6 = ops.op("image.watershed").arity3().input(gauss, false, true)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		assertResults(expOut6, out6);

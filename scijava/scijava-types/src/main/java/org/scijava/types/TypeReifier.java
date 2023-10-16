@@ -1,20 +1,52 @@
+/*-
+ * #%L
+ * SciJava library for generic type reasoning.
+ * %%
+ * Copyright (C) 2016 - 2023 SciJava developers.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
 package org.scijava.types;
-
-import com.google.common.reflect.TypeToken;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.scijava.log2.Logger;
 import org.scijava.types.extractors.IterableTypeExtractor;
 
+import com.google.common.reflect.TypeToken;
+
 public interface TypeReifier {
 
-	/** Gets the type extractor which handles the given class, or null if none. */
-	<T> TypeExtractor<T> getExtractor(Class<T> c);
+	/**
+	 * Gets the type extractor which handles the given class, or null if none.
+	 */
+	Optional<TypeExtractor> getExtractor(Class<?> c);
 
 	Logger log();
 
@@ -156,8 +188,8 @@ public interface TypeReifier {
 	{
 		final Class<?> c = o.getClass();
 
-		final TypeExtractor<T> extractor = getExtractor(superType);
-		if (extractor == null) return null; // No plugin for this specific class.
+		final Optional<TypeExtractor> extractor = getExtractor(superType);
+		if (extractor.isEmpty()) return null; // No plugin for this specific class.
 
 		if (!superType.isInstance(o)) {
 			throw new IllegalStateException("'" + o.getClass() +
@@ -166,10 +198,13 @@ public interface TypeReifier {
 		@SuppressWarnings("unchecked")
 		final T t = (T) o;
 
-		final ParameterizedType extractedType = extractor.reify(this, t);
-
-		// Populate type variables to fully populate the supertype.
-		return Types.args(c, extractedType);
+		final Type extractedType = extractor.get().reify(this, t);
+		if (extractedType instanceof ParameterizedType) {
+			return Types.args(c, (ParameterizedType) extractedType);
+		}
+		else {
+			return Collections.emptyMap();
+		}
 	}
 
 }

@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,7 +31,6 @@ package net.imagej.ops2.features.hog;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 
 import net.imagej.ops2.thread.chunker.Chunk;
@@ -56,6 +55,7 @@ import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 import net.imglib2.view.composite.GenericComposite;
 
+import org.scijava.concurrent.Parallelization;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
@@ -77,13 +77,13 @@ import org.scijava.ops.spi.OpDependency;
  *@implNote op names='features.hog'
  */
 public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
-		Computers.Arity4<RandomAccessibleInterval<T>, Integer, Integer, ExecutorService, RandomAccessibleInterval<T>> {
+		Computers.Arity3<RandomAccessibleInterval<T>, Integer, Integer, RandomAccessibleInterval<T>> {
 
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, FloatType, RandomAccessibleInterval<FloatType>> createImgOp;
 
 	@OpDependency(name = "thread.chunker")
-	private Inplaces.Arity3_1<Chunk, Long, ExecutorService> chunkerOp;
+	private Inplaces.Arity2_1<Chunk, Long> chunkerOp;
 
 	private Converter<T, FloatType> converterToFloat;
 
@@ -101,7 +101,7 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 	 */
 	@Override
 	public void compute(RandomAccessibleInterval<T> in, Integer numOrientations, Integer spanOfNeighborhood,
-			ExecutorService es, RandomAccessibleInterval<T> out) {
+			RandomAccessibleInterval<T> out) {
 		Interval imgOpInterval = new FinalInterval(in.dimension(0), in.dimension(1));
 
 		converterToFloat = (arg0, arg1) -> arg1.setReal(arg0.getRealFloat());
@@ -188,10 +188,10 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 			}
 		};
 
-		chunkerOp.mutate(chunkable, Views.flatIterable(magnitudes).size(), es);
+		chunkerOp.mutate(chunkable, Views.flatIterable(magnitudes).size());
 
 		// stores each Thread to execute
-		final List<Callable<Void>> listCallables = new ArrayList<>();
+		final List<Runnable> listCallables = new ArrayList<>();
 
 		// compute descriptor (default 3x3, i.e. 9 channels: one channel for
 		// each bin)
@@ -204,16 +204,12 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 					neighborHood.randomAccess(), numOrientations));
 		}
 
-		try {
-			es.invokeAll(listCallables);
-		} catch (final InterruptedException e) {
-			throw new RuntimeException(e);
-		}
+		Parallelization.getTaskExecutor().runAll(listCallables);
 
 		listCallables.clear();
 	}
 
-	private class ComputeDescriptor implements Callable<Void> {
+	private class ComputeDescriptor implements Runnable {
 		final private RandomAccessibleInterval<FloatType> in;
 		final private long i;
 		final private RandomAccess<FloatType> raAngles;
@@ -235,8 +231,7 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 			this.numOrientations = numOrientations;
 		}
 
-		@Override
-		public Void call() throws Exception {
+		public void run() {
 
 			final FinalInterval interval = new FinalInterval(in.dimension(0), in.dimension(1));
 			for (int j = 0; j < in.dimension(1); j++) {
@@ -254,7 +249,6 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 					}
 				}
 			}
-			return null;
 		}
 	}
 
@@ -277,13 +271,13 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
  *@implNote op names='features.hog'
  */
 class HistogramOfOrientedGradients2DFunction<T extends RealType<T>> implements
-		Functions.Arity4<RandomAccessibleInterval<T>, Integer, Integer, ExecutorService, RandomAccessibleInterval<T>> {
+		Functions.Arity3<RandomAccessibleInterval<T>, Integer, Integer, RandomAccessibleInterval<T>> {
 
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, T, RandomAccessibleInterval<T>> outputCreator;
 
 	@OpDependency(name = "features.hog")
-	private Computers.Arity4<RandomAccessibleInterval<T>, Integer, Integer, ExecutorService, RandomAccessibleInterval<T>> hogOp;
+	private Computers.Arity3<RandomAccessibleInterval<T>, Integer, Integer, RandomAccessibleInterval<T>> hogOp;
 
 	/**
 	 * TODO
@@ -291,15 +285,14 @@ class HistogramOfOrientedGradients2DFunction<T extends RealType<T>> implements
 	 * @param input
 	 * @param numOrientations
 	 * @param spanOfNeighborhood
-	 * @param executorService
 	 * @return the output
 	 */
 	@Override
 	public RandomAccessibleInterval<T> apply(final RandomAccessibleInterval<T> input, final Integer numOrientations,
-			final Integer spanOfNeighborhood, final ExecutorService es) {
+			final Integer spanOfNeighborhood) {
 		final T inType = Util.getTypeFromInterval(input);
 		RandomAccessibleInterval<T> output = outputCreator.apply(new FinalInterval(input.dimension(0), input.dimension(1), numOrientations), inType);
-		hogOp.compute(input, numOrientations, spanOfNeighborhood, es, output);
+		hogOp.compute(input, numOrientations, spanOfNeighborhood, output);
 		return output;
 	}
 

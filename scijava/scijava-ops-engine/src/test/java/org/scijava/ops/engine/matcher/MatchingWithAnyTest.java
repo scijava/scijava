@@ -1,3 +1,31 @@
+/*-
+ * #%L
+ * SciJava Operations Engine: a framework for reusable algorithms.
+ * %%
+ * Copyright (C) 2016 - 2023 SciJava developers.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
 package org.scijava.ops.engine.matcher;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,10 +61,10 @@ public class MatchingWithAnyTest extends AbstractTestEnvironment implements OpCo
 	public void testAny() {
 
 		NestedThing<String, Thing<String>> nthing = new NestedThing<>();
-		Double e = ops.op("test.nestedAny").input(nthing).outType(Double.class).apply();
+		Double e = ops.op("test.nestedAny").arity1().input(nthing).outType(Double.class).apply();
 
 		Thing<Double> thing = new Thing<>();
-		Double d = ops.op("test.any").input(thing).outType(Double.class).apply();
+		Double d = ops.op("test.any").arity1().input(thing).outType(Double.class).apply();
 
 		assert d == 5.;
 		assert e == 5.;
@@ -53,7 +81,7 @@ public class MatchingWithAnyTest extends AbstractTestEnvironment implements OpCo
 
 		ExceptionalThing<Double> ething = new ExceptionalThing<>(0.5);
 		assertThrows(ClassCastException.class, () -> {
-			Double d = ops.op("test.exceptionalAny").input(ething).outType(Double.class).apply();
+			Double d = ops.op("test.exceptionalAny").arity1().input(ething).outType(Double.class).apply();
 		});
 
 	}
@@ -66,7 +94,7 @@ public class MatchingWithAnyTest extends AbstractTestEnvironment implements OpCo
 	public void testRunAnyFunction2FromComputer2() {
 		final int in1 = 11;
 		final long in2 = 31;
-		final StringContainer out = ops.op("test.integerAndLongAndNotAnyComputer").input(in1, in2).outType(StringContainer.class).apply();
+		final StringContainer out = ops.op("test.integerAndLongAndNotAnyComputer").arity2().input(in1, in2).outType(StringContainer.class).apply();
 		assertEquals(Long.toString(in1 + in2), out.getValue());
 	}
 

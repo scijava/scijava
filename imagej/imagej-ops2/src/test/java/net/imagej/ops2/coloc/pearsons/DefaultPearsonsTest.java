@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,7 +30,6 @@ package net.imagej.ops2.coloc.pearsons;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 
 import net.imagej.ops2.AbstractColocalisationTest;
@@ -56,7 +55,7 @@ public class DefaultPearsonsTest extends AbstractColocalisationTest {
 	 */
 	@Test
 	public void fastPearsonsZeroCorrTest(){
-		double result = ops.op("coloc.pearsons").input(getZeroCorrelationImageCh1(), getZeroCorrelationImageCh2()).outType(Double.class).apply();
+		double result = ops.op("coloc.pearsons").arity2().input(getZeroCorrelationImageCh1(), getZeroCorrelationImageCh2()).outType(Double.class).apply();
 		assertEquals(0.0, result, 0.05);
 	}
 	
@@ -66,7 +65,7 @@ public class DefaultPearsonsTest extends AbstractColocalisationTest {
 	 */
 	@Test
 	public void fastPearsonsPositiveCorrTest() {
-		double result = ops.op("coloc.pearsons").input(getPositiveCorrelationImageCh1(), getPositiveCorrelationImageCh2()).outType(Double.class).apply();
+		double result = ops.op("coloc.pearsons").arity2().input(getPositiveCorrelationImageCh1(), getPositiveCorrelationImageCh2()).outType(Double.class).apply();
 		assertEquals(0.75, result, 0.01);
 	}
 	
@@ -85,7 +84,7 @@ public class DefaultPearsonsTest extends AbstractColocalisationTest {
 					512, 512, mean, spread, sigma, 0x01234567);
 			RandomAccessibleInterval<FloatType> ch2 = produceMeanBasedNoiseImage(new FloatType(),
 					512, 512, mean, spread, sigma, 0x98765432);
-			double resultFast =  ops.op("coloc.pearsons").input(ch1, ch2).outType(Double.class).apply();
+			double resultFast =  ops.op("coloc.pearsons").arity2().input(ch1, ch2).outType(Double.class).apply();
 			assertEquals(0.0, resultFast, 0.1);
 
 			/* If the means are the same, it causes a numerical problem in the classic implementation of Pearson's
@@ -97,7 +96,6 @@ public class DefaultPearsonsTest extends AbstractColocalisationTest {
 
 	@Test
 	public void testPValue() {
-		ExecutorService es = threads.getExecutorService();
 		final double mean = 0.2;
 		final double spread = 0.1;
 		final double[] sigma = new double[] { 3.0, 3.0 };
@@ -108,7 +106,7 @@ public class DefaultPearsonsTest extends AbstractColocalisationTest {
 		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op =
 			OpBuilder.matchFunction(ops, "coloc.pearsons", new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
-		ops.op("coloc.pValue").input(ch1, ch2, op, es).output(value).compute();
+		ops.op("coloc.pValue").arity3().input(ch1, ch2, op).output(value).compute();
 		assertEquals(0.66, value.getPValue(), 0.0);
 	}
 

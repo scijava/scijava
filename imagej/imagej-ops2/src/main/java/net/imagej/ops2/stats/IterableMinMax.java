@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -52,8 +52,9 @@ public class IterableMinMax<I extends RealType<I>> implements Function<Iterable<
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
-	 * @param minMax
+	 * @param input the {@link Iterable} to compute over
+	 * @return the minimum and maximum of the {@code input}, partitioned within a
+	 *         {@link Pair}
 	 */
 	@Override
 	public Pair<I, I> apply(final Iterable<I> input) {

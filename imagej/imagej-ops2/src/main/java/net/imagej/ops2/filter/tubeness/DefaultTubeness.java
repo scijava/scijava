@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,8 +31,11 @@ package net.imagej.ops2.filter.tubeness;
 
 import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.function.Function;
+
+import org.scijava.concurrent.Parallelization;
+import org.scijava.function.Computers;
+import org.scijava.ops.spi.OpDependency;
 
 import net.imglib2.Dimensions;
 import net.imglib2.FinalDimensions;
@@ -47,9 +50,6 @@ import net.imglib2.outofbounds.OutOfBoundsBorderFactory;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.Views;
-
-import org.scijava.function.Computers;
-import org.scijava.ops.spi.OpDependency;
 
 /**
  * The Tubeness filter: enhance filamentous structures of a specified thickness.
@@ -92,7 +92,7 @@ import org.scijava.ops.spi.OpDependency;
  *@implNote op names='filter.tubeness'
  */
 public class DefaultTubeness<T extends RealType<T>> implements
-	Computers.Arity4<RandomAccessibleInterval<T>, ExecutorService, Double, double[], IterableInterval<DoubleType>>
+	Computers.Arity3<RandomAccessibleInterval<T>, Double, double[], IterableInterval<DoubleType>>
 {
 
 	@OpDependency(name = "create.imgFactory")
@@ -103,7 +103,7 @@ public class DefaultTubeness<T extends RealType<T>> implements
 	private Computers.Arity3<RandomAccessibleInterval<DoubleType>, Computers.Arity1<Iterable<DoubleType>, DoubleType>, Integer, IterableInterval<DoubleType>> projector;
 
 	@Override
-	public void compute(final RandomAccessibleInterval<T> input, ExecutorService es, final Double sigma,
+	public void compute(final RandomAccessibleInterval<T> input, final Double sigma,
 		final double[] calibration, final IterableInterval<DoubleType> tubeness)
 	{
 
@@ -139,13 +139,16 @@ public class DefaultTubeness<T extends RealType<T>> implements
 		final int nThreads = Runtime.getRuntime().availableProcessors();
 
 		try {
+			var es = Parallelization.getExecutorService();
 			// Hessian calculation.
 			HessianMatrix.calculateMatrix(Views.extendBorder(input), gaussian, gradient, hessian,
 					new OutOfBoundsBorderFactory<>(), nThreads, es, sigma);
 
 			// Hessian eigenvalues.
-			final RandomAccessibleInterval<DoubleType> evs = TensorEigenValues.calculateEigenValuesSymmetric(hessian,
-					TensorEigenValues.createAppropriateResultImg(hessian, factory, new DoubleType()), nThreads, es);
+			final RandomAccessibleInterval<DoubleType> evs = TensorEigenValues
+				.calculateEigenValuesSymmetric(hessian, TensorEigenValues
+					.createAppropriateResultImg(hessian, factory, new DoubleType()),
+					nThreads, es);
 
 			final Computers.Arity1<Iterable<DoubleType>, DoubleType> method;
 			switch (numDimensions) {
@@ -216,14 +219,14 @@ public class DefaultTubeness<T extends RealType<T>> implements
  *@implNote op names='filter.tubeness'
  */
 class DefaultTubenessWithoutCalibration<T extends RealType<T>> implements
-		Computers.Arity3<RandomAccessibleInterval<T>, ExecutorService, Double, IterableInterval<DoubleType>> {
+		Computers.Arity2<RandomAccessibleInterval<T>, Double, IterableInterval<DoubleType>> {
 
 	@OpDependency(name = "filter.tubeness")
-	Computers.Arity4<RandomAccessibleInterval<T>, ExecutorService, Double, double[], IterableInterval<DoubleType>> tubenessOp;
+	Computers.Arity3<RandomAccessibleInterval<T>, Double, double[], IterableInterval<DoubleType>> tubenessOp;
 
 	@Override
-	public void compute(RandomAccessibleInterval<T> in1, ExecutorService in2, Double in3,
+	public void compute(RandomAccessibleInterval<T> in1, Double in3,
 			IterableInterval<DoubleType> out) {
-		tubenessOp.compute(in1, in2, in3, new double[] {}, out);
+		tubenessOp.compute(in1, in3, new double[] {}, out);
 	}
 }

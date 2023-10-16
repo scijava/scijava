@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,9 +30,9 @@
 package net.imagej.ops2.thread.chunker;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
+import java.util.List;
 
+import org.scijava.concurrent.Parallelization;
 import org.scijava.function.Inplaces;
 
 /**
@@ -44,7 +44,7 @@ import org.scijava.function.Inplaces;
  * @author Michael Zinsmaier (University of Konstanz)
  * @implNote op names='thread.chunker', priority='-10000.'
  */
-public class ChunkerInterleaved implements Inplaces.Arity3_1<Chunk, Long, ExecutorService>{
+public class ChunkerInterleaved implements Inplaces.Arity2_1<Chunk, Long>{
 
 	private String cancellationMsg;
 
@@ -53,43 +53,31 @@ public class ChunkerInterleaved implements Inplaces.Arity3_1<Chunk, Long, Execut
 	 *
 	 * @param chunk
 	 * @param numberOfElements
-	 * @param executorService
 	 */
 	@Override
-	public void mutate(final Chunk chunk, final Long numberOfElements, final ExecutorService es) {
+	public void mutate(final Chunk chunk, final Long numberOfElements) {
 
 		final int numThreads = Runtime.getRuntime().availableProcessors();
 		final int numStepsFloor = (int) (numberOfElements / numThreads);
 		final int remainder = numberOfElements.intValue() - (numStepsFloor * numThreads);
 
-		final ArrayList<Future<?>> futures = new ArrayList<>(numThreads);
+		final List<Runnable> list = new ArrayList<>(numThreads);
 
 		for (int i = 0; i < numThreads; i++) {
 			final int j = i;
 
-			futures.add(es.submit(new Runnable() {
+			list.add(() -> {
 
-				@Override
-				public void run() {
 					if (j < remainder) {
 						chunk.execute(j, numThreads, (numStepsFloor + 1));
 					}
 					else {
 						chunk.execute(j, numThreads, numStepsFloor);
 					}
-				}
-			}));
+				});
 		}
 
-		for (final Future<?> future : futures) {
-			try {
-				future.get();
-			}
-			catch (final Exception e) {
-				cancellationMsg = e.getMessage();
-				break;
-			}
-		}
+		Parallelization.getTaskExecutor().runAll(list);
 	}
 
 }

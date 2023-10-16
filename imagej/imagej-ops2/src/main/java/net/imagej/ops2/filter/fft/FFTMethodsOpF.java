@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,8 +29,6 @@
 
 package net.imagej.ops2.filter.fft;
 
-import java.util.concurrent.ExecutorService;
-
 import net.imglib2.Dimensions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccessibleInterval;
@@ -53,7 +51,7 @@ import org.scijava.ops.spi.OpDependency;
  * @implNote op names='filter.fft', priority='100.'
  */
 public class FFTMethodsOpF<T extends RealType<T>, C extends ComplexType<C>> implements
-		Functions.Arity5<RandomAccessibleInterval<T>, long[], Boolean, C, ExecutorService, RandomAccessibleInterval<C>> {
+		Functions.Arity4<RandomAccessibleInterval<T>, long[], Boolean, C, RandomAccessibleInterval<C>> {
 
 	@OpDependency(name = "filter.padInputFFTMethods")
 	private Functions.Arity4<RandomAccessibleInterval<T>, Dimensions, Boolean, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> padOp;
@@ -62,7 +60,7 @@ public class FFTMethodsOpF<T extends RealType<T>, C extends ComplexType<C>> impl
 	private Functions.Arity3<Dimensions, C, Boolean, RandomAccessibleInterval<C>> createOp;
 
 	@OpDependency(name = "filter.fft")
-	private Computers.Arity2<RandomAccessibleInterval<T>, ExecutorService, RandomAccessibleInterval<C>> fftMethodsOp;
+	private Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<C>> fftMethodsOp;
 
 	/**
 	 * Note that if fast is true the input will be extended to the next fast FFT
@@ -78,12 +76,11 @@ public class FFTMethodsOpF<T extends RealType<T>, C extends ComplexType<C>> impl
 	 * @param borderSize the size of border to apply in each dimension
 	 * @param fast whether to perform a fast FFT; default true
 	 * @param fftType the complex type of the output
-	 * @param executorService
 	 * @return the output
 	 */
 	@Override
 	public RandomAccessibleInterval<C> apply(final RandomAccessibleInterval<T> input, final long[] borderSize,
-			final Boolean fast, final C fftType, final ExecutorService es) {
+			final Boolean fast, final C fftType) {
 		// calculate the padded size
 		long[] paddedSize = new long[input.numDimensions()];
 
@@ -104,7 +101,7 @@ public class FFTMethodsOpF<T extends RealType<T>, C extends ComplexType<C>> impl
 		RandomAccessibleInterval<T> paddedInput = padOp.apply(input, paddedDimensions, fast, null);
 
 		// compute and return fft
-		fftMethodsOp.compute(paddedInput, es, output);
+		fftMethodsOp.compute(paddedInput, output);
 
 		return output;
 

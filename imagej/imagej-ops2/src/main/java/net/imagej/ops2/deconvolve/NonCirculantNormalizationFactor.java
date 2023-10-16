@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,7 +29,6 @@
 
 package net.imagej.ops2.deconvolve;
 
-import java.util.concurrent.ExecutorService;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
@@ -64,7 +63,7 @@ import org.scijava.ops.spi.OpDependency;
  * @implNote op names='deconvolve.normalizationFactor', priority='-100.'
  */
 public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
-	implements Inplaces.Arity6_1<RandomAccessibleInterval<O>, Dimensions, Dimensions, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService>
+	implements Inplaces.Arity5_1<RandomAccessibleInterval<O>, Dimensions, Dimensions, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>>
 {
 
 	/**
@@ -92,7 +91,7 @@ public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends Re
 	private BiFunction<Dimensions, O, Img<O>> create;
 
 	@OpDependency(name = "filter.correlate")
-	private Computers.Arity7<RandomAccessibleInterval<O>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> correlater;
+	private Computers.Arity6<RandomAccessibleInterval<O>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, RandomAccessibleInterval<O>> correlater;
 
 //	@OpDependency(name = "math.divide") TODO: match an Op here?
 	private BiConsumer<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> divide = (numerResult, denom) -> {
@@ -111,15 +110,14 @@ public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends Re
 	 * apply the normalization image needed for semi noncirculant model see
 	 * http://bigwww.epfl.ch/deconvolution/challenge2013/index.html?p=doc_math_rl
 	 *
-	 * @param io
+	 * @param arg
 	 * @param k
 	 * @param l
 	 * @param fftInput
 	 * @param fftKernel
-	 * @param executorService
 	 */
 	@Override
-	public void mutate(RandomAccessibleInterval<O> arg, final Dimensions k, final Dimensions l, final RandomAccessibleInterval<C> fftInput, final RandomAccessibleInterval<C> fftKernel, final ExecutorService es) {
+	public void mutate(RandomAccessibleInterval<O> arg, final Dimensions k, final Dimensions l, final RandomAccessibleInterval<C> fftInput, final RandomAccessibleInterval<C> fftKernel) {
 		this.k = k;
 		this.l = l;
 		this.fftInput = fftInput;
@@ -127,7 +125,7 @@ public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends Re
 
 		// if the normalization image hasn't been computed yet, then compute it
 		if (normalization == null) {
-			this.createNormalizationImageSemiNonCirculant(arg, Util.getTypeFromInterval(arg), es);
+			this.createNormalizationImageSemiNonCirculant(arg, Util.getTypeFromInterval(arg));
 		}
 		
 		// normalize for non-circulant deconvolution
@@ -135,7 +133,7 @@ public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends Re
 		divide.accept(arg, normalization);
 	}
 
-	protected void createNormalizationImageSemiNonCirculant(Interval fastFFTInterval, O type, ExecutorService es) {
+	protected void createNormalizationImageSemiNonCirculant(Interval fastFFTInterval, O type) {
 
 		// k is the window size (valid image region)
 		final int length = k.numDimensions();
@@ -211,7 +209,7 @@ public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends Re
 		final Img<O> tempImg = create.apply(fd, type);
 
 		// 3. correlate psf with the output of step 2.
-		correlater.compute(normalization, null, fftInput, fftKernel, true, false, es, tempImg);
+		correlater.compute(normalization, null, fftInput, fftKernel, true, false, tempImg);
 
 		normalization = tempImg;
 

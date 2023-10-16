@@ -1,9 +1,8 @@
 /*
  * #%L
- * ImageJ software for multidimensional image processing and analysis.
+ * SciJava Operations Engine: a framework for reusable algorithms.
  * %%
- * Copyright (C) 2014 - 2016 Board of Regents of the University of
- * Wisconsin-Madison and University of Konstanz.
+ * Copyright (C) 2016 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,8 +29,6 @@
 
 package org.scijava.ops.engine.struct;
 
-import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
-
 import java.lang.reflect.Field;
 
 import org.scijava.function.Producer;
@@ -51,13 +48,13 @@ public class FieldOpDependencyMember<T> extends AnnotatedOpDependencyMember<T>
 	private final Field field;
 
 	public FieldOpDependencyMember(final Field field, final Class<?> structType) {
-		super(() -> field.getName(), getDescription(field), Types.fieldType(field, structType), field
-			.getAnnotation(OpDependency.class));
+		super( //
+			field.getName(), //
+			"", //
+			Types.fieldType(field, structType), //
+			field.getAnnotation(OpDependency.class) //
+		);
 		this.field = field;
-	}
-
-	private static Producer<String> getDescription(Field f) {
-		return () -> RuntimeJavadoc.getJavadoc(f).getComment().toString();
 	}
 
 	// -- ValueAccessible methods --

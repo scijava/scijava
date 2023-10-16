@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,8 +29,6 @@
 
 package net.imagej.ops2.geom.geom3d;
 
-import java.util.function.Function;
-
 import net.imagej.mesh2.Mesh;
 import net.imagej.mesh2.NaiveDoubleMesh;
 import net.imglib2.Cursor;
@@ -43,7 +41,7 @@ import net.imglib2.view.Views;
 
 import org.apache.commons.math3.util.MathArrays;
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Nullable;
 
 /**
  * This is a marching cubes implementation. It is inspired by Paul Bourke's
@@ -58,10 +56,7 @@ import org.scijava.ops.spi.OpDependency;
 public class DefaultMarchingCubes<T extends BooleanType<T>>
 		implements Functions.Arity3<RandomAccessibleInterval<T>, Double, VertexInterpolator, Mesh> {
 
-	// @Parameter(itemIO = ItemIO.INPUT, required = false)
 	private double isolevel;
-	//
-	// @Parameter(itemIO = ItemIO.INPUT, required = false)
 	private VertexInterpolator interpolatorClass;
 
 	@SuppressWarnings({ "unchecked" })
@@ -69,12 +64,13 @@ public class DefaultMarchingCubes<T extends BooleanType<T>>
 	 * TODO
 	 *
 	 * @param input
-	 * @param isolevel
-	 * @param interpolatorClass
+	 * @param isolevel (required = false)
+	 * @param interpolatorClass (required = false)
 	 * @return the output
 	 */
 	@Override
-	public Mesh apply(final RandomAccessibleInterval<T> input, Double isolevel, VertexInterpolator interpolatorClass) {
+	public Mesh apply(final RandomAccessibleInterval<T> input,
+			@Nullable Double isolevel, @Nullable VertexInterpolator interpolatorClass) {
 
 		// ensure validity of inputs
 		if (input.numDimensions() != 3)
@@ -552,26 +548,4 @@ public class DefaultMarchingCubes<T extends BooleanType<T>>
 			{ 0, 3, 8, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
 			{ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 } };
 
-}
-
-/**
- *@implNote op names='geom.marchingCubes'
- */
-class SimpleMarchingCubes<T extends BooleanType<T>>
-		implements Function<RandomAccessibleInterval<T>, Mesh> {
-	
-	@OpDependency(name = "geom.marchingCubes")
-	private Functions.Arity3<RandomAccessibleInterval<T>, Double, VertexInterpolator, Mesh> marchingOp;
-
-	/**
-	 * TODO
-	 *
-	 * @param input
-	 * @return the output
-	 */
-	@Override
-	public Mesh apply(RandomAccessibleInterval<T> t) {
-		return marchingOp.apply(t, null, null);
-	}
-	
 }

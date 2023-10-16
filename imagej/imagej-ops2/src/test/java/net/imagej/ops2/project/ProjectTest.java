@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -82,8 +82,8 @@ public class ProjectTest extends AbstractOpTest {
 		// ops.run(DefaultProjectParallel.class, out2, in, op, PROJECTION_DIM);
 		// testEquality(out1, out2);
 
-		ops.op("project").input(in, op, PROJECTION_DIM).output(out1).compute();
-		ops.op("project").input(in, op, PROJECTION_DIM).output(out2).compute();
+		ops.op("project").arity3().input(in, op, PROJECTION_DIM).output(out1).compute();
+		ops.op("project").arity3().input(in, op, PROJECTION_DIM).output(out2).compute();
 		testEquality(out1, out2);
 	}
 

@@ -1,8 +1,8 @@
 /*
  * #%L
- * SciJava Operations: a framework for reusable algorithms.
+ * SciJava library for generic type reasoning.
  * %%
- * Copyright (C) 2016 - 2019 SciJava Ops developers.
+ * Copyright (C) 2016 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -300,6 +300,36 @@ public final class TypeTools {
 		final Class<?> paramClass = Types.raw(paramComponent);
 		if (!paramClass.isAssignableFrom(argClass)) return false;
 		return true;
+	}
+
+	/**
+	 * Returns {@code cls}, parameterized with {@link TypeVariable} bounds defined
+	 * by a set of type parameters <b>on some superclass </b> of {@code cls}
+	 * 
+	 * @param cls the {@link Class} to be parameterized
+	 * @param superCls a super{@link Class} of {@code cls}
+	 * @param superClsTypeVars the type parameters of {@code supercls}, to be
+	 *          raised to the {@link Class} {@code cls}
+	 * @return {@code cls}, but parameterized with the type variables in
+	 *         {@code superClsTypeVars} against superclass {@code superCls}
+	 */
+	public static Type parameterizeViaSuperType(Class<?> cls, final Class<?> superCls,
+		final Type... superClsTypeVars)
+	{
+		Type t = Types.parameterizeRaw(cls);
+		Type[] typeVars = Types.typeParamsAgainstClass(t, superCls);
+		if (typeVars.length != superClsTypeVars.length) {
+			throw new IllegalArgumentException("Type variables " + Arrays.toString(
+				typeVars) + " of class " + cls +
+				" did not match the expected type variables " + Arrays.toString(
+					superClsTypeVars) + " of superclass " + superCls);
+		}
+		Map<TypeVariable<?>, Type> map = new HashMap<>();
+		for (int i = 0; i < typeVars.length; i++) {
+			if (typeVars[i] instanceof TypeVariable) map.put(
+				(TypeVariable<?>) typeVars[i], superClsTypeVars[i]);
+		}
+		return Types.mapVarToTypes(t, map);
 	}
 
 	/**

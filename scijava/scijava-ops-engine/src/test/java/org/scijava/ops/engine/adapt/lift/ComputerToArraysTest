@@ -1,8 +1,8 @@
 /*
  * #%L
- * SciJava Operations: a framework for reusable algorithms.
+ * SciJava Operations Engine: a framework for reusable algorithms.
  * %%
- * Copyright (C) 2016 - 2019 SciJava Ops developers.
+ * Copyright (C) 2016 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -87,7 +87,7 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements OpC
 	public void testComputer0ToArrays() {
 		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
 		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").input().output(output).compute();
+		ops.op("test.liftArrayC").arity0().output(output).compute();
 
 		for(int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(0 * i, output[i].getNumber());
@@ -101,7 +101,7 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements OpC
 	public void testComputer1ToArrays() {
 		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
 		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").input(input).output(output).compute();
+		ops.op("test.liftArrayC").arity1().input(input).output(output).compute();
 
 		for(int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(1 * i, output[i].getNumber());
@@ -115,7 +115,7 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements OpC
 	public void testComputer2ToArrays() {
 		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
 		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").input(input, input).output(output).compute();
+		ops.op("test.liftArrayC").arity2().input(input, input).output(output).compute();
 
 		for(int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(2 * i, output[i].getNumber());
@@ -129,7 +129,7 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements OpC
 	public void testComputer3ToArrays() {
 		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
 		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").input(input, input, input).output(output).compute();
+		ops.op("test.liftArrayC").arity3().input(input, input, input).output(output).compute();
 
 		for(int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(3 * i, output[i].getNumber());
@@ -143,7 +143,7 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements OpC
 	public void testComputer4ToArrays() {
 		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
 		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").input(input, input, input, input).output(output).compute();
+		ops.op("test.liftArrayC").arity4().input(input, input, input, input).output(output).compute();
 
 		for(int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(4 * i, output[i].getNumber());
@@ -157,7 +157,7 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements OpC
 	public void testComputer5ToArrays() {
 		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
 		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").input(input, input, input, input, input).output(output).compute();
+		ops.op("test.liftArrayC").arity5().input(input, input, input, input, input).output(output).compute();
 
 		for(int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(5 * i, output[i].getNumber());
@@ -171,7 +171,7 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements OpC
 	public void testComputer6ToArrays() {
 		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
 		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").input(input, input, input, input, input, input).output(output).compute();
+		ops.op("test.liftArrayC").arity6().input(input, input, input, input, input, input).output(output).compute();
 
 		for(int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(6 * i, output[i].getNumber());
@@ -185,7 +185,7 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements OpC
 	public void testComputer7ToArrays() {
 		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
 		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").input(input, input, input, input, input, input, input).output(output).compute();
+		ops.op("test.liftArrayC").arity7().input(input, input, input, input, input, input, input).output(output).compute();
 
 		for(int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(7 * i, output[i].getNumber());
@@ -199,7 +199,7 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements OpC
 	public void testComputer8ToArrays() {
 		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
 		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").input(input, input, input, input, input, input, input, input).output(output).compute();
+		ops.op("test.liftArrayC").arity8().input(input, input, input, input, input, input, input, input).output(output).compute();
 
 		for(int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(8 * i, output[i].getNumber());
@@ -213,7 +213,7 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements OpC
 	public void testComputer9ToArrays() {
 		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
 		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").input(input, input, input, input, input, input, input, input, input).output(output).compute();
+		ops.op("test.liftArrayC").arity9().input(input, input, input, input, input, input, input, input, input).output(output).compute();
 
 		for(int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(9 * i, output[i].getNumber());
@@ -227,7 +227,7 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements OpC
 	public void testComputer10ToArrays() {
 		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
 		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").input(input, input, input, input, input, input, input, input, input, input).output(output).compute();
+		ops.op("test.liftArrayC").arity10().input(input, input, input, input, input, input, input, input, input, input).output(output).compute();
 
 		for(int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(10 * i, output[i].getNumber());
@@ -241,7 +241,7 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements OpC
 	public void testComputer11ToArrays() {
 		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
 		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").input(input, input, input, input, input, input, input, input, input, input, input).output(output).compute();
+		ops.op("test.liftArrayC").arity11().input(input, input, input, input, input, input, input, input, input, input, input).output(output).compute();
 
 		for(int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(11 * i, output[i].getNumber());
@@ -255,7 +255,7 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements OpC
 	public void testComputer12ToArrays() {
 		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
 		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").input(input, input, input, input, input, input, input, input, input, input, input, input).output(output).compute();
+		ops.op("test.liftArrayC").arity12().input(input, input, input, input, input, input, input, input, input, input, input, input).output(output).compute();
 
 		for(int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(12 * i, output[i].getNumber());
@@ -269,7 +269,7 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements OpC
 	public void testComputer13ToArrays() {
 		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
 		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").input(input, input, input, input, input, input, input, input, input, input, input, input, input).output(output).compute();
+		ops.op("test.liftArrayC").arity13().input(input, input, input, input, input, input, input, input, input, input, input, input, input).output(output).compute();
 
 		for(int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(13 * i, output[i].getNumber());
@@ -283,7 +283,7 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements OpC
 	public void testComputer14ToArrays() {
 		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
 		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").input(input, input, input, input, input, input, input, input, input, input, input, input, input, input).output(output).compute();
+		ops.op("test.liftArrayC").arity14().input(input, input, input, input, input, input, input, input, input, input, input, input, input, input).output(output).compute();
 
 		for(int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(14 * i, output[i].getNumber());
@@ -297,7 +297,7 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements OpC
 	public void testComputer15ToArrays() {
 		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
 		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").input(input, input, input, input, input, input, input, input, input, input, input, input, input, input, input).output(output).compute();
+		ops.op("test.liftArrayC").arity15().input(input, input, input, input, input, input, input, input, input, input, input, input, input, input, input).output(output).compute();
 
 		for(int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(15 * i, output[i].getNumber());
@@ -311,7 +311,7 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements OpC
 	public void testComputer16ToArrays() {
 		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
 		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").input(input, input, input, input, input, input, input, input, input, input, input, input, input, input, input, input).output(output).compute();
+		ops.op("test.liftArrayC").arity16().input(input, input, input, input, input, input, input, input, input, input, input, input, input, input, input, input).output(output).compute();
 
 		for(int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(16 * i, output[i].getNumber());

@@ -1,8 +1,8 @@
 /*
  * #%L
- * SciJava Operations: a framework for reusable algorithms.
+ * SciJava Operations Engine: a framework for reusable algorithms.
  * %%
- * Copyright (C) 2016 - 2019 SciJava Ops developers.
+ * Copyright (C) 2016 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -39,27 +39,25 @@ import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Producer;
 import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaFunction;
-import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaSource;
 import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpField;
+import org.scijava.ops.spi.OpMethod;
+import org.scijava.priority.Priority;
 
 /**
- * Ensures that higher-priority adapt Ops are used over lower-priority adapt
- * Ops. For reference we are using {@link ComputersToFunctionsViaSource} and
- * {@link ComputersToFunctionsViaFunction}
+ * Ensures that higher-priority {@code adapt} Ops are used over lower-priority
+ * {@code adapt} Ops.
  * 
  * @author Gabriel Selzer
  */
-public class OpAdaptationPriorityTest extends AbstractTestEnvironment implements OpCollection {
+public class OpAdaptationPriorityTest extends AbstractTestEnvironment implements
+	OpCollection
+{
 
 	@BeforeAll
 	public static void addNeededOps() {
 		ops.register(new OpAdaptationPriorityTest());
-		Object[] adapters = objsFromNoArgConstructors(ComputersToFunctionsViaFunction.class.getDeclaredClasses());
-		ops.register(adapters);
-		adapters = objsFromNoArgConstructors(ComputersToFunctionsViaSource.class.getDeclaredClasses());
-		ops.register(adapters);
 	}
 
 	public static class PriorityThing {
@@ -85,6 +83,30 @@ public class OpAdaptationPriorityTest extends AbstractTestEnvironment implements
 		out.increasePriority(in);
 	};
 
+	@OpMethod(names = "adapt", type = Function.class, priority = Priority.HIGH)
+	public static <I, O> Function<I, O> highPriorityAdaptor( //
+		@OpDependency(name = "create", adaptable = false) Function<I, O> creator, //
+		Computers.Arity1<I, O> computer //
+	) {
+		return (in) -> {
+			var out = creator.apply(in);
+			computer.compute(in, out);
+			return out;
+		};
+	}
+
+	@OpMethod(names = "adapt", type = Function.class, priority = Priority.LOW)
+	public static <I, O> Function<I, O> lowPriorityAdaptor( //
+		@OpDependency(name = "create", adaptable = false) Producer<O> creator, //
+		Computers.Arity1<I, O> computer //
+	) {
+		return (in) -> {
+			var out = creator.get();
+			computer.compute(in, out);
+			return out;
+		};
+	}
+
 	@OpField(names = "create")
 	public static final Producer<PriorityThing> priorityThingProducer =
 		() -> new PriorityThing(10000);
@@ -95,8 +117,8 @@ public class OpAdaptationPriorityTest extends AbstractTestEnvironment implements
 
 	@Test
 	public void testPriority() {
-		PriorityThing pThing = ops.op("test.priorityOp").input(
-			new Double(10)).outType(PriorityThing.class).apply();
+		PriorityThing pThing = ops.op("test.priorityOp").arity1().input(new Double(
+			10)).outType(PriorityThing.class).apply();
 		assertEquals(20, pThing.getPriority(), 0.);
 		// This would be the value of pThing if it were created using
 		// PriorityThingProducer

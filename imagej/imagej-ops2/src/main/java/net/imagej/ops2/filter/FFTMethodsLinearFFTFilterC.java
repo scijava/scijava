@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,8 +29,6 @@
 
 package net.imagej.ops2.filter;
 
-import java.util.concurrent.ExecutorService;
-
 import net.imglib2.Dimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.ComplexType;
@@ -39,6 +37,7 @@ import net.imglib2.util.Util;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 /**
@@ -52,16 +51,16 @@ import org.scijava.ops.spi.OpDependency;
  * @implNote op names='filter.linearFilter', priority='-100.'
  */
 public class FFTMethodsLinearFFTFilterC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
-		implements Computers.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>>, RandomAccessibleInterval<O>> {
+		implements Computers.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, Boolean, Boolean, Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<O>> {
 
 	@OpDependency(name = "filter.fft")
-	private Computers.Arity2<RandomAccessibleInterval<I>, ExecutorService, RandomAccessibleInterval<C>> fftInOp;
+	private Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<C>> fftInOp;
 
 	@OpDependency(name = "filter.fft")
-	private Computers.Arity2<RandomAccessibleInterval<K>, ExecutorService, RandomAccessibleInterval<C>> fftKernelOp;
+	private Computers.Arity1<RandomAccessibleInterval<K>, RandomAccessibleInterval<C>> fftKernelOp;
 
 	@OpDependency(name = "filter.ifft")
-	private Computers.Arity2<RandomAccessibleInterval<C>, ExecutorService, RandomAccessibleInterval<O>> ifftOp;
+	private Computers.Arity1<RandomAccessibleInterval<C>, RandomAccessibleInterval<O>> ifftOp;
 	
 	@OpDependency(name = "filter.createFFTOutput")
 	private Functions.Arity3<Dimensions, C, Boolean, RandomAccessibleInterval<C>> createOp;
@@ -72,21 +71,21 @@ public class FFTMethodsLinearFFTFilterC<I extends RealType<I>, O extends RealTyp
 	/**
 	 * TODO
 	 *
-	 * @param input
+	 * @param in
 	 * @param kernel
-	 * @param fftInput
-	 * @param fftKernel
 	 * @param performInputFFT
 	 * @param performKernelFFT
-	 * @param executorService
 	 * @param frequencyOp
-	 * @param output
+	 * @param fftInput (required = false)
+	 * @param fftKernel (required = false)
+	 * @param out
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<I> in, final RandomAccessibleInterval<K> kernel,
-			final RandomAccessibleInterval<C> fftInput, final RandomAccessibleInterval<C> fftKernel,
-			final Boolean performInputFFT, final Boolean performKernelFFT, final ExecutorService es,
+			final Boolean performInputFFT, final Boolean performKernelFFT,
 			final Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> frequencyOp,
+			@Nullable RandomAccessibleInterval<C> fftInput, @Nullable
+	RandomAccessibleInterval<C> fftKernel,
 			final RandomAccessibleInterval<O> out) {
 		final C fftType = Util.getTypeFromInterval(fftInput);
 
@@ -104,12 +103,12 @@ public class FFTMethodsLinearFFTFilterC<I extends RealType<I>, O extends RealTyp
 
 		// perform input FFT if needed
 		if (performInputFFT) {
-			fftInOp.compute(in, es, inputFFT);
+			fftInOp.compute(in, inputFFT);
 		}
 
 		// perform kernel FFT if needed
 		if (performKernelFFT) {
-			fftKernelOp.compute(kernel, es, kernelFFT);
+			fftKernelOp.compute(kernel, kernelFFT);
 		}
 
 		// perform the operation in frequency domain (ie multiplication for
@@ -118,7 +117,7 @@ public class FFTMethodsLinearFFTFilterC<I extends RealType<I>, O extends RealTyp
 		frequencyOp.compute(inputFFT, kernelFFT, inputFFT);
 
 		// perform inverse fft
-		ifftOp.compute(inputFFT, es, out);
+		ifftOp.compute(inputFFT, out);
 		// linearFilter.compute(in, kernel, out);
 	}
 }

@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -45,6 +45,7 @@ import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Nullable;
 
 /**
  * Implements update step for Richardson-Lucy algorithm with total variation
@@ -67,13 +68,14 @@ public class RichardsonLucyTVUpdate<T extends RealType<T> & NativeType<T>, I ext
 	/**
 	 * performs update step of the Richardson Lucy with Total Variation Algorithm
 	 *
-	 * @param input
+	 * @param correction
 	 * @param regularizationFactor
-	 * @param variation
-	 * @param output
+	 * @param variation (required = false)
+	 * @param estimate
 	 */
 	@Override
-	public void compute(final I correction, final Float regularizationFactor, RandomAccessibleInterval<T> variation, final I estimate) {
+	public void compute(final I correction, final Float regularizationFactor, @Nullable
+	RandomAccessibleInterval<T> variation, final I estimate) {
 
 		if (variation == null) {
 			Type<T> type = Util.getTypeFromInterval(correction);

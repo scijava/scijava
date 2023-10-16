@@ -1,8 +1,8 @@
 /*
  * #%L
- * ImageJ software for multidimensional image processing and analysis.
+ * SciJava Operations API: Outward-facing Interfaces used by the SciJava Operations framework.
  * %%
- * Copyright (C) 2014 - 2018 ImageJ developers.
+ * Copyright (C) 2021 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,8 +30,13 @@
 package org.scijava.ops.api;
 
 import java.lang.reflect.Type;
-import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.ServiceLoader;
+import java.util.Set;
 
+import org.scijava.discovery.Discoverer;
+import org.scijava.priority.Prioritized;
 import org.scijava.types.Nil;
 
 /**
@@ -40,7 +45,7 @@ import org.scijava.types.Nil;
  * <ul>
  * <li>The pool of available ops, from which candidates are chosen.</li>
  * <li>Type-safe, built-in method signatures for all op implementations.</li>
- * <li>Selection (a.k.a. "matching") of op implementations from {@link OpRef}
+ * <li>Selection (a.k.a. "matching") of op implementations from {@link OpRequest}
  * descriptors.</li>
  * </ul>
  * <p>
@@ -56,16 +61,43 @@ import org.scijava.types.Nil;
  * @author Curtis Rueden
  * @author Gabriel Selzer
  */
-public interface OpEnvironment {
+public interface OpEnvironment extends Prioritized<OpEnvironment> {
+
+	static OpEnvironment getBareEnvironment() {
+		Optional<OpEnvironment> opsOptional = Discoverer //
+				.using(ServiceLoader::load) //
+				.discoverMax(OpEnvironment.class);
+		return opsOptional.orElseThrow( //
+				() -> new RuntimeException("No OpEnvironment Provided!") //
+		);
+	}
+
+	static OpEnvironment getEnvironment() {
+		OpEnvironment ops = getBareEnvironment();
+		ops.discoverEverything();
+		return ops;
+	}
+
+	static OpEnvironment getEnvironment(Discoverer... discoverers) {
+		OpEnvironment ops = getBareEnvironment();
+		ops.discoverUsing(discoverers);
+		return ops;
+	}
 
 	/** The available ops for this environment. */
-	Iterable<OpInfo> infos();
+	List<OpInfo> infos();
 	
-	Iterable<OpInfo> infos(String name);
+	List<OpInfo> infos(String name);
 
-	Iterable<OpInfo> infos(Hints hints);
+	List<OpInfo> infos(Hints hints);
 
-	Iterable<OpInfo> infos(String name, Hints hints);
+	List<OpInfo> infos(String name, Hints hints);
+
+	void discoverUsing(Discoverer... d);
+
+	void discoverEverything();
+
+	OpHistory history();
 
 	// TODO: Add interface method: OpInfo info(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType);
 
@@ -101,7 +133,7 @@ public interface OpEnvironment {
 		final Nil<?>[] inTypes, final Nil<?> outType, Hints hints);
 
 	/**
-	 * Returns an {@link InfoChain} fitting the provided arguments. NB
+	 * Returns an {@link InfoTree} fitting the provided arguments. NB
 	 * implementations of this method likely depend on the {@link Hints} set by
 	 * {@link OpEnvironment#setDefaultHints(Hints)}, which provides no guarantee
 	 * of thread-safety. Users interested in parallel Op matching should consider
@@ -113,11 +145,11 @@ public interface OpEnvironment {
 	 * @param outType the return of the Op (note that it may also be an argument)
 	 * @return an instance of an Op aligning with the search parameters
 	 */
-	 InfoChain infoChain(final String opName, final Nil<?> specialType,
+	 InfoTree infoTree(final String opName, final Nil<?> specialType,
 		final Nil<?>[] inTypes, final Nil<?> outType);
 
 	/**
-	 * Returns an {@link InfoChain} fitting the provided arguments.
+	 * Returns an {@link InfoTree} fitting the provided arguments.
 	 *
 	 * @param opName the name of the Op
 	 * @param specialType the generic {@link Type} of the Op
@@ -126,10 +158,10 @@ public interface OpEnvironment {
 	 * @param hints the {@link Hints} that should guide this matching call
 	 * @return an instance of an Op aligning with the search parameters
 	 */
-	InfoChain infoChain(final String opName, final Nil<?> specialType,
+	InfoTree infoTree(final String opName, final Nil<?> specialType,
 		final Nil<?>[] inTypes, final Nil<?> outType, Hints hints);
 
-	<T> T opFromInfoChain(InfoChain chain, Nil<T> specialType);
+	<T> T opFromInfoChain(InfoTree tree, Nil<T> specialType);
 
 	/**
 	 * Returns an Op fitting the provided arguments.
@@ -141,14 +173,543 @@ public interface OpEnvironment {
 	 */
 	<T> T opFromSignature(final String signature, final Nil<T> specialType);
 
-	InfoChain chainFromID(final String signature);
+	InfoTree treeFromID(final String signature);
 
-	InfoChain chainFromInfo(final OpInfo info, final Nil<?> specialType);
+	default InfoTree treeFromInfo(final OpInfo info, final Nil<?> specialType) {
+		return treeFromInfo(info, specialType, getDefaultHints());
+	}
 
-	InfoChain chainFromInfo(final OpInfo info, final Nil<?> specialType, final Hints hints);
+	InfoTree treeFromInfo(final OpInfo info, final Nil<?> specialType, final Hints hints);
 
+	/**
+	 * <p>Entry point for convenient Op calls, providing a builder-style interface
+	 * to walk through the process step-by-step.</p>
+	 * <br/>
+	 * The general order of specification:
+	 * <ol>
+	 *   <li>The op name (and {@link Hints}, if desired)</li>
+	 *   <li>The number of input(s)</li>
+	 *   <li>The type or value(s) of input(s)</li>
+	 *   <li>One of:
+	 *     <ul>
+	 *       <li>The type or value of the output</li>
+	 *       <li>Which input should be modified in-place</li>
+	 *     </ul>
+	 *   </li>
+	 * </ol>
+	 * The first two steps are required, at a minimum. The choices you make will
+	 * determine the <i>type</i> of Op that is matched:
+	 * <ul>
+	 *   <li>No inputs &rarr; <code>Producer</code> or <code>Computer</code></li>
+	 *   <li>Inputs with an output <i>value</i> &rarr; <code>Computer</code></li>
+	 *   <li>Inputs with an output <i>type</i> &rarr; <code>Computer</code> or <code>Function</code></li>
+	 *   <li>Inputs with no output &rarr; <code>Inplace</code> or <code>Function</code> with unknown (<code>Object</code>) return</li>
+	 * </ul>
+	 * <p>
+	 * This class also contains a series of convenience methods that combine the
+	 * {@code op} and {@code arityN} builder steps into one, e.g. {@link #nullary},
+	 * {@link #unary}, {@link #binary}, etc...
+	 * </p>
+	 * <br/>
+	 * <p>
+	 * Examples:
+	 * {@code OpEnvironment env = new DefaultOpEnvironment();}
+	 * <ul>
+	 *   <li>{@code env.op("create").arity0().outType(DoubleType.class).create();} &#8212; run an Op creating an instance of the ImgLib2 {@code DoubleType}</li>
+	 *   <li>{@code env.nullary("create").outType(DoubleType.class).create();} &#8212; same as above.</li>
+	 *   <li>{@code env.nullary("create", hints).outType(DoubleType.class).create();} &#8212; same as above but matching with the provided {@link Hints}.</li>
+	 *   <li>{@code env.op("create").arity0().outType(Img.class).create();} &#8212; run an Op creating a raw instance of an ImgLib2 {@code Img}.</li>
+	 *   <li>{@code env.op("create").arity0().outType(new Nil<Img<DoubleType>>(){}).create();} &#8212; run an Op creating an instance of an ImgLib2 {@code Img<DoubleType>}.</li>
+	 *   <li>{@code env.op("math.add").arity2().inType(Integer.class, Integer.class).function();} &#8212; get an instance of an Op to add two integers together. Return type will be {@code Object}.</li>
+	 *   <li>{@code env.binary("math.add").inType(Integer.class, Integer.class).function();} &#8212; same as above.</li>
+	 *   <li>{@code env.op("math.add").arity2().input(1, 1).outType(Double.class).apply();} &#8212; run an Op combining two integers. Return type will be {@code Double}.</li>
+	 *   <li>{@code env.op("math.add").arity2().input(img1, img2).output(result).compute();} &#8212; run an Op combining two images and storing the result in a pre-allocated image.</li>
+	 *   <li>{@code env.op("filter.addPoissonNoise").arity1().input(img1).mutate();} &#8212; run an Op adding poisson noise to an input image.</li>
+	 * </ul>
+	 * </p>
+	 *
+	 * @param opName The name of the Op to run
+	 * @return The {@link OpBuilder} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-org.scijava.ops.api.Hints-" title="To specify a Hints instance to use">op(String, Hints)</a>
+	 * @see <a href="#nullary-java.lang.String-" title="For a series of convenience builds with arity pre-selected">nullary(String)</a>
+	 * @see OpBuilder
+	 */
 	default OpBuilder op(final String opName) {
 		return new OpBuilder(this, opName);
+	}
+
+	/**
+	 * As {@link #op(String)} but using a provided {@link Hints}.
+	 *
+	 * @param opName The name of the Op to run
+	 * @param hints The {@code Hints} instance to use for Op matching
+	 * @return The {@link OpBuilder} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-" title="To use the default Hints for this OpEnvironment">op(String)</a>
+	 * @see <a href="#nullary-java.lang.String-org.scijava.ops.api.Hints-" title="For a series of convenience builds with arity pre-selected">nullary(String, Hints)</a>
+	 */
+	default OpBuilder op(final String opName, final Hints hints) {
+		return new OpBuilder(this, opName, hints);
+	}
+
+	/**
+	 * Convenience version of {@link #op(String)} with arity pre-selected to 0.
+	 *
+	 * @param opName The name of the Op to run
+	 * @return The {@link org.scijava.ops.api.OpBuilder.Arity0} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-" title="For a Builder instance without the arity choice made">op(String)</a>
+	 * @see <a href="#nullary-java.lang.String-org.scijava.ops.api.Hints-" title="To specify a Hints instance to use">nullary(String, Hints)</a>
+	 */
+	default OpBuilder.Arity0 nullary(final String opName) {
+		return new OpBuilder(this, opName).arity0();
+	}
+
+	/**
+	 * Convenience version of {@link #op(String)} with arity pre-selected to 1.
+	 *
+	 * @param opName The name of the Op to run
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity1} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-" title="For a Builder instance without the arity choice made">op(String)</a>
+	 * @see <a href="#unary-java.lang.String-org.scijava.ops.api.Hints-" title="To specify a Hints instance to use">unary(String, Hints)</a>
+	 */
+	default OpBuilder.Arity1 unary(final String opName) {
+		return new OpBuilder(this, opName).arity1();
+	}
+
+	/**
+	 * Convenience version of {@link #op(String)} with arity pre-selected to 2.
+	 *
+	 * @param opName The name of the Op to run
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity2} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-" title="For a Builder instance without the arity choice made">op(String)</a>
+	 * @see <a href="#binary-java.lang.String-org.scijava.ops.api.Hints-" title="To specify a Hints instance to use">binary(String, Hints)</a>
+	 */
+	default OpBuilder.Arity2 binary(final String opName) {
+		return new OpBuilder(this, opName).arity2();
+	}
+
+	/**
+	 * Convenience version of {@link #op(String)} with arity pre-selected to 3.
+	 *
+	 * @param opName The name of the Op to run
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity3} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-" title="For a Builder instance without the arity choice made">op(String)</a>
+	 * @see <a href="#ternary-java.lang.String-org.scijava.ops.api.Hints-" title="To specify a Hints instance to use">ternary(String, Hints)</a>
+	 */
+	default OpBuilder.Arity3 ternary(final String opName) {
+		return new OpBuilder(this, opName).arity3();
+	}
+
+	/**
+	 * Convenience version of {@link #op(String)} with arity pre-selected to 4.
+	 *
+	 * @param opName The name of the Op to run
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity4} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-" title="For a Builder instance without the arity choice made">op(String)</a>
+	 * @see <a href="#quaternary-java.lang.String-org.scijava.ops.api.Hints-" title="To specify a Hints instance to use">quaternary(String, Hints)</a>
+	 */
+	default OpBuilder.Arity4 quaternary(final String opName) {
+		return new OpBuilder(this, opName).arity4();
+	}
+
+	/**
+	 * Convenience version of {@link #op(String)} with arity pre-selected to 5.
+	 *
+	 * @param opName The name of the Op to run
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity5} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-" title="For a Builder instance without the arity choice made">op(String)</a>
+	 * @see <a href="#quinary-java.lang.String-org.scijava.ops.api.Hints-" title="To specify a Hints instance to use">quinary(String, Hints)</a>
+	 */
+	default OpBuilder.Arity5 quinary(final String opName) {
+		return new OpBuilder(this, opName).arity5();
+	}
+
+	/**
+	 * Convenience version of {@link #op(String)} with arity pre-selected to 6.
+	 *
+	 * @param opName The name of the Op to run
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity6} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-" title="For a Builder instance without the arity choice made">op(String)</a>
+	 * @see <a href="#senary-java.lang.String-org.scijava.ops.api.Hints-" title="To specify a Hints instance to use">senary(String, Hints)</a>
+	 */
+	default OpBuilder.Arity6 senary(final String opName) {
+		return new OpBuilder(this, opName).arity6();
+	}
+
+	/**
+	 * Convenience version of {@link #op(String)} with arity pre-selected to 7.
+	 *
+	 * @param opName The name of the Op to run
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity7} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-" title="For a Builder instance without the arity choice made">op(String)</a>
+	 * @see <a href="#septenary-java.lang.String-org.scijava.ops.api.Hints-" title="To specify a Hints instance to use">septenary(String, Hints)</a>
+	 */
+	default OpBuilder.Arity7 septenary(final String opName) {
+		return new OpBuilder(this, opName).arity7();
+	}
+
+	/**
+	 * Convenience version of {@link #op(String)} with arity pre-selected to 8.
+	 *
+	 * @param opName The name of the Op to run
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity8} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-" title="For a Builder instance without the arity choice made">op(String)</a>
+	 * @see <a href="#octonary-java.lang.String-org.scijava.ops.api.Hints-" title="To specify a Hints instance to use">octonary(String, Hints)</a>
+	 */
+	default OpBuilder.Arity8 octonary(final String opName) {
+		return new OpBuilder(this, opName).arity8();
+	}
+
+	/**
+	 * Convenience version of {@link #op(String)} with arity pre-selected to 9.
+	 *
+	 * @param opName The name of the Op to run
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity9} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-" title="For a Builder instance without the arity choice made">op(String)</a>
+	 * @see <a href="#nonary-java.lang.String-org.scijava.ops.api.Hints-" title="To specify a Hints instance to use">nonary(String, Hints)</a>
+	 */
+	default OpBuilder.Arity9 nonary(final String opName) {
+		return new OpBuilder(this, opName).arity9();
+	}
+
+	/**
+	 * Convenience version of {@link #op(String)} with arity pre-selected to 10.
+	 *
+	 * @param opName The name of the Op to run
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity10} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-" title="For a Builder instance without the arity choice made">op(String)</a>
+	 * @see <a href="#decenary-java.lang.String-org.scijava.ops.api.Hints-" title="To specify a Hints instance to use">decenary(String, Hints)</a>
+	 */
+	default OpBuilder.Arity10 decenary(final String opName) {
+		return new OpBuilder(this, opName).arity10();
+	}
+
+	/**
+	 * Convenience version of {@link #op(String)} with arity pre-selected to 11.
+	 *
+	 * @param opName The name of the Op to run
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity11} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-" title="For a Builder instance without the arity choice made">op(String)</a>
+	 * @see <a href="#arity11-java.lang.String-org.scijava.ops.api.Hints-" title="To specify a Hints instance to use">arity11(String, Hints)</a>
+	 */
+	default OpBuilder.Arity11 arity11(final String opName) {
+		return new OpBuilder(this, opName).arity11();
+	}
+
+	/**
+	 * Convenience version of {@link #op(String)} with arity pre-selected to 12.
+	 *
+	 * @param opName The name of the Op to run
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity12} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-" title="For a Builder instance without the arity choice made">op(String)</a>
+	 * @see <a href="#arity12-java.lang.String-org.scijava.ops.api.Hints-" title="To specify a Hints instance to use">arity12(String, Hints)</a>
+	 */
+	default OpBuilder.Arity12 arity12(final String opName) {
+		return new OpBuilder(this, opName).arity12();
+	}
+
+	/**
+	 * Convenience version of {@link #op(String)} with arity pre-selected to 13.
+	 *
+	 * @param opName The name of the Op to run
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity13} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-" title="For a Builder instance without the arity choice made">op(String)</a>
+	 * @see <a href="#arity13-java.lang.String-org.scijava.ops.api.Hints-" title="To specify a Hints instance to use">arity13(String, Hints)</a>
+	 */
+	default OpBuilder.Arity13 arity13(final String opName) {
+		return new OpBuilder(this, opName).arity13();
+	}
+
+	/**
+	 * Convenience version of {@link #op(String)} with arity pre-selected to 14.
+	 *
+	 * @param opName The name of the Op to run
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity14} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-" title="For a Builder instance without the arity choice made">op(String)</a>
+	 * @see <a href="#arity14-java.lang.String-org.scijava.ops.api.Hints-" title="To specify a Hints instance to use">arity14(String, Hints)</a>
+	 */
+	default OpBuilder.Arity14 arity14(final String opName) {
+		return new OpBuilder(this, opName).arity14();
+	}
+
+	/**
+	 * Convenience version of {@link #op(String)} with arity pre-selected to 15.
+	 *
+	 * @param opName The name of the Op to run
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity15} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-" title="For a Builder instance without the arity choice made">op(String)</a>
+	 * @see <a href="#arity15-java.lang.String-org.scijava.ops.api.Hints-" title="To specify a Hints instance to use">arity15(String, Hints)</a>
+	 */
+	default OpBuilder.Arity15 arity15(final String opName) {
+		return new OpBuilder(this, opName).arity15();
+	}
+
+	/**
+	 * Convenience version of {@link #op(String)} with arity pre-selected to 16.
+	 *
+	 * @param opName The name of the Op to run
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity16} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-" title="For a Builder instance without the arity choice made">op(String)</a>
+	 * @see <a href="#arity16-java.lang.String-org.scijava.ops.api.Hints-" title="To specify a Hints instance to use">arity16(String, Hints)</a>
+	 */
+	default OpBuilder.Arity16 arity16(final String opName) {
+		return new OpBuilder(this, opName).arity16();
+	}
+
+	/**
+	 * As {@link #nullary(String)} but using a provided {@link Hints}.
+	 *
+	 * @param opName The name of the Op to run
+	 * @param hints The {@code Hints} instance to use for Op matching
+	 * @return The {@link org.scijava.ops.api.OpBuilder.Arity0} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-org.scijava.ops.api.Hints-" title="For a Builder instance without the arity choice made">op(String, Hints)</a>
+	 * @see <a href="#nullary-java.lang.String-" title="To use the default Hints for this OpEnvironment">nullary(String)</a>
+	 */
+	default OpBuilder.Arity0 nullary(final String opName, final Hints hints) {
+		return new OpBuilder(this, opName, hints).arity0();
+	}
+
+	/**
+	 * As {@link #unary(String)} but using a provided {@link Hints}.
+	 *
+	 * @param opName The name of the Op to run
+	 * @param hints The {@code Hints} instance to use for Op matching
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity1} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-org.scijava.ops.api.Hints-" title="For a Builder instance without the arity choice made">op(String, Hints)</a>
+	 * @see <a href="#unary-java.lang.String-" title="To use the default Hints for this OpEnvironment">unary(String)</a>
+	 */
+	default OpBuilder.Arity1 unary(final String opName, final Hints hints) {
+		return new OpBuilder(this, opName, hints).arity1();
+	}
+
+	/**
+	 * As {@link #binary(String)} but using a provided {@link Hints}.
+	 *
+	 * @param opName The name of the Op to run
+	 * @param hints The {@code Hints} instance to use for Op matching
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity2} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-org.scijava.ops.api.Hints-" title="For a Builder instance without the arity choice made">op(String, Hints)</a>
+	 * @see <a href="#binary-java.lang.String-" title="To use the default Hints for this OpEnvironment">binary(String)</a>
+	 */
+	default OpBuilder.Arity2 binary(final String opName, final Hints hints) {
+		return new OpBuilder(this, opName, hints).arity2();
+	}
+
+	/**
+	 * As {@link #ternary(String)} but using a provided {@link Hints}.
+	 *
+	 * @param opName The name of the Op to run
+	 * @param hints The {@code Hints} instance to use for Op matching
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity3} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-org.scijava.ops.api.Hints-" title="For a Builder instance without the arity choice made">op(String, Hints)</a>
+	 * @see <a href="#ternary-java.lang.String-" title="To use the default Hints for this OpEnvironment">ternary(String)</a>
+	 */
+	default OpBuilder.Arity3 ternary(final String opName, final Hints hints) {
+		return new OpBuilder(this, opName, hints).arity3();
+	}
+
+	/**
+	 * As {@link #quaternary(String)} but using a provided {@link Hints}.
+	 *
+	 * @param opName The name of the Op to run
+	 * @param hints The {@code Hints} instance to use for Op matching
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity4} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-org.scijava.ops.api.Hints-" title="For a Builder instance without the arity choice made">op(String, Hints)</a>
+	 * @see <a href="#quaternary-java.lang.String-" title="To use the default Hints for this OpEnvironment">quaternary(String)</a>
+	 */
+	default OpBuilder.Arity4 quaternary(final String opName, final Hints hints) {
+		return new OpBuilder(this, opName, hints).arity4();
+	}
+
+	/**
+	 * As {@link #quinary(String)} but using a provided {@link Hints}.
+	 *
+	 * @param opName The name of the Op to run
+	 * @param hints The {@code Hints} instance to use for Op matching
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity5} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-org.scijava.ops.api.Hints-" title="For a Builder instance without the arity choice made">op(String, Hints)</a>
+	 * @see <a href="#quinary-java.lang.String-" title="To use the default Hints for this OpEnvironment">quinary(String)</a>
+	 */
+	default OpBuilder.Arity5 quinary(final String opName, final Hints hints) {
+		return new OpBuilder(this, opName, hints).arity5();
+	}
+
+	/**
+	 * As {@link #senary(String)} but using a provided {@link Hints}.
+	 *
+	 * @param opName The name of the Op to run
+	 * @param hints The {@code Hints} instance to use for Op matching
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity6} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-org.scijava.ops.api.Hints-" title="For a Builder instance without the arity choice made">op(String, Hints)</a>
+	 * @see <a href="#senary-java.lang.String-" title="To use the default Hints for this OpEnvironment">senary(String)</a>
+	 */
+	default OpBuilder.Arity6 senary(final String opName, final Hints hints) {
+		return new OpBuilder(this, opName, hints).arity6();
+	}
+
+	/**
+	 * As {@link #septenary(String)} but using a provided {@link Hints}.
+	 *
+	 * @param opName The name of the Op to run
+	 * @param hints The {@code Hints} instance to use for Op matching
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity7} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-org.scijava.ops.api.Hints-" title="For a Builder instance without the arity choice made">op(String, Hints)</a>
+	 * @see <a href="#septenary-java.lang.String-" title="To use the default Hints for this OpEnvironment">septenary(String)</a>
+	 */
+	default OpBuilder.Arity7 septenary(final String opName, final Hints hints) {
+		return new OpBuilder(this, opName, hints).arity7();
+	}
+
+	/**
+	 * As {@link #octonary(String)} but using a provided {@link Hints}.
+	 *
+	 * @param opName The name of the Op to run
+	 * @param hints The {@code Hints} instance to use for Op matching
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity8} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-org.scijava.ops.api.Hints-" title="For a Builder instance without the arity choice made">op(String, Hints)</a>
+	 * @see <a href="#octonary-java.lang.String-" title="To use the default Hints for this OpEnvironment">octonary(String)</a>
+	 */
+	default OpBuilder.Arity8 octonary(final String opName, final Hints hints) {
+		return new OpBuilder(this, opName, hints).arity8();
+	}
+
+	/**
+	 * As {@link #nonary(String)} but using a provided {@link Hints}.
+	 *
+	 * @param opName The name of the Op to run
+	 * @param hints The {@code Hints} instance to use for Op matching
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity9} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-org.scijava.ops.api.Hints-" title="For a Builder instance without the arity choice made">op(String, Hints)</a>
+	 * @see <a href="#nonary-java.lang.String-" title="To use the default Hints for this OpEnvironment">nonary(String)</a>
+	 */
+	default OpBuilder.Arity9 nonary(final String opName, final Hints hints) {
+		return new OpBuilder(this, opName, hints).arity9();
+	}
+
+	/**
+	 * As {@link #decenary(String)} but using a provided {@link Hints}.
+	 *
+	 * @param opName The name of the Op to run
+	 * @param hints The {@code Hints} instance to use for Op matching
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity10} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-org.scijava.ops.api.Hints-" title="For a Builder instance without the arity choice made">op(String, Hints)</a>
+	 * @see <a href="#decenary-java.lang.String-" title="To use the default Hints for this OpEnvironment">decenary(String)</a>
+	 */
+	default OpBuilder.Arity10 decenary(final String opName, final Hints hints) {
+		return new OpBuilder(this, opName, hints).arity10();
+	}
+
+	/**
+	 * As {@link #arity11(String)} but using a provided {@link Hints}.
+	 *
+	 * @param opName The name of the Op to run
+	 * @param hints The {@code Hints} instance to use for Op matching
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity11} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-org.scijava.ops.api.Hints-" title="For a Builder instance without the arity choice made">op(String, Hints)</a>
+	 * @see <a href="#arity11-java.lang.String-" title="To use the default Hints for this OpEnvironment">arity11(String)</a>
+	 */
+	default OpBuilder.Arity11 arity11(final String opName, final Hints hints) {
+		return new OpBuilder(this, opName, hints).arity11();
+	}
+
+	/**
+	 * As {@link #arity12(String)} but using a provided {@link Hints}.
+	 *
+	 * @param opName The name of the Op to run
+	 * @param hints The {@code Hints} instance to use for Op matching
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity12} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-org.scijava.ops.api.Hints-" title="For a Builder instance without the arity choice made">op(String, Hints)</a>
+	 * @see <a href="#arity12-java.lang.String-" title="To use the default Hints for this OpEnvironment">arity12(String)</a>
+	 */
+	default OpBuilder.Arity12 arity12(final String opName, final Hints hints) {
+		return new OpBuilder(this, opName, hints).arity12();
+	}
+
+	/**
+	 * As {@link #arity13(String)} but using a provided {@link Hints}.
+	 *
+	 * @param opName The name of the Op to run
+	 * @param hints The {@code Hints} instance to use for Op matching
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity13} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-org.scijava.ops.api.Hints-" title="For a Builder instance without the arity choice made">op(String, Hints)</a>
+	 * @see <a href="#arity13-java.lang.String-" title="To use the default Hints for this OpEnvironment">arity13(String)</a>
+	 */
+	default OpBuilder.Arity13 arity13(final String opName, final Hints hints) {
+		return new OpBuilder(this, opName, hints).arity13();
+	}
+
+	/**
+	 * As {@link #arity14(String)} but using a provided {@link Hints}.
+	 *
+	 * @param opName The name of the Op to run
+	 * @param hints The {@code Hints} instance to use for Op matching
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity14} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-org.scijava.ops.api.Hints-" title="For a Builder instance without the arity choice made">op(String, Hints)</a>
+	 * @see <a href="#arity14-java.lang.String-" title="To use the default Hints for this OpEnvironment">arity14(String)</a>
+	 */
+	default OpBuilder.Arity14 arity14(final String opName, final Hints hints) {
+		return new OpBuilder(this, opName, hints).arity14();
+	}
+
+	/**
+	 * As {@link #arity15(String)} but using a provided {@link Hints}.
+	 *
+	 * @param opName The name of the Op to run
+	 * @param hints The {@code Hints} instance to use for Op matching
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity15} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-org.scijava.ops.api.Hints-" title="For a Builder instance without the arity choice made">op(String, Hints)</a>
+	 * @see <a href="#arity15-java.lang.String-" title="To use the default Hints for this OpEnvironment">arity15(String)</a>
+	 */
+	default OpBuilder.Arity15 arity15(final String opName, final Hints hints) {
+		return new OpBuilder(this, opName, hints).arity15();
+	}
+
+	/**
+	 * As {@link #arity16(String)} but using a provided {@link Hints}.
+	 *
+	 * @param opName The name of the Op to run
+	 * @param hints The {@code Hints} instance to use for Op matching
+	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity16} instance for builder chaining.
+	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-org.scijava.ops.api.Hints-" title="For a Builder instance without the arity choice made">op(String, Hints)</a>
+	 * @see <a href="#arity16-java.lang.String-" title="To use the default Hints for this OpEnvironment">arity16(String)</a>
+	 */
+	default OpBuilder.Arity16 arity16(final String opName, final Hints hints) {
+		return new OpBuilder(this, opName, hints).arity16();
 	}
 
 	/** Discerns the generic type of an object instance. */
@@ -194,7 +755,7 @@ public interface OpEnvironment {
 	/**
 	 * Creates an {@link OpInfo} from an {@link Class}.
 	 *
-	 * @param opClass
+	 * @param opClass the {@link Class} to derive the Op from
 	 * @return an {@link OpInfo} which can make instances of {@code opClass}
 	 */
 	OpInfo opify(Class<?> opClass);
@@ -202,7 +763,7 @@ public interface OpEnvironment {
 	/**
 	 * Creates an {@link OpInfo} from an {@link Class} with the given priority.
 	 *
-	 * @param opClass
+	 * @param opClass the {@link Class} to derive the Op from
 	 * @param priority - the assigned priority of the Op.
 	 * @param names - the name(s) of the Op
 	 * @return an {@link OpInfo} which can make instances of {@code opClass}
@@ -219,14 +780,13 @@ public interface OpEnvironment {
 	/**
 	 * Creates some {@link OpInfo}s from {@code o}
 	 * @param o the {@link Object} to create {@link OpInfo}s from
-	 * @return a {@link Collection} of {@link OpInfo}s
+	 * @return a {@link Set} of {@link OpInfo}s
 	 */
-	Collection<OpInfo> infosFrom(Object o);
+	Set<OpInfo> infosFrom(Object o);
 
 	/**
 	 * Creates some {@link OpInfo}s from {@code o}
 	 * @param o the {@link Object} to create {@link OpInfo}s from
-	 * @return a {@link Collection} of {@link OpInfo}s
 	 */
 	default void registerInfosFrom(Object o) {
 		register(infosFrom(o));
@@ -243,10 +803,10 @@ public interface OpEnvironment {
 	 * Note that this method does not inherently provide <b>any</b> guarantees
 	 * pertaining to thread-safety; this API is provided purely for convenience.
 	 * Any calls to {@link OpEnvironment#op(String, Nil, Nil[], Nil)} that require
-	 * a specific {@Hints} should <b>not</b> use this method, instead opting for
+	 * a specific {@link Hints} should <b>not</b> use this method, instead opting for
 	 * {@link OpEnvironment#op(String, Nil, Nil[], Nil, Hints)}.
 	 * 
-	 * @param hints
+	 * @param hints the {@link Hints} to be set as default
 	 */
 	void setDefaultHints(Hints hints);
 
@@ -266,5 +826,21 @@ public interface OpEnvironment {
 	 * @return a {@link Hints} with all {@code startingHints} as hints.
 	 */
 	Hints createHints(String... startingHints);
+
+	/**
+	 * Returns the descriptions for all Ops contained within this
+	 * {@link OpEnvironment}
+	 *
+	 * @return a {@link Set} of descriptions
+	 */
+	List<String> descriptions();
+
+	/**
+	 * Returns the descriptions for all Ops identifiable by a given name within
+	 * this {@link OpEnvironment}
+	 *
+	 * @return a {@link Set} of descriptions
+	 */
+	List<String> descriptions(String name);
 
 }

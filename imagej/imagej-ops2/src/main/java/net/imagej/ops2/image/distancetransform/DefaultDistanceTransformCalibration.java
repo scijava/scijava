@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,16 +31,15 @@ package net.imagej.ops2.image.distancetransform;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
+
+import org.scijava.concurrent.Parallelization;
+import org.scijava.function.Computers;
 
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.BooleanType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.IntervalIndexer;
-
-import org.scijava.function.Computers;
 
 
 
@@ -57,7 +56,7 @@ public class DefaultDistanceTransformCalibration {
 	 * Source: http://fab.cba.mit.edu/classes/S62.12/docs/Meijster_distance.pdf
 	 */
 	public static <B extends BooleanType<B>, T extends RealType<T>> void compute(final RandomAccessibleInterval<B> in,
-			final double[] calibration, final ExecutorService es, final RandomAccessibleInterval<T> out) {
+			final double[] calibration, final RandomAccessibleInterval<T> out) {
 		// stores the size of each dimension
 		final int[] dimensSizes = new int[in.numDimensions()];
 
@@ -75,7 +74,7 @@ public class DefaultDistanceTransformCalibration {
 		final double[] actualValues = new double[numPoints];
 
 		// stores each Thread to execute
-		final List<Callable<Void>> list = new ArrayList<>();
+		final List<Runnable> list = new ArrayList<>();
 
 		/*
 		 * initial phase calculates the first dimension
@@ -93,11 +92,7 @@ public class DefaultDistanceTransformCalibration {
 			}
 		}
 
-		try {
-			es.invokeAll(list);
-		} catch (final InterruptedException e) {
-			throw new RuntimeException(e);
-		}
+		Parallelization.getTaskExecutor().runAll(list);
 
 		list.clear();
 
@@ -130,11 +125,7 @@ public class DefaultDistanceTransformCalibration {
 				}
 			}
 
-			try {
-				es.invokeAll(list);
-			} catch (final InterruptedException e) {
-				throw new RuntimeException(e);
-			}
+			Parallelization.getTaskExecutor().runAll(list);
 
 			list.clear();
 		}
@@ -161,7 +152,7 @@ public class DefaultDistanceTransformCalibration {
 	}
 }
 
-class InitPhaseCal<B extends BooleanType<B>, T extends RealType<T>> implements Callable<Void> {
+class InitPhaseCal<B extends BooleanType<B>, T extends RealType<T>> implements Runnable {
 	private final double[] actualValues;
 	private final RandomAccess<B> raIn;
 	private final int infinite;
@@ -183,7 +174,7 @@ class InitPhaseCal<B extends BooleanType<B>, T extends RealType<T>> implements C
 	}
 
 	@Override
-	public Void call() throws Exception {
+	public void run() {
 		// scan9bd9360dc2f4fed6c7e7386209bafc8f57b16a6a1
 		positions[0] = 0;
 		raIn.setPosition(positions);
@@ -216,12 +207,11 @@ class InitPhaseCal<B extends BooleanType<B>, T extends RealType<T>> implements C
 						+ actualValues[IntervalIndexer.positionToIndex(temp, dimensSizes)];
 			}
 		}
-		return null;
 	}
 
 }
 
-class NextPhaseCal<T extends RealType<T>> implements Callable<Void> {
+class NextPhaseCal<T extends RealType<T>> implements Runnable {
 	private final double[] actualValues;
 	private final int[] dimensSizes;
 	private final int[] positions;
@@ -252,7 +242,7 @@ class NextPhaseCal<T extends RealType<T>> implements Callable<Void> {
 	}
 
 	@Override
-	public Void call() throws Exception {
+	public void run() {
 		final int[] s = new int[dimensSizes[actualDimension]];
 		final int[] t = new int[dimensSizes[actualDimension]];
 		int q = 0;
@@ -299,27 +289,25 @@ class NextPhaseCal<T extends RealType<T>> implements Callable<Void> {
 			positions[actualDimension] = u;
 			actualValues[IntervalIndexer.positionToIndex(positions, dimensSizes)] = newValues[u];
 		}
-		return null;
 	}
 }
 
 /**
  * @implNote op names='image.distanceTransform', priority='1e-300'
  */
-class DefaultDistanceTransformCalibrationOp <B extends BooleanType<B>, T extends RealType<T>>implements Computers.Arity3<RandomAccessibleInterval<B>, double[], ExecutorService, RandomAccessibleInterval<T>>{
+class DefaultDistanceTransformCalibrationOp <B extends BooleanType<B>, T extends RealType<T>>implements Computers.Arity2<RandomAccessibleInterval<B>, double[], RandomAccessibleInterval<T>>{
 
 	/**
 	 * TODO
 	 *
-	 * @param binaryInput
+	 * @param in
 	 * @param calibration
-	 * @param executorService
-	 * @param output
+	 * @param out
 	 */
 	@Override
-	public void compute(RandomAccessibleInterval<B> in, double[] calibration, ExecutorService es,
+	public void compute(RandomAccessibleInterval<B> in, double[] calibration,
 			RandomAccessibleInterval<T> out) {
-		DefaultDistanceTransformCalibration.compute(in, calibration, es, out);
+		DefaultDistanceTransformCalibration.compute(in, calibration, out);
 	}
 
 }

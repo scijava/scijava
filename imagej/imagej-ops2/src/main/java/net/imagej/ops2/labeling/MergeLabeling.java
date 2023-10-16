@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -123,13 +123,13 @@ class MergeLabelingMaskless<L, I extends IntegerType<I>, B extends BooleanType<B
 	/**
 	 * TODO
 	 *
-	 * @param labeling1
-	 * @param labeling2
-	 * @param combinedLabeling
+	 * @param labeling1 the first {@link ImgLabeling}
+	 * @param labeling2 the second {@link ImgLabeling}
+	 * @return the merged {@link ImgLabeling}
 	 */
 	@Override
-	public ImgLabeling<L, I> apply(ImgLabeling<L, I> t, ImgLabeling<L, I> u) {
-		return mergeOp.apply(t, u, null);
+	public ImgLabeling<L, I> apply(ImgLabeling<L, I> labeling1, ImgLabeling<L, I> labeling2) {
+		return mergeOp.apply(labeling1, labeling2, null);
 	}
 
 }

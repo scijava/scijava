@@ -2,7 +2,7 @@
  * #%L
  * SciJava Operations: a framework for reusable algorithms.
  * %%
- * Copyright (C) 2016 - 2019 SciJava Ops developers.
+ * Copyright (C) 2016 - 2019 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -70,7 +70,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 #end
 		double[] expected = $inplaceExpectedArray.call($arity);
 		final double[] output = ops.op("test.mulArrays${arity}_${a}") //
-			.input($args.call($arity)) //
+			.arity$arity().input($args.call($arity)) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));

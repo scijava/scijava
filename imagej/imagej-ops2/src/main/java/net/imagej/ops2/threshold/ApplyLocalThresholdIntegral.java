@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -33,6 +33,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+import org.scijava.function.Computers;
+import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.OpExecutionException;
+
 import net.imagej.ops2.stats.IntegralMean;
 import net.imglib2.FinalInterval;
 import net.imglib2.RandomAccessibleInterval;
@@ -51,10 +55,6 @@ import net.imglib2.view.ExtendedRandomAccessibleInterval;
 import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
 import net.imglib2.view.composite.Composite;
-
-import org.scijava.function.Computers;
-import org.scijava.ops.engine.OpExecutionException;
-import org.scijava.ops.spi.OpDependency;
 
 /**
  * Apply a local thresholding method to an image using integral images for speed

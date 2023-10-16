@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -95,7 +95,7 @@ public class DefaultDetectJunctionsTest extends AbstractOpTest {
 		lines.add(new DefaultWritablePolyline(list4));
 
 		List<RealPoint> results;
-		results = ops.op("segment.detectJunctions").input(lines, threshold)
+		results = ops.op("segment.detectJunctions").arity2().input(lines, threshold)
 			.outType(new Nil<List<RealPoint>>()
 			{}).apply();
 

@@ -1,8 +1,8 @@
 /*
  * #%L
- * SciJava Common shared library for SciJava software.
+ * SciJava Log 2: SciJava plugins for logging.
  * %%
- * Copyright (C) 2009 - 2021 SciJava developers.
+ * Copyright (C) 2021 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,11 +29,15 @@
 
 package org.scijava.log2;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
 
 /**
  * Tests {@link LogSource}

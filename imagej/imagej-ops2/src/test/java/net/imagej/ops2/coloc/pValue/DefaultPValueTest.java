@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -32,7 +32,6 @@ package net.imagej.ops2.coloc.pValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
-import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 
 import net.imagej.ops2.AbstractColocalisationTest;
@@ -81,20 +80,18 @@ public class DefaultPValueTest extends AbstractColocalisationTest {
 	 * @param result
 	 */
 	private void assertColoc(double expectedPValue, double expectedColocValue, double[] expectedColocValuesArray, double... result) {
-		ExecutorService es = threads.getExecutorService();
 		Img<FloatType> ch1 = ArrayImgs.floats(1); // NB: Images will be ignored.
-		Img<FloatType> ch2 = ch1;
 
 		// Mock the underlying op.
 		final int[] count = { 0 };
 		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op = //
-				op((input1, input2) -> {
-					Double r;
+				(input1, input2) -> {
+					double r;
 					synchronized (this) {
 						r = result[count[0]++];
 					}
 					return r;
-				});
+				};
 
 		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> wrapped =
 			ops.bakeLambdaType(op,
@@ -102,7 +99,7 @@ public class DefaultPValueTest extends AbstractColocalisationTest {
 				{}.getType());
 
 		PValueResult output = new PValueResult();
-		ops.op("coloc.pValue").input(ch1, ch2, wrapped, result.length - 1, es).output(output).compute();
+		ops.op("coloc.pValue").arity4().input(ch1, ch1, wrapped, result.length - 1).output(output).compute();
 		Double actualPValue = output.getPValue();
 		Double actualColocValue = output.getColocValue();
 		double[] actualColocValuesArray = output.getColocValuesArray();
@@ -114,11 +111,4 @@ public class DefaultPValueTest extends AbstractColocalisationTest {
 		}
 	}
 
-	// -- Utility methods --
-
-	private static <I1, I2, O> BiFunction<I1, I2, O> op(
-		final BiFunction<I1, I2, O> function)
-	{
-		return (input1, input2) -> function.apply(input1, input2);
-	}
 }

@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,17 +29,18 @@
 
 package net.imagej.ops2.threshold;
 
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
-import net.imagej.ops2.filter.ApplyCenterAwareNeighborhoodBasedFilter;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.histogram.Histogram1d;
+import net.imglib2.outofbounds.OutOfBoundsBorderFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 /**
@@ -346,15 +347,15 @@ public final class ApplyThresholdMethodLocal {
 		Computers.Arity3<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
 				RandomAccessibleInterval<BitType>> {
 
-		// TODO: Once optional primary parameters are supported by the matching
-		// system, this can be made a unary function (drop integer parameter, which
-		// is the number of bins of the histogram).
 		@OpDependency(name = "image.histogram")
-		private BiFunction<Iterable<T>, Integer, Histogram1d<T>> createHistogramOp;
+		private Function<Iterable<T>, Histogram1d<T>> createHistogramOp;
 
 		// TODO: Would be cool if Computers.Arity2<T, T, BitType> would be matched.
 		@OpDependency(name = "threshold.apply")
 		private Computers.Arity2<Comparable<? super T>, T, BitType> applyThresholdOp;
+
+		@OpDependency(name = "filter.applyCenterAware")
+		private Computers.Arity4<RandomAccessibleInterval<T>, Computers.Arity2<Iterable<T>, T, BitType>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<BitType>> applyFilterOp;
 
 		private Computers.Arity2<Iterable<T>, T, BitType> thresholdOp;
 
@@ -369,12 +370,14 @@ public final class ApplyThresholdMethodLocal {
 		@Override
 		public void compute(final RandomAccessibleInterval<T> input,
 			final Shape inputNeighborhoodShape,
-			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
+			@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 			final RandomAccessibleInterval<BitType> output)
 		{
+			if (outOfBoundsFactory == null) outOfBoundsFactory =
+					new OutOfBoundsBorderFactory<>();
 			if (thresholdOp == null) thresholdOp = getThresholdOp();
-			ApplyCenterAwareNeighborhoodBasedFilter.compute(input,
-				inputNeighborhoodShape, outOfBoundsFactory, thresholdOp, output);
+			applyFilterOp.compute(input, thresholdOp,
+				inputNeighborhoodShape, outOfBoundsFactory, output);
 		}
 
 		private Computers.Arity2<Iterable<T>, T, BitType> getThresholdOp() {
@@ -387,7 +390,7 @@ public final class ApplyThresholdMethodLocal {
 					final T inputCenterPixel, final BitType output)
 				{
 					final Histogram1d<T> histogram = createHistogramOp.apply(
-						inputNeighborhood, null);
+						inputNeighborhood);
 					final T threshold = inputNeighborhood.iterator().next()
 						.createVariable();
 					computeThresholdOp.compute(histogram, threshold);

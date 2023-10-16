@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,16 +30,14 @@ package net.imagej.ops2.features.hog;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.concurrent.ExecutorService;
+import org.junit.jupiter.api.Test;
+import org.scijava.types.Nil;
 
 import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.real.FloatType;
-
-import org.junit.jupiter.api.Test;
-import org.scijava.types.Nil;
 
 /**
  * The HoG Op is tested by comparing its result with the ground-truth which was
@@ -54,13 +52,11 @@ public class HistogramOfOrientedGradients2DTest extends AbstractOpTest {
 
 	@Test
 	public void test() {
-		ExecutorService es = threads.getExecutorService();
-
 		Img<FloatType> hogTestImg = openFloatImg("HoG2DResult.tif");
 		Img<FloatType> hogInputImg = openFloatImg("HoG2DInput.png");
 
 		// use numOrientations = 9 and spanOfNeighborhood = 2 for test
-		RandomAccessibleInterval<FloatType> hogOp = ops.op("features.hog").input(hogInputImg, 9, 2, es)
+		RandomAccessibleInterval<FloatType> hogOp = ops.op("features.hog").arity3().input(hogInputImg, 9, 2)
 				.outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
 
 		RandomAccess<FloatType> raOp = hogOp.randomAccess();

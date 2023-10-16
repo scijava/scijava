@@ -1,14 +1,39 @@
+/*-
+ * #%L
+ * SciJava Operations API: Outward-facing Interfaces used by the SciJava Operations framework.
+ * %%
+ * Copyright (C) 2021 - 2023 SciJava developers.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
 
 package org.scijava.ops.api;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.scijava.common3.validity.ValidityException;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
@@ -34,7 +59,7 @@ public interface OpInfo extends Comparable<OpInfo> {
 	/** Gets the associated {@link Struct} metadata. */
 	Struct struct();
 
-	/** Gets the hints declared in the {@link OpHints} annotation */
+	/** Gets the hints declared by the Op */
 	Hints declaredHints();
 
 	/** Gets the op's input parameters. */
@@ -74,18 +99,6 @@ public interface OpInfo extends Comparable<OpInfo> {
 		return output().getType();
 	}
 
-	/** Gets the op's dependencies on other ops. */
-	default List<OpDependencyMember<?>> dependencies() {
-		return struct().members().stream() //
-			.filter(m -> m instanceof OpDependencyMember) //
-			.map(m -> (OpDependencyMember<?>) m) //
-			.collect(Collectors.toList());
-	}
-	
-	default OpCandidate createCandidate(OpEnvironment env, OpRef ref, Map<TypeVariable<?>, Type> typeVarAssigns) {
-		return new OpCandidate(env, ref, this, typeVarAssigns);
-	}
-
 	/** The op's priority. */
 	double priority();
 
@@ -95,10 +108,6 @@ public interface OpInfo extends Comparable<OpInfo> {
 	/** Create a StructInstance using the Struct metadata backed by an object of the op itself. */
 	StructInstance<?> createOpInstance(List<?> dependencies);
 
-	// TODO Consider if we really want to keep the following methods.
-	boolean isValid();
-	ValidityException getValidityException();
-	
 	AnnotatedElement getAnnotationBearer();
 
 	@Override
@@ -113,56 +122,4 @@ public interface OpInfo extends Comparable<OpInfo> {
 
 	/** A unique identifier for an Op */
 	String id();
-
-	/**
-	 * Writes a basic {@link String} describing this {@link OpInfo}
-	 * 
-	 * @return a descriptor for this {@link OpInfo}
-	 */
-	default String opString() {
-		return opString(null);
-	}
-
-	/**
-	 * Writes a basic {@link String} describing this {@link OpInfo} <b>with a
-	 * particular {@link Member} highlighted</b>.
-	 *
-	 * @param special the {@link Member} to highlight
-	 * @return a descriptor for this {@link OpInfo}
-	 */
-	default String opString(final Member<?> special) {
-		final StringBuilder sb = new StringBuilder();
-		sb.append(implementationName()).append("(\n\t Inputs:\n");
-		for (final Member<?> arg : inputs()) {
-			appendParam(sb, arg, special);
-		}
-		sb.append("\t Outputs:\n");
-		appendParam(sb, output(), special);
-		sb.append(")\n");
-		return sb.toString();
-	}
-
-	/**
-	 * Appends a {@link Member} to the {@link StringBuilder} writing the Op
-	 * string.
-	 * 
-	 * @param sb the {@link StringBuilder}
-	 * @param arg the {@link Member} being appended to {@code sb}
-	 * @param special the {@link Member} to highlight
-	 */
-	private void appendParam(final StringBuilder sb, final Member<?> arg,
-		final Member<?> special)
-	{
-		if (arg == special) sb.append("==> \t"); // highlight special item
-		else sb.append("\t\t");
-		sb.append(arg.getType().getTypeName());
-		sb.append(" ");
-		sb.append(arg.getKey());
-		if (!arg.getDescription().isEmpty()) {
-			sb.append(" -> ");
-			sb.append(arg.getDescription());
-		}
-		sb.append("\n");
-	}
-
 }

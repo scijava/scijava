@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,6 +34,7 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.function.Computers;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 /**
@@ -79,7 +80,7 @@ public class ComputeLocalSauvolaThreshold<T extends RealType<T>> implements
 	 */
 	@Override
 	public void compute(final Iterable<T> inputNeighborhood,
-		final T inputCenterPixel, final Double k, final Double r,
+		final T inputCenterPixel, @Nullable final Double k, @Nullable final Double r,
 		final BitType output)
 	{
 		compute(inputNeighborhood, inputCenterPixel, k, r, meanOp, stdDeviationOp,

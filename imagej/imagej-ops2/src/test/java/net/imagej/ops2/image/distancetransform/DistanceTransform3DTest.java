@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,18 +30,16 @@ package net.imagej.ops2.image.distancetransform;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.Test;
+import org.scijava.types.Nil;
+import org.scijava.util.MersenneTwisterFast;
+
 import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.FinalInterval;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.real.FloatType;
-
-import org.junit.jupiter.api.Test;
-import org.scijava.types.Nil;
-import org.scijava.util.MersenneTwisterFast;
-
-import java.util.concurrent.ExecutorService;
 
 /**
  * @author Simon Schmid (University of Konstanz)
@@ -53,29 +51,27 @@ public class DistanceTransform3DTest extends AbstractOpTest {
 
 	@Test
 	public void test() {
-		ExecutorService es = threads.getExecutorService();
-
 		// create 3D image
 		final RandomAccessibleInterval<BitType> in = ops.op("create.img")
-				.input(new FinalInterval(20, 20, 5), new BitType())
+				.arity2().input(new FinalInterval(20, 20, 5), new BitType())
 				.outType(new Nil<RandomAccessibleInterval<BitType>>() {}).apply();
 		generate3DImg(in);
 
 		// create output image
-		RandomAccessibleInterval<FloatType> out = ops.op("create.img").input(in, new FloatType())
+		RandomAccessibleInterval<FloatType> out = ops.op("create.img").arity2().input(in, new FloatType())
 				.outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
 
 		/*
 		 * test normal DT
 		 */
-		ops.op("image.distanceTransform").input(in, es).output(out).compute();
+		ops.op("image.distanceTransform").arity1().input(in).output(out).compute();
 		compareResults(out, in, new double[] { 1, 1, 1 });
 
 		/*
 		 * test calibrated DT
 		 */
 		final double[] calibration = new double[] { 3.74, 5.19, 1.21 };
-		ops.op("image.distanceTransform").input(in, calibration, es).output(out)
+		ops.op("image.distanceTransform").arity2().input(in, calibration).output(out)
 				.compute();
 		compareResults(out, in, calibration);
 	}

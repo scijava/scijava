@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -52,7 +52,7 @@ public class AddNumericTypeBinaryMathAddTest extends AbstractOpTest {
 		final ARGBDoubleType b = new ARGBDoubleType(255, 75, 35, 45);
 		final ARGBDoubleType c = new ARGBDoubleType();
 
-		ops.op("math.add").input(a, b).output(c).compute();
+		ops.op("math.add").arity2().input(a, b).output(c).compute();
 		assertEquals(203.0, c.getR(), DELTA);
 		assertEquals(163.0, c.getG(), DELTA);
 		assertEquals(173.0, c.getB(), DELTA);

@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -49,7 +49,7 @@ public class LBP2dFeatureTest extends AbstractFeatureTest {
 
 	@Test
 	public void testLbp2d() {
-		final ArrayList<LongType> hist = ops.op("features.lbp2d").input(random, 1, 4)
+		final ArrayList<LongType> hist = ops.op("features.lbp2d").arity3().input(random, 1, 4)
 				.outType(new Nil<ArrayList<LongType>>() {}).apply();
 
 		// Test values proved by calculating small toy example by hand.

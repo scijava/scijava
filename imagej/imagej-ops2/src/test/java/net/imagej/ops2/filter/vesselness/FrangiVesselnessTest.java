@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -73,7 +73,7 @@ public class FrangiVesselnessTest extends AbstractOpTest {
 		final double[] spacing = { 1, 1 };
 
 		// run the op
-		ops.op("filter.frangiVesselness").input(inputImg, spacing, scale).output(actualOutput).compute();
+		ops.op("filter.frangiVesselness").arity3().input(inputImg, scale, spacing).output(actualOutput).compute();
 
 		// compare the output image data to that stored in the file.
 		final Cursor<FloatType> cursor = Views.iterable(actualOutput).localizingCursor();

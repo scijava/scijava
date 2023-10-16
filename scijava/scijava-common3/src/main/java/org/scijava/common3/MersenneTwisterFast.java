@@ -1,8 +1,8 @@
 /*
  * #%L
- * SciJava Common shared library for SciJava software.
+ * SciJava Common 3: Functionality widely used across SciJava modules
  * %%
- * Copyright (C) 2009 - 2021 SciJava developers.
+ * Copyright (C) 2021 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:

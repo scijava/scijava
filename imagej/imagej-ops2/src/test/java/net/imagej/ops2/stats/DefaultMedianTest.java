@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -58,7 +58,7 @@ public class DefaultMedianTest extends AbstractOpTest {
 		numbers.add(new DoubleType(1.0));
 
 		final DoubleType result = new DoubleType();
-		ops.op("stats.median").input(numbers).output(result).compute();
+		ops.op("stats.median").arity1().input(numbers).output(result).compute();
 
 		assertEquals(numbers.get(0).getRealDouble(), result.getRealDouble(), 1e-12);
 	}
@@ -74,7 +74,7 @@ public class DefaultMedianTest extends AbstractOpTest {
 		shuffle(numbers);
 
 		final DoubleType result = new DoubleType();
-		ops.op("stats.median").input(numbers).output(result).compute();
+		ops.op("stats.median").arity1().input(numbers).output(result).compute();
 
 		assertEquals(3.0, result.getRealDouble(), 1e-12);
 	}
@@ -89,7 +89,7 @@ public class DefaultMedianTest extends AbstractOpTest {
 		shuffle(numbers);
 
 		final DoubleType result = new DoubleType();
-		ops.op("stats.median").input(numbers).output(result).compute();
+		ops.op("stats.median").arity1().input(numbers).output(result).compute();
 
 		assertEquals(2.5, result.getRealDouble(), 1e-12);
 	}
@@ -100,7 +100,7 @@ public class DefaultMedianTest extends AbstractOpTest {
 			.randomlyFilledUnsignedByteWithSeed(new long[] { 100, 100 }, 1234567890L);
 
 		final DoubleType result = new DoubleType();
-		ops.op("stats.median").input(randomlyFilledImg).output(result).compute();
+		ops.op("stats.median").arity1().input(randomlyFilledImg).output(result).compute();
 
 		assertEquals(128d, result.getRealDouble(), 0.00001d);
 	}

@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,7 +43,7 @@ import org.scijava.ops.spi.OpDependency;
  * 
  * @author Andreas Graumann (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
- *@implNote op names='features.haralick.sumAverage'
+ * @implNote op names='features.haralick.sumAverage'
  */
 public class DefaultSumAverage<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 

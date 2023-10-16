@@ -1,9 +1,8 @@
 /*
  * #%L
- * ImageJ software for multidimensional image processing and analysis.
+ * SciJava Operations Engine: a framework for reusable algorithms.
  * %%
- * Copyright (C) 2014 - 2016 Board of Regents of the University of
- * Wisconsin-Madison and University of Konstanz.
+ * Copyright (C) 2016 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -33,7 +32,7 @@ package org.scijava.ops.engine.struct;
 import java.lang.reflect.Type;
 import java.util.function.Supplier;
 
-import org.scijava.ops.api.OpDependencyMember;
+import org.scijava.ops.engine.OpDependencyMember;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.Member;
 

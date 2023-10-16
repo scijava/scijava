@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -62,7 +62,7 @@ public class TypeExtractorTests extends AbstractOpTest {
 		OutOfBoundsFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>> oobf = new OutOfBoundsConstantValueFactory<>(
 				new UnsignedByteType(5));
 
-		String output = (String) ops.op("test.oobcvfTypeExtractor").input(oobf).apply();
+		String output = (String) ops.op("test.oobcvfTypeExtractor").arity1().input(oobf).apply();
 		// make sure that output matches the return from the Op above, specific to the
 		// type of OOBF we passed through.
 		assert output.equals("oobcvf");
@@ -78,6 +78,6 @@ public class TypeExtractorTests extends AbstractOpTest {
 		OutOfBoundsFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>> oobf = new OutOfBoundsRandomValueFactory<>( 
 				new UnsignedByteType(7), 7, 7);
 		Img<UnsignedByteType> img = ArrayImgs.unsignedBytes(new long[] { 10, 10 }); 
-		String output = (String) ops.op("test.oobrvfTypeExtractor").input(oobf, img).apply(); // make sure that output matches the return from the Op above, specific to the // type of OOBF we passed through. 
+		String output = (String) ops.op("test.oobrvfTypeExtractor").arity2().input(oobf, img).apply(); // make sure that output matches the return from the Op above, specific to the // type of OOBF we passed through.
 		assert output.equals("oobrvf"); } 
 	}

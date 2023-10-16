@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -49,8 +49,8 @@ public class CentroidLabelRegion implements Function<LabelRegion<?>, RealLocaliz
 	/**
 	 * TODO
 	 *
-	 * @param input
-	 * @param centroid
+	 * @param input a {@link LabelRegion}
+	 * @return the centroid of the input, as a {@link RealLocalizable}
 	 */
 	@Override
 	public RealLocalizable apply(final LabelRegion<?> input) {

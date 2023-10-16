@@ -2,7 +2,7 @@
  * #%L
  * SciJava Operations: a framework for reusable algorithms.
  * %%
- * Copyright (C) 2016 - 2019 SciJava Ops developers.
+ * Copyright (C) 2016 - 2019 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -88,7 +88,7 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements OpC
 	public void testComputer${arity}ToArrays() {
 		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
 		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").input($inputArgs.call($arity)).output(output).compute();
+		ops.op("test.liftArrayC").arity$arity()#if ( $arity > 0 ).input($inputArgs.call($arity))#end.output(output).compute();
 
 		for(int i = 0; i < output.length; i++) {
 			Assertions.assertEquals($arity * i, output[i].getNumber());

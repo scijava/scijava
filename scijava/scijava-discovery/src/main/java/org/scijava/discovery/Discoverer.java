@@ -1,7 +1,43 @@
+/*-
+ * #%L
+ * SciJava Discovery: Discovery mechanisms used by the SciJava Framework.
+ * %%
+ * Copyright (C) 2021 - 2023 SciJava developers.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
 package org.scijava.discovery;
 
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.ServiceConfigurationError;
+import java.util.ServiceLoader;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -165,5 +201,32 @@ public interface Discoverer {
 				return d.discover(c);
 			}
 		};
+	}
+	/**
+	 * Finds the maximum implementation of any {@link Comparable} {@code c}.
+	 *
+	 * @param c the {@link Class}, extending {@link Comparable} that the returned
+	 *          implementation <b>must</b> implement
+	 * @param <U> the {@link Type} of {@code c}
+	 * @return the maximum implementation of {@code c}
+	 */
+	default <U extends Comparable<U>> Optional<U> discoverMax(Class<U> c) {
+		List<U> discoveries = discover(c);
+		// NB: natural order sorts in ascending order
+		return discoveries.stream().max(Comparator.naturalOrder());
+	}
+
+	/**
+	 * Finds the minimum implementation of any {@link Comparable} {@code c}.
+	 *
+	 * @param c the {@link Class}, extending {@link Comparable} that the returned
+	 *          implementation <b>must</b> implement
+	 * @param <U> the {@link Type} of {@code c}
+	 * @return the minimum implementation of {@code c}
+	 */
+	default <U extends Comparable<U>> Optional<U> discoverMin(Class<U> c) {
+		List<U> discoveries = discover(c);
+		// NB: natural order sorts in ascending order
+		return discoveries.stream().min(Comparator.naturalOrder());
 	}
 }

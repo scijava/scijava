@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,12 +29,13 @@
 
 package net.imagej.ops2;
 
-import io.scif.img.IO;
-
 import java.net.URL;
-import java.util.*;
 import java.util.stream.StreamSupport;
 
+import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.spi.Op;
+
+import io.scif.img.IO;
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccess;
@@ -48,21 +49,6 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.scijava.discovery.Discoverer;
-import org.scijava.log2.Logger;
-import org.scijava.log2.StderrLoggerFactory;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpHistory;
-import org.scijava.ops.engine.DefaultOpEnvironment;
-import org.scijava.ops.engine.DefaultOpHistory;
-import org.scijava.ops.spi.Op;
-import org.scijava.threads.DefaultThreadManager;
-import org.scijava.threads.ThreadManager;
-import org.scijava.types.DefaultTypeReifier;
-import org.scijava.types.TypeReifier;
-
 /**
  * Base class for Op unit testing.
  * <p>
@@ -75,8 +61,8 @@ import org.scijava.types.TypeReifier;
  */
 public abstract class AbstractOpTest{
 
-	protected static final OpEnvironment ops = new DefaultOpEnvironment();
-	protected static final ThreadManager threads = new DefaultThreadManager();
+	protected static final OpEnvironment ops = OpEnvironment.getEnvironment();
+
 
 	private int seed;
 

@@ -1,8 +1,8 @@
 /*
  * #%L
- * SciJava Common shared library for SciJava software.
+ * SciJava Parse 2: SciJava plugins for String parsing.
  * %%
- * Copyright (C) 2009 - 2021 SciJava developers.
+ * Copyright (C) 2021 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,6 +30,12 @@
 package org.scijava.parse2.impl;
 
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +45,6 @@ import org.scijava.parse2.Item;
 import org.scijava.parse2.Items;
 import org.scijava.parse2.Parser;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests {@link Parser}.

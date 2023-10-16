@@ -1,18 +1,18 @@
 /*
  * #%L
- * ImageJ software for multidimensional image processing and analysis.
+ * SciJava Operations Engine: a framework for reusable algorithms.
  * %%
- * Copyright (C) 2014 - 2018 ImageJ developers.
+ * Copyright (C) 2016 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ * 
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -34,17 +34,17 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.scijava.ops.api.OpCandidate;
+import org.scijava.ops.api.OpMatchingException;
+import org.scijava.ops.engine.OpCandidate;
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpRef;
-import org.scijava.ops.api.features.MatchingConditions;
-import org.scijava.ops.api.features.MatchingRoutine;
-import org.scijava.ops.api.features.OpMatcher;
-import org.scijava.ops.api.features.OpMatchingException;
+import org.scijava.ops.api.OpRequest;
+import org.scijava.ops.engine.MatchingConditions;
+import org.scijava.ops.engine.matcher.MatchingRoutine;
+import org.scijava.ops.engine.matcher.OpMatcher;
 
 /**
  * Default implementation of {@link OpMatcher}. Used for finding Ops which match
- * a {@link OpRef request}.
+ * a {@link OpRequest request}.
  *
  * @author David Kolb
  */

@@ -1,21 +1,18 @@
 /*
  * #%L
- * SciJava Common shared library for SciJava software.
+ * SciJava library for generic type reasoning.
  * %%
- * Copyright (C) 2009 - 2017 Board of Regents of the University of
- * Wisconsin-Madison, Broad Institute of MIT and Harvard, Max Planck
- * Institute of Molecular Cell Biology and Genetics, University of
- * Konstanz, and KNIME GmbH.
+ * Copyright (C) 2016 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ * 
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -32,26 +29,36 @@
 
 package org.scijava.types;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.scijava.testutil.ExampleTypes.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.scijava.testutil.ExampleTypes.CircularThing;
+import static org.scijava.testutil.ExampleTypes.ComplexThing;
+import static org.scijava.testutil.ExampleTypes.IntegerThing;
+import static org.scijava.testutil.ExampleTypes.Loop;
+import static org.scijava.testutil.ExampleTypes.LoopingThing;
+import static org.scijava.testutil.ExampleTypes.NestedThing;
+import static org.scijava.testutil.ExampleTypes.NumberThing;
+import static org.scijava.testutil.ExampleTypes.RecursiveThing;
+import static org.scijava.testutil.ExampleTypes.StrangeThing;
+import static org.scijava.testutil.ExampleTypes.StrangerThing;
+import static org.scijava.testutil.ExampleTypes.Thing;
+import static org.scijava.testutil.ExampleTypes.Words;
 
-import java.io.*;
+import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.jar.JarOutputStream;
-import java.util.zip.ZipEntry;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -218,6 +225,7 @@ public class TypesTest {
 	@Test
 	public <T extends Number> void testIsAssignableT() {
 		final Type t = new Nil<T>() {}.getType();
+		final Type listRaw = List.class;
 		final Type listT = new Nil<List<T>>() {}.getType();
 		final Type listNumber = new Nil<List<Number>>() {}.getType();
 		final Type listInteger = new Nil<List<Integer>>() {}.getType();
@@ -227,19 +235,29 @@ public class TypesTest {
 		final Type listListInteger = new Nil<List<List<Integer>>>(){}.getType();
 
 		assertTrue(Types.isAssignable(t, t));
+		assertTrue(Types.isAssignable(listRaw, listRaw));
 		assertTrue(Types.isAssignable(listT, listT));
 		assertTrue(Types.isAssignable(listNumber, listNumber));
 		assertTrue(Types.isAssignable(listInteger, listInteger));
 		assertTrue(Types.isAssignable(listExtendsNumber, listExtendsNumber));
 
+		assertTrue(Types.isAssignable(listRaw, listExtendsNumber));
 		assertTrue(Types.isAssignable(listT, listExtendsNumber));
 		assertTrue(Types.isAssignable(listNumber, listExtendsNumber));
 		assertTrue(Types.isAssignable(listInteger, listExtendsNumber));
 
+		assertTrue(Types.isAssignable(listRaw, listT));
 		assertTrue(Types.isAssignable(listNumber, listT));
 		assertTrue(Types.isAssignable(listInteger, listT));
 		assertTrue(Types.isAssignable(listExtendsNumber, listT));
 		assertFalse(Types.isAssignable(listExtendsNumber, listNumber));
+
+		assertTrue(Types.isAssignable(listT, listRaw));
+		assertTrue(Types.isAssignable(listNumber, listRaw));
+		assertTrue(Types.isAssignable(listInteger, listRaw));
+		assertTrue(Types.isAssignable(listExtendsNumber, listRaw));
+		assertTrue(Types.isAssignable(listListRaw, listRaw));
+		assertTrue(Types.isAssignable(listListInteger, listRaw));
 
 		// Nested Type Variables must be EXACTLY the same to be assignable
 		assertFalse(Types.isAssignable(listListInteger, listListRaw));

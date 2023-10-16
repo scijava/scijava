@@ -1,12 +1,40 @@
+/*-
+ * #%L
+ * SciJava Operations Engine: a framework for reusable algorithms.
+ * %%
+ * Copyright (C) 2016 - 2023 SciJava developers.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
 
 package org.scijava.ops.engine.matcher.impl;
 
 import java.lang.reflect.Type;
 
+import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInstance;
-import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.RichOp;
-import org.scijava.ops.api.features.BaseOpHints.History;
 import org.scijava.progress.Progress;
 
 /**
@@ -22,25 +50,31 @@ import org.scijava.progress.Progress;
 public abstract class AbstractRichOp<T> implements RichOp<T> {
 
 	private final OpInstance<T> instance;
-	private final OpMetadata metadata;
+	private final OpEnvironment env;
+	private final Hints hints;
 
-	public AbstractRichOp(final OpInstance<T> instance, final OpMetadata metadata) {
+	public boolean record = true;
+
+	public AbstractRichOp(final OpInstance<T> instance, final OpEnvironment env, final Hints hints) {
 		this.instance = instance;
-		this.metadata = metadata;
+		this.env = env;
+		this.hints = hints;
 
-		if (!metadata.hints().contains(History.SKIP_RECORDING)) {
-			metadata.history().logOp(this);
-		}
+		this.env.history().logOp(this);
 	}
 
+	@Override
+	public OpEnvironment env() {
+		return env;
+	}
+
+	@Override
+	public Hints hints() {
+		return hints;
+	}
 	@Override
 	public OpInstance<T> instance() {
 		return instance;
-	}
-
-	@Override
-	public OpMetadata metadata() {
-		return metadata;
 	}
 
 	@Override
@@ -50,11 +84,20 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 
 	@Override
 	public void postprocess(Object output) {
-		// Log a new execution
-		if (!metadata.hints().contains(History.SKIP_RECORDING)) {
-			metadata.history().logOutput(this, output);
+		if (record) {
+			env.history().logOutput(this, output);
 		}
 		Progress.complete();
+	}
+
+	@Override
+	public boolean isRecordingExecutions() {
+		return record;
+	}
+
+	@Override
+	public void recordExecutions(boolean record) {
+		this.record = record;
 	}
 
 }

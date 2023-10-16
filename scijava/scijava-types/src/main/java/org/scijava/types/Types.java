@@ -1,20 +1,18 @@
 /*
  * #%L
- * SciJava Common shared library for SciJava software.
+ * SciJava library for generic type reasoning.
  * %%
- * Copyright (C) 2009 - 2016 Board of Regents of the University of
- * Wisconsin-Madison, Broad Institute of MIT and Harvard, and Max Planck
- * Institute of Molecular Cell Biology and Genetics.
+ * Copyright (C) 2016 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ * 
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -424,7 +422,55 @@ public final class Types {
 		}
 		return Object.class;
 	}
-	
+
+	/**
+	 * Obtains the type parameters of {@link Type} {@code src} <b>with respect
+	 * to</b> the {@link Class} {@code dest}. When {@code src} has no type
+	 * parameters (or is not a subclass of {@code dest}), an empty array is
+	 * returned.
+	 *
+	 * @param src - the {@code Type} whose type parameters will be returned.
+	 * @param superclass - the {@code Class} against which we want the type
+	 *          parameters of {@code src}
+	 * @return an array of {@code Type}s denoting the type
+	 */
+	public static Type[] typeParamsAgainstClass(Type src, Class<?> superclass) {
+		// only classes and ParameterizedTypes can have type parameters
+		if (!(src instanceof Class || src instanceof ParameterizedType))
+			return new Type[0];
+		try {
+			Type superSrc = Types.getExactSuperType(src, superclass);
+			if (superSrc instanceof ParameterizedType)
+				return ((ParameterizedType) superSrc).getActualTypeArguments();
+			return getParams(Types.raw(src), superclass);
+		} catch (AssertionError e) {
+			return new Type[0];
+		}
+	}
+
+	/**
+	 * Finds the type parameters of the most specific super type of the specified
+	 * subType whose erasure is the specified superErasure. Hence, will return the
+	 * type parameters of superErasure possibly narrowed down by subType. If
+	 * superErasure is not raw or not a super type of subType, an empty array will
+	 * be returned.
+	 *
+	 * @param subType the type to narrow down type parameters
+	 * @param superErasure the erasure of an super type of subType to get the
+	 *          parameters from
+	 * @return type parameters of superErasure possibly narrowed down by subType,
+	 *         or empty type array if no exists or superErasure is not a super
+	 *         type of subtype
+	 */
+	public static Type[] getParams(Class<?> subType, Class<?> superErasure) {
+		Type pt = parameterizeRaw(subType);
+		Type superType = getExactSuperType(pt, superErasure);
+		if (superType != null && superType instanceof ParameterizedType) {
+			return ((ParameterizedType) superType).getActualTypeArguments();
+		}
+		return new Type[0];
+	}
+
 	/**
 	 * Discerns whether it would be legal to assign a group of references of types
 	 * {@code source} to a reference of type {@code target}.
@@ -588,6 +634,11 @@ public final class Types {
 		final ParameterizedType param,
 		final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
 	{
+		if (arg instanceof Class) {
+			Class<?> paramRaw = Types.raw(param);
+			return Types.isAssignable(arg, paramRaw);
+		}
+
 		// get an array of the destination parameter types
 		Type[] destTypes = param.getActualTypeArguments();
 		Type[] srcTypes = new Type[destTypes.length];
@@ -596,7 +647,7 @@ public final class Types {
 		Type argType = arg;
 		Type superType = Types
 				.getExactSuperType(argType, Types.raw(param));
-		if (superType == null || !(superType instanceof ParameterizedType)) return false;
+		if (!(superType instanceof ParameterizedType)) return false;
 		srcTypes = ((ParameterizedType)superType).getActualTypeArguments();
 		
 		// List to collect the indices of destination parameters that are type vars
@@ -2859,7 +2910,7 @@ public final class Types {
 					if (followTypeVars) {
 						return unrollVariables(typeArguments, typeArguments.get(type), followTypeVars);
 					} else {
-						return typeArguments.get(type);
+						return typeArguments.getOrDefault(type, type);
 					}
 				}
 				if (type instanceof ParameterizedType) {
@@ -2870,18 +2921,17 @@ public final class Types {
 					}
 					else {
 						parameterizedTypeArguments = new HashMap<>(typeArguments);
-						parameterizedTypeArguments.putAll(TypeUtils.getTypeArguments(p));
+//						parameterizedTypeArguments.putAll(TypeUtils.getTypeArguments(p));
 					}
 					final Type[] args = p.getActualTypeArguments();
+					final Type[] resolved = new Type[args.length];
 					for (int i = 0; i < args.length; i++) {
 						final Type unrolled = unrollVariables(parameterizedTypeArguments,
 							args[i], followTypeVars);
-						if (unrolled != null) {
-							args[i] = unrolled;
-						}
+						resolved[i] = unrolled != null ? unrolled : args[i];
 					}
 					return parameterizeWithOwner(p.getOwnerType(), (Class<?>) p
-						.getRawType(), args);
+						.getRawType(), resolved);
 				}
 				if (type instanceof WildcardType) {
 					final WildcardType wild = (WildcardType) type;

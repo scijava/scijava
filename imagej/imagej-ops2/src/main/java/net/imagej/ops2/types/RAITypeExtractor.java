@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,12 +31,13 @@ package net.imagej.ops2.types;
 
 import java.lang.reflect.Type;
 
-import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.util.Util;
-
 import org.scijava.priority.Priority;
+import org.scijava.types.SubTypeExtractor;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
+
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.util.Util;
 
 /**
  * {@link TypeExtractor} plugin which operates on
@@ -48,28 +49,25 @@ import org.scijava.types.TypeReifier;
  *
  * @author Gabriel Selzer
  */
-public class RAITypeExtractor implements
-	TypeExtractor<RandomAccessibleInterval<?>>
+public class RAITypeExtractor extends
+	SubTypeExtractor<RandomAccessibleInterval<?>>
 {
 
 	@Override
-	public Type reify(final TypeReifier t, final RandomAccessibleInterval<?> o, final int n) {
-		if (n != 0) throw new IndexOutOfBoundsException();
-
-		// type of the image
-		Type raiType = t.reify(Util.getTypeFromInterval(o));
-		return raiType;
-	}
-
-	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Class<RandomAccessibleInterval<?>> getRawType() {
-		return (Class) RandomAccessibleInterval.class;
-	}
-
-	@Override
-	public double priority() {
+	public double getPriority() {
 		return Priority.LOW;
+	}
+
+	@Override
+	protected Class<?> getRawType() {
+		return RandomAccessibleInterval.class;
+	}
+
+	@Override
+	protected Type[] getTypeParameters(TypeReifier r,
+		RandomAccessibleInterval<?> object)
+	{
+		return new Type[] { r.reify(Util.getTypeFromInterval(object)) };
 	}
 
 }

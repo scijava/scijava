@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -32,7 +32,6 @@ package net.imagej.ops2.coloc.icq;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 
 import net.imagej.ops2.AbstractColocalisationTest;
@@ -59,7 +58,7 @@ public class LiICQTest extends AbstractColocalisationTest {
 		final Img<ByteType> img1 = TestImgGeneration.byteArray(true, 10, 15, 20);
 		final Img<ByteType> img2 = TestImgGeneration.byteArray(true, 10, 15, 20);
 
-		final Double icqValue = ops.op("coloc.icq").input(img1, img2).outType(Double.class).apply();
+		final Double icqValue = ops.op("coloc.icq").arity2().input(img1, img2).outType(Double.class).apply();
 
 		assertEquals(0.5, icqValue, 0.0);
 	}
@@ -69,7 +68,7 @@ public class LiICQTest extends AbstractColocalisationTest {
 	 */
 	@Test
 	public void liPositiveCorrTest() {
-		final Double icqValue = ops.op("coloc.icq").input(getPositiveCorrelationImageCh1(), getPositiveCorrelationImageCh2())
+		final Double icqValue = ops.op("coloc.icq").arity2().input(getPositiveCorrelationImageCh1(), getPositiveCorrelationImageCh2())
 				.outType(Double.class).apply();
 		assertTrue(icqValue > 0.34 && icqValue < 0.35);
 	}
@@ -80,7 +79,7 @@ public class LiICQTest extends AbstractColocalisationTest {
 	 */
 	@Test
 	public void liZeroCorrTest() {
-		final Object icqValue = ops.op("coloc.icq").input(getZeroCorrelationImageCh1(), getZeroCorrelationImageCh2()).apply();
+		final Object icqValue = ops.op("coloc.icq").arity2().input(getZeroCorrelationImageCh1(), getZeroCorrelationImageCh2()).apply();
 
 		assertTrue(icqValue instanceof Double);
 		final double icq = (Double) icqValue;
@@ -92,7 +91,6 @@ public class LiICQTest extends AbstractColocalisationTest {
 	 */
 	@Test
 	public void testPValue() {
-		ExecutorService es = threads.getExecutorService();
 		final double mean = 0.2;
 		final double spread = 0.1;
 		final double[] sigma = new double[] { 3.0, 3.0 };
@@ -103,7 +101,7 @@ public class LiICQTest extends AbstractColocalisationTest {
 		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op = OpBuilder.matchFunction(ops, "coloc.icq",
 				new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
-		ops.op("coloc.pValue").input(ch1, ch2, op, es).output(value).compute();
+		ops.op("coloc.pValue").arity3().input(ch1, ch2, op).output(value).compute();
 		assertEquals(0.72, value.getPValue(), 0.0);
 	}
 

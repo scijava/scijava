@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -68,7 +68,7 @@ public class MapNeighborhoodTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testMapNeighborhoodsAccess() {
-		ops.op("map.neighborhood").input(in, new RectangleShape(1, false), new CountNeighbors()).output(out).compute();
+		ops.op("map.neighborhood").arity3().input(in, new RectangleShape(1, false), new CountNeighbors()).output(out).compute();
 
 		for (final ByteType t : out) {
 			assertEquals(9, t.get());

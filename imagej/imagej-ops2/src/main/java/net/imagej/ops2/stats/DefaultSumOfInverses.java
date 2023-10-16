@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -65,8 +65,10 @@ public class DefaultSumOfInverses<I extends RealType<I>, O extends RealType<O>> 
 	/**
 	 * TODO
 	 *
-	 * @param raiInput
-	 * @param sumOfInverses
+	 * @param input the input data to iterate over
+	 * @param dbzValue the value to use for the inverse when the input data is
+	 *          zero
+	 * @param output the output buffer
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final O dbzValue, final O output) {

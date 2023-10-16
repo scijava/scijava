@@ -1,3 +1,31 @@
+/*-
+ * #%L
+ * A lightweight framework for collecting Members
+ * %%
+ * Copyright (C) 2021 - 2023 SciJava developers.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
 
 package org.scijava.struct;
 
@@ -5,11 +33,8 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 import org.scijava.common3.Classes;
-import org.scijava.common3.validity.ValidityException;
-import org.scijava.common3.validity.ValidityProblem;
 
 public final class Structs {
 
@@ -31,17 +56,12 @@ public final class Structs {
 			memberInstance.get());
 	}
 
-	public static <S> Struct from(S source, Type structType, List<ValidityProblem> problems,
+	public static <S> Struct from(S source, Type structType,
 		@SuppressWarnings("unchecked") MemberParser<S, ? extends Member<?>>... parsers)
 	{
 		List<Member<?>> members = new ArrayList<>();
 		for (MemberParser<S, ? extends Member<?>> p : parsers) {
-			try {
-				members.addAll(p.parse(source, structType));
-			}
-			catch (ValidityException e) {
-				problems.addAll(e.problems());
-			}
+			members.addAll(p.parse(source, structType));
 		}
 		return () -> members;
 	}
@@ -50,44 +70,20 @@ public final class Structs {
 	 * Helper to check for several modifiers at once.
 	 * 
 	 * @param message
-	 * @param problems
 	 * @param actualModifiers
 	 * @param requiredModifiers
 	 */
-	public static void checkModifiers(String message, final ArrayList<ValidityProblem> problems,
+	public static void checkModifiers(String message,
 			final int actualModifiers, final boolean negate, final int... requiredModifiers) {
 		for (int mod : requiredModifiers) {
 			if (negate) {
 				if ((actualModifiers & mod) != 0) {
-					problems.add(
-							new ValidityProblem(message + "Illegal modifier. Must not be " + Modifier.toString(mod)));
+					throw new IllegalArgumentException(message + "Illegal modifier. Must not be " + Modifier.toString(mod));
 				}
 			} else {
-				if ((actualModifiers & mod) == 0) {
-					problems.add(new ValidityProblem(message + "Illegal modifier. Must be " + Modifier.toString(mod)));
-				}
+				throw new IllegalArgumentException(message + "Illegal modifier. Must be " + Modifier.toString(mod));
 			}
 		}
-	}
-
-	public static boolean checkValidity(Member<?> m, String name, Class<?> type,
-		boolean isFinal, ArrayList<ValidityProblem> problems)
-	{
-		boolean valid = true;
-
-		if ((m.getIOType() == ItemIO.MUTABLE || m
-			.getIOType() == ItemIO.CONTAINER) && Structs.isImmutable(type))
-		{
-			// NB: The MUTABLE and CONTAINER types signify that the parameter
-			// will be written to, but immutable parameters cannot be changed in
-			// such a manner, so it makes no sense to label them as such.
-			final String error = "Immutable " + m.getIOType() + " parameter: " +
-				name + " (" + type.getName() + " is immutable)";
-			problems.add(new ValidityProblem(error));
-			valid = false;
-		}
-	
-		return valid;
 	}
 
 	public static boolean isImmutable(final Class<?> type) {

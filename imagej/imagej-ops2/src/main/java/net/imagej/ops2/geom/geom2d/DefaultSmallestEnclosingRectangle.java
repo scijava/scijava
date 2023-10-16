@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -33,14 +33,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+import org.scijava.ops.spi.OpDependency;
+
 import net.imagej.ops2.geom.GeomUtils;
 import net.imglib2.RealLocalizable;
 import net.imglib2.RealPoint;
 import net.imglib2.roi.geom.real.DefaultWritablePolygon2D;
 import net.imglib2.roi.geom.real.Polygon2D;
 import net.imglib2.type.numeric.real.DoubleType;
-
-import org.scijava.ops.spi.OpDependency;
 
 /**
  * Generic implementation of {@code geom.smallestBoundingBox}.
@@ -96,10 +96,8 @@ public class DefaultSmallestEnclosingRectangle implements Function<Polygon2D, Po
 	}
 
 	/**
-	 * TODO
-	 *
-	 * @param input
-	 * @param smallestEnclosingBoundingBox
+	 * @param input the input Polygon
+	 * @return The smallest enclosing rectangle, as a {@link Polygon2D}
 	 */
 	@Override
 	public Polygon2D apply(final Polygon2D input) {

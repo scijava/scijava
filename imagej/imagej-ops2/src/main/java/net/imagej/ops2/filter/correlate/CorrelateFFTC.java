@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,14 +29,12 @@
 
 package net.imagej.ops2.filter.correlate;
 
-import java.util.concurrent.ExecutorService;
+import org.scijava.function.Computers;
+import org.scijava.ops.spi.OpDependency;
 
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
-
-import org.scijava.function.Computers;
-import org.scijava.ops.spi.OpDependency;
 
 /**
  * Correlate op for (@link RandomAccessibleInterval)
@@ -49,18 +47,18 @@ import org.scijava.ops.spi.OpDependency;
  *@implNote op names='filter.correlate'
  */
 public class CorrelateFFTC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
-		implements Computers.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> {
+		implements Computers.Arity6<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, RandomAccessibleInterval<O>> {
 
 	@OpDependency(name = "math.complexConjugateMultiply")
 	private Computers.Arity2<RandomAccessibleInterval<C>, //
 			RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> complexConjugateMul;
 
 	@OpDependency(name = "filter.linearFilter")
-	private Computers.Arity8<RandomAccessibleInterval<I>, //
-			RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, //
-			RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, //
+	private Computers.Arity7<RandomAccessibleInterval<I>, //
+			RandomAccessibleInterval<K>,  Boolean, Boolean, //
 			Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, //
-					RandomAccessibleInterval<C>>, RandomAccessibleInterval<O>> linearFilter;
+			RandomAccessibleInterval<C>>, RandomAccessibleInterval<C>, //
+			RandomAccessibleInterval<C>,RandomAccessibleInterval<O>> linearFilter;
 
 	/**
 	 * Call the linear filter that is set up to perform correlation
@@ -74,15 +72,14 @@ public class CorrelateFFTC<I extends RealType<I>, O extends RealType<O>, K exten
 	 * @param fftKernel
 	 * @param performInputFFT
 	 * @param performKernelFFT
-	 * @param executorService
-	 * @param output
+	 * @param out
 	 */
 	@Override
 	public void compute(RandomAccessibleInterval<I> input, RandomAccessibleInterval<K> kernel,
 			RandomAccessibleInterval<C> fftInput, RandomAccessibleInterval<C> fftKernel, Boolean performInputFFT,
-			Boolean performKernelFFT, ExecutorService es, RandomAccessibleInterval<O> out) {
+			Boolean performKernelFFT, RandomAccessibleInterval<O> out) {
 		
-		linearFilter.compute(input, kernel, fftInput, fftKernel, performInputFFT, performKernelFFT, es,
-				complexConjugateMul, out);
+		linearFilter.compute(input, kernel, performInputFFT, performKernelFFT,
+				complexConjugateMul, fftInput, fftKernel, out);
 	}
 }

@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -51,15 +51,16 @@ public class IterableSumOfInverses<I extends RealType<I>, O extends RealType<O>>
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
-	 * @param sumOfInverses
+	 * @param iterableInput the {@link Iterable} to sum
+	 * @param dbzValue the value to use in the summation when the input is zero.
+	 * @param output the sum of inverses
 	 */
 	@Override
-	public void compute(final Iterable<I> input, final O dbzValue,
+	public void compute(final Iterable<I> iterableInput, final O dbzValue,
 		final O output)
 	{
 		double res = 0.0;
-		for (final I in : input) {
+		for (final I in : iterableInput) {
 			double inVal = in.getRealDouble();
 			if (inVal == 0d) {
 				res += dbzValue.getRealDouble();

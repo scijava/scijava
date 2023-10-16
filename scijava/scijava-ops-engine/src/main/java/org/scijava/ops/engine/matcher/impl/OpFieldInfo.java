@@ -1,8 +1,8 @@
 /*
  * #%L
- * ImageJ software for multidimensional image processing and analysis.
+ * SciJava Operations Engine: a framework for reusable algorithms.
  * %%
- * Copyright (C) 2014 - 2018 ImageJ developers.
+ * Copyright (C) 2016 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,19 +29,21 @@
 
 package org.scijava.ops.engine.matcher.impl;
 
-import java.lang.reflect.*;
-import java.util.ArrayList;
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 
-import org.scijava.common3.validity.ValidityException;
-import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
+import org.scijava.ops.engine.OpDescription;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.engine.OpUtils;
+import org.scijava.ops.engine.exceptions.impl.PrivateOpException;
 import org.scijava.ops.engine.struct.FieldInstance;
 import org.scijava.ops.engine.struct.FieldParameterMemberParser;
+import org.scijava.ops.engine.util.Ops;
 import org.scijava.ops.spi.OpField;
 import org.scijava.priority.Priority;
 import org.scijava.struct.Struct;
@@ -63,8 +65,6 @@ public class OpFieldInfo implements OpInfo {
 	private final double priority;
 
 	private Struct struct;
-	private ValidityException validityException;
-
 	private final Hints hints;
 
 	public OpFieldInfo(final Object instance, final Field field, final Hints hints, final String... names) {
@@ -72,7 +72,7 @@ public class OpFieldInfo implements OpInfo {
 	}
 
 	public OpFieldInfo(final Object instance, final Field field, final Hints hints, final double priority, final String... names) {
-		this(instance, field, Versions.getVersion(field.getDeclaringClass()), hints, Priority.NORMAL, names);
+		this(instance, field, Versions.getVersion(field.getDeclaringClass()), hints, priority, names);
 	}
 
 	public OpFieldInfo(final Object instance, final Field field, final String version, final Hints hints, final String... names) {
@@ -85,6 +85,7 @@ public class OpFieldInfo implements OpInfo {
 		this.field = field;
 		this.names = Arrays.asList(names);
 		this.priority = priority;
+		this.hints = hints;
 
 		if (Modifier.isStatic(field.getModifiers())) {
 			// Field is static; instance must be null.
@@ -99,28 +100,17 @@ public class OpFieldInfo implements OpInfo {
 				// But: we need to have proper case logic for the field being static or not.
 			}
 		}
-		List<ValidityProblem> problems = new ArrayList<>();
 		// Reject all non public fields
 		if (!Modifier.isPublic(field.getModifiers())) {
-			problems.add(new ValidityProblem("Field to parse: " + field + " must be public."));
+			throw new PrivateOpException(field);
 		}
 
 		// NB: Subclassing a collection and inheriting its fields is NOT
 		// ALLOWED!
-		try {
-			Type structType = Types.fieldType(field, field.getDeclaringClass());
-			FieldInstance fieldInstance = new FieldInstance(field, instance);
-			struct = Structs.from(fieldInstance, structType, problems, new FieldParameterMemberParser());
-			OpUtils.checkHasSingleOutput(struct);
-			// NB: Contextual parameters not supported for now.
-		} catch (ValidityException e) {
-			problems.addAll(e.problems());
-		}
-		if (!problems.isEmpty()) {
-			validityException = new ValidityException(problems);
-		}
-
-		this.hints = hints;
+		Type structType = Types.fieldType(field, field.getDeclaringClass());
+		FieldInstance fieldInstance = new FieldInstance(field, instance);
+		struct = Structs.from(fieldInstance, structType, new FieldParameterMemberParser());
+		Ops.ensureHasSingleOutput(implementationName(), struct);
 	}
 
 	// -- OpInfo methods --
@@ -181,16 +171,6 @@ public class OpFieldInfo implements OpInfo {
 	}
 
 	@Override
-	public ValidityException getValidityException() {
-		return validityException;
-	}
-
-	@Override
-	public boolean isValid() {
-		return validityException == null;
-	}
-	
-	@Override
 	public AnnotatedElement getAnnotationBearer() {
 		return field;
 	}
@@ -237,8 +217,6 @@ public class OpFieldInfo implements OpInfo {
 	}
 
 	@Override
-	public String toString() {
-		return opString();
-	}
+	public String toString() { return OpDescription.basic(this); }
 
 }

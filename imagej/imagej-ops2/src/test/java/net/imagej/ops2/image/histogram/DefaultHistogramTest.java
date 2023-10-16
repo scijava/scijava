@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -58,7 +58,7 @@ public class DefaultHistogramTest extends AbstractOpTest {
 	@Test
 	public void testRegression() {
 		Img<UnsignedByteType> img = ArrayImgs.unsignedBytes(data, 8, 8);
-		Histogram1d<UnsignedByteType> histogram = ops.op("image.histogram").input(img, 10)
+		Histogram1d<UnsignedByteType> histogram = ops.op("image.histogram").arity2().input(img, 10)
 				.outType(new Nil<Histogram1d<UnsignedByteType>>() {}).apply();
 
 		Assertions.assertEquals(false, histogram.hasTails());

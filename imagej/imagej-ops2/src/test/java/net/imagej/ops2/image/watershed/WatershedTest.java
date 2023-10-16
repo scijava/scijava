@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -32,7 +32,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
+
+import org.junit.jupiter.api.Test;
+import org.scijava.types.Nil;
 
 import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.Cursor;
@@ -50,9 +52,6 @@ import net.imglib2.type.numeric.integer.IntType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
 
-import org.junit.jupiter.api.Test;
-import org.scijava.types.Nil;
-
 /**
  * Test for the watershed op.
  * 
@@ -65,35 +64,32 @@ public class WatershedTest extends AbstractOpTest {
 		// load test image
 		Img<FloatType> watershedTestImg = openRelativeFloatImg(WatershedTest.class, "watershed_test_image.png");
 
-		// retrieve an ExecutorService TODO is there a better way to do this?
-		ExecutorService es = threads.getExecutorService();
-
 		// threshold it
 		RandomAccessibleInterval<BitType> thresholdedImg = ops.op("create.img")
-				.input(watershedTestImg, new BitType()).outType(new Nil<RandomAccessibleInterval<BitType>>() {})
+				.arity2().input(watershedTestImg, new BitType()).outType(new Nil<RandomAccessibleInterval<BitType>>() {})
 				.apply();
-		ops.op("threshold.apply").input(Views.flatIterable(watershedTestImg), new FloatType(1))
+		ops.op("threshold.apply").arity2().input(Views.flatIterable(watershedTestImg), new FloatType(1))
 				.output(Views.flatIterable(thresholdedImg)).compute();
 
 		// compute inverted distance transform and smooth it with gaussian
 		// filtering
 
 		final RandomAccessibleInterval<FloatType> distMap = ops.op("create.img")
-			.input(thresholdedImg, new FloatType()).outType(
+				.arity2().input(thresholdedImg, new FloatType()).outType(
 				new Nil<RandomAccessibleInterval<FloatType>>()
 				{}).apply();
-		ops.op("image.distanceTransform").input(thresholdedImg, es).output(distMap)
+		ops.op("image.distanceTransform").arity1().input(thresholdedImg).output(distMap)
 			.compute();
 		final RandomAccessibleInterval<FloatType> invertedDistMap = ops.op(
-			"create.img").input(distMap, new FloatType()).outType(
+			"create.img").arity2().input(distMap, new FloatType()).outType(
 				new Nil<RandomAccessibleInterval<FloatType>>()
 				{}).apply();
-		ops.op("image.invert").input(distMap).output(invertedDistMap).compute();
+		ops.op("image.invert").arity1().input(distMap).output(invertedDistMap).compute();
 		final RandomAccessibleInterval<FloatType> gauss = ops.op("create.img")
-			.input(invertedDistMap, new FloatType()).outType(
+				.arity2().input(invertedDistMap, new FloatType()).outType(
 				new Nil<RandomAccessibleInterval<FloatType>>()
 				{}).apply();
-		ops.op("filter.gauss").input(invertedDistMap, es, new double[] { 3, 3 })
+		ops.op("filter.gauss").arity2().input(invertedDistMap, new double[] { 3, 3 })
 			.output(gauss).compute();
 
 		testWithoutMask(gauss);
@@ -115,13 +111,13 @@ public class WatershedTest extends AbstractOpTest {
 		 */
 		// compute result without watersheds
 		ImgLabeling<Integer, IntType> out = ops.op("image.watershed")
-				.input(in, true, false).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
+				.arity3().input(in, true, false).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
 
 		assertResults(in, out, mask, true, false, false);
 
 		// compute result with watersheds
 		ImgLabeling<Integer, IntType> out2 = ops.op("image.watershed")
-				.input(in, true, true).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
+				.arity3().input(in, true, true).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
 
 		assertResults(in, out2, mask, true, true, false);
 
@@ -130,13 +126,13 @@ public class WatershedTest extends AbstractOpTest {
 		 */
 		// compute result without watersheds
 		ImgLabeling<Integer, IntType> out3 = ops.op("image.watershed")
-				.input(in, false, false).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
+				.arity3().input(in, false, false).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
 
 		assertResults(in, out3, mask, false, false, false);
 
 		// compute result with watersheds
 		ImgLabeling<Integer, IntType> out4 = ops.op("image.watershed")
-				.input(in, false, true).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
+				.arity3().input(in, false, true).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
 
 		assertResults(in, out4, mask, false, true, false);
 	}
@@ -162,13 +158,13 @@ public class WatershedTest extends AbstractOpTest {
 		 */
 		// compute result without watersheds
 		ImgLabeling<Integer, IntType> out = ops.op("image.watershed")
-				.input(in, true, false, mask).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
+				.arity4().input(in, true, false, mask).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
 
 		assertResults(in, out, mask, true, false, true);
 
 		// compute result with watersheds
 		ImgLabeling<Integer, IntType> out2 = ops.op("image.watershed")
-				.input(in, true, true, mask).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
+				.arity4().input(in, true, true, mask).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
 
 		assertResults(in, out2, mask, true, true, true);
 
@@ -177,13 +173,13 @@ public class WatershedTest extends AbstractOpTest {
 		 */
 		// compute result without watersheds
 		ImgLabeling<Integer, IntType> out3 = ops.op("image.watershed")
-				.input(in, false, false, mask).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
+				.arity4().input(in, false, false, mask).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
 
 		assertResults(in, out3, mask, false, false, true);
 
 		// compute result with watersheds
 		ImgLabeling<Integer, IntType> out4 = ops.op("image.watershed")
-				.input(in, false, true, mask).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
+				.arity4().input(in, false, true, mask).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
 
 		assertResults(in, out4, mask, false, true, true);
 	}

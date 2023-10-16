@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -64,7 +64,7 @@ public class DefaultDetectRidgesTest extends AbstractOpTest {
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			@SuppressWarnings("unused")
 			List<DefaultWritablePolyline> polylines = ops.op("segment.detectRidges")
-					.input(input, width, lowerThreshold, higherThreshold, ridgeLengthMin)
+					.arity5().input(input, width, lowerThreshold, higherThreshold, ridgeLengthMin)
 					.outType(new Nil<List<DefaultWritablePolyline>>() {}).apply();
 		});
 	}
@@ -80,7 +80,7 @@ public class DefaultDetectRidgesTest extends AbstractOpTest {
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			@SuppressWarnings("unused")
 			List<DefaultWritablePolyline> polylines = ops.op("segment.detectRidges")
-					.input(input, width, lowerThreshold, higherThreshold, ridgeLengthMin)
+					.arity5().input(input, width, lowerThreshold, higherThreshold, ridgeLengthMin)
 					.outType(new Nil<List<DefaultWritablePolyline>>() {}).apply();
 		});
 	}
@@ -118,7 +118,7 @@ public class DefaultDetectRidgesTest extends AbstractOpTest {
 		double width = 1, lowerThreshold = 2, higherThreshold = 4;
 
 		List<DefaultWritablePolyline> polylines = ops.op("segment.detectRidges")
-				.input(input, width, lowerThreshold, higherThreshold, ridgeLengthMin)
+				.arity5().input(input, width, lowerThreshold, higherThreshold, ridgeLengthMin)
 				.outType(new Nil<List<DefaultWritablePolyline>>() {}).apply();
 
 		int vertexCount = 0;

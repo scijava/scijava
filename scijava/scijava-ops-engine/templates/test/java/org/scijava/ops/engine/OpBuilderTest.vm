@@ -2,7 +2,7 @@
  * #%L
  * SciJava Operations: a framework for reusable algorithms.
  * %%
- * Copyright (C) 2016 - 2019 SciJava Ops developers.
+ * Copyright (C) 2016 - 2019 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -103,7 +103,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	/** Matches a nullary function in a vacuum. */
 	@Test
 	public void testArity0_OU_matchF() {
-		final Producer<?> op = name("test.addDoubles").input().producer();
+		final Producer<?> op = name("test.addDoubles").arity0().producer();
 		final Object result = op.create();
 		assertEquals(0., result);
 	}
@@ -111,7 +111,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	/** Runs a nullary function in a vacuum. */
 	@Test
 	public void testArity0_OU_runF() {
-		final Object result = name("test.addDoubles").input().create();
+		final Object result = name("test.addDoubles").arity0().create();
 		assertEquals(0., result);
 	}
 
@@ -120,7 +120,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	public void testArity0_OT_matchF() {
 		final Double expected = 0.;
 		final Producer<Double> op = //
-			name("test.addDoubles").input().outType(Double.class).producer();
+			name("test.addDoubles").arity0().outType(Double.class).producer();
 		final Object result = op.create();
 		assertEquals(result, expected);
 	}
@@ -131,7 +131,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] actual = { 1, 2, 3 };
 		final double[] expected = { 0, 0, 0 };
 		final Computers.Arity0<double[]> op = //
-			name("test.addArrays").input().outType(double[].class).computer();
+			name("test.addArrays").arity0().outType(double[].class).computer();
 		op.compute(actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -139,7 +139,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	/** Runs a nullary function with a given output type. */
 	@Test
 	public void testArity0_OT_runF() {
-		final Double result = name("test.addDoubles").input().outType(Double.class)
+		final Double result = name("test.addDoubles").arity0().outType(Double.class)
 			.create();
 		assert (0. == result);
 	}
@@ -150,7 +150,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] result = { 1, 2, 3 };
 		double[] expected = { 0, 0, 0 };
 		final Computers.Arity0<double[]> op = //
-			name("test.addArrays").input().output(result).computer();
+			name("test.addArrays").arity0().output(result).computer();
 		op.compute(result);
 		assertTrue(Arrays.equals(expected, result));
 	}
@@ -160,7 +160,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	public void testArity0_OV_runC() {
 		double[] result = { 1, 2, 3 };
 		double[] expected = { 0, 0, 0 };
-		name("test.addArrays").input().output(result).compute();
+		name("test.addArrays").arity0().output(result).compute();
 		assertTrue(Arrays.equals(expected, result));
 	}
 #foreach($arity in [1..$maxArity])
@@ -176,6 +176,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double expected = ${arity}.;
 		final ${functionArity.call($arity)}${wildcardOutputDoubles.call($arity)} op = //
 			name("test.addDoubles") //
+				.arity$arity() //
 				.inType($doubleClassString.call($arity)) //
 				.function();
 		final Object actual = op.apply($args.call($arity));
@@ -192,6 +193,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] expected = $inplaceExpectedArray.call($arity);
 		final ${inplaceType.call($arity, $i)}${arrayGenerics.call($arity)} op = //
 			name("test.mulArrays${arity}_${i}") //
+				.arity$arity() //
 				.inType($arrayClassString.call($arity)) //
 				.${inplaceMethod.call($arity, $i)}();
 		op.mutate($args.call($arity));
@@ -207,7 +209,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 #end
 		final Double expected = ${arity}.;
 		final ${functionArity.call($arity)}${genericDoubles.call($arity)} op = //
-			name("test.addDoubles").inType($doubleClassString.call($arity)) //
+			name("test.addDoubles").arity$arity().inType($doubleClassString.call($arity)) //
 				.outType(Double.class).function();
 		final double actual = op.apply($args.call($arity));
 		assertEquals(actual, expected, 0.);
@@ -223,6 +225,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] expected = $computerExpectedArray.call($arity);
 		final ${computerArity.call($arity)}${computerArrayGenerics.call($arity)} op = //
 			name("test.addArrays") //
+				.arity$arity() //
 				.inType(${arrayClassString.call($arity)}) //
 				.outType(double[].class).computer();
 		op.compute($args.call($arity), actual);
@@ -238,6 +241,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double expected = ${arity}.;
 		final ${functionArity.call($arity)}${wildcardOutputDoubles.call($arity)} op = //
 			name("test.addDoubles") //
+				.arity$arity() //
 				.input($args.call($arity)) //
 				.function();
 		final Object actual = op.apply($args.call($arity));
@@ -253,7 +257,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 #end
 		double[] expected = $inplaceExpectedArray.call($arity);
 		final ${inplaceType.call($arity, $i)}${arrayGenerics.call($arity)} op = //
-			name("test.mulArrays${arity}_${i}").input($args.call($arity)) //
+			name("test.mulArrays${arity}_${i}").arity$arity().input($args.call($arity)) //
 				.${inplaceMethod.call($arity, $i)}();
 		op.mutate($args.call($arity));
 		assertTrue(Arrays.equals(expected, $functionInputName.call($arity, $i)));
@@ -268,6 +272,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 #end
 		final Double expected = ${arity}.;
 		final Object actual = name("test.addDoubles") //
+			.arity$arity() //
 			.input($args.call($arity)) //
 			.apply();
 		assertEquals(actual, expected);
@@ -282,6 +287,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 #end
 		final double[] expected = $inplaceExpectedArray.call($arity);
 		name("test.mulArrays${arity}_${i}") //
+			.arity$arity() //
 			.input($args.call($arity)) //
 			.${mutateMethod.call($arity, $i)}();
 		assertTrue(Arrays.equals($functionInputName.call($arity, $i), expected));
@@ -296,7 +302,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 #end
 		final Double expected = ${arity}.;
 		final ${functionArity.call($arity)}${genericDoubles.call($arity)} op = //
-			name("test.addDoubles").input($args.call($arity)) //
+			name("test.addDoubles").arity$arity().input($args.call($arity)) //
 				.outType(Double.class).function();
 		final double actual = op.apply($args.call($arity));
 		assertEquals(actual, expected, 0.);
@@ -312,6 +318,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] expected = ${computerExpectedArray.call($arity)};
 		final ${computerArity.call($arity)}${computerArrayGenerics.call($arity)} op = //
 			name("test.addArrays") //
+				.arity$arity() //
 				.input($args.call($arity)) //
 				.output(actual).computer();
 		op.compute($args.call($arity), actual);
@@ -326,6 +333,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 #end
 		final Double expected = ${arity}.;
 		final Object actual = name("test.addDoubles") //
+			.arity$arity() //
 			.input($args.call($arity)) //
 			.outType(Double.class).apply();
 		assertEquals(actual, expected);
@@ -341,6 +349,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] expected = $computerExpectedArray.call($arity);
 		final $computerArity.call($arity)${computerArrayGenerics.call($arity)} op = //
 			name("test.addArrays") //
+				.arity$arity() //
 				.input($args.call($arity)) //
 				.output(actual).computer();
 		op.compute($args.call($arity), actual);
@@ -356,6 +365,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = $computerExpectedArray.call($arity);
 		name("test.addArrays") //
+			.arity$arity() //
 			.input($args.call($arity)) //
 			.output(actual).compute();
 		assertTrue(Arrays.equals(actual, expected));

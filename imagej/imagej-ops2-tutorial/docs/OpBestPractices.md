@@ -1,6 +1,71 @@
-# Writing Small, Easy, Modular Ops
+# Best Practices When Writing Ops
 
-SciJava Ops is designed for modularity, extensibility, and granularity - by writing your Ops on the smallest functional elements possible, you'll allow SciJava Ops to lift your Op to new image types, enable parallelism, and more without any additional effort!
+SciJava Ops is designed for modularity, extensibility, and granularity - you can exploit these aspects by adhering to the following guidelines when writing Ops:
+
+## Using Dependencies
+
+If you are writing an Op that performs many intermediate operations, there's a good chance someone else has written (and even optimized) some or all of them.
+
+If not there's a great chance that others would benefit from you writing them separately so that they can reuse your work!
+
+To accomodate this separation, Ops can reuse other Ops by declaring Op dependencies. When Ops returns an instance of your Op, it will also find and instantiate all of your dependencies!
+
+To illustrate how this might work, here's a trivial example of an Op that computes the mean of a `double[]`:
+
+```java
+
+import org.scijava.ops.spi.OpDependency;
+
+/**
+ * A simple mean calculator
+ *
+ * @implNote op names="stats.mean"
+ */
+class DoubleMeanOp implements Function<double[], Double> {
+
+    @OpDependency(name="stats.sum")
+    public Function<double[], Double> sumOp;
+
+    @OpDependency(name="stats.size")
+    public Function<double[], Double> sizeOp;
+		
+    public Double apply(final double[] inArray) {
+        final Double sum = sumOp.apply(inArray);
+        final Double size = sizeOp.apply(inArray);
+        return sum / size;
+    }
+}
+```
+In this example, the two `OpDependency` Ops already exist within the SciJava Ops Engine module - but if they didn't, you'd  define  them just like any other Op:
+
+```java
+/**
+ * A simple summer
+ *
+ * @implNote op names="stats.sum"
+ */
+class DoubleSumOp implements Function<double[], Double> {
+	public Double apply(final double[] inArray) {
+		double sum = 0;
+		for (double v : inArray) {
+			sum += v;
+		}
+		return i;
+	}
+}
+
+/**
+ * A simple size calculator
+ *
+ * @implNote op names="stats.size"
+ */
+class DoubleSizeOp implements Function<double[], Double> {
+	public Double apply(final double[] inArray) {
+		return inArray.length;
+	}
+}
+
+```
 
 ## Element-wise Ops
 
@@ -13,10 +78,11 @@ Simple pixel-wise operations like addition, inversion, and more can be written o
  * @implNote op names="pixel.op"
  */
 class <T extends RealType<T>> MyPixelwiseOp implements Computers.Arity2<T, T, T> {
+	
 	@Override
-        public void compute(final T in1, final T in2, final T out) {
-            ... pixelwise computation here ...
-        }
+    public void compute(final T in1, final T in2, final T out) {
+        ... pixelwise computation here ...
+    }
 }
 ```
 
@@ -80,47 +146,4 @@ Shape neighborhoodShape = ...
 ArrayImg<DoubleType> output = ...
 
 ops.op("neighborhood.op").arity2().input(input, shape).output(output).compute()
-```
-
-## Using dependencies
-
-Even when your Op must be run on entire Images, you can use Op Dependencies to promote extensibility, reusability and flexibility.
-
-For example, if your Op must iterate over some algorithm n times, consider internalizing the algorithm within a separate Op, and make it a depedency, like shown below:
-
-```java
-import org.scijava.ops.spi.OpDependency;
-
-
-/**
- * An Op that needs to run on the whole image
- *
- * @implNote op names="iterating.op"
- */
-class<I, O> MultiPassOp implements Computers.Arity1<Img<I>,Img<O>>{
-	
-    @OpDependency(name = "internal.Op")
-    private final Computers.Arity1<Img<I>, Img<O>> iteration;
-
-    @Override
-    public void compute(final Img<I> input, final Img<O> container){
-        for(int i=0; i < numItrs; i++){
-            iteration.compute(input, container);
-		}
-    }
-    
-}
-
-/**
- * An Op that executes a single iteration of some iterative process
- * @implNote op names="internal.Op"
- */
-class<I, O> IterationOp implements Computers.Arity1<Img<I>,Img<O>>{
-	
-    @Override
-    public void compute(final Img<I> input, final Img<O> container){
-        ...perform an iteration...
-    }
-    
-}
 ```

@@ -35,30 +35,48 @@ import org.scijava.types.GenericTyped;
 
 /**
  * An {@link OpInstance} with state
- * <p>
- * Each {@link RichOp} has <b>one</b> {@link OpInstance}, and <b>one</b>
- * </p>
- * 
+ *
  * @author Gabriel Selzer
  * @param <T> the functional {@link Type} of the wrapped Op
  */
 public interface RichOp<T> extends GenericTyped {
 
+	/**
+	 * Gets the {@link OpInstance} of this {@link RichOp}
+	 *
+	 * @return the {@link OpInstance} of this {@link RichOp}
+	 */
 	OpInstance<T> instance();
 
 	OpEnvironment env();
 
 	Hints hints();
 
+	/**
+	 * Getter for this {@link RichOp}'s <b>raw</b> Op instance
+	 *
+	 * @return the raw Op instance of this {@link RichOp}
+	 */
 	default T op() {
 		return instance().op();
 	}
+
+	/**
+	 * Getter for this {@link RichOp}'s functional {@link Type}
+	 *
+	 * @return the {@link Type} of this Op
+	 */
 
 	@Override
 	default Type getType() {
 		return instance().getType();
 	}
 
+	/**
+	 * Getter for this {@link RichOp}'s {@link InfoTree}
+	 *
+	 * @return the {@link InfoTree} describing the construction of this Op
+	 */
 	default InfoTree infoTree() {
 		return instance().infoTree();
 	}
@@ -70,11 +88,37 @@ public interface RichOp<T> extends GenericTyped {
 	 */
 	T asOpType();
 
-	void preprocess(Object... inputs);
+	/**
+	 * Defines behavior performed by the Op before <em>each</em> execution.
+	 *
+	 * @param inputs the inputs to the Op's functional method
+	 */
+	default void preprocess(Object... inputs) {
+		// By default, do nothing
+	}
 
-	void postprocess(Object output);
+	/**
+	 * Defines behavior performed by the Op after <em>each</em> execution.
+	 *
+	 * @param output the output of the Op's functional method
+	 */
+	default void postprocess(Object output) {
+		// By default, do nothing
+	}
 
+	/**
+	 * Returns true iff this {@link RichOp} is logging its executions in its
+	 * {@link OpHistory}
+	 * 
+	 * @return true iff it is recording its executions
+	 */
 	boolean isRecordingExecutions();
 
+	/**
+	 * Designates whether this {@link RichOp} should log its executions to its
+	 * {@link OpHistory}
+	 * 
+	 * @param record tells this {@link RichOp} to record its executions iff true.
+	 */
 	void recordExecutions(boolean record);
 }

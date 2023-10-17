@@ -67,5 +67,6 @@ module net.imagej.ops2.tutorial {
 			net.imagej.ops2.tutorial.OpReduction,
 			net.imagej.ops2.tutorial.OpSimplification,
 			net.imagej.ops2.tutorial.ReportingProgress,
+			net.imagej.ops2.tutorial.UsingNils,
 			net.imagej.ops2.tutorial.WritingOpCollections;
 }

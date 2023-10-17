@@ -9,5 +9,5 @@ dependencies {
     // apparently needed
     implementation(projects.scijavaLog2)
     implementation(projects.scijavaDiscovery)
-    implementation(libs.guava)
+    implementation("com.google.guava:guava:31.1-jre")
 }

@@ -4,5 +4,5 @@ plugins {
 
 dependencies {
     implementation("org.scijava:scijava-common3")
-    implementation(imglib2.imglib2)
+    implementation("net.imglib2:imglib2:6.1.0")
 }

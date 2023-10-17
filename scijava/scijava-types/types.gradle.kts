@@ -8,10 +8,10 @@ dependencies {
     implementation(projects.scijavaDiscovery)
     implementation(projects.scijavaLog2)
     implementation(projects.scijavaPriority)
-    implementation(libs.guava)
+    implementation("com.google.guava:guava:31.1-jre")
 
-    testImplementation(junit5.junit.jupiter.api)
-    testImplementation(junit5.junit.jupiter.engine)
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.3")
     testImplementation(projects.scijavaTestutil)
 }
 

@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation(projects.scijavaFunction)
+    implementation(projects.scijavaPriority)
     implementation(projects.scijavaStruct)
     implementation(projects.scijavaTypes)
 
@@ -11,14 +12,8 @@ dependencies {
     implementation(projects.scijavaCommon3)
     implementation(projects.scijavaLog2)
     implementation(projects.scijavaDiscovery)
-    implementation(libs.guava)
+    implementation("com.google.guava:guava:31.1-jre")
 }
 
-val generateCode by tasks.registering(GenerateCode::class)
-sourceSets {
-    main {
-        java {
-            srcDir(generateCode)
-        }
-    }
-}
+val generateScijava by tasks.registering(GenerateScijava::class)
+sourceSets.main { java.srcDir(generateScijava) }

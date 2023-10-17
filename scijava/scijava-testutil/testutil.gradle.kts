@@ -3,5 +3,5 @@ plugins {
 }
 
 dependencies {
-    implementation(junit5.junit.jupiter.api)
+    implementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
 }

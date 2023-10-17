@@ -41,13 +41,17 @@ import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 
-abstract class GenerateCode : DefaultTask() {
+abstract class GenerateScijava : DefaultTask() {
 
-    @Input
-    var main: Boolean = true
+    init {
+        group = "build"
+    }
 
-    @get:Nested
-    val srcPath get() = "generated/src/" + if (main) "main" else "test"
+    @get:Input
+    var isMain: Boolean = true
+
+    @get:Input
+    val srcPath get() = "generated/src/" + if (isMain) "main" else "test"
 
     @get:OutputDirectory
     val target: Provider<Directory>
@@ -65,7 +69,7 @@ abstract class GenerateCode : DefaultTask() {
             }
             "ops-api" -> OpBuilder(src)
             "ops-engine" ->
-                if (main) {
+                if (isMain) {
                     // complexLift
                     ComputersToFunctionsAndLift(src)
                     FunctionsToComputersAndLift(src)

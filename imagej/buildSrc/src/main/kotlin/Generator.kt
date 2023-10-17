@@ -24,7 +24,7 @@ abstract class Generator {
 
     // Globals.list
     var arity = 0
-    val maxArity = 16
+    var maxArity = 16
     val numConsumers get() = maxArity + 1
     open val arities get() = 0..maxArity
 
@@ -33,6 +33,34 @@ abstract class Generator {
             arity = a
             block(a)
         }
+    }
+
+    val functionName
+        get() = when (arity) {
+            1 -> "Function"
+            2 -> "BiFunction"
+            in 3..16 -> "Functions.Arity$arity"
+            else -> "Error"
+        }
+
+    fun arityName(arity: Int) = when (arity) {
+        1 -> "first"
+        2 -> "second"
+        3 -> "third"
+        4 -> "fourth"
+        5 -> "fifth"
+        6 -> "sixth"
+        7 -> "seventh"
+        8 -> "eighth"
+        9 -> "ninth"
+        10 -> "tenth"
+        11 -> "eleventh"
+        12 -> "twelfth"
+        13 -> "thirteenth"
+        14 -> "fourteenth"
+        15 -> "fifteenth"
+        16 -> "sixteenth"
+        else -> error("invalid max arity: $maxArity")
     }
 
     fun inplaceSuffix(num: Int) = if (arity == 1) "1" else "${arity}_$num"

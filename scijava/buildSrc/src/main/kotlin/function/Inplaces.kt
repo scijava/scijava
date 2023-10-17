@@ -30,15 +30,15 @@ object Inplaces : Generator() {
     fun matchName(num: Int) = if (arity == 1) "match" else "match$num"
 
     fun matchParams(io: Int) = genericsList(io).map {
-        val arg = if (it[1] == 'O') it.toLowerCase() else "in" + it.substring(1)
+        val arg = if (it[1] == 'O') it.lowercase() else "in" + it.substring(1)
         "final Nil<$it> ${arg}Type"
     }.joinToString()
 
     fun typeArgs(io: Int) = basicParamsList(io).joinToString { "$it.getType()" }
 
-    val allMutableMutateParams get() = allMutableGenericsList.joinToString { "@Mutable $it ${it.toLowerCase()}" }
+    val allMutableMutateParams get() = allMutableGenericsList.joinToString { "@Mutable $it ${it.lowercase()}" }
 
-    val allMutableMutateArgs get() = allMutableGenericsList.joinToString { "${it.toLowerCase()}" }
+    val allMutableMutateArgs get() = allMutableGenericsList.joinToString { "${it.lowercase()}" }
 
     fun mutateArgs(io: Int) = genericsList(io).joinToString {
         if (it.substring(1) == "O")

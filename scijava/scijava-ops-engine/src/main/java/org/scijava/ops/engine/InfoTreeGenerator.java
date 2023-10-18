@@ -36,8 +36,10 @@ import java.util.stream.Collectors;
 
 import org.scijava.ops.api.InfoTree;
 import org.scijava.ops.api.OpInfo;
+import org.scijava.priority.Prioritized;
+import org.scijava.priority.Priority;
 
-public interface InfoTreeGenerator {
+public interface InfoTreeGenerator extends Prioritized<InfoTreeGenerator> {
 
 
 	/**
@@ -68,13 +70,11 @@ public interface InfoTreeGenerator {
 	{
 		List<InfoTreeGenerator> suitableGenerators = generators.stream() //
 			.filter(g -> g.canGenerate(signature)) //
+			.sorted() //
 			.collect(Collectors.toList());
-		if (suitableGenerators.size() == 0) throw new IllegalArgumentException(
+		if (suitableGenerators.isEmpty()) throw new IllegalArgumentException(
 			"No InfoTreeGenerator in given collection " + generators +
 				" is able to reify signature " + signature);
-		if (suitableGenerators.size() > 1) throw new IllegalArgumentException(
-			"Signature " + signature +
-				" is able to be reified by multiple generators: " + suitableGenerators);
 		return suitableGenerators.get(0);
 	}
 
@@ -90,8 +90,8 @@ public interface InfoTreeGenerator {
 	 * Finds the subsignature in {@link String} {@code signature}. The
 	 * subsignature is assumed to start at index {@code start}.
 	 * 
-	 * @param signature
-	 * @param start
+	 * @param signature the signature containing a subsignature
+	 * @param start the index where the subsignature starts
 	 * @return a signature contained withing {@code signature}
 	 */
 	static String subSignatureFrom(String signature, int start) {
@@ -103,8 +103,7 @@ public interface InfoTreeGenerator {
 			else if (ch == InfoTree.DEP_END_DELIM) {
 				depth--;
 				if (depth == 0) {
-					int depsEnd = i;
-					return signature.substring(start, depsEnd + 1);
+					return signature.substring(start, i + 1);
 				}
 			}
 		}
@@ -124,4 +123,8 @@ public interface InfoTreeGenerator {
 	 */
 	boolean canGenerate(String signature);
 
+	@Override
+	default double getPriority() {
+		return Priority.NORMAL;
+	}
 }

@@ -36,6 +36,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
+import org.scijava.types.Nil;
 
 public class OpMethodInParentTest extends AbstractTestEnvironment {
 
@@ -61,6 +62,22 @@ public class OpMethodInParentTest extends AbstractTestEnvironment {
 		String expected = "This string came from " +
 			SuperOpMethodHousingInterface.class;
 		Assertions.assertEquals(expected, actual);
+	}
+
+	@Test
+	public void testRequestingFunctionalTypeSubclass() {
+		// Assert that things work just fine when asking for a Function
+		Function<String, String> function = ops//
+			.op("test.superMethod", new Nil<>()
+			{}, new Nil[] { new Nil<String>() {} }, new Nil<String>() {});
+
+		// Assert that things don't work when asking for a SuperOpMethodHousingClass
+		Assertions.assertThrows(ClassCastException.class, () -> {
+			SuperOpMethodHousingClass op = ops.op("test.superMethod", new Nil<>() {
+
+			}, new Nil[] { new Nil<String>() {} }, new Nil<String>() {});
+		});
+
 	}
 
 }

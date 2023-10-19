@@ -493,8 +493,21 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 		try {
 			// find the opWrapper that wraps this type of Op
-			Class<?> wrapper = getWrapperClass(instance.op(), instance.infoTree()
-				.info());
+			OpInfo info = instance.infoTree().info();
+			Class<?> rawType = Types.raw(info.opType());
+			Class<?> wrapper = getWrapperClass(rawType, info);
+			if (wrapper == null) {
+				throw new IllegalArgumentException(info.implementationName() +
+					": matched op Type " + info.opType().getClass() +
+					" does not match a wrappable Op type.");
+			}
+			if (!wrapper.equals(rawType)) {
+				log.warn("OpInfo" + info.implementationName() +
+					" could not be wrapped as a " + rawType +
+					", so it is instead wrapped as a " + wrapper +
+					". If you want it to be wrapped as a " + rawType +
+					", then you must define a new OpWrapper for that class!");
+			}
 			// obtain the generic type of the Op w.r.t. the Wrapper class
 			Type reifiedSuperType = Types.getExactSuperType(instance.getType(),
 				wrapper);
@@ -513,37 +526,24 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		}
 	}
 
-	private Class<?> getWrapperClass(Object op, OpInfo info) {
-		List<Class<?>> suitableWrappers = wrappers.keySet().stream().filter(
-			wrapper -> wrapper.isInstance(op)).collect(Collectors.toList());
-		List<Class<?>> filteredWrappers = filterWrapperSuperclasses(
-			suitableWrappers);
-		if (filteredWrappers.size() == 0) throw new IllegalArgumentException(info
-			.implementationName() + ": matched op Type " + info.opType().getClass() +
-			" does not match a wrappable Op type.");
-		if (filteredWrappers.size() > 1) throw new IllegalArgumentException(
-			"Matched op Type " + info.opType().getClass() +
-				" matches multiple Op types: " + filteredWrappers);
-		if (!Types.isAssignable(Types.raw(info.opType()), filteredWrappers.get(0)))
-			throw new IllegalArgumentException(Types.raw(info.opType()) +
-				"cannot be wrapped as a " + filteredWrappers.get(0));
-		return filteredWrappers.get(0);
-	}
-
-	private List<Class<?>> filterWrapperSuperclasses(
-		List<Class<?>> suitableWrappers)
-	{
-		if (suitableWrappers.size() < 2) return suitableWrappers;
-		List<Class<?>> list = new ArrayList<>();
-		for (Class<?> c : suitableWrappers) {
-			boolean isSuperclass = false;
-			for (Class<?> other : suitableWrappers) {
-				if (c.equals(other)) continue;
-				if (c.isAssignableFrom(other)) isSuperclass = true;
-			}
-			if (!isSuperclass) list.add(c);
+	private Class<?> getWrapperClass(Class<?> opType, OpInfo info) {
+		if (opType == null)
+			return null;
+		// Check opType itself
+		if (wrappers.containsKey(opType))
+			return opType;
+		// Check superclass of opType
+		Class<?> wrapperSuperClass = getWrapperClass(opType.getSuperclass(), info);
+		if (wrapperSuperClass != null)
+			return wrapperSuperClass;
+		// Check interfaces of opType
+		for (Class<?> iFace: opType.getInterfaces()) {
+			Class<?> wrapperIFace = getWrapperClass(iFace, info);
+			if (wrapperIFace != null)
+				return wrapperIFace;
 		}
-		return list;
+		// There is no wrapper
+		return null;
 	}
 
 	private List<RichOp<?>> resolveOpDependencies(OpCandidate candidate,

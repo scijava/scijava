@@ -40,7 +40,7 @@
  * <p>
  * Ops 1 and 3 should also be considered form equivalent, as they have the same name, but are not form equivalent, as one computes its own Shape over which to perform a gaussian blur, while the other takes a predefined shape.
  * <p>
- * These definitions of equivalence provide a level of flexibility impossible without the Ops API; form equivalence allows us to, for example, define equivalent Ops across programming languages and libraries, and then to create scripts that can run unaltered on data types from each of those languages and libraries. Within each form implementation, however, we ensure numeric equivalence and therefore reproducability
+ * These definitions of equivalence provide a level of flexibility impossible without the Ops API; algorithmic equivalence allows us to, for example, define equivalent Ops across programming languages and libraries, and then to create scripts that can run unaltered on data types from each of those languages and libraries. Within each form implementation, however, we ensure numeric equivalence and therefore reproducability
  *
  */
 package org.scijava.ops.api;

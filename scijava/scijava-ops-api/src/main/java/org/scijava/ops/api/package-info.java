@@ -6,10 +6,9 @@
  * <ol>
  * <li>Ops are stateless - with no internal state, calling an Op two times on the same inputs will produce the same output.</li>
  * <li>Ops are limited to one output - by limiting Ops to one output, we ensure that the algorithms we write are reusable building blocks. Of course, algorithms always need inputs, and there are no limitations on the number of inputs.</li>
- * <li>Ops have a strong functional type - Java has a strong type system, and Ops utilizes this to maximize expressiveness and efficiency.</li>
  * <li>Ops have at least one name - this name conveys an Op's purpose</li>
  * </ol>
- * Using the name and the functional type, we can retrieve, or "match" any Op from within an {@link org.scijava.ops.api.OpEnvironment}. The Op environment guarantees reproducibility, given the name and functional type, for identical Ops.
+ * Using the name and the combination of input and output parameters, we can retrieve, or "match", any Op from within an {@link org.scijava.ops.api.OpEnvironment}. Op calls with the same name and specified inputs/outputs will be reproducible within a particular Op environment.
  *
  * <h1>Op Equivalence</h1>
  * To support the Op matching paradigm, we establish three types of equivalence:

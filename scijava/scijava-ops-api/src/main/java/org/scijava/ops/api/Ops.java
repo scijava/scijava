@@ -58,6 +58,16 @@ public final class Ops {
 	}
 
 	/**
+	 * Convenience function for getting the {@link OpInfo} of {@code op}
+	 * @param op the Op
+	 * @return the {@link OpInfo} that generated {@code op}
+	 * @param <T> the type of {@code op}
+	 */
+	public static <T> OpInfo info(T op) {
+		return rich(op).instance().infoTree().info();
+	}
+
+	/**
 	 * Convenience function for accessing {@link RichOp#recordExecutions(boolean)}
 	 *
 	 * @param op the Op

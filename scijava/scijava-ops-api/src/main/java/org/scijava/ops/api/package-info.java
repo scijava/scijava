@@ -1,5 +1,17 @@
 /**
  * This module contains the API necessary to retrieve, execute, and reason about Ops.
+ *
+ * <h1>What is the SciJava Ops Library?</h1>
+ * SciJava Ops arose from a desire for simplicity - there are lots of different algorithmic libraries, each with their own data structures, algorithm syntax, and other requirements. With all of these differences, library interoperability can be a daunting task. This can lead to algorithm reimplementations, unmaintained code, and a lack of cooperation between open-source communitites. SciJava Ops seeks to unify different libraries under a single framework, separating the development of new algorithms from the way they are executed.
+ *
+ * Put more succinctly, the goals of SciJava Ops are the following:
+ * <ul>
+ *   <li><b>Usability</b> All Ops should be called in the same way, and implementation details should be hidden - this means that the user should call an Op the same way, whether the algorithm is written in Java, Python, or as a CUDA kernel.</li>
+ *   <li><b>Extensibility</b> New Ops should be accommodated in a variety of programming languages, and each language should provide minimally-invasive methods for declaring code blocks as Ops. This also means that Ops should accommodate writing Ops in one language, and then calling Ops using data structures from a different language.</li>
+ *   <li><b>Generality</b> Ops should allow any number of typed inputs, without restriction on input types. With no restrictions on input types, the library can seamlessly adapt new data structures tailored to performance or expressiveness as they are developed.</li>
+ *   <li><b>Speed</b> Calling Ops should be approximately as performant as invocation in their natural setting (such as Python, C++, Java, or another language entirely).</li>
+ * </ul>
+ *
  * <h1>What is an Op?</h1>
  *
  * An Op is an algorithm adhering to the following traits:

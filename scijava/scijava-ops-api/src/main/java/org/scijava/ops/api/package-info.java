@@ -24,7 +24,7 @@
  * <h1>Op Equivalence</h1>
  * To support the Op matching paradigm, we establish three types of equivalence:
  * <ol>
- *   <li><b>Form Equivalence</b></li> Drawn from <a href="https://en.wikipedia.org/wiki/Theory_of_forms">Plato's Theory of Forms</a>, Form Equivalence implies that two objects (which could be Ops, or Op parameters) theoretically draw from the same shared idea (such as an addition operation, or an image, etc.)
+ *   <li><b>Form Equivalence</b></li> Form Equivalence implies that two objects (which could be Ops, or Op parameters) theoretically draw from the same shared idea (such as an addition operation, or an image, etc.)
  *   <li><b>Structural Equivalence</b></li> Structural Equivalence means that two Ops:
  *   <ol>
  *     <li>Are Form Equivalent</li>

@@ -17,8 +17,7 @@
  * An Op is an algorithm adhering to the following traits:
  * <ol>
  * <li>Ops are stateless and deterministic - with no internal state, calling an Op two times on the same inputs will produce the same output.</li>
- * <li>Ops are limited to one output - by limiting Ops to one output, we ensure that the algorithms we write are reusable building blocks. Of course, algorithms always need inputs, and there are no limitations on the number of inputs.</li>
- * <li>Ops have at least one name - this name conveys an Op's purpose</li>
+ * <li>Ops are named - this name conveys an Op's purpose, and allows us to find all Ops implementing a particular operation</li>
  * </ol>
  * Using the name and the combination of input and output parameters, we can retrieve, or "match", any Op from within an {@link org.scijava.ops.api.OpEnvironment}. Op calls with the same name and specified inputs/outputs will be reproducible within a particular Op environment.
  *

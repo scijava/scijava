@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.api;
 
 /**
@@ -38,7 +39,9 @@ public final class Ops {
 	private Ops() {}
 
 	/**
-	 * Convenience function for determining whether {@code op} is a {@link RichOp}.
+	 * Convenience function for determining whether {@code op} is a
+	 * {@link RichOp}.
+	 * 
 	 * @param op the Op
 	 * @return true iff {@code op} is a {@link RichOp}
 	 */
@@ -48,20 +51,28 @@ public final class Ops {
 
 	/**
 	 * Convenience function for getting the {@link RichOp} of {@code op}
+	 * 
 	 * @param op the Op
 	 * @return the {@link RichOp} wrapping {@code op}
 	 * @param <T> the type of {@code op}
+	 * @throws IllegalArgumentException when a {@link RichOp} cannot be obtained
+	 *           for {@code op}
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> RichOp<T> rich(T op) {
+		if (!isRich(op)) {
+			throw new IllegalArgumentException(op + " is not a RichOp!");
+		}
 		return (RichOp<T>) op;
 	}
 
 	/**
 	 * Convenience function for getting the {@link OpInfo} of {@code op}
+	 * 
 	 * @param op the Op
 	 * @return the {@link OpInfo} that generated {@code op}
 	 * @param <T> the type of {@code op}
+	 * @throws IllegalArgumentException if {@code op} is not an Op
 	 */
 	public static <T> OpInfo info(T op) {
 		return rich(op).instance().infoTree().info();
@@ -73,6 +84,7 @@ public final class Ops {
 	 * @param op the Op
 	 * @param record true iff {@code op} should record its executions
 	 * @param <T> the type of the Op
+	 * @throws IllegalArgumentException if {@code op} is not an Op
 	 */
 	public static <T> void recordExecutions(T op, boolean record) {
 		rich(op).recordExecutions(record);

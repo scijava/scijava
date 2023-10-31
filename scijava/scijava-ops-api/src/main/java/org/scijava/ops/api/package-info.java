@@ -51,7 +51,12 @@
  * <p>
  * Ops 1 and 3 are also form-equivalent, as they have the same name, but are not structural-equivalent, as one has an implicit Shape over which to perform a gaussian blur, while the other uses an explicitly specified shape.
  * <p>
- * These definitions of equivalence provide a level of flexibility impossible without the Ops API; structural-equivalence allows us to, for example, define equivalent Ops across programming languages and libraries, and then to create scripts that can run unaltered on data types from each of those languages and libraries. Given the same {@link org.scijava.ops.api.OpEnvironment} and inputs, however, we ensure result-equivalence and therefore reproducability
- *
+ * These definitions of equivalence provide clarity when articulating the Ops framework's benefits:
+ * <ol>
+ *   <li>Form-equivalence in Ops allows a comprehensive search of the available algorithms for accomplishing a particular algorithm, by searching its name</li>
+ *   <li>Form-equivalence in data inputs allows us to consider algorithm inputs in a library-agnostic way, making it easier to understand and use algorithms</li>
+ *   <li>Structural-equivalence in Ops allows us to consider similar Ops in different languages as one, and to delegate to the proper Op using user inputs. In other words, you can call structural-equivalent Ops identically, and Scijava Ops will take care to call the correct Op based on the concrete inputs provided.</li>
+ *   <li>Result-equivalence, and therefore reproducability, in Ops, is guaranteed within an OpEnvironment and a set of input objects, but not for Op calls. This allows us to ensure reproducible pipelines, but also allows us to introduce new Ops into the pipeline or to run pipelines on different inputs without changing the pipeline itself.</li>
+ * </ol>
  */
 package org.scijava.ops.api;

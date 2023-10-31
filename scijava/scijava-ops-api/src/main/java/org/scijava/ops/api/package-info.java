@@ -49,7 +49,7 @@
  * </ol>
  * Ops 1 and 2 are considered form-equivalent, as they have the same name, and structural-equivalent, as they both take in an image data structure and a floating point number and return an image data structure, but may not be result-equivalent due to implementation differences between the two Ops, or precision loss of the data structures.
  * <p>
- * Ops 1 and 3 are also form-equivalent, as they have the same name, but are not structural-equivalent, as one computes its own Shape over which to perform a gaussian blur, while the other takes a predefined shape.
+ * Ops 1 and 3 are also form-equivalent, as they have the same name, but are not structural-equivalent, as one has an implicit Shape over which to perform a gaussian blur, while the other uses an explicitly specified shape.
  * <p>
  * These definitions of equivalence provide a level of flexibility impossible without the Ops API; structural-equivalence allows us to, for example, define equivalent Ops across programming languages and libraries, and then to create scripts that can run unaltered on data types from each of those languages and libraries. Given the same {@link org.scijava.ops.api.OpEnvironment} and inputs, however, we ensure result-equivalence and therefore reproducability
  *

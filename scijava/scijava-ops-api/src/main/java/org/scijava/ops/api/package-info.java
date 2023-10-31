@@ -36,9 +36,9 @@
  * </ol>
  * Within the Ops API, each type of equivalence is utilized in the following ways:
  * <ol>
- *   <li><b>Form Equivalence</b></li> If two Ops are "Form Equivalent", they are defined under the same name.
- *   <li><b>Structural Equivalence</b></li> If two Ops are "Structural Equivalent", they share a common form-reduced description, searchable using {@link org.scijava.ops.api.OpEnvironment#descriptions(java.lang.String)}. For example, an Op "math.add" that produces an ImgLib2 Img from Img operands, and another Op "math.add" that produces a NumPy ndarray from ndarray operands, will reduce to a single description "math.add" that produces an image from image operands.
- *   <li><b>Result Equivalence</b></li> If two Ops are "Result Equivalent", then they are considered to produce equivalent values, using the primary language-specific definition of equality (e.g. `Object.equals`, for Java usage).
+ *   <li><b>Form Equivalence</b></li> If two Ops are form-equivalent, they are defined under the same name.
+ *   <li><b>Structural Equivalence</b></li> If two Ops are structural-equivalent, they share a common form-reduced description, searchable using {@link org.scijava.ops.api.OpEnvironment#descriptions(java.lang.String)}. For example, an Op "math.add" that produces an ImgLib2 Img from Img operands, and another Op "math.add" that produces a NumPy ndarray from ndarray operands, will reduce to a single description "math.add" that produces an image from image operands.
+ *   <li><b>Result Equivalence</b></li> If two Ops are result-equivalent, then they are considered to produce equivalent values, using the primary language-specific definition of equality (e.g. `Object.equals`, for Java usage).
  * </ol>
  *
  * For example, consider three Ops:

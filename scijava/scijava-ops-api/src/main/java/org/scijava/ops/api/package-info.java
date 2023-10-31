@@ -16,7 +16,7 @@
  *
  * An Op is an algorithm adhering to the following traits:
  * <ol>
- * <li>Ops are stateless - with no internal state, calling an Op two times on the same inputs will produce the same output.</li>
+ * <li>Ops are stateless and deterministic - with no internal state, calling an Op two times on the same inputs will produce the same output.</li>
  * <li>Ops are limited to one output - by limiting Ops to one output, we ensure that the algorithms we write are reusable building blocks. Of course, algorithms always need inputs, and there are no limitations on the number of inputs.</li>
  * <li>Ops have at least one name - this name conveys an Op's purpose</li>
  * </ol>

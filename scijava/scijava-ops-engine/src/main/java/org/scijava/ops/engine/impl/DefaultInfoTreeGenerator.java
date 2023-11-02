@@ -35,13 +35,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.scijava.ops.api.InfoTree;
+import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.engine.InfoTreeGenerator;
 import org.scijava.ops.api.OpInfo;
 
 public class DefaultInfoTreeGenerator implements InfoTreeGenerator {
 
 	@Override
-	public InfoTree generate(String signature, Map<String, OpInfo> idMap,
+	public InfoTree generate(OpEnvironment env, String signature, Map<String, OpInfo> idMap,
 		Collection<InfoTreeGenerator> generators)
 	{
 		int dependencyStart = signature.indexOf(InfoTree.DEP_START_DELIM);
@@ -55,7 +56,7 @@ public class DefaultInfoTreeGenerator implements InfoTreeGenerator {
 		List<String> dependencies = getDependencies(dependencySignature);
 		List<InfoTree> dependencyChains = new ArrayList<>();
 		for (String dep : dependencies) {
-			dependencyChains.add(InfoTreeGenerator.generateDependencyTree(dep,
+			dependencyChains.add(InfoTreeGenerator.generateDependencyTree(env, dep,
 				idMap, generators));
 		}
 		return new InfoTree(info, dependencyChains);

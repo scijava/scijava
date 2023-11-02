@@ -70,7 +70,6 @@ public final class Ops {
 		}
 		return (RichOp<T>) op;
 	}
-
 	/**
 	 * Convenience function for getting the {@link OpInfo} of {@code op}
 	 * 
@@ -109,11 +108,14 @@ public final class Ops {
 
 	/**
 	 * Searches for a {@code @FunctionalInterface} annotated interface in the
-	 * class hierarchy of the specified type. The first one that is found will
-	 * be returned. If no such interface can be found, null will be returned.
-	 *
-	 * @param type
-	 * @return
+	 * class hierarchy of the specified type. The first one that is found will be
+	 * returned. If no such interface can be found, null will be returned.
+	 * 
+	 * @param type some {@link Class}, possibly implementing a
+	 *          {@link FunctionalInterface}
+	 * @return the {@link FunctionalInterface} implemented by {@code type}, or
+	 *         {@code null} if {@code type} does not implement a
+	 *         {@link FunctionalInterface}.
 	 */
 	public static Class<?> findFunctionalInterface(Class<?> type) {
 		if (type == null) return null;
@@ -126,27 +128,42 @@ public final class Ops {
 	}
 
 	/**
-	 * Attempts to find the single functional method of the specified
-	 * class, by scanning the for functional interfaces. If there
-	 * is no functional interface, null will be returned.
-	 *
-	 * @param cls
-	 * @return
+	 * Attempts to find the single functional method of the specified class, by
+	 * scanning the for functional interfaces. If there is no functional
+	 * interface, null will be returned.
+	 * 
+	 * @param cls the {@link Class} implmenting some {@link FunctionalInterface}
+	 * @return the functional {@link Method} of {@code cls}
+	 * @throws IllegalArgumentException if {@code cls} does not implement a
+	 *           {@link FunctionalInterface}
 	 */
 	public static Method findFunctionalMethod(Class<?> cls) {
+		Method m = fMethod(cls);
+		if (m == null) {
+			throw new IllegalArgumentException("Op type" + cls.getName() +
+				" does not have a functional method!");
+		}
+		return m;
+	}
+
+	private static Method fMethod(Class<?> cls) {
 		Class<?> iFace = findFunctionalInterface(cls);
 		if (iFace == null) {
 			return null;
 		}
 
-		List<Method> nonDefaults = Arrays.stream(iFace.getMethods())
-				.filter(m -> !m.isDefault()).collect(Collectors.toList());
+		List<Method> nonDefaults = Arrays.stream(iFace.getMethods()) //
+				.filter(m -> !m.isDefault()) //
+				.collect(Collectors.toList());
 
 		// The single non default method must be the functional one
 		if (nonDefaults.size() != 1) {
 			for (Class<?> i : iFace.getInterfaces()) {
-				final Method result = findFunctionalMethod(i);
-				if (result != null) return result;
+				try {
+					return findFunctionalMethod(i);
+				} catch (IllegalArgumentException e) {
+					// Try another interface
+				}
 			}
 		}
 

@@ -46,7 +46,7 @@ public class OpAdaptationInfoTest extends AbstractTestEnvironment {
 
 	@BeforeAll
 	public static void addNeededOps() {
-		ops.registerInfosFrom(new CopyOpCollection<>());
+		ops.register(new CopyOpCollection<>());
 	}
 
 	static class ClassOp implements BiFunction<Double, Double, Double> {

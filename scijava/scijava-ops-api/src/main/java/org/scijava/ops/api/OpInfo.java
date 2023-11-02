@@ -114,6 +114,10 @@ public interface OpInfo extends Comparable<OpInfo> {
 	default int compareTo(final OpInfo that) {
 		if (this.priority() < that.priority()) return 1;
 		if (this.priority() > that.priority()) return -1;
+		int nameComparison = this.toString().compareTo(that.toString());
+		if (nameComparison != 0) {
+			return nameComparison;
+		}
 		return this.implementationName().compareTo(that.implementationName());
 	}
 

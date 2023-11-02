@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.scijava.ops.api.InfoTree;
+import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.InfoTreeGenerator;
 import org.scijava.types.Types;
@@ -43,7 +44,7 @@ import org.scijava.types.Types;
 public class AdaptationInfoTreeGenerator implements InfoTreeGenerator {
 
 	@Override
-	public InfoTree generate(String signature, Map<String, OpInfo> idMap,
+	public InfoTree generate(OpEnvironment env, String signature, Map<String, OpInfo> idMap,
 		Collection<InfoTreeGenerator> generators)
 	{
 
@@ -55,7 +56,7 @@ public class AdaptationInfoTreeGenerator implements InfoTreeGenerator {
 				OpAdaptationInfo.ADAPTOR);
 		String adaptorSignature = adaptorComponent.substring(
 			OpAdaptationInfo.ADAPTOR.length());
-		InfoTree adaptorTree = InfoTreeGenerator.generateDependencyTree(
+		InfoTree adaptorTree = InfoTreeGenerator.generateDependencyTree(env,
 			adaptorSignature, idMap, generators);
 
 		// Resolve original op
@@ -66,7 +67,7 @@ public class AdaptationInfoTreeGenerator implements InfoTreeGenerator {
 				OpAdaptationInfo.ORIGINAL);
 		String originalSignature = originalComponent.substring(
 			OpAdaptationInfo.ORIGINAL.length());
-		InfoTree originalTree = InfoTreeGenerator.generateDependencyTree(
+		InfoTree originalTree = InfoTreeGenerator.generateDependencyTree(env,
 			originalSignature, idMap, generators);
 
 		// Rebuild original tree with an OpAdaptationInfo

@@ -30,10 +30,10 @@
 package org.scijava.ops.api;
 
 import java.lang.reflect.Type;
-import java.util.List;
 import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.Set;
+import java.util.SortedSet;
 
 import org.scijava.discovery.Discoverer;
 import org.scijava.priority.Prioritized;
@@ -84,14 +84,42 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 		return ops;
 	}
 
-	/** The available ops for this environment. */
-	List<OpInfo> infos();
-	
-	List<OpInfo> infos(String name);
+	/**
+	 * Obtains all Ops in the {@link OpEnvironment}.
+	 * 
+	 * @return a {@link SortedSet} containing all Ops contained in the
+	 *         {@link OpEnvironment}.
+	 */
+	SortedSet<OpInfo> infos();
 
-	List<OpInfo> infos(Hints hints);
+	/**
+	 * Obtains all Ops in the {@link OpEnvironment} that are named {@code name}.
+	 *
+	 * @param name the {@link String} of all Ops to be returned.
+	 * @return a {@link SortedSet} containing all Ops in the {@link OpEnvironment}
+	 *         named {@code name}
+	 */
+	SortedSet<OpInfo> infos(String name);
 
-	List<OpInfo> infos(String name, Hints hints);
+	/**
+	 * Obtains all Ops in the {@link OpEnvironment} that match {@code hints}
+	 *
+	 * @param hints the {@link Hints} used to filter available Ops.
+	 * @return a {@link SortedSet} containing all Ops in the {@link OpEnvironment}
+	 *         matching {@code hints}
+	 */
+	SortedSet<OpInfo> infos(Hints hints);
+
+	/**
+	 * Obtains all Ops in the {@link OpEnvironment} that are named {@code name}
+	 * and match {@code hints}
+	 *
+	 * @param name the {@link String} of all Ops to be returned.
+	 * @param hints the {@link Hints} used to filter available Ops.
+	 * @return a {@link SortedSet} containing all Ops in the {@link OpEnvironment}
+	 *         named {@code name} and matching {@code hints}
+	 */
+	SortedSet<OpInfo> infos(String name, Hints hints);
 
 	void discoverUsing(Discoverer... d);
 
@@ -778,21 +806,6 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	void register(Object... objects);
 
 	/**
-	 * Creates some {@link OpInfo}s from {@code o}
-	 * @param o the {@link Object} to create {@link OpInfo}s from
-	 * @return a {@link Set} of {@link OpInfo}s
-	 */
-	Set<OpInfo> infosFrom(Object o);
-
-	/**
-	 * Creates some {@link OpInfo}s from {@code o}
-	 * @param o the {@link Object} to create {@link OpInfo}s from
-	 */
-	default void registerInfosFrom(Object o) {
-		register(infosFrom(o));
-	}
-
-	/**
 	 * Sets the {@link Hints} for the {@link OpEnvironment}. Every Call to
 	 * {@link #op} that <b>does not</b> pass a {@link Hints} will <b>copy</b> the
 	 * Hints passed here (to prevent multiple Op calls from accessing/changing the
@@ -818,29 +831,63 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	Hints getDefaultHints();
 
 	/**
-	 * Creates a {@link Hints} object using the {@link String}s provided as the
-	 * starting hints.
-	 * 
-	 * @param startingHints the hints existing in the {@link Hints} object from
-	 *          creation time
-	 * @return a {@link Hints} with all {@code startingHints} as hints.
+	 * Returns the descriptions for all Ops contained within this
+	 * {@link OpEnvironment}
+	 *
+	 * @return a String describing all Ops in the environment matching {@code name}
 	 */
-	Hints createHints(String... startingHints);
+	default String help() {
+		return help(new PartialOpRequest());
+	}
 
 	/**
 	 * Returns the descriptions for all Ops contained within this
+	 * {@link OpEnvironment} matching {@code name}
+	 *
+	 * @param name the {@link String} name to filter on
+	 * @return a String describing all Ops in the environment matching {@code name}
+	 */
+	default String help(final String name) {
+		return help(new PartialOpRequest(name));
+	}
+
+	/**
+	 * Returns simple descriptions for all Ops identifiable by a given name within
+	 * this {@link OpEnvironment}
+	 *
+	 * @param request the {@link OpRequest} to filter on
+	 * @return a {@link Set} of descriptions
+	 */
+	String help(final OpRequest request);
+
+	/**
+	 * Returns verbose descriptions for all Ops contained within this
 	 * {@link OpEnvironment}
 	 *
 	 * @return a {@link Set} of descriptions
 	 */
-	List<String> descriptions();
+	default String helpVerbose() {
+		return helpVerbose(new PartialOpRequest());
+	}
 
 	/**
-	 * Returns the descriptions for all Ops identifiable by a given name within
-	 * this {@link OpEnvironment}
+	 * Returns verbose descriptions for all Ops contained within this
+	 * {@link OpEnvironment}
 	 *
+	 * @param name the {@link String} name to filter on
 	 * @return a {@link Set} of descriptions
 	 */
-	List<String> descriptions(String name);
+	default String helpVerbose(final String name) {
+		return helpVerbose(new PartialOpRequest(name));
+	}
 
+
+	/**
+	 * Returns verbose descriptions for all Ops contained within this
+	 * {@link OpEnvironment}
+	 *
+	 * @param request the {@link OpRequest} to filter on
+	 * @return a {@link Set} of descriptions
+	 */
+	String helpVerbose(final OpRequest request);
 }

@@ -32,75 +32,204 @@ package org.scijava.ops.engine.matcher.simplify;
 import java.util.function.Function;
 
 import org.scijava.collections.ObjectArray;
-import org.scijava.ops.spi.OpHints;
 import org.scijava.ops.engine.BaseOpHints.Simplification;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
+import org.scijava.ops.spi.OpHints;
 
 /**
  * A collection of Ops for simplifying and focusing primitive arrays
  *
  * @author Gabriel Selzer
  */
-public class PrimitiveArraySimplifiers implements OpCollection {
+public class PrimitiveArraySimplifiers<N extends Number> implements
+	OpCollection
+{
 
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	// -- Object simplifiers -- //
+		@OpHints(hints = { Simplification.FORBIDDEN })
+		@OpField(names = "simplify")
+		public final Function<N[], ObjectArray<Number>> byteArrSimplifier = arr -> {
+			var oa = new ObjectArray<>(Number.class, arr.length);
+			// TODO: Why doesn't System.arraycopy work?
+			for (int i = 0; i < arr.length; i++) {
+				oa.set(i, arr[i]);
+			}
+			return oa;
+		};
+
+	// -- Primitive simplifiers -- //
+
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "simplify")
-	public final Function<Byte[], ObjectArray<Number>> byteArrSimplifier =
-		b -> new ObjectArray<>(b);
+	public final Function<byte[], ObjectArray<Number>> bytePrimitiveArraySimplifier =
+		arr -> {
+			var oa = new ObjectArray<>(Number.class, arr.length);
+			// TODO: Why doesn't System.arraycopy work?
+			for (int i = 0; i < arr.length; i++) {
+				oa.set(i, arr[i]);
+			}
+			return oa;
+		};
 
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
+	@OpField(names = "simplify")
+	public final Function<short[], ObjectArray<Number>> shortPrimitiveArraySimplifier =
+		arr -> {
+			var oa = new ObjectArray<>(Number.class, arr.length);
+			// TODO: Why doesn't System.arraycopy work?
+			for (int i = 0; i < arr.length; i++) {
+				oa.set(i, arr[i]);
+			}
+			return oa;
+		};
+
+	@OpHints(hints = { Simplification.FORBIDDEN })
+	@OpField(names = "simplify")
+	public final Function<int[], ObjectArray<Number>> intPrimitiveArraySimplifier = arr -> {
+		var oa = new ObjectArray<>(Number.class, arr.length);
+		// TODO: Why doesn't System.arraycopy work?
+		for (int i = 0; i < arr.length; i++) {
+			oa.set(i, arr[i]);
+		}
+		return oa;
+	};
+
+	@OpHints(hints = { Simplification.FORBIDDEN })
+	@OpField(names = "simplify")
+	public final Function<long[], ObjectArray<Number>> longPrimitiveArraySimplifier =
+		arr -> {
+			var oa = new ObjectArray<>(Number.class, arr.length);
+			// TODO: Why doesn't System.arraycopy work?
+			for (int i = 0; i < arr.length; i++) {
+				oa.set(i, arr[i]);
+			}
+			return oa;
+		};
+
+	@OpHints(hints = { Simplification.FORBIDDEN })
+	@OpField(names = "simplify")
+	public final Function<float[], ObjectArray<Number>> floatPrimitiveArraySimplifier =
+		arr -> {
+			var oa = new ObjectArray<>(Number.class, arr.length);
+			// TODO: Why doesn't System.arraycopy work?
+			for (int i = 0; i < arr.length; i++) {
+				oa.set(i, arr[i]);
+			}
+			return oa;
+		};
+
+	@OpHints(hints = { Simplification.FORBIDDEN })
+	@OpField(names = "simplify")
+	public final Function<double[], ObjectArray<Number>> doublePrimitiveArraySimplifier =
+		arr -> {
+			var oa = new ObjectArray<>(Number.class, arr.length);
+			// TODO: Why doesn't System.arraycopy work?
+			for (int i = 0; i < arr.length; i++) {
+				oa.set(i, arr[i]);
+			}
+			return oa;
+		};
+
+	// -- Object Focusers -- //
+
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "focus")
 	public final Function<ObjectArray<Number>, Byte[]> byteArrFocuser = o -> o
 		.stream().map(b -> b == null ? null : b.byteValue()).toArray(Byte[]::new);
 
-	@OpHints(hints = {Simplification.FORBIDDEN})
-	@OpField(names = "simplify")
-	public final Function<Integer[], ObjectArray<Number>> intArrSimplifier =
-		i -> new ObjectArray<>(i);
-
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "focus")
 	public final Function<ObjectArray<Number>, Integer[]> intArrFocuser = o -> o
 		.stream().map(i -> i == null ? null : i.intValue()).toArray(Integer[]::new);
 
-	@OpHints(hints = {Simplification.FORBIDDEN})
-	@OpField(names = "simplify")
-	public final Function<Short[], ObjectArray<Number>> shortArrSimplifier =
-		s -> new ObjectArray<>(s);
-
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "focus")
 	public final Function<ObjectArray<Number>, Short[]> shortArrFocuser = o -> o
 		.stream().map(s -> s == null ? null : s.shortValue()).toArray(Short[]::new);
 
-	@OpHints(hints = {Simplification.FORBIDDEN})
-	@OpField(names = "simplify")
-	public final Function<Long[], ObjectArray<Number>> longArrSimplifier =
-		l -> new ObjectArray<>(l);
-
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "focus")
 	public final Function<ObjectArray<Number>, Long[]> longArrFocuser = o -> o
 		.stream().map(l -> l == null ? null : l.longValue()).toArray(Long[]::new);
 
-	@OpHints(hints = {Simplification.FORBIDDEN})
-	@OpField(names = "simplify")
-	public final Function<Float[], ObjectArray<Number>> floatArrSimplifier =
-		f -> new ObjectArray<>(f);
-
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "focus")
 	public final Function<ObjectArray<Number>, Float[]> floatArrFocuser = o -> o
 		.stream().map(f -> f == null ? null : f.floatValue()).toArray(Float[]::new);
 
-	@OpHints(hints = {Simplification.FORBIDDEN})
-	@OpField(names = "simplify")
-	public final Function<Double[], ObjectArray<Number>> doubleArrSimplifier =
-		d -> new ObjectArray<>(d);
-
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "focus")
 	public final Function<ObjectArray<Number>, Double[]> doubleArrFocuser = o -> o
-		.stream().map(d -> d == null ? null : d.doubleValue()).toArray(Double[]::new);
+		.stream().map(d -> d == null ? null : d.doubleValue()).toArray(
+			Double[]::new);
+
+	// -- Primitive Focusers -- //
+
+	@OpHints(hints = { Simplification.FORBIDDEN })
+	@OpField(names = "focus")
+	public final Function<ObjectArray<Number>, byte[]> bytePrimitiveArrFocuser =
+		o -> {
+			byte[] arr = new byte[o.size()];
+			for (int i = 0; i < o.size(); i++) {
+				arr[i] = o.get(i).byteValue();
+			}
+			return arr;
+		};
+
+	@OpHints(hints = { Simplification.FORBIDDEN })
+	@OpField(names = "focus")
+	public final Function<ObjectArray<Number>, short[]> shortPrimitiveArrFocuser =
+		o -> {
+			short[] arr = new short[o.size()];
+			for (int i = 0; i < o.size(); i++) {
+				arr[i] = o.get(i).shortValue();
+			}
+			return arr;
+		};
+
+	@OpHints(hints = { Simplification.FORBIDDEN })
+	@OpField(names = "focus")
+	public final Function<ObjectArray<Number>, int[]> intPrimitiveArrFocuser =
+		o -> {
+			int[] arr = new int[o.size()];
+			for (int i = 0; i < o.size(); i++) {
+				arr[i] = o.get(i).intValue();
+			}
+			return arr;
+		};
+
+	@OpHints(hints = { Simplification.FORBIDDEN })
+	@OpField(names = "focus")
+	public final Function<ObjectArray<Number>, long[]> longPrimitiveArrFocuser =
+		o -> {
+			long[] arr = new long[o.size()];
+			for (int i = 0; i < o.size(); i++) {
+				arr[i] = o.get(i).longValue();
+			}
+			return arr;
+		};
+
+	@OpHints(hints = { Simplification.FORBIDDEN })
+	@OpField(names = "focus")
+	public final Function<ObjectArray<Number>, float[]> floatPrimitiveArrFocuser =
+		o -> {
+			float[] arr = new float[o.size()];
+			for (int i = 0; i < o.size(); i++) {
+				arr[i] = o.get(i).floatValue();
+			}
+			return arr;
+		};
+
+	@OpHints(hints = { Simplification.FORBIDDEN })
+	@OpField(names = "focus")
+	public final Function<ObjectArray<Number>, double[]> doublePrimitiveArrFocuser =
+		o -> {
+			double[] arr = new double[o.size()];
+			for (int i = 0; i < o.size(); i++) {
+				arr[i] = o.get(i).doubleValue();
+			}
+			return arr;
+		};
+
 }

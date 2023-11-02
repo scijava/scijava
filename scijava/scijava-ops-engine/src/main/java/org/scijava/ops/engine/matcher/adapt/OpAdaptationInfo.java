@@ -173,6 +173,6 @@ public class OpAdaptationInfo implements OpInfo {
 
 	@Override
 	public String toString() {
-		return OpDescription.basic(this);
+		return OpDescription.verbose(this);
 	}
 }

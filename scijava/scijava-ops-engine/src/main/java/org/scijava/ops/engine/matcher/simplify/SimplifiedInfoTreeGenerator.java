@@ -26,60 +26,56 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.engine.matcher.simplify;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.function.Function;
 
+import org.scijava.function.Computers;
 import org.scijava.ops.api.InfoTree;
-import org.scijava.ops.engine.InfoTreeGenerator;
+import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.Ops;
+import org.scijava.ops.api.RichOp;
+import org.scijava.ops.engine.InfoTreeGenerator;
+import org.scijava.types.Nil;
 
-public class SimplificationInfoTreeGenerator implements InfoTreeGenerator {
+/**
+ * Generates a {@link InfoTree}, rooted by a {@link SimplifiedOpInfo}, from a
+ * {@link String} signature.
+ *
+ * @author Gabriel Selzer
+ */
+public class SimplifiedInfoTreeGenerator implements InfoTreeGenerator {
 
 	@Override
-	public InfoTree generate(String signature, Map<String, OpInfo> idMap,
-		Collection<InfoTreeGenerator> generators)
+	public InfoTree generate(OpEnvironment env, String signature,
+		Map<String, OpInfo> idMap, Collection<InfoTreeGenerator> generators)
 	{
 		// get the list of components
-		List<String> components = parseComponents(signature.substring(SimplifiedOpInfo.IMPL_DECLARATION.length()));
+		List<String> components = parseComponents(signature.substring(
+			SimplifiedOpInfo.IMPL_DECLARATION.length()));
 		int compIndex = 0;
 
-		// Proceed to input simplifiers
-		List<InfoTree> reqSimplifiers = new ArrayList<>();
-		String reqSimpComp = components.get(compIndex);
-		while (reqSimpComp.startsWith(
-			SimplifiedOpInfo.INPUT_SIMPLIFIER_DELIMITER))
-		{
-			String reqSimpSignature = reqSimpComp.substring(
-				SimplifiedOpInfo.INPUT_SIMPLIFIER_DELIMITER.length());
-			InfoTree reqSimpChain = InfoTreeGenerator.generateDependencyTree(
-				reqSimpSignature, idMap, generators);
-			reqSimplifiers.add(reqSimpChain);
-			reqSimpComp = components.get(++compIndex);
-		}
-
-		// Proceed to input simplifiers
-		List<InfoTree> infoFocusers = new ArrayList<>();
-		String infoFocuserComp = components.get(compIndex);
-		while (infoFocuserComp.startsWith(
+		List<RichOp<Function<?, ?>>> reqFocusers = new ArrayList<>();
+		String reqFocuserComp = components.get(compIndex);
+		while (reqFocuserComp.startsWith(
 			SimplifiedOpInfo.INPUT_FOCUSER_DELIMITER))
 		{
-			String infoFocSignature = infoFocuserComp.substring(
+			String reqFocuserSignature = reqFocuserComp.substring(
 				SimplifiedOpInfo.INPUT_FOCUSER_DELIMITER.length());
-			InfoTree infoFocChain = InfoTreeGenerator.generateDependencyTree(
-				infoFocSignature, idMap, generators);
-			infoFocusers.add(infoFocChain);
-			infoFocuserComp = components.get(++compIndex);
+			InfoTree reqFocuserChain = InfoTreeGenerator.generateDependencyTree(env,
+				reqFocuserSignature, idMap, generators);
+
+			reqFocusers.add(Ops.rich(env.opFromInfoChain(reqFocuserChain,
+				new Nil<>()
+				{})));
+			reqFocuserComp = components.get(++compIndex);
 		}
-
-		if (infoFocusers.size() != reqSimplifiers.size())
-			throw new IllegalArgumentException("Signature " + signature +
-				" does not have the same number of input simplifiers and input focusers!");
-
 		// Proceed to output simplifier
 		String outSimpComp = components.get(compIndex++);
 		if (!outSimpComp.startsWith(SimplifiedOpInfo.OUTPUT_SIMPLIFIER_DELIMITER))
@@ -88,22 +84,14 @@ public class SimplificationInfoTreeGenerator implements InfoTreeGenerator {
 				SimplifiedOpInfo.OUTPUT_SIMPLIFIER_DELIMITER + ")");
 		String outSimpSignature = outSimpComp.substring(
 			SimplifiedOpInfo.OUTPUT_SIMPLIFIER_DELIMITER.length());
-		InfoTree outputSimplifierChain = InfoTreeGenerator
-			.generateDependencyTree(outSimpSignature, idMap, generators);
-
-		// Proceed to output focuser
-		String outFocComp = components.get(compIndex++);
-		if (!outFocComp.startsWith(SimplifiedOpInfo.OUTPUT_FOCUSER_DELIMITER))
-			throw new IllegalArgumentException("Signature " + signature +
-				" does not contain an output simplifier signature (starting with " +
-				SimplifiedOpInfo.OUTPUT_FOCUSER_DELIMITER + ")");
-		String outFocSignature = outFocComp.substring(
-			SimplifiedOpInfo.OUTPUT_FOCUSER_DELIMITER.length());
-		InfoTree outputFocuserChain = InfoTreeGenerator.generateDependencyTree(
-			outFocSignature, idMap, generators);
+		InfoTree outputSimplifierChain = InfoTreeGenerator.generateDependencyTree(
+			env, outSimpSignature, idMap, generators);
+		RichOp<Function<?, ?>> outSimplifier = Ops.rich(env.opFromInfoChain(
+			outputSimplifierChain, new Nil<>()
+			{}));
 
 		// Proceed to output copier
-		Optional<InfoTree> copierChain;
+		RichOp<Computers.Arity1<?, ?>> copier = null;
 		String outCopyComp = components.get(compIndex++);
 		if (!outCopyComp.startsWith(SimplifiedOpInfo.OUTPUT_COPIER_DELIMITER))
 			throw new IllegalArgumentException("Signature " + signature +
@@ -111,35 +99,32 @@ public class SimplificationInfoTreeGenerator implements InfoTreeGenerator {
 				SimplifiedOpInfo.OUTPUT_COPIER_DELIMITER + ")");
 		String outCopySignature = outCopyComp.substring(
 			SimplifiedOpInfo.OUTPUT_COPIER_DELIMITER.length());
-		if (outCopySignature.isEmpty()) copierChain = Optional.empty();
-		else {
-			copierChain = Optional.of(InfoTreeGenerator.generateDependencyTree(
-				outCopySignature, idMap, generators));
+		if (!outCopySignature.isEmpty()) {
+			InfoTree copierTree = InfoTreeGenerator.generateDependencyTree(env,
+				outCopySignature, idMap, generators);
+			copier = Ops.rich(env.opFromInfoChain(copierTree, new Nil<>() {}));
 		}
 
 		// Proceed to original info
-		String originalComponent = components.get(compIndex++);
+		String originalComponent = components.get(compIndex);
 		if (!originalComponent.startsWith(SimplifiedOpInfo.ORIGINAL_INFO))
 			throw new IllegalArgumentException("Signature " + signature +
 				" does not contain an original Op signature (starting with " +
 				SimplifiedOpInfo.ORIGINAL_INFO + ")");
 		String originalSignature = originalComponent.substring(
 			SimplifiedOpInfo.ORIGINAL_INFO.length());
-		InfoTree originalChain = InfoTreeGenerator.generateDependencyTree(
+		InfoTree originalChain = InfoTreeGenerator.generateDependencyTree(env,
 			originalSignature, idMap, generators);
 
-
-		SimplificationMetadata metadata = new SimplificationMetadata(originalChain
-			.info(), reqSimplifiers, infoFocusers, outputSimplifierChain,
-			outputFocuserChain, copierChain);
-		OpInfo baseInfo = new SimplifiedOpInfo(originalChain.info(), metadata, Double.MIN_VALUE);
+		OpInfo baseInfo = new SimplifiedOpInfo(originalChain.info(), reqFocusers,
+			outSimplifier, copier);
 		return new InfoTree(baseInfo, originalChain.dependencies());
 	}
 
-	List<String> parseComponents(String signature) {
+	private List<String> parseComponents(String signature) {
 		List<String> components = new ArrayList<>();
 		String s = signature;
-		while(s.length() > 0) {
+		while (!s.isEmpty()) {
 			String subSignatureFrom = InfoTreeGenerator.subSignatureFrom(s, 0);
 			components.add(subSignatureFrom);
 			s = s.substring(subSignatureFrom.length());

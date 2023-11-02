@@ -185,7 +185,7 @@ public class OpClassInfo implements OpInfo {
 	}
 
 	@Override
-	public String toString() { return OpDescription.basic(this); }
+	public String toString() { return OpDescription.verbose(this); }
 
 	@Override
 	public String version() {

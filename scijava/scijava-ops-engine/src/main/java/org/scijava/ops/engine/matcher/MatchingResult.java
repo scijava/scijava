@@ -147,7 +147,7 @@ public class MatchingResult {
 		int count = 0;
 		for (final OpCandidate candidate : candidates) {
 			sb.append(++count + ". ");
-			sb.append("\t" + OpDescription.basic(candidate.opInfo(), candidate.getStatusItem()) + "\n");
+			sb.append("\t" + OpDescription.verbose(candidate.opInfo(), candidate.getStatusItem()) + "\n");
 			final String status = candidate.getStatus();
 			if (status != null)
 				sb.append("\t" + status + "\n");

@@ -2,13 +2,14 @@
 
 As the `OpEnvironment` is fully extensible, different `OpEnvironment`s might contain different Ops, and it is important to be able to query an `OpEnvironment` about the available Ops.
 
-Users can query the `OpEnvironment` for Ops matching a given name using the method `OpEnvironment.descriptions(String)`. The following SciJava script queries an `OpEnvironment` for all Ops matching the name `filter.gauss`:
+Users can query the `OpEnvironment` for available Ops using the method `OpEnvironment.help(String)`. The following example shows you how to find all `"filter.gauss"` Ops in an `OpEnvironment`:
 
 ```groovy
 import org.scijava.ops.api.OpEnvironment
+
 ops = OpEnvironment.getEnvironment()
 
-print(ops.descriptions("filter.gauss"))
+print(ops.help("filter.gauss"))
 ```
 This script yields the following printout:
 ```groovy

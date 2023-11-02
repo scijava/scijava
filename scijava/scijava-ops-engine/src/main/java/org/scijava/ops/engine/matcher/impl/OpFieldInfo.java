@@ -145,8 +145,10 @@ public class OpFieldInfo implements OpInfo {
 	public String implementationName() {
 		// Get generic string without modifiers and return type
 		String fullyQualifiedField = field.toGenericString();
+		int lastDotPos = fullyQualifiedField.lastIndexOf('.');
+		fullyQualifiedField = fullyQualifiedField.substring(0, lastDotPos) + "$" + fullyQualifiedField.substring(lastDotPos + 1);
 		String packageName = field.getDeclaringClass().getPackageName();
-		int classNameIndex = fullyQualifiedField.indexOf(packageName);
+		int classNameIndex = fullyQualifiedField.lastIndexOf(packageName);
 		return fullyQualifiedField.substring(classNameIndex);
 	}
 
@@ -217,6 +219,6 @@ public class OpFieldInfo implements OpInfo {
 	}
 
 	@Override
-	public String toString() { return OpDescription.basic(this); }
+	public String toString() { return OpDescription.verbose(this); }
 
 }

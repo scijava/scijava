@@ -31,7 +31,11 @@ package org.scijava.ops.engine;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
+import org.scijava.types.Types;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,8 +54,8 @@ public final class OpDescription {
      * @param info the {@link OpInfo} of interest
      * @return a descriptor for this {@link OpInfo}
      */
-    public static String basic(final OpInfo info) {
-        return basic(info, null);
+    public static String verbose(final OpInfo info) {
+        return verbose(info, null);
     }
 
     /**
@@ -62,21 +66,33 @@ public final class OpDescription {
      * @param special the {@link Member} to highlight
      * @return a descriptor for this {@link OpInfo}
      */
-    public static String basic(final OpInfo info, final Member<?> special) {
+    public static String verbose(final OpInfo info, final Member<?> special) {
+        return description(info, special, false);
+    }
+
+    public static String simple(final OpInfo info) {
+        return description(info, null, true);
+    }
+
+    public static String simple(final OpInfo info, final Member<?> special) {
+        return description(info, special, true);
+    }
+
+    private static String description(final OpInfo info, final Member<?> special, boolean simple) {
         final StringBuilder sb = new StringBuilder();
         final List<String> names = info.names();
         sb.append(names.get(0)).append("(\n\t Inputs:\n");
         List<Member<?>> containers = new ArrayList<>();
         for (final Member<?> arg : info.inputs()) {
-            if (arg.getIOType() == ItemIO.INPUT) appendParam(sb, arg, special);
+            if (arg.getIOType() == ItemIO.INPUT) appendParam(sb, arg, special, simple);
             else containers.add(arg);
         }
         if (containers.isEmpty()) {
             sb.append("\t Outputs:\n");
-            appendParam(sb, info.output(), special);
+            appendParam(sb, info.output(), special, simple);
         } else {
             sb.append("\t Containers (I/O):\n");
-            containers.forEach(c -> appendParam(sb, c, special));
+            containers.forEach(c -> appendParam(sb, c, special, simple));
         }
         sb.append(")\n");
         if (names.size() > 1) {
@@ -96,10 +112,10 @@ public final class OpDescription {
      * @param special the {@link Member} to highlight
      */
     private static void appendParam(final StringBuilder sb, final Member<?> arg,
-                             final Member<?> special) {
+                             final Member<?> special, final boolean simple) {
         if (arg == special) sb.append("==> \t"); // highlight special item
         else sb.append("\t\t");
-        sb.append(arg.getType().getTypeName());
+        sb.append(typeString(arg.getType(), simple));
         sb.append(" ");
         sb.append(arg.getKey());
         if (!arg.isRequired()) sb.append("?");
@@ -108,5 +124,29 @@ public final class OpDescription {
             sb.append(arg.getDescription());
         }
         sb.append("\n");
+    }
+
+    private static String typeString(final Type input, final boolean simple) {
+        var str = input.getTypeName();
+        if (!simple) return str;
+        if (input instanceof TypeVariable<?>) {
+            var bounds = ((TypeVariable<?>)input).getBounds();
+            String[] s = new String[bounds.length];
+            for(int i = 0; i < s.length; i++) {
+                s[i] = typeString(Types.raw(bounds[i]), simple);
+            }
+            return String.join("+", s);
+        }
+        else if (input instanceof ParameterizedType) {
+            var pType = (ParameterizedType) input;
+            var raw = typeString(pType.getRawType(), simple);
+            Type[] args = pType.getActualTypeArguments();
+            String[] s = new String[args.length];
+            for(int i = 0; i < args.length; i++) {
+                s[i] = typeString(args[i], simple);
+            }
+            return raw + "<" + String.join(", ", s) + ">";
+        }
+        return str.replaceAll("([a-zA-Z_$][a-zA-Z\\d_$]*\\.)*([a-zA-Z_$][a-zA-Z\\d_$]*)", "$2");
     }
 }

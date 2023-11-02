@@ -33,13 +33,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 
-public class OpRegressionTest extends AbstractOpTest {
+public class OpRegressionTest {
+
+	protected static final OpEnvironment ops = OpEnvironment.getEnvironment();
 
 	@Test
 	public void opDiscoveryRegressionIT() {
-		long expected = 1841;
+		long expected = 1849;
 		long actual = ops.infos().size();
 		assertEquals(expected, actual);
 	}

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,50 +27,26 @@
  * #L%
  */
 
-package org.scijava.ops.engine.matcher.simplify;
+package org.scijava.ops.engine;
 
-import com.google.common.collect.Lists;
-
-import java.util.ArrayList;
+import java.lang.reflect.Type;
 import java.util.List;
 
+import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.OpRequest;
+import org.scijava.priority.Prioritized;
+import org.scijava.priority.Priority;
 
-public class ChainCluster {
+public interface OpDescriptionGenerator extends
+	Prioritized<OpDescriptionGenerator>
+{
+	String simpleDescriptions(OpEnvironment env, OpRequest request);
 
-	private final List<MutatorChain> chains;
-	private final TypePair pairing;
+	String verboseDescriptions(OpEnvironment env, OpRequest request);
 
-	private ChainCluster(TypePair pairing) {
-		this.chains = new ArrayList<>();
-		this.pairing = pairing;
+	default double getPriority() {
+		return Priority.NORMAL;
 	}
 
-	public static ChainCluster generateCluster(TypePair pairing,
-		List<OpInfo> simplifiers, List<OpInfo> focusers, OpEnvironment env)
-	{
-		ChainCluster cluster = new ChainCluster(pairing);
-		List<List<OpInfo>> chains = Lists.cartesianProduct(simplifiers, focusers);
-
-		for (List<OpInfo> chainList : chains) {
-			OpInfo simplifier = chainList.get(0);
-			OpInfo focuser = chainList.get(1);
-			MutatorChain chain = new MutatorChain(simplifier, focuser, pairing, env);
-			if (chain.isValid()) cluster.addChain(chain);
-		}
-		return cluster;
-	}
-
-	public boolean addChain(MutatorChain chain) {
-		return chains.add(chain);
-	}
-
-	public List<MutatorChain> getChains() {
-		return chains;
-	}
-
-	public TypePair getPairing() {
-		return pairing;
-	}
 }

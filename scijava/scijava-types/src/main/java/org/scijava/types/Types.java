@@ -277,7 +277,9 @@ public final class Types {
 	 *            a wildcard).
 	 * @return a {@link Type} that is a supertype of all {@link Type}s in the types array.
 	 */
-	public static Type greatestCommonSuperType(final Type[] types, final boolean wildcardSingleIface) {
+	public static Type greatestCommonSuperType(Type[] types, final boolean wildcardSingleIface) {
+
+		types = Arrays.stream(types).filter(t -> !(t.equals(Any.class) || t instanceof Any)).toArray(Type[]::new);
 
 		// return answer quick if the answer is trivial
 		if (types.length == 0) return null;
@@ -1676,6 +1678,10 @@ public final class Types {
 				return true;
 			}
 
+			if (type.equals(Any.class)) {
+				return true;
+			}
+
 			if (type instanceof Class) {
 				// just comparing two classes
 				return type.equals(Any.class) || toClass.isAssignableFrom((Class<?>) type);
@@ -2223,6 +2229,7 @@ public final class Types {
 						return true;
 					}
 				}
+				return false;
 			}
 			
 			// if the type satisfies every one of the constraints of the type variable, then
@@ -2239,7 +2246,7 @@ public final class Types {
 				return true;
 			}
 			
-			if (type instanceof Any) {
+			if (type instanceof Any || type.equals(Any.class)) {
 				typeVarAssigns.put(toTypeVariable, new Any(toTypeVariable.getBounds()));
 				return true;
 			}

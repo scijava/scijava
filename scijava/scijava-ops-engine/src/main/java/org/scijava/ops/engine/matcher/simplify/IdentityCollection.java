@@ -31,24 +31,26 @@ package org.scijava.ops.engine.matcher.simplify;
 
 import java.util.function.Function;
 
-import org.scijava.ops.spi.OpHints;
 import org.scijava.ops.engine.BaseOpHints.Simplification;
-import org.scijava.ops.spi.Op;
-import org.scijava.ops.spi.OpClass;
+import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpField;
+import org.scijava.ops.spi.OpHints;
+import org.scijava.priority.Priority;
 
-@OpHints(hints = { Simplification.FORBIDDEN })
-@OpClass(names = "simplify, focus")
-public class Identity<T> implements Function<T, T>, Op {
-
-	public Identity() {}
+/**
+ * An {@link OpCollection} containing {@code identity} Ops.
+ * @author Gabriel Selzer
+ * @param <T>
+ */
+public class IdentityCollection<T> implements OpCollection {
 
 	/**
-	 * @param t the object to be simplified
-	 * @return the simplified object (since we are doing an identity
+	 * @input t the object to be simplified
+	 * @output the simplified object (since we are doing an identity
 	 *         simplification, this is just a reference to the input object).
 	 */
-	@Override
-	public T apply(T t) {
-		return t;
-	}
+	@OpHints(hints = { Simplification.FORBIDDEN })
+	@OpField(names="simplify, focus, identify", priority=Priority.LAST)
+	public final Function<T, T> identity = (t) -> t;
+
 }

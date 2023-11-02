@@ -106,12 +106,12 @@ public class OpsIntro {
 		// To see information about available ops, we use the OpEnvironment#descriptions method
 		// First, print all available ops
 		System.out.println("--- All Ops!!! ---");
-		ops.descriptions().stream().forEach(System.out::println);
+		System.out.println(ops.help());
 
 		// Printing all the ops is a lot, so usually it's more helpful to check the
 		// available signatures for a particular op:
 		System.out.println("--- Available 'math.multiply' ops ---");
-		ops.descriptions("math.multiply").stream().forEach(System.out::println);
+		System.out.println(ops.help("math.multiply"));
 	}
 
 	/**

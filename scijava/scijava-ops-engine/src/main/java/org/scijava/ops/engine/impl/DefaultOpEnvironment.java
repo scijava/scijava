@@ -34,21 +34,20 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.Set;
-import java.util.function.BiConsumer;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
-import com.google.common.collect.Multimap;
-import com.google.common.collect.TreeMultimap;
 import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.ManualDiscoverer;
 import org.scijava.meta.Versions;
@@ -69,6 +68,7 @@ import org.scijava.ops.engine.InfoTreeGenerator;
 import org.scijava.ops.engine.MatchingConditions;
 import org.scijava.ops.engine.OpCandidate;
 import org.scijava.ops.engine.OpDependencyMember;
+import org.scijava.ops.engine.OpDescriptionGenerator;
 import org.scijava.ops.engine.OpInfoGenerator;
 import org.scijava.ops.engine.OpWrapper;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
@@ -92,17 +92,20 @@ import org.scijava.types.Types;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.TreeMultimap;
+
 /**
  * Default implementation of {@link OpEnvironment}, whose ops and related state
  * are discovered from a SciJava application context.
  * 
  * @author Curtis Rueden
+ * @author Gabriel Selzer
  */
 public class DefaultOpEnvironment implements OpEnvironment {
 
-	private final List<Discoverer> discoverers;
+	private final List<Discoverer> discoverers = new ArrayList<>();
 
-	private final ManualDiscoverer manDiscoverer;
+	private final ManualDiscoverer manDiscoverer = new ManualDiscoverer();
 
 	private final OpMatcher matcher;
 
@@ -115,7 +118,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * search size for any Op request to the number of known Ops with the name
 	 * given in the request.
 	 */
-	private Multimap<String, OpInfo> opDirectory;
+	private final TreeMultimap<String, OpInfo> opDirectory = TreeMultimap.create();
 
 	/**
 	 * Data structure storing all known Ops, discoverable using their id.
@@ -148,68 +151,63 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	public DefaultOpEnvironment(){
-		this(Collections.emptyList());
+		this(new Discoverer[0]);
 	}
 
-	public DefaultOpEnvironment(final Discoverer... d)
+	public DefaultOpEnvironment(final Discoverer... discoverers)
 	{
-		this(Arrays.asList(d));
-	}
-
-	public DefaultOpEnvironment(
-		final Collection<Discoverer> discoverers)
-	{
-		this.discoverers = new ArrayList<>(discoverers);
-		this.manDiscoverer = new ManualDiscoverer();
-		this.discoverers.add(this.manDiscoverer);
-		this.typeService = new DefaultTypeReifier(Discoverer.using(ServiceLoader::load));
-		this.history = OpHistory.getOpHistory();
+		typeService = new DefaultTypeReifier(Discoverer.using(ServiceLoader::load));
+		history = OpHistory.getOpHistory();
 		matcher = new DefaultOpMatcher(Discoverer.using(ServiceLoader::load).discover(
 				MatchingRoutine.class));
+		discoverUsing(discoverers);
+		discoverUsing(manDiscoverer);
 	}
 
 	@Override
 	public OpHistory history() {
-		return this.history;
+		return history;
 	}
 
 	@Override
-	public List<OpInfo> infos() {
-		if (opDirectory == null) initOpDirectory();
+	public SortedSet<OpInfo> infos() {
 		// NB distinct() prevents aliased Ops from appearing multiple times.
-		return opDirectory.values().stream() //
-				.distinct().sorted()
-				.collect(Collectors.toUnmodifiableList());
+		return new TreeSet<>(opDirectory.values());
 	}
 
 	@Override
-	public List<OpInfo> infos(String name) {
-		if (opDirectory == null) initOpDirectory();
+	public SortedSet<OpInfo> infos(String name) {
 		if (name == null || name.isEmpty()) return infos();
 		return opsOfName(name);
 	}
 
 	@Override
-	public List<OpInfo> infos(Hints hints) {
+	public SortedSet<OpInfo> infos(Hints hints) {
 		return filterInfos(infos(), hints);
 	}
 
 	@Override
-	public List<OpInfo> infos(String name, Hints hints) {
+	public SortedSet<OpInfo> infos(String name, Hints hints) {
 		return filterInfos(infos(name), hints);
 	}
 
 	@Override
 	public void discoverUsing(Discoverer... arr) {
-		discoverers.addAll(Arrays.asList(arr));
+		for (Discoverer d: arr) {
+			discoverers.add(d);
+
+			d.discover(OpInfo.class).forEach(this::registerInfosFrom);
+			d.discover(Op.class).forEach(this::registerInfosFrom);
+			d.discover(OpCollection.class).forEach(this::registerInfosFrom);
+		}
 	}
 
 	@Override
 	public void discoverEverything() {
-		discoverers.addAll(Discoverer.all(ServiceLoader::load));
+		discoverUsing(Discoverer.all(ServiceLoader::load).toArray(Discoverer[]::new));
 	}
 
-	private List<OpInfo> filterInfos(List<OpInfo> infos, Hints hints) {
+	private SortedSet<OpInfo> filterInfos(SortedSet<OpInfo> infos, Hints hints) {
 		boolean adapting = hints.contains(Adaptation.IN_PROGRESS);
 		boolean simplifying = hints.contains(Simplification.IN_PROGRESS);
 		// if we aren't doing any
@@ -221,7 +219,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			// filter out unadaptable ops
 			.filter(info -> !simplifying || !info.declaredHints().contains(
 				Simplification.FORBIDDEN)) //
-			.collect(Collectors.toList());
+			.collect(Collectors.toCollection(TreeSet::new));
 	}
 
 	@Override
@@ -288,7 +286,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 		InfoTreeGenerator genOpt = InfoTreeGenerator.findSuitableGenerator(
 			signature, infoTreeGenerators);
-		return genOpt.generate(signature, idDirectory, infoTreeGenerators);
+		return genOpt.generate(this, signature, idDirectory, infoTreeGenerators);
 	}
 
 	@Override
@@ -317,32 +315,84 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	@Override
 	public void register(Object... objects) {
 		for (Object o : objects) {
-			if (o.getClass().isArray())
+			// Step 1: Register the Op with a discoverer
+			if (o.getClass().isArray()) {
 				register(o);
+			}
 			else if (o instanceof Iterable<?>) {
 				((Iterable<?>) o).forEach(this::register);
 			}
-			else
-				this.manDiscoverer.register(o);
+			else {
+				manDiscoverer.register(o);
+			}
+
+			// Step 2: Register any Op infos within the Op Index
+			registerInfosFrom(o);
 		}
 	}
-	
-	@Override
-	public Set<OpInfo> infosFrom(Object o) {
-		return infoGenerators().parallelStream() //
+
+	/**
+	 * Discovers all {@link OpInfo}s from {@link Object} {@code o}. Note that
+	 * {@code o} is usually a {@link Op}, an {@link OpCollection}, or an
+	 * {@link OpInfo} (from which "secondary" {@link OpInfo}s will be generated).
+	 * <p>
+	 * NB We want to make sure that we can discover {@link OpInfoGenerator}s
+	 * first, so we use {@link ServiceLoader#load(Class)} to load all of them
+	 * </p>
+	 * @param o the {@link Object} to derive {@link OpInfo}s from.
+	 * @return all {@link OpInfo}s derived from {@code o}
+	 */
+	private List<OpInfo> generateAllInfos(Object o) {
+		// Get a discoverer that can find all OpInfoGenerators
+		return Discoverer.union(Discoverer.all(ServiceLoader::load)) //
+				// Find all OpInfoGenerators
+				.discover(OpInfoGenerator.class) //
+				.stream() //
+				// Filter to the ones that can operate on o
 				.filter(g -> g.canGenerateFrom(o)) //
+				// Map to the set of OpInfos
 				.flatMap(g -> g.generateInfosFrom(o).stream()) //
-				.collect(Collectors.toSet());
+				.collect(Collectors.toList());
 	}
 
-	@Override
-	public List<String> descriptions() {
-		return descriptions(infos());
+	private void registerInfosFrom(Object o) {
+		// Step 1: Discover "primary" OpInfos
+		List<OpInfo> infos;
+		if (o instanceof OpInfo)
+			infos = Collections.singletonList((OpInfo) o);
+		else
+			infos = generateAllInfos(o);
+		infos.forEach(addToOpIndex);
+
+		// Step 2: Discover "secondary" OpInfos e.g. ReducedOpInfos, SimplifiedOpInfos
+		for(OpInfo info: infos) {
+			generateAllInfos(info).forEach(addToOpIndex);
+		}
 	}
 
+	/**
+	 * Helper method to get the descriptions for each {@link OpInfo} in
+	 * {@code infos}
+	 * <p>
+	 * NB we return a {@link List} here to preserve multiple instances of the same
+	 * {@link OpInfo}. This is consistent with {@link DefaultOpEnvironment#infos}
+	 * returning multiple instances of the same {@link OpInfo}. The duplicate
+	 * {@link OpInfo}s are created when Ops have multiple names.
+	 * </p>
+	 *
+	 * @param request an {@link OpRequest}
+	 * @return a {@link Set} of {@link String}s, one describing each
+	 *         {@link OpInfo} in {@code infos}.
+	 */
 	@Override
-	public List<String> descriptions(String name) {
-		return descriptions(infos(name));
+	public String help(final OpRequest request) {
+		Optional<OpDescriptionGenerator>
+				opt = Discoverer.using(ServiceLoader::load).discoverMin(
+				OpDescriptionGenerator.class);
+		if (opt.isEmpty()) {
+			return "";
+		}
+		return opt.get().simpleDescriptions(this, request);
 	}
 
 	/**
@@ -354,14 +404,19 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * returning multiple instances of the same {@link OpInfo}. The duplicate
 	 * {@link OpInfo}s are created when Ops have multiple names.
 	 *
-	 * @param infos an {@link Iterable} of {@link OpInfo}s
+	 * @param request an {@link OpRequest}
 	 * @return a {@link Set} of {@link String}s, one describing each
 	 *         {@link OpInfo} in {@code infos}.
 	 */
-	private List<String> descriptions(Iterable<OpInfo> infos) {
-		return StreamSupport.stream(infos.spliterator(), true) //
-				.map(OpInfo::toString) //
-				.collect(Collectors.toUnmodifiableList());
+	@Override
+	public String helpVerbose(final OpRequest request) {
+		Optional<OpDescriptionGenerator>
+				opt = Discoverer.using(ServiceLoader::load).discoverMin(
+				OpDescriptionGenerator.class);
+		if (opt.isEmpty()) {
+			return "";
+		}
+		return opt.get().verboseDescriptions(this, request);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -497,7 +552,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			// find the opWrapper that wraps this type of Op
 			OpInfo info = instance.infoTree().info();
 			Class<?> rawType = Types.raw(info.opType());
-			Class<?> wrapper = getWrapperClass(rawType, info);
+			Class<?> wrapper = getWrapperClass(rawType);
 			if (wrapper == null) {
 				throw new IllegalArgumentException(info.implementationName() +
 					": matched op Type " + info.opType().getClass() +
@@ -528,19 +583,19 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		}
 	}
 
-	private Class<?> getWrapperClass(Class<?> opType, OpInfo info) {
+	private Class<?> getWrapperClass(Class<?> opType) {
 		if (opType == null)
 			return null;
 		// Check opType itself
 		if (wrappers.containsKey(opType))
 			return opType;
 		// Check superclass of opType
-		Class<?> wrapperSuperClass = getWrapperClass(opType.getSuperclass(), info);
+		Class<?> wrapperSuperClass = getWrapperClass(opType.getSuperclass());
 		if (wrapperSuperClass != null)
 			return wrapperSuperClass;
 		// Check interfaces of opType
 		for (Class<?> iFace: opType.getInterfaces()) {
-			Class<?> wrapperIFace = getWrapperClass(iFace, info);
+			Class<?> wrapperIFace = getWrapperClass(iFace);
 			if (wrapperIFace != null)
 				return wrapperIFace;
 		}
@@ -650,8 +705,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 *
 	 * @param type the functional {@link Type} of the {@code op} we're looking for
 	 * @param name the name of the {@code op} we're looking for
-	 * @param typeVarAssigns the mappings of {@link TypeVariable}s to {@link Type}s 
-	 * @return null if the specified type has no functional method
+	 * @param typeVarAssigns the mappings of {@link TypeVariable}s to {@link Type}s
+	 * @throws OpMatchingException if {@code type} defines more than one output.
 	 */
 	private OpRequest inferOpRequest(Type type, String name, Map<TypeVariable<?>, Type> typeVarAssigns) {
 		List<FunctionalMethodType> fmts = FunctionalParameters.findFunctionalMethodTypes(type);
@@ -684,69 +739,28 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		return new DefaultOpRequest(name, type, mappedOutputs[0], mappedInputs);
 	}
 
-	private synchronized void initOpDirectory() {
-		if (opDirectory != null) return;
-		Multimap<String, OpInfo> tmp = TreeMultimap.create();
-		// add all OpInfos that are directly discoverable
-		discoverers.stream().flatMap(d -> d.discover(OpInfo.class).stream()).forEach(info -> addToOpIndex.accept(tmp, info));
-		List<OpInfoGenerator> generators = infoGenerators();
-		discoverers.stream().flatMap(d -> d.discover(Op.class).stream()).forEach(o -> registerOpsFrom(tmp, o, generators));
-		discoverers.stream().flatMap(d -> d.discover(OpCollection.class).stream()).forEach(o -> registerOpsFrom(tmp, o, generators));
-		Set<OpInfo> infos = tmp.values().stream().distinct().map(info -> opsFromObject(info, generators)).flatMap(Collection::stream).collect(
-				Collectors.toSet());
-		infos.forEach(info -> addToOpIndex.accept(tmp, info));
-		opDirectory = tmp;
-	}
-
-	/**
-	 * Generates a {@link List} of {@link OpInfo}s from {@code o} using a List of {@link OpInfoGenerator}s.
-	 * @param o the {@link Object} to parse {@link OpInfo}s from.
-	 * @param generators the {@link List} of {@link OpInfoGenerator}s
-	 * @return a {@link List} of {@link OpInfo}s
-	 */
-	private List<OpInfo> opsFromObject(Object o, List<OpInfoGenerator> generators) {
-		return generators.stream() //
-				.filter(g -> g.canGenerateFrom(o)) //
-				.flatMap(g -> g.generateInfosFrom(o).stream()) //
-				.collect(Collectors.toList());
-	}
-
-	private void registerOpsFrom(final Multimap<String, OpInfo> opDirectory, final Object o, List<OpInfoGenerator> generators) {
-		opsFromObject(o, generators).forEach(info -> addToOpIndex.accept(opDirectory, info));
-	}
-	
-	private List<OpInfoGenerator> infoGenerators() {
-		return discoverers.stream() //
-				.flatMap(d -> d.discover(OpInfoGenerator.class).stream()) //
-				.collect(Collectors.toList());
-	}
-
 	private synchronized void initIdDirectory() {
 		if (idDirectory != null) return;
 		idDirectory = new HashMap<>();
-		if (opDirectory == null) initOpDirectory();
 
-		opDirectory.values().stream() //
+		opDirectory.values() //
 				.forEach(info -> idDirectory.put(info.id(), info));
 	}
 
-	private final BiConsumer<Multimap<String, OpInfo>, OpInfo> addToOpIndex = (final Multimap<String, OpInfo> directory, final OpInfo opInfo) -> {
+	private final Consumer<OpInfo> addToOpIndex = (final OpInfo opInfo) -> {
 		if (opInfo.names() == null || opInfo.names().isEmpty()) {
 			log.error("Skipping Op " + opInfo.implementationName() + ":\n" +
 				"Op implementation must provide name.");
 			return;
 		}
 		for (String opName : opInfo.names()) {
-			directory.put(opName, opInfo);
+			opDirectory.put(opName, opInfo);
 		}
 	};
 
-	private List<OpInfo> opsOfName(final String name) {
+	private SortedSet<OpInfo> opsOfName(final String name) {
 		// NB distinct() prevents aliased Ops from appearing multiple times.
-		return opDirectory.get(name).stream() //
-				.distinct() //
-				.sorted() //
-				.collect(Collectors.toUnmodifiableList());
+		return new TreeSet<>(opDirectory.get(name));
 	}
 
 	/**
@@ -761,18 +775,13 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 */
 	@Override
 	public void setDefaultHints(Hints hints) {
-		this.environmentHints = hints.copy();
+		environmentHints = hints.copy();
 	}
 
 	@Override
 	public Hints getDefaultHints() {
-		if (this.environmentHints != null) return this.environmentHints.copy();
+		if (environmentHints != null) return environmentHints.copy();
 		return new Hints();
-	}
-
-	@Override
-	public Hints createHints(String... startingHints) {
-		return new Hints(startingHints);
 	}
 
 	@Override

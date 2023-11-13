@@ -76,6 +76,16 @@ public class ImageBinaryMathTest extends AbstractOpTest {
 	}
 
 	@Test
+	public void subImageFNoOutType() {
+		final Img<IntType> imgA = TestImgGeneration.intArray(true, 10, 10);
+
+		int originalVal = imgA.cursor().next().get();
+
+		var imgC = (Img<IntType>)ops.binary("math.sub").input(imgA, new IntType(25)).apply();
+		assertEquals(originalVal - 25, imgC.cursor().next().get());
+	}
+
+	@Test
 	public void addRAIRealTypeC() {
 		final Img<IntType> imgIntType = TestImgGeneration.intArray(true, 10, 10);
 		int originalVal = imgIntType.cursor().next().get();

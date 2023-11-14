@@ -617,7 +617,7 @@ public final class Types {
 	}
 
 	private static boolean isApplicableToRawTypes(final Type arg, final Type param) {
-		if(arg instanceof Any) return true;
+		if (arg instanceof Any || arg.equals(Any.class)) return true;
 		final List<Class<?>> srcClasses = Types.raws(arg);
 		final List<Class<?>> destClasses = Types.raws(param);
 		for (final Class<?> destClass : destClasses) {
@@ -664,7 +664,7 @@ public final class Types {
 			if (destType instanceof TypeVariable<?>) {
 				final Type srcType = srcTypes[i];
 				final TypeVariable<?> destTypeVar = (TypeVariable<?>) destType;
-				if (srcType instanceof Any) continue;
+				if (srcType instanceof Any || srcType.equals(Any.class)) continue;
 				if (!isApplicableToTypeParameter(srcType, destTypeVar, typeBounds))
 					return false;
 				ignoredIndices.add(i);
@@ -1678,7 +1678,7 @@ public final class Types {
 
 			if (type instanceof Class) {
 				// just comparing two classes
-				return toClass.isAssignableFrom((Class<?>) type);
+				return type.equals(Any.class) || toClass.isAssignableFrom((Class<?>) type);
 			}
 
 			if (type instanceof ParameterizedType) {
@@ -1844,7 +1844,8 @@ public final class Types {
 				// parameters of the target type.
 				if (fromResolved != null && !fromResolved.equals(toResolved)) {
 					// check for anys
-					if (fromResolved instanceof Any || toResolved instanceof Any)
+					if (fromResolved instanceof Any || toResolved instanceof Any || fromResolved.equals(
+							Any.class) || toResolved.equals(Any.class))
 						continue;
 					if (fromResolved instanceof ParameterizedType &&
 						toResolved instanceof ParameterizedType)
@@ -1859,7 +1860,8 @@ public final class Types {
 								typeVarAssigns.put((TypeVariable<?>) toTypes[i], fromTypes[i]);
 								continue;
 							}
-							if(!(fromTypes[i] instanceof Any || toTypes[i] instanceof Any)) return false;
+							if (!(fromTypes[i] instanceof Any || toTypes[i] instanceof Any || fromTypes[i].equals(
+									Any.class) || toTypes[i].equals(Any.class))) return false;
 						}
 						continue;
 					}
@@ -2017,7 +2019,7 @@ public final class Types {
 			final GenericArrayType toGenericArrayType,
 			final Map<TypeVariable<?>, Type> typeVarAssigns)
 		{
-			if (type == null || type instanceof Any) {
+			if (type == null || type instanceof Any || type.equals(Any.class)) {
 				return true;
 			}
 
@@ -2097,7 +2099,7 @@ public final class Types {
 			final WildcardType toWildcardType,
 			final Map<TypeVariable<?>, Type> typeVarAssigns)
 		{
-			if (type == null || type instanceof Any) {
+			if (type == null || type instanceof Any || type.equals(Any.class)) {
 				return true;
 			}
 

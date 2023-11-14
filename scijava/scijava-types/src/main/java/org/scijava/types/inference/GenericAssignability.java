@@ -309,6 +309,10 @@ public class GenericAssignability {
 		// output to check.
 		if (returnType == void.class) return true;
 
+		// Functions with no outType specified will return Any's, and thus we do not
+		// need to check output
+		if (Any.class.equals(destTypes[destTypes.length - 1])) return true;
+
 		return Types.isAssignable(returnType, destTypes[destTypes.length - 1],
 			typeVarAssigns);
 	}
@@ -460,6 +464,11 @@ public class GenericAssignability {
 		}
 		if (inferFrom instanceof Any) {
 			Any any = (Any) inferFrom;
+			mapTypeVarsToAny(type, any, typeMappings);
+			return;
+		}
+		if (inferFrom.equals(Any.class)) {
+			Any any = new Any();
 			mapTypeVarsToAny(type, any, typeMappings);
 			return;
 		}

@@ -63,7 +63,7 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	 * @input input2
 	 * @input divideByZeroValue
 	 * @container result
-	 * @implNote op names='math.divide', priority='100.'
+	 * @implNote op names='math.div, math.divide', priority='100.'
 	 */
 	public final Computers.Arity3<T, T, T, T> divider = (input1, input2, dbzVal, output) -> { 
 		try {
@@ -80,20 +80,20 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	 * @input input1
 	 * @input input2
 	 * @container result
-	 * @implNote op names='math.multiply', priority='100.'
+	 * @implNote op names='math.mul, math.multiply', priority='100.'
 	 */
 	public final Computers.Arity2<T, T, T> multiplier = (input1, input2, output) -> {
 		output.set(input1);
 		output.mul(input2);
 	};
 
-	/*
+	/**
 	 * Sets the real component of an output real number to the subtraction between
 	 * the real component of two input real numbers.
 	 * @input input1
 	 * @input input2
 	 * @container result
-	 * @implNote op names='math.subtract', priority='100.'
+	 * @implNote op names='math.sub, math.subtract', priority='100.'
 	 */
 	public final Computers.Arity2<T, T, T> subtracter = (input1, input2, output) -> {
 		output.set(input1);

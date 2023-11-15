@@ -72,7 +72,7 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	 * @input input2
 	 * @input divideByZeroValue
 	 * @container result
-	 * @implNote op names='math.divide'
+	 * @implNote op names='math.div, math.divide'
 	 */
 	public final Computers.Arity3<I1, I2, Double, O> divider = (input1, input2, dbzVal, output) -> { 
 			if (input2.getRealDouble() == 0) {
@@ -89,7 +89,7 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	 * @input input1
 	 * @input input2
 	 * @container result
-	 * @implNote op names='math.multiply'
+	 * @implNote op names='math.mul, math.multiply'
 	 */
 	public final Computers.Arity2<I1, I2, O> multiplier = (input1, input2, output) -> 
 			output.setReal(input1.getRealDouble() * input2.getRealDouble());
@@ -112,7 +112,7 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	 * @input input1
 	 * @input input2
 	 * @container result
-	 * @implNote op names='math.subtract'
+	 * @implNote op names=`math.sub, math.subtract`
 	 */
 	public final Computers.Arity2<I1, I2, O> subtracter = (input1, input2, output) -> 
 			output.setReal(input1.getRealDouble() - input2.getRealDouble());

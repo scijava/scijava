@@ -147,4 +147,27 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 			output.setReal((long) input1.getRealDouble() ^ (long) input2
 				.getRealDouble());
 
+	/**
+	 * Sets the real component of an output real number to the real component
+	 * of a first input real number raised to the power of the real component of
+	 * a second input number
+	 * @input input1
+	 * @input input2
+	 * @container result
+	 * @implNote op names='math.pow, math.power'
+	 */
+	public final Computers.Arity2<I1, I2, O> power = (input1, input2, output) ->
+			output.setReal(Math.pow(input1.getRealDouble(), input2.getRealDouble()));
+
+	/**
+	 * Sets the real component of an output real number to the real component
+	 * of a first input real number modulus the real component of a second input
+	 * number
+	 * @input input1
+	 * @input input2
+	 * @container result
+	 * @implNote op names='math.modulus, math.mod, math.remainder'
+	 */
+	public final Computers.Arity2<I1, I2, O> moder = (input1, input2, output) ->
+			output.setReal(input1.getRealDouble() % input2.getRealDouble());
 }

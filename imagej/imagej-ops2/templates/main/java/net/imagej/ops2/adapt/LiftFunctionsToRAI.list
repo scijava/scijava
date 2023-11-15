@@ -1,6 +1,6 @@
 .include templates/main/java/net/imagej/ops2/adapt/Globals.list
 
-[LiftFunctionsToImg.java]
+[LiftFunctionsToRAI.java]
 
 functionNames = ```
 { arity ->

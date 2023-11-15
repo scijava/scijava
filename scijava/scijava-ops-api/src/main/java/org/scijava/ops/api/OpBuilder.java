@@ -1,8 +1,8 @@
 /*
  * #%L
- * SciJava Operations API: Outward-facing Interfaces used by the SciJava Operations framework.
+ * SciJava Operations: a framework for reusable algorithms.
  * %%
- * Copyright (C) 2021 - 2023 SciJava developers.
+ * Copyright (C) 2016 - 2019 SciJava Ops developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -42,6 +42,7 @@ import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
+import org.scijava.types.Any;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 
@@ -1169,7 +1170,7 @@ public class OpBuilder {
 		 * @see <a href="#inplace()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
 		 */
 		public Function<I1, ?> function() {
-			return matchFunction(env, opName, in1Type, Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, in1Type, Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -1323,7 +1324,7 @@ public class OpBuilder {
 		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public Function<I1, ?> function() {
-			return matchFunction(env, opName, type(in1), Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, type(in1), Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -1518,7 +1519,7 @@ public class OpBuilder {
 		 * @see <a href="#inplace1()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
 		 */
 		public BiFunction<I1, I2, ?> function() {
-			return matchFunction(env, opName, in1Type, in2Type, Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, in1Type, in2Type, Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -1693,7 +1694,7 @@ public class OpBuilder {
 		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public BiFunction<I1, I2, ?> function() {
-			return matchFunction(env, opName, type(in1), type(in2), Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, type(in1), type(in2), Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -1930,7 +1931,7 @@ public class OpBuilder {
 		 * @see <a href="#inplace1()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
 		 */
 		public Functions.Arity3<I1, I2, I3, ?> function() {
-			return matchFunction(env, opName, in1Type, in2Type, in3Type, Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, in1Type, in2Type, in3Type, Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -2126,7 +2127,7 @@ public class OpBuilder {
 		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public Functions.Arity3<I1, I2, I3, ?> function() {
-			return matchFunction(env, opName, type(in1), type(in2), type(in3), Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, type(in1), type(in2), type(in3), Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -2405,7 +2406,7 @@ public class OpBuilder {
 		 * @see <a href="#inplace1()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
 		 */
 		public Functions.Arity4<I1, I2, I3, I4, ?> function() {
-			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -2622,7 +2623,7 @@ public class OpBuilder {
 		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public Functions.Arity4<I1, I2, I3, I4, ?> function() {
-			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -2943,7 +2944,7 @@ public class OpBuilder {
 		 * @see <a href="#inplace1()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
 		 */
 		public Functions.Arity5<I1, I2, I3, I4, I5, ?> function() {
-			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -3181,7 +3182,7 @@ public class OpBuilder {
 		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public Functions.Arity5<I1, I2, I3, I4, I5, ?> function() {
-			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -3544,7 +3545,7 @@ public class OpBuilder {
 		 * @see <a href="#inplace1()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
 		 */
 		public Functions.Arity6<I1, I2, I3, I4, I5, I6, ?> function() {
-			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -3803,7 +3804,7 @@ public class OpBuilder {
 		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public Functions.Arity6<I1, I2, I3, I4, I5, I6, ?> function() {
-			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -4208,7 +4209,7 @@ public class OpBuilder {
 		 * @see <a href="#inplace1()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
 		 */
 		public Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, ?> function() {
-			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -4488,7 +4489,7 @@ public class OpBuilder {
 		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, ?> function() {
-			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -4935,7 +4936,7 @@ public class OpBuilder {
 		 * @see <a href="#inplace1()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
 		 */
 		public Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, ?> function() {
-			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -5236,7 +5237,7 @@ public class OpBuilder {
 		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, ?> function() {
-			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -5725,7 +5726,7 @@ public class OpBuilder {
 		 * @see <a href="#inplace1()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
 		 */
 		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, ?> function() {
-			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -6047,7 +6048,7 @@ public class OpBuilder {
 		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, ?> function() {
-			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -6578,7 +6579,7 @@ public class OpBuilder {
 		 * @see <a href="#inplace1()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
 		 */
 		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, ?> function() {
-			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -6921,7 +6922,7 @@ public class OpBuilder {
 		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, ?> function() {
-			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -7494,7 +7495,7 @@ public class OpBuilder {
 		 * @see <a href="#inplace1()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
 		 */
 		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, ?> function() {
-			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -7858,7 +7859,7 @@ public class OpBuilder {
 		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, ?> function() {
-			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -8473,7 +8474,7 @@ public class OpBuilder {
 		 * @see <a href="#inplace1()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
 		 */
 		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, ?> function() {
-			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -8858,7 +8859,7 @@ public class OpBuilder {
 		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, ?> function() {
-			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -9515,7 +9516,7 @@ public class OpBuilder {
 		 * @see <a href="#inplace1()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
 		 */
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, ?> function() {
-			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -9921,7 +9922,7 @@ public class OpBuilder {
 		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, ?> function() {
-			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -10620,7 +10621,7 @@ public class OpBuilder {
 		 * @see <a href="#inplace1()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
 		 */
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, ?> function() {
-			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -11047,7 +11048,7 @@ public class OpBuilder {
 		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, ?> function() {
-			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -11788,7 +11789,7 @@ public class OpBuilder {
 		 * @see <a href="#inplace1()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
 		 */
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, ?> function() {
-			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -12236,7 +12237,7 @@ public class OpBuilder {
 		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, ?> function() {
-			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -13019,7 +13020,7 @@ public class OpBuilder {
 		 * @see <a href="#inplace1()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
 		 */
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, ?> function() {
-			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**
@@ -13488,7 +13489,7 @@ public class OpBuilder {
 		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, ?> function() {
-			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 		/**

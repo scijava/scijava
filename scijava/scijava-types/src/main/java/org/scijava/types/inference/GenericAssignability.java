@@ -309,6 +309,10 @@ public class GenericAssignability {
 		// output to check.
 		if (returnType == void.class) return true;
 
+		// Functions with no outType specified will return Any's, and thus we do not
+		// need to check output
+		if (Any.class.equals(destTypes[destTypes.length - 1])) return true;
+
 		return Types.isAssignable(returnType, destTypes[destTypes.length - 1],
 			typeVarAssigns);
 	}
@@ -463,6 +467,11 @@ public class GenericAssignability {
 			mapTypeVarsToAny(type, any, typeMappings);
 			return;
 		}
+		if (inferFrom.equals(Any.class)) {
+			Any any = new Any();
+			mapTypeVarsToAny(type, any, typeMappings);
+			return;
+		}
 		// Finding the supertype here is really important. Suppose that we are
 		// inferring from a StrangeThing<Long> extends Thing<Double> and our
 		// Op requires a Thing<T>. We need to ensure that T gets
@@ -489,7 +498,8 @@ public class GenericAssignability {
 		else if (superInferFrom == null) {
 			// edge case 1: if inferFrom is an Object, superInferFrom will be null
 			// when type is some interface.
-			if (Object.class.equals(inferFrom)) {
+			if (Object.class.equals(inferFrom) ||
+					(inferFrom instanceof TypeVariable && Object.class.equals(((TypeVariable<?>) inferFrom).getBounds()[0]))) {
 				mapTypeVarsToAny(type, typeMappings);
 				return;
 			}

@@ -617,7 +617,7 @@ public final class Types {
 	}
 
 	private static boolean isApplicableToRawTypes(final Type arg, final Type param) {
-		if(arg instanceof Any) return true;
+		if (arg instanceof Any || arg.equals(Any.class)) return true;
 		final List<Class<?>> srcClasses = Types.raws(arg);
 		final List<Class<?>> destClasses = Types.raws(param);
 		for (final Class<?> destClass : destClasses) {
@@ -664,7 +664,7 @@ public final class Types {
 			if (destType instanceof TypeVariable<?>) {
 				final Type srcType = srcTypes[i];
 				final TypeVariable<?> destTypeVar = (TypeVariable<?>) destType;
-				if (srcType instanceof Any) continue;
+				if (srcType instanceof Any || srcType.equals(Any.class)) continue;
 				if (!isApplicableToTypeParameter(srcType, destTypeVar, typeBounds))
 					return false;
 				ignoredIndices.add(i);
@@ -1678,7 +1678,7 @@ public final class Types {
 
 			if (type instanceof Class) {
 				// just comparing two classes
-				return toClass.isAssignableFrom((Class<?>) type);
+				return type.equals(Any.class) || toClass.isAssignableFrom((Class<?>) type);
 			}
 
 			if (type instanceof ParameterizedType) {
@@ -1768,6 +1768,20 @@ public final class Types {
 
 			// null means the two types are not compatible
 			if (fromTypeVarAssigns == null) {
+				if (type instanceof TypeVariable) {
+					TypeVariable<?> typeVar = (TypeVariable<?>)type;
+					Type[] bounds = typeVar.getBounds();
+					if (typeVarAssigns.containsKey(type)) {
+						return isAssignable(typeVarAssigns.get(type), toParameterizedType, typeVarAssigns);
+					}
+					if (bounds.length == 1 && Object.class.equals(bounds[0])) {
+						// We have an unbound (as bound is Object) type variable with no
+						// assignment in the type variable map. Thus we can bind it to
+						// our toType
+						typeVarAssigns.put((TypeVariable) type, toParameterizedType);
+						return true;
+					}
+				}
 				return false;
 			}
 
@@ -1789,12 +1803,37 @@ public final class Types {
 				
 				Type toResolved = resolveTypeParameters(toTypeArg, toTypeVarAssigns);
 				Type fromResolved = resolveTypeParameters(fromTypeArg, fromTypeVarAssigns);
-				
-				// if toResolved is null, it must be linked to a unbounded type variable.
+
+				Type[] toBounds = determineBounds(var, toTypeArg, toResolved, toTypeVarAssigns);
+				Type[] fromBounds = determineBounds(var, fromTypeArg, fromResolved, fromTypeVarAssigns);
+
+				// if either type is bounded we need to recurse
+				if (toBounds != null) {
+					for (Type to : toBounds) {
+						if (fromBounds != null) {
+							for (Type from : fromBounds) {
+								if (!isAssignable(from, to, typeVarAssigns)) return false;
+							}
+						} else if (!isAssignable(fromResolved == null ? fromTypeArg : fromResolved, to, typeVarAssigns)) return false;
+					}
+					if (toTypeArg == null && toResolved == null && fromResolved != null && typeVarAssigns != null) {
+						TypeVariable<?> unbounded = (TypeVariable<?>) toTypeVarAssigns.get(var);
+						typeVarAssigns.put(unbounded, fromResolved);
+					}
+					continue;
+				}
+				if (fromBounds != null) {
+					for (Type from : fromBounds) {
+						if (!isAssignable(from, toResolved == null ? toTypeArg : toResolved, typeVarAssigns)) return false;
+					}
+					continue;
+				}
+
+				// if toResolved and toTypeArg are null, it must be linked to an unbounded type variable.
 				// We can then bound it to fromResolved (assuming fromResolved actually
 				// represents some type i.e. not null) in toTypeVarAssigns and typeVarAssigns.
 				// Effectively toResolved = fromResolved.
-				if (toResolved == null && fromResolved != null && typeVarAssigns != null) {
+				if (toTypeArg == null && toResolved == null && fromResolved != null && typeVarAssigns != null) {
 					TypeVariable<?> unbounded = (TypeVariable<?>) toTypeVarAssigns.get(var);
 					typeVarAssigns.put(unbounded, fromResolved);
 					toResolved = fromResolved;
@@ -1803,10 +1842,10 @@ public final class Types {
 				// parameters must either be absent from the subject type, within
 				// the bounds of the wildcard type, or be an exact match to the
 				// parameters of the target type.
-				if (fromResolved != null && !fromResolved.equals(toResolved) && !(toResolved instanceof WildcardType
-						&& isAssignable(fromResolved, toResolved, typeVarAssigns))) {
+				if (fromResolved != null && !fromResolved.equals(toResolved)) {
 					// check for anys
-					if (fromResolved instanceof Any || toResolved instanceof Any)
+					if (fromResolved instanceof Any || toResolved instanceof Any || fromResolved.equals(
+							Any.class) || toResolved.equals(Any.class))
 						continue;
 					if (fromResolved instanceof ParameterizedType &&
 						toResolved instanceof ParameterizedType)
@@ -1821,7 +1860,8 @@ public final class Types {
 								typeVarAssigns.put((TypeVariable<?>) toTypes[i], fromTypes[i]);
 								continue;
 							}
-							if(!(fromTypes[i] instanceof Any || toTypes[i] instanceof Any)) return false;
+							if (!(fromTypes[i] instanceof Any || toTypes[i] instanceof Any || fromTypes[i].equals(
+									Any.class) || toTypes[i].equals(Any.class))) return false;
 						}
 						continue;
 					}
@@ -1830,7 +1870,75 @@ public final class Types {
 			}
 			return true;
 		}
-		
+
+		/**
+		 * Helper method to try and find the most appropriate type bounds for a
+		 * particular {@code var}.
+		 *
+		 * @param var the type variable to look up
+		 * @param typeArg The {@link #unrollVariableAssignments} result for {@code var}
+		 * @param resolvedType The {@link #resolveTypeParameters} result for {@code typeArg}
+		 * @param typeVarAssigns the map used for the look up
+		 * @return An array of {@code Types} representing the bounds of the given {@code var}
+		 */
+		private static Type[] determineBounds(TypeVariable<?> var, Type typeArg, Type resolvedType, Map<TypeVariable<?>, Type> typeVarAssigns) {
+			Type[] bounds = null;
+			if (resolvedType == null && typeArg == null) {
+				typeArg = unrollVariableAssignments(var, typeVarAssigns, true);
+				if (typeArg != null) {
+					// Definitely have a bounded param
+					bounds = ((TypeVariable<?>)typeArg).getBounds();
+					Set<Type> nonObjects = new HashSet<>(bounds.length);
+					for (Type t : bounds) {
+						if (!Object.class.equals(t)) {
+							nonObjects.add(t);
+						}
+					}
+					if (nonObjects.isEmpty()) bounds = null;
+					else if (nonObjects.size() != bounds.length) {
+						bounds = nonObjects.toArray(new Type[nonObjects.size()]);
+					}
+				}
+			} else  {
+				WildcardType wt = null;
+				if (resolvedType != null && resolvedType instanceof WildcardType) {
+					wt = ((WildcardType) resolvedType);
+				} else if (typeArg != null && typeArg instanceof WildcardType) {
+					wt = ((WildcardType) typeArg);
+				}
+				if (wt != null) {
+					bounds = wt.getUpperBounds();
+				}
+			}
+
+			if (bounds != null) {
+				Set<Type> actualTypes = new HashSet<>(bounds.length);
+				Set<Type> parentBounds = new HashSet<>(Arrays.asList(bounds));
+				for (Type b : bounds) {
+					if (b instanceof ParameterizedType) {
+						for (Type t : ((ParameterizedType)b).getActualTypeArguments()) {
+							if (t instanceof TypeVariable) {
+								Type[] subBounds = ((TypeVariable<?>)t).getBounds();
+								for (Type s : subBounds) {
+									// This stops recursive types from infinite recursion
+									if (parentBounds.contains(s)) {
+										actualTypes.add(((ParameterizedType)b).getRawType());
+									} else {
+										actualTypes.add(b);
+									}
+								}
+							} else {
+								actualTypes.add(b);
+							}
+						}
+					} else actualTypes.add(b);
+
+					bounds = actualTypes.toArray(new Type[actualTypes.size()]);
+				}
+			}
+			return bounds;
+		}
+
 		private static Type resolveTypeParameters(Type type, Map<TypeVariable<?>, Type> typeVarAssigns) {
 			Type toTypeArg;
 			if (!(Types.containsTypeVars(type))) return type;
@@ -1852,16 +1960,30 @@ public final class Types {
 		}
 
 		/**
+		 * As {@link #unrollVariableAssignments(TypeVariable, Map, boolean)} with
+		 * {@code acceptBounds} defaulting to {@code false}, so that only true
+		 * assignments will be unrolled.
+		 */
+		private static Type unrollVariableAssignments(TypeVariable<?> var,
+				final Map<TypeVariable<?>, Type> typeVarAssigns) {
+			return unrollVariableAssignments(var, typeVarAssigns, false);
+		}
+
+		/**
 		 * Look up {@code var} in {@code typeVarAssigns} <em>transitively</em>, i.e.
 		 * keep looking until the value found is <em>not</em> a type variable.
 		 *
 		 * @param var the type variable to look up
 		 * @param typeVarAssigns the map used for the look up
+		 * @param acceptBounds If {@code true} and a variable chain does not
+		 *                     lead to a concrete type assignment, then the bounds
+		 *                     of the leaf variable will be returned instead of
+		 *                     {@code null}.
 		 * @return Type or {@code null} if some variable was not in the map
 		 * @since 3.2
 		 */
 		private static Type unrollVariableAssignments(TypeVariable<?> var,
-			final Map<TypeVariable<?>, Type> typeVarAssigns)
+			final Map<TypeVariable<?>, Type> typeVarAssigns, boolean acceptBounds)
 		{
 			Type result;
 			do {
@@ -1869,6 +1991,11 @@ public final class Types {
 				if (result instanceof TypeVariable && !result.equals(var)) {
 					var = (TypeVariable<?>) result;
 					continue;
+				}
+				else if (result == null && acceptBounds && var.getBounds().length > 0) {
+					// We didn't find an absolute mapping for the given variable, but the
+					// variable is bounded so we can return it.
+					result = var;
 				}
 				break;
 			}
@@ -1892,7 +2019,7 @@ public final class Types {
 			final GenericArrayType toGenericArrayType,
 			final Map<TypeVariable<?>, Type> typeVarAssigns)
 		{
-			if (type == null || type instanceof Any) {
+			if (type == null || type instanceof Any || type.equals(Any.class)) {
 				return true;
 			}
 
@@ -1972,7 +2099,7 @@ public final class Types {
 			final WildcardType toWildcardType,
 			final Map<TypeVariable<?>, Type> typeVarAssigns)
 		{
-			if (type == null || type instanceof Any) {
+			if (type == null || type instanceof Any || type.equals(Any.class)) {
 				return true;
 			}
 

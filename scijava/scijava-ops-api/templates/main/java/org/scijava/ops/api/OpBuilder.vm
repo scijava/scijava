@@ -42,6 +42,7 @@ import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
+import org.scijava.types.Any;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 
@@ -496,7 +497,7 @@ public class OpBuilder {
 		 * @see <a href="#inplace#if ( $arity > 1 )1#end()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
 		 */
 		public $functionArity.call($arity)$genericsWildcardFunction.call($arity) function() {
-			return matchFunction(env, opName, $inputTypes.call($arity), Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, $inputTypes.call($arity), Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 #foreach($a in [1..$arity])
@@ -664,7 +665,7 @@ public class OpBuilder {
 		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public $functionArity.call($arity)$genericsWildcardFunction.call($arity) function() {
-			return matchFunction(env, opName, $inputTypesFromArgs.call($arity), Nil.of(Object.class), OpBuilder.this.hints);
+			return matchFunction(env, opName, $inputTypesFromArgs.call($arity), Nil.of(Any.class), OpBuilder.this.hints);
 		}
 
 #foreach($a in [1..$arity])

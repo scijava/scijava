@@ -302,17 +302,19 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 		final Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
 		if (reqType == null) return true;
-		if (reqType instanceof ParameterizedType) {
-			if (!GenericAssignability.checkGenericAssignability(opType,
-				(ParameterizedType) reqType, typeVarAssigns, true))
-			{
-				return false;
+		try {
+			if (reqType instanceof ParameterizedType) {
+				if (!GenericAssignability.checkGenericAssignability(opType, (ParameterizedType) reqType, typeVarAssigns, true)) {
+					return false;
+				}
 			}
-		}
-		else {
-			if (!Types.isAssignable(opType, reqType)) {
-				return false;
+			else {
+				if (!Types.isAssignable(opType, reqType)) {
+					return false;
+				}
 			}
+		} catch (IllegalStateException e) {
+			return false;
 		}
 		return true;
 	}

@@ -32,6 +32,10 @@ package net.imagej.ops2.math;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
+import org.scijava.ops.spi.Nullable;
+import org.scijava.ops.spi.OpCollection;
+
+import java.util.Objects;
 
 /**
  * Binary Ops of the {@code math} namespace which operate on {@link RealType}s.
@@ -40,7 +44,7 @@ import org.scijava.function.Computers;
  *
  * @author Leon Yang
  */
-public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2>, O extends RealType<O>>{
+public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2>, O extends RealType<O>> {
 
 	/**
 	 * Sets the real component of an output real number to the addition of the
@@ -70,17 +74,31 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	 * real component of two input real numbers.
 	 * @input input1
 	 * @input input2
-	 * @input divideByZeroValue
-	 * @container result
-	 * @implNote op names='math.divide'
+	 * @input dbzVal
+	 * @container output
+	 * @implNote op names='math.div, math.divide'
 	 */
-	public final Computers.Arity3<I1, I2, Double, O> divider = (input1, input2, dbzVal, output) -> { 
-			if (input2.getRealDouble() == 0) {
-				output.setReal(dbzVal);
-			}
-			else {
-				output.setReal(input1.getRealDouble() / input2.getRealDouble());
-			}
+	public final Computers.Arity3<I1, I2, Double, O> divider = (input1, input2, dbzVal, output) ->
+	{
+		if (Objects.nonNull(dbzVal) && (input2.getRealDouble() == 0)) {
+			output.setReal(dbzVal);
+		}
+		else {
+			output.setReal(input1.getRealDouble() / input2.getRealDouble());
+		}
+	};
+
+	/**
+	 * Sets the real component of an output real number to the division of the
+	 * real component of two input real numbers.
+	 * @input input1
+	 * @input input2
+	 * @container output
+	 * @implNote op names='math.div, math.divide'
+	 */
+	public final Computers.Arity2<I1, I2, O> dividerB = (input1, input2, output) ->
+	{
+		divider.compute(input1, input2, null, output);
 	};
 
 	/**
@@ -89,7 +107,7 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	 * @input input1
 	 * @input input2
 	 * @container result
-	 * @implNote op names='math.multiply'
+	 * @implNote op names='math.mul, math.multiply'
 	 */
 	public final Computers.Arity2<I1, I2, O> multiplier = (input1, input2, output) -> 
 			output.setReal(input1.getRealDouble() * input2.getRealDouble());
@@ -112,7 +130,7 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	 * @input input1
 	 * @input input2
 	 * @container result
-	 * @implNote op names='math.subtract'
+	 * @implNote op names=`math.sub, math.subtract`
 	 */
 	public final Computers.Arity2<I1, I2, O> subtracter = (input1, input2, output) -> 
 			output.setReal(input1.getRealDouble() - input2.getRealDouble());

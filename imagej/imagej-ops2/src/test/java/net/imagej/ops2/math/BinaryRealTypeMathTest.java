@@ -34,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.type.numeric.integer.IntType;
 import org.junit.jupiter.api.Test;
+import org.scijava.ops.engine.math.MathOps;
 
 /**
  * Tests {@link BinaryRealTypeMath}.
@@ -42,24 +43,77 @@ import org.junit.jupiter.api.Test;
  */
 public class BinaryRealTypeMathTest extends AbstractOpTest {
 
+	private static final IntType A = new IntType(25);
+	private static final IntType B = new IntType(25);
 	@Test
 	public void testAddF() {
-		IntType a = new IntType(25);
-		IntType b = new IntType(45);
-		IntType c = ops.binary("math.add").input(a, b).outType(IntType.class).apply();
-		assertEquals(c.get(), a.get() + b.get());
+		for (String opName : MathOps.ADD.split(", ")) {
+			IntType c = ops.binary(opName).input(A, B).outType(IntType.class).apply();
+			assertEquals(A.get() + B.get(), c.get());
+		}
 	}
 
 	@Test
 	public void testAddC() {
-		IntType a = new IntType(25);
-		IntType b = new IntType(45);
-		IntType c = new IntType();
-		ops.binary("math.add").input(a, b).output(c).compute();
-		assertEquals(c.get(), a.get() + b.get());
+		for (String opName : MathOps.ADD.split(", ")) {
+			IntType c = new IntType();
+			ops.binary(opName).input(A, B).output(c).compute();
+			assertEquals(A.get() + B.get(), c.get());
+		}
 	}
 
-// FIXME: currently not working
+	@Test
+	public void testSubF() {
+		for (String opName : MathOps.SUB.split(", ")) {
+			IntType c = ops.binary(opName).input(A, B).outType(IntType.class).apply();
+			assertEquals(A.get() - B.get(), c.get());
+		}
+	}
+
+	@Test
+	public void testSubC() {
+		for (String opName : MathOps.SUB.split(", ")) {
+			IntType c = new IntType();
+			ops.binary(opName).input(A, B).output(c).compute();
+			assertEquals(A.get() - B.get(), c.get());
+		}
+	}
+
+	@Test
+	public void testDivF() {
+		for (String opName : MathOps.DIV.split(", ")) {
+			IntType c = ops.binary(opName).input(A, B).outType(IntType.class).apply();
+			assertEquals(A.get() / B.get(), c.get());
+		}
+	}
+
+	@Test
+	public void testDivC() {
+		for (String opName : MathOps.DIV.split(", ")) {
+			IntType c = new IntType();
+			ops.binary(opName).input(A, B).output(c).compute();
+			assertEquals(A.get() / B.get(), c.get());
+		}
+	}
+
+	@Test
+	public void testMulF() {
+		for (String opName : MathOps.MUL.split(", ")) {
+			IntType c = ops.binary(opName).input(A, B).outType(IntType.class).apply();
+			assertEquals(A.get() * B.get(), c.get());
+		}
+	}
+
+	@Test
+	public void testMulC() {
+		for (String opName : MathOps.MUL.split(", ")) {
+			IntType c = new IntType();
+			ops.binary(opName).input(A, B).output(c).compute();
+			assertEquals(A.get() * B.get(), c.get());
+		}
+	}
+
+// FIXME: inplaces would be nice
 //	@Test
 //	public void testAddI() {
 //		IntType a = new IntType(25);

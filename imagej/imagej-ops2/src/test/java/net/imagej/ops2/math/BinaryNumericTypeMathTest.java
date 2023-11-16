@@ -37,11 +37,11 @@ import org.junit.jupiter.api.Test;
 import org.scijava.ops.engine.math.MathOps;
 
 /**
- * Tests {@link BinaryRealTypeMath}.
+ * Tests {@link BinaryNumericTypeMath}.
  *
  * @author Mark Hiner
  */
-public class BinaryRealTypeMathTest extends AbstractOpTest {
+public class BinaryNumericTypeMathTest extends AbstractOpTest {
 
 	private static final IntType A = new IntType(12);
 	private static final IntType B = new IntType(7);

@@ -74,7 +74,8 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 
 	/**
 	 * Sets the real component of an output real number to the division of the
-	 * real component of two input real numbers.
+	 * real component of two input real numbers, with optional zero-value to use
+	 * in case of zero division.
 	 * @input input1
 	 * @input input2
 	 * @input dbzVal
@@ -100,6 +101,8 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	/**
 	 * Sets the real component of an output real number to the division of the
 	 * real component of two input real numbers.
+	 * TODO - merge with trinary divider using @Nullable
+	 *
 	 * @input input1
 	 * @input input2
 	 * @container output

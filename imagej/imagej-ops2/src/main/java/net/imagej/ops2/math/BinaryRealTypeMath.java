@@ -137,14 +137,14 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 				.getRealDouble());
 
 	/**
-	 * Sets the real component of an output real number to the subtraction between
+	 * Sets the real component of an output real number to the difference of
 	 * the real component of two input real numbers.
 	 * @input input1
 	 * @input input2
 	 * @container result
-	 * @implNote op names=`math.sub, math.subtract`
+	 * @implNote op names='math.sub, math.subtract'
 	 */
-	public final Computers.Arity2<I1, I2, O> subtracter = (input1, input2, output) -> 
+	public final Computers.Arity2<I1, I2, O> subtracter = (input1, input2, output) ->
 			output.setReal(input1.getRealDouble() - input2.getRealDouble());
 
 	/**

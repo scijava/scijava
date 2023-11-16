@@ -45,6 +45,7 @@ import java.util.Objects;
  * TODO: Can these be static?
  *
  * @author Leon Yang
+ * @author Mark Hiner
  */
 public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2>, O extends RealType<O>> {
 

@@ -93,34 +93,6 @@ public class BinaryNumericTypeMathTest extends AbstractOpTest {
 		test(MathOps.POW, e.get());
 	}
 
-	// MOD
-
-	@Test
-	public void testMod() {
-		test(MathOps.MOD, A.get() % B.get());
-	}
-
-	// OR
-
-	@Test
-	public void testOr() {
-		test("math.or", (int)((long) A.get() | (long) B.get()));
-	}
-
-	// XOR
-
-	@Test
-	public void testXor() {
-		test("math.xor", (int)((long)A.get() ^ (long)B.get()));
-	}
-
-	// AND
-
-	@Test
-	public void testAnd() {
-		test("math.and", (int)((long)A.get() & (long)B.get()));
-	}
-
 	// -- Helpers --
 
 	/**

@@ -133,7 +133,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Computers.Arity0<double[]> op = //
 			name("test.addArrays").arity0().outType(double[].class).computer();
 		op.compute(actual);
-		assertTrue(Arrays.equals(actual, expected));
+		assertTrue(Arrays.equals(expected, actual));
 	}
 
 	/** Runs a nullary function with a given output type. */
@@ -180,7 +180,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 				.inType($doubleClassString.call($arity)) //
 				.function();
 		final Object actual = op.apply($args.call($arity));
-		assertEquals(actual, expected);
+		assertEquals(expected, actual);
 	}
 
 #foreach($i in [1..$arity])
@@ -212,7 +212,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 			name("test.addDoubles").arity$arity().inType($doubleClassString.call($arity)) //
 				.outType(Double.class).function();
 		final double actual = op.apply($args.call($arity));
-		assertEquals(actual, expected, 0.);
+		assertEquals(expected, actual, 0.);
 	}
 
 	/** Matches a ${arity}-arity computer using input types + output type. */
@@ -229,7 +229,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 				.inType(${arrayClassString.call($arity)}) //
 				.outType(double[].class).computer();
 		op.compute($args.call($arity), actual);
-		assertTrue(Arrays.equals(actual, expected));
+		assertTrue(Arrays.equals(expected, actual));
 	}
 
 	/** Matches a ${arity}-arity function using input value only. */
@@ -245,7 +245,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 				.input($args.call($arity)) //
 				.function();
 		final Object actual = op.apply($args.call($arity));
-		assertEquals(actual, expected);
+		assertEquals(expected, actual);
 	}
 
 #foreach($i in [1..$arity])
@@ -275,7 +275,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 			.arity$arity() //
 			.input($args.call($arity)) //
 			.apply();
-		assertEquals(actual, expected);
+		assertEquals(expected, actual);
 	}
 
 #foreach($i in [1..$arity])
@@ -305,7 +305,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 			name("test.addDoubles").arity$arity().input($args.call($arity)) //
 				.outType(Double.class).function();
 		final double actual = op.apply($args.call($arity));
-		assertEquals(actual, expected, 0.);
+		assertEquals(expected, actual, 0.);
 	}
 
 	/** Matches a unary computer using input types + output type. */
@@ -322,7 +322,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 				.input($args.call($arity)) //
 				.output(actual).computer();
 		op.compute($args.call($arity), actual);
-		assertTrue(Arrays.equals(actual, expected));
+		assertTrue(Arrays.equals(expected, actual));
 	}
 
 	/** Runs a unary function using input value + output type. */
@@ -336,7 +336,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 			.arity$arity() //
 			.input($args.call($arity)) //
 			.outType(Double.class).apply();
-		assertEquals(actual, expected);
+		assertEquals(expected, actual);
 	}
 
 	/** Matches a unary computer using input value + output value. */
@@ -353,7 +353,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 				.input($args.call($arity)) //
 				.output(actual).computer();
 		op.compute($args.call($arity), actual);
-		assertTrue(Arrays.equals(actual, expected));
+		assertTrue(Arrays.equals(expected, actual));
 	}
 
 	/** Runs a unary computer using input value + output value. */
@@ -368,7 +368,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 			.arity$arity() //
 			.input($args.call($arity)) //
 			.output(actual).compute();
-		assertTrue(Arrays.equals(actual, expected));
+		assertTrue(Arrays.equals(expected, actual));
 	}
 #end
 

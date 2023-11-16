@@ -30,25 +30,27 @@
 package net.imagej.ops2.math;
 
 import net.imglib2.type.numeric.NumericType;
-import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
 
+import java.util.Objects;
+
 /**
- * Binary Ops of the {@code math} namespace which operate on {@link RealType}s.
+ * Binary Ops of the {@code math} namespace which operate on {@link NumericType}s.
  * 
  * TODO: Can these be static?
  *
  * @author Leon Yang
+ * @author Mark Hiner
  */
 public class BinaryNumericTypeMath <T extends NumericType<T>> {
 
 	/**
-	 * Sets the real component of an output real number to the addition of the
-	 * real components of two input real numbers.
+	 * Sum two numeric types
+	 *
 	 * @input input1
 	 * @input input2
-	 * @container sum
+	 * @container output
 	 * @implNote op names='math.add', priority='100.'
 	 */
 	public final Computers.Arity2<T, T, T> adder = (input1, input2, output) -> {
@@ -57,12 +59,13 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	};
 
 	/**
-	 * Sets the real component of an output real number to the division of the
-	 * real component of two input real numbers.
+	 * Divide a first numeric type by a second, with optional zero-value to use in
+	 * case of zero division.
+	 *
 	 * @input input1
 	 * @input input2
 	 * @input divideByZeroValue
-	 * @container result
+	 * @container output
 	 * @implNote op names='math.div, math.divide', priority='100.'
 	 */
 	public final Computers.Arity3<T, T, T, T> divider = (input1, input2, dbzVal, output) -> { 
@@ -70,16 +73,33 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 			output.set(input1);
 			output.div(input2);
 		} catch(Exception e) {
-			output.set(dbzVal);
+			if (Objects.nonNull(dbzVal)) {
+				output.set(dbzVal);
+			} else {
+				throw e;
+			}
 		}
 	};
 
 	/**
-	 * Sets the real component of an output real number to the multiplication of
-	 * the real component of two input real numbers.
+	 * Divide a first numeric type by a second.
+	 * TODO: merge with trinary divider using @Nullable
+	 *
 	 * @input input1
 	 * @input input2
-	 * @container result
+	 * @container output
+	 * @implNote op names='math.div, math.divide', priority='100.'
+	 */
+	public final Computers.Arity2<T, T, T> dividerB = (input1, input2, output) -> {
+		divider.compute(input1, input2, null, output);
+	};
+
+	/**
+	 * Multiply two numeric types
+	 *
+	 * @input input1
+	 * @input input2
+	 * @container output
 	 * @implNote op names='math.mul, math.multiply', priority='100.'
 	 */
 	public final Computers.Arity2<T, T, T> multiplier = (input1, input2, output) -> {
@@ -88,11 +108,11 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	};
 
 	/**
-	 * Sets the real component of an output real number to the subtraction between
-	 * the real component of two input real numbers.
+	 * Subtract a second numeric type from a first
+	 *
 	 * @input input1
 	 * @input input2
-	 * @container result
+	 * @container output
 	 * @implNote op names='math.sub, math.subtract', priority='100.'
 	 */
 	public final Computers.Arity2<T, T, T> subtracter = (input1, input2, output) -> {
@@ -100,4 +120,16 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 		output.sub(input2);
 	};
 
+	/**
+	 * Raise a first numeric type to the power of a second
+	 *
+	 * @input input1
+	 * @input input2
+	 * @container result
+	 * @implNote op names='math.pow, math.power', priority='100.'
+	 */
+	public final Computers.Arity2<T, T, T> power = (input1, input2, output) -> {
+		output.set(input1);
+		output.pow(input2);
+	};
 }

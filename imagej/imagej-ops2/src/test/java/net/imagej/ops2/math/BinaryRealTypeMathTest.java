@@ -33,7 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.type.numeric.integer.IntType;
-import net.imglib2.util.Util;
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.engine.math.MathOps;
 
@@ -47,171 +46,100 @@ public class BinaryRealTypeMathTest extends AbstractOpTest {
 	private static final IntType A = new IntType(12);
 	private static final IntType B = new IntType(7);
 
+	// TODO inplace would be nice
+	private static String[] methods = new String[]{"function", "computer"};
+
 	// ADD
 	@Test
-	public void testAddF() {
-		for (String opName : MathOps.ADD.split(", ")) {
-			IntType c = ops.binary(opName).input(A, B).outType(IntType.class).apply();
-			assertEquals(A.get() + B.get(), c.get());
-		}
-	}
-
-	@Test
-	public void testAddC() {
-		for (String opName : MathOps.ADD.split(", ")) {
-			IntType c = new IntType();
-			ops.binary(opName).input(A, B).output(c).compute();
-			assertEquals(A.get() + B.get(), c.get());
-		}
+	public void testAdd() {
+		IntType e = A.copy();
+		e.add(B);
+		test(MathOps.ADD, e.get());
 	}
 
 	// SUB
 
 	@Test
-	public void testSubF() {
-		for (String opName : MathOps.SUB.split(", ")) {
-			IntType c = ops.binary(opName).input(A, B).outType(IntType.class).apply();
-			assertEquals(A.get() - B.get(), c.get());
-		}
-	}
-
-	@Test
-	public void testSubC() {
-		for (String opName : MathOps.SUB.split(", ")) {
-			IntType c = new IntType();
-			ops.binary(opName).input(A, B).output(c).compute();
-			assertEquals(A.get() - B.get(), c.get());
-		}
+	public void testSub() {
+		IntType e = A.copy();
+		e.sub(B);
+		test(MathOps.SUB, e.get());
 	}
 
 	// DIV
 
 	@Test
-	public void testDivF() {
-		for (String opName : MathOps.DIV.split(", ")) {
-			IntType c = ops.binary(opName).input(A, B).outType(IntType.class).apply();
-			assertEquals(Util.round(A.getRealDouble() / B.get()), c.get());
-		}
-	}
-
-	@Test
-	public void testDivC() {
-		for (String opName : MathOps.DIV.split(", ")) {
-			IntType c = new IntType();
-			ops.binary(opName).input(A, B).output(c).compute();
-			assertEquals(Util.round(A.getRealDouble() / B.get()), c.get());
-		}
+	public void testDiv() {
+		IntType e = A.copy();
+		e.div(B);
+		test(MathOps.DIV, e.get());
 	}
 
 	// MUL
 
 	@Test
-	public void testMulF() {
-		for (String opName : MathOps.MUL.split(", ")) {
-			IntType c = ops.binary(opName).input(A, B).outType(IntType.class).apply();
-			assertEquals(A.get() * B.get(), c.get());
-		}
-	}
-
-	@Test
-	public void testMulC() {
-		for (String opName : MathOps.MUL.split(", ")) {
-			IntType c = new IntType();
-			ops.binary(opName).input(A, B).output(c).compute();
-			assertEquals(A.get() * B.get(), c.get());
-		}
+	public void testMul() {
+		IntType e = A.copy();
+		e.mul(B);
+		test(MathOps.MUL, e.get());
 	}
 
 	// POW
 
 	@Test
-	public void testPowF() {
-		for (String opName : MathOps.POW.split(", ")) {
-			IntType c = ops.binary(opName).input(A, B).outType(IntType.class).apply();
-			assertEquals(Math.pow(A.get(), B.get()), c.get());
-		}
-	}
-
-	@Test
-	public void testPowC() {
-		for (String opName : MathOps.POW.split(", ")) {
-			IntType c = new IntType();
-			ops.binary(opName).input(A, B).output(c).compute();
-			assertEquals(Math.pow(A.get(), B.get()), c.get());
-		}
+	public void testPow() {
+		IntType e = A.copy();
+		e.pow(B);
+		test(MathOps.POW, e.get());
 	}
 
 	// MOD
 
 	@Test
-	public void testModF() {
-		for (String opName : MathOps.MOD.split(", ")) {
-			IntType c = ops.binary(opName).input(A, B).outType(IntType.class).apply();
-			assertEquals(A.get() % B.get(), c.get());
-		}
-	}
-
-	@Test
-	public void testModC() {
-		for (String opName : MathOps.MOD.split(", ")) {
-			IntType c = new IntType();
-			ops.binary(opName).input(A, B).output(c).compute();
-			assertEquals(A.get() % B.get(), c.get());
-		}
+	public void testMod() {
+		test(MathOps.MOD, A.get() % B.get());
 	}
 
 	// OR
 
 	@Test
-	public void testOrF() {
-		IntType c = ops.binary("math.or").input(A, B).outType(IntType.class).apply();
-		assertEquals((long)A.get() | (long)B.get(), c.get());
-	}
-
-	@Test
-	public void testOrC() {
-		IntType c = new IntType();
-		ops.binary("math.or").input(A, B).output(c).compute();
-		assertEquals((long)A.get() | (long)B.get(), c.get());
+	public void testOr() {
+		test("math.or", (int)((long) A.get() | (long) B.get()));
 	}
 
 	// XOR
 
 	@Test
-	public void testXorF() {
-		IntType c = ops.binary("math.xor").input(A, B).outType(IntType.class).apply();
-		assertEquals((long)A.get() ^ (long)B.get(), c.get());
-	}
-
-	@Test
-	public void testXorC() {
-		IntType c = new IntType();
-		ops.binary("math.xor").input(A, B).output(c).compute();
-		assertEquals((long)A.get() ^ (long)B.get(), c.get());
+	public void testXor() {
+		test("math.xor", (int)((long)A.get() ^ (long)B.get()));
 	}
 
 	// AND
 
 	@Test
-	public void testAndF() {
-		IntType c = ops.binary("math.and").input(A, B).outType(IntType.class).apply();
-		assertEquals((long)A.get() & (long)B.get(), c.get());
+	public void testAnd() {
+		test("math.and", (int)((long)A.get() & (long)B.get()));
 	}
 
-	@Test
-	public void testAndC() {
-		IntType c = new IntType();
-		ops.binary("math.and").input(A, B).output(c).compute();
-		assertEquals((long)A.get() & (long)B.get(), c.get());
-	}
+	// -- Helpers --
 
-// FIXME: inplaces would be nice
-//	@Test
-//	public void testAddI() {
-//		IntType a = new IntType(25);
-//		IntType b = new IntType(45);
-//		int expected = a.get() + b.get();
-//		ops.binary("math.add").input(a, b).mutate1();
-//		assertEquals(a.get(), expected);
-//	}
+	/**
+	 * Helper method to test that the given Op name run on {@link #A} and {@link #B}
+	 * produces the expected value when run using each method type in {@link #methods}
+	 *
+	 * @param opNames comma space-separated list of op names to test
+	 * @param expectedValue Expected value from op invocation
+	 */
+	private void test(String opNames, int expectedValue) {
+		for (String opName : opNames.split(", ")) {
+			for (String m : methods) {
+				IntType c = new IntType();
+				if (m.equals("function"))
+					c = ops.binary(opName).input(A, B).outType(IntType.class).apply();
+				else if (m.equals("computer"))
+					ops.binary(opName).input(A, B).output(c).compute();
+				assertEquals(expectedValue, c.get());
+			}
+		}
+	}
 }

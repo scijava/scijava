@@ -29,11 +29,13 @@
 
 package net.imagej.ops2.math;
 
+import net.imglib2.type.numeric.IntegerType;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpCollection;
+import org.scijava.types.Types;
 
 import java.util.Objects;
 
@@ -84,7 +86,13 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 			output.setReal(dbzVal);
 		}
 		else {
-			output.setReal(input1.getRealDouble() / input2.getRealDouble());
+			double result = input1.getRealDouble() / input2.getRealDouble();
+			if (Types.isAssignable(output.getClass(), IntegerType.class)) {
+				// Preserve integer division logic if we have an IntegerType
+				output.setReal((int)result);
+			} else {
+				output.setReal(result);
+			}
 		}
 	};
 

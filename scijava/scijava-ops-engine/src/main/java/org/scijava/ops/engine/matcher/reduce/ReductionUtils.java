@@ -28,6 +28,8 @@
  */
 package org.scijava.ops.engine.matcher.reduce;
 
+import com.google.common.collect.Streams;
+
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -37,9 +39,6 @@ import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.engine.util.Ops;
 import org.scijava.struct.Member;
 import org.scijava.types.Types;
-import org.scijava.types.inference.InterfaceInference;
-
-import com.google.common.collect.Streams;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -51,6 +50,7 @@ import javassist.CtNewConstructor;
 import javassist.CtNewMethod;
 import javassist.Modifier;
 import javassist.NotFoundException;
+import org.scijava.types.inference.InterfaceInference;
 
 public class ReductionUtils {
 
@@ -284,6 +284,7 @@ public class ReductionUtils {
 			}
 			if (i + 1 < totalArguments.size()) sb.append(",");
 		}
+
 		sb.append(");");
 
 		sb.append("}");

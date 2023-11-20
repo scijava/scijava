@@ -98,9 +98,8 @@ public class OpsIntro {
 		// open an image and do ops with it
 		var img = openLymp();
 		var shape = new RectangleShape(5, false);
-		var oobf = new OutOfBoundsBorderFactory<>();
 		var uByteType = new Nil<Img<UnsignedByteType>>(){};
-		var mean = ops.ternary("filter.mean").input(img, shape, oobf).outType(uByteType).apply();
+		var mean = ops.binary("filter.mean").input(img, shape).outType(uByteType).apply();
 		var multResult = ops.binary("create.img").input(img, new IntType()).apply();
 		ops.binary("math.multiply").input(img, mean).output(multResult).compute();
 

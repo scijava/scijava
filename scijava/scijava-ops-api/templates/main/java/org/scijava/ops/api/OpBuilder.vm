@@ -35,7 +35,6 @@
 package org.scijava.ops.api;
 
 import java.lang.reflect.Type;
-import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 

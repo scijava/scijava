@@ -41,9 +41,9 @@ import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.OpDependencyMember;
 import org.scijava.ops.engine.OpDescription;
-import org.scijava.ops.engine.matcher.util.OpInfos;
 import org.scijava.ops.engine.struct.ClassOpDependencyMemberParser;
 import org.scijava.ops.engine.struct.ClassParameterMemberParser;
+import org.scijava.ops.engine.util.Infos;
 import org.scijava.priority.Priority;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
@@ -87,7 +87,7 @@ public class OpClassInfo implements OpInfo {
 			new ClassOpDependencyMemberParser() //
 		);
 
-		OpInfos.ensureHasSingleOutput(implementationName(), struct);
+		Infos.validate(this);
 	}
 
 	// -- OpInfo methods --
@@ -144,7 +144,7 @@ public class OpClassInfo implements OpInfo {
 			throw new IllegalStateException("Unable to instantiate op: '" + opClass
 				.getName() + "' Ensure that the Op has a no-args constructor.", e);
 		}
-		final var dependencyMembers = OpInfos.dependenciesOf(this);
+		final var dependencyMembers = Infos.dependencies(this);
 		for (int i = 0; i < dependencyMembers.size(); i++) {
 			final OpDependencyMember<?> dependencyMember = dependencyMembers.get(i);
 			try {

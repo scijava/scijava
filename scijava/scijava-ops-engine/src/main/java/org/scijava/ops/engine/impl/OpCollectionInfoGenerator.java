@@ -41,10 +41,10 @@ import org.scijava.common3.Annotations;
 import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.Ops;
 import org.scijava.ops.engine.OpInfoGenerator;
 import org.scijava.ops.engine.matcher.impl.OpFieldInfo;
 import org.scijava.ops.engine.matcher.impl.OpMethodInfo;
+import org.scijava.ops.engine.util.Infos;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpHints;
@@ -97,7 +97,7 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 		final boolean isStatic = Modifier.isStatic(field.getModifiers());
 		OpField annotation = field.getAnnotation(OpField.class);
 		String unparsedOpNames = annotation.names();
-		String[] parsedOpNames = Ops.parseOpNames(unparsedOpNames);
+		String[] parsedOpNames = Infos.parseNames(unparsedOpNames);
 		double priority = annotation.priority();
 		Hints hints = formHints(field.getAnnotation(OpHints.class));
 		return new OpFieldInfo(isStatic ? null : instance, field, version, hints,
@@ -108,7 +108,7 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 		OpMethod annotation = method.getAnnotation(OpMethod.class);
 		Class<?> opType = annotation.type();
 		String unparsedOpNames = annotation.names();
-		String[] parsedOpNames = Ops.parseOpNames(unparsedOpNames);
+		String[] parsedOpNames = Infos.parseNames(unparsedOpNames);
 		Hints hints = formHints(method.getAnnotation(OpHints.class));
 		double priority = annotation.priority();
 		return new OpMethodInfo(method, opType, version, hints, priority,

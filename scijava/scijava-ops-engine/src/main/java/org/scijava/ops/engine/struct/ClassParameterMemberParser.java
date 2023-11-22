@@ -41,6 +41,7 @@ import org.scijava.ops.engine.exceptions.impl.FunctionalTypeOpException;
 import org.scijava.struct.MemberParser;
 import org.scijava.struct.Structs;
 import org.scijava.types.Types;
+import org.scijava.types.inference.FunctionalInterfaces;
 
 public class ClassParameterMemberParser implements
 	MemberParser<Class<?>, SynthesizedParameterMember<?>>
@@ -67,7 +68,7 @@ public class ClassParameterMemberParser implements
 		}
 
 		// obtain a parameterData
-		Class<?> fIface = Ops.findFunctionalInterface(source);
+		Class<?> fIface = FunctionalInterfaces.findFrom(source);
 		ParameterData paramData = new LazilyGeneratedMethodParameterData(opMethod, fIface);
 
 		try {
@@ -91,7 +92,7 @@ public class ClassParameterMemberParser implements
 	 */
 	private Method getDeclaredOpMethod(Class<?> c) throws NoSuchMethodException {
 		// NB this is the functional method w.r.t. the interface, not w.r.t. the Op
-		Method fMethod = Ops.findFunctionalMethod(c);
+		Method fMethod = FunctionalInterfaces.functionalMethodOf(c);
 		Type[] paramTypes = Types.getExactParameterTypes(fMethod, c);
 		Class<?>[] rawParamTypes = Arrays.stream(paramTypes).map(t -> Types.raw(t))
 			.toArray(Class[]::new);

@@ -26,22 +26,60 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.types.inference;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 
-public final class InterfaceInference {
+import org.scijava.types.Types;
 
-	private InterfaceInference() {
+public final class FunctionalInterfaces {
+
+	private FunctionalInterfaces() {
 		// Prevent instantiation of static utility class
 	}
+	/**
+	 * Searches for a {@code @FunctionalInterface} annotated interface in the
+	 * class hierarchy of the specified type. The first one that is found will be
+	 * returned. If no such interface can be found, null will be returned.
+	 *
+	 * @param type some {@link Class}, possibly implementing a
+	 *          {@link FunctionalInterface}
+	 * @return the {@link FunctionalInterface} implemented by {@code type}, or
+	 *         {@code null} if {@code type} does not implement a
+	 *         {@link FunctionalInterface}.
+	 */
+	public static Class<?> findFrom(Type type) {
+		return findFrom(Types.raw(type));
+	}
 
-	public static Method singularAbstractMethod(Class<?> functionalInterface) {
-		Method[] typeMethods = Arrays.stream(functionalInterface
-			.getMethods()).filter(method -> Modifier.isAbstract(method
-				.getModifiers())).toArray(Method[]::new);
+	private static Class<?> findFrom(Class<?> type) {
+		if (type == null) return null;
+		if (type.getAnnotation(FunctionalInterface.class) != null) return type;
+		for (Class<?> iface : type.getInterfaces()) {
+			final Class<?> result = findFrom(iface);
+			if (result != null) return result;
+		}
+		return findFrom(type.getSuperclass());
+	}
+
+	public static Method functionalMethodOf(Type type) {
+		Class<?> functionalInterface = findFrom(type);
+		if (functionalInterface != null) {
+			return functionalMethodOf(functionalInterface);
+		}
+		throw new IllegalArgumentException( //
+			type + " does not implement a FunctionalInterface!" //
+		);
+	}
+
+	private static Method functionalMethodOf(Class<?> functionalInterface) {
+		Method[] typeMethods = Arrays.stream(functionalInterface.getMethods())
+			.filter(method -> Modifier.isAbstract(method.getModifiers())).toArray(
+				Method[]::new);
 		if (typeMethods.length != 1) {
 			throw new IllegalArgumentException(functionalInterface +
 				" should be a FunctionalInterface, however it has " +

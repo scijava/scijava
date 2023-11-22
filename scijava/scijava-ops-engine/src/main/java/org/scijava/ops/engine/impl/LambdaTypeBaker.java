@@ -33,10 +33,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 
-import org.scijava.ops.api.Ops;
 import org.scijava.types.GenericTyped;
 import org.scijava.types.Types;
-import org.scijava.types.inference.InterfaceInference;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -47,6 +45,7 @@ import javassist.CtMethod;
 import javassist.CtNewConstructor;
 import javassist.CtNewMethod;
 import javassist.NotFoundException;
+import org.scijava.types.inference.FunctionalInterfaces;
 
 public final class LambdaTypeBaker {
 
@@ -103,8 +102,8 @@ public final class LambdaTypeBaker {
 
 	private static <T> void ensureImplementation(T originalOp, Type reifiedType) {
 		Class<?> opClass = originalOp.getClass();
-		Class<?> opFIFace = Ops.findFunctionalInterface(opClass);
-		Class<?> typeFIFace = Ops.findFunctionalInterface(Types.raw(reifiedType));
+		Class<?> opFIFace = FunctionalInterfaces.findFrom(opClass);
+		Class<?> typeFIFace = FunctionalInterfaces.findFrom(reifiedType);
 		if (!opFIFace.equals(typeFIFace)) {
 			throw new IllegalArgumentException(originalOp + " does not implement " + Types.raw(reifiedType));
 		}
@@ -242,7 +241,7 @@ public final class LambdaTypeBaker {
 
 		// determine the name of the functional method
 		Class<?> raw = Types.raw(reifiedType);
-		Method m = InterfaceInference.singularAbstractMethod(raw);
+		Method m = FunctionalInterfaces.functionalMethodOf(raw);
 
 		//-- signature -- //
 		sb.append(generateSignature(m));

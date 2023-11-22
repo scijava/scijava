@@ -56,8 +56,8 @@ import org.scijava.ops.engine.MatchingConditions;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.engine.matcher.impl.DefaultOpRequest;
-import org.scijava.ops.engine.matcher.util.OpInfos;
 import org.scijava.ops.engine.struct.FunctionalParameters;
+import org.scijava.ops.engine.util.Infos;
 import org.scijava.priority.Priority;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
@@ -120,7 +120,7 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 				// resolve adaptor dependencies
 				final Map<TypeVariable<?>, Type> adaptorBounds = new HashMap<>();
 				final Map<TypeVariable<?>, Type> dependencyBounds = new HashMap<>();
-				List<InfoTree> depTrees = OpInfos.dependenciesOf(adaptor).stream() //
+				List<InfoTree> depTrees = Infos.dependencies(adaptor).stream() //
 					.map(d -> {
 						OpRequest request = inferOpRequest(d, map);
 						Nil<?> type = Nil.of(request.getType());

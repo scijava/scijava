@@ -39,8 +39,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
+
+import org.scijava.function.Computers;
+import org.scijava.function.Container;
+import org.scijava.function.Mutable;
+import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.OpMatchingException;
+import org.scijava.ops.api.OpRequest;
+import org.scijava.ops.api.RichOp;
+import org.scijava.ops.engine.BaseOpHints;
+import org.scijava.ops.engine.util.Infos;
+import org.scijava.ops.engine.util.internal.AnnotationUtils;
+import org.scijava.types.Any;
+import org.scijava.types.Nil;
+import org.scijava.types.Types;
+import org.scijava.types.inference.FunctionalInterfaces;
+import org.scijava.types.inference.GenericAssignability;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -51,24 +68,6 @@ import javassist.CtMethod;
 import javassist.CtNewConstructor;
 import javassist.CtNewMethod;
 import javassist.NotFoundException;
-import org.scijava.function.Computers;
-import org.scijava.function.Container;
-import org.scijava.function.Mutable;
-import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpMatchingException;
-import org.scijava.ops.api.OpRequest;
-import org.scijava.ops.api.Ops;
-import org.scijava.ops.api.RichOp;
-import org.scijava.ops.engine.BaseOpHints;
-import org.scijava.ops.engine.util.internal.AnnotationUtils;
-import org.scijava.struct.Member;
-import org.scijava.types.Any;
-import org.scijava.types.Nil;
-import org.scijava.types.Types;
-import org.scijava.types.inference.GenericAssignability;
-import org.scijava.types.inference.InterfaceInference;
 
 
 public final class SimplificationUtils {
@@ -102,7 +101,7 @@ public final class SimplificationUtils {
 	{
 		// only retype types that we know how to retype
 		Class<?> opType = Types.raw(originalOpType);
-		Method fMethod = Ops.findFunctionalMethod(opType);
+		Method fMethod = FunctionalInterfaces.functionalMethodOf(opType);
 
 		Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
 
@@ -164,7 +163,7 @@ public final class SimplificationUtils {
 	 *         returned).
 	 */
 	public static int findMutableArgIndex(Class<?> c) {
-		Method fMethod = Ops.findFunctionalMethod(c);
+		Method fMethod = FunctionalInterfaces.functionalMethodOf(c);
 		for (int i = 0; i < fMethod.getParameterCount(); i++) {
 			if (AnnotationUtils.getMethodParameterAnnotation(fMethod, i,
 				Mutable.class) != null) return i;
@@ -363,7 +362,7 @@ public final class SimplificationUtils {
 
 		// add functional interface method
 		Class<?> opType = Types.raw(altered.opType());
-		int ioIndex = ioArgIndex(altered);
+		int ioIndex = Infos.IOIndex(altered);
 		CtMethod functionalMethod = CtNewMethod.make(createFunctionalMethod( //
 			opType, //
 			ioIndex, //
@@ -473,7 +472,7 @@ public final class SimplificationUtils {
 		StringBuilder sb = new StringBuilder();
 
 		// determine the name of the functional method
-		Method m = InterfaceInference.singularAbstractMethod(opType);
+		Method m = FunctionalInterfaces.functionalMethodOf(opType);
 		// determine the name of the output:
 		String opOutput = "originalOut";
 		if (ioIndex > -1) {
@@ -506,15 +505,6 @@ public final class SimplificationUtils {
 		}
 		sb.append("}");
 		return sb.toString();
-	}
-
-	public static int ioArgIndex(OpInfo info) {
-		List<Member<?>> inputs = info.inputs();
-		Optional<Member<?>> ioArg = inputs.stream().filter(m -> m.isInput() && m
-			.isOutput()).findFirst();
-		if (ioArg.isEmpty()) return -1;
-		Member<?> ioMember = ioArg.get();
-		return inputs.indexOf(ioMember);
 	}
 
 	private static String generateSignature(Method m) {

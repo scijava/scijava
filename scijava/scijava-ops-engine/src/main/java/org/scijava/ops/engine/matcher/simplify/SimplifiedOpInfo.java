@@ -59,6 +59,7 @@ import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
 import org.scijava.types.Types;
+import org.scijava.types.inference.FunctionalInterfaces;
 import org.scijava.types.inference.GenericAssignability;
 
 /**
@@ -125,7 +126,7 @@ public class SimplifiedOpInfo implements OpInfo {
 			fmts.add(new FunctionalMethodType(newType, m.getIOType()));
 		}
 		// generate new output fmt
-		Class<?> fIface = Ops.findFunctionalInterface( Types.raw(info.opType()));
+		Class<?> fIface = FunctionalInterfaces.findFrom(info.opType());
 		this.opType = SimplificationUtils.retypeOpType(fIface, inTypes, outType);
 		RetypingRequest r = new RetypingRequest(info.struct(), fmts);
 		this.struct = Structs.from(r, opType, new OpRetypingMemberParser());

@@ -28,8 +28,6 @@
  */
 package org.scijava.ops.engine.matcher.reduce;
 
-import com.google.common.collect.Streams;
-
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -37,10 +35,13 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.Ops;
+import org.scijava.ops.engine.util.Infos;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.struct.Member;
 import org.scijava.types.Types;
+import org.scijava.types.inference.FunctionalInterfaces;
+
+import com.google.common.collect.Streams;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -52,7 +53,6 @@ import javassist.CtNewConstructor;
 import javassist.CtNewMethod;
 import javassist.Modifier;
 import javassist.NotFoundException;
-import org.scijava.types.inference.InterfaceInference;
 
 public final class ReductionUtils {
 
@@ -248,10 +248,10 @@ public final class ReductionUtils {
 		StringBuilder sb = new StringBuilder();
 
 		// determine the name of the functional method
-		Class<?> fIface = Ops.findFunctionalInterface(Types.raw(info.opType()));
-		Method m = InterfaceInference.singularAbstractMethod(fIface);
-		Class<?> srcFIface = Ops.findFunctionalInterface(Types.raw(info.srcInfo().opType()));
-		Method srcM = InterfaceInference.singularAbstractMethod(srcFIface);
+		Class<?> fIface = FunctionalInterfaces.findFrom(info.opType());
+		Method m = FunctionalInterfaces.functionalMethodOf(fIface);
+		Class<?> srcFIface = FunctionalInterfaces.findFrom(info.srcInfo().opType());
+		Method srcM = FunctionalInterfaces.functionalMethodOf(srcFIface);
 		// determine the name of the output:
 		String opOutput = "out";
 
@@ -262,7 +262,7 @@ public final class ReductionUtils {
 
 		// processing
 		sb.append(" {");
-		if (hasPureOutput(info)) {
+		if (Infos.hasPureOutput(info)) {
 			sb.append("return ");
 		}
 		sb.append("op." + srcM.getName() + "(");

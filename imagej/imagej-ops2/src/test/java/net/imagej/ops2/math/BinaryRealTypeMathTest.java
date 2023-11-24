@@ -38,7 +38,7 @@ import org.scijava.ops.engine.math.MathOps;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Tests {@link BinaryNumericTypeMath}.
+ * Tests {@link BinaryRealTypeMath}.
  *
  * @author Mark Hiner
  */

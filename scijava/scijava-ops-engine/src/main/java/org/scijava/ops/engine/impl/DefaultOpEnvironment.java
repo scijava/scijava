@@ -47,8 +47,8 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.TreeMultimap;
 import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.ManualDiscoverer;
 import org.scijava.meta.Versions;
@@ -686,7 +686,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	private synchronized void initOpDirectory() {
 		if (opDirectory != null) return;
-		Multimap<String, OpInfo> tmp = ArrayListMultimap.create();
+		Multimap<String, OpInfo> tmp = TreeMultimap.create();
 		// add all OpInfos that are directly discoverable
 		discoverers.stream().flatMap(d -> d.discover(OpInfo.class).stream()).forEach(info -> addToOpIndex.accept(tmp, info));
 		List<OpInfoGenerator> generators = infoGenerators();

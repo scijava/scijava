@@ -45,6 +45,8 @@ import org.scijava.ops.engine.matcher.simplify.PrimitiveSimplifiers;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 public class SimplificationHintTest extends AbstractTestEnvironment implements OpCollection {
 
 	@BeforeAll
@@ -141,14 +143,10 @@ public class SimplificationHintTest extends AbstractTestEnvironment implements O
 		// make sure that we cannot match the Op via adaptation even when
 		// simplification
 		// is allowed (since it declares itself to be unsimplifiable)
-		try {
-			ops.op("test.simplification.unsimplifiable", hints).arity1().inType(Integer[].class)
-				.outType(Integer[].class).function();
-			throw new IllegalStateException(
+		assertThrows(OpMatchingException.class,
+				() -> ops.op("test.simplification.unsimplifiable", hints).arity1()
+						.inType(Integer[].class).outType(Integer[].class).function(),
 				"The only relevant Op is not simplifiable - this op call should not match!");
-		}
-		catch (OpMatchingException e) {
-		}
 
 	}
 

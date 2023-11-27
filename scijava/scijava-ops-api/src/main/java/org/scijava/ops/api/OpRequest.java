@@ -34,8 +34,6 @@ import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
@@ -70,8 +68,6 @@ public interface OpRequest {
 	 */
 	String getLabel();
 
-	boolean typesMatch(final Type opType);
-
 	/**
 	 * Determines whether the specified type satisfies the op's required types
 	 * using {@link Types#isApplicable(Type[], Type[])}.
@@ -82,18 +78,19 @@ public interface OpRequest {
 	// -- Object methods --
 
 	default String requestString() {
-		String n = getName() == null ? "" : "Name: \"" + getName() + "\", Types: ";
-		n += getType() + "\n";
-		n += "Input Types: \n";
+		StringBuilder n = new StringBuilder(
+				getName() == null ? "" : "Name: \"" + getName() + "\", Types: ");
+		n.append(getType()).append("\n");
+		n.append("Input Types: \n");
 		for (Type arg : getArgs()) {
-			n += "\t\t* ";
-			n += arg == null ? "" : arg.getTypeName();
-			n += "\n";
+			n.append("\t\t* ");
+			n.append(arg == null ? "" : arg.getTypeName());
+			n.append("\n");
 		}
-		n += "Output Type: \n";
-		n += "\t\t* ";
-		n += getOutType() == null ? "" : getOutType().getTypeName();
-		n += "\n";
+		n.append("Output Type: \n");
+		n.append("\t\t* ");
+		n.append(getOutType() == null ? "" : getOutType().getTypeName());
+		n.append("\n");
 		return n.substring(0, n.length() - 1);
 	}
 
@@ -105,8 +102,7 @@ public interface OpRequest {
 		if (!Objects.equals(getName(), other.getName())) return false;
 		if (!Objects.equals(getType(), other.getType())) return false;
 		if (!Objects.equals(getOutType(), other.getOutType())) return false;
-		if (!Arrays.equals(getArgs(), other.getArgs())) return false;
-		return true;
+		return Arrays.equals(getArgs(), other.getArgs());
 	}
 
 	default int requestHashCode() {
@@ -117,9 +113,9 @@ public interface OpRequest {
 	// -- Utility methods --
 
 	static Type[] filterNulls(final Type... types) {
-		Type[] ts = Arrays.stream(types).filter(t -> t != null).toArray(
-			Type[]::new);
-		return ts == null ? null : ts;
+		return Arrays.stream(types) //
+			.filter(Objects::nonNull) //
+			.toArray(Type[]::new);
 	}
 
 	// -- Helper methods --
@@ -134,41 +130,41 @@ public interface OpRequest {
 
 class PartialOpRequest implements OpRequest {
 
-	private final Optional<String> name;
-	private final Optional<Type[]> args;
-	private final Optional<Type> outType;
+	private final String name;
+	private final Type[] args;
+	private final Type outType;
 
 	PartialOpRequest() {
-		this.name = Optional.empty();
-		this.args = Optional.empty();
-		this.outType = Optional.empty();
+		this.name = null;
+		this.args = null;
+		this.outType = null;
 	}
 
 	PartialOpRequest(String name) {
-		this.name = Optional.of(name);
-		this.args = Optional.empty();
-		this.outType = Optional.empty();
+		this.name = name;
+		this.args = null;
+		this.outType = null;
 	}
 
 	PartialOpRequest(String name, Nil<?>[] args) {
-		this.name = Optional.of(name);
-		Type[] tmp = Arrays.stream(args).map(nil -> nil == null ? null : nil
-			.getType()).toArray(Type[]::new);
-		this.args = Optional.of(tmp);
-		this.outType = Optional.empty();
+		this.name = name;
+		this.args = Arrays.stream(args) //
+				.map(nil -> nil == null ? null : nil.getType()) //
+				.toArray(Type[]::new);
+		this.outType = null;
 	}
 
 	PartialOpRequest(String name, Nil<?>[] args, Nil<?> outType) {
-		this.name = Optional.of(name);
-		Type[] tmp = Arrays.stream(args).map(nil -> nil == null ? null : nil
-			.getType()).toArray(Type[]::new);
-		this.args = Optional.of(tmp);
-		this.outType = Optional.of(outType.getType());
+		this.name = name;
+		this.args = Arrays.stream(args) //
+				.map(nil -> nil == null ? null : nil.getType()) //
+				.toArray(Type[]::new);
+		this.outType = outType.getType();
 	}
 
 	@Override
 	public String getName() {
-		return name.orElse(null);
+		return name;
 	}
 
 	@Override
@@ -179,24 +175,18 @@ class PartialOpRequest implements OpRequest {
 
 	@Override
 	public Type getOutType() {
-		return outType.orElse(null);
+		return outType;
 	}
 
 	@Override
 	public Type[] getArgs() {
-		return args.orElse(null);
+		return args;
 	}
 
 	@Override
 	public String getLabel() {
 		throw new UnsupportedOperationException(
 			"PartialOpRequests do not have a Label!");
-	}
-
-	@Override
-	public boolean typesMatch(Type opType) {
-		throw new UnsupportedOperationException(
-			"PartialOpRequests cannot match types!");
 	}
 
 	@Override

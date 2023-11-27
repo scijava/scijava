@@ -32,7 +32,6 @@ package org.scijava.ops.engine.matcher.impl;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.scijava.ops.api.OpRequest;
@@ -131,11 +130,6 @@ public class DefaultOpRequest implements OpRequest {
 			OpRequest.append(sb, Types.name(type));
 		}
 		return sb.toString();
-	}
-
-	@Override
-	public boolean typesMatch(final Type opType) {
-		return typesMatch(opType, new HashMap<>());
 	}
 
 	/**

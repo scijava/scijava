@@ -41,9 +41,7 @@ import java.util.function.Function;
 import org.scijava.function.Computers;
 import org.scijava.function.Computers.Arity1;
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.InfoTree;
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpMatchingException;
 import org.scijava.ops.api.OpRequest;
 import org.scijava.ops.api.Ops;
@@ -188,11 +186,6 @@ public class SimplifiedOpRequest implements OpRequest {
 	@Override
 	public String getLabel() {
 		return "Simplification of " + srcReq.getLabel();
-	}
-
-	@Override
-	public boolean typesMatch(Type opType) {
-		return typesMatch(opType, new HashMap<>());
 	}
 
 	/**

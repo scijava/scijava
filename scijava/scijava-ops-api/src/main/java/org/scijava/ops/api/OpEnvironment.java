@@ -845,7 +845,8 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 * {@link OpEnvironment} matching {@code name}
 	 *
 	 * @param name the {@link String} name to filter on
-	 * @return a String describing all Ops in the environment matching {@code name}
+	 * @return a {@link String} describing all Ops in the environment matching
+	 *         {@code name}
 	 */
 	default String help(final String name) {
 		return help(new PartialOpRequest(name));
@@ -856,7 +857,8 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 * this {@link OpEnvironment}
 	 *
 	 * @param request the {@link OpRequest} to filter on
-	 * @return a {@link Set} of descriptions
+	 * @return a {@link String} containing a (set of) lines for each Op matching
+	 *         {@code request}
 	 */
 	String help(final OpRequest request);
 
@@ -864,7 +866,7 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 * Returns verbose descriptions for all Ops contained within this
 	 * {@link OpEnvironment}
 	 *
-	 * @return a {@link Set} of descriptions
+	 * @return a {@link String} containing a (set of) lines for each Op
 	 */
 	default String helpVerbose() {
 		return helpVerbose(new PartialOpRequest());
@@ -875,7 +877,8 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 * {@link OpEnvironment}
 	 *
 	 * @param name the {@link String} name to filter on
-	 * @return a {@link Set} of descriptions
+	 * @return a {@link String} describing all Ops in the environment matching
+	 *         {@code name}
 	 */
 	default String helpVerbose(final String name) {
 		return helpVerbose(new PartialOpRequest(name));
@@ -887,7 +890,8 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 * {@link OpEnvironment}
 	 *
 	 * @param request the {@link OpRequest} to filter on
-	 * @return a {@link Set} of descriptions
+	 * @return a {@link String} containing a (set of) lines for each Op matching
+	 *         {@code request}
 	 */
 	String helpVerbose(final OpRequest request);
 }

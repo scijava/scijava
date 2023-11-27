@@ -300,13 +300,8 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 					try {
 						poms.add(new POM(url));
 					}
-					catch (final IOException exc) {
-						// ignore and continue
-					}
-					catch (final ParserConfigurationException exc) {
-						// ignore and continue
-					}
-					catch (final SAXException exc) {
+					catch (final IOException | ParserConfigurationException | SAXException exc) {
+						// NB: empty catch block
 						// ignore and continue
 					}
 				}

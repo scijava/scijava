@@ -52,25 +52,26 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	/**
 	 * Sets the real component of an output real number to the addition of the
 	 * real components of two input real numbers.
+	 *
 	 * @input input1
 	 * @input input2
 	 * @container sum
 	 * @implNote op names='math.add'
 	 */
-	public final Computers.Arity2<I1, I2, O> adder = (input1, input2, output) -> 
-			output.setReal(input1.getRealDouble() + input2.getRealDouble());
+	public final Computers.Arity2<I1, I2, O> adder =
+			(input1, input2, output) -> output.setReal(input1.getRealDouble() + input2.getRealDouble());
 
 	/**
 	 * Sets the real component of an output real number to the logical AND of the
 	 * real component of two input real numbers.
+	 *
 	 * @input input1
 	 * @input input2
 	 * @container result
 	 * @implNote op names='math.and'
 	 */
-	public final Computers.Arity2<I1, I2, O> ander = (input1, input2, output) -> 
-			output.setReal((long) input1.getRealDouble() & (long) input2
-				.getRealDouble());
+	public final Computers.Arity2<I1, I2, O> ander =
+			(input1, input2, output) -> output.setReal((long) input1.getRealDouble() & (long) input2.getRealDouble());
 
 	/**
 	 * Sets the real component of an output real number to the division of the

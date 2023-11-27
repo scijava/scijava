@@ -29,20 +29,43 @@
 
 package org.scijava.ops.engine;
 
-import java.lang.reflect.Type;
-import java.util.List;
-
-import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpRequest;
 import org.scijava.priority.Prioritized;
 import org.scijava.priority.Priority;
 
+/**
+ * An interface whose implementations are able to describe all the Ops in an
+ * {@link OpEnvironment} that could satisfy an {@link OpRequest}.
+ * 
+ * @author Gabriel Selzer
+ */
 public interface OpDescriptionGenerator extends
 	Prioritized<OpDescriptionGenerator>
 {
+
+	/**
+	 * Returns a {@link String} with a "simple" description for each Op in
+	 * {@code env} matching {@code request}.
+	 * 
+	 * @param env an {@link OpEnvironment} containing Ops that may match
+	 *          {@code request}
+	 * @param request an {@link OpRequest} to filter on.
+	 * @return a {@link String} with a "simple" description for each Op in
+	 *         {@code env} matching {@code request}.
+	 */
 	String simpleDescriptions(OpEnvironment env, OpRequest request);
 
+	/**
+	 * Returns a {@link String} with a "simple" description for each Op in
+	 * {@code env} matching {@code request}.
+	 *
+	 * @param env an {@link OpEnvironment} containing Ops that may match
+	 *          {@code request}
+	 * @param request an {@link OpRequest} to filter on.
+	 * @return a {@link String} with a "simple" description for each Op in
+	 *         {@code env} matching {@code request}.
+	 */
 	String verboseDescriptions(OpEnvironment env, OpRequest request);
 
 	default double getPriority() {

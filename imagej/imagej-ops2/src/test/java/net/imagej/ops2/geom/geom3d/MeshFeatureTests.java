@@ -28,9 +28,6 @@
  */
 package net.imagej.ops2.geom.geom3d;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.Iterator;
 
 import net.imagej.mesh2.Mesh;
@@ -46,6 +43,10 @@ import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.OpMatchingException;
 import org.scijava.types.Nil;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class MeshFeatureTests extends AbstractFeatureTest {
 	private static final double EPSILON = 10e-12;
 	private static LabelRegion<String> ROI;
@@ -59,11 +60,8 @@ public class MeshFeatureTests extends AbstractFeatureTest {
 
 	@Test
 	public void boxivityMesh() {
-		try {
-			ops.op("geom.boxivity").arity1().input(mesh).outType(DoubleType.class).apply();
-		} catch (OpMatchingException e) {
-			// DefaultSmallestOrientedBoundingBox is not implemented.
-		}
+		// DefaultSmallestOrientedBoundingBox is not implemented.
+		assertThrows(OpMatchingException.class, () -> ops.op("geom.boxivity").arity1().input(mesh).outType(DoubleType.class).apply());
 	}
 
 	@Test

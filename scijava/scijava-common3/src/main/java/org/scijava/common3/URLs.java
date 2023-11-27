@@ -207,12 +207,11 @@ public final class URLs {
 			}
 			return new File(new URL(path).toURI());
 		}
-		catch (final MalformedURLException e) {
-			// NB: URL is not completely well-formed.
+		catch (final MalformedURLException | URISyntaxException e) {
+			// NB: empty catch block
+			// This is OK if it's a file. Otherwise we'll throw IAE below
 		}
-		catch (final URISyntaxException e) {
-			// NB: URL is not completely well-formed.
-		}
+		// If it's a File we can still try to construct it
 		if (path.startsWith("file:")) {
 			// pass through the URL as-is, minus "file:" prefix
 			path = path.substring(5);

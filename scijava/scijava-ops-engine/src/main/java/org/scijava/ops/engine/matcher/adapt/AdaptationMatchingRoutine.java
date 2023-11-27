@@ -102,6 +102,7 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 		OpEnvironment env) throws OpMatchingException
 	{
 		Hints adaptationHints = conditions.hints().plus(Adaptation.IN_PROGRESS);
+		List<Exception> matchingExceptions = new ArrayList<>();
 		List<DependencyMatchingException> depExceptions = new ArrayList<>();
 		for (final OpInfo adaptor : env.infos("adapt")) {
 			Type adaptTo = adaptor.output().getType();
@@ -181,13 +182,17 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 			}
 			catch (DependencyMatchingException d) {
 				depExceptions.add(d);
+				matchingExceptions.add(d);
 			}
 			catch (OpMatchingException | IllegalArgumentException e1) {
-//				log.trace(e1);
+				matchingExceptions.add(e1);
 			}
 		}
-		throw new OpMatchingException("Unable to find an Op adaptation for " +
+		OpMatchingException agglomerated = new OpMatchingException("Unable to find an Op adaptation for " +
 			conditions);
+
+		matchingExceptions.stream().forEach(agglomerated::addSuppressed);
+		throw agglomerated;
 	}
 
 	private OpRequest inferOpRequest(OpDependencyMember<?> dependency,

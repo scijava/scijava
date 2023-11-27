@@ -29,13 +29,6 @@
 
 package org.scijava.common3;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -65,6 +58,13 @@ import java.util.zip.ZipEntry;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.scijava.testutil.ExampleTypes;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests {@link Classes}
@@ -152,7 +152,7 @@ public class ClassesTest {
 	 */
 	@Test
 	public void testLoadFailureLoud() {
-		Assertions.assertThrows(IllegalArgumentException.class, //
+		assertThrows(IllegalArgumentException.class, //
 			() -> Classes.load("a.non.existent.class", false));
 	}
 
@@ -213,7 +213,7 @@ public class ClassesTest {
 	public void testLocationFailureLoud() {
 		final Class<?> weirdClass = loadCustomClass();
 		assertEquals("Hello", weirdClass.getName());
-		Assertions.assertThrows(IllegalArgumentException.class, //
+		assertThrows(IllegalArgumentException.class, //
 			() -> Classes.location(weirdClass, false));
 	}
 
@@ -421,25 +421,16 @@ public class ClassesTest {
 		assertSame(boolean[][].class, Classes.array(boolean[].class));
 		assertSame(String[][].class, Classes.array(String[].class));
 		assertSame(Number[][].class, Classes.array(Number[].class));
-		try {
-			Classes.array(void.class);
-			fail("Unexpected success creating void[]");
-		}
-		catch (final IllegalArgumentException exc) {
-			// NB: Expected behavior
-		}
+		assertThrows(IllegalArgumentException.class,
+				() -> Classes.array(void.class), "Unexpected success creating void[]");
 
 		// multidimensional cases
 		assertSame(Number[][].class, Classes.array(Number.class, 2));
 		assertSame(boolean[][][].class, Classes.array(boolean.class, 3));
 		assertSame(String.class, Classes.array(String.class, 0));
-		try {
-			Classes.array(char.class, -1);
-			fail("Unexpected success creating negative dimensional array");
-		}
-		catch (final IllegalArgumentException exc) {
-			// NB: Expected behavior
-		}
+		assertThrows(IllegalArgumentException.class,
+				() -> Classes.array(char.class, -1),
+				"Unexpected success creating negative dimensional array");
 	}
 
 	// -- Helper methods -- //

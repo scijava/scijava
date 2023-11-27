@@ -43,6 +43,8 @@ import org.scijava.ops.engine.copy.CopyOpCollection;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 public class AdaptationHintTest extends AbstractTestEnvironment implements OpCollection {
 
 	@BeforeAll
@@ -127,12 +129,10 @@ public class AdaptationHintTest extends AbstractTestEnvironment implements OpCol
 			.function();
 		// make sure that we cannot match the Op via adaptation even when adaptation
 		// is allowed (since it declares itself to be unadaptable)
-		try {
-			ops.op("test.adaptation.unadaptable", hints).arity1().inType(Double[].class).outType(
-				Double[].class).computer();
-			throw new IllegalStateException("This op call should not match!");
-		} catch( OpMatchingException e) {
-		}
+		assertThrows(OpMatchingException.class,
+				() -> ops.op("test.adaptation.unadaptable", hints).arity1()
+						.inType(Double[].class).outType(Double[].class).computer(),
+				"This op call should not match!");
 	}
 
 }

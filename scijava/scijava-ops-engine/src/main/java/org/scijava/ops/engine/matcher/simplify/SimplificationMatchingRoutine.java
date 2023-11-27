@@ -73,8 +73,8 @@ public class SimplificationMatchingRoutine extends RuntimeSafeMatchingRoutine {
 				simpleInfos.add(gen.generateSuitableInfo(env, req, hints));
 			}
 			catch (Throwable t) {
-				// NB: If we cannot generate the simplification,
-				// move on to the next info
+				// NB: empty catch block
+				// If we cannot generate the simplification, move on to the next info
 			}
 		}
 		return simpleInfos;

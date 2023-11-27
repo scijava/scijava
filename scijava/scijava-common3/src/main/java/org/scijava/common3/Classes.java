@@ -479,9 +479,10 @@ public final class Classes {
 			return c.getDeclaredMethod(name, parameterTypes);
 		}
 		catch (final NoSuchMethodException exc) {
-			// Try the next class level up
-			return method(c.getSuperclass(), name, parameterTypes);
+			// NB: empty catch block
 		}
+		// Try the next class level up
+		return method(c.getSuperclass(), name, parameterTypes);
 	}
 
 	/**

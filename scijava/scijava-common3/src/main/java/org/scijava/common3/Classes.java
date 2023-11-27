@@ -434,15 +434,17 @@ public final class Classes {
 	 * @return The first field with the given name in the class's superclass
 	 *         hierarchy.
 	 * @throws IllegalArgumentException if the specified class does not contain a
-	 *           method with the given name
+	 *           field with the given name
 	 */
 	public static Field field(final Class<?> c, final String name) {
 		if (c == null) throw iae("No such field: " + name);
 		try {
 			return c.getDeclaredField(name);
 		}
-		catch (final NoSuchFieldException e) {}
-		return field(c.getSuperclass(), name);
+		catch (final NoSuchFieldException e) {
+			// Try the next class level up
+			return field(c.getSuperclass(), name);
+		}
 	}
 
 	/**
@@ -476,8 +478,10 @@ public final class Classes {
 		try {
 			return c.getDeclaredMethod(name, parameterTypes);
 		}
-		catch (final NoSuchMethodException exc) {}
-		return method(c.getSuperclass(), name, parameterTypes);
+		catch (final NoSuchMethodException exc) {
+			// Try the next class level up
+			return method(c.getSuperclass(), name, parameterTypes);
+		}
 	}
 
 	/**

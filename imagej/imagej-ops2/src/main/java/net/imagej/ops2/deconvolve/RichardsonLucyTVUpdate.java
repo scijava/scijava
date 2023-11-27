@@ -313,72 +313,67 @@ public class RichardsonLucyTVUpdate<T extends RealType<T> & NativeType<T>, I ext
 									fipCursor.fwd();
 								}
 
-								try {
+								fimjm = fimjmCursor.get().getRealFloat();
+								fim = fimCursor.get().getRealFloat();
+								fimkm = fimkmCursor.get().getRealFloat();
+								fimkp = fimkpCursor.get().getRealFloat();
+								fimjp = fimjpCursor.get().getRealFloat();
+								fjmkm = fjmkmCursor.get().getRealFloat();
+								fjm = fjmCursor.get().getRealFloat();
+								fkm = fkmCursor.get().getRealFloat();
+								fijk = fijkCursor.get().getRealFloat();
+								fkp = fkpCursor.get().getRealFloat();
+								fjpkm = fjpkmCursor.get().getRealFloat();
+								fjp = fjpCursor.get().getRealFloat();
+								fipjm = fipjmCursor.get().getRealFloat();
+								fipkm = fipkmCursor.get().getRealFloat();
+								fip = fipCursor.get().getRealFloat();
 
-									fimjm = fimjmCursor.get().getRealFloat();
-									fim = fimCursor.get().getRealFloat();
-									fimkm = fimkmCursor.get().getRealFloat();
-									fimkp = fimkpCursor.get().getRealFloat();
-									fimjp = fimjpCursor.get().getRealFloat();
-									fjmkm = fjmkmCursor.get().getRealFloat();
-									fjm = fjmCursor.get().getRealFloat();
-									fkm = fkmCursor.get().getRealFloat();
-									fijk = fijkCursor.get().getRealFloat();
-									fkp = fkpCursor.get().getRealFloat();
-									fjpkm = fjpkmCursor.get().getRealFloat();
-									fjp = fjpCursor.get().getRealFloat();
-									fipjm = fipjmCursor.get().getRealFloat();
-									fipkm = fipkmCursor.get().getRealFloat();
-									fip = fipCursor.get().getRealFloat();
+								Dxpf = (fip - fijk) / hx;
+								Dxmf = (fijk - fim) / hx;
+								Dypf = (fjp - fijk) / hy;
+								Dymf = (fijk - fjm) / hy;
+								Dzpf = (fkp - fijk) / hz;
+								Dzmf = (fijk - fkm) / hz;
+								aijk = hypot3(Dxpf, m(Dypf, Dymf), m(Dzpf, Dzmf));
+								bijk = hypot3(Dypf, m(Dxpf, Dxmf), m(Dzpf, Dzmf));
+								cijk = hypot3(Dzpf, m(Dypf, Dymf), m(Dxpf, Dxmf));
 
-									Dxpf = (fip - fijk) / hx;
-									Dxmf = (fijk - fim) / hx;
-									Dypf = (fjp - fijk) / hy;
-									Dymf = (fijk - fjm) / hy;
-									Dzpf = (fkp - fijk) / hz;
-									Dzmf = (fijk - fkm) / hz;
-									aijk = hypot3(Dxpf, m(Dypf, Dymf), m(Dzpf, Dzmf));
-									bijk = hypot3(Dypf, m(Dxpf, Dxmf), m(Dzpf, Dzmf));
-									cijk = hypot3(Dzpf, m(Dypf, Dymf), m(Dxpf, Dxmf));
+								aijk = (aijk > FLOAT32_EPS ? Dxpf / aijk : 0.0);
+								bijk = (bijk > FLOAT32_EPS ? Dypf / bijk : 0.0);
+								cijk = (cijk > FLOAT32_EPS ? Dzpf / cijk : 0.0);
 
-									aijk = (aijk > FLOAT32_EPS ? Dxpf / aijk : 0.0);
-									bijk = (bijk > FLOAT32_EPS ? Dypf / bijk : 0.0);
-									cijk = (cijk > FLOAT32_EPS ? Dzpf / cijk : 0.0);
+								Dxpf = (fijk - fim) / hx;
+								Dypf = (fimjp - fim) / hy;
+								Dymf = (fim - fimjm) / hy;
+								Dzpf = (fimkp - fim) / hz;
+								Dzmf = (fim - fimkm) / hz;
+								aim = hypot3(Dxpf, m(Dypf, Dymf), m(Dzpf, Dzmf));
 
-									Dxpf = (fijk - fim) / hx;
-									Dypf = (fimjp - fim) / hy;
-									Dymf = (fim - fimjm) / hy;
-									Dzpf = (fimkp - fim) / hz;
-									Dzmf = (fim - fimkm) / hz;
-									aim = hypot3(Dxpf, m(Dypf, Dymf), m(Dzpf, Dzmf));
+								aim = (aim > FLOAT32_EPS ? Dxpf / aim : 0.0);
 
-									aim = (aim > FLOAT32_EPS ? Dxpf / aim : 0.0);
+								Dxpf = (fipjm - fjm) / hx;
+								Dxmf = (fjm - fimjm) / hx;
+								Dypf = (fijk - fjm) / hy;
+								Dzmf = (fjm - fjmkm) / hz;
+								bjm = hypot3(Dypf, m(Dxpf, Dxmf), m(Dzpf, Dzmf));
 
-									Dxpf = (fipjm - fjm) / hx;
-									Dxmf = (fjm - fimjm) / hx;
-									Dypf = (fijk - fjm) / hy;
-									Dzmf = (fjm - fjmkm) / hz;
-									bjm = hypot3(Dypf, m(Dxpf, Dxmf), m(Dzpf, Dzmf));
+								bjm = (bjm > FLOAT32_EPS ? Dypf / bjm : 0.0);
 
-									bjm = (bjm > FLOAT32_EPS ? Dypf / bjm : 0.0);
+								Dxpf = (fipkm - fkm) / hx;
+								Dxmf = (fjm - fimkm) / hx;
+								Dypf = (fjpkm - fkm) / hy;
+								Dymf = (fkm - fjmkm) / hy;
+								Dzpf = (fijk - fkm) / hz;
+								ckm = hypot3(Dzpf, m(Dypf, Dymf), m(Dxpf, Dxmf));
 
-									Dxpf = (fipkm - fkm) / hx;
-									Dxmf = (fjm - fimkm) / hx;
-									Dypf = (fjpkm - fkm) / hy;
-									Dymf = (fkm - fjmkm) / hy;
-									Dzpf = (fijk - fkm) / hz;
-									ckm = hypot3(Dzpf, m(Dypf, Dymf), m(Dxpf, Dxmf));
+								ckm = (ckm > FLOAT32_EPS ? Dzpf / ckm : 0.0);
 
-									ckm = (ckm > FLOAT32_EPS ? Dzpf / ckm : 0.0);
+								Dxma = (aijk - aim) / hx;
+								Dymb = (bijk - bjm) / hy;
+								Dzmc = (cijk - ckm) / hz;
 
-									Dxma = (aijk - aim) / hx;
-									Dymb = (bijk - bjm) / hy;
-									Dzmc = (cijk - ckm) / hz;
-
-									outCursor.get().setReal(Dxma + Dymb + Dzmc);
-
-								}
-								catch (final ArrayIndexOutOfBoundsException ex) {}
+								outCursor.get().setReal(Dxma + Dymb + Dzmc);
 
 							} // end i
 						} // end j

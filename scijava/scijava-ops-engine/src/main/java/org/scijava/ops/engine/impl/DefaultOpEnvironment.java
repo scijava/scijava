@@ -103,6 +103,11 @@ import com.google.common.collect.TreeMultimap;
  */
 public class DefaultOpEnvironment implements OpEnvironment {
 
+	// A Discoverer used to discover backend plugins, like OpInfoGenerators
+	private final Discoverer metaDiscoverer = Discoverer.union(
+			Discoverer.all(ServiceLoader::load)
+	);
+
 	private final List<Discoverer> discoverers = new ArrayList<>();
 
 	private final ManualDiscoverer manDiscoverer = new ManualDiscoverer();
@@ -156,10 +161,11 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	public DefaultOpEnvironment(final Discoverer... discoverers)
 	{
-		typeService = new DefaultTypeReifier(Discoverer.using(ServiceLoader::load));
+		typeService = new DefaultTypeReifier(metaDiscoverer);
 		history = OpHistory.getOpHistory();
-		matcher = new DefaultOpMatcher(Discoverer.using(ServiceLoader::load).discover(
-				MatchingRoutine.class));
+		matcher = new DefaultOpMatcher( //
+				metaDiscoverer.discover(MatchingRoutine.class) //
+		);
 		discoverUsing(discoverers);
 		discoverUsing(manDiscoverer);
 	}
@@ -204,7 +210,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	@Override
 	public void discoverEverything() {
-		discoverUsing(Discoverer.all(ServiceLoader::load).toArray(Discoverer[]::new));
+		discoverUsing(metaDiscoverer);
 	}
 
 	private SortedSet<OpInfo> filterInfos(SortedSet<OpInfo> infos, Hints hints) {
@@ -343,10 +349,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * @return all {@link OpInfo}s derived from {@code o}
 	 */
 	private List<OpInfo> generateAllInfos(Object o) {
-		// Get a discoverer that can find all OpInfoGenerators
-		return Discoverer.union(Discoverer.all(ServiceLoader::load)) //
-				// Find all OpInfoGenerators
-				.discover(OpInfoGenerator.class) //
+		// Find all OpInfoGenerators
+		return metaDiscoverer.discover(OpInfoGenerator.class) //
 				.stream() //
 				// Filter to the ones that can operate on o
 				.filter(g -> g.canGenerateFrom(o)) //
@@ -387,8 +391,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	@Override
 	public String help(final OpRequest request) {
 		Optional<OpDescriptionGenerator>
-				opt = Discoverer.using(ServiceLoader::load).discoverMin(
-				OpDescriptionGenerator.class);
+				opt = metaDiscoverer.discoverMin(OpDescriptionGenerator.class);
 		if (opt.isEmpty()) {
 			return "";
 		}
@@ -411,8 +414,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	@Override
 	public String helpVerbose(final OpRequest request) {
 		Optional<OpDescriptionGenerator>
-				opt = Discoverer.using(ServiceLoader::load).discoverMin(
-				OpDescriptionGenerator.class);
+				opt = metaDiscoverer.discoverMin(OpDescriptionGenerator.class);
 		if (opt.isEmpty()) {
 			return "";
 		}

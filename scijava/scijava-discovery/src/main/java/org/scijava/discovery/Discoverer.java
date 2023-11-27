@@ -145,18 +145,11 @@ public interface Discoverer {
 		return new Discoverer() {
 			@Override
 			public <U> List<U> discover(Class<U> c) {
-				return StreamSupport //
-						.stream(discoverers.spliterator(), true) //
-						.flatMap(d ->  {
-							try {
-								List<U> discoveries;
-								discoveries = d.discover(c);
-								return d.discover(c).stream();
-							} catch(ClassCastException e) {
-								return Stream.empty();
-							}
-						}) //
-						.collect(Collectors.toList());
+				List<U> list = new ArrayList<>();
+				for (var discoverer : discoverers) {
+					list.addAll(discoverer.discover(c));
+				}
+				return list;
 			}
 		};
 	}

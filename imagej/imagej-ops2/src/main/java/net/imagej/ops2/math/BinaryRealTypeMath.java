@@ -77,13 +77,15 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	 * Sets the real component of an output real number to the division of the
 	 * real component of two input real numbers, with optional zero-value to use
 	 * in case of zero division.
-	 * @input input1
-	 * @input input2
-	 * @input dbzVal
-	 * @container output
+	 *
+	 * @param input1
+	 * @param input2
+	 * @param dbzVal
+	 * @param output
 	 * @implNote op names='math.div, math.divide'
 	 */
-	public final Computers.Arity3<I1, I2, Double, O> divider = (input1, input2, dbzVal, output) ->
+	public static <T1 extends RealType<T1>, T2 extends RealType<T2>, O extends RealType<O>> void divider(
+			T1 input1, T2 input2, @Nullable Double dbzVal, O output)
 	{
 		if (Objects.nonNull(dbzVal) && (input2.getRealDouble() == 0)) {
 			output.setReal(dbzVal);
@@ -92,27 +94,14 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 			double result = input1.getRealDouble() / input2.getRealDouble();
 			if (Types.isAssignable(output.getClass(), IntegerType.class)) {
 				// Preserve integer division logic if we have an IntegerType
-				output.setReal((int)result);
-			} else {
+				output.setReal((int) result);
+			}
+			else {
 				output.setReal(result);
 			}
 		}
-	};
+	}
 
-	/**
-	 * Sets the real component of an output real number to the division of the
-	 * real component of two input real numbers.
-	 * TODO - merge with trinary divider using @Nullable
-	 *
-	 * @input input1
-	 * @input input2
-	 * @container output
-	 * @implNote op names='math.div, math.divide'
-	 */
-	public final Computers.Arity2<I1, I2, O> dividerB = (input1, input2, output) ->
-	{
-		divider.compute(input1, input2, null, output);
-	};
 
 	/**
 	 * Sets the real component of an output real number to the multiplication of

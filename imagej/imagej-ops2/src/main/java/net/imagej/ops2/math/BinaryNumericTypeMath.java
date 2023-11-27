@@ -32,6 +32,7 @@ package net.imagej.ops2.math;
 import net.imglib2.type.numeric.NumericType;
 
 import org.scijava.function.Computers;
+import org.scijava.ops.spi.Nullable;
 
 import java.util.Objects;
 
@@ -62,13 +63,15 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	 * Divide a first numeric type by a second, with optional zero-value to use in
 	 * case of zero division.
 	 *
-	 * @input input1
-	 * @input input2
-	 * @input divideByZeroValue
-	 * @container output
+	 * @param input1
+	 * @param input2
+	 * @param dbzVal
+	 * @param output
 	 * @implNote op names='math.div, math.divide', priority='100.'
 	 */
-	public final Computers.Arity3<T, T, T, T> divider = (input1, input2, dbzVal, output) -> { 
+	public static <N extends NumericType<N>> void divider(N input1, N input2,
+			@Nullable N dbzVal, N output)
+	{
 		try {
 			output.set(input1);
 			output.div(input2);
@@ -79,19 +82,6 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 				throw e;
 			}
 		}
-	};
-
-	/**
-	 * Divide a first numeric type by a second.
-	 * TODO: merge with trinary divider using @Nullable
-	 *
-	 * @input input1
-	 * @input input2
-	 * @container output
-	 * @implNote op names='math.div, math.divide', priority='100.'
-	 */
-	public final Computers.Arity2<T, T, T> dividerB = (input1, input2, output) -> {
-		divider.compute(input1, input2, null, output);
 	};
 
 	/**

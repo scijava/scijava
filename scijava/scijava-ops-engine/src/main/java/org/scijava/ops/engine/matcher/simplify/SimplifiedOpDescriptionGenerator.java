@@ -36,8 +36,8 @@ import java.util.stream.Collectors;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRequest;
-import org.scijava.ops.engine.OpDescription;
 import org.scijava.ops.engine.OpDescriptionGenerator;
+import org.scijava.ops.engine.util.Infos;
 import org.scijava.priority.Priority;
 
 /**
@@ -62,7 +62,7 @@ public class SimplifiedOpDescriptionGenerator implements
 		var infos = SimplificationMatchingRoutine.getSimpleInfos(env, req.getName());
 		var filtered = filterInfos(infos, req);
 		String opString = filtered.stream() //
-				.map(OpDescription::simple) //
+				.map(Infos::describe) //
 				.map(s -> s.replaceAll("\n", "\n\t")) //
 				.distinct() //
 				.collect(Collectors.joining("\n\t> "));
@@ -82,7 +82,7 @@ public class SimplifiedOpDescriptionGenerator implements
 		var infos = env.infos(req.getName());
 		var filtered = filterInfos(infos, req);
 		String opString = filtered.stream() //
-				.map(OpDescription::verbose) //
+				.map(Infos::describeVerbose) //
 				.map(s -> s.replaceAll("\n", "\n\t")) //
 				.distinct() //
 				.collect(Collectors.joining("\n\t> "));

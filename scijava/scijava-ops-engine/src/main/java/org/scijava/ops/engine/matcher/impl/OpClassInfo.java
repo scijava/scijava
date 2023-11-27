@@ -40,7 +40,6 @@ import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.OpDependencyMember;
-import org.scijava.ops.engine.OpDescription;
 import org.scijava.ops.engine.struct.ClassOpDependencyMemberParser;
 import org.scijava.ops.engine.struct.ClassParameterMemberParser;
 import org.scijava.ops.engine.util.Infos;
@@ -185,7 +184,7 @@ public class OpClassInfo implements OpInfo {
 	}
 
 	@Override
-	public String toString() { return OpDescription.verbose(this); }
+	public String toString() { return Infos.describeVerbose(this); }
 
 	@Override
 	public String version() {

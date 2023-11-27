@@ -29,6 +29,10 @@
 
 package org.scijava.ops.engine.util;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +41,9 @@ import java.util.stream.Collectors;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.OpDependencyMember;
 import org.scijava.ops.engine.exceptions.impl.MultipleOutputsOpException;
+import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
+import org.scijava.types.Types;
 
 /**
  * Utility methods for working with {@link OpInfo}s.
@@ -119,5 +125,135 @@ public final class Infos {
 			.filter(m -> m instanceof OpDependencyMember) //
 			.map(m -> (OpDependencyMember<?>) m) //
 			.collect(Collectors.toList());
+	}
+
+
+	/**
+	 * Generates a {@link String} describing the given {@link OpInfo}
+	 *
+	 * @param info the {@link OpInfo} of interest
+	 * @return a descriptor for {@code info}
+	 */
+	public static String describe(final OpInfo info) {
+		return describe(info, null);
+	}
+	
+	/**
+	 * Generates a verbose {@link String} describing the given {@link OpInfo}
+	 *
+	 * @param info the {@link OpInfo} of interest
+	 * @return a descriptor for {@code info}
+	 */
+	public static String describeVerbose(final OpInfo info) {
+			return describeVerbose(info, null);
+	}
+
+	/**
+	 * Writes a {@link String} describing the {@link OpInfo} of interest
+	 * <b>with a particular {@link Member} highlighted</b>.
+	 *
+	 * @param info the {@link OpInfo} of interest
+	 * @param special a {@link Member} to highlight
+	 * @return a descriptor for {@code info}
+	 */
+	public static String describe(final OpInfo info, final Member<?> special) {
+		return description(info, special, false);
+	}
+
+	/**
+	 * Writes a verbose {@link String} describing the {@link OpInfo} of interest
+	 * <b>with a particular {@link Member} highlighted</b>.
+	 *
+	 * @param info the {@link OpInfo} of interest
+	 * @param special a {@link Member} to highlight
+	 * @return a descriptor for {@code info}
+	 */
+	public static String describeVerbose(final OpInfo info, final Member<?> special) {
+			return description(info, special, true);
+	}
+
+	/**
+	 * Private method to describe {@code info}, optionally highlighting some member {@code special}. Description is verbose iff {@code verbose=true}.
+	 *
+	 * @param info the {@link OpInfo} to describe
+	 * @param special the {@link Member} to highlight
+	 * @param verbose iff {@code true}, returns a verbose description
+	 * @return a description of {@code info}
+	 */
+	private static String description(final OpInfo info, final Member<?> special,
+		boolean verbose)
+	{
+		final StringBuilder sb = new StringBuilder();
+		final List<String> names = info.names();
+		sb.append(names.get(0)).append("(\n\t Inputs:\n");
+		List<Member<?>> containers = new ArrayList<>();
+		for (final Member<?> arg : info.inputs()) {
+			if (arg.getIOType() == ItemIO.INPUT) appendParam(sb, arg, special,
+				verbose);
+			else containers.add(arg);
+		}
+		if (containers.isEmpty()) {
+			sb.append("\t Outputs:\n");
+			appendParam(sb, info.output(), special, verbose);
+		}
+		else {
+			sb.append("\t Containers (I/O):\n");
+			containers.forEach(c -> appendParam(sb, c, special, verbose));
+		}
+		sb.append(")\n");
+		if (names.size() > 1) {
+			sb.append("Aliases: [");
+			sb.append(String.join(", ", names.subList(1, names.size())));
+			sb.append("]\n");
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Appends a {@link Member} to the {@link StringBuilder} writing the Op
+	 * string.
+	 *
+	 * @param sb      the {@link StringBuilder}
+	 * @param arg     the {@link Member} being appended to {@code sb}
+	 * @param special the {@link Member} to highlight
+	 * @param verbose appends a verbose description iff {@code true}
+	 */
+	private static void appendParam(final StringBuilder sb, final Member<?> arg,
+													 final Member<?> special, final boolean verbose) {
+			if (arg == special) sb.append("==> \t"); // highlight special item
+			else sb.append("\t\t");
+			sb.append(typeString(arg.getType(), verbose));
+			sb.append(" ");
+			sb.append(arg.getKey());
+			if (!arg.isRequired()) sb.append("?");
+			if (!arg.getDescription().isEmpty()) {
+					sb.append(" -> ");
+					sb.append(arg.getDescription());
+			}
+			sb.append("\n");
+	}
+
+	private static String typeString(final Type input, final boolean verbose) {
+			var str = input.getTypeName();
+			if (verbose) return str;
+			if (input instanceof TypeVariable<?>) {
+					var bounds = ((TypeVariable<?>)input).getBounds();
+					String[] s = new String[bounds.length];
+					for(int i = 0; i < s.length; i++) {
+							s[i] = typeString(Types.raw(bounds[i]), verbose);
+					}
+					return String.join("+", s);
+			}
+			else if (input instanceof ParameterizedType) {
+					var pType = (ParameterizedType) input;
+					var raw = typeString(pType.getRawType(), verbose);
+					Type[] args = pType.getActualTypeArguments();
+					String[] s = new String[args.length];
+					for(int i = 0; i < args.length; i++) {
+							s[i] = typeString(args[i], verbose);
+					}
+					return raw + "<" + String.join(", ", s) + ">";
+			}
+			return str.replaceAll("([a-zA-Z_$][a-zA-Z\\d_$]*\\.)*([a-zA-Z_$][a-zA-Z\\d_$]*)", "$2");
 	}
 }

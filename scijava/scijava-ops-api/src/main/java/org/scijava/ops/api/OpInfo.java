@@ -31,9 +31,11 @@ package org.scijava.ops.api;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;

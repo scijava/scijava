@@ -36,11 +36,11 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.engine.OpDescription;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.engine.struct.OpResizingMemberParser;
 import org.scijava.ops.engine.struct.RetypingRequest;
+import org.scijava.ops.engine.util.Infos;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
@@ -226,7 +226,7 @@ public class ReducedOpInfo implements OpInfo {
 
 	@Override
 	public String toString() {
-		return OpDescription.verbose(this);
+		return Infos.describeVerbose(this);
 	}
 
 }

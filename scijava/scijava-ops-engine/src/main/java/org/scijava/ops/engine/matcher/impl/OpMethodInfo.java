@@ -41,7 +41,6 @@ import java.util.List;
 import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.engine.OpDescription;
 import org.scijava.ops.engine.exceptions.impl.InstanceOpMethodException;
 import org.scijava.ops.engine.exceptions.impl.PrivateOpException;
 import org.scijava.ops.engine.exceptions.impl.UnreadableOpException;
@@ -230,7 +229,7 @@ public class OpMethodInfo implements OpInfo {
 
 	@Override
 	public String toString() {
-		return OpDescription.verbose(this);
+		return Infos.describeVerbose(this);
 	}
 
 	@Override

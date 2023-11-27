@@ -38,7 +38,6 @@ import java.util.List;
 
 import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.engine.OpDescription;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.exceptions.impl.PrivateOpException;
 import org.scijava.ops.engine.struct.FieldInstance;
@@ -219,6 +218,6 @@ public class OpFieldInfo implements OpInfo {
 	}
 
 	@Override
-	public String toString() { return OpDescription.verbose(this); }
+	public String toString() { return Infos.describeVerbose(this); }
 
 }

@@ -48,9 +48,9 @@ import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.Ops;
 import org.scijava.ops.api.RichOp;
 import org.scijava.ops.engine.BaseOpHints;
-import org.scijava.ops.engine.OpDescription;
 import org.scijava.ops.engine.struct.OpRetypingMemberParser;
 import org.scijava.ops.engine.struct.RetypingRequest;
+import org.scijava.ops.engine.util.Infos;
 import org.scijava.priority.Priority;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
@@ -207,7 +207,7 @@ public class SimplifiedOpInfo implements OpInfo {
 
 	@Override
 	public String toString() {
-		return OpDescription.verbose(this);
+		return Infos.describeVerbose(this);
 	}
 
 	@Override

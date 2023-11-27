@@ -36,8 +36,8 @@ import java.util.Objects;
 import org.scijava.ops.api.OpMatchingException;
 import org.scijava.ops.engine.OpCandidate;
 import org.scijava.ops.engine.OpCandidate.StatusCode;
-import org.scijava.ops.engine.OpDescription;
 import org.scijava.ops.api.OpRequest;
+import org.scijava.ops.engine.util.Infos;
 
 /**
  * Class representing the result from type matching done by a
@@ -147,7 +147,7 @@ public class MatchingResult {
 		int count = 0;
 		for (final OpCandidate candidate : candidates) {
 			sb.append(++count + ". ");
-			sb.append("\t" + OpDescription.verbose(candidate.opInfo(), candidate.getStatusItem()) + "\n");
+			sb.append("\t" + Infos.describeVerbose(candidate.opInfo(), candidate.getStatusItem()) + "\n");
 			final String status = candidate.getStatus();
 			if (status != null)
 				sb.append("\t" + status + "\n");

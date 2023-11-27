@@ -39,7 +39,6 @@ import org.scijava.ops.api.InfoTree;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.engine.BaseOpHints.Adaptation;
-import org.scijava.ops.engine.OpDescription;
 import org.scijava.ops.engine.struct.FunctionalParameters;
 import org.scijava.ops.engine.struct.OpRetypingMemberParser;
 import org.scijava.ops.engine.struct.RetypingRequest;
@@ -173,6 +172,6 @@ public class OpAdaptationInfo implements OpInfo {
 
 	@Override
 	public String toString() {
-		return OpDescription.verbose(this);
+		return Infos.describeVerbose(this);
 	}
 }

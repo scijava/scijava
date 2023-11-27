@@ -295,7 +295,7 @@ public final class Annotations {
 					}
 				}
 				catch (final Throwable t) {
-					// NB: No action needed?
+					// FIXME: empty catch block
 				}
 			}
 		}

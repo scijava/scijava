@@ -41,17 +41,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import org.scijava.ops.api.OpMatchingException;
+import org.scijava.ops.api.*;
 import org.scijava.ops.engine.OpCandidate;
 import org.scijava.ops.engine.OpCandidate.StatusCode;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpRequest;
 import org.scijava.ops.engine.MatchingConditions;
 import org.scijava.ops.engine.matcher.MatchingResult;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.engine.matcher.OpMatcher;
-import org.scijava.ops.engine.util.Ops;
 import org.scijava.priority.Priority;
 import org.scijava.struct.Member;
 import org.scijava.types.Types;
@@ -150,7 +146,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 		final ArrayList<OpCandidate> matches = new ArrayList<>();
 		double priority = Double.NaN;
 		for (final OpCandidate candidate : candidates) {
-			final double p = Ops.getPriority(candidate);
+			final double p = candidate.priority();
 			if (p != priority && !matches.isEmpty()) {
 				// NB: Lower priority was reached; stop looking for any more
 				// matches.

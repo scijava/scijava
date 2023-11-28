@@ -1,4 +1,4 @@
-/*-
+/*
  * #%L
  * SciJava Operations Engine: a framework for reusable algorithms.
  * %%
@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,48 +27,44 @@
  * #L%
  */
 
-package org.scijava.ops.engine.impl;
+package org.scijava.ops.engine.matcher.util;
 
-import java.util.Collections;
-import java.util.List;
-
-import org.scijava.meta.Versions;
-import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.Ops;
-import org.scijava.ops.engine.OpInfoGenerator;
-import org.scijava.ops.engine.matcher.impl.OpClassInfo;
-import org.scijava.ops.spi.Op;
-import org.scijava.ops.spi.OpClass;
-import org.scijava.ops.spi.OpHints;
+import org.scijava.ops.engine.OpDependencyMember;
+import org.scijava.ops.engine.exceptions.impl.MultipleOutputsOpException;
+import org.scijava.struct.Member;
+import org.scijava.struct.Struct;
 
-public class OpClassOpInfoGenerator implements OpInfoGenerator
-{
+import java.util.List;
+import java.util.stream.Collectors;
 
-	private Hints formHints(OpHints h) {
-		if (h == null) return new Hints();
-		return new Hints(h.hints());
+/**
+ * Static utility class for working with {@link org.scijava.ops.api.OpInfo}
+ *
+ * @author Curtis Rueden
+ * @author David Kolb
+ * @author Mark Hiner
+ */
+public final class OpInfos {
+
+	private OpInfos() {
+		// Prevent instantiation of static utility class
 	}
 
-	protected List<OpInfo> processClass(Class<?> c) {
-		OpClass p = c.getAnnotation(OpClass.class);
-		if (p == null) return Collections.emptyList();
-
-		String[] parsedOpNames = Ops.parseOpNames(p.names());
-		String version = Versions.getVersion(c);
-		Hints hints = formHints(c.getAnnotation(OpHints.class));
-		double priority = p.priority();
-		return Collections.singletonList(new OpClassInfo(c, version, hints,
-			priority, parsedOpNames));
+	public static void ensureHasSingleOutput(String op, Struct struct)
+	{
+		final long numOutputs = struct.members().stream() //
+				.filter(Member::isOutput).count();
+		if (numOutputs > 1) {
+			throw new MultipleOutputsOpException(op);
+		}
 	}
 
-	@Override public boolean canGenerateFrom(Object o) {
-		boolean isOp = o instanceof Op;
-		boolean isOpClass = o.getClass().isAnnotationPresent(OpClass.class);
-		return isOp && isOpClass;
-	}
-
-	@Override public List<OpInfo> generateInfosFrom(Object o) {
-		return processClass(o.getClass());
+	/** Gets the op's dependencies on other ops. */
+	public static List<OpDependencyMember<?>> dependenciesOf(OpInfo info) {
+		return info.struct().members().stream() //
+				.filter(m -> m instanceof OpDependencyMember) //
+				.map(m -> (OpDependencyMember<?>) m) //
+				.collect(Collectors.toList());
 	}
 }

@@ -37,8 +37,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.scijava.function.Producer;
+import org.scijava.ops.api.Ops;
 import org.scijava.ops.engine.exceptions.impl.NullablesOnMultipleMethodsException;
-import org.scijava.ops.engine.util.Ops;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.FunctionalMethodType;
 

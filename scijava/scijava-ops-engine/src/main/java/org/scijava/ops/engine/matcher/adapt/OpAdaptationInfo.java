@@ -40,10 +40,10 @@ import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.engine.OpDescription;
+import org.scijava.ops.engine.matcher.util.OpInfos;
 import org.scijava.ops.engine.struct.FunctionalParameters;
 import org.scijava.ops.engine.struct.OpRetypingMemberParser;
 import org.scijava.ops.engine.struct.RetypingRequest;
-import org.scijava.ops.engine.util.Ops;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
@@ -84,7 +84,7 @@ public class OpAdaptationInfo implements OpInfo {
 		
 		RetypingRequest r = new RetypingRequest(srcInfo.struct(), fmts);
 		struct = Structs.from(r, type, new OpRetypingMemberParser());
-		Ops.ensureHasSingleOutput(srcInfo.implementationName(), struct);
+		OpInfos.ensureHasSingleOutput(srcInfo.implementationName(), struct);
 	}
 
 	@Override

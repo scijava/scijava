@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 
 import org.scijava.function.Container;
 import org.scijava.function.Mutable;
-import org.scijava.ops.engine.util.Ops;
+import org.scijava.ops.api.Ops;
 import org.scijava.ops.engine.util.internal.AnnotationUtils;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.struct.FunctionalMethodType;

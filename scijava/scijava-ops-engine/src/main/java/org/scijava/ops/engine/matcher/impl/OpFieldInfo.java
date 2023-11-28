@@ -41,9 +41,9 @@ import org.scijava.ops.api.Hints;
 import org.scijava.ops.engine.OpDescription;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.exceptions.impl.PrivateOpException;
+import org.scijava.ops.engine.matcher.util.OpInfos;
 import org.scijava.ops.engine.struct.FieldInstance;
 import org.scijava.ops.engine.struct.FieldParameterMemberParser;
-import org.scijava.ops.engine.util.Ops;
 import org.scijava.ops.spi.OpField;
 import org.scijava.priority.Priority;
 import org.scijava.struct.Struct;
@@ -110,7 +110,7 @@ public class OpFieldInfo implements OpInfo {
 		Type structType = Types.fieldType(field, field.getDeclaringClass());
 		FieldInstance fieldInstance = new FieldInstance(field, instance);
 		struct = Structs.from(fieldInstance, structType, new FieldParameterMemberParser());
-		Ops.ensureHasSingleOutput(implementationName(), struct);
+		OpInfos.ensureHasSingleOutput(implementationName(), struct);
 	}
 
 	// -- OpInfo methods --

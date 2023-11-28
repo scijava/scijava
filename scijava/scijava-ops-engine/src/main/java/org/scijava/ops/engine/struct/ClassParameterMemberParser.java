@@ -36,8 +36,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.scijava.ops.api.Ops;
 import org.scijava.ops.engine.exceptions.impl.FunctionalTypeOpException;
-import org.scijava.ops.engine.util.Ops;
 import org.scijava.struct.MemberParser;
 import org.scijava.struct.Structs;
 import org.scijava.types.Types;

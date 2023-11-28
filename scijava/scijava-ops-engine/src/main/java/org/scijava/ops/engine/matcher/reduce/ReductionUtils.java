@@ -33,10 +33,12 @@ import com.google.common.collect.Streams;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.Ops;
 import org.scijava.ops.spi.Nullable;
-import org.scijava.ops.engine.util.Ops;
 import org.scijava.struct.Member;
 import org.scijava.types.Types;
 
@@ -256,7 +258,7 @@ public class ReductionUtils {
 
 		// processing
 		sb.append(" {");
-		if (Ops.hasPureOutput(info)) {
+		if (hasPureOutput(info)) {
 			sb.append("return ");
 		}
 		sb.append("op." + srcM.getName() + "(");
@@ -289,6 +291,25 @@ public class ReductionUtils {
 
 		sb.append("}");
 		return sb.toString();
+	}
+
+
+	/**
+	 * Returns the index of the argument that is both the input and the output. <b>If there is no such argument (i.e. the Op produces a pure output), -1 is returned</b>
+	 *
+	 * @return the index of the mutable argument.
+	 */
+	private static int ioArgIndex(final OpInfo info) {
+		List<Member<?>> inputs = info.inputs();
+		Optional<Member<?>>
+				ioArg = inputs.stream().filter(m -> m.isInput() && m.isOutput()).findFirst();
+		if(ioArg.isEmpty()) return -1;
+		Member<?> ioMember = ioArg.get();
+		return inputs.indexOf(ioMember);
+	}
+
+	private static boolean hasPureOutput(final OpInfo info) {
+		return ioArgIndex(info) == -1;
 	}
 
 	private static String generateSignature(Method m) {

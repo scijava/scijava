@@ -67,7 +67,11 @@ import javassist.CtNewConstructor;
 import javassist.CtNewMethod;
 import javassist.NotFoundException;
 
-public class SimplificationUtils {
+public final class SimplificationUtils {
+
+	private SimplificationUtils() {
+		// Prevent instantiation of static utility class
+	}
 
 	/**
 	 * Determines the {@link Type} of a retyped Op using its old {@code Type}, a

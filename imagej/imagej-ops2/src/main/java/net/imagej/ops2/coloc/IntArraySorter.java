@@ -38,7 +38,11 @@ package net.imagej.ops2.coloc;
  *  
  * @author Johannes Schindelin
  */
-public class IntArraySorter {
+public final class IntArraySorter {
+
+	private IntArraySorter() {
+		// prevent instantiation of static utility class
+	}
 
 	private final static int SORT_SIZE_THRESHOLD = 16;
 

@@ -50,8 +50,11 @@ import net.imglib2.type.Type;
 import net.imglib2.type.operators.SetZero;
 import net.imglib2.view.Views;
 
-public class LiftNeighborhoodComputersToFunctionsOnImgs {
+public final class LiftNeighborhoodComputersToFunctionsOnImgs {
 
+	private LiftNeighborhoodComputersToFunctionsOnImgs() {
+		// prevent instantiation of static utility class
+	}
 
 	/**
 	 * @implNote op names='adapt', priority='100.', type='java.util.function.Function'

@@ -36,7 +36,11 @@ package org.scijava.meta;
  * @author Curtis Rueden
  * @author Mark Hiner
  */
-public class Versions {
+public final class Versions {
+
+	private Versions() {
+		// Prevent instantiation of static utility class
+	}
 
 	/**
 	 * Looks up the version of the specified class using any means available,

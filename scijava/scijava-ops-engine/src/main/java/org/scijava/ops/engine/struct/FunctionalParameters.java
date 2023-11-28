@@ -45,7 +45,11 @@ import org.scijava.struct.ItemIO;
 import org.scijava.struct.Structs;
 import org.scijava.types.Types;
 
-public class FunctionalParameters {
+public final class FunctionalParameters {
+
+	private FunctionalParameters() {
+		// Prevent instantiation of static utility class
+	}
 
 	public static void parseFunctionalParameters(
 		final ArrayList<SynthesizedParameterMember<?>> items,

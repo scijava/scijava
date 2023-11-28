@@ -51,7 +51,11 @@ import net.imglib2.view.Views;
  * @author Jean-Yves Tinevez
  * @author Brian Northan
  */
-public class DefaultCreateKernelLog {
+public final class DefaultCreateKernelLog {
+
+	private DefaultCreateKernelLog() {
+		// Prevent instantiation of static utility class
+	}
 
 	public static <T extends Type<T>, C extends ComplexType<C>> RandomAccessibleInterval<C> createKernel(double[] sigmas, C type, BiFunction<Dimensions, T, Img<T>> imgFromDimsAndType) {
 		final double[] sigmaPixels = new double[sigmas.length];

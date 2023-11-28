@@ -47,7 +47,11 @@ import net.imglib2.type.numeric.IntegerType;
 import net.imglib2.util.Intervals;
 import net.imglib2.util.Util;
 
-public class Copiers {
+public final class Copiers {
+
+    private Copiers() {
+        // Prevent instantiation of static utility class
+    }
 
     /**
      * Copy {@link Type} to another {@link Type}

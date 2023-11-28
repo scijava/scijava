@@ -47,7 +47,11 @@ import org.scijava.InstantiableException;
  * json. See {@link RuntimeTypeAdapterFactory}
  */
 
-public class ScijavaGsonHelper {
+public final class ScijavaGsonHelper {
+
+	private ScijavaGsonHelper() {
+		// Prevent instantiation of static utility class
+	}
 
 	public static Gson getGson(Context ctx) {
 		return getGson(ctx, false);

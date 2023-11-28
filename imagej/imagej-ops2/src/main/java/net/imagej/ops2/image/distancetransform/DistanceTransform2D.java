@@ -43,7 +43,11 @@ import org.scijava.concurrent.Parallelization;
  * 
  * @author Simon Schmid (University of Konstanz)
  */
-public class DistanceTransform2D {
+public final class DistanceTransform2D {
+
+	private DistanceTransform2D() {
+		// Prevent instantiation of static utility class
+	}
 
 	/*
 	 * meijsters raster scan alogrithm Source:

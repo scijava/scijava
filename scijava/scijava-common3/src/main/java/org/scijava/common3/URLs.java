@@ -44,6 +44,10 @@ import java.util.jar.JarFile;
 
 public final class URLs {
 
+	private URLs() {
+		// Prevent instantiation of static utility class
+	}
+
 	/**
 	 * Recursively lists the contents of the referenced directory. Directories are
 	 * excluded from the result. Supported protocols include {@code file} and

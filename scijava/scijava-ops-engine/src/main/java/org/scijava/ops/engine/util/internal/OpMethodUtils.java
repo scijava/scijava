@@ -43,7 +43,11 @@ import org.scijava.types.Types;
 import org.scijava.types.inference.GenericAssignability;
 import org.scijava.types.inference.InterfaceInference;
 
-public class OpMethodUtils {
+public final class OpMethodUtils {
+
+	private OpMethodUtils() {
+		// Prevent instantiation of static utility class
+	}
 
 	public static Type getOpMethodType(Class<?> opClass, Method opMethod) {
 		// since type is a functional interface, it has (exactly) one abstract

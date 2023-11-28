@@ -40,7 +40,11 @@ import org.junit.jupiter.api.Assertions;
  * @author Gabriel Selzer
  * @see Assertions
  */
-public class AssertClose {
+public final class AssertClose {
+
+	private AssertClose() {
+		// Prevent instantiation of static utility class
+	}
 
 	/**
 	 * <em>Assert</em> that {@code expected} and {@code actual} are equal within

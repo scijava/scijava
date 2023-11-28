@@ -52,7 +52,11 @@ import net.imglib2.view.Views;
  * 
  * @author Gabriel Selzer
  */
-public class Gaussians {
+public final class Gaussians {
+
+	private Gaussians() {
+		// Prevent instantiation of static utility class
+	}
 
 	/**
 	 * Gaussian filter, wrapping {@link Gauss3} of imglib2-algorithms.

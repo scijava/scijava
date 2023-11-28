@@ -29,7 +29,11 @@
 
 package net.imagej.ops2.filter.fftSize;
 
-public class NextPowerOfTwo {
+public final class NextPowerOfTwo {
+
+	private NextPowerOfTwo() {
+		// Prevent instantiation of static utility class
+	}
 
 	public static long nextPowerOfTwo(long x) {
 		long out = 1;

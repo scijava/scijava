@@ -58,7 +58,11 @@ import net.imglib2.util.Util;
  * @author Gabriel Selzer
  * @author Mark Hiner
  */
-public class LiftComputersToRAI {
+public final class LiftComputersToRAI {
+
+	private LiftComputersToRAI() {
+		// prevent instantiation of static utility class
+	}
 #foreach($arity in $arities)
 #foreach($rais in [1..$arity])
 

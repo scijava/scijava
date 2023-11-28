@@ -46,7 +46,11 @@ import net.imglib2.util.IntervalIndexer;
  * 
  * @author Simon Schmid (University of Konstanz)
  */
-public class DefaultDistanceTransform {
+public final class DefaultDistanceTransform {
+
+	private DefaultDistanceTransform() {
+		// Prevent instantiation of static utility class
+	}
 
 	/*
 	 * extended version of meijsters raster scan alogrithm to compute n-d inputs

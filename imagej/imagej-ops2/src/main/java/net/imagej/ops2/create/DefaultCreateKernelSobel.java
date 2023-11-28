@@ -48,8 +48,12 @@ import net.imglib2.view.Views;
  *            type of input
  */
 
-public class DefaultCreateKernelSobel{
-	
+public final class DefaultCreateKernelSobel{
+
+	private DefaultCreateKernelSobel() {
+		// Prevent instantiation of static utility class
+	}
+
 	private static final float[] values = { 1.0f, 2.0f, 1.0f, -1.0f, 0.0f, 1.0f };
 
 	public static <T extends Type<T>, C extends ComplexType<C>> RandomAccessibleInterval<C> createKernel(C type, BiFunction<Dimensions, T, Img<T>> createFunc) {

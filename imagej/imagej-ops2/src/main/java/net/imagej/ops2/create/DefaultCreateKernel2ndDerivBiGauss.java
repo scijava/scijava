@@ -31,6 +31,7 @@ package net.imagej.ops2.create;
 
 import java.util.function.BiFunction;
 
+import net.imagej.ops2.logic.Default;
 import net.imglib2.Cursor;
 import net.imglib2.Dimensions;
 import net.imglib2.FinalInterval;
@@ -66,7 +67,11 @@ import net.imglib2.view.Views;
  * @author Vladimír Ulman
  * @param <T>
  */
-public class DefaultCreateKernel2ndDerivBiGauss {
+public final class DefaultCreateKernel2ndDerivBiGauss {
+
+	private DefaultCreateKernel2ndDerivBiGauss() {
+		// Prevent instantiation of static utility class
+	}
 
 	public static <T extends Type<T>, C extends ComplexType<C>> RandomAccessibleInterval<C> createKernel(final double[] sigmas,
 			final Integer dimensionality, final C typeVar, final BiFunction<Dimensions, T, Img<T>> createImgFunc) {

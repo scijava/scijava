@@ -50,7 +50,11 @@ import org.apache.commons.math3.special.BesselJ;
  * @author Jizhou Li
  * @author Brian Northan
  */
-public class DefaultCreateKernelGibsonLanni {
+public final class DefaultCreateKernelGibsonLanni {
+
+	private DefaultCreateKernelGibsonLanni() {
+		// Prevent instantiation of static utility class
+	}
 
 	public static <T extends Type<T>, C extends ComplexType<C> & NativeType<C>> Img<C> createKernel(Dimensions size,
 			Double NA, Double lambda, Double ns, Double ni, Double resLateral, Double resAxial, Double pZ, C type,

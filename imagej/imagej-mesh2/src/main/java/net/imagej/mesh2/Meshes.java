@@ -43,7 +43,11 @@ import java.util.Map;
  * @author Curtis Rueden
  * @author Kyle Harrington
  */
-public class Meshes {
+public final class Meshes {
+
+    private Meshes() {
+        // prevent instantiation of static utility class
+    }
 
     /**
      * Finds the center of a mesh using vertices.

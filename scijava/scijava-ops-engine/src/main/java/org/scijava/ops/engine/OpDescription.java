@@ -40,6 +40,10 @@ import java.util.List;
  */
 public final class OpDescription {
 
+    private OpDescription() {
+        // Prevent instantiation of static utility class
+    }
+
     /**
      * Generates a basic {@link String} describing the given {@link OpInfo}
      *

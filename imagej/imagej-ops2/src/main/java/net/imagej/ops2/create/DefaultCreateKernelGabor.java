@@ -59,7 +59,11 @@ import net.imglib2.view.Views;
  * @author Vladimír Ulman
  * @param <T>
  */
-public class DefaultCreateKernelGabor {
+public final class DefaultCreateKernelGabor {
+
+	private DefaultCreateKernelGabor() {
+		// Prevent instantiation of static utility class
+	}
 
 	public static <T extends Type<T>, C extends ComplexType<C>> RandomAccessibleInterval<C> createKernel(
 			final double[] sigmas, final double[] period, final C typeVar,

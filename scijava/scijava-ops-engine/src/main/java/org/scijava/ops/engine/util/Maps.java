@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 
 import org.scijava.function.Computers;
 
-public class Maps {
+public final class Maps {
 
 	private Maps() {
 		// NB: Prevent instantiation of utility class.

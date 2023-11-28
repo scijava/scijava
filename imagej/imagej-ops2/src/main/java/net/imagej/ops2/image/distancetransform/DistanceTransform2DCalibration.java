@@ -44,7 +44,11 @@ import net.imglib2.type.numeric.RealType;
  * 
  * @author Simon Schmid (University of Konstanz)
  */
-public class DistanceTransform2DCalibration {
+public final class DistanceTransform2DCalibration {
+
+	private DistanceTransform2DCalibration() {
+		// Prevent instantiation of static utility class
+	}
 
 	/*
 	 * meijsters raster scan alogrithm Source:

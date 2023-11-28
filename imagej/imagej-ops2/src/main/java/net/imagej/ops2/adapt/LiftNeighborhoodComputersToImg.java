@@ -42,7 +42,11 @@ import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.outofbounds.OutOfBoundsMirrorFactory;
 import net.imglib2.view.Views;
 
-public class LiftNeighborhoodComputersToImg {
+public final class LiftNeighborhoodComputersToImg {
+
+	private LiftNeighborhoodComputersToImg() {
+		// prevent instantiation of static utility class
+	}
 
 	/**
 	 * @implNote op names='adapt', priority='100.',

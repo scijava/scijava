@@ -66,8 +66,12 @@ import net.imglib2.view.Views;
  * @author Vladimír Ulman
  * @param <T>
  */
-public class DefaultCreateKernelBiGauss
+public final class DefaultCreateKernelBiGauss
 {
+
+	private DefaultCreateKernelBiGauss() {
+		// Prevent instantiation of static utility class
+	}
 
 	public static <T extends Type<T>, C extends ComplexType<C>> RandomAccessibleInterval<C> createKernel(final double[] sigmas,
 	                                             final Integer dimensionality, final C typeVar, BiFunction<Dimensions, T, Img<T>> createImgFunc) {

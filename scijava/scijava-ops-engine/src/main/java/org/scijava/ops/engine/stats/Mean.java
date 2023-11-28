@@ -33,9 +33,10 @@ import java.util.function.Function;
 
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
+import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
 
-public class Mean {
+public class Mean implements OpCollection {
 
 	@OpClass(names = "stats.mean")
 	public static class MeanFunction <N, O> implements Function<Iterable<N>, O>, Op{

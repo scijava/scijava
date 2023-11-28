@@ -171,28 +171,10 @@ public class FocusedOpInfo implements OpInfo {
 		for(Member<?> m: struct()) {
 			if (m.isInput() || m.isOutput()) {
 				sb.append("_");
-				sb.append(getClassName(m.getType()));
+				sb.append(SimplificationUtils.getClassName(m.getType()));
 			}
 		}
 		return sb.toString();
-	}
-
-	/**
-	 * {@link Class}es of array types return "[]" when
-	 * {@link Class#getSimpleName()} is called. Those characters are invalid in a
-	 * class name, so we exchange them for the suffix "_Arr".
-	 *
-	 * @param t - the {@link Type} for which we need a name
-	 * @return - a name that is legal as part of a class name.
-	 */
-	private static String getClassName(Type t) {
-		Class<?> clazz = Types.raw(t);
-		String className = clazz.getSimpleName();
-		if(className.chars().allMatch(Character::isJavaIdentifierPart))
-			return className;
-		if(clazz.isArray())
-			return clazz.getComponentType().getSimpleName() + "_Arr";
-		return className;
 	}
 
 	/**
@@ -206,14 +188,17 @@ public class FocusedOpInfo implements OpInfo {
 	 */
 	@Override
 	public StructInstance<?> createOpInstance(List<?> dependencies) {
+		// Original Op
 		final Object op = simpleInfo.srcInfo().createOpInstance(dependencies)
 			.object();
-		// TODO: I feel like the double copy could be annoying...
+		// Create Functions to Simplify and then Focus each input
 		List<Function<?, ?>> inputProcessors = new ArrayList<>();
 		for(int i = 0; i < inputSimplifiers.size(); i++) {
 			inputProcessors.add(combineFunctions(inputSimplifiers.get(i), simpleInfo.inputFocusers.get(i)));
 		}
+		// Create Function to Simplify and then Focus the output
 		Function<?, ?> outputProcessor = combineFunctions(simpleInfo.outputSimplifier, outputFocuser);
+		// Grab the output copier if it exists.
 		Computers.Arity1<?, ?> outputCopier = copyOp == null ? null : copyOp.asOpType();
 
 		try {

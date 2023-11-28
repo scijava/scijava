@@ -34,6 +34,7 @@ import org.scijava.ops.engine.BaseOpHints.Simplification;
 import org.scijava.ops.engine.conversionLoss.LossReporter;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
+import org.scijava.priority.Priority;
 import org.scijava.types.Nil;
 
 /**
@@ -43,8 +44,8 @@ import org.scijava.types.Nil;
  * @param <T> - the type that is not being simplified.
  */
 @OpHints(hints = {Simplification.FORBIDDEN})
-@OpClass(names = "lossReporter")
-public class IdentityLossReporter<T> implements LossReporter<T, T>, Op {
+@OpClass(names = "lossReporter", priority= Priority.VERY_HIGH)
+public class IdentityLossReporter<U, T extends U> implements LossReporter<T, U>, Op {
 
 	/**
 	 * @param t the Nil describing the type that is being converted from
@@ -52,7 +53,7 @@ public class IdentityLossReporter<T> implements LossReporter<T, T>, Op {
 	 * @return the worst-case loss converting from type T to type T (i.e. 0)
 	 */
 	@Override
-	public Double apply(Nil<T> t, Nil<T> u) {
+	public Double apply(Nil<T> t, Nil<U> u) {
 		return 0.;
 	}
 

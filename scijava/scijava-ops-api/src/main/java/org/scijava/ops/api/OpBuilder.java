@@ -91,67 +91,67 @@ public class OpBuilder {
 	/** Specifies an op with 1 input. */
 	public Arity1 arity1() { return new Arity1(); }
 
-
 	/** Specifies an op with 2 inputs. */
 	public Arity2 arity2() { return new Arity2(); }
-
 
 	/** Specifies an op with 3 inputs. */
 	public Arity3 arity3() { return new Arity3(); }
 
-
 	/** Specifies an op with 4 inputs. */
 	public Arity4 arity4() { return new Arity4(); }
-
 
 	/** Specifies an op with 5 inputs. */
 	public Arity5 arity5() { return new Arity5(); }
 
-
 	/** Specifies an op with 6 inputs. */
 	public Arity6 arity6() { return new Arity6(); }
-
 
 	/** Specifies an op with 7 inputs. */
 	public Arity7 arity7() { return new Arity7(); }
 
-
 	/** Specifies an op with 8 inputs. */
 	public Arity8 arity8() { return new Arity8(); }
-
 
 	/** Specifies an op with 9 inputs. */
 	public Arity9 arity9() { return new Arity9(); }
 
-
 	/** Specifies an op with 10 inputs. */
 	public Arity10 arity10() { return new Arity10(); }
-
 
 	/** Specifies an op with 11 inputs. */
 	public Arity11 arity11() { return new Arity11(); }
 
-
 	/** Specifies an op with 12 inputs. */
 	public Arity12 arity12() { return new Arity12(); }
-
 
 	/** Specifies an op with 13 inputs. */
 	public Arity13 arity13() { return new Arity13(); }
 
-
 	/** Specifies an op with 14 inputs. */
 	public Arity14 arity14() { return new Arity14(); }
 
-
 	/** Specifies an op with 15 inputs. */
 	public Arity15 arity15() { return new Arity15(); }
-
 
 	/** Specifies an op with 16 inputs. */
 	public Arity16 arity16() { return new Arity16(); }
 
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName));
+		}
 	// -- Helper methods --
 
 	@SuppressWarnings({ "unchecked" })
@@ -299,6 +299,22 @@ public class OpBuilder {
 		public Object create() {
 			return producer().create();
 		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {}));
+		}
 	}
 
 	/**
@@ -364,6 +380,22 @@ public class OpBuilder {
 		public O create() {
 			return producer().create();
 		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {}, outType));
+		}
 	}
 
 	/**
@@ -400,6 +432,22 @@ public class OpBuilder {
 		 */
 		public void compute() {
 			computer().compute(out);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {}, type(out)));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {}, type(out)));
 		}
 	}
 
@@ -444,6 +492,21 @@ public class OpBuilder {
 			return new Arity1_IT_OU<>(in1Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {null}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {null}));
+		}
 	}
 
 	/**
@@ -486,6 +549,21 @@ public class OpBuilder {
 			return new Arity2_IT_OU<>(in1Type, in2Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {null, null}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {null, null}));
+		}
 	}
 
 	/**
@@ -528,6 +606,21 @@ public class OpBuilder {
 			return new Arity3_IT_OU<>(in1Type, in2Type, in3Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {null, null, null}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {null, null, null}));
+		}
 	}
 
 	/**
@@ -570,6 +663,21 @@ public class OpBuilder {
 			return new Arity4_IT_OU<>(in1Type, in2Type, in3Type, in4Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null}));
+		}
 	}
 
 	/**
@@ -612,6 +720,21 @@ public class OpBuilder {
 			return new Arity5_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null}));
+		}
 	}
 
 	/**
@@ -654,6 +777,21 @@ public class OpBuilder {
 			return new Arity6_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null, null}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null, null}));
+		}
 	}
 
 	/**
@@ -696,6 +834,21 @@ public class OpBuilder {
 			return new Arity7_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null, null, null}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null, null, null}));
+		}
 	}
 
 	/**
@@ -738,6 +891,21 @@ public class OpBuilder {
 			return new Arity8_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null, null, null, null}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null, null, null, null}));
+		}
 	}
 
 	/**
@@ -780,6 +948,21 @@ public class OpBuilder {
 			return new Arity9_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null, null, null, null, null}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null, null, null, null, null}));
+		}
 	}
 
 	/**
@@ -822,6 +1005,21 @@ public class OpBuilder {
 			return new Arity10_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null, null, null, null, null, null}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null, null, null, null, null, null}));
+		}
 	}
 
 	/**
@@ -864,6 +1062,21 @@ public class OpBuilder {
 			return new Arity11_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null, null, null, null, null, null, null}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null, null, null, null, null, null, null}));
+		}
 	}
 
 	/**
@@ -906,6 +1119,21 @@ public class OpBuilder {
 			return new Arity12_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null, null, null, null, null, null, null, null}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null, null, null, null, null, null, null, null}));
+		}
 	}
 
 	/**
@@ -948,6 +1176,21 @@ public class OpBuilder {
 			return new Arity13_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null, null, null, null, null, null, null, null, null}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null, null, null, null, null, null, null, null, null}));
+		}
 	}
 
 	/**
@@ -990,6 +1233,21 @@ public class OpBuilder {
 			return new Arity14_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null, null, null, null, null, null, null, null, null, null}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null, null, null, null, null, null, null, null, null, null}));
+		}
 	}
 
 	/**
@@ -1032,6 +1290,21 @@ public class OpBuilder {
 			return new Arity15_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}));
+		}
 	}
 
 	/**
@@ -1074,6 +1347,21 @@ public class OpBuilder {
 			return new Arity16_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}));
+		}
 	}
 
 	/**
@@ -1118,6 +1406,22 @@ public class OpBuilder {
 		 */
 		public Computers.Arity1<I1, O> computer() {
 			return matchComputer(env, opName, in1Type, outType, OpBuilder.this.hints);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type}, outType));
 		}
 	}
 
@@ -1188,6 +1492,21 @@ public class OpBuilder {
 			return matchInplace(env, opName, in1Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type}));
+		}
 	}
 
 	/**
@@ -1248,6 +1567,22 @@ public class OpBuilder {
 		 */
 		public O apply() {
 			return function().apply(in1);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1)}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1)}, outType));
 		}
 	}
 
@@ -1378,6 +1713,21 @@ public class OpBuilder {
 			inplace().mutate(in1);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1)}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1)}));
+		}
 	}
 
 	/**
@@ -1417,6 +1767,22 @@ public class OpBuilder {
 		 */
 		public void compute() {
 			computer().compute(in1, out);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1)}, type(out)));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1)}, type(out)));
 		}
 	}
 	/**
@@ -1464,6 +1830,22 @@ public class OpBuilder {
 		 */
 		public Computers.Arity2<I1, I2, O> computer() {
 			return matchComputer(env, opName, in1Type, in2Type, outType, OpBuilder.this.hints);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type}, outType));
 		}
 	}
 
@@ -1552,6 +1934,21 @@ public class OpBuilder {
 			return matchInplace2_2(env, opName, in1Type, in2Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type}));
+		}
 	}
 
 	/**
@@ -1615,6 +2012,22 @@ public class OpBuilder {
 		 */
 		public O apply() {
 			return function().apply(in1, in2);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2)}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2)}, outType));
 		}
 	}
 
@@ -1781,6 +2194,21 @@ public class OpBuilder {
 			inplace2().mutate(in1, in2);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2)}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2)}));
+		}
 	}
 
 	/**
@@ -1823,6 +2251,22 @@ public class OpBuilder {
 		 */
 		public void compute() {
 			computer().compute(in1, in2, out);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2)}, type(out)));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2)}, type(out)));
 		}
 	}
 	/**
@@ -1873,6 +2317,22 @@ public class OpBuilder {
 		 */
 		public Computers.Arity3<I1, I2, I3, O> computer() {
 			return matchComputer(env, opName, in1Type, in2Type, in3Type, outType, OpBuilder.this.hints);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type}, outType));
 		}
 	}
 
@@ -1979,6 +2439,21 @@ public class OpBuilder {
 			return matchInplace3_3(env, opName, in1Type, in2Type, in3Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type}));
+		}
 	}
 
 	/**
@@ -2045,6 +2520,22 @@ public class OpBuilder {
 		 */
 		public O apply() {
 			return function().apply(in1, in2, in3);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3)}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3)}, outType));
 		}
 	}
 
@@ -2247,6 +2738,21 @@ public class OpBuilder {
 			inplace3().mutate(in1, in2, in3);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3)}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3)}));
+		}
 	}
 
 	/**
@@ -2292,6 +2798,22 @@ public class OpBuilder {
 		 */
 		public void compute() {
 			computer().compute(in1, in2, in3, out);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3)}, type(out)));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3)}, type(out)));
 		}
 	}
 	/**
@@ -2345,6 +2867,22 @@ public class OpBuilder {
 		 */
 		public Computers.Arity4<I1, I2, I3, I4, O> computer() {
 			return matchComputer(env, opName, in1Type, in2Type, in3Type, in4Type, outType, OpBuilder.this.hints);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type}, outType));
 		}
 	}
 
@@ -2469,6 +3007,21 @@ public class OpBuilder {
 			return matchInplace4_4(env, opName, in1Type, in2Type, in3Type, in4Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type}));
+		}
 	}
 
 	/**
@@ -2538,6 +3091,22 @@ public class OpBuilder {
 		 */
 		public O apply() {
 			return function().apply(in1, in2, in3, in4);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4)}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4)}, outType));
 		}
 	}
 
@@ -2776,6 +3345,21 @@ public class OpBuilder {
 			inplace4().mutate(in1, in2, in3, in4);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4)}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4)}));
+		}
 	}
 
 	/**
@@ -2824,6 +3408,22 @@ public class OpBuilder {
 		 */
 		public void compute() {
 			computer().compute(in1, in2, in3, in4, out);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4)}, type(out)));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4)}, type(out)));
 		}
 	}
 	/**
@@ -2880,6 +3480,22 @@ public class OpBuilder {
 		 */
 		public Computers.Arity5<I1, I2, I3, I4, I5, O> computer() {
 			return matchComputer(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, outType, OpBuilder.this.hints);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type}, outType));
 		}
 	}
 
@@ -3022,6 +3638,21 @@ public class OpBuilder {
 			return matchInplace5_5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type}));
+		}
 	}
 
 	/**
@@ -3094,6 +3725,22 @@ public class OpBuilder {
 		 */
 		public O apply() {
 			return function().apply(in1, in2, in3, in4, in5);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5)}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5)}, outType));
 		}
 	}
 
@@ -3368,6 +4015,21 @@ public class OpBuilder {
 			inplace5().mutate(in1, in2, in3, in4, in5);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5)}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5)}));
+		}
 	}
 
 	/**
@@ -3419,6 +4081,22 @@ public class OpBuilder {
 		 */
 		public void compute() {
 			computer().compute(in1, in2, in3, in4, in5, out);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5)}, type(out)));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5)}, type(out)));
 		}
 	}
 	/**
@@ -3478,6 +4156,22 @@ public class OpBuilder {
 		 */
 		public Computers.Arity6<I1, I2, I3, I4, I5, I6, O> computer() {
 			return matchComputer(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, outType, OpBuilder.this.hints);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type}, outType));
 		}
 	}
 
@@ -3638,6 +4332,21 @@ public class OpBuilder {
 			return matchInplace6_6(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type}));
+		}
 	}
 
 	/**
@@ -3713,6 +4422,22 @@ public class OpBuilder {
 		 */
 		public O apply() {
 			return function().apply(in1, in2, in3, in4, in5, in6);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6)}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6)}, outType));
 		}
 	}
 
@@ -4023,6 +4748,21 @@ public class OpBuilder {
 			inplace6().mutate(in1, in2, in3, in4, in5, in6);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6)}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6)}));
+		}
 	}
 
 	/**
@@ -4077,6 +4817,22 @@ public class OpBuilder {
 		 */
 		public void compute() {
 			computer().compute(in1, in2, in3, in4, in5, in6, out);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6)}, type(out)));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6)}, type(out)));
 		}
 	}
 	/**
@@ -4139,6 +4895,22 @@ public class OpBuilder {
 		 */
 		public Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer() {
 			return matchComputer(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, outType, OpBuilder.this.hints);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type}, outType));
 		}
 	}
 
@@ -4317,6 +5089,21 @@ public class OpBuilder {
 			return matchInplace7_7(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type}));
+		}
 	}
 
 	/**
@@ -4395,6 +5182,22 @@ public class OpBuilder {
 		 */
 		public O apply() {
 			return function().apply(in1, in2, in3, in4, in5, in6, in7);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7)}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7)}, outType));
 		}
 	}
 
@@ -4741,6 +5544,21 @@ public class OpBuilder {
 			inplace7().mutate(in1, in2, in3, in4, in5, in6, in7);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7)}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7)}));
+		}
 	}
 
 	/**
@@ -4798,6 +5616,22 @@ public class OpBuilder {
 		 */
 		public void compute() {
 			computer().compute(in1, in2, in3, in4, in5, in6, in7, out);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7)}, type(out)));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7)}, type(out)));
 		}
 	}
 	/**
@@ -4863,6 +5697,22 @@ public class OpBuilder {
 		 */
 		public Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer() {
 			return matchComputer(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, outType, OpBuilder.this.hints);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type}, outType));
 		}
 	}
 
@@ -5059,6 +5909,21 @@ public class OpBuilder {
 			return matchInplace8_8(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type}));
+		}
 	}
 
 	/**
@@ -5140,6 +6005,22 @@ public class OpBuilder {
 		 */
 		public O apply() {
 			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8)}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8)}, outType));
 		}
 	}
 
@@ -5522,6 +6403,21 @@ public class OpBuilder {
 			inplace8().mutate(in1, in2, in3, in4, in5, in6, in7, in8);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8)}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8)}));
+		}
 	}
 
 	/**
@@ -5582,6 +6478,22 @@ public class OpBuilder {
 		 */
 		public void compute() {
 			computer().compute(in1, in2, in3, in4, in5, in6, in7, in8, out);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8)}, type(out)));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8)}, type(out)));
 		}
 	}
 	/**
@@ -5650,6 +6562,22 @@ public class OpBuilder {
 		 */
 		public Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer() {
 			return matchComputer(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, outType, OpBuilder.this.hints);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type}, outType));
 		}
 	}
 
@@ -5864,6 +6792,21 @@ public class OpBuilder {
 			return matchInplace9_9(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type}));
+		}
 	}
 
 	/**
@@ -5948,6 +6891,22 @@ public class OpBuilder {
 		 */
 		public O apply() {
 			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9)}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9)}, outType));
 		}
 	}
 
@@ -6366,6 +7325,21 @@ public class OpBuilder {
 			inplace9().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9)}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9)}));
+		}
 	}
 
 	/**
@@ -6429,6 +7403,22 @@ public class OpBuilder {
 		 */
 		public void compute() {
 			computer().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, out);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9)}, type(out)));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9)}, type(out)));
 		}
 	}
 	/**
@@ -6500,6 +7490,22 @@ public class OpBuilder {
 		 */
 		public Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer() {
 			return matchComputer(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, outType, OpBuilder.this.hints);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type}, outType));
 		}
 	}
 
@@ -6732,6 +7738,21 @@ public class OpBuilder {
 			return matchInplace10_10(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type}));
+		}
 	}
 
 	/**
@@ -6819,6 +7840,22 @@ public class OpBuilder {
 		 */
 		public O apply() {
 			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10)}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10)}, outType));
 		}
 	}
 
@@ -7273,6 +8310,21 @@ public class OpBuilder {
 			inplace10().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10)}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10)}));
+		}
 	}
 
 	/**
@@ -7339,6 +8391,22 @@ public class OpBuilder {
 		 */
 		public void compute() {
 			computer().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, out);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10)}, type(out)));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10)}, type(out)));
 		}
 	}
 	/**
@@ -7413,6 +8481,22 @@ public class OpBuilder {
 		 */
 		public Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer() {
 			return matchComputer(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, outType, OpBuilder.this.hints);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type}, outType));
 		}
 	}
 
@@ -7663,6 +8747,21 @@ public class OpBuilder {
 			return matchInplace11_11(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type}));
+		}
 	}
 
 	/**
@@ -7753,6 +8852,22 @@ public class OpBuilder {
 		 */
 		public O apply() {
 			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11)}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11)}, outType));
 		}
 	}
 
@@ -8243,6 +9358,21 @@ public class OpBuilder {
 			inplace11().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11)}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11)}));
+		}
 	}
 
 	/**
@@ -8312,6 +9442,22 @@ public class OpBuilder {
 		 */
 		public void compute() {
 			computer().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, out);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11)}, type(out)));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11)}, type(out)));
 		}
 	}
 	/**
@@ -8389,6 +9535,22 @@ public class OpBuilder {
 		 */
 		public Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer() {
 			return matchComputer(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, outType, OpBuilder.this.hints);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type}, outType));
 		}
 	}
 
@@ -8657,6 +9819,21 @@ public class OpBuilder {
 			return matchInplace12_12(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type}));
+		}
 	}
 
 	/**
@@ -8750,6 +9927,22 @@ public class OpBuilder {
 		 */
 		public O apply() {
 			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12)}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12)}, outType));
 		}
 	}
 
@@ -9276,6 +10469,21 @@ public class OpBuilder {
 			inplace12().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12)}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12)}));
+		}
 	}
 
 	/**
@@ -9348,6 +10556,22 @@ public class OpBuilder {
 		 */
 		public void compute() {
 			computer().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, out);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12)}, type(out)));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12)}, type(out)));
 		}
 	}
 	/**
@@ -9428,6 +10652,22 @@ public class OpBuilder {
 		 */
 		public Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer() {
 			return matchComputer(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, outType, OpBuilder.this.hints);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type}, outType));
 		}
 	}
 
@@ -9714,6 +10954,21 @@ public class OpBuilder {
 			return matchInplace13_13(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type}));
+		}
 	}
 
 	/**
@@ -9810,6 +11065,22 @@ public class OpBuilder {
 		 */
 		public O apply() {
 			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13)}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13)}, outType));
 		}
 	}
 
@@ -10372,6 +11643,21 @@ public class OpBuilder {
 			inplace13().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13)}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13)}));
+		}
 	}
 
 	/**
@@ -10447,6 +11733,22 @@ public class OpBuilder {
 		 */
 		public void compute() {
 			computer().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, out);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13)}, type(out)));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13)}, type(out)));
 		}
 	}
 	/**
@@ -10530,6 +11832,22 @@ public class OpBuilder {
 		 */
 		public Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer() {
 			return matchComputer(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, outType, OpBuilder.this.hints);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type}, outType));
 		}
 	}
 
@@ -10834,6 +12152,21 @@ public class OpBuilder {
 			return matchInplace14_14(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type}));
+		}
 	}
 
 	/**
@@ -10933,6 +12266,22 @@ public class OpBuilder {
 		 */
 		public O apply() {
 			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14)}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14)}, outType));
 		}
 	}
 
@@ -11531,6 +12880,21 @@ public class OpBuilder {
 			inplace14().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14)}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14)}));
+		}
 	}
 
 	/**
@@ -11609,6 +12973,22 @@ public class OpBuilder {
 		 */
 		public void compute() {
 			computer().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, out);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14)}, type(out)));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14)}, type(out)));
 		}
 	}
 	/**
@@ -11695,6 +13075,22 @@ public class OpBuilder {
 		 */
 		public Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer() {
 			return matchComputer(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, outType, OpBuilder.this.hints);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type}, outType));
 		}
 	}
 
@@ -12017,6 +13413,21 @@ public class OpBuilder {
 			return matchInplace15_15(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type}));
+		}
 	}
 
 	/**
@@ -12119,6 +13530,22 @@ public class OpBuilder {
 		 */
 		public O apply() {
 			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15)}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15)}, outType));
 		}
 	}
 
@@ -12753,6 +14180,21 @@ public class OpBuilder {
 			inplace15().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15)}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15)}));
+		}
 	}
 
 	/**
@@ -12834,6 +14276,22 @@ public class OpBuilder {
 		 */
 		public void compute() {
 			computer().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, out);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15)}, type(out)));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15)}, type(out)));
 		}
 	}
 	/**
@@ -12923,6 +14381,22 @@ public class OpBuilder {
 		 */
 		public Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer() {
 			return matchComputer(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, outType, OpBuilder.this.hints);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type}, outType));
 		}
 	}
 
@@ -13263,6 +14737,21 @@ public class OpBuilder {
 			return matchInplace16_16(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type}));
+		}
 	}
 
 	/**
@@ -13368,6 +14857,22 @@ public class OpBuilder {
 		 */
 		public O apply() {
 			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16)}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16)}, outType));
 		}
 	}
 
@@ -14038,6 +15543,21 @@ public class OpBuilder {
 			inplace16().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16)}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16)}));
+		}
 	}
 
 	/**
@@ -14122,6 +15642,22 @@ public class OpBuilder {
 		 */
 		public void compute() {
 			computer().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16, out);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16)}, type(out)));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16)}, type(out)));
 		}
 	}
 

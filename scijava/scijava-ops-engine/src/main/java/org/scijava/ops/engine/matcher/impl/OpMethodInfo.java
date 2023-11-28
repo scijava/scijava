@@ -41,13 +41,12 @@ import java.util.List;
 import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.engine.OpDescription;
 import org.scijava.ops.engine.exceptions.impl.InstanceOpMethodException;
 import org.scijava.ops.engine.exceptions.impl.PrivateOpException;
 import org.scijava.ops.engine.exceptions.impl.UnreadableOpException;
-import org.scijava.ops.engine.matcher.util.OpInfos;
 import org.scijava.ops.engine.struct.MethodOpDependencyMemberParser;
 import org.scijava.ops.engine.struct.MethodParameterMemberParser;
+import org.scijava.ops.engine.util.Infos;
 import org.scijava.ops.engine.util.Lambdas;
 import org.scijava.ops.engine.util.internal.OpMethodUtils;
 import org.scijava.ops.spi.OpMethod;
@@ -102,7 +101,7 @@ public class OpMethodInfo implements OpInfo {
 			new MethodOpDependencyMemberParser() //
 		);
 
-		OpInfos.ensureHasSingleOutput(implementationName(), struct);
+		Infos.validate(this);
 	}
 
 	private void checkModifiers() {
@@ -177,7 +176,7 @@ public class OpMethodInfo implements OpInfo {
 			Object op = Lambdas.lambdaize( //
 					Types.raw(opType), //
 					handle, //
-					OpInfos.dependenciesOf(this).stream().map(Member::getRawType).toArray(Class[]::new),
+					Infos.dependencies(this).stream().map(Member::getRawType).toArray(Class[]::new),
 					dependencies.toArray() //
 			);
 			return struct().createInstance(op);
@@ -230,7 +229,7 @@ public class OpMethodInfo implements OpInfo {
 
 	@Override
 	public String toString() {
-		return OpDescription.basic(this);
+		return Infos.describeVerbose(this);
 	}
 
 	@Override

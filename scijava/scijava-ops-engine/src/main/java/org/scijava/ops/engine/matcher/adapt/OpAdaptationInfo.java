@@ -39,11 +39,10 @@ import org.scijava.ops.api.InfoTree;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.engine.BaseOpHints.Adaptation;
-import org.scijava.ops.engine.OpDescription;
-import org.scijava.ops.engine.matcher.util.OpInfos;
 import org.scijava.ops.engine.struct.FunctionalParameters;
 import org.scijava.ops.engine.struct.OpRetypingMemberParser;
 import org.scijava.ops.engine.struct.RetypingRequest;
+import org.scijava.ops.engine.util.Infos;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
@@ -84,7 +83,7 @@ public class OpAdaptationInfo implements OpInfo {
 		
 		RetypingRequest r = new RetypingRequest(srcInfo.struct(), fmts);
 		struct = Structs.from(r, type, new OpRetypingMemberParser());
-		OpInfos.ensureHasSingleOutput(srcInfo.implementationName(), struct);
+		Infos.validate(this);
 	}
 
 	@Override
@@ -173,6 +172,6 @@ public class OpAdaptationInfo implements OpInfo {
 
 	@Override
 	public String toString() {
-		return OpDescription.basic(this);
+		return Infos.describeVerbose(this);
 	}
 }

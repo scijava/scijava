@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,28 +27,49 @@
  * #L%
  */
 
-package org.scijava.ops.engine.matcher.simplify;
+package org.scijava.ops.engine;
 
-import java.util.function.Function;
+import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.OpRequest;
+import org.scijava.priority.Prioritized;
+import org.scijava.priority.Priority;
 
-import org.scijava.ops.spi.OpHints;
-import org.scijava.ops.engine.BaseOpHints.Simplification;
-import org.scijava.ops.spi.Op;
-import org.scijava.ops.spi.OpClass;
-
-@OpHints(hints = { Simplification.FORBIDDEN })
-@OpClass(names = "simplify, focus")
-public class Identity<T> implements Function<T, T>, Op {
-
-	public Identity() {}
+/**
+ * An interface whose implementations are able to describe all the Ops in an
+ * {@link OpEnvironment} that could satisfy an {@link OpRequest}.
+ * 
+ * @author Gabriel Selzer
+ */
+public interface OpDescriptionGenerator extends
+	Prioritized<OpDescriptionGenerator>
+{
 
 	/**
-	 * @param t the object to be simplified
-	 * @return the simplified object (since we are doing an identity
-	 *         simplification, this is just a reference to the input object).
+	 * Returns a {@link String} with a "simple" description for each Op in
+	 * {@code env} matching {@code request}.
+	 * 
+	 * @param env an {@link OpEnvironment} containing Ops that may match
+	 *          {@code request}
+	 * @param request an {@link OpRequest} to filter on.
+	 * @return a {@link String} with a "simple" description for each Op in
+	 *         {@code env} matching {@code request}.
 	 */
-	@Override
-	public T apply(T t) {
-		return t;
+	String simpleDescriptions(OpEnvironment env, OpRequest request);
+
+	/**
+	 * Returns a {@link String} with a "simple" description for each Op in
+	 * {@code env} matching {@code request}.
+	 *
+	 * @param env an {@link OpEnvironment} containing Ops that may match
+	 *          {@code request}
+	 * @param request an {@link OpRequest} to filter on.
+	 * @return a {@link String} with a "simple" description for each Op in
+	 *         {@code env} matching {@code request}.
+	 */
+	String verboseDescriptions(OpEnvironment env, OpRequest request);
+
+	default double getPriority() {
+		return Priority.NORMAL;
 	}
+
 }

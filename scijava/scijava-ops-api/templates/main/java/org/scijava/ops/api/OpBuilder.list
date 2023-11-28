@@ -129,3 +129,8 @@ basicParams = ```
   String.join(', ', basicParamsList(arity, io))
 }
 ```
+nullList = ```
+{ arity ->
+  String.join(', ', (1..arity).stream().map{a -> "null"}.collect())
+}
+```

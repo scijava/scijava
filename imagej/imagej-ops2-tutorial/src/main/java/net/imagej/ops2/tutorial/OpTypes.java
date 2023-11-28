@@ -74,7 +74,7 @@ public class OpTypes {
 			}
 		}
 
-		ops.registerInfosFrom(SampleFunction.class);
+		ops.register(SampleFunction.class);
 
 		BiFunction<Double, Double, Double> sumOp = ops //
 			// Look for a "math.add" op

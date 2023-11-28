@@ -29,48 +29,28 @@
 
 package org.scijava.ops.engine.matcher.simplify;
 
-import com.google.common.collect.Lists;
+import java.util.function.Function;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.scijava.ops.engine.BaseOpHints.Simplification;
+import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpField;
+import org.scijava.ops.spi.OpHints;
+import org.scijava.priority.Priority;
 
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpInfo;
+/**
+ * An {@link OpCollection} containing {@code identity} Ops.
+ * @author Gabriel Selzer
+ * @param <T>
+ */
+public class IdentityCollection<T> implements OpCollection {
 
-public class ChainCluster {
+	/**
+	 * @input t the object to be simplified
+	 * @output the simplified object (since we are doing an identity
+	 *         simplification, this is just a reference to the input object).
+	 */
+	@OpHints(hints = { Simplification.FORBIDDEN })
+	@OpField(names="simplify, focus, identify", priority=Priority.LAST)
+	public final Function<T, T> identity = (t) -> t;
 
-	private final List<MutatorChain> chains;
-	private final TypePair pairing;
-
-	private ChainCluster(TypePair pairing) {
-		this.chains = new ArrayList<>();
-		this.pairing = pairing;
-	}
-
-	public static ChainCluster generateCluster(TypePair pairing,
-		List<OpInfo> simplifiers, List<OpInfo> focusers, OpEnvironment env)
-	{
-		ChainCluster cluster = new ChainCluster(pairing);
-		List<List<OpInfo>> chains = Lists.cartesianProduct(simplifiers, focusers);
-
-		for (List<OpInfo> chainList : chains) {
-			OpInfo simplifier = chainList.get(0);
-			OpInfo focuser = chainList.get(1);
-			MutatorChain chain = new MutatorChain(simplifier, focuser, pairing, env);
-			if (chain.isValid()) cluster.addChain(chain);
-		}
-		return cluster;
-	}
-
-	public boolean addChain(MutatorChain chain) {
-		return chains.add(chain);
-	}
-
-	public List<MutatorChain> getChains() {
-		return chains;
-	}
-
-	public TypePair getPairing() {
-		return pairing;
-	}
 }

@@ -40,7 +40,7 @@ import java.util.List;
  * @author Gabe Selzer
  *
  */
-public class Any implements Type {
+public final class Any implements Type {
 	@Override
 	public String toString() {
 		return "Any";

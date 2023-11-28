@@ -41,7 +41,7 @@ import org.scijava.function.Producer;
 import org.scijava.ops.api.Ops;
 import org.scijava.ops.engine.exceptions.impl.NullablesOnMultipleMethodsException;
 import org.scijava.struct.FunctionalMethodType;
-import org.scijava.types.inference.InterfaceInference;
+import org.scijava.types.inference.FunctionalInterfaces;
 
 /**
  * Lazily generates the parameter data for a {@link List} of
@@ -76,7 +76,7 @@ public class LazilyGeneratedFieldParameterData implements ParameterData {
 	{
 		if (paramDataMap.containsKey(fieldInstance)) return;
 
-		Method sam = InterfaceInference.singularAbstractMethod(fieldInstance.field()
+		Method sam = FunctionalInterfaces.functionalMethodOf(fieldInstance.field()
 			.getType());
 		// There is always one output, but we need the number of inputs
 		long numIns = sam.getParameterCount();
@@ -151,7 +151,7 @@ public class LazilyGeneratedFieldParameterData implements ParameterData {
 		}
 		List<Method> fMethodsWithNullables = FunctionalParameters
 			.fMethodsWithNullable(fieldClass);
-		Class<?> fIface = Ops.findFunctionalInterface(fieldClass);
+		Class<?> fIface = FunctionalInterfaces.findFrom(fieldClass);
 		List<Method> fIfaceMethodsWithNullables = FunctionalParameters
 			.fMethodsWithNullable(fIface);
 

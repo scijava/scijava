@@ -50,7 +50,7 @@ public class SimplificationPriorityTest extends AbstractTestEnvironment
 	public static void AddNeededOps() {
 		ops.register(new SimplificationPriorityTest());
 		ops.register(new IdentityLossReporter());
-		ops.register(new Identity());
+		ops.register(new IdentityCollection());
 		ops.register(new LossReporterWrapper());
 	}
 

@@ -29,11 +29,6 @@
 
 package org.scijava.ops.api;
 
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
  * Generic Ops utilities
  *
@@ -70,7 +65,6 @@ public final class Ops {
 		}
 		return (RichOp<T>) op;
 	}
-
 	/**
 	 * Convenience function for getting the {@link OpInfo} of {@code op}
 	 * 
@@ -106,75 +100,4 @@ public final class Ops {
 		return isRich(op) && rich(op).isRecordingExecutions();
 	}
 
-
-	/**
-	 * Searches for a {@code @FunctionalInterface} annotated interface in the
-	 * class hierarchy of the specified type. The first one that is found will
-	 * be returned. If no such interface can be found, null will be returned.
-	 *
-	 * @param type
-	 * @return
-	 */
-	public static Class<?> findFunctionalInterface(Class<?> type) {
-		if (type == null) return null;
-		if (type.getAnnotation(FunctionalInterface.class) != null) return type;
-		for (Class<?> iface : type.getInterfaces()) {
-			final Class<?> result = findFunctionalInterface(iface);
-			if (result != null) return result;
-		}
-		return findFunctionalInterface(type.getSuperclass());
-	}
-
-	/**
-	 * Attempts to find the single functional method of the specified
-	 * class, by scanning the for functional interfaces. If there
-	 * is no functional interface, null will be returned.
-	 *
-	 * @param cls
-	 * @return
-	 */
-	public static Method findFunctionalMethod(Class<?> cls) {
-		Class<?> iFace = findFunctionalInterface(cls);
-		if (iFace == null) {
-			return null;
-		}
-
-		List<Method> nonDefaults = Arrays.stream(iFace.getMethods())
-				.filter(m -> !m.isDefault()).collect(Collectors.toList());
-
-		// The single non default method must be the functional one
-		if (nonDefaults.size() != 1) {
-			for (Class<?> i : iFace.getInterfaces()) {
-				final Method result = findFunctionalMethod(i);
-				if (result != null) return result;
-			}
-		}
-
-		return nonDefaults.get(0);
-	}
-
-	/**
-	 * Parses op names contained in specified String according to the following
-	 * format:
-	 *
-	 * <pre>
-	 *  'prefix1'.'prefix2' , 'prefix1'.'prefix3'
-	 * </pre>
-	 *
-	 * E.g. "math.add, math.pow". </br>
-	 * The name delimiter is a comma (,). Furthermore, names without prefixes
-	 * are added. The above example will result in the following output:
-	 *
-	 * <pre>
-	 *  [math.add, add, math.pow, pow]
-	 * </pre>
-	 *
-	 * @param names
-	 *            the string containing the names to parse
-	 * @return
-	 */
-	public static String[] parseOpNames(String names) {
-		return Arrays.stream(names.split(",")).map(s -> s.trim())
-				.toArray(String[]::new);
-	}
 }

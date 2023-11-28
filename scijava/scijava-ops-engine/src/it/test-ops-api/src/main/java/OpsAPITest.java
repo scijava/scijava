@@ -56,11 +56,10 @@ public class OpsAPITest {
 	/**
 	 * Tests that descriptions can be obtained
 	 */
-	public static void testOpDescriptions() {
+	public static void testOpHelp() {
 		OpEnvironment ops = OpEnvironment.getEnvironment();
-		var descriptions = ops.descriptions("math.add");
-		Assertions.assertInstanceOf(List.class, descriptions);
-		Assertions.assertInstanceOf(String.class, descriptions.get(0));
+		var descriptions = ops.help("math.add");
+		Assertions.assertInstanceOf(String.class, descriptions);
 	}
 
 	/**
@@ -71,13 +70,11 @@ public class OpsAPITest {
 		long exponent = 5;
 		OpEnvironment ops = OpEnvironment.getEnvironment();
 		// Assert there are no "math.pow" Ops that deal with longs
-		var descriptions = ops.descriptions("math.pow");
-		Assertions.assertNotEquals(0, descriptions.size(),
+		var help = ops.help("math.pow");
+		Assertions.assertNotEquals("No Ops found matching this request.", help,
 			"Expected at least one math.pow Op");
-		for (var description : descriptions) {
-			Assertions.assertFalse(description.toLowerCase().contains("long"),
-				"Found a math.pow Op that deals with Longs - testing the hints won't work here!");
-		}
+		Assertions.assertFalse(help.toLowerCase().contains("long"),
+			"Found a math.pow Op that deals with Longs - testing the hints won't work here!");
 		// Ensure an Op matches without simplification
 		// NB this call must come first, or the cache will be hit based on the previous call.
 		Hints h = new Hints("simplification.FORBIDDEN");
@@ -92,7 +89,7 @@ public class OpsAPITest {
 		try {
 			testOpEnvironmentObtainable();
 			testOpExecutions();
-			testOpDescriptions();
+			testOpHelp();
 			testOpHints();
 		}
 		catch (final Throwable t) {

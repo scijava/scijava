@@ -41,10 +41,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import org.scijava.ops.api.*;
+import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.OpMatchingException;
+import org.scijava.ops.api.OpRequest;
+import org.scijava.ops.engine.MatchingConditions;
 import org.scijava.ops.engine.OpCandidate;
 import org.scijava.ops.engine.OpCandidate.StatusCode;
-import org.scijava.ops.engine.MatchingConditions;
 import org.scijava.ops.engine.matcher.MatchingResult;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.engine.matcher.OpMatcher;
@@ -114,7 +117,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 		return validCandidates;
 	}
 
-	private List<OpCandidate> filterMatches(final List<OpCandidate> candidates) {
+	protected List<OpCandidate> filterMatches(final List<OpCandidate> candidates) {
 		final List<OpCandidate> validCandidates = checkCandidates(candidates);
 
 		// List of valid candidates needs to be sorted according to priority.
@@ -161,7 +164,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 		return matches;
 	}
 
-	protected Iterable<OpInfo> getInfos(OpEnvironment env,
+	private Iterable<OpInfo> getInfos(OpEnvironment env,
 		MatchingConditions conditions)
 	{
 		return env.infos(conditions.request().getName(), conditions.hints());
@@ -294,8 +297,8 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	 * Determines whether the specified type satisfies the op's required types
 	 * using {@link Types#isApplicable(Type[], Type[])}.
 	 */
-	private boolean typesMatch(final Type opType, final Type reqType,
-		final Map<TypeVariable<?>, Type> typeVarAssigns)
+	protected boolean typesMatch(final Type opType, final Type reqType,
+			final Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
 		if (reqType == null) return true;
 		try {

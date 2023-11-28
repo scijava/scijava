@@ -40,8 +40,8 @@ import org.scijava.common3.Classes;
 import org.scijava.ops.engine.exceptions.impl.FunctionalTypeOpException;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.types.Types;
+import org.scijava.types.inference.FunctionalInterfaces;
 import org.scijava.types.inference.GenericAssignability;
-import org.scijava.types.inference.InterfaceInference;
 
 public final class OpMethodUtils {
 
@@ -54,7 +54,7 @@ public final class OpMethodUtils {
 		// declared method (the method that our OpMethod is emulating).
 		Method abstractMethod;
 		try {
-			abstractMethod = InterfaceInference.singularAbstractMethod(opClass);
+			abstractMethod = FunctionalInterfaces.functionalMethodOf(opClass);
 		} catch (IllegalArgumentException e) {
 			throw new FunctionalTypeOpException(opMethod, e);
 

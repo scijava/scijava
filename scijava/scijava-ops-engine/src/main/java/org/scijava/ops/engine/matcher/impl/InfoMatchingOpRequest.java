@@ -113,11 +113,6 @@ public class InfoMatchingOpRequest implements OpRequest {
 	}
 
 	@Override
-	public boolean typesMatch(Type opType) {
-		return typesMatch(opType, new HashMap<>());
-	}
-
-	@Override
 	public boolean typesMatch(Type opType,
 		Map<TypeVariable<?>, Type> typeVarAssigns)
 	{

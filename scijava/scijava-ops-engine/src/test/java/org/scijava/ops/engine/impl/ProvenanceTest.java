@@ -38,21 +38,21 @@ import java.util.function.Function;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.scijava.collections.ObjectArray;
 import org.scijava.function.Computers;
 import org.scijava.function.Producer;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.InfoTree;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.Ops;
 import org.scijava.ops.api.RichOp;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaFunction;
 import org.scijava.ops.engine.adapt.lift.FunctionToArrays;
-import org.scijava.ops.engine.matcher.simplify.PrimitiveLossReporters;
 import org.scijava.ops.engine.copy.CopyOpCollection;
 import org.scijava.ops.engine.create.CreateOpCollection;
 import org.scijava.ops.engine.matcher.simplify.PrimitiveArraySimplifiers;
+import org.scijava.ops.engine.matcher.simplify.PrimitiveLossReporters;
 import org.scijava.ops.engine.matcher.simplify.PrimitiveSimplifiers;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
@@ -359,20 +359,47 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 	@Test
 	public void testSimplificationRecovery() {
 		// Get the Op
+		Computers.Arity1<ObjectArray<Number>, ObjectArray<Number>> c = ops //
+				.op("test" + ".provenanceComputer") //
+				.arity1() //
+				.inType(new Nil<ObjectArray<Number>>() {}) //
+				.outType(new Nil<ObjectArray<Number>>() {}) //
+				.computer();
+		// Get the signature from the Op
+		String signature = ops.history().signatureOf(c);
+		// Generate the Op from the signature and an Op type
+		Nil<Computers.Arity1<ObjectArray<Number>, ObjectArray<Number>>> special = new Nil<>() {};
+		Computers.Arity1<ObjectArray<Number>, ObjectArray<Number>> fromString = ops.opFromSignature(
+				signature, special);
+		// Assert Op similarity
+		Assertions.assertTrue(wrappedOpEquality(c, fromString));
+		// Assert Op functionality similarity
+		ObjectArray<Number> in = new ObjectArray<>(new Number[] { 1, 2, 3 });
+		ObjectArray<Number> actual = new ObjectArray<>(new Number[] { 0, 0, 0 });
+		fromString.compute(in, actual);
+		ObjectArray<Number> expected = new ObjectArray<>(new Number[] { 1., 2., 3. });
+		Assertions.assertEquals(expected, actual);
+	}
+
+	/**
+	 * Tests the ability of {@link OpEnvironment#opFromSignature(String, Nil)} to
+	 * generate an Op that has been adapted and simplified.
+	 */
+	@Test
+	public void testFocusedRecovery() {
+		// Get the Op
 		Computers.Arity1<Integer[], Integer[]> c = ops //
-			.op("test" + ".provenanceComputer") //
+			.op("test.provenanceComputer") //
 			.arity1() //
 			.inType(Integer[].class) //
 			.outType(Integer[].class) //
 			.computer();
 		// Get the signature from the Op
 		String signature = ops.history().signatureOf(c);
-		// Generate the Op from the signature and an Op type
+		// Generate the Op from the signature and an Op typ
 		Nil<Computers.Arity1<Integer[], Integer[]>> special = new Nil<>() {};
 		Computers.Arity1<Integer[], Integer[]> fromString = ops.opFromSignature(
 			signature, special);
-		// Assert Op similarity
-		Assertions.assertTrue(wrappedOpEquality(c, fromString));
 		// Assert Op functionality similarity
 		Integer[] in = { 1, 2, 3 };
 		Integer[] actual = { 0, 0, 0 };

@@ -92,8 +92,23 @@ public class OpBuilder {
 	/** Specifies an op with $arity input#if ( $arity > 1)s#end. */
 	public Arity${arity} arity${arity}() { return new Arity${arity}(); }
 
-
 #end
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName));
+		}
 	// -- Helper methods --
 
 	@SuppressWarnings({ "unchecked" })
@@ -241,6 +256,22 @@ public class OpBuilder {
 		public Object create() {
 			return producer().create();
 		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {}));
+		}
 	}
 
 	/**
@@ -306,6 +337,22 @@ public class OpBuilder {
 		public O create() {
 			return producer().create();
 		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {}, outType));
+		}
 	}
 
 	/**
@@ -342,6 +389,22 @@ public class OpBuilder {
 		 */
 		public void compute() {
 			computer().compute(out);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {}, type(out)));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {}, type(out)));
 		}
 	}
 
@@ -387,6 +450,21 @@ public class OpBuilder {
 			return new Arity${arity}_IT_OU<>($inputTypes.call($arity));
 		}
 
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {$nullList.call($arity)}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {$nullList.call($arity)}));
+		}
 	}
 #end
 
@@ -439,6 +517,22 @@ public class OpBuilder {
 		 */
 		public Computers.Arity${arity}$generics.call($arity) computer() {
 			return matchComputer(env, opName, $inputTypesWithOutput.call($arity), OpBuilder.this.hints);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {$inputTypes.call($arity)}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {$inputTypes.call($arity)}, outType));
 		}
 	}
 
@@ -517,6 +611,21 @@ public class OpBuilder {
 		}
 
 #end
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {$inputTypes.call($arity)}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {$inputTypes.call($arity)}));
+		}
 	}
 
 	/**
@@ -583,6 +692,22 @@ public class OpBuilder {
 		 */
 		public O apply() {
 			return function().apply($inputObjects.call($arity));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {$inputTypesFromArgs.call($arity)}, outType));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {$inputTypesFromArgs.call($arity)}, outType));
 		}
 	}
 
@@ -723,6 +848,21 @@ public class OpBuilder {
 		}
 
 #end
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {$inputTypesFromArgs.call($arity)}));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {$inputTypesFromArgs.call($arity)}));
+		}
 	}
 
 	/**
@@ -768,6 +908,22 @@ public class OpBuilder {
 		 */
 		public void compute() {
 			computer().compute($inputObjects.call($arity), out);
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a simple entry for each Op satisfying the partial request
+         */
+		public String help() {
+		    return env.help(new PartialOpRequest(opName, new Nil<?>[] {$inputTypesFromArgs.call($arity)}, type(out)));
+		}
+
+        /**
+         * Finds all Ops matching the current partial OpBuilder request
+         * @return a {@link String} with a verbose entry for each Op satisfying the partial request
+         */
+		public String helpVerbose() {
+		    return env.helpVerbose(new PartialOpRequest(opName, new Nil<?>[] {$inputTypesFromArgs.call($arity)}, type(out)));
 		}
 	}
 #end

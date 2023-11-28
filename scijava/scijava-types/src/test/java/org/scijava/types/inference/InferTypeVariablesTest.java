@@ -176,7 +176,7 @@ public class InferTypeVariablesTest {
 		// We expect O = Any
 		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.getType();
 		Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
-		expected.put(typeVarO, new TypeMapping(typeVarO, new Any(), true));
+		expected.put(typeVarO, new TypeMapping(typeVarO, Any.class, true));
 
 		Assertions.assertEquals(expected, typeAssigns);
 	}
@@ -194,7 +194,7 @@ public class InferTypeVariablesTest {
 		// We expect O = Any
 		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.getType();
 		Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
-		expected.put(typeVarO, new TypeMapping(typeVarO, new Any(), true));
+		expected.put(typeVarO, new TypeMapping(typeVarO, Any.class, true));
 
 		Assertions.assertEquals(expected, typeAssigns);
 	}
@@ -212,7 +212,7 @@ public class InferTypeVariablesTest {
 		// We expect O = Any
 		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.getType();
 		Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
-		expected.put(typeVarO, new TypeMapping(typeVarO, new Any(), true));
+		expected.put(typeVarO, new TypeMapping(typeVarO, Any.class, true));
 
 		Assertions.assertEquals(expected, typeAssigns);
 	}
@@ -230,7 +230,7 @@ public class InferTypeVariablesTest {
 		// We expect O = Any
 		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.getType();
 		Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
-		expected.put(typeVarO, new TypeMapping(typeVarO, new Any(), true));
+		expected.put(typeVarO, new TypeMapping(typeVarO, Any.class, true));
 
 		Assertions.assertEquals(expected, typeAssigns);
 	}

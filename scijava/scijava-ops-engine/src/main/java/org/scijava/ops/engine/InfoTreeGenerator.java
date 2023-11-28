@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.scijava.ops.api.InfoTree;
+import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.priority.Prioritized;
 import org.scijava.priority.Priority;
@@ -45,15 +46,18 @@ public interface InfoTreeGenerator extends Prioritized<InfoTreeGenerator> {
 	/**
 	 * Generates an {@link InfoTree}. This {@link InfoTreeGenerator} is only
 	 * responsible for generating the <b>outer layer</b> of the {@link InfoTree},
-	 * and delegates to {@code generators} to
-	 * 
-	 * @param signature the signature for which an {@link InfoTreeGenerator} must be generated
+	 * and delegates to {@code generators} to generate other needed components,
+	 * such as dependencies.
+	 *
+	 * @param env the {@link OpEnvironment}
+	 * @param signature the signature for which an {@link InfoTreeGenerator} must
+	 *          be generated
 	 * @param idMap the available {@link OpInfo}s, keyed by their id
 	 * @param generators the available {@link InfoTreeGenerator}s
 	 * @return an {@link InfoTree} matching the specifications of
 	 *         {@code signature}
 	 */
-	InfoTree generate(String signature, Map<String, OpInfo> idMap,
+	InfoTree generate(OpEnvironment env, String signature, Map<String, OpInfo> idMap,
 		Collection<InfoTreeGenerator> generators);
 
 	/**
@@ -78,19 +82,21 @@ public interface InfoTreeGenerator extends Prioritized<InfoTreeGenerator> {
 		return suitableGenerators.get(0);
 	}
 
-	static InfoTree generateDependencyTree(String subsignature,
+	static InfoTree generateDependencyTree(OpEnvironment env, String subsignature,
 		Map<String, OpInfo> idMap, Collection<InfoTreeGenerator> generators)
 	{
 		InfoTreeGenerator genOpt = InfoTreeGenerator
 			.findSuitableGenerator(subsignature, generators);
-		return genOpt.generate(subsignature, idMap, generators);
+		return genOpt.generate(env, subsignature, idMap, generators);
 	}
 
 	/**
 	 * Finds the subsignature in {@link String} {@code signature}. The
-	 * subsignature is assumed to start at index {@code start}.
-	 * 
-	 * @param signature the signature containing a subsignature
+	 * subsignature is assumed to start at index {@code start}. Note that we
+	 * cannot simply use {@link String#substring(int)} because the subsignature
+	 * may have dependencies, which are not easily parsed.
+	 *
+	 * @param signature the signature of some Op
 	 * @param start the index where the subsignature starts
 	 * @return a signature contained withing {@code signature}
 	 */

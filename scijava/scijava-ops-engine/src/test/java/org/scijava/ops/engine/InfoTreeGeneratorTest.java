@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.InfoTree;
+import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.engine.matcher.impl.OpFieldInfo;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.priority.Priority;
@@ -42,7 +42,7 @@ public class InfoTreeGeneratorTest extends AbstractTestEnvironment implements
 	static class DummyInfoTreeGenerator implements InfoTreeGenerator {
 
 		@Override
-		public InfoTree generate(String signature, Map<String, OpInfo> idMap,
+		public InfoTree generate(OpEnvironment env, String signature, Map<String, OpInfo> idMap,
 				Collection<InfoTreeGenerator> generators)
 		{
 			return null;

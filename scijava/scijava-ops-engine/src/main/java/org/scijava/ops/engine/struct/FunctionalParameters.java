@@ -37,13 +37,13 @@ import java.util.stream.Collectors;
 
 import org.scijava.function.Container;
 import org.scijava.function.Mutable;
-import org.scijava.ops.api.Ops;
 import org.scijava.ops.engine.util.internal.AnnotationUtils;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Structs;
 import org.scijava.types.Types;
+import org.scijava.types.inference.FunctionalInterfaces;
 
 public final class FunctionalParameters {
 
@@ -97,7 +97,7 @@ public final class FunctionalParameters {
 	public static List<FunctionalMethodType> findFunctionalMethodTypes(
 		Type functionalType)
 	{
-		Method functionalMethod = Ops.findFunctionalMethod(Types.raw(functionalType));
+		Method functionalMethod = FunctionalInterfaces.functionalMethodOf(functionalType);
 		if (functionalMethod == null) throw new IllegalArgumentException("Type " +
 			functionalType +
 			" is not a functional type, thus its functional method types cannot be determined");
@@ -143,7 +143,7 @@ public final class FunctionalParameters {
 	}
 
 	public static List<Method> fMethodsWithNullable(Class<?> opClass) {
-		Method superFMethod = Ops.findFunctionalMethod(opClass);
+		Method superFMethod = FunctionalInterfaces.functionalMethodOf(opClass);
 		return Arrays.stream(opClass.getMethods()) //
 				.filter(m -> m.getName().equals(superFMethod.getName())) //
 				.filter(m -> m.getParameterCount() == superFMethod.getParameterCount()) //

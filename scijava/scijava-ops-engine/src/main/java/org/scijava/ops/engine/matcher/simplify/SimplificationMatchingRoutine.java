@@ -29,21 +29,53 @@
 
 package org.scijava.ops.engine.matcher.simplify;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
-import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpRequest;
 import org.scijava.ops.api.OpMatchingException;
+import org.scijava.ops.api.OpRequest;
 import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.engine.MatchingConditions;
+import org.scijava.ops.engine.OpCandidate;
+import org.scijava.ops.engine.matcher.MatchingResult;
+import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.engine.matcher.impl.RuntimeSafeMatchingRoutine;
 import org.scijava.priority.Priority;
-import org.scijava.types.Types;
+import org.slf4j.LoggerFactory;
 
 public class SimplificationMatchingRoutine extends RuntimeSafeMatchingRoutine {
+
+	protected static final Map<OpEnvironment, Map<String, SortedSet<OpInfo>>> seenNames = new HashMap<>();
+
+	protected static void addSimpleInfosToCache(OpEnvironment env, String name) {
+		Map<String, SortedSet<OpInfo>> seen = seenNames.computeIfAbsent(env, e -> new HashMap<>());
+		if (!seen.containsKey(name)) {
+			SortedSet<OpInfo> ops = new TreeSet<>();
+			for (OpInfo info : env.infos(name)) {
+				if (info.declaredHints().contains(BaseOpHints.Simplification.FORBIDDEN)) continue;
+				if (info instanceof SimplifiedOpInfo) continue;
+				try {
+					ops.add(SimplificationUtils.simplifyInfo(env, info));
+				}
+				catch (OpMatchingException e) {
+					LoggerFactory.getLogger(SimplificationMatchingRoutine.class) //
+						.info("Could not simplify OpInfo " + info +
+							" due to the following exception", e);
+					ops.add(info);
+				}
+			}
+			seen.put(name, ops);
+		}
+	}
 
 	@Override
 	public void checkSuitability(MatchingConditions conditions)
@@ -56,33 +88,73 @@ public class SimplificationMatchingRoutine extends RuntimeSafeMatchingRoutine {
 	}
 
 	@Override
-	protected Iterable<OpInfo> getInfos(OpEnvironment env,
-		MatchingConditions conditions)
+	public OpCandidate findMatch(MatchingConditions conditions, OpMatcher matcher,
+			OpEnvironment env)
 	{
-		OpRequest req = conditions.request();
-		Hints hints = conditions.hints().plus(BaseOpHints.Simplification.IN_PROGRESS);
-		Iterable<OpInfo> suitableInfos = env.infos(req.getName(), hints);
-		Set<OpInfo> simpleInfos = new HashSet<>();
-		for (OpInfo info : suitableInfos) {
-			boolean functionallyAssignable = Types.isAssignable(Types.raw(info
-				.opType()), Types.raw(req.getType()));
-			if (!functionallyAssignable) continue;
-			try {
-				InfoSimplificationGenerator gen = new InfoSimplificationGenerator(info,
-					env);
-				simpleInfos.add(gen.generateSuitableInfo(env, req, hints));
+		conditions = MatchingConditions.from(conditions.request(), conditions.hints().plus(
+				BaseOpHints.Simplification.IN_PROGRESS));
+		OpRequest request = conditions.request();
+		Iterable<SimplifiedOpInfo> simpleInfos = getSimpleInfos(env, conditions.request().getName());
+		// Pass 1 - Check simple infos
+		final ArrayList<OpCandidate> candidates = new ArrayList<>();
+		for (final SimplifiedOpInfo info: simpleInfos) {
+			Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
+			if (typesMatch(info.opType(), conditions.request().getType(),
+					typeVarAssigns))
+			{
+				OpCandidate candidate = new OpCandidate(env, request, info,
+						typeVarAssigns);
+				candidates.add(candidate);
 			}
-			catch (Throwable t) {
-				// NB: empty catch block
-				// If we cannot generate the simplification, move on to the next info
+		}
+		if (!candidates.isEmpty()) {
+			final List<OpCandidate> matches = filterMatches(candidates);
+			return new MatchingResult(candidates, matches, Collections.singletonList(request)).singleMatch();
+		}
+
+		// Pass 2 - Focus if needed
+		SimplifiedOpRequest simpleReq = new SimplifiedOpRequest(request, env);
+		for (final SimplifiedOpInfo info : simpleInfos) {
+			Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
+			if (typesMatch(info.opType(), simpleReq.getType(),
+					typeVarAssigns))
+			{
+				FocusedOpInfo focusedInfo = new FocusedOpInfo(info, simpleReq, env);
+				OpCandidate candidate = new OpCandidate(env, request, focusedInfo,
+						typeVarAssigns);
+				candidates.add(candidate);
+			}
+		}
+		List<OpRequest> reqs = Collections.singletonList(conditions.request());
+		if (candidates.isEmpty()) {
+			return MatchingResult.empty(reqs).singleMatch();
+		}
+		// narrow down candidates to the exact matches
+		final List<OpCandidate> matches = filterMatches(candidates);
+		return new MatchingResult(candidates, matches, reqs).singleMatch();
+	}
+
+	protected static SortedSet<SimplifiedOpInfo> getSimpleInfos(OpEnvironment env, String name)
+	{
+		addSimpleInfosToCache(env, name);
+		TreeSet<SimplifiedOpInfo> simpleInfos = new TreeSet<>();
+		for (OpInfo info: seenNames.get(env).get(name)) {
+			if (info instanceof SimplifiedOpInfo) {
+				simpleInfos.add((SimplifiedOpInfo) info);
 			}
 		}
 		return simpleInfos;
 	}
 
+	protected static SortedSet<OpInfo> getInfos(OpEnvironment env, String name)
+	{
+		addSimpleInfosToCache(env, name);
+		return seenNames.get(env).get(name);
+	}
+
 	@Override
 	public double priority() {
-		return Priority.LOW - 1;
+		return Priority.VERY_LOW;
 	}
 
 }

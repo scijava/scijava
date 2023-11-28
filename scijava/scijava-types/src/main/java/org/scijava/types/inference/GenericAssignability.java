@@ -466,14 +466,8 @@ public final class GenericAssignability {
 		if (inferFrom instanceof WildcardType) {
 			inferFrom = getInferrableBound((WildcardType) inferFrom);
 		}
-		if (inferFrom instanceof Any) {
-			Any any = (Any) inferFrom;
-			mapTypeVarsToAny(type, any, typeMappings);
-			return;
-		}
-		if (inferFrom.equals(Any.class)) {
-			Any any = new Any();
-			mapTypeVarsToAny(type, any, typeMappings);
+		if (inferFrom instanceof Any || inferFrom.equals(Any.class)) {
+			mapTypeVarsToAny(type, typeMappings);
 			return;
 		}
 		// Finding the supertype here is really important. Suppose that we are
@@ -646,7 +640,7 @@ public final class GenericAssignability {
 		// TODO: consider checking inferrableBounds instanceof Class
 	}
 
-	private static void mapTypeVarsToAny(Type type, Any any,
+	private static void mapTypeVarsToAny(Type type,
 		Map<TypeVariable<?>, TypeMapping> typeMappings)
 	{
 		if (!Types.containsTypeVars(type)) return;
@@ -654,7 +648,7 @@ public final class GenericAssignability {
 		if (type instanceof TypeVariable) {
 			if (typeMappings.containsKey(type)) return;
 			TypeVariable<?> typeVar = (TypeVariable<?>) type;
-			typeMappings.put(typeVar, suitableTypeMapping(typeVar, any, true));
+			typeMappings.put(typeVar, suitableTypeMapping(typeVar, Any.class, true));
 		}
 		else if (type instanceof ParameterizedType) {
 			ParameterizedType pType = (ParameterizedType) type;
@@ -675,12 +669,6 @@ public final class GenericAssignability {
 			for (Type typeParam : clazz.getTypeParameters())
 				mapTypeVarsToAny(typeParam, typeMappings);
 		}
-	}
-
-	private static void mapTypeVarsToAny(Type type,
-		Map<TypeVariable<?>, TypeMapping> typeMappings)
-	{
-		mapTypeVarsToAny(type, new Any(), typeMappings);
 	}
 
 	private static void resolveTypeInMap(TypeVariable<?> typeVar, Type newType,

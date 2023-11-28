@@ -41,6 +41,7 @@ import org.scijava.ops.api.Ops;
 import org.scijava.ops.engine.exceptions.impl.NullablesOnMultipleMethodsException;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.FunctionalMethodType;
+import org.scijava.types.inference.FunctionalInterfaces;
 
 /**
  * Lazily generates the parameter data for a {@link List} of
@@ -100,7 +101,7 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 		long numOpParams = m.getParameterCount();
 		long numReturns = m.getReturnType() == void.class ? 0 : 1;
 
-		opType = Ops.findFunctionalInterface(opType);
+		opType = FunctionalInterfaces.findFrom(opType);
 		Boolean[] paramNullability = getParameterNullability(m, opType,
 			(int) numOpParams);
 

@@ -38,6 +38,7 @@ import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.Ops;
 import org.scijava.ops.engine.OpInfoGenerator;
 import org.scijava.ops.engine.matcher.impl.OpClassInfo;
+import org.scijava.ops.engine.util.Infos;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
 import org.scijava.ops.spi.OpHints;
@@ -54,7 +55,7 @@ public class OpClassOpInfoGenerator implements OpInfoGenerator
 		OpClass p = c.getAnnotation(OpClass.class);
 		if (p == null) return Collections.emptyList();
 
-		String[] parsedOpNames = Ops.parseOpNames(p.names());
+		String[] parsedOpNames = Infos.parseNames(p.names());
 		String version = Versions.getVersion(c);
 		Hints hints = formHints(c.getAnnotation(OpHints.class));
 		double priority = p.priority();

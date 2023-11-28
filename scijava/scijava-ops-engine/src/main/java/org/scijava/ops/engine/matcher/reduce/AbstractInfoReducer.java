@@ -35,13 +35,14 @@ import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.Ops;
 import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.types.Types;
+import org.scijava.types.inference.FunctionalInterfaces;
 
 public abstract class AbstractInfoReducer implements InfoReducer {
 
 	@Override
 	public boolean canReduce(OpInfo info) {
-		boolean isReducerType = isReducerType(Ops.findFunctionalInterface(Types
-			.raw(info.opType())));
+		boolean isReducerType = isReducerType(
+				FunctionalInterfaces.findFrom(info.opType()));
 		boolean canReduce = info.declaredHints().containsNone(
 			BaseOpHints.Reduction.FORBIDDEN);
 		return isReducerType && canReduce;
@@ -49,8 +50,7 @@ public abstract class AbstractInfoReducer implements InfoReducer {
 
 	@Override
 	public ReducedOpInfo reduce(OpInfo info, int numReductions) {
-		Type opType = info.opType();
-		Class<?> rawType = Ops.findFunctionalInterface(Types.raw(opType));
+		Class<?> rawType = FunctionalInterfaces.findFrom(info.opType());
 		int originalArity = arityOf(rawType);
 		int reducedArity = originalArity - numReductions;
 		Class<?> reducedRawType = ofArity(reducedArity);

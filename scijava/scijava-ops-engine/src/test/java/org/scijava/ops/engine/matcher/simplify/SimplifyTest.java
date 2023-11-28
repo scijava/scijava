@@ -52,23 +52,24 @@ public class SimplifyTest extends AbstractTestEnvironment implements OpCollectio
 
 	@BeforeAll
 	public static void AddNeededOps() {
-		ops.register(new SimplifyTest());
-		ops.register(new PrimitiveSimplifiers());
-		ops.register(new PrimitiveLossReporters());
-		ops.register(new IdentityLossReporter());
-		ops.register(new Identity());
-		ops.register(new LossReporterWrapper());
-		ops.register(new PrimitiveArraySimplifiers());
-		ops.register(new CopyOpCollection());
-		ops.register(new CreateOpCollection());
+		ops.register( //
+			new SimplifyTest(), //
+			new PrimitiveSimplifiers(), //
+			new PrimitiveLossReporters(), //
+			new IdentityLossReporter<>(), //
+			new IdentityCollection<>(), //
+			new LossReporterWrapper<>(), //
+			new PrimitiveArraySimplifiers<>(), //
+			new CopyOpCollection<>(), //
+			new CreateOpCollection() //
+		);
 	}
 
 	@OpField(names = "test.math.powDouble", params = "base, exponent, result")
-	public final BiFunction<Double, Double, Double> powOp = (b, e) -> Math.pow(b,
-		e);
+	public final BiFunction<Double, Double, Double> powOp = Math::pow;
 
 	@OpField(names = "test.math.powDouble", params = "base, exponent, result")
-	public final BiFunction<Long, Long, Double> powOpL = (b, e) -> Math.pow(b, e);
+	public final BiFunction<Long, Long, Double> powOpL = Math::pow;
 
 	@OpField(names = "test.math.powDouble", params = "base, exponent, result")
 	public final BiFunction<Integer[], Double, Double> powOpArray = (b, e) -> Math.pow(b[0], e);
@@ -93,7 +94,7 @@ public class SimplifyTest extends AbstractTestEnvironment implements OpCollectio
 	
 	@Test
 	public void testSimplifyArray() {
-		Byte[] number = {2};
+		byte[] number = {2};
 		Double exponent = 3.;
 		Double result = ops.op("test.math.powDouble").arity2().input(number, exponent)
 			.outType(Double.class).apply();

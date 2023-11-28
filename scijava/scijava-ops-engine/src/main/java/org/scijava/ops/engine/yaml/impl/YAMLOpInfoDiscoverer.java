@@ -71,11 +71,9 @@ public class YAMLOpInfoDiscoverer implements Discoverer {
 	public <U> List<U> discover(Class<U> c) {
 		// We only discover OpInfos
 		if (!c.equals(OpInfo.class)) return Collections.emptyList();
-		// Load all YAML files
-		Enumeration<URL> opFiles = getOpYAML();
 		// Parse each YAML file
 		List<OpInfo> opInfos = new ArrayList<>();
-		Collections.list(opFiles).stream().distinct().forEach(opFile -> {
+		getOpYAML().stream().distinct().forEach(opFile -> {
 			try {
 				parse(opInfos, opFile);
 			}
@@ -89,15 +87,16 @@ public class YAMLOpInfoDiscoverer implements Discoverer {
 	/**
 	 * Convenience method to hide IOException
 	 * 
-	 * @return an {@link Enumeration} of YAML files.
+	 * @return an {@link List} of YAML files.
 	 */
-	private Enumeration<URL> getOpYAML() {
+	private List<URL> getOpYAML() {
 		try {
-			return Classes.classLoader().getResources("op.yaml");
+			Enumeration<URL> e = Classes.classLoader().getResources("op.yaml");
+			return Collections.list(e);
 		}
 		catch (IOException e) {
 			log.error("Could not load Op YAML files!", e);
-			return Collections.emptyEnumeration();
+			return Collections.emptyList();
 		}
 	}
 

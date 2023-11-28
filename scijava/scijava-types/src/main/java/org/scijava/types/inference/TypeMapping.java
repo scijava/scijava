@@ -92,6 +92,9 @@ public class TypeMapping {
 		if (otherType instanceof Any) {
 			return;
 		}
+		if (mappedType.equals(otherType)) {
+			return;
+		}
 		if (malleable) {
 			// TODO: consider the correct value of that boolean
 			Type superType = Types.greatestCommonSuperType(new Type[] { otherType,

@@ -36,7 +36,11 @@ import java.util.function.Function;
  *
  * @author Gabriel Selzer
  */
-public class ExampleTypes {
+public final class ExampleTypes {
+
+	private ExampleTypes() {
+		// Prevent instantiation of static utility class
+	}
 
 	public static class Thing<T> {
 

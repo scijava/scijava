@@ -52,8 +52,12 @@ import net.imglib2.view.Views;
  * @author Gabe Selzer
  * @param <T>
  */
-public class DefaultCreateKernelGauss
+public final class DefaultCreateKernelGauss
 {
+
+	private DefaultCreateKernelGauss() {
+		// Prevent instantiation of static utility class
+	}
 
 	public static <T extends Type<T>, C extends ComplexType<C>> RandomAccessibleInterval<C> createKernel(double[] input, C type, BiFunction<Dimensions, T, Img<T>> imgFromDimsAndType) {
 		final double[] sigmaPixels = new double[input.length];

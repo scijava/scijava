@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 
 import org.scijava.function.Container;
 import org.scijava.function.Mutable;
-import org.scijava.ops.engine.util.Ops;
+import org.scijava.ops.api.Ops;
 import org.scijava.ops.engine.util.internal.AnnotationUtils;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.struct.FunctionalMethodType;
@@ -45,7 +45,11 @@ import org.scijava.struct.ItemIO;
 import org.scijava.struct.Structs;
 import org.scijava.types.Types;
 
-public class FunctionalParameters {
+public final class FunctionalParameters {
+
+	private FunctionalParameters() {
+		// Prevent instantiation of static utility class
+	}
 
 	public static void parseFunctionalParameters(
 		final ArrayList<SynthesizedParameterMember<?>> items,

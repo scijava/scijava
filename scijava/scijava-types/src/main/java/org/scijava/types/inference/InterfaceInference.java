@@ -32,7 +32,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
-public class InterfaceInference {
+public final class InterfaceInference {
+
+	private InterfaceInference() {
+		// Prevent instantiation of static utility class
+	}
 
 	public static Method singularAbstractMethod(Class<?> functionalInterface) {
 		Method[] typeMethods = Arrays.stream(functionalInterface

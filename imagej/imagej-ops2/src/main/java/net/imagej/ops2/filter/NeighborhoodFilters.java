@@ -35,7 +35,11 @@ import net.imglib2.type.numeric.real.DoubleType;
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
 
-public class NeighborhoodFilters {
+public final class NeighborhoodFilters {
+
+	private NeighborhoodFilters() {
+		// Prevent instantiation of static utility class
+	}
 
 	/**
 	 * Computes the maximum over a {@link Neighborhood}, and stores it in the

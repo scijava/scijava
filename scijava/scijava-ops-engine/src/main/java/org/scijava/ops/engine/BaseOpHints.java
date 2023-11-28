@@ -36,7 +36,11 @@ import java.lang.annotation.Annotation;
  * 
  * @author Gabriel Selzer
  */
-public class BaseOpHints {
+public final class BaseOpHints {
+
+	private BaseOpHints() {
+		// Prevent instantiation of static utility class
+	}
 
 	public static class Reduction {
 		public static final String PREFIX = "reduction";

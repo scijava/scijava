@@ -48,7 +48,11 @@ import org.scijava.types.Any;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 
-public class GenericAssignability {
+public final class GenericAssignability {
+
+	private GenericAssignability() {
+		// Prevent instantiation of static utility class
+	}
 
 	/**
 	 * @param src the type for which assignment should be checked from

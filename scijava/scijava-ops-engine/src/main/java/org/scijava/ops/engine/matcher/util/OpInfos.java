@@ -1,17 +1,18 @@
-/* #%L
- * ImageJ2 software for multidimensional image processing and analysis.
+/*
+ * #%L
+ * SciJava Operations Engine: a framework for reusable algorithms.
  * %%
- * Copyright (C) 2014 - 2023 ImageJ2 developers.
+ * Copyright (C) 2016 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,58 +27,44 @@
  * #L%
  */
 
-package net.imagej.ops2.create;
+package org.scijava.ops.engine.matcher.util;
 
-import java.util.function.BiFunction;
+import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.engine.OpDependencyMember;
+import org.scijava.ops.engine.exceptions.impl.MultipleOutputsOpException;
+import org.scijava.struct.Member;
+import org.scijava.struct.Struct;
 
-import net.imglib2.Cursor;
-import net.imglib2.Dimensions;
-import net.imglib2.FinalInterval;
-import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.img.Img;
-import net.imglib2.type.Type;
-import net.imglib2.type.numeric.ComplexType;
-import net.imglib2.view.Views;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * Creates a separated sobel kernel.
- * 
- * @author Eike Heinz, University of Konstanz
+ * Static utility class for working with {@link org.scijava.ops.api.OpInfo}
  *
- * @param <T>
- *            type of input
+ * @author Curtis Rueden
+ * @author David Kolb
+ * @author Mark Hiner
  */
+public final class OpInfos {
 
-public final class DefaultCreateKernelSobel{
-
-	private DefaultCreateKernelSobel() {
+	private OpInfos() {
 		// Prevent instantiation of static utility class
 	}
 
-	private static final float[] values = { 1.0f, 2.0f, 1.0f, -1.0f, 0.0f, 1.0f };
-
-	public static <T extends Type<T>, C extends ComplexType<C>> RandomAccessibleInterval<C> createKernel(C type, BiFunction<Dimensions, T, Img<T>> createFunc) {
-		long[] dim = new long[4];
-
-		dim[0] = 3;
-		dim[1] = 1;
-
-		for (int k = 2; k < dim.length; k++) {
-			dim[k] = 1;
+	public static void ensureHasSingleOutput(String op, Struct struct)
+	{
+		final long numOutputs = struct.members().stream() //
+				.filter(Member::isOutput).count();
+		if (numOutputs > 1) {
+			throw new MultipleOutputsOpException(op);
 		}
-
-		dim[dim.length - 1] = 2;
-
-		RandomAccessibleInterval<C> output = (RandomAccessibleInterval<C>) createFunc.apply(new FinalInterval(dim), (T) type);
-		final Cursor<C> cursor = Views.iterable(output).cursor();
-		int i = 0;
-		while (cursor.hasNext()) {
-			cursor.fwd();
-			cursor.get().setReal(values[i]);
-			i++;
-		}
-
-		return output;
 	}
 
+	/** Gets the op's dependencies on other ops. */
+	public static List<OpDependencyMember<?>> dependenciesOf(OpInfo info) {
+		return info.struct().members().stream() //
+				.filter(m -> m instanceof OpDependencyMember) //
+				.map(m -> (OpDependencyMember<?>) m) //
+				.collect(Collectors.toList());
+	}
 }

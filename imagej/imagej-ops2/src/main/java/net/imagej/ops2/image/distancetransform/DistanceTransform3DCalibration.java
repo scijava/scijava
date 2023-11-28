@@ -43,7 +43,11 @@ import org.scijava.concurrent.Parallelization;
  * 
  * @author Simon Schmid (University of Konstanz)
  */
-public class DistanceTransform3DCalibration {
+public final class DistanceTransform3DCalibration {
+
+	private DistanceTransform3DCalibration() {
+		// Prevent instantiation of static utility class
+	}
 
 	/*
 	 * meijsters raster scan alogrithm Source:

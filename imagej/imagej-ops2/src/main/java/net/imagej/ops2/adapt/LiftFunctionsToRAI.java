@@ -61,7 +61,11 @@ import org.scijava.ops.spi.OpDependency;
  * @author Gabriel Selzer
  * @author Mark Hiner
  */
-public class LiftFunctionsToRAI {
+public final class LiftFunctionsToRAI {
+
+	private LiftFunctionsToRAI() {
+		// prevent instantiation of static utility class
+	}
 
 	/**
 	 * @implNote op names='adapt', priority='100.'

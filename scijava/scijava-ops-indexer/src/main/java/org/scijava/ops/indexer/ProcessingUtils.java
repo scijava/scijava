@@ -48,7 +48,7 @@ import javax.tools.Diagnostic;
  *
  * @author Gabriel Selzer
  */
-public class ProcessingUtils {
+public final class ProcessingUtils {
 
 	/**
 	 * Given a Javadoc comment, separates the comment by the Javadoc tags

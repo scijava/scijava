@@ -44,7 +44,11 @@ import net.imglib2.type.numeric.RealType;
  * 
  * @author Simon Schmid (University of Konstanz)
  */
-public class DistanceTransform3D {
+public final class DistanceTransform3D {
+
+	private DistanceTransform3D() {
+		// Prevent instantiation of static utility class
+	}
 
 	/*
 	 * meijsters raster scan alogrithm Source:

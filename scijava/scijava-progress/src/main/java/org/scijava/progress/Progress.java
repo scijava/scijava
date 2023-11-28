@@ -45,6 +45,11 @@ import java.util.WeakHashMap;
 public final class Progress {
 
 	/**
+	 * Private constructor designed to prevent instantiation.
+	 */
+	private Progress() {}
+
+	/**
 	 * A record of all listeners interested in the progress of all Object
 	 * executions
 	 */
@@ -272,11 +277,6 @@ public final class Progress {
 	public static void setStageMax(long max) {
 		currentTask().setStageMax(max);
 	}
-
-	/**
-	 * Private constructor designed to prevent instantiation.
-	 */
-	private Progress() {}
 
 }
 

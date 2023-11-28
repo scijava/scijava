@@ -31,8 +31,11 @@ package org.scijava.ops.engine.yaml;
 import java.util.HashMap;
 import java.util.Map;
 
-public class YAMLUtils {
+public final class YAMLUtils {
 
+	private YAMLUtils() {
+		// Prevent instantiation of static utility class
+	}
 
 	public static Map<String, Object> subMap(final Map<String, Object> map,
 			String key)

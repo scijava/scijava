@@ -68,7 +68,11 @@ import org.scijava.function.Functions;
  * @author Per Christian Henden
  * @author Jens Bache-Wiig
  */
-public class BoxCount {
+public final class BoxCount {
+
+	private BoxCount() {
+		// Prevent instantiation of static utility class
+	}
 
 	// /** Starting size of the grid sections in pixels */
 	// private Long maxSize = 48L;

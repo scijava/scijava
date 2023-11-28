@@ -77,8 +77,8 @@ import org.scijava.ops.engine.matcher.impl.DefaultOpMatcher;
 import org.scijava.ops.engine.matcher.impl.DefaultOpRequest;
 import org.scijava.ops.engine.matcher.impl.InfoMatchingOpRequest;
 import org.scijava.ops.engine.matcher.impl.OpClassInfo;
+import org.scijava.ops.engine.matcher.util.OpInfos;
 import org.scijava.ops.engine.struct.FunctionalParameters;
-import org.scijava.ops.engine.util.Ops;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
@@ -581,7 +581,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 		final List<RichOp<?>> dependencyChains = new ArrayList<>();
 
-		for (final OpDependencyMember<?> dependency : Ops.dependenciesOf(info)) {
+		for (final OpDependencyMember<?> dependency : OpInfos.dependenciesOf(info)) {
 			final OpRequest dep = inferOpRequest(dependency, typeVarAssigns);
 			try {
 				// TODO: Consider a new Hint implementation

@@ -68,7 +68,7 @@ public class Quadric implements
 	/**
 	 * TODO
 	 *
-	 * @param vectorCollection
+	 * @param points
 	 * @return the outputMatrix
 	 */
 	@Override

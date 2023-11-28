@@ -45,7 +45,9 @@ import org.scijava.common3.Classes;
  */
 public final class Lambdas {
 
-	private Lambdas() {}
+	private Lambdas() {
+		// Prevent instantiation of static utility class
+	}
 
 	public static <T> T lambdaize(Class<T> functionalInterface,
 			MethodHandle methodHandle) throws Throwable

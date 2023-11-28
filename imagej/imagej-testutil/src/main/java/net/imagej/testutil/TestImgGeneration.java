@@ -64,7 +64,12 @@ import net.imglib2.util.Intervals;
 
 import org.scijava.common3.MersenneTwisterFast;
 
-public class TestImgGeneration {
+public final class TestImgGeneration {
+
+	private TestImgGeneration() {
+		// Prevent instantiation of static utility class
+	}
+
 	private static int SEED = 17;
 	public static ArrayImg<BitType, LongArray> bitArray(
 		final boolean fill, final long... dims)

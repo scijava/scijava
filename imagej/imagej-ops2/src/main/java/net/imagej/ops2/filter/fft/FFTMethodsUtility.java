@@ -38,7 +38,11 @@ import net.imglib2.algorithm.fft2.FFTMethods;
  *
  * @author bnorthan
  */
-public class FFTMethodsUtility {
+public final class FFTMethodsUtility {
+
+	private FFTMethodsUtility() {
+		// Prevent instantiation of static utility class
+	}
 
 	/**
 	 * Calculates padding size and complex FFT size for real to complex FFT

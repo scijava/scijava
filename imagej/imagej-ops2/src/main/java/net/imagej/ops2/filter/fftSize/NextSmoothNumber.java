@@ -45,7 +45,11 @@ package net.imagej.ops2.filter.fftSize;
  * @author Johannes Schindelin
  * @author Brian Northan
  */
-public class NextSmoothNumber {
+public final class NextSmoothNumber {
+
+	private NextSmoothNumber() {
+		// Prevent instantiation of static utility class
+	}
 
 	public static int nextSmooth(int x) {
 		int result = -1;

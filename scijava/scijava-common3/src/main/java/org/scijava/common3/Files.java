@@ -33,7 +33,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Pattern;
 
-public class Files {
+public final class Files {
+
+	private Files() {
+		// Prevent instantiation of static utility class
+	}
 
 	/**
 	 * Gets the absolute path to the given file, with the directory separator

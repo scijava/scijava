@@ -43,7 +43,11 @@ import org.scijava.ops.spi.OpDependency;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class ComputersToFunctionsAndLift {
+public final class ComputersToFunctionsAndLift {
+
+	private ComputersToFunctionsAndLift() {
+		// prevent instantiation of static utility class
+	}
 
 #foreach($arity in $arities)
 #foreach($rai in [1..$arity])

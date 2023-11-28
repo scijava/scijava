@@ -43,7 +43,11 @@ import org.scijava.ops.spi.OpDependency;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class FunctionsToComputersAndLift {
+public final class FunctionsToComputersAndLift {
+
+	private FunctionsToComputersAndLift() {
+		// prevent instantiation of static utility class
+	}
 
 	/**
 	 * Lifting function for mapping Functions Ops to Computers that operate on RandomAccessibleIntervals.

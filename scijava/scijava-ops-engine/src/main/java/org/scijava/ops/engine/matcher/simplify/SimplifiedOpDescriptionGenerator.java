@@ -59,7 +59,7 @@ public class SimplifiedOpDescriptionGenerator implements
 		if (env.infos(name).isEmpty()) {
 			return allNamespaces(env, name);
 		}
-		var infos = SimplificationMatchingRoutine.getSimpleInfos(env, req.getName());
+		var infos = SimplificationMatchingRoutine.getInfos(env, req.getName());
 		var filtered = filterInfos(infos, req);
 		String opString = filtered.stream() //
 				.map(Infos::describe) //
@@ -119,7 +119,11 @@ public class SimplifiedOpDescriptionGenerator implements
 	private List<OpInfo> filterInfos(Iterable<? extends OpInfo> infos, OpRequest req) {
 		List<OpInfo> filtered = new ArrayList<>();
 		for (var info: infos) {
-			if (req.getArgs() == null || req.getArgs().length == info.inputTypes().size()) {
+			var numPureInputs = info.inputs().stream() //
+					.filter(m -> !m.isOutput()) //
+					.count();
+
+			if (req.getArgs() == null || req.getArgs().length == numPureInputs) {
 				filtered.add(info);
 			}
 		}

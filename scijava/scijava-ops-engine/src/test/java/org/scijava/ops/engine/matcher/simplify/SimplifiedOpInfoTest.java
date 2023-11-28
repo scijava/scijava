@@ -38,6 +38,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.collections.ObjectArray;
+import org.scijava.function.Computers;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.matcher.impl.OpClassInfo;
@@ -112,21 +113,35 @@ public class SimplifiedOpInfoTest extends AbstractTestEnvironment implements
 	@OpField(names = "test.coalesceSimpleDescription")
 	public final Function<Long, Long> func2 = in -> in + 1;
 
+	@OpField(names = "test.coalesceSimpleDescription")
+	public final Computers.Arity1<List<Long>, List<Long>> comp1 = (in, out) -> {
+		out.clear();
+		out.addAll(in);
+	};
+
 	@Test
 	public void testSimpleDescriptions() {
 		String actual = ops.unary("test.coalesceSimpleDescription").helpVerbose();
-		String expected = "Ops:\n" + "\t> test.coalesceSimpleDescription(\n" +
-				"\t\t Inputs:\n" + "\t\t\tjava.lang.Double input1\n" +
-				"\t\t Outputs:\n" + "\t\t\tjava.lang.Double output1\n" + "\t)\n" +
-				"\t\n" + "\t> test.coalesceSimpleDescription(\n" + "\t\t Inputs:\n" +
-				"\t\t\tjava.lang.Long input1\n" + "\t\t Outputs:\n" +
-				"\t\t\tjava.lang.Long output1\n" + "\t)\n\t";
+		String expected =  //
+				"Ops:\n\t> test.coalesceSimpleDescription(\n" +
+				"\t\t Inputs:\n\t\t\tjava.lang.Double input1\n" +
+				"\t\t Outputs:\n\t\t\tjava.lang.Double output1\n\t)\n\t" +
+				"\n\t> test.coalesceSimpleDescription(\n" +
+				"\t\t Inputs:\n\t\t\tjava.lang.Long input1\n" +
+				"\t\t Outputs:\n\t\t\tjava.lang.Long output1\n\t)\n\t" +
+				"\n\t> test.coalesceSimpleDescription(\n" +
+				"\t\t Inputs:\n\t\t\tjava.util.List<java.lang.Long> input1\n" +
+				"\t\t Containers (I/O):\n\t\t\tjava.util.List<java.lang.Long> container1\n\t)\n\t";
 		Assertions.assertEquals(expected, actual);
 
 		actual = ops.unary("test.coalesceSimpleDescription").help();
-		expected = "Ops:\n" + "\t> test.coalesceSimpleDescription(\n" +
-				"\t\t Inputs:\n" + "\t\t\tNumber input1\n" + "\t\t Outputs:\n" +
-				"\t\t\tNumber output1\n" + "\t)\n" + "\t";
+		expected =  //
+				"Ops:\n\t> test.coalesceSimpleDescription(\n" +
+						"\t\t Inputs:\n\t\t\tList<Long> input1\n" +
+						"\t\t Containers (I/O):\n\t\t\tList<Long> container1\n\t)\n\t" +
+						"\n\t> test.coalesceSimpleDescription(\n" +
+						"\t\t Inputs:\n\t\t\tNumber input1\n" +
+						"\t\t Outputs:\n\t\t\tNumber output1\n\t)\n\t";
 		Assertions.assertEquals(expected, actual);
 		// Finally test that different number of outputs doesn't retrieve the Ops
 		actual = ops.nullary("test.coalesceSimpleDescription").help();

@@ -54,12 +54,12 @@ import org.slf4j.LoggerFactory;
 
 public class SimplificationMatchingRoutine extends RuntimeSafeMatchingRoutine {
 
-	protected static final Map<OpEnvironment, Map<String, SortedSet<SimplifiedOpInfo>>> seenNames = new HashMap<>();
+	protected static final Map<OpEnvironment, Map<String, SortedSet<OpInfo>>> seenNames = new HashMap<>();
 
 	protected static void addSimpleInfosToCache(OpEnvironment env, String name) {
-		Map<String, SortedSet<SimplifiedOpInfo>> seen = seenNames.computeIfAbsent(env, e -> new HashMap<>());
+		Map<String, SortedSet<OpInfo>> seen = seenNames.computeIfAbsent(env, e -> new HashMap<>());
 		if (!seen.containsKey(name)) {
-			SortedSet<SimplifiedOpInfo> ops = new TreeSet<>();
+			SortedSet<OpInfo> ops = new TreeSet<>();
 			for (OpInfo info : env.infos(name)) {
 				if (info.declaredHints().contains(BaseOpHints.Simplification.FORBIDDEN)) continue;
 				if (info instanceof SimplifiedOpInfo) continue;
@@ -70,6 +70,7 @@ public class SimplificationMatchingRoutine extends RuntimeSafeMatchingRoutine {
 					LoggerFactory.getLogger(SimplificationMatchingRoutine.class) //
 						.info("Could not simplify OpInfo " + info +
 							" due to the following exception", e);
+					ops.add(info);
 				}
 			}
 			seen.put(name, ops);
@@ -134,6 +135,18 @@ public class SimplificationMatchingRoutine extends RuntimeSafeMatchingRoutine {
 	}
 
 	protected static SortedSet<SimplifiedOpInfo> getSimpleInfos(OpEnvironment env, String name)
+	{
+		addSimpleInfosToCache(env, name);
+		TreeSet<SimplifiedOpInfo> simpleInfos = new TreeSet<>();
+		for (OpInfo info: seenNames.get(env).get(name)) {
+			if (info instanceof SimplifiedOpInfo) {
+				simpleInfos.add((SimplifiedOpInfo) info);
+			}
+		}
+		return simpleInfos;
+	}
+
+	protected static SortedSet<OpInfo> getInfos(OpEnvironment env, String name)
 	{
 		addSimpleInfosToCache(env, name);
 		return seenNames.get(env).get(name);

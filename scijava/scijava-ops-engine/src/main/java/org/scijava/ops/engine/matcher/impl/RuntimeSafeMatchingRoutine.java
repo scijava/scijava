@@ -104,7 +104,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	 * @param candidates the candidates to check
 	 * @return candidates passing checks
 	 */
-	protected List<OpCandidate> checkCandidates(
+	private List<OpCandidate> checkCandidates(
 		final List<OpCandidate> candidates)
 	{
 		final ArrayList<OpCandidate> validCandidates = new ArrayList<>();
@@ -143,7 +143,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	 * @param filter the condition
 	 * @return candidates passing test of condition and having highest priority
 	 */
-	protected List<OpCandidate> filterMatches(final List<OpCandidate> candidates,
+	private List<OpCandidate> filterMatches(final List<OpCandidate> candidates,
 		final Predicate<OpCandidate> filter)
 	{
 		final ArrayList<OpCandidate> matches = new ArrayList<>();
@@ -164,7 +164,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 		return matches;
 	}
 
-	protected Iterable<OpInfo> getInfos(OpEnvironment env,
+	private Iterable<OpInfo> getInfos(OpEnvironment env,
 		MatchingConditions conditions)
 	{
 		return env.infos(conditions.request().getName(), conditions.hints());
@@ -179,7 +179,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	 * @param typeBounds possibly predetermined type bounds for type variables
 	 * @return whether the input types match
 	 */
-	protected boolean inputsMatch(final OpCandidate candidate,
+	private boolean inputsMatch(final OpCandidate candidate,
 		HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
 	{
 		if (checkCandidates(Collections.singletonList(candidate)).isEmpty())
@@ -233,7 +233,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	 * Helper method of {@link #filterMatches(List)}.
 	 * </p>
 	 */
-	protected boolean missArgs(final OpCandidate candidate,
+	private boolean missArgs(final OpCandidate candidate,
 		final Type[] paddedArgs)
 	{
 		int i = 0;
@@ -254,7 +254,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	 * @param typeBounds possibly predetermined type bounds for type variables
 	 * @return whether the output types match
 	 */
-	protected boolean outputsMatch(final OpCandidate candidate,
+	private boolean outputsMatch(final OpCandidate candidate,
 		HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
 	{
 		final Type reqOutType = candidate.getRequest().getOutType();
@@ -281,7 +281,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	 * @param candidate the candidate to check args for
 	 * @return whether the arg types are satisfied
 	 */
-	protected boolean typesMatch(final OpCandidate candidate) {
+	private boolean typesMatch(final OpCandidate candidate) {
 		HashMap<TypeVariable<?>, TypeVarInfo> typeBounds = new HashMap<>();
 		if (!inputsMatch(candidate, typeBounds)) {
 			return false;
@@ -298,7 +298,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	 * using {@link Types#isApplicable(Type[], Type[])}.
 	 */
 	protected boolean typesMatch(final Type opType, final Type reqType,
-		final Map<TypeVariable<?>, Type> typeVarAssigns)
+			final Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
 		if (reqType == null) return true;
 		try {
@@ -322,7 +322,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	 * Determine if the arguments and the output types of the candidate perfectly
 	 * match with the request.
 	 */
-	protected boolean typesPerfectMatch(final OpCandidate candidate) {
+	private boolean typesPerfectMatch(final OpCandidate candidate) {
 		int i = 0;
 		Type[] paddedArgs = candidate.paddedArgs();
 		for (final Type t : candidate.opInfo().inputTypes()) {

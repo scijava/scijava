@@ -89,7 +89,7 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 
 		// Test that helpEnv.help("test") returns both of our namespaces
 		descriptions = helpEnv.helpVerbose("help");
-		expected = "Namespaces:\n\t> help.verbose1\n\t> help.verbose2";
+		expected = "Names:\n\t> help.verbose1\n\t> help.verbose2";
 		Assertions.assertEquals(expected, descriptions);
 
 		// Get the Op matching the description

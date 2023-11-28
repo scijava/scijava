@@ -112,7 +112,7 @@ public class SimplifiedOpDescriptionGenerator implements
 				.filter(n -> n.contains(name)) //
 				.sorted() //
 				.collect(Collectors.toList());
-		return "Namespaces:\n\t> " + String.join("\n\t> ", namespaces);
+		return "Names:\n\t> " + String.join("\n\t> ", namespaces);
 
 	}
 

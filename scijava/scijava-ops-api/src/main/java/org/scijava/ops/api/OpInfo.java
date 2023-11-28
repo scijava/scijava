@@ -31,11 +31,9 @@ package org.scijava.ops.api;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
@@ -116,10 +114,7 @@ public interface OpInfo extends Comparable<OpInfo> {
 	default int compareTo(final OpInfo that) {
 		if (this.priority() < that.priority()) return 1;
 		if (this.priority() > that.priority()) return -1;
-		int nameComparison = this.toString().compareTo(that.toString());
-		if (nameComparison != 0) {
-			return nameComparison;
-		}
+
 		return this.implementationName().compareTo(that.implementationName());
 	}
 

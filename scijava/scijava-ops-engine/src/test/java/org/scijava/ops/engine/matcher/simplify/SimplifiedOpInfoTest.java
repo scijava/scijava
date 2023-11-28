@@ -123,15 +123,16 @@ public class SimplifiedOpInfoTest extends AbstractTestEnvironment implements
 	public void testSimpleDescriptions() {
 		String actual = ops.unary("test.coalesceSimpleDescription").helpVerbose();
 		String expected =  //
-				"Ops:\n\t> test.coalesceSimpleDescription(\n" +
+				"Ops:" +
+				"\n\t> test.coalesceSimpleDescription(\n" +
+				"\t\t Inputs:\n\t\t\tjava.util.List<java.lang.Long> input1\n" +
+				"\t\t Containers (I/O):\n\t\t\tjava.util.List<java.lang.Long> container1\n\t)\n\t" +
+				"\n\t> test.coalesceSimpleDescription(\n" +
 				"\t\t Inputs:\n\t\t\tjava.lang.Double input1\n" +
 				"\t\t Outputs:\n\t\t\tjava.lang.Double output1\n\t)\n\t" +
 				"\n\t> test.coalesceSimpleDescription(\n" +
 				"\t\t Inputs:\n\t\t\tjava.lang.Long input1\n" +
-				"\t\t Outputs:\n\t\t\tjava.lang.Long output1\n\t)\n\t" +
-				"\n\t> test.coalesceSimpleDescription(\n" +
-				"\t\t Inputs:\n\t\t\tjava.util.List<java.lang.Long> input1\n" +
-				"\t\t Containers (I/O):\n\t\t\tjava.util.List<java.lang.Long> container1\n\t)\n\t";
+				"\t\t Outputs:\n\t\t\tjava.lang.Long output1\n\t)\n\t";
 		Assertions.assertEquals(expected, actual);
 
 		actual = ops.unary("test.coalesceSimpleDescription").help();

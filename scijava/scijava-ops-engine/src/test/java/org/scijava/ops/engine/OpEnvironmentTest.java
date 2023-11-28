@@ -78,8 +78,7 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 		// NB We use a new OpEnvironment here for a clean list of Ops.
 		OpEnvironment helpEnv = barebonesEnvironment();
 		helpEnv.register( //
-			helpEnv.opify(OpifyOp.class, Priority.HIGH, "help.verbose1"), //
-			helpEnv.opify(OpifyOp.class, Priority.HIGH, "help.verbose2") //
+			helpEnv.opify(OpifyOp.class, Priority.HIGH, "help.verbose1", "help.verbose2") //
 		);
 
 		// Test that helpEnv.help() returns just "test"
@@ -94,7 +93,7 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 
 		// Get the Op matching the description
 		descriptions = helpEnv.helpVerbose("help.verbose1");
-		expected = "Ops:\n\t> help.verbose1(\n\t\t Inputs:\n\t\t Outputs:\n\t\t\tjava.lang.String output1\n\t)\n\t";
+		expected = "Ops:\n\t> help.verbose1(\n\t\t Inputs:\n\t\t Outputs:\n\t\t\tjava.lang.String output1\n\t)\n\tAliases: [help.verbose2]\n\t";
 		Assertions.assertEquals(expected, descriptions);
 
 		// Finally assert a message is thrown when no Ops match

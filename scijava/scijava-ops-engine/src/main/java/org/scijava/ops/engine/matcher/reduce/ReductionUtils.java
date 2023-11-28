@@ -54,7 +54,11 @@ import javassist.Modifier;
 import javassist.NotFoundException;
 import org.scijava.types.inference.InterfaceInference;
 
-public class ReductionUtils {
+public final class ReductionUtils {
+
+	private ReductionUtils() {
+		// Prevent instantiation of static utility class
+	}
 
 	/**
 	 * Creates a Class given an Op and a {@link ReducedOpInfo}. This class:

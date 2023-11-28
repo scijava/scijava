@@ -37,7 +37,11 @@ import net.imglib2.RealPoint;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.Views;
 
-public class RidgeDetectionUtils {
+public final class RidgeDetectionUtils {
+
+	private RidgeDetectionUtils() {
+		// Prevent instantiation of static utility class
+	}
 
 	/**
 	 * Returns the angle between the x-axis and a given vector (in components).

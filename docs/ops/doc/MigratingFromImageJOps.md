@@ -2,7 +2,7 @@
 
 The [ImageJ Ops](https://imagej.net/libs/imagej-ops/index) framework is the predecessor of the SciJava Ops framework, and many steps were taken to make expressing Ops much easier. This document shows ImageJ Ops developers how to convert their Ops to SciJava Ops - we'll convert [`DefaultGaussRAI`](https://github.com/imagej/imagej-ops/blob/master/src/main/java/net/imagej/ops/filter/gauss/DefaultGaussRAI.java) from the ImageJ Ops repository as an example.
 
-## 1. Upgrading pom-scijava
+## Upgrading pom-scijava
 
 Before doing anything else, you should ensure that your version of pom-scijava is new enough to make use of SciJava 3 goodness.
 
@@ -36,11 +36,11 @@ Until the SciJava 3 annotation processor is added to pom-scijava, developers mus
 
 The other step recommended in your POM is to remove the dependency on ImageJ Ops!
 
-## 2. Removing all the boilerplate
+## Removing all the boilerplate
 
 In ImageJ Ops, all Ops were written as `Class`es, with SciJava `@Plugin` and `@Parameter` annotations everywhere - most of these annotations can be removed in SciJava Ops!
 
-### 2.1 Replace the `@Plugin` annotation with an `@implNote` in the javadoc
+### Replace the `@Plugin` annotation with an `@implNote` in the javadoc
 
 SciJava Ops uses a separate annotation processor to record plugins at compile time. This allows SciJava Ops to discover Ops *without any runtime dependencies*! Thus, instead of using an annotation, plugin declaration is performed *within the javadoc* of all plugins, using the `@implNote` tag new to Java 9. The general schema for op declaration is as follows:
 
@@ -71,7 +71,7 @@ The following diff shows the changes needed to replace the `@Plugin` annotation:
         implements Ops.Filter.Gauss
 ```
 
-### 2.2 Moving parameters to the functional method
+### Moving parameters to the functional method
 
 SciJava Ops no longer uses the `@Parameter` annotation to declare parameters - *all* Op parameters are instead passed through the functional method.
 
@@ -103,7 +103,7 @@ To conform `DefaultGaussRAI` to this schema, the following diff should be applie
 
 **Note**: nullable parameters are denoted using the `org.scijava.ops.spi.Nullable` annotation. Just like in ImageJ Ops, if the user does *not* decide to pass that parameter, it will be assigned to `null`, so leave in any null-checks for nullable parameters.
 
-## 3 Implementing the right functional interface
+## Implementing the right functional interface
 
 Ops in the SciJava Ops framework implement a new set of Op types, designed for functional simplicity. These functional interfaces are built off of the `java.util.function.Function` interface, and are housed in the SciJava Functions library. 
 

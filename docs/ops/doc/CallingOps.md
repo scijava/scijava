@@ -1,4 +1,4 @@
-# Calling Ops
+# Calling Ops with the `OpBuilder`
 
 Ops are designed to be called from the Op matcher, using the `OpBuilder` syntax. OpBuilder chains follow the [builder pattern](https://refactoring.guru/design-patterns/builder), allowing users to create complex Op calls by "chaining" or appending consecutive, simpler method calls.
 
@@ -64,19 +64,6 @@ Therefore the following OpBuilder call is identical to the previous call:
 
 ```groovy
 var gaussOp = ops.binary("filter.gauss").input(inImage, 2.0).output(outImage).computer()
-gaussOp.compute(inImage, 2.0, outImage)
-```
-
-## Additions: Combining `.op().arity*()`
-
-While the `.op().arity*()` pattern is very repetitive (and thus easy to remember), OpBuilder chains provide convenience methods to combine them, such as:
-* `.op("my.opName").arity1()` can be replaced with `.unary("my.opName")`
-* `.op("my.opName").arity2()` can be replaced with `.binary("my.opName")`
-
-Therefore the following OpBuilder call is identical to the previous call:
-
-```groovy
-var gaussOp = ops.unary("filter.gauss").input(inImage, 2.0).output(outImage).computer()
 gaussOp.compute(inImage, 2.0, outImage)
 ```
 

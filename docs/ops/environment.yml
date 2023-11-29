@@ -1,0 +1,10 @@
+name: ops-docs
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - sphinx
+  - sphinx_rtd_theme
+  - pip
+  - pip:
+      - readthedocs-sphinx-search

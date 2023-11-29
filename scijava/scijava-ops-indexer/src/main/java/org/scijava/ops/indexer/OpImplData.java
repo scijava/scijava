@@ -33,12 +33,7 @@ import static org.scijava.ops.indexer.ProcessingUtils.blockSeparator;
 import static org.scijava.ops.indexer.ProcessingUtils.tagElementSeparator;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.annotation.processing.ProcessingEnvironment;
@@ -113,6 +108,31 @@ public abstract class OpImplData {
 		if (!remaining.isEmpty()) {
 			parseAdditionalTags(source, remaining);
 		}
+		validateOpImpl();
+	}
+
+	/**
+	 * Helper method to ensure this OpImpl is valid. Throws
+	 * {@link InvalidOpImplException} i
+	 * problems are detected.
+	 *
+	 * Parallel compile-time implementation of org.scijava.ops.engine.util.Infos#validate
+	 * in scijava-ops-engine
+	 */
+	private void validateOpImpl() {
+		if (Objects.isNull(names) || names.isEmpty()) {
+			throw new InvalidOpImplException(
+					"Invalid Op defined in : " + source + ". Op names cannot be empty!");
+		}
+
+		int outputs = 0;
+		for (OpParameter p : params) {
+			if (p.ioType.equals(OpParameter.IO_TYPE.OUTPUT)) outputs++;
+		}
+		if (outputs > 1) {
+			throw new InvalidOpImplException(
+					"Invalid Op defined in : " + source + ". Ops cannot have more than one output!");
+		}
 	}
 
 	private List<String[]> parseUniversalTags(List<String[]> tags) {
@@ -147,6 +167,10 @@ public abstract class OpImplData {
 
 	abstract String formulateSource(Element source);
 
+	/**
+	 * Method for parsing the actual "@implNote" tag
+	 * @param implTag Tag to parse
+	 */
 	private void parseImplNote(String implTag) {
 		var implElements = tagElementSeparator.split(implTag);
 		if (implElements.length > 1) {

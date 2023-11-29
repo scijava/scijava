@@ -47,7 +47,7 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testClassOpification() {
-		OpInfo opifyOpInfo = ops.opify(OpifyOp.class);
+		OpInfo opifyOpInfo = ops.opify(OpifyOp.class, OpifyOp.class.getName());
 		Assertions.assertEquals(OpifyOp.class.getName(), opifyOpInfo.implementationName());
 		// assert default priority
 		Assertions.assertEquals(Priority.NORMAL, opifyOpInfo.priority(), 0.);
@@ -55,7 +55,7 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testClassOpificationWithPriority() {
-		OpInfo opifyOpInfo = ops.opify(OpifyOp.class, Priority.HIGH);
+		OpInfo opifyOpInfo = ops.opify(OpifyOp.class, Priority.HIGH, OpifyOp.class.getName());
 		Assertions.assertEquals(OpifyOp.class.getName(), opifyOpInfo.implementationName());
 		// assert default priority
 		Assertions.assertEquals(Priority.HIGH, opifyOpInfo.priority(), 0.);

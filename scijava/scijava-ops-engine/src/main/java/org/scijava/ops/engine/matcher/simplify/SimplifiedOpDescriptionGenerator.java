@@ -37,6 +37,7 @@ import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRequest;
 import org.scijava.ops.engine.OpDescriptionGenerator;
+import org.scijava.ops.engine.matcher.reduce.ReducedOpInfo;
 import org.scijava.ops.engine.util.Infos;
 import org.scijava.priority.Priority;
 
@@ -119,6 +120,10 @@ public class SimplifiedOpDescriptionGenerator implements
 	private List<OpInfo> filterInfos(Iterable<? extends OpInfo> infos, OpRequest req) {
 		List<OpInfo> filtered = new ArrayList<>();
 		for (var info: infos) {
+			if (info instanceof ReducedOpInfo) {
+				continue;
+			}
+
 			var numPureInputs = info.inputs().stream() //
 					.filter(m -> !m.isOutput()) //
 					.count();
@@ -126,6 +131,7 @@ public class SimplifiedOpDescriptionGenerator implements
 			if (req.getArgs() == null || req.getArgs().length == numPureInputs) {
 				filtered.add(info);
 			}
+
 		}
 		return filtered;
 	}

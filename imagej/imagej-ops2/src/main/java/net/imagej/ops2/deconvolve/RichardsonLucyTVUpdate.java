@@ -70,7 +70,7 @@ public class RichardsonLucyTVUpdate<T extends RealType<T> & NativeType<T>, I ext
 	 *
 	 * @param correction
 	 * @param regularizationFactor
-	 * @param variation (required = false)
+	 * @param variation
 	 * @param estimate
 	 */
 	@Override

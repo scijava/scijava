@@ -64,8 +64,8 @@ public class DefaultMarchingCubes<T extends BooleanType<T>>
 	 * TODO
 	 *
 	 * @param input
-	 * @param isolevel (required = false)
-	 * @param interpolatorClass (required = false)
+	 * @param isolevel
+	 * @param interpolatorClass
 	 * @return the output
 	 */
 	@Override

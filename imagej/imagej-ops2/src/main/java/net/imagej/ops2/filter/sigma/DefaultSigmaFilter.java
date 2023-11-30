@@ -65,7 +65,7 @@ public class DefaultSigmaFilter<T extends RealType<T>, V extends RealType<V>> im
 	 * @param inputNeighborhoodShape
 	 * @param range
 	 * @param minPixelFraction
-	 * @param outOfBoundsFactory (required = false)
+	 * @param outOfBoundsFactory
 	 * @param output
 	 */
 	@Override

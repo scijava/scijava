@@ -99,7 +99,7 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 	 *
 	 * @param input
 	 * @param scale size of vessels to search for
-	 * @param spacing physical distance between data points (required = false)
+	 * @param spacing physical distance between data points
 	 * @param output
 	 */
 	@Override

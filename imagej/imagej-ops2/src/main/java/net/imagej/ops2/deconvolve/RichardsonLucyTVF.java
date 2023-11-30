@@ -179,9 +179,9 @@ public class RichardsonLucyTVF<I extends RealType<I> & NativeType<I>, O extends 
 	 * @param nonCirculant indicates whether to use non-circulant edge handling
 	 * @param accelerate indicates whether or not to use acceleration
 	 * @param regularizationFactor
-	 * @param borderSize (required = false)
-	 * @param obfInput (required = false)
-	 * @param obfKernel (required = false)
+	 * @param borderSize
+	 * @param obfInput
+	 * @param obfKernel
 	 * @return the deconvolution of the input data
 	 */
 	@Override

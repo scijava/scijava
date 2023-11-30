@@ -74,8 +74,8 @@ public class ComputeLocalSauvolaThreshold<T extends RealType<T>> implements
 	 *
 	 * @param inputNeighborhood
 	 * @param inputCenterPixel
-	 * @param k (required = false)
-	 * @param r (required = false)
+	 * @param k
+	 * @param r
 	 * @param output
 	 */
 	@Override

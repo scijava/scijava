@@ -76,8 +76,8 @@ public class FFTMethodsLinearFFTFilterC<I extends RealType<I>, O extends RealTyp
 	 * @param performInputFFT
 	 * @param performKernelFFT
 	 * @param frequencyOp
-	 * @param fftInput (required = false)
-	 * @param fftKernel (required = false)
+	 * @param fftInput
+	 * @param fftKernel
 	 * @param out
 	 */
 	@Override

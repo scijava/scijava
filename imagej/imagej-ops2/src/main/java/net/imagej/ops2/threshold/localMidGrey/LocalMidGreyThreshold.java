@@ -60,7 +60,7 @@ public class LocalMidGreyThreshold<T extends RealType<T>> implements
 	 * @param input
 	 * @param inputNeighborhoodShape
 	 * @param c
-	 * @param outOfBoundsFactory (required = false)
+	 * @param outOfBoundsFactory
 	 * @param output
 	 */
 	@Override

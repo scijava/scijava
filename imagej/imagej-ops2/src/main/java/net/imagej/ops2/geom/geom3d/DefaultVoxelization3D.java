@@ -70,9 +70,9 @@ public class DefaultVoxelization3D
 	 * TODO
 	 *
 	 * @param input the input {@link Mesh}
-	 * @param width (required = false)
-	 * @param height (required = false)
-	 * @param depth (required = false)
+	 * @param width
+	 * @param height
+	 * @param depth
 	 * @return the voxelization of {@code input}
 	 */
 	@Override

@@ -67,8 +67,8 @@ public class ConvolveFFTC<I extends RealType<I>, O extends RealType<O>, K extend
 	 * @param kernel
 	 * @param fftInput
 	 * @param fftKernel
-	 * @param performInputFFT (required = false)
-	 * @param performKernelFFT (required = false)
+	 * @param performInputFFT
+	 * @param performKernelFFT
 	 * @param out
 	 */
 	@Override

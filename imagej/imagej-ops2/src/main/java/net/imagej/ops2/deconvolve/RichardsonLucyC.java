@@ -128,7 +128,7 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 	 * @param accelerator
 	 * @param updateOp by default, this should be RichardsonLucyUpdate
 	 * @param iterativePostProcessingOps
-	 * @param raiExtendedEstimate (required = false)
+	 * @param raiExtendedEstimate
 	 * @param out
 	 */
 	@Override

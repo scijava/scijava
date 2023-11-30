@@ -364,7 +364,7 @@ public final class ApplyThresholdMethodLocal {
 		 *
 		 * @param input
 		 * @param inputNeighborhoodShape
-		 * @param outOfBoundsFactory (required = false)
+		 * @param outOfBoundsFactory
 		 * @param output
 		 */
 		@Override

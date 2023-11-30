@@ -83,9 +83,9 @@ implements Functions.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterva
 	 * @param kernel
 	 * @param outType
 	 * @param fftType
-	 * @param borderSize (required = false)
-	 * @param obfInput (required = false)
-	 * @param obfKernel (required = false)
+	 * @param borderSize
+	 * @param obfInput
+	 * @param obfKernel
 	 * @return the output
 	 */
 	@Override

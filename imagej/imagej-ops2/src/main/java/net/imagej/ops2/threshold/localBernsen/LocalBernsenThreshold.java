@@ -63,7 +63,7 @@ public class LocalBernsenThreshold<T extends RealType<T>> implements
 	 * @param inputNeighborhoodShape
 	 * @param contrastThreshold
 	 * @param halfMaxValue
-	 * @param outOfBoundsFactory (required = false)
+	 * @param outOfBoundsFactory
 	 * @param output
 	 */
 	@Override

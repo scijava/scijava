@@ -72,9 +72,9 @@ public class LocalSauvolaThreshold<T extends RealType<T>> extends
 	 *
 	 * @param input
 	 * @param inputNeighborhoodShape
-	 * @param k (required = false)
-	 * @param r (required = false)
-	 * @param outOfBoundsFactory (required = false)
+	 * @param k
+	 * @param r
+	 * @param outOfBoundsFactory
 	 * @param output
 	 */
 	@Override

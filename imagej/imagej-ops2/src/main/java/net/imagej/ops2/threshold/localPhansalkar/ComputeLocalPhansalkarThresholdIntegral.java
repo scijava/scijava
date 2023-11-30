@@ -81,8 +81,8 @@ public class ComputeLocalPhansalkarThresholdIntegral<T extends RealType<T>>
 	 *
 	 * @param inputNeighborhood
 	 * @param inputCenterPixel
-	 * @param k (required = false)
-	 * @param r (required = false)
+	 * @param k
+	 * @param r
 	 * @param output
 	 */
 	@Override

@@ -301,13 +301,13 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@Override
-	public OpInfo opify(final Class<?> opClass) {
-		return opify(opClass, Priority.NORMAL);
+	public OpInfo opify(final Class<?> opClass, String... names) {
+		return opify(opClass, Priority.NORMAL, names);
 	}
 
 	@Override
 	public OpInfo opify(final Class<?> opClass, final double priority,
-		final String... names)
+		String... names)
 	{
 		return new OpClassInfo(opClass, Versions.getVersion(opClass), new Hints(), priority,
 			names);

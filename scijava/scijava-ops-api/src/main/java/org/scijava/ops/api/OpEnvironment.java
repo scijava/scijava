@@ -784,9 +784,10 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 * Creates an {@link OpInfo} from an {@link Class}.
 	 *
 	 * @param opClass the {@link Class} to derive the Op from
+	 * @param names - the name(s) of the Op
 	 * @return an {@link OpInfo} which can make instances of {@code opClass}
 	 */
-	OpInfo opify(Class<?> opClass);
+	OpInfo opify(Class<?> opClass, String... names);
 
 	/**
 	 * Creates an {@link OpInfo} from an {@link Class} with the given priority.

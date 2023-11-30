@@ -32,15 +32,14 @@ package org.scijava.ops.engine.util;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.OpDependencyMember;
+import org.scijava.ops.engine.exceptions.InvalidOpException;
 import org.scijava.ops.engine.exceptions.impl.MultipleOutputsOpException;
+import org.scijava.ops.engine.exceptions.impl.UnnamedOpException;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 import org.scijava.types.Types;
@@ -95,6 +94,9 @@ public final class Infos {
 			.filter(Member::isOutput).count();
 		if (numOutputs > 1) {
 			throw new MultipleOutputsOpException(info.implementationName());
+		}
+		if (Objects.isNull(info.names()) || info.names().isEmpty()) {
+			throw new UnnamedOpException(info.implementationName());
 		}
 	}
 

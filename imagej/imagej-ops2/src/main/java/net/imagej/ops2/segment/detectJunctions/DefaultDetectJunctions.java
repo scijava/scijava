@@ -95,7 +95,7 @@ public class DefaultDetectJunctions implements BiFunction<List<? extends Writabl
 	 * TODO
 	 *
 	 * @param lines
-	 * @param threshold Maximum distance between polylines to be considered a junction (required = false)
+	 * @param threshold Maximum distance between polylines to be considered a junction
 	 * @return junctions
 	 */
 	@Override

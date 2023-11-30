@@ -60,7 +60,7 @@ public class LocalContrastThreshold<T extends RealType<T>> implements
 	 *
 	 * @param input
 	 * @param inputNeighborhoodShape
-	 * @param outOfBoundsFactory (required = false)
+	 * @param outOfBoundsFactory
 	 * @param output
 	 */
 	@Override

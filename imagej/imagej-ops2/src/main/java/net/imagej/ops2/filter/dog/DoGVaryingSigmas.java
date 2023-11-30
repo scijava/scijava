@@ -106,7 +106,7 @@ class DoGSingleSigma<T extends NumericType<T> & NativeType<T>> implements
 	 * @param input
 	 * @param sigma1
 	 * @param sigma2
-	 * @param oobf (required = false)
+	 * @param oobf
 	 * @param out
 	 */
 	@Override

@@ -85,8 +85,8 @@ public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealT
 	 * @param kernel
 	 * @param outType
 	 * @param complexType
-	 * @param borderSize (required = false)
-	 * @param obfInput (required = false)
+	 * @param borderSize
+	 * @param obfInput
 	 * @return the output
 	 */
 	@Override

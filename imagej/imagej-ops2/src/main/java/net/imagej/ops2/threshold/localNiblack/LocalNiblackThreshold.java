@@ -73,7 +73,7 @@ public class LocalNiblackThreshold<T extends RealType<T>> extends
 	 * @param inputNeighborhoodShape
 	 * @param c
 	 * @param k
-	 * @param outOfBoundsFactory (required = false)
+	 * @param outOfBoundsFactory
 	 * @param output
 	 */
 	@Override

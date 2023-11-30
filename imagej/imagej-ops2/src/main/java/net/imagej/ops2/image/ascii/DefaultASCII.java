@@ -61,8 +61,8 @@ public class DefaultASCII<T extends RealType<T>> implements Functions.Arity3<Ite
 	 * TODO
 	 *
 	 * @param input
-	 * @param min (required = false)
-	 * @param max (required = false)
+	 * @param min
+	 * @param max
 	 * @return ASCIIArt
 	 */
 	@Override

@@ -79,7 +79,7 @@ public class LocalMeanThreshold<T extends RealType<T>> extends
 	 * @param input
 	 * @param inputNeighborhoodShape
 	 * @param c
-	 * @param outOfBoundsFactory (required = false)
+	 * @param outOfBoundsFactory
 	 * @param output
 	 */
 	@Override

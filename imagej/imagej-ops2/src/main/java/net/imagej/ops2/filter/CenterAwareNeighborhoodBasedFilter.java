@@ -58,7 +58,7 @@ public class CenterAwareNeighborhoodBasedFilter<I, O> implements
 	 * @param input
 	 * @param filterOp
 	 * @param inputNeighborhoodShape
-	 * @param outOfBoundsFactory (required = false)
+	 * @param outOfBoundsFactory
 	 * @param output
 	 */
 	@Override

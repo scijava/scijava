@@ -66,7 +66,7 @@ public class PadInput<T extends ComplexType<T>, I extends RandomAccessibleInterv
 	 *
 	 * @param input
 	 * @param paddedDimensions
-	 * @param outOfBoundsFactory The OutOfBoundsFactory used to extend the image (required = false)
+	 * @param outOfBoundsFactory The OutOfBoundsFactory used to extend the image
 	 * @return the output
 	 */
 	public O apply(final I input, final Dimensions paddedDimensions,

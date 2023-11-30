@@ -68,8 +68,7 @@ public final class Gaussians {
 	 * @param input the input image
 	 * @param sigmas the sigmas for the gaussian
 	 * @param outOfBounds the {@link OutOfBoundsFactory} that defines how the
-	 *          calculation is affected outside the input bounds. (required =
-	 *          false)
+	 *          calculation is affected outside the input bounds.
 	 * @param output the output image
 	 * @implNote op names='filter.gauss'
 	 */
@@ -107,8 +106,7 @@ public final class Gaussians {
 	 * @param input the input image
 	 * @param sigma the sigmas for the Gaussian
 	 * @param outOfBounds the {@link OutOfBoundsFactory} that defines how the
-	 *          calculation is affected outside the input bounds. (required =
-	 *          false)
+	 *          calculation is affected outside the input bounds.
 	 * @param output the preallocated output image
 	 * @implNote op names='filter.gauss'
 	 */

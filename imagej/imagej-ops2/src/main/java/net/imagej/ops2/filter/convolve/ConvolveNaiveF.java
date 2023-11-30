@@ -93,8 +93,8 @@ public class ConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & Nativ
 	 *
 	 * @param input
 	 * @param kernel
-	 * @param obf (required = false)
-	 * @param outType (required = false)
+	 * @param obf
+	 * @param outType
 	 * @return the output
 	 */
 	@Override

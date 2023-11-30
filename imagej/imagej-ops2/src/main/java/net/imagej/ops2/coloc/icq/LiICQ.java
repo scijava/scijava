@@ -61,8 +61,8 @@ public class LiICQ<T extends RealType<T>, U extends RealType<U>, V extends RealT
 	 *
 	 * @param image1
 	 * @param image2
-	 * @param mean1 (required = false)
-	 * @param mean2 (required = false)
+	 * @param mean1
+	 * @param mean2
 	 * @return the output
 	 */
 	@Override

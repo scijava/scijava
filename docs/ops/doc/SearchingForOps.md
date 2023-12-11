@@ -17,7 +17,7 @@ print(ops.help())
 
 This gives the following printout:
 
-```groovy
+```
 Namespaces:
 	> adapt
 	> coloc
@@ -57,7 +57,7 @@ Namespaces:
 	> types
 ```
 
-# Interrogating a Namespace
+## Interrogating a Namespace
 
 You can choose one of the above namespaces, and `ops.help()` will give you information about the algorithms contained within:
 ```groovy
@@ -69,7 +69,7 @@ print(ops.help("filter"))
 
 This gives the following printout:
 
-```groovy
+```
 Namespaces:
 	> filter.DoG
 	> filter.addNoise
@@ -118,7 +118,7 @@ ops = OpEnvironment.getEnvironment()
 print(ops.help("filter.gauss"))
 ```
 
-```groovy
+```
 Ops:
 	> filter.gauss(
 		 Inputs:

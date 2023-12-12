@@ -60,7 +60,7 @@ public final class Copiers {
      * @param <T> the {@link Type} of the objects involved
      * @param input the input {@link Type}
      * @param output the {@link Type} that will be filled with the value of {@code input}
-     * @implNote op names='copy, copy.type'
+     * @implNote op names='copy, copy.type', type=Computer
      */
     public static <T extends Type<T>> void copyType(final T input, final T output) {
         output.set(input);
@@ -75,7 +75,7 @@ public final class Copiers {
      * @param input the {@link RandomAccessibleInterval} whose data will be copied
      * @param copy  the {@link RandomAccessibleInterval} that will be filled with the contents of {@code input}
      * @author Christian Dietz (University of Konstanz)
-     * @implNote op names='copy, copy.rai, copy.img', priority='10.0'
+     * @implNote op names='copy, copy.rai, copy.img', priority='10.0', type=Computer
      */
     public static <T> void copyRAI( //
                                     final @OpDependency(name = "copy") Computers.Arity1<T, T> copier, //
@@ -95,7 +95,7 @@ public final class Copiers {
      * @param input         the {@link ImgLabeling} to copy
      * @param output        the destination container of the copy operation
      * @author Christian Dietz (University of Konstanz)
-     * @implNote op names='copy, copy.imgLabeling'
+     * @implNote op names='copy, copy.imgLabeling', type=Computer
      */
     public static <T extends IntegerType<T> & NativeType<T>, L> void copyImgLabeling( //
       final @OpDependency(name = "copy") Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> raiCopier,  //
@@ -118,7 +118,7 @@ public final class Copiers {
      * @param <L> the type of the {@link LabelingMapping} elements
      * @param input the {@link LabelingMapping} to copy
      * @param output the destination container of the copy operation
-     * @implNote op names='copy, copy.labelingMapping', priority='10000.'
+     * @implNote op names='copy, copy.labelingMapping', priority='10000.', type=Computer
      */
     public static <L> void copyLabelingMapping(final LabelingMapping<L> input, final LabelingMapping<L> output) {
         output.setLabelSets(input.getLabelSets());
@@ -132,7 +132,7 @@ public final class Copiers {
      * @param <A> the type of the backing data storage for each image
      * @param input the {@link ArrayImg} to copy
      * @param output the destination container of the copy operation
-     * @implNote op names='copy, copy.img', priority='10000.'
+     * @implNote op names='copy, copy.img', priority='10000.', type=Computer
      */
     public static <T extends NativeType<T>, A extends ArrayDataAccess<A>> void copyArrayImage( //
            final ArrayImg<T, A> input,
@@ -154,7 +154,7 @@ public final class Copiers {
      * @param copier an Op responsible for copying element types
      * @param input the {@link IterableInterval} to copy
      * @param output the destination container of the copy operation
-     * @implNote op names='copy, copy.iterableInterval, copy.img', priority='1.0'
+     * @implNote op names='copy, copy.iterableInterval, copy.img', priority='1.0', type=Computer
      */
     public static <T> void copyIterableInterval( //
         @OpDependency(name = "copy.type") final Computers.Arity1<Iterable<T>, Iterable<T>> copier, //

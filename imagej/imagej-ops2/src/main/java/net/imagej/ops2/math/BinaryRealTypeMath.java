@@ -82,7 +82,7 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	 * @param input2
 	 * @param dbzVal
 	 * @param output
-	 * @implNote op names='math.div, math.divide'
+	 * @implNote op names='math.div, math.divide', type=Computer
 	 */
 	public static <T1 extends RealType<T1>, T2 extends RealType<T2>, O extends RealType<O>> void divider(
 			T1 input1, T2 input2, @Nullable Double dbzVal, O output)

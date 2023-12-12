@@ -36,7 +36,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.scijava.ops.api.Ops;
 import org.scijava.ops.engine.exceptions.impl.FunctionalTypeOpException;
 import org.scijava.struct.MemberParser;
 import org.scijava.struct.Structs;
@@ -69,7 +68,7 @@ public class ClassParameterMemberParser implements
 
 		// obtain a parameterData
 		Class<?> fIface = FunctionalInterfaces.findFrom(source);
-		ParameterData paramData = new LazilyGeneratedMethodParameterData(opMethod, fIface);
+		ParameterData paramData = new SynthesizedMethodParameterData(opMethod, fIface);
 
 		try {
 			FunctionalParameters.parseFunctionalParameters(items, source, paramData);

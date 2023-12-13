@@ -32,15 +32,11 @@ package org.scijava.ops.engine.struct;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
-import org.scijava.function.Producer;
-import org.scijava.ops.api.Ops;
 import org.scijava.ops.engine.exceptions.impl.NullablesOnMultipleMethodsException;
 import org.scijava.struct.FunctionalMethodType;
+import org.scijava.struct.ItemIO;
 import org.scijava.types.inference.FunctionalInterfaces;
 
 /**
@@ -52,91 +48,66 @@ import org.scijava.types.inference.FunctionalInterfaces;
  *
  * @author Gabriel Selzer
  */
-public class LazilyGeneratedFieldParameterData implements ParameterData {
-
-	private static final Map<FieldInstance, MethodParamInfo> paramDataMap =
-		new HashMap<>();
+public class SynthesizedFieldParameterData implements ParameterData {
 
 	private final FieldInstance fieldInstance;
+	private final int numInputs;
 
-	public LazilyGeneratedFieldParameterData(FieldInstance fieldInstance) {
+	public SynthesizedFieldParameterData(FieldInstance fieldInstance) {
 		this.fieldInstance = fieldInstance;
-	}
-
-	public static MethodParamInfo getInfo(List<FunctionalMethodType> fmts,
-		FieldInstance fieldInstance)
-	{
-		if (!paramDataMap.containsKey(fieldInstance)) generateFieldParamInfo(fmts,
-			fieldInstance);
-		return paramDataMap.get(fieldInstance);
-	}
-
-	public static synchronized void generateFieldParamInfo(
-		List<FunctionalMethodType> fmts, FieldInstance fieldInstance)
-	{
-		if (paramDataMap.containsKey(fieldInstance)) return;
-
-		Method sam = FunctionalInterfaces.functionalMethodOf(fieldInstance.field()
-			.getType());
-		// There is always one output, but we need the number of inputs
-		long numIns = sam.getParameterCount();
-
-		// determine the Op inputs/outputs
-		Boolean[] paramNullability = getParameterNullability(fieldInstance
-			.instance(), fieldInstance.field(), (int) numIns);
-
-		paramDataMap.put(fieldInstance, synthesizedMethodParamInfo(fmts,
-			paramNullability));
-	}
-
-	private static MethodParamInfo synthesizedMethodParamInfo(
-		List<FunctionalMethodType> fmts, Boolean[] paramNullability)
-	{
-		Map<FunctionalMethodType, String> fmtNames = new HashMap<>(fmts.size());
-		Map<FunctionalMethodType, String> fmtDescriptions = new HashMap<>(fmts
-			.size());
-		Map<FunctionalMethodType, Boolean> fmtNullability = new HashMap<>(fmts
-			.size());
-
-		int ins, outs, containers, mutables;
-		ins = outs = containers = mutables = 1;
-		int nullableIndex = 0;
-		for (FunctionalMethodType fmt : fmts) {
-			fmtDescriptions.put(fmt, "");
-			switch (fmt.itemIO()) {
-				case INPUT:
-					fmtNames.put(fmt, "input" + ins++);
-					fmtNullability.put(fmt, paramNullability[nullableIndex++]);
-					break;
-				case OUTPUT:
-					fmtNames.put(fmt, "output" + outs++);
-					break;
-				case CONTAINER:
-					fmtNames.put(fmt, "container" + containers++);
-					break;
-				case MUTABLE:
-					fmtNames.put(fmt, "mutable" + mutables++);
-					break;
-				default:
-					throw new RuntimeException("Unexpected ItemIO type encountered!");
-			}
-		}
-		return new MethodParamInfo(fmtNames, fmtDescriptions, fmtNullability);
+		this.numInputs = FunctionalInterfaces //
+				.functionalMethodOf(fieldInstance.field().getType())
+				.getParameterCount();
 	}
 
 	@Override
 	public List<SynthesizedParameterMember<?>> synthesizeMembers(
 		List<FunctionalMethodType> fmts)
 	{
-		Producer<MethodParamInfo> p = //
-			() -> LazilyGeneratedFieldParameterData.getInfo(fmts, fieldInstance);
 
-		return fmts.stream() //
-			.map(fmt -> new SynthesizedParameterMember<>(fmt, p)) //
-			.collect(Collectors.toList());
+		// determine the optionality of each input
+		Boolean[] optionality = getParameterNullability(fieldInstance
+				.instance(), fieldInstance.field(), numInputs);
+		// determine the name of each fmt
+		List<String> names = getParameterNames(fmts);
+		// map fmts to members
+		int p = 0;
+		List<SynthesizedParameterMember<?>> members = new ArrayList<>(fmts.size());
+		for (FunctionalMethodType fmt: fmts) {
+			String name = names.get(p);
+			boolean optional = fmt.itemIO() != ItemIO.OUTPUT && optionality[p++];
+			members.add(new SynthesizedParameterMember<>(fmt, name, !optional, ""));
+		}
+		return members;
 	}
 
-	// Helper methods
+	private List<String> getParameterNames(
+			List<FunctionalMethodType> fmts)
+	{
+		List<String> fmtNames = new ArrayList<>(fmts.size());
+		int ins, outs, containers, mutables;
+		ins = outs = containers = mutables = 1;
+		for (FunctionalMethodType fmt : fmts) {
+			switch (fmt.itemIO()) {
+				case INPUT:
+					fmtNames.add("input" + ins++);
+					break;
+				case OUTPUT:
+					fmtNames.add("output" + outs++);
+					break;
+				case CONTAINER:
+					fmtNames.add("container" + containers++);
+					break;
+				case MUTABLE:
+					fmtNames.add("mutable" + mutables++);
+					break;
+				default:
+					throw new RuntimeException("Unexpected ItemIO type encountered!");
+			}
+		}
+		return fmtNames;
+	}
+
 	private static Boolean[] getParameterNullability(Object instance, Field field,
 		int opParams)
 	{

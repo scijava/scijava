@@ -31,17 +31,13 @@ package org.scijava.ops.engine.struct;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
-import org.scijava.function.Producer;
-import org.scijava.ops.api.Ops;
 import org.scijava.ops.engine.exceptions.impl.NullablesOnMultipleMethodsException;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.FunctionalMethodType;
-import org.scijava.types.inference.FunctionalInterfaces;
+import org.scijava.struct.ItemIO;
 
 /**
  * Lazily generates the parameter data for a {@link List} of
@@ -52,119 +48,57 @@ import org.scijava.types.inference.FunctionalInterfaces;
  * 
  * @author Gabriel Selzer
  */
-public class LazilyGeneratedMethodParameterData implements ParameterData {
-
-	private static final Map<Method, MethodParamInfo> paramDataMap =
-		new HashMap<>();
+public class SynthesizedMethodParameterData implements ParameterData {
 
 	private final Method m;
 	private final Class<?> opType;
 
-	public LazilyGeneratedMethodParameterData(Method m, Class<?> opType) {
+	public SynthesizedMethodParameterData(Method m, Class<?> opType) {
 		this.m = m;
 		this.opType = opType;
 	}
 
-	public static MethodParamInfo getInfo(List<FunctionalMethodType> fmts,
-		Method m, Class<?> opType)
+	private List<String> getParameterNames(
+		List<FunctionalMethodType> fmts)
 	{
-		if (!paramDataMap.containsKey(m)) generateMethodParamInfo(fmts, m, opType);
-		MethodParamInfo info = paramDataMap.get(m);
-		if (!info.containsAll(fmts)) updateMethodParamInfo(info, fmts, m, opType);
-		return info;
-	}
-
-	private static void updateMethodParamInfo(MethodParamInfo info,
-		List<FunctionalMethodType> fmts, Method m, Class<?> opType)
-	{
-		Map<FunctionalMethodType, String> fmtNames = info.getFmtNames();
-		Map<FunctionalMethodType, String> fmtDescriptions = info
-			.getFmtDescriptions();
-		Map<FunctionalMethodType, Boolean> fmtNullability = info
-			.getFmtNullability();
-		// determine the Op inputs/outputs
-		long numOpParams = m.getParameterCount();
-		long numReturns = m.getReturnType() == void.class ? 0 : 1;
-		Boolean[] paramNullability = getParameterNullability(m, opType,
-			(int) numOpParams);
-
-		addSynthesizedMethodParamInfo(fmtNames, fmtDescriptions, fmts,
-			fmtNullability, paramNullability);
-	}
-
-	public static synchronized void generateMethodParamInfo(
-		List<FunctionalMethodType> fmts, Method m, Class<?> opType)
-	{
-		if (paramDataMap.containsKey(m)) return;
-
-		// determine the Op inputs/outputs
-		long numOpParams = m.getParameterCount();
-		long numReturns = m.getReturnType() == void.class ? 0 : 1;
-
-		opType = FunctionalInterfaces.findFrom(opType);
-		Boolean[] paramNullability = getParameterNullability(m, opType,
-			(int) numOpParams);
-
-		paramDataMap.put(m, synthesizedMethodParamInfo(fmts, paramNullability));
-	}
-
-	private static void addSynthesizedMethodParamInfo(
-		Map<FunctionalMethodType, String> fmtNames,
-		Map<FunctionalMethodType, String> fmtDescriptions,
-		List<FunctionalMethodType> fmts,
-		Map<FunctionalMethodType, Boolean> fmtNullability,
-		Boolean[] paramNullability)
-	{
+		List<String> fmtNames = new ArrayList<>(fmts.size());
 		int ins, outs, containers, mutables;
 		ins = outs = containers = mutables = 1;
-		int nullableIndex = 0;
 		for (FunctionalMethodType fmt : fmts) {
-			fmtDescriptions.put(fmt, "");
 			switch (fmt.itemIO()) {
 				case INPUT:
-					fmtNames.put(fmt, "input" + ins++);
-					fmtNullability.put(fmt, paramNullability[nullableIndex++]);
+					fmtNames.add("input" + ins++);
 					break;
 				case OUTPUT:
-					fmtNames.put(fmt, "output" + outs++);
+					fmtNames.add("output" + outs++);
 					break;
 				case CONTAINER:
-					fmtNames.put(fmt, "container" + containers++);
+					fmtNames.add("container" + containers++);
 					break;
 				case MUTABLE:
-					fmtNames.put(fmt, "mutable" + mutables++);
+					fmtNames.add("mutable" + mutables++);
 					break;
 				default:
 					throw new RuntimeException("Unexpected ItemIO type encountered!");
 			}
 		}
-	}
-
-	private static MethodParamInfo synthesizedMethodParamInfo(
-		List<FunctionalMethodType> fmts, Boolean[] paramNullability)
-	{
-		Map<FunctionalMethodType, String> fmtNames = new HashMap<>(fmts.size());
-		Map<FunctionalMethodType, String> fmtDescriptions = new HashMap<>(fmts
-			.size());
-		Map<FunctionalMethodType, Boolean> fmtNullability = new HashMap<>(fmts
-			.size());
-
-		addSynthesizedMethodParamInfo(fmtNames, fmtDescriptions, fmts,
-			fmtNullability, paramNullability);
-
-		return new MethodParamInfo(fmtNames, fmtDescriptions, fmtNullability);
+		return fmtNames;
 	}
 
 	@Override
 	public List<SynthesizedParameterMember<?>> synthesizeMembers(
 		List<FunctionalMethodType> fmts)
 	{
-		Producer<MethodParamInfo> p = //
-			() -> LazilyGeneratedMethodParameterData.getInfo(fmts, m, opType);
-
-		return fmts.stream() //
-			.map(fmt -> new SynthesizedParameterMember<>(fmt, p)) //
-			.collect(Collectors.toList());
+		Boolean[] optionality = getParameterNullability(m, opType, m.getParameterCount());
+		List<String> names = getParameterNames(fmts);
+		int p = 0;
+		List<SynthesizedParameterMember<?>> members = new ArrayList<>(fmts.size());
+		for (FunctionalMethodType fmt: fmts) {
+			String name = names.get(p);
+			boolean optional = fmt.itemIO() != ItemIO.OUTPUT && optionality[p++];
+			members.add(new SynthesizedParameterMember<>(fmt, name, !optional, ""));
+		}
+		return members;
 	}
 
 	private static Boolean[] getParameterNullability(Method m, Class<?> opType,

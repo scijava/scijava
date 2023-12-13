@@ -31,7 +31,6 @@ package org.scijava.ops.engine.struct;
 
 import java.lang.reflect.Type;
 
-import org.scijava.function.Producer;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
@@ -47,58 +46,31 @@ public class SynthesizedParameterMember<T> implements Member<T> {
 	/** {@link FunctionalMethodType} describing this Member */
 	private final FunctionalMethodType fmt;
 
-	/** Producer able to generate the parameter name */
-	private final Producer<String> nameGenerator;
-
 	/** Name of the parameter */
-	private String name = null;
+	private final String name;
 
-	/** Producer able to generate the parameter descriptor */
-	private final Producer<String> descriptionGenerator;
+	private final String description;
 
-	private String description = null;
+	private final boolean isRequired;
 
-	private boolean isRequired;
 
-	public SynthesizedParameterMember(final FunctionalMethodType fmt, final Producer<MethodParamInfo> synthesizerGenerator)
-	{
-		this(fmt, synthesizerGenerator, true);
-	}
-
-	public SynthesizedParameterMember(final FunctionalMethodType fmt, final Producer<MethodParamInfo> synthesizerGenerator, boolean isRequired)
-	{
+	public SynthesizedParameterMember(final FunctionalMethodType fmt, final String name, final boolean isRequired, final String description) {
 		this.fmt = fmt;
-		this.nameGenerator = () -> synthesizerGenerator.create().name(fmt);
-		this.descriptionGenerator = () -> synthesizerGenerator.create().description(fmt);
-		this.isRequired = !synthesizerGenerator.create().optionality(fmt);
+		this.name = name;
+		this.isRequired = isRequired;
+		this.description = description;
 	}
-
-
 
 	// -- Member methods --
 
 	@Override
 	public String getKey() {
-		if (name == null) generateName();
 		return name;
-	}
-
-	private synchronized void generateName() {
-		if (name != null) return;
-		String temp = nameGenerator.create();
-		name = temp;
 	}
 
 	@Override
 	public String getDescription() {
-		if (description == null) generateDescription();
 		return description;
-	}
-
-	private synchronized void generateDescription() {
-		if (description != null) return;
-		String temp = descriptionGenerator.create();
-		description = temp;
 	}
 
 	@Override
@@ -109,11 +81,6 @@ public class SynthesizedParameterMember<T> implements Member<T> {
 	@Override
 	public ItemIO getIOType() {
 		return fmt.itemIO();
-	}
-
-	@Override
-	public boolean isStruct() {
-		return false;
 	}
 
 	@Override

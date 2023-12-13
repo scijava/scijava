@@ -46,7 +46,7 @@ public class FieldParameterMemberParser implements
 		if (source == null) return null;
 
 		// obtain a parameterData (preferably one that scrapes the javadoc)
-		ParameterData paramData = new LazilyGeneratedFieldParameterData(source);
+		ParameterData paramData = new SynthesizedFieldParameterData(source);
 
 		final ArrayList<SynthesizedParameterMember<?>> items = new ArrayList<>();
 

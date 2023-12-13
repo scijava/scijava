@@ -227,7 +227,7 @@ public final class Infos {
 			sb.append(typeString(arg.getType(), verbose));
 			sb.append(" ");
 			sb.append(arg.getKey());
-			if (!arg.isRequired()) sb.append("?");
+			if (!arg.isRequired()) sb.append(" = null");
 			if (!arg.getDescription().isEmpty()) {
 					sb.append(" -> ");
 					sb.append(arg.getDescription());

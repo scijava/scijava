@@ -33,12 +33,11 @@
 
 package org.scijava.function;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -1843,6 +1842,18 @@ public final class Inplaces {
 
 		public int mutablePosition() {
 			return mutablePosition;
+		}
+
+		@Override
+		public boolean equals(Object that) {
+			if (!(that instanceof InplaceInfo)) return false;
+			InplaceInfo other = (InplaceInfo) that;
+			return other.arity == arity && other.mutablePosition == mutablePosition;
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(arity, mutablePosition);
 		}
 	}
 }

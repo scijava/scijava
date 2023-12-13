@@ -30,18 +30,21 @@
 package org.scijava.ops.engine.yaml.impl;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.net.URI;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.scijava.common3.Classes;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
+import org.scijava.function.Inplaces;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.matcher.impl.OpMethodInfo;
-import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.engine.yaml.AbstractYAMLOpInfoCreator;
 import org.scijava.ops.engine.yaml.YAMLOpInfoCreator;
+import org.scijava.ops.spi.OpDependency;
 
 /**
  * A {@link YAMLOpInfoCreator} specialized for Java {@link Method}s.
@@ -79,36 +82,47 @@ public class JavaMethodYAMLInfoCreator extends AbstractYAMLOpInfoCreator {
 		// parse op type
 		Class<?> opType;
 		Map<String, Object> tags = ((Map<String, Object>) yaml.get("tags"));
-		if (tags.containsKey("type")) {
-			String typeString = (String) tags.get("type");
-			opType = deriveType(identifier, typeString);
-		}
-		else {
-			opType = inferOpMethod(method);
-		}
+		String typeString = (String) tags.getOrDefault("type", "");
+		opType = deriveOpType(identifier, typeString, method);
 
 		return new OpMethodInfo(method, opType, new Hints(), priority, names);
 	}
 
-	/**
-	 * If the Op author does not specify an Op type, we assume that it is either
-	 * a Function (if it has an output) or a Computer (if the output is void).
-	 * @param method the {@link Method} annotated as an Op
-	 * @return the inferred {@link FunctionalInterface} of the Op
-	 */
-	private Class<?> inferOpMethod(Method method) {
-		// Find all non-OpDependency parameters
-		int paramCount = method.getParameterCount();
-		for (var p : method.getParameters()) {
+	private Class<?> deriveOpType(String identifier, String typeString, Method method) {
+		int parameterCount = method.getParameterCount();
+		for(Parameter p: method.getParameters()) {
 			if (p.isAnnotationPresent(OpDependency.class)) {
-				paramCount--;
+				parameterCount--;
 			}
 		}
-		if (method.getReturnType() != void.class) {
-			return Functions.functionOfArity(paramCount);
+		// Handle pure inference
+		if (typeString.isBlank()) {
+			if (method.getReturnType() != void.class) {
+				return Functions.functionOfArity(parameterCount);
+			}
+			else {
+				throw new RuntimeException(
+						"Op " + identifier + " could not be loaded: Computers and Inplaces must declare their Op type in their @implNote annotation For example, if your Inplace is designed to mutate the first argument, please write \"type='Inplace1'\"");
+			}
 		}
-		// NB the last input of a computer is the preallocated output
-		return Computers.computerOfArity(paramCount - 1);
+		// Handle op type inference
+		if (Pattern.matches("^[Ii]nplace\\s*[0-9]*$", typeString)) {
+			try {
+				int ioIndex = Integer.parseInt(typeString.replaceAll("[^0-9]", "")) - 1;
+				return Inplaces.inplaceOfArity(parameterCount, ioIndex);
+			} catch(NumberFormatException e) {
+				throw new RuntimeException(
+						"Op " + identifier + " could not be loaded: Inplaces must declare the index of the mutable parameter. For example, if your Inplace is designed to mutate the first argument, please write \"Inplace1\"");
+			}
+		}
+		else if (Pattern.matches("^[Cc]omputer\\s*[0-9]*$", typeString)) {
+			return Computers.computerOfArity(parameterCount - 1);
+		}
+		else if (Pattern.matches("^[Ff]unction\\s*[0-9]*$", typeString)) {
+			return Functions.functionOfArity(parameterCount);
+		}
+		// Finally, pass off to the class loader function.
+		return deriveType(identifier, typeString);
 	}
 
 	private Class<?> deriveType(String identifier, String typeString){

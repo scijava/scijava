@@ -30,6 +30,7 @@
 package org.scijava.ops.engine.yaml.impl.ops;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * A static {@link Method}, exposed to Ops via YAML
@@ -48,6 +49,35 @@ public class YAMLMethodOp {
 	 */
 	public static Double subtract(Double aDouble, Double aDouble2) {
 		return aDouble - aDouble2;
+	}
+
+	/**
+	 * Another example Op, implemented by a {@link Method}
+	 *
+	 * @implNote op name=example.xor, type=Inplace1
+	 * @param aList the first integer {@link List}
+	 * @param aList2 the second integer {@link List}
+	 * @return the xor
+	 */
+	public static void xor(List<Integer> aList, List<Integer> aList2) {
+		for(int i = 0; i < aList.size(); i++) {
+			aList.set(i, aList.get(i) ^ aList2.get(i));
+		}
+	}
+
+	/**
+	 * A third example Op, implemented by a {@link Method}
+	 *
+	 * @implNote op name=example.and, type=Computer
+	 * @param aList the first integer {@link List}
+	 * @param aList2 the second integer {@link List}
+	 * @param out the logical and of the two integer {@link List}s
+	 */
+	public static void and(List<Integer> aList, List<Integer> aList2, List<Integer> out) {
+		out.clear();
+		for(int i = 0; i < aList.size(); i++) {
+			out.add(aList.get(i) & aList2.get(i));
+		}
 	}
 
 }

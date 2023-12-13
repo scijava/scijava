@@ -67,7 +67,7 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	 * @param input2
 	 * @param dbzVal
 	 * @param output
-	 * @implNote op names='math.div, math.divide', priority='100.'
+	 * @implNote op names='math.div, math.divide', priority='100.', type=Computer
 	 */
 	public static <N extends NumericType<N>> void divider(N input1, N input2,
 			@Nullable N dbzVal, N output)

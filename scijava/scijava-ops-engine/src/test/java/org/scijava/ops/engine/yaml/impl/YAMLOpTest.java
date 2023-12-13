@@ -29,6 +29,10 @@
 
 package org.scijava.ops.engine.yaml.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -65,10 +69,27 @@ public class YAMLOpTest extends AbstractTestEnvironment {
 	}
 
 	@Test
-	public void testYAMLMethod() {
+	public void testYAMLMethodFunction() {
 		Double sum = ops.op("example.sub").arity2().input(2., 3.).outType(Double.class)
 			.apply();
 		Assertions.assertEquals(-1., sum, 1e-6);
+	}
+
+	@Test
+	public void testYAMLMethodInplaceShortType() {
+		List<Integer> l1 = Arrays.asList(1);
+		List<Integer> l2 = Arrays.asList(3);
+		ops.op("example.xor").arity2().input(l1, l2).mutate1();
+		Assertions.assertEquals(2, l1.get(0), 1e-6);
+	}
+
+	@Test
+	public void testYAMLMethodComputerShortType() {
+		List<Integer> l1 = Arrays.asList(1);
+		List<Integer> l2 = Arrays.asList(3);
+		List<Integer> out = new ArrayList<>();
+		ops.op("example.and").arity2().input(l1, l2).output(out).compute();
+		Assertions.assertEquals(1, l1.get(0), 1e-6);
 	}
 
 	@Test

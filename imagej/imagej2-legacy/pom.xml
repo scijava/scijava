@@ -99,10 +99,6 @@
 			<id>scijava.public</id>
 			<url>https://maven.scijava.org/content/groups/public</url>
 		</repository>
-		<repository>
-			<id>imagej.snapshots</id>
-			<url>https://maven.scijava.org/content/groups/snapshots</url>
-		</repository>
 	</repositories>
 
 	<dependencies>

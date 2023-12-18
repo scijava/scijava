@@ -29,18 +29,19 @@
 
 package org.scijava.ops.indexer;
 
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.VariableElement;
-import javax.lang.model.type.NoType;
-import javax.tools.Diagnostic;
 import java.lang.reflect.Method;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.NoType;
+import javax.tools.Diagnostic;
 
 /**
  * {@link OpImplData} implementation handling {@link Method}s annotated with
@@ -110,14 +111,16 @@ public class OpMethodImplData extends OpImplData {
 
 		// Finally, parse the return
 		Optional<String[]> returnTag = additionalTags.stream() //
-			.filter(t -> t[0].equals("@return")).findFirst();
+			.filter(t -> t[0].startsWith("@return")).findFirst();
 		if (returnTag.isPresent()) {
+			String totalTag = String.join(" ", returnTag.get());
+			totalTag = totalTag.replaceFirst("[^\\s]+\\s", "");
 			String returnType = exSource.getReturnType().toString();
 			params.add(new OpParameter( //
 				"output", //
 				returnType, //
 				OpParameter.IO_TYPE.OUTPUT, //
-				returnTag.get()[1] //
+				totalTag //
 			));
 		}
 		// Validate number of outputs

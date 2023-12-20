@@ -30,6 +30,7 @@
 package org.scijava.ops.engine.matcher.simplify;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,6 +51,13 @@ import org.scijava.priority.Priority;
 public class SimplifiedOpDescriptionGenerator implements
 	OpDescriptionGenerator
 {
+
+	private static final List<String> internalNamespaces = Arrays.asList( //
+			"adapt", //
+			"focus", //
+			"lossReporter", //
+			"simplify" //
+	);
 
 	@Override
 	public String simpleDescriptions(OpEnvironment env, OpRequest req) {
@@ -97,6 +105,8 @@ public class SimplifiedOpDescriptionGenerator implements
 				.flatMap(info -> info.names().stream()) //
 				// Map each name to its namespace
 				.map(name -> name.contains(".") ?  name.substring(0, name.indexOf(".")) : name) //
+				// Filter out "internal" namespaces
+				.filter(ns -> !internalNamespaces.contains(ns)) //
 				// Deduplicate, sort & collect
 				.distinct() //
 				.sorted() //
@@ -108,6 +118,8 @@ public class SimplifiedOpDescriptionGenerator implements
 		List<String> namespaces = env.infos().stream() //
 				// Get all names from each Op
 				.flatMap(info -> info.names().stream()) //
+				// Filter out "internal" namespaces
+				.filter(ns -> !internalNamespaces.contains(ns)) //
 				// Deduplicate, sort & collect
 				.distinct() //
 				.filter(n -> n.contains(name)) //

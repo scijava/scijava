@@ -147,7 +147,10 @@ public abstract class AbstractYAMLOpInfoCreator implements YAMLOpInfoCreator {
     private Member<?> wrapMember(final Member<?> member, final Map<String, Object> map) {
         String name = member.getKey();
         if (member.isInput() && !member.isOutput()) {
-            name = (String) map.get("INPUT");
+            var newName = (String) map.get("name");
+            if (newName != null) {
+                name = newName;
+            }
         }
         else {
             for (String key: outputKeys) {

@@ -38,6 +38,7 @@ import java.util.Optional;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.NoType;
@@ -104,9 +105,13 @@ public class OpMethodImplData extends OpImplData {
 		if (opDependencies.size() + params.size() != exSource
 				.getParameters().size())
 		{
-			env.getMessager().printMessage(Diagnostic.Kind.ERROR,
+			var clsElement = exSource.getEnclosingElement();
+			while (clsElement.getKind() != ElementKind.CLASS) {
+				clsElement = clsElement.getEnclosingElement();
+			}
+			env.getMessager().printMessage(Diagnostic.Kind.ERROR, clsElement + " - " +
 					"The number of @param tags on " + exSource +
-							" does not match the number of parameters!");
+					" does not match the number of parameters!");
 		}
 
 		// Finally, parse the return
@@ -125,8 +130,12 @@ public class OpMethodImplData extends OpImplData {
 		}
 		// Validate number of outputs
 		if (!(exSource.getReturnType() instanceof NoType) && returnTag.isEmpty()) {
-			env.getMessager().printMessage(Diagnostic.Kind.ERROR, exSource +
-				" has a return, but no @return parameter");
+			var clsElement = exSource.getEnclosingElement();
+			while (clsElement.getKind() != ElementKind.CLASS) {
+				clsElement = clsElement.getEnclosingElement();
+			}
+			env.getMessager().printMessage(Diagnostic.Kind.ERROR, clsElement + " - " + exSource +
+					" has a return, but no @return parameter");
 		}
 	}
 

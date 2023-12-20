@@ -22,6 +22,7 @@ The combination of these libraries allows declarative image analysis workflows, 
    CallingOps
    SearchingForOps
    ScriptingInImageJ2
+   Benchmarks
 
 .. toctree::
    :maxdepth: 2

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.scijava</groupId>
+		<artifactId>scijava-incubator</artifactId>
+		<version>0-SNAPSHOT</version>
+		<relativePath>../..</relativePath>
+	</parent>
+
+	<artifactId>scijava-ops-benchmarks</artifactId>
+
+	<name>SciJava Ops Benchmarks</name>
+	<description>SciJava Operations Benchmarks: A set of benchmarking tests for the Scijava Ops Engine library</description>
+	<url>https://github.com/scijava/scijava-ops-benchmarks</url>
+	<inceptionYear>2023</inceptionYear>
+	<organization>
+		<name>SciJava</name>
+		<url>https://scijava.org/</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>Simplified BSD License</name>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<id>ctrueden</id>
+			<name>Curtis Rueden</name>
+			<url>https://imagej.net/people/ctrueden</url>
+			<roles>
+				<role>founder</role>
+				<role>lead</role>
+				<role>reviewer</role>
+				<role>support</role>
+				<role>maintainer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>gselzer</id>
+			<name>Gabriel Selzer</name>
+			<roles>
+				<role>founder</role>
+				<role>developer</role>
+				<role>debugger</role>
+				<role>reviewer</role>
+				<role>support</role>
+			</roles>
+		</developer>
+	</developers>
+	<contributors>
+		<contributor>
+			<name>Christian Dietz</name>
+			<url>https://imagej.net/people/dietzc</url>
+			<roles>
+				<role>founder</role>
+			</roles>
+			<properties>
+				<id>dietzc</id>
+			</properties>
+		</contributor>
+		<contributor>
+			<name>David Kolb</name>
+			<roles>
+				<role>founder</role>
+			</roles>
+			<properties>
+				<id>Treiblesschorle</id>
+			</properties>
+		</contributor>
+	</contributors>
+
+	<mailingLists>
+		<mailingList>
+			<name>Image.sc Forum</name>
+			<archive>https://forum.image.sc/tag/scijava</archive>
+		</mailingList>
+	</mailingLists>
+<build>
+	<plugins>
+		<plugin>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<configuration>
+				<annotationProcessorPaths>
+					<path>
+						<groupId>org.scijava</groupId>
+						<artifactId>scijava-ops-indexer</artifactId>
+						<version>${project.version}</version>
+					</path>
+					<path>
+						<groupId>org.scijava</groupId>
+						<artifactId>scijava-common</artifactId>
+						<version>${scijava-common.version}</version>
+					</path>
+				</annotationProcessorPaths>
+				<fork>true</fork>
+				<showWarnings>true</showWarnings>
+				<compilerArgs>
+					<arg>-Aparse.ops="${scijava.parse.ops}"</arg>
+					<arg>-Aop.version="${project.version}"</arg>
+				</compilerArgs>
+			</configuration>
+		</plugin>
+	</plugins>
+</build>
+
+	<scm>
+		<connection>scm:git:git://github.com/scijava/incubator</connection>
+		<developerConnection>scm:git:git@github.com:scijava/incubator</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/scijava/incubator</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/scijava/scijava/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<system>GitHub Actions</system>
+		<url>https://github.com/scijava/incubator/actions</url>
+	</ciManagement>
+
+	<properties>
+		<main-class>org.scijava.ops.benchmarks.Main</main-class>
+		<package-name>org.scijava.ops.benchmarks</package-name>
+
+		<license.licenseName>bsd_2</license.licenseName>
+		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
+		<scijava-ops-benchmarks.allowedDuplicateClasses>${scijava.allowedDuplicateClasses},com.github.therapi.runtimejavadoc.repack.com.eclipsesource.json.*</scijava-ops-benchmarks.allowedDuplicateClasses>
+		<allowedDuplicateClasses>${scijava-ops-benchmarks.allowedDuplicateClasses}</allowedDuplicateClasses>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>scijava.public</id>
+			<url>https://maven.scijava.org/content/groups/public</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>net.imagej</groupId>
+			<artifactId>imagej-ops</artifactId>
+		</dependency>
+		<!-- SciJava dependencies -->
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-ops-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-ops-engine</artifactId>
+			<version>${project.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- Test scope dependencies -->
+	</dependencies>
+</project>

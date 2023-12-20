@@ -16,6 +16,7 @@ This analysis was performed with the following hardware:
 * 2017 Dell Inspiron 15 7000 Gaming
 * Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz
 * 16 GB 2400 MHz DDR4 RAM
+
 The following software components were used:
 * Ubuntu 22.04.3 LTS
 * OpenJDK Runtime Environment (build 11.0.21) with OpenJDK 64-Bit Server VM (build 11.0.21, mixed mode, sharing)
@@ -75,6 +76,10 @@ We now analyze the performance of each execution method in performing randomizat
 * The `ImageJ Ops` execution method discovers the static method through an `@Plugin` wrapper class and calls the functionality through an `OpService`
 
 ```java
+private static double expensiveOperation(final int value) {
+    return 255 * Math.random() * Math.sin(value / 255.0);
+}
+
 /**
  * @param data the data to invert
  * @implNote op name="randomize",type=Inplace1

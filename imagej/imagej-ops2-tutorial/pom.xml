@@ -224,8 +224,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>net.imagej</groupId>
-			<artifactId>imagej-ops2</artifactId>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-ops-image</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

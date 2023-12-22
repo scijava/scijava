@@ -34,7 +34,6 @@ module net.imagej.ops2.tutorial {
 
 	requires io.scif;
 	requires java.scripting;
-	requires net.imagej.ops2;
 	requires net.imglib2;
 	requires net.imglib2.algorithm;
 	requires net.imglib2.algorithm.fft2;
@@ -45,6 +44,7 @@ module net.imagej.ops2.tutorial {
 	requires org.scijava.meta;
 	requires org.scijava.ops.api;
 	requires org.scijava.ops.engine;
+	requires org.scijava.ops.image;
 	requires org.scijava.ops.spi;
 	requires org.scijava.parsington;
 	requires org.scijava.priority;

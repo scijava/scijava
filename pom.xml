@@ -46,7 +46,6 @@
 
 	<modules>
 		<module>imagej/imagej-ops2-tutorial</module>
-		<module>imagej/imagej-ops2</module>
 		<module>imagej/imagej2-legacy</module>
 		<module>scijava/scijava-collections</module>
 		<module>scijava/scijava-common3</module>
@@ -58,6 +57,7 @@
 		<module>scijava/scijava-ops-api</module>
 		<module>scijava/scijava-ops-benchmarks</module>
 		<module>scijava/scijava-ops-engine</module>
+		<module>scijava/scijava-ops-image</module>
 		<module>scijava/scijava-ops-indexer</module>
 		<module>scijava/scijava-ops-spi</module>
 		<module>scijava/scijava-persist</module>

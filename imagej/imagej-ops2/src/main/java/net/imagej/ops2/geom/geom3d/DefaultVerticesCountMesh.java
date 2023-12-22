@@ -29,7 +29,7 @@
 
 package net.imagej.ops2.geom.geom3d;
 
-import net.imagej.mesh2.Mesh;
+import net.imglib2.mesh.Mesh;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.function.Computers;

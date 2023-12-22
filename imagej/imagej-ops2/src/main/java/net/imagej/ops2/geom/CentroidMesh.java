@@ -31,7 +31,7 @@ package net.imagej.ops2.geom;
 
 import java.util.function.Function;
 
-import net.imagej.mesh2.Mesh;
+import net.imglib2.mesh.Mesh;
 import net.imglib2.RealLocalizable;
 import net.imglib2.RealPoint;
 import net.imglib2.type.numeric.real.DoubleType;

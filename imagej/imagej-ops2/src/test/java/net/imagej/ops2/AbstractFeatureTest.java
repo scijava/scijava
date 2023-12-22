@@ -39,8 +39,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import net.imagej.mesh2.Mesh;
-import net.imagej.mesh2.NaiveDoubleMesh;
+import net.imglib2.mesh.Mesh;
+import net.imglib2.mesh.impl.naive.NaiveDoubleMesh;
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccess;

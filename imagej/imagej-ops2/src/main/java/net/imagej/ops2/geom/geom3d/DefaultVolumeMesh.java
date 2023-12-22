@@ -30,8 +30,8 @@ package net.imagej.ops2.geom.geom3d;
 
 import java.util.function.Function;
 
-import net.imagej.mesh2.Mesh;
-import net.imagej.mesh2.Triangle;
+import net.imglib2.mesh.Mesh;
+import net.imglib2.mesh.Triangle;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.apache.commons.math3.util.MathArrays;

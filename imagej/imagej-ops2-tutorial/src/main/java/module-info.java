@@ -34,7 +34,6 @@ module net.imagej.ops2.tutorial {
 
 	requires io.scif;
 	requires java.scripting;
-	requires net.imagej.mesh2;
 	requires net.imagej.ops2;
 	requires net.imglib2;
 	requires net.imglib2.algorithm;

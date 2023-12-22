@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-package net.imagej.testutil;
+package net.imagej.ops2;
 
 import net.imglib2.Cursor;
 import net.imglib2.img.array.ArrayImg;

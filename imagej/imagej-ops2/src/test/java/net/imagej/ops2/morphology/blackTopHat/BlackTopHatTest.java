@@ -34,7 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.imagej.ops2.AbstractOpTest;
-import net.imagej.testutil.TestImgGeneration;
+import net.imagej.ops2.TestImgGeneration;
 import net.imglib2.algorithm.morphology.BlackTopHat;
 import net.imglib2.algorithm.neighborhood.DiamondShape;
 import net.imglib2.algorithm.neighborhood.HorizontalLineShape;

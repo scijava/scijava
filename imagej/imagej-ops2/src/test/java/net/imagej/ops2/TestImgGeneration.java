@@ -26,43 +26,25 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-package net.imagej.testutil;
-
-import java.math.BigInteger;
-import java.util.Random;
+package net.imagej.ops2;
 
 import net.imglib2.Cursor;
 import net.imglib2.FinalInterval;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImg;
 import net.imglib2.img.array.ArrayImgs;
-import net.imglib2.img.basictypeaccess.array.ByteArray;
-import net.imglib2.img.basictypeaccess.array.DoubleArray;
-import net.imglib2.img.basictypeaccess.array.FloatArray;
-import net.imglib2.img.basictypeaccess.array.IntArray;
-import net.imglib2.img.basictypeaccess.array.LongArray;
-import net.imglib2.img.basictypeaccess.array.ShortArray;
+import net.imglib2.img.basictypeaccess.array.*;
 import net.imglib2.img.cell.CellImg;
 import net.imglib2.img.cell.CellImgFactory;
 import net.imglib2.type.logic.BitType;
-import net.imglib2.type.numeric.integer.ByteType;
-import net.imglib2.type.numeric.integer.IntType;
-import net.imglib2.type.numeric.integer.LongType;
-import net.imglib2.type.numeric.integer.ShortType;
-import net.imglib2.type.numeric.integer.Unsigned128BitType;
-import net.imglib2.type.numeric.integer.Unsigned12BitType;
-import net.imglib2.type.numeric.integer.Unsigned2BitType;
-import net.imglib2.type.numeric.integer.Unsigned4BitType;
-import net.imglib2.type.numeric.integer.UnsignedByteType;
-import net.imglib2.type.numeric.integer.UnsignedIntType;
-import net.imglib2.type.numeric.integer.UnsignedLongType;
-import net.imglib2.type.numeric.integer.UnsignedShortType;
-import net.imglib2.type.numeric.integer.UnsignedVariableBitLengthType;
+import net.imglib2.type.numeric.integer.*;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.util.Intervals;
-
 import org.scijava.common3.MersenneTwisterFast;
+
+import java.math.BigInteger;
+import java.util.Random;
 
 public final class TestImgGeneration {
 

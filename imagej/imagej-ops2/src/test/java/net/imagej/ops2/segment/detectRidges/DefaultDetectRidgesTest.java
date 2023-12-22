@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.List;
 
 import net.imagej.ops2.AbstractOpTest;
-import net.imagej.testutil.TestImgGeneration;
+import net.imagej.ops2.TestImgGeneration;
 import net.imglib2.RandomAccess;
 import net.imglib2.img.Img;
 import net.imglib2.roi.geom.real.DefaultWritablePolyline;

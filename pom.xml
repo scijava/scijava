@@ -47,7 +47,6 @@
 	<modules>
 		<module>imagej/imagej-ops2-tutorial</module>
 		<module>imagej/imagej-ops2</module>
-		<module>imagej/imagej-testutil</module>
 		<module>imagej/imagej2-legacy</module>
 		<module>scijava/scijava-collections</module>
 		<module>scijava/scijava-common3</module>

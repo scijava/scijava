@@ -30,7 +30,7 @@
 package net.imagej.ops2.stats;
 
 import net.imagej.ops2.AbstractOpTest;
-import net.imagej.testutil.TestImgGeneration;
+import net.imagej.ops2.TestImgGeneration;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImg;
 import net.imglib2.img.array.ArrayImgs;

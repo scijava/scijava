@@ -224,11 +224,6 @@
 	</repositories>
 
 	<dependencies>
-		<dependency>
-			<groupId>net.imagej</groupId>
-			<artifactId>imagej-mesh2</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 
 		<!-- ImgLib2 dependencies -->
 		<dependency>
@@ -245,18 +240,34 @@
 		</dependency>
 		<dependency>
 			<groupId>net.imglib2</groupId>
+			<artifactId>imglib2-mesh</artifactId>
+			<!-- TODO Remove once added to pom-scijava -->
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>net.imglib2</groupId>
 			<artifactId>imglib2-roi</artifactId>
 		</dependency>
 
 		<!-- SciJava dependencies -->
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-meta</artifactId>
+			<artifactId>scijava-collections</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-concurrent</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-function</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-meta</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -267,11 +278,6 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-spi</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-function</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

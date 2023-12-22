@@ -31,7 +31,7 @@ open module net.imagej.ops2 {
 	// from the SciJava Ops Engine module.
 
 	requires java.scripting;
-	requires net.imagej.mesh2;
+	requires net.imglib2.mesh;
 	requires net.imglib2;
 	requires net.imglib2.algorithm;
 	requires net.imglib2.algorithm.fft2;

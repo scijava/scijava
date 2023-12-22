@@ -29,8 +29,8 @@
 
 package net.imagej.ops2.geom.geom3d;
 
-import net.imagej.mesh2.Mesh;
-import net.imagej.mesh2.NaiveDoubleMesh;
+import net.imglib2.mesh.Mesh;
+import net.imglib2.mesh.impl.naive.NaiveDoubleMesh;
 import net.imglib2.Cursor;
 import net.imglib2.FinalInterval;
 import net.imglib2.RandomAccessibleInterval;

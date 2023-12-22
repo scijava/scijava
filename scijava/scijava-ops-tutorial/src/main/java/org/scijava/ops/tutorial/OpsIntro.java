@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-package net.imagej.ops2.tutorial;
+package org.scijava.ops.tutorial;
 
 import org.scijava.Context;
 import org.scijava.ops.api.OpEnvironment;

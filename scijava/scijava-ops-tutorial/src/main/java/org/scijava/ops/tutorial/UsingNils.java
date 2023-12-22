@@ -1,5 +1,5 @@
 
-package net.imagej.ops2.tutorial;
+package org.scijava.ops.tutorial;
 
 import org.scijava.function.Producer;
 import org.scijava.ops.api.OpEnvironment;

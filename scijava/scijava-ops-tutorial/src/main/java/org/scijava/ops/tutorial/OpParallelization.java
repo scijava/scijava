@@ -27,7 +27,7 @@
  * #L%
  */
 
-package net.imagej.ops2.tutorial;
+package org.scijava.ops.tutorial;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.api.OpEnvironment;

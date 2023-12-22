@@ -69,9 +69,9 @@ You can also access an `OpEnvironment` via the `env` variable, for a [Java](#run
 
 ### From an IDE
 
-The [OpsIntro](src/main/java/net/imagej/ops2/tutorial/OpsIntro.java) class is designed to take a developer through the
+The [OpsIntro](src/main/java/org/scijava/ops/tutorial/OpsIntro.java) class is designed to take a developer through the
 basic concepts of the SciJava Ops framework. It includes examples of Ops calls, how to interrogate available Ops, and
 additional commentary about the framework.
 
-Moving beyond the intro, the additional classes in the [tutorial package](src/main/java/net/imagej/ops2/tutorial)
+Moving beyond the intro, the additional classes in the [tutorial package](src/main/java/org/scijava/ops/tutorial)
 provide focused guides to particular tasks or concepts.

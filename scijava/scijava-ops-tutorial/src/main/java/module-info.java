@@ -26,11 +26,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-module net.imagej.ops2.tutorial {
-	exports net.imagej.ops2.tutorial;
+module org.scijava.ops.tutorial {
+	exports org.scijava.ops.tutorial;
 	
 	// -- Open plugins to scijava-ops, therapi
-	opens net.imagej.ops2.tutorial to therapi.runtime.javadoc, org.scijava.ops.engine;
+	opens org.scijava.ops.tutorial to therapi.runtime.javadoc, org.scijava.ops.engine;
 
 	requires io.scif;
 	requires java.scripting;
@@ -59,13 +59,13 @@ module net.imagej.ops2.tutorial {
 	requires mines.jtk;
 
 	provides org.scijava.ops.spi.OpCollection with
-			net.imagej.ops2.tutorial.OpAdaptation,
-			net.imagej.ops2.tutorial.OpDependencies,
-			net.imagej.ops2.tutorial.OpParallelization,
-			net.imagej.ops2.tutorial.OpPriorities,
-			net.imagej.ops2.tutorial.OpReduction,
-			net.imagej.ops2.tutorial.OpSimplification,
-			net.imagej.ops2.tutorial.ReportingProgress,
-			net.imagej.ops2.tutorial.UsingNils,
-			net.imagej.ops2.tutorial.WritingOpCollections;
+			org.scijava.ops.tutorial.OpAdaptation,
+			org.scijava.ops.tutorial.OpDependencies,
+			org.scijava.ops.tutorial.OpParallelization,
+			org.scijava.ops.tutorial.OpPriorities,
+			org.scijava.ops.tutorial.OpReduction,
+			org.scijava.ops.tutorial.OpSimplification,
+			org.scijava.ops.tutorial.ReportingProgress,
+			org.scijava.ops.tutorial.UsingNils,
+			org.scijava.ops.tutorial.WritingOpCollections;
 }

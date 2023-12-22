@@ -1,5 +1,5 @@
 
-package net.imagej.ops2.tutorial;
+package org.scijava.ops.tutorial;
 
 import java.util.Arrays;
 import java.util.function.Function;

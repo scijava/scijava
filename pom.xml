@@ -62,7 +62,6 @@
 		<module>scijava/scijava-ops-engine</module>
 		<module>scijava/scijava-ops-indexer</module>
 		<module>scijava/scijava-ops-spi</module>
-		<module>scijava/scijava-parse2</module>
 		<module>scijava/scijava-persist</module>
 		<module>scijava/scijava-priority</module>
 		<module>scijava/scijava-progress</module>

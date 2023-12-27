@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 
 import org.scijava.ops.image.AbstractOpTest;
-import org.scijava.ops.image.TestImgGeneration;
+import org.scijava.ops.image.util.TestImgGeneration;
 import net.imglib2.algorithm.neighborhood.Neighborhood;
 import net.imglib2.algorithm.neighborhood.RectangleShape;
 import net.imglib2.img.array.ArrayImgs;

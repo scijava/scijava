@@ -13,11 +13,11 @@ more developer focused.
 
 You may wish to use ops from a [jupyter notebook](#jupyter-notebooks) or simply
 a [python interpreter](#from-an-interpreter); in each case we recommend starting from the provided `environment.yml`.
-To create and activate this environment, from the `imagej-ops2-tutorial` directory in the terminal of your choice, run:
+To create and activate this environment, from the `scijava-ops-tutorial` directory in the terminal of your choice, run:
 
 ```bash
 mamba env create
-mamba activate imagej-ops2
+mamba activate scijava-ops
 ```
 
 ### Jupyter Notebooks
@@ -26,7 +26,7 @@ mamba activate imagej-ops2
 provided is intended to introduce you to python programming in ops. You can simply open it from the command line via:
 
 ```bash
-jupyter notebook notebooks/ImageJOps2.ipynb
+jupyter notebook notebooks/SciJavaOps.ipynb
 ```
 
 ### From an Interpreter

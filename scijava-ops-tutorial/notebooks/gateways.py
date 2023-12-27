@@ -30,7 +30,7 @@ class OpNamespace:
         '''
         Convenience wrapper for OpEnvironment.description(), for information about available ops. Prints all returned information, line-by-line.
         '''
-        print(*self.env.descriptions(op_name), sep = "\n")
+        print(*self.env.help(op_name), sep = "\n")
 
 class OpGateway(OpNamespace):
     '''

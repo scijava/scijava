@@ -32,7 +32,7 @@
 * corresponding template in templates/ and rerun bin/generate.groovy.
 */
 
-package net.imagej.ops2.adapt;
+package org.scijava.ops.image.adapt;
 
 import java.util.function.Function;
 

@@ -1,10 +1,10 @@
-package net.imagej.ops2.convert;
+package org.scijava.ops.image.convert;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigInteger;
 
-import net.imagej.ops2.AbstractOpTest;
+import org.scijava.ops.image.AbstractOpTest;
 import net.imglib2.FinalDimensions;
 import net.imglib2.IterableInterval;
 import net.imglib2.type.logic.BitType;

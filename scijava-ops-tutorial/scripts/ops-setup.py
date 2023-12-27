@@ -12,7 +12,7 @@ Variables:
 '''
 
 from scyjava import config, jimport
-config.endpoints.append('net.imagej:imagej-ops2-tutorial:0-SNAPSHOT')
+config.endpoints.append('org.scijava:scijava-ops-tutorial:0-SNAPSHOT')
 
 import gateways as g
 

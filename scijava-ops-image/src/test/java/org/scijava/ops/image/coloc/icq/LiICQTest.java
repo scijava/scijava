@@ -36,7 +36,7 @@ import java.util.function.BiFunction;
 
 import org.scijava.ops.image.AbstractColocalisationTest;
 import org.scijava.ops.image.coloc.pValue.PValueResult;
-import org.scijava.ops.image.TestImgGeneration;
+import org.scijava.ops.image.util.TestImgGeneration;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.integer.ByteType;

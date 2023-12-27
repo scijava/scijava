@@ -32,7 +32,7 @@
 * corresponding template in templates/ and rerun bin/generate.groovy.
 */
 
-package net.imagej.ops2.adapt.complexLift;
+package org.scijava.ops.image.adapt.complexLift;
 
 import net.imglib2.RandomAccessibleInterval;
 import org.scijava.function.Computers;

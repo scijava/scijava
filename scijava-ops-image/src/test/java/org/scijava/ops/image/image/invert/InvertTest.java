@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.math.BigInteger;
 
 import org.scijava.ops.image.AbstractOpTest;
-import org.scijava.ops.image.TestImgGeneration;
+import org.scijava.ops.image.util.TestImgGeneration;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccess;
 import net.imglib2.img.Img;
@@ -59,6 +59,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.jupiter.api.Test;
+import org.scijava.ops.image.util.UnboundedIntegerType;
 
 /**
  * Tests {@link InvertII} and {@link InvertIIInteger}.
@@ -237,18 +238,17 @@ public class InvertTest extends AbstractOpTest {
 				new UnsignedShortType((short) 8008));
 	}
 
-	//TODO: resolve imagej-common dependency within imagej-testutil
-//	@Test
-//	public void testUnboundedIntegerTypeInvert() {
-//		final Img<UnboundedIntegerType> inUnboundedIntegerType = TestImgGeneration.generateUnboundedIntegerTypeListTestImg(true, 5, 5);
-//		final Img<UnboundedIntegerType> outUnboundedIntegerType = inUnboundedIntegerType.factory()
-//				.create(inUnboundedIntegerType, new UnboundedIntegerType());
-//		assertIntegerInvert(inUnboundedIntegerType, outUnboundedIntegerType);
-//		assertIntegerInvertMinMaxProvided(inUnboundedIntegerType, outUnboundedIntegerType,
-//				new UnboundedIntegerType(437), new UnboundedIntegerType(8008));
-//		assertIntegerInvertMinMaxProvided(inUnboundedIntegerType, outUnboundedIntegerType, new UnboundedIntegerType(0),
-//				new UnboundedIntegerType(1));
-//	}
+	@Test
+	public void testUnboundedIntegerTypeInvert() {
+		final Img<UnboundedIntegerType> inUnboundedIntegerType = TestImgGeneration.generateUnboundedIntegerTypeListTestImg(true, 5, 5);
+		final Img<UnboundedIntegerType> outUnboundedIntegerType = inUnboundedIntegerType.factory()
+				.create(inUnboundedIntegerType, new UnboundedIntegerType());
+		assertIntegerInvert(inUnboundedIntegerType, outUnboundedIntegerType);
+		assertIntegerInvertMinMaxProvided(inUnboundedIntegerType, outUnboundedIntegerType,
+				new UnboundedIntegerType(437), new UnboundedIntegerType(8008));
+		assertIntegerInvertMinMaxProvided(inUnboundedIntegerType, outUnboundedIntegerType, new UnboundedIntegerType(0),
+				new UnboundedIntegerType(1));
+	}
 
 	@Test
 	public void testUnsignedVariableBitLengthTypeInvert() {

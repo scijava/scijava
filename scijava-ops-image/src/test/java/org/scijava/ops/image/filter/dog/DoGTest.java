@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
 import org.scijava.types.Nil;
 
 import org.scijava.ops.image.AbstractOpTest;
-import org.scijava.ops.image.TestImgGeneration;
+import org.scijava.ops.image.util.TestImgGeneration;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.dog.DifferenceOfGaussian;

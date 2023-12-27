@@ -32,18 +32,13 @@ package org.scijava.ops.image.math;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.scijava.ops.image.AbstractOpTest;
-import org.scijava.ops.image.TestImgGeneration;
-import net.imglib2.RandomAccessible;
+import org.scijava.ops.image.util.TestImgGeneration;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.integer.IntType;
-import net.imglib2.view.IntervalView;
-import net.imglib2.view.Views;
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.types.Nil;
-
-import java.util.function.BiFunction;
 
 /**
  * Tests for binary functions in {@link org.scijava.ops.image.math} applied to images

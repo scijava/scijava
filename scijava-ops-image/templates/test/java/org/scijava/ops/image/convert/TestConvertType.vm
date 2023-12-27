@@ -1,4 +1,4 @@
-package net.imagej.ops2.convert;
+package org.scijava.ops.image.convert;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -7,7 +7,7 @@ import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
 
-import net.imagej.ops2.AbstractOpTest;
+import org.scijava.ops.image.AbstractOpTest;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.complex.ComplexDoubleType;
 import net.imglib2.type.numeric.complex.ComplexFloatType;

@@ -58,7 +58,7 @@ public class DatasetTypeExtractorTest {
 		// NB we pass a null context to avoid a SciJava Common dependency
 		var ds = new DefaultDataset(null, imgPlus);
 		// Assert correct reification
-		// NB without a dependency on imagej-ops2 we cannot reify
+		// NB without a dependency on scijava-ops-image we cannot reify
 		// the ImgPlus, but asserting an ImgPlus is the reified type
 		// is enough to unit test the TypeExtractor
 		var actual = new DatasetTypeExtractor().reify(reifier, ds);

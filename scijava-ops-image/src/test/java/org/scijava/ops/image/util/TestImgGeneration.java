@@ -26,22 +26,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-package org.scijava.ops.image;
+package org.scijava.ops.image.util;
 
 import net.imglib2.Cursor;
 import net.imglib2.FinalInterval;
+import net.imglib2.RandomAccess;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImg;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.img.basictypeaccess.array.*;
 import net.imglib2.img.cell.CellImg;
 import net.imglib2.img.cell.CellImgFactory;
+import net.imglib2.img.list.ListImg;
+import net.imglib2.img.list.ListImgFactory;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.integer.*;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.util.Intervals;
 import org.scijava.common3.MersenneTwisterFast;
+import org.scijava.ops.image.util.UnboundedIntegerType;
 
 import java.math.BigInteger;
 import java.util.Random;
@@ -315,30 +319,29 @@ public final class TestImgGeneration {
 		return ArrayImgs.unsignedVariableBitLengths(l, nbits, dims);
 	}
 
-	// TODO: uncomment and add dependency on imagej-common or delete
-//	public ListImg<UnboundedIntegerType> generateUnboundedIntegerTypeListTestImg(
-//		final boolean fill, final long... dims)
-//	{
-//
-//		final ListImg<UnboundedIntegerType> l =
-//			new ListImgFactory<>(new UnboundedIntegerType()).create(dims);
-//
-//		final BigInteger[] array = new BigInteger[(int) Intervals.numElements(
-//			dims)];
-//
-//		RandomAccess<UnboundedIntegerType> ra = l.randomAccess();
-//
-//		if (fill) {
-//			MersenneTwisterFast betterRNG = new MersenneTwisterFast(0xf1eece);
-//			for (int i = 0; i < Intervals.numElements(dims); i++) {
-//				BigInteger val = BigInteger.valueOf(betterRNG.nextLong());
-//				ra.get().set(val);
-//				ra.fwd(0);
-//			}
-//		}
-//
-//		return l;
-//	}
+	public static ListImg<UnboundedIntegerType> generateUnboundedIntegerTypeListTestImg(
+			final boolean fill, final long... dims)
+	{
+
+		final ListImg<UnboundedIntegerType> l =
+			new ListImgFactory<>(new UnboundedIntegerType()).create(dims);
+
+		final BigInteger[] array = new BigInteger[(int) Intervals.numElements(
+			dims)];
+
+		RandomAccess<UnboundedIntegerType> ra = l.randomAccess();
+
+		if (fill) {
+			MersenneTwisterFast betterRNG = new MersenneTwisterFast(0xf1eece);
+			for (int i = 0; i < Intervals.numElements(dims); i++) {
+				BigInteger val = BigInteger.valueOf(betterRNG.nextLong());
+				ra.get().set(val);
+				ra.fwd(0);
+			}
+		}
+
+		return l;
+	}
 
 	public static Img<UnsignedByteType>
 		randomlyFilledUnsignedByteWithSeed(final long[] dims,

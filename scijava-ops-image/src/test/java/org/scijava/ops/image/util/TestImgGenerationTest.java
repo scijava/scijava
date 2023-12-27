@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-package org.scijava.ops.image;
+package org.scijava.ops.image.util;
 
 import net.imglib2.Cursor;
 import net.imglib2.img.array.ArrayImg;

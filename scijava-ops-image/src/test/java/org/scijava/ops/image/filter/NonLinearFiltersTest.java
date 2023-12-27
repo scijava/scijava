@@ -36,7 +36,7 @@ import java.util.Collections;
 
 import org.scijava.ops.image.AbstractOpTest;
 import org.scijava.ops.image.filter.sigma.DefaultSigmaFilter;
-import org.scijava.ops.image.TestImgGeneration;
+import org.scijava.ops.image.util.TestImgGeneration;
 import net.imglib2.algorithm.neighborhood.Neighborhood;
 import net.imglib2.algorithm.neighborhood.RectangleShape;
 import net.imglib2.algorithm.neighborhood.RectangleShape.NeighborhoodsIterableInterval;

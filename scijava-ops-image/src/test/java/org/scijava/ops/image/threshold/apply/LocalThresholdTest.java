@@ -55,7 +55,7 @@ import org.scijava.ops.image.threshold.localMean.LocalMeanThreshold;
 import org.scijava.ops.image.threshold.localMedian.LocalMedianThreshold;
 import org.scijava.ops.image.threshold.localNiblack.LocalNiblackThreshold;
 import org.scijava.ops.image.threshold.localSauvola.LocalSauvolaThreshold;
-import org.scijava.ops.image.TestImgGeneration;
+import org.scijava.ops.image.util.TestImgGeneration;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.RectangleShape;

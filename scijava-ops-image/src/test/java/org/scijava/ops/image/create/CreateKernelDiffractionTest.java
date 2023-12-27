@@ -117,12 +117,12 @@ public class CreateKernelDiffractionTest extends AbstractOpTest {
 	 * <p>
 	 * It is worth noting that results are only comparable between the two when
 	 * using a particle position relative to the coverslip of 0. This is because
-	 * imagej-ops automatically crops and centers kernels produced by the Fast
-	 * Gibson-Lanni implementation in {@link DefaultCreateKernelGibsonLanni} while
-	 * the Gibson &amp; Lanni kernels produced by PSFGenerator are not. See this
-	 * github issue
-	 * <a href="https://github.com/imagej/imagej-ops/issues/550">thread</a> for more
-	 * details.
+	 * scijava-ops-image automatically crops and centers kernels produced by the
+	 * Fast Gibson-Lanni implementation in {@link DefaultCreateKernelGibsonLanni}
+	 * while the Gibson &amp; Lanni kernels produced by PSFGenerator are not.
+	 * See this github issue
+	 * <a href="https://github.com/imagej/imagej-ops/issues/550">thread</a> for
+	 * more details.
 	 * </p>
 	 * <p>
 	 * It is also worth noting that when using a particle position of 0, the model

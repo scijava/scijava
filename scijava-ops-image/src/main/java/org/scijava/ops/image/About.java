@@ -66,6 +66,6 @@ public class About {
 	}
 
 	public static void main(String... args) {
-		System.out.println(about(About.class, "net.imagej", "imagej-ops2"));
+		System.out.println(about(About.class, "org.scijava", "scijava-ops-image"));
 	}
 }

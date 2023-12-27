@@ -76,7 +76,7 @@ import org.scijava.util.LongArray;
 public class AbstractFeatureTest extends AbstractOpTest {
 
 	protected static final boolean expensiveTestsEnabled = 
-		"enabled".equals(System.getProperty("imagej.ops.expensive.tests"));
+		"enabled".equals(System.getProperty("scijava.ops.image.expensive.tests"));
 
 	/**
 	 * Really small number, used for assertEquals with floating or double values.

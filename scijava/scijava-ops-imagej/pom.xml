@@ -9,16 +9,15 @@
 		<relativePath>../..</relativePath>
 	</parent>
 
-	<groupId>net.imagej</groupId>
-	<artifactId>imagej2-legacy</artifactId>
+	<artifactId>scijava-ops-imagej</artifactId>
 
-	<name>ImageJ2 Legacy</name>
-	<description>An interface between SciJava 3 and ImageJ2.</description>
+	<name>SciJava Ops ImageJ</name>
+	<description>Components enabling interoperability between SciJava 3 and ImageJ/ImageJ2.</description>
 	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2023</inceptionYear>
 	<organization>
-		<name>ImageJ</name>
-		<url>https://imagej.net/</url>
+		<name>SciJava</name>
+		<url>https://scijava.org/</url>
 	</organization>
 	<licenses>
 		<license>

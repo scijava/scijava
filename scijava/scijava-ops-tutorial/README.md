@@ -1,6 +1,6 @@
-# ImageJ Ops 2 Tutorial
+# SciJava Ops Tutorial
 
-These tutorials are intended to familiarize the reader with ImageJ Ops 2. In general,
+These tutorials are intended to familiarize the reader with SciJava Ops. In general,
 the [Python](#running-ops-in-python) use-cases are more targeted towards users, while [Java](#running-ops-in-java) is
 more developer focused.
 

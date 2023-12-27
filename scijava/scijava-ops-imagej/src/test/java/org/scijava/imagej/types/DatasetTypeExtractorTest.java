@@ -1,5 +1,3 @@
-import net.imagej2.legacy.types.DatasetTypeExtractor;
-
 /*-
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
@@ -8,13 +6,13 @@ import net.imagej2.legacy.types.DatasetTypeExtractor;
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,11 +26,44 @@ import net.imagej2.legacy.types.DatasetTypeExtractor;
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-module net.imagej2.legacy {
 
-	requires net.imagej;
-	requires org.scijava.types;
-	requires org.scijava.priority;
+package org.scijava.imagej.types;
 
-	provides org.scijava.types.TypeExtractor with net.imagej2.legacy.types.DatasetTypeExtractor;
+import java.lang.reflect.Type;
+import java.util.ServiceLoader;
+
+import net.imagej.DefaultDataset;
+import net.imagej.ImgPlus;
+import net.imglib2.img.array.ArrayImgs;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.scijava.discovery.Discoverer;
+import org.scijava.types.Any;
+import org.scijava.types.DefaultTypeReifier;
+import org.scijava.types.Types;
+
+/**
+ * Tests {@link DatasetTypeExtractor}
+ *
+ * @author Gabriel Selzer
+ */
+public class DatasetTypeExtractorTest {
+
+	@Test public void testDatasetTypeExtractor() {
+		// Create a TypeReifier
+		var reifier = new DefaultTypeReifier(Discoverer.all(ServiceLoader::load));
+		// Create a Dataset
+		var img = ArrayImgs.unsignedBytes(10, 10);
+		var imgPlus = new ImgPlus<>(img);
+		// NB we pass a null context to avoid a SciJava Common dependency
+		var ds = new DefaultDataset(null, imgPlus);
+		// Assert correct reification
+		// NB without a dependency on imagej-ops2 we cannot reify
+		// the ImgPlus, but asserting an ImgPlus is the reified type
+		// is enough to unit test the TypeExtractor
+		var actual = new DatasetTypeExtractor().reify(reifier, ds);
+		var expected = Types.parameterize(ImgPlus.class, new Type[] { new Any() });
+		Assertions.assertEquals(expected, actual);
+	}
+
 }

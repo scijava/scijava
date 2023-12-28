@@ -37,11 +37,11 @@ import org.scijava.ops.spi.OpField;
 public class PrimitiveArrayLossReporters implements OpCollection {
 	
 	@OpHints(hints = {Simplification.FORBIDDEN})
-	@OpField(names = "lossReporter")
+	@OpField(names = "engine.lossReporter")
 	public final LossReporter<Byte[], Integer[]> bArrIArr = (from, to) -> 0.;
 	
 	@OpHints(hints = {Simplification.FORBIDDEN})
-	@OpField(names = "lossReporter")
+	@OpField(names = "engine.lossReporter")
 	public final LossReporter<Double[], Integer[]> dArrIArr = (from, to) -> 0.;
 
 }

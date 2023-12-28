@@ -81,12 +81,12 @@ public class SimplifiedOpRequest implements OpRequest {
 		this.inSimplifiers = new ArrayList<>();
 		for(Type arg: req.getArgs()) {
 			var inNil = Nil.of(arg);
-			var simplifier = env.unary("simplify", h).inType(inNil).outType(Object.class).function();
+			var simplifier = env.unary("engine.simplify", h).inType(inNil).outType(Object.class).function();
 			inSimplifiers.add(Ops.rich(simplifier));
 		}
 		var inNil = Nil.of(new Any());
 		var outNil = Nil.of(req.getOutType());
-		var focuser = env.unary("focus", h).inType(inNil).outType(outNil).function();
+		var focuser = env.unary("engine.focus", h).inType(inNil).outType(outNil).function();
 		this.outFocuser = Ops.rich(focuser);
 
 		// Determine the new type

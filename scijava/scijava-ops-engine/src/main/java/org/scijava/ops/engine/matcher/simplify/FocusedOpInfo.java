@@ -369,8 +369,8 @@ public class FocusedOpInfo implements OpInfo {
 	}
 
 	/**
-	 * Calls a {@code lossReporter} Op to determine the <b>worst-case</b> loss
-	 * from a {@code T} to a {@code R}. If no {@code lossReporter} exists for such
+	 * Calls a {@code engine.lossReporter} Op to determine the <b>worst-case</b> loss
+	 * from a {@code T} to a {@code R}. If no {@code engine.lossReporter} exists for such
 	 * a conversion, we assume infinite loss.
 	 *
 	 * @param <T> -the generic type we are converting from.
@@ -396,7 +396,7 @@ public class FocusedOpInfo implements OpInfo {
 				.getType() });
 			Hints h = new Hints(BaseOpHints.Adaptation.FORBIDDEN,
 				BaseOpHints.Simplification.FORBIDDEN);
-			LossReporter<T, R> op = env.op("lossReporter", specialTypeNil, new Nil[] {
+			LossReporter<T, R> op = env.op("engine.lossReporter", specialTypeNil, new Nil[] {
 				Nil.of(nilFromType), Nil.of(nilToType) }, Nil.of(Double.class), h);
 			return op.apply(from, to);
 		}

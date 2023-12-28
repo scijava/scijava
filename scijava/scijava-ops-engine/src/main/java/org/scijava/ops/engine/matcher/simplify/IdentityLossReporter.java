@@ -44,7 +44,7 @@ import org.scijava.types.Nil;
  * @param <T> - the type that is not being simplified.
  */
 @OpHints(hints = {Simplification.FORBIDDEN})
-@OpClass(names = "lossReporter", priority= Priority.VERY_HIGH)
+@OpClass(names = "engine.lossReporter", priority= Priority.VERY_HIGH)
 public class IdentityLossReporter<U, T extends U> implements LossReporter<T, U>, Op {
 
 	/**

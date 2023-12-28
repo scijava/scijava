@@ -13,9 +13,10 @@ format_inner_class () {
 }
 
 # Ensure running in basedir
-if [[ ! -d "scijava" || ! -d "imagej" ]];
+dir=${PWD##*/}          # Credit: https://stackoverflow.com/a/1371283
+if [[ "$dir" != "incubator" ]]
 then
-  echo "SciJava and/or ImageJ directories not found. Please run this script from the incubator base directory."
+  echo "Please run this script from the incubator base directory."
   exit 0
 fi
 

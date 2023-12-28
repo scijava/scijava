@@ -1,4 +1,0 @@
-.include templates/main/java/net/imagej/ops2/adapt/complexLift/Globals.list
-
-[FunctionsToComputersAndLift.java]
-arities = (1..maxArity).collect()

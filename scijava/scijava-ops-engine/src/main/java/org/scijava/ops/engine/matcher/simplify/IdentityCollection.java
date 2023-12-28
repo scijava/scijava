@@ -50,7 +50,7 @@ public class IdentityCollection<T> implements OpCollection {
 	 *         simplification, this is just a reference to the input object).
 	 */
 	@OpHints(hints = { Simplification.FORBIDDEN })
-	@OpField(names="simplify, focus, identify", priority=Priority.LAST)
+	@OpField(names="engine.simplify, engine.focus, identity", priority=Priority.LAST)
 	public final Function<T, T> identity = (t) -> t;
 
 }

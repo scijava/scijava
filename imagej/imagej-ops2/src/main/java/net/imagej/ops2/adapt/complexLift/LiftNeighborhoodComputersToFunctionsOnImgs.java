@@ -57,7 +57,7 @@ public final class LiftNeighborhoodComputersToFunctionsOnImgs {
 	}
 
 	/**
-	 * @implNote op names='adapt', priority='100.', type='java.util.function.Function'
+	 * @implNote op names='engine.adapt', priority='100.', type='java.util.function.Function'
 	 */
 	public static <T, U> BiFunction<RandomAccessibleInterval<T>, Shape, Img<T>>
 	adaptUsingShape(
@@ -78,9 +78,9 @@ public final class LiftNeighborhoodComputersToFunctionsOnImgs {
 	}
 
 	/**
-	 * @implNote op names='adapt', priority='100.', type='java.util.function.Function'
+	 * @implNote op names='engine.adapt', priority='100.', type='java.util.function.Function'
 	 */
-	@OpMethod(names = "adapt", type = Function.class)
+	@OpMethod(names = "engine.adapt", type = Function.class)
 	public static <T, F extends RandomAccessibleInterval<T>>
 	Functions.Arity3<F, Shape, OutOfBoundsFactory<T, ? super F>, Img<T>>
 	adaptUsingShapeAndOOBF(

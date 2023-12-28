@@ -55,7 +55,7 @@ import org.scijava.priority.Priority;
 public class ComputersToFunctionsViaSource {
 
 #foreach($arity in [0..$maxArity])
-	@OpClass(names = "adapt", priority = Priority.LOW)
+	@OpClass(names = "engine.adapt", priority = Priority.LOW)
 	public static class Computer${arity}ToFunction${arity}ViaSource$generics.call($arity)
 			implements Function<$computerArity.call($arity)$generics.call($arity), $functionArity.call($arity)$generics.call($arity)>, 
 			Op

@@ -39,7 +39,7 @@ import org.scijava.ops.spi.OpClass;
  * 
  * @author Gabriel Selzer
  */
-@OpClass(names = "simplify")
+@OpClass(names = "engine.simplify")
 public class PrimitiveListSimplifier<T extends Number> implements Function<List<T>, List<Number>>, Op {
 
 	@Override

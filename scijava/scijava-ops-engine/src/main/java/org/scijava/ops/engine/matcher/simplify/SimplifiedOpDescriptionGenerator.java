@@ -97,9 +97,11 @@ public class SimplifiedOpDescriptionGenerator implements
 				.flatMap(info -> info.names().stream()) //
 				// Map each name to its namespace
 				.map(name -> name.contains(".") ?  name.substring(0, name.indexOf(".")) : name) //
-				// Deduplicate, sort & collect
+				// Deduplicate & sort
 				.distinct() //
 				.sorted() //
+				// Filter out the engine namespaces
+				.filter(ns -> !ns.equals("engine")) //
 				.collect(Collectors.toList());
 		return "Namespaces:\n\t> " + String.join("\n\t> ", namespaces);
 	}
@@ -108,10 +110,13 @@ public class SimplifiedOpDescriptionGenerator implements
 		List<String> namespaces = env.infos().stream() //
 				// Get all names from each Op
 				.flatMap(info -> info.names().stream()) //
-				// Deduplicate, sort & collect
+				// Deduplicate & sort
 				.distinct() //
-				.filter(n -> n.contains(name)) //
 				.sorted() //
+				// Filter out the engine namespace
+				.filter(ns -> !ns.equals("engine")) //
+				// Filter by the predicate name
+				.filter(n -> n.contains(name)) //
 				.collect(Collectors.toList());
 		return "Names:\n\t> " + String.join("\n\t> ", namespaces);
 

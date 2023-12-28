@@ -48,7 +48,7 @@ public class PrimitiveArraySimplifiers<N extends Number> implements
 
 	// -- Object simplifiers -- //
 		@OpHints(hints = { Simplification.FORBIDDEN })
-		@OpField(names = "simplify")
+		@OpField(names = "engine.simplify")
 		public final Function<N[], ObjectArray<Number>> byteArrSimplifier = arr -> {
 			var oa = new ObjectArray<>(Number.class, arr.length);
 			// TODO: Why doesn't System.arraycopy work?
@@ -61,7 +61,7 @@ public class PrimitiveArraySimplifiers<N extends Number> implements
 	// -- Primitive simplifiers -- //
 
 	@OpHints(hints = { Simplification.FORBIDDEN })
-	@OpField(names = "simplify")
+	@OpField(names = "engine.simplify")
 	public final Function<byte[], ObjectArray<Number>> bytePrimitiveArraySimplifier =
 		arr -> {
 			var oa = new ObjectArray<>(Number.class, arr.length);
@@ -73,7 +73,7 @@ public class PrimitiveArraySimplifiers<N extends Number> implements
 		};
 
 	@OpHints(hints = { Simplification.FORBIDDEN })
-	@OpField(names = "simplify")
+	@OpField(names = "engine.simplify")
 	public final Function<short[], ObjectArray<Number>> shortPrimitiveArraySimplifier =
 		arr -> {
 			var oa = new ObjectArray<>(Number.class, arr.length);
@@ -85,7 +85,7 @@ public class PrimitiveArraySimplifiers<N extends Number> implements
 		};
 
 	@OpHints(hints = { Simplification.FORBIDDEN })
-	@OpField(names = "simplify")
+	@OpField(names = "engine.simplify")
 	public final Function<int[], ObjectArray<Number>> intPrimitiveArraySimplifier = arr -> {
 		var oa = new ObjectArray<>(Number.class, arr.length);
 		// TODO: Why doesn't System.arraycopy work?
@@ -96,7 +96,7 @@ public class PrimitiveArraySimplifiers<N extends Number> implements
 	};
 
 	@OpHints(hints = { Simplification.FORBIDDEN })
-	@OpField(names = "simplify")
+	@OpField(names = "engine.simplify")
 	public final Function<long[], ObjectArray<Number>> longPrimitiveArraySimplifier =
 		arr -> {
 			var oa = new ObjectArray<>(Number.class, arr.length);
@@ -108,7 +108,7 @@ public class PrimitiveArraySimplifiers<N extends Number> implements
 		};
 
 	@OpHints(hints = { Simplification.FORBIDDEN })
-	@OpField(names = "simplify")
+	@OpField(names = "engine.simplify")
 	public final Function<float[], ObjectArray<Number>> floatPrimitiveArraySimplifier =
 		arr -> {
 			var oa = new ObjectArray<>(Number.class, arr.length);
@@ -120,7 +120,7 @@ public class PrimitiveArraySimplifiers<N extends Number> implements
 		};
 
 	@OpHints(hints = { Simplification.FORBIDDEN })
-	@OpField(names = "simplify")
+	@OpField(names = "engine.simplify")
 	public final Function<double[], ObjectArray<Number>> doublePrimitiveArraySimplifier =
 		arr -> {
 			var oa = new ObjectArray<>(Number.class, arr.length);
@@ -134,32 +134,32 @@ public class PrimitiveArraySimplifiers<N extends Number> implements
 	// -- Object Focusers -- //
 
 	@OpHints(hints = { Simplification.FORBIDDEN })
-	@OpField(names = "focus")
+	@OpField(names = "engine.focus")
 	public final Function<ObjectArray<Number>, Byte[]> byteArrFocuser = o -> o
 		.stream().map(b -> b == null ? null : b.byteValue()).toArray(Byte[]::new);
 
 	@OpHints(hints = { Simplification.FORBIDDEN })
-	@OpField(names = "focus")
+	@OpField(names = "engine.focus")
 	public final Function<ObjectArray<Number>, Integer[]> intArrFocuser = o -> o
 		.stream().map(i -> i == null ? null : i.intValue()).toArray(Integer[]::new);
 
 	@OpHints(hints = { Simplification.FORBIDDEN })
-	@OpField(names = "focus")
+	@OpField(names = "engine.focus")
 	public final Function<ObjectArray<Number>, Short[]> shortArrFocuser = o -> o
 		.stream().map(s -> s == null ? null : s.shortValue()).toArray(Short[]::new);
 
 	@OpHints(hints = { Simplification.FORBIDDEN })
-	@OpField(names = "focus")
+	@OpField(names = "engine.focus")
 	public final Function<ObjectArray<Number>, Long[]> longArrFocuser = o -> o
 		.stream().map(l -> l == null ? null : l.longValue()).toArray(Long[]::new);
 
 	@OpHints(hints = { Simplification.FORBIDDEN })
-	@OpField(names = "focus")
+	@OpField(names = "engine.focus")
 	public final Function<ObjectArray<Number>, Float[]> floatArrFocuser = o -> o
 		.stream().map(f -> f == null ? null : f.floatValue()).toArray(Float[]::new);
 
 	@OpHints(hints = { Simplification.FORBIDDEN })
-	@OpField(names = "focus")
+	@OpField(names = "engine.focus")
 	public final Function<ObjectArray<Number>, Double[]> doubleArrFocuser = o -> o
 		.stream().map(d -> d == null ? null : d.doubleValue()).toArray(
 			Double[]::new);
@@ -167,7 +167,7 @@ public class PrimitiveArraySimplifiers<N extends Number> implements
 	// -- Primitive Focusers -- //
 
 	@OpHints(hints = { Simplification.FORBIDDEN })
-	@OpField(names = "focus")
+	@OpField(names = "engine.focus")
 	public final Function<ObjectArray<Number>, byte[]> bytePrimitiveArrFocuser =
 		o -> {
 			byte[] arr = new byte[o.size()];
@@ -178,7 +178,7 @@ public class PrimitiveArraySimplifiers<N extends Number> implements
 		};
 
 	@OpHints(hints = { Simplification.FORBIDDEN })
-	@OpField(names = "focus")
+	@OpField(names = "engine.focus")
 	public final Function<ObjectArray<Number>, short[]> shortPrimitiveArrFocuser =
 		o -> {
 			short[] arr = new short[o.size()];
@@ -189,7 +189,7 @@ public class PrimitiveArraySimplifiers<N extends Number> implements
 		};
 
 	@OpHints(hints = { Simplification.FORBIDDEN })
-	@OpField(names = "focus")
+	@OpField(names = "engine.focus")
 	public final Function<ObjectArray<Number>, int[]> intPrimitiveArrFocuser =
 		o -> {
 			int[] arr = new int[o.size()];
@@ -200,7 +200,7 @@ public class PrimitiveArraySimplifiers<N extends Number> implements
 		};
 
 	@OpHints(hints = { Simplification.FORBIDDEN })
-	@OpField(names = "focus")
+	@OpField(names = "engine.focus")
 	public final Function<ObjectArray<Number>, long[]> longPrimitiveArrFocuser =
 		o -> {
 			long[] arr = new long[o.size()];
@@ -211,7 +211,7 @@ public class PrimitiveArraySimplifiers<N extends Number> implements
 		};
 
 	@OpHints(hints = { Simplification.FORBIDDEN })
-	@OpField(names = "focus")
+	@OpField(names = "engine.focus")
 	public final Function<ObjectArray<Number>, float[]> floatPrimitiveArrFocuser =
 		o -> {
 			float[] arr = new float[o.size()];
@@ -222,7 +222,7 @@ public class PrimitiveArraySimplifiers<N extends Number> implements
 		};
 
 	@OpHints(hints = { Simplification.FORBIDDEN })
-	@OpField(names = "focus")
+	@OpField(names = "engine.focus")
 	public final Function<ObjectArray<Number>, double[]> doublePrimitiveArrFocuser =
 		o -> {
 			double[] arr = new double[o.size()];

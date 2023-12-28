@@ -56,7 +56,7 @@ public class ComputerToArrays$classGenerics.call($maxArity) implements OpCollect
 	}
 
 #foreach($arity in [0..$maxArity])
-	@OpField(names = "adapt", params = "fromOp, toOp")
+	@OpField(names = "engine.adapt", params = "fromOp, toOp")
 	public final Function<$computerArity.call($arity)$generics.call($arity), $computerArity.call($arity)$arrayGenerics.call($arity)> liftComputer$arity =
 		(computer) -> {
 			return ($computeArgs.call($arity)) -> {

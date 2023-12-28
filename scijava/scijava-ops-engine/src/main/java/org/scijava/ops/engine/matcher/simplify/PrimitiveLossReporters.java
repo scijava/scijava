@@ -58,7 +58,7 @@ public class PrimitiveLossReporters implements OpCollection {
 
 
 	@OpHints(hints = {Simplification.FORBIDDEN})
-	@OpField(names = "lossReporter")
+	@OpField(names = "engine.lossReporter")
 	public final IntToDecimalReporter<Long, Double> LongDoubleReporter = (from, to) -> {
 		long maxValue = Long.MAX_VALUE - 1;
 		double converted = maxValue;
@@ -66,7 +66,7 @@ public class PrimitiveLossReporters implements OpCollection {
 	};
 
 	@OpHints(hints = {Simplification.FORBIDDEN})
-	@OpField(names = "lossReporter")
+	@OpField(names = "engine.lossReporter")
 	public final LossReporter<Double, Long> DoubleLongReporter = (from, to) -> {
 		double maxValue = Double.MAX_VALUE;
 		long converted = (long) maxValue;
@@ -74,7 +74,7 @@ public class PrimitiveLossReporters implements OpCollection {
 	};
 
 	@OpHints(hints = {Simplification.FORBIDDEN})
-	@OpField(names = "lossReporter")
+	@OpField(names = "engine.lossReporter")
 	public final LossReporter<Long, Integer> LongIntegerReporter = (from, to) -> {
 		long maxValue = Long.MAX_VALUE;
 		int converted = (int) maxValue;
@@ -82,13 +82,13 @@ public class PrimitiveLossReporters implements OpCollection {
 	};
 
 	@OpHints(hints = {Simplification.FORBIDDEN})
-	@OpField(names = "lossReporter")
+	@OpField(names = "engine.lossReporter")
 	public final LossReporter<Integer, Long> IntegerLongReporter = (from, to) -> {
 		return 0.;
 	};
 
 	@OpHints(hints = {Simplification.FORBIDDEN})
-	@OpField(names = "lossReporter")
+	@OpField(names = "engine.lossReporter")
 	public final IntToDecimalReporter<Integer, Double> IntegerDoubleReporter = (from, to) -> {
 		long maxValue = Integer.MAX_VALUE;
 		double converted = maxValue;
@@ -96,7 +96,7 @@ public class PrimitiveLossReporters implements OpCollection {
 	};
 
 	@OpHints(hints = {Simplification.FORBIDDEN})
-	@OpField(names = "lossReporter")
+	@OpField(names = "engine.lossReporter")
 	public final LossReporter<Double, Integer> DoubleIntegerReporter = (from, to) -> {
 		double maxValue = Double.MAX_VALUE;
 		int converted = (int) maxValue;
@@ -104,12 +104,12 @@ public class PrimitiveLossReporters implements OpCollection {
 	};
 
 	@OpHints(hints = {Simplification.FORBIDDEN})
-	@OpField(names = "lossReporter")
+	@OpField(names = "engine.lossReporter")
 	public final LossReporter<Number, Double> NumberDoubleReporter = (from,
 		to) -> LongDoubleReporter.apply(Nil.of(Long.class), Nil.of(Double.class));
 
 	@OpHints(hints = {Simplification.FORBIDDEN})
-	@OpField(names = "lossReporter")
+	@OpField(names = "engine.lossReporter")
 	public final LossReporter<Number, Long> NumberLongReporter = (from,
 		to) -> DoubleLongReporter.apply(Nil.of(Double.class), Nil.of(Long.class));
 }

@@ -59,7 +59,7 @@ public class InplaceToArrays$classGenerics.call($maxArity) implements OpCollecti
 	
 #foreach($arity in [1..$maxArity])
 #foreach($a in [1..$arity])
-	@OpField(names = "adapt", params = "fromOp, toOp")
+	@OpField(names = "engine.adapt", params = "fromOp, toOp")
 	public final Function<$inplaceType.call($arity, $a)$generics.call($arity, $a), $inplaceType.call($arity, $a)$arrayGenerics.call($arity, $a)> liftInplace$inplaceSuffix.call($arity, $a) =
 		(inplace) -> {
 			return ($mutateParams.call($arity, $a)) -> {

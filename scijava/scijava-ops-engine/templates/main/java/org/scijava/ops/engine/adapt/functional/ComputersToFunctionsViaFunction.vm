@@ -53,7 +53,7 @@ import org.scijava.ops.spi.OpClass;
 public class ComputersToFunctionsViaFunction {
 
 #foreach($arity in [1..$maxArity])
-	@OpClass(names = "adapt")
+	@OpClass(names = "engine.adapt")
 	public static class Computer${arity}ToFunction${arity}ViaFunction$generics.call($arity)
 			implements Function<$computerArity.call($arity)$generics.call($arity), $functionArity.call($arity)$generics.call($arity)>,
 			Op

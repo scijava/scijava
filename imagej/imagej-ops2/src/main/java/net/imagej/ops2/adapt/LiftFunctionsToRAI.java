@@ -68,7 +68,7 @@ public final class LiftFunctionsToRAI {
 	}
 
 	/**
-	 * @implNote op names='adapt', priority='100.'
+	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	 public static <I1, O extends Type<O>, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>> Function<RAII1, RAIO> lift11(
 			@OpDependency(name = "create") BiFunction<Dimensions, O, RAIO> imgCreator, //
@@ -85,7 +85,7 @@ public final class LiftFunctionsToRAI {
 	}
 
 	/**
-	 * @implNote op names='adapt', priority='100.'
+	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	 public static <I1, I2, O extends Type<O>, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>> BiFunction<RAII1, I2, RAIO> lift21(
 			@OpDependency(name = "create") BiFunction<Dimensions, O, RAIO> imgCreator, //
@@ -102,7 +102,7 @@ public final class LiftFunctionsToRAI {
 	}
 
 	/**
-	 * @implNote op names='adapt', priority='100.'
+	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	 public static <I1, I2, O extends Type<O>, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAIO extends RandomAccessibleInterval<O>> BiFunction<RAII1, RAII2, RAIO> lift22(
 			@OpDependency(name = "create") BiFunction<Dimensions, O, RAIO> imgCreator, //
@@ -120,7 +120,7 @@ public final class LiftFunctionsToRAI {
 	}
 
 	/**
-	 * @implNote op names='adapt', priority='100.'
+	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	 public static <I1, I2, I3, O extends Type<O>, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>> Functions.Arity3<RAII1, I2, I3, RAIO> lift31(
 			@OpDependency(name = "create") BiFunction<Dimensions, O, RAIO> imgCreator, //
@@ -137,7 +137,7 @@ public final class LiftFunctionsToRAI {
 	}
 
 	/**
-	 * @implNote op names='adapt', priority='100.'
+	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	 public static <I1, I2, I3, O extends Type<O>, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAIO extends RandomAccessibleInterval<O>> Functions.Arity3<RAII1, RAII2, I3, RAIO> lift32(
 			@OpDependency(name = "create") BiFunction<Dimensions, O, RAIO> imgCreator, //
@@ -155,7 +155,7 @@ public final class LiftFunctionsToRAI {
 	}
 
 	/**
-	 * @implNote op names='adapt', priority='100.'
+	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	 public static <I1, I2, I3, O extends Type<O>, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAIO extends RandomAccessibleInterval<O>> Functions.Arity3<RAII1, RAII2, RAII3, RAIO> lift33(
 			@OpDependency(name = "create") BiFunction<Dimensions, O, RAIO> imgCreator, //
@@ -174,7 +174,7 @@ public final class LiftFunctionsToRAI {
 	}
 
 	/**
-	 * @implNote op names='adapt', priority='100.'
+	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	 public static <I1, I2, I3, I4, O extends Type<O>, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>> Functions.Arity4<RAII1, I2, I3, I4, RAIO> lift41(
 			@OpDependency(name = "create") BiFunction<Dimensions, O, RAIO> imgCreator, //
@@ -191,7 +191,7 @@ public final class LiftFunctionsToRAI {
 	}
 
 	/**
-	 * @implNote op names='adapt', priority='100.'
+	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	 public static <I1, I2, I3, I4, O extends Type<O>, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAIO extends RandomAccessibleInterval<O>> Functions.Arity4<RAII1, RAII2, I3, I4, RAIO> lift42(
 			@OpDependency(name = "create") BiFunction<Dimensions, O, RAIO> imgCreator, //
@@ -209,7 +209,7 @@ public final class LiftFunctionsToRAI {
 	}
 
 	/**
-	 * @implNote op names='adapt', priority='100.'
+	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	 public static <I1, I2, I3, I4, O extends Type<O>, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAIO extends RandomAccessibleInterval<O>> Functions.Arity4<RAII1, RAII2, RAII3, I4, RAIO> lift43(
 			@OpDependency(name = "create") BiFunction<Dimensions, O, RAIO> imgCreator, //
@@ -228,7 +228,7 @@ public final class LiftFunctionsToRAI {
 	}
 
 	/**
-	 * @implNote op names='adapt', priority='100.'
+	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	 public static <I1, I2, I3, I4, O extends Type<O>, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAIO extends RandomAccessibleInterval<O>> Functions.Arity4<RAII1, RAII2, RAII3, RAII4, RAIO> lift44(
 			@OpDependency(name = "create") BiFunction<Dimensions, O, RAIO> imgCreator, //
@@ -248,7 +248,7 @@ public final class LiftFunctionsToRAI {
 	}
 
 	/**
-	 * @implNote op names='adapt', priority='100.'
+	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	 public static <I1, I2, I3, I4, I5, O extends Type<O>, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>> Functions.Arity5<RAII1, I2, I3, I4, I5, RAIO> lift51(
 			@OpDependency(name = "create") BiFunction<Dimensions, O, RAIO> imgCreator, //
@@ -265,7 +265,7 @@ public final class LiftFunctionsToRAI {
 	}
 
 	/**
-	 * @implNote op names='adapt', priority='100.'
+	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	 public static <I1, I2, I3, I4, I5, O extends Type<O>, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAIO extends RandomAccessibleInterval<O>> Functions.Arity5<RAII1, RAII2, I3, I4, I5, RAIO> lift52(
 			@OpDependency(name = "create") BiFunction<Dimensions, O, RAIO> imgCreator, //
@@ -283,7 +283,7 @@ public final class LiftFunctionsToRAI {
 	}
 
 	/**
-	 * @implNote op names='adapt', priority='100.'
+	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	 public static <I1, I2, I3, I4, I5, O extends Type<O>, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAIO extends RandomAccessibleInterval<O>> Functions.Arity5<RAII1, RAII2, RAII3, I4, I5, RAIO> lift53(
 			@OpDependency(name = "create") BiFunction<Dimensions, O, RAIO> imgCreator, //
@@ -302,7 +302,7 @@ public final class LiftFunctionsToRAI {
 	}
 
 	/**
-	 * @implNote op names='adapt', priority='100.'
+	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	 public static <I1, I2, I3, I4, I5, O extends Type<O>, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAIO extends RandomAccessibleInterval<O>> Functions.Arity5<RAII1, RAII2, RAII3, RAII4, I5, RAIO> lift54(
 			@OpDependency(name = "create") BiFunction<Dimensions, O, RAIO> imgCreator, //
@@ -322,7 +322,7 @@ public final class LiftFunctionsToRAI {
 	}
 
 	/**
-	 * @implNote op names='adapt', priority='100.'
+	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	 public static <I1, I2, I3, I4, I5, O extends Type<O>, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAIO extends RandomAccessibleInterval<O>> Functions.Arity5<RAII1, RAII2, RAII3, RAII4, RAII5, RAIO> lift55(
 			@OpDependency(name = "create") BiFunction<Dimensions, O, RAIO> imgCreator, //

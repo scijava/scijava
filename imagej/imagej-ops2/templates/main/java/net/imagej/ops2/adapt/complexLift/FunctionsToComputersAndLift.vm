@@ -65,15 +65,15 @@ public final class FunctionsToComputersAndLift {
 #end
 	 * @param <O>
 	 *            The RAI return type
-	 *@implNote op names='adapt', priority='-100.'
+	 *@implNote op names='engine.adapt', priority='-100.'
 	 */
 	 public static class RAI$arity${rai}FunctionToComputerAndLiftAfter<#foreach($a in [1..$arity])I$a,#if($a < $arity) #end#end O, #foreach($a in [1..$rai])RAII$a extends RandomAccessibleInterval<I$a>, #{end}RAIO extends RandomAccessibleInterval<O>>
 		 implements Function<$functionNames.call($arity)<#foreach($a in [1..$arity])I$a,#if($a < $arity) #end#end O>, Computers.Arity$arity<#foreach($a in [1..$arity])#if($a <= $rai)RAI#{end}I$a, #{end}RAIO>>,
 			Op
 	{
-		@OpDependency(name = "adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", adaptable = false)
 		Function<$functionNames.call($arity)<#foreach($a in [1..$arity])I$a, #{end}O>, Computers.Arity${arity}<#foreach($a in [1..$arity])I$a, #{end}O>> adapter;
-		@OpDependency(name = "adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", adaptable = false)
 		Function<Computers.Arity${arity}<#foreach($a in [1..$arity])I$a, #{end}O>, Computers.Arity${arity}<#foreach($a in [1..$arity])#if($a <= $rai)RAI#{end}I$a, #{end}RAIO>> lifter;
 
 		/**
@@ -100,15 +100,15 @@ public final class FunctionsToComputersAndLift {
 #end
 	 * @param <O>
 	 *            The RAI return type
-	 *@implNote op names='adapt', priority='-99.'
+	 *@implNote op names='engine.adapt', priority='-99.'
 	 */
 	 public static class RAI$arity${rai}FunctionToComputerAndLiftBefore<#foreach($a in [1..$arity])I$a,#if($a < $arity) #end#end O, #foreach($a in [1..$rai])RAII$a extends RandomAccessibleInterval<I$a>, #{end}RAIO extends RandomAccessibleInterval<O>>
 		 implements Function<$functionNames.call($arity)<#foreach($a in [1..$arity])I$a,#if($a < $arity) #end#end O>, Computers.Arity$arity<#foreach($a in [1..$arity])#if($a <= $rai)RAI#{end}I$a, #{end}RAIO>>,
 			Op
 	{
-		@OpDependency(name = "adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", adaptable = false)
 		Function<$functionNames.call($arity)<#foreach($a in [1..$arity])I$a, #{end}O>, $functionNames.call($arity)<#foreach($a in [1..$arity])#if($a <= $rai)RAI#{end}I$a, #{end}RAIO>> lifter;
-		@OpDependency(name = "adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", adaptable = false)
 		Function<$functionNames.call($arity)<#foreach($a in [1..$arity])#if($a <= $rai)RAI#{end}I$a, #{end}RAIO>, Computers.Arity${arity}<#foreach($a in [1..$arity])#if($a <= $rai)RAI#{end}I$a, #{end}RAIO>> adapter;
 
 		/**

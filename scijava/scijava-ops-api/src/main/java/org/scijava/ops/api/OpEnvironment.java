@@ -757,7 +757,7 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 * <p>
 	 *
 	 * <pre>{@code
-	 * op("adapt")
+	 * op("engine.adapt")
 	 *  input(computer)
 	 *   .outType(new Nil<Computers.Arity1<Iterable<Double>, Iterable<Double>>>() {})
 	 *   .apply()

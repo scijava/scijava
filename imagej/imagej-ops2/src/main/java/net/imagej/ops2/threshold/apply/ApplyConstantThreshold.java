@@ -52,7 +52,7 @@ public class ApplyConstantThreshold<T extends RealType<T>>
 	@OpDependency(name = "threshold.apply")
 	Computers.Arity3<T, T, Comparator<? super T>, BitType> applyThreshold;
 
-	@OpDependency(name = "adapt")
+	@OpDependency(name = "engine.adapt")
 	Function<Computers.Arity1<T, BitType>, Computers.Arity1<Iterable<T>, Iterable<BitType>>> lifter;
 
 	// TODO can/should the Comparator be of <? super T> instead of just <T>?

@@ -43,7 +43,7 @@ import org.scijava.ops.spi.OpField;
  * <p>
  * The simplest type of transformation is termed "adaptation". Adaptation
  * involves transforming an Op into a different functional type. A set of
- * "adapt" Ops exist to perform this transformation, taking in any Op of
+ * "engine.adapt" Ops exist to perform this transformation, taking in any Op of
  * functional type X and returning an Op of functional type Y.
  * <p>
  * Adaptation can be used to call a Function like a Computer, or to call an Op

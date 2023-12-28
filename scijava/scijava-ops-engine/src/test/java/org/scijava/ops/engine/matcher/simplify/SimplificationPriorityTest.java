@@ -92,42 +92,42 @@ public class SimplificationPriorityTest extends AbstractTestEnvironment
 	}
 
 	@OpHints(hints = {Simplification.FORBIDDEN})
-	@OpField(names = "simplify")
+	@OpField(names = "engine.simplify")
 	public final Function<FromThing, BasicThing> fromToBasic =
 		from -> new BasicThing();
 
 	@OpHints(hints = {Simplification.FORBIDDEN})
-	@OpField(names = "focus")
+	@OpField(names = "engine.focus")
 	public final Function<BasicThing, LosslessThing> basicToLossless =
 		basic -> new LosslessThing();
 
 	@OpHints(hints = {Simplification.FORBIDDEN})
-	@OpField(names = "focus")
+	@OpField(names = "engine.focus")
 	public final Function<BasicThing, SomewhatLossyThing> basicToSomewhat =
 		basic -> new SomewhatLossyThing();
 
 	@OpHints(hints = {Simplification.FORBIDDEN})
-	@OpField(names = "focus")
+	@OpField(names = "engine.focus")
 	public final Function<BasicThing, VeryLossyThing> basicToVery =
 		basic -> new VeryLossyThing();
 
 	@OpHints(hints = {Simplification.FORBIDDEN})
-	@OpField(names = "focus")
+	@OpField(names = "engine.focus")
 	public final Function<BasicThing, InconceivablyLossyThing> basicToInconceivable =
 		basic -> new InconceivablyLossyThing();
 
 	@OpHints(hints = {Simplification.FORBIDDEN})
-	@OpField(names = "lossReporter")
+	@OpField(names = "engine.lossReporter")
 	public final LossReporter<FromThing, LosslessThing> fromToLossless = (nil1,
 		nil2) -> 1.;
 
 	@OpHints(hints = {Simplification.FORBIDDEN})
-	@OpField(names = "lossReporter")
+	@OpField(names = "engine.lossReporter")
 	public final LossReporter<FromThing, SomewhatLossyThing> fromToSomewhat = (
 		nil1, nil2) -> 1e3;
 
 	@OpHints(hints = {Simplification.FORBIDDEN})
-	@OpField(names = "lossReporter")
+	@OpField(names = "engine.lossReporter")
 	public final LossReporter<FromThing, VeryLossyThing> fromToVery = (nil1,
 		nil2) -> 1e6;
 

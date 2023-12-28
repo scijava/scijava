@@ -182,7 +182,7 @@ public final class SimplificationUtils {
 			var inNil = Nil.of(arg);
 			try {
 				var focuser =
-						env.unary("focus", h).inType(Any.class).outType(inNil).function();
+						env.unary("engine.focus", h).inType(Any.class).outType(inNil).function();
 				inFocusers.add(org.scijava.ops.api.Ops.rich(focuser));
 			} catch (OpMatchingException e) {
 				var identity = env.unary("identity", h).inType(inNil).outType(inNil).function();
@@ -192,7 +192,7 @@ public final class SimplificationUtils {
 		var outNil = Nil.of(info.outputType());
 		RichOp<Function<?, ?>> outSimplifier;
 		try {
-			var simplifier = env.unary("simplify", h).inType(outNil).outType(
+			var simplifier = env.unary("engine.simplify", h).inType(outNil).outType(
 					Object.class).function();
 			outSimplifier = org.scijava.ops.api.Ops.rich(simplifier);
 		} catch (OpMatchingException e) {

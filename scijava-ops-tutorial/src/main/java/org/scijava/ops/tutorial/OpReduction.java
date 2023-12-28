@@ -92,7 +92,7 @@ public class OpReduction implements OpCollection {
 
 	public static void main(String... args) {
 		// Create the OpEnvironment
-		OpEnvironment ops = OpEnvironment.getEnvironment();
+		OpEnvironment ops = OpEnvironment.build();
 
 		// Define some data
 		Double first = 1.;

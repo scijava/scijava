@@ -39,7 +39,7 @@ public class PerformanceBenchmark {
 	 * </p>
 	 */
 	private final List< Map< String, Long > > results = new ArrayList<>();
-	private final OpEnvironment env = OpEnvironment.getEnvironment();
+	private final OpEnvironment env = OpEnvironment.build();
 
 	private final OpService ops;
 

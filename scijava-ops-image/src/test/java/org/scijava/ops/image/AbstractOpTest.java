@@ -61,7 +61,7 @@ import net.imglib2.view.Views;
  */
 public abstract class AbstractOpTest{
 
-	protected static final OpEnvironment ops = OpEnvironment.getEnvironment();
+	protected static final OpEnvironment ops = OpEnvironment.build();
 
 
 	private int seed;

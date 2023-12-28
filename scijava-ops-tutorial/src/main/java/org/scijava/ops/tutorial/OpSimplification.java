@@ -70,7 +70,7 @@ public class OpSimplification implements OpCollection {
 
 	public static void main(String... args) {
 		// Create the OpEnvironment
-		OpEnvironment ops = OpEnvironment.getEnvironment();
+		OpEnvironment ops = OpEnvironment.build();
 		// Call the Op on some inputs
 		Integer first = 1;
 		Integer second = 2;

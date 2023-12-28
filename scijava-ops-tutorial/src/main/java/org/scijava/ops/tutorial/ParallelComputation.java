@@ -52,7 +52,7 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 public class ParallelComputation {
 
 	public static void main(String... args) {
-		OpEnvironment ops = OpEnvironment.getEnvironment();
+		OpEnvironment ops = OpEnvironment.build();
 		// To compute tasks using Parallelization, we must first gather a list of
 		// parameters.
 		List<Double> fillValues = Arrays.asList(1.0, 2.0, 3.0, 4.0);

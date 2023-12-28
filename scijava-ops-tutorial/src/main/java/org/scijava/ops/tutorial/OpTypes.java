@@ -57,7 +57,7 @@ public class OpTypes {
 		
 		We will showcase each of the types below.
 		 */
-		OpEnvironment ops = OpEnvironment.getEnvironment();
+		OpEnvironment ops = OpEnvironment.build();
 
 		/**
 		 * The most basic category of Ops are Functions.

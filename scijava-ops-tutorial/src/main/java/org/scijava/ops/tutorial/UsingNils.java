@@ -40,7 +40,7 @@ public class UsingNils implements OpCollection {
 		() -> ArrayImgs.doubles(10, 10);
 
 	public static void main(String... args) {
-		OpEnvironment ops = OpEnvironment.getEnvironment();
+		OpEnvironment ops = OpEnvironment.build();
 
 		// The following is the syntax used to create a Nil that encodes the type we
 		// want. Namely, if we want to ensure that the return is an Img<DoubleType>,

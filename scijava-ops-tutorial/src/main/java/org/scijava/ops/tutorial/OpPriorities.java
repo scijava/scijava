@@ -73,7 +73,7 @@ public class OpPriorities implements OpCollection {
 	 * something else.
 	 */
 	public static void main(String... args) {
-		OpEnvironment ops = OpEnvironment.getEnvironment();
+		OpEnvironment ops = OpEnvironment.build();
 		// Say we have a Collection of numbers
 		var ourNumbers = Arrays.asList(4, 8, 2, 3);
 

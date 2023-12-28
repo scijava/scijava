@@ -14,7 +14,7 @@ Variables:
 from scyjava import jimport
 from types import MethodType
 OpEnvironment = jimport('org.scijava.ops.api.OpEnvironment')
-env = OpEnvironment.getEnvironment()
+env = OpEnvironment.build()
 
 op_names={str(name) for info in env.infos() for name in info.names()}
 
@@ -28,7 +28,7 @@ class OpNamespace:
 
     def help(self, op_name=None):
         '''
-        Convenience wrapper for OpEnvironment.description(), for information about available ops. Prints all returned information, line-by-line.
+        Convenience wrapper for OpEnvironment.help(), for information about available ops. Prints all returned information, line-by-line.
         '''
         print(*self.env.help(op_name), sep = "\n")
 

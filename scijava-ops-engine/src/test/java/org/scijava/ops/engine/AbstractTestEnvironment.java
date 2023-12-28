@@ -82,7 +82,9 @@ public abstract class AbstractTestEnvironment {
 			OpInfo.class, //
 			OpCollection.class //
 		);
-		return OpEnvironment.getEnvironment(serviceLoading);
+		var ops =  OpEnvironment.buildEmpty();
+		ops.discoverUsing(serviceLoading);
+		return ops;
 	}
 
 	protected static boolean arrayEquals(double[] arr1, Double... arr2) {

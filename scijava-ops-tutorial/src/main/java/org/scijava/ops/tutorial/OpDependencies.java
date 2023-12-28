@@ -47,7 +47,7 @@ public class OpDependencies implements OpCollection {
 	}
 
 	public static void main(String... args) {
-		OpEnvironment ops = OpEnvironment.getEnvironment();
+		OpEnvironment ops = OpEnvironment.build();
 		// The mean of this array is 3.0
 		double[] arr = {1.0, 2.0, 3.0, 4.0, 5.0};
 

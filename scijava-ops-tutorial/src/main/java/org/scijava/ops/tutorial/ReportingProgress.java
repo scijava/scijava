@@ -114,7 +114,7 @@ public class ReportingProgress implements OpCollection {
 	};
 
 	public static void main(String... args) {
-		OpEnvironment ops = OpEnvironment.getEnvironment();
+		OpEnvironment ops = OpEnvironment.build();
 
 		// ProgressListeners consume task updates.
 		// This ProgressListener simply logs to standard output, but we could print

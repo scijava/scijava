@@ -35,7 +35,6 @@ import org.scijava.types.Nil;
 import io.scif.img.ImgOpener;
 import net.imglib2.algorithm.neighborhood.RectangleShape;
 import net.imglib2.img.Img;
-import net.imglib2.outofbounds.OutOfBoundsBorderFactory;
 import net.imglib2.type.numeric.integer.IntType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 
@@ -70,7 +69,7 @@ public class OpsIntro {
 		The easiest way to obtain an OpEnvironment is to use the following static
 		method.
 		*/
-		OpEnvironment ops = OpEnvironment.getEnvironment();
+		OpEnvironment ops = OpEnvironment.build();
 
 		/*
 		OpEnvironments contain Ops, and there are a lot of them.

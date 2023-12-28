@@ -41,14 +41,14 @@ import org.scijava.ops.api.OpMatchingException;
 public class OpsAPITest {
 
 	public static void testOpEnvironmentObtainable() {
-		Assertions.assertNotNull(OpEnvironment.getEnvironment());
+		Assertions.assertNotNull(OpEnvironment.build());
 	}
 
 	/**
 	 * Tests that an Op can be matched and run
 	 */
 	public static void testOpExecutions() {
-		OpEnvironment ops = OpEnvironment.getEnvironment();
+		OpEnvironment ops = OpEnvironment.build();
 		var sum = ops.op("math.add").arity2().input(5., 6.).apply();
 		Assertions.assertEquals(sum, 11.);
 	}
@@ -57,7 +57,7 @@ public class OpsAPITest {
 	 * Tests that descriptions can be obtained
 	 */
 	public static void testOpHelp() {
-		OpEnvironment ops = OpEnvironment.getEnvironment();
+		OpEnvironment ops = OpEnvironment.build();
 		var descriptions = ops.help("math.add");
 		Assertions.assertInstanceOf(String.class, descriptions);
 	}
@@ -68,7 +68,7 @@ public class OpsAPITest {
 	public static void testOpHints() {
 		long in = 5;
 		long exponent = 5;
-		OpEnvironment ops = OpEnvironment.getEnvironment();
+		OpEnvironment ops = OpEnvironment.build();
 		// Assert there are no "math.pow" Ops that deal with longs
 		var help = ops.help("math.pow");
 		Assertions.assertNotEquals("No Ops found matching this request.", help,

@@ -38,7 +38,7 @@ import org.scijava.ops.api.OpInfo;
 
 public class OpRegressionTest {
 
-	protected static final OpEnvironment ops = OpEnvironment.getEnvironment();
+	protected static final OpEnvironment ops = OpEnvironment.build();
 
 	@Test
 	public void opDiscoveryRegressionIT() {

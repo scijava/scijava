@@ -74,7 +74,8 @@ public class OpCachingTest implements OpCollection {
 		discoverer.register(new OpCachingTest());
 		discoverer.register(new ComplicatedOp());
 
-		ops = OpEnvironment.getEnvironment(serviceLoading, discoverer);
+		ops = OpEnvironment.buildEmpty();
+		ops.discoverUsing(serviceLoading, discoverer);
 	}
 
 	/**

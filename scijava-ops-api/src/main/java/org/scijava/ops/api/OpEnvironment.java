@@ -32,7 +32,6 @@ package org.scijava.ops.api;
 import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.ServiceLoader;
-import java.util.Set;
 import java.util.SortedSet;
 
 import org.scijava.discovery.Discoverer;
@@ -63,7 +62,7 @@ import org.scijava.types.Nil;
  */
 public interface OpEnvironment extends Prioritized<OpEnvironment> {
 
-	static OpEnvironment getBareEnvironment() {
+	static OpEnvironment buildEmpty() {
 		Optional<OpEnvironment> opsOptional = Discoverer //
 				.using(ServiceLoader::load) //
 				.discoverMax(OpEnvironment.class);
@@ -72,15 +71,9 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 		);
 	}
 
-	static OpEnvironment getEnvironment() {
-		OpEnvironment ops = getBareEnvironment();
+	static OpEnvironment build() {
+		OpEnvironment ops = buildEmpty();
 		ops.discoverEverything();
-		return ops;
-	}
-
-	static OpEnvironment getEnvironment(Discoverer... discoverers) {
-		OpEnvironment ops = getBareEnvironment();
-		ops.discoverUsing(discoverers);
 		return ops;
 	}
 

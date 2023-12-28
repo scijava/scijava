@@ -80,7 +80,7 @@ public class WritingOpCollections implements OpCollection {
 	}
 
 	public static void main(String... args){
-		OpEnvironment ops = OpEnvironment.getEnvironment();
+		OpEnvironment ops = OpEnvironment.build();
 
 		Double result = ops.binary("test.opField.power") //
 				.input(2.0, 10.0) //

@@ -43,7 +43,7 @@ public class OpBuilder {
 
 	public static void main(String... args) {
 		// All Ops calls start from an OpEnvironment. This environment determines the available Ops.
-		OpEnvironment ops = OpEnvironment.getEnvironment();
+		OpEnvironment ops = OpEnvironment.build();
 
 		/*
 		To run an Op we have to match it. Ops themselves have a name, some number of inputs, and potentially an output

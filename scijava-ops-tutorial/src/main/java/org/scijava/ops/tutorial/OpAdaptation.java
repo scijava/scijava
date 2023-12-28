@@ -65,7 +65,7 @@ public class OpAdaptation implements OpCollection {
 
 	public static void main(String... args) {
 		// Create the OpEnvironment
-		OpEnvironment ops = OpEnvironment.getEnvironment();
+		OpEnvironment ops = OpEnvironment.build();
 		// Call the Op on some inputs
 		Double[] firstArray = new Double[] { 1., 2., 3. };
 		Double[] secondArray = new Double[] { 1., 2., 3. };

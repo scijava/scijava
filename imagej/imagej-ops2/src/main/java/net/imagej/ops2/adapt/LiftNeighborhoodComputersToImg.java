@@ -29,11 +29,6 @@
 
 package net.imagej.ops2.adapt;
 
-import java.util.function.Function;
-
-import org.scijava.function.Computers;
-import org.scijava.ops.spi.OpMethod;
-
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.Neighborhood;
 import net.imglib2.algorithm.neighborhood.Shape;
@@ -41,6 +36,7 @@ import net.imglib2.loops.LoopBuilder;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.outofbounds.OutOfBoundsMirrorFactory;
 import net.imglib2.view.Views;
+import org.scijava.function.Computers;
 
 public final class LiftNeighborhoodComputersToImg {
 
@@ -50,7 +46,7 @@ public final class LiftNeighborhoodComputersToImg {
 
 	/**
 	 * @implNote op names='engine.adapt', priority='100.',
-	 *           type='java.util.function.Function'
+	 *           type=Function
 	 */
 	public static <T, U>
 		Computers.Arity2<RandomAccessibleInterval<T>, Shape, RandomAccessibleInterval<U>>
@@ -69,9 +65,8 @@ public final class LiftNeighborhoodComputersToImg {
 
 	/**
 	 * @implNote op names='engine.adapt', priority='100.',
-	 *           type='java.util.function.Function'
+	 *           type=Function
 	 */
-	@OpMethod(names = "engine.adapt", type = Function.class)
 	public static <T, U, F extends RandomAccessibleInterval<T>>
 		Computers.Arity3<F, Shape, OutOfBoundsFactory<T, F>, RandomAccessibleInterval<U>>
 		adapt1UsingShapeAndOOBF(Computers.Arity1<Neighborhood<T>, U> op)
@@ -86,7 +81,7 @@ public final class LiftNeighborhoodComputersToImg {
 
 	/**
 	 * @implNote op names='engine.adapt', priority='100.',
-	 *           type='java.util.function.Function'
+	 *           type=Function
 	 */
 	public static <T, U, V>
 		Computers.Arity3<RandomAccessibleInterval<T>, V, Shape, RandomAccessibleInterval<U>>
@@ -106,9 +101,8 @@ public final class LiftNeighborhoodComputersToImg {
 
 	/**
 	 * @implNote op names='engine.adapt', priority='100.',
-	 *           type='java.util.function.Function'
+	 *           type=Function
 	 */
-	@OpMethod(names = "engine.adapt", type = Function.class)
 	public static <T, U, V, F extends RandomAccessibleInterval<T>>
 		Computers.Arity4<F, V, Shape, OutOfBoundsFactory<T, F>, RandomAccessibleInterval<U>>
 		adapt2UsingShapeAndOOBF(Computers.Arity2<Neighborhood<T>, V, U> op)
@@ -124,7 +118,7 @@ public final class LiftNeighborhoodComputersToImg {
 
 	/**
 	 * @implNote op names='engine.adapt', priority='100.',
-	 *           type='java.util.function.Function'
+	 *           type=Function
 	 */
 	public static <T, U, V, W>
 		Computers.Arity4<RandomAccessibleInterval<T>, V, W, Shape, RandomAccessibleInterval<U>>
@@ -144,9 +138,8 @@ public final class LiftNeighborhoodComputersToImg {
 
 	/**
 	 * @implNote op names='engine.adapt', priority='100.',
-	 *           type='java.util.function.Function'
+	 *           type=Function
 	 */
-	@OpMethod(names = "engine.adapt", type = Function.class)
 	public static <T, U, V, W, F extends RandomAccessibleInterval<T>>
 		Computers.Arity5<F, V, W, Shape, OutOfBoundsFactory<T, F>, RandomAccessibleInterval<U>>
 		adapt3UsingShapeAndOOBF(Computers.Arity3<Neighborhood<T>, V, W, U> op)

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ * 
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,30 +26,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+module org.scijava.legacy {
 
-package org.scijava.imagej.types;
+	requires net.imagej;
+	requires org.scijava.types;
+	requires org.scijava.priority;
 
-import java.lang.reflect.Type;
-
-import org.scijava.priority.Priority;
-import org.scijava.types.TypeExtractor;
-import org.scijava.types.TypeReifier;
-
-import net.imagej.Dataset;
-
-public class DatasetTypeExtractor implements TypeExtractor {
-
-	@Override public double getPriority() {
-		return Priority.HIGH;
-	}
-
-	@Override public boolean canReify(TypeReifier r, Class<?> object) {
-		return Dataset.class.isAssignableFrom(object);
-	}
-
-	@Override public Type reify(TypeReifier r, Object object) {
-		if (!(object instanceof Dataset)) throw new IllegalArgumentException(
-				object + " cannot be reified because it is not a Dataset!");
-		return r.reify(((Dataset) object).getImgPlus());
-	}
+	provides org.scijava.types.TypeExtractor with org.scijava.legacy.types.DatasetTypeExtractor;
 }

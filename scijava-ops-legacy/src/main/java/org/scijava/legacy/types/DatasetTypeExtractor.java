@@ -27,43 +27,29 @@
  * #L%
  */
 
-package org.scijava.imagej.types;
+package org.scijava.legacy.types;
 
 import java.lang.reflect.Type;
-import java.util.ServiceLoader;
 
-import net.imagej.DefaultDataset;
-import net.imagej.ImgPlus;
-import net.imglib2.img.array.ArrayImgs;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.scijava.discovery.Discoverer;
-import org.scijava.types.Any;
-import org.scijava.types.DefaultTypeReifier;
-import org.scijava.types.Types;
+import org.scijava.priority.Priority;
+import org.scijava.types.TypeExtractor;
+import org.scijava.types.TypeReifier;
 
-/**
- * Tests {@link DatasetTypeExtractor}
- *
- * @author Gabriel Selzer
- */
-public class DatasetTypeExtractorTest {
+import net.imagej.Dataset;
 
-	@Test public void testDatasetTypeExtractor() {
-		// Create a TypeReifier
-		var reifier = new DefaultTypeReifier(Discoverer.all(ServiceLoader::load));
-		// Create a Dataset
-		var img = ArrayImgs.unsignedBytes(10, 10);
-		var imgPlus = new ImgPlus<>(img);
-		// NB we pass a null context to avoid a SciJava Common dependency
-		var ds = new DefaultDataset(null, imgPlus);
-		// Assert correct reification
-		// NB without a dependency on scijava-ops-image we cannot reify
-		// the ImgPlus, but asserting an ImgPlus is the reified type
-		// is enough to unit test the TypeExtractor
-		var actual = new DatasetTypeExtractor().reify(reifier, ds);
-		var expected = Types.parameterize(ImgPlus.class, new Type[] { new Any() });
-		Assertions.assertEquals(expected, actual);
+public class DatasetTypeExtractor implements TypeExtractor {
+
+	@Override public double getPriority() {
+		return Priority.HIGH;
 	}
 
+	@Override public boolean canReify(TypeReifier r, Class<?> object) {
+		return Dataset.class.isAssignableFrom(object);
+	}
+
+	@Override public Type reify(TypeReifier r, Object object) {
+		if (!(object instanceof Dataset)) throw new IllegalArgumentException(
+				object + " cannot be reified because it is not a Dataset!");
+		return r.reify(((Dataset) object).getImgPlus());
+	}
 }

@@ -49,7 +49,7 @@ public final class LiftNeighborhoodComputersToImg {
 	}
 
 	/**
-	 * @implNote op names='adapt', priority='100.',
+	 * @implNote op names='engine.adapt', priority='100.',
 	 *           type='java.util.function.Function'
 	 */
 	public static <T, U>
@@ -68,10 +68,10 @@ public final class LiftNeighborhoodComputersToImg {
 	}
 
 	/**
-	 * @implNote op names='adapt', priority='100.',
+	 * @implNote op names='engine.adapt', priority='100.',
 	 *           type='java.util.function.Function'
 	 */
-	@OpMethod(names = "adapt", type = Function.class)
+	@OpMethod(names = "engine.adapt", type = Function.class)
 	public static <T, U, F extends RandomAccessibleInterval<T>>
 		Computers.Arity3<F, Shape, OutOfBoundsFactory<T, F>, RandomAccessibleInterval<U>>
 		adapt1UsingShapeAndOOBF(Computers.Arity1<Neighborhood<T>, U> op)
@@ -85,7 +85,7 @@ public final class LiftNeighborhoodComputersToImg {
 	}
 
 	/**
-	 * @implNote op names='adapt', priority='100.',
+	 * @implNote op names='engine.adapt', priority='100.',
 	 *           type='java.util.function.Function'
 	 */
 	public static <T, U, V>
@@ -105,10 +105,10 @@ public final class LiftNeighborhoodComputersToImg {
 	}
 
 	/**
-	 * @implNote op names='adapt', priority='100.',
+	 * @implNote op names='engine.adapt', priority='100.',
 	 *           type='java.util.function.Function'
 	 */
-	@OpMethod(names = "adapt", type = Function.class)
+	@OpMethod(names = "engine.adapt", type = Function.class)
 	public static <T, U, V, F extends RandomAccessibleInterval<T>>
 		Computers.Arity4<F, V, Shape, OutOfBoundsFactory<T, F>, RandomAccessibleInterval<U>>
 		adapt2UsingShapeAndOOBF(Computers.Arity2<Neighborhood<T>, V, U> op)
@@ -123,7 +123,7 @@ public final class LiftNeighborhoodComputersToImg {
 	}
 
 	/**
-	 * @implNote op names='adapt', priority='100.',
+	 * @implNote op names='engine.adapt', priority='100.',
 	 *           type='java.util.function.Function'
 	 */
 	public static <T, U, V, W>
@@ -143,10 +143,10 @@ public final class LiftNeighborhoodComputersToImg {
 	}
 
 	/**
-	 * @implNote op names='adapt', priority='100.',
+	 * @implNote op names='engine.adapt', priority='100.',
 	 *           type='java.util.function.Function'
 	 */
-	@OpMethod(names = "adapt", type = Function.class)
+	@OpMethod(names = "engine.adapt", type = Function.class)
 	public static <T, U, V, W, F extends RandomAccessibleInterval<T>>
 		Computers.Arity5<F, V, W, Shape, OutOfBoundsFactory<T, F>, RandomAccessibleInterval<U>>
 		adapt3UsingShapeAndOOBF(Computers.Arity3<Neighborhood<T>, V, W, U> op)

@@ -52,7 +52,7 @@ import org.scijava.ops.spi.OpCollection;
 public class ComputerToIterables$classGenerics.call($maxArity) implements OpCollection {
 
 #foreach($arity in [0..$maxArity])
-	@OpField(names = "adapt")
+	@OpField(names = "engine.adapt")
 	public final Function<$computerArity.call($arity)$generics.call($arity), $computerArity.call($arity)$iterableGenerics.call($arity)> liftComputer$arity = 
 		(computer) -> {
 			return ($computeArgs.call($arity)) -> {

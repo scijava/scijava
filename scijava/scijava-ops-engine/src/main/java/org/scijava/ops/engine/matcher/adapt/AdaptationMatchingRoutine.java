@@ -104,7 +104,7 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 		Hints adaptationHints = conditions.hints().plus(Adaptation.IN_PROGRESS);
 		List<Exception> matchingExceptions = new ArrayList<>();
 		List<DependencyMatchingException> depExceptions = new ArrayList<>();
-		for (final OpInfo adaptor : env.infos("adapt")) {
+		for (final OpInfo adaptor : env.infos("engine.adapt")) {
 			Type adaptTo = adaptor.output().getType();
 			Map<TypeVariable<?>, Type> map = new HashMap<>();
 			// make sure that the adaptor outputs the correct type

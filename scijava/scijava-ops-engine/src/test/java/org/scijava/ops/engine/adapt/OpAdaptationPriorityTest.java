@@ -83,7 +83,7 @@ public class OpAdaptationPriorityTest extends AbstractTestEnvironment implements
 		out.increasePriority(in);
 	};
 
-	@OpMethod(names = "adapt", type = Function.class, priority = Priority.HIGH)
+	@OpMethod(names = "engine.adapt", type = Function.class, priority = Priority.HIGH)
 	public static <I, O> Function<I, O> highPriorityAdaptor( //
 		@OpDependency(name = "create", adaptable = false) Function<I, O> creator, //
 		Computers.Arity1<I, O> computer //
@@ -95,7 +95,7 @@ public class OpAdaptationPriorityTest extends AbstractTestEnvironment implements
 		};
 	}
 
-	@OpMethod(names = "adapt", type = Function.class, priority = Priority.LOW)
+	@OpMethod(names = "engine.adapt", type = Function.class, priority = Priority.LOW)
 	public static <I, O> Function<I, O> lowPriorityAdaptor( //
 		@OpDependency(name = "create", adaptable = false) Producer<O> creator, //
 		Computers.Arity1<I, O> computer //

@@ -65,7 +65,7 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	// NOTE: we cannot convert Producers since there is no way to determine the
 	// length of the output array
 
-	@OpField(names = "adapt", params = "fromOp, toOp")
+	@OpField(names = "engine.adapt", params = "fromOp, toOp")
 	public final Function<Function<I, O>, Function<I[], O[]>> liftFunction1 =
 		(function) -> {
 			return (in) -> {
@@ -82,7 +82,7 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 			};
 		};
 
-	@OpField(names = "adapt", params = "fromOp, toOp")
+	@OpField(names = "engine.adapt", params = "fromOp, toOp")
 	public final Function<BiFunction<I1, I2, O>, BiFunction<I1[], I2[], O[]>> liftFunction2 =
 		(function) -> {
 			return (in1, in2) -> {
@@ -99,7 +99,7 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 			};
 		};
 
-	@OpField(names = "adapt", params = "fromOp, toOp")
+	@OpField(names = "engine.adapt", params = "fromOp, toOp")
 	public final Function<Functions.Arity3<I1, I2, I3, O>, Functions.Arity3<I1[], I2[], I3[], O[]>> liftFunction3 =
 		(function) -> {
 			return (in1, in2, in3) -> {
@@ -116,7 +116,7 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 			};
 		};
 
-	@OpField(names = "adapt", params = "fromOp, toOp")
+	@OpField(names = "engine.adapt", params = "fromOp, toOp")
 	public final Function<Functions.Arity4<I1, I2, I3, I4, O>, Functions.Arity4<I1[], I2[], I3[], I4[], O[]>> liftFunction4 =
 		(function) -> {
 			return (in1, in2, in3, in4) -> {
@@ -133,7 +133,7 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 			};
 		};
 
-	@OpField(names = "adapt", params = "fromOp, toOp")
+	@OpField(names = "engine.adapt", params = "fromOp, toOp")
 	public final Function<Functions.Arity5<I1, I2, I3, I4, I5, O>, Functions.Arity5<I1[], I2[], I3[], I4[], I5[], O[]>> liftFunction5 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5) -> {
@@ -150,7 +150,7 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 			};
 		};
 
-	@OpField(names = "adapt", params = "fromOp, toOp")
+	@OpField(names = "engine.adapt", params = "fromOp, toOp")
 	public final Function<Functions.Arity6<I1, I2, I3, I4, I5, I6, O>, Functions.Arity6<I1[], I2[], I3[], I4[], I5[], I6[], O[]>> liftFunction6 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6) -> {
@@ -167,7 +167,7 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 			};
 		};
 
-	@OpField(names = "adapt", params = "fromOp, toOp")
+	@OpField(names = "engine.adapt", params = "fromOp, toOp")
 	public final Function<Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Functions.Arity7<I1[], I2[], I3[], I4[], I5[], I6[], I7[], O[]>> liftFunction7 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7) -> {
@@ -184,7 +184,7 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 			};
 		};
 
-	@OpField(names = "adapt", params = "fromOp, toOp")
+	@OpField(names = "engine.adapt", params = "fromOp, toOp")
 	public final Function<Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Functions.Arity8<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], O[]>> liftFunction8 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8) -> {
@@ -201,7 +201,7 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 			};
 		};
 
-	@OpField(names = "adapt", params = "fromOp, toOp")
+	@OpField(names = "engine.adapt", params = "fromOp, toOp")
 	public final Function<Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Functions.Arity9<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], I9[], O[]>> liftFunction9 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9) -> {
@@ -218,7 +218,7 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 			};
 		};
 
-	@OpField(names = "adapt", params = "fromOp, toOp")
+	@OpField(names = "engine.adapt", params = "fromOp, toOp")
 	public final Function<Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Functions.Arity10<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], I9[], I10[], O[]>> liftFunction10 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10) -> {
@@ -235,7 +235,7 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 			};
 		};
 
-	@OpField(names = "adapt", params = "fromOp, toOp")
+	@OpField(names = "engine.adapt", params = "fromOp, toOp")
 	public final Function<Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Functions.Arity11<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], I9[], I10[], I11[], O[]>> liftFunction11 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11) -> {
@@ -252,7 +252,7 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 			};
 		};
 
-	@OpField(names = "adapt", params = "fromOp, toOp")
+	@OpField(names = "engine.adapt", params = "fromOp, toOp")
 	public final Function<Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Functions.Arity12<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], I9[], I10[], I11[], I12[], O[]>> liftFunction12 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12) -> {
@@ -269,7 +269,7 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 			};
 		};
 
-	@OpField(names = "adapt", params = "fromOp, toOp")
+	@OpField(names = "engine.adapt", params = "fromOp, toOp")
 	public final Function<Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], I9[], I10[], I11[], I12[], I13[], O[]>> liftFunction13 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13) -> {
@@ -286,7 +286,7 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 			};
 		};
 
-	@OpField(names = "adapt", params = "fromOp, toOp")
+	@OpField(names = "engine.adapt", params = "fromOp, toOp")
 	public final Function<Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], I9[], I10[], I11[], I12[], I13[], I14[], O[]>> liftFunction14 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14) -> {
@@ -303,7 +303,7 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 			};
 		};
 
-	@OpField(names = "adapt", params = "fromOp, toOp")
+	@OpField(names = "engine.adapt", params = "fromOp, toOp")
 	public final Function<Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], I9[], I10[], I11[], I12[], I13[], I14[], I15[], O[]>> liftFunction15 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15) -> {
@@ -320,7 +320,7 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 			};
 		};
 
-	@OpField(names = "adapt", params = "fromOp, toOp")
+	@OpField(names = "engine.adapt", params = "fromOp, toOp")
 	public final Function<Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], I9[], I10[], I11[], I12[], I13[], I14[], I15[], I16[], O[]>> liftFunction16 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> {

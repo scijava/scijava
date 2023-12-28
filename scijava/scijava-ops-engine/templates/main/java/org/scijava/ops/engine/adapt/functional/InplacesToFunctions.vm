@@ -56,7 +56,7 @@ public class InplacesToFunctions$generics.call($classArity, $classArity) impleme
 
 #foreach($arity in [1..$maxArity])
 #foreach($a in [1..$arity])
-	@OpClass(names = "adapt")
+	@OpClass(names = "engine.adapt")
 	public static class Inplace$inplaceSuffix.call($arity, $a)ToFunction${arity}$generics.call($arity, $a) implements Function<$inplaceType.call($arity, $a)$generics.call($arity, $a), $functionArity.call($arity)$functionGenerics.call($arity, $a)>, Op {
 		
 		@OpDependency(name = "create", adaptable = false)

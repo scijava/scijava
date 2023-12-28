@@ -54,15 +54,15 @@ import org.scijava.priority.Priority;
 public class FunctionsToComputersAndLift {
 #foreach($arity in [1..$maxArity])
 
-	@OpClass(names = "adapt", priority = Priority.LOW)
+	@OpClass(names = "engine.adapt", priority = Priority.LOW)
 	public static class Function${arity}ToComputer${arity}AndLiftAfter$generics.call($arity) implements
 		Function<$functionArity.call($arity)$generics.call($arity), $computerArity.call($arity)$iterableGenerics.call($arity)>,
 		Op
 	{
 
-		@OpDependency(name = "adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", adaptable = false)
 		Function<$functionArity.call($arity)$generics.call($arity), $computerArity.call($arity)$generics.call($arity)> adaptor;
-		@OpDependency(name = "adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", adaptable = false)
 		Function<$computerArity.call($arity)$generics.call($arity), $computerArity.call($arity)$iterableGenerics.call($arity)> lifter;
 
 		/**
@@ -78,15 +78,15 @@ public class FunctionsToComputersAndLift {
 
 	}
 
-	@OpClass(names = "adapt", priority = Priority.LOW + 1)
+	@OpClass(names = "engine.adapt", priority = Priority.LOW + 1)
 	public static class Function${arity}ToComputer${arity}AndLiftBefore$generics.call($arity) implements
 		Function<$functionArity.call($arity)$generics.call($arity), $computerArity.call($arity)$iterableGenerics.call($arity)>,
 		Op
 	{
 
-		@OpDependency(name = "adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", adaptable = false)
 		Function<$functionArity.call($arity)$iterableGenerics.call($arity), $computerArity.call($arity)$iterableGenerics.call($arity)> adaptor;
-		@OpDependency(name = "adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", adaptable = false)
 		Function<$functionArity.call($arity)$generics.call($arity), $functionArity.call($arity)$iterableGenerics.call($arity)> lifter;
 
 		/**

@@ -68,7 +68,7 @@ public final class LambdaTypeBaker {
 	 * <p>
 	 *
 	 * <pre>{@code
-	 * op("adapt")
+	 * op("engine.adapt")
 	 *   .input(computer)
 	 *   .outType(new Nil&lt;Computers.Arity1&lt;Iterable&lt;Double&gt;, Iterable&lt;Double&gt;&gt;&gt;() {})
 	 *   .apply()

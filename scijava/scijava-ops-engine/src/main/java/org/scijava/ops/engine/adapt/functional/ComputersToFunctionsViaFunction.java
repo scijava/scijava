@@ -52,7 +52,7 @@ import org.scijava.ops.spi.OpClass;
  */
 public class ComputersToFunctionsViaFunction {
 
-	@OpClass(names = "adapt")
+	@OpClass(names = "engine.adapt")
 	public static class Computer1ToFunction1ViaFunction<I, O>
 			implements Function<Computers.Arity1<I, O>, Function<I, O>>,
 			Op
@@ -76,7 +76,7 @@ public class ComputersToFunctionsViaFunction {
 
 	}
 
-	@OpClass(names = "adapt")
+	@OpClass(names = "engine.adapt")
 	public static class Computer2ToFunction2ViaFunction<I1, I2, O>
 			implements Function<Computers.Arity2<I1, I2, O>, BiFunction<I1, I2, O>>,
 			Op
@@ -100,7 +100,7 @@ public class ComputersToFunctionsViaFunction {
 
 	}
 
-	@OpClass(names = "adapt")
+	@OpClass(names = "engine.adapt")
 	public static class Computer3ToFunction3ViaFunction<I1, I2, I3, O>
 			implements Function<Computers.Arity3<I1, I2, I3, O>, Functions.Arity3<I1, I2, I3, O>>,
 			Op
@@ -124,7 +124,7 @@ public class ComputersToFunctionsViaFunction {
 
 	}
 
-	@OpClass(names = "adapt")
+	@OpClass(names = "engine.adapt")
 	public static class Computer4ToFunction4ViaFunction<I1, I2, I3, I4, O>
 			implements Function<Computers.Arity4<I1, I2, I3, I4, O>, Functions.Arity4<I1, I2, I3, I4, O>>,
 			Op
@@ -148,7 +148,7 @@ public class ComputersToFunctionsViaFunction {
 
 	}
 
-	@OpClass(names = "adapt")
+	@OpClass(names = "engine.adapt")
 	public static class Computer5ToFunction5ViaFunction<I1, I2, I3, I4, I5, O>
 			implements Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Functions.Arity5<I1, I2, I3, I4, I5, O>>,
 			Op
@@ -172,7 +172,7 @@ public class ComputersToFunctionsViaFunction {
 
 	}
 
-	@OpClass(names = "adapt")
+	@OpClass(names = "engine.adapt")
 	public static class Computer6ToFunction6ViaFunction<I1, I2, I3, I4, I5, I6, O>
 			implements Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Functions.Arity6<I1, I2, I3, I4, I5, I6, O>>,
 			Op
@@ -196,7 +196,7 @@ public class ComputersToFunctionsViaFunction {
 
 	}
 
-	@OpClass(names = "adapt")
+	@OpClass(names = "engine.adapt")
 	public static class Computer7ToFunction7ViaFunction<I1, I2, I3, I4, I5, I6, I7, O>
 			implements Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O>>,
 			Op
@@ -220,7 +220,7 @@ public class ComputersToFunctionsViaFunction {
 
 	}
 
-	@OpClass(names = "adapt")
+	@OpClass(names = "engine.adapt")
 	public static class Computer8ToFunction8ViaFunction<I1, I2, I3, I4, I5, I6, I7, I8, O>
 			implements Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>>,
 			Op
@@ -244,7 +244,7 @@ public class ComputersToFunctionsViaFunction {
 
 	}
 
-	@OpClass(names = "adapt")
+	@OpClass(names = "engine.adapt")
 	public static class Computer9ToFunction9ViaFunction<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>
 			implements Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>>,
 			Op
@@ -268,7 +268,7 @@ public class ComputersToFunctionsViaFunction {
 
 	}
 
-	@OpClass(names = "adapt")
+	@OpClass(names = "engine.adapt")
 	public static class Computer10ToFunction10ViaFunction<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>
 			implements Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>>,
 			Op
@@ -292,7 +292,7 @@ public class ComputersToFunctionsViaFunction {
 
 	}
 
-	@OpClass(names = "adapt")
+	@OpClass(names = "engine.adapt")
 	public static class Computer11ToFunction11ViaFunction<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>
 			implements Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>>,
 			Op
@@ -316,7 +316,7 @@ public class ComputersToFunctionsViaFunction {
 
 	}
 
-	@OpClass(names = "adapt")
+	@OpClass(names = "engine.adapt")
 	public static class Computer12ToFunction12ViaFunction<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>
 			implements Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>>,
 			Op
@@ -340,7 +340,7 @@ public class ComputersToFunctionsViaFunction {
 
 	}
 
-	@OpClass(names = "adapt")
+	@OpClass(names = "engine.adapt")
 	public static class Computer13ToFunction13ViaFunction<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>
 			implements Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>>,
 			Op
@@ -364,7 +364,7 @@ public class ComputersToFunctionsViaFunction {
 
 	}
 
-	@OpClass(names = "adapt")
+	@OpClass(names = "engine.adapt")
 	public static class Computer14ToFunction14ViaFunction<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>
 			implements Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>>,
 			Op
@@ -388,7 +388,7 @@ public class ComputersToFunctionsViaFunction {
 
 	}
 
-	@OpClass(names = "adapt")
+	@OpClass(names = "engine.adapt")
 	public static class Computer15ToFunction15ViaFunction<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>
 			implements Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>>,
 			Op
@@ -412,7 +412,7 @@ public class ComputersToFunctionsViaFunction {
 
 	}
 
-	@OpClass(names = "adapt")
+	@OpClass(names = "engine.adapt")
 	public static class Computer16ToFunction16ViaFunction<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>
 			implements Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>>,
 			Op

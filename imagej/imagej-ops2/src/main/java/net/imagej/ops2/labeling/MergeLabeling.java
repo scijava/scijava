@@ -62,7 +62,7 @@ public class MergeLabeling<L, I extends IntegerType<I>, B extends BooleanType<B>
 	@OpDependency(name = "create.imgLabeling")
 	private BiFunction<Dimensions, I, ImgLabeling<L, I>> imgLabelingCreator;
 	
-	@OpDependency(name = "adapt")
+	@OpDependency(name = "engine.adapt")
 	private Function<Computers.Arity2<LabelingType<L>, LabelingType<L>, LabelingType<L>>, Computers.Arity2<Iterable<LabelingType<L>>, Iterable<LabelingType<L>>, Iterable<LabelingType<L>>>> adaptor;
 
 	@SuppressWarnings({ "unchecked", "rawtypes", "hiding" })

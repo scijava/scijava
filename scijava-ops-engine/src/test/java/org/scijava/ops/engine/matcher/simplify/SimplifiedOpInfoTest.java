@@ -84,7 +84,7 @@ public class SimplifiedOpInfoTest extends AbstractTestEnvironment implements
 		String expected = "test.simplifiedDescription(\n\t " //
 				+
 				"Inputs:\n\t\tjava.lang.Number input1\n\t\tjava.lang.Number input2\n\t " //
-				+ "Outputs:\n\t\torg.scijava.collections.ObjectArray<java.lang.Number> output1\n)\n";
+				+ "Output:\n\t\torg.scijava.collections.ObjectArray<java.lang.Number> output1\n)\n";
 		String actual = info.toString();
 		Assertions.assertEquals(expected, actual);
 	}
@@ -126,23 +126,23 @@ public class SimplifiedOpInfoTest extends AbstractTestEnvironment implements
 				"Ops:" +
 				"\n\t> test.coalesceSimpleDescription(\n" +
 				"\t\t Inputs:\n\t\t\tjava.util.List<java.lang.Long> input1\n" +
-				"\t\t Containers (I/O):\n\t\t\tjava.util.List<java.lang.Long> container1\n\t)\n\t" +
+				"\t\t Container (I/O):\n\t\t\tjava.util.List<java.lang.Long> container1\n\t)\n\t" +
 				"\n\t> test.coalesceSimpleDescription(\n" +
 				"\t\t Inputs:\n\t\t\tjava.lang.Double input1\n" +
-				"\t\t Outputs:\n\t\t\tjava.lang.Double output1\n\t)\n\t" +
+				"\t\t Output:\n\t\t\tjava.lang.Double output1\n\t)\n\t" +
 				"\n\t> test.coalesceSimpleDescription(\n" +
 				"\t\t Inputs:\n\t\t\tjava.lang.Long input1\n" +
-				"\t\t Outputs:\n\t\t\tjava.lang.Long output1\n\t)\n\t";
+				"\t\t Output:\n\t\t\tjava.lang.Long output1\n\t)\n\t";
 		Assertions.assertEquals(expected, actual);
 
 		actual = ops.unary("test.coalesceSimpleDescription").help();
 		expected =  //
 				"Ops:\n\t> test.coalesceSimpleDescription(\n" +
 						"\t\t Inputs:\n\t\t\tList<Long> input1\n" +
-						"\t\t Containers (I/O):\n\t\t\tList<Long> container1\n\t)\n\t" +
+						"\t\t Container (I/O):\n\t\t\tList<Long> container1\n\t)\n\t" +
 						"\n\t> test.coalesceSimpleDescription(\n" +
 						"\t\t Inputs:\n\t\t\tNumber input1\n" +
-						"\t\t Outputs:\n\t\t\tNumber output1\n\t)\n\t";
+						"\t\t Output:\n\t\t\tNumber output1\n\t)\n\t";
 		Assertions.assertEquals(expected, actual);
 		// Finally test that different number of outputs doesn't retrieve the Ops
 		actual = ops.nullary("test.coalesceSimpleDescription").help();

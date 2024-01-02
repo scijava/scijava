@@ -63,7 +63,7 @@ public class SimplifiedOpDescriptionGenerator implements
 		var infos = SimplificationMatchingRoutine.getInfos(env, req.getName());
 		var filtered = filterInfos(infos, req);
 		String opString = filtered.stream() //
-				.map(Infos::describe) //
+				.map(info -> Infos.describe(info, name)) //
 				.map(s -> s.replaceAll("\n", "\n\t")) //
 				.distinct() //
 				.collect(Collectors.joining("\n\t> "));
@@ -83,7 +83,7 @@ public class SimplifiedOpDescriptionGenerator implements
 		var infos = env.infos(req.getName());
 		var filtered = filterInfos(infos, req);
 		String opString = filtered.stream() //
-				.map(Infos::describeVerbose) //
+				.map(info -> Infos.describeVerbose(info, name)) //
 				.map(s -> s.replaceAll("\n", "\n\t")) //
 				.distinct() //
 				.collect(Collectors.joining("\n\t> "));

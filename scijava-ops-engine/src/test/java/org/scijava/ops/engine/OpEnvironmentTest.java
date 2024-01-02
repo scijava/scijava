@@ -93,7 +93,7 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 
 		// Get the Op matching the description
 		descriptions = helpEnv.helpVerbose("help.verbose1");
-		expected = "Ops:\n\t> help.verbose1(\n\t\t Inputs:\n\t\t Output:\n\t\t\tjava.lang.String output1\n\t)\n\t";
+		expected = "Ops:\n\t> help.verbose1(\n\t\t Output:\n\t\t\tjava.lang.String output1\n\t)\n\t";
 		Assertions.assertEquals(expected, descriptions);
 
 		// Finally assert a message is thrown when no Ops match
@@ -116,7 +116,7 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 		Assertions.assertEquals(expected, actual);
 		// ...but make sure that if we really need help with the internal namespace, we can get it
 		actual = helpEnv.help("engine.adapt");
-		expected = "Ops:\n\t> engine.adapt(\n\t\t Inputs:\n\t\t Output:\n\t\t\tString output1\n\t)\n\t";
+		expected = "Ops:\n\t> engine.adapt(\n\t\t Output:\n\t\t\tString output1\n\t)\n\t";
 		Assertions.assertEquals(expected, actual);
 	}
 

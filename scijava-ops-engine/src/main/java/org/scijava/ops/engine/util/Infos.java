@@ -237,7 +237,7 @@ public final class Infos {
 		boolean verbose)
 	{
 		final StringBuilder sb = new StringBuilder();
-
+		// Step 1: Name
 		if (name != null) {
 			if (!info.names().contains(name)) {
 				throw new IllegalArgumentException("OpInfo " + info.implementationName() + " has no name " + name);
@@ -247,13 +247,19 @@ public final class Infos {
 		else {
 			sb.append(info.names().get(0));
 		}
-		sb.append("(\n\t Inputs:\n");
+		sb.append("(\n");
+		// Step 2: Inputs
+		List<Member<?>> members = info.inputs();
 		List<Member<?>> containers = new ArrayList<>();
-		for (final Member<?> arg : info.inputs()) {
-			if (arg.getIOType() == ItemIO.INPUT) appendParam(sb, arg, special,
-				verbose);
-			else containers.add(arg);
+		if (!members.isEmpty()) {
+			sb.append("\t Inputs:\n");
+			for (final Member<?> arg : info.inputs()) {
+				if (arg.getIOType() == ItemIO.INPUT)
+					appendParam(sb, arg, special, verbose);
+				else containers.add(arg);
+			}
 		}
+		// Step 3: Output
 		if (containers.isEmpty()) {
 			sb.append("\t Output:\n");
 			appendParam(sb, info.output(), special, verbose);

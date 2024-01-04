@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
 
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.OpDependencyMember;
+import org.scijava.ops.engine.exceptions.impl.InvalidOpNameException;
 import org.scijava.ops.engine.exceptions.impl.MultipleOutputsOpException;
 import org.scijava.ops.engine.exceptions.impl.UnnamedOpException;
 import org.scijava.struct.ItemIO;
@@ -100,6 +101,11 @@ public final class Infos {
 		}
 		if (Objects.isNull(info.names()) || info.names().isEmpty()) {
 			throw new UnnamedOpException(info.implementationName());
+		}
+		for (var name: info.names()) {
+			if (!name.contains(".")) {
+//				throw new InvalidOpNameException(info, name);
+			}
 		}
 	}
 
@@ -269,6 +275,45 @@ public final class Infos {
 			containers.forEach(c -> appendParam(sb, c, special, verbose));
 		}
 		sb.append(")\n");
+		return sb.toString();
+	}
+
+	public static String describeOneLine(final OpInfo info) {
+		final StringBuilder sb = new StringBuilder("(");
+		// Step 2: Inputs
+		var inputs = info.inputs().stream().map(member-> {
+//			var str = typeString(member.getType(), false);
+			switch (member.getIOType()) {
+				case INPUT:
+					return member.getKey();
+				case MUTABLE:
+					return "^" + member.getKey();
+				case CONTAINER:
+					return "*" + member.getKey();
+				default:
+					throw new IllegalArgumentException("Invalid IO type: " + member.getIOType());
+			}
+		}).collect(Collectors.joining(", "));
+		sb.append(inputs);
+		sb.append(")");
+		// Step 3: Output
+		Member<?> output = info.output();
+		sb.append(" -> ");
+		switch (output.getIOType()) {
+			case OUTPUT:
+				sb.append(typeString(output.getType(), false));
+				break;
+			case MUTABLE:
+				sb.append("None");
+//				sb.append("None [Overwrites MUTABLE]");
+				break;
+			case CONTAINER:
+				sb.append("None");
+//				sb.append("None [Fills CONTAINER]");
+				break;
+			default:
+				throw new IllegalArgumentException("Invalid IO type: " + output.getIOType());
+		}
 		return sb.toString();
 	}
 

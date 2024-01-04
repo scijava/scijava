@@ -108,7 +108,7 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 		OpEnvironment helpEnv = barebonesEnvironment();
 		// Register an Op under an "internal" namespace and an "external" namespace
 		helpEnv.register( //
-				helpEnv.opify(OpifyOp.class, Priority.HIGH, "engine.adapt", "help") //
+				helpEnv.opify(OpifyOp.class, Priority.HIGH, "engine.adapt", "help.verbose1") //
 		);
 		// Make sure that only the "external" namespaces are visible
 		var actual = helpEnv.help();
@@ -116,7 +116,7 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 		Assertions.assertEquals(expected, actual);
 		// ...but make sure that if we really need help with the internal namespace, we can get it
 		actual = helpEnv.help("engine.adapt");
-		expected = "Ops:\n\t> engine.adapt(\n\t\t Output:\n\t\t\tString output1\n\t)\n\t";
+		expected = "engine.adapt:\n\t- () -> String\nKey: *=container, ^=mutable";
 		Assertions.assertEquals(expected, actual);
 	}
 

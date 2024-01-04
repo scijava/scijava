@@ -91,7 +91,7 @@ public class ConvertIIsTest extends AbstractOpTest {
 	// -- Helper methods --
 
 	private void addNoise(final IterableInterval<ShortType> image) {
-		IterableInterval<ShortType> copy = ops.op("copy").arity1().input(image).outType(new Nil<IterableInterval<ShortType>>() {}).apply();
+		IterableInterval<ShortType> copy = ops.op("copy.img").arity1().input(image).outType(new Nil<IterableInterval<ShortType>>() {}).apply();
 		ops.op("filter.addNoise").arity4().input(copy, -32768., 32767., 10000.).output(image).compute();
 	}
 

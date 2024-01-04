@@ -85,7 +85,7 @@ public class OpAdaptationPriorityTest extends AbstractTestEnvironment implements
 
 	@OpMethod(names = "engine.adapt", type = Function.class, priority = Priority.HIGH)
 	public static <I, O> Function<I, O> highPriorityAdaptor( //
-		@OpDependency(name = "create", adaptable = false) Function<I, O> creator, //
+		@OpDependency(name = "engine.create", adaptable = false) Function<I, O> creator, //
 		Computers.Arity1<I, O> computer //
 	) {
 		return (in) -> {
@@ -97,7 +97,7 @@ public class OpAdaptationPriorityTest extends AbstractTestEnvironment implements
 
 	@OpMethod(names = "engine.adapt", type = Function.class, priority = Priority.LOW)
 	public static <I, O> Function<I, O> lowPriorityAdaptor( //
-		@OpDependency(name = "create", adaptable = false) Producer<O> creator, //
+		@OpDependency(name = "engine.create", adaptable = false) Producer<O> creator, //
 		Computers.Arity1<I, O> computer //
 	) {
 		return (in) -> {
@@ -107,11 +107,11 @@ public class OpAdaptationPriorityTest extends AbstractTestEnvironment implements
 		};
 	}
 
-	@OpField(names = "create")
+	@OpField(names = "engine.create")
 	public static final Producer<PriorityThing> priorityThingProducer =
 		() -> new PriorityThing(10000);
 
-	@OpField(names = "create")
+	@OpField(names = "engine.create")
 	public static final Function<Double, PriorityThing> priorityThingFunction = (
 		in) -> new PriorityThing(in);
 

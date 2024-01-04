@@ -159,7 +159,7 @@ public class SimplifiedOpRequest implements OpRequest {
 		// prevent further simplification/adaptation
 		Hints hints = new Hints(Adaptation.FORBIDDEN, Simplification.FORBIDDEN);
 		Nil<?> copyNil = Nil.of(copyType);
-		var op = env.unary("copy", hints).inType(copyNil).outType(copyNil).computer();
+		var op = env.unary("engine.copy", hints).inType(copyNil).outType(copyNil).computer();
 		return Ops.rich(op);
 	}
 

@@ -60,7 +60,7 @@ public class ComputerToFunctionObjectOutputTest extends AbstractTestEnvironment
 		}
 	}
 
-	@OpField(names = "create")
+	@OpField(names = "engine.create")
 	public final Function<double[], double[]> creator =
 		in -> new double[in.length];
 

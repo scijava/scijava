@@ -104,7 +104,7 @@ public final class Infos {
 		}
 		for (var name: info.names()) {
 			if (!name.contains(".")) {
-//				throw new InvalidOpNameException(info, name);
+				throw new InvalidOpNameException(info, name);
 			}
 		}
 	}
@@ -282,17 +282,24 @@ public final class Infos {
 		final StringBuilder sb = new StringBuilder("(");
 		// Step 2: Inputs
 		var inputs = info.inputs().stream().map(member-> {
-//			var str = typeString(member.getType(), false);
+			var str = "";
 			switch (member.getIOType()) {
 				case INPUT:
-					return member.getKey();
+					str += member.getKey();
+					break;
 				case MUTABLE:
-					return "^" + member.getKey();
+					str += "^" + member.getKey();
+					break;
 				case CONTAINER:
-					return "*" + member.getKey();
+					str += "*" + member.getKey();
+					break;
 				default:
 					throw new IllegalArgumentException("Invalid IO type: " + member.getIOType());
 			}
+			if (!member.isRequired()) {
+				str += " = null";
+			}
+			return str;
 		}).collect(Collectors.joining(", "));
 		sb.append(inputs);
 		sb.append(")");

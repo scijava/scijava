@@ -19,11 +19,7 @@ import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.engine.OpWrapper;
 import org.scijava.ops.api.RichOp;
 
-public final class OpWrappers {
-
-	private OpWrappers() {
-		// Prevent instantiation of static utility class
-	}
+public class OpWrappers {
 
 	// -- producer --
 

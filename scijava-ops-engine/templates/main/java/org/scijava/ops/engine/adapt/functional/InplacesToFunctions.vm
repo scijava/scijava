@@ -59,9 +59,9 @@ public class InplacesToFunctions$generics.call($classArity, $classArity) impleme
 	@OpClass(names = "engine.adapt")
 	public static class Inplace$inplaceSuffix.call($arity, $a)ToFunction${arity}$generics.call($arity, $a) implements Function<$inplaceType.call($arity, $a)$generics.call($arity, $a), $functionArity.call($arity)$functionGenerics.call($arity, $a)>, Op {
 		
-		@OpDependency(name = "create", adaptable = false)
+		@OpDependency(name = "engine.create", adaptable = false)
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "copy", adaptable = false)
+		@OpDependency(name = "engine.copy", adaptable = false)
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**

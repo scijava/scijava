@@ -48,7 +48,7 @@ import org.scijava.ops.spi.OpClass;
  * @author Curtis Rueden
  * @see OpEvaluator
  */
-@OpClass(names = "eval")
+@OpClass(names = "expression.eval")
 public class DefaultEval implements
 	Functions.Arity3<String, OpEnvironment, Map<String, ?>, Object>, Op
 {
@@ -57,8 +57,8 @@ public class DefaultEval implements
 	 * TODO
 	 *
 	 * @param input
-	 * @param vars
 	 * @param ops
+	 * @param vars
 	 * @return the output
 	 */
 	@Override

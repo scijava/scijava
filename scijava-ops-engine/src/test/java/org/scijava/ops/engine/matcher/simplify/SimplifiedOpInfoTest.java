@@ -137,12 +137,7 @@ public class SimplifiedOpInfoTest extends AbstractTestEnvironment implements
 
 		actual = ops.unary("test.coalesceSimpleDescription").help();
 		expected =  //
-				"Ops:\n\t> test.coalesceSimpleDescription(\n" +
-						"\t\t Inputs:\n\t\t\tList<Long> input1\n" +
-						"\t\t Container (I/O):\n\t\t\tList<Long> container1\n\t)\n\t" +
-						"\n\t> test.coalesceSimpleDescription(\n" +
-						"\t\t Inputs:\n\t\t\tNumber input1\n" +
-						"\t\t Output:\n\t\t\tNumber output1\n\t)\n\t";
+				"test.coalesceSimpleDescription:\n\t- (input1, *container1) -> None\n\t- (input1) -> Number\nKey: *=container, ^=mutable";
 		Assertions.assertEquals(expected, actual);
 		// Finally test that different number of outputs doesn't retrieve the Ops
 		actual = ops.nullary("test.coalesceSimpleDescription").help();

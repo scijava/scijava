@@ -86,12 +86,13 @@ public class SimplifiedOpDescriptionGenerator implements
 		var infos = env.infos(req.getName());
 		var filtered = filterInfos(infos, req);
 		String opString = filtered.stream() //
-				.map(info -> Infos.describeVerbose(info, name)) //
+				.map(Infos::describeMultiLine) //
 				.map(s -> s.replaceAll("\n", "\n\t")) //
 				.distinct() //
-				.collect(Collectors.joining("\n\t> "));
+				.collect(Collectors.joining("\n\t- "));
 		if (opString.isEmpty()) return "No Ops found matching this request.";
-		return "Ops:\n\t> " + opString;
+		var key = "Key: *=container, ^=mutable";
+		return name + ":\n\t- " + opString + "\n" + key;
 	}
 
 	private String allNamespaces(final OpEnvironment env) {

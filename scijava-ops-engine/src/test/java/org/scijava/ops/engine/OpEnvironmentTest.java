@@ -93,7 +93,7 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 
 		// Get the Op matching the description
 		descriptions = helpEnv.helpVerbose("help.verbose1");
-		expected = "Ops:\n\t> help.verbose1(\n\t\t Output:\n\t\t\tjava.lang.String output1\n\t)\n\t";
+		expected = "help.verbose1:\n\t- org.scijava.ops.engine.OpifyOp\n\t\tReturns : java.lang.String\nKey: *=container, ^=mutable";
 		Assertions.assertEquals(expected, descriptions);
 
 		// Finally assert a message is thrown when no Ops match

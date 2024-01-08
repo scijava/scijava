@@ -122,17 +122,16 @@ public class SimplifiedOpInfoTest extends AbstractTestEnvironment implements
 	@Test
 	public void testSimpleDescriptions() {
 		String actual = ops.unary("test.coalesceSimpleDescription").helpVerbose();
-		String expected =  //
-				"Ops:" +
-				"\n\t> test.coalesceSimpleDescription(\n" +
-				"\t\t Inputs:\n\t\t\tjava.util.List<java.lang.Long> input1\n" +
-				"\t\t Container (I/O):\n\t\t\tjava.util.List<java.lang.Long> container1\n\t)\n\t" +
-				"\n\t> test.coalesceSimpleDescription(\n" +
-				"\t\t Inputs:\n\t\t\tjava.lang.Double input1\n" +
-				"\t\t Output:\n\t\t\tjava.lang.Double output1\n\t)\n\t" +
-				"\n\t> test.coalesceSimpleDescription(\n" +
-				"\t\t Inputs:\n\t\t\tjava.lang.Long input1\n" +
-				"\t\t Output:\n\t\t\tjava.lang.Long output1\n\t)\n\t";
+		String expected =  "test.coalesceSimpleDescription:\n" +
+				"\t- org.scijava.ops.engine.matcher.simplify.SimplifiedOpInfoTest$comp1\n" +
+				"\t\t> input1 : java.util.List<java.lang.Long>\n" +
+				"\t\t> *container1 : java.util.List<java.lang.Long>\n" +
+				"\t- org.scijava.ops.engine.matcher.simplify.SimplifiedOpInfoTest$func1\n" +
+				"\t\t> input1 : java.lang.Double\n" + "\t\tReturns : java.lang.Double\n" +
+				"\t- org.scijava.ops.engine.matcher.simplify.SimplifiedOpInfoTest$func2\n" +
+				"\t\t> input1 : java.lang.Long\n" + "\t\tReturns : java.lang.Long\n" +
+				"Key: *=container, ^=mutable";
+
 		Assertions.assertEquals(expected, actual);
 
 		actual = ops.unary("test.coalesceSimpleDescription").help();

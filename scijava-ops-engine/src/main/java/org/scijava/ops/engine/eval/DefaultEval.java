@@ -33,6 +33,7 @@ import java.util.Map;
 
 import org.scijava.function.Functions;
 import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
 
@@ -61,8 +62,10 @@ public class DefaultEval implements
 	 * @return the output
 	 */
 	@Override
-	public Object apply(final String input, final Map<String, Object> vars,
-		final OpEnvironment ops)
+	public Object apply( //
+		final String input, //
+		@Nullable final Map<String, Object> vars, //
+		final OpEnvironment ops) //
 	{
 		OpEvaluator e = new OpEvaluator(ops);
 		if (vars != null) e.setAll(vars);

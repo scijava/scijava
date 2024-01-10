@@ -34,25 +34,21 @@ import java.util.Random;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
-
-import org.scijava.function.Computers;
+import org.scijava.ops.spi.Nullable;
 
 /**
  * Contains Ops designed to add noise to populated images.
  * 
  * @author Gabriel Selzer
- *
- * @param <I>
- *            type of input
- * @param <O>
- *            type of output
  */
-public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
+public class NoiseAdders {
+
+	private static final Long defaultSeed = 0xabcdef1234567890L;
 
 	/**
 	 * Sets the real component of an output real number to the addition of the real
 	 * component of an input real number with an amount of Gaussian noise.
-	 * 
+	 * <p>
 	 * Note that this Op has changed relative to the older implementations; before
 	 * it operated on RealTypes, we now only provide the operation on
 	 * Iterable<RealType>s. This is due to the nature of {@link Random}: The old
@@ -63,46 +59,31 @@ public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 	 * {@link Iterable}. Since the {@link Random} is created upon every call of the
 	 * Op it ensures that given the same seed and input data the output will always
 	 * be the same.
-	 * @input input
-	 * @input rangeMin
-	 * @input rangeMax
-	 * @input rangeStdDev
-	 * @input seed
-	 * @container output
-	 * @implNote op names='filter.addNoise'
+	 * @param input
+	 * @param rangeMin
+	 * @param rangeMax
+	 * @param rangeStdDev
+	 * @param seed
+	 * @param output
+	 * @implNote op names='filter.addNoise', type=Computer
 	 */
-	public final Computers.Arity5<RandomAccessibleInterval<I>, Double, Double, Double, Long, RandomAccessibleInterval<O>> addNoiseInterval = (
-			input, rangeMin, rangeMax, rangeStdDev, seed, output) -> {
-		addNoise(input, output, rangeMin, rangeMax, rangeStdDev, new Random(seed));
-	};
-
-	/**
-	 * Convenience Op for when the user does not pass through a seed (default seed
-	 * taken from past implementation).
-	 * @input input
-	 * @input rangeMin
-	 * @input rangeMax
-	 * @input rangeStdDev
-	 * @container output
-	 * @implNote op names='filter.addNoise'
-	 */
-	public final Computers.Arity4<RandomAccessibleInterval<I>, Double, Double, Double, RandomAccessibleInterval<O>> addNoiseIntervalSeedless = (
-			input, rangeMin, rangeMax, rangeStdDev,
-			output) -> addNoiseInterval.compute(input, rangeMin, rangeMax, rangeStdDev, 0xabcdef1234567890L, output);
-
-	// -- Static utility methods --
-
-	// Runs the below method on every element of the input iterables.
-	public static <I extends RealType<I>, O extends RealType<O>> void addNoise(
-		final RandomAccessibleInterval<I> input,
-		final RandomAccessibleInterval<O> output, final double rangeMin,
-		final double rangeMax, final double rangeStdDev, final Random rng)
-	{
+	public static <I extends RealType<I>, O extends RealType<O>> void addNoiseInterval( //
+			final RandomAccessibleInterval<I> input, //
+			final Double rangeMin, //
+			final Double rangeMax, //
+			final Double rangeStdDev, //
+			@Nullable Long seed, //
+			final RandomAccessibleInterval<O> output //
+	) {
+		if (seed == null) {
+			seed = defaultSeed;
+		}
+		Random rng = new Random(seed);
 		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel((in,
-			out) -> {
+				out) -> {
 			addNoise(in, out, rangeMin, rangeMax, rangeStdDev, rng);
 		});
-	}
+	};
 
 	// Copied from the previous implementation of addNoise
 	public static <I extends RealType<I>, O extends RealType<O>> void addNoise(final I input, final O output,
@@ -134,49 +115,41 @@ public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 	 * </p>
 	 * 
 	 * @author Jan Eglinger
-	 * 
-	 *         Note that this Op has changed relative to the older implementations;
-	 *         before it operated on RealTypes, we now only provide the operation on
-	 *         Iterable<RealType>s. This is due to the nature of {@link Random}: The
-	 *         old implementation saved a {@link Random} and used it on each
-	 *         {@link RealType} passed to the Op. This provided no deterministic
-	 *         output, as the same input would yield two different outputs if called
-	 *         in succession. Thus in this iteration of the Op we make it a
-	 *         requirement that the input must be an {@link Iterable}. Since the
-	 *         {@link Random} is created upon every call of the Op it ensures that
-	 *         given the same seed and input data the output will always be the
-	 *         same.
+	 * <p>
+	 * Note that this Op has changed relative to the older implementations;
+	 * before it operated on RealTypes, we now only provide the operation on
+	 * Iterable<RealType>s. This is due to the nature of {@link Random}: The
+	 * old implementation saved a {@link Random} and used it on each
+	 * {@link RealType} passed to the Op. This provided no deterministic
+	 * output, as the same input would yield two different outputs if called
+	 * in succession. Thus in this iteration of the Op we make it a
+	 * requirement that the input must be an {@link Iterable}. Since the
+	 * {@link Random} is created upon every call of the Op it ensures that
+	 * given the same seed and input data the output will always be the
+	 * same.
 	 *
-	 * @input input
-	 * @input seed
-	 * @container output
-	 * @implNote op names='filter.addPoissonNoise'
+	 * @param input
+	 * @param seed
+	 * @param output
+	 * @implNote op names='filter.addPoissonNoise', type=Computer
 	 */
-	public final Computers.Arity2<RandomAccessibleInterval<I>, Long, RandomAccessibleInterval<O>> addPoissonNoiseInterval = (input, seed,
-			output) -> addPoissonNoise(input, new Random(seed), output);
-
-	/**
-	 * Convenience Op for when the user does not pass through a seed (default seed
-	 * taken from past implementation).
-	 * @input input
-	 * @container output
-	 * @implNote op names='filter.addPoissonNoise'
-	 */
-	public final Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> addPoissonNoiseIntervalSeedless = (input,
-			output) -> addPoissonNoise(input, new Random(0xabcdef1234567890L), output);
-
-	// -- Static utility methods --
-
-	// Runs the below method on every element of the input iterables.
-	public static <I extends RealType<I>, O extends RealType<O>> void
-		addPoissonNoise(final RandomAccessibleInterval<I> input, final Random rng,
-			final RandomAccessibleInterval<O> output)
+	public static <I extends RealType<I>, O extends RealType<O>> void addPoissonNoiseInterval ( //
+			final RandomAccessibleInterval<I> input, //
+			@Nullable Long seed, //
+			final RandomAccessibleInterval<O> output //
+	)
 	{
+		if (seed == null) {
+			seed = defaultSeed;
+		}
+		Random rng = new Random(seed);
 		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel((in,
-			out) -> {
+				out) -> {
 			addPoissonNoise(in, rng, out);
 		});
 	}
+
+	// -- Static utility methods --
 
 	// Copied from the previous implementation of addNoise
 	public static <I extends RealType<I>, O extends RealType<O>> void addPoissonNoise(final I input, final Random rng,
@@ -189,7 +162,6 @@ public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 			p *= rng.nextDouble();
 		} while (p >= l);
 		output.setReal(k - 1);
-		return;
 	}
 
 }

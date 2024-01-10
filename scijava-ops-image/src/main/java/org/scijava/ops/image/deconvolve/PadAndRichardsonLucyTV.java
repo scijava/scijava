@@ -63,7 +63,7 @@ import org.scijava.ops.spi.OpDependency;
  * @param <C>
  * @implNote op names='deconvolve.richardsonLucyTV', priority='100.'
  */
-public class RichardsonLucyTVF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
+public class PadAndRichardsonLucyTV<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
 	implements Functions.Arity11<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, O, C, Integer, Boolean, Boolean, Float, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, RandomAccessibleInterval<O>> {
 
 	@OpDependency(name = "deconvolve.richardsonLucyUpdate")

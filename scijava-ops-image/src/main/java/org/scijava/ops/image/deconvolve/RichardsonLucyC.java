@@ -29,6 +29,7 @@
 
 package org.scijava.ops.image.deconvolve;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -40,11 +41,10 @@ import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Util;
 import net.imglib2.view.Views;
-
 import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
-import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.Nullable;
+import org.scijava.ops.spi.OpDependency;
 
 /**
  * Richardson Lucy algorithm for (@link RandomAccessibleInterval) (Lucy, L. B.
@@ -64,43 +64,22 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 			Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>>, //
 			List<Inplaces.Arity1<RandomAccessibleInterval<O>>>, RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> {
 
-	// /**
-	// * Op that computes Richardson Lucy update, can be overridden to implement
-	// * variations of the algorithm (like RichardsonLucyTV)
-	// */
-	// private UnaryComputerOp<RandomAccessibleInterval<O>,
-	// RandomAccessibleInterval<O>> updateOp =
-	// null;
-	//
-	// /**
-	// * The current estimate, by passing in the current estimate the user can
-	// * define the starting point (first guess), if no starting estimate is
-	// * provided the default starting point will be the input image
-	// */
-	// private RandomAccessibleInterval<O> raiExtendedEstimate;
-	//
-	// /**
-	// * A list of optional constraints that are applied at the end of each
-	// * iteration (ie can be used to achieve noise removal, non-circulant
-	// * normalization, etc.)
-	// */
-	// private ArrayList<UnaryInplaceOp<RandomAccessibleInterval<O>,
-	// RandomAccessibleInterval<O>>> iterativePostProcessingOps =
-	// null;
+	@OpDependency(name = "deconvolve.richardsonLucyUpdate")
+	private Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> updateOp;
 
-	// private BinaryComputerOp<RandomAccessibleInterval<I>,
-	// RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> rlCorrectionOp;
 	@OpDependency(name = "deconvolve.richardsonLucyCorrection")
-	private Computers.Arity4<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>, //
-	RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, //
-	RandomAccessibleInterval<O>> rlCorrectionOp;
+	private Computers.Arity4< //
+			RandomAccessibleInterval<I>, //
+			RandomAccessibleInterval<O>, //
+			RandomAccessibleInterval<C>, //
+			RandomAccessibleInterval<C>, //
+			RandomAccessibleInterval<O> //
+			> rlCorrectionOp;
 
 	@OpDependency(name = "create.img")
 	private BiFunction<Interval, O, Img<O>> createOp;
 
 	@OpDependency(name = "filter.fft")
-	// private UnaryComputerOp<RandomAccessibleInterval<K>,
-	// RandomAccessibleInterval<C>> fftKernelOp;
 	private Computers.Arity1<RandomAccessibleInterval<K>, RandomAccessibleInterval<C>> fftKernelOp;
 
 	@OpDependency(name = "filter.convolve")
@@ -117,30 +96,49 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 	/**
 	 * TODO
 	 *
-	 * @param in
-	 * @param kernel
-	 * @param fftInput
-	 * @param fftKernel
-	 * @param performInputFFT
-	 * @param performKernelFFT
-	 * @param complexType
-	 * @param maxIterations
-	 * @param accelerator
-	 * @param updateOp by default, this should be RichardsonLucyUpdate
-	 * @param iterativePostProcessingOps
-	 * @param raiExtendedEstimate
-	 * @param out
+	 * @param in the input data
+	 * @param kernel the kernel
+	 * @param fftInput A buffer to be used to store kernel FFTs.
+	 * @param fftKernel A buffer to be used to store kernel FFTs.
+	 * @param performInputFFT boolean indicating that the input FFT has already been calculated. If true, the FFT will be taken on the input.
+	 * @param performKernelFFT boolean indicating that the kernel FFT has already been calculated. If true, the FFT will be taken on the kernel.
+	 * @param complexType An instance of the type to be used in the Fourier space.
+	 * @param maxIterations Maximum number of iterations to perform.
+	 * @param accelerator An op which implements an acceleration strategy (takes a larger step at each iteration).
+	 * @param updateOp Op that computes Richardson Lucy update, can be overridden to implement variations of the algorithm (like RichardsonLucyTV).
+	 * @param iterativePostProcessingOps A list of optional constraints that are applied at the end of each iteration (ie can be used to achieve noise removal, non-circulant normalization, etc.).
+	 * @param raiExtendedEstimate The current estimate, by passing in the current estimate the user can define the starting point (first guess), if no starting estimate is provided the default starting point will be the input image.
+	 * @param out the output buffer
 	 */
 	@Override
-	public void compute(RandomAccessibleInterval<I> in, RandomAccessibleInterval<K> kernel,
-			RandomAccessibleInterval<C> fftInput, RandomAccessibleInterval<C> fftKernel, Boolean performInputFFT,
-			Boolean performKernelFFT, C complexType, Integer maxIterations,
-			Inplaces.Arity1<RandomAccessibleInterval<O>> accelerator,
-			Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> updateOp,
-			List<Inplaces.Arity1<RandomAccessibleInterval<O>>> iterativePostProcessingOps,
-			@Nullable RandomAccessibleInterval<O> raiExtendedEstimate,
-			RandomAccessibleInterval<O> out) {
+	public void compute(
+			RandomAccessibleInterval<I> in, //
+			RandomAccessibleInterval<K> kernel, //
+			RandomAccessibleInterval<C> fftInput, //
+			RandomAccessibleInterval<C> fftKernel, //
+			Boolean performInputFFT, //
+			Boolean performKernelFFT, //
+			C complexType, //
+			Integer maxIterations, //
+			@Nullable Inplaces.Arity1<RandomAccessibleInterval<O>> accelerator, //
+			@Nullable Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> updateOp, //
+			@Nullable List<Inplaces.Arity1<RandomAccessibleInterval<O>>> iterativePostProcessingOps, //
+			@Nullable RandomAccessibleInterval<O> raiExtendedEstimate, //
+			RandomAccessibleInterval<O> out //
+	) {
 
+		// If the accelerator is null, make a No-op placeholder
+		if (accelerator == null) {
+			accelerator = (t) -> {};
+		}
+		// If the update Op is null, use the default
+		if (updateOp == null) {
+			updateOp = this.updateOp;
+		}
+		// If the user does not want any postprocessing, pass an empty list
+		if (iterativePostProcessingOps == null) {
+			iterativePostProcessingOps = Collections.emptyList();
+		}
 		// if a starting point for the estimate was not passed in then create
 		// estimate Img and use the input as the starting point
 		if (raiExtendedEstimate == null) {
@@ -174,17 +172,12 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 			updateOp.compute(raiExtendedReblurred, raiExtendedEstimate);
 
 			// apply post processing
-			if (iterativePostProcessingOps != null) {
-				for (Inplaces.Arity1<RandomAccessibleInterval<O>> pp : iterativePostProcessingOps) {
-					pp.mutate(raiExtendedEstimate);
-				}
+			for (Inplaces.Arity1<RandomAccessibleInterval<O>> pp : iterativePostProcessingOps) {
+				pp.mutate(raiExtendedEstimate);
 			}
 
 			// accelerate the algorithm by taking a larger step
-			// TODO: do we need the nullcheck?
-			if (accelerator != null) {
-				accelerator.mutate(raiExtendedEstimate);
-			}
+			accelerator.mutate(raiExtendedEstimate);
 		}
 
 		// -- copy crop padded back to original size

@@ -31,12 +31,8 @@ package org.scijava.ops.image.coloc.maxTKendallTau;
 
 import java.util.Collections;
 import java.util.Random;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.scijava.ops.image.coloc.ColocUtil;
-import org.scijava.ops.image.coloc.IntArraySorter;
-import org.scijava.ops.image.coloc.MergeSort;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.histogram.Histogram1d;
@@ -45,10 +41,13 @@ import net.imglib2.util.IntervalIndexer;
 import net.imglib2.util.Intervals;
 import net.imglib2.util.Util;
 import net.imglib2.view.Views;
-
 import org.scijava.collections.IntArray;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
+import org.scijava.ops.image.coloc.ColocUtil;
+import org.scijava.ops.image.coloc.IntArraySorter;
+import org.scijava.ops.image.coloc.MergeSort;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 /**
@@ -86,7 +85,7 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>>
 	 * @return the output
 	 */
 	@Override
-	public Double apply(final RandomAccessibleInterval<T> image1, final RandomAccessibleInterval<U> image2, final Long seed) {
+	public Double apply(final RandomAccessibleInterval<T> image1, final RandomAccessibleInterval<U> image2, @Nullable Long seed) {
 		// check image sizes
 		// TODO: Add these checks to conforms().
 		if (!Intervals.equalDimensions(image1, image2)) {
@@ -97,6 +96,13 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>>
 			throw new IllegalArgumentException("Image dimensions too large: " + n1);
 		}
 		final int n = (int) n1;
+
+		// Check nullable seed
+		if (seed == null) {
+			// NB the original seed used in ImageJ Ops was an integer, 0x893023421.
+			// To preserve the same value without casting, we need this value.
+			seed = 0xffff_ffff_8930_2341L;
+		}
 
 		// compute thresholds
 		final double thresh1 = thresholdT(image1);
@@ -142,8 +148,8 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>>
 		double[][] finalRanks = new double[rn][2];
 		for (int i = 0; i < rn; i++) {
 			final int index = validIndex.getValue(i);
-			finalRanks[i][0] = Math.floor(rankIndex1[index]);
-			finalRanks[i][1] = Math.floor(rankIndex2[index]);
+			finalRanks[i][0] = rankIndex1[index];
+			finalRanks[i][1] = rankIndex2[index];
 		}
 		return finalRanks;
 	}
@@ -242,32 +248,6 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>>
 		final long n0 = an * (long) (an - 1) / 2;
 		final long S = mergeSort.sort();
 		return (n0 - 2 * S) / (double) n0;
-	}
-
-}
-
-/**
- *@implNote op names='coloc.maxTKendallTau'
- */
-class MTKTSimple<T extends RealType<T>, U extends RealType<U>>
-	implements BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> 
-{
-	
-	@OpDependency(name = "coloc.maxTKendallTau")
-	private Functions.Arity3<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Long, Double> colocOp;
-	
-	private long seed = 0x89302341;
-
-	/**
-	 * TODO
-	 *
-	 * @param image1
-	 * @param image2
-	 * @return the output
-	 */
-	@Override
-	public Double apply(RandomAccessibleInterval<T> image1, RandomAccessibleInterval<U> image2) {
-		return colocOp.apply(image1, image2, seed);
 	}
 
 }

@@ -48,7 +48,7 @@ public abstract class AbstractHaralickFeature<T extends RealType<T>>
 		implements Functions.Arity4<RandomAccessibleInterval<T>, Integer, Integer, MatrixOrientation, DoubleType> {
 
 	@OpDependency(name = "image.cooccurrenceMatrix")
-	private Functions.Arity4<RandomAccessibleInterval<T>, Integer, Integer, MatrixOrientation, double[][]> coocFunc;
+	private Functions.Arity4<RandomAccessibleInterval<T>, MatrixOrientation, Integer, Integer, double[][]> coocFunc;
 
 	/**
 	 * given the specified parameters. No caching!
@@ -59,7 +59,7 @@ public abstract class AbstractHaralickFeature<T extends RealType<T>>
 			final Integer distance, final MatrixOrientation matrixOrientation) {
 		if (matrixOrientation.numDims() != input.numDimensions())
 			throw new IllegalArgumentException("MatrixOrientation must be of the same dimensions as the input!");
-		return coocFunc.apply(input, numGreyLevels, distance, matrixOrientation);
+		return coocFunc.apply(input, matrixOrientation, numGreyLevels, distance);
 	}
 
 }

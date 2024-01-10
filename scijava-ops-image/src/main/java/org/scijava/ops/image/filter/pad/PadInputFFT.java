@@ -65,15 +65,23 @@ public abstract class PadInputFFT<T extends ComplexType<T>, I extends RandomAcce
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public O apply(final I input, final Dimensions paddedDimensions, final Boolean fast,
-			@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> obf) {
+	public O apply( //
+			final I input, //
+			final Dimensions paddedDimensions, //
+			@Nullable Boolean fast, //
+			@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> obf //
+	) {
+
+		if (fast == null) {
+			fast = true;
+		}
 
 		Dimensions paddedFFTInputDimensions;
 
 		// if an fftsize op has been set recompute padded size
-			long[][] sizes = getFFTSizeOp(fast).apply(paddedDimensions);
+		long[][] sizes = getFFTSizeOp(fast).apply(paddedDimensions);
 
-			paddedFFTInputDimensions = new FinalDimensions(sizes[0]);
+		paddedFFTInputDimensions = new FinalDimensions(sizes[0]);
 
 		if (obf == null) {
 			obf = new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(input).createVariable());

@@ -30,9 +30,10 @@
 package org.scijava.ops.image.filter.vesselness;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
+import Jama.EigenvalueDecomposition;
+import Jama.Matrix;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
@@ -40,11 +41,7 @@ import net.imglib2.outofbounds.OutOfBoundsMirrorFactory;
 import net.imglib2.outofbounds.OutOfBoundsMirrorFactory.Boundary;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
-
 import org.scijava.function.Computers;
-
-import Jama.EigenvalueDecomposition;
-import Jama.Matrix;
 import org.scijava.ops.spi.Nullable;
 
 /**
@@ -59,24 +56,13 @@ import org.scijava.ops.spi.Nullable;
 public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 		implements Computers.Arity3<RandomAccessibleInterval<T>, Integer, double[], RandomAccessibleInterval<U>> {
 
-	private double[] spacing;
-	private int scale;
-
 	protected double alpha = 0.5;
 	protected double beta = 0.5;
 
 	protected double minimumVesselness = Double.MIN_VALUE;
 	protected double maximumVesselness = Double.MAX_VALUE;
 
-	public double getMinimumVesselness() {
-		return minimumVesselness;
-	}
-
-	public double getMaximumVesselness() {
-		return maximumVesselness;
-	}
-
-	private double getDistance(RandomAccess<T> ahead, RandomAccess<T> behind, int d) {
+	private double getDistance(RandomAccess<T> ahead, RandomAccess<T> behind, int d, double[] spacing) {
 		double distance = 0;
 
 		for (int i = 0; i < d; i++) {
@@ -97,10 +83,10 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 	/**
 	 * TODO
 	 *
-	 * @param input
-	 * @param scale size of vessels to search for
+	 * @param input the image containing input data
+	 * @param scale sigma for the gaussian filter, and the scale for the vesselness filter
 	 * @param spacing physical distance between data points
-	 * @param output
+	 * @param output the pre-allocated output buffer
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input, final Integer scale,
@@ -111,26 +97,23 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 
 		// set spacing if the parameter is not passed.
 		if (spacing == null) {
-			this.spacing = new double[input.numDimensions()];
+			spacing = new double[input.numDimensions()];
 			for (int i = 0; i < input.numDimensions(); i++)
-				this.spacing[i] = 1;
-		} else
-			this.spacing = spacing;
+				spacing[i] = 1;
+		}
 
-		this.scale = scale;
-
-		frangi(input, output, this.scale);
+		frangi(input, output, spacing, scale);
 	}
 
-	private final void frangi(RandomAccessibleInterval<T> in, RandomAccessibleInterval<U> out, int step) {
+	private void frangi(RandomAccessibleInterval<T> in,
+			RandomAccessibleInterval<U> out, double[] spacing, int step) {
 
 		// create denominators used for gaussians later.
 		double ad = 2 * alpha * alpha;
 		double bd = 2 * beta * beta;
 
 		// OutOfBoundsMirrorStrategy for use when the cursor reaches the edges.
-		OutOfBoundsMirrorFactory<T, RandomAccessibleInterval<T>> osmf = new OutOfBoundsMirrorFactory<T, RandomAccessibleInterval<T>>(
-				Boundary.SINGLE);
+		OutOfBoundsMirrorFactory<T, RandomAccessibleInterval<T>> osmf = new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
 
 		Cursor<T> cursor = Views.iterable(in).localizingCursor();
 
@@ -164,7 +147,7 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 
 					// take the derivative between the two points
 					double derivativeA = derive(behind.get().getRealDouble(), current.get().getRealDouble(),
-							getDistance(behind, current, in.numDimensions()));
+							getDistance(behind, current, in.numDimensions(), spacing));
 
 					// move one ahead to take the other first derivative
 					ahead.move(step, m);
@@ -173,11 +156,11 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 
 					// take the derivative between the two points
 					double derivativeB = derive(current.get().getRealDouble(), ahead.get().getRealDouble(),
-							getDistance(current, ahead, in.numDimensions()));
+							getDistance(current, ahead, in.numDimensions(), spacing));
 
 					// take the second derivative using the two first derivatives
 					double derivative2 = derive(derivativeA, derivativeB,
-							getDistance(behind, ahead, in.numDimensions()));
+							getDistance(behind, ahead, in.numDimensions(), spacing));
 
 					hessian.set(m, n, derivative2);
 
@@ -191,10 +174,10 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 			// find and sort the eigenvalues and eigenvectors of the Hessian
 			EigenvalueDecomposition e = hessian.eig();
 			double[] eigenvaluesArray = e.getRealEigenvalues();
-			ArrayList<Double> eigenvaluesArrayList = new ArrayList<Double>();
+			ArrayList<Double> eigenvaluesArrayList = new ArrayList<>();
 			for (double d : eigenvaluesArray)
 				eigenvaluesArrayList.add(d);
-			Collections.sort(eigenvaluesArrayList, Comparator.comparingDouble(Math::abs));
+			eigenvaluesArrayList.sort(Comparator.comparingDouble(Math::abs));
 
 			// vesselness value
 			double v = 0;
@@ -256,9 +239,7 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 					v = (1 - Math.exp(an / ad)) * Math.exp(bn / bd) * (1 - Math.exp(cn / cd));
 				}
 
-			} else
-
-			if (!Double.isNaN(v)) {
+			} else {
 				maximumVesselness = Math.max(v, maximumVesselness);
 				minimumVesselness = Math.min(v, minimumVesselness);
 			}

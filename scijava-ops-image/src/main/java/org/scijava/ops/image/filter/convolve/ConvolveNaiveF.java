@@ -62,33 +62,6 @@ public class ConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & Nativ
 	private BiFunction<Dimensions, O, RandomAccessibleInterval<O>> createOp;
 
 	/**
-	 * Create the output using the outFactory and outType if they exist. If these
-	 * are null use a default factory and type
-	 */
-	@SuppressWarnings("unchecked")
-	public RandomAccessibleInterval<O> createOutput(RandomAccessibleInterval<I> input,
-			RandomAccessibleInterval<K> kernel, O outType) {
-
-		// TODO can we remove this null check?
-		if (outType == null) {
-
-			// if the input type and kernel type are the same use this type
-			if (Util.getTypeFromInterval(input).getClass() == Util.getTypeFromInterval(kernel).getClass()) {
-				Object temp = Util.getTypeFromInterval(input).createVariable();
-				outType = (O) temp;
-
-			}
-			// otherwise default to float
-			else {
-				Object temp = new FloatType();
-				outType = (O) temp;
-			}
-		}
-
-		return createOp.apply(input, outType.createVariable());
-	}
-
-	/**
 	 * TODO
 	 *
 	 * @param input
@@ -106,7 +79,7 @@ public class ConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & Nativ
 		if (Intervals.numElements(kernel) <= 9)
 			throw new IllegalArgumentException("The kernel is too small to perform computation!");
 
-		RandomAccessibleInterval<O> out = createOutput(input, kernel, outType);
+		RandomAccessibleInterval<O> out = createOp.apply(input, outType);
 
 		if (obf == null) {
 			obf = new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(input).createVariable());
@@ -130,18 +103,18 @@ public class ConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & Nativ
 }
 
 /**
+ * A convenience Op enabling output type safety.
  *
  * @param <I>
- * @param <O>
  * @param <K>
  * @implNote op name='filter.convolve', priority='101.'
  */
-class SimpleConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K>>
+class SimpleConvolveNaiveF<I extends RealType<I>, K extends RealType<K>>
 		implements
-		BiFunction<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> {
+		BiFunction<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<FloatType>> {
 	
 	@OpDependency(name = "filter.convolve")
-	Functions.Arity4<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, O, RandomAccessibleInterval<O>> convolveOp;
+	Functions.Arity3<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, FloatType, RandomAccessibleInterval<FloatType>> convolveOp;
 
 	/**
 	 * TODO
@@ -151,7 +124,7 @@ class SimpleConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & Native
 	 * @return the output
 	 */
 	@Override
-	public RandomAccessibleInterval<O> apply(RandomAccessibleInterval<I> input, RandomAccessibleInterval<K> kernel) {
-		return convolveOp.apply(input, kernel, null, null);
+	public RandomAccessibleInterval<FloatType> apply(RandomAccessibleInterval<I> input, RandomAccessibleInterval<K> kernel) {
+		return convolveOp.apply(input, kernel, new FloatType());
 	}
 }

@@ -62,6 +62,10 @@ public class DefaultPercentile<I extends RealType<I>, O extends RealType<O>>
 	 */
 	@Override
 	public void compute(final Iterable<I> input, final Double percent, final O output) {
+		if (percent < 0 || percent > 100) {
+			throw new IllegalArgumentException(
+					"Percent must be between 0 and 100 (inclusive) but was " + percent);
+		}
 		op.compute(input, percent / 100, output);
 	}
 }

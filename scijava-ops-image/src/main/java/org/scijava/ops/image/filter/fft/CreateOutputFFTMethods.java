@@ -35,6 +35,7 @@ import net.imglib2.Dimensions;
 import net.imglib2.img.Img;
 
 import org.scijava.function.Functions;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 /**
@@ -52,13 +53,16 @@ public class CreateOutputFFTMethods<T> implements Functions.Arity3<Dimensions, T
 	/**
 	 * TODO
 	 *
-	 * @param Dimensions
-	 * @param outType
+	 * @param paddedDimensions the size of the output image
+	 * @param outType the type of the output image
 	 * @param fast
 	 * @return the output
 	 */
 	@Override
-	public Img<T> apply(Dimensions paddedDimensions, T outType, Boolean fast) {
+	public Img<T> apply(Dimensions paddedDimensions, T outType, @Nullable Boolean fast) {
+		if (fast == null) {
+			fast = true;
+		}
 
 		Dimensions paddedFFTMethodsFFTDimensions = FFTMethodsUtility.getFFTDimensionsRealToComplex(fast,
 				paddedDimensions);
@@ -66,24 +70,4 @@ public class CreateOutputFFTMethods<T> implements Functions.Arity3<Dimensions, T
 		return create.apply(paddedFFTMethodsFFTDimensions, outType);
 	}
 
-}
-
-/**
- *@implNote op names='filter.createFFTOutput'
- */
-class CreateOutputFFTMethodsSimple<T> implements BiFunction<Dimensions, T, Img<T>> {
-	@OpDependency(name = "filter.createFFTOutput")
-	private Functions.Arity3<Dimensions, T, Boolean, Img<T>> create;
-
-	/**
-	 * TODO
-	 *
-	 * @param Dimensions
-	 * @param outType
-	 * @return the output
-	 */
-	@Override
-	public Img<T> apply(Dimensions paddedDimensions, T outType) {
-		return create.apply(paddedDimensions, outType, true);
-	}
 }

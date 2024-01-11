@@ -29,16 +29,15 @@
 
 package org.scijava.ops.image.geom.geom3d;
 
-import net.imglib2.mesh.Mesh;
-import net.imglib2.mesh.impl.naive.NaiveDoubleMesh;
 import net.imglib2.Cursor;
 import net.imglib2.FinalInterval;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.mesh.Mesh;
+import net.imglib2.mesh.impl.naive.NaiveDoubleMesh;
 import net.imglib2.type.BooleanType;
 import net.imglib2.type.logic.BoolType;
 import net.imglib2.view.ExtendedRandomAccessibleInterval;
 import net.imglib2.view.Views;
-
 import org.apache.commons.math3.util.MathArrays;
 import org.scijava.function.Functions;
 import org.scijava.ops.spi.Nullable;
@@ -76,13 +75,9 @@ public class DefaultMarchingCubes<T extends BooleanType<T>>
 		if (input.numDimensions() != 3)
 			throw new IllegalArgumentException("Only three-dimensional inputs are supported!");
 
-		if (isolevel != null)
-			this.isolevel = isolevel;
-		else
+		if (isolevel == null)
 			this.isolevel = 1;
-		if (interpolatorClass != null)
-			this.interpolatorClass = interpolatorClass;
-		else
+		if (interpolatorClass == null)
 			this.interpolatorClass = new DefaultVertexInterpolator();
 
 		Mesh output = new NaiveDoubleMesh();

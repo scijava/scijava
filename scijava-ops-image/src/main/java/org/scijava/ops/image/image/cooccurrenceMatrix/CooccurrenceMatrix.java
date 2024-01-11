@@ -31,6 +31,7 @@ package org.scijava.ops.image.image.cooccurrenceMatrix;
 import java.util.function.Function;
 
 import org.scijava.function.Functions;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 import net.imglib2.RandomAccessibleInterval;
@@ -47,7 +48,7 @@ import net.imglib2.util.Pair;
  *@implNote op names='image.cooccurrenceMatrix'
  */
 public class CooccurrenceMatrix<T extends RealType<T>>
-		implements Functions.Arity4<RandomAccessibleInterval<T>, Integer, Integer, MatrixOrientation, double[][]> {
+		implements Functions.Arity4<RandomAccessibleInterval<T>, MatrixOrientation, Integer, Integer, double[][]> {
 
 	@OpDependency(name = "stats.minMax")
 	private Function<RandomAccessibleInterval<T>, Pair<T, T>> minmax;
@@ -63,8 +64,27 @@ public class CooccurrenceMatrix<T extends RealType<T>>
 	 * @return the co-occurence matrix
 	 */
 	@Override
-	public double[][] apply(RandomAccessibleInterval<T> input, Integer nrGreyLevels, Integer distance,
-			MatrixOrientation orientation) {
+	public double[][] apply( //
+			RandomAccessibleInterval<T> input, //
+			MatrixOrientation orientation,  //
+			@Nullable Integer nrGreyLevels, //
+			@Nullable Integer distance //
+	) {
+		// nrGreyLevels validation
+		if (nrGreyLevels == null) {
+			nrGreyLevels = 32;
+		}
+		if (nrGreyLevels < 0 || nrGreyLevels > 128) {
+			throw new IllegalArgumentException("nrGreyLevels must be between 0 and 128 (inclusive) but was " + nrGreyLevels);
+		}
+		// distance validation
+		if (distance == null) {
+			distance = 1;
+		}
+		if (distance < 0 || distance > 128) {
+			throw new IllegalArgumentException("distance must be between 0 and 128 (inclusive) but was " + distance);
+		}
+
 		if (input.numDimensions() == 3 && orientation.isCompatible(3)) {
 			return CooccurrenceMatrix3D.apply(input, nrGreyLevels, distance, minmax, orientation);
 		} else if (input.numDimensions() == 2 && orientation.isCompatible(2)) {

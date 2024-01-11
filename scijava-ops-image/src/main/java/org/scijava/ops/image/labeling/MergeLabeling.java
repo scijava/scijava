@@ -47,6 +47,7 @@ import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 /**
@@ -75,8 +76,11 @@ public class MergeLabeling<L, I extends IntegerType<I>, B extends BooleanType<B>
 	 * @param combinedLabeling
 	 */
 	@Override
-	public ImgLabeling<L, I> apply(final ImgLabeling<L, I> input1, final ImgLabeling<L, I> input2,
-			final RandomAccessibleInterval<B> mask) {
+	public ImgLabeling<L, I> apply( //
+			final ImgLabeling<L, I> input1, //
+			final ImgLabeling<L, I> input2, //
+			@Nullable  final RandomAccessibleInterval<B> mask //
+	) {
 		final ImgLabeling<L, I> output = imgLabelingCreator.apply(input1,
 				Views.iterable(input1.getSource()).firstElement());
 		if (mask != null) {
@@ -109,27 +113,4 @@ public class MergeLabeling<L, I extends IntegerType<I>, B extends BooleanType<B>
 
 		return output;
 	}
-}
-
-/**
- *@implNote op names='labeling.merge'
- */
-class MergeLabelingMaskless<L, I extends IntegerType<I>, B extends BooleanType<B>>
-		implements BiFunction<ImgLabeling<L, I>, ImgLabeling<L, I>, ImgLabeling<L, I>> {
-
-	@OpDependency(name = "labeling.merge")
-	private Functions.Arity3<ImgLabeling<L, I>, ImgLabeling<L, I>, RandomAccessibleInterval<B>, ImgLabeling<L, I>> mergeOp;
-
-	/**
-	 * TODO
-	 *
-	 * @param labeling1 the first {@link ImgLabeling}
-	 * @param labeling2 the second {@link ImgLabeling}
-	 * @return the merged {@link ImgLabeling}
-	 */
-	@Override
-	public ImgLabeling<L, I> apply(ImgLabeling<L, I> labeling1, ImgLabeling<L, I> labeling2) {
-		return mergeOp.apply(labeling1, labeling2, null);
-	}
-
 }

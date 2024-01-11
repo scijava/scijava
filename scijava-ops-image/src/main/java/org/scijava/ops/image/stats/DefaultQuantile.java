@@ -64,6 +64,11 @@ implements Computers.Arity2<Iterable<I>, Double, O>
 	public void compute(final Iterable<I> input, final Double quantile,
 		final O output)
 	{
+		if (quantile < 0 || quantile > 1) {
+			throw new IllegalArgumentException(
+					"Quantile must be between 0 and 1 (inclusive) but is " + quantile);
+		}
+
 		final ArrayList<Double> statistics = new ArrayList<>();
 
 		final Iterator<I> it = input.iterator();

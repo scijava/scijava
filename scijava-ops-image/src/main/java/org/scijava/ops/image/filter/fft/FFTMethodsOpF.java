@@ -38,6 +38,7 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 /**
@@ -51,7 +52,7 @@ import org.scijava.ops.spi.OpDependency;
  * @implNote op names='filter.fft', priority='100.'
  */
 public class FFTMethodsOpF<T extends RealType<T>, C extends ComplexType<C>> implements
-		Functions.Arity4<RandomAccessibleInterval<T>, long[], Boolean, C, RandomAccessibleInterval<C>> {
+		Functions.Arity4<RandomAccessibleInterval<T>, C, long[], Boolean, RandomAccessibleInterval<C>> {
 
 	@OpDependency(name = "filter.padInputFFTMethods")
 	private Functions.Arity4<RandomAccessibleInterval<T>, Dimensions, Boolean, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> padOp;
@@ -73,14 +74,22 @@ public class FFTMethodsOpF<T extends RealType<T>, C extends ComplexType<C>> impl
 	 * TODO
 	 *
 	 * @param input
+	 * @param fftType the complex type of the output
 	 * @param borderSize the size of border to apply in each dimension
 	 * @param fast whether to perform a fast FFT; default true
-	 * @param fftType the complex type of the output
 	 * @return the output
 	 */
 	@Override
-	public RandomAccessibleInterval<C> apply(final RandomAccessibleInterval<T> input, final long[] borderSize,
-			final Boolean fast, final C fftType) {
+	public RandomAccessibleInterval<C> apply( //
+			final RandomAccessibleInterval<T> input, //
+			final C fftType, //
+			@Nullable long[] borderSize, //
+			@Nullable Boolean fast //
+	) {
+
+		if (fast == null) {
+			fast = true;
+		}
 		// calculate the padded size
 		long[] paddedSize = new long[input.numDimensions()];
 

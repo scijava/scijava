@@ -77,7 +77,7 @@ public class FFTTest extends AbstractOpTest {
 			final Img<FloatType> inverse = TestImgGeneration.floatArray(false, dimensions);
 
 			final RandomAccessibleInterval<ComplexFloatType> out = ops.op("filter.fft")
-					.arity4().input(in, null, true, new ComplexFloatType())
+					.arity2().input(in, new ComplexFloatType())
 					.outType(new Nil<RandomAccessibleInterval<ComplexFloatType>>() {}).apply();
 			ops.op("filter.ifft").arity1().input(out).output(inverse).compute();
 
@@ -124,19 +124,19 @@ public class FFTTest extends AbstractOpTest {
 			// parameter we have to pass null for the
 			// output parameter).
 			final RandomAccessibleInterval<ComplexFloatType> fft1 = ops.op("filter.fft")
-					.arity4().input(inOriginal, null, false, new ComplexFloatType())
+					.arity4().input(inOriginal, new ComplexFloatType(), null, false)
 					.outType(new Nil<RandomAccessibleInterval<ComplexFloatType>>() {}).apply();
 
 			// call FFT passing true for "fast" The FFT op will pad the input to the
 			// fast
 			// size.
 			final RandomAccessibleInterval<ComplexFloatType> fft2 = ops.op("filter.fft")
-					.arity4().input(inOriginal, null, true, new ComplexFloatType())
+					.arity2().input(inOriginal, new ComplexFloatType())
 					.outType(new Nil<RandomAccessibleInterval<ComplexFloatType>>() {}).apply();
 
 			// call fft using the img that was created with the fast size
 			final RandomAccessibleInterval<ComplexFloatType> fft3 = ops.op("filter.fft")
-					.arity4().input(inFast, null, true, new ComplexFloatType())
+					.arity2().input(inFast, new ComplexFloatType())
 					.outType(new Nil<RandomAccessibleInterval<ComplexFloatType>>() {}).apply();
 
 			// create an image to be used for the inverse, using the original

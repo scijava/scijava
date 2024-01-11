@@ -43,6 +43,7 @@ import net.imglib2.type.BooleanType;
 import net.imglib2.type.Type;
 import net.imglib2.util.Util;
 import net.imglib2.view.Views;
+import org.scijava.ops.spi.Nullable;
 
 /**
  * Generic implementation of {@code geom.contour}.
@@ -186,7 +187,11 @@ public class DefaultContour<B extends BooleanType<B>>
 	 * @return the contour
 	 */
 	@Override
-	public Polygon2D apply(final RandomAccessibleInterval<B> input, final Boolean useJacobs) {
+	public Polygon2D apply(final RandomAccessibleInterval<B> input, @Nullable Boolean useJacobs) {
+
+		if (useJacobs == null) {
+			useJacobs = true;
+		}
 
 		// ensure validity of inputs
 		if (2 != input.numDimensions())

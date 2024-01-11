@@ -33,6 +33,7 @@ import java.util.Map;
 
 import org.scijava.function.Functions;
 import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
 
@@ -49,7 +50,7 @@ import org.scijava.ops.spi.OpClass;
  */
 @OpClass(names = "eval")
 public class DefaultEval implements
-	Functions.Arity3<String, Map<String, Object>, OpEnvironment, Object>, Op
+	Functions.Arity3<String, OpEnvironment, Map<String, ?>, Object>, Op
 {
 
 	/**
@@ -61,9 +62,11 @@ public class DefaultEval implements
 	 * @return the output
 	 */
 	@Override
-	public Object apply(final String input, final Map<String, Object> vars,
-		final OpEnvironment ops)
-	{
+	public Object apply( //
+		final String input, //
+		final OpEnvironment ops, //
+		@Nullable final Map<String, ?> vars //
+	) {
 		OpEvaluator e = new OpEvaluator(ops);
 		if (vars != null) e.setAll(vars);
 		return e.evaluate(input);

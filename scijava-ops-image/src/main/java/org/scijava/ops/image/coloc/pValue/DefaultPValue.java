@@ -38,6 +38,7 @@ import java.util.stream.IntStream;
 
 import org.scijava.concurrent.Parallelization;
 import org.scijava.function.Computers;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 import org.scijava.ops.image.coloc.ShuffledView;
@@ -69,15 +70,29 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> impleme
 	 * @param image2 the second image
 	 * @param op the op
 	 * @param nrRandomizations the number of randomizations
-	 * @param psfSize the psf size
+	 * @param psfSize Size of blocks for random shufflings.
 	 * @param seed the seed
 	 * @param output the output
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<T> image1, final RandomAccessibleInterval<U> image2,
-			final BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> op,
-			final Integer nrRandomizations, final Dimensions psfSize, final Long seed,
-			final PValueResult output) {
+	public void compute( //
+			final RandomAccessibleInterval<T> image1, //
+			final RandomAccessibleInterval<U> image2, //
+			final BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> op, //
+			@Nullable Integer nrRandomizations, //
+			@Nullable Dimensions psfSize, //
+			@Nullable Long seed, //
+			final PValueResult output //
+	) {
+		// Check nullable arguments
+		if (nrRandomizations == null) {
+			nrRandomizations = 100;
+		}
+		// NB psfSize null-check is in blockSize method
+		if (seed == null) {
+			seed = 0x27372034L;
+		}
+
 		final int[] blockSize = blockSize(image1, psfSize);
 		final RandomAccessibleInterval<T> trimmedImage1 = trim(image1, blockSize);
 		final RandomAccessibleInterval<U> trimmedImage2 = trim(image2, blockSize);
@@ -101,15 +116,17 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> impleme
 		List<Integer> params = IntStream.rangeClosed(0, numTasks - 1) //
 		 .boxed().collect(Collectors.toList());
 
+		// NB final variable needed for use in lambda
+		final Integer nr = nrRandomizations;
 		Consumer<Integer> task = (t) -> {
-			int offset = t * nrRandomizations / numTasks;
-			int count = (t + 1) * nrRandomizations / numTasks - offset;
+			int offset = t * nr / numTasks;
+			int count = (t + 1) * nr / numTasks - offset;
 			// a new one per thread and each needs its own seed
 			final ShuffledView<T> shuffled = new ShuffledView<>(trimmedImage1, blockSize, seeds[offset]);
 			Img<T> buffer = Util.getSuitableImgFactory(shuffled, type1).create(shuffled);
 			for (int i = 0; i < count; i++) {
 				int index = offset + i;
-				if (index >= nrRandomizations)
+				if (index >= nr)
 					break;
 				if (i > 0)
 					shuffled.shuffleBlocks(seeds[index]);
@@ -180,58 +197,4 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> impleme
 		}
 		return Views.interval(image, min, max);
 	}
-}
-
-/**
- *@implNote op names='coloc.pValue'
- */
-class PValueSimpleWithRandomizations<T extends RealType<T>, U extends RealType<U>> implements
-		Computers.Arity4<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double>, Integer, PValueResult> {
-
-	@OpDependency(name = "coloc.pValue")
-	private Computers.Arity6<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double>, Integer, Dimensions, Long, PValueResult> pValueOp;
-
-	/**
-	 * TODO
-	 *
-	 * @param image1 the first image
-	 * @param image2 the second image
-	 * @param op the op
-	 * @param nrRandomizations the number of randomizations
-	 * @param output the result
-	 */
-	@Override
-	public void compute(RandomAccessibleInterval<T> image1, RandomAccessibleInterval<U> image2,
-			BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> op, Integer nrRandomizations, PValueResult output) {
-		Long defaultSeed = 0x27372034L;
-		pValueOp.compute(image1, image2, op, nrRandomizations, null, defaultSeed, output);
-	}
-
-}
-
-/**
- *@implNote op names='coloc.pValue'
- */
-class PValueSimple<T extends RealType<T>, U extends RealType<U>> implements
-		Computers.Arity3<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double>, PValueResult> {
-
-	@OpDependency(name = "coloc.pValue")
-	private Computers.Arity4<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double>, Integer, PValueResult> pValueOp;
-
-	/**
-	 * TODO
-	 *
-	 * @param image1 the first image
-	 * @param image2 the second image
-	 * @param op the op
-	 * @param output the result
-	 */
-	@Override
-	public void compute(RandomAccessibleInterval<T> image1, RandomAccessibleInterval<U> image2,
-			BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> op,
-			PValueResult output) {
-		Integer defaultNumberRandomizations = 100;
-		pValueOp.compute(image1, image2, op, defaultNumberRandomizations, output);
-	}
-
 }

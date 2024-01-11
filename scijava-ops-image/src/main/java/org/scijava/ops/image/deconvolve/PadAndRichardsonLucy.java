@@ -61,7 +61,7 @@ import org.scijava.ops.spi.OpDependency;
  * @param <C>
  * @implNote op names='deconvolve.richardsonLucy', priority='100.'
  */
-public class RichardsonLucyF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
+public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
 		implements
 		Functions.Arity10<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, O, C, Integer, Boolean, Boolean, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, RandomAccessibleInterval<O>> {
 
@@ -196,7 +196,7 @@ public class RichardsonLucyF<I extends RealType<I> & NativeType<I>, O extends Re
 	@Override
 	public RandomAccessibleInterval<O> apply(RandomAccessibleInterval<I> input, RandomAccessibleInterval<K> kernel,
 			O outType, C complexType, Integer maxIterations,
-			Boolean nonCirculant, Boolean accelerate,
+			@Nullable Boolean nonCirculant, @Nullable Boolean accelerate,
 			@Nullable long[] borderSize,
 			@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,
 			@Nullable OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel)
@@ -204,7 +204,16 @@ public class RichardsonLucyF<I extends RealType<I> & NativeType<I>, O extends Re
 		if (obfInput == null)
 			obfInput = new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(input).createVariable());
 
-		this.nonCirculant = nonCirculant;
+		if (nonCirculant == null) {
+			this.nonCirculant = false;
+		}
+		else {
+			this.nonCirculant = nonCirculant;
+		}
+
+		if (accelerate == null) {
+			accelerate = false;
+		}
 		this.maxIterations = maxIterations;
 
 		RandomAccessibleInterval<O> output = outputCreator.apply(input, outType);

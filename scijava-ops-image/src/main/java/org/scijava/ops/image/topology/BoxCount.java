@@ -47,6 +47,7 @@ import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Functions;
+import org.scijava.ops.spi.Nullable;
 
 /**
  * An N-dimensional box counting that can be used to estimate the fractal
@@ -103,11 +104,15 @@ public final class BoxCount {
 	 * @return A list of (log(foreground count), -log(section size))
 	 *         {@link ValuePair} objects for curve fitting
 	 */
-	public static <B extends BooleanType<B>>
-		List<ValuePair<DoubleType, DoubleType>> apply(
-			final RandomAccessibleInterval<B> input, final Long maxSize,
-			final Long minSize, final Double scaling, final Long gridMoves)
-	{
+	public static <B extends BooleanType<B>> //
+		List<ValuePair<DoubleType, DoubleType>> apply( //
+			final RandomAccessibleInterval<B> input, //
+			final Long maxSize, //
+			final Long minSize, //
+			final Double scaling, //
+			final Long gridMoves //
+	) {
+
 		if (scaling <= 1.0) {
 			throw new IllegalArgumentException(
 				"Scaling must be > 1.0 or algorithm won't stop.");
@@ -344,10 +349,25 @@ class DefaultBoxCount<B extends BooleanType<B>> implements
 	 * @return the output
 	 */
 	@Override
-	public List<ValuePair<DoubleType, DoubleType>> apply(
-		RandomAccessibleInterval<B> input, Long maxSize, Long minSize,
-		Double scaling, Long gridMoves)
-	{
+	public List<ValuePair<DoubleType, DoubleType>> apply( //
+		final RandomAccessibleInterval<B> input, //
+		@Nullable Long maxSize, //
+		@Nullable Long minSize, //
+		@Nullable Double scaling, //
+		@Nullable Long gridMoves //
+	) {
+		if (maxSize == null) {
+			maxSize = 48L;
+		}
+		if (minSize == null) {
+			minSize = 5L;
+		}
+		if (scaling == null) {
+			scaling = 1.2;
+		}
+		if (gridMoves == null) {
+			gridMoves = 0L;
+		}
 		return BoxCount.apply(input, maxSize, minSize, scaling, gridMoves);
 	}
 

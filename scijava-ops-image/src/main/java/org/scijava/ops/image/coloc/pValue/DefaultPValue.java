@@ -75,14 +75,20 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> impleme
 	 * @param output the output
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<T> image1, final RandomAccessibleInterval<U> image2,
-			final BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> op,
-			@Nullable Integer nrRandomizations, @Nullable Dimensions psfSize, @Nullable Long seed,
-			final PValueResult output) {
+	public void compute( //
+			final RandomAccessibleInterval<T> image1, //
+			final RandomAccessibleInterval<U> image2, //
+			final BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> op, //
+			@Nullable Integer nrRandomizations, //
+			@Nullable Dimensions psfSize, //
+			@Nullable Long seed, //
+			final PValueResult output //
+	) {
 		// Check nullable arguments
 		if (nrRandomizations == null) {
 			nrRandomizations = 100;
 		}
+		// NB psfSize null-check is in blockSize method
 		if (seed == null) {
 			seed = 0x27372034L;
 		}
@@ -110,6 +116,7 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> impleme
 		List<Integer> params = IntStream.rangeClosed(0, numTasks - 1) //
 		 .boxed().collect(Collectors.toList());
 
+		// NB final variable needed for use in lambda
 		final Integer nr = nrRandomizations;
 		Consumer<Integer> task = (t) -> {
 			int offset = t * nr / numTasks;

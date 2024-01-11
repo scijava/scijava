@@ -79,10 +79,10 @@ public class NoiseAdders {
 			seed = defaultSeed;
 		}
 		Random rng = new Random(seed);
-		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel((in,
-				out) -> {
-			addNoise(in, out, rangeMin, rangeMax, rangeStdDev, rng);
-		});
+		LoopBuilder.setImages(input, output).multiThreaded() //
+				.forEachPixel((in, out) -> {
+					addNoise(in, out, rangeMin, rangeMax, rangeStdDev, rng);
+				});
 	};
 
 	// Copied from the previous implementation of addNoise
@@ -143,10 +143,10 @@ public class NoiseAdders {
 			seed = defaultSeed;
 		}
 		Random rng = new Random(seed);
-		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel((in,
-				out) -> {
-			addPoissonNoise(in, rng, out);
-		});
+		LoopBuilder.setImages(input, output).multiThreaded() //
+				.forEachPixel((in, out) -> {
+					addPoissonNoise(in, rng, out);
+				});
 	}
 
 	// -- Static utility methods --

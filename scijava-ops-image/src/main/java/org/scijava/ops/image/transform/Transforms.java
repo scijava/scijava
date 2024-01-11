@@ -294,7 +294,7 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	 * @input min
 	 * @input max
 	 * @output result
-	 * @implNote op names='transform.intervalView'
+	 * @implNote op names='transform.intervalView, transform.crop'
 	 */
 	public final Functions.Arity3<RandomAccessible<T>, long[], long[], IntervalView<T>> intervalMinMax = Views::interval;
 
@@ -302,7 +302,7 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	 * @input input
 	 * @input interval
 	 * @output result
-	 * @implNote op names='transform.intervalView'
+	 * @implNote op names='transform.intervalView, transform.crop'
 	 */
 	public final BiFunction<RandomAccessible<T>, Interval, IntervalView<T>> intervalWithInterval = Views::interval;
 

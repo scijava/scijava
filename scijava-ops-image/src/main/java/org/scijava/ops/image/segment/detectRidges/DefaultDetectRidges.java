@@ -48,6 +48,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 /**
@@ -58,24 +59,6 @@ import org.scijava.ops.spi.OpDependency;
  */
 public class DefaultDetectRidges<T extends RealType<T>> implements
 		Functions.Arity5<RandomAccessibleInterval<T>, Double, Double, Double, Integer, List<DefaultWritablePolyline>> {
-
-	/**
-	 * The diameter of the lines to search for.
-	 */
-	double width;
-
-	/**
-	 * The threshold for which the gradient of a subsequent line point must be
-	 * above.
-	 */
-	double lowerThreshold;
-
-	/**
-	 * The threshold for which the gradient of a initial line point must be above.
-	 */
-	double higherThreshold;
-
-	int ridgeLengthMin;
 
 	/**
 	 * The threshold for angle differences between the eigenvectors of two different
@@ -125,7 +108,7 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 	 */
 	private void getNextPoint(RandomAccess<DoubleType> gradientRA, RandomAccess<DoubleType> pRA,
 			RandomAccess<DoubleType> nRA, List<RealPoint> points, int octant, double lastnx, double lastny,
-			double lastpx, double lastpy) {
+			double lastpx, double lastpy, Double lowerThreshold) {
 		Point currentPos = new Point(gradientRA);
 		// variables for the best line point of the three.
 		Point salientPoint = new Point(gradientRA);
@@ -215,7 +198,7 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 
 			// perform the operation again on the new end of the line being formed.
 			getNextPoint(gradientRA, pRA, nRA, points, RidgeDetectionUtils.getOctant(salientnx, salientny), salientnx,
-					salientny, salientpx, salientpy);
+					salientny, salientpx, salientpy, lowerThreshold);
 		}
 	}
 
@@ -223,20 +206,28 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 	 * TODO
 	 *
 	 * @param input
-	 * @param width
-	 * @param lowerThreshold
-	 * @param higherThreshold
-	 * @param ridgeLengthMin
+	 * @param width The diameter of the lines to search for.
+	 * @param lowerThreshold The threshold for which the gradient of a subsequent line point must be above.
+	 * @param higherThreshold The threshold for which the gradient of a initial line point must be above.
+	 * @param ridgeLengthMin The minimum number of connected line points necessary to define a ridge. Can be used to remove small noisy ridges.
 	 * @return the {@link List} of ridges
 	 */
 	@Override
-	public List<DefaultWritablePolyline> apply(final RandomAccessibleInterval<T> input, final Double width,
-			final Double lowerThreshold, final Double higherThreshold, final Integer ridgeLengthMin) {
+	public List<DefaultWritablePolyline> apply(
+			final RandomAccessibleInterval<T> input,
+			final Double width,
+			final Double lowerThreshold,
+			final Double higherThreshold,
+			@Nullable Integer ridgeLengthMin
+	) {
+		if (ridgeLengthMin == null) {
+			ridgeLengthMin = 1;
+		}
 
-		this.width = width;
-		this.lowerThreshold = lowerThreshold;
-		this.higherThreshold = higherThreshold;
-		this.ridgeLengthMin = ridgeLengthMin;
+//		this.width = width;
+//		this.lowerThreshold = lowerThreshold;
+//		this.higherThreshold = higherThreshold;
+//		this.ridgeLengthMin = ridgeLengthMin;
 
 		// ensure validity of inputs
 		if (input.numDimensions() != 2)
@@ -294,7 +285,7 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 
 			// go in the direction to the left of the perpendicular value
 			getNextPoint(gradientRA, pRA, nRA, points, RidgeDetectionUtils.getOctant(eigenx, eigeny), eigenx, eigeny,
-					px, py);
+					px, py, lowerThreshold);
 
 			// flip the array list around so that we get one cohesive line
 			gradientRA.setPosition(new long[] { eigenvectorPos[0], eigenvectorPos[1] });
@@ -304,7 +295,7 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 			eigenx = -eigenx;
 			eigeny = -eigeny;
 			getNextPoint(gradientRA, pRA, nRA, points, RidgeDetectionUtils.getOctant(eigenx, eigeny), eigenx, eigeny,
-					px, py);
+					px, py, lowerThreshold);
 
 			// set the value to 0 so that it is not reused.
 			gradientRA.get().setReal(0);

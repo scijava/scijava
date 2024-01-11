@@ -33,6 +33,7 @@ import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
 
 import org.scijava.function.Computers;
+import org.scijava.ops.spi.Nullable;
 
 /**
  * {@link SliceOp} implementation for {@link RandomAccessibleInterval} input and
@@ -60,9 +61,17 @@ public class SliceRAI2RAI<I, O> implements
 	 * @param output
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<I> input,
-			final Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> op, final int[] axisIndices,
-			final Boolean dropSingleDimensions, final RandomAccessibleInterval<O> output) {
+	public void compute( //
+			final RandomAccessibleInterval<I> input, //
+			final Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> op, //
+			final int[] axisIndices, //
+			@Nullable Boolean dropSingleDimensions, //
+			final RandomAccessibleInterval<O> output //
+	) {
+		if (dropSingleDimensions == null) {
+			dropSingleDimensions = true;
+		}
+
 		SlicesII<I> slicedInput = new SlicesII<>(input, axisIndices, dropSingleDimensions);
 		SlicesII<O> slicedOutput = new SlicesII<>(output, axisIndices, dropSingleDimensions);
 		

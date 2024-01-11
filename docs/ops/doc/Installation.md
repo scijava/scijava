@@ -2,9 +2,7 @@
 
 ## Fiji
 
-### Ensure Java 11 is being used
-
-`sudo update-java-alternatives` is likely the best 
+One easy way to use SciJava Ops is within ImageJ2/Fiji, using SciJava's Script Editor. **Note that to use ImageJ2/Fiji, you must use Java 11+. Instructions on using Java 11+ for ImageJ2/Fiji can be found [here](https://imagej.net/learn/faq#how-do-i-launch-imagej-with-a-different-version-of-java)**.
 
 ### Installing the SciJava Ops update site
 
@@ -12,19 +10,8 @@ You can install the SciJava Ops update site (containing ImageJ Ops2, SciJava Ops
 
 1. With Fiji open, navigate to `Help --> Update...`
 2. Click `Manage Update Sites` 
-3. Click `Add Unlisted Site`
-4. In the URL field, enter `https://sites.imagej.net/scijava-ops`
-5. (Optional) in the Name field, enter `SciJava Ops`
-6. Click `Apply and Close`. You should see many items appear in the `ImageJ Updater` table.
-7. Click `Apply Changes`
-8. Click the close button of Fiji, or navigate to `File --> Quit`, to close Fiji.
-
-### Launching Fiji
-
-Ideally, until Fiji starts shipping Java 11, we'd follow [these instructions](https://forum.image.sc/t/run-fiji-or-imagej-headless-mode-with-java-11/73989/4). Unfortunately, we don't have access to the full classpath with this method, breaking the Therapi Op discovery mechanism. The following line of code DOES work, however:
-
-```bash
-export FIJI_HOME=~/Applications/Fiji.app; /usr/bin/java -cp "$FIJI_HOME/jars/*:$FIJI_HOME/jars/bio-formats/*:$FIJI_HOME/plugins/*" sc.fiji.Main
-```
-
-
+3. In the `Search` bar at the top of the popup, search `SciJava Ops`
+4. Find the `SciJava Ops` row, and check the checkbox in the `Active` column.
+5. Click `Apply and Close`. You should see many items appear in the `ImageJ Updater` table.
+6. Click `Apply Changes`
+7. Restart Fiji

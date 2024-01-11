@@ -35,6 +35,7 @@ import java.util.function.BiFunction;
 
 import org.scijava.concurrent.Parallelization;
 import org.scijava.function.Functions;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 import net.imglib2.Dimensions;
@@ -69,41 +70,19 @@ public class DefaultCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> i
 	 * @param labeling
 	 */
 	@Override
-	public ImgLabeling<Integer, IntType> apply(final RandomAccessibleInterval<T> input,
-			StructuringElement se, Iterator<Integer> labelGenerator) {
+	public ImgLabeling<Integer, IntType> apply( //
+			final RandomAccessibleInterval<T> input, //
+			final StructuringElement se, //
+			@Nullable Iterator<Integer> labelGenerator //
+	) {
+		if (labelGenerator == null) {
+			labelGenerator = new DefaultLabelIterator();
+		}
 		ImgLabeling<Integer, IntType> output = (ImgLabeling<Integer, IntType>) imgLabelingCreator.apply(input,
 				new IntType());
 		ExecutorService es = Parallelization.getExecutorService();
 		ConnectedComponents.labelAllConnectedComponents(input, output, labelGenerator, se, es);
 		return output;
-	}
-
-}
-
-/**
- *@implNote op names='labeling.cca', priority='1.0'
- */
-class SimpleCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> implements
-		BiFunction<RandomAccessibleInterval<T>, StructuringElement, ImgLabeling<Integer, IntType>> {
-	@OpDependency(name = "labeling.cca")
-	private Functions.Arity3<RandomAccessibleInterval<T>, StructuringElement, Iterator<Integer>, ImgLabeling<Integer, IntType>> labeler;
-
-	@SuppressWarnings("unchecked")
-	/**
-	 * TODO
-	 *
-	 * @param input
-	 * @param executorService
-	 * @param structuringElement
-	 * @param labeling
-	 */
-	@Override
-	public ImgLabeling<Integer, IntType> apply(RandomAccessibleInterval<T> input,
-			StructuringElement structuringElement) {
-		DefaultLabelIterator defaultLabelIterator = new DefaultLabelIterator();
-		// note the case to Iterator<L> is okay because L is a vacuous type parameter,
-		// meaning that any Object can go there.
-		return labeler.apply(input, structuringElement, defaultLabelIterator);
 	}
 
 }

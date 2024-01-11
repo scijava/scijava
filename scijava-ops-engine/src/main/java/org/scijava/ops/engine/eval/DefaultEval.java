@@ -50,7 +50,7 @@ import org.scijava.ops.spi.OpClass;
  */
 @OpClass(names = "eval")
 public class DefaultEval implements
-	Functions.Arity3<String, Map<String, Object>, OpEnvironment, Object>, Op
+	Functions.Arity3<String, OpEnvironment, Map<String, ?>, Object>, Op
 {
 
 	/**
@@ -64,9 +64,9 @@ public class DefaultEval implements
 	@Override
 	public Object apply( //
 		final String input, //
-		@Nullable final Map<String, Object> vars, //
-		final OpEnvironment ops) //
-	{
+		final OpEnvironment ops, //
+		@Nullable final Map<String, ?> vars //
+	) {
 		OpEvaluator e = new OpEvaluator(ops);
 		if (vars != null) e.setAll(vars);
 		return e.evaluate(input);

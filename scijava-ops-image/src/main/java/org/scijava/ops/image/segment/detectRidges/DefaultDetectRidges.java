@@ -224,11 +224,6 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 			ridgeLengthMin = 1;
 		}
 
-//		this.width = width;
-//		this.lowerThreshold = lowerThreshold;
-//		this.higherThreshold = higherThreshold;
-//		this.ridgeLengthMin = ridgeLengthMin;
-
 		// ensure validity of inputs
 		if (input.numDimensions() != 2)
 			throw new IllegalArgumentException("Input image must be of two dimensions!");

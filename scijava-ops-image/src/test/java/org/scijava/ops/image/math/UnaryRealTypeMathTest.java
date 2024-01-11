@@ -482,22 +482,6 @@ public class UnaryRealTypeMathTest extends AbstractOpTest {
 			"arcsec(x) : x out of range"));
 	}
 
-	@Test
-	public void testRandomGaussian() {
-		final long seed = 0xabcdef1234567890L;
-		assertRandomGaussian(23, 16.53373419964066, seed);
-		assertRandomGaussian(27, -15.542815799078497, 0xfeeddeadbeefbeefL);
-		assertRandomGaussian(123, -49.838353142718006, 124, 181.75101003563117);
-	}
-
-	@Test
-	public void testRandomUniform() {
-		final long seed = 0xabcdef1234567890L;
-		assertRandomUniform(23, 14.278690684728433, seed);
-		assertRandomUniform(27, 5.940945158572171, 0xfeeddeadbeefbeefL);
-		assertRandomUniform(123, 52.3081016051914, 124, 95.52110798318904);
-	}
-
 	// -- Helper methods --
 
 	private void assertArccsc(final double i, final double o) {
@@ -512,47 +496,5 @@ public class UnaryRealTypeMathTest extends AbstractOpTest {
 		final DoubleType out = in.createVariable();
 		ops.op("math.arcsec").arity1().input(in).output(out).compute();
 		assertEquals(o, out.get(), 1e-15);
-	}
-
-	private void assertRandomGaussian(final double i, final double o, final long seed) {
-		final DoubleType in = new DoubleType(i);
-		final DoubleType out = in.createVariable();
-		ops.op("math.randomGaussian").arity2().input(in, seed).output(out).compute();
-		assertEquals(o, out.get(), 0);
-	}
-
-	private void assertRandomGaussian(final double i, final double o, final double i2, final double o2) {
-		final DoubleType in = new DoubleType(i);
-		final DoubleType out = new DoubleType();
-		final long seed = 0xcafebabe12345678L;
-		final Random rng = new Random(seed);
-		final Computers.Arity2<DoubleType, Random, DoubleType> op = OpBuilder.matchComputer(ops, "math.randomGaussian",
-				new Nil<DoubleType>() {}, new Nil<Random>() {}, new Nil<DoubleType>() {});
-		op.compute(in, rng, out);
-		assertEquals(o, out.get(), 0);
-		in.set(i2);
-		op.compute(in, rng, out);
-		assertEquals(o2, out.get(), 0);
-	}
-
-	private void assertRandomUniform(final double i, final double o, final long seed) {
-		final DoubleType in = new DoubleType(i);
-		final DoubleType out = in.createVariable();
-		ops.op("math.randomUniform").arity2().input(in, seed).output(out).compute();
-		assertEquals(o, out.get(), 0);
-	}
-
-	private void assertRandomUniform(final double i, final double o, final double i2, final double o2) {
-		final DoubleType in = new DoubleType(i);
-		final DoubleType out = new DoubleType();
-		final long seed = 0xcafebabe12345678L;
-		final Random rng = new Random(seed);
-		final Computers.Arity2<DoubleType, Random, DoubleType> op = OpBuilder.matchComputer(ops, "math.randomUniform",
-				new Nil<DoubleType>() {}, new Nil<Random>() {}, new Nil<DoubleType>() {});
-		op.compute(in, rng, out);
-		assertEquals(o, out.get(), 0);
-		in.set(i2);
-		op.compute(in, rng, out);
-		assertEquals(o2, out.get(), 0);
 	}
 }

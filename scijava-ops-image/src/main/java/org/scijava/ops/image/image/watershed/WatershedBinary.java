@@ -32,6 +32,7 @@ import java.util.function.BiFunction;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 import net.imglib2.Dimensions;
@@ -105,9 +106,14 @@ public class WatershedBinary<T extends BooleanType<T>, B extends BooleanType<B>>
 	 * @param out
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<T> in, final Boolean useEightConnectivity,
-			final Boolean drawWatersheds, final double[] sigma, final RandomAccessibleInterval<B> mask,
-			final ImgLabeling<Integer, IntType> out) {
+	public void compute( //
+			final RandomAccessibleInterval<T> in, //
+			final Boolean useEightConnectivity, //
+			final Boolean drawWatersheds, //
+			final double[] sigma, //
+			@Nullable RandomAccessibleInterval<B> mask, //
+			final ImgLabeling<Integer, IntType> out //
+	) {
 
 		// make sure that the params conform to the requirements of the op (copied from
 		// the old implementation)
@@ -136,87 +142,3 @@ public class WatershedBinary<T extends BooleanType<T>, B extends BooleanType<B>>
 
 }
 
-/**
- *@implNote op names='image.watershed'
- */
-class WatershedBinaryMaskless<T extends BooleanType<T>, B extends BooleanType<B>> implements
-		Computers.Arity4<RandomAccessibleInterval<T>, Boolean, Boolean, double[], ImgLabeling<Integer, IntType>> {
-
-	@OpDependency(name = "image.watershed")
-	private Computers.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> watershedOp;
-
-	/**
-	 * TODO
-	 *
-	 * @param in
-	 * @param useEightConnectivity
-	 * @param drawWatersheds
-	 * @param sigma
-	 * @param outputLabeling
-	 */
-	@Override
-	public void compute(RandomAccessibleInterval<T> in, Boolean useEightConnectivity, Boolean drawWatersheds,
-			double[] sigma, ImgLabeling<Integer, IntType> outputLabeling) {
-		watershedOp.compute(in, useEightConnectivity, drawWatersheds, sigma, null, outputLabeling);
-
-	}
-}
-
-/**
- *@implNote op names='image.watershed'
- */
-class WatershedBinaryFunction<T extends BooleanType<T>, B extends BooleanType<B>> implements
-		Functions.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> {
-
-	@OpDependency(name = "image.watershed")
-	private Computers.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> watershedOp;
-	@OpDependency(name = "create.imgLabeling")
-	private BiFunction<Dimensions, IntType, ImgLabeling<Integer, IntType>> labelingCreator;
-
-	/**
-	 * TODO
-	 *
-	 * @param in
-	 * @param useEightConnectivity
-	 * @param drawWatersheds
-	 * @param sigma
-	 * @param mask
-	 * @return the outputLabeling
-	 */
-	@Override
-	public ImgLabeling<Integer, IntType> apply(RandomAccessibleInterval<T> in, Boolean useEightConnectivity,
-			Boolean drawWatersheds, double[] sigma, RandomAccessibleInterval<B> mask) {
-		ImgLabeling<Integer, IntType> outputLabeling = labelingCreator.apply(in, new IntType());
-		watershedOp.compute(in, useEightConnectivity, drawWatersheds, sigma, mask, outputLabeling);
-		return outputLabeling;
-	}
-}
-
-/**
- *@implNote op names='image.watershed'
- */
-class WatershedBinaryFunctionMaskless<T extends BooleanType<T>, B extends BooleanType<B>>
-		implements Functions.Arity4<RandomAccessibleInterval<T>, Boolean, Boolean, double[], ImgLabeling<Integer, IntType>> {
-
-	@OpDependency(name = "image.watershed")
-	private Computers.Arity4<RandomAccessibleInterval<T>, Boolean, Boolean, double[], ImgLabeling<Integer, IntType>> watershedOp;
-	@OpDependency(name = "create.imgLabeling")
-	private BiFunction<Dimensions, IntType, ImgLabeling<Integer, IntType>> labelingCreator;
-
-	/**
-	 * TODO
-	 *
-	 * @param in
-	 * @param useEightConnectivity
-	 * @param drawWatersheds
-	 * @param sigma
-	 * @return the outputLabeling
-	 */
-	@Override
-	public ImgLabeling<Integer, IntType> apply(RandomAccessibleInterval<T> in, Boolean useEightConnectivity,
-			Boolean drawWatersheds, double[] sigma) {
-		ImgLabeling<Integer, IntType> outputLabeling = labelingCreator.apply(in, new IntType());
-		watershedOp.compute(in, useEightConnectivity, drawWatersheds, sigma, outputLabeling);
-		return outputLabeling;
-	}
-}

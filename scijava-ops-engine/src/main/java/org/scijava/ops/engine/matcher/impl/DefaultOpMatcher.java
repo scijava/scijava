@@ -71,17 +71,24 @@ public class DefaultOpMatcher implements OpMatcher {
 		}
 
 		// in the case of no matches, throw an agglomerated exception
-		throw agglomeratedException(exceptions);
+		throw agglomeratedException(conditions.request(), exceptions, env);
 	}
 
-	private OpMatchingException agglomeratedException(
-		List<OpMatchingException> list)
-	{
-		OpMatchingException agglomerated = new OpMatchingException(
-			"No MatchingRoutine was able to produce a match!");
-		for (int i = 0; i < list.size(); i++) {
-			agglomerated.addSuppressed(list.get(i));
+	private OpMatchingException agglomeratedException( //
+		final OpRequest request, //
+		final List<OpMatchingException> list, //
+		final OpEnvironment env //
+	) {
+		// Develop help message
+		var msg = "No match found!";
+		try {
+			// TODO: Remove try/catch.
+			msg += " Perhaps you meant: \n" + env.help(request);
+		} catch (StackOverflowError e) {
+			// No-op
 		}
+        OpMatchingException agglomerated = new OpMatchingException(msg);
+		list.forEach(agglomerated::addSuppressed);
 		return agglomerated;
 	}
 }

@@ -80,7 +80,7 @@ public class OpMatchingExceptionTest extends AbstractTestEnvironment implements 
 		}
 		catch (OpMatchingException e) {
 			Assertions.assertTrue(e.getMessage().startsWith(
-				"No MatchingRoutine was able to produce a match!"));
+				"No match found!"));
 			Assertions.assertTrue(Arrays.stream(e.getSuppressed()).anyMatch(s -> s
 				.getMessage().startsWith("Multiple 'test.duplicateOp/" +
 					"java.util.function.Function<java.lang.Double, java.lang.Double>' " +

@@ -103,7 +103,7 @@ public class SimplifiedOpDescriptionGenerator implements
 	private String allNamespaces(final OpEnvironment env, final String name) {
 		List<String> namespaces = namespaceStream(env) //
 				// Filter by the predicate name
-				.filter(n -> n.contains(name)) //
+				.filter(n -> n.startsWith(name)) //
 				.collect(Collectors.toList());
 		return "Names:\n\t> " + String.join("\n\t> ", namespaces);
 	}

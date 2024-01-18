@@ -29,8 +29,8 @@
 
 package org.scijava.ops.engine.matcher.simplify;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -55,43 +55,43 @@ public class SimplifiedOpDescriptionGenerator implements
 	@Override
 	public String simpleDescriptions(OpEnvironment env, OpRequest req) {
 		String name = req.getName();
-		if (name == null) {
-			return allNamespaces(env);
-		}
-		if (env.infos(name).isEmpty()) {
-			return allNamespaces(env, name);
-		}
-		var infos = SimplificationMatchingRoutine.getInfos(env, req.getName());
-		var filtered = filterInfos(infos, req);
-		String opString = filtered.stream() //
-				.map(Infos::describeOneLine) //
-				.map(s -> s.replaceAll("\n", "\n\t")) //
-				.distinct() //
-				.collect(Collectors.joining("\n\t- "));
-		if (opString.isEmpty()) return "No Ops found matching this request.";
-		var key = "Key: *=container, ^=mutable";
-		return name + ":\n\t- " + opString + "\n" + key;
+		Optional<String> nsString = getNamespaceString(env, name);
+		if (nsString.isPresent()) return nsString.get();
+		var infos = SimplificationMatchingRoutine.getInfos(env, name);
+		return buildOpString(infos, req, Infos::describeOneLine);
 	}
 
 	@Override
 	public String verboseDescriptions(OpEnvironment env, OpRequest req) {
 		String name = req.getName();
-		if (name == null) {
-			return allNamespaces(env);
-		}
-		if (env.infos(name).isEmpty()) {
-			return allNamespaces(env, name);
-		}
-		var infos = env.infos(req.getName());
+		Optional<String> nsString = getNamespaceString(env, name);
+		if (nsString.isPresent()) return nsString.get();
+		var infos = env.infos(name);
+		return buildOpString(infos, req, Infos::describeMultiLine);
+	}
+
+	private String buildOpString(Collection<OpInfo> infos, OpRequest req,
+			Function<OpInfo, String> descriptionFunction)
+	{
 		var filtered = filterInfos(infos, req);
 		String opString = filtered.stream() //
-				.map(Infos::describeMultiLine) //
+				.map(descriptionFunction) //
 				.map(s -> s.replaceAll("\n", "\n\t")) //
 				.distinct() //
 				.collect(Collectors.joining("\n\t- "));
 		if (opString.isEmpty()) return "No Ops found matching this request.";
 		var key = "Key: *=container, ^=mutable";
-		return name + ":\n\t- " + opString + "\n" + key;
+		return req.getName() + ":\n\t- " + opString + "\n" + key;
+	}
+
+	private Optional<String> getNamespaceString(OpEnvironment env, String name) {
+		if (name == null) {
+			return Optional.of(allNamespaces(env));
+		}
+		if (env.infos(name).isEmpty()) {
+			return Optional.of(allNamespaces(env, name));
+		}
+		return Optional.empty();
 	}
 
 	private String allNamespaces(final OpEnvironment env) {

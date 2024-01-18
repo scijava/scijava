@@ -116,7 +116,7 @@ public class SimplifiedOpDescriptionGenerator implements
 				.distinct() //
 				.sorted() //
 				// Filter out the engine namespace
-				.filter(ns -> !ns.equals("engine"));
+				.filter(ns -> !ns.startsWith("engine"));
 	}
 
 	private List<OpInfo> filterInfos(Iterable<? extends OpInfo> infos, OpRequest req) {

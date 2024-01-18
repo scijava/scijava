@@ -31,8 +31,8 @@ package org.scijava.ops.engine.matcher.simplify;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
@@ -41,7 +41,6 @@ import org.scijava.ops.engine.OpDescriptionGenerator;
 import org.scijava.ops.engine.matcher.reduce.ReducedOpInfo;
 import org.scijava.ops.engine.util.Infos;
 import org.scijava.priority.Priority;
-import org.scijava.struct.Member;
 
 /**
  * An {@link OpDescriptionGenerator} implementation which makes use of
@@ -96,34 +95,28 @@ public class SimplifiedOpDescriptionGenerator implements
 	}
 
 	private String allNamespaces(final OpEnvironment env) {
-		List<String> namespaces = env.infos().stream() //
-				// Get all names from each Op
-				.flatMap(info -> info.names().stream()) //
-				// Map each name to its namespace
-				.map(name -> name.contains(".") ?  name.substring(0, name.indexOf(".")) : name) //
-				// Deduplicate & sort
-				.distinct() //
-				.sorted() //
-				// Filter out the engine namespaces
-				.filter(ns -> !ns.equals("engine")) //
+		List<String> namespaces = namespaceStream(env) //
 				.collect(Collectors.toList());
 		return "Namespaces:\n\t> " + String.join("\n\t> ", namespaces);
 	}
 
 	private String allNamespaces(final OpEnvironment env, final String name) {
-		List<String> namespaces = env.infos().stream() //
+		List<String> namespaces = namespaceStream(env) //
+				// Filter by the predicate name
+				.filter(n -> n.contains(name)) //
+				.collect(Collectors.toList());
+		return "Names:\n\t> " + String.join("\n\t> ", namespaces);
+	}
+
+	private Stream<String> namespaceStream(OpEnvironment env) {
+		return env.infos().stream() //
 				// Get all names from each Op
 				.flatMap(info -> info.names().stream()) //
 				// Deduplicate & sort
 				.distinct() //
 				.sorted() //
 				// Filter out the engine namespace
-				.filter(ns -> !ns.equals("engine")) //
-				// Filter by the predicate name
-				.filter(n -> n.contains(name)) //
-				.collect(Collectors.toList());
-		return "Names:\n\t> " + String.join("\n\t> ", namespaces);
-
+				.filter(ns -> !ns.equals("engine"));
 	}
 
 	private List<OpInfo> filterInfos(Iterable<? extends OpInfo> infos, OpRequest req) {

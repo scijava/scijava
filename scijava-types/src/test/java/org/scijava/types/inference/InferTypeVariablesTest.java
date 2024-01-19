@@ -407,4 +407,5 @@ public class InferTypeVariablesTest {
 		Assertions.assertEquals(expected2, typeAssigns2);
 	}
 
+
 }

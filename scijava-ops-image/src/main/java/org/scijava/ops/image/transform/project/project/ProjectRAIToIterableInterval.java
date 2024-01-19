@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops.image.project;
+package org.scijava.ops.image.transform.project.project;
 
 import java.util.Iterator;
 
@@ -39,7 +39,7 @@ import net.imglib2.RandomAccessibleInterval;
 import org.scijava.function.Computers;
 
 /**
- * @implNote op names='project', priority='-100.'
+ * @implNote op names='transform.project', priority='-100.'
  */
 public class ProjectRAIToIterableInterval<T, V>
 		implements Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<Iterable<T>, V>, Integer, IterableInterval<V>> {

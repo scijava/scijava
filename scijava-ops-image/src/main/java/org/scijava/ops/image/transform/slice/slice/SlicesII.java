@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops.image.slice;
+package org.scijava.ops.image.transform.slice.slice;
 
 import java.util.Iterator;
 

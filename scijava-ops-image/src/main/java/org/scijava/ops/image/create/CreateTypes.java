@@ -52,91 +52,91 @@ public class CreateTypes {
 
 	/**
 	 * @output output
-	 * @implNote op names='create, create.bit'
+	 * @implNote op names='create.bit, create.type, engine.create'
 	 */
 	public final Producer<BitType> bitTypeSource = () -> new BitType();
 
 	/**
 	 * @output output
-	 * @implNote op names='create, create.uint2'
+	 * @implNote op names='create.uint2, create.type, engine.create'
 	 */
 	public final Producer<Unsigned2BitType> uint2TypeSource = () -> new Unsigned2BitType();
 
 	/**
 	 * @output output
-	 * @implNote op names='create, create.uint4'
+	 * @implNote op names='create.uint4, create.type, engine.create'
 	 */
 	public final Producer<Unsigned4BitType> uint4TypeSource = () -> new Unsigned4BitType();
 
 	/**
 	 * @output output
-	 * @implNote op names='create, create.byte'
+	 * @implNote op names='create.byte, create.type, engine.create'
 	 */
 	public final Producer<ByteType> byteTypeSource = () -> new ByteType();
 
 	/**
 	 * @output output
-	 * @implNote op names='create, create.uint8'
+	 * @implNote op names='create.uint8, create.type, engine.create'
 	 */
 	public final Producer<UnsignedByteType> uint8TypeSource = () -> new UnsignedByteType();
 
 	/**
 	 * @output output
-	 * @implNote op names='create, create.uint12'
+	 * @implNote op names='create.uint12, create.type, engine.create'
 	 */
 	public final Producer<Unsigned12BitType> uint12TypeSource = () -> new Unsigned12BitType();
 
 	/**
 	 * @output output
-	 * @implNote op names='create, create.int16'
+	 * @implNote op names='create.int16, create.type, engine.create'
 	 */
 	public final Producer<ShortType> shortTypeSource = () -> new ShortType();
 
 	/**
 	 * @output output
-	 * @implNote op names='create, create.uint16'
+	 * @implNote op names='create.uint16, create.type, engine.create'
 	 */
 	public final Producer<UnsignedShortType> uint16TypeSource = () -> new UnsignedShortType();
 
 	/**
 	 * @output output
-	 * @implNote op names='create, create.int32'
+	 * @implNote op names='create.int32, create.type, engine.create'
 	 */
 	public final Producer<IntType> int32TypeSource = () -> new IntType();
 
 	/**
 	 * @output output
-	 * @implNote op names='create, create.uint32'
+	 * @implNote op names='create.uint32, create.type, engine.create'
 	 */
 	public final Producer<UnsignedIntType> uint32TypeSource = () -> new UnsignedIntType();
 
 	/**
 	 * @output output
-	 * @implNote op names='create, create.int64'
+	 * @implNote op names='create.int64, create.type, engine.create'
 	 */
 	public final Producer<LongType> int64TypeSource = () -> new LongType();
 
 	/**
 	 * @output output
-	 * @implNote op names='create, create.uint64'
+	 * @implNote op names='create.uint64, create.type, engine.create'
 	 */
 	public final Producer<UnsignedLongType> uint64TypeSource = () -> new UnsignedLongType();
 
 	/**
 	 * @output output
-	 * @implNote op names='create, create.uint128'
+	 * @implNote op names='create.uint128, create.type, engine.create'
 	 */
 	public final Producer<Unsigned128BitType> uint128TypeSource = () -> new Unsigned128BitType();
 
 	/**
 	 * @output output
-	 * @implNote op names='create, create.float32'
+	 * @implNote op names='create.float32, create.type, engine.create'
 	 */
 	public final Producer<FloatType> float32TypeSource = () -> new FloatType();
 
 	/**
 	 * @output output
-	 * @implNote op names='create, create.cfloat32'
+	 * @implNote op names='create.cfloat32, create.type, engine.create'
 	 */
 	public final Producer<ComplexFloatType> cfloat32TypeSource = () -> new ComplexFloatType();
 
@@ -144,13 +144,13 @@ public class CreateTypes {
 	 * NB higher priority to match {@code Producer<RealType>} and {@code Producer<NativeType>}
 	 *
 	 * @output output
-	 * @implNote op names='create, create.float64', priority='100.'
+	 * @implNote op names='create.float64, create.type, engine.create', priority='100.'
 	 */
 	public final Producer<DoubleType> float64TypeSource = () -> new DoubleType();
 
 	/**
 	 * @output output
-	 * @implNote op names='create, create.cfloat64'
+	 * @implNote op names='create.cfloat64, create.type, engine.create'
 	 */
 	public final Producer<ComplexDoubleType> cfloat64TypeSource = () -> new ComplexDoubleType();
 

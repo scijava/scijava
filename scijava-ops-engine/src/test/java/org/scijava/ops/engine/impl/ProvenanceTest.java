@@ -360,7 +360,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 	public void testSimplificationRecovery() {
 		// Get the Op
 		Computers.Arity1<ObjectArray<Number>, ObjectArray<Number>> c = ops //
-				.op("test" + ".provenanceComputer") //
+				.op("test.provenanceComputer") //
 				.arity1() //
 				.inType(new Nil<ObjectArray<Number>>() {}) //
 				.outType(new Nil<ObjectArray<Number>>() {}) //

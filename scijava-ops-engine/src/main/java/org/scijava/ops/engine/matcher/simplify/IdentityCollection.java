@@ -31,6 +31,7 @@ package org.scijava.ops.engine.matcher.simplify;
 
 import java.util.function.Function;
 
+import org.scijava.function.Inplaces;
 import org.scijava.ops.engine.BaseOpHints.Simplification;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
@@ -50,7 +51,13 @@ public class IdentityCollection<T> implements OpCollection {
 	 *         simplification, this is just a reference to the input object).
 	 */
 	@OpHints(hints = { Simplification.FORBIDDEN })
-	@OpField(names="engine.simplify, engine.focus, identity", priority=Priority.LAST)
+	@OpField(names="engine.simplify, engine.focus, engine.identity", priority=Priority.LAST)
 	public final Function<T, T> identity = (t) -> t;
 
+	/**
+	 * @mutable t the object to be "mutated"
+	 */
+	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpField(names="engine.identity", priority=Priority.LAST)
+	public final Inplaces.Arity1<T> inplace = (t) -> {};
 }

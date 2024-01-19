@@ -291,8 +291,8 @@ module org.scijava.ops.engine {
 	    org.scijava.ops.engine.math.Zero,
 	    org.scijava.ops.engine.matcher.simplify.PrimitiveArraySimplifiers,
 	    org.scijava.ops.engine.matcher.simplify.PrimitiveSimplifiers,
-	    org.scijava.ops.engine.stats.Mean,
-		org.scijava.ops.engine.stats.Size;
+			org.scijava.ops.engine.stats.Mean,
+			org.scijava.ops.engine.stats.Size;
 
 
 	provides org.scijava.ops.spi.Op with //

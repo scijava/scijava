@@ -32,12 +32,16 @@ package org.scijava.ops.engine.util;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.OpDependencyMember;
-import org.scijava.ops.engine.exceptions.InvalidOpException;
+import org.scijava.ops.engine.exceptions.impl.InvalidOpNameException;
 import org.scijava.ops.engine.exceptions.impl.MultipleOutputsOpException;
 import org.scijava.ops.engine.exceptions.impl.UnnamedOpException;
 import org.scijava.struct.ItemIO;
@@ -98,6 +102,11 @@ public final class Infos {
 		if (Objects.isNull(info.names()) || info.names().isEmpty()) {
 			throw new UnnamedOpException(info.implementationName());
 		}
+		for (var name: info.names()) {
+			if (!name.contains(".")) {
+				throw new InvalidOpNameException(info, name);
+			}
+		}
 	}
 
 	/**
@@ -137,9 +146,20 @@ public final class Infos {
 	 * @return a descriptor for {@code info}
 	 */
 	public static String describe(final OpInfo info) {
-		return describe(info, null);
+		return describe(info, null, null);
 	}
-	
+
+	/**
+	 * Generates a {@link String} describing the given {@link OpInfo}
+	 *
+	 * @param info the {@link OpInfo} of interest
+	 * @param name the name that the Op was searched by
+	 * @return a descriptor for {@code info}
+	 */
+	public static String describe(final OpInfo info, final String name) {
+		return describe(info, name, null);
+	}
+
 	/**
 	 * Generates a verbose {@link String} describing the given {@link OpInfo}
 	 *
@@ -147,7 +167,18 @@ public final class Infos {
 	 * @return a descriptor for {@code info}
 	 */
 	public static String describeVerbose(final OpInfo info) {
-			return describeVerbose(info, null);
+			return describeVerbose(info, null, null);
+	}
+
+	/**
+	 * Generates a verbose {@link String} describing the given {@link OpInfo}
+	 *
+	 * @param info the {@link OpInfo} of interest
+	 * @param name the name that the Op was searched by
+	 * @return a descriptor for {@code info}
+	 */
+	public static String describeVerbose(final OpInfo info, final String name) {
+		return describeVerbose(info, name, null);
 	}
 
 	/**
@@ -159,7 +190,20 @@ public final class Infos {
 	 * @return a descriptor for {@code info}
 	 */
 	public static String describe(final OpInfo info, final Member<?> special) {
-		return description(info, special, false);
+		return describe(info, null, special);
+	}
+
+	/**
+	 * Writes a {@link String} describing the {@link OpInfo} of interest
+	 * <b>with a particular {@link Member} highlighted</b>.
+	 *
+	 * @param info the {@link OpInfo} of interest
+	 * @param name the name that the Op was searched by
+	 * @param special a {@link Member} to highlight
+	 * @return a descriptor for {@code info}
+	 */
+	public static String describe(final OpInfo info, final String name, final Member<?> special) {
+		return description(info, name, special, false);
 	}
 
 	/**
@@ -171,7 +215,20 @@ public final class Infos {
 	 * @return a descriptor for {@code info}
 	 */
 	public static String describeVerbose(final OpInfo info, final Member<?> special) {
-			return description(info, special, true);
+			return describeVerbose(info, null, special);
+	}
+
+	/**
+	 * Writes a verbose {@link String} describing the {@link OpInfo} of interest
+	 * <b>with a particular {@link Member} highlighted</b>.
+	 *
+	 * @param info the {@link OpInfo} of interest
+	 * @param name the name that the Op was searched by
+	 * @param special a {@link Member} to highlight
+	 * @return a descriptor for {@code info}
+	 */
+	public static String describeVerbose(final OpInfo info, final String name, final Member<?> special) {
+		return description(info, name, special, true);
 	}
 
 	/**
@@ -182,31 +239,129 @@ public final class Infos {
 	 * @param verbose iff {@code true}, returns a verbose description
 	 * @return a description of {@code info}
 	 */
-	private static String description(final OpInfo info, final Member<?> special,
+	private static String description(final OpInfo info, final String name, final Member<?> special,
 		boolean verbose)
 	{
 		final StringBuilder sb = new StringBuilder();
-		final List<String> names = info.names();
-		sb.append(names.get(0)).append("(\n\t Inputs:\n");
-		List<Member<?>> containers = new ArrayList<>();
-		for (final Member<?> arg : info.inputs()) {
-			if (arg.getIOType() == ItemIO.INPUT) appendParam(sb, arg, special,
-				verbose);
-			else containers.add(arg);
+		// Step 1: Name
+		if (name != null) {
+			if (!info.names().contains(name)) {
+				throw new IllegalArgumentException("OpInfo " + info.implementationName() + " has no name " + name);
+			}
+			sb.append(name);
 		}
+		else {
+			sb.append(info.names().get(0));
+		}
+		sb.append("(\n");
+		// Step 2: Inputs
+		List<Member<?>> members = info.inputs();
+		List<Member<?>> containers = new ArrayList<>();
+		if (!members.isEmpty()) {
+			sb.append("\t Inputs:\n");
+			for (final Member<?> arg : info.inputs()) {
+				if (arg.getIOType() == ItemIO.INPUT)
+					appendParam(sb, arg, special, verbose);
+				else containers.add(arg);
+			}
+		}
+		// Step 3: Output
 		if (containers.isEmpty()) {
-			sb.append("\t Outputs:\n");
+			sb.append("\t Output:\n");
 			appendParam(sb, info.output(), special, verbose);
 		}
 		else {
-			sb.append("\t Containers (I/O):\n");
+			sb.append("\t Container (I/O):\n");
 			containers.forEach(c -> appendParam(sb, c, special, verbose));
 		}
 		sb.append(")\n");
-		if (names.size() > 1) {
-			sb.append("Aliases: [");
-			sb.append(String.join(", ", names.subList(1, names.size())));
-			sb.append("]\n");
+		return sb.toString();
+	}
+
+	public static String describeMultiLine(final OpInfo info) {
+		final StringBuilder sb = new StringBuilder(info.implementationName());
+		// Step 2: Inputs
+		String key;
+		for (var member: info.inputs()) {
+			sb.append("\n\t");
+			switch (member.getIOType()) {
+				case INPUT:
+					key = member.getKey();
+					break;
+				case MUTABLE:
+					key = "^" + member.getKey();
+					break;
+				case CONTAINER:
+					key = "*" + member.getKey();
+					break;
+				default:
+					throw new IllegalArgumentException("Invalid IO type: " + member.getIOType());
+			}
+			sb.append("> ").append(key) //
+					.append(member.isRequired() ? "" : " (optional)")  //
+					.append(" : ") //
+					.append(typeString(member.getType(), true)); //
+			if (!member.getDescription().isBlank()) {
+				sb.append("\n\t\t").append(member.getDescription().replaceAll("\n\\s*", "\n\t\t"));
+			}
+		}
+		// Step 3: Output
+		Member<?> output = info.output();
+		switch (output.getIOType()) {
+			case OUTPUT:
+				sb.append("\n\tReturns : ").append(typeString(output.getType(), true));
+				break;
+			case MUTABLE:
+			case CONTAINER:
+				break;
+			default:
+				throw new IllegalArgumentException("Invalid IO type: " + output.getIOType());
+		}
+		return sb.toString();
+	}
+
+	public static String describeOneLine(final OpInfo info) {
+		final StringBuilder sb = new StringBuilder("(");
+		// Step 2: Inputs
+		var inputs = info.inputs().stream().map(member-> {
+			var str = "";
+			switch (member.getIOType()) {
+				case INPUT:
+					str += member.getKey();
+					break;
+				case MUTABLE:
+					str += "^" + member.getKey();
+					break;
+				case CONTAINER:
+					str += "*" + member.getKey();
+					break;
+				default:
+					throw new IllegalArgumentException("Invalid IO type: " + member.getIOType());
+			}
+			if (!member.isRequired()) {
+				str += " = null";
+			}
+			return str;
+		}).collect(Collectors.joining(", "));
+		sb.append(inputs);
+		sb.append(")");
+		// Step 3: Output
+		Member<?> output = info.output();
+		sb.append(" -> ");
+		switch (output.getIOType()) {
+			case OUTPUT:
+				sb.append(typeString(output.getType(), false));
+				break;
+			case MUTABLE:
+				sb.append("None");
+//				sb.append("None [Overwrites MUTABLE]");
+				break;
+			case CONTAINER:
+				sb.append("None");
+//				sb.append("None [Fills CONTAINER]");
+				break;
+			default:
+				throw new IllegalArgumentException("Invalid IO type: " + output.getIOType());
 		}
 		return sb.toString();
 	}

@@ -177,7 +177,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	@Override
 	public SortedSet<OpInfo> infos() {
-		// NB distinct() prevents aliased Ops from appearing multiple times.
+		// prevents aliased Ops from appearing multiple times.
 		return new TreeSet<>(opDirectory.values());
 	}
 

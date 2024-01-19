@@ -73,7 +73,7 @@ public final class LiftFunctionsToRAI {
 	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	 public static <#foreach($a in [1..$arity])I$a, #{end}O extends Type<O>, #foreach($a in [1..$rais])RAII$a extends RandomAccessibleInterval<I$a>, #{end}RAIO extends RandomAccessibleInterval<O>> $functionNames.call($arity)<#foreach($a in [1..$arity])#if($a <= $rais)RAI#{end}I$a, #{end}RAIO> lift$arity$rais(
-			@OpDependency(name = "create") BiFunction<Dimensions, O, RAIO> imgCreator, //
+			@OpDependency(name = "engine.create") BiFunction<Dimensions, O, RAIO> imgCreator, //
 			$functionNames.call($arity)<#foreach($a in [1..$arity])I$a, #{end}O> func //
 		) {
 		return (#foreach($a in [1..$arity])in$a#if($a < $arity), #end#{end}) -> {

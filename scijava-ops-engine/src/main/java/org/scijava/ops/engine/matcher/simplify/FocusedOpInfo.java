@@ -320,7 +320,7 @@ public class FocusedOpInfo implements OpInfo {
 		Hints hints = new Hints(BaseOpHints.Adaptation.FORBIDDEN,
 			BaseOpHints.Simplification.FORBIDDEN);
 		Nil<?> copyNil = Nil.of(copyType);
-		var op = env.unary("copy", hints).inType(copyNil).outType(copyNil)
+		var op = env.unary("engine.copy", hints).inType(copyNil).outType(copyNil)
 			.computer();
 		return Ops.rich(op);
 	}

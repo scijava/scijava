@@ -47,16 +47,16 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testClassOpification() {
-		OpInfo opifyOpInfo = ops.opify(OpifyOp.class, OpifyOp.class.getName());
-		Assertions.assertEquals(OpifyOp.class.getName(), opifyOpInfo.implementationName());
+		OpInfo opifyOpInfo = ops.opify(OpifyOp1.class, OpifyOp1.class.getName());
+		Assertions.assertEquals(OpifyOp1.class.getName(), opifyOpInfo.implementationName());
 		// assert default priority
 		Assertions.assertEquals(Priority.NORMAL, opifyOpInfo.priority(), 0.);
 	}
 
 	@Test
 	public void testClassOpificationWithPriority() {
-		OpInfo opifyOpInfo = ops.opify(OpifyOp.class, Priority.HIGH, OpifyOp.class.getName());
-		Assertions.assertEquals(OpifyOp.class.getName(), opifyOpInfo.implementationName());
+		OpInfo opifyOpInfo = ops.opify(OpifyOp1.class, Priority.HIGH, OpifyOp1.class.getName());
+		Assertions.assertEquals(OpifyOp1.class.getName(), opifyOpInfo.implementationName());
 		// assert default priority
 		Assertions.assertEquals(Priority.HIGH, opifyOpInfo.priority(), 0.);
 	}
@@ -64,72 +64,95 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 	@Test
 	public void testRegister() {
 		String opName = "test.opifyOp";
-		OpInfo opifyOpInfo = ops.opify(OpifyOp.class, Priority.HIGH, opName);
+		OpInfo opifyOpInfo = ops.opify(OpifyOp1.class, Priority.HIGH, opName);
 		ops.register(opifyOpInfo);
 
 		String actual = ops.op(opName).arity0().outType(String.class).create();
 
-		String expected = new OpifyOp().getString();
+		String expected = new OpifyOp1().getString();
 		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
-	public void testHelpVerbose() {
-		// NB We use a new OpEnvironment here for a clean list of Ops.
-		OpEnvironment helpEnv = barebonesEnvironment();
-		helpEnv.register( //
-			helpEnv.opify(OpifyOp.class, Priority.HIGH, "help.verbose1", "help.verbose2") //
-		);
+	public void testHelpVerboseNoNS() {
+		OpEnvironment helpEnv = makeHelpEnv("help.verbose1", "help.verbose2");
 
-		// Test that helpEnv.help() returns just "test"
+		// Test that our namespace is found
 		String descriptions = helpEnv.helpVerbose();
 		String expected = "Namespaces:\n\t> help";
 		Assertions.assertEquals(expected, descriptions);
+	}
 
-		// Test that helpEnv.help("test") returns both of our namespaces
-		descriptions = helpEnv.helpVerbose("help");
-		expected = "Names:\n\t> help.verbose1\n\t> help.verbose2";
+	@Test
+	public void testHelpVerboseInvalid() {
+		OpEnvironment helpEnv = makeHelpEnv("help.verbose1", "help.verbose2");
+
+		// Test that our namespace is found
+		String descriptions = helpEnv.helpVerbose("ichneumon");
+		String expected = "Not a valid Op name or namespace:\n\t> ichneumon";
 		Assertions.assertEquals(expected, descriptions);
+	}
+
+	@Test
+	public void testHelpVerboseNS() {
+		OpEnvironment helpEnv = makeHelpEnv("help.verbose1", "help.verbose2");
+
+		// Test that both of our ops are found in the namespace
+		String descriptions = helpEnv.helpVerbose("help");
+		String expected = "Names:\n\t> help.verbose1\n\t> help.verbose2";
+		Assertions.assertEquals(expected, descriptions);
+	}
+
+	@Test
+	public void testHelpVerboseOp() {
+		OpEnvironment helpEnv = makeHelpEnv("help.verbose1", "help.verbose2");
 
 		// Get the Op matching the description
-		descriptions = helpEnv.helpVerbose("help.verbose1");
-		expected = "Ops:\n\t> help.verbose1(\n\t\t Inputs:\n\t\t Outputs:\n\t\t\tjava.lang.String output1\n\t)\n\tAliases: [help.verbose2]\n\t";
+		String descriptions = helpEnv.helpVerbose("help.verbose1");
+		String expected = "help.verbose1:\n\t- org.scijava.ops.engine.OpifyOp1\n\t\tReturns : java.lang.String\nKey: *=container, ^=mutable";
 		Assertions.assertEquals(expected, descriptions);
+	}
 
+	@Test
+	public void testHelpVerboseNotFound() {
+		OpEnvironment helpEnv = makeHelpEnv("help.verbose1", "help.verbose2");
 		// Finally assert a message is thrown when no Ops match
-		descriptions = helpEnv.unary("help.verbose1").helpVerbose();
-		expected = "No Ops found matching this request.";
+		String descriptions = helpEnv.unary("help.verbose1").helpVerbose();
+		String expected = "No Ops found matching this request.";
 		Assertions.assertEquals(expected, descriptions);
 	}
 
 	@Test
 	public void testInternalNamespaceHelp() {
-		// NB We use a new OpEnvironment here for a clean list of Ops.
-		OpEnvironment helpEnv = barebonesEnvironment();
-		// Register an Op under an "internal" namespace and an "external" namespace
-		helpEnv.register( //
-				helpEnv.opify(OpifyOp.class, Priority.HIGH, "engine.adapt", "help") //
-		);
 		// Make sure that only the "external" namespaces are visible
+		OpEnvironment helpEnv = makeHelpEnv("engine.adapt", "help.verbose1");
 		var actual = helpEnv.help();
 		String expected = "Namespaces:\n\t> help";
 		Assertions.assertEquals(expected, actual);
 		// ...but make sure that if we really need help with the internal namespace, we can get it
 		actual = helpEnv.help("engine.adapt");
-		expected = "Ops:\n\t> engine.adapt(\n\t\t Inputs:\n\t\t Outputs:\n\t\t\tString output1\n\t)\n\tAliases: [help]\n\t";
+		expected = "engine.adapt:\n\t- () -> String\nKey: *=container, ^=mutable";
 		Assertions.assertEquals(expected, actual);
+	}
+
+	private OpEnvironment makeHelpEnv(String n1, String n2) {
+		// NB We use a new OpEnvironment here for a clean list of Ops.
+		OpEnvironment helpEnv = barebonesEnvironment();
+		// Register an Op under an "internal" namespace and an "external" namespace
+		helpEnv.register( //
+				helpEnv.opify(OpifyOp1.class, Priority.HIGH, n1) //
+		);
+		helpEnv.register( //
+				helpEnv.opify(OpifyOp2.class, Priority.HIGH, n2) //
+		);
+		return helpEnv;
 	}
 
 }
 
-/**
- * Test class to be opified (and added to the {@link OpEnvironment})
- *
- * TODO: remove @Parameter annotation when it is no longer necessary
- *
- * @author Gabriel Selzer
- */
-class OpifyOp implements Producer<String> {
+// -- Test classes to be registered --
+
+class OpifyOp1 implements Producer<String> {
 
 	@Override
 	public String create() {
@@ -140,4 +163,12 @@ class OpifyOp implements Producer<String> {
 		return "This Op tests opify!";
 	}
 
+}
+
+class OpifyOp2 implements Producer<String> {
+
+	@Override
+	public String create() { return getString(); }
+
+	public String getString() { return "This Op tests opify!"; }
 }

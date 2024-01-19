@@ -31,6 +31,11 @@ package org.scijava.ops.image.copy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.util.HashMap;
+
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.type.Type;
+import net.imglib2.type.numeric.IntegerType;
 import org.scijava.ops.image.AbstractOpTest;
 import net.imglib2.Cursor;
 import net.imglib2.FinalDimensions;
@@ -42,13 +47,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.types.Nil;
+import org.scijava.types.inference.GenericAssignability;
 
 /**
  * Test {@link Copiers#copyImgLabeling(Computers.Arity1, Computers.Arity1, ImgLabeling, ImgLabeling)}
  * 
  * @author Christian Dietz (University of Konstanz)
  */
-public class CopyImgLabelingTest extends AbstractOpTest {
+public class CopyImgLabelingTest<T extends Type<T>, L extends Type<L>, I extends IntegerType<I>> extends AbstractOpTest {
 
 	private ImgLabeling<String, IntType> input;
 	private ImgLabeling<String, IntType> copy;
@@ -75,7 +81,7 @@ public class CopyImgLabelingTest extends AbstractOpTest {
 
 	@Test
 	public void copyImgLabeling() {
-		ops.op("copy").arity1().input(input).output(copy).compute();
+		ops.op("copy.imgLabeling").arity1().input(input).output(copy).compute();
 		assertNotNull(copy);
 
 		Cursor<LabelingType<String>> inCursor = input.cursor();
@@ -83,4 +89,5 @@ public class CopyImgLabelingTest extends AbstractOpTest {
 			assertEquals(inCursor.next(), type);
 		}
 	}
+
 }

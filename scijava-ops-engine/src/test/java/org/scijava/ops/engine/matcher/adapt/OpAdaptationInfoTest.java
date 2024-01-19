@@ -66,7 +66,7 @@ public class OpAdaptationInfoTest extends AbstractTestEnvironment {
 		OpAdaptationInfo adapted = new OpAdaptationInfo(info, opType, null);
 		String expected = "test.adaptationDescription(\n\t " //
 				+ "Inputs:\n\t\tjava.lang.Double input1\n\t\tjava.lang.Double input2\n\t " //
-				+ "Containers (I/O):\n\t\tjava.lang.Double output1\n)\n";
+				+ "Container (I/O):\n\t\tjava.lang.Double output1\n)\n";
 		String actual = adapted.toString();
 		Assertions.assertEquals(expected, actual);
 	}

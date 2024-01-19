@@ -59,7 +59,7 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 
 		String expected = "test.classDescription(\n\t " //
 			+ "Inputs:\n\t\tjava.lang.Double input1\n\t\tjava.lang.Double input2\n\t " //
-			+ "Outputs:\n\t\tjava.lang.Double output1\n)\n";
+			+ "Output:\n\t\tjava.lang.Double output1\n)\n";
 		String actual = info.toString();
 		Assertions.assertEquals(expected, actual);
 	}
@@ -76,7 +76,7 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 			new Hints(), "test.methodDescription");
 		String expected = "test.methodDescription(\n\t " //
 			+ "Inputs:\n\t\tjava.lang.Double input1\n\t\tjava.lang.Double input2\n\t " //
-			+ "Outputs:\n\t\tjava.lang.Double output1\n)\n";
+			+ "Output:\n\t\tjava.lang.Double output1\n)\n";
 		String actual = info.toString();
 		Assertions.assertEquals(expected, actual);
 	}
@@ -90,7 +90,7 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 			"test.fieldDescription");
 		String expected = "test.fieldDescription(\n\t " //
 			+ "Inputs:\n\t\tjava.lang.Double input1\n\t\tjava.lang.Double input2\n\t " //
-			+ "Outputs:\n\t\tjava.lang.Double output1\n)\n";
+			+ "Output:\n\t\tjava.lang.Double output1\n)\n";
 		String actual = info.toString();
 		Assertions.assertEquals(expected, actual);
 	}
@@ -105,7 +105,7 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 		ReducedOpInfo reduced = new ReducedOpInfo(info, opType, 1);
 		String expected = "test.reductionDescription(\n\t " //
 			+ "Inputs:\n\t\tjava.lang.Double input1\n\t " //
-			+ "Outputs:\n\t\tjava.lang.Double output1\n)\n";
+			+ "Output:\n\t\tjava.lang.Double output1\n)\n";
 		String actual = reduced.toString();
 		Assertions.assertEquals(expected, actual);
 	}
@@ -117,8 +117,7 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 
 		String expected = "test.classDescription(\n\t " //
 			+ "Inputs:\n\t\tjava.lang.Double input1\n\t\tjava.lang.Double input2\n\t " //
-			+ "Outputs:\n\t\tjava.lang.Double output1\n)\n" //
-			+ "Aliases: [test.otherName]\n";
+			+ "Output:\n\t\tjava.lang.Double output1\n)\n"; //
 		String actual = info.toString();
 		Assertions.assertEquals(expected, actual);
 

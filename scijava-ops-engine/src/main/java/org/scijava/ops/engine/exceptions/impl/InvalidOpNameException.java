@@ -1,18 +1,18 @@
-/*
+/*-
  * #%L
- * ImageJ2 software for multidimensional image processing and analysis.
+ * SciJava Operations Engine: a framework for reusable algorithms.
  * %%
- * Copyright (C) 2014 - 2023 ImageJ2 developers.
+ * Copyright (C) 2016 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,37 +27,18 @@
  * #L%
  */
 
-package org.scijava.ops.image.identity;
+package org.scijava.ops.engine.exceptions.impl;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
-
-import org.scijava.ops.image.AbstractOpTest;
-
-import org.junit.jupiter.api.Test;
+import org.scijava.ops.engine.exceptions.InvalidOpException;
 
 /**
- * Tests {@link IdentityOp}.
- * 
- * @author Curtis Rueden
+ * An {@link InvalidOpException} arising when an Op has an invalid name
+ *
+ * @author Gabriel Selzer
  */
-public class IdentityTest extends AbstractOpTest {
+public class InvalidOpNameException extends InvalidOpException {
 
-	@Test
-	public void testIdentity() {
-		Byte b = 35;
-		final Object ib = b;
-		ops.op("identity").arity1().input(b).mutate();
-		assertSame(b, ib);
-
-		int i = 23;
-		final Object ii = i; 
-		ops.op("identity").arity1().input(i).mutate();
-		assertSame(i, ii);
-
-		String s = "hello";
-		final Object is = s;
-		ops.op("identity").arity1().input(s).mutate();
-		assertSame(s, is);
+	public InvalidOpNameException(Object op, String name) {
+		super("Invalid name " + name + " for Op " + op + " - all Op names must have a namespace!");
 	}
-
 }

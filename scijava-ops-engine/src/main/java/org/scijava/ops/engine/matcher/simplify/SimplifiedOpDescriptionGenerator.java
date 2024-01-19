@@ -29,10 +29,12 @@
 
 package org.scijava.ops.engine.matcher.simplify;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import com.google.common.base.Strings;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRequest;
@@ -50,76 +52,91 @@ import org.scijava.priority.Priority;
 public class SimplifiedOpDescriptionGenerator implements
 	OpDescriptionGenerator
 {
+	@Override
+	public double getPriority() {
+		return Priority.VERY_HIGH;
+	}
 
 	@Override
 	public String simpleDescriptions(OpEnvironment env, OpRequest req) {
 		String name = req.getName();
-		if (name == null) {
-			return allNamespaces(env);
-		}
-		if (env.infos(name).isEmpty()) {
-			return allNamespaces(env, name);
-		}
-		var infos = SimplificationMatchingRoutine.getInfos(env, req.getName());
-		var filtered = filterInfos(infos, req);
-		String opString = filtered.stream() //
-				.map(Infos::describe) //
-				.map(s -> s.replaceAll("\n", "\n\t")) //
-				.distinct() //
-				.collect(Collectors.joining("\n\t> "));
-		if (opString.isEmpty()) return "No Ops found matching this request.";
-		return "Ops:\n\t> " + opString;
+		Optional<String> nsString = getNonOpString(env, name);
+		if (nsString.isPresent()) return nsString.get();
+		var infos = SimplificationMatchingRoutine.getInfos(env, name);
+		return buildOpString(infos, req, Infos::describeOneLine);
 	}
 
 	@Override
 	public String verboseDescriptions(OpEnvironment env, OpRequest req) {
 		String name = req.getName();
-		if (name == null) {
-			return allNamespaces(env);
-		}
-		if (env.infos(name).isEmpty()) {
-			return allNamespaces(env, name);
-		}
-		var infos = env.infos(req.getName());
+		Optional<String> nsString = getNonOpString(env, name);
+		if (nsString.isPresent()) return nsString.get();
+		var infos = env.infos(name);
+		return buildOpString(infos, req, Infos::describeMultiLine);
+	}
+
+	private String buildOpString(Collection<OpInfo> infos, OpRequest req,
+			Function<OpInfo, String> descriptionFunction)
+	{
 		var filtered = filterInfos(infos, req);
 		String opString = filtered.stream() //
-				.map(Infos::describeVerbose) //
+				.map(descriptionFunction) //
 				.map(s -> s.replaceAll("\n", "\n\t")) //
 				.distinct() //
-				.collect(Collectors.joining("\n\t> "));
+				.collect(Collectors.joining("\n\t- "));
 		if (opString.isEmpty()) return "No Ops found matching this request.";
-		return "Ops:\n\t> " + opString;
+		var key = "Key: *=container, ^=mutable";
+		return req.getName() + ":\n\t- " + opString + "\n" + key;
 	}
 
-	private String allNamespaces(final OpEnvironment env) {
-		List<String> namespaces = env.infos().stream() //
-				// Get all names from each Op
-				.flatMap(info -> info.names().stream()) //
-				// Map each name to its namespace
-				.map(name -> name.contains(".") ?  name.substring(0, name.indexOf(".")) : name) //
-				// Deduplicate & sort
-				.distinct() //
-				.sorted() //
-				// Filter out the engine namespaces
-				.filter(ns -> !ns.equals("engine")) //
-				.collect(Collectors.toList());
-		return "Namespaces:\n\t> " + String.join("\n\t> ", namespaces);
+	/**
+	 * Helper method to build strings when the queried name is not an op
+	 *
+	 * @param env The op to query, or null
+	 * @param name The potential op name
+	 * @return If the {@code name} is empty/{@code null}, return a namespaces
+	 * 				string. Otherwise, if it doesn't match a particular op name, it
+	 * 				is assumed to be a namespace request and we return all ops in that
+	 * 				namespace. Returns {@code Optional.empty()} if this is a legitimate
+	 * 				op request.
+	 */
+	private Optional<String> getNonOpString(OpEnvironment env, String name) {
+		String prefix = null;
+		Stream<String> nsStream = null;
+		if (Strings.isNullOrEmpty(name)) {
+			// Return all namespaces
+			nsStream = publicOpStream(env);
+			nsStream = nsStream.map(s -> s.substring(0, s.lastIndexOf('.'))).distinct();
+			prefix = "Namespaces:\n\t> ";
+		} else if (env.infos(name).isEmpty()) {
+			// Return all ops in the namespace
+			nsStream = publicOpStream(env).filter(n -> n.startsWith(name));
+			prefix = "Names:\n\t> ";
+		}
+		if (nsStream == null) return Optional.empty();
+		String suffix = nsStream.collect(Collectors.joining("\n\t> "));
+
+		if (Strings.isNullOrEmpty(suffix))
+			return Optional.of("Not a valid Op name or namespace:\n\t> " + name);
+
+	  return Optional.of(prefix + suffix);
 	}
 
-	private String allNamespaces(final OpEnvironment env, final String name) {
-		List<String> namespaces = env.infos().stream() //
+	/**
+	 * Helper method for getting publicly visible ops
+	 *
+	 * @return A stream of strings for each Op info not in a protected namespace
+	 * 				(e.g. 'engine')
+	 */
+	private Stream<String> publicOpStream(OpEnvironment env) {
+		return env.infos().stream() //
 				// Get all names from each Op
 				.flatMap(info -> info.names().stream()) //
 				// Deduplicate & sort
 				.distinct() //
 				.sorted() //
 				// Filter out the engine namespace
-				.filter(ns -> !ns.equals("engine")) //
-				// Filter by the predicate name
-				.filter(n -> n.contains(name)) //
-				.collect(Collectors.toList());
-		return "Names:\n\t> " + String.join("\n\t> ", namespaces);
-
+				.filter(ns -> !ns.startsWith("engine"));
 	}
 
 	private List<OpInfo> filterInfos(Iterable<? extends OpInfo> infos, OpRequest req) {
@@ -139,10 +156,5 @@ public class SimplifiedOpDescriptionGenerator implements
 
 		}
 		return filtered;
-	}
-
-	@Override
-	public double getPriority() {
-		return Priority.VERY_HIGH;
 	}
 }

@@ -61,7 +61,7 @@ public final class LiftNeighborhoodComputersToFunctionsOnImgs {
 	 */
 	public static <T, U> BiFunction<RandomAccessibleInterval<T>, Shape, Img<T>>
 	adaptUsingShape(
-			@OpDependency(name="create", adaptable = false) BiFunction<Dimensions, T, Img<T>> creator,
+			@OpDependency(name="engine.create", adaptable = false) BiFunction<Dimensions, T, Img<T>> creator,
 			Computers.Arity1<Neighborhood<T>, T> op
 	)
 	{
@@ -84,7 +84,7 @@ public final class LiftNeighborhoodComputersToFunctionsOnImgs {
 	public static <T, F extends RandomAccessibleInterval<T>>
 	Functions.Arity3<F, Shape, OutOfBoundsFactory<T, ? super F>, Img<T>>
 	adaptUsingShapeAndOOBF(
-			@OpDependency(name="create", adaptable = false) BiFunction<Dimensions, T, Img<T>> creator,
+			@OpDependency(name="engine.create", adaptable = false) BiFunction<Dimensions, T, Img<T>> creator,
 			Computers.Arity1<Neighborhood<T>, T> op)
 	{
 		return (in, shape, oobf) -> {

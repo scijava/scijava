@@ -57,7 +57,7 @@ public class FunctionsToComputers {
 	@OpClass(names = "engine.adapt")
 	public static class Function${arity}ToComputer${arity}$generics.call($arity) implements Function<$functionArity.call($arity)$generics.call($arity), $computerArity.call($arity)$generics.call($arity)>, Op {
 
-		@OpDependency(name = "copy", adaptable = false)
+		@OpDependency(name = "engine.copy", adaptable = false)
 		Computers.Arity1<O, O> copyOp;
 
 		/**

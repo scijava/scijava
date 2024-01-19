@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops.image.project;
+package org.scijava.ops.image.transform.project.project;
 
 import java.util.Iterator;
 
@@ -42,7 +42,7 @@ import org.scijava.function.Computers;
  *
  * @param <T>
  * @param <V>
- * @implNote op name='project', priority='99.'
+ * @implNote op name='transform.project', priority='99.'
  */
 public class DefaultProjectParallel<T, V> implements
 	Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<Iterable<T>, V>, Integer, RandomAccessibleInterval<V>>

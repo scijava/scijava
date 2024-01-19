@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops.image.slice;
+package org.scijava.ops.image.transform.slice.slice;
 
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
@@ -46,7 +46,7 @@ import org.scijava.ops.spi.Nullable;
  * 
  * @author Christian Dietz (University of Konstanz)
  * @author Martin Horn (University of Konstanz)
- * @implNote op names='slice', priority='10000.'
+ * @implNote op names='transform.slice', priority='10000.'
  */
 public class SliceRAI2RAI<I, O> implements
 		Computers.Arity4<RandomAccessibleInterval<I>, Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>>, int[], Boolean, RandomAccessibleInterval<O>> {

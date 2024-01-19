@@ -59,7 +59,7 @@ public class ComputersToFunctionsViaFunction {
 			Op
 		 {
 
-		@OpDependency(name = "create", adaptable = false)
+		@OpDependency(name = "engine.create", adaptable = false)
 		Function<I#if($arity == 1)#{else}1#end, O> creator;
 
 		/**

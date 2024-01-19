@@ -84,7 +84,7 @@ public class SimplifiedOpInfoTest extends AbstractTestEnvironment implements
 		String expected = "test.simplifiedDescription(\n\t " //
 				+
 				"Inputs:\n\t\tjava.lang.Number input1\n\t\tjava.lang.Number input2\n\t " //
-				+ "Outputs:\n\t\torg.scijava.collections.ObjectArray<java.lang.Number> output1\n)\n";
+				+ "Output:\n\t\torg.scijava.collections.ObjectArray<java.lang.Number> output1\n)\n";
 		String actual = info.toString();
 		Assertions.assertEquals(expected, actual);
 	}
@@ -122,27 +122,21 @@ public class SimplifiedOpInfoTest extends AbstractTestEnvironment implements
 	@Test
 	public void testSimpleDescriptions() {
 		String actual = ops.unary("test.coalesceSimpleDescription").helpVerbose();
-		String expected =  //
-				"Ops:" +
-				"\n\t> test.coalesceSimpleDescription(\n" +
-				"\t\t Inputs:\n\t\t\tjava.util.List<java.lang.Long> input1\n" +
-				"\t\t Containers (I/O):\n\t\t\tjava.util.List<java.lang.Long> container1\n\t)\n\t" +
-				"\n\t> test.coalesceSimpleDescription(\n" +
-				"\t\t Inputs:\n\t\t\tjava.lang.Double input1\n" +
-				"\t\t Outputs:\n\t\t\tjava.lang.Double output1\n\t)\n\t" +
-				"\n\t> test.coalesceSimpleDescription(\n" +
-				"\t\t Inputs:\n\t\t\tjava.lang.Long input1\n" +
-				"\t\t Outputs:\n\t\t\tjava.lang.Long output1\n\t)\n\t";
+		String expected =  "test.coalesceSimpleDescription:\n" +
+				"\t- org.scijava.ops.engine.matcher.simplify.SimplifiedOpInfoTest$comp1\n" +
+				"\t\t> input1 : java.util.List<java.lang.Long>\n" +
+				"\t\t> *container1 : java.util.List<java.lang.Long>\n" +
+				"\t- org.scijava.ops.engine.matcher.simplify.SimplifiedOpInfoTest$func1\n" +
+				"\t\t> input1 : java.lang.Double\n" + "\t\tReturns : java.lang.Double\n" +
+				"\t- org.scijava.ops.engine.matcher.simplify.SimplifiedOpInfoTest$func2\n" +
+				"\t\t> input1 : java.lang.Long\n" + "\t\tReturns : java.lang.Long\n" +
+				"Key: *=container, ^=mutable";
+
 		Assertions.assertEquals(expected, actual);
 
 		actual = ops.unary("test.coalesceSimpleDescription").help();
 		expected =  //
-				"Ops:\n\t> test.coalesceSimpleDescription(\n" +
-						"\t\t Inputs:\n\t\t\tList<Long> input1\n" +
-						"\t\t Containers (I/O):\n\t\t\tList<Long> container1\n\t)\n\t" +
-						"\n\t> test.coalesceSimpleDescription(\n" +
-						"\t\t Inputs:\n\t\t\tNumber input1\n" +
-						"\t\t Outputs:\n\t\t\tNumber output1\n\t)\n\t";
+				"test.coalesceSimpleDescription:\n\t- (input1, *container1) -> None\n\t- (input1) -> Number\nKey: *=container, ^=mutable";
 		Assertions.assertEquals(expected, actual);
 		// Finally test that different number of outputs doesn't retrieve the Ops
 		actual = ops.nullary("test.coalesceSimpleDescription").help();

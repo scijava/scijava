@@ -62,7 +62,7 @@ public class EvalTest extends AbstractTestEnvironment {
 		vars.put("b", 3);
 		vars.put("c", 5);
 
-		var evaluator = ops.ternary("eval") //
+		var evaluator = ops.ternary("expression.eval") //
 				.input("a+c", ops, vars) //
 				.function();
 
@@ -76,7 +76,7 @@ public class EvalTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testMathWithoutVars() {
-		var result = ops.binary("eval") //
+		var result = ops.binary("expression.eval") //
 				.input("5+2", ops) //
 				.apply();
 

@@ -185,7 +185,7 @@ public final class SimplificationUtils {
 						env.unary("engine.focus", h).inType(Any.class).outType(inNil).function();
 				inFocusers.add(org.scijava.ops.api.Ops.rich(focuser));
 			} catch (OpMatchingException e) {
-				var identity = env.unary("identity", h).inType(inNil).outType(inNil).function();
+				var identity = env.unary("engine.identity", h).inType(inNil).outType(inNil).function();
 				inFocusers.add(org.scijava.ops.api.Ops.rich(identity));
 			}
 		}
@@ -196,7 +196,7 @@ public final class SimplificationUtils {
 					Object.class).function();
 			outSimplifier = org.scijava.ops.api.Ops.rich(simplifier);
 		} catch (OpMatchingException e) {
-			var identity = env.unary("identity", h).inType(outNil).outType(outNil).function();
+			var identity = env.unary("engine.identity", h).inType(outNil).outType(outNil).function();
 			outSimplifier = org.scijava.ops.api.Ops.rich(identity);
 		}
 
@@ -205,7 +205,7 @@ public final class SimplificationUtils {
 			.opType()));
 		if (ioIndex > -1) {
 			var nil = Nil.of(outType(info.outputType(), outSimplifier));
-			var copier = env.unary("copy").inType(nil).outType(nil).computer();
+			var copier = env.unary("engine.copy").inType(nil).outType(nil).computer();
 			copyOp = org.scijava.ops.api.Ops.rich(copier);
 		}
 		return new SimplifiedOpInfo(info, inFocusers, outSimplifier, copyOp);

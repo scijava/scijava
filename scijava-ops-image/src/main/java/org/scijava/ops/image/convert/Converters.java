@@ -42,7 +42,7 @@ public class Converters<I, O extends Type<O>> {
 	 * @input converter
 	 * @input outputType
 	 * @output outputII
-	 * @implNote op names='convert'
+	 * @implNote op names='convert.image'
 	 */
 	public final Functions.Arity3<RandomAccessible<I>, Converter<? super I, ? super O>, O, RandomAccessible<O>> generalConverterRA =
 			net.imglib2.converter.Converters::convert;
@@ -52,7 +52,7 @@ public class Converters<I, O extends Type<O>> {
 	 * @input converter
 	 * @input outputType
 	 * @output outputII
-	 * @implNote op names='convert'
+	 * @implNote op names='convert.image'
 	 */
 	public final Functions.Arity3<IterableInterval<I>, Converter<? super I, ? super O>, O, IterableInterval<O>> generalConverterII =
 			net.imglib2.converter.Converters::convert;

@@ -99,7 +99,7 @@ public class DefaultTubeness<T extends RealType<T>> implements
 	private Function<Dimensions, ImgFactory<DoubleType>> createFactoryOp;
 
 	//TODO: make sure this works
-	@OpDependency(name = "project")
+	@OpDependency(name = "transform.project")
 	private Computers.Arity3<RandomAccessibleInterval<DoubleType>, Computers.Arity1<Iterable<DoubleType>, DoubleType>, Integer, IterableInterval<DoubleType>> projector;
 
 	@Override

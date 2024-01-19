@@ -114,7 +114,12 @@ public class SimplifiedOpDescriptionGenerator implements
 			prefix = "Names:\n\t> ";
 		}
 		if (nsStream == null) return Optional.empty();
-	  return Optional.of(prefix + nsStream.collect(Collectors.joining("\n\t> ")));
+		String suffix = nsStream.collect(Collectors.joining("\n\t> "));
+
+		if (Strings.isNullOrEmpty(suffix))
+			return Optional.of("Not a valid Op name or namespace:\n\t> " + name);
+
+	  return Optional.of(prefix + suffix);
 	}
 
 	/**

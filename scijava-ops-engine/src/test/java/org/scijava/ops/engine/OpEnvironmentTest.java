@@ -84,6 +84,16 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 	}
 
 	@Test
+	public void testHelpVerboseInvalid() {
+		OpEnvironment helpEnv = makeHelpEnv("help.verbose1", "help.verbose2");
+
+		// Test that our namespace is found
+		String descriptions = helpEnv.helpVerbose("ichneumon");
+		String expected = "Not a valid Op name or namespace:\n\t> ichneumon";
+		Assertions.assertEquals(expected, descriptions);
+	}
+
+	@Test
 	public void testHelpVerboseNS() {
 		OpEnvironment helpEnv = makeHelpEnv("help.verbose1", "help.verbose2");
 

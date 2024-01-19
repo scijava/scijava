@@ -74,43 +74,48 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 	}
 
 	@Test
-	public void testHelpVerbose() {
-		// NB We use a new OpEnvironment here for a clean list of Ops.
-		OpEnvironment helpEnv = barebonesEnvironment();
-		helpEnv.register( //
-			helpEnv.opify(OpifyOp.class, Priority.HIGH, "help.verbose1", "help.verbose2") //
-		);
+	public void testHelpVerboseNoNS() {
+		OpEnvironment helpEnv = makeHelpEnv("help.verbose1", "help.verbose2");
 
-		// Test that helpEnv.help() returns just "test"
+		// Test that our namespace is found
 		String descriptions = helpEnv.helpVerbose();
 		String expected = "Namespaces:\n\t> help";
 		Assertions.assertEquals(expected, descriptions);
+	}
 
-		// Test that helpEnv.help("test") returns both of our namespaces
-		descriptions = helpEnv.helpVerbose("help");
-		expected = "Names:\n\t> help.verbose1\n\t> help.verbose2";
+	@Test
+	public void testHelpVerboseNS() {
+		OpEnvironment helpEnv = makeHelpEnv("help.verbose1", "help.verbose2");
+
+		// Test that both of our ops are found in the namespace
+		String descriptions = helpEnv.helpVerbose("help");
+		String expected = "Names:\n\t> help.verbose1\n\t> help.verbose2";
 		Assertions.assertEquals(expected, descriptions);
+	}
+
+	@Test
+	public void testHelpVerboseOp() {
+		OpEnvironment helpEnv = makeHelpEnv("help.verbose1", "help.verbose2");
 
 		// Get the Op matching the description
-		descriptions = helpEnv.helpVerbose("help.verbose1");
-		expected = "help.verbose1:\n\t- org.scijava.ops.engine.OpifyOp\n\t\tReturns : java.lang.String\nKey: *=container, ^=mutable";
+		String descriptions = helpEnv.helpVerbose("help.verbose1");
+		String expected = "help.verbose1:\n\t- org.scijava.ops.engine.OpifyOp\n\t\tReturns : java.lang.String\nKey: *=container, ^=mutable";
 		Assertions.assertEquals(expected, descriptions);
+	}
 
+	@Test
+	public void testHelpVerboseNotFound() {
+		OpEnvironment helpEnv = makeHelpEnv("help.verbose1", "help.verbose2");
 		// Finally assert a message is thrown when no Ops match
-		descriptions = helpEnv.unary("help.verbose1").helpVerbose();
-		expected = "No Ops found matching this request.";
+		String descriptions = helpEnv.unary("help.verbose1").helpVerbose();
+		String expected = "No Ops found matching this request.";
 		Assertions.assertEquals(expected, descriptions);
 	}
 
 	@Test
 	public void testInternalNamespaceHelp() {
-		// NB We use a new OpEnvironment here for a clean list of Ops.
-		OpEnvironment helpEnv = barebonesEnvironment();
-		// Register an Op under an "internal" namespace and an "external" namespace
-		helpEnv.register( //
-				helpEnv.opify(OpifyOp.class, Priority.HIGH, "engine.adapt", "help.verbose1") //
-		);
 		// Make sure that only the "external" namespaces are visible
+		OpEnvironment helpEnv = makeHelpEnv("engine.adapt", "help.verbose1");
 		var actual = helpEnv.help();
 		String expected = "Namespaces:\n\t> help";
 		Assertions.assertEquals(expected, actual);
@@ -118,6 +123,16 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 		actual = helpEnv.help("engine.adapt");
 		expected = "engine.adapt:\n\t- () -> String\nKey: *=container, ^=mutable";
 		Assertions.assertEquals(expected, actual);
+	}
+
+	private OpEnvironment makeHelpEnv(String... names) {
+		// NB We use a new OpEnvironment here for a clean list of Ops.
+		OpEnvironment helpEnv = barebonesEnvironment();
+		// Register an Op under an "internal" namespace and an "external" namespace
+		helpEnv.register( //
+				helpEnv.opify(OpifyOp.class, Priority.HIGH, names) //
+		);
+		return helpEnv;
 	}
 
 }

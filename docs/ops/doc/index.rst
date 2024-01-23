@@ -13,6 +13,7 @@ The combination of these libraries allows declarative image analysis workflows, 
    :maxdepth: 2
    :caption: 🚀 Getting Started
 
+   WhyOps
    Installation
 
 .. toctree::

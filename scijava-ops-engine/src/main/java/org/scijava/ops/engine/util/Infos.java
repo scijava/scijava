@@ -281,41 +281,27 @@ public final class Infos {
 	public static String describeMultiLine(final OpInfo info) {
 		final StringBuilder sb = new StringBuilder(info.implementationName());
 		// Step 2: Inputs
-		String key;
 		for (var member: info.inputs()) {
 			sb.append("\n\t");
-			switch (member.getIOType()) {
-				case INPUT:
-					key = member.getKey();
-					break;
-				case MUTABLE:
-					key = "^" + member.getKey();
-					break;
-				case CONTAINER:
-					key = "*" + member.getKey();
-					break;
-				default:
-					throw new IllegalArgumentException("Invalid IO type: " + member.getIOType());
-			}
-			sb.append("> ").append(key) //
+			sb.append("> ").append(member.getKey()) //
 					.append(member.isRequired() ? "" : " (optional)")  //
-					.append(" : ") //
-					.append(typeString(member.getType(), true)); //
+					.append(" : ");
+			if (member.getIOType() == ItemIO.CONTAINER) {
+				sb.append("@CONTAINER ");
+			}
+			else if (member.getIOType() == ItemIO.MUTABLE) {
+				sb.append("@MUTABLE ");
+			}
+
+			sb.append(typeString(member.getType(), true)); //
 			if (!member.getDescription().isBlank()) {
 				sb.append("\n\t\t").append(member.getDescription().replaceAll("\n\\s*", "\n\t\t"));
 			}
 		}
 		// Step 3: Output
 		Member<?> output = info.output();
-		switch (output.getIOType()) {
-			case OUTPUT:
+		if (output.getIOType() == ItemIO.OUTPUT) {
 				sb.append("\n\tReturns : ").append(typeString(output.getType(), true));
-				break;
-			case MUTABLE:
-			case CONTAINER:
-				break;
-			default:
-				throw new IllegalArgumentException("Invalid IO type: " + output.getIOType());
 		}
 		return sb.toString();
 	}
@@ -330,10 +316,10 @@ public final class Infos {
 					str += member.getKey();
 					break;
 				case MUTABLE:
-					str += "^" + member.getKey();
+					str += "@MUTABLE " + member.getKey();
 					break;
 				case CONTAINER:
-					str += "*" + member.getKey();
+					str += "@CONTAINER " + member.getKey();
 					break;
 				default:
 					throw new IllegalArgumentException("Invalid IO type: " + member.getIOType());
@@ -353,12 +339,8 @@ public final class Infos {
 				sb.append(typeString(output.getType(), false));
 				break;
 			case MUTABLE:
-				sb.append("None");
-//				sb.append("None [Overwrites MUTABLE]");
-				break;
 			case CONTAINER:
 				sb.append("None");
-//				sb.append("None [Fills CONTAINER]");
 				break;
 			default:
 				throw new IllegalArgumentException("Invalid IO type: " + output.getIOType());

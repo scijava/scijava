@@ -85,8 +85,7 @@ public class SimplifiedOpDescriptionGenerator implements
 				.distinct() //
 				.collect(Collectors.joining("\n\t- "));
 		if (opString.isEmpty()) return "No Ops found matching this request.";
-		var key = "Key: *=container, ^=mutable";
-		return req.getName() + ":\n\t- " + opString + "\n" + key;
+		return req.getName() + ":\n\t- " + opString;
 	}
 
 	/**

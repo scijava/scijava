@@ -31,7 +31,7 @@ public class InfosTest extends AbstractTestEnvironment implements OpCollection {
     @Test
     public void testDescriptionOfNullableParameter() {
         var actual = ops.help("test.nullableMethod");
-        var expected = "test.nullableMethod:\n\t- (input1, input2 = null) -> Integer\nKey: *=container, ^=mutable";
+        var expected = "test.nullableMethod:\n\t- (input1, input2 = null) -> Integer";
         Assertions.assertEquals(expected, actual);
     }
 }

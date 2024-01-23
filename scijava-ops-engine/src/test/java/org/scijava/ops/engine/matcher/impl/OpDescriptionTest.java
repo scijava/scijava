@@ -57,9 +57,10 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 		OpClassInfo info = new OpClassInfo(ClassOp.class, new Hints(),
 			"test.classDescription");
 
-		String expected = "test.classDescription(\n\t " //
-			+ "Inputs:\n\t\tjava.lang.Double input1\n\t\tjava.lang.Double input2\n\t " //
-			+ "Output:\n\t\tjava.lang.Double output1\n)\n";
+		String expected = "org.scijava.ops.engine.matcher.impl.OpDescriptionTest$ClassOp\n\t" //
+			+ "> input1 : java.lang.Double\n\t" //
+			+ "> input2 : java.lang.Double\n\t" //
+			+ "Returns : java.lang.Double";
 		String actual = info.toString();
 		Assertions.assertEquals(expected, actual);
 	}
@@ -74,9 +75,10 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 			Double.class);
 		OpMethodInfo info = new OpMethodInfo(method, BiFunction.class,
 			new Hints(), "test.methodDescription");
-		String expected = "test.methodDescription(\n\t " //
-			+ "Inputs:\n\t\tjava.lang.Double input1\n\t\tjava.lang.Double input2\n\t " //
-			+ "Output:\n\t\tjava.lang.Double output1\n)\n";
+		String expected = "org.scijava.ops.engine.matcher.impl.OpDescriptionTest.methodOp(java.lang.Double,java.lang.Double)\n\t" //
+			+ "> input1 : java.lang.Double\n\t" //
+			+ "> input2 : java.lang.Double\n\t" //
+			+ "Returns : java.lang.Double";
 		String actual = info.toString();
 		Assertions.assertEquals(expected, actual);
 	}
@@ -88,9 +90,10 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 		Field field = OpDescriptionTest.class.getDeclaredField("fieldOp");
 		OpFieldInfo info = new OpFieldInfo(this, field, new Hints(),
 			"test.fieldDescription");
-		String expected = "test.fieldDescription(\n\t " //
-			+ "Inputs:\n\t\tjava.lang.Double input1\n\t\tjava.lang.Double input2\n\t " //
-			+ "Output:\n\t\tjava.lang.Double output1\n)\n";
+		String expected = "org.scijava.ops.engine.matcher.impl.OpDescriptionTest$fieldOp\n\t" //
+			+ "> input1 : java.lang.Double\n\t" //
+			+ "> input2 : java.lang.Double\n\t" //
+			+ "Returns : java.lang.Double";
 		String actual = info.toString();
 		Assertions.assertEquals(expected, actual);
 	}
@@ -103,24 +106,11 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 		Type opType = Types.parameterize(Function.class, new Type[] { Double.class,
 			Double.class });
 		ReducedOpInfo reduced = new ReducedOpInfo(info, opType, 1);
-		String expected = "test.reductionDescription(\n\t " //
-			+ "Inputs:\n\t\tjava.lang.Double input1\n\t " //
-			+ "Output:\n\t\tjava.lang.Double output1\n)\n";
+		String expected = "org.scijava.ops.engine.matcher.impl.OpDescriptionTest$ClassOpReduction1\n\t" //
+			+ "> input1 : java.lang.Double\n\t" //
+			+ "Returns : java.lang.Double";
 		String actual = reduced.toString();
 		Assertions.assertEquals(expected, actual);
-	}
-
-	@Test
-	public void testMultiNameOp() {
-		OpClassInfo info = new OpClassInfo(ClassOp.class, new Hints(),
-			"test.classDescription", "test.otherName");
-
-		String expected = "test.classDescription(\n\t " //
-			+ "Inputs:\n\t\tjava.lang.Double input1\n\t\tjava.lang.Double input2\n\t " //
-			+ "Output:\n\t\tjava.lang.Double output1\n)\n"; //
-		String actual = info.toString();
-		Assertions.assertEquals(expected, actual);
-
 	}
 
 }

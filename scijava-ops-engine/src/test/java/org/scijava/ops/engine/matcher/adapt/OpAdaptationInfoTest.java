@@ -38,17 +38,28 @@ import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.adapt.functional.FunctionsToComputers;
 import org.scijava.ops.engine.copy.CopyOpCollection;
 import org.scijava.ops.engine.matcher.impl.OpClassInfo;
+import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpMethod;
 import org.scijava.types.Types;
 
-public class OpAdaptationInfoTest extends AbstractTestEnvironment {
+public class OpAdaptationInfoTest extends AbstractTestEnvironment implements
+		OpCollection
+{
 
 	@BeforeAll
 	public static void addNeededOps() {
-		ops.register(new CopyOpCollection<>());
+		ops.register(new OpAdaptationInfoTest());
+		ops.register(new CopyOpCollection());
+		ops.register(new FunctionsToComputers.Function2ToComputer2<>());
 	}
 
+	@OpMethod(names="test.adaptationDescription", type= BiFunction.class)
+	public static double[] adaptableOp(final Double t, final Double u) {
+		return new double[] {t, u};
+	}
 	static class ClassOp implements BiFunction<Double, Double, Double> {
 
 		@Override
@@ -59,14 +70,15 @@ public class OpAdaptationInfoTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testAdaptedDescription() {
-		OpClassInfo info = new OpClassInfo(ClassOp.class, new Hints(),
-				"test.adaptationDescription");
-		Type opType = Types.parameterize(Computers.Arity2.class, new Type[] {
-				Double.class, Double.class, Double.class });
-		OpAdaptationInfo adapted = new OpAdaptationInfo(info, opType, null);
-		String expected = "test.adaptationDescription(\n\t " //
-				+ "Inputs:\n\t\tjava.lang.Double input1\n\t\tjava.lang.Double input2\n\t " //
-				+ "Container (I/O):\n\t\tjava.lang.Double output1\n)\n";
+		// Match the above Op as a Computer
+		var adapted = ops.binary("test.adaptationDescription") //
+				.inType(Double.class, Double.class) //
+				.outType(double[].class) //
+				.computer();
+		String expected = "org.scijava.ops.engine.matcher.adapt.OpAdaptationInfoTest.adaptableOp(java.lang.Double,java.lang.Double)|Adaptor:|Info:org.scijava.ops.engine.adapt.functional.FunctionsToComputers$Function2ToComputer2@0-SNAPSHOT{|Info:org.scijava.ops.engine.copy.CopyOpCollection$copyDoubleArray@0-SNAPSHOT{}}\n\t" //
+				+ "> input1 : java.lang.Double\n\t" //
+				+ "> input2 : java.lang.Double\n\t" //
+				+ "> output1 : @CONTAINER double[]";
 		String actual = adapted.toString();
 		Assertions.assertEquals(expected, actual);
 	}

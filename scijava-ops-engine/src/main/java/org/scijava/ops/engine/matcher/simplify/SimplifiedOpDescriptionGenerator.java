@@ -63,7 +63,7 @@ public class SimplifiedOpDescriptionGenerator implements
 		Optional<String> nsString = getNonOpString(env, name);
 		if (nsString.isPresent()) return nsString.get();
 		var infos = SimplificationMatchingRoutine.getInfos(env, name);
-		return buildOpString(infos, req, Infos::describeOneLine);
+		return buildOpString(infos, req, Infos::describe);
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class SimplifiedOpDescriptionGenerator implements
 		Optional<String> nsString = getNonOpString(env, name);
 		if (nsString.isPresent()) return nsString.get();
 		var infos = env.infos(name);
-		return buildOpString(infos, req, Infos::describeMultiLine);
+		return buildOpString(infos, req, Infos::describeVerbose);
 	}
 
 	private String buildOpString(Collection<OpInfo> infos, OpRequest req,

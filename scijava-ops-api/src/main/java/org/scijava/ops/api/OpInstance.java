@@ -93,7 +93,7 @@ public class OpInstance<T> implements GenericTyped {
 
 	@Override
 	public String toString() {
-		return infoTree().info().implementationName();
+		return infoTree().info().toString();
 	}
 
 }

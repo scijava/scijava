@@ -81,10 +81,10 @@ public class SimplifiedOpInfoTest extends AbstractTestEnvironment implements
 	@Test
 	public void testSimplifiedDescription() {
 		SimplifiedOpInfo info = createSimpleInfo();
-		String expected = "test.simplifiedDescription(\n\t " //
-				+
-				"Inputs:\n\t\tjava.lang.Number input1\n\t\tjava.lang.Number input2\n\t " //
-				+ "Output:\n\t\torg.scijava.collections.ObjectArray<java.lang.Number> output1\n)\n";
+		String expected = "org.scijava.ops.engine.matcher.simplify.SimplifiedOpInfoTest$SimpleOp|simple\n\t" //
+				+ "> input1 : java.lang.Number\n\t" //
+				+ "> input2 : java.lang.Number\n\t" //
+				+ "Returns : org.scijava.collections.ObjectArray<java.lang.Number>";
 		String actual = info.toString();
 		Assertions.assertEquals(expected, actual);
 	}

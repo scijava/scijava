@@ -172,6 +172,16 @@ public class OpAdaptationInfo implements OpInfo {
 
 	@Override
 	public String toString() {
-		return Infos.describeVerbose(this);
+		// Get the original description
+		String description = Infos.describeVerbose(this);
+		// Make the name friendlier
+		StringBuilder sb = new StringBuilder();
+		sb.append(srcInfo.implementationName());
+		sb.append("\n\tAdaptor: ");
+		sb.append(adaptorChain.toString().replace("\n", "\n\t"));
+
+		int nameBreak = description.indexOf('\n');
+		sb.append(description.substring(nameBreak));
+		return sb.toString();
 	}
 }

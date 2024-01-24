@@ -75,7 +75,9 @@ public class OpAdaptationInfoTest extends AbstractTestEnvironment implements
 				.inType(Double.class, Double.class) //
 				.outType(double[].class) //
 				.computer();
-		String expected = "org.scijava.ops.engine.matcher.adapt.OpAdaptationInfoTest.adaptableOp(java.lang.Double,java.lang.Double)|Adaptor:|Info:org.scijava.ops.engine.adapt.functional.FunctionsToComputers$Function2ToComputer2@0-SNAPSHOT{|Info:org.scijava.ops.engine.copy.CopyOpCollection$copyDoubleArray@0-SNAPSHOT{}}\n\t" //
+		String expected = "org.scijava.ops.engine.matcher.adapt.OpAdaptationInfoTest.adaptableOp(java.lang.Double,java.lang.Double)\n\t" +
+				"Adaptor: org.scijava.ops.engine.adapt.functional.FunctionsToComputers$Function2ToComputer2\n\t\t" +
+				"Depends upon: org.scijava.ops.engine.copy.CopyOpCollection$copyDoubleArray\n\t" //
 				+ "> input1 : java.lang.Double\n\t" //
 				+ "> input2 : java.lang.Double\n\t" //
 				+ "> output1 : @CONTAINER double[]";

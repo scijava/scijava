@@ -109,7 +109,7 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 
 		// Get the Op matching the description
 		String descriptions = helpEnv.helpVerbose("help.verbose1");
-		String expected = "help.verbose1:\n\t- org.scijava.ops.engine.OpifyOp1\n\t\tReturns : java.lang.String\nKey: *=container, ^=mutable";
+		String expected = "help.verbose1:\n\t- org.scijava.ops.engine.OpifyOp1\n\t\tReturns : java.lang.String";
 		Assertions.assertEquals(expected, descriptions);
 	}
 
@@ -131,7 +131,7 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 		Assertions.assertEquals(expected, actual);
 		// ...but make sure that if we really need help with the internal namespace, we can get it
 		actual = helpEnv.help("engine.adapt");
-		expected = "engine.adapt:\n\t- () -> String\nKey: *=container, ^=mutable";
+		expected = "engine.adapt:\n\t- () -> String";
 		Assertions.assertEquals(expected, actual);
 	}
 

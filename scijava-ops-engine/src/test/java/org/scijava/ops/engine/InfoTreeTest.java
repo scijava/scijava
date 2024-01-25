@@ -52,10 +52,26 @@ import org.scijava.types.Nil;
  */
 public class InfoTreeTest extends AbstractTestEnvironment implements OpCollection {
 
+	private static InfoTree simpleTree;
+
+	private static InfoTree complexTree;
+
 	@BeforeAll
-	public static void addNeededOps() {
+	public static void additionalSetup() {
+		// add needed ops
 		ops.register(new InfoTreeTest());
 		ops.register(new ComplexOp());
+
+		// get simple InfoTree
+		OpInfo info = singularInfoOfName("test.infoTree");
+		simpleTree = new InfoTree(info);
+
+		// get dependent InfoTree
+		OpInfo complexInfo = singularInfoOfName("test.infoTreeBase");
+		complexTree = new InfoTree( //
+				complexInfo, //
+				Collections.singletonList(simpleTree) //
+		);
 	}
 
 	public static final String S = "this Op is cool";
@@ -65,30 +81,34 @@ public class InfoTreeTest extends AbstractTestEnvironment implements OpCollectio
 
 	@Test
 	public void testInfoChainInstantiation() {
-		OpInfo info = singularInfoOfName("test.infoTree");
-		InfoTree tree = new InfoTree(info);
 		Nil<Producer<String>> nil = new Nil<>() {};
-		Producer<String> op = ops.opFromInfoChain(tree, nil);
+		Producer<String> op = ops.opFromInfoChain(simpleTree, nil);
+		Assertions.assertEquals(S, op.create());
+
+		// Find dependency
+		nil = new Nil<>() {};
+		op = ops.opFromInfoChain(complexTree, nil);
 		Assertions.assertEquals(S, op.create());
 	}
 
 	@Test
-	public void testInfoChainWithDependenciesInstantiation() {
-		// Find dependency
-		OpInfo info = singularInfoOfName("test.infoTree");
-		InfoTree dependencyChain = new InfoTree(info);
+	public void testInfoChainToString() {
+		Assertions.assertEquals( //
+				simpleTree.info().implementationName(), //
+				simpleTree.toString() //
+		);
 
-		// Find dependent Op
-		OpInfo baseInfo = singularInfoOfName("test.infoTreeBase");
-		InfoTree tree = new InfoTree(baseInfo, Collections.singletonList(
-			dependencyChain));
-
-		Nil<Producer<String>> nil = new Nil<>() {};
-		Producer<String> op = ops.opFromInfoChain(tree, nil);
-		Assertions.assertEquals(S, op.create());
+		StringBuilder sb = new StringBuilder();
+		sb.append(complexTree.info().implementationName());
+		sb.append(InfoTree.DEPENDENCY_DELIM);
+		sb.append(complexTree.dependencies().get(0).info().implementationName());
+		Assertions.assertEquals( //
+				sb.toString(), //
+				complexTree.toString() //
+		);
 	}
 
-	private OpInfo singularInfoOfName(String name) {
+	private static OpInfo singularInfoOfName(String name) {
 		Iterator<OpInfo> infos = ops.infos(name).iterator();
 		Assertions.assertTrue(infos.hasNext());
 		OpInfo info = infos.next();

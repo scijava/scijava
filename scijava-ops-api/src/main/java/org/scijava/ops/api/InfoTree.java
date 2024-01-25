@@ -61,6 +61,8 @@ public class InfoTree {
 	public static final Character DEP_START_DELIM = '{';
 	public static final Character DEP_END_DELIM = '}';
 
+	public static final String DEPENDENCY_DELIM = "\n\tDepends upon: ";
+
 	private final List<InfoTree> dependencies;
 	private String id;
 
@@ -134,6 +136,15 @@ public class InfoTree {
 			s = s.concat(dependency.signature());
 		}
 		id = s.concat(String.valueOf(DEP_END_DELIM));
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder(info().implementationName());
+		for (var dep: dependencies()) {
+			sb.append(DEPENDENCY_DELIM).append(dep.toString().replace("\n", "\n\t"));
+		}
+		return sb.toString();
 	}
 
 }

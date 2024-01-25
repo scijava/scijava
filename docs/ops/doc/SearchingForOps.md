@@ -2,7 +2,7 @@
 
 As the `OpEnvironment` is fully extensible, different `OpEnvironment`s might contain different Ops, and it is important to be able to query an `OpEnvironment` about the available Ops.
 
-The `OpEnvironment.help()` API allows you to query an `OpEnvironment` about the types of Ops it contains, as we show in the following sections: 
+The `OpEnvironment.help()` API allows you to query an `OpEnvironment` about the types of Ops it contains, as we show in the following sections. **Note that the example printouts from the help API may not reflect the Ops available in *your* Op environment**. 
 
 ## Searching for operations
 
@@ -19,37 +19,25 @@ This gives the following printout:
 
 ```
 Namespaces:
-	> adapt
 	> coloc
 	> convert
 	> copy
-	> cp
 	> create
 	> deconvolve
-	> eval
+	> expression
 	> features
 	> filter
-	> focus
 	> geom
-	> identify
-	> identity
 	> image
 	> imageMoments
 	> labeling
 	> linalg
 	> logic
-	> lossReporter
 	> map
 	> math
 	> morphology
-	> project
 	> segment
-	> simplify
-	> slice
-	> source
-	> src
 	> stats
-	> test
 	> thread
 	> threshold
 	> topology
@@ -70,10 +58,11 @@ print(ops.help("filter"))
 This gives the following printout:
 
 ```
-Namespaces:
+Names:
 	> filter.DoG
 	> filter.addNoise
 	> filter.addPoissonNoise
+	> filter.addUniformNoise
 	> filter.applyCenterAware
 	> filter.bilateral
 	> filter.convolve
@@ -119,44 +108,11 @@ print(ops.help("filter.gauss"))
 ```
 
 ```
-Ops:
-	> filter.gauss(
-		 Inputs:
-			RandomAccessibleInterval<NumericType> null -> the input image
-			ObjectArray<Number> null -> the sigmas for the gaussian
-		 Containers (I/O):
-			RandomAccessibleInterval<NumericType> container1 -> the output image
-	)
-	
-	> filter.gauss(
-		 Inputs:
-			RandomAccessibleInterval<NumericType> null -> the input image
-			ObjectArray<Number> null -> the sigmas for the gaussian
-			OutOfBoundsFactory<NumericType, RandomAccessibleInterval<NumericType>> null? -> the {@link OutOfBoundsFactory} that defines how the
-	          calculation is affected outside the input bounds. (required =
-	          false)
-		 Containers (I/O):
-			RandomAccessibleInterval<NumericType> container1 -> the output image
-	)
-	
-	> filter.gauss(
-		 Inputs:
-			RandomAccessibleInterval<NumericType> null -> the input image
-			Number null -> the sigmas for the Gaussian
-		 Containers (I/O):
-			RandomAccessibleInterval<NumericType> container1 -> the preallocated output image
-	)
-	
-	> filter.gauss(
-		 Inputs:
-			RandomAccessibleInterval<NumericType> null -> the input image
-			Number null -> the sigmas for the Gaussian
-			OutOfBoundsFactory<NumericType, RandomAccessibleInterval<NumericType>> null? -> the {@link OutOfBoundsFactory} that defines how the
-	          calculation is affected outside the input bounds. (required =
-	          false)
-		 Containers (I/O):
-			RandomAccessibleInterval<NumericType> container1 -> the preallocated output image
-	)
+filter.gauss:
+	- (input, sigmas, @CONTAINER container1) -> None
+	- (input, sigmas, outOfBounds = null, @CONTAINER container1) -> None
+	- (input, sigma, @CONTAINER container1) -> None
+	- (input, sigma, outOfBounds = null, @CONTAINER container1) -> None
 ```
 
 Note that these descriptions are simple, and you can obtain more verbose descriptions by instead using the method `OpEnvironment.helpVerbose()`:
@@ -169,43 +125,25 @@ print(ops.helpVerbose("filter.gauss"))
 ```
 
 ```
-Ops:
-	> filter.gauss(
-		 Inputs:
-			net.imglib2.RandomAccessibleInterval<I> null -> the input image
-			double[] null -> the sigmas for the gaussian
-			net.imglib2.outofbounds.OutOfBoundsFactory<I, net.imglib2.RandomAccessibleInterval<I>> null? -> the {@link OutOfBoundsFactory} that defines how the
-	          calculation is affected outside the input bounds. (required =
-	          false)
-		 Containers (I/O):
-			net.imglib2.RandomAccessibleInterval<O> container1 -> the output image
-	)
-	
-	> filter.gauss(
-		 Inputs:
-			net.imglib2.RandomAccessibleInterval<I> null -> the input image
-			double[] null -> the sigmas for the gaussian
-		 Containers (I/O):
-			net.imglib2.RandomAccessibleInterval<O> container1 -> the output image
-	)
-	
-	> filter.gauss(
-		 Inputs:
-			net.imglib2.RandomAccessibleInterval<I> null -> the input image
-			java.lang.Double null -> the sigmas for the Gaussian
-			net.imglib2.outofbounds.OutOfBoundsFactory<I, net.imglib2.RandomAccessibleInterval<I>> null? -> the {@link OutOfBoundsFactory} that defines how the
-	          calculation is affected outside the input bounds. (required =
-	          false)
-		 Containers (I/O):
-			net.imglib2.RandomAccessibleInterval<O> container1 -> the preallocated output image
-	)
-	
-	> filter.gauss(
-		 Inputs:
-			net.imglib2.RandomAccessibleInterval<I> null -> the input image
-			java.lang.Double null -> the sigmas for the Gaussian
-		 Containers (I/O):
-			net.imglib2.RandomAccessibleInterval<O> container1 -> the preallocated output image
-	)
-
+filter.gauss:
+	- org.scijava.ops.image.filter.gauss.Gaussians.defaultGaussRAI(net.imglib2.RandomAccessibleInterval<I>,double[],net.imglib2.outofbounds.OutOfBoundsFactory<I, net.imglib2.RandomAccessibleInterval<I>>,net.imglib2.RandomAccessibleInterval<O>)
+		> input : net.imglib2.RandomAccessibleInterval<I>
+			the input image
+		> sigmas : double[]
+			the sigmas for the gaussian
+		> outOfBounds (optional) : net.imglib2.outofbounds.OutOfBoundsFactory<I, net.imglib2.RandomAccessibleInterval<I>>
+			the {@link OutOfBoundsFactory} that defines how the
+			calculation is affected outside the input bounds.
+		> container1 : @CONTAINER net.imglib2.RandomAccessibleInterval<O>
+			the output image
+	- org.scijava.ops.image.filter.gauss.Gaussians.gaussRAISingleSigma(net.imglib2.RandomAccessibleInterval<I>,double,net.imglib2.outofbounds.OutOfBoundsFactory<I, net.imglib2.RandomAccessibleInterval<I>>,net.imglib2.RandomAccessibleInterval<O>)
+		> input : net.imglib2.RandomAccessibleInterval<I>
+			the input image
+		> sigma : java.lang.Double
+			the sigmas for the Gaussian
+		> outOfBounds (optional) : net.imglib2.outofbounds.OutOfBoundsFactory<I, net.imglib2.RandomAccessibleInterval<I>>
+			the {@link OutOfBoundsFactory} that defines how the
+			calculation is affected outside the input bounds.
+		> container1 : @CONTAINER net.imglib2.RandomAccessibleInterval<O>
+			the preallocated output image
 ```

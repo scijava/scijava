@@ -32,7 +32,6 @@ package org.scijava.ops.engine.util;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -138,189 +137,45 @@ public final class Infos {
 			.collect(Collectors.toList());
 	}
 
-
 	/**
-	 * Generates a {@link String} describing the given {@link OpInfo}
-	 *
-	 * @param info the {@link OpInfo} of interest
-	 * @return a descriptor for {@code info}
-	 */
-	public static String describe(final OpInfo info) {
-		return describe(info, null, null);
-	}
-
-	/**
-	 * Generates a {@link String} describing the given {@link OpInfo}
-	 *
-	 * @param info the {@link OpInfo} of interest
-	 * @param name the name that the Op was searched by
-	 * @return a descriptor for {@code info}
-	 */
-	public static String describe(final OpInfo info, final String name) {
-		return describe(info, name, null);
-	}
-
-	/**
-	 * Generates a verbose {@link String} describing the given {@link OpInfo}
-	 *
-	 * @param info the {@link OpInfo} of interest
-	 * @return a descriptor for {@code info}
+	 * Forms a verbose description of {@code info}
+	 * @param info an {@link OpInfo}
+	 * @return a verbose description of {@code info}
 	 */
 	public static String describeVerbose(final OpInfo info) {
-			return describeVerbose(info, null, null);
-	}
-
-	/**
-	 * Generates a verbose {@link String} describing the given {@link OpInfo}
-	 *
-	 * @param info the {@link OpInfo} of interest
-	 * @param name the name that the Op was searched by
-	 * @return a descriptor for {@code info}
-	 */
-	public static String describeVerbose(final OpInfo info, final String name) {
-		return describeVerbose(info, name, null);
-	}
-
-	/**
-	 * Writes a {@link String} describing the {@link OpInfo} of interest
-	 * <b>with a particular {@link Member} highlighted</b>.
-	 *
-	 * @param info the {@link OpInfo} of interest
-	 * @param special a {@link Member} to highlight
-	 * @return a descriptor for {@code info}
-	 */
-	public static String describe(final OpInfo info, final Member<?> special) {
-		return describe(info, null, special);
-	}
-
-	/**
-	 * Writes a {@link String} describing the {@link OpInfo} of interest
-	 * <b>with a particular {@link Member} highlighted</b>.
-	 *
-	 * @param info the {@link OpInfo} of interest
-	 * @param name the name that the Op was searched by
-	 * @param special a {@link Member} to highlight
-	 * @return a descriptor for {@code info}
-	 */
-	public static String describe(final OpInfo info, final String name, final Member<?> special) {
-		return description(info, name, special, false);
-	}
-
-	/**
-	 * Writes a verbose {@link String} describing the {@link OpInfo} of interest
-	 * <b>with a particular {@link Member} highlighted</b>.
-	 *
-	 * @param info the {@link OpInfo} of interest
-	 * @param special a {@link Member} to highlight
-	 * @return a descriptor for {@code info}
-	 */
-	public static String describeVerbose(final OpInfo info, final Member<?> special) {
-			return describeVerbose(info, null, special);
-	}
-
-	/**
-	 * Writes a verbose {@link String} describing the {@link OpInfo} of interest
-	 * <b>with a particular {@link Member} highlighted</b>.
-	 *
-	 * @param info the {@link OpInfo} of interest
-	 * @param name the name that the Op was searched by
-	 * @param special a {@link Member} to highlight
-	 * @return a descriptor for {@code info}
-	 */
-	public static String describeVerbose(final OpInfo info, final String name, final Member<?> special) {
-		return description(info, name, special, true);
-	}
-
-	/**
-	 * Private method to describe {@code info}, optionally highlighting some member {@code special}. Description is verbose iff {@code verbose=true}.
-	 *
-	 * @param info the {@link OpInfo} to describe
-	 * @param special the {@link Member} to highlight
-	 * @param verbose iff {@code true}, returns a verbose description
-	 * @return a description of {@code info}
-	 */
-	private static String description(final OpInfo info, final String name, final Member<?> special,
-		boolean verbose)
-	{
-		final StringBuilder sb = new StringBuilder();
-		// Step 1: Name
-		if (name != null) {
-			if (!info.names().contains(name)) {
-				throw new IllegalArgumentException("OpInfo " + info.implementationName() + " has no name " + name);
-			}
-			sb.append(name);
-		}
-		else {
-			sb.append(info.names().get(0));
-		}
-		sb.append("(\n");
-		// Step 2: Inputs
-		List<Member<?>> members = info.inputs();
-		List<Member<?>> containers = new ArrayList<>();
-		if (!members.isEmpty()) {
-			sb.append("\t Inputs:\n");
-			for (final Member<?> arg : info.inputs()) {
-				if (arg.getIOType() == ItemIO.INPUT)
-					appendParam(sb, arg, special, verbose);
-				else containers.add(arg);
-			}
-		}
-		// Step 3: Output
-		if (containers.isEmpty()) {
-			sb.append("\t Output:\n");
-			appendParam(sb, info.output(), special, verbose);
-		}
-		else {
-			sb.append("\t Container (I/O):\n");
-			containers.forEach(c -> appendParam(sb, c, special, verbose));
-		}
-		sb.append(")\n");
-		return sb.toString();
-	}
-
-	public static String describeMultiLine(final OpInfo info) {
 		final StringBuilder sb = new StringBuilder(info.implementationName());
 		// Step 2: Inputs
-		String key;
 		for (var member: info.inputs()) {
 			sb.append("\n\t");
-			switch (member.getIOType()) {
-				case INPUT:
-					key = member.getKey();
-					break;
-				case MUTABLE:
-					key = "^" + member.getKey();
-					break;
-				case CONTAINER:
-					key = "*" + member.getKey();
-					break;
-				default:
-					throw new IllegalArgumentException("Invalid IO type: " + member.getIOType());
-			}
-			sb.append("> ").append(key) //
+			sb.append("> ").append(member.getKey()) //
 					.append(member.isRequired() ? "" : " (optional)")  //
-					.append(" : ") //
-					.append(typeString(member.getType(), true)); //
+					.append(" : ");
+			if (member.getIOType() == ItemIO.CONTAINER) {
+				sb.append("@CONTAINER ");
+			}
+			else if (member.getIOType() == ItemIO.MUTABLE) {
+				sb.append("@MUTABLE ");
+			}
+
+			sb.append(typeString(member.getType(), true)); //
 			if (!member.getDescription().isBlank()) {
 				sb.append("\n\t\t").append(member.getDescription().replaceAll("\n\\s*", "\n\t\t"));
 			}
 		}
 		// Step 3: Output
 		Member<?> output = info.output();
-		switch (output.getIOType()) {
-			case OUTPUT:
+		if (output.getIOType() == ItemIO.OUTPUT) {
 				sb.append("\n\tReturns : ").append(typeString(output.getType(), true));
-				break;
-			case MUTABLE:
-			case CONTAINER:
-				break;
-			default:
-				throw new IllegalArgumentException("Invalid IO type: " + output.getIOType());
 		}
 		return sb.toString();
 	}
 
-	public static String describeOneLine(final OpInfo info) {
+	/**
+	 * Forms a brief description of {@code info}
+	 * @param info an {@link OpInfo}
+	 * @return a brief description of {@code info}
+	 */
+	public static String describe(final OpInfo info) {
 		final StringBuilder sb = new StringBuilder("(");
 		// Step 2: Inputs
 		var inputs = info.inputs().stream().map(member-> {
@@ -330,10 +185,10 @@ public final class Infos {
 					str += member.getKey();
 					break;
 				case MUTABLE:
-					str += "^" + member.getKey();
+					str += "@MUTABLE " + member.getKey();
 					break;
 				case CONTAINER:
-					str += "*" + member.getKey();
+					str += "@CONTAINER " + member.getKey();
 					break;
 				default:
 					throw new IllegalArgumentException("Invalid IO type: " + member.getIOType());
@@ -353,41 +208,13 @@ public final class Infos {
 				sb.append(typeString(output.getType(), false));
 				break;
 			case MUTABLE:
-				sb.append("None");
-//				sb.append("None [Overwrites MUTABLE]");
-				break;
 			case CONTAINER:
 				sb.append("None");
-//				sb.append("None [Fills CONTAINER]");
 				break;
 			default:
 				throw new IllegalArgumentException("Invalid IO type: " + output.getIOType());
 		}
 		return sb.toString();
-	}
-
-	/**
-	 * Appends a {@link Member} to the {@link StringBuilder} writing the Op
-	 * string.
-	 *
-	 * @param sb      the {@link StringBuilder}
-	 * @param arg     the {@link Member} being appended to {@code sb}
-	 * @param special the {@link Member} to highlight
-	 * @param verbose appends a verbose description iff {@code true}
-	 */
-	private static void appendParam(final StringBuilder sb, final Member<?> arg,
-													 final Member<?> special, final boolean verbose) {
-			if (arg == special) sb.append("==> \t"); // highlight special item
-			else sb.append("\t\t");
-			sb.append(typeString(arg.getType(), verbose));
-			sb.append(" ");
-			sb.append(arg.getKey());
-			if (!arg.isRequired()) sb.append(" = null");
-			if (!arg.getDescription().isEmpty()) {
-					sb.append(" -> ");
-					sb.append(arg.getDescription());
-			}
-			sb.append("\n");
 	}
 
 	private static String typeString(final Type input, final boolean verbose) {
@@ -397,17 +224,17 @@ public final class Infos {
 					var bounds = ((TypeVariable<?>)input).getBounds();
 					String[] s = new String[bounds.length];
 					for(int i = 0; i < s.length; i++) {
-							s[i] = typeString(Types.raw(bounds[i]), verbose);
+							s[i] = typeString(Types.raw(bounds[i]), false);
 					}
 					return String.join("+", s);
 			}
 			else if (input instanceof ParameterizedType) {
 					var pType = (ParameterizedType) input;
-					var raw = typeString(pType.getRawType(), verbose);
+					var raw = typeString(pType.getRawType(), false);
 					Type[] args = pType.getActualTypeArguments();
 					String[] s = new String[args.length];
 					for(int i = 0; i < args.length; i++) {
-							s[i] = typeString(args[i], verbose);
+							s[i] = typeString(args[i], false);
 					}
 					return raw + "<" + String.join(", ", s) + ">";
 			}

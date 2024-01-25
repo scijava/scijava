@@ -477,8 +477,16 @@ public final class GenericAssignability {
 		Type superInferFrom = Types.getExactSuperType(inferFrom, Types.raw(type));
 		if (superInferFrom instanceof ParameterizedType) {
 			ParameterizedType paramInferFrom = (ParameterizedType) superInferFrom;
-			inferTypeVariables(type.getActualTypeArguments(), paramInferFrom
-				.getActualTypeArguments(), typeMappings, false);
+			if (!Types.isRecursive(paramInferFrom)) {
+				inferTypeVariables(type.getActualTypeArguments(),
+						paramInferFrom.getActualTypeArguments(), typeMappings, false);
+			} else {
+				// Recursively parameterized types will cause infinite recursion if we
+				// naively recurse the type inference. Instead we simply continue with
+				// the raw type.
+				inferTypeVariables(type.getActualTypeArguments(),
+						new Type[]{paramInferFrom.getRawType()}, typeMappings, false);
+			}
 		}
 		else if (superInferFrom instanceof Class) {
 			TypeVarAssigns typeVarAssigns = new TypeVarAssigns(typeMappings);

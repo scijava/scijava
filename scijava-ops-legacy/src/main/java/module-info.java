@@ -28,9 +28,16 @@
  */
 module org.scijava.legacy {
 
+	exports org.scijava.legacy.service to org.scijava;
+	exports org.scijava.legacy.module.process to org.scijava;
+
+	opens org.scijava.legacy.module.process to org.scijava;
+
 	requires net.imagej;
+	requires org.scijava;
 	requires org.scijava.types;
 	requires org.scijava.priority;
+	requires org.scijava.ops.api;
 
 	provides org.scijava.types.TypeExtractor with org.scijava.legacy.types.DatasetTypeExtractor;
 }

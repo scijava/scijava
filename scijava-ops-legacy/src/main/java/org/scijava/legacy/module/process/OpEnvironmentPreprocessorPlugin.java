@@ -1,7 +1,7 @@
 package org.scijava.legacy.module.process;
 
 import org.scijava.Priority;
-import org.scijava.legacy.service.OpService;
+import org.scijava.legacy.service.OpEnvironmentService;
 import org.scijava.module.Module;
 import org.scijava.module.ModuleItem;
 import org.scijava.module.process.AbstractPreprocessorPlugin;
@@ -16,7 +16,7 @@ public class OpEnvironmentPreprocessorPlugin extends
 {
 
 	@Parameter
-	private OpService opService;
+	private OpEnvironmentService opEnvironmentService;
 
 	@Override
 	public void process(Module module) {
@@ -27,7 +27,7 @@ public class OpEnvironmentPreprocessorPlugin extends
 			if (OpEnvironment.class.equals(type)) {
 				@SuppressWarnings("unchecked")
 				final ModuleItem<OpEnvironment> envInput = (ModuleItem<OpEnvironment>) input;
-				envInput.setValue(module, opService.env());
+				envInput.setValue(module, opEnvironmentService.env());
 				module.resolveInput(input.getName());
 			}
 		}

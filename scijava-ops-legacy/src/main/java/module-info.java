@@ -26,12 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-module org.scijava.legacy {
-
-	exports org.scijava.legacy.service to org.scijava;
-	exports org.scijava.legacy.module.process to org.scijava;
-
-	opens org.scijava.legacy.module.process to org.scijava;
+open module org.scijava.legacy {
 
 	requires net.imagej;
 	requires org.scijava;

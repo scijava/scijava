@@ -1,11 +1,10 @@
 package org.scijava.legacy.module.process;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.scijava.Context;
 import org.scijava.command.Command;
 import org.scijava.command.CommandService;
-import org.scijava.legacy.service.OpService;
+import org.scijava.legacy.service.OpEnvironmentService;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.plugin.Parameter;
 
@@ -17,10 +16,10 @@ public class OpEnvironmentPreprocessorTest {
 	public void testOpEnvironmentPreprocessor()
 		throws ExecutionException, InterruptedException
 	{
-		final Context context = new Context(CommandService.class, OpService.class);
-		final CommandService commandService = context.service(CommandService.class);
-		var command = commandService.run(CommandWithOpEnvironment.class, true).get();
-		Assertions.assertDoesNotThrow(command::run);
+		var context = new Context(CommandService.class, OpEnvironmentService.class);
+		var commandService = context.service(CommandService.class);
+		commandService.run(CommandWithOpEnvironment.class, true).get();
+		context.dispose();
 	}
 
 	public static class CommandWithOpEnvironment implements Command {
@@ -31,7 +30,8 @@ public class OpEnvironmentPreprocessorTest {
 		@Override
 		public void run() {
 			if (env == null) {
-				throw new IllegalArgumentException("OpEnvironment not properly injected!");
+				throw new IllegalArgumentException(
+					"OpEnvironment not properly injected!");
 			}
 		}
 	}

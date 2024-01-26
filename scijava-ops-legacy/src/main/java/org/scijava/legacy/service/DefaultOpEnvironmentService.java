@@ -1,13 +1,14 @@
 package org.scijava.legacy.service;
 
 import org.scijava.ops.api.OpEnvironment;
+import org.scijava.plugin.Attr;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.script.ScriptService;
 import org.scijava.service.AbstractService;
 import org.scijava.service.Service;
 
-@Plugin(type= Service.class)
+@Plugin(type= Service.class, attrs = { @Attr(name="noAlias") })
 public class DefaultOpEnvironmentService extends AbstractService implements
 	OpEnvironmentService
 {

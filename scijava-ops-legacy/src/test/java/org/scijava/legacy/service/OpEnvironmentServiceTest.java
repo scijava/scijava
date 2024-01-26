@@ -32,10 +32,13 @@ public class OpEnvironmentServiceTest {
 	public void testOpEnvironmentAlias() {
 		Context ctx = new Context(OpEnvironmentService.class, ScriptService.class);
 		ScriptService script = ctx.getService(ScriptService.class);
+		// Assert the correct alias for OpEnvironment
 		Assertions.assertEquals( //
 			OpEnvironment.class, //
 			script.getAliases().get("OpEnvironment") //
 		);
+		// Assert no alias for OpEnvironmentService
+		Assertions.assertNull(script.getAliases().get("OpEnvironmentService"));
 		ctx.dispose();
 	}
 

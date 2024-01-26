@@ -190,13 +190,13 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-api</artifactId>
-			<version>0-SNAPSHOT</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-engine</artifactId>
-			<version>0-SNAPSHOT</version>
+			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

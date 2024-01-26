@@ -1,3 +1,4 @@
+
 package org.scijava.legacy.service;
 
 import org.junit.jupiter.api.Assertions;
@@ -6,14 +7,19 @@ import org.scijava.Context;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.script.ScriptService;
 
+/**
+ * Tests {@link OpEnvironmentService} API.
+ *
+ * @author Gabriel Selzer
+ */
 public class OpEnvironmentServiceTest {
 
 	/**
-	 * Tests that an {@link OpEnvironmentService} produces an {@link OpEnvironment} with some
-	 * Ops in it.
+	 * Tests that an {@link OpEnvironmentService} produces an
+	 * {@link OpEnvironment} with some Ops in it.
 	 */
 	@Test
-	public void testOpService() {
+	public void testOpEnvironmentService() {
 		Context ctx = new Context(OpEnvironmentService.class);
 		OpEnvironmentService ops = ctx.getService(OpEnvironmentService.class);
 		Double result = ops.env().binary("math.add") //
@@ -29,7 +35,7 @@ public class OpEnvironmentServiceTest {
 	 * alias points to {@link OpEnvironment}.
 	 */
 	@Test
-	public void testOpEnvironmentAlias() {
+	public void testOpEnvironmentServiceAliases() {
 		Context ctx = new Context(OpEnvironmentService.class, ScriptService.class);
 		ScriptService script = ctx.getService(ScriptService.class);
 		// Assert the correct alias for OpEnvironment

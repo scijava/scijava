@@ -1,3 +1,4 @@
+
 package org.scijava.legacy.module.process;
 
 import org.junit.jupiter.api.Test;
@@ -10,11 +11,17 @@ import org.scijava.plugin.Parameter;
 
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Tests the ability of {@link OpEnvironmentPreprocessorPlugin} to fill in
+ * {@link OpEnvironment} module parameters.
+ *
+ * @author Gabriel Selzer
+ */
 public class OpEnvironmentPreprocessorTest {
 
 	@Test
-	public void testOpEnvironmentPreprocessor()
-		throws ExecutionException, InterruptedException
+	public void testOpEnvironmentPreprocessor() throws ExecutionException,
+		InterruptedException
 	{
 		var context = new Context(CommandService.class, OpEnvironmentService.class);
 		var commandService = context.service(CommandService.class);
@@ -29,6 +36,7 @@ public class OpEnvironmentPreprocessorTest {
 
 		@Override
 		public void run() {
+			// Fails the test if the OpEnvironment was not injected
 			if (env == null) {
 				throw new IllegalArgumentException(
 					"OpEnvironment not properly injected!");

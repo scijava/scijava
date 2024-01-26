@@ -1,3 +1,4 @@
+
 package org.scijava.legacy.module.process;
 
 import org.scijava.Priority;
@@ -10,7 +11,13 @@ import org.scijava.ops.api.OpEnvironment;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
-@Plugin(type= PreprocessorPlugin.class, priority = Priority.HIGH)
+/**
+ * A {@link PreprocessorPlugin} used to inject an {@link OpEnvironment}, created
+ * by the {@link OpEnvironmentService}, into {@link Module}s.
+ *
+ * @author Gabriel Selzer
+ */
+@Plugin(type = PreprocessorPlugin.class, priority = Priority.HIGH)
 public class OpEnvironmentPreprocessorPlugin extends
 	AbstractPreprocessorPlugin
 {
@@ -20,13 +27,14 @@ public class OpEnvironmentPreprocessorPlugin extends
 
 	@Override
 	public void process(Module module) {
-		for (final ModuleItem<?> input: module.getInfo().inputs()) {
+		for (final ModuleItem<?> input : module.getInfo().inputs()) {
 			if (!input.isAutoFill()) continue;
 			if (module.isInputResolved(input.getName())) continue;
 			final Class<?> type = input.getType();
 			if (OpEnvironment.class.equals(type)) {
 				@SuppressWarnings("unchecked")
-				final ModuleItem<OpEnvironment> envInput = (ModuleItem<OpEnvironment>) input;
+				final ModuleItem<OpEnvironment> envInput =
+					(ModuleItem<OpEnvironment>) input;
 				envInput.setValue(module, opEnvironmentService.env());
 				module.resolveInput(input.getName());
 			}

@@ -1,3 +1,4 @@
+
 package org.scijava.legacy.service;
 
 import org.scijava.ops.api.OpEnvironment;
@@ -8,20 +9,27 @@ import org.scijava.script.ScriptService;
 import org.scijava.service.AbstractService;
 import org.scijava.service.Service;
 
-@Plugin(type= Service.class, attrs = { @Attr(name="noAlias") })
+/**
+ * Default implementation of {@link OpEnvironmentService}
+ *
+ * @author Gabriel Selzer
+ */
+@Plugin(type = Service.class, attrs = { @Attr(name = "noAlias") })
 public class DefaultOpEnvironmentService extends AbstractService implements
 	OpEnvironmentService
 {
 
-	@Parameter(required=false)
+	@Parameter(required = false)
 	private ScriptService scriptService;
 
 	private OpEnvironment env;
 
 	@Override
 	public void initialize() {
- 		env = OpEnvironment.build();
+		// Build the Op Environment
+		env = OpEnvironment.build();
 
+		// Set up alias, if ScriptService available
 		if (scriptService != null) {
 			scriptService.addAlias(OpEnvironment.class);
 		}

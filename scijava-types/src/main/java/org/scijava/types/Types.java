@@ -582,6 +582,26 @@ public final class Types {
 	}
 
 	/**
+	 * Helper method to detect if a particular bound, {@code typeBound}, of a
+	 * reference type, {@code refType}, is a recursive type parameter: that is, if
+	 * {@code typeBound} itself has a type argument equal to {@code refType}.
+	 *
+	 *
+	 * @param refType Base type to check
+	 * @param typeBound A bound of {@code refType}
+	 * @return True if {@code typeBound} is parameterized with a type argument
+	 *         that is itself equal to {@code refType}
+	 */
+	public static boolean isRecursiveBound(final Type refType, final Type typeBound) {
+		if (typeBound instanceof ParameterizedType) {
+			for (Type boundArg : ((ParameterizedType) typeBound).getActualTypeArguments()) {
+				if (Objects.equals(refType,boundArg)) return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Discerns whether it would be legal to pass a sequence of references of the
 	 * given source types to a method with parameters typed according to the
 	 * specified sequence of destination types.

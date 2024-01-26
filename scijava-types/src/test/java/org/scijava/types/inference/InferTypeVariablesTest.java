@@ -248,7 +248,7 @@ public class InferTypeVariablesTest {
 		// We expect O = FooThing
 		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.getType();
 		Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
-		expected.put(typeVarO, new TypeMapping(typeVarO, FooThing.class, false));
+		expected.put(typeVarO, new TypeMapping(typeVarO, FooThing.class, true));
 
 		Assertions.assertEquals(expected, typeAssigns);
 	}

@@ -611,7 +611,7 @@ public final class GenericAssignability {
 						throw new TypeInferenceException();
 					}
 				}
-				else {
+				else if (!Types.isRecurisveBound(type, bound)) {
 					// Else go into recursion as we encountered a new var.
 					inferTypeVariables(bound, inferFrom, typeMappings);
 				}

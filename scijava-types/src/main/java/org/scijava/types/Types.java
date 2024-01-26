@@ -551,7 +551,56 @@ public final class Types {
 		if (dest == null) return false;
 		return obj == null || dest.isInstance(obj);
 	}
-	
+
+	/**
+	 * Checks if the given {@link Type} is recursively typed: that is
+	 * if it's a {@link ParameterizedType} with a self-referential type parameter.
+	 *
+	 * @param type Type of interest to interrogate
+	 * @return {@code True} if the given type is recursively parameterized,
+	 *         {@code False} otherwise
+	 */
+	public static boolean isRecursive(final Type type) {
+		// type = Foo<T extends Foo<T>>
+		if (type instanceof ParameterizedType) {
+			ParameterizedType parameterizedType = (ParameterizedType) type;
+			Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+			for (Type arg : actualTypeArguments) {
+				if (arg instanceof TypeVariable) {
+					// arg = T extends Foo<T>
+					TypeVariable<?> argVar = (TypeVariable<?>) arg;
+					for (Type bound : argVar.getBounds()) {
+						// bound is Foo<T>
+						if (bound.equals(type)) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Helper method to detect if a particular bound, {@code typeBound}, of a
+	 * reference type, {@code refType}, is a recursive type parameter: that is, if
+	 * {@code typeBound} itself has a type argument equal to {@code refType}.
+	 *
+	 *
+	 * @param refType Base type to check
+	 * @param typeBound A bound of {@code refType}
+	 * @return True if {@code typeBound} is parameterized with a type argument
+	 *         that is itself equal to {@code refType}
+	 */
+	public static boolean isRecursiveBound(final Type refType, final Type typeBound) {
+		if (typeBound instanceof ParameterizedType) {
+			for (Type boundArg : ((ParameterizedType) typeBound).getActualTypeArguments()) {
+				if (Objects.equals(refType,boundArg)) return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Discerns whether it would be legal to pass a sequence of references of the
 	 * given source types to a method with parameters typed according to the
@@ -2983,8 +3032,7 @@ public final class Types {
 		 *         {@link GenericArrayType}.
 		 */
 		public static boolean isArrayType(final Type type) {
-			return type instanceof GenericArrayType || type instanceof Class &&
-				((Class<?>) type).isArray();
+			return type instanceof GenericArrayType || type instanceof Class && ((Class<?>) type).isArray();
 		}
 
 		/**

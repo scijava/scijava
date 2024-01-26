@@ -52,6 +52,8 @@ public class InferTypeVariablesTest {
 
 	static abstract class RecursiveThing<T extends RecursiveThing<T>> {}
 
+	static abstract class RecursiveSubThing<U> extends RecursiveThing<RecursiveSubThing<U>> {}
+
 	class StrangeThing<N extends Number, T> extends Thing<T> {}
 
 	class Thing<T> {}
@@ -246,7 +248,7 @@ public class InferTypeVariablesTest {
 		// We expect O = FooThing
 		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.getType();
 		Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
-		expected.put(typeVarO, new TypeMapping(typeVarO, FooThing.class, false));
+		expected.put(typeVarO, new TypeMapping(typeVarO, FooThing.class, true));
 
 		Assertions.assertEquals(expected, typeAssigns);
 	}
@@ -407,5 +409,24 @@ public class InferTypeVariablesTest {
 		Assertions.assertEquals(expected2, typeAssigns2);
 	}
 
+	// NB RecursiveSubThing<L> extends RecursiveThing<RecursiveSubThing<L>>
+	@Test
+	public <T extends RecursiveThing<T>, L extends RecursiveThing<L>> void inferImgLabelingFromRAI() {
+		// This is a confusing test. Key insight
+		// RecursiveSubThing has *two* type variables:
+		// 	one *any* param, declared by RST
+		// 	one recursive param, declared by superclass RecursiveThing
+		// The "L" in this test is the "any" param, even though it itself is also
+		// recursive in this case.
+		var paramType = new Nil<RecursiveSubThing<L>>() {}.getType();
+		var argType = new Nil<T>() {}.getType();
 
+		Map<TypeVariable<?>, Type> typeAssigns = new HashMap<>();
+		GenericAssignability.inferTypeVariables(new java.lang.reflect.Type[] {paramType},
+				new java.lang.reflect.Type[] {argType}, typeAssigns);
+		TypeVariable<?> typeVar = (TypeVariable<?>) new Nil<L>(){}.getType();
+		final Map<TypeVariable<?>, Type> expected = new HashMap<>();
+		expected.put(typeVar, Any.class);
+		Assertions.assertEquals(expected, typeAssigns);
+	}
 }

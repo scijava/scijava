@@ -50,6 +50,7 @@ import static org.scijava.testutil.ExampleTypes.Words;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -307,6 +308,18 @@ public class TypesTest {
 		// casting to null is not allowed
 		assertFalse(Types.isInstance(nullObject, null));
 		assertFalse(Types.isInstance(new Object(), null));
+	}
+
+
+	private static class RecursiveClass<T extends RecursiveClass<T>> {
+
+	}
+
+	/** Tests {@link Types#isRecursive(Type)} */
+	@Test
+	public void testIsRecursive() {
+		assertFalse(Types.isRecursive(Types.parameterizeRaw(new ArrayList<Number>().getClass())));
+		assertTrue(Types.isRecursive(Types.parameterizeRaw(new RecursiveClass<>().getClass())));
 	}
 
 	/** Tests {@link Types#isApplicable(Type[], Type[])} for raw classes. */

@@ -31,13 +31,7 @@ package org.scijava.types.inference;
 
 import com.google.common.base.Objects;
 
-import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.lang.reflect.WildcardType;
+import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -477,8 +471,16 @@ public final class GenericAssignability {
 		Type superInferFrom = Types.getExactSuperType(inferFrom, Types.raw(type));
 		if (superInferFrom instanceof ParameterizedType) {
 			ParameterizedType paramInferFrom = (ParameterizedType) superInferFrom;
-			inferTypeVariables(type.getActualTypeArguments(), paramInferFrom
-				.getActualTypeArguments(), typeMappings, false);
+			if (!Types.isRecursive(paramInferFrom)) {
+				inferTypeVariables(type.getActualTypeArguments(),
+						paramInferFrom.getActualTypeArguments(), typeMappings, false);
+			} else {
+				// Recursively parameterized types will cause infinite recursion if we
+				// naively recurse the type inference. Instead we simply continue with
+				// the raw type.
+				inferTypeVariables(type.getActualTypeArguments(),
+						new Type[]{paramInferFrom.getRawType()}, typeMappings, false);
+			}
 		}
 		else if (superInferFrom instanceof Class) {
 			TypeVarAssigns typeVarAssigns = new TypeVarAssigns(typeMappings);
@@ -603,7 +605,7 @@ public final class GenericAssignability {
 						throw new TypeInferenceException();
 					}
 				}
-				else {
+				else if (!Types.isRecursiveBound(type, bound)) {
 					// Else go into recursion as we encountered a new var.
 					inferTypeVariables(bound, inferFrom, typeMappings);
 				}

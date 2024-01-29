@@ -80,14 +80,8 @@ public class DefaultOpMatcher implements OpMatcher {
 		final OpEnvironment env //
 	) {
 		// Develop help message
-		var msg = "No match found!";
-		try {
-			// TODO: Remove try/catch.
-			msg += " Perhaps you meant: \n" + env.help(request);
-		} catch (StackOverflowError e) {
-			// No-op
-		}
-        OpMatchingException agglomerated = new OpMatchingException(msg);
+		var msg = "No match found! Perhaps you meant: \n" + env.help(request);
+		OpMatchingException agglomerated = new OpMatchingException(msg);
 		list.forEach(agglomerated::addSuppressed);
 		return agglomerated;
 	}

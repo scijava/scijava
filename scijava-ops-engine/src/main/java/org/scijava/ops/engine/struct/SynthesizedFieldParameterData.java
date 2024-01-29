@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -56,8 +56,7 @@ public class SynthesizedFieldParameterData implements ParameterData {
 	public SynthesizedFieldParameterData(FieldInstance fieldInstance) {
 		this.fieldInstance = fieldInstance;
 		this.numInputs = FunctionalInterfaces //
-				.functionalMethodOf(fieldInstance.field().getType())
-				.getParameterCount();
+			.functionalMethodOf(fieldInstance.field().getType()).getParameterCount();
 	}
 
 	@Override
@@ -66,14 +65,14 @@ public class SynthesizedFieldParameterData implements ParameterData {
 	{
 
 		// determine the optionality of each input
-		Boolean[] optionality = getParameterNullability(fieldInstance
-				.instance(), fieldInstance.field(), numInputs);
+		Boolean[] optionality = getParameterNullability(fieldInstance.instance(),
+			fieldInstance.field(), numInputs);
 		// determine the name of each fmt
 		List<String> names = getParameterNames(fmts);
 		// map fmts to members
 		int p = 0;
 		List<SynthesizedParameterMember<?>> members = new ArrayList<>(fmts.size());
-		for (FunctionalMethodType fmt: fmts) {
+		for (FunctionalMethodType fmt : fmts) {
 			String name = names.get(p);
 			boolean optional = fmt.itemIO() != ItemIO.OUTPUT && optionality[p++];
 			members.add(new SynthesizedParameterMember<>(fmt, name, !optional, ""));
@@ -81,9 +80,7 @@ public class SynthesizedFieldParameterData implements ParameterData {
 		return members;
 	}
 
-	private List<String> getParameterNames(
-			List<FunctionalMethodType> fmts)
-	{
+	private List<String> getParameterNames(List<FunctionalMethodType> fmts) {
 		List<String> fmtNames = new ArrayList<>(fmts.size());
 		int ins, outs, containers, mutables;
 		ins = outs = containers = mutables = 1;

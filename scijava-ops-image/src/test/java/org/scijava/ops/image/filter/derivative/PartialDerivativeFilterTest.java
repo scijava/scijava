@@ -5,13 +5,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -47,16 +47,16 @@ import org.scijava.types.Nil;
 
 /**
  * Test for partial derivative op.
- * 
- * @author Eike Heinz, University of Konstanz
  *
+ * @author Eike Heinz, University of Konstanz
  */
 
 public class PartialDerivativeFilterTest extends AbstractOpTest {
 
 	@Test
 	public void test() {
-		Img<FloatType> img = TestImgGeneration.floatArray(false, new long[] { 20, 20 });
+		Img<FloatType> img = TestImgGeneration.floatArray(false, new long[] { 20,
+			20 });
 
 		Cursor<FloatType> cursorImg = img.cursor();
 		int counterX = 0;
@@ -64,7 +64,8 @@ public class PartialDerivativeFilterTest extends AbstractOpTest {
 		while (cursorImg.hasNext()) {
 			if (counterX > 8 && counterX < 12 || counterY > 8 && counterY < 12) {
 				cursorImg.next().setOne();
-			} else {
+			}
+			else {
 				cursorImg.next().setZero();
 			}
 			counterX++;
@@ -79,8 +80,10 @@ public class PartialDerivativeFilterTest extends AbstractOpTest {
 			}
 		}
 
-		RandomAccessibleInterval<FloatType> out = ops.op("filter.partialDerivative").arity2().input(img, 0)
-				.outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
+		RandomAccessibleInterval<FloatType> out = ops.op("filter.partialDerivative")
+			.arity2().input(img, 0).outType(
+				new Nil<RandomAccessibleInterval<FloatType>>()
+				{}).apply();
 
 		FloatType type = Util.getTypeFromInterval(out).createVariable();
 		type.set(4.0f);
@@ -137,7 +140,8 @@ public class PartialDerivativeFilterTest extends AbstractOpTest {
 
 	@Test
 	public void testAllDerivatives() {
-		Img<FloatType> img = TestImgGeneration.floatArray(false, new long[] { 20, 20, 3 });
+		Img<FloatType> img = TestImgGeneration.floatArray(false, new long[] { 20,
+			20, 3 });
 
 		Cursor<FloatType> cursorImg = img.cursor();
 		int counterX = 0;
@@ -145,7 +149,8 @@ public class PartialDerivativeFilterTest extends AbstractOpTest {
 		while (cursorImg.hasNext()) {
 			if (counterX > 8 && counterX < 12 || counterY > 8 && counterY < 12) {
 				cursorImg.next().setOne();
-			} else {
+			}
+			else {
 				cursorImg.next().setZero();
 			}
 			counterX++;
@@ -160,10 +165,13 @@ public class PartialDerivativeFilterTest extends AbstractOpTest {
 			}
 		}
 
-		CompositeIntervalView<FloatType, RealComposite<FloatType>> out = ops.op("filter.partialDerivative")
-				.arity1().input(img).outType(new Nil<CompositeIntervalView<FloatType, RealComposite<FloatType>>>() {}).apply();
+		CompositeIntervalView<FloatType, RealComposite<FloatType>> out = ops.op(
+			"filter.partialDerivative").arity1().input(img).outType(
+				new Nil<CompositeIntervalView<FloatType, RealComposite<FloatType>>>()
+				{}).apply();
 
-		CompositeView<FloatType, RealComposite<FloatType>>.CompositeRandomAccess outRA = out.randomAccess();
+		CompositeView<FloatType, RealComposite<FloatType>>.CompositeRandomAccess outRA =
+			out.randomAccess();
 
 		FloatType type = Util.getTypeFromInterval(img).createVariable();
 

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -48,7 +48,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests the Frangi Vesselness operation.
- * 
+ *
  * @author Gabe Selzer
  */
 public class FrangiVesselnessTest extends AbstractOpTest {
@@ -73,10 +73,12 @@ public class FrangiVesselnessTest extends AbstractOpTest {
 		final double[] spacing = { 1, 1 };
 
 		// run the op
-		ops.op("filter.frangiVesselness").arity3().input(inputImg, scale, spacing).output(actualOutput).compute();
+		ops.op("filter.frangiVesselness").arity3().input(inputImg, scale, spacing)
+			.output(actualOutput).compute();
 
 		// compare the output image data to that stored in the file.
-		final Cursor<FloatType> cursor = Views.iterable(actualOutput).localizingCursor();
+		final Cursor<FloatType> cursor = Views.iterable(actualOutput)
+			.localizingCursor();
 		final RandomAccess<FloatType> actualRA = actualOutput.randomAccess();
 		final RandomAccess<FloatType> expectedRA = expectedOutput.randomAccess();
 
@@ -97,15 +99,18 @@ public class FrangiVesselnessTest extends AbstractOpTest {
 
 	private Img<FloatType> regressionOutput() {
 		Img<FloatType> expectedOutput = ArrayImgs.floats(8, 8);
-		setVesselPosValues(expectedOutput, new FloatType(0.0031375182f), new FloatType(0));
+		setVesselPosValues(expectedOutput, new FloatType(0.0031375182f),
+			new FloatType(0));
 		return expectedOutput;
 	}
 
-	private <T extends RealType<T>> void setVesselPosValues(Img<T> img, T vesselVal, T otherVal) {
+	private <T extends RealType<T>> void setVesselPosValues(Img<T> img,
+		T vesselVal, T otherVal)
+	{
 		Cursor<T> inputCursor = img.localizingCursor();
 		// for each position, set to one if column at vesselPos, 0 otherwise
 		int vesselPos = 4;
-		while(inputCursor.hasNext()) {
+		while (inputCursor.hasNext()) {
 			inputCursor.fwd();
 			double[] pos = inputCursor.positionAsDoubleArray();
 			inputCursor.get().set(pos[1] == vesselPos ? vesselVal : otherVal);

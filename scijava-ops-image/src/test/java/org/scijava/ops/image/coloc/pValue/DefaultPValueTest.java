@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -51,47 +51,49 @@ import org.scijava.types.Nil;
 public class DefaultPValueTest extends AbstractColocalisationTest {
 
 	/*
-	 * Tests 
+	 * Tests
 	 */
 	@Test
 	public void testPValuePerfectColoc() {
-		double[] array = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+		double[] array = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 		assertColoc(0.0, 1.0, array, 1, 0, 0, 0, 0, 0, 0);
 	}
 
 	@Test
 	public void testPValueNoColoc() {
-		double[] array = {1.0, 2.0, 3.0, 4.0, 5.0};
+		double[] array = { 1.0, 2.0, 3.0, 4.0, 5.0 };
 		assertColoc(1.0, 0.0, array, 0, 1, 2, 3, 4, 5);
 	}
 
 	@Test
 	public void testPValueSomeColoc() {
-		double[] array = {0.25, 0.25, 0.75, 0.75, 0.75};
+		double[] array = { 0.25, 0.25, 0.75, 0.75, 0.75 };
 		assertColoc(0.6, 0.25, array, 0.25, 0.25, 0.25, 0.75, 0.75, 0.75);
 	}
 
 	/**
 	 * Function is called once with original images. Thereafter, each call is with
 	 * a shuffled version of the first image.
-	 * 
+	 *
 	 * @param expectedPValue
 	 * @param expectedColocValue
 	 * @param result
 	 */
-	private void assertColoc(double expectedPValue, double expectedColocValue, double[] expectedColocValuesArray, double... result) {
+	private void assertColoc(double expectedPValue, double expectedColocValue,
+		double[] expectedColocValuesArray, double... result)
+	{
 		Img<FloatType> ch1 = ArrayImgs.floats(1); // NB: Images will be ignored.
 
 		// Mock the underlying op.
 		final int[] count = { 0 };
 		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op = //
-				(input1, input2) -> {
-					double r;
-					synchronized (this) {
-						r = result[count[0]++];
-					}
-					return r;
-				};
+			(input1, input2) -> {
+				double r;
+				synchronized (this) {
+					r = result[count[0]++];
+				}
+				return r;
+			};
 
 		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> wrapped =
 			ops.bakeLambdaType(op,
@@ -99,7 +101,8 @@ public class DefaultPValueTest extends AbstractColocalisationTest {
 				{}.getType());
 
 		PValueResult output = new PValueResult();
-		ops.op("coloc.pValue").arity4().input(ch1, ch1, wrapped, result.length - 1).output(output).compute();
+		ops.op("coloc.pValue").arity4().input(ch1, ch1, wrapped, result.length - 1)
+			.output(output).compute();
 		Double actualPValue = output.getPValue();
 		Double actualColocValue = output.getColocValue();
 		double[] actualColocValuesArray = output.getColocValuesArray();

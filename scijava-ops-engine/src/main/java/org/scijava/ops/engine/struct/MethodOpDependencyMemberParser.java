@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -54,7 +54,7 @@ public class MethodOpDependencyMemberParser implements
 	/**
 	 * Parses out the {@link MethodParameterOpDependencyMember}s from {@code
 	 * source}
-	 * 
+	 *
 	 * @param source the {@link Object} to parse
 	 * @param structType TODO
 	 * @return a {@link List} of all {@link MethodParameterOpDependencyMember}s
@@ -68,7 +68,8 @@ public class MethodOpDependencyMemberParser implements
 
 		source.setAccessible(true);
 
-		final ArrayList<MethodParameterOpDependencyMember<?>> items = new ArrayList<>();
+		final ArrayList<MethodParameterOpDependencyMember<?>> items =
+			new ArrayList<>();
 
 		// Parse method level @OpDependency annotations.
 		parseMethodOpDependencies(items, source);
@@ -81,7 +82,8 @@ public class MethodOpDependencyMemberParser implements
 		final Method annotatedMethod)
 	{
 		Boolean[] isDependency = Arrays.stream(annotatedMethod.getParameters()) //
-			.map(param -> param.isAnnotationPresent(OpDependency.class)).toArray(Boolean[]::new);
+			.map(param -> param.isAnnotationPresent(OpDependency.class)).toArray(
+				Boolean[]::new);
 		for (int i = 0; i < isDependency.length - 1; i++) {
 			if (!isDependency[i] && isDependency[i + 1]) {
 				// OpDependencies must come first so that they can be curried within
@@ -94,17 +96,17 @@ public class MethodOpDependencyMemberParser implements
 			.getParameters();
 
 		for (java.lang.reflect.Parameter methodParam : methodParams) {
-			final OpDependency dependency =
-					methodParam.getAnnotation(OpDependency.class);
+			final OpDependency dependency = methodParam.getAnnotation(
+				OpDependency.class);
 			if (dependency == null) continue;
 
 			final String name = methodParam.getName();
 			final Type methodParamType = methodParam.getParameterizedType();
 			items.add(new MethodParameterOpDependencyMember<>( //
-					name, //
-					"", //
-					methodParamType, //
-					dependency //
+				name, //
+				"", //
+				methodParamType, //
+				dependency //
 			));
 		}
 	}

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -48,15 +48,18 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 	@Test
 	public void testClassOpification() {
 		OpInfo opifyOpInfo = ops.opify(OpifyOp1.class, OpifyOp1.class.getName());
-		Assertions.assertEquals(OpifyOp1.class.getName(), opifyOpInfo.implementationName());
+		Assertions.assertEquals(OpifyOp1.class.getName(), opifyOpInfo
+			.implementationName());
 		// assert default priority
 		Assertions.assertEquals(Priority.NORMAL, opifyOpInfo.priority(), 0.);
 	}
 
 	@Test
 	public void testClassOpificationWithPriority() {
-		OpInfo opifyOpInfo = ops.opify(OpifyOp1.class, Priority.HIGH, OpifyOp1.class.getName());
-		Assertions.assertEquals(OpifyOp1.class.getName(), opifyOpInfo.implementationName());
+		OpInfo opifyOpInfo = ops.opify(OpifyOp1.class, Priority.HIGH, OpifyOp1.class
+			.getName());
+		Assertions.assertEquals(OpifyOp1.class.getName(), opifyOpInfo
+			.implementationName());
 		// assert default priority
 		Assertions.assertEquals(Priority.HIGH, opifyOpInfo.priority(), 0.);
 	}
@@ -109,7 +112,8 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 
 		// Get the Op matching the description
 		String descriptions = helpEnv.helpVerbose("help.verbose1");
-		String expected = "help.verbose1:\n\t- org.scijava.ops.engine.OpifyOp1\n\t\tReturns : java.lang.String";
+		String expected =
+			"help.verbose1:\n\t- org.scijava.ops.engine.OpifyOp1\n\t\tReturns : java.lang.String";
 		Assertions.assertEquals(expected, descriptions);
 	}
 
@@ -129,7 +133,8 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 		var actual = helpEnv.help();
 		String expected = "Namespaces:\n\t> help";
 		Assertions.assertEquals(expected, actual);
-		// ...but make sure that if we really need help with the internal namespace, we can get it
+		// ...but make sure that if we really need help with the internal namespace,
+		// we can get it
 		actual = helpEnv.help("engine.adapt");
 		expected = "engine.adapt:\n\t- () -> String";
 		Assertions.assertEquals(expected, actual);
@@ -140,10 +145,10 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 		OpEnvironment helpEnv = barebonesEnvironment();
 		// Register an Op under an "internal" namespace and an "external" namespace
 		helpEnv.register( //
-				helpEnv.opify(OpifyOp1.class, Priority.HIGH, n1) //
+			helpEnv.opify(OpifyOp1.class, Priority.HIGH, n1) //
 		);
 		helpEnv.register( //
-				helpEnv.opify(OpifyOp2.class, Priority.HIGH, n2) //
+			helpEnv.opify(OpifyOp2.class, Priority.HIGH, n2) //
 		);
 		return helpEnv;
 	}
@@ -168,7 +173,11 @@ class OpifyOp1 implements Producer<String> {
 class OpifyOp2 implements Producer<String> {
 
 	@Override
-	public String create() { return getString(); }
+	public String create() {
+		return getString();
+	}
 
-	public String getString() { return "This Op tests opify!"; }
+	public String getString() {
+		return "This Op tests opify!";
+	}
 }

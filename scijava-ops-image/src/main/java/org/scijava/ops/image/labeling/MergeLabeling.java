@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -55,14 +55,16 @@ import org.scijava.ops.spi.OpDependency;
  * provided). Outside of the mask, labels will be empty.
  *
  * @author Stefan Helfrich (University of Konstanz)
- *@implNote op names='labeling.merge'
+ * @implNote op names='labeling.merge'
  */
 public class MergeLabeling<L, I extends IntegerType<I>, B extends BooleanType<B>>
-		implements Functions.Arity3<ImgLabeling<L, I>, ImgLabeling<L, I>, RandomAccessibleInterval<B>, ImgLabeling<L, I>> {
+	implements
+	Functions.Arity3<ImgLabeling<L, I>, ImgLabeling<L, I>, RandomAccessibleInterval<B>, ImgLabeling<L, I>>
+{
 
 	@OpDependency(name = "create.imgLabeling")
 	private BiFunction<Dimensions, I, ImgLabeling<L, I>> imgLabelingCreator;
-	
+
 	@OpDependency(name = "engine.adapt")
 	private Function<Computers.Arity2<LabelingType<L>, LabelingType<L>, LabelingType<L>>, Computers.Arity2<Iterable<LabelingType<L>>, Iterable<LabelingType<L>>, Iterable<LabelingType<L>>>> adaptor;
 
@@ -77,12 +79,12 @@ public class MergeLabeling<L, I extends IntegerType<I>, B extends BooleanType<B>
 	 */
 	@Override
 	public ImgLabeling<L, I> apply( //
-			final ImgLabeling<L, I> input1, //
-			final ImgLabeling<L, I> input2, //
-			@Nullable  final RandomAccessibleInterval<B> mask //
+		final ImgLabeling<L, I> input1, //
+		final ImgLabeling<L, I> input2, //
+		@Nullable final RandomAccessibleInterval<B> mask //
 	) {
-		final ImgLabeling<L, I> output = imgLabelingCreator.apply(input1,
-				Views.iterable(input1.getSource()).firstElement());
+		final ImgLabeling<L, I> output = imgLabelingCreator.apply(input1, Views
+			.iterable(input1.getSource()).firstElement());
 		if (mask != null) {
 			final IterableRegion iterable = Regions.iterable(mask);
 			final IterableInterval<LabelingType<L>> sample = Regions.sample(
@@ -97,13 +99,17 @@ public class MergeLabeling<L, I extends IntegerType<I>, B extends BooleanType<B>
 				randomAccess2.setPosition(cursor);
 				outLabeling.addAll(randomAccess2.get());
 			}
-		} else {
-			Computers.Arity2<Iterable<LabelingType<L>>, Iterable<LabelingType<L>>, Iterable<LabelingType<L>>> adapted = adaptor.apply(
-					new Computers.Arity2<LabelingType<L>, LabelingType<L>, LabelingType<L>>() {
+		}
+		else {
+			Computers.Arity2<Iterable<LabelingType<L>>, Iterable<LabelingType<L>>, Iterable<LabelingType<L>>> adapted =
+				adaptor.apply(
+					new Computers.Arity2<LabelingType<L>, LabelingType<L>, LabelingType<L>>()
+					{
 
 						@Override
-						public void compute(final LabelingType<L> input1, final LabelingType<L> input2,
-								final LabelingType<L> output) {
+						public void compute(final LabelingType<L> input1,
+							final LabelingType<L> input2, final LabelingType<L> output)
+					{
 							output.addAll(input1);
 							output.addAll(input2);
 						}

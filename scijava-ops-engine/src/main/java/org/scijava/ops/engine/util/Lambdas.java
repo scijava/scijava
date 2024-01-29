@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.engine.util;
 
 import java.lang.invoke.LambdaMetafactory;
@@ -50,31 +51,31 @@ public final class Lambdas {
 	}
 
 	public static <T> T lambdaize(Class<T> functionalInterface,
-			MethodHandle methodHandle) throws Throwable
+		MethodHandle methodHandle) throws Throwable
 	{
 		return lambdaize(functionalInterface, methodHandle, new Class[0],
-				new Object[0]);
+			new Object[0]);
 	}
 
 	public static <T> T lambdaize(Class<T> functionalInterface,
-			MethodHandle methodHandle, Class<?>[] capturedClasses,
-			Object[] capturedArgs) throws Throwable
+		MethodHandle methodHandle, Class<?>[] capturedClasses,
+		Object[] capturedArgs) throws Throwable
 	{
 		MethodHandles.Lookup caller = MethodHandles.lookup();
 
 		// determine the method name used by the functionalInterface (e.g. for
 		// Consumer this name is "accept").
-		String[] invokedNames =
-				Arrays.stream(functionalInterface.getDeclaredMethods()) //
-						.filter(method -> Modifier.isAbstract(method.getModifiers())) //
-						.map(Method::getName) //
-						.toArray(String[]::new);
+		String[] invokedNames = Arrays.stream(functionalInterface
+			.getDeclaredMethods()) //
+			.filter(method -> Modifier.isAbstract(method.getModifiers())) //
+			.map(Method::getName) //
+			.toArray(String[]::new);
 		if (invokedNames.length != 1) throw new IllegalArgumentException(
-				"The passed class is not a functional interface");
+			"The passed class is not a functional interface");
 		// see the LambdaMetafactory javadocs for explanations on these
 		// MethodTypes.
 		MethodType invokedType = MethodType.methodType(functionalInterface, //
-				capturedClasses //
+			capturedClasses //
 		);
 		MethodType methodType = methodHandle.type();
 		// Drop captured arguments
@@ -82,20 +83,20 @@ public final class Lambdas {
 		// Box primitive parameter types
 		for (int i = 0; i < methodType.parameterCount(); i++) {
 			Class<?> paramType = methodType.parameterType(i);
-			if (paramType.isPrimitive())
-				methodType = methodType.changeParameterType(i, Classes.box(paramType));
+			if (paramType.isPrimitive()) methodType = methodType.changeParameterType(
+				i, Classes.box(paramType));
 		}
 		Class<?> rType = methodType.returnType();
 		if (rType.isPrimitive() && rType != void.class) rType = Classes.box(rType);
 		MethodType samMethodType = methodType.generic() //
-				.changeReturnType(rType == void.class ? rType : Object.class);
+			.changeReturnType(rType == void.class ? rType : Object.class);
 		MethodHandle callSite = LambdaMetafactory.metafactory(//
-				caller, //
-				invokedNames[0], //
-				invokedType, //
-				samMethodType, //
-				methodHandle, //
-				methodType //
+			caller, //
+			invokedNames[0], //
+			invokedType, //
+			samMethodType, //
+			methodHandle, //
+			methodType //
 		).getTarget();
 		return (T) callSite.invokeWithArguments(capturedArgs);
 	}

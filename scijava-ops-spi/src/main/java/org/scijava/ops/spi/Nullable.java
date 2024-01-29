@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.spi;
 
 import java.lang.annotation.ElementType;
@@ -63,22 +64,27 @@ import java.lang.annotation.Target;
  * is confusing and hard to read. Which parameters are nullable in this case? Is
  * it obvious that {@code in3} is nullable just by looking at {@code Impl}? For
  * this reason, it should be enforced that the annotation is only on one of the
- * method signatures.
- * <br/><br/>
- * Note also that annotations are currently (as of Java 11) not supported on lambdas.
- * Nullable parameters are supported on interfaces and class implementations (including
- * anonymous classes) but the following will not recognize the nullability of {@code in}:
+ * method signatures. <br/>
+ * <br/>
+ * Note also that annotations are currently (as of Java 11) not supported on
+ * lambdas. Nullable parameters are supported on interfaces and class
+ * implementations (including anonymous classes) but the following will not
+ * recognize the nullability of {@code in}:
+ *
  * <pre>
+ *
  * &#64;OpField(names = "nullableLambda")
- * public final Function<Integer, Float> nullableLambda = (&#64;Nullable Integer in) -> {
+ * public final Function<Integer, Float> nullableLambda = (
+ * 	&#64;Nullable Integer in) -> {
  * 	Integer nonNullIn = in == null ? 0 : in;
  * 	return nonNullIn + 0.5f;
  * };
  * </pre>
  *
- * See also these SO posts:
- * <a href="https://stackoverflow.com/questions/44646915/will-it-be-possible-to-annotate-lambda-expression-in-java-9">one</a>,
- * <a href="https://stackoverflow.com/questions/22375891/annotating-the-functional-interface-of-a-lambda-expression">two</a>
+ * See also these SO posts: <a href=
+ * "https://stackoverflow.com/questions/44646915/will-it-be-possible-to-annotate-lambda-expression-in-java-9">one</a>,
+ * <a href=
+ * "https://stackoverflow.com/questions/22375891/annotating-the-functional-interface-of-a-lambda-expression">two</a>
  *
  * @author Gabriel Selzer
  */

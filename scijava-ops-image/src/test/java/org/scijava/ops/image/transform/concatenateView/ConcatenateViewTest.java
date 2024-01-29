@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.transform.concatenateView;
 
 import java.util.Arrays;
@@ -82,8 +83,10 @@ public class ConcatenateViewTest extends AbstractOpTest {
 		rng.nextBytes(data);
 	}
 
-	private <T> List<RandomAccessibleInterval<T>> createIntervals(final RandomAccessibleInterval<T> source,
-			final long divider, final int axis) {
+	private <T> List<RandomAccessibleInterval<T>> createIntervals(
+		final RandomAccessibleInterval<T> source, final long divider,
+		final int axis)
+	{
 		final long[] min = Intervals.minAsLongArray(source);
 		final long[] max = Intervals.maxAsLongArray(source);
 		final long[] min1 = min.clone();
@@ -98,42 +101,53 @@ public class ConcatenateViewTest extends AbstractOpTest {
 		return Arrays.asList(interval1, interval2);
 	}
 
-	private static <T extends ValueEquals<T>> void testEqual(final RandomAccessibleInterval<T> rai1,
-			final RandomAccessibleInterval<T> rai2) {
-		Assertions.assertArrayEquals(Intervals.minAsLongArray(rai1), Intervals.minAsLongArray(rai2));
-		Assertions.assertArrayEquals(Intervals.maxAsLongArray(rai1), Intervals.maxAsLongArray(rai2));
+	private static <T extends ValueEquals<T>> void testEqual(
+		final RandomAccessibleInterval<T> rai1,
+		final RandomAccessibleInterval<T> rai2)
+	{
+		Assertions.assertArrayEquals(Intervals.minAsLongArray(rai1), Intervals
+			.minAsLongArray(rai2));
+		Assertions.assertArrayEquals(Intervals.maxAsLongArray(rai1), Intervals
+			.maxAsLongArray(rai2));
 		for (final Pair<T, T> p : Views.interval(Views.pair(rai1, rai2), rai1))
 			Assertions.assertTrue(p.getA().valueEquals(p.getB()));
 	}
 
 	@Test
 	public void defaultConcatenateTest() {
-		BiFunction<Integer, List<RandomAccessibleInterval<ByteType>>, RandomAccessibleInterval<ByteType>> concatFunc = OpBuilder
-				.matchFunction(ops, "transform.concatenateView", new Nil<Integer>() {
-				}, new Nil<List<RandomAccessibleInterval<ByteType>>>() {
-				}, new Nil<RandomAccessibleInterval<ByteType>>() {
-				});
+		BiFunction<Integer, List<RandomAccessibleInterval<ByteType>>, RandomAccessibleInterval<ByteType>> concatFunc =
+			OpBuilder.matchFunction(ops, "transform.concatenateView",
+				new Nil<Integer>()
+				{}, new Nil<List<RandomAccessibleInterval<ByteType>>>() {},
+				new Nil<RandomAccessibleInterval<ByteType>>()
+				{});
 
-		final List<RandomAccessibleInterval<ByteType>> intervals = createIntervals(img, divider, axis);
-		final RandomAccessibleInterval<ByteType> cat1 = Views.concatenate(axis, intervals);
-		final RandomAccessibleInterval<ByteType> cat2 = concatFunc.apply(axis, intervals);
+		final List<RandomAccessibleInterval<ByteType>> intervals = createIntervals(
+			img, divider, axis);
+		final RandomAccessibleInterval<ByteType> cat1 = Views.concatenate(axis,
+			intervals);
+		final RandomAccessibleInterval<ByteType> cat2 = concatFunc.apply(axis,
+			intervals);
 		testEqual(cat1, cat2);
 
 	}
 
 	@Test
 	public void concatenateWithAccessModeTest() {
-		Functions.Arity3<Integer, StackAccessMode, List<RandomAccessibleInterval<ByteType>>, RandomAccessibleInterval<ByteType>> concatFunc = OpBuilder
-				.matchFunction(ops, "transform.concatenateView", new Nil<Integer>() {
-				}, new Nil<StackAccessMode>() {
-				}, new Nil<List<RandomAccessibleInterval<ByteType>>>() {
-				}, new Nil<RandomAccessibleInterval<ByteType>>() {
-				});
+		Functions.Arity3<Integer, StackAccessMode, List<RandomAccessibleInterval<ByteType>>, RandomAccessibleInterval<ByteType>> concatFunc =
+			OpBuilder.matchFunction(ops, "transform.concatenateView",
+				new Nil<Integer>()
+				{}, new Nil<StackAccessMode>() {},
+				new Nil<List<RandomAccessibleInterval<ByteType>>>()
+				{}, new Nil<RandomAccessibleInterval<ByteType>>() {});
 
-		final List<RandomAccessibleInterval<ByteType>> intervals = createIntervals(img, divider, axis);
+		final List<RandomAccessibleInterval<ByteType>> intervals = createIntervals(
+			img, divider, axis);
 		for (final StackAccessMode mode : StackAccessMode.values()) {
-			final RandomAccessibleInterval<ByteType> cat1 = Views.concatenate(axis, mode, intervals);
-			final RandomAccessibleInterval<ByteType> cat2 = concatFunc.apply(axis, mode, intervals);
+			final RandomAccessibleInterval<ByteType> cat1 = Views.concatenate(axis,
+				mode, intervals);
+			final RandomAccessibleInterval<ByteType> cat2 = concatFunc.apply(axis,
+				mode, intervals);
 			testEqual(cat1, cat2);
 		}
 	}

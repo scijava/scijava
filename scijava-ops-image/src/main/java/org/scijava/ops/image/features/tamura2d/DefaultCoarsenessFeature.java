@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.features.tamura2d;
 
 import java.util.ArrayList;
@@ -50,17 +51,16 @@ import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * 
  * Implementation of Tamura's Coarseness feature
- * 
- * @author Andreas Graumann (University of Konstanz)
  *
+ * @author Andreas Graumann (University of Konstanz)
  * @param <I>
  * @param <O>
- *@implNote op names='features.tamura.coarseness'
+ * @implNote op names='features.tamura.coarseness'
  */
 public class DefaultCoarsenessFeature<I extends RealType<I>, O extends RealType<O>>
-		implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
+	implements Computers.Arity1<RandomAccessibleInterval<I>, O>
+{
 
 	@OpDependency(name = "filter.mean")
 	private Computers.Arity3<RandomAccessibleInterval<I>, Shape, //
@@ -75,8 +75,8 @@ public class DefaultCoarsenessFeature<I extends RealType<I>, O extends RealType<
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
-		if (input.numDimensions() != 2)
-			throw new IllegalArgumentException("Only 2 dimensional images allowed!");
+		if (input.numDimensions() != 2) throw new IllegalArgumentException(
+			"Only 2 dimensional images allowed!");
 		HashMap<Integer, Img<I>> meanImages = new HashMap<>();
 
 		// get mean images
@@ -97,20 +97,19 @@ public class DefaultCoarsenessFeature<I extends RealType<I>, O extends RealType<
 	}
 
 	/**
-	 * 
 	 * For every point calculate differences between the not overlapping
 	 * neighborhoods on opposite sides of the point in horizontal and vertical
 	 * direction. At each point take the highest difference value when considering
 	 * all directions together.
-	 * 
-	 * @param input
-	 *            Input image
-	 * @param meanImages
-	 *            Mean images
+	 *
+	 * @param input Input image
+	 * @param meanImages Mean images
 	 * @return Array containing all leadding difference values
 	 */
-	private ArrayList<Double> sizedLeadDiffValues(final RandomAccessibleInterval<I> input,
-			final HashMap<Integer, Img<I>> meanImages) {
+	private ArrayList<Double> sizedLeadDiffValues(
+		final RandomAccessibleInterval<I> input,
+		final HashMap<Integer, Img<I>> meanImages)
+	{
 
 		long[] pos = new long[input.numDimensions()];
 		long[] dim = new long[input.numDimensions()];
@@ -157,11 +156,9 @@ public class DefaultCoarsenessFeature<I extends RealType<I>, O extends RealType<
 
 	/**
 	 * Apply mean filter with given size of reactangle shape
-	 * 
-	 * @param input
-	 *            Input image
-	 * @param i
-	 *            Size of rectangle shape
+	 *
+	 * @param input Input image
+	 * @param i Size of rectangle shape
 	 * @return Filered mean image
 	 */
 	@SuppressWarnings("unchecked")
@@ -170,11 +167,12 @@ public class DefaultCoarsenessFeature<I extends RealType<I>, O extends RealType<
 		long[] dims = new long[input.numDimensions()];
 		input.dimensions(dims);
 
-		final byte[] array = new byte[(int) Intervals.numElements(new FinalInterval(dims))];
+		final byte[] array = new byte[(int) Intervals.numElements(new FinalInterval(
+			dims))];
 		Img<I> meanImg = (Img<I>) ArrayImgs.unsignedBytes(array, dims);
 
-		OutOfBoundsMirrorFactory<I, RandomAccessibleInterval<I>> oobFactory = new OutOfBoundsMirrorFactory<>(
-				Boundary.SINGLE);
+		OutOfBoundsMirrorFactory<I, RandomAccessibleInterval<I>> oobFactory =
+			new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
 
 		meanOp.compute(input, new RectangleShape(i, true), oobFactory, meanImg);
 

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -42,15 +42,15 @@ import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * This Op computes the 2nd multi variate of a {@link IterableRegion}
- * (Label).
- * 
+ * This Op computes the 2nd multi variate of a {@link IterableRegion} (Label).
+ *
  * @author Tim-Oliver Buchholz (University of Konstanz)
- * @param <B>
- *            BooleanType
- *@implNote op names='geom.secondMoment'
+ * @param <B> BooleanType
+ * @implNote op names='geom.secondMoment'
  */
-public class DefaultInertiaTensor3D<B extends BooleanType<B>> implements Function<IterableRegion<B>, RealMatrix> {
+public class DefaultInertiaTensor3D<B extends BooleanType<B>> implements
+	Function<IterableRegion<B>, RealMatrix>
+{
 
 	@OpDependency(name = "geom.centroid")
 	private Function<IterableRegion<B>, RealLocalizable> centroid;
@@ -64,8 +64,8 @@ public class DefaultInertiaTensor3D<B extends BooleanType<B>> implements Functio
 	@Override
 	public RealMatrix apply(final IterableRegion<B> input) {
 		// ensure validity of inputs
-		if (input.numDimensions() != 3)
-			throw new IllegalArgumentException("Only three-dimensional inputs allowed!");
+		if (input.numDimensions() != 3) throw new IllegalArgumentException(
+			"Only three-dimensional inputs allowed!");
 
 		final BlockRealMatrix output = new BlockRealMatrix(3, 3);
 		Cursor<Void> c = input.localizingCursor();
@@ -78,14 +78,20 @@ public class DefaultInertiaTensor3D<B extends BooleanType<B>> implements Functio
 		while (c.hasNext()) {
 			c.fwd();
 			c.localize(pos);
-			output.setEntry(0, 0, output.getEntry(0, 0) + (pos[0] - mX) * (pos[0] - mX));
-			output.setEntry(1, 1, output.getEntry(1, 1) + (pos[1] - mX) * (pos[1] - mY));
-			output.setEntry(2, 2, output.getEntry(2, 2) + (pos[2] - mX) * (pos[2] - mZ));
-			output.setEntry(0, 1, output.getEntry(0, 1) + (pos[0] - mY) * (pos[1] - mY));
+			output.setEntry(0, 0, output.getEntry(0, 0) + (pos[0] - mX) * (pos[0] -
+				mX));
+			output.setEntry(1, 1, output.getEntry(1, 1) + (pos[1] - mX) * (pos[1] -
+				mY));
+			output.setEntry(2, 2, output.getEntry(2, 2) + (pos[2] - mX) * (pos[2] -
+				mZ));
+			output.setEntry(0, 1, output.getEntry(0, 1) + (pos[0] - mY) * (pos[1] -
+				mY));
 			output.setEntry(1, 0, output.getEntry(0, 1));
-			output.setEntry(0, 2, output.getEntry(0, 2) + (pos[0] - mY) * (pos[2] - mZ));
+			output.setEntry(0, 2, output.getEntry(0, 2) + (pos[0] - mY) * (pos[2] -
+				mZ));
 			output.setEntry(2, 0, output.getEntry(0, 2));
-			output.setEntry(1, 2, output.getEntry(1, 2) + (pos[1] - mZ) * (pos[2] - mZ));
+			output.setEntry(1, 2, output.getEntry(1, 2) + (pos[1] - mZ) * (pos[2] -
+				mZ));
 			output.setEntry(2, 1, output.getEntry(1, 2));
 		}
 

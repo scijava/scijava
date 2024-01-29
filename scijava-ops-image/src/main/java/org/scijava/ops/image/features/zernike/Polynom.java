@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,82 +26,85 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.features.zernike;
 
 /**
  * class used to represent a zernike moment polynomial.
- * 
+ *
  * @author Andreas Graumann (University of Konstanz)
  */
 public class Polynom {
-    /** the array of polynom coefficients. */
-    private final int[] m_coefficients;
 
-    /** the degree of the polynom. */
-    private final int m_degree;
+	/** the array of polynom coefficients. */
+	private final int[] m_coefficients;
 
-    /**
-     * default constructor.
-     * 
-     * @param degree the degree of the polynom
-     */
-    public Polynom(final int degree) {
-        m_degree = degree;
-        m_coefficients = new int[m_degree + 1];
-        for (int i = 0; i <= m_degree; ++i) {
-            setCoefficient(i, 0);
-        }
-    }
+	/** the degree of the polynom. */
+	private final int m_degree;
 
-    /**
-     * set the coefficient at a position.
-     * 
-     * @param pos the position (the power of the monom)
-     * @param coef the coefficient
-     */
-    public void setCoefficient(final int pos, final int coef) {
-        m_coefficients[pos] = coef;
-    }
+	/**
+	 * default constructor.
+	 *
+	 * @param degree the degree of the polynom
+	 */
+	public Polynom(final int degree) {
+		m_degree = degree;
+		m_coefficients = new int[m_degree + 1];
+		for (int i = 0; i <= m_degree; ++i) {
+			setCoefficient(i, 0);
+		}
+	}
 
-    /**
-     * return the coefficient at a given position.
-     * 
-     * @param pos the position
-     * @return the coefficient
-     */
-    public int getCoefficient(final int pos) {
-        return m_coefficients[pos];
-    }
+	/**
+	 * set the coefficient at a position.
+	 *
+	 * @param pos the position (the power of the monom)
+	 * @param coef the coefficient
+	 */
+	public void setCoefficient(final int pos, final int coef) {
+		m_coefficients[pos] = coef;
+	}
 
-    /**
-     * return the value of the polynom in a given point.
-     * 
-     * @param x the point
-     * @return the value of the polynom
-     */
-    public double evaluate(final double x) {
-        double power = 1.0;
-        double result = 0.0;
-        for (int i = 0; i <= m_degree; ++i) {
-            result += m_coefficients[i] * power;
-            power *= x;
-        }
-        return result;
-    }
+	/**
+	 * return the coefficient at a given position.
+	 *
+	 * @param pos the position
+	 * @return the coefficient
+	 */
+	public int getCoefficient(final int pos) {
+		return m_coefficients[pos];
+	}
 
-    /**
-     * provide a String representation of this polynom. mostly for debugging purposes and for the JUnit test case
-     * 
-     * @return the String representation
-     */
-    @Override
-    public String toString() {
-        final StringBuffer result = new StringBuffer();
-        for (int i = m_degree; i >= 0; i--) {
-            if (m_coefficients[i] != 0) {
-                result.append(m_coefficients[i] + "X^" + i + " ");
-            }
-        }
-        return result.toString();
-    }
+	/**
+	 * return the value of the polynom in a given point.
+	 *
+	 * @param x the point
+	 * @return the value of the polynom
+	 */
+	public double evaluate(final double x) {
+		double power = 1.0;
+		double result = 0.0;
+		for (int i = 0; i <= m_degree; ++i) {
+			result += m_coefficients[i] * power;
+			power *= x;
+		}
+		return result;
+	}
+
+	/**
+	 * provide a String representation of this polynom. mostly for debugging
+	 * purposes and for the JUnit test case
+	 *
+	 * @return the String representation
+	 */
+	@Override
+	public String toString() {
+		final StringBuffer result = new StringBuffer();
+		for (int i = m_degree; i >= 0; i--) {
+			if (m_coefficients[i] != 0) {
+				result.append(m_coefficients[i] + "X^" + i + " ");
+			}
+		}
+		return result.toString();
+	}
 }

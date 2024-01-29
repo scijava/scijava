@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -40,10 +40,10 @@ import net.imglib2.util.Pair;
  * data container. It implements the FAST calculation for Pearson's Correlation.
  *
  * @author Ellen T Arena
- *@implNote op names='coloc.pearsons'
+ * @implNote op names='coloc.pearsons'
  */
-public class DefaultPearsons<T extends RealType<T>, U extends RealType<U>> implements
-	BiFunction<Iterable<T>, Iterable<U>, Double> 
+public class DefaultPearsons<T extends RealType<T>, U extends RealType<U>>
+	implements BiFunction<Iterable<T>, Iterable<U>, Double>
 {
 
 	/**
@@ -54,15 +54,13 @@ public class DefaultPearsons<T extends RealType<T>, U extends RealType<U>> imple
 	 * @return the output
 	 */
 	@Override
-	public Double apply(final Iterable<T> image1,
-		final Iterable<U> image2)
-	{
+	public Double apply(final Iterable<T> image1, final Iterable<U> image2) {
 		return fastPearsons(new IterablePair<>(image1, image2));
 	}
 
 	/**
-	 * Calculates Person's R value by using a fast implementation of the
-	 * algorithm taken from Coloc 2.
+	 * Calculates Person's R value by using a fast implementation of the algorithm
+	 * taken from Coloc 2.
 	 *
 	 * @return Person's R value
 	 * @throws IllegalArgumentException If input data is statistically unsound.
@@ -117,12 +115,12 @@ public class DefaultPearsons<T extends RealType<T>, U extends RealType<U>> imple
 	// -- Helper classes --
 
 	/**
-	 * A class allowing an easy accumulation of values visited by an
-	 * IterablePair. After instantiation the sum of channel one,
-	 * channel two, products with them self and a product of both of
-	 * them will be available. It additionally provides the possibility
-	 * to subtract values from the data before adding them to the sum.:
-	 * 
+	 * A class allowing an easy accumulation of values visited by an IterablePair.
+	 * After instantiation the sum of channel one, channel two, products with them
+	 * self and a product of both of them will be available. It additionally
+	 * provides the possibility to subtract values from the data before adding
+	 * them to the sum.:
+	 *
 	 * @author Johannes Schindelin
 	 * @author Tom Kazimiers
 	 * @author Ellen T Arena
@@ -133,14 +131,16 @@ public class DefaultPearsons<T extends RealType<T>, U extends RealType<U>> imple
 		private int count;
 
 		/**
-		 * The two values x and y from each iteration to get
-		 * summed up as single values and their combinations.
+		 * The two values x and y from each iteration to get summed up as single
+		 * values and their combinations.
 		 */
 		public Accumulator(final Iterable<Pair<T, U>> samples) {
 			this(samples, false, 0.0d, 0.0d);
 		}
 
-		protected Accumulator(final Iterable<Pair<T, U>> samples, boolean substract, double xDiff, double yDiff) {
+		protected Accumulator(final Iterable<Pair<T, U>> samples, boolean substract,
+			double xDiff, double yDiff)
+		{
 
 			for (Pair<T, U> sample : samples) {
 

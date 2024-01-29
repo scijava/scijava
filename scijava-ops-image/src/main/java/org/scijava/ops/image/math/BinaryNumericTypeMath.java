@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -37,14 +37,13 @@ import org.scijava.ops.spi.Nullable;
 import java.util.Objects;
 
 /**
- * Binary Ops of the {@code math} namespace which operate on {@link NumericType}s.
- * 
- * TODO: Can these be static?
+ * Binary Ops of the {@code math} namespace which operate on
+ * {@link NumericType}s. TODO: Can these be static?
  *
  * @author Leon Yang
  * @author Mark Hiner
  */
-public class BinaryNumericTypeMath <T extends NumericType<T>> {
+public class BinaryNumericTypeMath<T extends NumericType<T>> {
 
 	/**
 	 * Sum two numeric types
@@ -70,15 +69,17 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	 * @implNote op names='math.div, math.divide', priority='100.', type=Computer
 	 */
 	public static <N extends NumericType<N>> void divider(N input1, N input2,
-			@Nullable N dbzVal, N output)
+		@Nullable N dbzVal, N output)
 	{
 		try {
 			output.set(input1);
 			output.div(input2);
-		} catch(Exception e) {
+		}
+		catch (Exception e) {
 			if (Objects.nonNull(dbzVal)) {
 				output.set(dbzVal);
-			} else {
+			}
+			else {
 				throw e;
 			}
 		}
@@ -92,7 +93,8 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	 * @container output
 	 * @implNote op names='math.mul, math.multiply', priority='100.'
 	 */
-	public final Computers.Arity2<T, T, T> multiplier = (input1, input2, output) -> {
+	public final Computers.Arity2<T, T, T> multiplier = (input1, input2,
+		output) -> {
 		output.set(input1);
 		output.mul(input2);
 	};
@@ -105,7 +107,8 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	 * @container output
 	 * @implNote op names='math.sub, math.subtract', priority='100.'
 	 */
-	public final Computers.Arity2<T, T, T> subtracter = (input1, input2, output) -> {
+	public final Computers.Arity2<T, T, T> subtracter = (input1, input2,
+		output) -> {
 		output.set(input1);
 		output.sub(input2);
 	};

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.adapt;
 
 import java.util.function.BiFunction;
@@ -39,15 +40,18 @@ public class RAIToIIOps<T, U, V> {
 	/**
 	 * @implNote op names='engine.adapt'
 	 */
-	public final Function<Function<Iterable<T>, U>, Function<RandomAccessibleInterval<T>, U>> func = (in) -> {
-		return (in1) -> in.apply(Views.flatIterable(in1));
-	};
+	public final Function<Function<Iterable<T>, U>, Function<RandomAccessibleInterval<T>, U>> func =
+		(in) -> {
+			return (in1) -> in.apply(Views.flatIterable(in1));
+		};
 
 	/**
 	 * @implNote op names='engine.adapt'
 	 */
-	public final Function<BiFunction<Iterable<T>, Iterable<U>, V>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, V>> biFunc = (in) -> {
-		return (in1, in2) -> in.apply(Views.flatIterable(in1), Views.flatIterable(in2));
-	};
+	public final Function<BiFunction<Iterable<T>, Iterable<U>, V>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, V>> biFunc =
+		(in) -> {
+			return (in1, in2) -> in.apply(Views.flatIterable(in1), Views.flatIterable(
+				in2));
+		};
 
 }

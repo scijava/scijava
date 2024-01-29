@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -65,19 +65,21 @@ public final class DefaultCreateKernelGabor {
 		// Prevent instantiation of static utility class
 	}
 
-	public static <T extends Type<T>, C extends ComplexType<C>> RandomAccessibleInterval<C> createKernel(
-			final double[] sigmas, final double[] period, final C typeVar,
-			final BiFunction<Dimensions, T, Img<T>> createImgFunc) {
+	public static <T extends Type<T>, C extends ComplexType<C>>
+		RandomAccessibleInterval<C> createKernel(final double[] sigmas,
+			final double[] period, final C typeVar,
+			final BiFunction<Dimensions, T, Img<T>> createImgFunc)
+	{
 		// both input arrays must be of the same length
-		if (sigmas.length != period.length)
-			throw new IllegalArgumentException("Params length mismatch: The number "
-					+ "of sigmas must match the dimensionality of the period vector.");
+		if (sigmas.length != period.length) throw new IllegalArgumentException(
+			"Params length mismatch: The number " +
+				"of sigmas must match the dimensionality of the period vector.");
 
 		// sigmas must be reasonable
 		// NB: sigma==0 indicates no filtering along its axis
 		for (final double s : sigmas)
-			if (s < 0.0)
-				throw new IllegalArgumentException("Input sigma must be non-negative.");
+			if (s < 0.0) throw new IllegalArgumentException(
+				"Input sigma must be non-negative.");
 
 		// the size and center of the output image
 		final long[] dims = new long[sigmas.length];
@@ -88,8 +90,9 @@ public final class DefaultCreateKernelGabor {
 		}
 
 		// prepare the output image
-		final RandomAccessibleInterval<C> out = (RandomAccessibleInterval<C>) createImgFunc
-				.apply(new FinalInterval(dims), (T) typeVar);
+		final RandomAccessibleInterval<C> out =
+			(RandomAccessibleInterval<C>) createImgFunc.apply(new FinalInterval(dims),
+				(T) typeVar);
 
 		// calculate the squared length of the period vector
 		double perLengthSq = 0.0;

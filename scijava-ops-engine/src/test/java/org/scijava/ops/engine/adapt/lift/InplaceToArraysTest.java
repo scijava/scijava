@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -45,10 +45,12 @@ import org.scijava.ops.spi.OpField;
 /**
  * Tests the adaptation of {@link Inplaces} running on a type into
  * {@link Inplaces} running on arrays of that type.
- * 
+ *
  * @author Gabriel Selzer
  */
-public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCollection {
+public class InplaceToArraysTest extends AbstractTestEnvironment implements
+	OpCollection
+{
 
 	@BeforeAll
 	public static void addNeededOps() {
@@ -66,7 +68,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 		public NumericalThing(int num) {
 			number = num;
 		}
-		
+
 		public void addNumber(int other) {
 			number += other;
 		}
@@ -77,8 +79,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI1")
-	public final Inplaces.Arity1<NumericalThing> alterThing1 = (
-		io) -> {
+	public final Inplaces.Arity1<NumericalThing> alterThing1 = (io) -> {
 		io.addNumber(0);
 	};
 
@@ -88,7 +89,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI1") //
+		ops.op("test.liftArrayI1") //
 			.arity1() //
 			.input(io) //
 			.mutate();
@@ -99,10 +100,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI1")
-	public final Inplaces.Arity2_1<NumericalThing, NumericalThing> alterThing2_1 = (
-		io, in2) -> {
-		io.addNumber(in2.getNumber());
-	};
+	public final Inplaces.Arity2_1<NumericalThing, NumericalThing> alterThing2_1 =
+		(io, in2) -> {
+			io.addNumber(in2.getNumber());
+		};
 
 	@Test
 	public void testInplace2_1ToArrays() {
@@ -110,7 +111,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI1") //
+		ops.op("test.liftArrayI1") //
 			.arity2() //
 			.input(io, input) //
 			.mutate1();
@@ -121,10 +122,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI2")
-	public final Inplaces.Arity2_2<NumericalThing, NumericalThing> alterThing2_2 = (
-		in1, io) -> {
-		io.addNumber(in1.getNumber());
-	};
+	public final Inplaces.Arity2_2<NumericalThing, NumericalThing> alterThing2_2 =
+		(in1, io) -> {
+			io.addNumber(in1.getNumber());
+		};
 
 	@Test
 	public void testInplace2_2ToArrays() {
@@ -132,7 +133,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI2") //
+		ops.op("test.liftArrayI2") //
 			.arity2() //
 			.input(input, io) //
 			.mutate2();
@@ -143,11 +144,11 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI1")
-	public final Inplaces.Arity3_1<NumericalThing, NumericalThing, NumericalThing> alterThing3_1 = (
-		io, in2, in3) -> {
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-	};
+	public final Inplaces.Arity3_1<NumericalThing, NumericalThing, NumericalThing> alterThing3_1 =
+		(io, in2, in3) -> {
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+		};
 
 	@Test
 	public void testInplace3_1ToArrays() {
@@ -155,7 +156,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI1") //
+		ops.op("test.liftArrayI1") //
 			.arity3() //
 			.input(io, input, input) //
 			.mutate1();
@@ -166,11 +167,11 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI2")
-	public final Inplaces.Arity3_2<NumericalThing, NumericalThing, NumericalThing> alterThing3_2 = (
-		in1, io, in3) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in3.getNumber());
-	};
+	public final Inplaces.Arity3_2<NumericalThing, NumericalThing, NumericalThing> alterThing3_2 =
+		(in1, io, in3) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in3.getNumber());
+		};
 
 	@Test
 	public void testInplace3_2ToArrays() {
@@ -178,7 +179,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI2") //
+		ops.op("test.liftArrayI2") //
 			.arity3() //
 			.input(input, io, input) //
 			.mutate2();
@@ -189,11 +190,11 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI3")
-	public final Inplaces.Arity3_3<NumericalThing, NumericalThing, NumericalThing> alterThing3_3 = (
-		in1, in2, io) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-	};
+	public final Inplaces.Arity3_3<NumericalThing, NumericalThing, NumericalThing> alterThing3_3 =
+		(in1, in2, io) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+		};
 
 	@Test
 	public void testInplace3_3ToArrays() {
@@ -201,7 +202,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI3") //
+		ops.op("test.liftArrayI3") //
 			.arity3() //
 			.input(input, input, io) //
 			.mutate3();
@@ -212,12 +213,12 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI1")
-	public final Inplaces.Arity4_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing4_1 = (
-		io, in2, in3, in4) -> {
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-	};
+	public final Inplaces.Arity4_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing4_1 =
+		(io, in2, in3, in4) -> {
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+		};
 
 	@Test
 	public void testInplace4_1ToArrays() {
@@ -225,7 +226,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI1") //
+		ops.op("test.liftArrayI1") //
 			.arity4() //
 			.input(io, input, input, input) //
 			.mutate1();
@@ -236,12 +237,12 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI2")
-	public final Inplaces.Arity4_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing4_2 = (
-		in1, io, in3, in4) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-	};
+	public final Inplaces.Arity4_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing4_2 =
+		(in1, io, in3, in4) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+		};
 
 	@Test
 	public void testInplace4_2ToArrays() {
@@ -249,7 +250,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI2") //
+		ops.op("test.liftArrayI2") //
 			.arity4() //
 			.input(input, io, input, input) //
 			.mutate2();
@@ -260,12 +261,12 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI3")
-	public final Inplaces.Arity4_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing4_3 = (
-		in1, in2, io, in4) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in4.getNumber());
-	};
+	public final Inplaces.Arity4_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing4_3 =
+		(in1, in2, io, in4) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in4.getNumber());
+		};
 
 	@Test
 	public void testInplace4_3ToArrays() {
@@ -273,7 +274,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI3") //
+		ops.op("test.liftArrayI3") //
 			.arity4() //
 			.input(input, input, io, input) //
 			.mutate3();
@@ -284,12 +285,12 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI4")
-	public final Inplaces.Arity4_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing4_4 = (
-		in1, in2, in3, io) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-	};
+	public final Inplaces.Arity4_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing4_4 =
+		(in1, in2, in3, io) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+		};
 
 	@Test
 	public void testInplace4_4ToArrays() {
@@ -297,7 +298,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI4") //
+		ops.op("test.liftArrayI4") //
 			.arity4() //
 			.input(input, input, input, io) //
 			.mutate4();
@@ -308,13 +309,13 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI1")
-	public final Inplaces.Arity5_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing5_1 = (
-		io, in2, in3, in4, in5) -> {
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-	};
+	public final Inplaces.Arity5_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing5_1 =
+		(io, in2, in3, in4, in5) -> {
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+		};
 
 	@Test
 	public void testInplace5_1ToArrays() {
@@ -322,7 +323,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI1") //
+		ops.op("test.liftArrayI1") //
 			.arity5() //
 			.input(io, input, input, input, input) //
 			.mutate1();
@@ -333,13 +334,13 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI2")
-	public final Inplaces.Arity5_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing5_2 = (
-		in1, io, in3, in4, in5) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-	};
+	public final Inplaces.Arity5_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing5_2 =
+		(in1, io, in3, in4, in5) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+		};
 
 	@Test
 	public void testInplace5_2ToArrays() {
@@ -347,7 +348,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI2") //
+		ops.op("test.liftArrayI2") //
 			.arity5() //
 			.input(input, io, input, input, input) //
 			.mutate2();
@@ -358,13 +359,13 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI3")
-	public final Inplaces.Arity5_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing5_3 = (
-		in1, in2, io, in4, in5) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-	};
+	public final Inplaces.Arity5_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing5_3 =
+		(in1, in2, io, in4, in5) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+		};
 
 	@Test
 	public void testInplace5_3ToArrays() {
@@ -372,7 +373,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI3") //
+		ops.op("test.liftArrayI3") //
 			.arity5() //
 			.input(input, input, io, input, input) //
 			.mutate3();
@@ -383,13 +384,13 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI4")
-	public final Inplaces.Arity5_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing5_4 = (
-		in1, in2, in3, io, in5) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in5.getNumber());
-	};
+	public final Inplaces.Arity5_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing5_4 =
+		(in1, in2, in3, io, in5) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in5.getNumber());
+		};
 
 	@Test
 	public void testInplace5_4ToArrays() {
@@ -397,7 +398,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI4") //
+		ops.op("test.liftArrayI4") //
 			.arity5() //
 			.input(input, input, input, io, input) //
 			.mutate4();
@@ -408,13 +409,13 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI5")
-	public final Inplaces.Arity5_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing5_5 = (
-		in1, in2, in3, in4, io) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-	};
+	public final Inplaces.Arity5_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing5_5 =
+		(in1, in2, in3, in4, io) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+		};
 
 	@Test
 	public void testInplace5_5ToArrays() {
@@ -422,7 +423,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI5") //
+		ops.op("test.liftArrayI5") //
 			.arity5() //
 			.input(input, input, input, input, io) //
 			.mutate5();
@@ -433,14 +434,14 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI1")
-	public final Inplaces.Arity6_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing6_1 = (
-		io, in2, in3, in4, in5, in6) -> {
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-	};
+	public final Inplaces.Arity6_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing6_1 =
+		(io, in2, in3, in4, in5, in6) -> {
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+		};
 
 	@Test
 	public void testInplace6_1ToArrays() {
@@ -448,7 +449,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI1") //
+		ops.op("test.liftArrayI1") //
 			.arity6() //
 			.input(io, input, input, input, input, input) //
 			.mutate1();
@@ -459,14 +460,14 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI2")
-	public final Inplaces.Arity6_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing6_2 = (
-		in1, io, in3, in4, in5, in6) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-	};
+	public final Inplaces.Arity6_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing6_2 =
+		(in1, io, in3, in4, in5, in6) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+		};
 
 	@Test
 	public void testInplace6_2ToArrays() {
@@ -474,7 +475,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI2") //
+		ops.op("test.liftArrayI2") //
 			.arity6() //
 			.input(input, io, input, input, input, input) //
 			.mutate2();
@@ -485,14 +486,14 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI3")
-	public final Inplaces.Arity6_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing6_3 = (
-		in1, in2, io, in4, in5, in6) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-	};
+	public final Inplaces.Arity6_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing6_3 =
+		(in1, in2, io, in4, in5, in6) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+		};
 
 	@Test
 	public void testInplace6_3ToArrays() {
@@ -500,7 +501,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI3") //
+		ops.op("test.liftArrayI3") //
 			.arity6() //
 			.input(input, input, io, input, input, input) //
 			.mutate3();
@@ -511,14 +512,14 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI4")
-	public final Inplaces.Arity6_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing6_4 = (
-		in1, in2, in3, io, in5, in6) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-	};
+	public final Inplaces.Arity6_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing6_4 =
+		(in1, in2, in3, io, in5, in6) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+		};
 
 	@Test
 	public void testInplace6_4ToArrays() {
@@ -526,7 +527,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI4") //
+		ops.op("test.liftArrayI4") //
 			.arity6() //
 			.input(input, input, input, io, input, input) //
 			.mutate4();
@@ -537,14 +538,14 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI5")
-	public final Inplaces.Arity6_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing6_5 = (
-		in1, in2, in3, in4, io, in6) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in6.getNumber());
-	};
+	public final Inplaces.Arity6_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing6_5 =
+		(in1, in2, in3, in4, io, in6) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in6.getNumber());
+		};
 
 	@Test
 	public void testInplace6_5ToArrays() {
@@ -552,7 +553,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI5") //
+		ops.op("test.liftArrayI5") //
 			.arity6() //
 			.input(input, input, input, input, io, input) //
 			.mutate5();
@@ -563,14 +564,14 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI6")
-	public final Inplaces.Arity6_6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing6_6 = (
-		in1, in2, in3, in4, in5, io) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-	};
+	public final Inplaces.Arity6_6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing6_6 =
+		(in1, in2, in3, in4, in5, io) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+		};
 
 	@Test
 	public void testInplace6_6ToArrays() {
@@ -578,7 +579,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI6") //
+		ops.op("test.liftArrayI6") //
 			.arity6() //
 			.input(input, input, input, input, input, io) //
 			.mutate6();
@@ -589,15 +590,15 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI1")
-	public final Inplaces.Arity7_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing7_1 = (
-		io, in2, in3, in4, in5, in6, in7) -> {
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-	};
+	public final Inplaces.Arity7_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing7_1 =
+		(io, in2, in3, in4, in5, in6, in7) -> {
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+		};
 
 	@Test
 	public void testInplace7_1ToArrays() {
@@ -605,7 +606,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI1") //
+		ops.op("test.liftArrayI1") //
 			.arity7() //
 			.input(io, input, input, input, input, input, input) //
 			.mutate1();
@@ -616,15 +617,15 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI2")
-	public final Inplaces.Arity7_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing7_2 = (
-		in1, io, in3, in4, in5, in6, in7) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-	};
+	public final Inplaces.Arity7_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing7_2 =
+		(in1, io, in3, in4, in5, in6, in7) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+		};
 
 	@Test
 	public void testInplace7_2ToArrays() {
@@ -632,7 +633,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI2") //
+		ops.op("test.liftArrayI2") //
 			.arity7() //
 			.input(input, io, input, input, input, input, input) //
 			.mutate2();
@@ -643,15 +644,15 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI3")
-	public final Inplaces.Arity7_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing7_3 = (
-		in1, in2, io, in4, in5, in6, in7) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-	};
+	public final Inplaces.Arity7_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing7_3 =
+		(in1, in2, io, in4, in5, in6, in7) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+		};
 
 	@Test
 	public void testInplace7_3ToArrays() {
@@ -659,7 +660,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI3") //
+		ops.op("test.liftArrayI3") //
 			.arity7() //
 			.input(input, input, io, input, input, input, input) //
 			.mutate3();
@@ -670,15 +671,15 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI4")
-	public final Inplaces.Arity7_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing7_4 = (
-		in1, in2, in3, io, in5, in6, in7) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-	};
+	public final Inplaces.Arity7_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing7_4 =
+		(in1, in2, in3, io, in5, in6, in7) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+		};
 
 	@Test
 	public void testInplace7_4ToArrays() {
@@ -686,7 +687,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI4") //
+		ops.op("test.liftArrayI4") //
 			.arity7() //
 			.input(input, input, input, io, input, input, input) //
 			.mutate4();
@@ -697,15 +698,15 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI5")
-	public final Inplaces.Arity7_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing7_5 = (
-		in1, in2, in3, in4, io, in6, in7) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-	};
+	public final Inplaces.Arity7_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing7_5 =
+		(in1, in2, in3, in4, io, in6, in7) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+		};
 
 	@Test
 	public void testInplace7_5ToArrays() {
@@ -713,7 +714,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI5") //
+		ops.op("test.liftArrayI5") //
 			.arity7() //
 			.input(input, input, input, input, io, input, input) //
 			.mutate5();
@@ -724,15 +725,15 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI6")
-	public final Inplaces.Arity7_6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing7_6 = (
-		in1, in2, in3, in4, in5, io, in7) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in7.getNumber());
-	};
+	public final Inplaces.Arity7_6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing7_6 =
+		(in1, in2, in3, in4, in5, io, in7) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in7.getNumber());
+		};
 
 	@Test
 	public void testInplace7_6ToArrays() {
@@ -740,7 +741,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI6") //
+		ops.op("test.liftArrayI6") //
 			.arity7() //
 			.input(input, input, input, input, input, io, input) //
 			.mutate6();
@@ -751,15 +752,15 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI7")
-	public final Inplaces.Arity7_7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing7_7 = (
-		in1, in2, in3, in4, in5, in6, io) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-	};
+	public final Inplaces.Arity7_7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing7_7 =
+		(in1, in2, in3, in4, in5, in6, io) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+		};
 
 	@Test
 	public void testInplace7_7ToArrays() {
@@ -767,7 +768,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI7") //
+		ops.op("test.liftArrayI7") //
 			.arity7() //
 			.input(input, input, input, input, input, input, io) //
 			.mutate7();
@@ -778,16 +779,16 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI1")
-	public final Inplaces.Arity8_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing8_1 = (
-		io, in2, in3, in4, in5, in6, in7, in8) -> {
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-	};
+	public final Inplaces.Arity8_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing8_1 =
+		(io, in2, in3, in4, in5, in6, in7, in8) -> {
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+		};
 
 	@Test
 	public void testInplace8_1ToArrays() {
@@ -795,7 +796,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI1") //
+		ops.op("test.liftArrayI1") //
 			.arity8() //
 			.input(io, input, input, input, input, input, input, input) //
 			.mutate1();
@@ -806,16 +807,16 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI2")
-	public final Inplaces.Arity8_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing8_2 = (
-		in1, io, in3, in4, in5, in6, in7, in8) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-	};
+	public final Inplaces.Arity8_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing8_2 =
+		(in1, io, in3, in4, in5, in6, in7, in8) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+		};
 
 	@Test
 	public void testInplace8_2ToArrays() {
@@ -823,7 +824,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI2") //
+		ops.op("test.liftArrayI2") //
 			.arity8() //
 			.input(input, io, input, input, input, input, input, input) //
 			.mutate2();
@@ -834,16 +835,16 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI3")
-	public final Inplaces.Arity8_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing8_3 = (
-		in1, in2, io, in4, in5, in6, in7, in8) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-	};
+	public final Inplaces.Arity8_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing8_3 =
+		(in1, in2, io, in4, in5, in6, in7, in8) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+		};
 
 	@Test
 	public void testInplace8_3ToArrays() {
@@ -851,7 +852,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI3") //
+		ops.op("test.liftArrayI3") //
 			.arity8() //
 			.input(input, input, io, input, input, input, input, input) //
 			.mutate3();
@@ -862,16 +863,16 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI4")
-	public final Inplaces.Arity8_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing8_4 = (
-		in1, in2, in3, io, in5, in6, in7, in8) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-	};
+	public final Inplaces.Arity8_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing8_4 =
+		(in1, in2, in3, io, in5, in6, in7, in8) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+		};
 
 	@Test
 	public void testInplace8_4ToArrays() {
@@ -879,7 +880,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI4") //
+		ops.op("test.liftArrayI4") //
 			.arity8() //
 			.input(input, input, input, io, input, input, input, input) //
 			.mutate4();
@@ -890,16 +891,16 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI5")
-	public final Inplaces.Arity8_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing8_5 = (
-		in1, in2, in3, in4, io, in6, in7, in8) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-	};
+	public final Inplaces.Arity8_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing8_5 =
+		(in1, in2, in3, in4, io, in6, in7, in8) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+		};
 
 	@Test
 	public void testInplace8_5ToArrays() {
@@ -907,7 +908,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI5") //
+		ops.op("test.liftArrayI5") //
 			.arity8() //
 			.input(input, input, input, input, io, input, input, input) //
 			.mutate5();
@@ -918,16 +919,16 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI6")
-	public final Inplaces.Arity8_6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing8_6 = (
-		in1, in2, in3, in4, in5, io, in7, in8) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-	};
+	public final Inplaces.Arity8_6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing8_6 =
+		(in1, in2, in3, in4, in5, io, in7, in8) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+		};
 
 	@Test
 	public void testInplace8_6ToArrays() {
@@ -935,7 +936,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI6") //
+		ops.op("test.liftArrayI6") //
 			.arity8() //
 			.input(input, input, input, input, input, io, input, input) //
 			.mutate6();
@@ -946,16 +947,16 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI7")
-	public final Inplaces.Arity8_7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing8_7 = (
-		in1, in2, in3, in4, in5, in6, io, in8) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in8.getNumber());
-	};
+	public final Inplaces.Arity8_7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing8_7 =
+		(in1, in2, in3, in4, in5, in6, io, in8) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in8.getNumber());
+		};
 
 	@Test
 	public void testInplace8_7ToArrays() {
@@ -963,7 +964,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI7") //
+		ops.op("test.liftArrayI7") //
 			.arity8() //
 			.input(input, input, input, input, input, input, io, input) //
 			.mutate7();
@@ -974,16 +975,16 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI8")
-	public final Inplaces.Arity8_8<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing8_8 = (
-		in1, in2, in3, in4, in5, in6, in7, io) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-	};
+	public final Inplaces.Arity8_8<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing8_8 =
+		(in1, in2, in3, in4, in5, in6, in7, io) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+		};
 
 	@Test
 	public void testInplace8_8ToArrays() {
@@ -991,7 +992,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI8") //
+		ops.op("test.liftArrayI8") //
 			.arity8() //
 			.input(input, input, input, input, input, input, input, io) //
 			.mutate8();
@@ -1002,17 +1003,17 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI1")
-	public final Inplaces.Arity9_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing9_1 = (
-		io, in2, in3, in4, in5, in6, in7, in8, in9) -> {
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-	};
+	public final Inplaces.Arity9_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing9_1 =
+		(io, in2, in3, in4, in5, in6, in7, in8, in9) -> {
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+		};
 
 	@Test
 	public void testInplace9_1ToArrays() {
@@ -1020,7 +1021,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI1") //
+		ops.op("test.liftArrayI1") //
 			.arity9() //
 			.input(io, input, input, input, input, input, input, input, input) //
 			.mutate1();
@@ -1031,17 +1032,17 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI2")
-	public final Inplaces.Arity9_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing9_2 = (
-		in1, io, in3, in4, in5, in6, in7, in8, in9) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-	};
+	public final Inplaces.Arity9_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing9_2 =
+		(in1, io, in3, in4, in5, in6, in7, in8, in9) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+		};
 
 	@Test
 	public void testInplace9_2ToArrays() {
@@ -1049,7 +1050,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI2") //
+		ops.op("test.liftArrayI2") //
 			.arity9() //
 			.input(input, io, input, input, input, input, input, input, input) //
 			.mutate2();
@@ -1060,17 +1061,17 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI3")
-	public final Inplaces.Arity9_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing9_3 = (
-		in1, in2, io, in4, in5, in6, in7, in8, in9) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-	};
+	public final Inplaces.Arity9_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing9_3 =
+		(in1, in2, io, in4, in5, in6, in7, in8, in9) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+		};
 
 	@Test
 	public void testInplace9_3ToArrays() {
@@ -1078,7 +1079,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI3") //
+		ops.op("test.liftArrayI3") //
 			.arity9() //
 			.input(input, input, io, input, input, input, input, input, input) //
 			.mutate3();
@@ -1089,17 +1090,17 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI4")
-	public final Inplaces.Arity9_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing9_4 = (
-		in1, in2, in3, io, in5, in6, in7, in8, in9) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-	};
+	public final Inplaces.Arity9_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing9_4 =
+		(in1, in2, in3, io, in5, in6, in7, in8, in9) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+		};
 
 	@Test
 	public void testInplace9_4ToArrays() {
@@ -1107,7 +1108,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI4") //
+		ops.op("test.liftArrayI4") //
 			.arity9() //
 			.input(input, input, input, io, input, input, input, input, input) //
 			.mutate4();
@@ -1118,17 +1119,17 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI5")
-	public final Inplaces.Arity9_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing9_5 = (
-		in1, in2, in3, in4, io, in6, in7, in8, in9) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-	};
+	public final Inplaces.Arity9_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing9_5 =
+		(in1, in2, in3, in4, io, in6, in7, in8, in9) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+		};
 
 	@Test
 	public void testInplace9_5ToArrays() {
@@ -1136,7 +1137,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI5") //
+		ops.op("test.liftArrayI5") //
 			.arity9() //
 			.input(input, input, input, input, io, input, input, input, input) //
 			.mutate5();
@@ -1147,17 +1148,17 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI6")
-	public final Inplaces.Arity9_6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing9_6 = (
-		in1, in2, in3, in4, in5, io, in7, in8, in9) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-	};
+	public final Inplaces.Arity9_6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing9_6 =
+		(in1, in2, in3, in4, in5, io, in7, in8, in9) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+		};
 
 	@Test
 	public void testInplace9_6ToArrays() {
@@ -1165,7 +1166,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI6") //
+		ops.op("test.liftArrayI6") //
 			.arity9() //
 			.input(input, input, input, input, input, io, input, input, input) //
 			.mutate6();
@@ -1176,17 +1177,17 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI7")
-	public final Inplaces.Arity9_7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing9_7 = (
-		in1, in2, in3, in4, in5, in6, io, in8, in9) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-	};
+	public final Inplaces.Arity9_7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing9_7 =
+		(in1, in2, in3, in4, in5, in6, io, in8, in9) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+		};
 
 	@Test
 	public void testInplace9_7ToArrays() {
@@ -1194,7 +1195,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI7") //
+		ops.op("test.liftArrayI7") //
 			.arity9() //
 			.input(input, input, input, input, input, input, io, input, input) //
 			.mutate7();
@@ -1205,17 +1206,17 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI8")
-	public final Inplaces.Arity9_8<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing9_8 = (
-		in1, in2, in3, in4, in5, in6, in7, io, in9) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in9.getNumber());
-	};
+	public final Inplaces.Arity9_8<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing9_8 =
+		(in1, in2, in3, in4, in5, in6, in7, io, in9) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in9.getNumber());
+		};
 
 	@Test
 	public void testInplace9_8ToArrays() {
@@ -1223,7 +1224,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI8") //
+		ops.op("test.liftArrayI8") //
 			.arity9() //
 			.input(input, input, input, input, input, input, input, io, input) //
 			.mutate8();
@@ -1234,17 +1235,17 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI9")
-	public final Inplaces.Arity9_9<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing9_9 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, io) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-	};
+	public final Inplaces.Arity9_9<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing9_9 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, io) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+		};
 
 	@Test
 	public void testInplace9_9ToArrays() {
@@ -1252,7 +1253,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI9") //
+		ops.op("test.liftArrayI9") //
 			.arity9() //
 			.input(input, input, input, input, input, input, input, input, io) //
 			.mutate9();
@@ -1263,18 +1264,18 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI1")
-	public final Inplaces.Arity10_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10_1 = (
-		io, in2, in3, in4, in5, in6, in7, in8, in9, in10) -> {
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-	};
+	public final Inplaces.Arity10_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10_1 =
+		(io, in2, in3, in4, in5, in6, in7, in8, in9, in10) -> {
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+		};
 
 	@Test
 	public void testInplace10_1ToArrays() {
@@ -1282,7 +1283,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI1") //
+		ops.op("test.liftArrayI1") //
 			.arity10() //
 			.input(io, input, input, input, input, input, input, input, input, input) //
 			.mutate1();
@@ -1293,18 +1294,18 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI2")
-	public final Inplaces.Arity10_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10_2 = (
-		in1, io, in3, in4, in5, in6, in7, in8, in9, in10) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-	};
+	public final Inplaces.Arity10_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10_2 =
+		(in1, io, in3, in4, in5, in6, in7, in8, in9, in10) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+		};
 
 	@Test
 	public void testInplace10_2ToArrays() {
@@ -1312,7 +1313,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI2") //
+		ops.op("test.liftArrayI2") //
 			.arity10() //
 			.input(input, io, input, input, input, input, input, input, input, input) //
 			.mutate2();
@@ -1323,18 +1324,18 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI3")
-	public final Inplaces.Arity10_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10_3 = (
-		in1, in2, io, in4, in5, in6, in7, in8, in9, in10) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-	};
+	public final Inplaces.Arity10_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10_3 =
+		(in1, in2, io, in4, in5, in6, in7, in8, in9, in10) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+		};
 
 	@Test
 	public void testInplace10_3ToArrays() {
@@ -1342,7 +1343,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI3") //
+		ops.op("test.liftArrayI3") //
 			.arity10() //
 			.input(input, input, io, input, input, input, input, input, input, input) //
 			.mutate3();
@@ -1353,18 +1354,18 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI4")
-	public final Inplaces.Arity10_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10_4 = (
-		in1, in2, in3, io, in5, in6, in7, in8, in9, in10) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-	};
+	public final Inplaces.Arity10_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10_4 =
+		(in1, in2, in3, io, in5, in6, in7, in8, in9, in10) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+		};
 
 	@Test
 	public void testInplace10_4ToArrays() {
@@ -1372,7 +1373,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI4") //
+		ops.op("test.liftArrayI4") //
 			.arity10() //
 			.input(input, input, input, io, input, input, input, input, input, input) //
 			.mutate4();
@@ -1383,18 +1384,18 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI5")
-	public final Inplaces.Arity10_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10_5 = (
-		in1, in2, in3, in4, io, in6, in7, in8, in9, in10) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-	};
+	public final Inplaces.Arity10_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10_5 =
+		(in1, in2, in3, in4, io, in6, in7, in8, in9, in10) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+		};
 
 	@Test
 	public void testInplace10_5ToArrays() {
@@ -1402,7 +1403,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI5") //
+		ops.op("test.liftArrayI5") //
 			.arity10() //
 			.input(input, input, input, input, io, input, input, input, input, input) //
 			.mutate5();
@@ -1413,18 +1414,18 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI6")
-	public final Inplaces.Arity10_6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10_6 = (
-		in1, in2, in3, in4, in5, io, in7, in8, in9, in10) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-	};
+	public final Inplaces.Arity10_6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10_6 =
+		(in1, in2, in3, in4, in5, io, in7, in8, in9, in10) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+		};
 
 	@Test
 	public void testInplace10_6ToArrays() {
@@ -1432,7 +1433,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI6") //
+		ops.op("test.liftArrayI6") //
 			.arity10() //
 			.input(input, input, input, input, input, io, input, input, input, input) //
 			.mutate6();
@@ -1443,18 +1444,18 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI7")
-	public final Inplaces.Arity10_7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10_7 = (
-		in1, in2, in3, in4, in5, in6, io, in8, in9, in10) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-	};
+	public final Inplaces.Arity10_7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10_7 =
+		(in1, in2, in3, in4, in5, in6, io, in8, in9, in10) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+		};
 
 	@Test
 	public void testInplace10_7ToArrays() {
@@ -1462,7 +1463,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI7") //
+		ops.op("test.liftArrayI7") //
 			.arity10() //
 			.input(input, input, input, input, input, input, io, input, input, input) //
 			.mutate7();
@@ -1473,18 +1474,18 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI8")
-	public final Inplaces.Arity10_8<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10_8 = (
-		in1, in2, in3, in4, in5, in6, in7, io, in9, in10) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-	};
+	public final Inplaces.Arity10_8<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10_8 =
+		(in1, in2, in3, in4, in5, in6, in7, io, in9, in10) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+		};
 
 	@Test
 	public void testInplace10_8ToArrays() {
@@ -1492,7 +1493,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI8") //
+		ops.op("test.liftArrayI8") //
 			.arity10() //
 			.input(input, input, input, input, input, input, input, io, input, input) //
 			.mutate8();
@@ -1503,18 +1504,18 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI9")
-	public final Inplaces.Arity10_9<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10_9 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, io, in10) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in10.getNumber());
-	};
+	public final Inplaces.Arity10_9<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10_9 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, io, in10) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in10.getNumber());
+		};
 
 	@Test
 	public void testInplace10_9ToArrays() {
@@ -1522,7 +1523,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI9") //
+		ops.op("test.liftArrayI9") //
 			.arity10() //
 			.input(input, input, input, input, input, input, input, input, io, input) //
 			.mutate9();
@@ -1533,18 +1534,18 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI10")
-	public final Inplaces.Arity10_10<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10_10 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, io) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-	};
+	public final Inplaces.Arity10_10<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10_10 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, io) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+		};
 
 	@Test
 	public void testInplace10_10ToArrays() {
@@ -1552,7 +1553,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI10") //
+		ops.op("test.liftArrayI10") //
 			.arity10() //
 			.input(input, input, input, input, input, input, input, input, input, io) //
 			.mutate10();
@@ -1563,19 +1564,19 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI1")
-	public final Inplaces.Arity11_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11_1 = (
-		io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11) -> {
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-	};
+	public final Inplaces.Arity11_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11_1 =
+		(io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11) -> {
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+		};
 
 	@Test
 	public void testInplace11_1ToArrays() {
@@ -1583,9 +1584,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI1") //
+		ops.op("test.liftArrayI1") //
 			.arity11() //
-			.input(io, input, input, input, input, input, input, input, input, input, input) //
+			.input(io, input, input, input, input, input, input, input, input, input,
+				input) //
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
@@ -1594,19 +1596,19 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI2")
-	public final Inplaces.Arity11_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11_2 = (
-		in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-	};
+	public final Inplaces.Arity11_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11_2 =
+		(in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+		};
 
 	@Test
 	public void testInplace11_2ToArrays() {
@@ -1614,9 +1616,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI2") //
+		ops.op("test.liftArrayI2") //
 			.arity11() //
-			.input(input, io, input, input, input, input, input, input, input, input, input) //
+			.input(input, io, input, input, input, input, input, input, input, input,
+				input) //
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
@@ -1625,19 +1628,19 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI3")
-	public final Inplaces.Arity11_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11_3 = (
-		in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-	};
+	public final Inplaces.Arity11_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11_3 =
+		(in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+		};
 
 	@Test
 	public void testInplace11_3ToArrays() {
@@ -1645,9 +1648,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI3") //
+		ops.op("test.liftArrayI3") //
 			.arity11() //
-			.input(input, input, io, input, input, input, input, input, input, input, input) //
+			.input(input, input, io, input, input, input, input, input, input, input,
+				input) //
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
@@ -1656,19 +1660,19 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI4")
-	public final Inplaces.Arity11_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11_4 = (
-		in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-	};
+	public final Inplaces.Arity11_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11_4 =
+		(in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+		};
 
 	@Test
 	public void testInplace11_4ToArrays() {
@@ -1676,9 +1680,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI4") //
+		ops.op("test.liftArrayI4") //
 			.arity11() //
-			.input(input, input, input, io, input, input, input, input, input, input, input) //
+			.input(input, input, input, io, input, input, input, input, input, input,
+				input) //
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
@@ -1687,19 +1692,19 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI5")
-	public final Inplaces.Arity11_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11_5 = (
-		in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-	};
+	public final Inplaces.Arity11_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11_5 =
+		(in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+		};
 
 	@Test
 	public void testInplace11_5ToArrays() {
@@ -1707,9 +1712,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI5") //
+		ops.op("test.liftArrayI5") //
 			.arity11() //
-			.input(input, input, input, input, io, input, input, input, input, input, input) //
+			.input(input, input, input, input, io, input, input, input, input, input,
+				input) //
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
@@ -1718,19 +1724,19 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI6")
-	public final Inplaces.Arity11_6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11_6 = (
-		in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-	};
+	public final Inplaces.Arity11_6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11_6 =
+		(in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+		};
 
 	@Test
 	public void testInplace11_6ToArrays() {
@@ -1738,9 +1744,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI6") //
+		ops.op("test.liftArrayI6") //
 			.arity11() //
-			.input(input, input, input, input, input, io, input, input, input, input, input) //
+			.input(input, input, input, input, input, io, input, input, input, input,
+				input) //
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
@@ -1749,19 +1756,19 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI7")
-	public final Inplaces.Arity11_7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11_7 = (
-		in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-	};
+	public final Inplaces.Arity11_7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11_7 =
+		(in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+		};
 
 	@Test
 	public void testInplace11_7ToArrays() {
@@ -1769,9 +1776,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI7") //
+		ops.op("test.liftArrayI7") //
 			.arity11() //
-			.input(input, input, input, input, input, input, io, input, input, input, input) //
+			.input(input, input, input, input, input, input, io, input, input, input,
+				input) //
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
@@ -1780,19 +1788,19 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI8")
-	public final Inplaces.Arity11_8<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11_8 = (
-		in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-	};
+	public final Inplaces.Arity11_8<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11_8 =
+		(in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+		};
 
 	@Test
 	public void testInplace11_8ToArrays() {
@@ -1800,9 +1808,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI8") //
+		ops.op("test.liftArrayI8") //
 			.arity11() //
-			.input(input, input, input, input, input, input, input, io, input, input, input) //
+			.input(input, input, input, input, input, input, input, io, input, input,
+				input) //
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
@@ -1811,19 +1820,19 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI9")
-	public final Inplaces.Arity11_9<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11_9 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-	};
+	public final Inplaces.Arity11_9<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11_9 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+		};
 
 	@Test
 	public void testInplace11_9ToArrays() {
@@ -1831,9 +1840,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI9") //
+		ops.op("test.liftArrayI9") //
 			.arity11() //
-			.input(input, input, input, input, input, input, input, input, io, input, input) //
+			.input(input, input, input, input, input, input, input, input, io, input,
+				input) //
 			.mutate9();
 
 		for (int i = 0; i < input.length; i++) {
@@ -1842,19 +1852,19 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI10")
-	public final Inplaces.Arity11_10<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11_10 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in11.getNumber());
-	};
+	public final Inplaces.Arity11_10<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11_10 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in11.getNumber());
+		};
 
 	@Test
 	public void testInplace11_10ToArrays() {
@@ -1862,9 +1872,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI10") //
+		ops.op("test.liftArrayI10") //
 			.arity11() //
-			.input(input, input, input, input, input, input, input, input, input, io, input) //
+			.input(input, input, input, input, input, input, input, input, input, io,
+				input) //
 			.mutate10();
 
 		for (int i = 0; i < input.length; i++) {
@@ -1873,19 +1884,19 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI11")
-	public final Inplaces.Arity11_11<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11_11 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-	};
+	public final Inplaces.Arity11_11<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11_11 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+		};
 
 	@Test
 	public void testInplace11_11ToArrays() {
@@ -1893,9 +1904,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI11") //
+		ops.op("test.liftArrayI11") //
 			.arity11() //
-			.input(input, input, input, input, input, input, input, input, input, input, io) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, io) //
 			.mutate11();
 
 		for (int i = 0; i < input.length; i++) {
@@ -1904,20 +1916,20 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI1")
-	public final Inplaces.Arity12_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_1 = (
-		io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12) -> {
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-	};
+	public final Inplaces.Arity12_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_1 =
+		(io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12) -> {
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+		};
 
 	@Test
 	public void testInplace12_1ToArrays() {
@@ -1925,9 +1937,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI1") //
+		ops.op("test.liftArrayI1") //
 			.arity12() //
-			.input(io, input, input, input, input, input, input, input, input, input, input, input) //
+			.input(io, input, input, input, input, input, input, input, input, input,
+				input, input) //
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
@@ -1936,20 +1949,20 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI2")
-	public final Inplaces.Arity12_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_2 = (
-		in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-	};
+	public final Inplaces.Arity12_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_2 =
+		(in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+		};
 
 	@Test
 	public void testInplace12_2ToArrays() {
@@ -1957,9 +1970,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI2") //
+		ops.op("test.liftArrayI2") //
 			.arity12() //
-			.input(input, io, input, input, input, input, input, input, input, input, input, input) //
+			.input(input, io, input, input, input, input, input, input, input, input,
+				input, input) //
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
@@ -1968,20 +1982,20 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI3")
-	public final Inplaces.Arity12_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_3 = (
-		in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11, in12) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-	};
+	public final Inplaces.Arity12_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_3 =
+		(in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11, in12) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+		};
 
 	@Test
 	public void testInplace12_3ToArrays() {
@@ -1989,9 +2003,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI3") //
+		ops.op("test.liftArrayI3") //
 			.arity12() //
-			.input(input, input, io, input, input, input, input, input, input, input, input, input) //
+			.input(input, input, io, input, input, input, input, input, input, input,
+				input, input) //
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2000,20 +2015,20 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI4")
-	public final Inplaces.Arity12_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_4 = (
-		in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11, in12) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-	};
+	public final Inplaces.Arity12_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_4 =
+		(in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11, in12) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+		};
 
 	@Test
 	public void testInplace12_4ToArrays() {
@@ -2021,9 +2036,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI4") //
+		ops.op("test.liftArrayI4") //
 			.arity12() //
-			.input(input, input, input, io, input, input, input, input, input, input, input, input) //
+			.input(input, input, input, io, input, input, input, input, input, input,
+				input, input) //
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2032,20 +2048,20 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI5")
-	public final Inplaces.Arity12_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_5 = (
-		in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11, in12) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-	};
+	public final Inplaces.Arity12_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_5 =
+		(in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11, in12) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+		};
 
 	@Test
 	public void testInplace12_5ToArrays() {
@@ -2053,9 +2069,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI5") //
+		ops.op("test.liftArrayI5") //
 			.arity12() //
-			.input(input, input, input, input, io, input, input, input, input, input, input, input) //
+			.input(input, input, input, input, io, input, input, input, input, input,
+				input, input) //
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2064,20 +2081,20 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI6")
-	public final Inplaces.Arity12_6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_6 = (
-		in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11, in12) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-	};
+	public final Inplaces.Arity12_6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_6 =
+		(in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11, in12) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+		};
 
 	@Test
 	public void testInplace12_6ToArrays() {
@@ -2085,9 +2102,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI6") //
+		ops.op("test.liftArrayI6") //
 			.arity12() //
-			.input(input, input, input, input, input, io, input, input, input, input, input, input) //
+			.input(input, input, input, input, input, io, input, input, input, input,
+				input, input) //
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2096,20 +2114,20 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI7")
-	public final Inplaces.Arity12_7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_7 = (
-		in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11, in12) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-	};
+	public final Inplaces.Arity12_7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_7 =
+		(in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11, in12) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+		};
 
 	@Test
 	public void testInplace12_7ToArrays() {
@@ -2117,9 +2135,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI7") //
+		ops.op("test.liftArrayI7") //
 			.arity12() //
-			.input(input, input, input, input, input, input, io, input, input, input, input, input) //
+			.input(input, input, input, input, input, input, io, input, input, input,
+				input, input) //
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2128,20 +2147,20 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI8")
-	public final Inplaces.Arity12_8<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_8 = (
-		in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11, in12) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-	};
+	public final Inplaces.Arity12_8<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_8 =
+		(in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11, in12) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+		};
 
 	@Test
 	public void testInplace12_8ToArrays() {
@@ -2149,9 +2168,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI8") //
+		ops.op("test.liftArrayI8") //
 			.arity12() //
-			.input(input, input, input, input, input, input, input, io, input, input, input, input) //
+			.input(input, input, input, input, input, input, input, io, input, input,
+				input, input) //
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2160,20 +2180,20 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI9")
-	public final Inplaces.Arity12_9<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_9 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11, in12) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-	};
+	public final Inplaces.Arity12_9<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_9 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11, in12) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+		};
 
 	@Test
 	public void testInplace12_9ToArrays() {
@@ -2181,9 +2201,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI9") //
+		ops.op("test.liftArrayI9") //
 			.arity12() //
-			.input(input, input, input, input, input, input, input, input, io, input, input, input) //
+			.input(input, input, input, input, input, input, input, input, io, input,
+				input, input) //
 			.mutate9();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2192,20 +2213,20 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI10")
-	public final Inplaces.Arity12_10<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_10 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11, in12) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-	};
+	public final Inplaces.Arity12_10<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_10 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11, in12) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+		};
 
 	@Test
 	public void testInplace12_10ToArrays() {
@@ -2213,9 +2234,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI10") //
+		ops.op("test.liftArrayI10") //
 			.arity12() //
-			.input(input, input, input, input, input, input, input, input, input, io, input, input) //
+			.input(input, input, input, input, input, input, input, input, input, io,
+				input, input) //
 			.mutate10();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2224,20 +2246,20 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI11")
-	public final Inplaces.Arity12_11<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_11 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io, in12) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in12.getNumber());
-	};
+	public final Inplaces.Arity12_11<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_11 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io, in12) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in12.getNumber());
+		};
 
 	@Test
 	public void testInplace12_11ToArrays() {
@@ -2245,9 +2267,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI11") //
+		ops.op("test.liftArrayI11") //
 			.arity12() //
-			.input(input, input, input, input, input, input, input, input, input, input, io, input) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, io, input) //
 			.mutate11();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2256,20 +2279,20 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI12")
-	public final Inplaces.Arity12_12<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_12 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, io) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-	};
+	public final Inplaces.Arity12_12<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12_12 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, io) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+		};
 
 	@Test
 	public void testInplace12_12ToArrays() {
@@ -2277,9 +2300,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI12") //
+		ops.op("test.liftArrayI12") //
 			.arity12() //
-			.input(input, input, input, input, input, input, input, input, input, input, input, io) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, input, io) //
 			.mutate12();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2288,21 +2312,21 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI1")
-	public final Inplaces.Arity13_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_1 = (
-		io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13) -> {
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-	};
+	public final Inplaces.Arity13_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_1 =
+		(io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13) -> {
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+		};
 
 	@Test
 	public void testInplace13_1ToArrays() {
@@ -2310,9 +2334,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI1") //
+		ops.op("test.liftArrayI1") //
 			.arity13() //
-			.input(io, input, input, input, input, input, input, input, input, input, input, input, input) //
+			.input(io, input, input, input, input, input, input, input, input, input,
+				input, input, input) //
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2321,21 +2346,21 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI2")
-	public final Inplaces.Arity13_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_2 = (
-		in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-	};
+	public final Inplaces.Arity13_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_2 =
+		(in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+		};
 
 	@Test
 	public void testInplace13_2ToArrays() {
@@ -2343,9 +2368,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI2") //
+		ops.op("test.liftArrayI2") //
 			.arity13() //
-			.input(input, io, input, input, input, input, input, input, input, input, input, input, input) //
+			.input(input, io, input, input, input, input, input, input, input, input,
+				input, input, input) //
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2354,21 +2380,21 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI3")
-	public final Inplaces.Arity13_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_3 = (
-		in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-	};
+	public final Inplaces.Arity13_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_3 =
+		(in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+		};
 
 	@Test
 	public void testInplace13_3ToArrays() {
@@ -2376,9 +2402,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI3") //
+		ops.op("test.liftArrayI3") //
 			.arity13() //
-			.input(input, input, io, input, input, input, input, input, input, input, input, input, input) //
+			.input(input, input, io, input, input, input, input, input, input, input,
+				input, input, input) //
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2387,21 +2414,21 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI4")
-	public final Inplaces.Arity13_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_4 = (
-		in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11, in12, in13) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-	};
+	public final Inplaces.Arity13_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_4 =
+		(in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11, in12, in13) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+		};
 
 	@Test
 	public void testInplace13_4ToArrays() {
@@ -2409,9 +2436,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI4") //
+		ops.op("test.liftArrayI4") //
 			.arity13() //
-			.input(input, input, input, io, input, input, input, input, input, input, input, input, input) //
+			.input(input, input, input, io, input, input, input, input, input, input,
+				input, input, input) //
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2420,21 +2448,21 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI5")
-	public final Inplaces.Arity13_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_5 = (
-		in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11, in12, in13) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-	};
+	public final Inplaces.Arity13_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_5 =
+		(in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11, in12, in13) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+		};
 
 	@Test
 	public void testInplace13_5ToArrays() {
@@ -2442,9 +2470,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI5") //
+		ops.op("test.liftArrayI5") //
 			.arity13() //
-			.input(input, input, input, input, io, input, input, input, input, input, input, input, input) //
+			.input(input, input, input, input, io, input, input, input, input, input,
+				input, input, input) //
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2453,21 +2482,21 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI6")
-	public final Inplaces.Arity13_6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_6 = (
-		in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11, in12, in13) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-	};
+	public final Inplaces.Arity13_6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_6 =
+		(in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11, in12, in13) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+		};
 
 	@Test
 	public void testInplace13_6ToArrays() {
@@ -2475,9 +2504,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI6") //
+		ops.op("test.liftArrayI6") //
 			.arity13() //
-			.input(input, input, input, input, input, io, input, input, input, input, input, input, input) //
+			.input(input, input, input, input, input, io, input, input, input, input,
+				input, input, input) //
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2486,21 +2516,21 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI7")
-	public final Inplaces.Arity13_7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_7 = (
-		in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11, in12, in13) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-	};
+	public final Inplaces.Arity13_7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_7 =
+		(in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11, in12, in13) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+		};
 
 	@Test
 	public void testInplace13_7ToArrays() {
@@ -2508,9 +2538,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI7") //
+		ops.op("test.liftArrayI7") //
 			.arity13() //
-			.input(input, input, input, input, input, input, io, input, input, input, input, input, input) //
+			.input(input, input, input, input, input, input, io, input, input, input,
+				input, input, input) //
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2519,21 +2550,21 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI8")
-	public final Inplaces.Arity13_8<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_8 = (
-		in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11, in12, in13) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-	};
+	public final Inplaces.Arity13_8<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_8 =
+		(in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11, in12, in13) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+		};
 
 	@Test
 	public void testInplace13_8ToArrays() {
@@ -2541,9 +2572,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI8") //
+		ops.op("test.liftArrayI8") //
 			.arity13() //
-			.input(input, input, input, input, input, input, input, io, input, input, input, input, input) //
+			.input(input, input, input, input, input, input, input, io, input, input,
+				input, input, input) //
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2552,21 +2584,21 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI9")
-	public final Inplaces.Arity13_9<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_9 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11, in12, in13) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-	};
+	public final Inplaces.Arity13_9<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_9 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11, in12, in13) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+		};
 
 	@Test
 	public void testInplace13_9ToArrays() {
@@ -2574,9 +2606,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI9") //
+		ops.op("test.liftArrayI9") //
 			.arity13() //
-			.input(input, input, input, input, input, input, input, input, io, input, input, input, input) //
+			.input(input, input, input, input, input, input, input, input, io, input,
+				input, input, input) //
 			.mutate9();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2585,21 +2618,21 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI10")
-	public final Inplaces.Arity13_10<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_10 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11, in12, in13) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-	};
+	public final Inplaces.Arity13_10<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_10 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11, in12, in13) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+		};
 
 	@Test
 	public void testInplace13_10ToArrays() {
@@ -2607,9 +2640,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI10") //
+		ops.op("test.liftArrayI10") //
 			.arity13() //
-			.input(input, input, input, input, input, input, input, input, input, io, input, input, input) //
+			.input(input, input, input, input, input, input, input, input, input, io,
+				input, input, input) //
 			.mutate10();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2618,21 +2652,21 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI11")
-	public final Inplaces.Arity13_11<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_11 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io, in12, in13) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-	};
+	public final Inplaces.Arity13_11<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_11 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io, in12, in13) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+		};
 
 	@Test
 	public void testInplace13_11ToArrays() {
@@ -2640,9 +2674,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI11") //
+		ops.op("test.liftArrayI11") //
 			.arity13() //
-			.input(input, input, input, input, input, input, input, input, input, input, io, input, input) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, io, input, input) //
 			.mutate11();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2651,21 +2686,21 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI12")
-	public final Inplaces.Arity13_12<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_12 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, io, in13) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in13.getNumber());
-	};
+	public final Inplaces.Arity13_12<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_12 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, io, in13) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in13.getNumber());
+		};
 
 	@Test
 	public void testInplace13_12ToArrays() {
@@ -2673,9 +2708,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI12") //
+		ops.op("test.liftArrayI12") //
 			.arity13() //
-			.input(input, input, input, input, input, input, input, input, input, input, input, io, input) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, input, io, input) //
 			.mutate12();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2684,21 +2720,21 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI13")
-	public final Inplaces.Arity13_13<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_13 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, io) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-	};
+	public final Inplaces.Arity13_13<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13_13 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, io) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+		};
 
 	@Test
 	public void testInplace13_13ToArrays() {
@@ -2706,9 +2742,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI13") //
+		ops.op("test.liftArrayI13") //
 			.arity13() //
-			.input(input, input, input, input, input, input, input, input, input, input, input, input, io) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, input, input, io) //
 			.mutate13();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2717,22 +2754,23 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI1")
-	public final Inplaces.Arity14_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_1 = (
-		io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14) -> {
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-	};
+	public final Inplaces.Arity14_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_1 =
+		(io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13,
+			in14) -> {
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+		};
 
 	@Test
 	public void testInplace14_1ToArrays() {
@@ -2740,9 +2778,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI1") //
+		ops.op("test.liftArrayI1") //
 			.arity14() //
-			.input(io, input, input, input, input, input, input, input, input, input, input, input, input, input) //
+			.input(io, input, input, input, input, input, input, input, input, input,
+				input, input, input, input) //
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2751,22 +2790,23 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI2")
-	public final Inplaces.Arity14_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_2 = (
-		in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-	};
+	public final Inplaces.Arity14_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_2 =
+		(in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13,
+			in14) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+		};
 
 	@Test
 	public void testInplace14_2ToArrays() {
@@ -2774,9 +2814,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI2") //
+		ops.op("test.liftArrayI2") //
 			.arity14() //
-			.input(input, io, input, input, input, input, input, input, input, input, input, input, input, input) //
+			.input(input, io, input, input, input, input, input, input, input, input,
+				input, input, input, input) //
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2785,22 +2826,23 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI3")
-	public final Inplaces.Arity14_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_3 = (
-		in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-	};
+	public final Inplaces.Arity14_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_3 =
+		(in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13,
+			in14) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+		};
 
 	@Test
 	public void testInplace14_3ToArrays() {
@@ -2808,9 +2850,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI3") //
+		ops.op("test.liftArrayI3") //
 			.arity14() //
-			.input(input, input, io, input, input, input, input, input, input, input, input, input, input, input) //
+			.input(input, input, io, input, input, input, input, input, input, input,
+				input, input, input, input) //
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2819,22 +2862,23 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI4")
-	public final Inplaces.Arity14_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_4 = (
-		in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-	};
+	public final Inplaces.Arity14_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_4 =
+		(in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11, in12, in13,
+			in14) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+		};
 
 	@Test
 	public void testInplace14_4ToArrays() {
@@ -2842,9 +2886,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI4") //
+		ops.op("test.liftArrayI4") //
 			.arity14() //
-			.input(input, input, input, io, input, input, input, input, input, input, input, input, input, input) //
+			.input(input, input, input, io, input, input, input, input, input, input,
+				input, input, input, input) //
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2853,22 +2898,23 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI5")
-	public final Inplaces.Arity14_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_5 = (
-		in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11, in12, in13, in14) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-	};
+	public final Inplaces.Arity14_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_5 =
+		(in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11, in12, in13,
+			in14) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+		};
 
 	@Test
 	public void testInplace14_5ToArrays() {
@@ -2876,9 +2922,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI5") //
+		ops.op("test.liftArrayI5") //
 			.arity14() //
-			.input(input, input, input, input, io, input, input, input, input, input, input, input, input, input) //
+			.input(input, input, input, input, io, input, input, input, input, input,
+				input, input, input, input) //
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2887,22 +2934,23 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI6")
-	public final Inplaces.Arity14_6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_6 = (
-		in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11, in12, in13, in14) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-	};
+	public final Inplaces.Arity14_6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_6 =
+		(in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11, in12, in13,
+			in14) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+		};
 
 	@Test
 	public void testInplace14_6ToArrays() {
@@ -2910,9 +2958,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI6") //
+		ops.op("test.liftArrayI6") //
 			.arity14() //
-			.input(input, input, input, input, input, io, input, input, input, input, input, input, input, input) //
+			.input(input, input, input, input, input, io, input, input, input, input,
+				input, input, input, input) //
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2921,22 +2970,23 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI7")
-	public final Inplaces.Arity14_7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_7 = (
-		in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11, in12, in13, in14) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-	};
+	public final Inplaces.Arity14_7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_7 =
+		(in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11, in12, in13,
+			in14) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+		};
 
 	@Test
 	public void testInplace14_7ToArrays() {
@@ -2944,9 +2994,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI7") //
+		ops.op("test.liftArrayI7") //
 			.arity14() //
-			.input(input, input, input, input, input, input, io, input, input, input, input, input, input, input) //
+			.input(input, input, input, input, input, input, io, input, input, input,
+				input, input, input, input) //
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2955,22 +3006,23 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI8")
-	public final Inplaces.Arity14_8<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_8 = (
-		in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11, in12, in13, in14) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-	};
+	public final Inplaces.Arity14_8<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_8 =
+		(in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11, in12, in13,
+			in14) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+		};
 
 	@Test
 	public void testInplace14_8ToArrays() {
@@ -2978,9 +3030,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI8") //
+		ops.op("test.liftArrayI8") //
 			.arity14() //
-			.input(input, input, input, input, input, input, input, io, input, input, input, input, input, input) //
+			.input(input, input, input, input, input, input, input, io, input, input,
+				input, input, input, input) //
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
@@ -2989,22 +3042,23 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI9")
-	public final Inplaces.Arity14_9<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_9 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11, in12, in13, in14) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-	};
+	public final Inplaces.Arity14_9<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_9 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11, in12, in13,
+			in14) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+		};
 
 	@Test
 	public void testInplace14_9ToArrays() {
@@ -3012,9 +3066,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI9") //
+		ops.op("test.liftArrayI9") //
 			.arity14() //
-			.input(input, input, input, input, input, input, input, input, io, input, input, input, input, input) //
+			.input(input, input, input, input, input, input, input, input, io, input,
+				input, input, input, input) //
 			.mutate9();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3023,22 +3078,23 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI10")
-	public final Inplaces.Arity14_10<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_10 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11, in12, in13, in14) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-	};
+	public final Inplaces.Arity14_10<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_10 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11, in12, in13,
+			in14) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+		};
 
 	@Test
 	public void testInplace14_10ToArrays() {
@@ -3046,9 +3102,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI10") //
+		ops.op("test.liftArrayI10") //
 			.arity14() //
-			.input(input, input, input, input, input, input, input, input, input, io, input, input, input, input) //
+			.input(input, input, input, input, input, input, input, input, input, io,
+				input, input, input, input) //
 			.mutate10();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3057,22 +3114,23 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI11")
-	public final Inplaces.Arity14_11<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_11 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io, in12, in13, in14) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-	};
+	public final Inplaces.Arity14_11<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_11 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io, in12, in13,
+			in14) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+		};
 
 	@Test
 	public void testInplace14_11ToArrays() {
@@ -3080,9 +3138,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI11") //
+		ops.op("test.liftArrayI11") //
 			.arity14() //
-			.input(input, input, input, input, input, input, input, input, input, input, io, input, input, input) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, io, input, input, input) //
 			.mutate11();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3091,22 +3150,23 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI12")
-	public final Inplaces.Arity14_12<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_12 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, io, in13, in14) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-	};
+	public final Inplaces.Arity14_12<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_12 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, io, in13,
+			in14) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+		};
 
 	@Test
 	public void testInplace14_12ToArrays() {
@@ -3114,9 +3174,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI12") //
+		ops.op("test.liftArrayI12") //
 			.arity14() //
-			.input(input, input, input, input, input, input, input, input, input, input, input, io, input, input) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, input, io, input, input) //
 			.mutate12();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3125,22 +3186,23 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI13")
-	public final Inplaces.Arity14_13<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_13 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, io, in14) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in14.getNumber());
-	};
+	public final Inplaces.Arity14_13<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_13 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, io,
+			in14) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in14.getNumber());
+		};
 
 	@Test
 	public void testInplace14_13ToArrays() {
@@ -3148,9 +3210,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI13") //
+		ops.op("test.liftArrayI13") //
 			.arity14() //
-			.input(input, input, input, input, input, input, input, input, input, input, input, input, io, input) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, input, input, io, input) //
 			.mutate13();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3159,22 +3222,23 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI14")
-	public final Inplaces.Arity14_14<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_14 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, io) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-	};
+	public final Inplaces.Arity14_14<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14_14 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13,
+			io) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+		};
 
 	@Test
 	public void testInplace14_14ToArrays() {
@@ -3182,9 +3246,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI14") //
+		ops.op("test.liftArrayI14") //
 			.arity14() //
-			.input(input, input, input, input, input, input, input, input, input, input, input, input, input, io) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, input, input, input, io) //
 			.mutate14();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3193,23 +3258,24 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI1")
-	public final Inplaces.Arity15_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_1 = (
-		io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15) -> {
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-	};
+	public final Inplaces.Arity15_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_1 =
+		(io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15) -> {
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+		};
 
 	@Test
 	public void testInplace15_1ToArrays() {
@@ -3217,9 +3283,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI1") //
+		ops.op("test.liftArrayI1") //
 			.arity15() //
-			.input(io, input, input, input, input, input, input, input, input, input, input, input, input, input, input) //
+			.input(io, input, input, input, input, input, input, input, input, input,
+				input, input, input, input, input) //
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3228,23 +3295,24 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI2")
-	public final Inplaces.Arity15_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_2 = (
-		in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-	};
+	public final Inplaces.Arity15_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_2 =
+		(in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+		};
 
 	@Test
 	public void testInplace15_2ToArrays() {
@@ -3252,9 +3320,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI2") //
+		ops.op("test.liftArrayI2") //
 			.arity15() //
-			.input(input, io, input, input, input, input, input, input, input, input, input, input, input, input, input) //
+			.input(input, io, input, input, input, input, input, input, input, input,
+				input, input, input, input, input) //
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3263,23 +3332,24 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI3")
-	public final Inplaces.Arity15_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_3 = (
-		in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-	};
+	public final Inplaces.Arity15_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_3 =
+		(in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+		};
 
 	@Test
 	public void testInplace15_3ToArrays() {
@@ -3287,9 +3357,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI3") //
+		ops.op("test.liftArrayI3") //
 			.arity15() //
-			.input(input, input, io, input, input, input, input, input, input, input, input, input, input, input, input) //
+			.input(input, input, io, input, input, input, input, input, input, input,
+				input, input, input, input, input) //
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3298,23 +3369,24 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI4")
-	public final Inplaces.Arity15_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_4 = (
-		in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-	};
+	public final Inplaces.Arity15_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_4 =
+		(in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+		};
 
 	@Test
 	public void testInplace15_4ToArrays() {
@@ -3322,9 +3394,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI4") //
+		ops.op("test.liftArrayI4") //
 			.arity15() //
-			.input(input, input, input, io, input, input, input, input, input, input, input, input, input, input, input) //
+			.input(input, input, input, io, input, input, input, input, input, input,
+				input, input, input, input, input) //
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3333,23 +3406,24 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI5")
-	public final Inplaces.Arity15_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_5 = (
-		in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-	};
+	public final Inplaces.Arity15_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_5 =
+		(in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+		};
 
 	@Test
 	public void testInplace15_5ToArrays() {
@@ -3357,9 +3431,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI5") //
+		ops.op("test.liftArrayI5") //
 			.arity15() //
-			.input(input, input, input, input, io, input, input, input, input, input, input, input, input, input, input) //
+			.input(input, input, input, input, io, input, input, input, input, input,
+				input, input, input, input, input) //
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3368,23 +3443,24 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI6")
-	public final Inplaces.Arity15_6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_6 = (
-		in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11, in12, in13, in14, in15) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-	};
+	public final Inplaces.Arity15_6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_6 =
+		(in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+		};
 
 	@Test
 	public void testInplace15_6ToArrays() {
@@ -3392,9 +3468,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI6") //
+		ops.op("test.liftArrayI6") //
 			.arity15() //
-			.input(input, input, input, input, input, io, input, input, input, input, input, input, input, input, input) //
+			.input(input, input, input, input, input, io, input, input, input, input,
+				input, input, input, input, input) //
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3403,23 +3480,24 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI7")
-	public final Inplaces.Arity15_7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_7 = (
-		in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11, in12, in13, in14, in15) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-	};
+	public final Inplaces.Arity15_7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_7 =
+		(in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11, in12, in13, in14,
+			in15) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+		};
 
 	@Test
 	public void testInplace15_7ToArrays() {
@@ -3427,9 +3505,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI7") //
+		ops.op("test.liftArrayI7") //
 			.arity15() //
-			.input(input, input, input, input, input, input, io, input, input, input, input, input, input, input, input) //
+			.input(input, input, input, input, input, input, io, input, input, input,
+				input, input, input, input, input) //
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3438,23 +3517,24 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI8")
-	public final Inplaces.Arity15_8<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_8 = (
-		in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11, in12, in13, in14, in15) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-	};
+	public final Inplaces.Arity15_8<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_8 =
+		(in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11, in12, in13, in14,
+			in15) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+		};
 
 	@Test
 	public void testInplace15_8ToArrays() {
@@ -3462,9 +3542,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI8") //
+		ops.op("test.liftArrayI8") //
 			.arity15() //
-			.input(input, input, input, input, input, input, input, io, input, input, input, input, input, input, input) //
+			.input(input, input, input, input, input, input, input, io, input, input,
+				input, input, input, input, input) //
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3473,23 +3554,24 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI9")
-	public final Inplaces.Arity15_9<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_9 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11, in12, in13, in14, in15) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-	};
+	public final Inplaces.Arity15_9<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_9 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11, in12, in13, in14,
+			in15) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+		};
 
 	@Test
 	public void testInplace15_9ToArrays() {
@@ -3497,9 +3579,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI9") //
+		ops.op("test.liftArrayI9") //
 			.arity15() //
-			.input(input, input, input, input, input, input, input, input, io, input, input, input, input, input, input) //
+			.input(input, input, input, input, input, input, input, input, io, input,
+				input, input, input, input, input) //
 			.mutate9();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3508,23 +3591,24 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI10")
-	public final Inplaces.Arity15_10<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_10 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11, in12, in13, in14, in15) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-	};
+	public final Inplaces.Arity15_10<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_10 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11, in12, in13, in14,
+			in15) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+		};
 
 	@Test
 	public void testInplace15_10ToArrays() {
@@ -3532,9 +3616,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI10") //
+		ops.op("test.liftArrayI10") //
 			.arity15() //
-			.input(input, input, input, input, input, input, input, input, input, io, input, input, input, input, input) //
+			.input(input, input, input, input, input, input, input, input, input, io,
+				input, input, input, input, input) //
 			.mutate10();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3543,23 +3628,24 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI11")
-	public final Inplaces.Arity15_11<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_11 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io, in12, in13, in14, in15) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-	};
+	public final Inplaces.Arity15_11<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_11 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io, in12, in13, in14,
+			in15) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+		};
 
 	@Test
 	public void testInplace15_11ToArrays() {
@@ -3567,9 +3653,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI11") //
+		ops.op("test.liftArrayI11") //
 			.arity15() //
-			.input(input, input, input, input, input, input, input, input, input, input, io, input, input, input, input) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, io, input, input, input, input) //
 			.mutate11();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3578,23 +3665,24 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI12")
-	public final Inplaces.Arity15_12<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_12 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, io, in13, in14, in15) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-	};
+	public final Inplaces.Arity15_12<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_12 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, io, in13, in14,
+			in15) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+		};
 
 	@Test
 	public void testInplace15_12ToArrays() {
@@ -3602,9 +3690,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI12") //
+		ops.op("test.liftArrayI12") //
 			.arity15() //
-			.input(input, input, input, input, input, input, input, input, input, input, input, io, input, input, input) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, input, io, input, input, input) //
 			.mutate12();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3613,23 +3702,24 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI13")
-	public final Inplaces.Arity15_13<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_13 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, io, in14, in15) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-	};
+	public final Inplaces.Arity15_13<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_13 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, io, in14,
+			in15) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+		};
 
 	@Test
 	public void testInplace15_13ToArrays() {
@@ -3637,9 +3727,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI13") //
+		ops.op("test.liftArrayI13") //
 			.arity15() //
-			.input(input, input, input, input, input, input, input, input, input, input, input, input, io, input, input) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, input, input, io, input, input) //
 			.mutate13();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3648,23 +3739,24 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI14")
-	public final Inplaces.Arity15_14<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_14 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, io, in15) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in15.getNumber());
-	};
+	public final Inplaces.Arity15_14<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_14 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, io,
+			in15) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in15.getNumber());
+		};
 
 	@Test
 	public void testInplace15_14ToArrays() {
@@ -3672,9 +3764,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI14") //
+		ops.op("test.liftArrayI14") //
 			.arity15() //
-			.input(input, input, input, input, input, input, input, input, input, input, input, input, input, io, input) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, input, input, input, io, input) //
 			.mutate14();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3683,23 +3776,24 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI15")
-	public final Inplaces.Arity15_15<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_15 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, io) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-	};
+	public final Inplaces.Arity15_15<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15_15 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			io) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+		};
 
 	@Test
 	public void testInplace15_15ToArrays() {
@@ -3707,9 +3801,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI15") //
+		ops.op("test.liftArrayI15") //
 			.arity15() //
-			.input(input, input, input, input, input, input, input, input, input, input, input, input, input, input, io) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, input, input, input, input, io) //
 			.mutate15();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3718,24 +3813,25 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI1")
-	public final Inplaces.Arity16_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_1 = (
-		io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> {
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-		io.addNumber(in16.getNumber());
-	};
+	public final Inplaces.Arity16_1<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_1 =
+		(io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15, in16) -> {
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+			io.addNumber(in16.getNumber());
+		};
 
 	@Test
 	public void testInplace16_1ToArrays() {
@@ -3743,9 +3839,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI1") //
+		ops.op("test.liftArrayI1") //
 			.arity16() //
-			.input(io, input, input, input, input, input, input, input, input, input, input, input, input, input, input, input) //
+			.input(io, input, input, input, input, input, input, input, input, input,
+				input, input, input, input, input, input) //
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3754,24 +3851,25 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI2")
-	public final Inplaces.Arity16_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_2 = (
-		in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-		io.addNumber(in16.getNumber());
-	};
+	public final Inplaces.Arity16_2<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_2 =
+		(in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15, in16) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+			io.addNumber(in16.getNumber());
+		};
 
 	@Test
 	public void testInplace16_2ToArrays() {
@@ -3779,9 +3877,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI2") //
+		ops.op("test.liftArrayI2") //
 			.arity16() //
-			.input(input, io, input, input, input, input, input, input, input, input, input, input, input, input, input, input) //
+			.input(input, io, input, input, input, input, input, input, input, input,
+				input, input, input, input, input, input) //
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3790,24 +3889,25 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI3")
-	public final Inplaces.Arity16_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_3 = (
-		in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-		io.addNumber(in16.getNumber());
-	};
+	public final Inplaces.Arity16_3<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_3 =
+		(in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15, in16) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+			io.addNumber(in16.getNumber());
+		};
 
 	@Test
 	public void testInplace16_3ToArrays() {
@@ -3815,9 +3915,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI3") //
+		ops.op("test.liftArrayI3") //
 			.arity16() //
-			.input(input, input, io, input, input, input, input, input, input, input, input, input, input, input, input, input) //
+			.input(input, input, io, input, input, input, input, input, input, input,
+				input, input, input, input, input, input) //
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3826,24 +3927,25 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI4")
-	public final Inplaces.Arity16_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_4 = (
-		in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-		io.addNumber(in16.getNumber());
-	};
+	public final Inplaces.Arity16_4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_4 =
+		(in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15, in16) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+			io.addNumber(in16.getNumber());
+		};
 
 	@Test
 	public void testInplace16_4ToArrays() {
@@ -3851,9 +3953,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI4") //
+		ops.op("test.liftArrayI4") //
 			.arity16() //
-			.input(input, input, input, io, input, input, input, input, input, input, input, input, input, input, input, input) //
+			.input(input, input, input, io, input, input, input, input, input, input,
+				input, input, input, input, input, input) //
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3862,24 +3965,25 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI5")
-	public final Inplaces.Arity16_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_5 = (
-		in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-		io.addNumber(in16.getNumber());
-	};
+	public final Inplaces.Arity16_5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_5 =
+		(in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15, in16) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+			io.addNumber(in16.getNumber());
+		};
 
 	@Test
 	public void testInplace16_5ToArrays() {
@@ -3887,9 +3991,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI5") //
+		ops.op("test.liftArrayI5") //
 			.arity16() //
-			.input(input, input, input, input, io, input, input, input, input, input, input, input, input, input, input, input) //
+			.input(input, input, input, input, io, input, input, input, input, input,
+				input, input, input, input, input, input) //
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3898,24 +4003,25 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI6")
-	public final Inplaces.Arity16_6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_6 = (
-		in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-		io.addNumber(in16.getNumber());
-	};
+	public final Inplaces.Arity16_6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_6 =
+		(in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15, in16) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+			io.addNumber(in16.getNumber());
+		};
 
 	@Test
 	public void testInplace16_6ToArrays() {
@@ -3923,9 +4029,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI6") //
+		ops.op("test.liftArrayI6") //
 			.arity16() //
-			.input(input, input, input, input, input, io, input, input, input, input, input, input, input, input, input, input) //
+			.input(input, input, input, input, input, io, input, input, input, input,
+				input, input, input, input, input, input) //
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3934,24 +4041,25 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI7")
-	public final Inplaces.Arity16_7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_7 = (
-		in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-		io.addNumber(in16.getNumber());
-	};
+	public final Inplaces.Arity16_7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_7 =
+		(in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11, in12, in13, in14,
+			in15, in16) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+			io.addNumber(in16.getNumber());
+		};
 
 	@Test
 	public void testInplace16_7ToArrays() {
@@ -3959,9 +4067,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI7") //
+		ops.op("test.liftArrayI7") //
 			.arity16() //
-			.input(input, input, input, input, input, input, io, input, input, input, input, input, input, input, input, input) //
+			.input(input, input, input, input, input, input, io, input, input, input,
+				input, input, input, input, input, input) //
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
@@ -3970,24 +4079,25 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI8")
-	public final Inplaces.Arity16_8<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_8 = (
-		in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11, in12, in13, in14, in15, in16) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-		io.addNumber(in16.getNumber());
-	};
+	public final Inplaces.Arity16_8<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_8 =
+		(in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11, in12, in13, in14,
+			in15, in16) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+			io.addNumber(in16.getNumber());
+		};
 
 	@Test
 	public void testInplace16_8ToArrays() {
@@ -3995,9 +4105,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI8") //
+		ops.op("test.liftArrayI8") //
 			.arity16() //
-			.input(input, input, input, input, input, input, input, io, input, input, input, input, input, input, input, input) //
+			.input(input, input, input, input, input, input, input, io, input, input,
+				input, input, input, input, input, input) //
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
@@ -4006,24 +4117,25 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI9")
-	public final Inplaces.Arity16_9<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_9 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11, in12, in13, in14, in15, in16) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-		io.addNumber(in16.getNumber());
-	};
+	public final Inplaces.Arity16_9<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_9 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11, in12, in13, in14,
+			in15, in16) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+			io.addNumber(in16.getNumber());
+		};
 
 	@Test
 	public void testInplace16_9ToArrays() {
@@ -4031,9 +4143,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI9") //
+		ops.op("test.liftArrayI9") //
 			.arity16() //
-			.input(input, input, input, input, input, input, input, input, io, input, input, input, input, input, input, input) //
+			.input(input, input, input, input, input, input, input, input, io, input,
+				input, input, input, input, input, input) //
 			.mutate9();
 
 		for (int i = 0; i < input.length; i++) {
@@ -4042,24 +4155,25 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI10")
-	public final Inplaces.Arity16_10<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_10 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11, in12, in13, in14, in15, in16) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-		io.addNumber(in16.getNumber());
-	};
+	public final Inplaces.Arity16_10<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_10 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11, in12, in13, in14,
+			in15, in16) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+			io.addNumber(in16.getNumber());
+		};
 
 	@Test
 	public void testInplace16_10ToArrays() {
@@ -4067,9 +4181,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI10") //
+		ops.op("test.liftArrayI10") //
 			.arity16() //
-			.input(input, input, input, input, input, input, input, input, input, io, input, input, input, input, input, input) //
+			.input(input, input, input, input, input, input, input, input, input, io,
+				input, input, input, input, input, input) //
 			.mutate10();
 
 		for (int i = 0; i < input.length; i++) {
@@ -4078,24 +4193,25 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI11")
-	public final Inplaces.Arity16_11<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_11 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io, in12, in13, in14, in15, in16) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-		io.addNumber(in16.getNumber());
-	};
+	public final Inplaces.Arity16_11<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_11 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io, in12, in13, in14,
+			in15, in16) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+			io.addNumber(in16.getNumber());
+		};
 
 	@Test
 	public void testInplace16_11ToArrays() {
@@ -4103,9 +4219,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI11") //
+		ops.op("test.liftArrayI11") //
 			.arity16() //
-			.input(input, input, input, input, input, input, input, input, input, input, io, input, input, input, input, input) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, io, input, input, input, input, input) //
 			.mutate11();
 
 		for (int i = 0; i < input.length; i++) {
@@ -4114,24 +4231,25 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI12")
-	public final Inplaces.Arity16_12<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_12 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, io, in13, in14, in15, in16) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-		io.addNumber(in16.getNumber());
-	};
+	public final Inplaces.Arity16_12<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_12 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, io, in13, in14,
+			in15, in16) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+			io.addNumber(in16.getNumber());
+		};
 
 	@Test
 	public void testInplace16_12ToArrays() {
@@ -4139,9 +4257,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI12") //
+		ops.op("test.liftArrayI12") //
 			.arity16() //
-			.input(input, input, input, input, input, input, input, input, input, input, input, io, input, input, input, input) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, input, io, input, input, input, input) //
 			.mutate12();
 
 		for (int i = 0; i < input.length; i++) {
@@ -4150,24 +4269,25 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI13")
-	public final Inplaces.Arity16_13<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_13 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, io, in14, in15, in16) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-		io.addNumber(in16.getNumber());
-	};
+	public final Inplaces.Arity16_13<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_13 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, io, in14,
+			in15, in16) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+			io.addNumber(in16.getNumber());
+		};
 
 	@Test
 	public void testInplace16_13ToArrays() {
@@ -4175,9 +4295,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI13") //
+		ops.op("test.liftArrayI13") //
 			.arity16() //
-			.input(input, input, input, input, input, input, input, input, input, input, input, input, io, input, input, input) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, input, input, io, input, input, input) //
 			.mutate13();
 
 		for (int i = 0; i < input.length; i++) {
@@ -4186,24 +4307,25 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI14")
-	public final Inplaces.Arity16_14<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_14 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, io, in15, in16) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in15.getNumber());
-		io.addNumber(in16.getNumber());
-	};
+	public final Inplaces.Arity16_14<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_14 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, io,
+			in15, in16) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in15.getNumber());
+			io.addNumber(in16.getNumber());
+		};
 
 	@Test
 	public void testInplace16_14ToArrays() {
@@ -4211,9 +4333,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI14") //
+		ops.op("test.liftArrayI14") //
 			.arity16() //
-			.input(input, input, input, input, input, input, input, input, input, input, input, input, input, io, input, input) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, input, input, input, io, input, input) //
 			.mutate14();
 
 		for (int i = 0; i < input.length; i++) {
@@ -4222,24 +4345,25 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI15")
-	public final Inplaces.Arity16_15<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_15 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, io, in16) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in16.getNumber());
-	};
+	public final Inplaces.Arity16_15<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_15 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			io, in16) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in16.getNumber());
+		};
 
 	@Test
 	public void testInplace16_15ToArrays() {
@@ -4247,9 +4371,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI15") //
+		ops.op("test.liftArrayI15") //
 			.arity16() //
-			.input(input, input, input, input, input, input, input, input, input, input, input, input, input, input, io, input) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, input, input, input, input, io, input) //
 			.mutate15();
 
 		for (int i = 0; i < input.length; i++) {
@@ -4258,24 +4383,25 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 	}
 
 	@OpField(names = "test.liftArrayI16")
-	public final Inplaces.Arity16_16<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_16 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, io) -> {
-		io.addNumber(in1.getNumber());
-		io.addNumber(in2.getNumber());
-		io.addNumber(in3.getNumber());
-		io.addNumber(in4.getNumber());
-		io.addNumber(in5.getNumber());
-		io.addNumber(in6.getNumber());
-		io.addNumber(in7.getNumber());
-		io.addNumber(in8.getNumber());
-		io.addNumber(in9.getNumber());
-		io.addNumber(in10.getNumber());
-		io.addNumber(in11.getNumber());
-		io.addNumber(in12.getNumber());
-		io.addNumber(in13.getNumber());
-		io.addNumber(in14.getNumber());
-		io.addNumber(in15.getNumber());
-	};
+	public final Inplaces.Arity16_16<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16_16 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15, io) -> {
+			io.addNumber(in1.getNumber());
+			io.addNumber(in2.getNumber());
+			io.addNumber(in3.getNumber());
+			io.addNumber(in4.getNumber());
+			io.addNumber(in5.getNumber());
+			io.addNumber(in6.getNumber());
+			io.addNumber(in7.getNumber());
+			io.addNumber(in8.getNumber());
+			io.addNumber(in9.getNumber());
+			io.addNumber(in10.getNumber());
+			io.addNumber(in11.getNumber());
+			io.addNumber(in12.getNumber());
+			io.addNumber(in13.getNumber());
+			io.addNumber(in14.getNumber());
+			io.addNumber(in15.getNumber());
+		};
 
 	@Test
 	public void testInplace16_16ToArrays() {
@@ -4283,9 +4409,10 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.op("test.liftArrayI16") //
+		ops.op("test.liftArrayI16") //
 			.arity16() //
-			.input(input, input, input, input, input, input, input, input, input, input, input, input, input, input, input, io) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, input, input, input, input, input, io) //
 			.mutate16();
 
 		for (int i = 0; i < input.length; i++) {

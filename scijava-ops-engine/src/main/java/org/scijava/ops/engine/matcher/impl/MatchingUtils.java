@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -99,41 +99,47 @@ public final class MatchingUtils {
 	 *         {@code to[i]} for all {@code 0 <= i < from.length}.
 	 */
 	static int checkGenericOutputsAssignability(Type[] froms, Type[] tos,
-			HashMap<TypeVariable<?>, TypeVarInfo> typeBounds) {
+		HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
+	{
 		for (int i = 0; i < froms.length; i++) {
 			Type from = froms[i];
 			Type to = tos[i];
-			
+
 			if (to instanceof Any || to.equals(Any.class)) continue;
 
 			if (from instanceof TypeVariable) {
 				TypeVarInfo typeVarInfo = typeBounds.get(from);
 				// HACK: we CAN assign, for example, a Function<Iterable<N>, O> to a
 				// Function<Iterable<Integer>, Double>,
-				// because in this situation O is not bounded to any other types. However
+				// because in this situation O is not bounded to any other types.
+				// However
 				// isAssignable will fail,
-				// since we cannot just cast Double to O without that required knowledge that O
+				// since we cannot just cast Double to O without that required knowledge
+				// that O
 				// can be fixed to Double.
-				// We get around this by recording in typeBounds that our previously unbounded
+				// We get around this by recording in typeBounds that our previously
+				// unbounded
 				// TypeVariable (from) \
-				// is now fixed to (to), then simply assigning (from) to (to), since from only
+				// is now fixed to (to), then simply assigning (from) to (to), since
+				// from only
 				// has one bound, being to.
 				if (typeVarInfo == null) {
 					TypeVariable<?> fromTypeVar = (TypeVariable<?>) from;
-					TypeVarFromParameterizedTypeInfo fromInfo = new TypeVarFromParameterizedTypeInfo(fromTypeVar);
+					TypeVarFromParameterizedTypeInfo fromInfo =
+						new TypeVarFromParameterizedTypeInfo(fromTypeVar);
 					fromInfo.fixBounds(to, true);
 					typeBounds.put(fromTypeVar, fromInfo);
 					from = to;
 				}
-				// similar to the above, if we know that O is already bound to a Type, and that
+				// similar to the above, if we know that O is already bound to a Type,
+				// and that
 				// Type is to, then we can assign this without any issues.
 				else {
-					if(typeVarInfo.allowType(to, true)) from = to;
+					if (typeVarInfo.allowType(to, true)) from = to;
 				}
 			}
 
-			if (!Types.isAssignable(Types.raw(from), Types.raw(to)))
-				return i;
+			if (!Types.isAssignable(Types.raw(from), Types.raw(to))) return i;
 		}
 		return -1;
 	}
@@ -149,9 +155,11 @@ public final class MatchingUtils {
 	 *         (that are present in {@code typeAssigns}) are mapped to the
 	 *         associated values within the {@code Map}.
 	 */
-	public static Type[] mapVarToTypes(Type[] typesToMap, Map<TypeVariable<?>, Type> typeAssigns) {
-		return Arrays.stream(typesToMap).map(type -> Types.unrollVariables(typeAssigns, type, false))
-				.toArray(Type[]::new);
+	public static Type[] mapVarToTypes(Type[] typesToMap,
+		Map<TypeVariable<?>, Type> typeAssigns)
+	{
+		return Arrays.stream(typesToMap).map(type -> Types.unrollVariables(
+			typeAssigns, type, false)).toArray(Type[]::new);
 	}
 
 	/**
@@ -159,41 +167,36 @@ public final class MatchingUtils {
 	 * depends on the actual type of the object.
 	 */
 	public static Class<?> getClass(final Object obj) {
-		if (obj == null)
-			return null;
-		if (obj instanceof Nil)
-			return getClass(((Nil<?>) obj).getType());
-		if (obj instanceof Class)
-			return (Class<?>) obj;
+		if (obj == null) return null;
+		if (obj instanceof Nil) return getClass(((Nil<?>) obj).getType());
+		if (obj instanceof Class) return (Class<?>) obj;
 		if (obj instanceof ParameterizedType)
 			return (Class<?>) ((ParameterizedType) obj).getRawType();
 		return obj.getClass();
 	}
 
 	/**
-	 * Finds the levels of casting between {@code origin} and
-	 * {@code dest}. Returns 0 if dest and origin are the same. Returns -1 if
-	 * dest is not assignable from origin.
+	 * Finds the levels of casting between {@code origin} and {@code dest}.
+	 * Returns 0 if dest and origin are the same. Returns -1 if dest is not
+	 * assignable from origin.
 	 */
 	public static int findCastLevels(final Class<?> dest, final Class<?> origin) {
-		if (dest.equals(origin))
-			return 0;
+		if (dest.equals(origin)) return 0;
 
 		int level = 1;
 		Class<?> currType = origin;
 		// BFS if dest is an interface
 		if (dest.isInterface()) {
 			final HashSet<String> seen = new HashSet<>();
-			final ArrayList<Type> currIfaces = new ArrayList<>(Arrays.asList(currType.getGenericInterfaces()));
+			final ArrayList<Type> currIfaces = new ArrayList<>(Arrays.asList(currType
+				.getGenericInterfaces()));
 			do {
 				final ArrayList<Type> nextIfaces = new ArrayList<>();
 				for (final Type iface : currIfaces) {
-					if (seen.contains(iface.getTypeName()))
-						continue;
+					if (seen.contains(iface.getTypeName())) continue;
 
 					final Class<?> cls = getClass(iface);
-					if (cls.equals(dest))
-						return level;
+					if (cls.equals(dest)) return level;
 					seen.add(iface.getTypeName());
 					nextIfaces.addAll(Arrays.asList(cls.getGenericInterfaces()));
 				}
@@ -204,14 +207,14 @@ public final class MatchingUtils {
 					currIfaces.addAll(Arrays.asList(currType.getGenericInterfaces()));
 				}
 				level++;
-			} while (!currIfaces.isEmpty() || currType.getSuperclass() != null);
+			}
+			while (!currIfaces.isEmpty() || currType.getSuperclass() != null);
 		}
 		// otherwise dest is a class, so search the list of ancestors
 		else {
 			while (currType.getSuperclass() != null) {
 				currType = currType.getSuperclass();
-				if (currType.equals(dest))
-					return level;
+				if (currType.equals(dest)) return level;
 				level++;
 			}
 		}

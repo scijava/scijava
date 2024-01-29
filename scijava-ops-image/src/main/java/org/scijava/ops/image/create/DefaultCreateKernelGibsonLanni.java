@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -56,9 +56,11 @@ public final class DefaultCreateKernelGibsonLanni {
 		// Prevent instantiation of static utility class
 	}
 
-	public static <T extends Type<T>, C extends ComplexType<C> & NativeType<C>> Img<C> createKernel(Dimensions size,
-			Double NA, Double lambda, Double ns, Double ni, Double resLateral, Double resAxial, Double pZ, C type,
-			BiFunction<Dimensions, T, Img<T>> createFunc) {
+	public static <T extends Type<T>, C extends ComplexType<C> & NativeType<C>>
+		Img<C> createKernel(Dimensions size, Double NA, Double lambda, Double ns,
+			Double ni, Double resLateral, Double resAxial, Double pZ, C type,
+			BiFunction<Dimensions, T, Img<T>> createFunc)
+	{
 
 		// //////// physical parameters /////////////
 
@@ -77,20 +79,13 @@ public final class DefaultCreateKernelGibsonLanni {
 		int overSampling = 2; // overSampling
 
 		// initialization in the case of null params
-		if (NA == null)
-			NA = 1.4;
-		if (lambda == null)
-			lambda = 610E-09;
-		if (ns == null)
-			ns = 1.33;
-		if (ni == null)
-			ni = 1.5;
-		if (resLateral == null)
-			resLateral = 100E-9;
-		if (resAxial == null)
-			resAxial = 250E-9;
-		if (pZ == null)
-			pZ = 2000E-9D;
+		if (NA == null) NA = 1.4;
+		if (lambda == null) lambda = 610E-09;
+		if (ns == null) ns = 1.33;
+		if (ni == null) ni = 1.5;
+		if (resLateral == null) resLateral = 100E-9;
+		if (resAxial == null) resAxial = 250E-9;
+		if (pZ == null) pZ = 2000E-9D;
 
 		ni0 = ni;
 
@@ -102,7 +97,8 @@ public final class DefaultCreateKernelGibsonLanni {
 			nx = (int) size.dimension(0);
 			ny = (int) size.dimension(1);
 			nz = 1;
-		} else if (size.numDimensions() == 3) {
+		}
+		else if (size.numDimensions() == 3) {
 			nx = (int) size.dimension(0);
 			ny = (int) size.dimension(1);
 			nz = (int) size.dimension(2);
@@ -121,7 +117,8 @@ public final class DefaultCreateKernelGibsonLanni {
 		double xp = x0;
 		double yp = y0;
 
-		int maxRadius = (int) Math.round(Math.sqrt((nx - x0) * (nx - x0) + (ny - y0) * (ny - y0))) + 1;
+		int maxRadius = (int) Math.round(Math.sqrt((nx - x0) * (nx - x0) + (ny -
+			y0) * (ny - y0))) + 1;
 		double[] r = new double[maxRadius * overSampling];
 		double[][] h = new double[nz][r.length];
 
@@ -169,9 +166,10 @@ public final class DefaultCreateKernelGibsonLanni {
 				rhoNA2 = rho * rho * NA * NA;
 
 				OPD = pZ * Math.sqrt(ns * ns - rhoNA2);
-				OPD += tg * Math.sqrt(ng * ng - rhoNA2)
-						- tg0 * Math.sqrt(ng0 * ng0 - rhoNA2);
-				OPD += ti * Math.sqrt(ni * ni - rhoNA2) - ti0 * Math.sqrt(ni0 * ni0 - rhoNA2);
+				OPD += tg * Math.sqrt(ng * ng - rhoNA2) - tg0 * Math.sqrt(ng0 * ng0 -
+					rhoNA2);
+				OPD += ti * Math.sqrt(ni * ni - rhoNA2) - ti0 * Math.sqrt(ni0 * ni0 -
+					rhoNA2);
 
 				W = k0 * OPD;
 
@@ -185,7 +183,8 @@ public final class DefaultCreateKernelGibsonLanni {
 
 		RealMatrix coefficients = new Array2DRowRealMatrix(Basis, false);
 		RealMatrix rhsFun = new Array2DRowRealMatrix(Ffun, false);
-		DecompositionSolver solver = new SingularValueDecomposition(coefficients).getSolver(); // slower
+		DecompositionSolver solver = new SingularValueDecomposition(coefficients)
+			.getSolver(); // slower
 		// but
 		// more
 		// accurate
@@ -241,8 +240,8 @@ public final class DefaultCreateKernelGibsonLanni {
 					double rPixel = Math.sqrt((x - xp) * (x - xp) + (y - yp) * (y - yp));
 					int index = (int) Math.floor(rPixel * overSampling);
 
-					double value = h[z][index]
-							+ (h[z][index + 1] - h[z][index]) * (rPixel - r[index]) * overSampling;
+					double value = h[z][index] + (h[z][index + 1] - h[z][index]) *
+						(rPixel - r[index]) * overSampling;
 					Pixel[z][x + nx * y] = value;
 					if (value > maxValue) {
 						maxValue = value;

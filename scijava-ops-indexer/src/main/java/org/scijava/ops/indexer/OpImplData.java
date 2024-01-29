@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -93,6 +93,7 @@ public abstract class OpImplData {
 
 	/**
 	 * Abstract constructor parsing tags that all Ops share
+	 *
 	 * @param source the {@link Element} that has been declared as an Op
 	 * @param doc the Javadoc for {@code source}
 	 * @param env the {@link ProcessingEnvironment}
@@ -100,10 +101,11 @@ public abstract class OpImplData {
 	public OpImplData(Element source, String doc, ProcessingEnvironment env) {
 		this.env = env;
 		this.source = formulateSource(source);
-		this.version = env.getOptions().getOrDefault(OpImplNoteParser.OP_VERSION, "UNKNOWN");
-				List<String[]> tags = blockSeparator.splitAsStream(doc) //
-		 .map(section -> tagElementSeparator.split(section, 2)) //
-		 .collect( Collectors.toList());
+		this.version = env.getOptions().getOrDefault(OpImplNoteParser.OP_VERSION,
+			"UNKNOWN");
+		List<String[]> tags = blockSeparator.splitAsStream(doc) //
+			.map(section -> tagElementSeparator.split(section, 2)) //
+			.collect(Collectors.toList());
 		List<String[]> remaining = parseUniversalTags(tags);
 		if (!remaining.isEmpty()) {
 			parseAdditionalTags(source, remaining);
@@ -113,16 +115,14 @@ public abstract class OpImplData {
 
 	/**
 	 * Helper method to ensure this OpImpl is valid. Throws
-	 * {@link InvalidOpImplException} i
-	 * problems are detected.
-	 *
-	 * Parallel compile-time implementation of org.scijava.ops.engine.util.Infos#validate
+	 * {@link InvalidOpImplException} i problems are detected. Parallel
+	 * compile-time implementation of org.scijava.ops.engine.util.Infos#validate
 	 * in scijava-ops-engine
 	 */
 	private void validateOpImpl() {
 		if (Objects.isNull(names) || names.isEmpty()) {
-			throw new InvalidOpImplException(
-					"Invalid Op defined in : " + source + ". Op names cannot be empty!");
+			throw new InvalidOpImplException("Invalid Op defined in : " + source +
+				". Op names cannot be empty!");
 		}
 
 		int outputs = 0;
@@ -130,8 +130,8 @@ public abstract class OpImplData {
 			if (p.ioType.equals(OpParameter.IO_TYPE.OUTPUT)) outputs++;
 		}
 		if (outputs > 1) {
-			throw new InvalidOpImplException(
-					"Invalid Op defined in : " + source + ". Ops cannot have more than one output!");
+			throw new InvalidOpImplException("Invalid Op defined in : " + source +
+				". Ops cannot have more than one output!");
 		}
 	}
 
@@ -158,17 +158,21 @@ public abstract class OpImplData {
 	}
 
 	/**
-	 * Abstract method used to parse tags specific to the {@link OpImplData} subclass.
+	 * Abstract method used to parse tags specific to the {@link OpImplData}
+	 * subclass.
 	 *
-	 * @param source         the {@link Element} that is identified as an Op.
-	 * @param additionalTags the remaining tags that are not universal across all Op implementation types.
+	 * @param source the {@link Element} that is identified as an Op.
+	 * @param additionalTags the remaining tags that are not universal across all
+	 *          Op implementation types.
 	 */
-	abstract void parseAdditionalTags(Element source, List<String[]> additionalTags);
+	abstract void parseAdditionalTags(Element source,
+		List<String[]> additionalTags);
 
 	abstract String formulateSource(Element source);
 
 	/**
 	 * Method for parsing the actual "@implNote" tag
+	 *
 	 * @param implTag Tag to parse
 	 */
 	private void parseImplNote(String implTag) {
@@ -203,7 +207,7 @@ public abstract class OpImplData {
 
 	/**
 	 * Returns a {@link Map} storing the needed Op data hierarchically.
-	 * 
+	 *
 	 * @return the {@link Map} of data.
 	 */
 	public Map<String, Object> dumpData() {

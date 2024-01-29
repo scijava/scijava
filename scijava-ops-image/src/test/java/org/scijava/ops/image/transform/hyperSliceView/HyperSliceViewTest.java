@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.transform.hyperSliceView;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -58,35 +59,42 @@ import org.scijava.types.Nil;
  */
 public class HyperSliceViewTest extends AbstractOpTest {
 
-	Nil<RandomAccessibleInterval<DoubleType>> raiNil = new Nil<RandomAccessibleInterval<DoubleType>>() {
-	};
-	Nil<RandomAccessible<DoubleType>> raNil = new Nil<RandomAccessible<DoubleType>>() {
-	};
-	Nil<Integer> integerNil = new Nil<Integer>() {
-	};
-	Nil<Long> longNil = new Nil<Long>() {
-	};
+	Nil<RandomAccessibleInterval<DoubleType>> raiNil =
+		new Nil<RandomAccessibleInterval<DoubleType>>()
+		{};
+	Nil<RandomAccessible<DoubleType>> raNil =
+		new Nil<RandomAccessible<DoubleType>>()
+		{};
+	Nil<Integer> integerNil = new Nil<Integer>() {};
+	Nil<Long> longNil = new Nil<Long>() {};
 
-	public static <T> RandomAccessible<T> deinterval(RandomAccessibleInterval<T> input) {
+	public static <T> RandomAccessible<T> deinterval(
+		RandomAccessibleInterval<T> input)
+	{
 		return Views.extendBorder(input);
 	}
 
 	@Test
 	public void defaultHyperSliceTest() {
-		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Long, MixedTransformView<DoubleType>> hyperSliceFunc = OpBuilder
-				.matchFunction(ops, "transform.hyperSliceView", raNil, integerNil, longNil,
-						new Nil<MixedTransformView<DoubleType>>() {
-				});
+		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Long, MixedTransformView<DoubleType>> hyperSliceFunc =
+			OpBuilder.matchFunction(ops, "transform.hyperSliceView", raNil,
+				integerNil, longNil, new Nil<MixedTransformView<DoubleType>>()
+				{});
 
-		final Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10, 10 });
+		final Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
+			new int[] { 10, 10, 10 });
 
-		final MixedTransformView<DoubleType> il2 = Views.hyperSlice((RandomAccessible<DoubleType>) img, 1, 8);
-		final MixedTransformView<DoubleType> opr = hyperSliceFunc.apply(deinterval(img), 1, 8l);
+		final MixedTransformView<DoubleType> il2 = Views.hyperSlice(
+			(RandomAccessible<DoubleType>) img, 1, 8);
+		final MixedTransformView<DoubleType> opr = hyperSliceFunc.apply(deinterval(
+			img), 1, 8l);
 
 		for (int i = 0; i < il2.getTransformToSource().getMatrix().length; i++) {
-			for (int j = 0; j < il2.getTransformToSource().getMatrix()[i].length; j++) {
-				assertEquals(il2.getTransformToSource().getMatrix()[i][j], opr.getTransformToSource().getMatrix()[i][j],
-						1e-10);
+			for (int j = 0; j < il2.getTransformToSource()
+				.getMatrix()[i].length; j++)
+			{
+				assertEquals(il2.getTransformToSource().getMatrix()[i][j], opr
+					.getTransformToSource().getMatrix()[i][j], 1e-10);
 			}
 		}
 	}
@@ -94,24 +102,28 @@ public class HyperSliceViewTest extends AbstractOpTest {
 	@Test
 	public void IntervalHyperSliceTest() {
 
-		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Integer, Long, IntervalView<DoubleType>> hyperSliceFunc = OpBuilder
-				.matchFunction(ops, "transform.hyperSliceView", raiNil, integerNil, longNil,
-						new Nil<IntervalView<DoubleType>>() {
-						});
+		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Integer, Long, IntervalView<DoubleType>> hyperSliceFunc =
+			OpBuilder.matchFunction(ops, "transform.hyperSliceView", raiNil,
+				integerNil, longNil, new Nil<IntervalView<DoubleType>>()
+				{});
 
-		final Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10, 10 });
+		final Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
+			new int[] { 10, 10, 10 });
 
-		final IntervalView<DoubleType> il2 = Views.hyperSlice((RandomAccessibleInterval<DoubleType>) img, 1, 8);
+		final IntervalView<DoubleType> il2 = Views.hyperSlice(
+			(RandomAccessibleInterval<DoubleType>) img, 1, 8);
 		final IntervalView<DoubleType> opr = hyperSliceFunc.apply(img, 1, 8l);
 
-		for (int i = 0; i < ((MixedTransformView<DoubleType>) il2.getSource()).getTransformToSource()
-				.getMatrix().length; i++) {
-			for (int j = 0; j < ((MixedTransformView<DoubleType>) il2.getSource()).getTransformToSource()
-					.getMatrix()[i].length; j++) {
-				assertEquals(
-						((MixedTransformView<DoubleType>) il2.getSource()).getTransformToSource().getMatrix()[i][j],
-						((MixedTransformView<DoubleType>) opr.getSource()).getTransformToSource().getMatrix()[i][j],
-						1e-10);
+		for (int i = 0; i < ((MixedTransformView<DoubleType>) il2.getSource())
+			.getTransformToSource().getMatrix().length; i++)
+		{
+			for (int j = 0; j < ((MixedTransformView<DoubleType>) il2.getSource())
+				.getTransformToSource().getMatrix()[i].length; j++)
+			{
+				assertEquals(((MixedTransformView<DoubleType>) il2.getSource())
+					.getTransformToSource().getMatrix()[i][j],
+					((MixedTransformView<DoubleType>) opr.getSource())
+						.getTransformToSource().getMatrix()[i][j], 1e-10);
 			}
 		}
 

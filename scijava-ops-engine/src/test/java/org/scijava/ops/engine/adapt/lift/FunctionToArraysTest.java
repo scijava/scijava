@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -49,10 +49,12 @@ import org.scijava.types.Nil;
 /**
  * Tests the adaptation of {@link Functions} running on a type into
  * {@link Functions} running on arrays of that type.
- * 
+ *
  * @author Gabriel Selzer
  */
-public class FunctionToArraysTest extends AbstractTestEnvironment implements OpCollection {
+public class FunctionToArraysTest extends AbstractTestEnvironment implements
+	OpCollection
+{
 
 	@BeforeAll
 	public static void addNeededOps() {
@@ -97,8 +99,8 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 	}
 
 	@OpField(names = "test.liftArrayF")
-	public final BiFunction<NumericalThing, NumericalThing, NumericalThing> alterThing2 = (
-		in1, in2) -> new NumericalThing(in1.getNumber() + in2.getNumber());
+	public final BiFunction<NumericalThing, NumericalThing, NumericalThing> alterThing2 =
+		(in1, in2) -> new NumericalThing(in1.getNumber() + in2.getNumber());
 
 	@Test
 	public void testFunction2ToArrays() {
@@ -117,8 +119,9 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 	}
 
 	@OpField(names = "test.liftArrayF")
-	public final Functions.Arity3<NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing3 = (
-		in1, in2, in3) -> new NumericalThing(in1.getNumber() + in2.getNumber() + in3.getNumber());
+	public final Functions.Arity3<NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing3 =
+		(in1, in2, in3) -> new NumericalThing(in1.getNumber() + in2.getNumber() +
+			in3.getNumber());
 
 	@Test
 	public void testFunction3ToArrays() {
@@ -137,8 +140,9 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 	}
 
 	@OpField(names = "test.liftArrayF")
-	public final Functions.Arity4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing4 = (
-		in1, in2, in3, in4) -> new NumericalThing(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber());
+	public final Functions.Arity4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing4 =
+		(in1, in2, in3, in4) -> new NumericalThing(in1.getNumber() + in2
+			.getNumber() + in3.getNumber() + in4.getNumber());
 
 	@Test
 	public void testFunction4ToArrays() {
@@ -157,8 +161,9 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 	}
 
 	@OpField(names = "test.liftArrayF")
-	public final Functions.Arity5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing5 = (
-		in1, in2, in3, in4, in5) -> new NumericalThing(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber());
+	public final Functions.Arity5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing5 =
+		(in1, in2, in3, in4, in5) -> new NumericalThing(in1.getNumber() + in2
+			.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber());
 
 	@Test
 	public void testFunction5ToArrays() {
@@ -177,8 +182,10 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 	}
 
 	@OpField(names = "test.liftArrayF")
-	public final Functions.Arity6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing6 = (
-		in1, in2, in3, in4, in5, in6) -> new NumericalThing(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber());
+	public final Functions.Arity6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing6 =
+		(in1, in2, in3, in4, in5, in6) -> new NumericalThing(in1.getNumber() + in2
+			.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() + in6
+				.getNumber());
 
 	@Test
 	public void testFunction6ToArrays() {
@@ -197,8 +204,10 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 	}
 
 	@OpField(names = "test.liftArrayF")
-	public final Functions.Arity7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing7 = (
-		in1, in2, in3, in4, in5, in6, in7) -> new NumericalThing(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber());
+	public final Functions.Arity7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing7 =
+		(in1, in2, in3, in4, in5, in6, in7) -> new NumericalThing(in1.getNumber() +
+			in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() +
+			in6.getNumber() + in7.getNumber());
 
 	@Test
 	public void testFunction7ToArrays() {
@@ -217,8 +226,10 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 	}
 
 	@OpField(names = "test.liftArrayF")
-	public final Functions.Arity8<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing8 = (
-		in1, in2, in3, in4, in5, in6, in7, in8) -> new NumericalThing(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8.getNumber());
+	public final Functions.Arity8<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing8 =
+		(in1, in2, in3, in4, in5, in6, in7, in8) -> new NumericalThing(in1
+			.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5
+				.getNumber() + in6.getNumber() + in7.getNumber() + in8.getNumber());
 
 	@Test
 	public void testFunction8ToArrays() {
@@ -237,8 +248,11 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 	}
 
 	@OpField(names = "test.liftArrayF")
-	public final Functions.Arity9<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing9 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9) -> new NumericalThing(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8.getNumber() + in9.getNumber());
+	public final Functions.Arity9<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing9 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9) -> new NumericalThing(in1
+			.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5
+				.getNumber() + in6.getNumber() + in7.getNumber() + in8.getNumber() + in9
+					.getNumber());
 
 	@Test
 	public void testFunction9ToArrays() {
@@ -257,8 +271,11 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 	}
 
 	@OpField(names = "test.liftArrayF")
-	public final Functions.Arity10<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10) -> new NumericalThing(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8.getNumber() + in9.getNumber() + in10.getNumber());
+	public final Functions.Arity10<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10) -> new NumericalThing(
+			in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() +
+				in5.getNumber() + in6.getNumber() + in7.getNumber() + in8.getNumber() +
+				in9.getNumber() + in10.getNumber());
 
 	@Test
 	public void testFunction10ToArrays() {
@@ -267,7 +284,8 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
 			.arity10() //
-			.input(input, input, input, input, input, input, input, input, input, input) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input) //
 			.outType(new Nil<NumericalThing[]>()
 			{}).apply();
 
@@ -277,8 +295,12 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 	}
 
 	@OpField(names = "test.liftArrayF")
-	public final Functions.Arity11<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11) -> new NumericalThing(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8.getNumber() + in9.getNumber() + in10.getNumber() + in11.getNumber());
+	public final Functions.Arity11<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10,
+			in11) -> new NumericalThing(in1.getNumber() + in2.getNumber() + in3
+				.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7
+					.getNumber() + in8.getNumber() + in9.getNumber() + in10.getNumber() +
+				in11.getNumber());
 
 	@Test
 	public void testFunction11ToArrays() {
@@ -287,7 +309,8 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
 			.arity11() //
-			.input(input, input, input, input, input, input, input, input, input, input, input) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, input) //
 			.outType(new Nil<NumericalThing[]>()
 			{}).apply();
 
@@ -297,8 +320,12 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 	}
 
 	@OpField(names = "test.liftArrayF")
-	public final Functions.Arity12<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12) -> new NumericalThing(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8.getNumber() + in9.getNumber() + in10.getNumber() + in11.getNumber() + in12.getNumber());
+	public final Functions.Arity12<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11,
+			in12) -> new NumericalThing(in1.getNumber() + in2.getNumber() + in3
+				.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7
+					.getNumber() + in8.getNumber() + in9.getNumber() + in10.getNumber() +
+				in11.getNumber() + in12.getNumber());
 
 	@Test
 	public void testFunction12ToArrays() {
@@ -307,7 +334,8 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
 			.arity12() //
-			.input(input, input, input, input, input, input, input, input, input, input, input, input) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
 			{}).apply();
 
@@ -317,8 +345,12 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 	}
 
 	@OpField(names = "test.liftArrayF")
-	public final Functions.Arity13<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13) -> new NumericalThing(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8.getNumber() + in9.getNumber() + in10.getNumber() + in11.getNumber() + in12.getNumber() + in13.getNumber());
+	public final Functions.Arity13<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
+			in13) -> new NumericalThing(in1.getNumber() + in2.getNumber() + in3
+				.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7
+					.getNumber() + in8.getNumber() + in9.getNumber() + in10.getNumber() +
+				in11.getNumber() + in12.getNumber() + in13.getNumber());
 
 	@Test
 	public void testFunction13ToArrays() {
@@ -327,7 +359,8 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
 			.arity13() //
-			.input(input, input, input, input, input, input, input, input, input, input, input, input, input) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
 			{}).apply();
 
@@ -337,8 +370,13 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 	}
 
 	@OpField(names = "test.liftArrayF")
-	public final Functions.Arity14<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14) -> new NumericalThing(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8.getNumber() + in9.getNumber() + in10.getNumber() + in11.getNumber() + in12.getNumber() + in13.getNumber() + in14.getNumber());
+	public final Functions.Arity14<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13,
+			in14) -> new NumericalThing(in1.getNumber() + in2.getNumber() + in3
+				.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7
+					.getNumber() + in8.getNumber() + in9.getNumber() + in10.getNumber() +
+				in11.getNumber() + in12.getNumber() + in13.getNumber() + in14
+					.getNumber());
 
 	@Test
 	public void testFunction14ToArrays() {
@@ -347,7 +385,8 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
 			.arity14() //
-			.input(input, input, input, input, input, input, input, input, input, input, input, input, input, input) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
 			{}).apply();
 
@@ -357,8 +396,13 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 	}
 
 	@OpField(names = "test.liftArrayF")
-	public final Functions.Arity15<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15) -> new NumericalThing(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8.getNumber() + in9.getNumber() + in10.getNumber() + in11.getNumber() + in12.getNumber() + in13.getNumber() + in14.getNumber() + in15.getNumber());
+	public final Functions.Arity15<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15) -> new NumericalThing(in1.getNumber() + in2.getNumber() + in3
+				.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7
+					.getNumber() + in8.getNumber() + in9.getNumber() + in10.getNumber() +
+				in11.getNumber() + in12.getNumber() + in13.getNumber() + in14
+					.getNumber() + in15.getNumber());
 
 	@Test
 	public void testFunction15ToArrays() {
@@ -367,7 +411,8 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
 			.arity15() //
-			.input(input, input, input, input, input, input, input, input, input, input, input, input, input, input, input) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, input, input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
 			{}).apply();
 
@@ -377,8 +422,13 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 	}
 
 	@OpField(names = "test.liftArrayF")
-	public final Functions.Arity16<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16 = (
-		in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> new NumericalThing(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8.getNumber() + in9.getNumber() + in10.getNumber() + in11.getNumber() + in12.getNumber() + in13.getNumber() + in14.getNumber() + in15.getNumber() + in16.getNumber());
+	public final Functions.Arity16<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15, in16) -> new NumericalThing(in1.getNumber() + in2.getNumber() + in3
+				.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7
+					.getNumber() + in8.getNumber() + in9.getNumber() + in10.getNumber() +
+				in11.getNumber() + in12.getNumber() + in13.getNumber() + in14
+					.getNumber() + in15.getNumber() + in16.getNumber());
 
 	@Test
 	public void testFunction16ToArrays() {
@@ -387,7 +437,8 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
 			.arity16() //
-			.input(input, input, input, input, input, input, input, input, input, input, input, input, input, input, input, input) //
+			.input(input, input, input, input, input, input, input, input, input,
+				input, input, input, input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
 			{}).apply();
 

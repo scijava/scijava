@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -78,15 +78,16 @@ public class IntegralImgTest extends AbstractOpTest {
 	@Test
 	public void testIntegralImageSimilarity() {
 		// should match DefaultIntegralImg
-		Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<DoubleType>> defaultOp = OpBuilder
-				.matchComputer(ops, "image.integral", new Nil<RandomAccessibleInterval<ByteType>>() {
-				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
-				});
+		Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<DoubleType>> defaultOp =
+			OpBuilder.matchComputer(ops, "image.integral",
+				new Nil<RandomAccessibleInterval<ByteType>>()
+				{}, new Nil<RandomAccessibleInterval<DoubleType>>() {});
 		defaultOp.compute(in, out1);
 
 		// should match WrappedIntegralImg
-		out2 = ops.op("image.integral").arity1().input(
-				in).outType(new Nil<RandomAccessibleInterval<DoubleType>>() {}).apply();
+		out2 = ops.op("image.integral").arity1().input(in).outType(
+			new Nil<RandomAccessibleInterval<DoubleType>>()
+			{}).apply();
 
 		// Remove 0s from integralImg by shifting its interval by +1
 		final long[] min = new long[out2.numDimensions()];
@@ -100,8 +101,8 @@ public class IntegralImgTest extends AbstractOpTest {
 		// Define the Interval on the infinite random accessibles
 		final FinalInterval interval = new FinalInterval(min, max);
 
-		testIterableIntervalSimilarity(Views.iterable(out1),
-				Views.iterable(Views.offsetInterval(out2, interval)));
+		testIterableIntervalSimilarity(Views.iterable(out1), Views.iterable(Views
+			.offsetInterval(out2, interval)));
 	}
 
 	public ArrayImg<ByteType, ByteArray> generateKnownByteArrayTestImgLarge() {
@@ -122,7 +123,7 @@ public class IntegralImgTest extends AbstractOpTest {
 
 		return ArrayImgs.bytes(array, dims);
 	}
-	
+
 	/**
 	 * Checks if two {@link IterableInterval} have the same content.
 	 *

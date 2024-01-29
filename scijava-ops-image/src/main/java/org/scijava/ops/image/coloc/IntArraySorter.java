@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,16 +26,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.coloc;
 
 /**
  * Sorts an {@code int[]} according to a custom comparator.
  * <p>
- * This is an implementation of introsort, i.e. it is stable because
- * it tries the quicksort algorithm first and falls back to the heap
- * sort when it detects an unfavorable execution path.
+ * This is an implementation of introsort, i.e. it is stable because it tries
+ * the quicksort algorithm first and falls back to the heap sort when it detects
+ * an unfavorable execution path.
  * </p>
- *  
+ *
  * @author Johannes Schindelin
  */
 public final class IntArraySorter {
@@ -51,7 +52,8 @@ public final class IntArraySorter {
 		insertionSort(array, comparator);
 	}
 
-	private static void introSort(int[] array, IntComparator comparator, int begin, int end, int limit)
+	private static void introSort(int[] array, IntComparator comparator,
+		int begin, int end, int limit)
 	{
 		while (end - begin > SORT_SIZE_THRESHOLD) {
 			if (limit == 0) {
@@ -66,11 +68,12 @@ public final class IntArraySorter {
 			int c = array[end - 1];
 			int median;
 			if (comparator.compare(a, b) < 0) {
-				median = comparator.compare(b, c) < 0 ?
-					b : (comparator.compare(a, c) < 0 ? c : a);
-			} else {
-				median = comparator.compare(b, c) > 0 ?
-					b : (comparator.compare(a, c) > 0 ? c : a);
+				median = comparator.compare(b, c) < 0 ? b : (comparator.compare(a,
+					c) < 0 ? c : a);
+			}
+			else {
+				median = comparator.compare(b, c) > 0 ? b : (comparator.compare(a,
+					c) > 0 ? c : a);
 			}
 
 			// partition
@@ -98,8 +101,8 @@ public final class IntArraySorter {
 		}
 	}
 
-	private static void heapSort(int[] array, IntComparator comparator,
-			int begin, int end)
+	private static void heapSort(int[] array, IntComparator comparator, int begin,
+		int end)
 	{
 		int count = end - begin;
 		for (int i = count / 2 - 1; i >= 0; --i) {
@@ -115,14 +118,15 @@ public final class IntArraySorter {
 		}
 	}
 
-	private static void siftDown(int[] array, IntComparator comparator,
-			int i, int count, int offset)
+	private static void siftDown(int[] array, IntComparator comparator, int i,
+		int count, int offset)
 	{
 		int value = array[offset + i];
 		while (i < count / 2) {
 			int child = 2 * i + 1;
-			if (child + 1 < count &&
-					comparator.compare(array[child], array[child + 1]) < 0) {
+			if (child + 1 < count && comparator.compare(array[child], array[child +
+				1]) < 0)
+			{
 				++child;
 			}
 			if (comparator.compare(value, array[child]) >= 0) {
@@ -134,9 +138,7 @@ public final class IntArraySorter {
 		array[offset + i] = value;
 	}
 
-	private static void insertionSort(int[] array,
-			IntComparator comparator)
-	{
+	private static void insertionSort(int[] array, IntComparator comparator) {
 		for (int j = 1; j < array.length; ++j) {
 			int t = array[j];
 			int i = j - 1;

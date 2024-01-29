@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -73,7 +73,8 @@ public class MTKTTest extends AbstractColocalisationTest {
 		Img<DoubleType> vImage1 = ArrayImgs.doubles(values1, values1.length);
 		Img<DoubleType> vImage2 = ArrayImgs.doubles(values2, values2.length);
 		long seed = 0x89302341;
-		double[][] rank = MTKT.rankTransformation(vImage1, vImage2, 0.0, 0.0, 4, seed);
+		double[][] rank = MTKT.rankTransformation(vImage1, vImage2, 0.0, 0.0, 4,
+			seed);
 		double[] expectedRankOrder = { 1, 0, 2, 3 };
 		for (int i = 0; i < 4; i++) {
 			assertEquals(expectedRankOrder[i], rank[i][0], 0.0);
@@ -95,7 +96,8 @@ public class MTKTTest extends AbstractColocalisationTest {
 		Img<DoubleType> vImage1 = ArrayImgs.doubles(values1, values1.length);
 		Img<DoubleType> vImage2 = ArrayImgs.doubles(values2, values2.length);
 		long seed = 0x89302341;
-		double[][] rank = MTKT.rankTransformation(vImage1, vImage2, 0.0, 0.0, 4, seed);
+		double[][] rank = MTKT.rankTransformation(vImage1, vImage2, 0.0, 0.0, 4,
+			seed);
 		double[] expectedRankOrder1 = { 0, 1, 2, 3 };
 		double[] expectedRankOrder2 = { 0, 2, 1, 3 };
 		for (int i = 0; i < 4; i++) {
@@ -105,23 +107,27 @@ public class MTKTTest extends AbstractColocalisationTest {
 			// second element
 			if (rank[1][0] == 1.0) {
 				assertEquals(expectedRankOrder1[1], rank[1][0], 0.0);
-			} else if (rank[1][0] == 2.0) {
+			}
+			else if (rank[1][0] == 2.0) {
 				assertEquals(expectedRankOrder2[1], rank[1][0], 0.0);
 			}
 			if (rank[1][1] == 1.0) {
 				assertEquals(expectedRankOrder1[1], rank[1][1], 0.0);
-			} else if (rank[1][1] == 2.0) {
+			}
+			else if (rank[1][1] == 2.0) {
 				assertEquals(expectedRankOrder2[1], rank[1][1], 0.0);
 			}
 			// third element
 			if (rank[2][0] == 2.0) {
 				assertEquals(expectedRankOrder1[2], rank[2][0], 0.0);
-			} else if (rank[2][0] == 1.0) {
+			}
+			else if (rank[2][0] == 1.0) {
 				assertEquals(expectedRankOrder2[2], rank[2][0], 0.0);
 			}
 			if (rank[2][1] == 2.0) {
 				assertEquals(expectedRankOrder1[2], rank[2][1], 0.0);
-			} else if (rank[2][1] == 1.0) {
+			}
+			else if (rank[2][1] == 1.0) {
 				assertEquals(expectedRankOrder2[2], rank[2][1], 0.0);
 			}
 			// fourth element
@@ -137,14 +143,16 @@ public class MTKTTest extends AbstractColocalisationTest {
 	public void testMTKTnone() {
 		double[][] values = new double[10][2];
 		double[] values1 = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
-		double[] values2 = { 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0 };
+		double[] values2 = { 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0,
+			10.0 };
 		for (int i = 0; i < 4; i++) {
 			values[i][0] = values1[i];
 			values[i][1] = values2[i];
 		}
 		Img<DoubleType> vImage1 = ArrayImgs.doubles(values1, values1.length);
 		Img<DoubleType> vImage2 = ArrayImgs.doubles(values2, values2.length);
-		double result = ops.op("coloc.maxTKendallTau").arity2().input(vImage1, vImage2).outType(Double.class).apply();
+		double result = ops.op("coloc.maxTKendallTau").arity2().input(vImage1,
+			vImage2).outType(Double.class).apply();
 		assertEquals(4.9E-324, result, 0.0);
 	}
 
@@ -160,7 +168,8 @@ public class MTKTTest extends AbstractColocalisationTest {
 		}
 		Img<DoubleType> vImage1 = ArrayImgs.doubles(values1, values1.length);
 		Img<DoubleType> vImage2 = ArrayImgs.doubles(values2, values2.length);
-		double result = (Double) ops.op("coloc.maxTKendallTau").arity2().input(vImage1, vImage2).apply();
+		double result = (Double) ops.op("coloc.maxTKendallTau").arity2().input(
+			vImage1, vImage2).apply();
 		assertEquals(1.0, result, 0.0);
 	}
 
@@ -170,22 +179,26 @@ public class MTKTTest extends AbstractColocalisationTest {
 		final double mean = 0.2;
 		final double spread = 0.1;
 		final double[] sigma = new double[] { 3.0, 3.0 };
-		Img<FloatType> ch1 = AbstractColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
-				0x01234567);
-		Img<FloatType> ch2 = AbstractColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
-				0x98765432);
-		double result = (Double) ops.op("coloc.maxTKendallTau").arity2().input(ch1, ch2).apply();
+		Img<FloatType> ch1 = AbstractColocalisationTest.produceMeanBasedNoiseImage(
+			new FloatType(), 24, 24, mean, spread, sigma, 0x01234567);
+		Img<FloatType> ch2 = AbstractColocalisationTest.produceMeanBasedNoiseImage(
+			new FloatType(), 24, 24, mean, spread, sigma, 0x98765432);
+		double result = (Double) ops.op("coloc.maxTKendallTau").arity2().input(ch1,
+			ch2).apply();
 		assertEquals(2.710687382741972, result, 0.0);
 	}
 
 	// Lastly, we test a 'real' image.
 	@Test
 	public void testMTKTimage() {
-		RandomAccessibleInterval<UnsignedByteType> cropCh1 = Views.interval(getZeroCorrelationImageCh1(),
-				new long[] { 0, 0, 0 }, new long[] { 20, 20, 0 });
-		RandomAccessibleInterval<UnsignedByteType> cropCh2 = Views.interval(getZeroCorrelationImageCh2(),
-				new long[] { 0, 0, 0 }, new long[] { 20, 20, 0 });
-		double result = (Double) ops.op("coloc.maxTKendallTau").arity2().input(cropCh1, cropCh2).apply();
+		RandomAccessibleInterval<UnsignedByteType> cropCh1 = Views.interval(
+			getZeroCorrelationImageCh1(), new long[] { 0, 0, 0 }, new long[] { 20, 20,
+				0 });
+		RandomAccessibleInterval<UnsignedByteType> cropCh2 = Views.interval(
+			getZeroCorrelationImageCh2(), new long[] { 0, 0, 0 }, new long[] { 20, 20,
+				0 });
+		double result = (Double) ops.op("coloc.maxTKendallTau").arity2().input(
+			cropCh1, cropCh2).apply();
 		assertEquals(2.562373279563565, result, 0.0);
 	}
 
@@ -195,8 +208,9 @@ public class MTKTTest extends AbstractColocalisationTest {
 	@Test
 	public void testMTKTpValueNone() {
 		double[][] values = new double[10][2];
-	  double[] values1 = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
-	  double[] values2 = { 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0 };
+		double[] values1 = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
+		double[] values2 = { 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0,
+			10.0 };
 		for (int i = 0; i < 4; i++) {
 			values[i][0] = values1[i];
 			values[i][1] = values2[i];
@@ -204,9 +218,14 @@ public class MTKTTest extends AbstractColocalisationTest {
 		Img<DoubleType> vImage1 = ArrayImgs.doubles(values1, values1.length);
 		Img<DoubleType> vImage2 = ArrayImgs.doubles(values2, values2.length);
 		BiFunction<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>, Double> op =
-			OpBuilder.matchFunction(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
+			OpBuilder.matchFunction(ops, "coloc.maxTKendallTau",
+				new Nil<RandomAccessibleInterval<DoubleType>>()
+				{}, new Nil<RandomAccessibleInterval<DoubleType>>() {},
+				new Nil<Double>()
+				{});
 		PValueResult value = new PValueResult();
-		ops.op("coloc.pValue").arity4().input(vImage1, vImage2, op, 5).output(value).compute();
+		ops.op("coloc.pValue").arity4().input(vImage1, vImage2, op, 5).output(value)
+			.compute();
 		assertEquals(0.0, value.getPValue(), 0.0);
 	}
 
@@ -223,9 +242,14 @@ public class MTKTTest extends AbstractColocalisationTest {
 		Img<DoubleType> vImage1 = ArrayImgs.doubles(values1, values1.length);
 		Img<DoubleType> vImage2 = ArrayImgs.doubles(values2, values2.length);
 		BiFunction<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>, Double> op =
-			OpBuilder.matchFunction(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
+			OpBuilder.matchFunction(ops, "coloc.maxTKendallTau",
+				new Nil<RandomAccessibleInterval<DoubleType>>()
+				{}, new Nil<RandomAccessibleInterval<DoubleType>>() {},
+				new Nil<Double>()
+				{});
 		PValueResult value = new PValueResult();
-		ops.op("coloc.pValue").arity4().input(vImage1, vImage2, op, 5).output(value).compute();
+		ops.op("coloc.pValue").arity4().input(vImage1, vImage2, op, 5).output(value)
+			.compute();
 		assertEquals(0.0, value.getPValue(), 0.0);
 	}
 
@@ -235,35 +259,49 @@ public class MTKTTest extends AbstractColocalisationTest {
 		final double mean = 0.2;
 		final double spread = 0.1;
 		final double[] sigma = new double[] { 3.0, 3.0 };
-		Img<FloatType> ch1 = AbstractColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
-				0x01234567);
-		Img<FloatType> ch2 = AbstractColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
-				0x98765432);
+		Img<FloatType> ch1 = AbstractColocalisationTest.produceMeanBasedNoiseImage(
+			new FloatType(), 24, 24, mean, spread, sigma, 0x01234567);
+		Img<FloatType> ch2 = AbstractColocalisationTest.produceMeanBasedNoiseImage(
+			new FloatType(), 24, 24, mean, spread, sigma, 0x98765432);
 		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op =
-			OpBuilder.matchFunction(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});
+			OpBuilder.matchFunction(ops, "coloc.maxTKendallTau",
+				new Nil<RandomAccessibleInterval<FloatType>>()
+				{}, new Nil<RandomAccessibleInterval<FloatType>>() {},
+				new Nil<Double>()
+				{});
 		PValueResult value = new PValueResult();
-		ops.op("coloc.pValue").arity4().input(ch1, ch2, op, 10).output(value).compute();
+		ops.op("coloc.pValue").arity4().input(ch1, ch2, op, 10).output(value)
+			.compute();
 		assertEquals(0.2, value.getPValue(), 0.0);
 	}
 
 	// Lastly, we test a 'real' image.
 	@Test
 	public void testMTKTpValueImage() {
-		RandomAccessibleInterval<UnsignedByteType> cropCh1 = Views.interval(getZeroCorrelationImageCh1(),
-				new long[] { 0, 0, 0 }, new long[] { 20, 20, 0 });
-		RandomAccessibleInterval<UnsignedByteType> cropCh2 = Views.interval(getZeroCorrelationImageCh2(),
-				new long[] { 0, 0, 0 }, new long[] { 20, 20, 0 });
+		RandomAccessibleInterval<UnsignedByteType> cropCh1 = Views.interval(
+			getZeroCorrelationImageCh1(), new long[] { 0, 0, 0 }, new long[] { 20, 20,
+				0 });
+		RandomAccessibleInterval<UnsignedByteType> cropCh2 = Views.interval(
+			getZeroCorrelationImageCh2(), new long[] { 0, 0, 0 }, new long[] { 20, 20,
+				0 });
 		BiFunction<RandomAccessibleInterval<UnsignedByteType>, RandomAccessibleInterval<UnsignedByteType>, Double> op =
-			OpBuilder.matchFunction(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<UnsignedByteType>>() {}, new Nil<RandomAccessibleInterval<UnsignedByteType>>() {}, new Nil<Double>() {});
+			OpBuilder.matchFunction(ops, "coloc.maxTKendallTau",
+				new Nil<RandomAccessibleInterval<UnsignedByteType>>()
+				{}, new Nil<RandomAccessibleInterval<UnsignedByteType>>() {},
+				new Nil<Double>()
+				{});
 		final int[] blockSize = new int[cropCh1.numDimensions()];
 		for (int d = 0; d < blockSize.length; d++) {
 			final long size = (long) Math.floor(Math.sqrt(cropCh1.dimension(d)));
 			blockSize[d] = (int) size;
 		}
-		RandomAccessibleInterval<UnsignedByteType> ch1 = ShuffledView.cropAtMin(cropCh1, blockSize);
-		RandomAccessibleInterval<UnsignedByteType> ch2 = ShuffledView.cropAtMin(cropCh2, blockSize);
+		RandomAccessibleInterval<UnsignedByteType> ch1 = ShuffledView.cropAtMin(
+			cropCh1, blockSize);
+		RandomAccessibleInterval<UnsignedByteType> ch2 = ShuffledView.cropAtMin(
+			cropCh2, blockSize);
 		PValueResult value = new PValueResult();
-		ops.op("coloc.pValue").arity4().input(ch1, ch2, op, 5).output(value).compute();
+		ops.op("coloc.pValue").arity4().input(ch1, ch2, op, 5).output(value)
+			.compute();
 		assertEquals(0.2, value.getPValue(), 0.0);
 	}
 }

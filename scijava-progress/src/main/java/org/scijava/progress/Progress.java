@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -39,7 +39,7 @@ import java.util.WeakHashMap;
 /**
  * A static utility class serving as the interface between progress reporters
  * and progress listeners.
- * 
+ *
  * @author Gabriel Selzer
  */
 public final class Progress {
@@ -103,7 +103,7 @@ public final class Progress {
 	/**
 	 * Records {@link ProgressListener} {@code l} as a callback for progressible
 	 * {@link Object} {@code progressible}
-	 * 
+	 *
 	 * @param progressible an {@link Object} that reports its progress
 	 * @param l a {@link ProgressListener} that would like to know about the
 	 *          progress of {@code progressible}
@@ -133,7 +133,7 @@ public final class Progress {
 	 * Completes the current task on this {@link Thread}'s execution hierarchy,
 	 * removing it in the process. This method also takaes care to ping relevant
 	 * {@link ProgressListener}s.
-	 * 
+	 *
 	 * @see Task#complete()
 	 */
 	public static void complete() {
@@ -167,7 +167,7 @@ public final class Progress {
 	 * assumption that {@code progressible} is responsible for any calls to
 	 * {@link Progress}' progress-reporting API between the time this method is
 	 * called and the time when {@link Progress#complete()} is called.
-	 * 
+	 *
 	 * @param progressible an {@link Object} that would like to report its
 	 *          progress.
 	 * @param description a {@link String} describing {@code progressible}
@@ -192,7 +192,7 @@ public final class Progress {
 	/**
 	 * Activates all callback {@link ProgressListener}s listening for progress
 	 * updates on executions of {@code o}
-	 * 
+	 *
 	 * @param o an {@link Object} reporting its progress.
 	 */
 	private static void pingListeners(ProgressibleObject o) {
@@ -210,7 +210,7 @@ public final class Progress {
 
 	/**
 	 * Returns the currently-executing {@link Task} on this {@link Thread}
-	 * 
+	 *
 	 * @return the currently-execution {@link Task}
 	 */
 	private static Task currentTask() {
@@ -221,7 +221,7 @@ public final class Progress {
 	/**
 	 * Updates the progress of the current {@link Task}, pinging any interested
 	 * {@link ProgressListener}s.
-	 * 
+	 *
 	 * @see Task#update(long)
 	 */
 	public static void update() {
@@ -231,7 +231,7 @@ public final class Progress {
 	/**
 	 * Updates the progress of the current {@link Task}, pinging any interested
 	 * {@link ProgressListener}s.
-	 * 
+	 *
 	 * @see Task#update(long)
 	 */
 	public static void update(long numElements) {
@@ -242,7 +242,7 @@ public final class Progress {
 	/**
 	 * Sets the status of the current {@link Task}, pinging any interested
 	 * {@link ProgressListener}s.
-	 * 
+	 *
 	 * @see Task#setStatus(String)
 	 */
 	public static void setStatus(String status) {
@@ -252,7 +252,7 @@ public final class Progress {
 
 	/**
 	 * Defines the total progress of the current {@link Task}
-	 * 
+	 *
 	 * @see Task#defineTotalProgress(long)
 	 */
 	public static void defineTotalProgress(long numStages) {
@@ -261,7 +261,7 @@ public final class Progress {
 
 	/**
 	 * Defines the total progress of the current {@link Task}
-	 * 
+	 *
 	 * @see Task#defineTotalProgress(long, long)
 	 */
 	public static void defineTotalProgress(long numStages, long numSubTasks) {
@@ -271,7 +271,7 @@ public final class Progress {
 	/**
 	 * Defines the number of updates expected by the end of the current stage of
 	 * the current {@link Task}
-	 * 
+	 *
 	 * @see Task#setStageMax(long)
 	 */
 	public static void setStageMax(long max) {
@@ -282,7 +282,7 @@ public final class Progress {
 
 /**
  * An {@link Object} that reports its progress
- * 
+ *
  * @author Gabriel Selzer
  */
 class ProgressibleObject {

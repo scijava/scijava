@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.transform.zeroMinView;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -63,10 +64,12 @@ public class ZeroMinViewTest extends AbstractOpTest {
 			OpBuilder.matchFunction(ops, "transform.zeroMinView",
 				new Nil<IntervalView<DoubleType>>()
 				{}, new Nil<IntervalView<DoubleType>>() {});
-		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
+			new int[] { 10, 10 });
 
-		IntervalView<DoubleType> imgTranslated = Views.interval(
-				Views.translate((RandomAccessible<DoubleType>) img, 2, 5), new long[] { 2, 5 }, new long[] { 12, 15 });
+		IntervalView<DoubleType> imgTranslated = Views.interval(Views.translate(
+			(RandomAccessible<DoubleType>) img, 2, 5), new long[] { 2, 5 },
+			new long[] { 12, 15 });
 
 		IntervalView<DoubleType> il2 = Views.zeroMin(imgTranslated);
 		IntervalView<DoubleType> opr = zeroMinFunc.apply(imgTranslated);

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.engine.util.internal;
 
 import java.lang.reflect.Method;
@@ -55,7 +56,8 @@ public final class OpMethodUtils {
 		Method abstractMethod;
 		try {
 			abstractMethod = FunctionalInterfaces.functionalMethodOf(opClass);
-		} catch (IllegalArgumentException e) {
+		}
+		catch (IllegalArgumentException e) {
 			throw new FunctionalTypeOpException(opMethod, e);
 
 		}
@@ -75,10 +77,10 @@ public final class OpMethodUtils {
 			opMethodParams), typeVarAssigns);
 		if (abstractMethod.getReturnType() != void.class) {
 			Type returnType = opMethod.getGenericReturnType();
-			if (Types.raw(returnType).isPrimitive())
-				returnType = Classes.box(Types.raw(returnType));
+			if (Types.raw(returnType).isPrimitive()) returnType = Classes.box(Types
+				.raw(returnType));
 			GenericAssignability.inferTypeVariables(new Type[] { abstractMethod
-				.getGenericReturnType() }, new Type[] {returnType}, typeVarAssigns);
+				.getGenericReturnType() }, new Type[] { returnType }, typeVarAssigns);
 		}
 
 		// parameterize opClass
@@ -101,7 +103,8 @@ public final class OpMethodUtils {
 			.stream(methodParams) //
 			.filter(param -> param.getAnnotation(OpDependency.class) == null) //
 			.map(Parameter::getParameterizedType) //
-			.map(param -> Types.raw(param).isPrimitive() ? Classes.box(Types.raw(param)) : param) //
+			.map(param -> Types.raw(param).isPrimitive() ? Classes.box(Types.raw(
+				param)) : param) //
 			.toArray(Type[]::new);
 	}
 

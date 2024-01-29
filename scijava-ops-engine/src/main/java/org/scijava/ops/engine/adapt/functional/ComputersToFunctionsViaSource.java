@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -49,16 +49,15 @@ import org.scijava.priority.Priority;
  * Collection of adaptation Ops to convert {@link Computers} into
  * {@link Functions} with the use of a {@link Producer} that creates the output
  * using the first input as a model.
- * 
+ *
  * @author Gabriel Selzer
  */
 public class ComputersToFunctionsViaSource {
 
 	@OpClass(names = "engine.adapt", priority = Priority.LOW)
-	public static class Computer0ToFunction0ViaSource<O>
-			implements Function<Computers.Arity0<O>, Producer<O>>, 
-			Op
-		{
+	public static class Computer0ToFunction0ViaSource<O> implements
+		Function<Computers.Arity0<O>, Producer<O>>, Op
+	{
 
 		@OpDependency(name = "engine.create", adaptable = false)
 		Producer<O> creator;
@@ -79,10 +78,9 @@ public class ComputersToFunctionsViaSource {
 	}
 
 	@OpClass(names = "engine.adapt", priority = Priority.LOW)
-	public static class Computer1ToFunction1ViaSource<I, O>
-			implements Function<Computers.Arity1<I, O>, Function<I, O>>, 
-			Op
-		{
+	public static class Computer1ToFunction1ViaSource<I, O> implements
+		Function<Computers.Arity1<I, O>, Function<I, O>>, Op
+	{
 
 		@OpDependency(name = "engine.create", adaptable = false)
 		Producer<O> creator;
@@ -103,10 +101,9 @@ public class ComputersToFunctionsViaSource {
 	}
 
 	@OpClass(names = "engine.adapt", priority = Priority.LOW)
-	public static class Computer2ToFunction2ViaSource<I1, I2, O>
-			implements Function<Computers.Arity2<I1, I2, O>, BiFunction<I1, I2, O>>, 
-			Op
-		{
+	public static class Computer2ToFunction2ViaSource<I1, I2, O> implements
+		Function<Computers.Arity2<I1, I2, O>, BiFunction<I1, I2, O>>, Op
+	{
 
 		@OpDependency(name = "engine.create", adaptable = false)
 		Producer<O> creator;
@@ -127,10 +124,10 @@ public class ComputersToFunctionsViaSource {
 	}
 
 	@OpClass(names = "engine.adapt", priority = Priority.LOW)
-	public static class Computer3ToFunction3ViaSource<I1, I2, I3, O>
-			implements Function<Computers.Arity3<I1, I2, I3, O>, Functions.Arity3<I1, I2, I3, O>>, 
-			Op
-		{
+	public static class Computer3ToFunction3ViaSource<I1, I2, I3, O> implements
+		Function<Computers.Arity3<I1, I2, I3, O>, Functions.Arity3<I1, I2, I3, O>>,
+		Op
+	{
 
 		@OpDependency(name = "engine.create", adaptable = false)
 		Producer<O> creator;
@@ -140,7 +137,9 @@ public class ComputersToFunctionsViaSource {
 		 * @return a Function adaptation of computer
 		 */
 		@Override
-		public Functions.Arity3<I1, I2, I3, O> apply(Computers.Arity3<I1, I2, I3, O> computer) {
+		public Functions.Arity3<I1, I2, I3, O> apply(
+			Computers.Arity3<I1, I2, I3, O> computer)
+		{
 			return (in1, in2, in3) -> {
 				O out = creator.create();
 				computer.compute(in1, in2, in3, out);
@@ -152,9 +151,10 @@ public class ComputersToFunctionsViaSource {
 
 	@OpClass(names = "engine.adapt", priority = Priority.LOW)
 	public static class Computer4ToFunction4ViaSource<I1, I2, I3, I4, O>
-			implements Function<Computers.Arity4<I1, I2, I3, I4, O>, Functions.Arity4<I1, I2, I3, I4, O>>, 
-			Op
-		{
+		implements
+		Function<Computers.Arity4<I1, I2, I3, I4, O>, Functions.Arity4<I1, I2, I3, I4, O>>,
+		Op
+	{
 
 		@OpDependency(name = "engine.create", adaptable = false)
 		Producer<O> creator;
@@ -164,7 +164,9 @@ public class ComputersToFunctionsViaSource {
 		 * @return a Function adaptation of computer
 		 */
 		@Override
-		public Functions.Arity4<I1, I2, I3, I4, O> apply(Computers.Arity4<I1, I2, I3, I4, O> computer) {
+		public Functions.Arity4<I1, I2, I3, I4, O> apply(
+			Computers.Arity4<I1, I2, I3, I4, O> computer)
+		{
 			return (in1, in2, in3, in4) -> {
 				O out = creator.create();
 				computer.compute(in1, in2, in3, in4, out);
@@ -176,9 +178,10 @@ public class ComputersToFunctionsViaSource {
 
 	@OpClass(names = "engine.adapt", priority = Priority.LOW)
 	public static class Computer5ToFunction5ViaSource<I1, I2, I3, I4, I5, O>
-			implements Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Functions.Arity5<I1, I2, I3, I4, I5, O>>, 
-			Op
-		{
+		implements
+		Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Functions.Arity5<I1, I2, I3, I4, I5, O>>,
+		Op
+	{
 
 		@OpDependency(name = "engine.create", adaptable = false)
 		Producer<O> creator;
@@ -188,7 +191,9 @@ public class ComputersToFunctionsViaSource {
 		 * @return a Function adaptation of computer
 		 */
 		@Override
-		public Functions.Arity5<I1, I2, I3, I4, I5, O> apply(Computers.Arity5<I1, I2, I3, I4, I5, O> computer) {
+		public Functions.Arity5<I1, I2, I3, I4, I5, O> apply(
+			Computers.Arity5<I1, I2, I3, I4, I5, O> computer)
+		{
 			return (in1, in2, in3, in4, in5) -> {
 				O out = creator.create();
 				computer.compute(in1, in2, in3, in4, in5, out);
@@ -200,9 +205,10 @@ public class ComputersToFunctionsViaSource {
 
 	@OpClass(names = "engine.adapt", priority = Priority.LOW)
 	public static class Computer6ToFunction6ViaSource<I1, I2, I3, I4, I5, I6, O>
-			implements Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Functions.Arity6<I1, I2, I3, I4, I5, I6, O>>, 
-			Op
-		{
+		implements
+		Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Functions.Arity6<I1, I2, I3, I4, I5, I6, O>>,
+		Op
+	{
 
 		@OpDependency(name = "engine.create", adaptable = false)
 		Producer<O> creator;
@@ -212,7 +218,9 @@ public class ComputersToFunctionsViaSource {
 		 * @return a Function adaptation of computer
 		 */
 		@Override
-		public Functions.Arity6<I1, I2, I3, I4, I5, I6, O> apply(Computers.Arity6<I1, I2, I3, I4, I5, I6, O> computer) {
+		public Functions.Arity6<I1, I2, I3, I4, I5, I6, O> apply(
+			Computers.Arity6<I1, I2, I3, I4, I5, I6, O> computer)
+		{
 			return (in1, in2, in3, in4, in5, in6) -> {
 				O out = creator.create();
 				computer.compute(in1, in2, in3, in4, in5, in6, out);
@@ -224,9 +232,10 @@ public class ComputersToFunctionsViaSource {
 
 	@OpClass(names = "engine.adapt", priority = Priority.LOW)
 	public static class Computer7ToFunction7ViaSource<I1, I2, I3, I4, I5, I6, I7, O>
-			implements Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O>>, 
-			Op
-		{
+		implements
+		Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O>>,
+		Op
+	{
 
 		@OpDependency(name = "engine.create", adaptable = false)
 		Producer<O> creator;
@@ -236,7 +245,9 @@ public class ComputersToFunctionsViaSource {
 		 * @return a Function adaptation of computer
 		 */
 		@Override
-		public Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> apply(Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer) {
+		public Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> apply(
+			Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer)
+		{
 			return (in1, in2, in3, in4, in5, in6, in7) -> {
 				O out = creator.create();
 				computer.compute(in1, in2, in3, in4, in5, in6, in7, out);
@@ -248,9 +259,10 @@ public class ComputersToFunctionsViaSource {
 
 	@OpClass(names = "engine.adapt", priority = Priority.LOW)
 	public static class Computer8ToFunction8ViaSource<I1, I2, I3, I4, I5, I6, I7, I8, O>
-			implements Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>>, 
-			Op
-		{
+		implements
+		Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>>,
+		Op
+	{
 
 		@OpDependency(name = "engine.create", adaptable = false)
 		Producer<O> creator;
@@ -260,7 +272,9 @@ public class ComputersToFunctionsViaSource {
 		 * @return a Function adaptation of computer
 		 */
 		@Override
-		public Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> apply(Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer) {
+		public Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> apply(
+			Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer)
+		{
 			return (in1, in2, in3, in4, in5, in6, in7, in8) -> {
 				O out = creator.create();
 				computer.compute(in1, in2, in3, in4, in5, in6, in7, in8, out);
@@ -272,9 +286,10 @@ public class ComputersToFunctionsViaSource {
 
 	@OpClass(names = "engine.adapt", priority = Priority.LOW)
 	public static class Computer9ToFunction9ViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>
-			implements Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>>, 
-			Op
-		{
+		implements
+		Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>>,
+		Op
+	{
 
 		@OpDependency(name = "engine.create", adaptable = false)
 		Producer<O> creator;
@@ -284,7 +299,9 @@ public class ComputersToFunctionsViaSource {
 		 * @return a Function adaptation of computer
 		 */
 		@Override
-		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> apply(Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer) {
+		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> apply(
+			Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer)
+		{
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9) -> {
 				O out = creator.create();
 				computer.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, out);
@@ -296,9 +313,10 @@ public class ComputersToFunctionsViaSource {
 
 	@OpClass(names = "engine.adapt", priority = Priority.LOW)
 	public static class Computer10ToFunction10ViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>
-			implements Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>>, 
-			Op
-		{
+		implements
+		Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>>,
+		Op
+	{
 
 		@OpDependency(name = "engine.create", adaptable = false)
 		Producer<O> creator;
@@ -308,10 +326,13 @@ public class ComputersToFunctionsViaSource {
 		 * @return a Function adaptation of computer
 		 */
 		@Override
-		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> apply(Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer) {
+		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> apply(
+			Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer)
+		{
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10) -> {
 				O out = creator.create();
-				computer.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, out);
+				computer.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10,
+					out);
 				return out;
 			};
 		}
@@ -320,9 +341,10 @@ public class ComputersToFunctionsViaSource {
 
 	@OpClass(names = "engine.adapt", priority = Priority.LOW)
 	public static class Computer11ToFunction11ViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>
-			implements Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>>, 
-			Op
-		{
+		implements
+		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>>,
+		Op
+	{
 
 		@OpDependency(name = "engine.create", adaptable = false)
 		Producer<O> creator;
@@ -332,10 +354,14 @@ public class ComputersToFunctionsViaSource {
 		 * @return a Function adaptation of computer
 		 */
 		@Override
-		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> apply(Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer) {
+		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>
+			apply(
+				Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer)
+		{
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11) -> {
 				O out = creator.create();
-				computer.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, out);
+				computer.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10,
+					in11, out);
 				return out;
 			};
 		}
@@ -344,9 +370,10 @@ public class ComputersToFunctionsViaSource {
 
 	@OpClass(names = "engine.adapt", priority = Priority.LOW)
 	public static class Computer12ToFunction12ViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>
-			implements Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>>, 
-			Op
-		{
+		implements
+		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>>,
+		Op
+	{
 
 		@OpDependency(name = "engine.create", adaptable = false)
 		Producer<O> creator;
@@ -356,10 +383,16 @@ public class ComputersToFunctionsViaSource {
 		 * @return a Function adaptation of computer
 		 */
 		@Override
-		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> apply(Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer) {
-			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12) -> {
+		public
+			Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>
+			apply(
+				Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer)
+		{
+			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11,
+				in12) -> {
 				O out = creator.create();
-				computer.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, out);
+				computer.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10,
+					in11, in12, out);
 				return out;
 			};
 		}
@@ -368,9 +401,10 @@ public class ComputersToFunctionsViaSource {
 
 	@OpClass(names = "engine.adapt", priority = Priority.LOW)
 	public static class Computer13ToFunction13ViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>
-			implements Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>>, 
-			Op
-		{
+		implements
+		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>>,
+		Op
+	{
 
 		@OpDependency(name = "engine.create", adaptable = false)
 		Producer<O> creator;
@@ -380,10 +414,16 @@ public class ComputersToFunctionsViaSource {
 		 * @return a Function adaptation of computer
 		 */
 		@Override
-		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> apply(Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer) {
-			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13) -> {
+		public
+			Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>
+			apply(
+				Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer)
+		{
+			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
+				in13) -> {
 				O out = creator.create();
-				computer.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, out);
+				computer.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10,
+					in11, in12, in13, out);
 				return out;
 			};
 		}
@@ -392,9 +432,10 @@ public class ComputersToFunctionsViaSource {
 
 	@OpClass(names = "engine.adapt", priority = Priority.LOW)
 	public static class Computer14ToFunction14ViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>
-			implements Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>>, 
-			Op
-		{
+		implements
+		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>>,
+		Op
+	{
 
 		@OpDependency(name = "engine.create", adaptable = false)
 		Producer<O> creator;
@@ -404,10 +445,16 @@ public class ComputersToFunctionsViaSource {
 		 * @return a Function adaptation of computer
 		 */
 		@Override
-		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> apply(Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer) {
-			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14) -> {
+		public
+			Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>
+			apply(
+				Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer)
+		{
+			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
+				in13, in14) -> {
 				O out = creator.create();
-				computer.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, out);
+				computer.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10,
+					in11, in12, in13, in14, out);
 				return out;
 			};
 		}
@@ -416,9 +463,10 @@ public class ComputersToFunctionsViaSource {
 
 	@OpClass(names = "engine.adapt", priority = Priority.LOW)
 	public static class Computer15ToFunction15ViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>
-			implements Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>>, 
-			Op
-		{
+		implements
+		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>>,
+		Op
+	{
 
 		@OpDependency(name = "engine.create", adaptable = false)
 		Producer<O> creator;
@@ -428,10 +476,16 @@ public class ComputersToFunctionsViaSource {
 		 * @return a Function adaptation of computer
 		 */
 		@Override
-		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> apply(Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer) {
-			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15) -> {
+		public
+			Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>
+			apply(
+				Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer)
+		{
+			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
+				in13, in14, in15) -> {
 				O out = creator.create();
-				computer.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, out);
+				computer.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10,
+					in11, in12, in13, in14, in15, out);
 				return out;
 			};
 		}
@@ -440,9 +494,10 @@ public class ComputersToFunctionsViaSource {
 
 	@OpClass(names = "engine.adapt", priority = Priority.LOW)
 	public static class Computer16ToFunction16ViaSource<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>
-			implements Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>>, 
-			Op
-		{
+		implements
+		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>>,
+		Op
+	{
 
 		@OpDependency(name = "engine.create", adaptable = false)
 		Producer<O> creator;
@@ -452,10 +507,16 @@ public class ComputersToFunctionsViaSource {
 		 * @return a Function adaptation of computer
 		 */
 		@Override
-		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> apply(Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer) {
-			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> {
+		public
+			Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>
+			apply(
+				Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer)
+		{
+			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
+				in13, in14, in15, in16) -> {
 				O out = creator.create();
-				computer.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16, out);
+				computer.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10,
+					in11, in12, in13, in14, in15, in16, out);
 				return out;
 			};
 		}

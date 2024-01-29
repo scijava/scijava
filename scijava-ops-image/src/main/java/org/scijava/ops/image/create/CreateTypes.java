@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.create;
 
 import net.imglib2.type.logic.BitType;
@@ -60,13 +61,15 @@ public class CreateTypes {
 	 * @output output
 	 * @implNote op names='create.uint2, create.type, engine.create'
 	 */
-	public final Producer<Unsigned2BitType> uint2TypeSource = () -> new Unsigned2BitType();
+	public final Producer<Unsigned2BitType> uint2TypeSource =
+		() -> new Unsigned2BitType();
 
 	/**
 	 * @output output
 	 * @implNote op names='create.uint4, create.type, engine.create'
 	 */
-	public final Producer<Unsigned4BitType> uint4TypeSource = () -> new Unsigned4BitType();
+	public final Producer<Unsigned4BitType> uint4TypeSource =
+		() -> new Unsigned4BitType();
 
 	/**
 	 * @output output
@@ -78,13 +81,15 @@ public class CreateTypes {
 	 * @output output
 	 * @implNote op names='create.uint8, create.type, engine.create'
 	 */
-	public final Producer<UnsignedByteType> uint8TypeSource = () -> new UnsignedByteType();
+	public final Producer<UnsignedByteType> uint8TypeSource =
+		() -> new UnsignedByteType();
 
 	/**
 	 * @output output
 	 * @implNote op names='create.uint12, create.type, engine.create'
 	 */
-	public final Producer<Unsigned12BitType> uint12TypeSource = () -> new Unsigned12BitType();
+	public final Producer<Unsigned12BitType> uint12TypeSource =
+		() -> new Unsigned12BitType();
 
 	/**
 	 * @output output
@@ -96,7 +101,8 @@ public class CreateTypes {
 	 * @output output
 	 * @implNote op names='create.uint16, create.type, engine.create'
 	 */
-	public final Producer<UnsignedShortType> uint16TypeSource = () -> new UnsignedShortType();
+	public final Producer<UnsignedShortType> uint16TypeSource =
+		() -> new UnsignedShortType();
 
 	/**
 	 * @output output
@@ -108,7 +114,8 @@ public class CreateTypes {
 	 * @output output
 	 * @implNote op names='create.uint32, create.type, engine.create'
 	 */
-	public final Producer<UnsignedIntType> uint32TypeSource = () -> new UnsignedIntType();
+	public final Producer<UnsignedIntType> uint32TypeSource =
+		() -> new UnsignedIntType();
 
 	/**
 	 * @output output
@@ -120,13 +127,15 @@ public class CreateTypes {
 	 * @output output
 	 * @implNote op names='create.uint64, create.type, engine.create'
 	 */
-	public final Producer<UnsignedLongType> uint64TypeSource = () -> new UnsignedLongType();
+	public final Producer<UnsignedLongType> uint64TypeSource =
+		() -> new UnsignedLongType();
 
 	/**
 	 * @output output
 	 * @implNote op names='create.uint128, create.type, engine.create'
 	 */
-	public final Producer<Unsigned128BitType> uint128TypeSource = () -> new Unsigned128BitType();
+	public final Producer<Unsigned128BitType> uint128TypeSource =
+		() -> new Unsigned128BitType();
 
 	/**
 	 * @output output
@@ -138,13 +147,16 @@ public class CreateTypes {
 	 * @output output
 	 * @implNote op names='create.cfloat32, create.type, engine.create'
 	 */
-	public final Producer<ComplexFloatType> cfloat32TypeSource = () -> new ComplexFloatType();
+	public final Producer<ComplexFloatType> cfloat32TypeSource =
+		() -> new ComplexFloatType();
 
 	/**
-	 * NB higher priority to match {@code Producer<RealType>} and {@code Producer<NativeType>}
+	 * NB higher priority to match {@code Producer<RealType>} and
+	 * {@code Producer<NativeType>}
 	 *
 	 * @output output
-	 * @implNote op names='create.float64, create.type, engine.create', priority='100.'
+	 * @implNote op names='create.float64, create.type, engine.create',
+	 *           priority='100.'
 	 */
 	public final Producer<DoubleType> float64TypeSource = () -> new DoubleType();
 
@@ -152,6 +164,7 @@ public class CreateTypes {
 	 * @output output
 	 * @implNote op names='create.cfloat64, create.type, engine.create'
 	 */
-	public final Producer<ComplexDoubleType> cfloat64TypeSource = () -> new ComplexDoubleType();
+	public final Producer<ComplexDoubleType> cfloat64TypeSource =
+		() -> new ComplexDoubleType();
 
 }

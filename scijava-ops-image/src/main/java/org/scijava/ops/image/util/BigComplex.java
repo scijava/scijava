@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -41,7 +41,7 @@ import net.imglib2.type.numeric.ComplexType;
  * Besides providing precise numeric operations this class is useful for
  * supporting DataType translations with minimal data loss. Some methods may
  * round values to 50 decimal places of precision.
- * 
+ *
  * @author Barry DeZonia
  */
 public class BigComplex implements ComplexType<BigComplex> {
@@ -425,7 +425,7 @@ public class BigComplex implements ComplexType<BigComplex> {
 	public void mul(BigComplex other) {
 		mul(this, other);
 	}
-	
+
 	/**
 	 * Set self to the result of division between two BigComplex values. Precision
 	 * loss is possible.
@@ -733,24 +733,22 @@ public class BigComplex implements ComplexType<BigComplex> {
 
 	/**
 	 * Uses Newton Raphson to compute the square root of a BigDecimal.
-	 * 
+	 *
 	 * @author Luciano Culacciatti
-	 * @url 
-	 *      http://www.codeproject.com/Tips/257031/Implementing-SqrtRoot-in-BigDecimal
+	 * @url http://www.codeproject.com/Tips/257031/Implementing-SqrtRoot-in-BigDecimal
 	 * @param c
 	 */
 	private static BigDecimal bigSqrt(BigDecimal c) {
-		BigDecimal precision =
-			BigDecimal.ONE.divide(SQRT_PRE, DIGITS, RoundingMode.HALF_UP);
+		BigDecimal precision = BigDecimal.ONE.divide(SQRT_PRE, DIGITS,
+			RoundingMode.HALF_UP);
 		return sqrtNewtonRaphson(c, BigDecimal.ONE, precision);
 	}
 
 	/**
 	 * Private utility method used to compute the square root of a BigDecimal.
-	 * 
+	 *
 	 * @author Luciano Culacciatti
-	 * @url 
-	 *      http://www.codeproject.com/Tips/257031/Implementing-SqrtRoot-in-BigDecimal
+	 * @url http://www.codeproject.com/Tips/257031/Implementing-SqrtRoot-in-BigDecimal
 	 * @param c
 	 * @param xn
 	 * @param precision
@@ -843,9 +841,12 @@ public class BigComplex implements ComplexType<BigComplex> {
 			new BigDecimal("0.00000047683715820308885992758382144924707587049404378"),
 			new BigDecimal("0.00000023841857910155798249094797721893269783096898769"),
 			new BigDecimal("0.00000011920928955078068531136849713792211264596758766"),
-			new BigDecimal("0.000000059604644775390554413921062141788874250030195782"),
-			new BigDecimal("0.000000029802322387695303676740132767709503349043907067"),
-			new BigDecimal("0.000000014901161193847655147092516595963247108248930025"),
+			new BigDecimal(
+				"0.000000059604644775390554413921062141788874250030195782"),
+			new BigDecimal(
+				"0.000000029802322387695303676740132767709503349043907067"),
+			new BigDecimal(
+				"0.000000014901161193847655147092516595963247108248930025"),
 			new BigDecimal(
 				"0.0000000074505805969238279871365645744953921132066925545"),
 			new BigDecimal(

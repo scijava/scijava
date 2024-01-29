@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -69,7 +69,6 @@ import javassist.CtNewConstructor;
 import javassist.CtNewMethod;
 import javassist.NotFoundException;
 
-
 public final class SimplificationUtils {
 
 	private SimplificationUtils() {
@@ -87,7 +86,7 @@ public final class SimplificationUtils {
 	 * are present in the signature of that interface's single abstract
 	 * method.</li>
 	 * </ul>
-	 * 
+	 *
 	 * @param originalOpType - the {@link Type} declared by the source
 	 *          {@link OpRequest}
 	 * @param newArgs - the new argument {@link Type}s requested by the
@@ -157,7 +156,7 @@ public final class SimplificationUtils {
 	 * assumed that no arguments are mutable and that the output of the functional
 	 * {@link Method} is its output. We also assume that only one argument is
 	 * annotated.
-	 * 
+	 *
 	 * @param c - the {@link Class} extending a {@link FunctionalInterface}
 	 * @return the index of the mutable argument (or -1 iff the output is
 	 *         returned).
@@ -181,11 +180,13 @@ public final class SimplificationUtils {
 		for (Type arg : args) {
 			var inNil = Nil.of(arg);
 			try {
-				var focuser =
-						env.unary("engine.focus", h).inType(Any.class).outType(inNil).function();
+				var focuser = env.unary("engine.focus", h).inType(Any.class).outType(
+					inNil).function();
 				inFocusers.add(org.scijava.ops.api.Ops.rich(focuser));
-			} catch (OpMatchingException e) {
-				var identity = env.unary("engine.identity", h).inType(inNil).outType(inNil).function();
+			}
+			catch (OpMatchingException e) {
+				var identity = env.unary("engine.identity", h).inType(inNil).outType(
+					inNil).function();
 				inFocusers.add(org.scijava.ops.api.Ops.rich(identity));
 			}
 		}
@@ -193,10 +194,12 @@ public final class SimplificationUtils {
 		RichOp<Function<?, ?>> outSimplifier;
 		try {
 			var simplifier = env.unary("engine.simplify", h).inType(outNil).outType(
-					Object.class).function();
+				Object.class).function();
 			outSimplifier = org.scijava.ops.api.Ops.rich(simplifier);
-		} catch (OpMatchingException e) {
-			var identity = env.unary("engine.identity", h).inType(outNil).outType(outNil).function();
+		}
+		catch (OpMatchingException e) {
+			var identity = env.unary("engine.identity", h).inType(outNil).outType(
+				outNil).function();
 			outSimplifier = org.scijava.ops.api.Ops.rich(identity);
 		}
 
@@ -205,23 +208,26 @@ public final class SimplificationUtils {
 			.opType()));
 		if (ioIndex > -1) {
 			var nil = Nil.of(outType(info.outputType(), outSimplifier));
-			var copier = env.unary("engine.copy", h).inType(nil).outType(nil).computer();
+			var copier = env.unary("engine.copy", h).inType(nil).outType(nil)
+				.computer();
 			copyOp = org.scijava.ops.api.Ops.rich(copier);
 		}
 		return new SimplifiedOpInfo(info, inFocusers, outSimplifier, copyOp);
 	}
 
-
-	private static Type outType(Type originalOutput, RichOp<Function<?, ?>> outputSimplifier) {
+	private static Type outType(Type originalOutput,
+		RichOp<Function<?, ?>> outputSimplifier)
+	{
 		Map<TypeVariable<?>, Type> typeAssigns = new HashMap<>();
 		GenericAssignability.inferTypeVariables( //
-				new Type[] {org.scijava.ops.api.Ops.info(outputSimplifier).inputTypes().get(0)}, //
-				new Type[] {originalOutput}, //
-				typeAssigns //
+			new Type[] { org.scijava.ops.api.Ops.info(outputSimplifier).inputTypes()
+				.get(0) }, //
+			new Type[] { originalOutput }, //
+			typeAssigns //
 		);
-		return Types.mapVarToTypes(org.scijava.ops.api.Ops.info(outputSimplifier).outputType(), typeAssigns);
+		return Types.mapVarToTypes(org.scijava.ops.api.Ops.info(outputSimplifier)
+			.outputType(), typeAssigns);
 	}
-
 
 	/**
 	 * Creates a Class given an Op and a set of simplifiers. This class:
@@ -599,10 +605,10 @@ public final class SimplificationUtils {
 	static String getClassName(Type t) {
 		Class<?> clazz = Types.raw(t);
 		String className = clazz.getSimpleName();
-		if(className.chars().allMatch(Character::isJavaIdentifierPart))
+		if (className.chars().allMatch(Character::isJavaIdentifierPart))
 			return className;
-		if(clazz.isArray())
-			return clazz.getComponentType().getSimpleName() + "_Arr";
+		if (clazz.isArray()) return clazz.getComponentType().getSimpleName() +
+			"_Arr";
 		return className;
 	}
 }

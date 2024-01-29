@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -55,7 +55,7 @@ import org.scijava.function.Computers;
  * Tests implementations of {@code MaxFilterOp}, {@code MeanFilterOp},
  * {@code MedianFilterOp}, {@code MinFilterOp}, {@code SigmaFilterOp},
  * {@code VarianceFilterOp}.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
  */
 public class NonLinearFiltersTest extends AbstractOpTest {
@@ -63,7 +63,8 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	Img<ByteType> in;
 	Img<ByteType> out;
 	RectangleShape shape;
-	OutOfBoundsMirrorFactory<ByteType, Img<ByteType>> oobFactory = new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
+	OutOfBoundsMirrorFactory<ByteType, Img<ByteType>> oobFactory =
+		new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
 
 	/**
 	 * Initialize images.
@@ -82,12 +83,13 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testMaxFilter() {
-		ops.op("filter.max").arity3().input(in, shape, oobFactory).output(out).compute();
+		ops.op("filter.max").arity3().input(in, shape, oobFactory).output(out)
+			.compute();
 
 		byte max = Byte.MIN_VALUE;
 
-		NeighborhoodsIterableInterval<ByteType> neighborhoods = shape
-				.neighborhoods(Views.interval(Views.extendMirrorSingle(in), in));
+		NeighborhoodsIterableInterval<ByteType> neighborhoods = shape.neighborhoods(
+			Views.interval(Views.extendMirrorSingle(in), in));
 		for (ByteType t : neighborhoods.firstElement()) {
 			max = (byte) Math.max(t.getInteger(), max);
 		}
@@ -103,16 +105,18 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	}
 
 	/**
-	 * @see NeighborhoodFilters#defaultMean(Computers.Arity1, Neighborhood, Object)
+	 * @see NeighborhoodFilters#defaultMean(Computers.Arity1, Neighborhood,
+	 *      Object)
 	 */
 	@Test
 	public void testMeanFilter() {
-		ops.op("filter.mean").arity3().input(in, shape, oobFactory).output(out).compute();
+		ops.op("filter.mean").arity3().input(in, shape, oobFactory).output(out)
+			.compute();
 
 		double sum = 0.0;
 
-		NeighborhoodsIterableInterval<ByteType> neighborhoods = shape
-				.neighborhoods(Views.interval(Views.extendMirrorSingle(in), in));
+		NeighborhoodsIterableInterval<ByteType> neighborhoods = shape.neighborhoods(
+			Views.interval(Views.extendMirrorSingle(in), in));
 		for (ByteType t : neighborhoods.firstElement()) {
 			sum += t.getRealDouble();
 		}
@@ -121,7 +125,8 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	}
 
 	/**
-	 * @see NeighborhoodFilters#defaultMean(Computers.Arity1, Neighborhood, Object)
+	 * @see NeighborhoodFilters#defaultMean(Computers.Arity1, Neighborhood,
+	 *      Object)
 	 */
 	@Test
 	public void testMeanFilterNullable() {
@@ -129,15 +134,17 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	}
 
 	/**
-	 * @see NeighborhoodFilters#defaultMedian(Computers.Arity1, Neighborhood, Object)
+	 * @see NeighborhoodFilters#defaultMedian(Computers.Arity1, Neighborhood,
+	 *      Object)
 	 */
 	@Test
 	public void testMedianFilter() {
-		ops.op("filter.median").arity3().input(in, shape, oobFactory).output(out).compute();
+		ops.op("filter.median").arity3().input(in, shape, oobFactory).output(out)
+			.compute();
 
 		ArrayList<ByteType> items = new ArrayList<>();
-		NeighborhoodsIterableInterval<ByteType> neighborhoods = shape
-				.neighborhoods(Views.interval(Views.extendMirrorSingle(in), in));
+		NeighborhoodsIterableInterval<ByteType> neighborhoods = shape.neighborhoods(
+			Views.interval(Views.extendMirrorSingle(in), in));
 		for (ByteType t : neighborhoods.firstElement()) {
 			items.add(t.copy());
 		}
@@ -148,7 +155,8 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	}
 
 	/**
-	 * @see NeighborhoodFilters#defaultMedian(Computers.Arity1, Neighborhood, Object)
+	 * @see NeighborhoodFilters#defaultMedian(Computers.Arity1, Neighborhood,
+	 *      Object)
 	 */
 	@Test
 	public void testMedianFilterNullable() {
@@ -156,16 +164,18 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	}
 
 	/**
-	 * @see NeighborhoodFilters#defaultMinimum(Computers.Arity1, Neighborhood, Object)
+	 * @see NeighborhoodFilters#defaultMinimum(Computers.Arity1, Neighborhood,
+	 *      Object)
 	 */
 	@Test
 	public void testMinFilter() {
-		ops.op("filter.min").arity3().input(in, shape, oobFactory).output(out).compute();
+		ops.op("filter.min").arity3().input(in, shape, oobFactory).output(out)
+			.compute();
 
 		byte min = Byte.MAX_VALUE;
 
-		NeighborhoodsIterableInterval<ByteType> neighborhoods = shape
-				.neighborhoods(Views.interval(Views.extendMirrorSingle(in), in));
+		NeighborhoodsIterableInterval<ByteType> neighborhoods = shape.neighborhoods(
+			Views.interval(Views.extendMirrorSingle(in), in));
 		for (ByteType t : neighborhoods.firstElement()) {
 			min = (byte) Math.min(t.getInteger(), min);
 		}
@@ -173,7 +183,8 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	}
 
 	/**
-	 * @see NeighborhoodFilters#defaultMinimum(Computers.Arity1, Neighborhood, Object)
+	 * @see NeighborhoodFilters#defaultMinimum(Computers.Arity1, Neighborhood,
+	 *      Object)
 	 */
 	@Test
 	public void testMinFilterNullable() {
@@ -186,29 +197,33 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testSigmaFilter() {
-		ops.op("filter.sigma").arity5().input(in, shape, 1.0, 0.0, oobFactory).output(out).compute();
+		ops.op("filter.sigma").arity5().input(in, shape, 1.0, 0.0, oobFactory)
+			.output(out).compute();
 	}
 
 	@Test
 	public void testSigmaFilterNullable() {
-		ops.op("filter.sigma").arity4().input(in, shape, 1.0, 0.0).output(out).compute();
+		ops.op("filter.sigma").arity4().input(in, shape, 1.0, 0.0).output(out)
+			.compute();
 	}
 
 	@Test
 	public void testVarianceFilter() {
-		ops.op("filter.variance").arity3().input(in, shape, oobFactory).output(out).compute();
+		ops.op("filter.variance").arity3().input(in, shape, oobFactory).output(out)
+			.compute();
 
 		double sum = 0.0;
 		double sumSq = 0.0;
 
-		NeighborhoodsIterableInterval<ByteType> neighborhoods = shape
-				.neighborhoods(Views.interval(Views.extendMirrorSingle(in), in));
+		NeighborhoodsIterableInterval<ByteType> neighborhoods = shape.neighborhoods(
+			Views.interval(Views.extendMirrorSingle(in), in));
 		for (ByteType t : neighborhoods.firstElement()) {
 			sum += t.getRealDouble();
 			sumSq += t.getRealDouble() * t.getRealDouble();
 		}
 
-		assertEquals((byte) Util.round((sumSq - (sum * sum / 9)) / 8), out.firstElement().get());
+		assertEquals((byte) Util.round((sumSq - (sum * sum / 9)) / 8), out
+			.firstElement().get());
 	}
 
 	@Test

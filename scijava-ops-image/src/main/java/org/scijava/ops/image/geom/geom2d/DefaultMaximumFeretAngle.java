@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.geom.geom2d;
 
 import java.util.function.Function;
@@ -39,9 +40,11 @@ import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- *@implNote op names='geom.maximumFeretsAngle'
+ * @implNote op names='geom.maximumFeretsAngle'
  */
-public class DefaultMaximumFeretAngle implements Computers.Arity1<Polygon2D, DoubleType> {
+public class DefaultMaximumFeretAngle implements
+	Computers.Arity1<Polygon2D, DoubleType>
+{
 
 	@OpDependency(name = "geom.maximumFeret")
 	private Function<Polygon2D, Pair<RealLocalizable, RealLocalizable>> maxFeret;

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.types.inference;
 
 import com.google.common.base.Objects;
@@ -40,7 +41,7 @@ import org.scijava.types.Types;
 /**
  * A data structure retaining information about the mapping of a
  * {@link TypeVariable} to a {@link Type} within a type-inferring context.
- * 
+ *
  * @author Gabriel Selzer
  */
 public class TypeMapping {
@@ -50,13 +51,13 @@ public class TypeMapping {
 
 	/**
 	 * A boolean describing whether {@code mappedType} can be mutated in within
-	 * this set of {@link Type}s. The most common scenario in which a
-	 * {@link Type} <b>cannot</b> be mutated is when it is a type parameter of a
-	 * {@link ParameterizedType}. Once {@code malleable} is set to
-	 * {@code false}, {@code mappedType} <b>cannot</b> change, and
+	 * this set of {@link Type}s. The most common scenario in which a {@link Type}
+	 * <b>cannot</b> be mutated is when it is a type parameter of a
+	 * {@link ParameterizedType}. Once {@code malleable} is set to {@code false},
+	 * {@code mappedType} <b>cannot</b> change, and
 	 * {@link TypeMapping#refine(Type, boolean)} will throw a
-	 * {@link TypeInferenceException} so long as {@code newType} is not the
-	 * exact same {@code Type} as {@mappedType}.
+	 * {@link TypeInferenceException} so long as {@code newType} is not the exact
+	 * same {@code Type} as {@mappedType}.
 	 */
 	boolean malleable;
 
@@ -77,13 +78,12 @@ public class TypeMapping {
 	 * guarantee that either the existing {@code mappedType} or {@code newType}
 	 * will become the new {@link #mappedType} after the method ends;
 	 * {@link #mappedType} could be a supertype of these two {@link Type}s.
-	 * 
+	 *
 	 * @param otherType - the type that will be refined into {@link #mappedType}
 	 * @param newTypeMalleability - the malleability of {@code otherType},
 	 *          determined by the context from which {@code otherType} came.
 	 */
-	public void refine(Type otherType, boolean newTypeMalleability)
-	{
+	public void refine(Type otherType, boolean newTypeMalleability) {
 		malleable &= newTypeMalleability;
 		if (mappedType instanceof Any) {
 			mappedType = otherType;

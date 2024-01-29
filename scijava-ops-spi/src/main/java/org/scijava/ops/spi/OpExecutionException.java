@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -31,7 +31,7 @@ package org.scijava.ops.spi;
 
 /**
  * Thrown to indicate that an Op failed in its execution
- * 
+ *
  * @author Gabriel Selzer
  */
 public class OpExecutionException extends RuntimeException {
@@ -39,7 +39,7 @@ public class OpExecutionException extends RuntimeException {
 	/**
 	 * Constructs an {@code OpExecutionException} with the specified reason for
 	 * failure.
-	 * 
+	 *
 	 * @param s the reason for the failure
 	 */
 	public OpExecutionException(String s) {
@@ -48,7 +48,7 @@ public class OpExecutionException extends RuntimeException {
 
 	/**
 	 * Constructs an {@code OpExecutionException} with the specified cause.
-	 * 
+	 *
 	 * @param cause the cause of the failure
 	 */
 	public OpExecutionException(Throwable cause) {
@@ -58,7 +58,7 @@ public class OpExecutionException extends RuntimeException {
 	/**
 	 * Constructs an {@code OpExecutionException} with the specified reason for
 	 * failure and cause.
-	 * 
+	 *
 	 * @param message the reason for the failure
 	 * @param cause the cause of the failure
 	 */
@@ -70,7 +70,7 @@ public class OpExecutionException extends RuntimeException {
 	 * Runs a {@link Runnable} that throws some checked {@link Exception},
 	 * wrapping the {@link Exception} into an {@link OpExecutionException} if it
 	 * is thrown.
-	 * 
+	 *
 	 * @param runnable the {@link Runnable}
 	 */
 	public static void wrapAndRun(ThrowingRunnable runnable) {

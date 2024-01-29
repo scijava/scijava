@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
 
 /**
  * Useful methods for obtaining details of the SciJava application environment.
- * 
+ *
  * @author Johannes Schindelin
  * @author Curtis Rueden
  */
@@ -61,8 +61,8 @@ public final class Apps {
 	 * will fail if the main thread has terminated before this method is called.
 	 */
 	private static String mainClassName() {
-		final Map<Thread, StackTraceElement[]> traceMap =
-			Thread.getAllStackTraces();
+		final Map<Thread, StackTraceElement[]> traceMap = Thread
+			.getAllStackTraces();
 		for (final Thread thread : traceMap.keySet()) {
 			if (!"main".equals(thread.getName())) continue;
 			final StackTraceElement[] trace = traceMap.get(thread);
@@ -75,7 +75,7 @@ public final class Apps {
 
 	/**
 	 * Gets the class whose main method launched the application.
-	 * 
+	 *
 	 * @return The launching class, or null if the main method terminated before
 	 *         the {@code AppUtils} class was loaded.
 	 */
@@ -87,7 +87,7 @@ public final class Apps {
 	 * Gets the application root directory. If the given system property is set,
 	 * it is used. Otherwise, we scan up the tree from the given class for a
 	 * suitable directory.
-	 * 
+	 *
 	 * @param sysProp System property which may point at the root directory. If
 	 *          this is set to a valid directory, it is used.
 	 * @param c The class from which the base directory should be derived.
@@ -127,7 +127,7 @@ public final class Apps {
 
 	/**
 	 * Gets the base file system directory containing the given class file.
-	 * 
+	 *
 	 * @param c The class from which the base directory should be derived.
 	 * @see #getBaseDirectory(File, String)
 	 */
@@ -137,7 +137,7 @@ public final class Apps {
 
 	/**
 	 * Gets the base file system directory containing the given class file.
-	 * 
+	 *
 	 * @param c The class from which the base directory should be derived.
 	 * @param baseSubdirectory A hint for what to expect for a directory structure
 	 *          beneath the application base directory.
@@ -177,8 +177,8 @@ public final class Apps {
 	 * {@code target/classes} folder of a given component. In this case, the class
 	 * files reside directly on the file system (not in a JAR file). The base
 	 * directory is defined as the toplevel Maven directory for the multi-module
-	 * project. For example, if you have checked out {@code scijava-common3.git} to
-	 * {@code ~/sjc}, the {@code org.scijava.Context} class will be located at
+	 * project. For example, if you have checked out {@code scijava-common3.git}
+	 * to {@code ~/sjc}, the {@code org.scijava.Context} class will be located at
 	 * {@code ~/sjc/scijava-common3/target/classes/org/scijava/Context.class}.
 	 * Asking for the base directory for that class will yield
 	 * {@code ~/sjc/scijava-common3}, as long as you correctly specify
@@ -186,8 +186,8 @@ public final class Apps {
 	 * <li><b>Within a JAR file in the Maven local repository cache.</b> Typically
 	 * this cache is located in {@code ~/.m2/repository}. The location will be
 	 * {@code groupId/artifactId/version/artifactId-version.jar} where
-	 * {@code groupId}, {@code artifactId} and {@code version} are the <a
-	 * href="http://maven.apache.org/pom.html#Maven_Coordinates">Maven GAV
+	 * {@code groupId}, {@code artifactId} and {@code version} are the
+	 * <a href="http://maven.apache.org/pom.html#Maven_Coordinates">Maven GAV
 	 * coordinates</a>. Note that in this case, no base directory with respect to
 	 * the given class can be found, and this method will return null.</li>
 	 * <li><b>Within a JAR file beneath the base directory.</b> Common cases
@@ -216,8 +216,8 @@ public final class Apps {
 	 * NetBeans or IntelliJ IDEA) then all dependencies will reside <b>within JAR
 	 * files in the local Maven repository cache</b>. But the executed project
 	 * itself will reside <b>in its Maven build directory</b>. So as long as you
-	 * ask for the base directory relative to a class
-	 * <em>of the executed project</em> it will be found.</li>
+	 * ask for the base directory relative to a class <em>of the executed
+	 * project</em> it will be found.</li>
 	 * <li><b>Running as an application bundle (e.g., ImageJ).</b> Typically this
 	 * means downloading ImageJ from the web site, unpacking it and running the
 	 * ImageJ launcher (double-clicking ImageJ-win32.exe on Windows,
@@ -225,7 +225,7 @@ public final class Apps {
 	 * components reside in the {@code jars} folder of the application bundle, and
 	 * the base directory will be found one level above that.</li>
 	 * </ol>
-	 * 
+	 *
 	 * @param classLocation The location from which the base directory should be
 	 *          derived.
 	 * @param baseSubdirectory A hint for what to expect for a directory structure
@@ -251,7 +251,7 @@ public final class Apps {
 
 		final String targetClassesSuffix = basePrefix + "target/classes";
 		final String targetTestClassesSuffix = basePrefix + "target/test-classes";
-		final String[] suffixes = {targetClassesSuffix, targetTestClassesSuffix};
+		final String[] suffixes = { targetClassesSuffix, targetTestClassesSuffix };
 		for (final String suffix : suffixes) {
 			if (!path.endsWith(suffix)) continue;
 
@@ -262,8 +262,8 @@ public final class Apps {
 			if (baseSubdirectory == null) {
 				// NB: There is no hint as to the directory structure.
 				// So we scan up the tree to find the topmost pom.xml file.
-				while (dir.getParentFile() != null &&
-					new File(dir.getParentFile(), "pom.xml").exists())
+				while (dir.getParentFile() != null && new File(dir.getParentFile(),
+					"pom.xml").exists())
 				{
 					dir = dir.getParentFile();
 				}
@@ -271,9 +271,8 @@ public final class Apps {
 			return dir;
 		}
 
-		final Pattern pattern =
-			Pattern.compile(".*(" + Pattern.quote(basePrefix + "target/") +
-				"[^/]*\\.jar)");
+		final Pattern pattern = Pattern.compile(".*(" + Pattern.quote(basePrefix +
+			"target/") + "[^/]*\\.jar)");
 		final Matcher matcher = pattern.matcher(path);
 		if (matcher.matches()) {
 			// NB: The class is in the Maven build directory inside a JAR file

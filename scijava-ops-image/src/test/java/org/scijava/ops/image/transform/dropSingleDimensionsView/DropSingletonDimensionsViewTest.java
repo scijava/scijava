@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.transform.dropSingleDimensionsView;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -44,7 +45,8 @@ import org.scijava.ops.api.OpBuilder;
 import org.scijava.types.Nil;
 
 /**
- * Tests {@link org.scijava.ops.image.Ops.Transform.DropSingletonDimensionsView} ops.
+ * Tests {@link org.scijava.ops.image.Ops.Transform.DropSingletonDimensionsView}
+ * ops.
  * <p>
  * This test only checks if the op call works with all parameters and that the
  * result is equal to that of the {@link Views} method call. It is not a
@@ -58,14 +60,16 @@ public class DropSingletonDimensionsViewTest extends AbstractOpTest {
 	@Test
 	public void dropSingletonDimensionsTest() {
 
-		Function<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>> dropFunc = OpBuilder
-				.matchFunction(ops, "transform.dropSingletonDimensionsView", new Nil<RandomAccessibleInterval<DoubleType>>() {
-				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
-				});
+		Function<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>> dropFunc =
+			OpBuilder.matchFunction(ops, "transform.dropSingletonDimensionsView",
+				new Nil<RandomAccessibleInterval<DoubleType>>()
+				{}, new Nil<RandomAccessibleInterval<DoubleType>>() {});
 
-		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 1, 10 });
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
+			new int[] { 10, 1, 10 });
 
-		RandomAccessibleInterval<DoubleType> il2 = Views.dropSingletonDimensions(img);
+		RandomAccessibleInterval<DoubleType> il2 = Views.dropSingletonDimensions(
+			img);
 
 		RandomAccessibleInterval<DoubleType> opr = dropFunc.apply(img);
 

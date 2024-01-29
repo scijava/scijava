@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.testutil;
 
 import java.io.Serializable;
@@ -57,7 +58,7 @@ public final class ExampleTypes {
 	}
 
 	public static class ComplexThing<T extends Serializable & Cloneable> extends
-			Thing<T>
+		Thing<T>
 	{
 		// NB: No implementation needed.
 	}
@@ -67,13 +68,13 @@ public final class ExampleTypes {
 	}
 
 	public static class StrangerThing<R extends String> extends
-			StrangeThing<Double>
+		StrangeThing<Double>
 	{
 		// NB: No implementation needed.
 	}
 
 	public static class RecursiveThing<T extends RecursiveThing<T>> extends
-			Thing<Integer>
+		Thing<Integer>
 	{
 		// NB: No implementation needed.
 	}
@@ -83,26 +84,24 @@ public final class ExampleTypes {
 	}
 
 	public static class CircularThing extends RecursiveThing<CircularThing>
-			implements Loop
+		implements Loop
 	{
 		// NB: No implementation needed.
 	}
 
 	public static class LoopingThing extends RecursiveThing<LoopingThing>
-			implements Loop
+		implements Loop
 	{
 		// NB: No implementation needed.
 	}
 
-	public interface NestedThing<I1, I2> extends Function<I1, I2>
-	{
+	public interface NestedThing<I1, I2> extends Function<I1, I2> {
 		// NB: No implementation needed.
 	}
 
 	/** Enumeration for testing conversion to enum types. */
 	public static enum Words {
-		FOO, BAR, FUBAR
+			FOO, BAR, FUBAR
 	}
-
 
 }

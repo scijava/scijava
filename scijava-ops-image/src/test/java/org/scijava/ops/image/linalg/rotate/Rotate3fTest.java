@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -57,7 +57,8 @@ public class Rotate3fTest extends AbstractOpTest {
 			1);
 		final Vector3f expected = xAxis.rotate(new Quaternionf(axisAngle));
 
-		final Vector3f result = ops.op("linalg.rotate").arity2().input(in, axisAngle).outType(Vector3f.class).apply();
+		final Vector3f result = ops.op("linalg.rotate").arity2().input(in,
+			axisAngle).outType(Vector3f.class).apply();
 
 		assertEquals(expected, result, "Rotation is incorrect");
 	}
@@ -67,13 +68,14 @@ public class Rotate3fTest extends AbstractOpTest {
 		final Vector3f xAxis = new Vector3f(1, 0, 0);
 		final Vector3f in = new Vector3f(xAxis);
 
-		final Vector3f result = ops.op("linalg.rotate").arity2().input(in, IDENTITY).outType(Vector3f.class).apply();
+		final Vector3f result = ops.op("linalg.rotate").arity2().input(in, IDENTITY)
+			.outType(Vector3f.class).apply();
 
 		assertNotSame(in, result, "Op should create a new object for output");
 		assertEquals(xAxis, result, "Rotation is incorrect");
 	}
 
-	//TODO: X -> Inplaces transformers
+	// TODO: X -> Inplaces transformers
 //	@Test
 //	public void testMutate() {
 //		final Vector3f xAxis = new Vector3f(1, 0, 0);

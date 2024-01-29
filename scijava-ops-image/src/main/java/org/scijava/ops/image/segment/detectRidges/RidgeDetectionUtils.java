@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -46,7 +46,7 @@ public final class RidgeDetectionUtils {
 	/**
 	 * Returns the angle between the x-axis and a given vector (in components).
 	 * Always positive.
-	 * 
+	 *
 	 * @param y - double denoting the y component of the vector.
 	 * @param x - double denoting the x component of the vector.
 	 * @return double denoting the angle between the vector and the x-axis.
@@ -97,15 +97,17 @@ public final class RidgeDetectionUtils {
 			octant++;
 			angle -= 45;
 		}
-		while(octant > 8) octant -= 8;
-		while(octant < 1) octant += 8;
+		while (octant > 8)
+			octant -= 8;
+		while (octant < 1)
+			octant += 8;
 
 		return octant;
 	}
 
 	/**
 	 * Creates the modifier array for the octants.
-	 * 
+	 *
 	 * @param octant - describes the octant modifier needed.
 	 * @return double[] of length 2, with the first number denoting the modifier
 	 *         to the x-coordinate and the second denoting the modifier to the
@@ -156,7 +158,7 @@ public final class RidgeDetectionUtils {
 	 * Helper method to take a point in a n-d image and reduce it down to a 2
 	 * dimensional point (e.g. in 3D cartesian space removing the z-coordinate
 	 * from the point).
-	 * 
+	 *
 	 * @param RA - the random access of the {@code n>2} dimensional image.
 	 * @return Point in 2D space.
 	 */
@@ -172,7 +174,7 @@ public final class RidgeDetectionUtils {
 	 * Helper method to take a point in a n-d image and reduce it down to a 2
 	 * dimensional Realpoint (e.g. in 3D cartesian space removing the z-coordinate
 	 * from the point).
-	 * 
+	 *
 	 * @param RA - the random access of the {@code n>2} dimensional image.
 	 * @return Point in 2D space.
 	 */
@@ -186,7 +188,7 @@ public final class RidgeDetectionUtils {
 
 	/**
 	 * Returns a {@link RealPoint} with the coordinates (x, y).
-	 * 
+	 *
 	 * @param x - the x-coordinate
 	 * @param y - the y-coordinate
 	 * @return a {@link RealPoint} with coordinates (x,y)

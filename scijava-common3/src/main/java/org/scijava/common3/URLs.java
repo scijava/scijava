@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.common3;
 
 import java.io.File;
@@ -52,7 +53,7 @@ public final class URLs {
 	 * Recursively lists the contents of the referenced directory. Directories are
 	 * excluded from the result. Supported protocols include {@code file} and
 	 * {@code jar}.
-	 * 
+	 *
 	 * @param directory The directory whose contents should be listed.
 	 * @return A collection of {@link URL}s representing the directory's contents.
 	 * @see #listContents(URL, boolean, boolean)
@@ -64,7 +65,7 @@ public final class URLs {
 	/**
 	 * Lists all contents of the referenced directory. Supported protocols include
 	 * {@code file} and {@code jar}.
-	 * 
+	 *
 	 * @param directory The directory whose contents should be listed.
 	 * @param recurse Whether to list contents recursively, as opposed to only the
 	 *          directory's direct contents.
@@ -82,7 +83,7 @@ public final class URLs {
 	 * Recursively adds contents from the referenced directory to an existing
 	 * collection. Directories are excluded from the result. Supported protocols
 	 * include {@code file} and {@code jar}.
-	 * 
+	 *
 	 * @param result The collection to which contents should be added.
 	 * @param directory The directory whose contents should be listed.
 	 * @return A collection of {@link URL}s representing the directory's contents.
@@ -97,7 +98,7 @@ public final class URLs {
 	/**
 	 * Add contents from the referenced directory to an existing collection.
 	 * Supported protocols include {@code file} and {@code jar}.
-	 * 
+	 *
 	 * @param result The collection to which contents should be added.
 	 * @param directory The directory whose contents should be listed.
 	 * @param recurse Whether to append contents recursively, as opposed to only
@@ -138,15 +139,16 @@ public final class URLs {
 				final String prefix = url.substring(bang + 2);
 				final String baseURL = url.substring(0, bang + 2);
 
-				final JarURLConnection connection =
-					(JarURLConnection) new URL(baseURL).openConnection();
+				final JarURLConnection connection = (JarURLConnection) new URL(baseURL)
+					.openConnection();
 				try (final JarFile jar = connection.getJarFile()) {
 					final Enumeration<JarEntry> entries = jar.entries();
 					while (entries.hasMoreElements()) {
 						final JarEntry entry = entries.nextElement();
-						final String urlEncoded =
-							new URI(null, null, entry.getName(), null).toString();
-						if (urlEncoded.length() > prefix.length() && // omit directory itself
+						final String urlEncoded = new URI(null, null, entry.getName(), null)
+							.toString();
+						if (urlEncoded.length() > prefix.length() && // omit directory
+																													// itself
 							urlEncoded.startsWith(prefix))
 						{
 							if (filesOnly && urlEncoded.endsWith("/")) {
@@ -182,7 +184,7 @@ public final class URLs {
 	 * This method is similar to calling {@code new File(url.toURI())} except that
 	 * it also handles "jar:file:" URLs, returning the path to the JAR file.
 	 * </p>
-	 * 
+	 *
 	 * @param url The URL to convert.
 	 * @return A file path suitable for use with e.g. {@link FileInputStream}
 	 * @throws IllegalArgumentException if the URL does not correspond to a file.
@@ -193,7 +195,7 @@ public final class URLs {
 
 	/**
 	 * Converts the given URL string to its corresponding {@link File}.
-	 * 
+	 *
 	 * @param url The URL to convert.
 	 * @return A file path suitable for use with e.g. {@link FileInputStream}
 	 * @throws IllegalArgumentException if the URL does not correspond to a file.

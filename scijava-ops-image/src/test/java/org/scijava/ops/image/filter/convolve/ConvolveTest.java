@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,6 +27,7 @@
  * #L%
  */
 //
+
 package org.scijava.ops.image.filter.convolve;
 
 import org.scijava.ops.image.AbstractOpTest;
@@ -45,8 +46,13 @@ public class ConvolveTest extends AbstractOpTest {
 	@Test
 	public void testConvolve() {
 		// Verify we can get a ConvolveFFTF op
-		var o = ops.op("filter.convolve").arity6().inType(new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>> () {}, Nil.of(FloatType.class
-		), Nil.of(ComplexFloatType.class), new Nil<long[]>(){}, new Nil<OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>>() {}).outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).computer();
+		var o = ops.op("filter.convolve").arity6().inType(
+			new Nil<RandomAccessibleInterval<FloatType>>()
+			{}, new Nil<RandomAccessibleInterval<FloatType>>() {}, Nil.of(
+				FloatType.class), Nil.of(ComplexFloatType.class), new Nil<long[]>()
+			{},
+			new Nil<OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>>()
+			{}).outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).computer();
 	}
 }
 //
@@ -62,7 +68,7 @@ public class ConvolveTest extends AbstractOpTest {
 //		Img<FloatType> kernel = new ArrayImgFactory<>(new FloatType()).create(kernelSize);
 //
 ////		Op op = ops.op(Ops.Filter.Convolve.class, in, kernel);
-//		
+//
 //
 //		// we should get ConvolveNaive
 ////		assertSame(ConvolveNaiveF.class, op.getClass());

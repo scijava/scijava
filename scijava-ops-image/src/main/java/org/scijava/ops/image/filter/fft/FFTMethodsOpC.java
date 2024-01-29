@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -41,14 +41,15 @@ import org.scijava.function.Computers;
  * and output size must conform to a supported FFT size. Use
  * {@link org.scijava.ops.image.filter.fftSize.ComputeFFTSize} to calculate the
  * supported FFT size.
- * 
+ *
  * @author Brian Northan
  * @param <T>
  * @param <C>
  * @implNote op names='filter.fft', priority='0.'
  */
 public class FFTMethodsOpC<T extends RealType<T>, C extends ComplexType<C>>
-	implements Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<C>>
+	implements
+	Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<C>>
 {
 
 	/**

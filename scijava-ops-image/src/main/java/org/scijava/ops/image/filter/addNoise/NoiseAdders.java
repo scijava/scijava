@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -39,7 +39,7 @@ import org.scijava.ops.spi.Nullable;
 
 /**
  * Contains Ops designed to add noise to populated images.
- * 
+ *
  * @author Gabriel Selzer
  */
 public class NoiseAdders {
@@ -47,8 +47,8 @@ public class NoiseAdders {
 	private static final Long defaultSeed = 0xabcdef1234567890L;
 
 	/**
-	 * Sets the real component of an output real number to the addition of the real
-	 * component of an input real number with an amount of Gaussian noise.
+	 * Sets the real component of an output real number to the addition of the
+	 * real component of an input real number with an amount of Gaussian noise.
 	 * <p>
 	 * Note that this Op has changed relative to the older implementations; before
 	 * it operated on RealTypes, we now only provide the operation on
@@ -57,9 +57,10 @@ public class NoiseAdders {
 	 * passed to the Op. This provided no deterministic output, as the same input
 	 * would yield two different outputs if called in succession. Thus in this
 	 * iteration of the Op we make it a requirement that the input must be an
-	 * {@link Iterable}. Since the {@link Random} is created upon every call of the
-	 * Op it ensures that given the same seed and input data the output will always
-	 * be the same.
+	 * {@link Iterable}. Since the {@link Random} is created upon every call of
+	 * the Op it ensures that given the same seed and input data the output will
+	 * always be the same.
+	 *
 	 * @param input
 	 * @param rangeMin
 	 * @param rangeMax
@@ -68,7 +69,8 @@ public class NoiseAdders {
 	 * @param output
 	 * @implNote op names='filter.addNoise', type=Computer
 	 */
-	public static <I extends RealType<I>, O extends RealType<O>> void addNoiseInterval( //
+	public static <I extends RealType<I>, O extends RealType<O>> void
+		addNoiseInterval( //
 			final RandomAccessibleInterval<I> input, //
 			final Double rangeMin, //
 			final Double rangeMax, //
@@ -81,25 +83,30 @@ public class NoiseAdders {
 		}
 		Random rng = new Random(seed);
 		LoopBuilder.setImages(input, output).multiThreaded() //
-				.forEachPixel((in, out) -> {
-					addNoise(in, out, rangeMin, rangeMax, rangeStdDev, rng);
-				});
+			.forEachPixel((in, out) -> {
+				addNoise(in, out, rangeMin, rangeMax, rangeStdDev, rng);
+			});
 	};
 
 	// Copied from the previous implementation of addNoise
-	public static <I extends RealType<I>, O extends RealType<O>> void addNoise(final I input, final O output,
-			final double rangeMin, final double rangeMax, final double rangeStdDev, final Random rng) {
+	public static <I extends RealType<I>, O extends RealType<O>> void addNoise(
+		final I input, final O output, final double rangeMin, final double rangeMax,
+		final double rangeStdDev, final Random rng)
+	{
 		int i = 0;
 		do {
-			final double newVal = input.getRealDouble() + rng.nextGaussian() * rangeStdDev;
+			final double newVal = input.getRealDouble() + rng.nextGaussian() *
+				rangeStdDev;
 			if (rangeMin <= newVal && newVal <= rangeMax) {
 				output.setReal(newVal);
 				return;
 			}
 			if (i++ > 100) {
-				throw new IllegalArgumentException("noise function failing to terminate. probably misconfigured.");
+				throw new IllegalArgumentException(
+					"noise function failing to terminate. probably misconfigured.");
 			}
-		} while (true);
+		}
+		while (true);
 	}
 
 	// -- POISSON NOISE -- //
@@ -111,65 +118,66 @@ public class NoiseAdders {
 	 * Implementation according to:
 	 * </p>
 	 * <p>
-	 * D. E. Knuth. Art of Computer Programming, Volume 2: Seminumerical Algorithms
-	 * (3rd Edition). Addison-Wesley Professional, November 1997
+	 * D. E. Knuth. Art of Computer Programming, Volume 2: Seminumerical
+	 * Algorithms (3rd Edition). Addison-Wesley Professional, November 1997
 	 * </p>
-	 * 
-	 * @author Jan Eglinger
-	 * <p>
-	 * Note that this Op has changed relative to the older implementations;
-	 * before it operated on RealTypes, we now only provide the operation on
-	 * Iterable<RealType>s. This is due to the nature of {@link Random}: The
-	 * old implementation saved a {@link Random} and used it on each
-	 * {@link RealType} passed to the Op. This provided no deterministic
-	 * output, as the same input would yield two different outputs if called
-	 * in succession. Thus in this iteration of the Op we make it a
-	 * requirement that the input must be an {@link Iterable}. Since the
-	 * {@link Random} is created upon every call of the Op it ensures that
-	 * given the same seed and input data the output will always be the
-	 * same.
 	 *
+	 * @author Jan Eglinger
+	 *         <p>
+	 *         Note that this Op has changed relative to the older
+	 *         implementations; before it operated on RealTypes, we now only
+	 *         provide the operation on Iterable<RealType>s. This is due to the
+	 *         nature of {@link Random}: The old implementation saved a
+	 *         {@link Random} and used it on each {@link RealType} passed to the
+	 *         Op. This provided no deterministic output, as the same input would
+	 *         yield two different outputs if called in succession. Thus in this
+	 *         iteration of the Op we make it a requirement that the input must be
+	 *         an {@link Iterable}. Since the {@link Random} is created upon every
+	 *         call of the Op it ensures that given the same seed and input data
+	 *         the output will always be the same.
 	 * @param input
 	 * @param seed
 	 * @param output
 	 * @implNote op names='filter.addPoissonNoise', type=Computer
 	 */
-	public static <I extends RealType<I>, O extends RealType<O>> void addPoissonNoiseInterval ( //
+	public static <I extends RealType<I>, O extends RealType<O>> void
+		addPoissonNoiseInterval( //
 			final RandomAccessibleInterval<I> input, //
 			@Nullable Long seed, //
 			final RandomAccessibleInterval<O> output //
-	)
-	{
+	) {
 		if (seed == null) {
 			seed = defaultSeed;
 		}
 		Random rng = new Random(seed);
 		LoopBuilder.setImages(input, output).multiThreaded() //
-				.forEachPixel((in, out) -> {
-					addPoissonNoise(in, rng, out);
-				});
+			.forEachPixel((in, out) -> {
+				addPoissonNoise(in, rng, out);
+			});
 	}
 
 	// -- Static utility methods --
 
 	// Copied from the previous implementation of addNoise
-	public static <I extends RealType<I>, O extends RealType<O>> void addPoissonNoise(final I input, final Random rng,
-			final O output) {
+	public static <I extends RealType<I>, O extends RealType<O>> void
+		addPoissonNoise(final I input, final Random rng, final O output)
+	{
 		double l = Math.exp(-input.getRealDouble());
 		int k = 0;
 		double p = 1;
 		do {
 			k++;
 			p *= rng.nextDouble();
-		} while (p >= l);
+		}
+		while (p >= l);
 		output.setReal(k - 1);
 	}
 
 	// -- UNIFORM NOISE -- //
 
 	/**
-	 * Sets the real component of an output real number to the addition of the real
-	 * component of an input real number with an amount of uniform noise.
+	 * Sets the real component of an output real number to the addition of the
+	 * real component of an input real number with an amount of uniform noise.
 	 *
 	 * @param input the input {@link RandomAccessibleInterval}
 	 * @param rangeMin the "most negative" value that can be added to each element
@@ -197,7 +205,7 @@ public class NoiseAdders {
 		range.sub(rangeMin);
 
 		// Loop over the images
-		LoopBuilder.setImages(input, output).forEachPixel( (i, o) -> {
+		LoopBuilder.setImages(input, output).forEachPixel((i, o) -> {
 			// Random value = next double * range
 			o.set(range);
 			o.mul(rng.nextDouble(true, true));

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -49,12 +49,14 @@ import net.imglib2.type.numeric.integer.IntType;
 /**
  * Default Implementation wrapping {@link ConnectedComponents} of
  * ImgLib2-algorithms.
- * 
+ *
  * @author Christian Dietz (University of Konstanz)
  * @implNote op names='labeling.cca', priority='1.0'
  */
-public class DefaultCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> implements
-		Functions.Arity3<RandomAccessibleInterval<T>, StructuringElement, Iterator<Integer>, ImgLabeling<Integer, IntType>> {
+public class DefaultCCA<T extends IntegerType<T>, L, I extends IntegerType<I>>
+	implements
+	Functions.Arity3<RandomAccessibleInterval<T>, StructuringElement, Iterator<Integer>, ImgLabeling<Integer, IntType>>
+{
 
 	@OpDependency(name = "create.imgLabeling")
 	private BiFunction<Dimensions, IntType, ImgLabeling<L, IntType>> imgLabelingCreator;
@@ -71,17 +73,19 @@ public class DefaultCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> i
 	 */
 	@Override
 	public ImgLabeling<Integer, IntType> apply( //
-			final RandomAccessibleInterval<T> input, //
-			final StructuringElement se, //
-			@Nullable Iterator<Integer> labelGenerator //
+		final RandomAccessibleInterval<T> input, //
+		final StructuringElement se, //
+		@Nullable Iterator<Integer> labelGenerator //
 	) {
 		if (labelGenerator == null) {
 			labelGenerator = new DefaultLabelIterator();
 		}
-		ImgLabeling<Integer, IntType> output = (ImgLabeling<Integer, IntType>) imgLabelingCreator.apply(input,
+		ImgLabeling<Integer, IntType> output =
+			(ImgLabeling<Integer, IntType>) imgLabelingCreator.apply(input,
 				new IntType());
 		ExecutorService es = Parallelization.getExecutorService();
-		ConnectedComponents.labelAllConnectedComponents(input, output, labelGenerator, se, es);
+		ConnectedComponents.labelAllConnectedComponents(input, output,
+			labelGenerator, se, es);
 		return output;
 	}
 

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.copy;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,13 +47,14 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 
 /**
  * Test copying of various Image types
- * 
+ *
  * @author Christian Dietz (University of Konstanz)
  */
 public class CopyImgsTest extends AbstractOpTest {
 
 	private <T extends RealType<T>> void populateData(Img<T> data) {
-		final MersenneTwisterFast r = new MersenneTwisterFast(System.currentTimeMillis());
+		final MersenneTwisterFast r = new MersenneTwisterFast(System
+			.currentTimeMillis());
 		final Cursor<T> inc = data.cursor();
 		while (inc.hasNext()) {
 			inc.next().setReal(r.nextDouble() * 255);
@@ -65,8 +67,8 @@ public class CopyImgsTest extends AbstractOpTest {
 		populateData(data);
 		@SuppressWarnings("unchecked")
 		final RandomAccessibleInterval<UnsignedByteType> output =
-			(RandomAccessibleInterval<UnsignedByteType>) ops.op("copy.img").arity1().input(
-				data).apply();
+			(RandomAccessibleInterval<UnsignedByteType>) ops.op("copy.img").arity1()
+				.input(data).apply();
 
 		final Cursor<UnsignedByteType> inc = data.localizingCursor();
 		final RandomAccess<UnsignedByteType> outRA = output.randomAccess();
@@ -82,7 +84,8 @@ public class CopyImgsTest extends AbstractOpTest {
 	public void copyArrayImgWithOutputTest() {
 		var data = new ArrayImgFactory<>(new UnsignedByteType()).create(10, 10);
 		populateData(data);
-		final Img<UnsignedByteType> output = data.factory().create(data.dimensionsAsLongArray());
+		final Img<UnsignedByteType> output = data.factory().create(data
+			.dimensionsAsLongArray());
 
 		ops.op("copy.img").arity1().input(data).output(output).compute();
 
@@ -100,8 +103,8 @@ public class CopyImgsTest extends AbstractOpTest {
 		populateData(data);
 		@SuppressWarnings("unchecked")
 		final RandomAccessibleInterval<UnsignedByteType> output =
-				(RandomAccessibleInterval<UnsignedByteType>) ops.op("copy.img").arity1().input(
-						data).apply();
+			(RandomAccessibleInterval<UnsignedByteType>) ops.op("copy.img").arity1()
+				.input(data).apply();
 
 		final Cursor<UnsignedByteType> inc = data.localizingCursor();
 		final RandomAccess<UnsignedByteType> outRA = output.randomAccess();
@@ -117,7 +120,8 @@ public class CopyImgsTest extends AbstractOpTest {
 	public void copyPlanarImgWithOutputTest() {
 		var data = new PlanarImgFactory<>(new UnsignedByteType()).create(10, 10);
 		populateData(data);
-		final Img<UnsignedByteType> output = data.factory().create(data.dimensionsAsLongArray());
+		final Img<UnsignedByteType> output = data.factory().create(data
+			.dimensionsAsLongArray());
 
 		ops.op("copy.img").arity1().input(data).output(output).compute();
 
@@ -135,8 +139,8 @@ public class CopyImgsTest extends AbstractOpTest {
 		populateData(data);
 		@SuppressWarnings("unchecked")
 		final RandomAccessibleInterval<UnsignedByteType> output =
-				(RandomAccessibleInterval<UnsignedByteType>) ops.op("copy.img").arity1().input(
-						data).apply();
+			(RandomAccessibleInterval<UnsignedByteType>) ops.op("copy.img").arity1()
+				.input(data).apply();
 
 		final Cursor<UnsignedByteType> inc = data.localizingCursor();
 		final RandomAccess<UnsignedByteType> outRA = output.randomAccess();
@@ -152,7 +156,8 @@ public class CopyImgsTest extends AbstractOpTest {
 	public void copyCellImgWithOutputTest() {
 		var data = new CellImgFactory<>(new UnsignedByteType()).create(10, 10);
 		populateData(data);
-		final Img<UnsignedByteType> output = data.factory().create(data.dimensionsAsLongArray());
+		final Img<UnsignedByteType> output = data.factory().create(data
+			.dimensionsAsLongArray());
 
 		ops.op("copy.img").arity1().input(data).output(output).compute();
 

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.engine;
 
 import java.lang.reflect.ParameterizedType;
@@ -39,12 +40,14 @@ import org.scijava.types.Types;
 
 /**
  * An object that can wrap an Op into a {@link RichOp}
+ *
  * @param <T> the {@link Type} of the Op
  */
 public interface OpWrapper<T> {
 
 	/**
 	 * Wraps an Op into a {@link RichOp}
+	 *
 	 * @param op an Op
 	 * @param env the {@link OpEnvironment} that produced the Op
 	 * @param hints the {@link Hints} used to produce the Op
@@ -55,7 +58,8 @@ public interface OpWrapper<T> {
 	default Class<?> type() {
 		Type wrapperType = getClass().getGenericInterfaces()[0];
 		if (wrapperType instanceof ParameterizedType) {
-			return Types.raw(((ParameterizedType) wrapperType).getActualTypeArguments()[0]);
+			return Types.raw(((ParameterizedType) wrapperType)
+				.getActualTypeArguments()[0]);
 		}
 		return null;
 	}

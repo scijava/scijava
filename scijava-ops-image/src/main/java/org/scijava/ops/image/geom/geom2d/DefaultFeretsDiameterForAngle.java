@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -42,11 +42,13 @@ import org.scijava.ops.spi.OpDependency;
 
 /**
  * Ferets Diameter for a certain angle.
- * 
+ *
  * @author Tim-Oliver Buchholz, University of Konstanz
- *@implNote op names='geom.feretsDiameter'
+ * @implNote op names='geom.feretsDiameter'
  */
-public class DefaultFeretsDiameterForAngle implements Computers.Arity2<Polygon2D, Double, DoubleType> {
+public class DefaultFeretsDiameterForAngle implements
+	Computers.Arity2<Polygon2D, Double, DoubleType>
+{
 
 	@OpDependency(name = "geom.convexHull")
 	private Function<Polygon2D, Polygon2D> function;
@@ -60,7 +62,8 @@ public class DefaultFeretsDiameterForAngle implements Computers.Arity2<Polygon2D
 	 */
 	@Override
 	public void compute(Polygon2D input, final Double angle, DoubleType output) {
-		final List<? extends RealLocalizable> points = GeomUtils.vertices(function.apply(input));
+		final List<? extends RealLocalizable> points = GeomUtils.vertices(function
+			.apply(input));
 
 		final double angleRad = -angle * Math.PI / 180.0;
 
@@ -68,8 +71,8 @@ public class DefaultFeretsDiameterForAngle implements Computers.Arity2<Polygon2D
 		double maxX = Double.NEGATIVE_INFINITY;
 
 		for (RealLocalizable p : points) {
-			final double tmpX = p.getDoublePosition(0) * Math.cos(angleRad)
-					- p.getDoublePosition(1) * Math.sin(angleRad);
+			final double tmpX = p.getDoublePosition(0) * Math.cos(angleRad) - p
+				.getDoublePosition(1) * Math.sin(angleRad);
 			minX = tmpX < minX ? tmpX : minX;
 			maxX = tmpX > maxX ? tmpX : maxX;
 		}

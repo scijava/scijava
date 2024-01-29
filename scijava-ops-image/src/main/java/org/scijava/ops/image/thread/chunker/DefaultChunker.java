@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -36,13 +36,13 @@ import org.scijava.concurrent.Parallelization;
 import org.scijava.function.Inplaces;
 
 /**
- * Simple default implementation of a {@link ChunkerOp}. The list of
- * elements is chunked into equally sized (besides the last one), disjoint
- * chunks, which are processed in parallel. The stepSize is set to one, i.e.
- * each chunk consists of consecutive elements.
- * 
+ * Simple default implementation of a {@link ChunkerOp}. The list of elements is
+ * chunked into equally sized (besides the last one), disjoint chunks, which are
+ * processed in parallel. The stepSize is set to one, i.e. each chunk consists
+ * of consecutive elements.
+ *
  * @author Christian Dietz (University of Konstanz)
- *@implNote op names='thread.chunker'
+ * @implNote op names='thread.chunker'
  */
 public class DefaultChunker implements Inplaces.Arity2_1<Chunk, Long> {
 
@@ -58,10 +58,10 @@ public class DefaultChunker implements Inplaces.Arity2_1<Chunk, Long> {
 	public void mutate(final Chunk chunk, final Long numberOfElements) {
 
 		// TODO: is there a better way to determine the optimal chunk size?
-		
-		final long numSteps = Math.max(1, 
-			(long) (numberOfElements / Runtime.getRuntime().availableProcessors())) ;
-		
+
+		final long numSteps = Math.max(1, (long) (numberOfElements / Runtime
+			.getRuntime().availableProcessors()));
+
 		final int numChunks = (int) (numberOfElements / numSteps);
 
 		List<Runnable> list = new ArrayList<>();
@@ -72,7 +72,8 @@ public class DefaultChunker implements Inplaces.Arity2_1<Chunk, Long> {
 		}
 
 		// last chunk additionally add the rest of elements
-		list.add(() -> chunk.execute((numChunks - 1) * numSteps, STEP_SIZE, (int) (numSteps + (numberOfElements % numSteps))));
+		list.add(() -> chunk.execute((numChunks - 1) * numSteps, STEP_SIZE,
+			(int) (numSteps + (numberOfElements % numSteps))));
 
 		Parallelization.getTaskExecutor().runAll(list);
 	}

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -40,12 +40,13 @@ import org.scijava.function.Inplaces;
  * conform to supported FFT size. Use
  * {@link org.scijava.ops.image.filter.fftSize.ComputeFFTSize} to calculate the
  * supported FFT size.
- * 
+ *
  * @author Brian Northan
- *@implNote op names='filter.ifft'
+ * @implNote op names='filter.ifft'
  */
-public class IFFTMethodsOpI<C extends ComplexType<C>>
-		implements Inplaces.Arity1<RandomAccessibleInterval<C>> {
+public class IFFTMethodsOpI<C extends ComplexType<C>> implements
+	Inplaces.Arity1<RandomAccessibleInterval<C>>
+{
 
 	/**
 	 * Compute an ND inverse FFT
@@ -57,8 +58,8 @@ public class IFFTMethodsOpI<C extends ComplexType<C>>
 	 */
 	@Override
 	public void mutate(final RandomAccessibleInterval<C> inout) {
-		if (!conforms(inout))
-			throw new IllegalArgumentException("The input size does not conform to a supported FFT size!");
+		if (!conforms(inout)) throw new IllegalArgumentException(
+			"The input size does not conform to a supported FFT size!");
 		for (int d = inout.numDimensions() - 1; d >= 0; d--)
 			FFTMethods.complexToComplex(inout, d, false, true);
 	}

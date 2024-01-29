@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -40,14 +40,16 @@ import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * Generic implementation of {@link org.scijava.ops.image.Ops.Geometric.Spareness}.
- * 
- * Based on ImageJ1.
- * 
+ * Generic implementation of
+ * {@link org.scijava.ops.image.Ops.Geometric.Spareness}. Based on ImageJ1.
+ *
  * @author Tim-Oliver Buchholz (University of Konstanz)
- * @implNote op names='geom.spareness', label='Geometric (3D): Spareness', priority='10000.'
+ * @implNote op names='geom.spareness', label='Geometric (3D): Spareness',
+ *           priority='10000.'
  */
-public class DefaultSparenessMesh implements Computers.Arity1<Mesh, DoubleType> {
+public class DefaultSparenessMesh implements
+	Computers.Arity1<Mesh, DoubleType>
+{
 
 	@OpDependency(name = "geom.secondMoment")
 	private Function<Mesh, RealMatrix> inertiaTensor;
@@ -67,9 +69,12 @@ public class DefaultSparenessMesh implements Computers.Arity1<Mesh, DoubleType> 
 		final RealMatrix it = inertiaTensor.apply(input);
 		final EigenDecomposition ed = new EigenDecomposition(it);
 
-		final double l1 = ed.getRealEigenvalue(0) - ed.getRealEigenvalue(2) + ed.getRealEigenvalue(1);
-		final double l2 = ed.getRealEigenvalue(0) - ed.getRealEigenvalue(1) + ed.getRealEigenvalue(2);
-		final double l3 = ed.getRealEigenvalue(2) - ed.getRealEigenvalue(0) + ed.getRealEigenvalue(1);
+		final double l1 = ed.getRealEigenvalue(0) - ed.getRealEigenvalue(2) + ed
+			.getRealEigenvalue(1);
+		final double l2 = ed.getRealEigenvalue(0) - ed.getRealEigenvalue(1) + ed
+			.getRealEigenvalue(2);
+		final double l3 = ed.getRealEigenvalue(2) - ed.getRealEigenvalue(0) + ed
+			.getRealEigenvalue(1);
 
 		final double g = 1 / (8 * Math.PI / 15);
 

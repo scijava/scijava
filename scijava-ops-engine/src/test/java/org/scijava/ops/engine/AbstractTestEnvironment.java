@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -63,17 +63,18 @@ public abstract class AbstractTestEnvironment {
 	protected static <T> Optional<T> objFromNoArgConstructor(Class<T> c) {
 		try {
 			return Optional.of(c.getDeclaredConstructor().newInstance());
-		} catch (Throwable t) {
+		}
+		catch (Throwable t) {
 			return Optional.empty();
 		}
 	}
 
 	protected static Object[] objsFromNoArgConstructors(Class<?>[] arr) {
 		return Arrays.stream(arr) //
-				.map(AbstractTestEnvironment::objFromNoArgConstructor) //
-				.filter(Optional::isPresent) //
-				.map(Optional::get) //
-				.toArray();
+			.map(AbstractTestEnvironment::objFromNoArgConstructor) //
+			.filter(Optional::isPresent) //
+			.map(Optional::get) //
+			.toArray();
 	}
 
 	protected static OpEnvironment barebonesEnvironment() {
@@ -82,16 +83,19 @@ public abstract class AbstractTestEnvironment {
 			OpInfo.class, //
 			OpCollection.class //
 		);
-		var ops =  OpEnvironment.buildEmpty();
+		var ops = OpEnvironment.buildEmpty();
 		ops.discoverUsing(serviceLoading);
 		return ops;
 	}
 
 	protected static boolean arrayEquals(double[] arr1, Double... arr2) {
-		return Arrays.deepEquals(Arrays.stream(arr1).boxed().toArray(Double[]::new), arr2);
+		return Arrays.deepEquals(Arrays.stream(arr1).boxed().toArray(Double[]::new),
+			arr2);
 	}
 
-	protected static <T> void assertIterationsEqual(final Iterable<T> expected, final Iterable<T> actual) {
+	protected static <T> void assertIterationsEqual(final Iterable<T> expected,
+		final Iterable<T> actual)
+	{
 		final Iterator<T> e = expected.iterator();
 		final Iterator<T> a = actual.iterator();
 		while (e.hasNext()) {

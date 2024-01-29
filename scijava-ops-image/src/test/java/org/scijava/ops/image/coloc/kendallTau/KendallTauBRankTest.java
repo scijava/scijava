@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -59,14 +59,17 @@ import net.imglib2.util.Pair;
  */
 public class KendallTauBRankTest extends AbstractOpTest {
 
-	// FIXME: Eliminate exhaustive layer in favor of all working tests, even if slow.
+	// FIXME: Eliminate exhaustive layer in favor of all working tests, even if
+	// slow.
 	private boolean exhaustive = false;
 
 	@Test
 	public void testKendallTauBRankSimple() {
 		assumeTrue(!exhaustive);
-		// From Armitage P, Berry G. Statistical Methods in Medical Research (3rd edition). Blackwell 1994, p. 466.
-		assertTau(23.0 / 45.0, new int[] { 4, 10, 3, 1, 9, 2, 6, 7, 8, 5 }, new int[] { 5, 8, 6, 2, 10, 3, 9, 4, 7, 1 });
+		// From Armitage P, Berry G. Statistical Methods in Medical Research (3rd
+		// edition). Blackwell 1994, p. 466.
+		assertTau(23.0 / 45.0, new int[] { 4, 10, 3, 1, 9, 2, 6, 7, 8, 5 },
+			new int[] { 5, 8, 6, 2, 10, 3, 9, 4, 7, 1 });
 	}
 
 	@Test
@@ -88,7 +91,7 @@ public class KendallTauBRankTest extends AbstractOpTest {
 		// therefore Tau_b = -4 / sqrt(5 * 5) = -0.8
 		assertTau(-0.8, new int[] { 1, 1, 2, 3 }, new int[] { 3, 2, 1, 1 });
 	}
-	
+
 	@Test
 	public void exhaustiveKendallTauBRankTesting() {
 		assumeTrue(exhaustive);
@@ -99,33 +102,40 @@ public class KendallTauBRankTest extends AbstractOpTest {
 				values1[j] = Math.abs(pseudoRandom()) % m;
 				values2[j] = Math.abs(pseudoRandom()) % m;
 			}
-			
-			//final PairIterator<DoubleType> iter = pairIterator(values1, values2);
-			final Iterable<Pair<IntType, IntType>> iter = new IterablePair<>(ArrayImgs.ints(values1, n), ArrayImgs.ints(values2, n));
+
+			// final PairIterator<DoubleType> iter = pairIterator(values1, values2);
+			final Iterable<Pair<IntType, IntType>> iter = new IterablePair<>(ArrayImgs
+				.ints(values1, n), ArrayImgs.ints(values2, n));
 			double kendallValue1 = calculateNaive(iter.iterator());
-			double kendallValue2 = ops.op("coloc.kendallTau").arity2().input(values1, values2).outType(Double.class).apply();
+			double kendallValue2 = ops.op("coloc.kendallTau").arity2().input(values1,
+				values2).outType(Double.class).apply();
 			if (Double.isNaN(kendallValue1)) {
 				assertTrue(Double.isInfinite(kendallValue2) || Double.isNaN(
 					kendallValue2), "i: " + i + ", value2: " + kendallValue2);
-			} else {
+			}
+			else {
 				assertEquals(kendallValue1, kendallValue2, 1e-10, "i: " + i);
 			}
 		}
 	}
-	
+
 	@Test
 	public void testPValue() {
 		final double mean = 0.2;
 		final double spread = 0.1;
 		final double[] sigma = new double[] { 3.0, 3.0 };
-		Img<FloatType> ch1 = AbstractColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
-				0x01234567);
-		Img<FloatType> ch2 = AbstractColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
-				0x98765432);
+		Img<FloatType> ch1 = AbstractColocalisationTest.produceMeanBasedNoiseImage(
+			new FloatType(), 24, 24, mean, spread, sigma, 0x01234567);
+		Img<FloatType> ch2 = AbstractColocalisationTest.produceMeanBasedNoiseImage(
+			new FloatType(), 24, 24, mean, spread, sigma, 0x98765432);
 		Nil<Iterable<FloatType>> nilI = new Nil<Iterable<FloatType>>() {};
-		Nil<RandomAccessibleInterval<FloatType>> nilRAI = new Nil<RandomAccessibleInterval<FloatType>>() {};
-		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op = OpBuilder.matchFunction(ops,
-				"coloc.kendallTau", nilRAI, nilRAI, new Nil<Double>() {});
+		Nil<RandomAccessibleInterval<FloatType>> nilRAI =
+			new Nil<RandomAccessibleInterval<FloatType>>()
+			{};
+		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op =
+			OpBuilder.matchFunction(ops, "coloc.kendallTau", nilRAI, nilRAI,
+				new Nil<Double>()
+				{});
 //		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> raiOp = op(
 //				"transform.raiToIterable").input(op).outType(
 //						new Nil<BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double>>() {})
@@ -137,21 +147,28 @@ public class KendallTauBRankTest extends AbstractOpTest {
 
 	private int seed;
 
-	private int pseudoRandom()
-	{
+	private int pseudoRandom() {
 		return seed = 3170425 * seed + 132102;
 	}
-	
-	private <T extends RealType<T>, U extends RealType<U>> void assertTau(final double expected, final Iterable<T> img1, final Iterable<U> img2) {
-		final double kendallValue = (double) ops.op("coloc.kendallTau").arity2().input(img1, img2).apply();
+
+	private <T extends RealType<T>, U extends RealType<U>> void assertTau(
+		final double expected, final Iterable<T> img1, final Iterable<U> img2)
+	{
+		final double kendallValue = (double) ops.op("coloc.kendallTau").arity2()
+			.input(img1, img2).apply();
 		assertEquals(expected, kendallValue, 1e-10);
 	}
 
-	private void assertTau(final double expected, final int[] values1, final int[] values2) {
-		assertTau(expected, ArrayImgs.ints(values1, values1.length), ArrayImgs.ints(values2, values2.length));
+	private void assertTau(final double expected, final int[] values1,
+		final int[] values2)
+	{
+		assertTau(expected, ArrayImgs.ints(values1, values1.length), ArrayImgs.ints(
+			values2, values2.length));
 	}
 
-	private <T extends RealType<T>, U extends RealType<U>> double calculateNaive(final Iterator<Pair<T, U>> iterator) {
+	private <T extends RealType<T>, U extends RealType<U>> double calculateNaive(
+		final Iterator<Pair<T, U>> iterator)
+	{
 		if (!iterator.hasNext()) {
 			return Double.NaN;
 		}
@@ -167,8 +184,8 @@ public class KendallTauBRankTest extends AbstractOpTest {
 				return Double.NaN;
 			}
 			n++;
-			int ch1Int = (int)Math.round(ch1);
-			int ch2Int = (int)Math.round(ch2);
+			int ch1Int = (int) Math.round(ch1);
+			int ch2Int = (int) Math.round(ch2);
 			histogram[ch1Int][ch2Int]++;
 			if (max1 < ch1Int) {
 				max1 = ch1Int;
@@ -177,7 +194,7 @@ public class KendallTauBRankTest extends AbstractOpTest {
 				max2 = ch2Int;
 			}
 		}
-		long n0 = n * (long)(n - 1) / 2, n1 = 0, n2 = 0, nc = 0, nd = 0;
+		long n0 = n * (long) (n - 1) / 2, n1 = 0, n2 = 0, nc = 0, nd = 0;
 		for (int i1 = 0; i1 <= max1; i1++) {
 			int ch1 = 0;
 			for (int i2 = 0; i2 <= max2; i2++) {
@@ -195,16 +212,16 @@ public class KendallTauBRankTest extends AbstractOpTest {
 					}
 				}
 			}
-			n1 += ch1 * (long)(ch1 - 1) / 2;
+			n1 += ch1 * (long) (ch1 - 1) / 2;
 		}
 		for (int i2 = 0; i2 <= max2; i2++) {
 			int ch2 = 0;
 			for (int i1 = 0; i1 <= max1; i1++) {
 				ch2 += histogram[i1][i2];
 			}
-			n2 += ch2 * (long)(ch2 - 1) / 2;
+			n2 += ch2 * (long) (ch2 - 1) / 2;
 		}
 
-		return (nc - nd) / Math.sqrt((n0 - n1) * (double)(n0 - n2));
+		return (nc - nd) / Math.sqrt((n0 - n1) * (double) (n0 - n2));
 	}
 }

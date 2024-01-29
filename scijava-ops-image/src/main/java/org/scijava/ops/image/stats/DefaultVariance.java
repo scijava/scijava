@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -42,21 +42,21 @@ import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * Op to calculate the {@code stats.variance} using the
- * {@code stats.stdDev} using the two-pass algorithm.
- * 
+ * Op to calculate the {@code stats.variance} using the {@code stats.stdDev}
+ * using the two-pass algorithm.
+ *
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
- * @param <I>
- *            input type
- * @param <O>
- *            output type
+ * @param <I> input type
+ * @param <O> output type
  * @see <a href=
  *      "https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Two-pass_algorithm">
  *      Wikipedia </a>
  * @implNote op names='stats.variance', priority='100.'
  */
-public class DefaultVariance<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
+public class DefaultVariance<I extends RealType<I>, O extends RealType<O>>
+	implements Computers.Arity1<RandomAccessibleInterval<I>, O>
+{
 
 	@OpDependency(name = "stats.mean")
 	private Computers.Arity1<RandomAccessibleInterval<I>, DoubleType> meanOp;
@@ -78,16 +78,17 @@ public class DefaultVariance<I extends RealType<I>, O extends RealType<O>> imple
 		final LongType size = new LongType(0);
 		sizeOp.compute(input, size);
 
-		List<DoubleType> chunkSums = LoopBuilder.setImages(input).multiThreaded().forEachChunk(chunk -> {
-			DoubleType chunkSum = new DoubleType(0);
-			DoubleType temp = new DoubleType();
-			chunk.forEachPixel(pixel -> {
-				double x = pixel.getRealDouble();
-				temp.set((x - mean.getRealDouble()) * (x - mean.getRealDouble()));
-				chunkSum.add(temp);
+		List<DoubleType> chunkSums = LoopBuilder.setImages(input).multiThreaded()
+			.forEachChunk(chunk -> {
+				DoubleType chunkSum = new DoubleType(0);
+				DoubleType temp = new DoubleType();
+				chunk.forEachPixel(pixel -> {
+					double x = pixel.getRealDouble();
+					temp.set((x - mean.getRealDouble()) * (x - mean.getRealDouble()));
+					chunkSum.add(temp);
+				});
+				return chunkSum;
 			});
-			return chunkSum;
-		});
 
 		double sum = chunkSums.parallelStream().mapToDouble(chunkSum -> chunkSum
 			.get()).sum();

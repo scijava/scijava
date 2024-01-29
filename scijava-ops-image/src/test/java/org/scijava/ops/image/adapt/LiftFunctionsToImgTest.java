@@ -1,3 +1,4 @@
+
 package org.scijava.ops.image.adapt;
 
 import java.util.function.Function;
@@ -13,28 +14,33 @@ import org.junit.jupiter.api.Test;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.types.Nil;
 
-public class LiftFunctionsToImgTest extends AbstractOpTest implements OpCollection {
-	
+public class LiftFunctionsToImgTest extends AbstractOpTest implements
+	OpCollection
+{
+
 	/**
 	 * @implNote op names="test.liftFunctionToImg"
 	 */
 	public final Function<UnsignedByteType, UnsignedByteType> inc = //
-		(in) -> new UnsignedByteType(in.get() + 1);	
+		(in) -> new UnsignedByteType(in.get() + 1);
 
 	@Test
 	public void testLiftingArity1() {
-		Img<UnsignedByteType> foo = TestImgGeneration.unsignedByteArray(true, 10, 10, 10);
+		Img<UnsignedByteType> foo = TestImgGeneration.unsignedByteArray(true, 10,
+			10, 10);
 		Img<UnsignedByteType> result = ops.op("test.liftFunctionToImg") //
 			.arity1() //
 			.input(foo) //
-			.outType(new Nil<Img<UnsignedByteType>>() {}) //
+			.outType(new Nil<Img<UnsignedByteType>>()
+			{}) //
 			.apply();
 		Cursor<UnsignedByteType> cursor = result.localizingCursor();
 		RandomAccess<UnsignedByteType> fooRA = foo.randomAccess();
-		while(cursor.hasNext()) {
+		while (cursor.hasNext()) {
 			cursor.next();
 			cursor.localize(fooRA);
-			Assertions.assertEquals(cursor.get().get(), (fooRA.get().get() + 1) % 256);
+			Assertions.assertEquals(cursor.get().get(), (fooRA.get().get() + 1) %
+				256);
 		}
 	}
 

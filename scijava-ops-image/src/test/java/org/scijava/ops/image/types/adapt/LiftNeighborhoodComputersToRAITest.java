@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.types.adapt;
 
 import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
@@ -43,23 +44,23 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.view.Views;
 
 /**
- * Tests that {@link Computers} written on {@link Neighborhood}s can be
- * lifted to {@link net.imglib2.RandomAccessibleInterval}s.
+ * Tests that {@link Computers} written on {@link Neighborhood}s can be lifted
+ * to {@link net.imglib2.RandomAccessibleInterval}s.
  */
 public class LiftNeighborhoodComputersToRAITest extends AbstractOpTest {
-
 
 	/**
 	 * @implNote op names='test.liftImg'
 	 */
-	public final Computers.Arity1<Neighborhood<UnsignedByteType>, UnsignedByteType> testOp = (in, out) -> {
-		var cursor = in.cursor();
-		long sum = 0;
-		while(cursor.hasNext())
-			sum += cursor.next().get();
+	public final Computers.Arity1<Neighborhood<UnsignedByteType>, UnsignedByteType> testOp =
+		(in, out) -> {
+			var cursor = in.cursor();
+			long sum = 0;
+			while (cursor.hasNext())
+				sum += cursor.next().get();
 
-		out.setInteger(sum);
-	};
+			out.setInteger(sum);
+		};
 
 	@Test
 	public void liftArity1() {
@@ -76,7 +77,7 @@ public class LiftNeighborhoodComputersToRAITest extends AbstractOpTest {
 
 		// Assert correctness by performing the same lifting manually
 		var extended = Views.extend(inImg, new OutOfBoundsMirrorFactory<>(
-				OutOfBoundsMirrorFactory.Boundary.SINGLE));
+			OutOfBoundsMirrorFactory.Boundary.SINGLE));
 		var neighborhoods = shape.neighborhoodsRandomAccessibleSafe(extended);
 		var intervaled = Views.interval(neighborhoods, inImg);
 		var expected = ArrayImgs.unsignedBytes(10, 10);
@@ -86,7 +87,7 @@ public class LiftNeighborhoodComputersToRAITest extends AbstractOpTest {
 		var actualRA = actual.randomAccess();
 		var expectedRA = expected.randomAccess();
 
-		while(cursor.hasNext()) {
+		while (cursor.hasNext()) {
 			cursor.next();
 			cursor.localize(neighborhoodRA);
 			cursor.localize(actualRA);
@@ -107,9 +108,9 @@ public class LiftNeighborhoodComputersToRAITest extends AbstractOpTest {
 
 		// Call the above OpField through Ops, ensuring it is lifted
 		ops.op("test.liftImg").arity3() //
-				.input(inImg, shape, oobf) //
-				.output(actual) //
-				.compute();
+			.input(inImg, shape, oobf) //
+			.output(actual) //
+			.compute();
 
 		// Assert correctness by performing the same lifting manually
 		var extended = Views.extend(inImg, oobf);
@@ -122,7 +123,7 @@ public class LiftNeighborhoodComputersToRAITest extends AbstractOpTest {
 		var actualRA = actual.randomAccess();
 		var expectedRA = expected.randomAccess();
 
-		while(cursor.hasNext()) {
+		while (cursor.hasNext()) {
 			cursor.next();
 			cursor.localize(neighborhoodRA);
 			cursor.localize(actualRA);

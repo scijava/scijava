@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -41,12 +41,14 @@ import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpCollection;
 
 /**
- * Collection of ops designed to lift {@link Computers} to operate
- * on arrays. TODO: multi-threading support
- * 
+ * Collection of ops designed to lift {@link Computers} to operate on arrays.
+ * TODO: multi-threading support
+ *
  * @author Gabriel Selzer
  */
-public class ComputerToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> implements OpCollection {
+public class ComputerToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>
+	implements OpCollection
+{
 
 	private int minLength(Object[]... arrays) {
 		int minLength = Integer.MAX_VALUE;
@@ -127,7 +129,8 @@ public class ComputerToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 			return (in1, in2, in3, in4, in5, in6, out) -> {
 				int max = minLength(in1, in2, in3, in4, in5, in6, out);
 				for (int i = 0; i < max; i++) {
-					computer.compute(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i], out[i]);
+					computer.compute(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i],
+						out[i]);
 				}
 			};
 		};
@@ -138,7 +141,8 @@ public class ComputerToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 			return (in1, in2, in3, in4, in5, in6, in7, out) -> {
 				int max = minLength(in1, in2, in3, in4, in5, in6, in7, out);
 				for (int i = 0; i < max; i++) {
-					computer.compute(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i], in7[i], out[i]);
+					computer.compute(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i],
+						in7[i], out[i]);
 				}
 			};
 		};
@@ -149,7 +153,8 @@ public class ComputerToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 			return (in1, in2, in3, in4, in5, in6, in7, in8, out) -> {
 				int max = minLength(in1, in2, in3, in4, in5, in6, in7, in8, out);
 				for (int i = 0; i < max; i++) {
-					computer.compute(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i], in7[i], in8[i], out[i]);
+					computer.compute(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i],
+						in7[i], in8[i], out[i]);
 				}
 			};
 		};
@@ -160,7 +165,8 @@ public class ComputerToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, out) -> {
 				int max = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, out);
 				for (int i = 0; i < max; i++) {
-					computer.compute(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i], in7[i], in8[i], in9[i], out[i]);
+					computer.compute(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i],
+						in7[i], in8[i], in9[i], out[i]);
 				}
 			};
 		};
@@ -169,9 +175,11 @@ public class ComputerToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	public final Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], I9[], I10[], O[]>> liftComputer10 =
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, out) -> {
-				int max = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, out);
+				int max = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10,
+					out);
 				for (int i = 0; i < max; i++) {
-					computer.compute(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i], in7[i], in8[i], in9[i], in10[i], out[i]);
+					computer.compute(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i],
+						in7[i], in8[i], in9[i], in10[i], out[i]);
 				}
 			};
 		};
@@ -180,9 +188,11 @@ public class ComputerToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	public final Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], I9[], I10[], I11[], O[]>> liftComputer11 =
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, out) -> {
-				int max = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, out);
+				int max = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10,
+					in11, out);
 				for (int i = 0; i < max; i++) {
-					computer.compute(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i], in7[i], in8[i], in9[i], in10[i], in11[i], out[i]);
+					computer.compute(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i],
+						in7[i], in8[i], in9[i], in10[i], in11[i], out[i]);
 				}
 			};
 		};
@@ -190,10 +200,13 @@ public class ComputerToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	@OpField(names = "engine.adapt", params = "fromOp, toOp")
 	public final Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], I9[], I10[], I11[], I12[], O[]>> liftComputer12 =
 		(computer) -> {
-			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, out) -> {
-				int max = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, out);
+			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
+				out) -> {
+				int max = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10,
+					in11, in12, out);
 				for (int i = 0; i < max; i++) {
-					computer.compute(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i], in7[i], in8[i], in9[i], in10[i], in11[i], in12[i], out[i]);
+					computer.compute(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i],
+						in7[i], in8[i], in9[i], in10[i], in11[i], in12[i], out[i]);
 				}
 			};
 		};
@@ -201,10 +214,13 @@ public class ComputerToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	@OpField(names = "engine.adapt", params = "fromOp, toOp")
 	public final Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], I9[], I10[], I11[], I12[], I13[], O[]>> liftComputer13 =
 		(computer) -> {
-			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, out) -> {
-				int max = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, out);
+			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
+				in13, out) -> {
+				int max = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10,
+					in11, in12, in13, out);
 				for (int i = 0; i < max; i++) {
-					computer.compute(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i], in7[i], in8[i], in9[i], in10[i], in11[i], in12[i], in13[i], out[i]);
+					computer.compute(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i],
+						in7[i], in8[i], in9[i], in10[i], in11[i], in12[i], in13[i], out[i]);
 				}
 			};
 		};
@@ -212,10 +228,14 @@ public class ComputerToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	@OpField(names = "engine.adapt", params = "fromOp, toOp")
 	public final Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], I9[], I10[], I11[], I12[], I13[], I14[], O[]>> liftComputer14 =
 		(computer) -> {
-			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, out) -> {
-				int max = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, out);
+			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
+				in13, in14, out) -> {
+				int max = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10,
+					in11, in12, in13, in14, out);
 				for (int i = 0; i < max; i++) {
-					computer.compute(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i], in7[i], in8[i], in9[i], in10[i], in11[i], in12[i], in13[i], in14[i], out[i]);
+					computer.compute(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i],
+						in7[i], in8[i], in9[i], in10[i], in11[i], in12[i], in13[i], in14[i],
+						out[i]);
 				}
 			};
 		};
@@ -223,10 +243,14 @@ public class ComputerToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	@OpField(names = "engine.adapt", params = "fromOp, toOp")
 	public final Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], I9[], I10[], I11[], I12[], I13[], I14[], I15[], O[]>> liftComputer15 =
 		(computer) -> {
-			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, out) -> {
-				int max = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, out);
+			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
+				in13, in14, in15, out) -> {
+				int max = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10,
+					in11, in12, in13, in14, in15, out);
 				for (int i = 0; i < max; i++) {
-					computer.compute(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i], in7[i], in8[i], in9[i], in10[i], in11[i], in12[i], in13[i], in14[i], in15[i], out[i]);
+					computer.compute(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i],
+						in7[i], in8[i], in9[i], in10[i], in11[i], in12[i], in13[i], in14[i],
+						in15[i], out[i]);
 				}
 			};
 		};
@@ -234,10 +258,14 @@ public class ComputerToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	@OpField(names = "engine.adapt", params = "fromOp, toOp")
 	public final Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], I9[], I10[], I11[], I12[], I13[], I14[], I15[], I16[], O[]>> liftComputer16 =
 		(computer) -> {
-			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16, out) -> {
-				int max = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16, out);
+			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
+				in13, in14, in15, in16, out) -> {
+				int max = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10,
+					in11, in12, in13, in14, in15, in16, out);
 				for (int i = 0; i < max; i++) {
-					computer.compute(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i], in7[i], in8[i], in9[i], in10[i], in11[i], in12[i], in13[i], in14[i], in15[i], in16[i], out[i]);
+					computer.compute(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i],
+						in7[i], in8[i], in9[i], in10[i], in11[i], in12[i], in13[i], in14[i],
+						in15[i], in16[i], out[i]);
 				}
 			};
 		};

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -43,7 +43,7 @@ import net.imglib2.view.Views;
 /**
  * Evaluates a {@link Computers.Arity1} for each {@link Neighborhood} on the
  * input {@link RandomAccessibleInterval}.
- * 
+ *
  * @author Christian Dietz (University of Konstanz)
  * @author Martin Horn (University of Konstanz)
  * @param <I> input type
@@ -64,12 +64,13 @@ public class DefaultMapNeighborhood<I, O> implements
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<I> in1, final Shape in2,
-		final Computers.Arity1<Iterable<I>, O> computer, final IterableInterval<O> out)
+		final Computers.Arity1<Iterable<I>, O> computer,
+		final IterableInterval<O> out)
 	{
 		// TODO can we do this through a mapper?
 		Cursor<Neighborhood<I>> inCursor = in2.neighborhoodsSafe(in1).cursor();
-		Cursor<O> outCursor = out.cursor(); 
-		while(outCursor.hasNext()) {
+		Cursor<O> outCursor = out.cursor();
+		while (outCursor.hasNext()) {
 			outCursor.fwd();
 			inCursor.fwd();
 			computer.accept(inCursor.get(), outCursor.get());
@@ -88,7 +89,7 @@ public class DefaultMapNeighborhood<I, O> implements
  * multi-thread the process. Note that this process should be thread-safe so
  * long as the computer is state-less (which is a part of the contract for Ops).
  * We also assume that the input and output have identical dimensions.
- * 
+ *
  * @author Gabriel Selzer
  * @implNote op names='map.neighborhood', priority='100.'
  */
@@ -119,8 +120,8 @@ class MapNeighborhoodAllRAI<I, O> implements
 			Ops.recordExecutions(op, false);
 		}
 
-		LoopBuilder.setImages(neighborhoodInput, out).multiThreaded()
-			.forEachPixel(op::compute);
+		LoopBuilder.setImages(neighborhoodInput, out).multiThreaded().forEachPixel(
+			op::compute);
 
 		// Re-enable recording history if necessary
 		if (isRecording) {

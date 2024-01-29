@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -57,10 +57,11 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 		OpClassInfo info = new OpClassInfo(ClassOp.class, new Hints(),
 			"test.classDescription");
 
-		String expected = "org.scijava.ops.engine.matcher.impl.OpDescriptionTest$ClassOp\n\t" //
-			+ "> input1 : java.lang.Double\n\t" //
-			+ "> input2 : java.lang.Double\n\t" //
-			+ "Returns : java.lang.Double";
+		String expected =
+			"org.scijava.ops.engine.matcher.impl.OpDescriptionTest$ClassOp\n\t" //
+				+ "> input1 : java.lang.Double\n\t" //
+				+ "> input2 : java.lang.Double\n\t" //
+				+ "Returns : java.lang.Double";
 		String actual = info.toString();
 		Assertions.assertEquals(expected, actual);
 	}
@@ -73,12 +74,13 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 	public void testOpMethodDescription() throws NoSuchMethodException {
 		Method method = OpDescriptionTest.class.getMethod("methodOp", Double.class,
 			Double.class);
-		OpMethodInfo info = new OpMethodInfo(method, BiFunction.class,
-			new Hints(), "test.methodDescription");
-		String expected = "org.scijava.ops.engine.matcher.impl.OpDescriptionTest.methodOp(java.lang.Double,java.lang.Double)\n\t" //
-			+ "> input1 : java.lang.Double\n\t" //
-			+ "> input2 : java.lang.Double\n\t" //
-			+ "Returns : java.lang.Double";
+		OpMethodInfo info = new OpMethodInfo(method, BiFunction.class, new Hints(),
+			"test.methodDescription");
+		String expected =
+			"org.scijava.ops.engine.matcher.impl.OpDescriptionTest.methodOp(java.lang.Double,java.lang.Double)\n\t" //
+				+ "> input1 : java.lang.Double\n\t" //
+				+ "> input2 : java.lang.Double\n\t" //
+				+ "Returns : java.lang.Double";
 		String actual = info.toString();
 		Assertions.assertEquals(expected, actual);
 	}
@@ -90,10 +92,11 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 		Field field = OpDescriptionTest.class.getDeclaredField("fieldOp");
 		OpFieldInfo info = new OpFieldInfo(this, field, new Hints(),
 			"test.fieldDescription");
-		String expected = "org.scijava.ops.engine.matcher.impl.OpDescriptionTest$fieldOp\n\t" //
-			+ "> input1 : java.lang.Double\n\t" //
-			+ "> input2 : java.lang.Double\n\t" //
-			+ "Returns : java.lang.Double";
+		String expected =
+			"org.scijava.ops.engine.matcher.impl.OpDescriptionTest$fieldOp\n\t" //
+				+ "> input1 : java.lang.Double\n\t" //
+				+ "> input2 : java.lang.Double\n\t" //
+				+ "Returns : java.lang.Double";
 		String actual = info.toString();
 		Assertions.assertEquals(expected, actual);
 	}
@@ -106,9 +109,10 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 		Type opType = Types.parameterize(Function.class, new Type[] { Double.class,
 			Double.class });
 		ReducedOpInfo reduced = new ReducedOpInfo(info, opType, 1);
-		String expected = "org.scijava.ops.engine.matcher.impl.OpDescriptionTest$ClassOpReduction1\n\t" //
-			+ "> input1 : java.lang.Double\n\t" //
-			+ "Returns : java.lang.Double";
+		String expected =
+			"org.scijava.ops.engine.matcher.impl.OpDescriptionTest$ClassOpReduction1\n\t" //
+				+ "> input1 : java.lang.Double\n\t" //
+				+ "Returns : java.lang.Double";
 		String actual = reduced.toString();
 		Assertions.assertEquals(expected, actual);
 	}

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -69,11 +69,9 @@ public class CreateLabelingTest extends AbstractOpTest {
 		final MersenneTwisterFast randomGenerator = new MersenneTwisterFast(SEED);
 
 		// TODO can we keep this?
-		BiFunction<Dimensions, IntType, ImgLabeling<String, IntType>> createFunc = OpBuilder.matchFunction(ops,
-				"create.imgLabeling", new Nil<Dimensions>() {
-				}, new Nil<IntType>() {
-				}, new Nil<ImgLabeling<String, IntType>>() {
-				});
+		BiFunction<Dimensions, IntType, ImgLabeling<String, IntType>> createFunc =
+			OpBuilder.matchFunction(ops, "create.imgLabeling", new Nil<Dimensions>()
+			{}, new Nil<IntType>() {}, new Nil<ImgLabeling<String, IntType>>() {});
 
 		for (int i = 0; i < TEST_SIZE; i++) {
 
@@ -87,9 +85,11 @@ public class CreateLabelingTest extends AbstractOpTest {
 
 			// create imglabeling
 			@SuppressWarnings("unchecked")
-			final ImgLabeling<String, IntType> img = createFunc.apply(new FinalDimensions(dim), new IntType());
+			final ImgLabeling<String, IntType> img = createFunc.apply(
+				new FinalDimensions(dim), new IntType());
 
-			assertArrayEquals(dim, Intervals.dimensionsAsLongArray(img), "Labeling Dimensions:");
+			assertArrayEquals(dim, Intervals.dimensionsAsLongArray(img),
+				"Labeling Dimensions:");
 		}
 	}
 
@@ -99,31 +99,30 @@ public class CreateLabelingTest extends AbstractOpTest {
 
 		final Dimensions dim = new FinalDimensions(10, 10, 10);
 
-		Functions.Arity3<Dimensions, IntType, ImgFactory<IntType>, ImgLabeling<String, IntType>> createFunc = OpBuilder
-				.matchFunction(ops, "create.imgLabeling", new Nil<Dimensions>() {
-				}, new Nil<IntType>() {
-				}, new Nil<ImgFactory<IntType>>() {
-				}, new Nil<ImgLabeling<String, IntType>>() {
-				});
+		Functions.Arity3<Dimensions, IntType, ImgFactory<IntType>, ImgLabeling<String, IntType>> createFunc =
+			OpBuilder.matchFunction(ops, "create.imgLabeling", new Nil<Dimensions>()
+			{}, new Nil<IntType>() {}, new Nil<ImgFactory<IntType>>() {},
+				new Nil<ImgLabeling<String, IntType>>()
+				{});
 
-		assertEquals(ArrayImgFactory.class,
-				((Img<IntType>) createFunc.apply(dim, new IntType(), new ArrayImgFactory<>(new IntType())).getIndexImg())
-						.factory().getClass(), "Labeling Factory: ");
+		assertEquals(ArrayImgFactory.class, ((Img<IntType>) createFunc.apply(dim,
+			new IntType(), new ArrayImgFactory<>(new IntType())).getIndexImg())
+			.factory().getClass(), "Labeling Factory: ");
 
-		assertEquals(CellImgFactory.class,
-				((Img<IntType>) createFunc.apply(dim, new IntType(), new CellImgFactory<>(new IntType())).getIndexImg())
-						.factory().getClass(), "Labeling Factory: ");
+		assertEquals(CellImgFactory.class, ((Img<IntType>) createFunc.apply(dim,
+			new IntType(), new CellImgFactory<>(new IntType())).getIndexImg())
+			.factory().getClass(), "Labeling Factory: ");
 
 	}
 
 	@Test
 	public void testImageType() {
 
-		assertEquals(String.class, createLabelingWithType("1").firstElement().toArray()[0]
-			.getClass(), "Labeling Type");
+		assertEquals(String.class, createLabelingWithType("1").firstElement()
+			.toArray()[0].getClass(), "Labeling Type");
 
-		assertEquals(Integer.class, createLabelingWithType(1).firstElement().toArray()[0]
-			.getClass(), "Labeling Type");
+		assertEquals(Integer.class, createLabelingWithType(1).firstElement()
+			.toArray()[0].getClass(), "Labeling Type");
 
 		assertEquals(Double.class, createLabelingWithType(1d).firstElement()
 			.toArray()[0].getClass(), "Labeling Type");
@@ -135,12 +134,11 @@ public class CreateLabelingTest extends AbstractOpTest {
 	@SuppressWarnings("unchecked")
 	private <I> ImgLabeling<I, ?> createLabelingWithType(final I type) {
 
-		BiFunction<Dimensions, IntType, ImgLabeling<I, IntType>> createFunc = OpBuilder.matchFunction(ops,
-				"create.imgLabeling", new Nil<Dimensions>() {
-				}, new Nil<IntType>() {
-				}, new Nil<ImgLabeling<I, IntType>>() {
-				});
-		final ImgLabeling<I, ?> imgLabeling = createFunc.apply(new FinalDimensions(10, 10, 10), new IntType());
+		BiFunction<Dimensions, IntType, ImgLabeling<I, IntType>> createFunc =
+			OpBuilder.matchFunction(ops, "create.imgLabeling", new Nil<Dimensions>()
+			{}, new Nil<IntType>() {}, new Nil<ImgLabeling<I, IntType>>() {});
+		final ImgLabeling<I, ?> imgLabeling = createFunc.apply(new FinalDimensions(
+			10, 10, 10), new IntType());
 		imgLabeling.cursor().next().add(type);
 		return imgLabeling;
 	}

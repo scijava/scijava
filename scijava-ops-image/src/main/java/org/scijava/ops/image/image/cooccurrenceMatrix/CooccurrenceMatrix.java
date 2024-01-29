@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.image.cooccurrenceMatrix;
 
 import java.util.function.Function;
@@ -41,14 +42,14 @@ import net.imglib2.util.Pair;
 /**
  * Handler Op delegating between {@link CooccurrenceMatrix2D} and
  * {@link CooccurrenceMatrix3D}.
- * 
- * @author Gabriel Selzer
  *
+ * @author Gabriel Selzer
  * @param <T> - the input {@link RealType}.
- *@implNote op names='image.cooccurrenceMatrix'
+ * @implNote op names='image.cooccurrenceMatrix'
  */
-public class CooccurrenceMatrix<T extends RealType<T>>
-		implements Functions.Arity4<RandomAccessibleInterval<T>, MatrixOrientation, Integer, Integer, double[][]> {
+public class CooccurrenceMatrix<T extends RealType<T>> implements
+	Functions.Arity4<RandomAccessibleInterval<T>, MatrixOrientation, Integer, Integer, double[][]>
+{
 
 	@OpDependency(name = "stats.minMax")
 	private Function<RandomAccessibleInterval<T>, Pair<T, T>> minmax;
@@ -65,32 +66,39 @@ public class CooccurrenceMatrix<T extends RealType<T>>
 	 */
 	@Override
 	public double[][] apply( //
-			RandomAccessibleInterval<T> input, //
-			MatrixOrientation orientation,  //
-			@Nullable Integer nrGreyLevels, //
-			@Nullable Integer distance //
+		RandomAccessibleInterval<T> input, //
+		MatrixOrientation orientation, //
+		@Nullable Integer nrGreyLevels, //
+		@Nullable Integer distance //
 	) {
 		// nrGreyLevels validation
 		if (nrGreyLevels == null) {
 			nrGreyLevels = 32;
 		}
 		if (nrGreyLevels < 0 || nrGreyLevels > 128) {
-			throw new IllegalArgumentException("nrGreyLevels must be between 0 and 128 (inclusive) but was " + nrGreyLevels);
+			throw new IllegalArgumentException(
+				"nrGreyLevels must be between 0 and 128 (inclusive) but was " +
+					nrGreyLevels);
 		}
 		// distance validation
 		if (distance == null) {
 			distance = 1;
 		}
 		if (distance < 0 || distance > 128) {
-			throw new IllegalArgumentException("distance must be between 0 and 128 (inclusive) but was " + distance);
+			throw new IllegalArgumentException(
+				"distance must be between 0 and 128 (inclusive) but was " + distance);
 		}
 
 		if (input.numDimensions() == 3 && orientation.isCompatible(3)) {
-			return CooccurrenceMatrix3D.apply(input, nrGreyLevels, distance, minmax, orientation);
-		} else if (input.numDimensions() == 2 && orientation.isCompatible(2)) {
-			return CooccurrenceMatrix2D.apply(input, nrGreyLevels, distance, minmax, orientation);
-		} else
-			throw new IllegalArgumentException("Only 2 and 3-dimensional inputs are supported!");
+			return CooccurrenceMatrix3D.apply(input, nrGreyLevels, distance, minmax,
+				orientation);
+		}
+		else if (input.numDimensions() == 2 && orientation.isCompatible(2)) {
+			return CooccurrenceMatrix2D.apply(input, nrGreyLevels, distance, minmax,
+				orientation);
+		}
+		else throw new IllegalArgumentException(
+			"Only 2 and 3-dimensional inputs are supported!");
 	}
 
 }

@@ -41,9 +41,11 @@ import org.scijava.function.Computers;
 import org.scijava.types.Nil;
 
 /**
- * Tests for binary functions in {@link org.scijava.ops.image.math} applied to images
+ * Tests for binary functions in {@link org.scijava.ops.image.math} applied to
+ * images
  */
 public class ImageBinaryMathTest extends AbstractOpTest {
+
 	private static final IntType I = new IntType(25);
 
 	@Test
@@ -64,9 +66,10 @@ public class ImageBinaryMathTest extends AbstractOpTest {
 		final Img<IntType> imgB = TestImgGeneration.intArray(true, 10, 10);
 
 		int originalVal = imgA.cursor().next().get() + imgB.cursor().next().get();
-		final var outType = new Nil<Img<IntType>>(){};
+		final var outType = new Nil<Img<IntType>>() {};
 
-		var imgC = ops.binary("math.add").input(imgA, imgB).outType(outType).apply();
+		var imgC = ops.binary("math.add").input(imgA, imgB).outType(outType)
+			.apply();
 		assertEquals(originalVal, imgC.cursor().next().get());
 	}
 
@@ -76,7 +79,8 @@ public class ImageBinaryMathTest extends AbstractOpTest {
 
 		int originalVal = imgA.cursor().next().get();
 
-		var imgC = (Img<IntType>)ops.binary("math.sub").input(imgA, new IntType(25)).apply();
+		var imgC = (Img<IntType>) ops.binary("math.sub").input(imgA, new IntType(
+			25)).apply();
 		assertEquals(originalVal - 25, imgC.cursor().next().get());
 	}
 
@@ -84,17 +88,18 @@ public class ImageBinaryMathTest extends AbstractOpTest {
 	public void addRAIRealTypeC() {
 		final Img<IntType> imgIntType = TestImgGeneration.intArray(true, 10, 10);
 		int originalVal = imgIntType.cursor().next().get();
-		var inType = new Nil<RandomAccessibleInterval<IntType>>(){};
-		var outType = new Nil<RandomAccessibleInterval<IntType>>(){};
+		var inType = new Nil<RandomAccessibleInterval<IntType>>() {};
+		var outType = new Nil<RandomAccessibleInterval<IntType>>() {};
 
-		Computers.Arity2<RandomAccessibleInterval<IntType>, IntType, RandomAccessibleInterval<IntType>>
-				computer = ops.binary("math.add").inType(inType, Nil.of(IntType.class))
-				.outType(outType).computer();
+		Computers.Arity2<RandomAccessibleInterval<IntType>, IntType, RandomAccessibleInterval<IntType>> computer =
+			ops.binary("math.add").inType(inType, Nil.of(IntType.class)).outType(
+				outType).computer();
 
-		final RandomAccessibleInterval<IntType> result = TestImgGeneration.intArray(true, 10, 10);
+		final RandomAccessibleInterval<IntType> result = TestImgGeneration.intArray(
+			true, 10, 10);
 		computer.compute(imgIntType, I, result);
 
-		assertEquals((originalVal + I.get()), result.getAt(0,0).get());
+		assertEquals((originalVal + I.get()), result.getAt(0, 0).get());
 	}
 
 	@Test
@@ -102,8 +107,9 @@ public class ImageBinaryMathTest extends AbstractOpTest {
 		final Img<IntType> imgIntType = TestImgGeneration.intArray(true, 10, 10);
 		int originalVal = imgIntType.cursor().next().get();
 
-		var outType = new Nil<Img<IntType>>(){};
-		Img<IntType> result = ops.binary("math.add").input(imgIntType, I).outType(outType).apply();
+		var outType = new Nil<Img<IntType>>() {};
+		Img<IntType> result = ops.binary("math.add").input(imgIntType, I).outType(
+			outType).apply();
 		validateResult(result, originalVal);
 	}
 

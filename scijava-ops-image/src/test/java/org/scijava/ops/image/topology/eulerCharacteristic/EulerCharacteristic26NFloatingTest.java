@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.topology.eulerCharacteristic;
 
 import static org.scijava.ops.image.topology.eulerCharacteristic.TestHelper.drawCube;
@@ -47,99 +48,111 @@ import org.junit.jupiter.api.Test;
  * @author Richard Domander (Royal Veterinary College, London)
  */
 public class EulerCharacteristic26NFloatingTest extends AbstractOpTest {
-    @Test
-    public void testConforms() throws AssertionError {
-        final Img<BitType> img = ArrayImgs.bits(3, 3);
 
-        final DoubleType result = new DoubleType();
-				Assertions.assertThrows(IllegalArgumentException.class, () -> {
-					ops.op("topology.eulerCharacteristic26NFloating").arity1().input(img).output(
-						result).compute();
-				});
-	    }
+	@Test
+	public void testConforms() throws AssertionError {
+		final Img<BitType> img = ArrayImgs.bits(3, 3);
 
-    /**
-     * Test with a single voxel (=solid cube) that floats in the middle of a 3x3x3 space
-     * <p>
-     * Here χ = β_0 - β_1 + β_2 = 1 - 0 + 0 = 1.<br>
-     * The formula χ = vertices - edges + faces for surfaces of polyhedra doesn't apply because the cuboid is solid.
-     * </p>
-     */
-    @Test
-    public void testCube() throws Exception {
-        final Img<BitType> img = drawCube(1, 1, 1, 1);
+		final DoubleType result = new DoubleType();
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			ops.op("topology.eulerCharacteristic26NFloating").arity1().input(img)
+				.output(result).compute();
+		});
+	}
 
-        final DoubleType result = new DoubleType();
-        ops.op("topology.eulerCharacteristic26NFloating").arity1().input(img).output(result).compute();
+	/**
+	 * Test with a single voxel (=solid cube) that floats in the middle of a 3x3x3
+	 * space
+	 * <p>
+	 * Here χ = β_0 - β_1 + β_2 = 1 - 0 + 0 = 1.<br>
+	 * The formula χ = vertices - edges + faces for surfaces of polyhedra doesn't
+	 * apply because the cuboid is solid.
+	 * </p>
+	 */
+	@Test
+	public void testCube() throws Exception {
+		final Img<BitType> img = drawCube(1, 1, 1, 1);
 
-        assertEquals(1.0, result.get(), 1e-12, "Euler characteristic (χ) is incorrect");
-    }
+		final DoubleType result = new DoubleType();
+		ops.op("topology.eulerCharacteristic26NFloating").arity1().input(img)
+			.output(result).compute();
 
-    /**
-     * Test with a single voxel (=solid cube) in a 1x1x1 space
-     * <p>
-     * In this op result shouldn't differ from {@link #testCube} because space is zero extended
-     * </p>
-     */
-    @Test
-    public void testEdgeCube() throws Exception {
-        final Img<BitType> img = drawCube(1, 1, 1, 0);
+		assertEquals(1.0, result.get(), 1e-12,
+			"Euler characteristic (χ) is incorrect");
+	}
 
-        final DoubleType result = new DoubleType();
-        ops.op("topology.eulerCharacteristic26NFloating").arity1().input(img).output(result).compute();
+	/**
+	 * Test with a single voxel (=solid cube) in a 1x1x1 space
+	 * <p>
+	 * In this op result shouldn't differ from {@link #testCube} because space is
+	 * zero extended
+	 * </p>
+	 */
+	@Test
+	public void testEdgeCube() throws Exception {
+		final Img<BitType> img = drawCube(1, 1, 1, 0);
 
-        assertEquals(1.0, result.get(), 1e-12, "Euler characteristic (χ) is incorrect");
-    }
+		final DoubleType result = new DoubleType();
+		ops.op("topology.eulerCharacteristic26NFloating").arity1().input(img)
+			.output(result).compute();
 
-    /**
-     * Test with a cube that has a cavity inside
-     * <p>
-     * Here χ = β_0 - β_1 + β_2 = 1 - 0 + 1 = 2
-     * </p>
-     */
-    @Test
-    public void testHollowCube() throws Exception {
-        final Img<BitType> img = drawCube(3, 3, 3, 1);
-        final RandomAccess<BitType> access = img.randomAccess();
+		assertEquals(1.0, result.get(), 1e-12,
+			"Euler characteristic (χ) is incorrect");
+	}
 
-        // Add cavity
-        access.setPosition(new long[]{2, 2, 2});
-        access.get().setZero();
+	/**
+	 * Test with a cube that has a cavity inside
+	 * <p>
+	 * Here χ = β_0 - β_1 + β_2 = 1 - 0 + 1 = 2
+	 * </p>
+	 */
+	@Test
+	public void testHollowCube() throws Exception {
+		final Img<BitType> img = drawCube(3, 3, 3, 1);
+		final RandomAccess<BitType> access = img.randomAccess();
 
-        final DoubleType result = new DoubleType();
-        ops.op("topology.eulerCharacteristic26NFloating").arity1().input(img).output(result).compute();
+		// Add cavity
+		access.setPosition(new long[] { 2, 2, 2 });
+		access.get().setZero();
 
-        assertEquals(2.0, result.get(), 1e-12, "Euler characteristic (χ) is incorrect");
-    }
+		final DoubleType result = new DoubleType();
+		ops.op("topology.eulerCharacteristic26NFloating").arity1().input(img)
+			.output(result).compute();
 
-    /**
-     * Test with a cube that has a "handle"
-     * <p>
-     * Here χ = β_0 - β_1 + β_2 = 1 - 1 + 0 = 0
-     * </p>
-     */
-    @Test
-    public void testHandleCube() throws Exception {
-        final Img<BitType> cube = drawCube(9, 9, 9, 5);
-        final RandomAccess<BitType> access = cube.randomAccess();
+		assertEquals(2.0, result.get(), 1e-12,
+			"Euler characteristic (χ) is incorrect");
+	}
 
-        // Draw a handle on the front xy-face of the cuboid
-        access.setPosition(9, 0);
-        access.setPosition(6, 1);
-        access.setPosition(4, 2);
-        access.get().setOne();
-        access.setPosition(3, 2);
-        access.get().setOne();
-        access.setPosition(7, 1);
-        access.get().setOne();
-        access.setPosition(8, 1);
-        access.get().setOne();
-        access.setPosition(4, 2);
-        access.get().setOne();
+	/**
+	 * Test with a cube that has a "handle"
+	 * <p>
+	 * Here χ = β_0 - β_1 + β_2 = 1 - 1 + 0 = 0
+	 * </p>
+	 */
+	@Test
+	public void testHandleCube() throws Exception {
+		final Img<BitType> cube = drawCube(9, 9, 9, 5);
+		final RandomAccess<BitType> access = cube.randomAccess();
 
-        final DoubleType result = new DoubleType();
-        ops.op("topology.eulerCharacteristic26NFloating").arity1().input(cube).output(result).compute();
+		// Draw a handle on the front xy-face of the cuboid
+		access.setPosition(9, 0);
+		access.setPosition(6, 1);
+		access.setPosition(4, 2);
+		access.get().setOne();
+		access.setPosition(3, 2);
+		access.get().setOne();
+		access.setPosition(7, 1);
+		access.get().setOne();
+		access.setPosition(8, 1);
+		access.get().setOne();
+		access.setPosition(4, 2);
+		access.get().setOne();
 
-        assertEquals(0.0, result.get(), 1e-12, "Euler characteristic (χ) is incorrect");
-    }
+		final DoubleType result = new DoubleType();
+		ops.op("topology.eulerCharacteristic26NFloating").arity1().input(cube)
+			.output(result).compute();
+
+		assertEquals(0.0, result.get(), 1e-12,
+			"Euler characteristic (χ) is incorrect");
+	}
 }

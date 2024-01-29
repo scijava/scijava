@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.coloc.icq;
 
 import org.scijava.ops.image.coloc.ColocUtil;
@@ -42,14 +43,14 @@ import org.scijava.ops.spi.OpDependency;
 /**
  * This algorithm calculates Li et al.'s ICQ (intensity correlation quotient).
  *
- * @param <T>
- *            Type of the first image
- * @param <U>
- *            Type of the second image
- *@implNote op names='coloc.icq'
+ * @param <T> Type of the first image
+ * @param <U> Type of the second image
+ * @implNote op names='coloc.icq'
  */
 public class LiICQ<T extends RealType<T>, U extends RealType<U>, V extends RealType<V>>
-		implements Functions.Arity4<Iterable<T>, Iterable<U>, DoubleType, DoubleType, Double> {
+	implements
+	Functions.Arity4<Iterable<T>, Iterable<U>, DoubleType, DoubleType, Double>
+{
 
 	@OpDependency(name = "stats.mean")
 	private Computers.Arity1<Iterable<T>, DoubleType> meanTOp;
@@ -66,12 +67,13 @@ public class LiICQ<T extends RealType<T>, U extends RealType<U>, V extends RealT
 	 * @return the output
 	 */
 	@Override
-	public Double apply(final Iterable<T> image1, final Iterable<U> image2, @Nullable
-	DoubleType mean1, @Nullable DoubleType mean2) {
+	public Double apply(final Iterable<T> image1, final Iterable<U> image2,
+		@Nullable DoubleType mean1, @Nullable DoubleType mean2)
+	{
 
 		if (!ColocUtil.sameIterationOrder(image1, image2))
 			throw new IllegalArgumentException(
-					"Input and output must have the same dimensionality and iteration order!");
+				"Input and output must have the same dimensionality and iteration order!");
 
 		final Iterable<Pair<T, U>> samples = new IterablePair<>(image1, image2);
 
@@ -91,18 +93,16 @@ public class LiICQ<T extends RealType<T>, U extends RealType<U>, V extends RealT
 			final double productOfDifferenceOfMeans = (m1 - ch1) * (m2 - ch2);
 
 			// check for positive and negative values
-			if (productOfDifferenceOfMeans < 0.0)
-				++numNegativeProducts;
-			else
-				++numPositiveProducts;
+			if (productOfDifferenceOfMeans < 0.0) ++numNegativeProducts;
+			else++numPositiveProducts;
 		}
 
 		/*
 		 * calculate Li's ICQ value by dividing the amount of "positive pixels" to the
 		 * total number of pixels. Then shift it in the -0.5,0.5 range.
 		 */
-		final double icqValue = (double) numPositiveProducts / (double) (numNegativeProducts + numPositiveProducts)
-				- 0.5;
+		final double icqValue = (double) numPositiveProducts /
+			(double) (numNegativeProducts + numPositiveProducts) - 0.5;
 		return icqValue;
 	}
 
@@ -111,6 +111,7 @@ public class LiICQ<T extends RealType<T>, U extends RealType<U>, V extends RealT
 		meanTOp.compute(in, mean);
 		return mean.get();
 	}
+
 	private double computeMeanUOf(final Iterable<U> in) {
 		DoubleType mean = new DoubleType();
 		meanUOp.compute(in, mean);

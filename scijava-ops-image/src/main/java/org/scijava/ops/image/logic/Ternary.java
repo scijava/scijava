@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -35,14 +35,15 @@ import net.imglib2.type.Type;
 import org.scijava.function.Computers;
 
 /**
- * An Op that works the same way as the {@code ?:} operator. It sets the
- * output to the {@code ifTrueVal} if the input is evaluated as true, or
+ * An Op that works the same way as the {@code ?:} operator. It sets the output
+ * to the {@code ifTrueVal} if the input is evaluated as true, or
  * <code>ifFalseVal</code> otherwise.
- * 
+ *
  * @author Leon Yang
- *@implNote op names='logic.match'
+ * @implNote op names='logic.match'
  */
-public class Ternary<I extends BooleanType<I>, O extends Type<O>> implements Computers.Arity3<I, O, O, O>
+public class Ternary<I extends BooleanType<I>, O extends Type<O>> implements
+	Computers.Arity3<I, O, O, O>
 
 {
 
@@ -55,7 +56,9 @@ public class Ternary<I extends BooleanType<I>, O extends Type<O>> implements Com
 	 * @param output
 	 */
 	@Override
-	public void compute(final I input, final O ifTrueVal, final O ifFalseVal, final O output) {
+	public void compute(final I input, final O ifTrueVal, final O ifFalseVal,
+		final O output)
+	{
 		output.set(input.get() ? ifTrueVal : ifFalseVal);
 	}
 

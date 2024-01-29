@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.engine.matcher.simplify;
 
 import org.junit.jupiter.api.Assertions;
@@ -40,7 +41,8 @@ import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 
 public class SimplificationAdaptationTest<T> extends AbstractTestEnvironment
-		implements OpCollection {
+	implements OpCollection
+{
 
 	@BeforeAll
 	public static void AddNeededOps() {
@@ -49,13 +51,15 @@ public class SimplificationAdaptationTest<T> extends AbstractTestEnvironment
 		ops.register(new PrimitiveArraySimplifiers());
 		ops.register(new CopyOpCollection());
 		ops.register(new CreateOpCollection());
-		Object[] adapters = objsFromNoArgConstructors(ComputersToFunctionsViaFunction.class.getDeclaredClasses());
+		Object[] adapters = objsFromNoArgConstructors(
+			ComputersToFunctionsViaFunction.class.getDeclaredClasses());
 		ops.register(adapters);
 	}
 
 	@OpField(names = "test.math.modulus")
-	public final Computers.Arity2<Integer[], Integer, Integer[]> modOp = (inArr, mod, outArr) -> {
-		for(int i = 0; i < inArr.length && i < outArr.length; i++) {
+	public final Computers.Arity2<Integer[], Integer, Integer[]> modOp = (inArr,
+		mod, outArr) -> {
+		for (int i = 0; i < inArr.length && i < outArr.length; i++) {
 			outArr[i] = inArr[i] % mod;
 		}
 	};

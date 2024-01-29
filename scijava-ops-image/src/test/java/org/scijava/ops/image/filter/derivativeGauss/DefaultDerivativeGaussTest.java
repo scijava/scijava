@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -52,20 +52,21 @@ import org.scijava.types.Nil;
  */
 public class DefaultDerivativeGaussTest extends AbstractOpTest {
 
-	@Test //(expected = IllegalArgumentException.class)
+	@Test // (expected = IllegalArgumentException.class)
 	public void testImgParamDimensionsMismatch() {
 		final RandomAccessibleInterval<FloatType> input = TestImgGeneration
 			.floatArray(false, 30, 30, 30);
 
 		final Img<DoubleType> output = ops.op("create.img").arity1().input(input)
-				.outType(new Nil<Img<DoubleType>>() {}).apply();
+			.outType(new Nil<Img<DoubleType>>()
+			{}).apply();
 
 		final int[] derivatives = new int[] { 1, 0 };
 		final double[] sigmas = new double[] { 1, 1 };
 		IllegalArgumentException e = Assertions.assertThrows(
 			IllegalArgumentException.class, () -> {
-				ops.op("filter.derivativeGauss").arity3().input(input, sigmas, derivatives).output(
-					output).compute();
+				ops.op("filter.derivativeGauss").arity3().input(input, sigmas,
+					derivatives).output(output).compute();
 			});
 
 		Assertions.assertTrue(e.getMessage().equalsIgnoreCase(
@@ -75,12 +76,14 @@ public class DefaultDerivativeGaussTest extends AbstractOpTest {
 	@Test
 	public void regressionTest() {
 		final int width = 10;
-		final Img<DoubleType> input = ops.op("create.img")
-				.arity2().input(new FinalDimensions(width, width), new DoubleType()).outType(new Nil<Img<DoubleType>>() {})
-				.apply();
+		final Img<DoubleType> input = ops.op("create.img").arity2().input(
+			new FinalDimensions(width, width), new DoubleType()).outType(
+				new Nil<Img<DoubleType>>()
+				{}).apply();
 
-		final Img<DoubleType> output = ops.op("create.img").arity2().input(input, new DoubleType())
-				.outType(new Nil<Img<DoubleType>>() {}).apply();
+		final Img<DoubleType> output = ops.op("create.img").arity2().input(input,
+			new DoubleType()).outType(new Nil<Img<DoubleType>>()
+		{}).apply();
 
 		// Draw a line on the image
 		final RandomAccess<DoubleType> inputRA = input.randomAccess();
@@ -93,18 +96,21 @@ public class DefaultDerivativeGaussTest extends AbstractOpTest {
 		// filter the image
 		final int[] derivatives = new int[] { 1, 0 };
 		final double[] sigmas = new double[] { 0.5, 0.5 };
-		ops.op("filter.derivativeGauss").arity3().input(input, sigmas, derivatives).output(output).compute();
+		ops.op("filter.derivativeGauss").arity3().input(input, sigmas, derivatives)
+			.output(output).compute();
 
 		final Cursor<DoubleType> cursor = output.localizingCursor();
 		int currentPixel = 0;
 		while (cursor.hasNext()) {
 			cursor.fwd();
-			assertEquals(cursor.get().getRealDouble(), regressionRowValues[currentPixel % width], 0);
+			assertEquals(cursor.get().getRealDouble(),
+				regressionRowValues[currentPixel % width], 0);
 			currentPixel++;
 		}
 	}
 
-	double[] regressionRowValues = { 0.0, 0.0, 0.0, 2.1876502452391353, 117.25400606437196, 0.0, -117.25400606437196,
-			-2.1876502452391353, 0.0, 0.0 };
+	double[] regressionRowValues = { 0.0, 0.0, 0.0, 2.1876502452391353,
+		117.25400606437196, 0.0, -117.25400606437196, -2.1876502452391353, 0.0,
+		0.0 };
 
 }

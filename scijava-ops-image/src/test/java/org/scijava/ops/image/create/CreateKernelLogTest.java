@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -45,7 +45,7 @@ import org.scijava.types.Nil;
 /**
  * Tests {@code CreateKernelLogDoubleType} and
  * {@code CreateKernelLogSymmetricDoubleType}.
- * 
+ *
  * @author Brian Northan
  * @author Curtis Rueden
  */
@@ -56,22 +56,21 @@ public class CreateKernelLogTest extends AbstractOpTest {
 		final double sigma = 5.0;
 		final double[] sigmas = { sigma, sigma };
 
-		BiFunction<Double, Integer, RandomAccessibleInterval<DoubleType>> func1 = OpBuilder.matchFunction(ops,
-				"create.kernelLog", new Nil<Double>() {
-				}, new Nil<Integer>() {
-				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
-				});
+		BiFunction<Double, Integer, RandomAccessibleInterval<DoubleType>> func1 =
+			OpBuilder.matchFunction(ops, "create.kernelLog", new Nil<Double>()
+			{}, new Nil<Integer>() {},
+				new Nil<RandomAccessibleInterval<DoubleType>>()
+				{});
 
 		final RandomAccessibleInterval<DoubleType> logKernel = //
-				func1.apply(sigma, sigmas.length);
+			func1.apply(sigma, sigmas.length);
 
-		Function<double[], RandomAccessibleInterval<DoubleType>> func2 = OpBuilder.matchFunction(ops, "create.kernelLog",
-				new Nil<double[]>() {
-				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
-				});
+		Function<double[], RandomAccessibleInterval<DoubleType>> func2 = OpBuilder
+			.matchFunction(ops, "create.kernelLog", new Nil<double[]>()
+			{}, new Nil<RandomAccessibleInterval<DoubleType>>() {});
 
 		final RandomAccessibleInterval<DoubleType> logKernel2 = //
-				func2.apply(sigmas);
+			func2.apply(sigmas);
 
 		assertEquals(logKernel.dimension(1), 27);
 		assertEquals(logKernel2.dimension(1), 27);

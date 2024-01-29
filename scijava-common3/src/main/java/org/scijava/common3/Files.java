@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.common3;
 
 import java.io.File;
@@ -42,7 +43,7 @@ public final class Files {
 	/**
 	 * Gets the absolute path to the given file, with the directory separator
 	 * standardized to forward slash, like most platforms use.
-	 * 
+	 *
 	 * @param file The file whose path will be obtained and standardized.
 	 * @return The file's standardized absolute path.
 	 */
@@ -56,7 +57,7 @@ public final class Files {
 	 * Gets a standardized path based on the given one, with the directory
 	 * separator standardized from the specific separator to forward slash, like
 	 * most platforms use.
-	 * 
+	 *
 	 * @param path The path to standardize.
 	 * @param separator The directory separator to be standardized.
 	 * @return The standardized path.
@@ -68,7 +69,7 @@ public final class Files {
 
 	/**
 	 * Extracts the suffix (i.e., extension) of a file.
-	 * 
+	 *
 	 * @param file the file object
 	 * @return the file extension (excluding the dot), or the empty string when
 	 *         the file name does not contain dots

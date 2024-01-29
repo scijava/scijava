@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.engine.struct;
 
 import java.lang.reflect.Method;
@@ -52,16 +53,18 @@ public final class FunctionalParameters {
 	}
 
 	public static void parseFunctionalParameters(
-		final ArrayList<SynthesizedParameterMember<?>> items,
-		Type type, ParameterData data)
+		final ArrayList<SynthesizedParameterMember<?>> items, Type type,
+		ParameterData data)
 	{
 		// Search for the functional method of 'type' and map its signature to
 		// ItemIO
-		List<FunctionalMethodType> fmts = FunctionalParameters.findFunctionalMethodTypes(type);
+		List<FunctionalMethodType> fmts = FunctionalParameters
+			.findFunctionalMethodTypes(type);
 
 		// Synthesize members
-		List<SynthesizedParameterMember<?>> fmtMembers = data.synthesizeMembers(fmts);
-	
+		List<SynthesizedParameterMember<?>> fmtMembers = data.synthesizeMembers(
+			fmts);
+
 		for (SynthesizedParameterMember<?> m : fmtMembers) {
 			final Class<?> itemType = Types.raw(m.getType());
 			if ((m.getIOType() == ItemIO.MUTABLE || m
@@ -90,23 +93,24 @@ public final class FunctionalParameters {
 	 * {@code null} will be returned.<br>
 	 * The order will be the following: method parameters from left to right, then
 	 * return type.
-	 * 
+	 *
 	 * @param functionalType
 	 * @return
 	 */
 	public static List<FunctionalMethodType> findFunctionalMethodTypes(
 		Type functionalType)
 	{
-		Method functionalMethod = FunctionalInterfaces.functionalMethodOf(functionalType);
+		Method functionalMethod = FunctionalInterfaces.functionalMethodOf(
+			functionalType);
 		if (functionalMethod == null) throw new IllegalArgumentException("Type " +
 			functionalType +
 			" is not a functional type, thus its functional method types cannot be determined");
-	
+
 		Type paramfunctionalType = functionalType;
 		if (functionalType instanceof Class) {
 			paramfunctionalType = Types.parameterizeRaw((Class<?>) functionalType);
 		}
-	
+
 		List<FunctionalMethodType> out = new ArrayList<>();
 		int i = 0;
 		for (Type t : Types.getExactParameterTypes(functionalMethod,
@@ -121,34 +125,33 @@ public final class FunctionalParameters {
 			out.add(new FunctionalMethodType(t, ioType));
 			i++;
 		}
-	
+
 		Type returnType = Types.getExactReturnType(functionalMethod,
 			paramfunctionalType);
 		if (!returnType.equals(void.class)) {
 			out.add(new FunctionalMethodType(returnType, ItemIO.OUTPUT));
 		}
-	
+
 		return out;
 	}
 
-
 	public static Boolean hasNullableAnnotations(Method m) {
 		return Arrays.stream(m.getParameters()).anyMatch(p -> p.isAnnotationPresent(
-				Nullable.class));
+			Nullable.class));
 	}
 
 	public static Boolean[] findParameterNullability(Method m) {
 		return Arrays.stream(m.getParameters()).map(p -> p.isAnnotationPresent(
-				Nullable.class)).toArray(Boolean[]::new);
+			Nullable.class)).toArray(Boolean[]::new);
 	}
 
 	public static List<Method> fMethodsWithNullable(Class<?> opClass) {
 		Method superFMethod = FunctionalInterfaces.functionalMethodOf(opClass);
 		return Arrays.stream(opClass.getMethods()) //
-				.filter(m -> m.getName().equals(superFMethod.getName())) //
-				.filter(m -> m.getParameterCount() == superFMethod.getParameterCount()) //
-				.filter(m -> hasNullableAnnotations(m)) //
-				.collect(Collectors.toList());
+			.filter(m -> m.getName().equals(superFMethod.getName())) //
+			.filter(m -> m.getParameterCount() == superFMethod.getParameterCount()) //
+			.filter(m -> hasNullableAnnotations(m)) //
+			.collect(Collectors.toList());
 	}
 
 	public static Boolean[] generateAllRequiredArray(int num) {

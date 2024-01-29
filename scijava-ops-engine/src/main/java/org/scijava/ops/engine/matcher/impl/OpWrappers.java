@@ -27,17 +27,16 @@ public class OpWrappers {
 
 		@Override
 		public RichOp<Producer<T>> wrap( //
-            final OpInstance<Producer<T>> instance, //
-            final OpEnvironment env, //
-            final Hints hints)
+			final OpInstance<Producer<T>> instance, //
+			final OpEnvironment env, //
+			final Hints hints)
 		{
 			class GenericTypedProducer //
 				extends AbstractRichOp<Producer<T>> //
 				implements Producer<T>
 			{
 
-				public GenericTypedProducer()
-				{
+				public GenericTypedProducer() {
 					super(instance, env, hints);
 				}
 
@@ -78,11 +77,10 @@ public class OpWrappers {
 		{
 			class GenericTypedFunction1 //
 				extends AbstractRichOp<Function<I, O>> //
-				implements Function<I, O> 
+				implements Function<I, O>
 			{
 
-				public GenericTypedFunction1()
-				{
+				public GenericTypedFunction1() {
 					super(instance, env, hints);
 				}
 
@@ -121,11 +119,10 @@ public class OpWrappers {
 		{
 			class GenericTypedFunction2 //
 				extends AbstractRichOp<BiFunction<I1, I2, O>> //
-				implements BiFunction<I1, I2, O> 
+				implements BiFunction<I1, I2, O>
 			{
 
-				public GenericTypedFunction2()
-				{
+				public GenericTypedFunction2() {
 					super(instance, env, hints);
 				}
 
@@ -164,11 +161,10 @@ public class OpWrappers {
 		{
 			class GenericTypedFunction3 //
 				extends AbstractRichOp<Functions.Arity3<I1, I2, I3, O>> //
-				implements Functions.Arity3<I1, I2, I3, O> 
+				implements Functions.Arity3<I1, I2, I3, O>
 			{
 
-				public GenericTypedFunction3()
-				{
+				public GenericTypedFunction3() {
 					super(instance, env, hints);
 				}
 
@@ -207,11 +203,10 @@ public class OpWrappers {
 		{
 			class GenericTypedFunction4 //
 				extends AbstractRichOp<Functions.Arity4<I1, I2, I3, I4, O>> //
-				implements Functions.Arity4<I1, I2, I3, I4, O> 
+				implements Functions.Arity4<I1, I2, I3, I4, O>
 			{
 
-				public GenericTypedFunction4()
-				{
+				public GenericTypedFunction4() {
 					super(instance, env, hints);
 				}
 
@@ -250,11 +245,10 @@ public class OpWrappers {
 		{
 			class GenericTypedFunction5 //
 				extends AbstractRichOp<Functions.Arity5<I1, I2, I3, I4, I5, O>> //
-				implements Functions.Arity5<I1, I2, I3, I4, I5, O> 
+				implements Functions.Arity5<I1, I2, I3, I4, I5, O>
 			{
 
-				public GenericTypedFunction5()
-				{
+				public GenericTypedFunction5() {
 					super(instance, env, hints);
 				}
 
@@ -293,11 +287,10 @@ public class OpWrappers {
 		{
 			class GenericTypedFunction6 //
 				extends AbstractRichOp<Functions.Arity6<I1, I2, I3, I4, I5, I6, O>> //
-				implements Functions.Arity6<I1, I2, I3, I4, I5, I6, O> 
+				implements Functions.Arity6<I1, I2, I3, I4, I5, I6, O>
 			{
 
-				public GenericTypedFunction6()
-				{
+				public GenericTypedFunction6() {
 					super(instance, env, hints);
 				}
 
@@ -336,11 +329,10 @@ public class OpWrappers {
 		{
 			class GenericTypedFunction7 //
 				extends AbstractRichOp<Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O>> //
-				implements Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> 
+				implements Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O>
 			{
 
-				public GenericTypedFunction7()
-				{
+				public GenericTypedFunction7() {
 					super(instance, env, hints);
 				}
 
@@ -378,17 +370,18 @@ public class OpWrappers {
 			final Hints hints)
 		{
 			class GenericTypedFunction8 //
-				extends AbstractRichOp<Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>> //
-				implements Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> 
+				extends
+				AbstractRichOp<Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>> //
+				implements Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>
 			{
 
-				public GenericTypedFunction8()
-				{
+				public GenericTypedFunction8() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8) //
+				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7,
+					I8 in8) //
 				{
 					preprocess(in1, in2, in3, in4, in5, in6, in7, in8);
 
@@ -421,29 +414,33 @@ public class OpWrappers {
 			final Hints hints)
 		{
 			class GenericTypedFunction9 //
-				extends AbstractRichOp<Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>> //
-				implements Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> 
+				extends
+				AbstractRichOp<Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>> //
+				implements Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>
 			{
 
-				public GenericTypedFunction9()
-				{
+				public GenericTypedFunction9() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9) //
+				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7,
+					I8 in8, I9 in9) //
 				{
 					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9);
 
 					// Call the op
-					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9);
+					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8,
+						in9);
 
 					postprocess(out);
 					return out;
 				}
 
 				@Override
-				public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> asOpType() {
+				public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -458,35 +455,40 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> wrap( //
-			final OpInstance<Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public RichOp<Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>>
+			wrap( //
+				final OpInstance<Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedFunction10 //
-				extends AbstractRichOp<Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> //
-				implements Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> 
+				extends
+				AbstractRichOp<Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> //
+				implements Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>
 			{
 
-				public GenericTypedFunction10()
-				{
+				public GenericTypedFunction10() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10) //
+				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7,
+					I8 in8, I9 in9, I10 in10) //
 				{
 					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
 
 					// Call the op
-					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
+					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8,
+						in9, in10);
 
 					postprocess(out);
 					return out;
 				}
 
 				@Override
-				public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> asOpType() {
+				public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -501,35 +503,43 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> wrap( //
-			final OpInstance<Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>>
+			wrap( //
+				final OpInstance<Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedFunction11 //
-				extends AbstractRichOp<Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> //
-				implements Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> 
+				extends
+				AbstractRichOp<Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> //
+				implements
+				Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>
 			{
 
-				public GenericTypedFunction11()
-				{
+				public GenericTypedFunction11() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) //
+				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7,
+					I8 in8, I9 in9, I10 in10, I11 in11) //
 				{
 					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
 
 					// Call the op
-					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
+					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8,
+						in9, in10, in11);
 
 					postprocess(out);
 					return out;
 				}
 
 				@Override
-				public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> asOpType() {
+				public
+					Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -544,35 +554,44 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> wrap( //
-			final OpInstance<Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>>
+			wrap( //
+				final OpInstance<Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedFunction12 //
-				extends AbstractRichOp<Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> //
-				implements Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> 
+				extends
+				AbstractRichOp<Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> //
+				implements
+				Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>
 			{
 
-				public GenericTypedFunction12()
-				{
+				public GenericTypedFunction12() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) //
+				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7,
+					I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) //
 				{
-					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
+					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11,
+						in12);
 
 					// Call the op
-					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
+					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8,
+						in9, in10, in11, in12);
 
 					postprocess(out);
 					return out;
 				}
 
 				@Override
-				public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> asOpType() {
+				public
+					Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -587,35 +606,44 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> wrap( //
-			final OpInstance<Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>>
+			wrap( //
+				final OpInstance<Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedFunction13 //
-				extends AbstractRichOp<Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> //
-				implements Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> 
+				extends
+				AbstractRichOp<Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> //
+				implements
+				Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>
 			{
 
-				public GenericTypedFunction13()
-				{
+				public GenericTypedFunction13() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) //
+				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7,
+					I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) //
 				{
-					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
+					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11,
+						in12, in13);
 
 					// Call the op
-					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
+					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8,
+						in9, in10, in11, in12, in13);
 
 					postprocess(out);
 					return out;
 				}
 
 				@Override
-				public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> asOpType() {
+				public
+					Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -630,35 +658,44 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> wrap( //
-			final OpInstance<Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>>
+			wrap( //
+				final OpInstance<Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedFunction14 //
-				extends AbstractRichOp<Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> //
-				implements Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> 
+				extends
+				AbstractRichOp<Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> //
+				implements
+				Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>
 			{
 
-				public GenericTypedFunction14()
-				{
+				public GenericTypedFunction14() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) //
+				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7,
+					I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) //
 				{
-					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
+					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11,
+						in12, in13, in14);
 
 					// Call the op
-					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
+					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8,
+						in9, in10, in11, in12, in13, in14);
 
 					postprocess(out);
 					return out;
 				}
 
 				@Override
-				public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> asOpType() {
+				public
+					Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -673,35 +710,45 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> wrap( //
-			final OpInstance<Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>>
+			wrap( //
+				final OpInstance<Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedFunction15 //
-				extends AbstractRichOp<Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> //
-				implements Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> 
+				extends
+				AbstractRichOp<Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> //
+				implements
+				Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>
 			{
 
-				public GenericTypedFunction15()
-				{
+				public GenericTypedFunction15() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) //
+				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7,
+					I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14,
+					I15 in15) //
 				{
-					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
+					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11,
+						in12, in13, in14, in15);
 
 					// Call the op
-					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
+					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8,
+						in9, in10, in11, in12, in13, in14, in15);
 
 					postprocess(out);
 					return out;
 				}
 
 				@Override
-				public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> asOpType() {
+				public
+					Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -716,35 +763,45 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> wrap( //
-			final OpInstance<Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>>
+			wrap( //
+				final OpInstance<Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedFunction16 //
-				extends AbstractRichOp<Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> //
-				implements Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> 
+				extends
+				AbstractRichOp<Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> //
+				implements
+				Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>
 			{
 
-				public GenericTypedFunction16()
-				{
+				public GenericTypedFunction16() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) //
+				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7,
+					I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14,
+					I15 in15, I16 in16) //
 				{
-					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
+					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11,
+						in12, in13, in14, in15, in16);
 
 					// Call the op
-					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
+					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8,
+						in9, in10, in11, in12, in13, in14, in15, in16);
 
 					postprocess(out);
 					return out;
 				}
 
 				@Override
-				public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> asOpType() {
+				public
+					Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -768,10 +825,10 @@ public class OpWrappers {
 		{
 			class GenericTypedComputer0 //
 				extends AbstractRichOp<Computers.Arity0<O>> //
-				implements Computers.Arity0<O> 
+				implements Computers.Arity0<O>
 			{
-				public GenericTypedComputer0()
-				{
+
+				public GenericTypedComputer0() {
 					super(instance, env, hints);
 				}
 
@@ -809,10 +866,10 @@ public class OpWrappers {
 		{
 			class GenericTypedComputer1 //
 				extends AbstractRichOp<Computers.Arity1<I, O>> //
-				implements Computers.Arity1<I, O> 
+				implements Computers.Arity1<I, O>
 			{
-				public GenericTypedComputer1()
-				{
+
+				public GenericTypedComputer1() {
 					super(instance, env, hints);
 				}
 
@@ -850,10 +907,10 @@ public class OpWrappers {
 		{
 			class GenericTypedComputer2 //
 				extends AbstractRichOp<Computers.Arity2<I1, I2, O>> //
-				implements Computers.Arity2<I1, I2, O> 
+				implements Computers.Arity2<I1, I2, O>
 			{
-				public GenericTypedComputer2()
-				{
+
+				public GenericTypedComputer2() {
 					super(instance, env, hints);
 				}
 
@@ -891,10 +948,10 @@ public class OpWrappers {
 		{
 			class GenericTypedComputer3 //
 				extends AbstractRichOp<Computers.Arity3<I1, I2, I3, O>> //
-				implements Computers.Arity3<I1, I2, I3, O> 
+				implements Computers.Arity3<I1, I2, I3, O>
 			{
-				public GenericTypedComputer3()
-				{
+
+				public GenericTypedComputer3() {
 					super(instance, env, hints);
 				}
 
@@ -932,10 +989,10 @@ public class OpWrappers {
 		{
 			class GenericTypedComputer4 //
 				extends AbstractRichOp<Computers.Arity4<I1, I2, I3, I4, O>> //
-				implements Computers.Arity4<I1, I2, I3, I4, O> 
+				implements Computers.Arity4<I1, I2, I3, I4, O>
 			{
-				public GenericTypedComputer4()
-				{
+
+				public GenericTypedComputer4() {
 					super(instance, env, hints);
 				}
 
@@ -973,15 +1030,16 @@ public class OpWrappers {
 		{
 			class GenericTypedComputer5 //
 				extends AbstractRichOp<Computers.Arity5<I1, I2, I3, I4, I5, O>> //
-				implements Computers.Arity5<I1, I2, I3, I4, I5, O> 
+				implements Computers.Arity5<I1, I2, I3, I4, I5, O>
 			{
-				public GenericTypedComputer5()
-				{
+
+				public GenericTypedComputer5() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, @Container O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5,
+					@Container O out) //
 				{
 					preprocess(in1, in2, in3, in4, in5, out);
 
@@ -1014,15 +1072,16 @@ public class OpWrappers {
 		{
 			class GenericTypedComputer6 //
 				extends AbstractRichOp<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>> //
-				implements Computers.Arity6<I1, I2, I3, I4, I5, I6, O> 
+				implements Computers.Arity6<I1, I2, I3, I4, I5, I6, O>
 			{
-				public GenericTypedComputer6()
-				{
+
+				public GenericTypedComputer6() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, @Container O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6,
+					@Container O out) //
 				{
 					preprocess(in1, in2, in3, in4, in5, in6, out);
 
@@ -1055,15 +1114,16 @@ public class OpWrappers {
 		{
 			class GenericTypedComputer7 //
 				extends AbstractRichOp<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>> //
-				implements Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> 
+				implements Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>
 			{
-				public GenericTypedComputer7()
-				{
+
+				public GenericTypedComputer7() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, @Container O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6,
+					I7 in7, @Container O out) //
 				{
 					preprocess(in1, in2, in3, in4, in5, in6, in7, out);
 
@@ -1095,16 +1155,18 @@ public class OpWrappers {
 			final Hints hints)
 		{
 			class GenericTypedComputer8 //
-				extends AbstractRichOp<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>> //
-				implements Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> 
+				extends
+				AbstractRichOp<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>> //
+				implements Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>
 			{
-				public GenericTypedComputer8()
-				{
+
+				public GenericTypedComputer8() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, @Container O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6,
+					I7 in7, I8 in8, @Container O out) //
 				{
 					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, out);
 
@@ -1136,27 +1198,32 @@ public class OpWrappers {
 			final Hints hints)
 		{
 			class GenericTypedComputer9 //
-				extends AbstractRichOp<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>> //
-				implements Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> 
+				extends
+				AbstractRichOp<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>> //
+				implements Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>
 			{
-				public GenericTypedComputer9()
-				{
+
+				public GenericTypedComputer9() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, @Container O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6,
+					I7 in7, I8 in8, I9 in9, @Container O out) //
 				{
 					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, out);
 
 					// Call the op
-					instance.op().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, out);
+					instance.op().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9,
+						out);
 
 					postprocess(out);
 				}
 
 				@Override
-				public Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> asOpType() {
+				public Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -1171,33 +1238,39 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> wrap( //
-			final OpInstance<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public RichOp<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>>
+			wrap( //
+				final OpInstance<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedComputer10 //
-				extends AbstractRichOp<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> //
-				implements Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> 
+				extends
+				AbstractRichOp<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> //
+				implements Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>
 			{
-				public GenericTypedComputer10()
-				{
+
+				public GenericTypedComputer10() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, @Container O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6,
+					I7 in7, I8 in8, I9 in9, I10 in10, @Container O out) //
 				{
 					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, out);
 
 					// Call the op
-					instance.op().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, out);
+					instance.op().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9,
+						in10, out);
 
 					postprocess(out);
 				}
 
 				@Override
-				public Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> asOpType() {
+				public Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -1212,33 +1285,43 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> wrap( //
-			final OpInstance<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>>
+			wrap( //
+				final OpInstance<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedComputer11 //
-				extends AbstractRichOp<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> //
-				implements Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> 
+				extends
+				AbstractRichOp<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> //
+				implements
+				Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>
 			{
-				public GenericTypedComputer11()
-				{
+
+				public GenericTypedComputer11() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, @Container O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6,
+					I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, @Container O out) //
 				{
-					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, out);
+					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11,
+						out);
 
 					// Call the op
-					instance.op().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, out);
+					instance.op().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9,
+						in10, in11, out);
 
 					postprocess(out);
 				}
 
 				@Override
-				public Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> asOpType() {
+				public
+					Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -1253,33 +1336,44 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> wrap( //
-			final OpInstance<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>>
+			wrap( //
+				final OpInstance<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedComputer12 //
-				extends AbstractRichOp<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> //
-				implements Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> 
+				extends
+				AbstractRichOp<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> //
+				implements
+				Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>
 			{
-				public GenericTypedComputer12()
-				{
+
+				public GenericTypedComputer12() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, @Container O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6,
+					I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12,
+					@Container O out) //
 				{
-					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, out);
+					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11,
+						in12, out);
 
 					// Call the op
-					instance.op().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, out);
+					instance.op().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9,
+						in10, in11, in12, out);
 
 					postprocess(out);
 				}
 
 				@Override
-				public Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> asOpType() {
+				public
+					Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -1294,33 +1388,44 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> wrap( //
-			final OpInstance<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>>
+			wrap( //
+				final OpInstance<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedComputer13 //
-				extends AbstractRichOp<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> //
-				implements Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> 
+				extends
+				AbstractRichOp<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> //
+				implements
+				Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>
 			{
-				public GenericTypedComputer13()
-				{
+
+				public GenericTypedComputer13() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, @Container O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6,
+					I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13,
+					@Container O out) //
 				{
-					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, out);
+					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11,
+						in12, in13, out);
 
 					// Call the op
-					instance.op().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, out);
+					instance.op().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9,
+						in10, in11, in12, in13, out);
 
 					postprocess(out);
 				}
 
 				@Override
-				public Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> asOpType() {
+				public
+					Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -1335,33 +1440,44 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> wrap( //
-			final OpInstance<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>>
+			wrap( //
+				final OpInstance<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedComputer14 //
-				extends AbstractRichOp<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> //
-				implements Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> 
+				extends
+				AbstractRichOp<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> //
+				implements
+				Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>
 			{
-				public GenericTypedComputer14()
-				{
+
+				public GenericTypedComputer14() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, @Container O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6,
+					I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13,
+					I14 in14, @Container O out) //
 				{
-					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, out);
+					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11,
+						in12, in13, in14, out);
 
 					// Call the op
-					instance.op().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, out);
+					instance.op().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9,
+						in10, in11, in12, in13, in14, out);
 
 					postprocess(out);
 				}
 
 				@Override
-				public Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> asOpType() {
+				public
+					Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -1376,33 +1492,44 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> wrap( //
-			final OpInstance<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>>
+			wrap( //
+				final OpInstance<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedComputer15 //
-				extends AbstractRichOp<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> //
-				implements Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> 
+				extends
+				AbstractRichOp<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> //
+				implements
+				Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>
 			{
-				public GenericTypedComputer15()
-				{
+
+				public GenericTypedComputer15() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, @Container O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6,
+					I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13,
+					I14 in14, I15 in15, @Container O out) //
 				{
-					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, out);
+					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11,
+						in12, in13, in14, in15, out);
 
 					// Call the op
-					instance.op().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, out);
+					instance.op().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9,
+						in10, in11, in12, in13, in14, in15, out);
 
 					postprocess(out);
 				}
 
 				@Override
-				public Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> asOpType() {
+				public
+					Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -1417,33 +1544,44 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> wrap( //
-			final OpInstance<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>>
+			wrap( //
+				final OpInstance<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedComputer16 //
-				extends AbstractRichOp<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> //
-				implements Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> 
+				extends
+				AbstractRichOp<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> //
+				implements
+				Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>
 			{
-				public GenericTypedComputer16()
-				{
+
+				public GenericTypedComputer16() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16, @Container O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6,
+					I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13,
+					I14 in14, I15 in15, I16 in16, @Container O out) //
 				{
-					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16, out);
+					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11,
+						in12, in13, in14, in15, in16, out);
 
 					// Call the op
-					instance.op().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16, out);
+					instance.op().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9,
+						in10, in11, in12, in13, in14, in15, in16, out);
 
 					postprocess(out);
 				}
 
 				@Override
-				public Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> asOpType() {
+				public
+					Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -1467,10 +1605,10 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace1 //
 				extends AbstractRichOp<Inplaces.Arity1<IO>> //
-				implements Inplaces.Arity1<IO> 
+				implements Inplaces.Arity1<IO>
 			{
-				public GenericTypedInplace1()
-				{
+
+				public GenericTypedInplace1() {
 					super(instance, env, hints);
 				}
 
@@ -1509,10 +1647,10 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace2_1 //
 				extends AbstractRichOp<Inplaces.Arity2_1<IO, I2>> //
-				implements Inplaces.Arity2_1<IO, I2> 
+				implements Inplaces.Arity2_1<IO, I2>
 			{
-				public GenericTypedInplace2_1()
-				{
+
+				public GenericTypedInplace2_1() {
 					super(instance, env, hints);
 				}
 
@@ -1551,10 +1689,10 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace2_2 //
 				extends AbstractRichOp<Inplaces.Arity2_2<I1, IO>> //
-				implements Inplaces.Arity2_2<I1, IO> 
+				implements Inplaces.Arity2_2<I1, IO>
 			{
-				public GenericTypedInplace2_2()
-				{
+
+				public GenericTypedInplace2_2() {
 					super(instance, env, hints);
 				}
 
@@ -1593,10 +1731,10 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace3_1 //
 				extends AbstractRichOp<Inplaces.Arity3_1<IO, I2, I3>> //
-				implements Inplaces.Arity3_1<IO, I2, I3> 
+				implements Inplaces.Arity3_1<IO, I2, I3>
 			{
-				public GenericTypedInplace3_1()
-				{
+
+				public GenericTypedInplace3_1() {
 					super(instance, env, hints);
 				}
 
@@ -1635,10 +1773,10 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace3_2 //
 				extends AbstractRichOp<Inplaces.Arity3_2<I1, IO, I3>> //
-				implements Inplaces.Arity3_2<I1, IO, I3> 
+				implements Inplaces.Arity3_2<I1, IO, I3>
 			{
-				public GenericTypedInplace3_2()
-				{
+
+				public GenericTypedInplace3_2() {
 					super(instance, env, hints);
 				}
 
@@ -1677,10 +1815,10 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace3_3 //
 				extends AbstractRichOp<Inplaces.Arity3_3<I1, I2, IO>> //
-				implements Inplaces.Arity3_3<I1, I2, IO> 
+				implements Inplaces.Arity3_3<I1, I2, IO>
 			{
-				public GenericTypedInplace3_3()
-				{
+
+				public GenericTypedInplace3_3() {
 					super(instance, env, hints);
 				}
 
@@ -1719,10 +1857,10 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace4_1 //
 				extends AbstractRichOp<Inplaces.Arity4_1<IO, I2, I3, I4>> //
-				implements Inplaces.Arity4_1<IO, I2, I3, I4> 
+				implements Inplaces.Arity4_1<IO, I2, I3, I4>
 			{
-				public GenericTypedInplace4_1()
-				{
+
+				public GenericTypedInplace4_1() {
 					super(instance, env, hints);
 				}
 
@@ -1761,10 +1899,10 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace4_2 //
 				extends AbstractRichOp<Inplaces.Arity4_2<I1, IO, I3, I4>> //
-				implements Inplaces.Arity4_2<I1, IO, I3, I4> 
+				implements Inplaces.Arity4_2<I1, IO, I3, I4>
 			{
-				public GenericTypedInplace4_2()
-				{
+
+				public GenericTypedInplace4_2() {
 					super(instance, env, hints);
 				}
 
@@ -1803,10 +1941,10 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace4_3 //
 				extends AbstractRichOp<Inplaces.Arity4_3<I1, I2, IO, I4>> //
-				implements Inplaces.Arity4_3<I1, I2, IO, I4> 
+				implements Inplaces.Arity4_3<I1, I2, IO, I4>
 			{
-				public GenericTypedInplace4_3()
-				{
+
+				public GenericTypedInplace4_3() {
 					super(instance, env, hints);
 				}
 
@@ -1845,10 +1983,10 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace4_4 //
 				extends AbstractRichOp<Inplaces.Arity4_4<I1, I2, I3, IO>> //
-				implements Inplaces.Arity4_4<I1, I2, I3, IO> 
+				implements Inplaces.Arity4_4<I1, I2, I3, IO>
 			{
-				public GenericTypedInplace4_4()
-				{
+
+				public GenericTypedInplace4_4() {
 					super(instance, env, hints);
 				}
 
@@ -1887,15 +2025,16 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace5_1 //
 				extends AbstractRichOp<Inplaces.Arity5_1<IO, I2, I3, I4, I5>> //
-				implements Inplaces.Arity5_1<IO, I2, I3, I4, I5> 
+				implements Inplaces.Arity5_1<IO, I2, I3, I4, I5>
 			{
-				public GenericTypedInplace5_1()
-				{
+
+				public GenericTypedInplace5_1() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type) //
+				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type) //
 				{
 					preprocess(ioType, in2Type, in3Type, in4Type, in5Type);
 
@@ -1929,15 +2068,16 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace5_2 //
 				extends AbstractRichOp<Inplaces.Arity5_2<I1, IO, I3, I4, I5>> //
-				implements Inplaces.Arity5_2<I1, IO, I3, I4, I5> 
+				implements Inplaces.Arity5_2<I1, IO, I3, I4, I5>
 			{
-				public GenericTypedInplace5_2()
-				{
+
+				public GenericTypedInplace5_2() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type) //
+				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type,
+					I5 in5Type) //
 				{
 					preprocess(in1Type, ioType, in3Type, in4Type, in5Type);
 
@@ -1971,15 +2111,16 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace5_3 //
 				extends AbstractRichOp<Inplaces.Arity5_3<I1, I2, IO, I4, I5>> //
-				implements Inplaces.Arity5_3<I1, I2, IO, I4, I5> 
+				implements Inplaces.Arity5_3<I1, I2, IO, I4, I5>
 			{
-				public GenericTypedInplace5_3()
-				{
+
+				public GenericTypedInplace5_3() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type) //
+				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type,
+					I5 in5Type) //
 				{
 					preprocess(in1Type, in2Type, ioType, in4Type, in5Type);
 
@@ -2013,15 +2154,16 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace5_4 //
 				extends AbstractRichOp<Inplaces.Arity5_4<I1, I2, I3, IO, I5>> //
-				implements Inplaces.Arity5_4<I1, I2, I3, IO, I5> 
+				implements Inplaces.Arity5_4<I1, I2, I3, IO, I5>
 			{
-				public GenericTypedInplace5_4()
-				{
+
+				public GenericTypedInplace5_4() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType,
+					I5 in5Type) //
 				{
 					preprocess(in1Type, in2Type, in3Type, ioType, in5Type);
 
@@ -2055,15 +2197,16 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace5_5 //
 				extends AbstractRichOp<Inplaces.Arity5_5<I1, I2, I3, I4, IO>> //
-				implements Inplaces.Arity5_5<I1, I2, I3, I4, IO> 
+				implements Inplaces.Arity5_5<I1, I2, I3, I4, IO>
 			{
-				public GenericTypedInplace5_5()
-				{
+
+				public GenericTypedInplace5_5() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					IO ioType) //
 				{
 					preprocess(in1Type, in2Type, in3Type, in4Type, ioType);
 
@@ -2097,20 +2240,22 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace6_1 //
 				extends AbstractRichOp<Inplaces.Arity6_1<IO, I2, I3, I4, I5, I6>> //
-				implements Inplaces.Arity6_1<IO, I2, I3, I4, I5, I6> 
+				implements Inplaces.Arity6_1<IO, I2, I3, I4, I5, I6>
 			{
-				public GenericTypedInplace6_1()
-				{
+
+				public GenericTypedInplace6_1() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type) //
+				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type) //
 				{
 					preprocess(ioType, in2Type, in3Type, in4Type, in5Type, in6Type);
 
 					// Call the op
-					instance.op().mutate(ioType, in2Type, in3Type, in4Type, in5Type, in6Type);
+					instance.op().mutate(ioType, in2Type, in3Type, in4Type, in5Type,
+						in6Type);
 
 					// Log a new execution
 					postprocess(ioType);
@@ -2139,20 +2284,22 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace6_2 //
 				extends AbstractRichOp<Inplaces.Arity6_2<I1, IO, I3, I4, I5, I6>> //
-				implements Inplaces.Arity6_2<I1, IO, I3, I4, I5, I6> 
+				implements Inplaces.Arity6_2<I1, IO, I3, I4, I5, I6>
 			{
-				public GenericTypedInplace6_2()
-				{
+
+				public GenericTypedInplace6_2() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type) //
+				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type) //
 				{
 					preprocess(in1Type, ioType, in3Type, in4Type, in5Type, in6Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, ioType, in3Type, in4Type, in5Type, in6Type);
+					instance.op().mutate(in1Type, ioType, in3Type, in4Type, in5Type,
+						in6Type);
 
 					// Log a new execution
 					postprocess(ioType);
@@ -2181,20 +2328,22 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace6_3 //
 				extends AbstractRichOp<Inplaces.Arity6_3<I1, I2, IO, I4, I5, I6>> //
-				implements Inplaces.Arity6_3<I1, I2, IO, I4, I5, I6> 
+				implements Inplaces.Arity6_3<I1, I2, IO, I4, I5, I6>
 			{
-				public GenericTypedInplace6_3()
-				{
+
+				public GenericTypedInplace6_3() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type) //
+				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type,
+					I5 in5Type, I6 in6Type) //
 				{
 					preprocess(in1Type, in2Type, ioType, in4Type, in5Type, in6Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, ioType, in4Type, in5Type, in6Type);
+					instance.op().mutate(in1Type, in2Type, ioType, in4Type, in5Type,
+						in6Type);
 
 					// Log a new execution
 					postprocess(ioType);
@@ -2223,20 +2372,22 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace6_4 //
 				extends AbstractRichOp<Inplaces.Arity6_4<I1, I2, I3, IO, I5, I6>> //
-				implements Inplaces.Arity6_4<I1, I2, I3, IO, I5, I6> 
+				implements Inplaces.Arity6_4<I1, I2, I3, IO, I5, I6>
 			{
-				public GenericTypedInplace6_4()
-				{
+
+				public GenericTypedInplace6_4() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType,
+					I5 in5Type, I6 in6Type) //
 				{
 					preprocess(in1Type, in2Type, in3Type, ioType, in5Type, in6Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, ioType, in5Type, in6Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, ioType, in5Type,
+						in6Type);
 
 					// Log a new execution
 					postprocess(ioType);
@@ -2265,20 +2416,22 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace6_5 //
 				extends AbstractRichOp<Inplaces.Arity6_5<I1, I2, I3, I4, IO, I6>> //
-				implements Inplaces.Arity6_5<I1, I2, I3, I4, IO, I6> 
+				implements Inplaces.Arity6_5<I1, I2, I3, I4, IO, I6>
 			{
-				public GenericTypedInplace6_5()
-				{
+
+				public GenericTypedInplace6_5() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					IO ioType, I6 in6Type) //
 				{
 					preprocess(in1Type, in2Type, in3Type, in4Type, ioType, in6Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, ioType, in6Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, ioType,
+						in6Type);
 
 					// Log a new execution
 					postprocess(ioType);
@@ -2307,20 +2460,22 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace6_6 //
 				extends AbstractRichOp<Inplaces.Arity6_6<I1, I2, I3, I4, I5, IO>> //
-				implements Inplaces.Arity6_6<I1, I2, I3, I4, I5, IO> 
+				implements Inplaces.Arity6_6<I1, I2, I3, I4, I5, IO>
 			{
-				public GenericTypedInplace6_6()
-				{
+
+				public GenericTypedInplace6_6() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, IO ioType) //
 				{
 					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, ioType);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, ioType);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						ioType);
 
 					// Log a new execution
 					postprocess(ioType);
@@ -2349,20 +2504,23 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace7_1 //
 				extends AbstractRichOp<Inplaces.Arity7_1<IO, I2, I3, I4, I5, I6, I7>> //
-				implements Inplaces.Arity7_1<IO, I2, I3, I4, I5, I6, I7> 
+				implements Inplaces.Arity7_1<IO, I2, I3, I4, I5, I6, I7>
 			{
-				public GenericTypedInplace7_1()
-				{
+
+				public GenericTypedInplace7_1() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type) //
+				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type) //
 				{
-					preprocess(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
+					preprocess(ioType, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type);
 
 					// Call the op
-					instance.op().mutate(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
+					instance.op().mutate(ioType, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type);
 
 					// Log a new execution
 					postprocess(ioType);
@@ -2391,20 +2549,23 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace7_2 //
 				extends AbstractRichOp<Inplaces.Arity7_2<I1, IO, I3, I4, I5, I6, I7>> //
-				implements Inplaces.Arity7_2<I1, IO, I3, I4, I5, I6, I7> 
+				implements Inplaces.Arity7_2<I1, IO, I3, I4, I5, I6, I7>
 			{
-				public GenericTypedInplace7_2()
-				{
+
+				public GenericTypedInplace7_2() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type) //
+				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type) //
 				{
-					preprocess(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type);
+					preprocess(in1Type, ioType, in3Type, in4Type, in5Type, in6Type,
+						in7Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type);
+					instance.op().mutate(in1Type, ioType, in3Type, in4Type, in5Type,
+						in6Type, in7Type);
 
 					// Log a new execution
 					postprocess(ioType);
@@ -2433,20 +2594,23 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace7_3 //
 				extends AbstractRichOp<Inplaces.Arity7_3<I1, I2, IO, I4, I5, I6, I7>> //
-				implements Inplaces.Arity7_3<I1, I2, IO, I4, I5, I6, I7> 
+				implements Inplaces.Arity7_3<I1, I2, IO, I4, I5, I6, I7>
 			{
-				public GenericTypedInplace7_3()
-				{
+
+				public GenericTypedInplace7_3() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type) //
+				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type) //
 				{
-					preprocess(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type);
+					preprocess(in1Type, in2Type, ioType, in4Type, in5Type, in6Type,
+						in7Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type);
+					instance.op().mutate(in1Type, in2Type, ioType, in4Type, in5Type,
+						in6Type, in7Type);
 
 					// Log a new execution
 					postprocess(ioType);
@@ -2475,20 +2639,23 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace7_4 //
 				extends AbstractRichOp<Inplaces.Arity7_4<I1, I2, I3, IO, I5, I6, I7>> //
-				implements Inplaces.Arity7_4<I1, I2, I3, IO, I5, I6, I7> 
+				implements Inplaces.Arity7_4<I1, I2, I3, IO, I5, I6, I7>
 			{
-				public GenericTypedInplace7_4()
-				{
+
+				public GenericTypedInplace7_4() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type, I7 in7Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType,
+					I5 in5Type, I6 in6Type, I7 in7Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type);
+					preprocess(in1Type, in2Type, in3Type, ioType, in5Type, in6Type,
+						in7Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, ioType, in5Type,
+						in6Type, in7Type);
 
 					// Log a new execution
 					postprocess(ioType);
@@ -2517,20 +2684,23 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace7_5 //
 				extends AbstractRichOp<Inplaces.Arity7_5<I1, I2, I3, I4, IO, I6, I7>> //
-				implements Inplaces.Arity7_5<I1, I2, I3, I4, IO, I6, I7> 
+				implements Inplaces.Arity7_5<I1, I2, I3, I4, IO, I6, I7>
 			{
-				public GenericTypedInplace7_5()
-				{
+
+				public GenericTypedInplace7_5() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type, I7 in7Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					IO ioType, I6 in6Type, I7 in7Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, ioType, in6Type,
+						in7Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, ioType,
+						in6Type, in7Type);
 
 					// Log a new execution
 					postprocess(ioType);
@@ -2559,20 +2729,23 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace7_6 //
 				extends AbstractRichOp<Inplaces.Arity7_6<I1, I2, I3, I4, I5, IO, I7>> //
-				implements Inplaces.Arity7_6<I1, I2, I3, I4, I5, IO, I7> 
+				implements Inplaces.Arity7_6<I1, I2, I3, I4, I5, IO, I7>
 			{
-				public GenericTypedInplace7_6()
-				{
+
+				public GenericTypedInplace7_6() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType, I7 in7Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, IO ioType, I7 in7Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, ioType,
+						in7Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						ioType, in7Type);
 
 					// Log a new execution
 					postprocess(ioType);
@@ -2601,20 +2774,23 @@ public class OpWrappers {
 		{
 			class GenericTypedInplace7_7 //
 				extends AbstractRichOp<Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, IO>> //
-				implements Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, IO> 
+				implements Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, IO>
 			{
-				public GenericTypedInplace7_7()
-				{
+
+				public GenericTypedInplace7_7() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, IO ioType) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, IO ioType) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						ioType);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, ioType);
 
 					// Log a new execution
 					postprocess(ioType);
@@ -2642,21 +2818,25 @@ public class OpWrappers {
 			final Hints hints)
 		{
 			class GenericTypedInplace8_1 //
-				extends AbstractRichOp<Inplaces.Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8>> //
-				implements Inplaces.Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8> 
+				extends
+				AbstractRichOp<Inplaces.Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8>> //
+				implements Inplaces.Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8>
 			{
-				public GenericTypedInplace8_1()
-				{
+
+				public GenericTypedInplace8_1() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type) //
+				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type) //
 				{
-					preprocess(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
+					preprocess(ioType, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type);
 
 					// Call the op
-					instance.op().mutate(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
+					instance.op().mutate(ioType, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type);
 
 					// Log a new execution
 					postprocess(ioType);
@@ -2684,21 +2864,25 @@ public class OpWrappers {
 			final Hints hints)
 		{
 			class GenericTypedInplace8_2 //
-				extends AbstractRichOp<Inplaces.Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8>> //
-				implements Inplaces.Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8> 
+				extends
+				AbstractRichOp<Inplaces.Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8>> //
+				implements Inplaces.Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8>
 			{
-				public GenericTypedInplace8_2()
-				{
+
+				public GenericTypedInplace8_2() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type) //
+				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type) //
 				{
-					preprocess(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
+					preprocess(in1Type, ioType, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
+					instance.op().mutate(in1Type, ioType, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type);
 
 					// Log a new execution
 					postprocess(ioType);
@@ -2726,21 +2910,25 @@ public class OpWrappers {
 			final Hints hints)
 		{
 			class GenericTypedInplace8_3 //
-				extends AbstractRichOp<Inplaces.Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8>> //
-				implements Inplaces.Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8> 
+				extends
+				AbstractRichOp<Inplaces.Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8>> //
+				implements Inplaces.Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8>
 			{
-				public GenericTypedInplace8_3()
-				{
+
+				public GenericTypedInplace8_3() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type) //
+				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type) //
 				{
-					preprocess(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type);
+					preprocess(in1Type, in2Type, ioType, in4Type, in5Type, in6Type,
+						in7Type, in8Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type);
+					instance.op().mutate(in1Type, in2Type, ioType, in4Type, in5Type,
+						in6Type, in7Type, in8Type);
 
 					// Log a new execution
 					postprocess(ioType);
@@ -2768,21 +2956,25 @@ public class OpWrappers {
 			final Hints hints)
 		{
 			class GenericTypedInplace8_4 //
-				extends AbstractRichOp<Inplaces.Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8>> //
-				implements Inplaces.Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8> 
+				extends
+				AbstractRichOp<Inplaces.Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8>> //
+				implements Inplaces.Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8>
 			{
-				public GenericTypedInplace8_4()
-				{
+
+				public GenericTypedInplace8_4() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type);
+					preprocess(in1Type, in2Type, in3Type, ioType, in5Type, in6Type,
+						in7Type, in8Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, ioType, in5Type,
+						in6Type, in7Type, in8Type);
 
 					// Log a new execution
 					postprocess(ioType);
@@ -2810,21 +3002,25 @@ public class OpWrappers {
 			final Hints hints)
 		{
 			class GenericTypedInplace8_5 //
-				extends AbstractRichOp<Inplaces.Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8>> //
-				implements Inplaces.Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8> 
+				extends
+				AbstractRichOp<Inplaces.Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8>> //
+				implements Inplaces.Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8>
 			{
-				public GenericTypedInplace8_5()
-				{
+
+				public GenericTypedInplace8_5() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type, I7 in7Type, I8 in8Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					IO ioType, I6 in6Type, I7 in7Type, I8 in8Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, ioType, in6Type,
+						in7Type, in8Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, ioType,
+						in6Type, in7Type, in8Type);
 
 					// Log a new execution
 					postprocess(ioType);
@@ -2852,21 +3048,25 @@ public class OpWrappers {
 			final Hints hints)
 		{
 			class GenericTypedInplace8_6 //
-				extends AbstractRichOp<Inplaces.Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8>> //
-				implements Inplaces.Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8> 
+				extends
+				AbstractRichOp<Inplaces.Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8>> //
+				implements Inplaces.Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8>
 			{
-				public GenericTypedInplace8_6()
-				{
+
+				public GenericTypedInplace8_6() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType, I7 in7Type, I8 in8Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, IO ioType, I7 in7Type, I8 in8Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, ioType,
+						in7Type, in8Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						ioType, in7Type, in8Type);
 
 					// Log a new execution
 					postprocess(ioType);
@@ -2894,21 +3094,25 @@ public class OpWrappers {
 			final Hints hints)
 		{
 			class GenericTypedInplace8_7 //
-				extends AbstractRichOp<Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8>> //
-				implements Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8> 
+				extends
+				AbstractRichOp<Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8>> //
+				implements Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8>
 			{
-				public GenericTypedInplace8_7()
-				{
+
+				public GenericTypedInplace8_7() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, IO ioType, I8 in8Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, IO ioType, I8 in8Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						ioType, in8Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, ioType, in8Type);
 
 					// Log a new execution
 					postprocess(ioType);
@@ -2936,21 +3140,25 @@ public class OpWrappers {
 			final Hints hints)
 		{
 			class GenericTypedInplace8_8 //
-				extends AbstractRichOp<Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO>> //
-				implements Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO> 
+				extends
+				AbstractRichOp<Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO>> //
+				implements Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO>
 			{
-				public GenericTypedInplace8_8()
-				{
+
+				public GenericTypedInplace8_8() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, IO ioType) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, IO ioType) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, ioType);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, ioType);
 
 					// Log a new execution
 					postprocess(ioType);
@@ -2978,28 +3186,34 @@ public class OpWrappers {
 			final Hints hints)
 		{
 			class GenericTypedInplace9_1 //
-				extends AbstractRichOp<Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9>> //
-				implements Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9> 
+				extends
+				AbstractRichOp<Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9>> //
+				implements Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9>
 			{
-				public GenericTypedInplace9_1()
-				{
+
+				public GenericTypedInplace9_1() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type) //
+				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type) //
 				{
-					preprocess(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+					preprocess(ioType, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type);
 
 					// Call the op
-					instance.op().mutate(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+					instance.op().mutate(ioType, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9> asOpType() {
+				public Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3020,28 +3234,34 @@ public class OpWrappers {
 			final Hints hints)
 		{
 			class GenericTypedInplace9_2 //
-				extends AbstractRichOp<Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9>> //
-				implements Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9> 
+				extends
+				AbstractRichOp<Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9>> //
+				implements Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9>
 			{
-				public GenericTypedInplace9_2()
-				{
+
+				public GenericTypedInplace9_2() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type) //
+				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type) //
 				{
-					preprocess(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+					preprocess(in1Type, ioType, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+					instance.op().mutate(in1Type, ioType, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9> asOpType() {
+				public Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3062,28 +3282,34 @@ public class OpWrappers {
 			final Hints hints)
 		{
 			class GenericTypedInplace9_3 //
-				extends AbstractRichOp<Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9>> //
-				implements Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9> 
+				extends
+				AbstractRichOp<Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9>> //
+				implements Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9>
 			{
-				public GenericTypedInplace9_3()
-				{
+
+				public GenericTypedInplace9_3() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type) //
+				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type) //
 				{
-					preprocess(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+					preprocess(in1Type, in2Type, ioType, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+					instance.op().mutate(in1Type, in2Type, ioType, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9> asOpType() {
+				public Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3104,28 +3330,34 @@ public class OpWrappers {
 			final Hints hints)
 		{
 			class GenericTypedInplace9_4 //
-				extends AbstractRichOp<Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9>> //
-				implements Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9> 
+				extends
+				AbstractRichOp<Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9>> //
+				implements Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9>
 			{
-				public GenericTypedInplace9_4()
-				{
+
+				public GenericTypedInplace9_4() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type);
+					preprocess(in1Type, in2Type, in3Type, ioType, in5Type, in6Type,
+						in7Type, in8Type, in9Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, ioType, in5Type,
+						in6Type, in7Type, in8Type, in9Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9> asOpType() {
+				public Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3146,28 +3378,34 @@ public class OpWrappers {
 			final Hints hints)
 		{
 			class GenericTypedInplace9_5 //
-				extends AbstractRichOp<Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9>> //
-				implements Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9> 
+				extends
+				AbstractRichOp<Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9>> //
+				implements Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9>
 			{
-				public GenericTypedInplace9_5()
-				{
+
+				public GenericTypedInplace9_5() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, ioType, in6Type,
+						in7Type, in8Type, in9Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, ioType,
+						in6Type, in7Type, in8Type, in9Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9> asOpType() {
+				public Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3188,28 +3426,34 @@ public class OpWrappers {
 			final Hints hints)
 		{
 			class GenericTypedInplace9_6 //
-				extends AbstractRichOp<Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9>> //
-				implements Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9> 
+				extends
+				AbstractRichOp<Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9>> //
+				implements Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9>
 			{
-				public GenericTypedInplace9_6()
-				{
+
+				public GenericTypedInplace9_6() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, ioType,
+						in7Type, in8Type, in9Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						ioType, in7Type, in8Type, in9Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9> asOpType() {
+				public Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3230,28 +3474,34 @@ public class OpWrappers {
 			final Hints hints)
 		{
 			class GenericTypedInplace9_7 //
-				extends AbstractRichOp<Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9>> //
-				implements Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9> 
+				extends
+				AbstractRichOp<Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9>> //
+				implements Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9>
 			{
-				public GenericTypedInplace9_7()
-				{
+
+				public GenericTypedInplace9_7() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						ioType, in8Type, in9Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, ioType, in8Type, in9Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9> asOpType() {
+				public Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3272,28 +3522,34 @@ public class OpWrappers {
 			final Hints hints)
 		{
 			class GenericTypedInplace9_8 //
-				extends AbstractRichOp<Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9>> //
-				implements Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9> 
+				extends
+				AbstractRichOp<Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9>> //
+				implements Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9>
 			{
-				public GenericTypedInplace9_8()
-				{
+
+				public GenericTypedInplace9_8() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, ioType, in9Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, ioType, in9Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9> asOpType() {
+				public Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3314,28 +3570,34 @@ public class OpWrappers {
 			final Hints hints)
 		{
 			class GenericTypedInplace9_9 //
-				extends AbstractRichOp<Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO>> //
-				implements Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO> 
+				extends
+				AbstractRichOp<Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO>> //
+				implements Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO>
 			{
-				public GenericTypedInplace9_9()
-				{
+
+				public GenericTypedInplace9_9() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, ioType);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, ioType);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO> asOpType() {
+				public Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3350,34 +3612,42 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10>> wrap( //
-			final OpInstance<Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public RichOp<Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10>>
+			wrap( //
+				final OpInstance<Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace10_1 //
-				extends AbstractRichOp<Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10>> //
-				implements Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10> 
+				extends
+				AbstractRichOp<Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10>> //
+				implements Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10>
 			{
-				public GenericTypedInplace10_1()
-				{
+
+				public GenericTypedInplace10_1() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type) //
+				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type) //
 				{
-					preprocess(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+					preprocess(ioType, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type);
 
 					// Call the op
-					instance.op().mutate(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+					instance.op().mutate(ioType, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10> asOpType() {
+				public Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3392,34 +3662,42 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10>> wrap( //
-			final OpInstance<Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public RichOp<Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10>>
+			wrap( //
+				final OpInstance<Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace10_2 //
-				extends AbstractRichOp<Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10>> //
-				implements Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10> 
+				extends
+				AbstractRichOp<Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10>> //
+				implements Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10>
 			{
-				public GenericTypedInplace10_2()
-				{
+
+				public GenericTypedInplace10_2() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type) //
+				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type) //
 				{
-					preprocess(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+					preprocess(in1Type, ioType, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+					instance.op().mutate(in1Type, ioType, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10> asOpType() {
+				public Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3434,34 +3712,42 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10>> wrap( //
-			final OpInstance<Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public RichOp<Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10>>
+			wrap( //
+				final OpInstance<Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace10_3 //
-				extends AbstractRichOp<Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10>> //
-				implements Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10> 
+				extends
+				AbstractRichOp<Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10>> //
+				implements Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10>
 			{
-				public GenericTypedInplace10_3()
-				{
+
+				public GenericTypedInplace10_3() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type) //
+				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type) //
 				{
-					preprocess(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+					preprocess(in1Type, in2Type, ioType, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+					instance.op().mutate(in1Type, in2Type, ioType, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10> asOpType() {
+				public Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3476,34 +3762,42 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10>> wrap( //
-			final OpInstance<Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public RichOp<Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10>>
+			wrap( //
+				final OpInstance<Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace10_4 //
-				extends AbstractRichOp<Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10>> //
-				implements Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10> 
+				extends
+				AbstractRichOp<Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10>> //
+				implements Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10>
 			{
-				public GenericTypedInplace10_4()
-				{
+
+				public GenericTypedInplace10_4() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+					preprocess(in1Type, in2Type, in3Type, ioType, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, ioType, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10> asOpType() {
+				public Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3518,34 +3812,42 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10>> wrap( //
-			final OpInstance<Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public RichOp<Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10>>
+			wrap( //
+				final OpInstance<Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace10_5 //
-				extends AbstractRichOp<Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10>> //
-				implements Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10> 
+				extends
+				AbstractRichOp<Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10>> //
+				implements Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10>
 			{
-				public GenericTypedInplace10_5()
-				{
+
+				public GenericTypedInplace10_5() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, ioType, in6Type,
+						in7Type, in8Type, in9Type, in10Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, ioType,
+						in6Type, in7Type, in8Type, in9Type, in10Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10> asOpType() {
+				public Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3560,34 +3862,42 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10>> wrap( //
-			final OpInstance<Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public RichOp<Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10>>
+			wrap( //
+				final OpInstance<Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace10_6 //
-				extends AbstractRichOp<Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10>> //
-				implements Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10> 
+				extends
+				AbstractRichOp<Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10>> //
+				implements Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10>
 			{
-				public GenericTypedInplace10_6()
-				{
+
+				public GenericTypedInplace10_6() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, ioType,
+						in7Type, in8Type, in9Type, in10Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						ioType, in7Type, in8Type, in9Type, in10Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10> asOpType() {
+				public Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3602,34 +3912,42 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10>> wrap( //
-			final OpInstance<Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public RichOp<Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10>>
+			wrap( //
+				final OpInstance<Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace10_7 //
-				extends AbstractRichOp<Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10>> //
-				implements Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10> 
+				extends
+				AbstractRichOp<Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10>> //
+				implements Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10>
 			{
-				public GenericTypedInplace10_7()
-				{
+
+				public GenericTypedInplace10_7() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type, I10 in10Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type,
+					I10 in10Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						ioType, in8Type, in9Type, in10Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, ioType, in8Type, in9Type, in10Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10> asOpType() {
+				public Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3644,34 +3962,42 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10>> wrap( //
-			final OpInstance<Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public RichOp<Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10>>
+			wrap( //
+				final OpInstance<Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace10_8 //
-				extends AbstractRichOp<Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10>> //
-				implements Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10> 
+				extends
+				AbstractRichOp<Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10>> //
+				implements Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10>
 			{
-				public GenericTypedInplace10_8()
-				{
+
+				public GenericTypedInplace10_8() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type, I10 in10Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type,
+					I10 in10Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, ioType, in9Type, in10Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, ioType, in9Type, in10Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10> asOpType() {
+				public Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3686,34 +4012,42 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10>> wrap( //
-			final OpInstance<Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public RichOp<Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10>>
+			wrap( //
+				final OpInstance<Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace10_9 //
-				extends AbstractRichOp<Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10>> //
-				implements Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10> 
+				extends
+				AbstractRichOp<Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10>> //
+				implements Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10>
 			{
-				public GenericTypedInplace10_9()
-				{
+
+				public GenericTypedInplace10_9() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType, I10 in10Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType,
+					I10 in10Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, ioType, in10Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, ioType, in10Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10> asOpType() {
+				public Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3728,34 +4062,41 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO>> wrap( //
-			final OpInstance<Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public RichOp<Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO>>
+			wrap( //
+				final OpInstance<Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace10_10 //
-				extends AbstractRichOp<Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO>> //
-				implements Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO> 
+				extends
+				AbstractRichOp<Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO>> //
+				implements Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO>
 			{
-				public GenericTypedInplace10_10()
-				{
+
+				public GenericTypedInplace10_10() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, IO ioType) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, IO ioType) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, ioType);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, ioType);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO> asOpType() {
+				public Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3770,34 +4111,44 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11>> wrap( //
-			final OpInstance<Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11>>
+			wrap( //
+				final OpInstance<Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace11_1 //
-				extends AbstractRichOp<Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11>> //
-				implements Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> 
+				extends
+				AbstractRichOp<Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11>> //
+				implements
+				Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11>
 			{
-				public GenericTypedInplace11_1()
-				{
+
+				public GenericTypedInplace11_1() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type) //
+				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type) //
 				{
-					preprocess(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+					preprocess(ioType, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type);
 
 					// Call the op
-					instance.op().mutate(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+					instance.op().mutate(ioType, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> asOpType() {
+				public Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3812,34 +4163,44 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11>> wrap( //
-			final OpInstance<Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11>>
+			wrap( //
+				final OpInstance<Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace11_2 //
-				extends AbstractRichOp<Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11>> //
-				implements Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11> 
+				extends
+				AbstractRichOp<Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11>> //
+				implements
+				Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11>
 			{
-				public GenericTypedInplace11_2()
-				{
+
+				public GenericTypedInplace11_2() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type) //
+				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type) //
 				{
-					preprocess(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+					preprocess(in1Type, ioType, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+					instance.op().mutate(in1Type, ioType, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11> asOpType() {
+				public Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3854,34 +4215,44 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11>> wrap( //
-			final OpInstance<Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11>>
+			wrap( //
+				final OpInstance<Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace11_3 //
-				extends AbstractRichOp<Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11>> //
-				implements Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11> 
+				extends
+				AbstractRichOp<Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11>> //
+				implements
+				Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11>
 			{
-				public GenericTypedInplace11_3()
-				{
+
+				public GenericTypedInplace11_3() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type) //
+				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type) //
 				{
-					preprocess(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+					preprocess(in1Type, in2Type, ioType, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+					instance.op().mutate(in1Type, in2Type, ioType, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11> asOpType() {
+				public Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3896,34 +4267,44 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11>> wrap( //
-			final OpInstance<Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11>>
+			wrap( //
+				final OpInstance<Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace11_4 //
-				extends AbstractRichOp<Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11>> //
-				implements Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11> 
+				extends
+				AbstractRichOp<Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11>> //
+				implements
+				Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11>
 			{
-				public GenericTypedInplace11_4()
-				{
+
+				public GenericTypedInplace11_4() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+					preprocess(in1Type, in2Type, in3Type, ioType, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, ioType, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11> asOpType() {
+				public Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3938,34 +4319,44 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11>> wrap( //
-			final OpInstance<Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11>>
+			wrap( //
+				final OpInstance<Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace11_5 //
-				extends AbstractRichOp<Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11>> //
-				implements Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11> 
+				extends
+				AbstractRichOp<Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11>> //
+				implements
+				Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11>
 			{
-				public GenericTypedInplace11_5()
-				{
+
+				public GenericTypedInplace11_5() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, ioType, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, ioType,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11> asOpType() {
+				public Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -3980,34 +4371,44 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11>> wrap( //
-			final OpInstance<Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11>>
+			wrap( //
+				final OpInstance<Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace11_6 //
-				extends AbstractRichOp<Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11>> //
-				implements Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11> 
+				extends
+				AbstractRichOp<Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11>> //
+				implements
+				Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11>
 			{
-				public GenericTypedInplace11_6()
-				{
+
+				public GenericTypedInplace11_6() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, ioType,
+						in7Type, in8Type, in9Type, in10Type, in11Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						ioType, in7Type, in8Type, in9Type, in10Type, in11Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11> asOpType() {
+				public Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4022,34 +4423,44 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11>> wrap( //
-			final OpInstance<Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11>>
+			wrap( //
+				final OpInstance<Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace11_7 //
-				extends AbstractRichOp<Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11>> //
-				implements Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11> 
+				extends
+				AbstractRichOp<Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11>> //
+				implements
+				Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11>
 			{
-				public GenericTypedInplace11_7()
-				{
+
+				public GenericTypedInplace11_7() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						ioType, in8Type, in9Type, in10Type, in11Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, ioType, in8Type, in9Type, in10Type, in11Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11> asOpType() {
+				public Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4064,34 +4475,44 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11>> wrap( //
-			final OpInstance<Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11>>
+			wrap( //
+				final OpInstance<Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace11_8 //
-				extends AbstractRichOp<Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11>> //
-				implements Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11> 
+				extends
+				AbstractRichOp<Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11>> //
+				implements
+				Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11>
 			{
-				public GenericTypedInplace11_8()
-				{
+
+				public GenericTypedInplace11_8() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type, I10 in10Type, I11 in11Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type,
+					I10 in10Type, I11 in11Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, ioType, in9Type, in10Type, in11Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, ioType, in9Type, in10Type, in11Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11> asOpType() {
+				public Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4106,34 +4527,44 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11>> wrap( //
-			final OpInstance<Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11>>
+			wrap( //
+				final OpInstance<Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace11_9 //
-				extends AbstractRichOp<Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11>> //
-				implements Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11> 
+				extends
+				AbstractRichOp<Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11>> //
+				implements
+				Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11>
 			{
-				public GenericTypedInplace11_9()
-				{
+
+				public GenericTypedInplace11_9() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType, I10 in10Type, I11 in11Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType,
+					I10 in10Type, I11 in11Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, ioType, in10Type, in11Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, ioType, in10Type, in11Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11> asOpType() {
+				public Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4148,34 +4579,44 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11>> wrap( //
-			final OpInstance<Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11>>
+			wrap( //
+				final OpInstance<Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace11_10 //
-				extends AbstractRichOp<Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11>> //
-				implements Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11> 
+				extends
+				AbstractRichOp<Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11>> //
+				implements
+				Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11>
 			{
-				public GenericTypedInplace11_10()
-				{
+
+				public GenericTypedInplace11_10() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, IO ioType, I11 in11Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, IO ioType,
+					I11 in11Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, ioType, in11Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, ioType, in11Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11> asOpType() {
+				public Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4190,34 +4631,44 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO>> wrap( //
-			final OpInstance<Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO>>
+			wrap( //
+				final OpInstance<Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace11_11 //
-				extends AbstractRichOp<Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO>> //
-				implements Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO> 
+				extends
+				AbstractRichOp<Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO>> //
+				implements
+				Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO>
 			{
-				public GenericTypedInplace11_11()
-				{
+
+				public GenericTypedInplace11_11() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, IO ioType) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, IO ioType) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, ioType);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, ioType);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO> asOpType() {
+				public Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4232,34 +4683,45 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>> wrap( //
-			final OpInstance<Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>>
+			wrap( //
+				final OpInstance<Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace12_1 //
-				extends AbstractRichOp<Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>> //
-				implements Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> 
+				extends
+				AbstractRichOp<Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>> //
+				implements
+				Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>
 			{
-				public GenericTypedInplace12_1()
-				{
+
+				public GenericTypedInplace12_1() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type) //
+				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type) //
 				{
-					preprocess(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+					preprocess(ioType, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 
 					// Call the op
-					instance.op().mutate(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+					instance.op().mutate(ioType, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> asOpType() {
+				public
+					Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4274,34 +4736,45 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>> wrap( //
-			final OpInstance<Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>>
+			wrap( //
+				final OpInstance<Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace12_2 //
-				extends AbstractRichOp<Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>> //
-				implements Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> 
+				extends
+				AbstractRichOp<Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>> //
+				implements
+				Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>
 			{
-				public GenericTypedInplace12_2()
-				{
+
+				public GenericTypedInplace12_2() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type) //
+				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type) //
 				{
-					preprocess(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+					preprocess(in1Type, ioType, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+					instance.op().mutate(in1Type, ioType, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> asOpType() {
+				public
+					Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4316,34 +4789,45 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12>> wrap( //
-			final OpInstance<Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12>>
+			wrap( //
+				final OpInstance<Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace12_3 //
-				extends AbstractRichOp<Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12>> //
-				implements Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12> 
+				extends
+				AbstractRichOp<Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12>> //
+				implements
+				Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12>
 			{
-				public GenericTypedInplace12_3()
-				{
+
+				public GenericTypedInplace12_3() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type) //
+				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type) //
 				{
-					preprocess(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+					preprocess(in1Type, in2Type, ioType, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+					instance.op().mutate(in1Type, in2Type, ioType, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12> asOpType() {
+				public
+					Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4358,34 +4842,45 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12>> wrap( //
-			final OpInstance<Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12>>
+			wrap( //
+				final OpInstance<Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace12_4 //
-				extends AbstractRichOp<Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12>> //
-				implements Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12> 
+				extends
+				AbstractRichOp<Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12>> //
+				implements
+				Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12>
 			{
-				public GenericTypedInplace12_4()
-				{
+
+				public GenericTypedInplace12_4() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+					preprocess(in1Type, in2Type, in3Type, ioType, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, ioType, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12> asOpType() {
+				public
+					Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4400,34 +4895,45 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12>> wrap( //
-			final OpInstance<Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12>>
+			wrap( //
+				final OpInstance<Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace12_5 //
-				extends AbstractRichOp<Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12>> //
-				implements Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12> 
+				extends
+				AbstractRichOp<Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12>> //
+				implements
+				Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12>
 			{
-				public GenericTypedInplace12_5()
-				{
+
+				public GenericTypedInplace12_5() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, ioType, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, ioType,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12> asOpType() {
+				public
+					Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4442,34 +4948,45 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12>> wrap( //
-			final OpInstance<Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12>>
+			wrap( //
+				final OpInstance<Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace12_6 //
-				extends AbstractRichOp<Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12>> //
-				implements Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12> 
+				extends
+				AbstractRichOp<Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12>> //
+				implements
+				Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12>
 			{
-				public GenericTypedInplace12_6()
-				{
+
+				public GenericTypedInplace12_6() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, ioType,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12> asOpType() {
+				public
+					Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4484,34 +5001,45 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12>> wrap( //
-			final OpInstance<Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12>>
+			wrap( //
+				final OpInstance<Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace12_7 //
-				extends AbstractRichOp<Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12>> //
-				implements Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12> 
+				extends
+				AbstractRichOp<Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12>> //
+				implements
+				Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12>
 			{
-				public GenericTypedInplace12_7()
-				{
+
+				public GenericTypedInplace12_7() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						ioType, in8Type, in9Type, in10Type, in11Type, in12Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12> asOpType() {
+				public
+					Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4526,34 +5054,45 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12>> wrap( //
-			final OpInstance<Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12>>
+			wrap( //
+				final OpInstance<Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace12_8 //
-				extends AbstractRichOp<Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12>> //
-				implements Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12> 
+				extends
+				AbstractRichOp<Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12>> //
+				implements
+				Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12>
 			{
-				public GenericTypedInplace12_8()
-				{
+
+				public GenericTypedInplace12_8() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, ioType, in9Type, in10Type, in11Type, in12Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12> asOpType() {
+				public
+					Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4568,34 +5107,45 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12>> wrap( //
-			final OpInstance<Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12>>
+			wrap( //
+				final OpInstance<Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace12_9 //
-				extends AbstractRichOp<Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12>> //
-				implements Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12> 
+				extends
+				AbstractRichOp<Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12>> //
+				implements
+				Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12>
 			{
-				public GenericTypedInplace12_9()
-				{
+
+				public GenericTypedInplace12_9() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType, I10 in10Type, I11 in11Type, I12 in12Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType,
+					I10 in10Type, I11 in11Type, I12 in12Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, ioType, in10Type, in11Type, in12Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12> asOpType() {
+				public
+					Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4610,34 +5160,45 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12>> wrap( //
-			final OpInstance<Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12>>
+			wrap( //
+				final OpInstance<Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace12_10 //
-				extends AbstractRichOp<Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12>> //
-				implements Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12> 
+				extends
+				AbstractRichOp<Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12>> //
+				implements
+				Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12>
 			{
-				public GenericTypedInplace12_10()
-				{
+
+				public GenericTypedInplace12_10() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, IO ioType, I11 in11Type, I12 in12Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, IO ioType,
+					I11 in11Type, I12 in12Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, ioType, in11Type, in12Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12> asOpType() {
+				public
+					Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4652,34 +5213,45 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12>> wrap( //
-			final OpInstance<Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12>>
+			wrap( //
+				final OpInstance<Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace12_11 //
-				extends AbstractRichOp<Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12>> //
-				implements Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12> 
+				extends
+				AbstractRichOp<Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12>> //
+				implements
+				Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12>
 			{
-				public GenericTypedInplace12_11()
-				{
+
+				public GenericTypedInplace12_11() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, IO ioType, I12 in12Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, IO ioType, I12 in12Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, ioType, in12Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12> asOpType() {
+				public
+					Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4694,34 +5266,45 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO>> wrap( //
-			final OpInstance<Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO>>
+			wrap( //
+				final OpInstance<Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace12_12 //
-				extends AbstractRichOp<Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO>> //
-				implements Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> 
+				extends
+				AbstractRichOp<Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO>> //
+				implements
+				Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO>
 			{
-				public GenericTypedInplace12_12()
-				{
+
+				public GenericTypedInplace12_12() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, IO ioType) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, IO ioType) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, ioType);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> asOpType() {
+				public
+					Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4736,34 +5319,46 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> wrap( //
-			final OpInstance<Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>>
+			wrap( //
+				final OpInstance<Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace13_1 //
-				extends AbstractRichOp<Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> //
-				implements Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> 
+				extends
+				AbstractRichOp<Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> //
+				implements
+				Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>
 			{
-				public GenericTypedInplace13_1()
-				{
+
+				public GenericTypedInplace13_1() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
+				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
 				{
-					preprocess(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+					preprocess(ioType, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 
 					// Call the op
-					instance.op().mutate(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+					instance.op().mutate(ioType, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> asOpType() {
+				public
+					Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4778,34 +5373,46 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> wrap( //
-			final OpInstance<Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>>
+			wrap( //
+				final OpInstance<Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace13_2 //
-				extends AbstractRichOp<Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> //
-				implements Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> 
+				extends
+				AbstractRichOp<Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> //
+				implements
+				Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>
 			{
-				public GenericTypedInplace13_2()
-				{
+
+				public GenericTypedInplace13_2() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
+				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
 				{
-					preprocess(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+					preprocess(in1Type, ioType, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+					instance.op().mutate(in1Type, ioType, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> asOpType() {
+				public
+					Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4820,34 +5427,46 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> wrap( //
-			final OpInstance<Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>>
+			wrap( //
+				final OpInstance<Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace13_3 //
-				extends AbstractRichOp<Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> //
-				implements Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> 
+				extends
+				AbstractRichOp<Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> //
+				implements
+				Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>
 			{
-				public GenericTypedInplace13_3()
-				{
+
+				public GenericTypedInplace13_3() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
+				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
 				{
-					preprocess(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+					preprocess(in1Type, in2Type, ioType, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+					instance.op().mutate(in1Type, in2Type, ioType, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> asOpType() {
+				public
+					Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4862,34 +5481,46 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13>> wrap( //
-			final OpInstance<Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13>>
+			wrap( //
+				final OpInstance<Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace13_4 //
-				extends AbstractRichOp<Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13>> //
-				implements Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13> 
+				extends
+				AbstractRichOp<Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13>> //
+				implements
+				Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13>
 			{
-				public GenericTypedInplace13_4()
-				{
+
+				public GenericTypedInplace13_4() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+					preprocess(in1Type, in2Type, in3Type, ioType, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, ioType, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13> asOpType() {
+				public
+					Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4904,34 +5535,46 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13>> wrap( //
-			final OpInstance<Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13>>
+			wrap( //
+				final OpInstance<Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace13_5 //
-				extends AbstractRichOp<Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13>> //
-				implements Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13> 
+				extends
+				AbstractRichOp<Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13>> //
+				implements
+				Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13>
 			{
-				public GenericTypedInplace13_5()
-				{
+
+				public GenericTypedInplace13_5() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, ioType, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, ioType,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13> asOpType() {
+				public
+					Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4946,34 +5589,46 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13>> wrap( //
-			final OpInstance<Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13>>
+			wrap( //
+				final OpInstance<Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace13_6 //
-				extends AbstractRichOp<Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13>> //
-				implements Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13> 
+				extends
+				AbstractRichOp<Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13>> //
+				implements
+				Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13>
 			{
-				public GenericTypedInplace13_6()
-				{
+
+				public GenericTypedInplace13_6() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, ioType,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13> asOpType() {
+				public
+					Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -4988,34 +5643,46 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13>> wrap( //
-			final OpInstance<Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13>>
+			wrap( //
+				final OpInstance<Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace13_7 //
-				extends AbstractRichOp<Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13>> //
-				implements Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13> 
+				extends
+				AbstractRichOp<Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13>> //
+				implements
+				Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13>
 			{
-				public GenericTypedInplace13_7()
-				{
+
+				public GenericTypedInplace13_7() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13> asOpType() {
+				public
+					Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5030,34 +5697,46 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13>> wrap( //
-			final OpInstance<Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13>>
+			wrap( //
+				final OpInstance<Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace13_8 //
-				extends AbstractRichOp<Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13>> //
-				implements Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13> 
+				extends
+				AbstractRichOp<Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13>> //
+				implements
+				Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13>
 			{
-				public GenericTypedInplace13_8()
-				{
+
+				public GenericTypedInplace13_8() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type,
+						in13Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13> asOpType() {
+				public
+					Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5072,34 +5751,46 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13>> wrap( //
-			final OpInstance<Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13>>
+			wrap( //
+				final OpInstance<Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace13_9 //
-				extends AbstractRichOp<Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13>> //
-				implements Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13> 
+				extends
+				AbstractRichOp<Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13>> //
+				implements
+				Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13>
 			{
-				public GenericTypedInplace13_9()
-				{
+
+				public GenericTypedInplace13_9() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type,
+						in13Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13> asOpType() {
+				public
+					Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5114,34 +5805,46 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13>> wrap( //
-			final OpInstance<Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13>>
+			wrap( //
+				final OpInstance<Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace13_10 //
-				extends AbstractRichOp<Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13>> //
-				implements Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13> 
+				extends
+				AbstractRichOp<Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13>> //
+				implements
+				Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13>
 			{
-				public GenericTypedInplace13_10()
-				{
+
+				public GenericTypedInplace13_10() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, IO ioType, I11 in11Type, I12 in12Type, I13 in13Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, IO ioType,
+					I11 in11Type, I12 in12Type, I13 in13Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type,
+						in13Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13> asOpType() {
+				public
+					Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5156,34 +5859,46 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13>> wrap( //
-			final OpInstance<Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13>>
+			wrap( //
+				final OpInstance<Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace13_11 //
-				extends AbstractRichOp<Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13>> //
-				implements Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13> 
+				extends
+				AbstractRichOp<Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13>> //
+				implements
+				Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13>
 			{
-				public GenericTypedInplace13_11()
-				{
+
+				public GenericTypedInplace13_11() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, IO ioType, I12 in12Type, I13 in13Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, IO ioType, I12 in12Type, I13 in13Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type,
+						in13Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13> asOpType() {
+				public
+					Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5198,34 +5913,46 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13>> wrap( //
-			final OpInstance<Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13>>
+			wrap( //
+				final OpInstance<Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace13_12 //
-				extends AbstractRichOp<Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13>> //
-				implements Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13> 
+				extends
+				AbstractRichOp<Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13>> //
+				implements
+				Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13>
 			{
-				public GenericTypedInplace13_12()
-				{
+
+				public GenericTypedInplace13_12() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, IO ioType, I13 in13Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, IO ioType, I13 in13Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType,
+						in13Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13> asOpType() {
+				public
+					Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5240,34 +5967,46 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO>> wrap( //
-			final OpInstance<Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO>>
+			wrap( //
+				final OpInstance<Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace13_13 //
-				extends AbstractRichOp<Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO>> //
-				implements Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> 
+				extends
+				AbstractRichOp<Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO>> //
+				implements
+				Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO>
 			{
-				public GenericTypedInplace13_13()
-				{
+
+				public GenericTypedInplace13_13() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, IO ioType) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, IO ioType) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						ioType);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> asOpType() {
+				public
+					Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5282,34 +6021,47 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> wrap( //
-			final OpInstance<Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>>
+			wrap( //
+				final OpInstance<Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace14_1 //
-				extends AbstractRichOp<Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
-				implements Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> 
+				extends
+				AbstractRichOp<Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
+				implements
+				Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>
 			{
-				public GenericTypedInplace14_1()
-				{
+
+				public GenericTypedInplace14_1() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
+				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
 				{
-					preprocess(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+					preprocess(ioType, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type);
 
 					// Call the op
-					instance.op().mutate(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+					instance.op().mutate(ioType, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> asOpType() {
+				public
+					Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5324,34 +6076,47 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> wrap( //
-			final OpInstance<Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>>
+			wrap( //
+				final OpInstance<Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace14_2 //
-				extends AbstractRichOp<Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
-				implements Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> 
+				extends
+				AbstractRichOp<Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
+				implements
+				Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>
 			{
-				public GenericTypedInplace14_2()
-				{
+
+				public GenericTypedInplace14_2() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
+				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
 				{
-					preprocess(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+					preprocess(in1Type, ioType, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+					instance.op().mutate(in1Type, ioType, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> asOpType() {
+				public
+					Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5366,34 +6131,47 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> wrap( //
-			final OpInstance<Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>>
+			wrap( //
+				final OpInstance<Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace14_3 //
-				extends AbstractRichOp<Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
-				implements Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> 
+				extends
+				AbstractRichOp<Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
+				implements
+				Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>
 			{
-				public GenericTypedInplace14_3()
-				{
+
+				public GenericTypedInplace14_3() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
+				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
 				{
-					preprocess(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+					preprocess(in1Type, in2Type, ioType, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+					instance.op().mutate(in1Type, in2Type, ioType, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> asOpType() {
+				public
+					Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5408,34 +6186,47 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> wrap( //
-			final OpInstance<Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>>
+			wrap( //
+				final OpInstance<Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace14_4 //
-				extends AbstractRichOp<Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
-				implements Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> 
+				extends
+				AbstractRichOp<Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
+				implements
+				Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>
 			{
-				public GenericTypedInplace14_4()
-				{
+
+				public GenericTypedInplace14_4() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+					preprocess(in1Type, in2Type, in3Type, ioType, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, ioType, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> asOpType() {
+				public
+					Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5450,34 +6241,47 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14>> wrap( //
-			final OpInstance<Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14>>
+			wrap( //
+				final OpInstance<Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace14_5 //
-				extends AbstractRichOp<Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
-				implements Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14> 
+				extends
+				AbstractRichOp<Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
+				implements
+				Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14>
 			{
-				public GenericTypedInplace14_5()
-				{
+
+				public GenericTypedInplace14_5() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, ioType, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, ioType,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14> asOpType() {
+				public
+					Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5492,34 +6296,47 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14>> wrap( //
-			final OpInstance<Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14>>
+			wrap( //
+				final OpInstance<Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace14_6 //
-				extends AbstractRichOp<Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14>> //
-				implements Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14> 
+				extends
+				AbstractRichOp<Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14>> //
+				implements
+				Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14>
 			{
-				public GenericTypedInplace14_6()
-				{
+
+				public GenericTypedInplace14_6() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, ioType,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14> asOpType() {
+				public
+					Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5534,34 +6351,47 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14>> wrap( //
-			final OpInstance<Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14>>
+			wrap( //
+				final OpInstance<Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace14_7 //
-				extends AbstractRichOp<Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14>> //
-				implements Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14> 
+				extends
+				AbstractRichOp<Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14>> //
+				implements
+				Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14>
 			{
-				public GenericTypedInplace14_7()
-				{
+
+				public GenericTypedInplace14_7() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14> asOpType() {
+				public
+					Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5576,34 +6406,47 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14>> wrap( //
-			final OpInstance<Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14>>
+			wrap( //
+				final OpInstance<Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace14_8 //
-				extends AbstractRichOp<Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14>> //
-				implements Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14> 
+				extends
+				AbstractRichOp<Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14>> //
+				implements
+				Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14>
 			{
-				public GenericTypedInplace14_8()
-				{
+
+				public GenericTypedInplace14_8() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14> asOpType() {
+				public
+					Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5618,34 +6461,47 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14>> wrap( //
-			final OpInstance<Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14>>
+			wrap( //
+				final OpInstance<Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace14_9 //
-				extends AbstractRichOp<Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14>> //
-				implements Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14> 
+				extends
+				AbstractRichOp<Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14>> //
+				implements
+				Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14>
 			{
-				public GenericTypedInplace14_9()
-				{
+
+				public GenericTypedInplace14_9() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type, in14Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type,
+						in14Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type, in14Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type,
+						in13Type, in14Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14> asOpType() {
+				public
+					Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5660,34 +6516,47 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14>> wrap( //
-			final OpInstance<Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14>>
+			wrap( //
+				final OpInstance<Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace14_10 //
-				extends AbstractRichOp<Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14>> //
-				implements Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14> 
+				extends
+				AbstractRichOp<Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14>> //
+				implements
+				Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14>
 			{
-				public GenericTypedInplace14_10()
-				{
+
+				public GenericTypedInplace14_10() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, IO ioType, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, IO ioType,
+					I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type, in14Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type,
+						in14Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type, in14Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type,
+						in13Type, in14Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14> asOpType() {
+				public
+					Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5702,34 +6571,47 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14>> wrap( //
-			final OpInstance<Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14>>
+			wrap( //
+				final OpInstance<Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace14_11 //
-				extends AbstractRichOp<Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14>> //
-				implements Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14> 
+				extends
+				AbstractRichOp<Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14>> //
+				implements
+				Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14>
 			{
-				public GenericTypedInplace14_11()
-				{
+
+				public GenericTypedInplace14_11() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, IO ioType, I12 in12Type, I13 in13Type, I14 in14Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, IO ioType, I12 in12Type, I13 in13Type, I14 in14Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type, in14Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type,
+						in14Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type, in14Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type,
+						in13Type, in14Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14> asOpType() {
+				public
+					Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5744,34 +6626,47 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14>> wrap( //
-			final OpInstance<Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14>>
+			wrap( //
+				final OpInstance<Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace14_12 //
-				extends AbstractRichOp<Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14>> //
-				implements Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14> 
+				extends
+				AbstractRichOp<Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14>> //
+				implements
+				Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14>
 			{
-				public GenericTypedInplace14_12()
-				{
+
+				public GenericTypedInplace14_12() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, IO ioType, I13 in13Type, I14 in14Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, IO ioType, I13 in13Type, I14 in14Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type, in14Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type,
+						in14Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type, in14Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType,
+						in13Type, in14Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14> asOpType() {
+				public
+					Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5786,34 +6681,47 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14>> wrap( //
-			final OpInstance<Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14>>
+			wrap( //
+				final OpInstance<Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace14_13 //
-				extends AbstractRichOp<Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14>> //
-				implements Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14> 
+				extends
+				AbstractRichOp<Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14>> //
+				implements
+				Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14>
 			{
-				public GenericTypedInplace14_13()
-				{
+
+				public GenericTypedInplace14_13() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, IO ioType, I14 in14Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, IO ioType, I14 in14Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType, in14Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType,
+						in14Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType, in14Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						ioType, in14Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14> asOpType() {
+				public
+					Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5828,34 +6736,47 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>> wrap( //
-			final OpInstance<Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>>
+			wrap( //
+				final OpInstance<Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace14_14 //
-				extends AbstractRichOp<Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>> //
-				implements Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> 
+				extends
+				AbstractRichOp<Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>> //
+				implements
+				Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>
 			{
-				public GenericTypedInplace14_14()
-				{
+
+				public GenericTypedInplace14_14() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, IO ioType) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, IO ioType) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, ioType);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						ioType);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, ioType);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, ioType);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> asOpType() {
+				public
+					Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5870,34 +6791,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> wrap( //
-			final OpInstance<Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>>
+			wrap( //
+				final OpInstance<Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace15_1 //
-				extends AbstractRichOp<Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
-				implements Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> 
+				extends
+				AbstractRichOp<Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
+				implements
+				Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>
 			{
-				public GenericTypedInplace15_1()
-				{
+
+				public GenericTypedInplace15_1() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type) //
+				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type,
+					I15 in15Type) //
 				{
-					preprocess(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+					preprocess(ioType, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type, in15Type);
 
 					// Call the op
-					instance.op().mutate(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+					instance.op().mutate(ioType, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type, in15Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> asOpType() {
+				public
+					Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5912,34 +6847,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> wrap( //
-			final OpInstance<Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>>
+			wrap( //
+				final OpInstance<Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace15_2 //
-				extends AbstractRichOp<Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
-				implements Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> 
+				extends
+				AbstractRichOp<Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
+				implements
+				Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>
 			{
-				public GenericTypedInplace15_2()
-				{
+
+				public GenericTypedInplace15_2() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type) //
+				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type,
+					I15 in15Type) //
 				{
-					preprocess(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+					preprocess(in1Type, ioType, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type, in15Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+					instance.op().mutate(in1Type, ioType, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type, in15Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> asOpType() {
+				public
+					Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5954,34 +6903,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> wrap( //
-			final OpInstance<Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>>
+			wrap( //
+				final OpInstance<Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace15_3 //
-				extends AbstractRichOp<Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
-				implements Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> 
+				extends
+				AbstractRichOp<Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
+				implements
+				Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>
 			{
-				public GenericTypedInplace15_3()
-				{
+
+				public GenericTypedInplace15_3() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type) //
+				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type,
+					I15 in15Type) //
 				{
-					preprocess(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+					preprocess(in1Type, in2Type, ioType, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type, in15Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+					instance.op().mutate(in1Type, in2Type, ioType, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type, in15Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> asOpType() {
+				public
+					Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -5996,34 +6959,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> wrap( //
-			final OpInstance<Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>>
+			wrap( //
+				final OpInstance<Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace15_4 //
-				extends AbstractRichOp<Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
-				implements Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> 
+				extends
+				AbstractRichOp<Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
+				implements
+				Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>
 			{
-				public GenericTypedInplace15_4()
-				{
+
+				public GenericTypedInplace15_4() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type,
+					I15 in15Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+					preprocess(in1Type, in2Type, in3Type, ioType, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type, in15Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, ioType, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type, in15Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> asOpType() {
+				public
+					Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -6038,34 +7015,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> wrap( //
-			final OpInstance<Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>>
+			wrap( //
+				final OpInstance<Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace15_5 //
-				extends AbstractRichOp<Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
-				implements Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> 
+				extends
+				AbstractRichOp<Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
+				implements
+				Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>
 			{
-				public GenericTypedInplace15_5()
-				{
+
+				public GenericTypedInplace15_5() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type,
+					I15 in15Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, ioType, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type, in15Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, ioType,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type, in15Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> asOpType() {
+				public
+					Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -6080,34 +7071,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15>> wrap( //
-			final OpInstance<Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15>>
+			wrap( //
+				final OpInstance<Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace15_6 //
-				extends AbstractRichOp<Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
-				implements Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15> 
+				extends
+				AbstractRichOp<Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
+				implements
+				Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15>
 			{
-				public GenericTypedInplace15_6()
-				{
+
+				public GenericTypedInplace15_6() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type,
+					I15 in15Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, ioType,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type, in15Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type, in15Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15> asOpType() {
+				public
+					Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -6122,34 +7127,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15>> wrap( //
-			final OpInstance<Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15>>
+			wrap( //
+				final OpInstance<Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace15_7 //
-				extends AbstractRichOp<Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15>> //
-				implements Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15> 
+				extends
+				AbstractRichOp<Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15>> //
+				implements
+				Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15>
 			{
-				public GenericTypedInplace15_7()
-				{
+
+				public GenericTypedInplace15_7() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type,
+					I15 in15Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type, in15Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type, in15Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15> asOpType() {
+				public
+					Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -6164,34 +7183,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15>> wrap( //
-			final OpInstance<Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15>>
+			wrap( //
+				final OpInstance<Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace15_8 //
-				extends AbstractRichOp<Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15>> //
-				implements Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15> 
+				extends
+				AbstractRichOp<Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15>> //
+				implements
+				Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15>
 			{
-				public GenericTypedInplace15_8()
-				{
+
+				public GenericTypedInplace15_8() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type,
+					I15 in15Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type, in15Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type, in15Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15> asOpType() {
+				public
+					Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -6206,34 +7239,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15>> wrap( //
-			final OpInstance<Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15>>
+			wrap( //
+				final OpInstance<Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace15_9 //
-				extends AbstractRichOp<Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15>> //
-				implements Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15> 
+				extends
+				AbstractRichOp<Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15>> //
+				implements
+				Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15>
 			{
-				public GenericTypedInplace15_9()
-				{
+
+				public GenericTypedInplace15_9() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type,
+					I15 in15Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type,
+						in14Type, in15Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type,
+						in13Type, in14Type, in15Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15> asOpType() {
+				public
+					Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -6248,34 +7295,47 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15>> wrap( //
-			final OpInstance<Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15>>
+			wrap( //
+				final OpInstance<Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace15_10 //
-				extends AbstractRichOp<Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15>> //
-				implements Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15> 
+				extends
+				AbstractRichOp<Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15>> //
+				implements
+				Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15>
 			{
-				public GenericTypedInplace15_10()
-				{
+
+				public GenericTypedInplace15_10() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, IO ioType, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, IO ioType,
+					I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type, in14Type, in15Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type,
+						in14Type, in15Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type, in14Type, in15Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type,
+						in13Type, in14Type, in15Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15> asOpType() {
+				public
+					Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -6290,34 +7350,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15>> wrap( //
-			final OpInstance<Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15>>
+			wrap( //
+				final OpInstance<Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace15_11 //
-				extends AbstractRichOp<Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15>> //
-				implements Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15> 
+				extends
+				AbstractRichOp<Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15>> //
+				implements
+				Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15>
 			{
-				public GenericTypedInplace15_11()
-				{
+
+				public GenericTypedInplace15_11() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, IO ioType, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, IO ioType, I12 in12Type, I13 in13Type, I14 in14Type,
+					I15 in15Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type, in14Type, in15Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type,
+						in14Type, in15Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type, in14Type, in15Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type,
+						in13Type, in14Type, in15Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15> asOpType() {
+				public
+					Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -6332,34 +7406,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15>> wrap( //
-			final OpInstance<Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15>>
+			wrap( //
+				final OpInstance<Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace15_12 //
-				extends AbstractRichOp<Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15>> //
-				implements Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15> 
+				extends
+				AbstractRichOp<Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15>> //
+				implements
+				Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15>
 			{
-				public GenericTypedInplace15_12()
-				{
+
+				public GenericTypedInplace15_12() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, IO ioType, I13 in13Type, I14 in14Type, I15 in15Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, IO ioType, I13 in13Type, I14 in14Type,
+					I15 in15Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type, in14Type, in15Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type,
+						in14Type, in15Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type, in14Type, in15Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType,
+						in13Type, in14Type, in15Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15> asOpType() {
+				public
+					Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -6374,34 +7462,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15>> wrap( //
-			final OpInstance<Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15>>
+			wrap( //
+				final OpInstance<Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace15_13 //
-				extends AbstractRichOp<Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15>> //
-				implements Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15> 
+				extends
+				AbstractRichOp<Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15>> //
+				implements
+				Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15>
 			{
-				public GenericTypedInplace15_13()
-				{
+
+				public GenericTypedInplace15_13() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, IO ioType, I14 in14Type, I15 in15Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, IO ioType, I14 in14Type,
+					I15 in15Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType, in14Type, in15Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType,
+						in14Type, in15Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType, in14Type, in15Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						ioType, in14Type, in15Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15> asOpType() {
+				public
+					Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -6416,34 +7518,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15>> wrap( //
-			final OpInstance<Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15>>
+			wrap( //
+				final OpInstance<Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace15_14 //
-				extends AbstractRichOp<Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15>> //
-				implements Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15> 
+				extends
+				AbstractRichOp<Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15>> //
+				implements
+				Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15>
 			{
-				public GenericTypedInplace15_14()
-				{
+
+				public GenericTypedInplace15_14() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, IO ioType, I15 in15Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, IO ioType,
+					I15 in15Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, ioType, in15Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						ioType, in15Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, ioType, in15Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, ioType, in15Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15> asOpType() {
+				public
+					Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -6458,34 +7574,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>> wrap( //
-			final OpInstance<Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>>
+			wrap( //
+				final OpInstance<Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace15_15 //
-				extends AbstractRichOp<Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>> //
-				implements Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> 
+				extends
+				AbstractRichOp<Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>> //
+				implements
+				Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>
 			{
-				public GenericTypedInplace15_15()
-				{
+
+				public GenericTypedInplace15_15() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, IO ioType) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type,
+					IO ioType) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, ioType);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type, ioType);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, ioType);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type, ioType);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> asOpType() {
+				public
+					Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -6500,34 +7630,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
-			final OpInstance<Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>>
+			wrap( //
+				final OpInstance<Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace16_1 //
-				extends AbstractRichOp<Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
-				implements Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> 
+				extends
+				AbstractRichOp<Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
+				implements
+				Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>
 			{
-				public GenericTypedInplace16_1()
-				{
+
+				public GenericTypedInplace16_1() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
+				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type,
+					I15 in15Type, I16 in16Type) //
 				{
-					preprocess(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+					preprocess(ioType, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type, in15Type, in16Type);
 
 					// Call the op
-					instance.op().mutate(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+					instance.op().mutate(ioType, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type, in15Type, in16Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> asOpType() {
+				public
+					Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -6542,34 +7686,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
-			final OpInstance<Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>>
+			wrap( //
+				final OpInstance<Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace16_2 //
-				extends AbstractRichOp<Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
-				implements Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> 
+				extends
+				AbstractRichOp<Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
+				implements
+				Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>
 			{
-				public GenericTypedInplace16_2()
-				{
+
+				public GenericTypedInplace16_2() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
+				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type,
+					I15 in15Type, I16 in16Type) //
 				{
-					preprocess(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+					preprocess(in1Type, ioType, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type, in15Type, in16Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+					instance.op().mutate(in1Type, ioType, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type, in15Type, in16Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> asOpType() {
+				public
+					Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -6584,34 +7742,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
-			final OpInstance<Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>>
+			wrap( //
+				final OpInstance<Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace16_3 //
-				extends AbstractRichOp<Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
-				implements Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> 
+				extends
+				AbstractRichOp<Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
+				implements
+				Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>
 			{
-				public GenericTypedInplace16_3()
-				{
+
+				public GenericTypedInplace16_3() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
+				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type,
+					I15 in15Type, I16 in16Type) //
 				{
-					preprocess(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+					preprocess(in1Type, in2Type, ioType, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type, in15Type, in16Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+					instance.op().mutate(in1Type, in2Type, ioType, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type, in15Type, in16Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> asOpType() {
+				public
+					Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -6626,34 +7798,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
-			final OpInstance<Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>>
+			wrap( //
+				final OpInstance<Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace16_4 //
-				extends AbstractRichOp<Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
-				implements Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> 
+				extends
+				AbstractRichOp<Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
+				implements
+				Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>
 			{
-				public GenericTypedInplace16_4()
-				{
+
+				public GenericTypedInplace16_4() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type,
+					I15 in15Type, I16 in16Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+					preprocess(in1Type, in2Type, in3Type, ioType, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type, in15Type, in16Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, ioType, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type, in15Type, in16Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> asOpType() {
+				public
+					Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -6668,34 +7854,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
-			final OpInstance<Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>>
+			wrap( //
+				final OpInstance<Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace16_5 //
-				extends AbstractRichOp<Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
-				implements Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> 
+				extends
+				AbstractRichOp<Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
+				implements
+				Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>
 			{
-				public GenericTypedInplace16_5()
-				{
+
+				public GenericTypedInplace16_5() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type,
+					I15 in15Type, I16 in16Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, ioType, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type, in15Type, in16Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, ioType,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type, in15Type, in16Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> asOpType() {
+				public
+					Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -6710,34 +7910,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
-			final OpInstance<Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>>
+			wrap( //
+				final OpInstance<Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace16_6 //
-				extends AbstractRichOp<Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
-				implements Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> 
+				extends
+				AbstractRichOp<Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
+				implements
+				Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>
 			{
-				public GenericTypedInplace16_6()
-				{
+
+				public GenericTypedInplace16_6() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type,
+					I15 in15Type, I16 in16Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, ioType,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type, in15Type, in16Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type, in15Type, in16Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> asOpType() {
+				public
+					Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -6752,34 +7966,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
-			final OpInstance<Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16>>
+			wrap( //
+				final OpInstance<Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace16_7 //
-				extends AbstractRichOp<Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
-				implements Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16> 
+				extends
+				AbstractRichOp<Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
+				implements
+				Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16>
 			{
-				public GenericTypedInplace16_7()
-				{
+
+				public GenericTypedInplace16_7() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type,
+					I15 in15Type, I16 in16Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type, in15Type, in16Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type, in15Type, in16Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16> asOpType() {
+				public
+					Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -6794,34 +8022,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
-			final OpInstance<Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16>>
+			wrap( //
+				final OpInstance<Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace16_8 //
-				extends AbstractRichOp<Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16>> //
-				implements Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16> 
+				extends
+				AbstractRichOp<Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16>> //
+				implements
+				Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16>
 			{
-				public GenericTypedInplace16_8()
-				{
+
+				public GenericTypedInplace16_8() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type,
+					I15 in15Type, I16 in16Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type, in15Type, in16Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type, in15Type, in16Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16> asOpType() {
+				public
+					Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -6836,34 +8078,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16>> wrap( //
-			final OpInstance<Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16>>
+			wrap( //
+				final OpInstance<Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace16_9 //
-				extends AbstractRichOp<Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16>> //
-				implements Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16> 
+				extends
+				AbstractRichOp<Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16>> //
+				implements
+				Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16>
 			{
-				public GenericTypedInplace16_9()
-				{
+
+				public GenericTypedInplace16_9() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type,
+					I15 in15Type, I16 in16Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type,
+						in14Type, in15Type, in16Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type,
+						in13Type, in14Type, in15Type, in16Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16> asOpType() {
+				public
+					Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -6878,34 +8134,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16>> wrap( //
-			final OpInstance<Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16>>
+			wrap( //
+				final OpInstance<Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace16_10 //
-				extends AbstractRichOp<Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16>> //
-				implements Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16> 
+				extends
+				AbstractRichOp<Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16>> //
+				implements
+				Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16>
 			{
-				public GenericTypedInplace16_10()
-				{
+
+				public GenericTypedInplace16_10() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, IO ioType, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, IO ioType,
+					I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type,
+					I16 in16Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type,
+						in14Type, in15Type, in16Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type,
+						in13Type, in14Type, in15Type, in16Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16> asOpType() {
+				public
+					Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -6920,34 +8190,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16>> wrap( //
-			final OpInstance<Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16>>
+			wrap( //
+				final OpInstance<Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace16_11 //
-				extends AbstractRichOp<Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16>> //
-				implements Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16> 
+				extends
+				AbstractRichOp<Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16>> //
+				implements
+				Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16>
 			{
-				public GenericTypedInplace16_11()
-				{
+
+				public GenericTypedInplace16_11() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, IO ioType, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, IO ioType, I12 in12Type, I13 in13Type, I14 in14Type,
+					I15 in15Type, I16 in16Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type, in14Type, in15Type, in16Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type,
+						in14Type, in15Type, in16Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type, in14Type, in15Type, in16Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type,
+						in13Type, in14Type, in15Type, in16Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16> asOpType() {
+				public
+					Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -6962,34 +8246,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16>> wrap( //
-			final OpInstance<Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16>>
+			wrap( //
+				final OpInstance<Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace16_12 //
-				extends AbstractRichOp<Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16>> //
-				implements Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16> 
+				extends
+				AbstractRichOp<Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16>> //
+				implements
+				Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16>
 			{
-				public GenericTypedInplace16_12()
-				{
+
+				public GenericTypedInplace16_12() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, IO ioType, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, IO ioType, I13 in13Type, I14 in14Type,
+					I15 in15Type, I16 in16Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type, in14Type, in15Type, in16Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type,
+						in14Type, in15Type, in16Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type, in14Type, in15Type, in16Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType,
+						in13Type, in14Type, in15Type, in16Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16> asOpType() {
+				public
+					Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -7004,34 +8302,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16>> wrap( //
-			final OpInstance<Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16>>
+			wrap( //
+				final OpInstance<Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace16_13 //
-				extends AbstractRichOp<Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16>> //
-				implements Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16> 
+				extends
+				AbstractRichOp<Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16>> //
+				implements
+				Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16>
 			{
-				public GenericTypedInplace16_13()
-				{
+
+				public GenericTypedInplace16_13() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, IO ioType, I14 in14Type, I15 in15Type, I16 in16Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, IO ioType, I14 in14Type,
+					I15 in15Type, I16 in16Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType, in14Type, in15Type, in16Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType,
+						in14Type, in15Type, in16Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType, in14Type, in15Type, in16Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						ioType, in14Type, in15Type, in16Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16> asOpType() {
+				public
+					Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -7046,34 +8358,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16>> wrap( //
-			final OpInstance<Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16>>
+			wrap( //
+				final OpInstance<Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace16_14 //
-				extends AbstractRichOp<Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16>> //
-				implements Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16> 
+				extends
+				AbstractRichOp<Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16>> //
+				implements
+				Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16>
 			{
-				public GenericTypedInplace16_14()
-				{
+
+				public GenericTypedInplace16_14() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, IO ioType, I15 in15Type, I16 in16Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, IO ioType,
+					I15 in15Type, I16 in16Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, ioType, in15Type, in16Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						ioType, in15Type, in16Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, ioType, in15Type, in16Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, ioType, in15Type, in16Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16> asOpType() {
+				public
+					Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -7088,34 +8414,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16>> wrap( //
-			final OpInstance<Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16>>
+			wrap( //
+				final OpInstance<Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace16_15 //
-				extends AbstractRichOp<Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16>> //
-				implements Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16> 
+				extends
+				AbstractRichOp<Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16>> //
+				implements
+				Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16>
 			{
-				public GenericTypedInplace16_15()
-				{
+
+				public GenericTypedInplace16_15() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, IO ioType, I16 in16Type) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type,
+					IO ioType, I16 in16Type) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, ioType, in16Type);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type, ioType, in16Type);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, ioType, in16Type);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type, ioType, in16Type);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16> asOpType() {
+				public
+					Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -7130,34 +8470,48 @@ public class OpWrappers {
 	{
 
 		@Override
-		public RichOp<Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>> wrap( //
-			final OpInstance<Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>> instance, //
-			final OpEnvironment env, //
-			final Hints hints)
+		public
+			RichOp<Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>>
+			wrap( //
+				final OpInstance<Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>> instance, //
+				final OpEnvironment env, //
+				final Hints hints)
 		{
 			class GenericTypedInplace16_16 //
-				extends AbstractRichOp<Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>> //
-				implements Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> 
+				extends
+				AbstractRichOp<Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>> //
+				implements
+				Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>
 			{
-				public GenericTypedInplace16_16()
-				{
+
+				public GenericTypedInplace16_16() {
 					super(instance, env, hints);
 				}
 
 				@Override
-				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, IO ioType) //
+				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type,
+					I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type,
+					I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type,
+					I15 in15Type, IO ioType) //
 				{
-					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, ioType);
+					preprocess(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type,
+						in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type,
+						in14Type, in15Type, ioType);
 
 					// Call the op
-					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, ioType);
+					instance.op().mutate(in1Type, in2Type, in3Type, in4Type, in5Type,
+						in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type,
+						in13Type, in14Type, in15Type, ioType);
 
 					// Log a new execution
 					postprocess(ioType);
 				}
 
 				@Override
-				public Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> asOpType() {
+				public
+					Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>
+					asOpType()
+				{
 					return this;
 				}
 
@@ -7165,7 +8519,5 @@ public class OpWrappers {
 			return new GenericTypedInplace16_16();
 		}
 	}
-
-
 
 }

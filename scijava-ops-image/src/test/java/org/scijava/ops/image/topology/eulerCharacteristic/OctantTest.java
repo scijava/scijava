@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.topology.eulerCharacteristic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -45,46 +46,46 @@ import org.junit.jupiter.api.Test;
  * @author Richard Domander (Royal Veterinary College, London)
  */
 public class OctantTest {
-    @Test
-    public void testIsNeighborhoodEmpty() throws Exception {
-        final Img<BitType> img = ArrayImgs.bits(2, 2, 2);
-        Octant<BitType> octant = new Octant<>(img);
 
-        octant.setNeighborhood(1, 1, 1);
+	@Test
+	public void testIsNeighborhoodEmpty() throws Exception {
+		final Img<BitType> img = ArrayImgs.bits(2, 2, 2);
+		Octant<BitType> octant = new Octant<>(img);
 
-				assertTrue(octant.isNeighborhoodEmpty(),
-					"Neighborhood should be empty");
+		octant.setNeighborhood(1, 1, 1);
 
-				img.forEach(BitType::setOne);
-				octant.setNeighborhood(1, 1, 1);
+		assertTrue(octant.isNeighborhoodEmpty(), "Neighborhood should be empty");
 
-				assertFalse(octant.isNeighborhoodEmpty(),
-					"Neighborhood should not be empty");
-	    }
+		img.forEach(BitType::setOne);
+		octant.setNeighborhood(1, 1, 1);
 
-    @Test
-    public void testSetNeighborhood() throws Exception {
-        final Img<BitType> img = ArrayImgs.bits(3, 3, 3);
-        Octant<BitType> octant = new Octant<>(img);
+		assertFalse(octant.isNeighborhoodEmpty(),
+			"Neighborhood should not be empty");
+	}
 
-        final RandomAccess<BitType> access = img.randomAccess();
-        for (int z = 0; z < 2; z++) {
-            access.setPosition(z, 2);
-            for (int y = 0; y < 2; y++) {
-                access.setPosition(y, 1);
-                for (int x = 0; x < 2; x++) {
-                    access.setPosition(x, 0);
-                    access.get().setOne();
-                }
-            }
-        }
+	@Test
+	public void testSetNeighborhood() throws Exception {
+		final Img<BitType> img = ArrayImgs.bits(3, 3, 3);
+		Octant<BitType> octant = new Octant<>(img);
 
-				octant.setNeighborhood(1, 1, 1);
-				assertEquals(8, octant.getNeighborCount(),
-					"All neighbours should be foreground");
+		final RandomAccess<BitType> access = img.randomAccess();
+		for (int z = 0; z < 2; z++) {
+			access.setPosition(z, 2);
+			for (int y = 0; y < 2; y++) {
+				access.setPosition(y, 1);
+				for (int x = 0; x < 2; x++) {
+					access.setPosition(x, 0);
+					access.get().setOne();
+				}
+			}
+		}
 
-				octant.setNeighborhood(2, 2, 2);
-				assertEquals(1, octant.getNeighborCount(),
-					"Wrong number of foreground neighbors");
-	    }
+		octant.setNeighborhood(1, 1, 1);
+		assertEquals(8, octant.getNeighborCount(),
+			"All neighbours should be foreground");
+
+		octant.setNeighborhood(2, 2, 2);
+		assertEquals(1, octant.getNeighborCount(),
+			"Wrong number of foreground neighbors");
+	}
 }

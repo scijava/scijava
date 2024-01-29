@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -63,7 +63,7 @@ import static javax.lang.model.element.ElementKind.*;
 /**
  * {@link javax.annotation.processing.Processor} used to find code blocks
  * annotated as Ops, using the implNote syntax.
- * 
+ *
  * @author Gabriel Selzer
  */
 public class OpImplNoteParser extends AbstractProcessor {
@@ -120,11 +120,9 @@ public class OpImplNoteParser extends AbstractProcessor {
 	private static final EnumSet<ElementKind> elementKindsToInspect = EnumSet.of(
 		ElementKind.CLASS, ElementKind.INTERFACE, ElementKind.ENUM);
 
-	private void generateJavadoc(
-			Element element,
-			List<OpImplData> data,
-			Set<Element> alreadyProcessed
-	) {
+	private void generateJavadoc(Element element, List<OpImplData> data,
+		Set<Element> alreadyProcessed)
+	{
 		// Ignore elements that have been parsed already
 		if (!alreadyProcessed.add(element)) {
 			return;
@@ -138,7 +136,7 @@ public class OpImplNoteParser extends AbstractProcessor {
 		TypeElement classElement = (TypeElement) element;
 		Optional<OpImplData> clsData = elementToImplData(classElement);
 		clsData.ifPresent(data::add);
-		
+
 		// Then check contained elements
 		for (Element e : classElement.getEnclosedElements()) {
 			elementToImplData(e).ifPresent(data::add);
@@ -146,9 +144,11 @@ public class OpImplNoteParser extends AbstractProcessor {
 
 	}
 
-	private void outputYamlDoc(List<OpImplData> collectedData) throws IOException {
+	private void outputYamlDoc(List<OpImplData> collectedData)
+		throws IOException
+	{
 		var data = collectedData.stream().map(OpImplData::dumpData).collect(
-				Collectors.toList());
+			Collectors.toList());
 		String doc = yaml.dump(data);
 		FileObject resource = processingEnv.getFiler().createResource( //
 			StandardLocation.CLASS_OUTPUT, //
@@ -178,13 +178,14 @@ public class OpImplNoteParser extends AbstractProcessor {
 		return supportedOptions;
 	}
 
-	private Optional<OpImplData> elementToImplData (final Element element) {
+	private Optional<OpImplData> elementToImplData(final Element element) {
 		String javadoc = processingEnv.getElementUtils().getDocComment(element);
 		if (javadoc != null && javadoc.contains("implNote op")) {
 			try {
 				if (element.getKind() == CLASS) {
 					TypeElement typeElement = (TypeElement) element;
-					var fMethod = ProcessingUtils.findFunctionalMethod(processingEnv, typeElement);
+					var fMethod = ProcessingUtils.findFunctionalMethod(processingEnv,
+						typeElement);
 					var fMethodDoc = processingEnv.getElementUtils().getDocComment(
 						fMethod);
 					return Optional.of(new OpClassImplData(typeElement, fMethod, javadoc,

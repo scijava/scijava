@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.engine.matcher;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,25 +47,30 @@ import org.scijava.types.Any;
 
 /**
  * Tests op matcher functionality with {@link Any} types.
- * 
+ *
  * @author Gabriel Selzer
  */
-public class MatchingWithAnyTest extends AbstractTestEnvironment implements OpCollection {
+public class MatchingWithAnyTest extends AbstractTestEnvironment implements
+	OpCollection
+{
 
 	@BeforeAll
 	public static void addNeededOps() {
 		ops.register(new MatchingWithAnyTest());
-		ops.register(new ComputersToFunctionsViaSource.Computer2ToFunction2ViaSource());
+		ops.register(
+			new ComputersToFunctionsViaSource.Computer2ToFunction2ViaSource());
 	}
 
 	@Test
 	public void testAny() {
 
 		NestedThing<String, Thing<String>> nthing = new NestedThing<>();
-		Double e = ops.op("test.nestedAny").arity1().input(nthing).outType(Double.class).apply();
+		Double e = ops.op("test.nestedAny").arity1().input(nthing).outType(
+			Double.class).apply();
 
 		Thing<Double> thing = new Thing<>();
-		Double d = ops.op("test.any").arity1().input(thing).outType(Double.class).apply();
+		Double d = ops.op("test.any").arity1().input(thing).outType(Double.class)
+			.apply();
 
 		assert d == 5.;
 		assert e == 5.;
@@ -73,15 +79,16 @@ public class MatchingWithAnyTest extends AbstractTestEnvironment implements OpCo
 
 	/**
 	 * NOTE: this is where ops.run() and the Any paradigm fail. However, this can
-	 * easily be avoided by making TypeExtractors for any class for which this kind
-	 * of exception can happen.
+	 * easily be avoided by making TypeExtractors for any class for which this
+	 * kind of exception can happen.
 	 */
 	@Test
 	public void testExceptionalThing() {
 
 		ExceptionalThing<Double> ething = new ExceptionalThing<>(0.5);
 		assertThrows(ClassCastException.class, () -> {
-			Double d = ops.op("test.exceptionalAny").arity1().input(ething).outType(Double.class).apply();
+			Double d = ops.op("test.exceptionalAny").arity1().input(ething).outType(
+				Double.class).apply();
 		});
 
 	}
@@ -94,7 +101,8 @@ public class MatchingWithAnyTest extends AbstractTestEnvironment implements OpCo
 	public void testRunAnyFunction2FromComputer2() {
 		final int in1 = 11;
 		final long in2 = 31;
-		final StringContainer out = ops.op("test.integerAndLongAndNotAnyComputer").arity2().input(in1, in2).outType(StringContainer.class).apply();
+		final StringContainer out = ops.op("test.integerAndLongAndNotAnyComputer")
+			.arity2().input(in1, in2).outType(StringContainer.class).apply();
 		assertEquals(Long.toString(in1 + in2), out.getValue());
 	}
 
@@ -142,7 +150,6 @@ class StringContainer {
 	}
 }
 
-
 class Thing<U> {
 
 	public double create(U u) {
@@ -169,9 +176,8 @@ class ExceptionalThing<U> {
 }
 
 class NestedThing<U, V extends Thing<?>> {
+
 	public double create(V u) {
 		return 5.;
 	}
 }
-
-

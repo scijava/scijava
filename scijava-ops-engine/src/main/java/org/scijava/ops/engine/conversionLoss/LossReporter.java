@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -35,17 +35,16 @@ import java.util.function.BiFunction;
 import org.scijava.types.Nil;
 
 /**
- * {@link BiFunction} reporting the <b>worst-case loss</b> of a conversion
- * from a {@link Type} from a {@link Type} {@code t} to a {@code Type r}.
- * 
+ * {@link BiFunction} reporting the <b>worst-case loss</b> of a conversion from
+ * a {@link Type} from a {@link Type} {@code t} to a {@code Type r}.
+ *
  * @author Gabriel Selzer
  * @param <T> - the {@code Type} that we are converting <b>from</b>
  * @param <R> - the {@code Type} that we are converting <b>to</b>
  */
 @FunctionalInterface
-public interface LossReporter<T, R> extends
-	BiFunction<Nil<T>, Nil<R>, Double>
-{
+public interface LossReporter<T, R> extends BiFunction<Nil<T>, Nil<R>, Double> {
+
 	@Override
 	Double apply(Nil<T> from, Nil<R> to);
 }

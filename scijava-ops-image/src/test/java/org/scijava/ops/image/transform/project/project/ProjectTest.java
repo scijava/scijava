@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -71,8 +71,9 @@ public class ProjectTest extends AbstractOpTest {
 		out1 = TestImgGeneration.unsignedByteArray(false, 10, 10);
 		out2 = TestImgGeneration.unsignedByteArray(false, 10, 10);
 
-		op = OpBuilder.matchComputer(ops, "stats.sum", new Nil<Iterable<UnsignedByteType>>() {},
-				new Nil<UnsignedByteType>() {});
+		op = OpBuilder.matchComputer(ops, "stats.sum",
+			new Nil<Iterable<UnsignedByteType>>()
+			{}, new Nil<UnsignedByteType>() {});
 	}
 
 	@Test
@@ -82,12 +83,16 @@ public class ProjectTest extends AbstractOpTest {
 		// ops.run(DefaultProjectParallel.class, out2, in, op, PROJECTION_DIM);
 		// testEquality(out1, out2);
 
-		ops.op("transform.project").arity3().input(in, op, PROJECTION_DIM).output(out1).compute();
-		ops.op("transform.project").arity3().input(in, op, PROJECTION_DIM).output(out2).compute();
+		ops.op("transform.project").arity3().input(in, op, PROJECTION_DIM).output(
+			out1).compute();
+		ops.op("transform.project").arity3().input(in, op, PROJECTION_DIM).output(
+			out2).compute();
 		testEquality(out1, out2);
 	}
 
-	private void testEquality(final Img<UnsignedByteType> img1, final Img<UnsignedByteType> img2) {
+	private void testEquality(final Img<UnsignedByteType> img1,
+		final Img<UnsignedByteType> img2)
+	{
 		final RandomAccess<UnsignedByteType> img1RandomAccess = img1.randomAccess();
 		final RandomAccess<UnsignedByteType> img2RandomAccess = img2.randomAccess();
 
@@ -98,9 +103,9 @@ public class ProjectTest extends AbstractOpTest {
 				img2RandomAccess.setPosition(new long[] { x, y });
 
 				assertEquals(img1RandomAccess.get().get(), //
-						in.dimension(PROJECTION_DIM) * (x + y));
+					in.dimension(PROJECTION_DIM) * (x + y));
 				assertEquals(img2RandomAccess.get().get(), //
-						in.dimension(PROJECTION_DIM) * (x + y));
+					in.dimension(PROJECTION_DIM) * (x + y));
 			}
 		}
 	}

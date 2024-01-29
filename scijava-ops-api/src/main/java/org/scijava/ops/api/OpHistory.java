@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -58,9 +58,9 @@ public interface OpHistory extends Prioritized<OpHistory> {
 
 	static OpHistory getOpHistory() {
 		Optional<OpHistory> historyOptional = Discoverer //
-				.using(ServiceLoader::load) //
-				.discoverMax(OpHistory.class);
-		if (historyOptional.isEmpty()){
+			.using(ServiceLoader::load) //
+			.discoverMax(OpHistory.class);
+		if (historyOptional.isEmpty()) {
 			throw new RuntimeException("No OpEnvironment provided!");
 		}
 		return historyOptional.get();
@@ -71,7 +71,7 @@ public interface OpHistory extends Prioritized<OpHistory> {
 	/**
 	 * Describes the known executions upon {@link Object} {@code o} recorded in
 	 * the history
-	 * 
+	 *
 	 * @param o the {@link Object} of interest
 	 * @return a {@link List} of all executions upon {@code o}
 	 */
@@ -80,7 +80,7 @@ public interface OpHistory extends Prioritized<OpHistory> {
 	/**
 	 * Returns the hierarchy of {@link OpInfo}s describing the dependency tree of
 	 * the {@link Object} {@code op}.
-	 * 
+	 *
 	 * @param op the {@link Object} returned by a matching call. NB {@code op}
 	 *          <b>must</b> be the {@link Object} returned by the outermost
 	 *          matching call, as the dependency {@link Object}s are not recorded.
@@ -96,13 +96,14 @@ public interface OpHistory extends Prioritized<OpHistory> {
 
 	/**
 	 * Logs the creation of {@link RichOp}
-	 * 
+	 *
 	 * @param op the {@link RichOp} containing relevant information
 	 */
 	void logOp(RichOp<?> op);
 
 	/**
 	 * Logs the {@link Object} output of the {@link RichOp} {@code op}.
+	 *
 	 * @param op the {@link RichOp} producing {@code output}
 	 * @param output the {@link Object} output of {@code e}
 	 */

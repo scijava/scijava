@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -42,7 +42,6 @@ import org.scijava.function.Container;
 import org.scijava.ops.spi.Nullable;
 
 /**
- *
  * @author Curtis Rueden
  * @author Mark Hiner
  * @param <I> input type
@@ -50,7 +49,8 @@ import org.scijava.ops.spi.Nullable;
  * @implNote op names='filter.applyCenterAware'
  */
 public class CenterAwareNeighborhoodBasedFilter<I, O> implements
-		Computers.Arity4<RandomAccessibleInterval<I>, Computers.Arity2<Iterable<I>, I, O>, Shape, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<O>> {
+	Computers.Arity4<RandomAccessibleInterval<I>, Computers.Arity2<Iterable<I>, I, O>, Shape, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<O>>
+{
 
 	/**
 	 * TODO
@@ -73,8 +73,10 @@ public class CenterAwareNeighborhoodBasedFilter<I, O> implements
 		final RandomAccessibleInterval<I> inputCenterPixels = Views.interval(Views
 			.extend(input, outOfBoundsFactory), input);
 		final RandomAccessible<? extends Iterable<I>> inputNeighborhoods =
-			inputNeighborhoodShape.neighborhoodsRandomAccessibleSafe(inputCenterPixels);
-		final RandomAccessibleInterval<? extends Iterable<I>> inputNeighborhoodsRAI = Views.interval(inputNeighborhoods, input);
+			inputNeighborhoodShape.neighborhoodsRandomAccessibleSafe(
+				inputCenterPixels);
+		final RandomAccessibleInterval<? extends Iterable<I>> inputNeighborhoodsRAI =
+			Views.interval(inputNeighborhoods, input);
 		LoopBuilder.setImages(inputNeighborhoodsRAI, inputCenterPixels, output)
 			.multiThreaded() //
 			.forEachPixel(filterOp::compute);

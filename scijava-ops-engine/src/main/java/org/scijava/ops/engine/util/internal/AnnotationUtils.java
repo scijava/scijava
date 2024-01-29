@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -38,7 +38,7 @@ import java.lang.reflect.Method;
 
 /**
  * Useful methods for working with annotation instances.
- * 
+ *
  * @author David Kolb
  */
 public final class AnnotationUtils {
@@ -48,18 +48,24 @@ public final class AnnotationUtils {
 	}
 
 	/**
-	 * Attempt to retrieve the specified annotation from the i'th parameter
-	 * of the specified method. This method will only find annotations with:
-	 * <pre>@Target(ElementType.TYPE_USE)</pre>
-	 * If the ElementType is different or no annotation with specified type
-	 * is present, null is returned. 
-	 * 
+	 * Attempt to retrieve the specified annotation from the i'th parameter of the
+	 * specified method. This method will only find annotations with:
+	 *
+	 * <pre>
+	 * &#64;Target(ElementType.TYPE_USE)
+	 * </pre>
+	 *
+	 * If the ElementType is different or no annotation with specified type is
+	 * present, null is returned.
+	 *
 	 * @param method
 	 * @param i
 	 * @param annotationClass
 	 * @return
 	 */
-	public static <A extends Annotation> A getMethodParameterAnnotation(Method method, int i, Class<A> annotationClass) {
+	public static <A extends Annotation> A getMethodParameterAnnotation(
+		Method method, int i, Class<A> annotationClass)
+	{
 		AnnotatedType[] params = method.getAnnotatedParameterTypes();
 		if (i >= params.length) {
 			return null;

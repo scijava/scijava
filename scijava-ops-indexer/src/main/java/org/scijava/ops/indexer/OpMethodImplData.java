@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -60,7 +60,7 @@ public class OpMethodImplData extends OpImplData {
 
 	/**
 	 * Parse javadoc tags pertaining exclusively to {@link Method}s
-	 * 
+	 *
 	 * @param source the {@link Element} representing the {@link Method}. In
 	 *          practice, this will always be an {@link ExecutableElement}
 	 * @param additionalTags the tags pertaining exclusively to {@link Method}s.
@@ -82,9 +82,8 @@ public class OpMethodImplData extends OpImplData {
 			// circular dependency so this is the easiest way to check for an
 			// OpDependency
 			boolean isOpDep = param.getAnnotationMirrors().stream() //
-					.anyMatch(a -> a.toString().contains("OpDependency"));
-			if (isOpDep)
-				opDependencies.add(param);
+				.anyMatch(a -> a.toString().contains("OpDependency"));
+			if (isOpDep) opDependencies.add(param);
 			else {
 				// Coerce @param tag + VariableElement into an OpParameter
 				String name = param.getSimpleName().toString();
@@ -98,20 +97,20 @@ public class OpMethodImplData extends OpImplData {
 					description = "";
 				}
 				params.add(new OpParameter(name, type, OpParameter.IO_TYPE.INPUT,
-						description));
+					description));
 			}
 		}
 		// Validate number of inputs
-		if (opDependencies.size() + params.size() != exSource
-				.getParameters().size())
+		if (opDependencies.size() + params.size() != exSource.getParameters()
+			.size())
 		{
 			var clsElement = exSource.getEnclosingElement();
 			while (clsElement.getKind() != ElementKind.CLASS) {
 				clsElement = clsElement.getEnclosingElement();
 			}
 			env.getMessager().printMessage(Diagnostic.Kind.ERROR, clsElement + " - " +
-					"The number of @param tags on " + exSource +
-					" does not match the number of parameters!");
+				"The number of @param tags on " + exSource +
+				" does not match the number of parameters!");
 		}
 
 		// Finally, parse the return
@@ -134,22 +133,24 @@ public class OpMethodImplData extends OpImplData {
 			while (clsElement.getKind() != ElementKind.CLASS) {
 				clsElement = clsElement.getEnclosingElement();
 			}
-			env.getMessager().printMessage(Diagnostic.Kind.ERROR, clsElement + " - " + exSource +
-					" has a return, but no @return parameter");
+			env.getMessager().printMessage(Diagnostic.Kind.ERROR, clsElement + " - " +
+				exSource + " has a return, but no @return parameter");
 		}
 	}
 
 	/**
-	 * HACK to find type variable param tags
-	 * For a parameter tag, returns {@code true} iff the following tag is a type variable tag.
-	 * Type variable tags start with a greater than sign, and then has a string of letters, and then a less than sign.
+	 * HACK to find type variable param tags For a parameter tag, returns
+	 * {@code true} iff the following tag is a type variable tag. Type variable
+	 * tags start with a greater than sign, and then has a string of letters, and
+	 * then a less than sign.
+	 *
 	 * @param tag the string following an param tag
 	 * @return true iff the tag is an param tag
 	 */
 	private boolean paramIsTypeVariable(String tag) {
 		// TODO: Why doesn't Pattern.matches(".*<\\p{L}>.*", tag) work??
 		if (tag.charAt(0) != '<') return false;
-		for(int i = 1; i < tag.length(); i++) {
+		for (int i = 1; i < tag.length(); i++) {
 			char c = tag.charAt(i);
 			if (Character.isLetter(c)) continue;
 			return c == '>';

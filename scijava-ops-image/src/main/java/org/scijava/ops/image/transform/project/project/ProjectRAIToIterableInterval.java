@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -41,8 +41,9 @@ import org.scijava.function.Computers;
 /**
  * @implNote op names='transform.project', priority='-100.'
  */
-public class ProjectRAIToIterableInterval<T, V>
-		implements Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<Iterable<T>, V>, Integer, IterableInterval<V>> {
+public class ProjectRAIToIterableInterval<T, V> implements
+	Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<Iterable<T>, V>, Integer, IterableInterval<V>>
+{
 
 	/**
 	 * TODO
@@ -53,12 +54,15 @@ public class ProjectRAIToIterableInterval<T, V>
 	 * @param output
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<T> input, final Computers.Arity1<Iterable<T>, V> method,
-			final Integer dim, final IterableInterval<V> output) {
+	public void compute(final RandomAccessibleInterval<T> input,
+		final Computers.Arity1<Iterable<T>, V> method, final Integer dim,
+		final IterableInterval<V> output)
+	{
 		if (input.numDimensions() != output.numDimensions() + 1)
-			throw new IllegalArgumentException("Input must have one more dimension than output!");
-		if (dim >= input.numDimensions())
-			throw new IllegalArgumentException("The dimension provided to compute over does not exitst in the input!");
+			throw new IllegalArgumentException(
+				"Input must have one more dimension than output!");
+		if (dim >= input.numDimensions()) throw new IllegalArgumentException(
+			"The dimension provided to compute over does not exitst in the input!");
 
 		final Cursor<V> cursor = output.localizingCursor();
 		final RandomAccess<T> access = input.randomAccess();
@@ -71,7 +75,8 @@ public class ProjectRAIToIterableInterval<T, V>
 				}
 			}
 
-			method.compute(new DimensionIterable(input.dimension(dim), access, dim), cursor.get());
+			method.compute(new DimensionIterable(input.dimension(dim), access, dim),
+				cursor.get());
 		}
 	}
 
@@ -81,7 +86,9 @@ public class ProjectRAIToIterableInterval<T, V>
 		private final RandomAccess<T> access;
 		private final int dim;
 
-		public DimensionIterable(final long size, final RandomAccess<T> access, final int dim) {
+		public DimensionIterable(final long size, final RandomAccess<T> access,
+			final int dim)
+		{
 			this.size = size;
 			this.access = access;
 			this.dim = dim;

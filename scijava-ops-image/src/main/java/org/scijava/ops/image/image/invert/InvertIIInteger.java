@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -50,7 +50,7 @@
 // * @implNote op names='image.invert', priority='100.'
 // */
 //public class InvertIIInteger<T extends IntegerType<T>> implements
-//	Computers.Arity3<IterableInterval<T>, T, T, IterableInterval<T>> 
+//	Computers.Arity3<IterableInterval<T>, T, T, IterableInterval<T>>
 //{
 //
 //	@OpDependency(name = "map")
@@ -60,8 +60,8 @@
 //	@Override
 //	public void compute(final IterableInterval<T> input, final T min, final T max,
 //		final IterableInterval<T> output)
-//	{		
-//		
+//	{
+//
 //		final BigInteger minValue = min == null ? minValue(input.firstElement()).getBigInteger() : min.getBigInteger();
 //		final BigInteger maxValue = max == null ? maxValue(input.firstElement()).getBigInteger() : max.getBigInteger();
 //		final BigInteger minMax = minValue.add(maxValue);

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -55,7 +55,8 @@ public abstract class AnnotatedOpDependencyMember<T> implements
 	private final OpDependency annotation;
 
 	/**
-	 * This constructor is ideal for situations where the key and description are readily available
+	 * This constructor is ideal for situations where the key and description are
+	 * readily available
 	 *
 	 * @param key the key
 	 * @param description the description
@@ -77,11 +78,13 @@ public abstract class AnnotatedOpDependencyMember<T> implements
 	 * description are computationally expensive.
 	 *
 	 * @param keyGenerator the {@link Supplier} able to generate the key
-	 * @param descriptionGenerator the {@link Supplier} able to generate the description
+	 * @param descriptionGenerator the {@link Supplier} able to generate the
+	 *          description
 	 * @param type the {@link Type} of this {@link Member}
 	 * @param annotation the {@link OpDependency} annotation
 	 */
-	public AnnotatedOpDependencyMember(Supplier<String> keyGenerator, Supplier<String> descriptionGenerator, Type type,
+	public AnnotatedOpDependencyMember(Supplier<String> keyGenerator,
+		Supplier<String> descriptionGenerator, Type type,
 		final OpDependency annotation)
 	{
 		this.keyGenerator = keyGenerator;
@@ -139,4 +142,3 @@ public abstract class AnnotatedOpDependencyMember<T> implements
 		return type;
 	}
 }
-

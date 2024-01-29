@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,6 +28,7 @@
  */
 
 package org.scijava.ops.engine;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -45,9 +46,10 @@ public class OpPriorityTest extends AbstractTestEnvironment {
 		ops.register(new TestDouble());
 		ops.register(new TestFloat());
 	}
-	
+
 	@OpClass(names = "test.priority", priority = Priority.HIGH)
 	private static final class TestDouble implements Producer<Number>, Op {
+
 		@Override
 		public Number create() {
 			return new Double(0.0);
@@ -56,16 +58,19 @@ public class OpPriorityTest extends AbstractTestEnvironment {
 
 	@OpClass(names = "test.priority", priority = Priority.LOW)
 	private static final class TestFloat implements Producer<Number>, Op {
+
 		@Override
 		public Number create() {
 			return new Float(0.0);
 		}
 	}
-	
+
 	@Test
 	public void testOpPriority() {
 
-		Producer<Number> testFunc = ops.op("test.priority", new Nil<Producer<Number>>() {}, new Nil[] {}, new Nil<Number>() {});
+		Producer<Number> testFunc = ops.op("test.priority",
+			new Nil<Producer<Number>>()
+			{}, new Nil[] {}, new Nil<Number>() {});
 		Number x = testFunc.create();
 		assertTrue(x instanceof Double);
 	}

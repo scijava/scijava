@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -51,7 +51,8 @@ public class NormalizeTest extends AbstractOpTest {
 	@Test
 	public void testNormalize() {
 
-		// TODO these method calls are not right - need lazy normalization parameters
+		// TODO these method calls are not right - need lazy normalization
+		// parameters
 		// Ops
 
 		Img<ByteType> in = TestImgGeneration.byteArray(true, 5, 5);
@@ -59,10 +60,12 @@ public class NormalizeTest extends AbstractOpTest {
 
 		ops.op("image.normalize").arity1().input(in).output(out).compute();
 
-		final Pair<ByteType, ByteType> minMax = ops.op("stats.minMax").arity1().input(in)
-				.outType(new Nil<Pair<ByteType, ByteType>>() {}).apply();
-		final Pair<ByteType, ByteType> minMax2 = ops.op("stats.minMax").arity1().input(out)
-				.outType(new Nil<Pair<ByteType, ByteType>>() {}).apply();
+		final Pair<ByteType, ByteType> minMax = ops.op("stats.minMax").arity1()
+			.input(in).outType(new Nil<Pair<ByteType, ByteType>>()
+			{}).apply();
+		final Pair<ByteType, ByteType> minMax2 = ops.op("stats.minMax").arity1()
+			.input(out).outType(new Nil<Pair<ByteType, ByteType>>()
+			{}).apply();
 
 		assertEquals(minMax2.getA().get(), Byte.MIN_VALUE);
 		assertEquals(minMax2.getB().get(), Byte.MAX_VALUE);
@@ -70,15 +73,18 @@ public class NormalizeTest extends AbstractOpTest {
 		final ByteType min = new ByteType((byte) in.firstElement().getMinValue());
 		final ByteType max = new ByteType((byte) in.firstElement().getMaxValue());
 
-		final RandomAccessibleInterval<ByteType> lazyOut = ops.op("image.normalize").arity1().input(in)
-				.outType(new Nil<RandomAccessibleInterval<ByteType>>() {}).apply();
-		final RandomAccessibleInterval<ByteType> notLazyOut = ops.op("image.normalize")
-				.arity5().input(in, minMax.getA(), minMax.getB(), min, max).outType(new Nil<RandomAccessibleInterval<ByteType>>() {})
-				.apply();
+		final RandomAccessibleInterval<ByteType> lazyOut = ops.op("image.normalize")
+			.arity1().input(in).outType(new Nil<RandomAccessibleInterval<ByteType>>()
+			{}).apply();
+		final RandomAccessibleInterval<ByteType> notLazyOut = ops.op(
+			"image.normalize").arity5().input(in, minMax.getA(), minMax.getB(), min,
+				max).outType(new Nil<RandomAccessibleInterval<ByteType>>()
+		{}).apply();
 
 		final Cursor<ByteType> outCursor = out.cursor();
 		final Cursor<ByteType> lazyCursor = Views.flatIterable(lazyOut).cursor();
-		final Cursor<ByteType> notLazyCursor = Views.flatIterable(notLazyOut).cursor();
+		final Cursor<ByteType> notLazyCursor = Views.flatIterable(notLazyOut)
+			.cursor();
 		while (outCursor.hasNext()) {
 			assertEquals(outCursor.next().get(), lazyCursor.next().get());
 			assertEquals(outCursor.get().get(), notLazyCursor.next().get());

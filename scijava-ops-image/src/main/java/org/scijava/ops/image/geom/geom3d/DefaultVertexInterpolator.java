@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,12 +26,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.geom.geom3d;
 
 /**
  * Linearly interpolate the position where an isosurface cuts an edge between
  * two vertices, each with their own scalar value
- * 
+ *
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 public class DefaultVertexInterpolator extends AbstractVertexInterpolator {
@@ -46,15 +47,18 @@ public class DefaultVertexInterpolator extends AbstractVertexInterpolator {
 			for (int i = 0; i < 3; i++) {
 				output[i] = p1[i];
 			}
-		} else if (Math.abs(isolevel - p2Value) < 0.00001) {
+		}
+		else if (Math.abs(isolevel - p2Value) < 0.00001) {
 			for (int i = 0; i < 3; i++) {
 				output[i] = p2[i];
 			}
-		} else if (Math.abs(p1Value - p2Value) < 0.00001) {
+		}
+		else if (Math.abs(p1Value - p2Value) < 0.00001) {
 			for (int i = 0; i < 3; i++) {
 				output[i] = p1[i];
 			}
-		} else {
+		}
+		else {
 			double mu = (isolevel - p1Value) / (p2Value - p1Value);
 
 			output[0] = p1[0] + mu * (p2[0] - p1[0]);

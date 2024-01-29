@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -45,11 +45,12 @@ import org.scijava.ops.spi.Nullable;
  * <p>
  * Only the first two dimensions of the image are considered.
  * </p>
- * 
+ *
  * @author Curtis Rueden
- *@implNote op names='image.ascii'
+ * @implNote op names='image.ascii'
  */
-public class DefaultASCII<T extends RealType<T>> implements Functions.Arity3<IterableInterval<T>, T, T, String>
+public class DefaultASCII<T extends RealType<T>> implements
+	Functions.Arity3<IterableInterval<T>, T, T, String>
 {
 
 	private static final String CHARS = "#O*o+-,. ";
@@ -66,8 +67,9 @@ public class DefaultASCII<T extends RealType<T>> implements Functions.Arity3<Ite
 	 * @return ASCIIArt
 	 */
 	@Override
-	public String apply(final IterableInterval<T> input, @Nullable
-	T min, @Nullable T max) {
+	public String apply(final IterableInterval<T> input, @Nullable T min,
+		@Nullable T max)
+	{
 		if (min == null || max == null) {
 			final Pair<T, T> minMax = minMaxFunc.apply(input);
 			if (min == null) min = minMax.getA();

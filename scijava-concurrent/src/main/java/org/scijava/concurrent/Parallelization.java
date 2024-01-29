@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -43,7 +43,7 @@ import java.util.concurrent.ExecutorService;
  * <p>
  * The algorithm can be executed singleThreaded, multiThreaded or by using a
  * specified {@link ExecutorService} or {@link TaskExecutor}:
- * 
+ *
  * <pre>
  *     {@code
  *
@@ -216,21 +216,22 @@ public final class Parallelization {
 	 * {@link TaskExecutor}. It's mandatory to call the {@code close()} of the
 	 * return {@link Frame frame} afterwards. This could be done using an
 	 * try-with-resources statement.
-	 * 
+	 *
 	 * <pre>
 	 * {@code
 	 *
-	 * try ( Parallelization.Frame frame = Parallelization.setExecutorRequiresReset( taskExecutor ) )
+	 * try (Parallelization.Frame frame = Parallelization.setExecutorRequiresReset(
+	 * 	taskExecutor))
 	 * {
-	 *     myAlgorithm(input);
+	 * 	myAlgorithm(input);
 	 * }
 	 * }
 	 * </pre>
-	 * 
+	 *
 	 * Or by explicitly calling {@code frame.close()} in the finally block.
-	 * 
+	 *
 	 * <pre>
-	 * 
+	 *
 	 * {
 	 * 	&#64;code
 	 *

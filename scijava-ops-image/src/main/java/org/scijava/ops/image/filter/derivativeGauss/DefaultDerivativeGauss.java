@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -49,14 +49,15 @@ import org.scijava.ops.spi.OpDependency;
  * at a particular point.
  *
  * @author Gabe Selzer
- *@implNote op names='filter.derivativeGauss'
+ * @implNote op names='filter.derivativeGauss'
  */
-public class DefaultDerivativeGauss<T extends RealType<T>>
-		implements Computers.Arity3<RandomAccessibleInterval<T>, double[], int[], RandomAccessibleInterval<DoubleType>> {
-	
+public class DefaultDerivativeGauss<T extends RealType<T>> implements
+	Computers.Arity3<RandomAccessibleInterval<T>, double[], int[], RandomAccessibleInterval<DoubleType>>
+{
+
 	@OpDependency(name = "copy.rai")
 	private Computers.Arity1<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>> copyOp;
-	
+
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, DoubleType, RandomAccessibleInterval<DoubleType>> createOp;
 
@@ -65,10 +66,8 @@ public class DefaultDerivativeGauss<T extends RealType<T>>
 	/**
 	 * Calculates a value at a specified location in a normal mask.
 	 *
-	 * @param x
-	 *            - the location in the mask.
-	 * @param sigma
-	 *            - the sigma for the convolution.
+	 * @param x - the location in the mask.
+	 * @param sigma - the sigma for the convolution.
 	 * @return double - the value of the mask at location x.
 	 */
 	private double phi0(final double x, final double sigma) {
@@ -80,10 +79,8 @@ public class DefaultDerivativeGauss<T extends RealType<T>>
 	 * Calculates a value at a specified location in a first partial derivative
 	 * mask.
 	 *
-	 * @param x
-	 *            - the location in the mask.
-	 * @param sigma
-	 *            - the sigma for the convolution.
+	 * @param x - the location in the mask.
+	 * @param sigma - the sigma for the convolution.
 	 * @return double - the value of the mask at location x.
 	 */
 	private double phi1(final double x, final double sigma) {
@@ -95,10 +92,8 @@ public class DefaultDerivativeGauss<T extends RealType<T>>
 	 * Calculates a value at a specified location in a second partial derivative
 	 * mask.
 	 *
-	 * @param x
-	 *            - the location in the mask.
-	 * @param sigma
-	 *            - the sigma for the convolution.
+	 * @param x - the location in the mask.
+	 * @param sigma - the sigma for the convolution.
 	 * @return double - the value of the mask at location x.
 	 */
 	private double phi2(final double x, final double sigma) {
@@ -109,8 +104,7 @@ public class DefaultDerivativeGauss<T extends RealType<T>>
 	/**
 	 * Creates the mask for normal convolutions
 	 *
-	 * @param sigma
-	 *            - The sigma for the convolution.
+	 * @param sigma - The sigma for the convolution.
 	 * @return double[] - The mask.
 	 */
 	private double[] get_mask_0(final double sigma) {
@@ -129,8 +123,7 @@ public class DefaultDerivativeGauss<T extends RealType<T>>
 	/**
 	 * Creates the mask for first partial derivative convolutions
 	 *
-	 * @param sigma
-	 *            - The sigma for the convolution.
+	 * @param sigma - The sigma for the convolution.
 	 * @return double[] - The mask.
 	 */
 	private double[] get_mask_1(final double sigma) {
@@ -149,8 +142,7 @@ public class DefaultDerivativeGauss<T extends RealType<T>>
 	/**
 	 * Creates the mask for second partial derivative convolutions
 	 *
-	 * @param sigma
-	 *            - The sigma for the convolution.
+	 * @param sigma - The sigma for the convolution.
 	 * @return double[] - The mask.
 	 */
 	private double[] get_mask_2(final double sigma) {
@@ -170,27 +162,25 @@ public class DefaultDerivativeGauss<T extends RealType<T>>
 	 * Returns the correct mask of nth partial derivative. Leaves the calculations
 	 * to the helper methods.
 	 *
-	 * @param sigma
-	 *            - The sigma for the convolution.
-	 * @param n
-	 *            - A number specifying the nth partial derivative.
+	 * @param sigma - The sigma for the convolution.
+	 * @param n - A number specifying the nth partial derivative.
 	 * @return double[] - The mask.
 	 */
 	private double[] get_mask_general(final int n, final double sigma) {
 		double[] h;
 		switch (n) {
-		case 0:
-			h = get_mask_0(sigma);
-			break;
-		case 1:
-			h = get_mask_1(sigma);
-			break;
-		case 2:
-			h = get_mask_2(sigma);
-			break;
-		default:
-			h = get_mask_0(sigma);
-			break;
+			case 0:
+				h = get_mask_0(sigma);
+				break;
+			case 1:
+				h = get_mask_1(sigma);
+				break;
+			case 2:
+				h = get_mask_2(sigma);
+				break;
+			default:
+				h = get_mask_0(sigma);
+				break;
 		}
 		return h;
 	}
@@ -198,19 +188,18 @@ public class DefaultDerivativeGauss<T extends RealType<T>>
 	/**
 	 * Convolves the columns of the image
 	 *
-	 * @param input
-	 *            - The input image.
-	 * @param output
-	 *            - The output image.
-	 * @param mask
-	 *            - The mask needed for the convolution, determined beforehand.
+	 * @param input - The input image.
+	 * @param output - The output image.
+	 * @param mask - The mask needed for the convolution, determined beforehand.
 	 */
-	private <T extends RealType<T>> void convolve_x(final RandomAccessibleInterval<T> input,
-			final RandomAccessibleInterval<DoubleType> output, final double[] mask) {
+	private <T extends RealType<T>> void convolve_x(
+		final RandomAccessibleInterval<T> input,
+		final RandomAccessibleInterval<DoubleType> output, final double[] mask)
+	{
 		double sum;
 		final Cursor<T> cursor = Views.iterable(input).localizingCursor();
-		final OutOfBoundsMirrorFactory<T, RandomAccessibleInterval<T>> osmf = new OutOfBoundsMirrorFactory<>(
-				Boundary.SINGLE);
+		final OutOfBoundsMirrorFactory<T, RandomAccessibleInterval<T>> osmf =
+			new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
 		final RandomAccess<T> inputRA = osmf.create(input);
 		final RandomAccess<DoubleType> outputRA = output.randomAccess();
 
@@ -234,19 +223,19 @@ public class DefaultDerivativeGauss<T extends RealType<T>>
 	/**
 	 * Convolves the rows of the image
 	 *
-	 * @param input
-	 *            - The input image.
-	 * @param output
-	 *            - The output image.
-	 * @param mask
-	 *            - The mask needed for the convolution, determined beforehand.
+	 * @param input - The input image.
+	 * @param output - The output image.
+	 * @param mask - The mask needed for the convolution, determined beforehand.
 	 */
-	private <T extends RealType<T>> void convolve_n(final RandomAccessibleInterval<T> input,
-			final RandomAccessibleInterval<DoubleType> output, final double[] mask, final int n) {
+	private <T extends RealType<T>> void convolve_n(
+		final RandomAccessibleInterval<T> input,
+		final RandomAccessibleInterval<DoubleType> output, final double[] mask,
+		final int n)
+	{
 		double sum;
 		final Cursor<T> cursor = Views.iterable(input).localizingCursor();
-		final OutOfBoundsMirrorFactory<T, RandomAccessibleInterval<T>> osmf = new OutOfBoundsMirrorFactory<>(
-				Boundary.SINGLE);
+		final OutOfBoundsMirrorFactory<T, RandomAccessibleInterval<T>> osmf =
+			new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
 		final RandomAccess<T> inputRA = osmf.create(input);
 		final RandomAccess<DoubleType> outputRA = output.randomAccess();
 
@@ -260,8 +249,7 @@ public class DefaultDerivativeGauss<T extends RealType<T>>
 			for (int i = -halfWidth; i <= halfWidth; i++) {
 				for (int dim = 0; dim < input.numDimensions(); dim++) {
 					long position = cursor.getLongPosition(dim);
-					if (dim == n)
-						position += i;
+					if (dim == n) position += i;
 					inputRA.setPosition(position, dim);
 				}
 				sum += inputRA.get().getRealDouble() * mask[i + halfWidth];
@@ -276,40 +264,46 @@ public class DefaultDerivativeGauss<T extends RealType<T>>
 	 *
 	 * @param input
 	 * @param sigma the sigma in each dimension of the gaussian
-	 * @param derivatives the value at each index indicates the derivative to take in each dimension of the image.
+	 * @param derivatives the value at each index indicates the derivative to take
+	 *          in each dimension of the image.
 	 * @param output
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<T> input, final double[] sigma, final int[] derivatives, final RandomAccessibleInterval<DoubleType> output) {
+	public void compute(final RandomAccessibleInterval<T> input,
+		final double[] sigma, final int[] derivatives,
+		final RandomAccessibleInterval<DoubleType> output)
+	{
 
 		// throw exception if not enough derivative values were given
 		if (input.numDimensions() != derivatives.length)
-			throw new IllegalArgumentException("derivatives array must include values for each dimension!");
+			throw new IllegalArgumentException(
+				"derivatives array must include values for each dimension!");
 
 		// throw exception if derivatives contains a derivative this Op cannot
 		// perform
 		for (final int derivative : derivatives)
-			if (derivative < 0 || derivative > 2)
-				throw new IllegalArgumentException(
-						"derivatives greater than second-order or less than zeroth order cannot be performed!");
+			if (derivative < 0 || derivative > 2) throw new IllegalArgumentException(
+				"derivatives greater than second-order or less than zeroth order cannot be performed!");
 
 		// create the intermediate image used as the input for all convolutions
 		// after the first
-		final RandomAccessibleInterval<DoubleType> intermediate = createOp.apply(input, new DoubleType());
+		final RandomAccessibleInterval<DoubleType> intermediate = createOp.apply(
+			input, new DoubleType());
 
 		// convolve the first dimension, transferring data to the intermediary
-		convolve_n(input, intermediate, get_mask_general(derivatives[0], sigma[0]), 0);
+		convolve_n(input, intermediate, get_mask_general(derivatives[0], sigma[0]),
+			0);
 
 		// convolve the remaining dimensions
 		for (int n = 1; n < input.numDimensions(); n++) {
 			// convolve from the intermediary, outputting to output
-			convolve_n(intermediate, output, get_mask_general(derivatives[n], sigma[n]), n);
+			convolve_n(intermediate, output, get_mask_general(derivatives[n],
+				sigma[n]), n);
 			// if there is still another dimension to convolve, transfer the data from
 			// the last convolution back into output so that we can convolve again.
-			if (n + 1 != input.numDimensions())
-				copyOp.compute(output, intermediate);
+			if (n + 1 != input.numDimensions()) copyOp.compute(output, intermediate);
 		}
-		
+
 	}
 
 }

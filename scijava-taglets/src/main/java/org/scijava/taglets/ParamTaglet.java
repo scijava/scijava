@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.taglets;
 
 import com.sun.source.doctree.DocTree;
@@ -67,16 +68,18 @@ public abstract class ParamTaglet implements Taglet {
 
 	@Override
 	public String toString(List<? extends DocTree> tags, Element element) {
-		return "\n<dt><span class=\"paramLabel\">" + title + " parameters:</span></dt>\n" + //
-				String.join("", tags.stream()//
-						.map(tag -> "<dd>" + tagToHTML(tag) + "</dd>\n")//
-						.collect(Collectors.toList()));
+		return "\n<dt><span class=\"paramLabel\">" + title +
+			" parameters:</span></dt>\n" + //
+			String.join("", tags.stream()//
+				.map(tag -> "<dd>" + tagToHTML(tag) + "</dd>\n")//
+				.collect(Collectors.toList()));
 	}
 
 	/** Reformats the tag content to match the HTML we want to have. */
 	private String tagToHTML(final DocTree tag) {
 		// Strip the leading tag string.
-		final String text = tag.toString().trim().replaceFirst("^@" + tagName, "").trim();
+		final String text = tag.toString().trim().replaceFirst("^@" + tagName, "")
+			.trim();
 		// Extract parameter name.
 		final String paramName = text.replaceFirst("\\s.*", "");
 		// Extract parameter description, if any.

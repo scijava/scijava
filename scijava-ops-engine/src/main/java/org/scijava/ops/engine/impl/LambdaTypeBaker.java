@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.engine.impl;
 
 import java.lang.invoke.MethodHandles;
@@ -68,10 +69,9 @@ public final class LambdaTypeBaker {
 	 * <p>
 	 *
 	 * <pre>{@code
-	 * op("engine.adapt")
-	 *   .input(computer)
-	 *   .outType(new Nil&lt;Computers.Arity1&lt;Iterable&lt;Double&gt;, Iterable&lt;Double&gt;&gt;&gt;() {})
-	 *   .apply()
+	 * op("engine.adapt").input(computer).outType(
+	 * 	new Nil&lt;Computers.Arity1&lt;Iterable&lt;Double&gt;, Iterable&lt;Double&gt;&gt;&gt;()
+	 * 	{}).apply()
 	 * }</pre>
 	 *
 	 * since the type parameters of {@code computer} are not retained at runtime.
@@ -82,10 +82,11 @@ public final class LambdaTypeBaker {
 	 * Note: {@code bakeLambdaType} <b>does not</b> need to be used with anonymous
 	 * subclasses; these retain their type parameters at runtime. It is only
 	 * lambda expressions that need to be passed to this method.
-	 * 
+	 *
 	 * @param <T> The type of the op instance to enrich.
 	 * @param originalOp The op instance to enrich.
-	 * @param reifiedType The intended generic type of the object to be known at runtime.
+	 * @param reifiedType The intended generic type of the object to be known at
+	 *          runtime.
 	 * @return An enriched version of the object with full knowledge of its
 	 *         generic type.
 	 */
@@ -105,7 +106,8 @@ public final class LambdaTypeBaker {
 		Class<?> opFIFace = FunctionalInterfaces.findFrom(opClass);
 		Class<?> typeFIFace = FunctionalInterfaces.findFrom(reifiedType);
 		if (!opFIFace.equals(typeFIFace)) {
-			throw new IllegalArgumentException(originalOp + " does not implement " + Types.raw(reifiedType));
+			throw new IllegalArgumentException(originalOp + " does not implement " +
+				Types.raw(reifiedType));
 		}
 	}
 
@@ -115,14 +117,16 @@ public final class LambdaTypeBaker {
 	 * <li>is of the same functional type as the given Op</li>
 	 * <li>knows its generic type by nature of being a {@link GenericTyped}</li>
 	 * </ul>
-	 * 
+	 *
 	 * @param originalOp - the Op that will be simplified
 	 * @param reifiedType - the {@link Type} to bake into {@code originalOp}.
 	 * @return a wrapper of {@code originalOp} taking arguments that are then
 	 *         mutated to satisfy {@code originalOp}, producing outputs that are
 	 *         then mutated to satisfy the desired output of the wrapper.
 	 */
-	private static Object javassistOp(Object originalOp, Type reifiedType) throws Throwable {
+	private static Object javassistOp(Object originalOp, Type reifiedType)
+		throws Throwable
+	{
 		ClassPool pool = ClassPool.getDefault();
 
 		// Create wrapper class
@@ -142,7 +146,7 @@ public final class LambdaTypeBaker {
 	}
 
 	// TODO: consider correctness
-	private static String formClassName(Object op,  Type reifiedType) {
+	private static String formClassName(Object op, Type reifiedType) {
 		// package name - required to be this package for the Lookup to work
 		String packageName = LambdaTypeBaker.class.getPackageName();
 		StringBuilder sb = new StringBuilder(packageName + ".");
@@ -151,16 +155,19 @@ public final class LambdaTypeBaker {
 		String implementationName = op.getClass().getSimpleName();
 		String originalName = implementationName.substring(implementationName
 			.lastIndexOf('.') + 1); // we only want the class name
-		String className = originalName.concat("_typeBaked_" + reifiedType.getTypeName());
+		String className = originalName.concat("_typeBaked_" + reifiedType
+			.getTypeName());
 		className = className.replaceAll("[^a-zA-Z0-9_]", "_");
-		if(className.chars().anyMatch(c -> !Character.isJavaIdentifierPart(c)))
-			throw new IllegalArgumentException(className + " is not a valid class name!");
+		if (className.chars().anyMatch(c -> !Character.isJavaIdentifierPart(c)))
+			throw new IllegalArgumentException(className +
+				" is not a valid class name!");
 
 		sb.append(className);
 		return sb.toString();
 	}
 
-	private static CtClass generateSimplifiedWrapper(ClassPool pool, String className, Type reifiedType) throws Throwable
+	private static CtClass generateSimplifiedWrapper(ClassPool pool,
+		String className, Type reifiedType) throws Throwable
 	{
 		CtClass cc = pool.makeClass(className);
 
@@ -179,12 +186,13 @@ public final class LambdaTypeBaker {
 		cc.addField(type);
 
 		// Add constructor to take the Simplifiers, as well as the original op.
-		CtConstructor constructor = CtNewConstructor.make(createConstructor(cc, Types.raw(reifiedType)), cc);
+		CtConstructor constructor = CtNewConstructor.make(createConstructor(cc,
+			Types.raw(reifiedType)), cc);
 		cc.addConstructor(constructor);
 
 		// add functional interface method
-		CtMethod functionalMethod = CtNewMethod.make(createFunctionalMethod(reifiedType),
-			cc);
+		CtMethod functionalMethod = CtNewMethod.make(createFunctionalMethod(
+			reifiedType), cc);
 		cc.addMethod(functionalMethod);
 
 		CtMethod genTypedMethod = CtNewMethod.make(createGenericTypedMethod(), cc);
@@ -198,14 +206,15 @@ public final class LambdaTypeBaker {
 		return "public java.lang.reflect.Type getType() {return type;}";
 	}
 
-	private static CtField createTypeField(ClassPool pool, CtClass cc, Class<?> opType, String fieldName)
-			throws NotFoundException, CannotCompileException
-		{
-			CtClass fType = pool.get(opType.getName());
-			CtField f = new CtField(fType, fieldName, cc);
-			f.setModifiers(Modifier.PRIVATE + Modifier.FINAL);
-			return f;
-		}
+	private static CtField createTypeField(ClassPool pool, CtClass cc,
+		Class<?> opType, String fieldName) throws NotFoundException,
+		CannotCompileException
+	{
+		CtClass fType = pool.get(opType.getName());
+		CtField f = new CtField(fType, fieldName, cc);
+		f.setModifiers(Modifier.PRIVATE + Modifier.FINAL);
+		return f;
+	}
 
 	private static String createConstructor(CtClass cc, Class<?> opType) {
 		StringBuilder sb = new StringBuilder();
@@ -223,13 +232,12 @@ public final class LambdaTypeBaker {
 
 	/**
 	 * Creates the functional method of a simplified Op. This functional method
-	 * simply wraps the lambda's method:
-	 * <b>NB</b> The Javassist compiler
+	 * simply wraps the lambda's method: <b>NB</b> The Javassist compiler
 	 * <a href="https://www.javassist.org/tutorial/tutorial3.html#generics">does
 	 * not fully support generics</a>, so we must ensure that the types are raw.
 	 * At compile time, the raw types are equivalent to the generic types, so this
 	 * should not pose any issues.
-	 * 
+	 *
 	 * @param reifiedType - the {@link Type} of the lambda, containing the
 	 *          information needed to write the method.
 	 * @return a {@link String} that can be used by
@@ -243,10 +251,10 @@ public final class LambdaTypeBaker {
 		Class<?> raw = Types.raw(reifiedType);
 		Method m = FunctionalInterfaces.functionalMethodOf(raw);
 
-		//-- signature -- //
+		// -- signature -- //
 		sb.append(generateSignature(m));
 
-		//-- body --//
+		// -- body --//
 
 		sb.append(" {");
 

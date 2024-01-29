@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -40,7 +40,8 @@ import org.scijava.struct.Member;
 import org.scijava.struct.MemberParser;
 import org.scijava.struct.Struct;
 
-public class OpResizingMemberParser implements MemberParser<RetypingRequest, Member<?>>
+public class OpResizingMemberParser implements
+	MemberParser<RetypingRequest, Member<?>>
 {
 
 	/**
@@ -57,20 +58,18 @@ public class OpResizingMemberParser implements MemberParser<RetypingRequest, Mem
 	 * <li>That there is <b>one</b> output {@link Member} in {@code srcStruct}
 	 * </ol>
 	 * We should consider adding the evalutation of these assumptions
-	 * 
+	 *
 	 * @param source the {@link RetypingRequest} from which we create the new
 	 *          {@link List} of {@link Member}s
 	 * @return a new {@link List} reflecting the simplified arguments / focused
 	 *         output of this {@link SimplifiedOpInfo}
 	 */
 	@Override
-	public List<Member<?>> parse(RetypingRequest source, Type structType)
-	{
+	public List<Member<?>> parse(RetypingRequest source, Type structType) {
 		List<FunctionalMethodType> newFmts = source.newFmts();
 		long numInputs = newFmts.stream() //
-				 .filter(fmt -> fmt
-			.itemIO() == ItemIO.INPUT) //
-		 .count();
+			.filter(fmt -> fmt.itemIO() == ItemIO.INPUT) //
+			.count();
 		List<Member<?>> newMembers = new ArrayList<>();
 		long inputsAdded = 0;
 		for (Member<?> m : source.struct().members()) {
@@ -83,7 +82,8 @@ public class OpResizingMemberParser implements MemberParser<RetypingRequest, Mem
 		return newMembers;
 	}
 
-	public List<Member<?>> parse(Struct s, List<FunctionalMethodType> newFmts, Type structType)
+	public List<Member<?>> parse(Struct s, List<FunctionalMethodType> newFmts,
+		Type structType)
 	{
 		return parse(new RetypingRequest(s, newFmts), structType);
 	}

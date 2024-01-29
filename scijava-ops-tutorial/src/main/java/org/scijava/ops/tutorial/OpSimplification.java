@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -47,7 +47,8 @@ import org.scijava.ops.spi.OpField;
  * type. This process makes use of two different Op types:
  * <ul>
  * <li>"engine.simplify" Ops transform user inputs into a broader data type</li>
- * <li>"engine.focus" Ops transform that broader type into the type used by the Op</li>
+ * <li>"engine.focus" Ops transform that broader type into the type used by the
+ * Op</li>
  * </ul>
  * functional type X and returning an Op of functional type Y.
  * <p>
@@ -88,15 +89,15 @@ public class OpSimplification implements OpCollection {
 		The simplification routine works as follows:
 		1. SciJava Ops determines that there are no existing "tutorial.simplify" Ops
 		that work on Integers
-		
+
 		2. SciJava Ops finds a "engine.focus" Op that can make Doubles from Numbers. Thus,
 		if the inputs are Numbers, SciJava Ops could use this "engine.focus" Op to make
 		those Numbers into Doubles
-		
+
 		3. SciJava Ops finds a "engine.simplify" Op that can make Numbers from Integers.
 		Thus, if the inputs are Integers, SciJava Ops can use this "engine.simplify" Op
 		to make those Integers into Numbers
-		
+
 		4. By using the "engine.simplify" and then the "engine.focus" Op, SciJava Ops can convert
 		the Integer inputs into Double inputs, and by creating a similar chain
 		in reverse, can convert the Double output into an Integer output.

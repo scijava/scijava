@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.morphology;
 
 import java.util.List;
@@ -53,7 +54,8 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	 * @implNote op names='morphology.dilate'
 	 */
 	@SuppressWarnings("unchecked")
-	public final Functions.Arity3<Img<R>, List<? extends Shape>, Integer, Img<R>> dilateImgList = (in1, in2, in3) -> Dilation.dilate(in1, (List<Shape>) in2, in3);
+	public final Functions.Arity3<Img<R>, List<? extends Shape>, Integer, Img<R>> dilateImgList =
+		(in1, in2, in3) -> Dilation.dilate(in1, (List<Shape>) in2, in3);
 
 	/**
 	 * @input source
@@ -62,7 +64,8 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	 * @output result
 	 * @implNote op names='morphology.dilate'
 	 */
-	public final Functions.Arity3<Img<R>, Shape, Integer, Img<R>> dilateImgSingle = Dilation::dilate;
+	public final Functions.Arity3<Img<R>, Shape, Integer, Img<R>> dilateImgSingle =
+		Dilation::dilate;
 
 	/**
 	 * @input source
@@ -73,7 +76,8 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	 * @implNote op names='morphology.dilate'
 	 */
 	@SuppressWarnings("unchecked")
-	public final Functions.Arity4<Img<T>, List<? extends Shape>, T, Integer, Img<T>> dilateImgListMinValue = (in1, in2, in3, in4) -> Dilation.dilate(in1, (List<Shape>) in2, in3, in4);
+	public final Functions.Arity4<Img<T>, List<? extends Shape>, T, Integer, Img<T>> dilateImgListMinValue =
+		(in1, in2, in3, in4) -> Dilation.dilate(in1, (List<Shape>) in2, in3, in4);
 
 	/**
 	 * @input source
@@ -83,7 +87,8 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	 * @output result
 	 * @implNote op names='morphology.dilate'
 	 */
-	public final Functions.Arity4<Img<T>, Shape, T, Integer, Img<T>> dilateImgSingleMinValue = Dilation::dilate;
+	public final Functions.Arity4<Img<T>, Shape, T, Integer, Img<T>> dilateImgSingleMinValue =
+		Dilation::dilate;
 
 	/**
 	 * @input source
@@ -93,8 +98,8 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	 * @implNote op names='morphology.dilate'
 	 */
 	@SuppressWarnings("unchecked")
-	public final Computers.Arity3<RandomAccessible<R>, List<? extends Shape>, Integer, IterableInterval<R>> dilateImgListComputer = (in1,
-			in2, in3, out) -> Dilation.dilate(in1, out, (List<Shape>) in2, in3);
+	public final Computers.Arity3<RandomAccessible<R>, List<? extends Shape>, Integer, IterableInterval<R>> dilateImgListComputer =
+		(in1, in2, in3, out) -> Dilation.dilate(in1, out, (List<Shape>) in2, in3);
 
 	/**
 	 * @input source
@@ -105,8 +110,9 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	 * @implNote op names='morphology.dilate'
 	 */
 	@SuppressWarnings("unchecked")
-	public final Computers.Arity4<RandomAccessible<T>, List<? extends Shape>, T, Integer, IterableInterval<T>> dilateImgListMinValComputer = (
-			in1, in2, in3, in4, out) -> Dilation.dilate(in1, out, (List<Shape>) in2, in3, in4);
+	public final Computers.Arity4<RandomAccessible<T>, List<? extends Shape>, T, Integer, IterableInterval<T>> dilateImgListMinValComputer =
+		(in1, in2, in3, in4, out) -> Dilation.dilate(in1, out, (List<Shape>) in2,
+			in3, in4);
 
 	/**
 	 * @input source
@@ -115,8 +121,8 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	 * @container target
 	 * @implNote op names='morphology.dilate'
 	 */
-	public final Computers.Arity3<RandomAccessible<R>, Shape, Integer, IterableInterval<R>> dilateImgComputer = (in1, in2, in3,
-			out) -> Dilation.dilate(in1, out, in2, in3);
+	public final Computers.Arity3<RandomAccessible<R>, Shape, Integer, IterableInterval<R>> dilateImgComputer =
+		(in1, in2, in3, out) -> Dilation.dilate(in1, out, in2, in3);
 
 	/**
 	 * @input source
@@ -126,8 +132,8 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	 * @container target
 	 * @implNote op names='morphology.dilate'
 	 */
-	public final Computers.Arity4<RandomAccessible<T>, Shape, T, Integer, IterableInterval<T>> dilateImgMinValComputer = (in1,
-			in2, in3, in4, out) -> Dilation.dilate(in1, out, in2, in3, in4);
+	public final Computers.Arity4<RandomAccessible<T>, Shape, T, Integer, IterableInterval<T>> dilateImgMinValComputer =
+		(in1, in2, in3, in4, out) -> Dilation.dilate(in1, out, in2, in3, in4);
 
 	/**
 	 * @input source
@@ -137,7 +143,8 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	 * @implNote op names='morphology.dilate'
 	 */
 	@SuppressWarnings("unchecked")
-	public final Functions.Arity3<Img<R>, List<? extends Shape>, Integer, Img<R>> dilateFullImgList = (in1, in2, in3) -> Dilation.dilateFull(in1, (List<Shape>) in2, in3);
+	public final Functions.Arity3<Img<R>, List<? extends Shape>, Integer, Img<R>> dilateFullImgList =
+		(in1, in2, in3) -> Dilation.dilateFull(in1, (List<Shape>) in2, in3);
 
 	/**
 	 * @input source
@@ -146,7 +153,8 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	 * @output result
 	 * @implNote op names='morphology.dilate'
 	 */
-	public final Functions.Arity3<Img<R>, Shape, Integer, Img<R>> dilateFullImgSingle = Dilation::dilateFull;
+	public final Functions.Arity3<Img<R>, Shape, Integer, Img<R>> dilateFullImgSingle =
+		Dilation::dilateFull;
 
 	/**
 	 * @input source
@@ -157,7 +165,9 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	 * @implNote op names='morphology.dilate'
 	 */
 	@SuppressWarnings("unchecked")
-	public final Functions.Arity4<Img<T>, List<? extends Shape>, T, Integer, Img<T>> dilateFullImgListMinValue = (in1, in2, in3, in4) -> Dilation.dilateFull(in1, (List<Shape>) in2, in3, in4);
+	public final Functions.Arity4<Img<T>, List<? extends Shape>, T, Integer, Img<T>> dilateFullImgListMinValue =
+		(in1, in2, in3, in4) -> Dilation.dilateFull(in1, (List<Shape>) in2, in3,
+			in4);
 
 	/**
 	 * @input source
@@ -167,7 +177,8 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	 * @output result
 	 * @implNote op names='morphology.dilate'
 	 */
-	public final Functions.Arity4<Img<T>, Shape, T, Integer, Img<T>> dilateFullImgSingleMinValue = Dilation::dilateFull;
+	public final Functions.Arity4<Img<T>, Shape, T, Integer, Img<T>> dilateFullImgSingleMinValue =
+		Dilation::dilateFull;
 
 	/**
 	 * @mutable source
@@ -177,7 +188,9 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	 * @implNote op names='morphology.dilate'
 	 */
 	@SuppressWarnings("unchecked")
-	public final Inplaces.Arity4_1<RandomAccessibleInterval<R>, Interval, List<? extends Shape>, Integer> dilateImgListInPlace = (io, in2, in3, in4) -> Dilation.dilateInPlace(io, in2, (List<Shape>) in3, in4);
+	public final Inplaces.Arity4_1<RandomAccessibleInterval<R>, Interval, List<? extends Shape>, Integer> dilateImgListInPlace =
+		(io, in2, in3, in4) -> Dilation.dilateInPlace(io, in2, (List<Shape>) in3,
+			in4);
 
 	/**
 	 * @mutable source
@@ -188,7 +201,9 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	 * @implNote op names='morphology.dilate'
 	 */
 	@SuppressWarnings("unchecked")
-	public final Inplaces.Arity5_1<RandomAccessibleInterval<T>, Interval, List<? extends Shape>, T, Integer> dilateImgListMinValInplace = (io, in2, in3, in4, in5) -> Dilation.dilateInPlace(io, in2, (List<Shape>) in3, in4, in5);
+	public final Inplaces.Arity5_1<RandomAccessibleInterval<T>, Interval, List<? extends Shape>, T, Integer> dilateImgListMinValInplace =
+		(io, in2, in3, in4, in5) -> Dilation.dilateInPlace(io, in2,
+			(List<Shape>) in3, in4, in5);
 
 	/**
 	 * @mutable source
@@ -197,7 +212,8 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	 * @input numThreads
 	 * @implNote op names='morphology.dilate'
 	 */
-	public final Inplaces.Arity4_1<RandomAccessibleInterval<R>, Interval, Shape, Integer> dilateImgSingleInPlace = Dilation::dilateInPlace;
+	public final Inplaces.Arity4_1<RandomAccessibleInterval<R>, Interval, Shape, Integer> dilateImgSingleInPlace =
+		Dilation::dilateInPlace;
 
 	/**
 	 * @mutable source
@@ -207,5 +223,6 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	 * @input numThreads
 	 * @implNote op names='morphology.dilate'
 	 */
-	public final Inplaces.Arity5_1<RandomAccessibleInterval<T>, Interval, Shape, T, Integer> dilateImgSingleMinValInplace = Dilation::dilateInPlace;
+	public final Inplaces.Arity5_1<RandomAccessibleInterval<T>, Interval, Shape, T, Integer> dilateImgSingleMinValInplace =
+		Dilation::dilateInPlace;
 }

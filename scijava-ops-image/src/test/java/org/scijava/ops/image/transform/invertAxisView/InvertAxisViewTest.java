@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.transform.invertAxisView;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -59,28 +60,36 @@ import org.scijava.types.Nil;
  */
 public class InvertAxisViewTest extends AbstractOpTest {
 
-	public static <T> RandomAccessible<T> deinterval(RandomAccessibleInterval<T> input) {
+	public static <T> RandomAccessible<T> deinterval(
+		RandomAccessibleInterval<T> input)
+	{
 		return Views.extendBorder(input);
 	}
 
 	@Test
 	public void defaultInvertAxisTest() {
 
-		BiFunction<RandomAccessible<DoubleType>, Integer, MixedTransformView<DoubleType>> invertFunc = OpBuilder
-				.matchFunction(ops, "transform.invertAxisView", new Nil<RandomAccessible<DoubleType>>() {
-				}, new Nil<Integer>() {
-				}, new Nil<MixedTransformView<DoubleType>>() {
-				});
+		BiFunction<RandomAccessible<DoubleType>, Integer, MixedTransformView<DoubleType>> invertFunc =
+			OpBuilder.matchFunction(ops, "transform.invertAxisView",
+				new Nil<RandomAccessible<DoubleType>>()
+				{}, new Nil<Integer>() {},
+				new Nil<MixedTransformView<DoubleType>>()
+				{});
 
-		final Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
+		final Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
+			new int[] { 10, 10 });
 
-		final MixedTransformView<DoubleType> il2 = Views.invertAxis((RandomAccessible<DoubleType>) img, 1);
-		final MixedTransformView<DoubleType> opr = invertFunc.apply(deinterval(img), 1);
+		final MixedTransformView<DoubleType> il2 = Views.invertAxis(
+			(RandomAccessible<DoubleType>) img, 1);
+		final MixedTransformView<DoubleType> opr = invertFunc.apply(deinterval(img),
+			1);
 
 		for (int i = 0; i < il2.getTransformToSource().getMatrix().length; i++) {
-			for (int j = 0; j < il2.getTransformToSource().getMatrix()[i].length; j++) {
-				assertEquals(il2.getTransformToSource().getMatrix()[i][j], opr.getTransformToSource().getMatrix()[i][j],
-						1e-10);
+			for (int j = 0; j < il2.getTransformToSource()
+				.getMatrix()[i].length; j++)
+			{
+				assertEquals(il2.getTransformToSource().getMatrix()[i][j], opr
+					.getTransformToSource().getMatrix()[i][j], 1e-10);
 			}
 		}
 	}
@@ -88,25 +97,27 @@ public class InvertAxisViewTest extends AbstractOpTest {
 	@Test
 	public void intervalInvertAxisTest() {
 
-		BiFunction<RandomAccessibleInterval<DoubleType>, Integer, IntervalView<DoubleType>> invertFunc = OpBuilder
-				.matchFunction(ops, "transform.invertAxisView", new Nil<RandomAccessibleInterval<DoubleType>>() {
-				}, new Nil<Integer>() {
-				}, new Nil<IntervalView<DoubleType>>() {
-				});
+		BiFunction<RandomAccessibleInterval<DoubleType>, Integer, IntervalView<DoubleType>> invertFunc =
+			OpBuilder.matchFunction(ops, "transform.invertAxisView",
+				new Nil<RandomAccessibleInterval<DoubleType>>()
+				{}, new Nil<Integer>() {}, new Nil<IntervalView<DoubleType>>() {});
 
-		final Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
+		final Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
+			new int[] { 10, 10 });
 
 		final IntervalView<DoubleType> il2 = Views.invertAxis(img, 1);
 		final IntervalView<DoubleType> opr = invertFunc.apply(img, 1);
 
-		for (int i = 0; i < ((MixedTransformView<DoubleType>) il2.getSource()).getTransformToSource()
-				.getMatrix().length; i++) {
-			for (int j = 0; j < ((MixedTransformView<DoubleType>) il2.getSource()).getTransformToSource()
-					.getMatrix()[i].length; j++) {
-				assertEquals(
-						((MixedTransformView<DoubleType>) il2.getSource()).getTransformToSource().getMatrix()[i][j],
-						((MixedTransformView<DoubleType>) opr.getSource()).getTransformToSource().getMatrix()[i][j],
-						1e-10);
+		for (int i = 0; i < ((MixedTransformView<DoubleType>) il2.getSource())
+			.getTransformToSource().getMatrix().length; i++)
+		{
+			for (int j = 0; j < ((MixedTransformView<DoubleType>) il2.getSource())
+				.getTransformToSource().getMatrix()[i].length; j++)
+			{
+				assertEquals(((MixedTransformView<DoubleType>) il2.getSource())
+					.getTransformToSource().getMatrix()[i][j],
+					((MixedTransformView<DoubleType>) opr.getSource())
+						.getTransformToSource().getMatrix()[i][j], 1e-10);
 			}
 		}
 	}

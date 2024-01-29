@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -42,32 +42,35 @@ import org.scijava.types.Types;
 public class MethodParameterMemberParser implements
 	MemberParser<Method, SynthesizedParameterMember<?>>
 {
+
 	@Override
-	public List<SynthesizedParameterMember<?>> parse(Method source, Type structType)
+	public List<SynthesizedParameterMember<?>> parse(Method source,
+		Type structType)
 	{
 		if (source == null) return null;
 
 		source.setAccessible(true);
 
 		// obtain a parameterData
-		ParameterData paramData = new SynthesizedMethodParameterData(source, Types.raw(structType));
+		ParameterData paramData = new SynthesizedMethodParameterData(source, Types
+			.raw(structType));
 
 		final ArrayList<SynthesizedParameterMember<?>> items = new ArrayList<>();
 
 		// Determine functional type
-		Type functionalType = OpMethodUtils.getOpMethodType(Types.raw(structType), source);
+		Type functionalType = OpMethodUtils.getOpMethodType(Types.raw(structType),
+			source);
 
 		// Parse method level @Parameter annotations.
 		try {
 			FunctionalParameters.parseFunctionalParameters(items, functionalType,
-					paramData);
-		} catch (IllegalArgumentException exc) {
+				paramData);
+		}
+		catch (IllegalArgumentException exc) {
 			throw new FunctionalTypeOpException(source, exc);
 		}
 
 		return items;
 	}
-
-
 
 }

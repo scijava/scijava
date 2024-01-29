@@ -39,6 +39,7 @@ import org.scijava.ops.engine.exceptions.InvalidOpException;
 public class InvalidOpNameException extends InvalidOpException {
 
 	public InvalidOpNameException(Object op, String name) {
-		super("Invalid name " + name + " for Op " + op + " - all Op names must have a namespace!");
+		super("Invalid name " + name + " for Op " + op +
+			" - all Op names must have a namespace!");
 	}
 }

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -43,14 +43,15 @@ import org.scijava.ops.spi.Op;
 
 /**
  * Op to calculate the {@code stats.minMax}.
- * 
+ *
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
- * @param <I>
- *            input type
+ * @param <I> input type
  * @implNote op names='stats.minMax', priority='100.'
  */
-public class DefaultMinMax<I extends RealType<I>> implements Function<RandomAccessibleInterval<I>, Pair<I, I>> {
+public class DefaultMinMax<I extends RealType<I>> implements
+	Function<RandomAccessibleInterval<I>, Pair<I, I>>
+{
 
 	/**
 	 * TODO
@@ -60,31 +61,35 @@ public class DefaultMinMax<I extends RealType<I>> implements Function<RandomAcce
 	 */
 	@Override
 	public Pair<I, I> apply(final RandomAccessibleInterval<I> input) {
-		// set minVal to the largest possible value and maxVal to the smallest possible.
+		// set minVal to the largest possible value and maxVal to the smallest
+		// possible.
 		final I minVal = Util.getTypeFromInterval(input).createVariable();
 		minVal.setReal(minVal.getMinValue());
 		final I maxVal = minVal.createVariable();
 		maxVal.setReal(maxVal.getMaxValue());
 
-		List<Pair<I, I>> minMaxes = LoopBuilder.setImages(input).multiThreaded().forEachChunk(chunk -> {
-			final I min = maxVal.copy();
-			final I max = minVal.copy();
-			
-			chunk.forEachPixel((in) -> {
-				if (in.compareTo(min) < 0) min.set(in);
-				if (in.compareTo(max) > 0) max.set(in);
+		List<Pair<I, I>> minMaxes = LoopBuilder.setImages(input).multiThreaded()
+			.forEachChunk(chunk -> {
+				final I min = maxVal.copy();
+				final I max = minVal.copy();
+
+				chunk.forEachPixel((in) -> {
+					if (in.compareTo(min) < 0) min.set(in);
+					if (in.compareTo(max) > 0) max.set(in);
+				});
+
+				return new ValuePair<>(min, max);
 			});
-			
-			return new ValuePair<>(min, max);
-		});
-		
+
 		final I raiMin = minMaxes.parallelStream() //
-				.map(pair -> pair.getA()) //
-				.reduce(maxVal, (result, min) -> min.compareTo(result) < 0 ? min : result);
+			.map(pair -> pair.getA()) //
+			.reduce(maxVal, (result, min) -> min.compareTo(result) < 0 ? min
+				: result);
 		final I raiMax = minMaxes.parallelStream() //
-				.map(pair -> pair.getB()) //
-				.reduce(minVal, (result, max) -> max.compareTo(result) > 0 ? max : result);
-		return new ValuePair<> (raiMin, raiMax);
+			.map(pair -> pair.getB()) //
+			.reduce(minVal, (result, max) -> max.compareTo(result) > 0 ? max
+				: result);
+		return new ValuePair<>(raiMin, raiMax);
 	}
 
 }

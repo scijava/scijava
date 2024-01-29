@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -66,7 +66,7 @@ public final class TypeTools {
 	 * illegal to pass a {@code List<Integer>} and {@code List<Double>} because
 	 * {@code T} cannot be both {@code Integer} and {@code Double} simultaneously.
 	 * </p>
-	 * 
+	 *
 	 * @return -1 if the args satisfy the params, otherwise the index of the arg
 	 *         that does not satisfy its parameter.
 	 */
@@ -79,7 +79,7 @@ public final class TypeTools {
 	}
 
 	public static int satisfies(final Type[] args, final Type[] params,
-			final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
+		final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
 	{
 		if (args.length != params.length) {
 			throw new IllegalArgumentException("src and dest lengths differ");
@@ -91,22 +91,21 @@ public final class TypeTools {
 
 			if (params[i] instanceof ParameterizedType) {
 				if (!satisfiesParameterizedTypes(args[i], (ParameterizedType) params[i],
-							typeBounds)) return i;
+					typeBounds)) return i;
 			}
 			else if (params[i] instanceof TypeVariable) {
 				if (!satisfiesTypeVariable(args[i], (TypeVariable<?>) params[i],
-							typeBounds)) return i;
+					typeBounds)) return i;
 			}
 			else if (params[i] instanceof WildcardType) {
-				if (!satisfiesWildcardType(args[i], (WildcardType) params[i]))
-					return i;
+				if (!satisfiesWildcardType(args[i], (WildcardType) params[i])) return i;
 			}
 			else if (params[i] instanceof GenericArrayType) {
 				if (!satisfiesGenericArrayType(args[i], (GenericArrayType) params[i],
-							typeBounds)) return i;
+					typeBounds)) return i;
 			}
-			//final Type t = TypeToken.of(params[i]).resolveType(args[i]).getType();
-			//                     System.out.println("src[" + i + "] = " + t);
+			// final Type t = TypeToken.of(params[i]).resolveType(args[i]).getType();
+			// System.out.println("src[" + i + "] = " + t);
 		}
 		return -1;
 	}
@@ -115,9 +114,9 @@ public final class TypeTools {
 	private static Method typesSatisfyVariables;
 
 	public static boolean satisfies(
-			final Map<TypeVariable<?>, Type> typeVarAssigns)
+		final Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
-		//return Types.TypeUtils.typesSatisfyVariables(typeVarAssigns);
+		// return Types.TypeUtils.typesSatisfyVariables(typeVarAssigns);
 		try {
 			if (typesSatisfyVariables == null) {
 				final Class<?> typeUtilsClass = //
@@ -141,12 +140,12 @@ public final class TypeTools {
 		final List<Class<?>> destClasses = Types.raws(param);
 		for (final Class<?> destClass : destClasses) {
 			final Optional<Class<?>> first = srcClasses.stream().filter(
-					srcClass -> destClass.isAssignableFrom(srcClass)).findFirst();
+				srcClass -> destClass.isAssignableFrom(srcClass)).findFirst();
 			if (!first.isPresent()) {
 				// TODO can we remove this?
-				//                             throw new IllegalArgumentException("Argument #" + i + //
-				//                                     " (" + Types.name(src[i]) + ") is not assignable to " + //
-				//                                     "destination type (" + Types.name(dest[i]) + ")");
+				// throw new IllegalArgumentException("Argument #" + i + //
+				// " (" + Types.name(src[i]) + ") is not assignable to " + //
+				// "destination type (" + Types.name(dest[i]) + ")");
 				return false;
 			}
 		}
@@ -154,8 +153,8 @@ public final class TypeTools {
 	}
 
 	private static boolean satisfiesParameterizedTypes(final Type arg,
-			final ParameterizedType param,
-			final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
+		final ParameterizedType param,
+		final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
 	{
 		// get an array of the destination parameter types
 		final Type[] destTypes = param.getActualTypeArguments();
@@ -214,12 +213,12 @@ public final class TypeTools {
 	}
 
 	private static boolean satisfiesTypeVariable(final Type arg,
-			final TypeVariable<?> param,
-			final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
+		final TypeVariable<?> param,
+		final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
 	{
 		// if the TypeVariable is not already in the hashMap add it.
 		if (!typeBounds.containsKey(param)) typeBounds.put(param, new TypeVarInfo(
-					param));
+			param));
 		// check to make sure that arg is a viable replacement for the type
 		// variable.
 		if (!typeBounds.get(param).allowType(arg)) return false;
@@ -237,8 +236,8 @@ public final class TypeTools {
 				for (int i = 0; i < paramBoundTypes.length; i++) {
 					final Type argType = Types.param(arg, Types.raw(param), i);
 					if (paramBoundTypes[i] instanceof TypeVariable<?> &&
-							!satisfiesTypeParameter(argType,
-								(TypeVariable<?>) paramBoundTypes[i], typeBounds)) return false;
+						!satisfiesTypeParameter(argType,
+							(TypeVariable<?>) paramBoundTypes[i], typeBounds)) return false;
 					else if (satisfies(new Type[] { argType }, new Type[] {
 						paramBoundTypes[i] }, typeBounds) != -1) return false;
 				}
@@ -249,7 +248,7 @@ public final class TypeTools {
 	}
 
 	private static boolean satisfiesWildcardType(final Type arg,
-			final WildcardType param)
+		final WildcardType param)
 	{
 		final Type[] upperBounds = param.getUpperBounds();
 		final Type[] lowerBounds = param.getLowerBounds();
@@ -269,8 +268,8 @@ public final class TypeTools {
 	}
 
 	private static boolean satisfiesGenericArrayType(final Type arg,
-			final GenericArrayType param,
-			final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
+		final GenericArrayType param,
+		final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
 	{
 		// get a class object of the component type of each array
 		final Type argComponent = Types.component(arg);
@@ -305,7 +304,7 @@ public final class TypeTools {
 	/**
 	 * Returns {@code cls}, parameterized with {@link TypeVariable} bounds defined
 	 * by a set of type parameters <b>on some superclass </b> of {@code cls}
-	 * 
+	 *
 	 * @param cls the {@link Class} to be parameterized
 	 * @param superCls a super{@link Class} of {@code cls}
 	 * @param superClsTypeVars the type parameters of {@code supercls}, to be
@@ -313,8 +312,8 @@ public final class TypeTools {
 	 * @return {@code cls}, but parameterized with the type variables in
 	 *         {@code superClsTypeVars} against superclass {@code superCls}
 	 */
-	public static Type parameterizeViaSuperType(Class<?> cls, final Class<?> superCls,
-		final Type... superClsTypeVars)
+	public static Type parameterizeViaSuperType(Class<?> cls,
+		final Class<?> superCls, final Type... superClsTypeVars)
 	{
 		Type t = Types.parameterizeRaw(cls);
 		Type[] typeVars = Types.typeParamsAgainstClass(t, superCls);

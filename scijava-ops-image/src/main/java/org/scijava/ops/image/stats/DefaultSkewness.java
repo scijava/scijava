@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -39,16 +39,16 @@ import org.scijava.ops.spi.OpDependency;
 /**
  * Op to calculate the {@code stats.skewness} using
  * {@code stats.moment3AboutMean} and {@code stats.stdDev}.
- * 
+ *
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
- * @param <I>
- *            input type
- * @param <O>
- *            output type
- *@implNote op names='stats.skewness'
+ * @param <I> input type
+ * @param <O> output type
+ * @implNote op names='stats.skewness'
  */
-public class DefaultSkewness<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
+public class DefaultSkewness<I extends RealType<I>, O extends RealType<O>>
+	implements Computers.Arity1<RandomAccessibleInterval<I>, O>
+{
 
 	@OpDependency(name = "stats.moment3AboutMean")
 	private Computers.Arity1<RandomAccessibleInterval<I>, O> moment3AboutMeanComputer;

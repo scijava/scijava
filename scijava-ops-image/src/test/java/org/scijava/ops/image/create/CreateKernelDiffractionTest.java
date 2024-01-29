@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -45,7 +45,7 @@ import org.scijava.types.Nil;
 
 /**
  * Tests {@link DefaultCreateKernelGibsonLanni}.
- * 
+ *
  * @author Curtis Rueden
  * @author Eric Czech
  */
@@ -63,49 +63,59 @@ public class CreateKernelDiffractionTest extends AbstractOpTest {
 		final double pZ = 2000E-9D; // position of particle
 		final DoubleType type = new DoubleType(); // pixel type of created kernel
 
-		Functions.Arity9<Dimensions, Double, Double, Double, Double, Double, Double, Double, DoubleType, Img<DoubleType>> createFunc = ops
-				.op("create.kernelDiffraction",
-						new Nil<Functions.Arity9<Dimensions, Double, Double, Double, Double, Double, Double, Double, DoubleType, Img<DoubleType>>>() {
-						}, new Nil[] { new Nil<Dimensions>() {
-						}, new Nil<Double>() {
-						}, new Nil<Double>() {
-						}, new Nil<Double>() {
-						}, new Nil<Double>() {
-						}, new Nil<Double>() {
-						}, new Nil<Double>() {
-						}, new Nil<Double>() {
-						}, new Nil<DoubleType>() {
-						} }, new Nil<Img<DoubleType>>() {
-						});
+		Functions.Arity9<Dimensions, Double, Double, Double, Double, Double, Double, Double, DoubleType, Img<DoubleType>> createFunc =
+			ops.op("create.kernelDiffraction",
+				new Nil<Functions.Arity9<Dimensions, Double, Double, Double, Double, Double, Double, Double, DoubleType, Img<DoubleType>>>()
+				{}, new Nil[] { new Nil<Dimensions>() {}, new Nil<Double>() {},
+					new Nil<Double>()
+					{}, new Nil<Double>() {}, new Nil<Double>() {}, new Nil<Double>() {},
+					new Nil<Double>()
+					{}, new Nil<Double>() {}, new Nil<DoubleType>() {} },
+				new Nil<Img<DoubleType>>()
+				{});
 
-		final Img<DoubleType> kernel = createFunc.apply(dims, NA, lambda, ns, ni, resLateral, resAxial, pZ, type);
+		final Img<DoubleType> kernel = createFunc.apply(dims, NA, lambda, ns, ni,
+			resLateral, resAxial, pZ, type);
 
-		final double[] expected = { 0.03298495871588273, 0.04246786111102021, 0.0543588031627261, 0.06650574371357207,
-				0.07370280610722534, 0.07370280610722534, 0.06650574371357207, 0.0543588031627261, 0.04246786111102021,
-				0.03298495871588273, 0.04246786111102021, 0.05962205221267819, 0.08320071670150801, 0.10800022978800021,
-				0.1247473245002288, 0.1247473245002288, 0.10800022978800021, 0.08320071670150801, 0.05962205221267819,
-				0.04246786111102021, 0.0543588031627261, 0.08320071670150801, 0.1247473245002288, 0.1971468112729564,
-				0.2691722397359577, 0.2691722397359577, 0.1971468112729564, 0.1247473245002288, 0.08320071670150801,
-				0.0543588031627261, 0.06650574371357207, 0.10800022978800021, 0.1971468112729564, 0.40090474481128285,
-				0.6227157103102976, 0.6227157103102976, 0.40090474481128285, 0.1971468112729564, 0.10800022978800021,
-				0.06650574371357207, 0.07370280610722534, 0.1247473245002288, 0.2691722397359577, 0.6227157103102976,
-				1.0, 1.0, 0.6227157103102976, 0.2691722397359577, 0.1247473245002288, 0.07370280610722534,
-				0.07370280610722534, 0.1247473245002288, 0.2691722397359577, 0.6227157103102976, 1.0, 1.0,
-				0.6227157103102976, 0.2691722397359577, 0.1247473245002288, 0.07370280610722534, 0.06650574371357207,
-				0.10800022978800021, 0.1971468112729564, 0.40090474481128285, 0.6227157103102976, 0.6227157103102976,
-				0.40090474481128285, 0.1971468112729564, 0.10800022978800021, 0.06650574371357207, 0.0543588031627261,
-				0.08320071670150801, 0.1247473245002288, 0.1971468112729564, 0.2691722397359577, 0.2691722397359577,
-				0.1971468112729564, 0.1247473245002288, 0.08320071670150801, 0.0543588031627261, 0.04246786111102021,
-				0.05962205221267819, 0.08320071670150801, 0.10800022978800021, 0.1247473245002288, 0.1247473245002288,
-				0.10800022978800021, 0.08320071670150801, 0.05962205221267819, 0.04246786111102021, 0.03298495871588273,
-				0.04246786111102021, 0.0543588031627261, 0.06650574371357207, 0.07370280610722534, 0.07370280610722534,
-				0.06650574371357207, 0.0543588031627261, 0.04246786111102021, 0.03298495871588273,
+		final double[] expected = { 0.03298495871588273, 0.04246786111102021,
+			0.0543588031627261, 0.06650574371357207, 0.07370280610722534,
+			0.07370280610722534, 0.06650574371357207, 0.0543588031627261,
+			0.04246786111102021, 0.03298495871588273, 0.04246786111102021,
+			0.05962205221267819, 0.08320071670150801, 0.10800022978800021,
+			0.1247473245002288, 0.1247473245002288, 0.10800022978800021,
+			0.08320071670150801, 0.05962205221267819, 0.04246786111102021,
+			0.0543588031627261, 0.08320071670150801, 0.1247473245002288,
+			0.1971468112729564, 0.2691722397359577, 0.2691722397359577,
+			0.1971468112729564, 0.1247473245002288, 0.08320071670150801,
+			0.0543588031627261, 0.06650574371357207, 0.10800022978800021,
+			0.1971468112729564, 0.40090474481128285, 0.6227157103102976,
+			0.6227157103102976, 0.40090474481128285, 0.1971468112729564,
+			0.10800022978800021, 0.06650574371357207, 0.07370280610722534,
+			0.1247473245002288, 0.2691722397359577, 0.6227157103102976, 1.0, 1.0,
+			0.6227157103102976, 0.2691722397359577, 0.1247473245002288,
+			0.07370280610722534, 0.07370280610722534, 0.1247473245002288,
+			0.2691722397359577, 0.6227157103102976, 1.0, 1.0, 0.6227157103102976,
+			0.2691722397359577, 0.1247473245002288, 0.07370280610722534,
+			0.06650574371357207, 0.10800022978800021, 0.1971468112729564,
+			0.40090474481128285, 0.6227157103102976, 0.6227157103102976,
+			0.40090474481128285, 0.1971468112729564, 0.10800022978800021,
+			0.06650574371357207, 0.0543588031627261, 0.08320071670150801,
+			0.1247473245002288, 0.1971468112729564, 0.2691722397359577,
+			0.2691722397359577, 0.1971468112729564, 0.1247473245002288,
+			0.08320071670150801, 0.0543588031627261, 0.04246786111102021,
+			0.05962205221267819, 0.08320071670150801, 0.10800022978800021,
+			0.1247473245002288, 0.1247473245002288, 0.10800022978800021,
+			0.08320071670150801, 0.05962205221267819, 0.04246786111102021,
+			0.03298495871588273, 0.04246786111102021, 0.0543588031627261,
+			0.06650574371357207, 0.07370280610722534, 0.07370280610722534,
+			0.06650574371357207, 0.0543588031627261, 0.04246786111102021,
+			0.03298495871588273,
 
 		};
-		
-		//TODO use asArray in AbstractOpTest
-		double[] actual = StreamSupport.stream(kernel.spliterator(), false).mapToDouble(t -> t
-				.getRealDouble()).toArray();
+
+		// TODO use asArray in AbstractOpTest
+		double[] actual = StreamSupport.stream(kernel.spliterator(), false)
+			.mapToDouble(t -> t.getRealDouble()).toArray();
 
 		assertArrayEquals(expected, actual, 1e-6);
 	}
@@ -119,8 +129,8 @@ public class CreateKernelDiffractionTest extends AbstractOpTest {
 	 * using a particle position relative to the coverslip of 0. This is because
 	 * scijava-ops-image automatically crops and centers kernels produced by the
 	 * Fast Gibson-Lanni implementation in {@link DefaultCreateKernelGibsonLanni}
-	 * while the Gibson &amp; Lanni kernels produced by PSFGenerator are not.
-	 * See this github issue
+	 * while the Gibson &amp; Lanni kernels produced by PSFGenerator are not. See
+	 * this github issue
 	 * <a href="https://github.com/imagej/imagej-ops/issues/550">thread</a> for
 	 * more details.
 	 * </p>
@@ -145,27 +155,23 @@ public class CreateKernelDiffractionTest extends AbstractOpTest {
 		final double resLateral = 100E-9; // lateral pixel size
 		final double resAxial = 250E-9; // axial pixel size
 		final DoubleType type = new DoubleType(); // pixel type of created kernel
-		
-		Functions.Arity9<Dimensions, Double, Double, Double, Double, Double, Double, Double, DoubleType, Img<DoubleType>> createFunc = ops
-				.op("create.kernelDiffraction",
-						new Nil<Functions.Arity9<Dimensions, Double, Double, Double, Double, Double, Double, Double, DoubleType, Img<DoubleType>>>() {
-						}, new Nil[] { new Nil<Dimensions>() {
-						}, new Nil<Double>() {
-						}, new Nil<Double>() {
-						}, new Nil<Double>() {
-						}, new Nil<Double>() {
-						}, new Nil<Double>() {
-						}, new Nil<Double>() {
-						}, new Nil<Double>() {
-						}, new Nil<DoubleType>() {
-						} }, new Nil<Img<DoubleType>>() {
-						});
+
+		Functions.Arity9<Dimensions, Double, Double, Double, Double, Double, Double, Double, DoubleType, Img<DoubleType>> createFunc =
+			ops.op("create.kernelDiffraction",
+				new Nil<Functions.Arity9<Dimensions, Double, Double, Double, Double, Double, Double, Double, DoubleType, Img<DoubleType>>>()
+				{}, new Nil[] { new Nil<Dimensions>() {}, new Nil<Double>() {},
+					new Nil<Double>()
+					{}, new Nil<Double>() {}, new Nil<Double>() {}, new Nil<Double>() {},
+					new Nil<Double>()
+					{}, new Nil<Double>() {}, new Nil<DoubleType>() {} },
+				new Nil<Img<DoubleType>>()
+				{});
 
 		// NB: It is important that this remain 0 for comparison to PSFGenerator.
 		final double pZ = 0D; // position of particle
 
-		final Img<DoubleType> kernel = createFunc.apply(dims, NA, lambda, ns, ni, resLateral, resAxial,
-				pZ, type);
+		final Img<DoubleType> kernel = createFunc.apply(dims, NA, lambda, ns, ni,
+			resLateral, resAxial, pZ, type);
 
 		// The following image used for comparison was generated via PSFGenerator
 		// with these arguments (where any not mentioned were left at default):
@@ -175,8 +181,8 @@ public class CreateKernelDiffractionTest extends AbstractOpTest {
 		// Pixelsize XY: 100 (nm)
 		// Z-step: 250 (nm)
 		// Size XYZ: 16, 16, 8
-		
-		//TODO uncomment when AbstractOpTest is available
+
+		// TODO uncomment when AbstractOpTest is available
 //		Img<DoubleType> expected = openDoubleImg("kern3d1.tif");
 //
 //		assertArrayEquals(asArray(expected), asArray(kernel), 1e-4);

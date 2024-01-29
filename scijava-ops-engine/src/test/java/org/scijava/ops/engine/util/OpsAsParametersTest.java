@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.engine.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,7 +47,9 @@ import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.types.Nil;
 
-public class OpsAsParametersTest extends AbstractTestEnvironment implements OpCollection {
+public class OpsAsParametersTest extends AbstractTestEnvironment implements
+	OpCollection
+{
 
 	@BeforeAll
 	public static void addNeededOps() {
@@ -58,12 +61,13 @@ public class OpsAsParametersTest extends AbstractTestEnvironment implements OpCo
 	public final Function<Number, Double> func = (x) -> x.doubleValue();
 
 	@OpField(names = "test.parameter.op")
-	public final BiFunction<List<Number>, Function<Number, Double>, List<Double>> biFunc = (x, op) -> {
-		List<Double> output = new ArrayList<>();
-		for (Number n : x)
-			output.add(op.apply(n));
-		return output;
-	};
+	public final BiFunction<List<Number>, Function<Number, Double>, List<Double>> biFunc =
+		(x, op) -> {
+			List<Double> output = new ArrayList<>();
+			for (Number n : x)
+				output.add(op.apply(n));
+			return output;
+		};
 
 	@Test
 	public void TestOpWithNonReifiableFunction() {
@@ -84,12 +88,9 @@ public class OpsAsParametersTest extends AbstractTestEnvironment implements OpCo
 		list.add(20.5);
 		list.add(4.0d);
 
-		BiFunction<List<Number>, Function<Number, Double>, List<Double>> thing = OpBuilder.matchFunction(ops,
-				"test.parameter.op", new Nil<List<Number>>() {
-				}, new Nil<Function<Number, Double>>() {
-				}, new Nil<List<Double>>() {
-				});
-		
+		BiFunction<List<Number>, Function<Number, Double>, List<Double>> thing =
+			OpBuilder.matchFunction(ops, "test.parameter.op", new Nil<List<Number>>()
+			{}, new Nil<Function<Number, Double>>() {}, new Nil<List<Double>>() {});
 
 		List<Double> output = thing.apply(list, func);
 	}
@@ -102,12 +103,14 @@ public class OpsAsParametersTest extends AbstractTestEnvironment implements OpCo
 		list.add(20.5);
 		list.add(4.0d);
 
-		Function<Number, Double> funcClass = OpBuilder.matchFunction(ops, "test.parameter.class", new Nil<Number>() {
-		}, new Nil<Double>() {
-		});
+		Function<Number, Double> funcClass = OpBuilder.matchFunction(ops,
+			"test.parameter.class", new Nil<Number>()
+			{}, new Nil<Double>() {});
 
 		@SuppressWarnings("unused")
-		List<Double> output = ops.op("test.parameter.op").arity2().input(list, funcClass).outType(new Nil<List<Double>>() {}).apply();
+		List<Double> output = ops.op("test.parameter.op").arity2().input(list,
+			funcClass).outType(new Nil<List<Double>>()
+		{}).apply();
 	}
 
 }

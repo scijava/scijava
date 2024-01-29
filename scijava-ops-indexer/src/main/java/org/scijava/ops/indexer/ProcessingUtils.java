@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -77,9 +77,11 @@ public final class ProcessingUtils {
 
 	/**
 	 * Logs a {@link Throwable} parsing an {@link Element}
+	 *
 	 * @param source the {@link Element} whose parsing was erroneous
 	 * @param t the {@link Throwable} thrown during the parsing
-	 * @param env the {@link ProcessingEnvironment} able to log the {@link Throwable}
+	 * @param env the {@link ProcessingEnvironment} able to log the
+	 *          {@link Throwable}
 	 */
 	public static void printProcessingException(Element source, Throwable t,
 		ProcessingEnvironment env)
@@ -92,18 +94,24 @@ public final class ProcessingUtils {
 	}
 
 	/**
-	 * Finds the functional method of {@code source}, returning it as an {@link ExecutableElement}
+	 * Finds the functional method of {@code source}, returning it as an
+	 * {@link ExecutableElement}
 	 *
-	 * @param env    the {@link ProcessingEnvironment} with the knowledge to reason about {@code source}
-	 * @param source the {@link TypeElement} that represents a {@link FunctionalInterface}, whose functional method we want to find
-	 * @return the functional method of {@code source}, as an {@link ExecutableElement}
+	 * @param env the {@link ProcessingEnvironment} with the knowledge to reason
+	 *          about {@code source}
+	 * @param source the {@link TypeElement} that represents a
+	 *          {@link FunctionalInterface}, whose functional method we want to
+	 *          find
+	 * @return the functional method of {@code source}, as an
+	 *         {@link ExecutableElement}
 	 */
 	public static ExecutableElement findFunctionalMethod(
 		ProcessingEnvironment env, TypeElement source)
 	{
 		// Step 1: Find abstract interface method somewhere in the hierarchy
 		ExecutableElement fMethod = findAbstractFunctionalMethod(env, source);
-		// Step 2: Find the member of source that matches that abstract interface method
+		// Step 2: Find the member of source that matches that abstract interface
+		// method
 		if (fMethod != null) {
 			for (Element e : env.getElementUtils().getAllMembers(source)) {
 				if (e.getSimpleName().equals(fMethod.getSimpleName())) {

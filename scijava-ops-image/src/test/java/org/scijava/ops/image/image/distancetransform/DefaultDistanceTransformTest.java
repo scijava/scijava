@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.image.distancetransform;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -52,14 +53,17 @@ public class DefaultDistanceTransformTest extends AbstractOpTest {
 	@Test
 	public void test() {
 		// create 4D image
-		final RandomAccessibleInterval<BitType> in = ops.op("create.img")
-				.arity2().input(new FinalInterval(20, 20, 5, 3), new BitType())
-				.outType(new Nil<RandomAccessibleInterval<BitType>>() {}).apply();
+		final RandomAccessibleInterval<BitType> in = ops.op("create.img").arity2()
+			.input(new FinalInterval(20, 20, 5, 3), new BitType()).outType(
+				new Nil<RandomAccessibleInterval<BitType>>()
+				{}).apply();
 		generate4DImg(in);
 
 		// create output image
-		RandomAccessibleInterval<FloatType> out = ops.op("create.img").arity2().input(in, new FloatType())
-				.outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
+		RandomAccessibleInterval<FloatType> out = ops.op("create.img").arity2()
+			.input(in, new FloatType()).outType(
+				new Nil<RandomAccessibleInterval<FloatType>>()
+				{}).apply();
 
 		/*
 		 * test normal DT
@@ -71,8 +75,8 @@ public class DefaultDistanceTransformTest extends AbstractOpTest {
 		 * test calibrated DT
 		 */
 		final double[] calibration = new double[] { 3.74, 5.19, 1.21, 2.21 };
-		ops.op("image.distanceTransform").arity2().input(in, calibration).output(out)
-				.compute();
+		ops.op("image.distanceTransform").arity2().input(in, calibration).output(
+			out).compute();
 		compareResults(out, in, calibration);
 	}
 
@@ -100,7 +104,8 @@ public class DefaultDistanceTransformTest extends AbstractOpTest {
 	 * and select the shortest
 	 */
 	private void compareResults(final RandomAccessibleInterval<FloatType> out,
-			final RandomAccessibleInterval<BitType> in, final double[] calibration) {
+		final RandomAccessibleInterval<BitType> in, final double[] calibration)
+	{
 		final RandomAccess<FloatType> raOut = out.randomAccess();
 		final RandomAccess<BitType> raIn = in.randomAccess();
 		for (int x0 = 0; x0 < in.dimension(0); x0++) {
@@ -111,21 +116,24 @@ public class DefaultDistanceTransformTest extends AbstractOpTest {
 						raOut.setPosition(new int[] { x0, y0, z0, w0 });
 						if (!raIn.get().get()) {
 							assertEquals(0, raOut.get().get(), EPSILON);
-						} else {
-							double actualValue = in.dimension(0) * in.dimension(0) + in.dimension(1) * in.dimension(1)
-									+ in.dimension(2) * in.dimension(2) + in.dimension(3) * in.dimension(3);
+						}
+						else {
+							double actualValue = in.dimension(0) * in.dimension(0) + in
+								.dimension(1) * in.dimension(1) + in.dimension(2) * in
+									.dimension(2) + in.dimension(3) * in.dimension(3);
 							for (int x = 0; x < in.dimension(0); x++) {
 								for (int y = 0; y < in.dimension(1); y++) {
 									for (int z = 0; z < in.dimension(2); z++) {
 										for (int w = 0; w < in.dimension(3); w++) {
 											raIn.setPosition(new int[] { x, y, z, w });
-											final double dist = calibration[0] * calibration[0] * (x0 - x) * (x0 - x)
-													+ calibration[1] * calibration[1] * (y0 - y) * (y0 - y)
-													+ calibration[2] * calibration[2] * (z0 - z) * (z0 - z)
-													+ calibration[3] * calibration[3] * (w0 - w) * (w0 - w);
+											final double dist = calibration[0] * calibration[0] *
+												(x0 - x) * (x0 - x) + calibration[1] * calibration[1] *
+													(y0 - y) * (y0 - y) + calibration[2] *
+														calibration[2] * (z0 - z) * (z0 - z) +
+												calibration[3] * calibration[3] * (w0 - w) * (w0 - w);
 
-											if (!raIn.get().get() && dist < actualValue)
-												actualValue = dist;
+											if (!raIn.get().get() && dist < actualValue) actualValue =
+												dist;
 										}
 									}
 								}

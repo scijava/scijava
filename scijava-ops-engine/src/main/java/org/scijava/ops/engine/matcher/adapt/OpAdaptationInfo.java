@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -51,7 +51,7 @@ import org.scijava.types.Nil;
 
 /**
  * {@link OpInfo} for ops that have been adapted to some other Op type.
- * 
+ *
  * @author Gabriel Selzer
  * @see OpInfo
  */
@@ -69,9 +69,7 @@ public class OpAdaptationInfo implements OpInfo {
 
 	private Struct struct;
 
-	public OpAdaptationInfo(OpInfo srcInfo, Type type,
-		InfoTree adaptorChain)
-	{
+	public OpAdaptationInfo(OpInfo srcInfo, Type type, InfoTree adaptorChain) {
 		this.srcInfo = srcInfo;
 		this.adaptorChain = adaptorChain;
 		this.type = type;
@@ -79,8 +77,9 @@ public class OpAdaptationInfo implements OpInfo {
 
 		// NOTE: since the source Op has already been shown to be valid, there is
 		// not much for us to do here.
-		List<FunctionalMethodType> fmts = FunctionalParameters.findFunctionalMethodTypes(type);
-		
+		List<FunctionalMethodType> fmts = FunctionalParameters
+			.findFunctionalMethodTypes(type);
+
 		RetypingRequest r = new RetypingRequest(srcInfo.struct(), fmts);
 		struct = Structs.from(r, type, new OpRetypingMemberParser());
 		Infos.validate(this);
@@ -167,7 +166,8 @@ public class OpAdaptationInfo implements OpInfo {
 	 */
 	@Override
 	public String id() {
-		return IMPL_DECLARATION + ADAPTOR + adaptorChain.signature() + ORIGINAL + srcInfo.id();
+		return IMPL_DECLARATION + ADAPTOR + adaptorChain.signature() + ORIGINAL +
+			srcInfo.id();
 	}
 
 	@Override

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -45,23 +45,25 @@ public class ClassOpDependencyMemberParser implements
 {
 
 	@Override
-	public List<FieldOpDependencyMember<?>> parse(Class<?> source, Type structType)
+	public List<FieldOpDependencyMember<?>> parse(Class<?> source,
+		Type structType)
 	{
-				if (source == null) return null;
+		if (source == null) return null;
 
-				final ArrayList<FieldOpDependencyMember<?>> items = new ArrayList<>();
+		final ArrayList<FieldOpDependencyMember<?>> items = new ArrayList<>();
 
-				// NB: Reject abstract classes.
-				org.scijava.struct.Structs.checkModifiers(source.getName() + ": ", source.getModifiers(), true, Modifier.ABSTRACT);
+		// NB: Reject abstract classes.
+		org.scijava.struct.Structs.checkModifiers(source.getName() + ": ", source
+			.getModifiers(), true, Modifier.ABSTRACT);
 
-				// Parse field level @OpDependency annotations.
-				parseFieldOpDependencies(items, source);
+		// Parse field level @OpDependency annotations.
+		parseFieldOpDependencies(items, source);
 
-				return items;
+		return items;
 	}
 
-	private static void parseFieldOpDependencies(final List<FieldOpDependencyMember<?>> items,
-		Class<?> annotatedClass)
+	private static void parseFieldOpDependencies(
+		final List<FieldOpDependencyMember<?>> items, Class<?> annotatedClass)
 	{
 		final List<Field> fields = Annotations.getAnnotatedFields(annotatedClass,
 			OpDependency.class);

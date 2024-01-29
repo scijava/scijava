@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.image.distancetransform;
 
 import org.scijava.function.Computers;
@@ -40,17 +41,16 @@ import net.imglib2.view.Views;
  * algorithm. Before doing so, it also ensures that the output
  * {@link RandomAccessibleInterval} is of a suitable {@link RealType} in order
  * to be able to contain the entire range of the output.
- * 
- * @author Gabriel Selzer
  *
- * @param <B>
- *            - the {@link BooleanType} of the input image
- * @param <T>
- *            - the {@link RealType} of the output image
- *@implNote op names='image.distanceTransform'
+ * @author Gabriel Selzer
+ * @param <B> - the {@link BooleanType} of the input image
+ * @param <T> - the {@link RealType} of the output image
+ * @implNote op names='image.distanceTransform'
  */
 public class CalibratedDistanceTransformer<B extends BooleanType<B>, T extends RealType<T>>
-		implements Computers.Arity2<RandomAccessibleInterval<B>, double[], RandomAccessibleInterval<T>> {
+	implements
+	Computers.Arity2<RandomAccessibleInterval<B>, double[], RandomAccessibleInterval<T>>
+{
 
 	/**
 	 * TODO
@@ -60,8 +60,9 @@ public class CalibratedDistanceTransformer<B extends BooleanType<B>, T extends R
 	 * @param out
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<B> binaryInput, final double[] calibration,
-			final RandomAccessibleInterval<T> out) {
+	public void compute(final RandomAccessibleInterval<B> binaryInput,
+		final double[] calibration, final RandomAccessibleInterval<T> out)
+	{
 		// make sure that the output type is suitable to be able to hold the maximum
 		// possible distance (replaces Conforms)
 		long max_dist = 0;
@@ -69,20 +70,21 @@ public class CalibratedDistanceTransformer<B extends BooleanType<B>, T extends R
 			max_dist += binaryInput.dimension(i) * binaryInput.dimension(i);
 		if (max_dist > Views.iterable(out).firstElement().getMaxValue())
 			throw new IllegalArgumentException(
-					"The type of the output image is too small to calculate the Distance Transform on this image!");
+				"The type of the output image is too small to calculate the Distance Transform on this image!");
 		switch (binaryInput.numDimensions()) {
-		case 2: {
-			DistanceTransform2DCalibration.compute(binaryInput, calibration, out);
-			break;
-		}
-		case 3: {
-			DistanceTransform3DCalibration.compute(binaryInput, calibration, out);
-			break;
-		}
-		default: {
-			DefaultDistanceTransformCalibration.compute(binaryInput, calibration, out);
-			break;
-		}
+			case 2: {
+				DistanceTransform2DCalibration.compute(binaryInput, calibration, out);
+				break;
+			}
+			case 3: {
+				DistanceTransform3DCalibration.compute(binaryInput, calibration, out);
+				break;
+			}
+			default: {
+				DefaultDistanceTransformCalibration.compute(binaryInput, calibration,
+					out);
+				break;
+			}
 		}
 
 	}

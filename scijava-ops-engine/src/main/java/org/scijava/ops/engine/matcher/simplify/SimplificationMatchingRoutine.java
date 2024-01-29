@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -54,14 +54,17 @@ import org.slf4j.LoggerFactory;
 
 public class SimplificationMatchingRoutine extends RuntimeSafeMatchingRoutine {
 
-	protected static final Map<OpEnvironment, Map<String, SortedSet<OpInfo>>> seenNames = new HashMap<>();
+	protected static final Map<OpEnvironment, Map<String, SortedSet<OpInfo>>> seenNames =
+		new HashMap<>();
 
 	protected static void addSimpleInfosToCache(OpEnvironment env, String name) {
-		Map<String, SortedSet<OpInfo>> seen = seenNames.computeIfAbsent(env, e -> new HashMap<>());
+		Map<String, SortedSet<OpInfo>> seen = seenNames.computeIfAbsent(env,
+			e -> new HashMap<>());
 		if (!seen.containsKey(name)) {
 			SortedSet<OpInfo> ops = new TreeSet<>();
 			for (OpInfo info : env.infos(name)) {
-				if (info.declaredHints().contains(BaseOpHints.Simplification.FORBIDDEN)) continue;
+				if (info.declaredHints().contains(BaseOpHints.Simplification.FORBIDDEN))
+					continue;
 				if (info instanceof SimplifiedOpInfo) continue;
 				try {
 					ops.add(SimplificationUtils.simplifyInfo(env, info));
@@ -89,39 +92,39 @@ public class SimplificationMatchingRoutine extends RuntimeSafeMatchingRoutine {
 
 	@Override
 	public OpCandidate findMatch(MatchingConditions conditions, OpMatcher matcher,
-			OpEnvironment env)
+		OpEnvironment env)
 	{
-		conditions = MatchingConditions.from(conditions.request(), conditions.hints().plus(
-				BaseOpHints.Simplification.IN_PROGRESS));
+		conditions = MatchingConditions.from(conditions.request(), conditions
+			.hints().plus(BaseOpHints.Simplification.IN_PROGRESS));
 		OpRequest request = conditions.request();
-		Iterable<SimplifiedOpInfo> simpleInfos = getSimpleInfos(env, conditions.request().getName());
+		Iterable<SimplifiedOpInfo> simpleInfos = getSimpleInfos(env, conditions
+			.request().getName());
 		// Pass 1 - Check simple infos
 		final ArrayList<OpCandidate> candidates = new ArrayList<>();
-		for (final SimplifiedOpInfo info: simpleInfos) {
+		for (final SimplifiedOpInfo info : simpleInfos) {
 			Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
 			if (typesMatch(info.opType(), conditions.request().getType(),
-					typeVarAssigns))
+				typeVarAssigns))
 			{
 				OpCandidate candidate = new OpCandidate(env, request, info,
-						typeVarAssigns);
+					typeVarAssigns);
 				candidates.add(candidate);
 			}
 		}
 		if (!candidates.isEmpty()) {
 			final List<OpCandidate> matches = filterMatches(candidates);
-			return new MatchingResult(candidates, matches, Collections.singletonList(request)).singleMatch();
+			return new MatchingResult(candidates, matches, Collections.singletonList(
+				request)).singleMatch();
 		}
 
 		// Pass 2 - Focus if needed
 		SimplifiedOpRequest simpleReq = new SimplifiedOpRequest(request, env);
 		for (final SimplifiedOpInfo info : simpleInfos) {
 			Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
-			if (typesMatch(info.opType(), simpleReq.getType(),
-					typeVarAssigns))
-			{
+			if (typesMatch(info.opType(), simpleReq.getType(), typeVarAssigns)) {
 				FocusedOpInfo focusedInfo = new FocusedOpInfo(info, simpleReq, env);
 				OpCandidate candidate = new OpCandidate(env, request, focusedInfo,
-						typeVarAssigns);
+					typeVarAssigns);
 				candidates.add(candidate);
 			}
 		}
@@ -134,11 +137,12 @@ public class SimplificationMatchingRoutine extends RuntimeSafeMatchingRoutine {
 		return new MatchingResult(candidates, matches, reqs).singleMatch();
 	}
 
-	protected static SortedSet<SimplifiedOpInfo> getSimpleInfos(OpEnvironment env, String name)
+	protected static SortedSet<SimplifiedOpInfo> getSimpleInfos(OpEnvironment env,
+		String name)
 	{
 		addSimpleInfosToCache(env, name);
 		TreeSet<SimplifiedOpInfo> simpleInfos = new TreeSet<>();
-		for (OpInfo info: seenNames.get(env).get(name)) {
+		for (OpInfo info : seenNames.get(env).get(name)) {
 			if (info instanceof SimplifiedOpInfo) {
 				simpleInfos.add((SimplifiedOpInfo) info);
 			}
@@ -146,8 +150,7 @@ public class SimplificationMatchingRoutine extends RuntimeSafeMatchingRoutine {
 		return simpleInfos;
 	}
 
-	protected static SortedSet<OpInfo> getInfos(OpEnvironment env, String name)
-	{
+	protected static SortedSet<OpInfo> getInfos(OpEnvironment env, String name) {
 		addSimpleInfosToCache(env, name);
 		return seenNames.get(env).get(name);
 	}

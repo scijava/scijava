@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -61,7 +61,7 @@ public final class Annotations {
 	 * This map serves as a cache, as these annotations should not change at
 	 * runtime and thus can alleviate the frequency field querying.
 	 * </p>
-	 * 
+	 *
 	 * @see <a href="https://github.com/scijava/scijava-common/issues/142">issue
 	 *      #142</a>
 	 */
@@ -75,7 +75,7 @@ public final class Annotations {
 	 * This map serves as a cache, as these annotations should not change at
 	 * runtime and thus can alleviate the frequency of method querying.
 	 * </p>
-	 * 
+	 *
 	 * @see <a href="https://github.com/scijava/scijava-common/issues/142">issue
 	 *      #142</a>
 	 */
@@ -122,9 +122,9 @@ public final class Annotations {
 	 * @param annotationClass The type of annotation for which to scan.
 	 * @param methods The list to which matching methods will be added.
 	 */
-	public static <A extends Annotation> void
-		getAnnotatedMethods(final Class<?> c, final Class<A> annotationClass,
-			final List<Method> methods)
+	public static <A extends Annotation> void getAnnotatedMethods(
+		final Class<?> c, final Class<A> annotationClass,
+		final List<Method> methods)
 	{
 		List<Method> cachedMethods = methodCache.getList(c, annotationClass);
 
@@ -177,8 +177,8 @@ public final class Annotations {
 	 * @param annotationClass The type of annotation for which to scan.
 	 * @param fields The list to which matching fields will be added.
 	 */
-	public static <A extends Annotation> void getAnnotatedFields(
-		final Class<?> c, final Class<A> annotationClass, final List<Field> fields)
+	public static <A extends Annotation> void getAnnotatedFields(final Class<?> c,
+		final Class<A> annotationClass, final List<Field> fields)
 	{
 		List<Field> cachedFields = fieldCache.getList(c, annotationClass);
 
@@ -196,8 +196,8 @@ public final class Annotations {
 
 	/**
 	 * This method scans the provided class, its superclasses and interfaces for
-	 * all supported {@link Annotation} : {@link AnnotatedElement} pairs.
-	 * These are then cached to remove the need for future queries.
+	 * all supported {@link Annotation} : {@link AnnotatedElement} pairs. These
+	 * are then cached to remove the need for future queries.
 	 * <p>
 	 * By combining multiple {@code Annotation : AnnotatedElement} pairs in one
 	 * query, we can limit the number of times a class's superclass and interface
@@ -218,10 +218,11 @@ public final class Annotations {
 		// same class by different threads, there are three scenarios:
 		// 1) intersection of A + B is empty - then they can run on separate threads
 		// 2) A == B - whichever was received second must wait for the first to
-		// 	  finish.
-		// 3) A != B and intersection of A + B is not empty - the intersection subset
-		//    can be safely performed on a separate thread, but the later query must
-		//    still wait for the earlier query to complete.
+		// finish.
+		// 3) A != B and intersection of A + B is not empty - the intersection
+		// subset
+		// can be safely performed on a separate thread, but the later query must
+		// still wait for the earlier query to complete.
 		//
 		// NB: an alternative would be to update the getAnnotatedxxx methods to
 		// return Sets instead of Lists. Then threads can pretty much go nuts
@@ -240,8 +241,7 @@ public final class Annotations {
 			if (scannedClass == Object.class) return;
 
 			// Initialize step - determine which queries are solved
-			final Set<Class<? extends Annotation>> keysToDrop =
-				new HashSet<>();
+			final Set<Class<? extends Annotation>> keysToDrop = new HashSet<>();
 			for (final Class<? extends Annotation> annotationClass : query.keySet()) {
 				// Fields
 				if (fieldCache.getList(scannedClass, annotationClass) != null) {
@@ -279,8 +279,8 @@ public final class Annotations {
 
 			// Populate supported objects for scanned class
 			for (final Class<? extends Annotation> annotationClass : query.keySet()) {
-				final Class<? extends AnnotatedElement> objectClass =
-					query.get(annotationClass);
+				final Class<? extends AnnotatedElement> objectClass = query.get(
+					annotationClass);
 
 				try {
 					// Methods
@@ -314,12 +314,12 @@ public final class Annotations {
 	{
 		// Add inherited elements
 		for (final Class<?> inheritedClass : inherited) {
-			final List<T> annotatedElements =
-				cacheMap.getList(inheritedClass, annotationClass);
+			final List<T> annotatedElements = cacheMap.getList(inheritedClass,
+				annotationClass);
 
 			if (annotatedElements != null && !annotatedElements.isEmpty()) {
-				final List<T> scannedElements =
-					cacheMap.makeList(scannedClass, annotationClass);
+				final List<T> scannedElements = cacheMap.makeList(scannedClass,
+					annotationClass);
 
 				scannedElements.addAll(annotatedElements);
 			}
@@ -396,7 +396,8 @@ public final class Annotations {
 			final Class<? extends Annotation> annotationClass)
 		{
 			final Map<Class<? extends Annotation>, List<T>> annotationTypes = get(c);
-			return annotationTypes == null ? null : annotationTypes.get(annotationClass);
+			return annotationTypes == null ? null : annotationTypes.get(
+				annotationClass);
 		}
 
 		/**
@@ -449,7 +450,7 @@ public final class Annotations {
 
 		public Query() {
 			super();
-		} 
+		}
 
 		public Query(final Query query) {
 			super(query);

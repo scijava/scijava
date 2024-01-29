@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.image.watershed;
 
 import java.util.function.BiFunction;
@@ -70,16 +71,15 @@ import net.imglib2.util.Intervals;
  * Output is a labeling of the different catchment basins.
  * </p>
  *
- * @param <T>
- *            element type of input
- * @param <B>
- *            element type of mask
- *
+ * @param <T> element type of input
+ * @param <B> element type of mask
  * @author Simon Schmid (University of Konstanz)
- *@implNote op names='image.watershed'
+ * @implNote op names='image.watershed'
  */
-public class WatershedBinary<T extends BooleanType<T>, B extends BooleanType<B>> implements
-		Computers.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> {
+public class WatershedBinary<T extends BooleanType<T>, B extends BooleanType<B>>
+	implements
+	Computers.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>>
+{
 
 	// @SuppressWarnings("rawtypes")
 	// private UnaryFunctionOp<Interval, ImgLabeling> createOp;
@@ -107,38 +107,41 @@ public class WatershedBinary<T extends BooleanType<T>, B extends BooleanType<B>>
 	 */
 	@Override
 	public void compute( //
-			final RandomAccessibleInterval<T> in, //
-			final Boolean useEightConnectivity, //
-			final Boolean drawWatersheds, //
-			final double[] sigma, //
-			@Nullable RandomAccessibleInterval<B> mask, //
-			final ImgLabeling<Integer, IntType> out //
+		final RandomAccessibleInterval<T> in, //
+		final Boolean useEightConnectivity, //
+		final Boolean drawWatersheds, //
+		final double[] sigma, //
+		@Nullable RandomAccessibleInterval<B> mask, //
+		final ImgLabeling<Integer, IntType> out //
 	) {
 
-		// make sure that the params conform to the requirements of the op (copied from
+		// make sure that the params conform to the requirements of the op (copied
+		// from
 		// the old implementation)
 		boolean conformed = sigma.length >= in.numDimensions();
 		for (int i = 0; i < sigma.length; i++) {
 			conformed &= sigma[i] >= 0;
 		}
-		if (!conformed)
-			throw new IllegalArgumentException("Only non-negative sigmas allowed!");
+		if (!conformed) throw new IllegalArgumentException(
+			"Only non-negative sigmas allowed!");
 		if (mask != null) {
 			conformed &= Intervals.equalDimensions(mask, in);
 		}
-		if (!conformed)
-			throw new IllegalArgumentException("Mask must be the same size as the input!");
+		if (!conformed) throw new IllegalArgumentException(
+			"Mask must be the same size as the input!");
 
 		// compute distance transform
-		final RandomAccessibleInterval<FloatType> distMap = imgCreator.apply(in, new FloatType());
+		final RandomAccessibleInterval<FloatType> distMap = imgCreator.apply(in,
+			new FloatType());
 		distanceTransformer.compute(in, distMap);
-		final RandomAccessibleInterval<FloatType> invertedDT = imgCreator.apply(in, new FloatType());
+		final RandomAccessibleInterval<FloatType> invertedDT = imgCreator.apply(in,
+			new FloatType());
 		imgInverter.compute(distMap, invertedDT);
-		final RandomAccessibleInterval<FloatType> gauss = imgCreator.apply(in, new FloatType());
+		final RandomAccessibleInterval<FloatType> gauss = imgCreator.apply(in,
+			new FloatType());
 		gaussOp.compute(invertedDT, sigma, gauss);
 		// run the default watershed
 		watershedOp.compute(gauss, useEightConnectivity, drawWatersheds, mask, out);
 	}
 
 }
-

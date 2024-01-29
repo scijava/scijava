@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -51,10 +51,12 @@ import org.scijava.ops.spi.Nullable;
  * RandomAccessibleInterval, and can vary for each dimension of the image.
  *
  * @author Gabe Selzer
- *@implNote op names='filter.frangiVesselness'
+ * @implNote op names='filter.frangiVesselness'
  */
 public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
-		implements Computers.Arity3<RandomAccessibleInterval<T>, Integer, double[], RandomAccessibleInterval<U>> {
+	implements
+	Computers.Arity3<RandomAccessibleInterval<T>, Integer, double[], RandomAccessibleInterval<U>>
+{
 
 	protected double alpha = 0.5;
 	protected double beta = 0.5;
@@ -62,11 +64,14 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 	protected double minimumVesselness = Double.MIN_VALUE;
 	protected double maximumVesselness = Double.MAX_VALUE;
 
-	private double getDistance(RandomAccess<T> ahead, RandomAccess<T> behind, int d, double[] spacing) {
+	private double getDistance(RandomAccess<T> ahead, RandomAccess<T> behind,
+		int d, double[] spacing)
+	{
 		double distance = 0;
 
 		for (int i = 0; i < d; i++) {
-			double separation = (ahead.getLongPosition(i) - behind.getLongPosition(i)) * spacing[i];
+			double separation = (ahead.getLongPosition(i) - behind.getLongPosition(
+				i)) * spacing[i];
 			if (separation != 0) {
 				distance += (separation * separation);
 			}
@@ -84,16 +89,20 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 	 * TODO
 	 *
 	 * @param input the image containing input data
-	 * @param scale sigma for the gaussian filter, and the scale for the vesselness filter
+	 * @param scale sigma for the gaussian filter, and the scale for the
+	 *          vesselness filter
 	 * @param spacing physical distance between data points
 	 * @param output the pre-allocated output buffer
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<T> input, final Integer scale,
-			@Nullable double[] spacing, final RandomAccessibleInterval<U> output) {
+	public void compute(final RandomAccessibleInterval<T> input,
+		final Integer scale, @Nullable double[] spacing,
+		final RandomAccessibleInterval<U> output)
+	{
 
 		if (input.numDimensions() != 2 && input.numDimensions() != 3)
-			throw new IllegalArgumentException("Currently only 2 or 3 dimensional images are supported");
+			throw new IllegalArgumentException(
+				"Currently only 2 or 3 dimensional images are supported");
 
 		// set spacing if the parameter is not passed.
 		if (spacing == null) {
@@ -106,14 +115,16 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 	}
 
 	private void frangi(RandomAccessibleInterval<T> in,
-			RandomAccessibleInterval<U> out, double[] spacing, int step) {
+		RandomAccessibleInterval<U> out, double[] spacing, int step)
+	{
 
 		// create denominators used for gaussians later.
 		double ad = 2 * alpha * alpha;
 		double bd = 2 * beta * beta;
 
 		// OutOfBoundsMirrorStrategy for use when the cursor reaches the edges.
-		OutOfBoundsMirrorFactory<T, RandomAccessibleInterval<T>> osmf = new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
+		OutOfBoundsMirrorFactory<T, RandomAccessibleInterval<T>> osmf =
+			new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
 
 		Cursor<T> cursor = Views.iterable(in).localizingCursor();
 
@@ -142,25 +153,25 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 
 					// move one behind to take the first derivative
 					behind.move(-step, m);
-					if (m != n)
-						behind.move(-step, n);
+					if (m != n) behind.move(-step, n);
 
 					// take the derivative between the two points
-					double derivativeA = derive(behind.get().getRealDouble(), current.get().getRealDouble(),
-							getDistance(behind, current, in.numDimensions(), spacing));
+					double derivativeA = derive(behind.get().getRealDouble(), current
+						.get().getRealDouble(), getDistance(behind, current, in
+							.numDimensions(), spacing));
 
 					// move one ahead to take the other first derivative
 					ahead.move(step, m);
-					if (m != n)
-						ahead.move(step, n);
+					if (m != n) ahead.move(step, n);
 
 					// take the derivative between the two points
-					double derivativeB = derive(current.get().getRealDouble(), ahead.get().getRealDouble(),
-							getDistance(current, ahead, in.numDimensions(), spacing));
+					double derivativeB = derive(current.get().getRealDouble(), ahead.get()
+						.getRealDouble(), getDistance(current, ahead, in.numDimensions(),
+							spacing));
 
 					// take the second derivative using the two first derivatives
-					double derivative2 = derive(derivativeA, derivativeB,
-							getDistance(behind, ahead, in.numDimensions(), spacing));
+					double derivative2 = derive(derivativeA, derivativeB, getDistance(
+						behind, ahead, in.numDimensions(), spacing));
 
 					hessian.set(m, n, derivative2);
 
@@ -202,7 +213,8 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 					double bn = -(rb * rb);
 					v = Math.exp(bn / bd) * (1 - Math.exp(cn / cd));
 				}
-			} else if (in.numDimensions() == 3) {
+			}
+			else if (in.numDimensions() == 3) {
 				double c = 200;
 				double cd = 2 * c * c;
 
@@ -236,10 +248,12 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 
 					// System.out.println(l1 + " " + l2 + " " + l3);
 
-					v = (1 - Math.exp(an / ad)) * Math.exp(bn / bd) * (1 - Math.exp(cn / cd));
+					v = (1 - Math.exp(an / ad)) * Math.exp(bn / bd) * (1 - Math.exp(cn /
+						cd));
 				}
 
-			} else {
+			}
+			else {
 				maximumVesselness = Math.max(v, maximumVesselness);
 				minimumVesselness = Math.min(v, minimumVesselness);
 			}

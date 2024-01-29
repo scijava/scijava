@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -71,20 +71,30 @@ public class OpMethodInfo implements OpInfo {
 
 	private final Hints hints;
 
-	public OpMethodInfo(final Method method, final Class<?> opType, final Hints hints, final String... names) {
-		this(method, opType, Versions.getVersion(method.getDeclaringClass()), hints, Priority.NORMAL, names);
+	public OpMethodInfo(final Method method, final Class<?> opType,
+		final Hints hints, final String... names)
+	{
+		this(method, opType, Versions.getVersion(method.getDeclaringClass()), hints,
+			Priority.NORMAL, names);
 	}
 
-	public OpMethodInfo(final Method method, final Class<?> opType, final Hints hints, final double priority,
-			final String... names) {
-		this(method, opType, Versions.getVersion(method.getDeclaringClass()), hints, priority, names);
+	public OpMethodInfo(final Method method, final Class<?> opType,
+		final Hints hints, final double priority, final String... names)
+	{
+		this(method, opType, Versions.getVersion(method.getDeclaringClass()), hints,
+			priority, names);
 	}
 
-	public OpMethodInfo(final Method method, final Class<?> opType, final String version, final Hints hints, final String... names) {
+	public OpMethodInfo(final Method method, final Class<?> opType,
+		final String version, final Hints hints, final String... names)
+	{
 		this(method, opType, version, hints, Priority.NORMAL, names);
 	}
 
-	public OpMethodInfo(final Method method, final Class<?> opType, final String version, final Hints hints, final double priority, final String... names) {
+	public OpMethodInfo(final Method method, final Class<?> opType,
+		final String version, final Hints hints, final double priority,
+		final String... names)
+	{
 		this.method = method;
 		this.version = version;
 		this.names = Arrays.asList(names);
@@ -162,9 +172,7 @@ public class OpMethodInfo implements OpInfo {
 	}
 
 	@Override
-	public StructInstance<?> createOpInstance(
-		final List<?> dependencies)
-	{
+	public StructInstance<?> createOpInstance(final List<?> dependencies) {
 		// NB LambdaMetaFactory only works if this Module (org.scijava.ops.engine)
 		// can read the Module containing the Op. So we also have to check that.
 		Module methodModule = method.getDeclaringClass().getModule();
@@ -174,16 +182,16 @@ public class OpMethodInfo implements OpInfo {
 			method.setAccessible(true);
 			MethodHandle handle = MethodHandles.lookup().unreflect(method);
 			Object op = Lambdas.lambdaize( //
-					Types.raw(opType), //
-					handle, //
-					Infos.dependencies(this).stream().map(Member::getRawType).toArray(Class[]::new),
-					dependencies.toArray() //
+				Types.raw(opType), //
+				handle, //
+				Infos.dependencies(this).stream().map(Member::getRawType).toArray(
+					Class[]::new), dependencies.toArray() //
 			);
 			return struct().createInstance(op);
 		}
 		catch (Throwable exc) {
 			throw new IllegalStateException("Failed to invoke Op method: " + method,
-					exc);
+				exc);
 		}
 	}
 

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -248,23 +248,23 @@ public class ClassesTest {
 		assertSame(void.class, voidType);
 
 		final Class<?>[] types = { //
-				boolean.class, byte.class, char.class, double.class, //
-				float.class, int.class, long.class, short.class, //
-				void.class, //
-				String.class, //
-				Number.class, BigInteger.class, BigDecimal.class, //
-				boolean[].class, byte[].class, char[].class, double[].class, //
-				float[].class, int[].class, long[].class, short[].class, //
-				Boolean[].class, Byte[].class, Character[].class, Double[].class, //
-				Float[].class, Integer[].class, Long[].class, Short[].class, //
-				Void[].class, //
-				Object.class, Object[].class, String[].class, //
-				Object[][].class, String[][].class, //
-				Collection.class, //
-				List.class, ArrayList.class, LinkedList.class, //
-				Set.class, HashSet.class, //
-				Map.class, HashMap.class, //
-				Collection[].class, List[].class, Set[].class, Map[].class };
+			boolean.class, byte.class, char.class, double.class, //
+			float.class, int.class, long.class, short.class, //
+			void.class, //
+			String.class, //
+			Number.class, BigInteger.class, BigDecimal.class, //
+			boolean[].class, byte[].class, char[].class, double[].class, //
+			float[].class, int[].class, long[].class, short[].class, //
+			Boolean[].class, Byte[].class, Character[].class, Double[].class, //
+			Float[].class, Integer[].class, Long[].class, Short[].class, //
+			Void[].class, //
+			Object.class, Object[].class, String[].class, //
+			Object[][].class, String[][].class, //
+			Collection.class, //
+			List.class, ArrayList.class, LinkedList.class, //
+			Set.class, HashSet.class, //
+			Map.class, HashMap.class, //
+			Collection[].class, List[].class, Set[].class, Map[].class };
 		for (final Class<?> c : types) {
 			final Class<?> type = Classes.unbox(c);
 			assertSame(c, type);
@@ -302,23 +302,23 @@ public class ClassesTest {
 		assertSame(Void.class, voidType);
 
 		final Class<?>[] types = { //
-				Boolean.class, Byte.class, Character.class, Double.class, //
-				Float.class, Integer.class, Long.class, Short.class, //
-				Void.class, //
-				String.class, //
-				Number.class, BigInteger.class, BigDecimal.class, //
-				boolean[].class, byte[].class, char[].class, double[].class, //
-				float[].class, int[].class, long[].class, short[].class, //
-				Boolean[].class, Byte[].class, Character[].class, Double[].class, //
-				Float[].class, Integer[].class, Long[].class, Short[].class, //
-				Void[].class, //
-				Object.class, Object[].class, String[].class, //
-				Object[][].class, String[][].class, //
-				Collection.class, //
-				List.class, ArrayList.class, LinkedList.class, //
-				Set.class, HashSet.class, //
-				Map.class, HashMap.class, //
-				Collection[].class, List[].class, Set[].class, Map[].class };
+			Boolean.class, Byte.class, Character.class, Double.class, //
+			Float.class, Integer.class, Long.class, Short.class, //
+			Void.class, //
+			String.class, //
+			Number.class, BigInteger.class, BigDecimal.class, //
+			boolean[].class, byte[].class, char[].class, double[].class, //
+			float[].class, int[].class, long[].class, short[].class, //
+			Boolean[].class, Byte[].class, Character[].class, Double[].class, //
+			Float[].class, Integer[].class, Long[].class, Short[].class, //
+			Void[].class, //
+			Object.class, Object[].class, String[].class, //
+			Object[][].class, String[][].class, //
+			Collection.class, //
+			List.class, ArrayList.class, LinkedList.class, //
+			Set.class, HashSet.class, //
+			Map.class, HashMap.class, //
+			Collection[].class, List[].class, Set[].class, Map[].class };
 		for (final Class<?> c : types) {
 			final Class<?> type = Classes.box(c);
 			assertSame(c, type);
@@ -356,23 +356,23 @@ public class ClassesTest {
 		assertNull(voidNull);
 
 		final Class<?>[] types = { //
-				Boolean.class, Byte.class, Character.class, Double.class, //
-				Float.class, Integer.class, Long.class, Short.class, //
-				Void.class, //
-				String.class, //
-				Number.class, BigInteger.class, BigDecimal.class, //
-				boolean[].class, byte[].class, char[].class, double[].class, //
-				float[].class, int[].class, long[].class, short[].class, //
-				Boolean[].class, Byte[].class, Character[].class, Double[].class, //
-				Float[].class, Integer[].class, Long[].class, Short[].class, //
-				Void[].class, //
-				Object.class, Object[].class, String[].class, //
-				Object[][].class, String[][].class, //
-				Collection.class, //
-				List.class, ArrayList.class, LinkedList.class, //
-				Set.class, HashSet.class, //
-				Map.class, HashMap.class, //
-				Collection[].class, List[].class, Set[].class, Map[].class };
+			Boolean.class, Byte.class, Character.class, Double.class, //
+			Float.class, Integer.class, Long.class, Short.class, //
+			Void.class, //
+			String.class, //
+			Number.class, BigInteger.class, BigDecimal.class, //
+			boolean[].class, byte[].class, char[].class, double[].class, //
+			float[].class, int[].class, long[].class, short[].class, //
+			Boolean[].class, Byte[].class, Character[].class, Double[].class, //
+			Float[].class, Integer[].class, Long[].class, Short[].class, //
+			Void[].class, //
+			Object.class, Object[].class, String[].class, //
+			Object[][].class, String[][].class, //
+			Collection.class, //
+			List.class, ArrayList.class, LinkedList.class, //
+			Set.class, HashSet.class, //
+			Map.class, HashMap.class, //
+			Collection[].class, List[].class, Set[].class, Map[].class };
 		for (final Class<?> c : types) {
 			final Object nullValue = Classes.nullValue(c);
 			assertNull(nullValue, "Expected null for " + c.getName());
@@ -392,14 +392,15 @@ public class ClassesTest {
 	/** Tests {@link Classes#method}. */
 	@Test
 	public void testMethod() {
-		final Method objectMethod = Classes.method(ExampleTypes.Thing.class, "toString");
+		final Method objectMethod = Classes.method(ExampleTypes.Thing.class,
+			"toString");
 		assertSame(Object.class, objectMethod.getDeclaringClass());
 		assertEquals("toString", objectMethod.getName());
 		assertSame(String.class, objectMethod.getReturnType());
 		assertEquals(0, objectMethod.getParameterTypes().length);
 
 		final Method wordsMethod = //
-				Classes.method(ExampleTypes.Words.class, "valueOf", String.class);
+			Classes.method(ExampleTypes.Words.class, "valueOf", String.class);
 		// NB: What is going on under the hood to make the Enum
 		// subtype Words be the declaring class for the 'valueOf'
 		// method? The compiler must internally override the valueOf
@@ -421,16 +422,15 @@ public class ClassesTest {
 		assertSame(boolean[][].class, Classes.array(boolean[].class));
 		assertSame(String[][].class, Classes.array(String[].class));
 		assertSame(Number[][].class, Classes.array(Number[].class));
-		assertThrows(IllegalArgumentException.class,
-				() -> Classes.array(void.class), "Unexpected success creating void[]");
+		assertThrows(IllegalArgumentException.class, () -> Classes.array(
+			void.class), "Unexpected success creating void[]");
 
 		// multidimensional cases
 		assertSame(Number[][].class, Classes.array(Number.class, 2));
 		assertSame(boolean[][][].class, Classes.array(boolean.class, 3));
 		assertSame(String.class, Classes.array(String.class, 0));
-		assertThrows(IllegalArgumentException.class,
-				() -> Classes.array(char.class, -1),
-				"Unexpected success creating negative dimensional array");
+		assertThrows(IllegalArgumentException.class, () -> Classes.array(char.class,
+			-1), "Unexpected success creating negative dimensional array");
 	}
 
 	// -- Helper methods -- //

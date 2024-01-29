@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -46,17 +46,16 @@ import net.imglib2.util.ValuePair;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 /**
- * This quickhull implementation is based on the paper
- * "The Quickhull Algorithm for Convex Hulls" by Barber, Dobkin and Huhdanpaa
+ * This quickhull implementation is based on the paper "The Quickhull Algorithm
+ * for Convex Hulls" by Barber, Dobkin and Huhdanpaa
  * (http://dpd.cs.princeton.edu/Papers/BarberDobkinHuhdanpaa.pdf). The
  * computation of the initial simplex is inspired by John Lloyd's quickhull
  * implementation (http://www.cs.ubc.ca/~lloyd/java/quickhull3d.html).
- * 
+ *
  * @author Tim-Oliver Buchholz (University of Konstanz)
- *@implNote op names='geom.convexHull'
+ * @implNote op names='geom.convexHull'
  */
-public class DefaultConvexHull3D implements Function<Mesh, Mesh>
-{
+public class DefaultConvexHull3D implements Function<Mesh, Mesh> {
 
 //	@Parameter(itemIO = ItemIO.OUTPUT)
 //	private double epsilon;
@@ -111,15 +110,14 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 
 	/**
 	 * Compute the convex hull.
-	 * 
+	 *
 	 * @param facetsWithPointInFront
 	 */
 	protected double computeHull(final Set<Vertex> vertices,
 		final List<TriangularFacet> facets,
 		final List<TriangularFacet> facetsWithPointInFront)
 	{
-		final double eps = createSimplex(vertices, facets,
-			facetsWithPointInFront);
+		final double eps = createSimplex(vertices, facets, facetsWithPointInFront);
 		while (!facetsWithPointInFront.isEmpty()) {
 			replaceFacet(eps, vertices, facets, facetsWithPointInFront,
 				facetsWithPointInFront.remove(0));
@@ -130,14 +128,13 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 
 	/**
 	 * Replaces a facet with at least three new facets.
-	 * 
+	 *
 	 * @param facet the facet to replace. At least one point must be in front of
 	 *          next.
 	 */
 	private void replaceFacet(final double eps, final Set<Vertex> vertices,
 		final List<TriangularFacet> facets,
-		final List<TriangularFacet> facetsPointInFront,
-		final TriangularFacet facet)
+		final List<TriangularFacet> facetsPointInFront, final TriangularFacet facet)
 	{
 		final Vertex v = facet.getMaximumDistanceVertex();
 		final Horizon horizon = computeHorizon(eps, vertices, facets,
@@ -148,7 +145,7 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 
 	/**
 	 * Adds for each edge of the horizon and vTop a new facet.
-	 * 
+	 *
 	 * @param horizon facet of all facets seen from point vTop
 	 * @param vTop point which is added to the convex hull
 	 * @return new created facets
@@ -190,7 +187,7 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 
 	/**
 	 * Sets neighbors for each new triangle. The triangles build a cone.
-	 * 
+	 *
 	 * @param newFacets the triangles
 	 */
 	private void connectTriangles(final List<TriangularFacet> newFacets) {
@@ -208,7 +205,7 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 
 	/**
 	 * Sets the first neighbor of a new created triangle.
-	 * 
+	 *
 	 * @param f the new facet.
 	 * @param n the neighbor facet.
 	 */
@@ -224,13 +221,13 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 	/**
 	 * Computes the horizon of vTop. The horizon is the merged facet of all facets
 	 * which are in front of the point vTop.
-	 * 
+	 *
 	 * @param frontFacet a face which is in front of vTop
 	 * @param vTop a point outside of the convex hull
 	 * @return facet containing all facets which are in front of vTop
 	 */
-	private Horizon computeHorizon(final double eps,
-		final Set<Vertex> vertices, final List<TriangularFacet> facets,
+	private Horizon computeHorizon(final double eps, final Set<Vertex> vertices,
+		final List<TriangularFacet> facets,
 		final List<TriangularFacet> facetsWithPointInFront,
 		final TriangularFacet frontFacet, final Vertex vTop)
 	{
@@ -269,7 +266,7 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 	/**
 	 * After the merge step the facet merge is part of frontFacet. Therefore the
 	 * neighbors of merge must point to frontFacet and not to merge.
-	 * 
+	 *
 	 * @param frontFacet the facet to which merge will be added.
 	 * @param merge the facet which will be merged with frontFacet.
 	 */
@@ -285,7 +282,7 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 
 	/**
 	 * Returns a facet which is in front of vTop and neighbor of front.
-	 * 
+	 *
 	 * @param frontFacet facet in front of vTop
 	 * @param vTop point which is added to the convex hull
 	 * @return neighboring facet of front or null if no facet is in front
@@ -340,7 +337,7 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 	 * facet is added to {@code facetsWithPointInFront}. After this call
 	 * {@code vertices} is empty. Points which are behind all facets are removed
 	 * because they are on the inside of the convex hull.
-	 * 
+	 *
 	 * @param newFacets which could have a point in front
 	 * @param facetsWithPointInFront
 	 */
@@ -465,7 +462,7 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 	/**
 	 * Finds the point with the largest distance to the plane described by v0, v1,
 	 * v2.
-	 * 
+	 *
 	 * @param v0 Vertex of the plane.
 	 * @param v1 Vertex of the plane.
 	 * @param v2 Vertex of the plane.
@@ -491,7 +488,7 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 
 	/**
 	 * Finds the vertex with the largest distance to the line described by v0, v1.
-	 * 
+	 *
 	 * @param v0 Vertex of the line.
 	 * @param v1 Vertex of the line.
 	 * @return Vertex with the largest distance.
@@ -529,7 +526,7 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 	/**
 	 * Computes the index of the dimension containing the points with the largest
 	 * distance.
-	 * 
+	 *
 	 * @param minMax Vertices with the min and max coordinates of each dimension.
 	 * @return index of the dimension with the largest distance between two
 	 *         points.
@@ -552,7 +549,7 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 
 	/**
 	 * Finds for each dimension the min and max vertex.
-	 * 
+	 *
 	 * @return min and max vertices of each dimension
 	 */
 	private Pair<Double, Vertex[]> computeMinMax(final Set<Vertex> vertices) {
@@ -609,10 +606,9 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 }
 
 /**
- *@implNote op names='geom.convexHullEpsilon'
+ * @implNote op names='geom.convexHullEpsilon'
  */
-class DefaultConvexHull3DEpsilon implements Function<Mesh, Double>
-{
+class DefaultConvexHull3DEpsilon implements Function<Mesh, Double> {
 
 	/**
 	 * TODO
@@ -629,6 +625,7 @@ class DefaultConvexHull3DEpsilon implements Function<Mesh, Double>
 		}
 		List<TriangularFacet> facets = new ArrayList<>();
 		List<TriangularFacet> facetsWithPointInFront = new ArrayList<>();
-		return new DefaultConvexHull3D().computeHull(vertices, facets, facetsWithPointInFront);
+		return new DefaultConvexHull3D().computeHull(vertices, facets,
+			facetsWithPointInFront);
 	}
 }

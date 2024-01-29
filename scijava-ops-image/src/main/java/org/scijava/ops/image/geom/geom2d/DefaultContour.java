@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -46,18 +46,17 @@ import net.imglib2.view.Views;
 import org.scijava.ops.spi.Nullable;
 
 /**
- * Generic implementation of {@code geom.contour}.
- * 
- * This implementation assumes that foreground-pixels are 'true' and
- * background-pixels are 'false'.
- * 
+ * Generic implementation of {@code geom.contour}. This implementation assumes
+ * that foreground-pixels are 'true' and background-pixels are 'false'.
+ *
  * @author Jonathan Hale (University of Konstanz)
  * @author Daniel Seebacher (University of Konstanz)
  * @author Tim-Oliver Buchholz (University of Konstanz)
- *@implNote op names='geom.contour'
+ * @implNote op names='geom.contour'
  */
-public class DefaultContour<B extends BooleanType<B>>
-		implements BiFunction<RandomAccessibleInterval<B>, Boolean, Polygon2D> {
+public class DefaultContour<B extends BooleanType<B>> implements
+	BiFunction<RandomAccessibleInterval<B>, Boolean, Polygon2D>
+{
 
 	// @Parameter(itemIO = ItemIO.INPUT,
 	// description = "Set this flag to use refined Jacobs stopping criteria")
@@ -66,20 +65,22 @@ public class DefaultContour<B extends BooleanType<B>>
 	/**
 	 * ClockwiseMooreNeighborhoodIterator Iterates clockwise through a 2D Moore
 	 * Neighborhood (8 connected Neighborhood). This iterator encourages reuse!
-	 * Reset iterator and move underlying random accessible, do not create new ones.
-	 * That is more resource efficient and faster.
+	 * Reset iterator and move underlying random accessible, do not create new
+	 * ones. That is more resource efficient and faster.
 	 *
 	 * @author Jonathan Hale (University of Konstanz)
 	 */
-	final class ClockwiseMooreNeighborhoodIterator<T extends Type<T>> implements java.util.Iterator<T> {
+	final class ClockwiseMooreNeighborhoodIterator<T extends Type<T>> implements
+		java.util.Iterator<T>
+	{
 
 		final private RandomAccess<T> m_ra;
 
-		final private int[][] CLOCKWISE_OFFSETS = { { 0, -1 }, { 1, 0 }, { 1, 0 }, { 0, 1 }, { 0, 1 }, { -1, 0 },
-				{ -1, 0 }, { 0, -1 } };
+		final private int[][] CLOCKWISE_OFFSETS = { { 0, -1 }, { 1, 0 }, { 1, 0 }, {
+			0, 1 }, { 0, 1 }, { -1, 0 }, { -1, 0 }, { 0, -1 } };
 
-		final private int[][] CCLOCKWISE_OFFSETS = { { 0, 1 }, { 0, 1 }, { -1, 0 }, { -1, 0 }, { 0, -1 }, { 0, -1 },
-				{ 1, 0 }, { 1, 0 } };
+		final private int[][] CCLOCKWISE_OFFSETS = { { 0, 1 }, { 0, 1 }, { -1, 0 },
+			{ -1, 0 }, { 0, -1 }, { 0, -1 }, { 1, 0 }, { 1, 0 } };
 
 		// index of offset to be executed at next next() call.
 		private int m_curOffset = 0;
@@ -127,13 +128,16 @@ public class DefaultContour<B extends BooleanType<B>>
 			if (back[0] == 0) {
 				if (back[1] == 1) {
 					m_curOffset = 6;
-				} else {
+				}
+				else {
 					m_curOffset = 2;
 				}
-			} else {
+			}
+			else {
 				if (back[0] == 1) {
 					m_curOffset = 4;
-				} else {
+				}
+				else {
 					m_curOffset = 0;
 				}
 			}
@@ -164,13 +168,16 @@ public class DefaultContour<B extends BooleanType<B>>
 			if (back[0] == 0) {
 				if (back[1] == 1) {
 					m_curOffset = 6;
-				} else {
+				}
+				else {
 					m_curOffset = 2;
 				}
-			} else {
+			}
+			else {
 				if (back[0] == 1) {
 					m_curOffset = 4;
-				} else {
+				}
+				else {
 					m_curOffset = 0;
 				}
 			}
@@ -187,23 +194,27 @@ public class DefaultContour<B extends BooleanType<B>>
 	 * @return the contour
 	 */
 	@Override
-	public Polygon2D apply(final RandomAccessibleInterval<B> input, @Nullable Boolean useJacobs) {
+	public Polygon2D apply(final RandomAccessibleInterval<B> input,
+		@Nullable Boolean useJacobs)
+	{
 
 		if (useJacobs == null) {
 			useJacobs = true;
 		}
 
 		// ensure validity of inputs
-		if (2 != input.numDimensions())
-			throw new IllegalArgumentException("Only two-dimensional inputs supported!");
+		if (2 != input.numDimensions()) throw new IllegalArgumentException(
+			"Only two-dimensional inputs supported!");
 
 		List<RealPoint> p = new ArrayList<>();
 
 		final B var = Util.getTypeFromInterval(input).createVariable();
 
-		final RandomAccess<B> raInput = Views.extendValue(input, var).randomAccess();
+		final RandomAccess<B> raInput = Views.extendValue(input, var)
+			.randomAccess();
 		final Cursor<B> cInput = Views.flatIterable(input).cursor();
-		final ClockwiseMooreNeighborhoodIterator<B> cNeigh = new ClockwiseMooreNeighborhoodIterator<>(raInput);
+		final ClockwiseMooreNeighborhoodIterator<B> cNeigh =
+			new ClockwiseMooreNeighborhoodIterator<>(raInput);
 
 		double[] position = new double[2];
 		double[] startPos = new double[2];
@@ -238,13 +249,15 @@ public class DefaultContour<B extends BooleanType<B>>
 									// Jonathans refinement to
 									// non-terminating jacobs criteria
 									specialBacktrack = true;
-								} else if (index == 2 || index == 3) {
+								}
+								else if (index == 2 || index == 3) {
 									// if index is 2 or 3, we entered pixel
 									// by moving {1, 0}, refore in same
 									// way.
 									break;
 								} // else criteria not fulfilled, continue.
-							} else {
+							}
+							else {
 								break;
 							}
 						}
@@ -253,7 +266,8 @@ public class DefaultContour<B extends BooleanType<B>>
 
 						if (specialBacktrack) {
 							cNeigh.backtrackSpecial();
-						} else {
+						}
+						else {
 							cNeigh.backtrack();
 						}
 					}

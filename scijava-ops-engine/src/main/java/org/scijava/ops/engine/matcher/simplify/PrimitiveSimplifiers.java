@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -38,64 +38,66 @@ import org.scijava.ops.spi.OpField;
 
 /**
  * A set of {@code simplify} Ops dealing with boxed primitive types.
- * 
+ *
  * @author Gabriel Selzer
  * @author Curtis Rueden
  */
 public class PrimitiveSimplifiers implements OpCollection {
 
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "engine.simplify")
 	public final Function<Byte, Number> byteSimplifier = b -> b;
-	
+
 	// TODO: move to separate class
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "engine.focus")
 	public final Function<Number, Byte> numberByteFocuser = n -> n.byteValue();
 
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "engine.simplify")
 	public final Function<Integer, Number> integerSimplifier = i -> i;
-	
+
 	// TODO: move to separate class
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "engine.focus")
-	public final Function<Number, Integer> numberIntegerFocuser = n -> n.intValue();
-	
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	public final Function<Number, Integer> numberIntegerFocuser = n -> n
+		.intValue();
+
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "engine.simplify")
 	public final Function<Short, Number> shortSimplifier = s -> s;
-	
+
 	// TODO: move to separate class
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "engine.focus")
 	public final Function<Number, Short> numberShortFocuser = n -> n.shortValue();
 
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "engine.simplify")
 	public final Function<Long, Number> longSimplifier = l -> l;
 
 	// TODO: move to separate class
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "engine.focus")
 	public final Function<Number, Long> numberLongFocuser = n -> n.longValue();
 
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "engine.simplify")
 	public final Function<Float, Number> floatSimplifier = f -> f;
 
 	// TODO: move to separate class
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "engine.focus")
 	public final Function<Number, Float> numberFloatFocuser = n -> n.floatValue();
 
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "engine.simplify")
 	public final Function<Double, Number> doubleSimplifier = d -> d;
 
 	// TODO: move to separate class
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "engine.focus")
-	public final Function<Number, Double> numberDoubleFocuser = n -> n.doubleValue();
+	public final Function<Number, Double> numberDoubleFocuser = n -> n
+		.doubleValue();
 
 }

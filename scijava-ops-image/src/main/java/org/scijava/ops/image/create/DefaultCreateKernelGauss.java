@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -52,14 +52,16 @@ import net.imglib2.view.Views;
  * @author Gabe Selzer
  * @param <T>
  */
-public final class DefaultCreateKernelGauss
-{
+public final class DefaultCreateKernelGauss {
 
 	private DefaultCreateKernelGauss() {
 		// Prevent instantiation of static utility class
 	}
 
-	public static <T extends Type<T>, C extends ComplexType<C>> RandomAccessibleInterval<C> createKernel(double[] input, C type, BiFunction<Dimensions, T, Img<T>> imgFromDimsAndType) {
+	public static <T extends Type<T>, C extends ComplexType<C>>
+		RandomAccessibleInterval<C> createKernel(double[] input, C type,
+			BiFunction<Dimensions, T, Img<T>> imgFromDimsAndType)
+	{
 		final double[] sigmaPixels = new double[input.length];
 
 		final long[] dims = new long[input.length];
@@ -72,8 +74,9 @@ public final class DefaultCreateKernelGauss
 			kernelArrays[d] = Util.createGaussianKernel1DDouble(sigmaPixels[d], true);
 		}
 
-		final RandomAccessibleInterval<C> out = (RandomAccessibleInterval<C>) imgFromDimsAndType.apply(new FinalInterval(
-			dims), (T) type);
+		final RandomAccessibleInterval<C> out =
+			(RandomAccessibleInterval<C>) imgFromDimsAndType.apply(new FinalInterval(
+				dims), (T) type);
 
 		final Cursor<C> cursor = Views.iterable(out).cursor();
 		while (cursor.hasNext()) {

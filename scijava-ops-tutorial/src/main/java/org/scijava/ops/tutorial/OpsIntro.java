@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.tutorial;
 
 import org.scijava.Context;
@@ -61,11 +62,10 @@ public class OpsIntro {
 		4. Ops have at least one name - this name conveys an Op's purpose
 		 */
 
-
 		/*
 		The OpEnvironment is the core of ImageJ Ops2. It is a collection of Ops,
 		along with API for accessing Ops, adding new Ops, and other utilities.
-		
+
 		The easiest way to obtain an OpEnvironment is to use the following static
 		method.
 		*/
@@ -75,14 +75,16 @@ public class OpsIntro {
 		OpEnvironments contain Ops, and there are a lot of them.
 		 */
 		int numberOfOps = count(ops.infos());
-		System.out.println("There are " + numberOfOps + " ops in the OpEnvironment");
+		System.out.println("There are " + numberOfOps +
+			" ops in the OpEnvironment");
 
 		/*
 		Because each Op has at least one name, we can search for all Ops by name:
 		 */
 		int numberOfGaussianOps = count(ops.infos("filter.gauss"));
-		System.out.println("There are " + numberOfGaussianOps + " gaussian filters in the OpEnvironment");
-		
+		System.out.println("There are " + numberOfGaussianOps +
+			" gaussian filters in the OpEnvironment");
+
 		/*
 		The OpEnvironment also provides an access point into the OpBuilder syntax.
 		(For an explanation of the OpBuilder syntax, please see the OpBuilder
@@ -97,12 +99,14 @@ public class OpsIntro {
 		// open an image and do ops with it
 		var img = openLymp();
 		var shape = new RectangleShape(5, false);
-		var uByteType = new Nil<Img<UnsignedByteType>>(){};
-		var mean = ops.binary("filter.mean").input(img, shape).outType(uByteType).apply();
+		var uByteType = new Nil<Img<UnsignedByteType>>() {};
+		var mean = ops.binary("filter.mean").input(img, shape).outType(uByteType)
+			.apply();
 		var multResult = ops.binary("create.img").input(img, new IntType()).apply();
 		ops.binary("math.multiply").input(img, mean).output(multResult).compute();
 
-		// To see information about available ops, we use the OpEnvironment#descriptions method
+		// To see information about available ops, we use the
+		// OpEnvironment#descriptions method
 		// First, print all available ops
 		System.out.println("--- All Ops!!! ---");
 		System.out.println(ops.help());
@@ -116,6 +120,7 @@ public class OpsIntro {
 	/**
 	 * Static utility function to count the number of elements in an
 	 * {@link Iterable}.
+	 *
 	 * @param iterable the {@link Iterable} to enumerate
 	 * @return the number of elements in {@code iterable}
 	 */
@@ -128,7 +133,8 @@ public class OpsIntro {
 	}
 
 	/**
-	 * Helper method to open the lymp.tif ImageJ sample data. It encapsulates an IJ2 context.
+	 * Helper method to open the lymp.tif ImageJ sample data. It encapsulates an
+	 * IJ2 context.
 	 *
 	 * @return The opened image
 	 */
@@ -136,7 +142,8 @@ public class OpsIntro {
 		Img<?> img = null;
 		try (Context ctx = new Context()) {
 			ImgOpener opener = new ImgOpener(ctx);
-			img = opener.openImgs("https://imagej.net/images/lymp.tif").get(0).getImg();
+			img = opener.openImgs("https://imagej.net/images/lymp.tif").get(0)
+				.getImg();
 		}
 		return img;
 	}

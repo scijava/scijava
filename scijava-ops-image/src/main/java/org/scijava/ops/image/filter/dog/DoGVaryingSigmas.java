@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -42,13 +42,15 @@ import org.scijava.ops.spi.Nullable;
 /**
  * Difference of Gaussians (DoG) implementation where sigmas can vary by
  * dimension.
- * 
+ *
  * @author Christian Dietz (University of Konstanz)
  * @param <T>
- *@implNote op names='filter.DoG'
+ * @implNote op names='filter.DoG'
  */
-public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>> implements
-		Computers.Arity4<RandomAccessibleInterval<T>, double[], double[], OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> {
+public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>>
+	implements
+	Computers.Arity4<RandomAccessibleInterval<T>, double[], double[], OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>>
+{
 
 	@OpDependency(name = "filter.gauss")
 	public Computers.Arity3<RandomAccessibleInterval<T>, double[], //
@@ -58,7 +60,7 @@ public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>> implemen
 	private Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, //
 			Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> dogOp;
 
-	//TODO: make the outOfBoundsFactory optional (see DoGTest for the default).
+	// TODO: make the outOfBoundsFactory optional (see DoGTest for the default).
 	/**
 	 * TODO
 	 *
@@ -69,21 +71,24 @@ public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>> implemen
 	 * @param output
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<T> t, final double[] sigmas1, //
-			final double[] sigmas2, //
-			@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> fac, //
-			final RandomAccessibleInterval<T> output) {
+	public void compute(final RandomAccessibleInterval<T> t,
+		final double[] sigmas1, //
+		final double[] sigmas2, //
+		@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> fac, //
+		final RandomAccessibleInterval<T> output)
+	{
 		if (sigmas1.length != sigmas2.length || sigmas1.length != t.numDimensions())
-			throw new IllegalArgumentException("Do not have enough sigmas to apply to each dimension of the input!");
+			throw new IllegalArgumentException(
+				"Do not have enough sigmas to apply to each dimension of the input!");
 
-		if (fac == null)
-			fac = new OutOfBoundsMirrorFactory<>(OutOfBoundsMirrorFactory.Boundary.SINGLE);
+		if (fac == null) fac = new OutOfBoundsMirrorFactory<>(
+			OutOfBoundsMirrorFactory.Boundary.SINGLE);
 
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> oobf = fac;
-		Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> gauss1 = (in, out) -> defaultGaussRA
-				.compute(in, sigmas1, oobf, out);
-		Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> gauss2 = (in, out) -> defaultGaussRA
-				.compute(in, sigmas2, oobf, out);
+		Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> gauss1 =
+			(in, out) -> defaultGaussRA.compute(in, sigmas1, oobf, out);
+		Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> gauss2 =
+			(in, out) -> defaultGaussRA.compute(in, sigmas2, oobf, out);
 
 		dogOp.compute(t, gauss1, gauss2, output);
 	}
@@ -91,10 +96,11 @@ public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>> implemen
 }
 
 /**
- *@implNote op names='filter.DoG'
+ * @implNote op names='filter.DoG'
  */
 class DoGSingleSigma<T extends NumericType<T> & NativeType<T>> implements
-		Computers.Arity4<RandomAccessibleInterval<T>, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> {
+	Computers.Arity4<RandomAccessibleInterval<T>, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>>
+{
 
 	@OpDependency(name = "filter.DoG")
 	private Computers.Arity4<RandomAccessibleInterval<T>, double[], double[], //
@@ -110,9 +116,11 @@ class DoGSingleSigma<T extends NumericType<T> & NativeType<T>> implements
 	 * @param out
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<T> input, final Double sigma1, final Double sigma2,
-			@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> oobf,
-			RandomAccessibleInterval<T> out) {
+	public void compute(final RandomAccessibleInterval<T> input,
+		final Double sigma1, final Double sigma2,
+		@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> oobf,
+		RandomAccessibleInterval<T> out)
+	{
 		double[] sigmas1 = new double[input.numDimensions()];
 		double[] sigmas2 = new double[input.numDimensions()];
 		for (int i = 0; i < input.numDimensions(); i++) {

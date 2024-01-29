@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -48,10 +48,12 @@ import org.scijava.function.Computers;
  * @author Gabe Selzer
  * @param <I>
  * @param <O>
- *@implNote op names='filter.bilateral'
+ * @implNote op names='filter.bilateral'
  */
 public class DefaultBilateral<I extends RealType<I>, O extends RealType<O>>
-		implements Computers.Arity4<RandomAccessibleInterval<I>, Double, Double, Integer, RandomAccessibleInterval<O>> {
+	implements
+	Computers.Arity4<RandomAccessibleInterval<I>, Double, Double, Integer, RandomAccessibleInterval<O>>
+{
 
 	public final static int MIN_DIMS = 2;
 
@@ -59,7 +61,8 @@ public class DefaultBilateral<I extends RealType<I>, O extends RealType<O>>
 
 	private static double gauss(final double x, final double sigma) {
 		final double mu = 0.0;
-		return 1 / (sigma * Math.sqrt(2 * Math.PI)) * Math.exp(-0.5 * (x - mu) * (x - mu) / (sigma * sigma));
+		return 1 / (sigma * Math.sqrt(2 * Math.PI)) * Math.exp(-0.5 * (x - mu) *
+			(x - mu) / (sigma * sigma));
 	}
 
 	private double getDistance(long[] x, long[] y) {
@@ -80,14 +83,18 @@ public class DefaultBilateral<I extends RealType<I>, O extends RealType<O>>
 	 * TODO
 	 *
 	 * @param inputRAI the input data
-	 * @param sigmaR range smoothing param, larger sigma means larger effect of intensity differences.
+	 * @param sigmaR range smoothing param, larger sigma means larger effect of
+	 *          intensity differences.
 	 * @param sigmaS spatial smoothing param, larger sigma means smoother image.
-	 * @param radius defines size of the square of pixels considered at each iteration.
+	 * @param radius defines size of the square of pixels considered at each
+	 *          iteration.
 	 * @param outputRAI
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<I> input, final Double sigmaR, final Double sigmaS,
-			final Integer radius, final RandomAccessibleInterval<O> output) {
+	public void compute(final RandomAccessibleInterval<I> input,
+		final Double sigmaR, final Double sigmaS, final Integer radius,
+		final RandomAccessibleInterval<O> output)
+	{
 
 		final long[] size = new long[input.numDimensions()];
 		input.dimensions(size);
@@ -111,8 +118,10 @@ public class DefaultBilateral<I extends RealType<I>, O extends RealType<O>>
 			neighborhoodMin[1] = Math.max(0, neighborhoodMin[1] - radius);
 			neighborhoodMax[0] = Math.min(input.max(0), neighborhoodMax[0] + radius);
 			neighborhoodMax[1] = Math.min(input.max(1), neighborhoodMax[1] + radius);
-			final Interval interval = new FinalInterval(neighborhoodMin, neighborhoodMax);
-			neighborhood = fac.create(currentPos, neighborhoodMin, neighborhoodMax, interval, input.randomAccess());
+			final Interval interval = new FinalInterval(neighborhoodMin,
+				neighborhoodMax);
+			neighborhood = fac.create(currentPos, neighborhoodMin, neighborhoodMax,
+				interval, input.randomAccess());
 			neighborhoodCursor = neighborhood.localizingCursor();
 			double weight, v = 0.0;
 			double w = 0.0;
@@ -122,13 +131,16 @@ public class DefaultBilateral<I extends RealType<I>, O extends RealType<O>>
 				distance = getDistance(currentPos, neighborhoodPos);
 				weight = gauss(distance, sigmaS);// spatial kernel
 
-				distance = Math.abs(inputCursor.get().getRealDouble() - neighborhoodCursor.get().getRealDouble());// intensity
-																													// difference
-				weight *= gauss(distance, sigmaR);// range kernel, then exponent addition
+				distance = Math.abs(inputCursor.get().getRealDouble() -
+					neighborhoodCursor.get().getRealDouble());// intensity
+				// difference
+				weight *= gauss(distance, sigmaR);// range kernel, then exponent
+																					// addition
 
 				v += weight * neighborhoodCursor.get().getRealDouble();
 				w += weight;
-			} while (neighborhoodCursor.hasNext());
+			}
+			while (neighborhoodCursor.hasNext());
 			outputRA.setPosition(currentPos);
 			outputRA.get().setReal(v / w);
 		}

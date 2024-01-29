@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.image.distancetransform;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ import net.imglib2.type.numeric.RealType;
 /**
  * Computes a distance transform, i.e. for every foreground pixel its distance
  * to the nearest background pixel.
- * 
+ *
  * @author Simon Schmid (University of Konstanz)
  */
 public final class DistanceTransform3D {
@@ -54,12 +55,14 @@ public final class DistanceTransform3D {
 	 * meijsters raster scan alogrithm Source:
 	 * http://fab.cba.mit.edu/classes/S62.12/docs/Meijster_distance.pdf
 	 */
-	public static <B extends BooleanType<B>, T extends RealType<T>> void compute(final RandomAccessibleInterval<B> in,
-			final RandomAccessibleInterval<T> out) {
+	public static <B extends BooleanType<B>, T extends RealType<T>> void compute(
+		final RandomAccessibleInterval<B> in, final RandomAccessibleInterval<T> out)
+	{
 
 		// tempValues stores the integer values of the first phase, i.e. the
 		// first two scans
-		final int[][][] tempValues = new int[(int) in.dimension(0)][(int) out.dimension(1)][(int) out.dimension(2)];
+		final int[][][] tempValues = new int[(int) in.dimension(0)][(int) out
+			.dimension(1)][(int) out.dimension(2)];
 
 		// first phase
 		final List<Runnable> list = new ArrayList<>();
@@ -75,7 +78,8 @@ public final class DistanceTransform3D {
 		list.clear();
 
 		// second phase
-		final int[][][] tempValues_new = new int[(int) in.dimension(0)][(int) out.dimension(1)][(int) out.dimension(2)];
+		final int[][][] tempValues_new = new int[(int) in.dimension(0)][(int) out
+			.dimension(1)][(int) out.dimension(2)];
 		for (int z = 0; z < in.dimension(2); z++) {
 			for (int x = 0; x < in.dimension(0); x++) {
 				list.add(new Phase2Runnable3D<>(tempValues, tempValues_new, out, x, z));
@@ -105,8 +109,9 @@ class Phase1Runnable3D<B extends BooleanType<B>> implements Runnable {
 	private final int infinite;
 	private final int width;
 
-	public Phase1Runnable3D(final int[][][] tempValues, final RandomAccessibleInterval<B> raIn, final int yPos,
-			final int zPos) {
+	public Phase1Runnable3D(final int[][][] tempValues,
+		final RandomAccessibleInterval<B> raIn, final int yPos, final int zPos)
+	{
 		this.tempValues = tempValues;
 		this.raIn = raIn.randomAccess();
 		this.y = yPos;
@@ -116,21 +121,23 @@ class Phase1Runnable3D<B extends BooleanType<B>> implements Runnable {
 	}
 
 	@Override
-	public void run(){
+	public void run() {
 		// scan1
 		raIn.setPosition(0, 0);
 		raIn.setPosition(y, 1);
 		raIn.setPosition(z, 2);
 		if (!raIn.get().get()) {
 			tempValues[0][y][z] = 0;
-		} else {
+		}
+		else {
 			tempValues[0][y][z] = infinite;
 		}
 		for (int x = 1; x < width; x++) {
 			raIn.setPosition(x, 0);
 			if (!raIn.get().get()) {
 				tempValues[x][y][z] = 0;
-			} else {
+			}
+			else {
 				tempValues[x][y][z] = tempValues[x - 1][y][z] + 1;
 			}
 		}
@@ -152,8 +159,10 @@ class Phase2Runnable3D<T extends RealType<T>> implements Runnable {
 	private final int zPos;
 	private final int height;
 
-	public Phase2Runnable3D(final int[][][] tempValues, final int[][][] tempValues_new,
-			final RandomAccessibleInterval<T> raOut, final int xPos, final int zPos) {
+	public Phase2Runnable3D(final int[][][] tempValues,
+		final int[][][] tempValues_new, final RandomAccessibleInterval<T> raOut,
+		final int xPos, final int zPos)
+	{
 		this.tempValues = tempValues;
 		this.tempValues_new = tempValues_new;
 		this.xPos = xPos;
@@ -167,7 +176,9 @@ class Phase2Runnable3D<T extends RealType<T>> implements Runnable {
 	}
 
 	// help function used from the algorithm
-	private double sep(final double i, final double u, final double w, final double v) {
+	private double sep(final double i, final double u, final double w,
+		final double v)
+	{
 		return (u * u - i * i + w * w - v * v) / (2 * (u - i));
 	}
 
@@ -181,15 +192,19 @@ class Phase2Runnable3D<T extends RealType<T>> implements Runnable {
 
 		// scan 3
 		for (int u = 1; u < height; u++) {
-			while (q >= 0 && distancefunc(t[q], s[q], tempValues[xPos][s[q]][zPos]) > distancefunc(t[q], u,
-					tempValues[xPos][u][zPos])) {
+			while (q >= 0 && distancefunc(t[q], s[q],
+				tempValues[xPos][s[q]][zPos]) > distancefunc(t[q], u,
+					tempValues[xPos][u][zPos]))
+			{
 				q--;
 			}
 			if (q < 0) {
 				q = 0;
 				s[0] = u;
-			} else {
-				final double w = 1 + sep(s[q], u, tempValues[xPos][u][zPos], tempValues[xPos][s[q]][zPos]);
+			}
+			else {
+				final double w = 1 + sep(s[q], u, tempValues[xPos][u][zPos],
+					tempValues[xPos][s[q]][zPos]);
 				if (w < height) {
 					q++;
 					s[q] = u;
@@ -200,7 +215,8 @@ class Phase2Runnable3D<T extends RealType<T>> implements Runnable {
 
 		// scan 4
 		for (int u = height - 1; u >= 0; u--) {
-			tempValues_new[xPos][u][zPos] = distancefunc(u, s[q], tempValues[xPos][s[q]][zPos]);
+			tempValues_new[xPos][u][zPos] = distancefunc(u, s[q],
+				tempValues[xPos][s[q]][zPos]);
 			if (u == t[q]) {
 				q--;
 			}
@@ -217,8 +233,9 @@ class Phase3Runnable3D<T extends RealType<T>> implements Runnable {
 	private final int yPos;
 	private final int deep;
 
-	public Phase3Runnable3D(final int[][][] tempValues, final RandomAccessibleInterval<T> raOut, final int xPos,
-			final int yPos) {
+	public Phase3Runnable3D(final int[][][] tempValues,
+		final RandomAccessibleInterval<T> raOut, final int xPos, final int yPos)
+	{
 		this.tempValues = tempValues;
 		this.raOut = raOut;
 		this.xPos = xPos;
@@ -246,15 +263,19 @@ class Phase3Runnable3D<T extends RealType<T>> implements Runnable {
 
 		// scan 3
 		for (int u = 1; u < deep; u++) {
-			while (q >= 0 && distancefunc(t[q], s[q], tempValues[xPos][yPos][s[q]]) > distancefunc(t[q], u,
-					tempValues[xPos][yPos][u])) {
+			while (q >= 0 && distancefunc(t[q], s[q],
+				tempValues[xPos][yPos][s[q]]) > distancefunc(t[q], u,
+					tempValues[xPos][yPos][u]))
+			{
 				q--;
 			}
 			if (q < 0) {
 				q = 0;
 				s[0] = u;
-			} else {
-				final int w = 1 + sep(s[q], u, tempValues[xPos][yPos][u], tempValues[xPos][yPos][s[q]]);
+			}
+			else {
+				final int w = 1 + sep(s[q], u, tempValues[xPos][yPos][u],
+					tempValues[xPos][yPos][s[q]]);
 				if (w < deep) {
 					q++;
 					s[q] = u;
@@ -269,7 +290,8 @@ class Phase3Runnable3D<T extends RealType<T>> implements Runnable {
 			ra.setPosition(xPos, 0);
 			ra.setPosition(yPos, 1);
 			ra.setPosition(u, 2);
-			ra.get().setReal(Math.sqrt(distancefunc(u, s[q], tempValues[xPos][yPos][s[q]])));
+			ra.get().setReal(Math.sqrt(distancefunc(u, s[q],
+				tempValues[xPos][yPos][s[q]])));
 			if (u == t[q]) {
 				q--;
 			}

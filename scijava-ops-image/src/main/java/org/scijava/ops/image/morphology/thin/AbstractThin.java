@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -56,15 +56,17 @@ public abstract class AbstractThin implements
 {
 
 	protected ThinningStrategy m_strategy;
-	
+
 	@OpDependency(name = "create.img")
 	BiFunction<Dimensions, BitType, Img<BitType>> imgCreator;
 
 	private void copy(final RandomAccessibleInterval<BitType> source,
 		final RandomAccessibleInterval<BitType> target)
 	{
-		if(!Intervals.equalDimensions(source, target)) throw new IllegalArgumentException("Source and target images must be of the same size!");
-		
+		if (!Intervals.equalDimensions(source, target))
+			throw new IllegalArgumentException(
+				"Source and target images must be of the same size!");
+
 		final IterableInterval<BitType> targetIt = Views.iterable(target);
 		final IterableInterval<BitType> sourceIt = Views.iterable(source);
 

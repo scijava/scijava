@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -39,17 +39,19 @@ import org.scijava.ops.spi.OpDependency;
 
 /**
  * Op to calculate the {@code imageMoments.huMoment7}.
- * 
+ *
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
- * @param <I>
- *            input type
- * @param <O>
- *            output type
- * @see <a href="https://en.wikipedia.org/wiki/Image_moment#Rotation_invariants"> This page </a>
+ * @param <I> input type
+ * @param <O> output type
+ * @see <a href=
+ *      "https://en.wikipedia.org/wiki/Image_moment#Rotation_invariants"> This
+ *      page </a>
  * @implNote op names='imageMoments.huMoment7', label='Image Moment: HuMoment7'
  */
-public class DefaultHuMoment7<I extends RealType<I>, O extends RealType<O>> implements AbstractImageMomentOp<I, O> {
+public class DefaultHuMoment7<I extends RealType<I>, O extends RealType<O>>
+	implements AbstractImageMomentOp<I, O>
+{
 
 	@OpDependency(name = "imageMoments.normalizedCentralMoment30")
 	private Computers.Arity1<RandomAccessibleInterval<I>, O> normalizedCentralMoment30Func;
@@ -70,7 +72,9 @@ public class DefaultHuMoment7<I extends RealType<I>, O extends RealType<O>> impl
 	 * @param output
 	 */
 	@Override
-	public void computeMoment(final RandomAccessibleInterval<I> input, final O output) {
+	public void computeMoment(final RandomAccessibleInterval<I> input,
+		final O output)
+	{
 		final O n03 = output.createVariable();
 		normalizedCentralMoment03Func.compute(input, n03);
 		final O n12 = output.createVariable();
@@ -79,7 +83,7 @@ public class DefaultHuMoment7<I extends RealType<I>, O extends RealType<O>> impl
 		normalizedCentralMoment21Func.compute(input, n21);
 		final O n30 = output.createVariable();
 		normalizedCentralMoment30Func.compute(input, n30);
-		
+
 		// term1 = (3*n21 - n03)(n30 + n12)[(n30 + n12)^2 - 3*(n21 + n03)^2]
 		// term11 = (3*n21 - n03)
 		final O term11 = n21.copy();
@@ -96,11 +100,11 @@ public class DefaultHuMoment7<I extends RealType<I>, O extends RealType<O>> impl
 		output.mul(output);
 		output.mul(3);
 		term13.sub(output);
-		
+
 		final O term1 = term11.copy();
 		term1.mul(term12);
 		term1.mul(term13);
-		
+
 		// term2 = (n30 - 3*n12)(n21 + n03)[3*(n30 + n12)^2 - (n21 + n03)^2]
 		// term21 = (n30 - 3*n12)
 		final O term21 = n30.copy();
@@ -117,11 +121,11 @@ public class DefaultHuMoment7<I extends RealType<I>, O extends RealType<O>> impl
 		output.set(term22);
 		output.mul(term22);
 		term23.sub(output);
-		
+
 		final O term2 = term21.copy();
 		term2.mul(term22);
 		term2.mul(term23);
-		
+
 		output.set(term1);
 		output.sub(term2);
 

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -56,7 +56,7 @@ import net.imglib2.type.numeric.real.FloatType;
  * This collection of Ops can be used to obtain the minimum value of any
  * {@link RealType}. This method of determining the minimum value of a
  * {@link RealType} is preferable since it is safe and extensible.
- * 
+ *
  * @author Gabriel Selzer
  */
 public class MinValueRealTypes {
@@ -229,6 +229,7 @@ public class MinValueRealTypes {
 	 * Due to the variable length of this type, we cannot simply return some final
 	 * value. The best we can do is quickly compute the answer. TODO: Is there
 	 * some way we could cache the values? Is that worth it??
+	 *
 	 * @implNote op names='types.minValue'
 	 */
 	public final Function<UnsignedVariableBitLengthType, UnsignedVariableBitLengthType> minVarLengthType =

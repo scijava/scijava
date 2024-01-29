@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.morphology;
 
 import org.scijava.concurrent.Parallelization;
@@ -47,7 +48,8 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	 * @input weights
 	 * @implNote op names='morphology.distanceTransform'
 	 */
-	public final Inplaces.Arity3_1<RandomAccessibleInterval<T>, DISTANCE_TYPE, double[]> transformInplace = DistanceTransform::transform;
+	public final Inplaces.Arity3_1<RandomAccessibleInterval<T>, DISTANCE_TYPE, double[]> transformInplace =
+		DistanceTransform::transform;
 
 	/**
 	 * @mutable source
@@ -74,7 +76,7 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	 * @implNote op names='morphology.distanceTransform'
 	 */
 	public final Computers.Arity3<RandomAccessibleInterval<T>, DISTANCE_TYPE, double[], RandomAccessibleInterval<T>> transformComputer =
-			(in1, in2, in3, out) -> DistanceTransform.transform(in1, out, in2, in3);
+		(in1, in2, in3, out) -> DistanceTransform.transform(in1, out, in2, in3);
 
 	/**
 	 * @input source
@@ -85,22 +87,23 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	 * @implNote op names='morphology.distanceTransform'
 	 */
 	public final Computers.Arity4<RandomAccessibleInterval<T>, DISTANCE_TYPE, Integer, double[], RandomAccessibleInterval<U>> transformExServiceComputer = //
-			(source, distanceType, numTasks, weights, target) -> //
-					OpExecutionException.wrapAndRun(() -> DistanceTransform.transform( //
-							source, //
-							target, //
-							distanceType, //
-							Parallelization.getExecutorService(), //
-							numTasks, //
-							weights //
-					));
+		(source, distanceType, numTasks, weights, target) -> //
+		OpExecutionException.wrapAndRun(() -> DistanceTransform.transform( //
+			source, //
+			target, //
+			distanceType, //
+			Parallelization.getExecutorService(), //
+			numTasks, //
+			weights //
+		));
 
 	/**
 	 * @mutable source
 	 * @input distance
 	 * @implNote op names='morphology.distanceTransform'
 	 */
-	public final Inplaces.Arity2_1<RandomAccessibleInterval<T>, Distance> transformInplaceDistance = DistanceTransform::transform;
+	public final Inplaces.Arity2_1<RandomAccessibleInterval<T>, Distance> transformInplaceDistance =
+		DistanceTransform::transform;
 
 	/**
 	 * @mutable source
@@ -109,13 +112,13 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	 * @implNote op names='morphology.distanceTransform'
 	 */
 	public final Inplaces.Arity3_1<RandomAccessibleInterval<T>, Distance, Integer> transformInplaceExServiceDistance = //
-			(source, distanceType, numTasks) -> //
-					OpExecutionException.wrapAndRun(() -> DistanceTransform.transform( //
-							source, //
-							distanceType, //
-							Parallelization.getExecutorService(), //
-							numTasks //
-					));
+		(source, distanceType, numTasks) -> //
+		OpExecutionException.wrapAndRun(() -> DistanceTransform.transform( //
+			source, //
+			distanceType, //
+			Parallelization.getExecutorService(), //
+			numTasks //
+		));
 
 	/**
 	 * @input source
@@ -123,7 +126,8 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	 * @container target
 	 * @implNote op names='morphology.distanceTransform'
 	 */
-	public final Computers.Arity2<RandomAccessibleInterval<T>, Distance, RandomAccessibleInterval<T>> transformComputerDistance = (in1, in2, out) -> DistanceTransform.transform(in1, out, in2);
+	public final Computers.Arity2<RandomAccessibleInterval<T>, Distance, RandomAccessibleInterval<T>> transformComputerDistance =
+		(in1, in2, out) -> DistanceTransform.transform(in1, out, in2);
 
 	/**
 	 * @input source
@@ -133,12 +137,12 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	 * @implNote op names='morphology.distanceTransform'
 	 */
 	public final Computers.Arity3<RandomAccessibleInterval<T>, Distance, Integer, RandomAccessibleInterval<T>> transformComputerExServiceDistance = //
-			(source, distanceType, numTasks, target) -> //
-					OpExecutionException.wrapAndRun(() -> DistanceTransform.transform( //
-							source, //
-							target, //
-							distanceType, //
-							Parallelization.getExecutorService(), //
-							numTasks //
-					));
+		(source, distanceType, numTasks, target) -> //
+		OpExecutionException.wrapAndRun(() -> DistanceTransform.transform( //
+			source, //
+			target, //
+			distanceType, //
+			Parallelization.getExecutorService(), //
+			numTasks //
+		));
 }

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -64,8 +64,9 @@ public class OutlineTest extends AbstractOpTest {
 		final Img<BitType> img = ArrayImgs.bits(inputDims);
 
 		// EXECUTE
-		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img, Boolean.TRUE)
-				.outType(new Nil<Img<BitType>>() {}).apply();
+		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img,
+			Boolean.TRUE).outType(new Nil<Img<BitType>>()
+		{}).apply();
 
 		// VERIFY
 		assertNotNull(result);
@@ -81,8 +82,9 @@ public class OutlineTest extends AbstractOpTest {
 		final Img<BitType> img = ArrayImgs.bits(3, 3, 3);
 
 		// EXECUTE
-		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img, Boolean.TRUE)
-				.outType(new Nil<Img<BitType>>() {}).apply();
+		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img,
+			Boolean.TRUE).outType(new Nil<Img<BitType>>()
+		{}).apply();
 
 		// VERIFY
 		assertEquals(0, countForeground(result),
@@ -97,11 +99,13 @@ public class OutlineTest extends AbstractOpTest {
 		img.forEach(BitType::setOne);
 
 		// EXECUTE
-		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img, Boolean.TRUE)
-				.outType(new Nil<Img<BitType>>() {}).apply();
+		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img,
+			Boolean.TRUE).outType(new Nil<Img<BitType>>()
+		{}).apply();
 
 		// VERIFY
-		assertEquals(0, countForeground(result), "Output should contain no foreground");
+		assertEquals(0, countForeground(result),
+			"Output should contain no foreground");
 	}
 
 	/** Test the op with a 2x2 square. The square is in the middle of a 4x4 img */
@@ -109,12 +113,14 @@ public class OutlineTest extends AbstractOpTest {
 	public void testSquare() throws Exception {
 		// SETUP
 		final Img<BitType> img = ArrayImgs.bits(4, 4);
-		final IntervalView<BitType> square = Views.offsetInterval(img, new long[] { 1, 1 }, new long[] { 2, 2 });
+		final IntervalView<BitType> square = Views.offsetInterval(img, new long[] {
+			1, 1 }, new long[] { 2, 2 });
 		square.cursor().forEachRemaining(BitType::setOne);
 
 		// EXECUTE
-		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img, Boolean.TRUE)
-				.outType(new Nil<Img<BitType>>() {}).apply();
+		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img,
+			Boolean.TRUE).outType(new Nil<Img<BitType>>()
+		{}).apply();
 
 		// VERIFY
 		assertEquals(4, countForeground(result),
@@ -126,22 +132,24 @@ public class OutlineTest extends AbstractOpTest {
 	}
 
 	/**
-	 * Test the op with a 3x3 square with a hole in the middle. The square is in the
-	 * middle of a 5x5 img
+	 * Test the op with a 3x3 square with a hole in the middle. The square is in
+	 * the middle of a 5x5 img
 	 */
 	@Test
 	public void testOutlineSquare() throws Exception {
 		// SETUP
 		final Img<BitType> img = ArrayImgs.bits(5, 5);
-		final IntervalView<BitType> square = Views.offsetInterval(img, new long[] { 1, 1 }, new long[] { 3, 3 });
+		final IntervalView<BitType> square = Views.offsetInterval(img, new long[] {
+			1, 1 }, new long[] { 3, 3 });
 		square.cursor().forEachRemaining(BitType::setOne);
 		final RandomAccess<BitType> access = square.randomAccess();
 		access.setPosition(new long[] { 1, 1 });
 		access.get().setZero();
 
 		// EXECUTION
-		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img, Boolean.TRUE)
-				.outType(new Nil<Img<BitType>>() {}).apply();
+		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img,
+			Boolean.TRUE).outType(new Nil<Img<BitType>>()
+		{}).apply();
 
 		// VERIFY
 		assertEquals(8, countForeground(result),
@@ -164,12 +172,14 @@ public class OutlineTest extends AbstractOpTest {
 	public void testEdgeSquare() throws Exception {
 		// SETUP
 		final Img<BitType> img = ArrayImgs.bits(5, 5);
-		final IntervalView<BitType> square = Views.offsetInterval(img, new long[] { 0, 1 }, new long[] { 3, 3 });
+		final IntervalView<BitType> square = Views.offsetInterval(img, new long[] {
+			0, 1 }, new long[] { 3, 3 });
 		square.cursor().forEachRemaining(BitType::setOne);
 
 		// EXECUTION
-		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img, Boolean.TRUE)
-				.outType(new Nil<Img<BitType>>() {}).apply();
+		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img,
+			Boolean.TRUE).outType(new Nil<Img<BitType>>()
+		{}).apply();
 
 		// VERIFY
 		assertEquals(7, countForeground(result),
@@ -194,11 +204,13 @@ public class OutlineTest extends AbstractOpTest {
 	public void testEdgeSquareExcludeEdgesFalse() throws Exception {
 		// SETUP
 		final Img<BitType> img = ArrayImgs.bits(5, 5);
-		final IntervalView<BitType> square = Views.offsetInterval(img, new long[] { 0, 1 }, new long[] { 3, 3 });
+		final IntervalView<BitType> square = Views.offsetInterval(img, new long[] {
+			0, 1 }, new long[] { 3, 3 });
 		square.cursor().forEachRemaining(BitType::setOne);
 
-		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img, Boolean.FALSE)
-				.outType(new Nil<Img<BitType>>() {}).apply();
+		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img,
+			Boolean.FALSE).outType(new Nil<Img<BitType>>()
+		{}).apply();
 
 		assertEquals(8, countForeground(result),
 			"Wrong number of foreground elements in interval");
@@ -210,20 +222,21 @@ public class OutlineTest extends AbstractOpTest {
 	}
 
 	/**
-	 * Test the op with a 3x3x3x3 hypercube. The cube is in the middle of a 5x5x5x5
-	 * img
+	 * Test the op with a 3x3x3x3 hypercube. The cube is in the middle of a
+	 * 5x5x5x5 img
 	 */
 	@Test
 	public void testHyperCube() throws Exception {
 		// SETUP
 		final Img<BitType> img = ArrayImgs.bits(5, 5, 5, 5);
-		final IntervalView<BitType> hyperCube = Views.offsetInterval(img, new long[] { 1, 1, 1, 1 },
-				new long[] { 3, 3, 3, 3 });
+		final IntervalView<BitType> hyperCube = Views.offsetInterval(img,
+			new long[] { 1, 1, 1, 1 }, new long[] { 3, 3, 3, 3 });
 		hyperCube.cursor().forEachRemaining(BitType::setOne);
 
 		// EXECUTE
-		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img, Boolean.TRUE)
-				.outType(new Nil<Img<BitType>>() {}).apply();
+		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img,
+			Boolean.TRUE).outType(new Nil<Img<BitType>>()
+		{}).apply();
 
 		// VERIFY
 		assertEquals(80, countForeground(result),
@@ -253,7 +266,9 @@ public class OutlineTest extends AbstractOpTest {
 		return count;
 	}
 
-	private void assertPositionBackground(final RandomAccessibleInterval<BitType> interval, final long[] position) {
+	private void assertPositionBackground(
+		final RandomAccessibleInterval<BitType> interval, final long[] position)
+	{
 		final RandomAccess<BitType> access = interval.randomAccess();
 		access.setPosition(position);
 		assertFalse(access.get().get(), "Element should be background");

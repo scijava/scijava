@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.transform.offsetView;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -64,21 +65,25 @@ public class OffsetViewTest extends AbstractOpTest {
 	@Test
 	public void defaultOffsetTest() {
 
-		BiFunction<RandomAccessible<DoubleType>, long[], MixedTransformView<DoubleType>> offsetFunc = OpBuilder
-				.matchFunction(ops, "transform.offsetView", new Nil<RandomAccessible<DoubleType>>() {
-				}, new Nil<long[]>() {
-				}, new Nil<MixedTransformView<DoubleType>>() {
-				});
+		BiFunction<RandomAccessible<DoubleType>, long[], MixedTransformView<DoubleType>> offsetFunc =
+			OpBuilder.matchFunction(ops, "transform.offsetView",
+				new Nil<RandomAccessible<DoubleType>>()
+				{}, new Nil<long[]>() {}, new Nil<MixedTransformView<DoubleType>>() {});
 
-		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
+			new int[] { 10, 10 });
 
-		MixedTransformView<DoubleType> il2 = Views.offset((RandomAccessible<DoubleType>) img, new long[] { 2, 2 });
-		MixedTransformView<DoubleType> opr = offsetFunc.apply(img, new long[] { 2, 2 });
+		MixedTransformView<DoubleType> il2 = Views.offset(
+			(RandomAccessible<DoubleType>) img, new long[] { 2, 2 });
+		MixedTransformView<DoubleType> opr = offsetFunc.apply(img, new long[] { 2,
+			2 });
 
 		for (int i = 0; i < il2.getTransformToSource().getMatrix().length; i++) {
-			for (int j = 0; j < il2.getTransformToSource().getMatrix()[i].length; j++) {
-				assertEquals(il2.getTransformToSource().getMatrix()[i][j], opr.getTransformToSource().getMatrix()[i][j],
-						1e-10);
+			for (int j = 0; j < il2.getTransformToSource()
+				.getMatrix()[i].length; j++)
+			{
+				assertEquals(il2.getTransformToSource().getMatrix()[i][j], opr
+					.getTransformToSource().getMatrix()[i][j], 1e-10);
 			}
 		}
 	}
@@ -86,18 +91,18 @@ public class OffsetViewTest extends AbstractOpTest {
 	@Test
 	public void defaultOffsetIntervalTest() {
 
-		BiFunction<RandomAccessibleInterval<DoubleType>, Interval, IntervalView<DoubleType>> offsetFunc = OpBuilder
-				.matchFunction(ops, "transform.offsetView", new Nil<RandomAccessibleInterval<DoubleType>>() {
-				}, new Nil<Interval>() {
-				}, new Nil<IntervalView<DoubleType>>() {
-				});
+		BiFunction<RandomAccessibleInterval<DoubleType>, Interval, IntervalView<DoubleType>> offsetFunc =
+			OpBuilder.matchFunction(ops, "transform.offsetView",
+				new Nil<RandomAccessibleInterval<DoubleType>>()
+				{}, new Nil<Interval>() {}, new Nil<IntervalView<DoubleType>>() {});
 
-		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
+			new int[] { 10, 10 });
 
-		IntervalView<DoubleType> il2 = Views.offsetInterval(img,
-				new FinalInterval(new long[] { 2, 2 }, new long[] { 9, 9 }));
-		IntervalView<DoubleType> opr = offsetFunc.apply(img,
-				new FinalInterval(new long[] { 2, 2 }, new long[] { 9, 9 }));
+		IntervalView<DoubleType> il2 = Views.offsetInterval(img, new FinalInterval(
+			new long[] { 2, 2 }, new long[] { 9, 9 }));
+		IntervalView<DoubleType> opr = offsetFunc.apply(img, new FinalInterval(
+			new long[] { 2, 2 }, new long[] { 9, 9 }));
 
 		assertEquals(il2.realMax(0), opr.realMax(0), 1e-10);
 		assertEquals(il2.realMin(0), opr.realMin(0), 1e-10);
@@ -108,17 +113,20 @@ public class OffsetViewTest extends AbstractOpTest {
 	@Test
 	public void defaultOffsetStartEndTest() {
 
-		Functions.Arity3<RandomAccessibleInterval<DoubleType>, long[], long[], IntervalView<DoubleType>> offsetFunc = OpBuilder
-				.matchFunction(ops, "transform.offsetView", new Nil<RandomAccessibleInterval<DoubleType>>() {
-				}, new Nil<long[]>() {
-				}, new Nil<long[]>() {
-				}, new Nil<IntervalView<DoubleType>>() {
-				});
+		Functions.Arity3<RandomAccessibleInterval<DoubleType>, long[], long[], IntervalView<DoubleType>> offsetFunc =
+			OpBuilder.matchFunction(ops, "transform.offsetView",
+				new Nil<RandomAccessibleInterval<DoubleType>>()
+				{}, new Nil<long[]>() {}, new Nil<long[]>() {},
+				new Nil<IntervalView<DoubleType>>()
+				{});
 
-		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
+			new int[] { 10, 10 });
 
-		IntervalView<DoubleType> il2 = Views.offsetInterval(img, new long[] { 2, 2 }, new long[] { 9, 9 });
-		IntervalView<DoubleType> opr = offsetFunc.apply(img, new long[] { 2, 2 }, new long[] { 9, 9 });
+		IntervalView<DoubleType> il2 = Views.offsetInterval(img, new long[] { 2,
+			2 }, new long[] { 9, 9 });
+		IntervalView<DoubleType> opr = offsetFunc.apply(img, new long[] { 2, 2 },
+			new long[] { 9, 9 });
 
 		assertEquals(il2.realMax(0), opr.realMax(0), 1e-10);
 		assertEquals(il2.realMin(0), opr.realMin(0), 1e-10);

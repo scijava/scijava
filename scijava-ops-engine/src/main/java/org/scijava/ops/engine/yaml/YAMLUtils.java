@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.engine.yaml;
 
 import java.util.HashMap;
@@ -38,16 +39,16 @@ public final class YAMLUtils {
 	}
 
 	public static Map<String, Object> subMap(final Map<String, Object> map,
-			String key)
+		String key)
 	{
 		if (!map.containsKey(key)) {
 			throw new IllegalArgumentException("YAML map " + map +
-					" does not contain key " + key);
+				" does not contain key " + key);
 		}
 		Object value = map.get(key);
 		if (!(value instanceof Map)) {
 			throw new IllegalArgumentException("YAML map " + map +
-					" has a non-map value for key " + key);
+				" has a non-map value for key " + key);
 		}
 		return (Map<String, Object>) value;
 	}
@@ -55,20 +56,24 @@ public final class YAMLUtils {
 	public static String value(final Map<String, Object> map, String key) {
 		if (!map.containsKey(key)) {
 			throw new IllegalArgumentException("YAML map " + map +
-					" does not contain key " + key);
+				" does not contain key " + key);
 		}
 		return map.get(key).toString().trim();
 	}
 
-	public static <T> T value(final Map<String, Object> map, String key, Class<T> type) {
+	public static <T> T value(final Map<String, Object> map, String key,
+		Class<T> type)
+	{
 		if (!map.containsKey(key)) {
 			throw new IllegalArgumentException("YAML map " + map +
-					" does not contain key " + key);
+				" does not contain key " + key);
 		}
 		return (T) map.get(key);
 	}
 
-	public static String value(final Map<String, Object> map, String key, String defaultValue) {
+	public static String value(final Map<String, Object> map, String key,
+		String defaultValue)
+	{
 		return map.getOrDefault(key, defaultValue).toString().trim();
 	}
 

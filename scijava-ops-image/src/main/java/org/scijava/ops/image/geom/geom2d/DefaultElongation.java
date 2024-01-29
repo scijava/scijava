@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -44,11 +44,13 @@ import org.scijava.ops.spi.OpDependency;
  * Generic implementation of {@code geom.mainElongation} based on
  * http://www.math.uci.edu/icamp/summer/research_11/park/
  * shape_descriptors_survey.pdf.
- * 
+ *
  * @author Tim-Oliver Buchholz, University of Konstanz
  * @implNote op names='geom.mainElongation', label='Geometric (2D): Elongation'
  */
-public class DefaultElongation implements Computers.Arity1<Polygon2D, DoubleType> {
+public class DefaultElongation implements
+	Computers.Arity1<Polygon2D, DoubleType>
+{
 
 	@OpDependency(name = "geom.smallestEnclosingBoundingBox")
 	private Function<Polygon2D, Polygon2D> minimumBoundingBoxFunc;
@@ -61,16 +63,19 @@ public class DefaultElongation implements Computers.Arity1<Polygon2D, DoubleType
 	 */
 	@Override
 	public void compute(final Polygon2D input, final DoubleType output) {
-		final List<? extends RealLocalizable> minBB = GeomUtils.vertices(minimumBoundingBoxFunc.apply(input));
+		final List<? extends RealLocalizable> minBB = GeomUtils.vertices(
+			minimumBoundingBoxFunc.apply(input));
 
 		final RealLocalizable p1 = minBB.get(0);
 		final RealLocalizable p2 = minBB.get(1);
 		final RealLocalizable p3 = minBB.get(2);
 
-		double width = Math.sqrt(Math.pow(p1.getDoublePosition(0) - p2.getDoublePosition(0), 2)
-				+ Math.pow(p1.getDoublePosition(1) - p2.getDoublePosition(1), 2));
-		double length = Math.sqrt(Math.pow(p2.getDoublePosition(0) - p3.getDoublePosition(0), 2)
-				+ Math.pow(p2.getDoublePosition(1) - p3.getDoublePosition(1), 2));
+		double width = Math.sqrt(Math.pow(p1.getDoublePosition(0) - p2
+			.getDoublePosition(0), 2) + Math.pow(p1.getDoublePosition(1) - p2
+				.getDoublePosition(1), 2));
+		double length = Math.sqrt(Math.pow(p2.getDoublePosition(0) - p3
+			.getDoublePosition(0), 2) + Math.pow(p2.getDoublePosition(1) - p3
+				.getDoublePosition(1), 2));
 
 		if (width > length) {
 			final double tmp = width;

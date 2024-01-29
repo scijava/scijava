@@ -47,11 +47,11 @@ public class Fills {
 	 * Default sequential implementation for all {@link Iterable}s
 	 *
 	 * @param constant the value to fill the image with
-	 * @param output   the output buffer to fill with {@code constant}
+	 * @param output the output buffer to fill with {@code constant}
 	 * @implNote op names='image.fill', type=Computer
 	 */
 	public static <T extends Type<T>> void iteratorFill(final T constant,
-			final Iterable<T> output)
+		final Iterable<T> output)
 	{
 		for (T t : output) {
 			t.set(constant);
@@ -59,14 +59,15 @@ public class Fills {
 	}
 
 	/**
-	 * Default sequential implementation for all {@link Iterable} of {@link Unsigned128BitType}
+	 * Default sequential implementation for all {@link Iterable} of
+	 * {@link Unsigned128BitType}
 	 *
 	 * @param constant the value to fill the image with
-	 * @param output   the output buffer to fill with {@code constant}
+	 * @param output the output buffer to fill with {@code constant}
 	 * @implNote op names='image.fill', priority='10' type=Computer
 	 */
 	public static void iteratorU128bitFill(final Unsigned128BitType constant,
-			final Iterable<Unsigned128BitType> output)
+		final Iterable<Unsigned128BitType> output)
 	{
 		BigInteger bi = constant.getBigInteger();
 		for (Unsigned128BitType t : output) {
@@ -78,14 +79,14 @@ public class Fills {
 	 * Default parallel implementation using {@link LoopBuilder}
 	 *
 	 * @param constant the value to fill the image with
-	 * @param output   the output buffer to fill with {@code constant}
+	 * @param output the output buffer to fill with {@code constant}
 	 * @implNote op names='image.fill', priority='100.', type=Computer
 	 */
 	public static <T extends Type<T>> void loopBuilderFill(final T constant,
-			final RandomAccessibleInterval<T> output)
+		final RandomAccessibleInterval<T> output)
 	{
-		LoopBuilder.setImages(output).multiThreaded()
-				.forEachPixel(pixel -> pixel.set(constant));
+		LoopBuilder.setImages(output).multiThreaded().forEachPixel(pixel -> pixel
+			.set(constant));
 	}
 
 	/**
@@ -93,14 +94,14 @@ public class Fills {
 	 * overflow by passing the value via {@link BigInteger}
 	 *
 	 * @param constant the value to fill the image with
-	 * @param output   the output buffer to fill with {@code constant}
+	 * @param output the output buffer to fill with {@code constant}
 	 * @implNote op names='image.fill', priority='1000.', type=Computer
 	 */
 	public static void u128bitFill(final Unsigned128BitType constant,
-			final RandomAccessibleInterval<Unsigned128BitType> output)
+		final RandomAccessibleInterval<Unsigned128BitType> output)
 	{
 		BigInteger bi = constant.getBigInteger();
-		LoopBuilder.setImages(output).multiThreaded()
-				.forEachPixel(pixel -> pixel.set(bi));
+		LoopBuilder.setImages(output).multiThreaded().forEachPixel(pixel -> pixel
+			.set(bi));
 	}
 }

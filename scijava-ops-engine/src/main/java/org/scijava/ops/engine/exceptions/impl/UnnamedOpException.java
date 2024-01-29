@@ -39,6 +39,7 @@ import org.scijava.ops.engine.exceptions.InvalidOpException;
 public class UnnamedOpException extends InvalidOpException {
 
 	public UnnamedOpException(Object op) {
-		super("No names declared for Op: " + op + " - all Ops must have at least one name");
+		super("No names declared for Op: " + op +
+			" - all Ops must have at least one name");
 	}
 }

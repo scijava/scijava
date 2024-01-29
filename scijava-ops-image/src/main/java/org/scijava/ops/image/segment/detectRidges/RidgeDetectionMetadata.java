@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -79,7 +79,8 @@ public class RidgeDetectionMetadata {
 		final Computers.Arity3<RandomAccessibleInterval<DoubleType>, double[], int[], RandomAccessibleInterval<DoubleType>> partialDerivativeOp)
 	{
 		// convert input to doubleType
-		final RandomAccessibleInterval<DoubleType> converted = createOp.apply(input, new DoubleType()); 
+		final RandomAccessibleInterval<DoubleType> converted = createOp.apply(input,
+			new DoubleType());
 		convertOp.compute(input, converted);
 
 		// create dimensions array for p and n values images, later used for setting
@@ -90,9 +91,11 @@ public class RidgeDetectionMetadata {
 		valuesArr[valuesArr.length - 1] = 2;
 
 		// create metadata images and randomAccesses
-		pValues = (Img<DoubleType>) createOp.apply(new FinalDimensions(valuesArr), new DoubleType());
+		pValues = (Img<DoubleType>) createOp.apply(new FinalDimensions(valuesArr),
+			new DoubleType());
 		final RandomAccess<DoubleType> pRA = pValues.randomAccess();
-		nValues = (Img<DoubleType>) createOp.apply(new FinalDimensions(valuesArr), new DoubleType());
+		nValues = (Img<DoubleType>) createOp.apply(new FinalDimensions(valuesArr),
+			new DoubleType());
 		final RandomAccess<DoubleType> nRA = nValues.randomAccess();
 		gradients = (Img<DoubleType>) createOp.apply(input, new DoubleType());
 		final RandomAccess<DoubleType> gradientsRA = gradients.randomAccess();
@@ -113,11 +116,16 @@ public class RidgeDetectionMetadata {
 		final RandomAccess<DoubleType> yyRA = yy.randomAccess();
 
 		// fill partial derivative images with gaussian derivative convolutions
-		partialDerivativeOp.compute(converted, new double[] {sigma, sigma}, new int[] { 1, 0 }, x);
-		partialDerivativeOp.compute(converted, new double[] {sigma, sigma}, new int[] { 2, 0 }, xx);
-		partialDerivativeOp.compute(converted, new double[] {sigma, sigma}, new int[] { 1, 1 }, xy);
-		partialDerivativeOp.compute(converted, new double[] {sigma, sigma}, new int[] { 0, 1 }, y);
-		partialDerivativeOp.compute(converted, new double[] {sigma, sigma}, new int[] { 0, 2 }, yy);
+		partialDerivativeOp.compute(converted, new double[] { sigma, sigma },
+			new int[] { 1, 0 }, x);
+		partialDerivativeOp.compute(converted, new double[] { sigma, sigma },
+			new int[] { 2, 0 }, xx);
+		partialDerivativeOp.compute(converted, new double[] { sigma, sigma },
+			new int[] { 1, 1 }, xy);
+		partialDerivativeOp.compute(converted, new double[] { sigma, sigma },
+			new int[] { 0, 1 }, y);
+		partialDerivativeOp.compute(converted, new double[] { sigma, sigma },
+			new int[] { 0, 2 }, yy);
 
 		// loop through the points, fill in potentialPoints with second directional
 		// derivative across the line, eigenx with the x component of the normal

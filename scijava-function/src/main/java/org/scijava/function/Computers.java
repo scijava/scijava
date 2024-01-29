@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -112,8 +112,8 @@ public final class Computers {
 	}
 
 	/**
-	 * @return {@code true} if the given type is a known
-	 *         computer type, {@code false} otherwise. <br>
+	 * @return {@code true} if the given type is a known computer type,
+	 *         {@code false} otherwise. <br>
 	 *         Note that only the type itself and not its type hierarchy is
 	 *         considered.
 	 * @throws NullPointerException If {@code c} is {@code null}.
@@ -143,45 +143,35 @@ public final class Computers {
 		return ALL_ARITIES.getOrDefault(c, -1);
 	}
 
-
 	@FunctionalInterface
-	public interface Arity0<O> extends
-		Consumer<O>
-	{
+	public interface Arity0<O> extends Consumer<O> {
 
 		void compute(@Container O out);
 
 		@Override
-		default void accept(final O out)
-		{
+		default void accept(final O out) {
 			compute(out);
 		}
 	}
 
 	@FunctionalInterface
-	public interface Arity1<I, O> extends
-		BiConsumer<I, O>
-	{
+	public interface Arity1<I, O> extends BiConsumer<I, O> {
 
 		void compute(I in, @Container O out);
 
 		@Override
-		default void accept(final I in, final O out)
-		{
+		default void accept(final I in, final O out) {
 			compute(in, out);
 		}
 	}
 
 	@FunctionalInterface
-	public interface Arity2<I1, I2, O> extends
-		Consumers.Arity3<I1, I2, O>
-	{
+	public interface Arity2<I1, I2, O> extends Consumers.Arity3<I1, I2, O> {
 
 		void compute(I1 in1, I2 in2, @Container O out);
 
 		@Override
-		default void accept(final I1 in1, final I2 in2, final O out)
-		{
+		default void accept(final I1 in1, final I2 in2, final O out) {
 			compute(in1, in2, out);
 		}
 	}
@@ -194,8 +184,7 @@ public final class Computers {
 		void compute(I1 in1, I2 in2, I3 in3, @Container O out);
 
 		@Override
-		default void accept(final I1 in1, final I2 in2, final I3 in3, final O out)
-		{
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final O out) {
 			compute(in1, in2, in3, out);
 		}
 	}
@@ -208,7 +197,8 @@ public final class Computers {
 		void compute(I1 in1, I2 in2, I3 in3, I4 in4, @Container O out);
 
 		@Override
-		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final O out)
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
+			final O out)
 		{
 			compute(in1, in2, in3, in4, out);
 		}
@@ -222,7 +212,8 @@ public final class Computers {
 		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, @Container O out);
 
 		@Override
-		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final O out)
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
+			final I5 in5, final O out)
 		{
 			compute(in1, in2, in3, in4, in5, out);
 		}
@@ -233,10 +224,12 @@ public final class Computers {
 		Consumers.Arity7<I1, I2, I3, I4, I5, I6, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, @Container O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6,
+			@Container O out);
 
 		@Override
-		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final O out)
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
+			final I5 in5, final I6 in6, final O out)
 		{
 			compute(in1, in2, in3, in4, in5, in6, out);
 		}
@@ -247,10 +240,12 @@ public final class Computers {
 		Consumers.Arity8<I1, I2, I3, I4, I5, I6, I7, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, @Container O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7,
+			@Container O out);
 
 		@Override
-		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final O out)
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
+			final I5 in5, final I6 in6, final I7 in7, final O out)
 		{
 			compute(in1, in2, in3, in4, in5, in6, in7, out);
 		}
@@ -261,10 +256,12 @@ public final class Computers {
 		Consumers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, @Container O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
+			@Container O out);
 
 		@Override
-		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final O out)
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
+			final I5 in5, final I6 in6, final I7 in7, final I8 in8, final O out)
 		{
 			compute(in1, in2, in3, in4, in5, in6, in7, in8, out);
 		}
@@ -275,10 +272,13 @@ public final class Computers {
 		Consumers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, @Container O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
+			I9 in9, @Container O out);
 
 		@Override
-		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final O out)
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
+			final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9,
+			final O out)
 		{
 			compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, out);
 		}
@@ -289,96 +289,134 @@ public final class Computers {
 		Consumers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, @Container O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
+			I9 in9, I10 in10, @Container O out);
 
 		@Override
-		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final O out)
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
+			final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9,
+			final I10 in10, final O out)
 		{
 			compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, out);
 		}
 	}
 
 	@FunctionalInterface
-	public interface Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> extends
-		Consumers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>
+	public interface Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>
+		extends Consumers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, @Container O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
+			I9 in9, I10 in10, I11 in11, @Container O out);
 
 		@Override
-		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final O out)
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
+			final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9,
+			final I10 in10, final I11 in11, final O out)
 		{
 			compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, out);
 		}
 	}
 
 	@FunctionalInterface
-	public interface Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> extends
+	public interface Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>
+		extends
 		Consumers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, @Container O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
+			I9 in9, I10 in10, I11 in11, I12 in12, @Container O out);
 
 		@Override
-		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final O out)
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
+			final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9,
+			final I10 in10, final I11 in11, final I12 in12, final O out)
 		{
-			compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, out);
+			compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
+				out);
 		}
 	}
 
 	@FunctionalInterface
-	public interface Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> extends
+	public interface Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>
+		extends
 		Consumers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, @Container O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
+			I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, @Container O out);
 
 		@Override
-		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final O out)
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
+			final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9,
+			final I10 in10, final I11 in11, final I12 in12, final I13 in13,
+			final O out)
 		{
-			compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, out);
+			compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
+				in13, out);
 		}
 	}
 
 	@FunctionalInterface
-	public interface Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> extends
+	public interface Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>
+		extends
 		Consumers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, @Container O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
+			I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14,
+			@Container O out);
 
 		@Override
-		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final O out)
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
+			final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9,
+			final I10 in10, final I11 in11, final I12 in12, final I13 in13,
+			final I14 in14, final O out)
 		{
-			compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, out);
+			compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
+				in13, in14, out);
 		}
 	}
 
 	@FunctionalInterface
-	public interface Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> extends
+	public interface Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>
+		extends
 		Consumers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, @Container O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
+			I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15,
+			@Container O out);
 
 		@Override
-		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final I15 in15, final O out)
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
+			final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9,
+			final I10 in10, final I11 in11, final I12 in12, final I13 in13,
+			final I14 in14, final I15 in15, final O out)
 		{
-			compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, out);
+			compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
+				in13, in14, in15, out);
 		}
 	}
 
 	@FunctionalInterface
-	public interface Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> extends
+	public interface Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>
+		extends
 		Consumers.Arity17<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16, @Container O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
+			I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15,
+			I16 in16, @Container O out);
 
 		@Override
-		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final I15 in15, final I16 in16, final O out)
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
+			final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9,
+			final I10 in10, final I11 in11, final I12 in12, final I13 in13,
+			final I14 in14, final I15 in15, final I16 in16, final O out)
 		{
-			compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16, out);
+			compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
+				in13, in14, in15, in16, out);
 		}
 	}
 }

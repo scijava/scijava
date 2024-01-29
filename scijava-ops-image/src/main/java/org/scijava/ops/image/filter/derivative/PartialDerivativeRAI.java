@@ -5,13 +5,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -46,15 +46,14 @@ import org.scijava.ops.spi.OpDependency;
 /**
  * Calculates the derivative (with sobel kernel) of an image in a given
  * dimension.
- * 
- * @author Eike Heinz, University of Konstanz
  *
- * @param <T>
- *            type of input
- *@implNote op names='filter.partialDerivative'
+ * @author Eike Heinz, University of Konstanz
+ * @param <T> type of input
+ * @implNote op names='filter.partialDerivative'
  */
-public class PartialDerivativeRAI<T extends RealType<T>>
-		implements Computers.Arity2<RandomAccessibleInterval<T>, Integer, RandomAccessibleInterval<T>> {
+public class PartialDerivativeRAI<T extends RealType<T>> implements
+	Computers.Arity2<RandomAccessibleInterval<T>, Integer, RandomAccessibleInterval<T>>
+{
 
 	@OpDependency(name = "create.img")
 	private Function<RandomAccessibleInterval<T>, Img<T>> createRAI;
@@ -77,12 +76,17 @@ public class PartialDerivativeRAI<T extends RealType<T>>
 
 	// TODO: is there any way to speed this up?
 	@SuppressWarnings("unchecked")
-	public void setupConvolves(RandomAccessibleInterval<T> input, Integer dimension) {
-		RandomAccessibleInterval<T> kernel = sobelKernelCreator.apply(Util.getTypeFromInterval(input));
+	public void setupConvolves(RandomAccessibleInterval<T> input,
+		Integer dimension)
+	{
+		RandomAccessibleInterval<T> kernel = sobelKernelCreator.apply(Util
+			.getTypeFromInterval(input));
 
-		RandomAccessibleInterval<T> kernelA = Views.hyperSlice(Views.hyperSlice(kernel, 3, 0), 2, 0);
+		RandomAccessibleInterval<T> kernelA = Views.hyperSlice(Views.hyperSlice(
+			kernel, 3, 0), 2, 0);
 
-		RandomAccessibleInterval<T> kernelB = Views.hyperSlice(Views.hyperSlice(kernel, 3, 0), 2, 1);
+		RandomAccessibleInterval<T> kernelB = Views.hyperSlice(Views.hyperSlice(
+			kernel, 3, 0), 2, 1);
 
 		// add dimensions to kernel to rotate properly
 		if (input.numDimensions() > 2) {
@@ -107,13 +111,16 @@ public class PartialDerivativeRAI<T extends RealType<T>>
 			// HACK needs to be final so that the compiler can encapsulate it.
 			final RandomAccessibleInterval<T> finalKernelB = kernelB;
 			// FIXME hack
-			kernelBConvolveOp = (in, out) -> convolveOp.compute(in, finalKernelB, out);
-		} else {
+			kernelBConvolveOp = (in, out) -> convolveOp.compute(in, finalKernelB,
+				out);
+		}
+		else {
 			// rotate kernel B to dimension
 			for (int j = 0; j < input.numDimensions(); j++) {
 				if (j == dimension) {
 					dims[j] = 3;
-				} else {
+				}
+				else {
 					dims[j] = 1;
 				}
 			}
@@ -126,8 +133,10 @@ public class PartialDerivativeRAI<T extends RealType<T>>
 			}
 
 			// HACK needs to be final so that the compiler can encapsulate it.
-			final RandomAccessibleInterval<T> finalRotatedKernelB = Views.interval(rotatedKernelB, kernelInterval);
-			kernelBConvolveOp = (in, out) -> convolveOp.compute(in, finalRotatedKernelB, out);
+			final RandomAccessibleInterval<T> finalRotatedKernelB = Views.interval(
+				rotatedKernelB, kernelInterval);
+			kernelBConvolveOp = (in, out) -> convolveOp.compute(in,
+				finalRotatedKernelB, out);
 		}
 
 		dims = null;
@@ -137,7 +146,8 @@ public class PartialDerivativeRAI<T extends RealType<T>>
 		if (dimension != 0) {
 			// HACK needs to be final so that the compiler can encapsulate it.
 			final RandomAccessibleInterval<T> finalKernelA = kernelA;
-			kernelAConvolveOps[0] = (in, out) -> convolveOp.compute(in, finalKernelA, out);
+			kernelAConvolveOps[0] = (in, out) -> convolveOp.compute(in, finalKernelA,
+				out);
 		}
 		RandomAccessibleInterval<T> rotatedKernelA = kernelA;
 		for (int i = 1; i < input.numDimensions(); i++) {
@@ -146,7 +156,8 @@ public class PartialDerivativeRAI<T extends RealType<T>>
 				for (int j = 0; j < input.numDimensions(); j++) {
 					if (i == j) {
 						dims[j] = 3;
-					} else {
+					}
+					else {
 						dims[j] = 1;
 					}
 				}
@@ -157,8 +168,8 @@ public class PartialDerivativeRAI<T extends RealType<T>>
 
 				// HACK needs to be final so that the compiler can encapsulate it.
 				final RandomAccessibleInterval<T> finalRotatedKernelA = rotatedKernelA;
-				kernelAConvolveOps[i] = (in, out) -> convolveOp.compute(in,
-						Views.interval(finalRotatedKernelA, kernelInterval), out);
+				kernelAConvolveOps[i] = (in, out) -> convolveOp.compute(in, Views
+					.interval(finalRotatedKernelA, kernelInterval), out);
 				rotatedKernelA = kernelA;
 			}
 		}
@@ -173,16 +184,20 @@ public class PartialDerivativeRAI<T extends RealType<T>>
 	 * @param output
 	 */
 	@Override
-	public void compute(RandomAccessibleInterval<T> input, final Integer dimension,
-			RandomAccessibleInterval<T> output) {
+	public void compute(RandomAccessibleInterval<T> input,
+		final Integer dimension, RandomAccessibleInterval<T> output)
+	{
 		setupConvolves(input, dimension);
 		RandomAccessibleInterval<T> in = input;
 		for (int i = input.numDimensions() - 1; i >= 0; i--) {
 			RandomAccessibleInterval<T> derivative = createRAI.apply(input);
 			if (dimension == i) {
-				kernelBConvolveOp.compute(Views.interval(Views.extendMirrorDouble(in), input), derivative);
-			} else {
-				kernelAConvolveOps[i].compute(Views.interval(Views.extendMirrorDouble(in), input), derivative);
+				kernelBConvolveOp.compute(Views.interval(Views.extendMirrorDouble(in),
+					input), derivative);
+			}
+			else {
+				kernelAConvolveOps[i].compute(Views.interval(Views.extendMirrorDouble(
+					in), input), derivative);
 			}
 			in = derivative;
 		}

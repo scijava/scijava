@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -37,18 +37,18 @@ import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * Op to calculate the {@code stats.geometricMean} using
- * {@code stats.size} and {@code stats.sumOfLogs}.
- * 
+ * Op to calculate the {@code stats.geometricMean} using {@code stats.size} and
+ * {@code stats.sumOfLogs}.
+ *
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
- * @param <I>
- *            input type
- * @param <O>
- *            output type
- *@implNote op names='stats.geometricMean'
+ * @param <I> input type
+ * @param <O> output type
+ * @implNote op names='stats.geometricMean'
  */
-public class DefaultGeometricMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
+public class DefaultGeometricMean<I extends RealType<I>, O extends RealType<O>>
+	implements Computers.Arity1<RandomAccessibleInterval<I>, O>
+{
 
 	@OpDependency(name = "stats.size")
 	private Computers.Arity1<RandomAccessibleInterval<I>, O> sizeComputer;
@@ -70,8 +70,10 @@ public class DefaultGeometricMean<I extends RealType<I>, O extends RealType<O>> 
 		sumOfLogsComputer.compute(input, sumOfLogs);
 
 		if (size.getRealDouble() != 0) {
-			output.setReal(Math.exp(sumOfLogs.getRealDouble() / size.getRealDouble()));
-		} else {
+			output.setReal(Math.exp(sumOfLogs.getRealDouble() / size
+				.getRealDouble()));
+		}
+		else {
 			output.setReal(0);
 		}
 

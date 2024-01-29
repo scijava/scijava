@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -43,7 +43,7 @@ import org.scijava.progress.Progress;
  * it does not implement the Op type it purports to be. The implementation of
  * that method is left to implementations of this class (and is necessary for
  * the correct behavior of {@link #asOpType()}).
- * 
+ *
  * @author Gabriel Selzer
  * @param <T> the functional {@link Type} of the Op
  */
@@ -55,7 +55,9 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 
 	public boolean record = true;
 
-	public AbstractRichOp(final OpInstance<T> instance, final OpEnvironment env, final Hints hints) {
+	public AbstractRichOp(final OpInstance<T> instance, final OpEnvironment env,
+		final Hints hints)
+	{
 		this.instance = instance;
 		this.env = env;
 		this.hints = hints;
@@ -72,6 +74,7 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 	public Hints hints() {
 		return hints;
 	}
+
 	@Override
 	public OpInstance<T> instance() {
 		return instance;

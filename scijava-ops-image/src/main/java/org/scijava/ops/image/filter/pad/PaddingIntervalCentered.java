@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -41,7 +41,7 @@ import net.imglib2.type.numeric.ComplexType;
 /**
  * Op used to calculate and return a centered padding interval given an input
  * RAI and the desired padded dimensions
- * 
+ *
  * @author bnorthan
  * @param <T>
  * @param <I>
@@ -49,7 +49,8 @@ import net.imglib2.type.numeric.ComplexType;
  * @implNote op names='filter.padIntervalCentered', priority='100.'
  */
 public class PaddingIntervalCentered<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends Interval>
-		implements BiFunction<I, Dimensions, O> {
+	implements BiFunction<I, Dimensions, O>
+{
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -65,7 +66,8 @@ public class PaddingIntervalCentered<T extends ComplexType<T>, I extends RandomA
 		final long[] paddedSize = new long[paddedDimensions.numDimensions()];
 		paddedDimensions.dimensions(paddedSize);
 
-		O inputInterval = (O) FFTMethods.paddingIntervalCentered(input, FinalDimensions.wrap(paddedSize));
+		O inputInterval = (O) FFTMethods.paddingIntervalCentered(input,
+			FinalDimensions.wrap(paddedSize));
 
 		return inputInterval;
 	}

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.engine.reduce;
 
 import org.junit.jupiter.api.Assertions;
@@ -42,7 +43,8 @@ import org.scijava.ops.spi.Nullable;
 import java.util.Arrays;
 
 public class NullableArgumentsTest extends AbstractTestEnvironment //
-		 implements OpCollection{
+	implements OpCollection
+{
 
 	@BeforeAll
 	public static void addNeededOps() {
@@ -50,24 +52,26 @@ public class NullableArgumentsTest extends AbstractTestEnvironment //
 		ops.register(new TestOpNullableArg());
 	}
 
-
 	@Test
 	public void testClassWithTwoNullables() {
-		Double sum = ops.op("test.nullableAdd").arity3().input(2.0, 5.0, 7.0).outType(Double.class).apply();
+		Double sum = ops.op("test.nullableAdd").arity3().input(2.0, 5.0, 7.0)
+			.outType(Double.class).apply();
 		Double expected = 14.0;
 		Assertions.assertEquals(expected, sum);
 	}
 
 	@Test
 	public void testClassWithOneNullable() {
-		Double sum = ops.op("test.nullableAdd").arity2().input(2.0, 5.0).outType(Double.class).apply();
+		Double sum = ops.op("test.nullableAdd").arity2().input(2.0, 5.0).outType(
+			Double.class).apply();
 		Double expected = 7.0;
 		Assertions.assertEquals(expected, sum);
 	}
 
 	@Test
 	public void testClassWithoutNullables() {
-		Double sum = ops.op("test.nullableAdd").arity1().input(2.0).outType(Double.class).apply();
+		Double sum = ops.op("test.nullableAdd").arity1().input(2.0).outType(
+			Double.class).apply();
 		Double expected = 2.0;
 		Assertions.assertEquals(expected, sum);
 	}
@@ -97,20 +101,21 @@ public class NullableArgumentsTest extends AbstractTestEnvironment //
 
 	@Test
 	public void testFieldWithTwoNullables() {
-		Double[] d1 = {2.0};
-		Double[] d2 = {5.0};
-		Double[] d3 = {7.0};
-		Double[] o = {50.0};
-		ops.op("test.nullableMultiply").arity3().input(d1, d2, d3).output(o).compute();
+		Double[] d1 = { 2.0 };
+		Double[] d2 = { 5.0 };
+		Double[] d3 = { 7.0 };
+		Double[] o = { 50.0 };
+		ops.op("test.nullableMultiply").arity3().input(d1, d2, d3).output(o)
+			.compute();
 		Double expected = 70.0;
 		Assertions.assertEquals(expected, o[0]);
 	}
 
 	@Test
 	public void testFieldWithOneNullable() {
-		Double[] d1 = {2.0};
-		Double[] d2 = {5.0};
-		Double[] o = {50.0};
+		Double[] d1 = { 2.0 };
+		Double[] d2 = { 5.0 };
+		Double[] o = { 50.0 };
 		ops.op("test.nullableMultiply").arity2().input(d1, d2).output(o).compute();
 		Double expected = 10.0;
 		Assertions.assertEquals(expected, o[0]);
@@ -118,16 +123,17 @@ public class NullableArgumentsTest extends AbstractTestEnvironment //
 
 	@Test
 	public void testFieldWithoutNullables() {
-		Double[] d1 = {2.0};
-		Double[] o = {50.0};
+		Double[] d1 = { 2.0 };
+		Double[] o = { 50.0 };
 		ops.op("test.nullableMultiply").arity1().input(d1).output(o).compute();
 		Double expected = 2.0;
 		Assertions.assertEquals(expected, o[0]);
 	}
 
 	@OpMethod(names = "test.nullableConcatenate", type = Functions.Arity3.class)
-	public static String nullableMethod(String in1, @Nullable
-	String in2, @Nullable String in3) {
+	public static String nullableMethod(String in1, @Nullable String in2,
+		@Nullable String in3)
+	{
 		if (in2 == null) in2 = "";
 		if (in3 == null) in3 = "";
 		return in1.concat(in2).concat(in3);
@@ -135,21 +141,24 @@ public class NullableArgumentsTest extends AbstractTestEnvironment //
 
 	@Test
 	public void testMethodWithTwoNullables() {
-		String out = ops.op("test.nullableConcatenate").arity3().input("a", "b", "c").outType(String.class).apply();
+		String out = ops.op("test.nullableConcatenate").arity3().input("a", "b",
+			"c").outType(String.class).apply();
 		String expected = "abc";
 		Assertions.assertEquals(expected, out);
 	}
 
 	@Test
 	public void testMethodWithOneNullable() {
-		String out = ops.op("test.nullableConcatenate").arity2().input("a", "b").outType(String.class).apply();
+		String out = ops.op("test.nullableConcatenate").arity2().input("a", "b")
+			.outType(String.class).apply();
 		String expected = "ab";
 		Assertions.assertEquals(expected, out);
 	}
 
 	@Test
 	public void testMethodWithoutNullables() {
-		String out = ops.op("test.nullableConcatenate").arity1().input("a").outType(String.class).apply();
+		String out = ops.op("test.nullableConcatenate").arity1().input("a").outType(
+			String.class).apply();
 		String expected = "a";
 		Assertions.assertEquals(expected, out);
 	}

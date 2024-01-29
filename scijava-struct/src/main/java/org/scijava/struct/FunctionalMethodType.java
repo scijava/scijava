@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,21 +26,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.struct;
 
 import java.lang.reflect.Type;
 
-
 /**
  * Wrapper to pair a type of a method signature with its {@link ItemIO}.
- * 
+ *
  * @author David Kolb
  */
 public class FunctionalMethodType {
 
 	private final Type type;
 	private final ItemIO itemIO;
-	
+
 	public FunctionalMethodType(final Type type, final ItemIO itemIO) {
 		this.type = type;
 		this.itemIO = itemIO;
@@ -53,10 +53,11 @@ public class FunctionalMethodType {
 	public Type type() {
 		return this.type;
 	}
-	public ItemIO itemIO(){
+
+	public ItemIO itemIO() {
 		return this.itemIO;
 	}
-	
+
 	@Override
 	public String toString() {
 		return itemIO + " : " + type.getTypeName();

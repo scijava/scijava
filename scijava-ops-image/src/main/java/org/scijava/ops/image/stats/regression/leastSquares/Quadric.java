@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -53,11 +53,9 @@ import org.ojalgo.random.Deterministic;
  * </p>
  *
  * @author Richard Domander (Royal Veterinary College, London)
- *@implNote op names='stats.leastSquares'
+ * @implNote op names='stats.leastSquares'
  */
-public class Quadric implements
-	Function<Collection<Vector3d>, Matrix4d> 
-{
+public class Quadric implements Function<Collection<Vector3d>, Matrix4d> {
 
 	/**
 	 * Minimum number of points in the input collection needed to fit a quadric
@@ -73,8 +71,8 @@ public class Quadric implements
 	 */
 	@Override
 	public Matrix4d apply(final Collection<Vector3d> points) {
-		if (points.size() < MIN_DATA)
-			throw new IllegalArgumentException("Must pass more points in order to fit a quadric equation!");
+		if (points.size() < MIN_DATA) throw new IllegalArgumentException(
+			"Must pass more points in order to fit a quadric equation!");
 		final double[] vector = solveVector(points);
 		return toQuadricMatrix(vector);
 	}

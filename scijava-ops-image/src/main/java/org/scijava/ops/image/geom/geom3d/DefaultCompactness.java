@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -38,16 +38,16 @@ import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * Generic implementation of {@link org.scijava.ops.image.Ops.Geometric.Compactness}.
- * 
- * Based on http://www.sciencedirect.com/science/article/pii/S003132030700324X.
- * 
- * In the paper compactness is defined as area^3/volume^2. For a sphere this is
+ * Generic implementation of
+ * {@link org.scijava.ops.image.Ops.Geometric.Compactness}. Based on
+ * http://www.sciencedirect.com/science/article/pii/S003132030700324X. In the
+ * paper compactness is defined as area^3/volume^2. For a sphere this is
  * minimized and results in 36*PI. To get values between (0,1] we use
  * (36*PI)/(area^3/volume^2).
- * 
+ *
  * @author Tim-Oliver Buchholz (University of Konstanz)
- * @implNote op names='geom.compactness', label='Geometric (3D): Compactness', priority='10000.'
+ * @implNote op names='geom.compactness', label='Geometric (3D): Compactness',
+ *           priority='10000.'
  */
 public class DefaultCompactness implements Computers.Arity1<Mesh, DoubleType> {
 

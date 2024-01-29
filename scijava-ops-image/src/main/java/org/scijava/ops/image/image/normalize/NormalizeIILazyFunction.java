@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -38,19 +38,19 @@ import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * Normalizes an {@link RandomAccessibleInterval} given its minimum and maximum to
- * another range defined by minimum and maximum.
- * 
- * TODO: Should this be a scale op?
- * 
+ * Normalizes an {@link RandomAccessibleInterval} given its minimum and maximum
+ * to another range defined by minimum and maximum. TODO: Should this be a scale
+ * op?
+ *
  * @author Christian Dietz (University of Konstanz)
  * @author Leon Yang
  * @param <I> - the type of the input image
  * @param <O> - the type of the output image
- *@implNote op names='image.normalize'
+ * @implNote op names='image.normalize'
  */
-public class NormalizeIILazyFunction<I extends RealType<I>>
-		implements Function<RandomAccessibleInterval<I>, RandomAccessibleInterval<I>> {
+public class NormalizeIILazyFunction<I extends RealType<I>> implements
+	Function<RandomAccessibleInterval<I>, RandomAccessibleInterval<I>>
+{
 
 	@OpDependency(name = "create.img")
 	private Function<RandomAccessibleInterval<I>, RandomAccessibleInterval<I>> createFunc;

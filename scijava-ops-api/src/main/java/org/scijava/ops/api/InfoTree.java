@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -38,7 +38,6 @@ import java.util.stream.Collectors;
 /**
  * A data structure wrangling a hierarchy of {@link OpInfo}s, created for every
  * Op match and called upon to instantiate any number of {@link OpInstance}s.
- * 
  * This {@link InfoTree} contains:
  * <ol>
  * <li>An {@link OpInfo} describing the Op</li>
@@ -141,7 +140,7 @@ public class InfoTree {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder(info().implementationName());
-		for (var dep: dependencies()) {
+		for (var dep : dependencies()) {
 			sb.append(DEPENDENCY_DELIM).append(dep.toString().replace("\n", "\n\t"));
 		}
 		return sb.toString();

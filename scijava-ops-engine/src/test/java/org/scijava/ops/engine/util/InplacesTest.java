@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -46,12 +46,12 @@ public class InplacesTest extends AbstractTestEnvironment {
 		ops.register(new Add());
 	}
 
-	private static Nil<double[]> nilDoubleArray = new Nil<>() {
-	};
+	private static Nil<double[]> nilDoubleArray = new Nil<>() {};
 
 	@Test
 	public void testUnaryInplaces() {
-		Inplaces.Arity1<double[]> inplaceSqrt = OpBuilder.matchInplace(ops, "math.sqrt", nilDoubleArray);
+		Inplaces.Arity1<double[]> inplaceSqrt = OpBuilder.matchInplace(ops,
+			"math.sqrt", nilDoubleArray);
 		final double[] a1 = { 4, 100, 36 };
 		inplaceSqrt.mutate(a1);
 		assert arrayEquals(a1, 2.0, 10.0, 6.0);
@@ -59,8 +59,8 @@ public class InplacesTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testBinaryInplaces() {
-		final Inplaces.Arity2_1<double[], double[]> inplaceAdd = OpBuilder.matchInplace2_1(ops, "math.add", nilDoubleArray,
-				nilDoubleArray);
+		final Inplaces.Arity2_1<double[], double[]> inplaceAdd = OpBuilder
+			.matchInplace2_1(ops, "math.add", nilDoubleArray, nilDoubleArray);
 		final double[] a1 = { 3, 5, 7 };
 		final double[] a2 = { 2, 4, 9 };
 		inplaceAdd.mutate(a1, a2);

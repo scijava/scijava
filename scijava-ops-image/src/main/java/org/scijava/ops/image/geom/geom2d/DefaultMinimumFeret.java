@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -45,11 +45,13 @@ import org.scijava.ops.spi.OpDependency;
 
 /**
  * Minimum Feret of a polygon.
- * 
+ *
  * @author Tim-Oliver Buchholz, University of Konstanz
- *@implNote op names='geom.minimumFeret'
+ * @implNote op names='geom.minimumFeret'
  */
-public class DefaultMinimumFeret implements Function<Polygon2D, Pair<RealLocalizable, RealLocalizable>> {
+public class DefaultMinimumFeret implements
+	Function<Polygon2D, Pair<RealLocalizable, RealLocalizable>>
+{
 
 	@OpDependency(name = "geom.convexHull")
 	private Function<Polygon2D, Polygon2D> function;
@@ -62,7 +64,8 @@ public class DefaultMinimumFeret implements Function<Polygon2D, Pair<RealLocaliz
 	 */
 	@Override
 	public Pair<RealLocalizable, RealLocalizable> apply(Polygon2D input) {
-		final List<? extends RealLocalizable> points = GeomUtils.vertices(function.apply(input));
+		final List<? extends RealLocalizable> points = GeomUtils.vertices(function
+			.apply(input));
 
 		double distance = Double.POSITIVE_INFINITY;
 		RealLocalizable p0 = points.get(0);
@@ -75,20 +78,21 @@ public class DefaultMinimumFeret implements Function<Polygon2D, Pair<RealLocaliz
 			final RealLocalizable lineStart = points.get(i);
 			final RealLocalizable lineEnd = points.get(i + 1);
 			tmpDist = 0;
-			final Line l = new Line(new Vector2D(lineStart.getDoublePosition(0), lineStart.getDoublePosition(1)),
-					new Vector2D(lineEnd.getDoublePosition(0), lineEnd.getDoublePosition(1)), 10e-12);
+			final Line l = new Line(new Vector2D(lineStart.getDoublePosition(0),
+				lineStart.getDoublePosition(1)), new Vector2D(lineEnd.getDoublePosition(
+					0), lineEnd.getDoublePosition(1)), 10e-12);
 
 			for (int j = 0; j < points.size(); j++) {
 				if (j != i && j != i + 1) {
 					final RealLocalizable ttmpP0 = points.get(j);
 
-					final double tmp = l
-							.distance(new Vector2D(ttmpP0.getDoublePosition(0), ttmpP0.getDoublePosition(1)));
+					final double tmp = l.distance(new Vector2D(ttmpP0.getDoublePosition(
+						0), ttmpP0.getDoublePosition(1)));
 
 					if (tmp > tmpDist) {
 						tmpDist = tmp;
-						final Vector2D vp = (Vector2D) l
-								.project(new Vector2D(ttmpP0.getDoublePosition(0), ttmpP0.getDoublePosition(1)));
+						final Vector2D vp = (Vector2D) l.project(new Vector2D(ttmpP0
+							.getDoublePosition(0), ttmpP0.getDoublePosition(1)));
 						tmpP0 = new RealPoint(vp.getX(), vp.getY());
 						tmpP1 = ttmpP0;
 					}
@@ -103,19 +107,21 @@ public class DefaultMinimumFeret implements Function<Polygon2D, Pair<RealLocaliz
 
 		final RealLocalizable lineStart = points.get(points.size() - 1);
 		final RealLocalizable lineEnd = points.get(0);
-		final Line l = new Line(new Vector2D(lineStart.getDoublePosition(0), lineStart.getDoublePosition(1)),
-				new Vector2D(lineEnd.getDoublePosition(0), lineEnd.getDoublePosition(1)), 10e-12);
+		final Line l = new Line(new Vector2D(lineStart.getDoublePosition(0),
+			lineStart.getDoublePosition(1)), new Vector2D(lineEnd.getDoublePosition(
+				0), lineEnd.getDoublePosition(1)), 10e-12);
 		tmpDist = 0;
 		for (int j = 0; j < points.size(); j++) {
 			if (j != points.size() - 1 && j != 0 + 1) {
 				final RealLocalizable ttmpP0 = points.get(j);
 
-				final double tmp = l.distance(new Vector2D(ttmpP0.getDoublePosition(0), ttmpP0.getDoublePosition(1)));
+				final double tmp = l.distance(new Vector2D(ttmpP0.getDoublePosition(0),
+					ttmpP0.getDoublePosition(1)));
 
 				if (tmp > tmpDist) {
 					tmpDist = tmp;
-					final Vector2D vp = (Vector2D) l
-							.project(new Vector2D(ttmpP0.getDoublePosition(0), ttmpP0.getDoublePosition(1)));
+					final Vector2D vp = (Vector2D) l.project(new Vector2D(ttmpP0
+						.getDoublePosition(0), ttmpP0.getDoublePosition(1)));
 					tmpP0 = new RealPoint(vp.getX(), vp.getY());
 					tmpP1 = ttmpP0;
 				}

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -36,15 +36,16 @@ import org.scijava.ops.spi.Op;
 
 /**
  * Op to calculate the {@code stats.min}.
- * 
+ *
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
  * @author Stefan Helfrich (University of Konstanz)
- * @param <T>
- *            input type
- *@implNote op names='stats.min'
+ * @param <T> input type
+ * @implNote op names='stats.min'
  */
-public class IterableMin<T extends RealType<T>> implements Computers.Arity1<Iterable<T>, T> {
+public class IterableMin<T extends RealType<T>> implements
+	Computers.Arity1<Iterable<T>, T>
+{
 
 	/**
 	 * TODO
@@ -57,7 +58,6 @@ public class IterableMin<T extends RealType<T>> implements Computers.Arity1<Iter
 		// Re-use output to compare against
 		output.setReal(output.getMaxValue());
 		for (final T in : input)
-			if (output.compareTo(in) > 0)
-				output.set(in);
+			if (output.compareTo(in) > 0) output.set(in);
 	}
 }

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -38,17 +38,17 @@ import edu.mines.jtk.util.Parallel;
  * parallel with other {@link Chunk}s. The elements of the subproblem are
  * identified by enumerating the original problem.
  * </p>
- * 
+ *
  * @author Christian Dietz (University of Konstanz)
  * @see ChunkerOp
  * @see Parallel
  */
 public interface Chunk {
-	
+
 	/**
 	 * Solve the subproblem for the element at startIndex, increase the index by
 	 * the given stepSize and repeat numSteps.
-	 * 
+	 *
 	 * @param startIndex zero based index that identifies the first element of
 	 *          this subproblem (w.r.t. the global problem enumeration)
 	 * @param stepSize the step-size between two consecutive elements

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.image.watershed;
 
 import java.util.ArrayList;
@@ -81,16 +82,15 @@ import org.scijava.ops.spi.OpDependency;
  * Output is a labeling of the different catchment basins.
  * </p>
  *
- * @param <T>
- *            element type of input
- * @param <B>
- *            element type of mask
- *
+ * @param <T> element type of input
+ * @param <B> element type of mask
  * @author Simon Schmid (University of Konstanz)
- *@implNote op names='image.watershed'
+ * @implNote op names='image.watershed'
  */
-public class Watershed<T extends RealType<T>, B extends BooleanType<B>> implements
-		Computers.Arity4<RandomAccessibleInterval<T>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> {
+public class Watershed<T extends RealType<T>, B extends BooleanType<B>>
+	implements
+	Computers.Arity4<RandomAccessibleInterval<T>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>>
+{
 
 	@OpDependency(name = "create.img")
 	BiFunction<Dimensions, IntType, RandomAccessibleInterval<IntType>> imgCreator;
@@ -114,12 +114,11 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>> implemen
 	 * @param outputLabeling
 	 */
 	@Override
-	public void compute(
-			final RandomAccessibleInterval<T> in, //
-			final Boolean useEightConnectivity, //
-			final Boolean drawWatersheds, //
-			@Nullable final RandomAccessibleInterval<B> mask, //
-			final ImgLabeling<Integer, IntType> outputLabeling //
+	public void compute(final RandomAccessibleInterval<T> in, //
+		final Boolean useEightConnectivity, //
+		final Boolean drawWatersheds, //
+		@Nullable final RandomAccessibleInterval<B> mask, //
+		final ImgLabeling<Integer, IntType> outputLabeling //
 	) {
 		final RandomAccess<T> raIn = in.randomAccess();
 
@@ -144,13 +143,14 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>> implemen
 				c.next();
 				imiList.add(IntervalIndexer.positionToIndex(c, in));
 			}
-		} else {
+		}
+		else {
 			for (long i = 0; i < numPixels; i++) {
 				imiList.add(i);
 			}
 		}
 		final Long[] imi = imiList.toArray(new Long[imiList.size()]);
-		
+
 		/*
 		 * Sort the pixels of imi in the increasing order of their grey value
 		 * (only the pixel indices are stored)
@@ -163,12 +163,14 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>> implemen
 		});
 
 		// lab and dist store the values calculated after each phase
-		final RandomAccessibleInterval<IntType> lab = imgCreator.apply(in, new IntType());
+		final RandomAccessibleInterval<IntType> lab = imgCreator.apply(in,
+			new IntType());
 		// extend border to be able to do a quick check, if a voxel is inside
-		final ExtendedRandomAccessibleInterval<IntType, RandomAccessibleInterval<IntType>> labExt = Views
-				.extendBorder(lab);
+		final ExtendedRandomAccessibleInterval<IntType, RandomAccessibleInterval<IntType>> labExt =
+			Views.extendBorder(lab);
 		final OutOfBounds<IntType> raLab = labExt.randomAccess();
-		final RandomAccessibleInterval<IntType> dist = imgCreator.apply(in, new IntType());
+		final RandomAccessibleInterval<IntType> dist = imgCreator.apply(in,
+			new IntType());
 		final RandomAccess<IntType> raDist = dist.randomAccess();
 
 		// initial values
@@ -183,11 +185,14 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>> implemen
 		final Shape shape;
 		if (useEightConnectivity) {
 			shape = new RectangleShape(1, true);
-		} else {
+		}
+		else {
 			shape = new DiamondShape(1);
 		}
-		final RandomAccessible<Neighborhood<T>> neighborhoods = shape.neighborhoodsRandomAccessible(in);
-		final RandomAccess<Neighborhood<T>> raNeighbor = neighborhoods.randomAccess();
+		final RandomAccessible<Neighborhood<T>> neighborhoods = shape
+			.neighborhoodsRandomAccessible(in);
+		final RandomAccess<Neighborhood<T>> raNeighbor = neighborhoods
+			.randomAccess();
 
 		/*
 		 * Start flooding
@@ -259,23 +264,27 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>> implemen
 							if (labq > 0) {
 								if (labp == MASK || labp == WSHED) {
 									labp = labq;
-								} else {
+								}
+								else {
 									if (labp != labq) {
 										labp = WSHED;
 									}
 								}
-							} else {
+							}
+							else {
 								if (labp == MASK) {
 									labp = WSHED;
 								}
 							}
 							raLab.setPosition(raNeighbor);
 							raLab.get().set(labp);
-						} else {
+						}
+						else {
 							if (labq == MASK && distq == 0) {
 								raDist.setPosition(posNeighbor);
 								raDist.get().set(current_dist + 1);
-								fifo.add(IntervalIndexer.positionToIndex(posNeighbor, dimensSizes));
+								fifo.add(IntervalIndexer.positionToIndex(posNeighbor,
+									dimensSizes));
 							}
 						}
 					}
@@ -307,7 +316,8 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>> implemen
 							neighborHood.localize(posNeighbor);
 							raLab.setPosition(posNeighbor);
 							if (!raLab.isOutOfBounds()) {
-								final long r = IntervalIndexer.positionToIndex(posNeighbor, dimensSizes);
+								final long r = IntervalIndexer.positionToIndex(posNeighbor,
+									dimensSizes);
 								if (raLab.get().get() == MASK) {
 									fifo.add(r);
 									raLab.get().set(current_label);
@@ -341,7 +351,8 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>> implemen
 			raLab.setPosition(cursorOut);
 			if (!maskValue) {
 				cursorOut.get().clear();
-			} else {
+			}
+			else {
 				if (!drawWatersheds && raLab.get().get() == WSHED) {
 					raNeighbor.setPosition(cursorOut);
 					final Cursor<T> neighborHood = raNeighbor.get().cursor();
@@ -358,10 +369,12 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>> implemen
 					}
 					if (newLab == WSHED) {
 						cursorOut.get().clear();
-					} else {
+					}
+					else {
 						cursorOut.get().add(newLab);
 					}
-				} else {
+				}
+				else {
 					cursorOut.get().add(raLab.get().get());
 				}
 			}
@@ -372,7 +385,8 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>> implemen
 		 */
 		if (outputLabeling != null) {
 			final Cursor<LabelingType<Integer>> cursor = outputLabeling.cursor();
-			final RandomAccess<LabelingType<Integer>> raOut = outputLabeling.randomAccess();
+			final RandomAccess<LabelingType<Integer>> raOut = outputLabeling
+				.randomAccess();
 			while (cursor.hasNext()) {
 				cursor.fwd();
 				raOut.setPosition(cursor);
@@ -384,4 +398,3 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>> implemen
 	}
 
 }
-

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -74,7 +74,7 @@ public final class GenericAssignability {
 	 * sense of empty angle brackets when a new object is created:
 	 *
 	 * <pre>
-	 * 
+	 *
 	 * List&lt;Integer&gt; listOfInts = new ArrayList&lt;&gt;();
 	 * </pre>
 	 *
@@ -184,9 +184,9 @@ public final class GenericAssignability {
 	}
 
 	/**
-	 * Finds the levels of casting between {@code origin} and
-	 * {@code dest}. Returns 0 if dest and origin are the same. Returns -1 if
-	 * dest is not assignable from origin.
+	 * Finds the levels of casting between {@code origin} and {@code dest}.
+	 * Returns 0 if dest and origin are the same. Returns -1 if dest is not
+	 * assignable from origin.
 	 */
 	public static int findCastLevels(final Class<?> dest, final Class<?> origin) {
 		if (dest.equals(origin)) return 0;
@@ -274,7 +274,7 @@ public final class GenericAssignability {
 	 * particularly common when using ops.run()) where the Function SHOULD NOT
 	 * NORMALLY MATCH UP but WE KNOW IT WILL BE SAFE TO ASSIGN. This method
 	 * attempts to tease those situations out as a last resort.
-	 * 
+	 *
 	 * @param destTypes - the array of Parameterized types of the OpInfo we called
 	 *          the matcher on (in the case of ops.run(), it is a Type array of
 	 *          the types of the args we passed through.)
@@ -472,14 +472,15 @@ public final class GenericAssignability {
 		if (superInferFrom instanceof ParameterizedType) {
 			ParameterizedType paramInferFrom = (ParameterizedType) superInferFrom;
 			if (!Types.isRecursive(paramInferFrom)) {
-				inferTypeVariables(type.getActualTypeArguments(),
-						paramInferFrom.getActualTypeArguments(), typeMappings, false);
-			} else {
+				inferTypeVariables(type.getActualTypeArguments(), paramInferFrom
+					.getActualTypeArguments(), typeMappings, false);
+			}
+			else {
 				// Recursively parameterized types will cause infinite recursion if we
 				// naively recurse the type inference. Instead we simply continue with
 				// the raw type.
-				inferTypeVariables(type.getActualTypeArguments(),
-						new Type[]{paramInferFrom.getRawType()}, typeMappings, false);
+				inferTypeVariables(type.getActualTypeArguments(), new Type[] {
+					paramInferFrom.getRawType() }, typeMappings, false);
 			}
 		}
 		else if (superInferFrom instanceof Class) {
@@ -499,7 +500,9 @@ public final class GenericAssignability {
 			// edge case 1: if inferFrom is an Object, superInferFrom will be null
 			// when type is some interface.
 			if (Object.class.equals(inferFrom) ||
-					(inferFrom instanceof TypeVariable && Object.class.equals(((TypeVariable<?>) inferFrom).getBounds()[0]))) {
+				(inferFrom instanceof TypeVariable && Object.class.equals(
+					((TypeVariable<?>) inferFrom).getBounds()[0])))
+			{
 				mapTypeVarsToAny(type, typeMappings);
 				return;
 			}

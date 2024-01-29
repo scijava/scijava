@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -45,17 +45,19 @@ import org.scijava.ops.spi.OpField;
 /**
  * Tests the adaptation of {@link Computers} running on a type into
  * {@link Computers} running on arrays of that type.
- * 
+ *
  * @author Gabriel Selzer
  */
-public class ComputerToArraysTest extends AbstractTestEnvironment implements OpCollection{
+public class ComputerToArraysTest extends AbstractTestEnvironment implements
+	OpCollection
+{
 
 	@BeforeAll
 	public static void addNeededOps() {
 		ops.register(new ComputerToArraysTest());
 		ops.register(new ComputerToArrays());
 	}
-	
+
 	/**
 	 * @author Gabriel Selzer
 	 */
@@ -79,241 +81,377 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements OpC
 			return number;
 		}
 	}
-	
+
 	@OpField(names = "test.liftArrayC")
-	public final Computers.Arity0<NumericalThing> alterThing0 = (out) -> {out.setNumber(0);};
+	public final Computers.Arity0<NumericalThing> alterThing0 = (out) -> {
+		out.setNumber(0);
+	};
 
 	@Test
 	public void testComputer0ToArrays() {
-		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
-		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
+		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
+			new NumericalThing(2) };
+		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
+			new NumericalThing() };
 		ops.op("test.liftArrayC").arity0().output(output).compute();
 
-		for(int i = 0; i < output.length; i++) {
+		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(0 * i, output[i].getNumber());
 		}
 	}
 
 	@OpField(names = "test.liftArrayC")
-	public final Computers.Arity1<NumericalThing, NumericalThing> alterThing1 = (in, out) -> {out.setNumber(in.getNumber());};
+	public final Computers.Arity1<NumericalThing, NumericalThing> alterThing1 = (
+		in, out) -> {
+		out.setNumber(in.getNumber());
+	};
 
 	@Test
 	public void testComputer1ToArrays() {
-		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
-		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
+		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
+			new NumericalThing(2) };
+		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
+			new NumericalThing() };
 		ops.op("test.liftArrayC").arity1().input(input).output(output).compute();
 
-		for(int i = 0; i < output.length; i++) {
+		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(1 * i, output[i].getNumber());
 		}
 	}
 
 	@OpField(names = "test.liftArrayC")
-	public final Computers.Arity2<NumericalThing, NumericalThing, NumericalThing> alterThing2 = (in1, in2, out) -> {out.setNumber(in1.getNumber() + in2.getNumber());};
+	public final Computers.Arity2<NumericalThing, NumericalThing, NumericalThing> alterThing2 =
+		(in1, in2, out) -> {
+			out.setNumber(in1.getNumber() + in2.getNumber());
+		};
 
 	@Test
 	public void testComputer2ToArrays() {
-		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
-		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").arity2().input(input, input).output(output).compute();
+		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
+			new NumericalThing(2) };
+		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
+			new NumericalThing() };
+		ops.op("test.liftArrayC").arity2().input(input, input).output(output)
+			.compute();
 
-		for(int i = 0; i < output.length; i++) {
+		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(2 * i, output[i].getNumber());
 		}
 	}
 
 	@OpField(names = "test.liftArrayC")
-	public final Computers.Arity3<NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing3 = (in1, in2, in3, out) -> {out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber());};
+	public final Computers.Arity3<NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing3 =
+		(in1, in2, in3, out) -> {
+			out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber());
+		};
 
 	@Test
 	public void testComputer3ToArrays() {
-		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
-		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").arity3().input(input, input, input).output(output).compute();
+		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
+			new NumericalThing(2) };
+		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
+			new NumericalThing() };
+		ops.op("test.liftArrayC").arity3().input(input, input, input).output(output)
+			.compute();
 
-		for(int i = 0; i < output.length; i++) {
+		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(3 * i, output[i].getNumber());
 		}
 	}
 
 	@OpField(names = "test.liftArrayC")
-	public final Computers.Arity4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing4 = (in1, in2, in3, in4, out) -> {out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber());};
+	public final Computers.Arity4<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing4 =
+		(in1, in2, in3, in4, out) -> {
+			out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4
+				.getNumber());
+		};
 
 	@Test
 	public void testComputer4ToArrays() {
-		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
-		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").arity4().input(input, input, input, input).output(output).compute();
+		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
+			new NumericalThing(2) };
+		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
+			new NumericalThing() };
+		ops.op("test.liftArrayC").arity4().input(input, input, input, input).output(
+			output).compute();
 
-		for(int i = 0; i < output.length; i++) {
+		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(4 * i, output[i].getNumber());
 		}
 	}
 
 	@OpField(names = "test.liftArrayC")
-	public final Computers.Arity5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing5 = (in1, in2, in3, in4, in5, out) -> {out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber());};
+	public final Computers.Arity5<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing5 =
+		(in1, in2, in3, in4, in5, out) -> {
+			out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4
+				.getNumber() + in5.getNumber());
+		};
 
 	@Test
 	public void testComputer5ToArrays() {
-		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
-		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").arity5().input(input, input, input, input, input).output(output).compute();
+		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
+			new NumericalThing(2) };
+		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
+			new NumericalThing() };
+		ops.op("test.liftArrayC").arity5().input(input, input, input, input, input)
+			.output(output).compute();
 
-		for(int i = 0; i < output.length; i++) {
+		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(5 * i, output[i].getNumber());
 		}
 	}
 
 	@OpField(names = "test.liftArrayC")
-	public final Computers.Arity6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing6 = (in1, in2, in3, in4, in5, in6, out) -> {out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber());};
+	public final Computers.Arity6<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing6 =
+		(in1, in2, in3, in4, in5, in6, out) -> {
+			out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4
+				.getNumber() + in5.getNumber() + in6.getNumber());
+		};
 
 	@Test
 	public void testComputer6ToArrays() {
-		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
-		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").arity6().input(input, input, input, input, input, input).output(output).compute();
+		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
+			new NumericalThing(2) };
+		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
+			new NumericalThing() };
+		ops.op("test.liftArrayC").arity6().input(input, input, input, input, input,
+			input).output(output).compute();
 
-		for(int i = 0; i < output.length; i++) {
+		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(6 * i, output[i].getNumber());
 		}
 	}
 
 	@OpField(names = "test.liftArrayC")
-	public final Computers.Arity7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing7 = (in1, in2, in3, in4, in5, in6, in7, out) -> {out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber());};
+	public final Computers.Arity7<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing7 =
+		(in1, in2, in3, in4, in5, in6, in7, out) -> {
+			out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4
+				.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber());
+		};
 
 	@Test
 	public void testComputer7ToArrays() {
-		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
-		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").arity7().input(input, input, input, input, input, input, input).output(output).compute();
+		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
+			new NumericalThing(2) };
+		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
+			new NumericalThing() };
+		ops.op("test.liftArrayC").arity7().input(input, input, input, input, input,
+			input, input).output(output).compute();
 
-		for(int i = 0; i < output.length; i++) {
+		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(7 * i, output[i].getNumber());
 		}
 	}
 
 	@OpField(names = "test.liftArrayC")
-	public final Computers.Arity8<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing8 = (in1, in2, in3, in4, in5, in6, in7, in8, out) -> {out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8.getNumber());};
+	public final Computers.Arity8<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing8 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, out) -> {
+			out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4
+				.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8
+					.getNumber());
+		};
 
 	@Test
 	public void testComputer8ToArrays() {
-		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
-		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").arity8().input(input, input, input, input, input, input, input, input).output(output).compute();
+		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
+			new NumericalThing(2) };
+		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
+			new NumericalThing() };
+		ops.op("test.liftArrayC").arity8().input(input, input, input, input, input,
+			input, input, input).output(output).compute();
 
-		for(int i = 0; i < output.length; i++) {
+		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(8 * i, output[i].getNumber());
 		}
 	}
 
 	@OpField(names = "test.liftArrayC")
-	public final Computers.Arity9<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing9 = (in1, in2, in3, in4, in5, in6, in7, in8, in9, out) -> {out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8.getNumber() + in9.getNumber());};
+	public final Computers.Arity9<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing9 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, out) -> {
+			out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4
+				.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8
+					.getNumber() + in9.getNumber());
+		};
 
 	@Test
 	public void testComputer9ToArrays() {
-		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
-		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").arity9().input(input, input, input, input, input, input, input, input, input).output(output).compute();
+		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
+			new NumericalThing(2) };
+		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
+			new NumericalThing() };
+		ops.op("test.liftArrayC").arity9().input(input, input, input, input, input,
+			input, input, input, input).output(output).compute();
 
-		for(int i = 0; i < output.length; i++) {
+		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(9 * i, output[i].getNumber());
 		}
 	}
 
 	@OpField(names = "test.liftArrayC")
-	public final Computers.Arity10<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10 = (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, out) -> {out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8.getNumber() + in9.getNumber() + in10.getNumber());};
+	public final Computers.Arity10<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing10 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, out) -> {
+			out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4
+				.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8
+					.getNumber() + in9.getNumber() + in10.getNumber());
+		};
 
 	@Test
 	public void testComputer10ToArrays() {
-		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
-		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").arity10().input(input, input, input, input, input, input, input, input, input, input).output(output).compute();
+		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
+			new NumericalThing(2) };
+		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
+			new NumericalThing() };
+		ops.op("test.liftArrayC").arity10().input(input, input, input, input, input,
+			input, input, input, input, input).output(output).compute();
 
-		for(int i = 0; i < output.length; i++) {
+		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(10 * i, output[i].getNumber());
 		}
 	}
 
 	@OpField(names = "test.liftArrayC")
-	public final Computers.Arity11<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11 = (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, out) -> {out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8.getNumber() + in9.getNumber() + in10.getNumber() + in11.getNumber());};
+	public final Computers.Arity11<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing11 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, out) -> {
+			out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4
+				.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8
+					.getNumber() + in9.getNumber() + in10.getNumber() + in11.getNumber());
+		};
 
 	@Test
 	public void testComputer11ToArrays() {
-		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
-		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").arity11().input(input, input, input, input, input, input, input, input, input, input, input).output(output).compute();
+		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
+			new NumericalThing(2) };
+		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
+			new NumericalThing() };
+		ops.op("test.liftArrayC").arity11().input(input, input, input, input, input,
+			input, input, input, input, input, input).output(output).compute();
 
-		for(int i = 0; i < output.length; i++) {
+		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(11 * i, output[i].getNumber());
 		}
 	}
 
 	@OpField(names = "test.liftArrayC")
-	public final Computers.Arity12<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12 = (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, out) -> {out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8.getNumber() + in9.getNumber() + in10.getNumber() + in11.getNumber() + in12.getNumber());};
+	public final Computers.Arity12<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing12 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, out) -> {
+			out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4
+				.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8
+					.getNumber() + in9.getNumber() + in10.getNumber() + in11.getNumber() +
+				in12.getNumber());
+		};
 
 	@Test
 	public void testComputer12ToArrays() {
-		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
-		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").arity12().input(input, input, input, input, input, input, input, input, input, input, input, input).output(output).compute();
+		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
+			new NumericalThing(2) };
+		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
+			new NumericalThing() };
+		ops.op("test.liftArrayC").arity12().input(input, input, input, input, input,
+			input, input, input, input, input, input, input).output(output).compute();
 
-		for(int i = 0; i < output.length; i++) {
+		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(12 * i, output[i].getNumber());
 		}
 	}
 
 	@OpField(names = "test.liftArrayC")
-	public final Computers.Arity13<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13 = (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, out) -> {out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8.getNumber() + in9.getNumber() + in10.getNumber() + in11.getNumber() + in12.getNumber() + in13.getNumber());};
+	public final Computers.Arity13<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing13 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13,
+			out) -> {
+			out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4
+				.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8
+					.getNumber() + in9.getNumber() + in10.getNumber() + in11.getNumber() +
+				in12.getNumber() + in13.getNumber());
+		};
 
 	@Test
 	public void testComputer13ToArrays() {
-		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
-		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").arity13().input(input, input, input, input, input, input, input, input, input, input, input, input, input).output(output).compute();
+		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
+			new NumericalThing(2) };
+		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
+			new NumericalThing() };
+		ops.op("test.liftArrayC").arity13().input(input, input, input, input, input,
+			input, input, input, input, input, input, input, input).output(output)
+			.compute();
 
-		for(int i = 0; i < output.length; i++) {
+		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(13 * i, output[i].getNumber());
 		}
 	}
 
 	@OpField(names = "test.liftArrayC")
-	public final Computers.Arity14<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14 = (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, out) -> {out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8.getNumber() + in9.getNumber() + in10.getNumber() + in11.getNumber() + in12.getNumber() + in13.getNumber() + in14.getNumber());};
+	public final Computers.Arity14<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing14 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			out) -> {
+			out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4
+				.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8
+					.getNumber() + in9.getNumber() + in10.getNumber() + in11.getNumber() +
+				in12.getNumber() + in13.getNumber() + in14.getNumber());
+		};
 
 	@Test
 	public void testComputer14ToArrays() {
-		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
-		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").arity14().input(input, input, input, input, input, input, input, input, input, input, input, input, input, input).output(output).compute();
+		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
+			new NumericalThing(2) };
+		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
+			new NumericalThing() };
+		ops.op("test.liftArrayC").arity14().input(input, input, input, input, input,
+			input, input, input, input, input, input, input, input, input).output(
+				output).compute();
 
-		for(int i = 0; i < output.length; i++) {
+		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(14 * i, output[i].getNumber());
 		}
 	}
 
 	@OpField(names = "test.liftArrayC")
-	public final Computers.Arity15<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15 = (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, out) -> {out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8.getNumber() + in9.getNumber() + in10.getNumber() + in11.getNumber() + in12.getNumber() + in13.getNumber() + in14.getNumber() + in15.getNumber());};
+	public final Computers.Arity15<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing15 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15, out) -> {
+			out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4
+				.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8
+					.getNumber() + in9.getNumber() + in10.getNumber() + in11.getNumber() +
+				in12.getNumber() + in13.getNumber() + in14.getNumber() + in15
+					.getNumber());
+		};
 
 	@Test
 	public void testComputer15ToArrays() {
-		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
-		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").arity15().input(input, input, input, input, input, input, input, input, input, input, input, input, input, input, input).output(output).compute();
+		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
+			new NumericalThing(2) };
+		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
+			new NumericalThing() };
+		ops.op("test.liftArrayC").arity15().input(input, input, input, input, input,
+			input, input, input, input, input, input, input, input, input, input)
+			.output(output).compute();
 
-		for(int i = 0; i < output.length; i++) {
+		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(15 * i, output[i].getNumber());
 		}
 	}
 
 	@OpField(names = "test.liftArrayC")
-	public final Computers.Arity16<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16 = (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16, out) -> {out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8.getNumber() + in9.getNumber() + in10.getNumber() + in11.getNumber() + in12.getNumber() + in13.getNumber() + in14.getNumber() + in15.getNumber() + in16.getNumber());};
+	public final Computers.Arity16<NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing, NumericalThing> alterThing16 =
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15, in16, out) -> {
+			out.setNumber(in1.getNumber() + in2.getNumber() + in3.getNumber() + in4
+				.getNumber() + in5.getNumber() + in6.getNumber() + in7.getNumber() + in8
+					.getNumber() + in9.getNumber() + in10.getNumber() + in11.getNumber() +
+				in12.getNumber() + in13.getNumber() + in14.getNumber() + in15
+					.getNumber() + in16.getNumber());
+		};
 
 	@Test
 	public void testComputer16ToArrays() {
-		NumericalThing[] input = {new NumericalThing(0), new NumericalThing(1), new NumericalThing(2)};
-		NumericalThing[] output = {new NumericalThing(), new NumericalThing(), new NumericalThing()};
-		ops.op("test.liftArrayC").arity16().input(input, input, input, input, input, input, input, input, input, input, input, input, input, input, input, input).output(output).compute();
+		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
+			new NumericalThing(2) };
+		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
+			new NumericalThing() };
+		ops.op("test.liftArrayC").arity16().input(input, input, input, input, input,
+			input, input, input, input, input, input, input, input, input, input,
+			input).output(output).compute();
 
-		for(int i = 0; i < output.length; i++) {
+		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(16 * i, output[i].getNumber());
 		}
 	}

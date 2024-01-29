@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -42,7 +42,7 @@ import org.scijava.ops.spi.OpDependency;
 
 /**
  * Convolve op for (@link RandomAccessibleInterval)
- * 
+ *
  * @author Brian Northan
  * @param <I>
  * @param <O>
@@ -51,7 +51,9 @@ import org.scijava.ops.spi.OpDependency;
  * @implNote op names='filter.linearFilter', priority='-100.'
  */
 public class FFTMethodsLinearFFTFilterC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
-		implements Computers.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, Boolean, Boolean, Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<O>> {
+	implements
+	Computers.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, Boolean, Boolean, Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<O>>
+{
 
 	@OpDependency(name = "filter.fft")
 	private Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<C>> fftInOp;
@@ -61,7 +63,7 @@ public class FFTMethodsLinearFFTFilterC<I extends RealType<I>, O extends RealTyp
 
 	@OpDependency(name = "filter.ifft")
 	private Computers.Arity1<RandomAccessibleInterval<C>, RandomAccessibleInterval<O>> ifftOp;
-	
+
 	@OpDependency(name = "filter.createFFTOutput")
 	private Functions.Arity3<Dimensions, C, Boolean, RandomAccessibleInterval<C>> createOp;
 
@@ -81,20 +83,21 @@ public class FFTMethodsLinearFFTFilterC<I extends RealType<I>, O extends RealTyp
 	 * @param out
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<I> in, final RandomAccessibleInterval<K> kernel,
-			final Boolean performInputFFT, final Boolean performKernelFFT,
-			final Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> frequencyOp,
-			@Nullable RandomAccessibleInterval<C> fftInput, @Nullable
-	RandomAccessibleInterval<C> fftKernel,
-			final RandomAccessibleInterval<O> out) {
+	public void compute(final RandomAccessibleInterval<I> in,
+		final RandomAccessibleInterval<K> kernel, final Boolean performInputFFT,
+		final Boolean performKernelFFT,
+		final Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> frequencyOp,
+		@Nullable RandomAccessibleInterval<C> fftInput,
+		@Nullable RandomAccessibleInterval<C> fftKernel,
+		final RandomAccessibleInterval<O> out)
+	{
 		final C fftType = Util.getTypeFromInterval(fftInput);
 
 		RandomAccessibleInterval<C> inputFFT = fftInput;
 		RandomAccessibleInterval<C> kernelFFT = fftKernel;
-		
+
 		// create FFT input memory if needed
-		if (inputFFT == null)
-			inputFFT = createOp.apply(in, fftType, true);
+		if (inputFFT == null) inputFFT = createOp.apply(in, fftType, true);
 
 		// create FFT kernel memory if needed
 		if (kernelFFT == null) {

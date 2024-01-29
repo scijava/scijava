@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.convert;
 
 import net.imglib2.IterableInterval;
@@ -45,7 +46,7 @@ public class Converters<I, O extends Type<O>> {
 	 * @implNote op names='convert.image'
 	 */
 	public final Functions.Arity3<RandomAccessible<I>, Converter<? super I, ? super O>, O, RandomAccessible<O>> generalConverterRA =
-			net.imglib2.converter.Converters::convert;
+		net.imglib2.converter.Converters::convert;
 
 	/**
 	 * @input inputII
@@ -55,6 +56,6 @@ public class Converters<I, O extends Type<O>> {
 	 * @implNote op names='convert.image'
 	 */
 	public final Functions.Arity3<IterableInterval<I>, Converter<? super I, ? super O>, O, IterableInterval<O>> generalConverterII =
-			net.imglib2.converter.Converters::convert;
+		net.imglib2.converter.Converters::convert;
 
 }

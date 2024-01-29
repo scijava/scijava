@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -43,16 +43,16 @@ import org.scijava.ops.spi.OpDependency;
 
 /**
  * Function that uses FFTMethods to perform a forward FFT
- * 
+ *
  * @author Brian Northan
- * @param <T>
- *            TODO Documentation
- * @param <C>
- *            TODO Documentation
+ * @param <T> TODO Documentation
+ * @param <C> TODO Documentation
  * @implNote op names='filter.fft', priority='100.'
  */
-public class FFTMethodsOpF<T extends RealType<T>, C extends ComplexType<C>> implements
-		Functions.Arity4<RandomAccessibleInterval<T>, C, long[], Boolean, RandomAccessibleInterval<C>> {
+public class FFTMethodsOpF<T extends RealType<T>, C extends ComplexType<C>>
+	implements
+	Functions.Arity4<RandomAccessibleInterval<T>, C, long[], Boolean, RandomAccessibleInterval<C>>
+{
 
 	@OpDependency(name = "filter.padInputFFTMethods")
 	private Functions.Arity4<RandomAccessibleInterval<T>, Dimensions, Boolean, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> padOp;
@@ -65,10 +65,10 @@ public class FFTMethodsOpF<T extends RealType<T>, C extends ComplexType<C>> impl
 
 	/**
 	 * Note that if fast is true the input will be extended to the next fast FFT
-	 * size. If false the input will be computed using the original input dimensions
-	 * (if possible). If the input dimensions are not supported by the underlying
-	 * FFT implementation the input will be extended to the nearest size that is
-	 * supported.
+	 * size. If false the input will be computed using the original input
+	 * dimensions (if possible). If the input dimensions are not supported by the
+	 * underlying FFT implementation the input will be extended to the nearest
+	 * size that is supported.
 	 */
 	/**
 	 * TODO
@@ -81,10 +81,10 @@ public class FFTMethodsOpF<T extends RealType<T>, C extends ComplexType<C>> impl
 	 */
 	@Override
 	public RandomAccessibleInterval<C> apply( //
-			final RandomAccessibleInterval<T> input, //
-			final C fftType, //
-			@Nullable long[] borderSize, //
-			@Nullable Boolean fast //
+		final RandomAccessibleInterval<T> input, //
+		final C fftType, //
+		@Nullable long[] borderSize, //
+		@Nullable Boolean fast //
 	) {
 
 		if (fast == null) {
@@ -104,10 +104,12 @@ public class FFTMethodsOpF<T extends RealType<T>, C extends ComplexType<C>> impl
 		Dimensions paddedDimensions = new FinalDimensions(paddedSize);
 
 		// create the complex output
-		RandomAccessibleInterval<C> output = createOp.apply(paddedDimensions, fftType, fast);
+		RandomAccessibleInterval<C> output = createOp.apply(paddedDimensions,
+			fftType, fast);
 
 		// pad the input
-		RandomAccessibleInterval<T> paddedInput = padOp.apply(input, paddedDimensions, fast, null);
+		RandomAccessibleInterval<T> paddedInput = padOp.apply(input,
+			paddedDimensions, fast, null);
 
 		// compute and return fft
 		fftMethodsOp.compute(paddedInput, output);

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.util;
 
 import net.imglib2.Cursor;
@@ -57,8 +58,9 @@ public final class TestImgGeneration {
 	}
 
 	private static int SEED = 17;
-	public static ArrayImg<BitType, LongArray> bitArray(
-		final boolean fill, final long... dims)
+
+	public static ArrayImg<BitType, LongArray> bitArray(final boolean fill,
+		final long... dims)
 	{
 		ArrayImg<BitType, LongArray> bits = ArrayImgs.bits(dims);
 
@@ -99,8 +101,8 @@ public final class TestImgGeneration {
 		return bits;
 	}
 
-	public static ArrayImg<Unsigned12BitType, LongArray>
-		unsigned12BitArray(final boolean fill, final long... dims)
+	public static ArrayImg<Unsigned12BitType, LongArray> unsigned12BitArray(
+		final boolean fill, final long... dims)
 	{
 		ArrayImg<Unsigned12BitType, LongArray> bits = ArrayImgs.unsigned12Bits(
 			dims);
@@ -114,8 +116,8 @@ public final class TestImgGeneration {
 		return bits;
 	}
 
-	public static ArrayImg<Unsigned128BitType, LongArray>
-		unsigned128BitArray(final boolean fill, final long... dims)
+	public static ArrayImg<Unsigned128BitType, LongArray> unsigned128BitArray(
+		final boolean fill, final long... dims)
 	{
 		ArrayImg<Unsigned128BitType, LongArray> bits = ArrayImgs.unsigned128Bits(
 			dims);
@@ -130,8 +132,8 @@ public final class TestImgGeneration {
 		return bits;
 	}
 
-	public static ArrayImg<ByteType, ByteArray> byteArray(
-		final boolean fill, final long... dims)
+	public static ArrayImg<ByteType, ByteArray> byteArray(final boolean fill,
+		final long... dims)
 	{
 		final byte[] array = new byte[(int) Intervals.numElements(new FinalInterval(
 			dims))];
@@ -190,10 +192,9 @@ public final class TestImgGeneration {
 		return ArrayImgs.unsignedInts(array, dims);
 	}
 
-	public CellImg<ByteType, ?> byteCell(final boolean fill,
-		final long... dims)
-	{
-		final CellImg<ByteType, ?> img = new CellImgFactory<>(new ByteType()).create(dims);
+	public CellImg<ByteType, ?> byteCell(final boolean fill, final long... dims) {
+		final CellImg<ByteType, ?> img = new CellImgFactory<>(new ByteType())
+			.create(dims);
 
 		if (fill) {
 			Random r = new Random(SEED);
@@ -205,10 +206,11 @@ public final class TestImgGeneration {
 		return img;
 	}
 
-	public CellImg<ByteType, ?> byteCell(final boolean fill,
-		final int[] cellDims, final long... dims)
+	public CellImg<ByteType, ?> byteCell(final boolean fill, final int[] cellDims,
+		final long... dims)
 	{
-		final CellImg<ByteType, ?> img = new CellImgFactory<>(new ByteType(), cellDims).create(dims);
+		final CellImg<ByteType, ?> img = new CellImgFactory<>(new ByteType(),
+			cellDims).create(dims);
 
 		if (fill) {
 			Random r = new Random(SEED);
@@ -236,8 +238,8 @@ public final class TestImgGeneration {
 		return ArrayImgs.doubles(array, dims);
 	}
 
-	public static ArrayImg<LongType, LongArray> longArray(
-		final boolean fill, final long... dims)
+	public static ArrayImg<LongType, LongArray> longArray(final boolean fill,
+		final long... dims)
 	{
 		final long[] array = new long[(int) Intervals.numElements(new FinalInterval(
 			dims))];
@@ -268,8 +270,8 @@ public final class TestImgGeneration {
 		return ArrayImgs.unsignedLongs(array, dims);
 	}
 
-	public static ArrayImg<ShortType, ShortArray> shortArray(
-		final boolean fill, final long... dims)
+	public static ArrayImg<ShortType, ShortArray> shortArray(final boolean fill,
+		final long... dims)
 	{
 		final short[] array = new short[(int) Intervals.numElements(
 			new FinalInterval(dims))];
@@ -284,8 +286,8 @@ public final class TestImgGeneration {
 		return ArrayImgs.shorts(array, dims);
 	}
 
-	public static ArrayImg<UnsignedShortType, ShortArray>
-		unsignedShortArray(final boolean fill, final long... dims)
+	public static ArrayImg<UnsignedShortType, ShortArray> unsignedShortArray(
+		final boolean fill, final long... dims)
 	{
 		final short[] array = new short[(int) Intervals.numElements(
 			new FinalInterval(dims))];
@@ -301,8 +303,8 @@ public final class TestImgGeneration {
 	}
 
 	public static ArrayImg<UnsignedVariableBitLengthType, LongArray>
-		unsignedVariableBitLengthTypeArray(final boolean fill,
-			final int nbits, final long... dims)
+		unsignedVariableBitLengthTypeArray(final boolean fill, final int nbits,
+			final long... dims)
 	{
 		final long[] array = new long[(int) Intervals.numElements(new FinalInterval(
 			dims))];
@@ -310,7 +312,7 @@ public final class TestImgGeneration {
 		if (fill) {
 			Random r = new Random(SEED);
 			for (int i = 0; i < array.length; i++) {
-				array[i] = (long) (r.nextInt() % Math.pow(2, nbits)) ;
+				array[i] = (long) (r.nextInt() % Math.pow(2, nbits));
 			}
 		}
 
@@ -319,12 +321,13 @@ public final class TestImgGeneration {
 		return ArrayImgs.unsignedVariableBitLengths(l, nbits, dims);
 	}
 
-	public static ListImg<UnboundedIntegerType> generateUnboundedIntegerTypeListTestImg(
-			final boolean fill, final long... dims)
+	public static ListImg<UnboundedIntegerType>
+		generateUnboundedIntegerTypeListTestImg(final boolean fill,
+			final long... dims)
 	{
 
-		final ListImg<UnboundedIntegerType> l =
-			new ListImgFactory<>(new UnboundedIntegerType()).create(dims);
+		final ListImg<UnboundedIntegerType> l = new ListImgFactory<>(
+			new UnboundedIntegerType()).create(dims);
 
 		final BigInteger[] array = new BigInteger[(int) Intervals.numElements(
 			dims)];
@@ -343,9 +346,8 @@ public final class TestImgGeneration {
 		return l;
 	}
 
-	public static Img<UnsignedByteType>
-		randomlyFilledUnsignedByteWithSeed(final long[] dims,
-			final long tempSeed)
+	public static Img<UnsignedByteType> randomlyFilledUnsignedByteWithSeed(
+		final long[] dims, final long tempSeed)
 	{
 
 		final Img<UnsignedByteType> img = ArrayImgs.unsignedBytes(dims);
@@ -359,8 +361,8 @@ public final class TestImgGeneration {
 		return img;
 	}
 
-	public static ArrayImg<FloatType, FloatArray> floatArray(
-		final boolean fill, final long... dims)
+	public static ArrayImg<FloatType, FloatArray> floatArray(final boolean fill,
+		final long... dims)
 	{
 		final float[] array = new float[(int) Intervals.numElements(
 			new FinalInterval(dims))];

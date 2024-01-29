@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.image.distancetransform;
 
 import net.imglib2.RandomAccessibleInterval;
@@ -40,15 +41,16 @@ import org.scijava.function.Computers;
  * algorithm. Before doing so, it also ensures that the output
  * {@link RandomAccessibleInterval} is of a suitable {@link RealType} in order
  * to be able to contain the entire range of the output.
- * 
- * @author Gabriel Selzer
  *
+ * @author Gabriel Selzer
  * @param <B> - the {@link BooleanType} of the input image
  * @param <T> - the {@link RealType} of the output image
- *@implNote op names='image.distanceTransform'
+ * @implNote op names='image.distanceTransform'
  */
 public class DistanceTransformer<B extends BooleanType<B>, T extends RealType<T>>
-		implements Computers.Arity1<RandomAccessibleInterval<B>, RandomAccessibleInterval<T>> {
+	implements
+	Computers.Arity1<RandomAccessibleInterval<B>, RandomAccessibleInterval<T>>
+{
 
 	/**
 	 * TODO
@@ -57,7 +59,9 @@ public class DistanceTransformer<B extends BooleanType<B>, T extends RealType<T>
 	 * @param output
 	 */
 	@Override
-	public void compute(RandomAccessibleInterval<B> binaryInput, RandomAccessibleInterval<T> output) {
+	public void compute(RandomAccessibleInterval<B> binaryInput,
+		RandomAccessibleInterval<T> output)
+	{
 		// make sure that the output type is suitable to be able to hold the maximum
 		// possible distance (replaces Conforms)
 		long max_dist = 0;
@@ -65,20 +69,20 @@ public class DistanceTransformer<B extends BooleanType<B>, T extends RealType<T>
 			max_dist += binaryInput.dimension(i) * binaryInput.dimension(i);
 		if (max_dist > Views.iterable(output).firstElement().getMaxValue())
 			throw new IllegalArgumentException(
-					"The type of the output image is too small to calculate the Distance Transform on this image!");
+				"The type of the output image is too small to calculate the Distance Transform on this image!");
 		switch (binaryInput.numDimensions()) {
-		case 2: {
-			DistanceTransform2D.compute(binaryInput, output);
-			break;
-		}
-		case 3: {
-			DistanceTransform3D.compute(binaryInput, output);
-			break;
-		}
-		default: {
-			DefaultDistanceTransform.compute(binaryInput, output);
-			break;
-		}
+			case 2: {
+				DistanceTransform2D.compute(binaryInput, output);
+				break;
+			}
+			case 3: {
+				DistanceTransform3D.compute(binaryInput, output);
+				break;
+			}
+			default: {
+				DefaultDistanceTransform.compute(binaryInput, output);
+				break;
+			}
 		}
 
 	}

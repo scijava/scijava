@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -47,16 +47,16 @@ public class PrimitiveArraySimplifiers<N extends Number> implements
 {
 
 	// -- Object simplifiers -- //
-		@OpHints(hints = { Simplification.FORBIDDEN })
-		@OpField(names = "engine.simplify")
-		public final Function<N[], ObjectArray<Number>> byteArrSimplifier = arr -> {
-			var oa = new ObjectArray<>(Number.class, arr.length);
-			// TODO: Why doesn't System.arraycopy work?
-			for (int i = 0; i < arr.length; i++) {
-				oa.set(i, arr[i]);
-			}
-			return oa;
-		};
+	@OpHints(hints = { Simplification.FORBIDDEN })
+	@OpField(names = "engine.simplify")
+	public final Function<N[], ObjectArray<Number>> byteArrSimplifier = arr -> {
+		var oa = new ObjectArray<>(Number.class, arr.length);
+		// TODO: Why doesn't System.arraycopy work?
+		for (int i = 0; i < arr.length; i++) {
+			oa.set(i, arr[i]);
+		}
+		return oa;
+	};
 
 	// -- Primitive simplifiers -- //
 
@@ -86,14 +86,15 @@ public class PrimitiveArraySimplifiers<N extends Number> implements
 
 	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "engine.simplify")
-	public final Function<int[], ObjectArray<Number>> intPrimitiveArraySimplifier = arr -> {
-		var oa = new ObjectArray<>(Number.class, arr.length);
-		// TODO: Why doesn't System.arraycopy work?
-		for (int i = 0; i < arr.length; i++) {
-			oa.set(i, arr[i]);
-		}
-		return oa;
-	};
+	public final Function<int[], ObjectArray<Number>> intPrimitiveArraySimplifier =
+		arr -> {
+			var oa = new ObjectArray<>(Number.class, arr.length);
+			// TODO: Why doesn't System.arraycopy work?
+			for (int i = 0; i < arr.length; i++) {
+				oa.set(i, arr[i]);
+			}
+			return oa;
+		};
 
 	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "engine.simplify")

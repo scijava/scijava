@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -49,7 +49,7 @@ import org.junit.jupiter.api.Test;
  * of facets is verified with qhull.org and
  * {@link QuickHull3DTest#assertConvex(Mesh, double)} checks for each centroid
  * if it is behind all other facets.
- * 
+ *
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 public class QuickHull3DTest extends AbstractOpTest {
@@ -58,8 +58,10 @@ public class QuickHull3DTest extends AbstractOpTest {
 	public void quickhull_100_000_Test() {
 		Mesh df = randomPoints(100000, 20150818);
 
-		final Mesh convexHull = ops.op("geom.convexHull").arity1().input(df).outType(Mesh.class).apply();
-		final double epsilon = ops.op("geom.convexHullEpsilon").arity1().input(df).outType(double.class).apply();
+		final Mesh convexHull = ops.op("geom.convexHull").arity1().input(df)
+			.outType(Mesh.class).apply();
+		final double epsilon = ops.op("geom.convexHullEpsilon").arity1().input(df)
+			.outType(double.class).apply();
 		assertEquals(175, convexHull.vertices().size());
 		assertConvex(convexHull, epsilon);
 	}
@@ -72,8 +74,10 @@ public class QuickHull3DTest extends AbstractOpTest {
 		df.vertices().add(0, 0, 1);
 		df.vertices().add(0, 1, 0);
 
-		final Mesh convexHull = ops.op("geom.convexHull").arity1().input(df).outType(Mesh.class).apply();
-		final double epsilon = ops.op("geom.convexHullEpsilon").arity1().input(df).outType(double.class).apply();
+		final Mesh convexHull = ops.op("geom.convexHull").arity1().input(df)
+			.outType(Mesh.class).apply();
+		final double epsilon = ops.op("geom.convexHullEpsilon").arity1().input(df)
+			.outType(double.class).apply();
 		assertEquals(4, convexHull.vertices().size());
 		assertConvex(convexHull, epsilon);
 	}
@@ -88,8 +92,10 @@ public class QuickHull3DTest extends AbstractOpTest {
 		df.vertices().add(-4.7, 0.4, -4.2);
 		df.vertices().add(-1.9, 2.2, -3.3);
 
-		final Mesh convexHull = ops.op("geom.convexHull").arity1().input(df).outType(Mesh.class).apply();
-		final double epsilon = ops.op("geom.convexHullEpsilon").arity1().input(df).outType(double.class).apply();
+		final Mesh convexHull = ops.op("geom.convexHull").arity1().input(df)
+			.outType(Mesh.class).apply();
+		final double epsilon = ops.op("geom.convexHullEpsilon").arity1().input(df)
+			.outType(double.class).apply();
 		assertEquals(5, convexHull.vertices().size());
 		assertConvex(convexHull, epsilon);
 	}
@@ -113,8 +119,10 @@ public class QuickHull3DTest extends AbstractOpTest {
 		v.add(0.3544683273457627, -0.450828987127942, -0.0827870439577727);
 		v.add(0.1667164640191164, 0.003605551555385444, -0.4014989499947977);
 
-		final Mesh convexHull = ops.op("geom.convexHull").arity1().input(df).outType(Mesh.class).apply();
-		final double epsilon = ops.op("geom.convexHullEpsilon").arity1().input(df).outType(double.class).apply();
+		final Mesh convexHull = ops.op("geom.convexHull").arity1().input(df)
+			.outType(Mesh.class).apply();
+		final double epsilon = ops.op("geom.convexHullEpsilon").arity1().input(df)
+			.outType(double.class).apply();
 		assertEquals(12, convexHull.vertices().size());
 		assertConvex(convexHull, epsilon);
 	}
@@ -165,8 +173,10 @@ public class QuickHull3DTest extends AbstractOpTest {
 		v.add(-0.312260808713977, -0.1674135249735914, 0.2808831662692904);
 		v.add(-0.1966306233747216, 0.2291105671125563, -0.3387042454804333);
 
-		final Mesh convexHull = ops.op("geom.convexHull").arity1().input(df).outType(Mesh.class).apply();
-		final double epsilon = ops.op("geom.convexHullEpsilon").arity1().input(df).outType(double.class).apply();
+		final Mesh convexHull = ops.op("geom.convexHull").arity1().input(df)
+			.outType(Mesh.class).apply();
+		final double epsilon = ops.op("geom.convexHullEpsilon").arity1().input(df)
+			.outType(double.class).apply();
 		assertEquals(20, convexHull.vertices().size());
 		assertConvex(convexHull, epsilon);
 	}
@@ -174,11 +184,9 @@ public class QuickHull3DTest extends AbstractOpTest {
 	/**
 	 * Checks for each centroid of each facet if the centroid is behind all other
 	 * facets.
-	 * 
-	 * @param convexHull
-	 *            the convex hull to check
-	 * @param epsilon
-	 *            The tolerance of the convex hull computation
+	 *
+	 * @param convexHull the convex hull to check
+	 * @param epsilon The tolerance of the convex hull computation
 	 */
 	private void assertConvex(final Mesh convexHull, final double epsilon) {
 		final long facetCount = convexHull.triangles().size();
@@ -194,10 +202,9 @@ public class QuickHull3DTest extends AbstractOpTest {
 
 		for (i = 0; i < centroids.length; i++) {
 			for (int j = 0; j < centroids.length; j++) {
-				if (i == j)
-					continue;
+				if (i == j) continue;
 				final double distance = //
-						distanceToPlane(normals[i], centroids[i], centroids[j]);
+					distanceToPlane(normals[i], centroids[i], centroids[j]);
 				assertTrue(distance < epsilon);
 			}
 			i++;
@@ -213,27 +220,24 @@ public class QuickHull3DTest extends AbstractOpTest {
 
 	/**
 	 * Computes the distance from a point to a facet
-	 * 
-	 * @param normal
-	 *            facet normal
-	 * @param centroid
-	 *            facet centroid
-	 * @param p
-	 *            the point
+	 *
+	 * @param normal facet normal
+	 * @param centroid facet centroid
+	 * @param p the point
 	 * @return the distance
 	 */
-	private double distanceToPlane(final Vector3D normal, final Vector3D centroid, final Vector3D p) {
+	private double distanceToPlane(final Vector3D normal, final Vector3D centroid,
+		final Vector3D p)
+	{
 		final double planeOffset = normal.normalize().dotProduct(centroid);
 		return normal.normalize().dotProduct(p) - planeOffset;
 	}
 
 	/**
 	 * Creates a random point cloud.
-	 * 
-	 * @param n
-	 *            number of points
-	 * @param seed
-	 *            the seed
+	 *
+	 * @param n number of points
+	 * @param seed the seed
 	 * @return random point cloud
 	 */
 	private Mesh randomPoints(int n, long seed) {

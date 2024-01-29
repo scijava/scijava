@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.features.tamura2d;
 
 import java.util.function.Function;
@@ -38,12 +39,13 @@ import org.scijava.ops.spi.OpDependency;
 
 /**
  * Default implementation of tamura feature contrast.
- * 
+ *
  * @author Andreas Graumann (University of Konstanz)
- *@implNote op names='features.tamura.contrast'
+ * @implNote op names='features.tamura.contrast'
  */
 public class DefaultContrastFeature<I extends RealType<I>, O extends RealType<O>>
-		implements Computers.Arity1<IterableInterval<I>, O> {
+	implements Computers.Arity1<IterableInterval<I>, O>
+{
 
 	@OpDependency(name = "stats.moment4AboutMean")
 	private Function<Iterable<I>, O> m4Op;
@@ -60,8 +62,8 @@ public class DefaultContrastFeature<I extends RealType<I>, O extends RealType<O>
 	 */
 	@Override
 	public void compute(final IterableInterval<I> input, final O output) {
-		if (input.numDimensions() != 2)
-			throw new IllegalArgumentException("Only 2 dimensional images allowed!");
+		if (input.numDimensions() != 2) throw new IllegalArgumentException(
+			"Only 2 dimensional images allowed!");
 
 		// Get fourth moment about mean
 		double m4 = m4Op.apply(input).getRealDouble();

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.linalg.rotate;
 
 import org.joml.AxisAngle4d;
@@ -52,7 +53,8 @@ public class Rotations {
 	 * @container vDot
 	 * @implNote op names='linalg.rotate'
 	 */
-	public final Computers.Arity2<Vector3d, Quaterniondc, Vector3d> rotate3d = (v, q, vDot) -> {
+	public final Computers.Arity2<Vector3d, Quaterniondc, Vector3d> rotate3d = (v,
+		q, vDot) -> {
 		vDot.set(v);
 		vDot.rotate(q);
 	};
@@ -63,8 +65,8 @@ public class Rotations {
 	 * @container vDot
 	 * @implNote op names='linalg.rotate'
 	 */
-	public final Computers.Arity2<Vector3d, AxisAngle4d, Vector3d> rotate3dAxisAngle = (v, aa, vDot) -> rotate3d.compute(v,
-			new Quaterniond(aa), vDot);
+	public final Computers.Arity2<Vector3d, AxisAngle4d, Vector3d> rotate3dAxisAngle =
+		(v, aa, vDot) -> rotate3d.compute(v, new Quaterniond(aa), vDot);
 
 	/**
 	 * @input inVector
@@ -72,7 +74,8 @@ public class Rotations {
 	 * @container vDot
 	 * @implNote op names='linalg.rotate'
 	 */
-	public final Computers.Arity2<Vector3f, Quaternionfc, Vector3f> rotate3f = (v, q, vDot) -> {
+	public final Computers.Arity2<Vector3f, Quaternionfc, Vector3f> rotate3f = (v,
+		q, vDot) -> {
 		vDot.set(v);
 		vDot.rotate(q);
 	};
@@ -83,7 +86,7 @@ public class Rotations {
 	 * @container vDot
 	 * @implNote op names='linalg.rotate'
 	 */
-	public final Computers.Arity2<Vector3f, AxisAngle4f, Vector3f> rotate3fAxisAngle = (v, aa, vDot) -> rotate3f.compute(v,
-			new Quaternionf(aa), vDot);
+	public final Computers.Arity2<Vector3f, AxisAngle4f, Vector3f> rotate3fAxisAngle =
+		(v, aa, vDot) -> rotate3f.compute(v, new Quaternionf(aa), vDot);
 
 }

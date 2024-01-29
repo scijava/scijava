@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.engine.matcher.simplify;
 
 import java.util.List;
@@ -36,17 +37,19 @@ import org.scijava.ops.spi.OpClass;
 
 /**
  * Simplifies {@link List}s of types extending {@link Number}.
- * 
+ *
  * @author Gabriel Selzer
  */
 @OpClass(names = "engine.simplify")
-public class PrimitiveListSimplifier<T extends Number> implements Function<List<T>, List<Number>>, Op {
+public class PrimitiveListSimplifier<T extends Number> implements
+	Function<List<T>, List<Number>>, Op
+{
 
 	@Override
 	/**
-	* @param t the input List
-	* @return a List whose elements have been simplified
-	*/
+	 * @param t the input List
+	 * @return a List whose elements have been simplified
+	 */
 	public List<Number> apply(List<T> t) {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		List<Number> numberList = (List) t;
@@ -54,4 +57,3 @@ public class PrimitiveListSimplifier<T extends Number> implements Function<List<
 	}
 
 }
-

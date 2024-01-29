@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -105,12 +105,12 @@ public final class BoxCount {
 	 *         {@link ValuePair} objects for curve fitting
 	 */
 	public static <B extends BooleanType<B>> //
-		List<ValuePair<DoubleType, DoubleType>> apply( //
-			final RandomAccessibleInterval<B> input, //
-			final Long maxSize, //
-			final Long minSize, //
-			final Double scaling, //
-			final Long gridMoves //
+	List<ValuePair<DoubleType, DoubleType>> apply( //
+		final RandomAccessibleInterval<B> input, //
+		final Long maxSize, //
+		final Long minSize, //
+		final Double scaling, //
+		final Long gridMoves //
 	) {
 
 		if (scaling <= 1.0) {
@@ -155,7 +155,7 @@ public final class BoxCount {
 	 * counted once, and there are no attempts at adjusting their coordinates for
 	 * a better fit.
 	 * </p>
-	 * 
+	 *
 	 * @param size Size n of a box in the algorithm. E.g. in the 3D case it's n *
 	 *          n * n.
 	 * @param translations Number of times the box counting grid is moved in each
@@ -311,7 +311,7 @@ public final class BoxCount {
 
 	/**
 	 * Adds translations to the given {@link Stream.Builder}
-	 * 
+	 *
 	 * @see #translationStream(long, long, int, long[])
 	 */
 	private static void generateTranslations(final long numTranslations,
@@ -332,7 +332,7 @@ public final class BoxCount {
 }
 
 /**
- *@implNote op names='topology.boxCount'
+ * @implNote op names='topology.boxCount'
  */
 class DefaultBoxCount<B extends BooleanType<B>> implements
 	Functions.Arity5<RandomAccessibleInterval<B>, Long, Long, Double, Long, List<ValuePair<DoubleType, DoubleType>>>

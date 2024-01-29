@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -57,7 +57,10 @@ public final class DefaultCreateKernelLog {
 		// Prevent instantiation of static utility class
 	}
 
-	public static <T extends Type<T>, C extends ComplexType<C>> RandomAccessibleInterval<C> createKernel(double[] sigmas, C type, BiFunction<Dimensions, T, Img<T>> imgFromDimsAndType) {
+	public static <T extends Type<T>, C extends ComplexType<C>>
+		RandomAccessibleInterval<C> createKernel(double[] sigmas, C type,
+			BiFunction<Dimensions, T, Img<T>> imgFromDimsAndType)
+	{
 		final double[] sigmaPixels = new double[sigmas.length];
 		for (int i = 0; i < sigmaPixels.length; i++) {
 			// Optimal sigma for LoG approach and dimensionality.
@@ -77,9 +80,10 @@ public final class DefaultCreateKernelLog {
 			middle[d] = 1 + hksizes;
 		}
 
-		//TODO is this safe? I think so...
-		final RandomAccessibleInterval<C> output = (RandomAccessibleInterval<C>) imgFromDimsAndType.apply(
-			new FinalInterval(dims), (T) type);
+		// TODO is this safe? I think so...
+		final RandomAccessibleInterval<C> output =
+			(RandomAccessibleInterval<C>) imgFromDimsAndType.apply(new FinalInterval(
+				dims), (T) type);
 
 		final Cursor<C> c = Views.iterable(output).cursor();
 		final long[] coords = new long[sigmas.length];

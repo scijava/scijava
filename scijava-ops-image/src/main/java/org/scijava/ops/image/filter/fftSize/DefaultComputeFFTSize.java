@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -34,16 +34,16 @@ import java.util.function.BiFunction;
 import net.imglib2.Dimensions;
 
 /**
- * Op that calculates FFT fast sizes according to the following logic.
- * 
- * If powerOfTwo=true compute next power of 2
- * 
- * If powerOfTwo=false compute next smooth size
- * 
+ * Op that calculates FFT fast sizes according to the following logic. If
+ * powerOfTwo=true compute next power of 2 If powerOfTwo=false compute next
+ * smooth size
+ *
  * @author Brian Northan
- *@implNote op names='filter.fftSize'
+ * @implNote op names='filter.fftSize'
  */
-public class DefaultComputeFFTSize implements BiFunction<Dimensions, Boolean, long[][]> {
+public class DefaultComputeFFTSize implements
+	BiFunction<Dimensions, Boolean, long[][]>
+{
 
 	/**
 	 * TODO
@@ -62,14 +62,18 @@ public class DefaultComputeFFTSize implements BiFunction<Dimensions, Boolean, lo
 		for (int i = 0; i < inputDimensions.numDimensions(); i++) {
 			// real size
 			if (powerOfTwo) {
-				size[0][i] = NextPowerOfTwo.nextPowerOfTwo(inputDimensions.dimension(i));
-			} else {
-				size[0][i] = NextSmoothNumber.nextSmooth((int) inputDimensions.dimension(i));
+				size[0][i] = NextPowerOfTwo.nextPowerOfTwo(inputDimensions.dimension(
+					i));
+			}
+			else {
+				size[0][i] = NextSmoothNumber.nextSmooth((int) inputDimensions
+					.dimension(i));
 			}
 			// complex size
 			if (i == 0) {
 				size[1][i] = size[0][i] / 2 + 1;
-			} else {
+			}
+			else {
 				size[1][i] = size[0][i];
 			}
 		}

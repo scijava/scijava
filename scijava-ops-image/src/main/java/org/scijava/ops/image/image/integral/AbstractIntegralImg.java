@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -41,33 +41,40 @@ import org.scijava.function.Computers;
 /**
  * Abstract base class for <i>n</i>-dimensional integral images.
  *
- * @param <I>
- *            The type of the input image.
+ * @param <I> The type of the input image.
  * @author Stefan Helfrich (University of Konstanz)
  */
 public abstract class AbstractIntegralImg<I extends RealType<I>, O extends RealType<O>>
-		implements Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> {
+	implements
+	Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>>
+{
 
 	@Override
-	public void compute(final RandomAccessibleInterval<I> input, final RandomAccessibleInterval<O> output) {
+	public void compute(final RandomAccessibleInterval<I> input,
+		final RandomAccessibleInterval<O> output)
+	{
 		// make sure the input and output have the same iteration order
-		if (!Views.iterable(input).iterationOrder().equals(Views.iterable(output).iterationOrder()))
-			throw new IllegalArgumentException("Input and Output images must have the same iteration order!");
+		if (!Views.iterable(input).iterationOrder().equals(Views.iterable(output)
+			.iterationOrder())) throw new IllegalArgumentException(
+				"Input and Output images must have the same iteration order!");
 
 		// We need an intermediary to accumulate the difference over multiple
-		// dimensions. We want to make it of type O so that the following for loop runs
-		// nice, but to do that we need the intermediary to start with the input data
+		// dimensions. We want to make it of type O so that the following for loop
+		// runs
+		// nice, but to do that we need the intermediary to start with the input
+		// data
 		// (so we convert the input to type O here)
 		RandomAccessibleInterval<O> generalizedInput = Converters.convert(input,
-				(Converter<I, O>) (arg0, arg1) -> arg1.setReal(arg0.getRealDouble()),
-				Views.iterable(output).firstElement().createVariable());
+			(Converter<I, O>) (arg0, arg1) -> arg1.setReal(arg0.getRealDouble()),
+			Views.iterable(output).firstElement().createVariable());
 
 		// Create integral image
 		for (int i = 0; i < input.numDimensions(); ++i) {
 			// Slicewise integral addition in one direction
 			// TODO can we find a way to parallelize this?
-			for(int j = 0; j < input.dimension(i); j++)
-				getComputer(i).compute(Views.hyperSlice(generalizedInput, i, j), Views.hyperSlice(output, i, j));
+			for (int j = 0; j < input.dimension(i); j++)
+				getComputer(i).compute(Views.hyperSlice(generalizedInput, i, j), Views
+					.hyperSlice(output, i, j));
 			generalizedInput = output;
 		}
 	}
@@ -76,45 +83,48 @@ public abstract class AbstractIntegralImg<I extends RealType<I>, O extends RealT
 	 * Implements the row-wise addition required for computations of integral
 	 * images.
 	 */
-	public abstract Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> getComputer(int dimension);
+	public abstract
+		Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>>
+		getComputer(int dimension);
 
 	/*
 	 * Computers used in the row-wise addition
 	 */
 
-	public final Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> computeAdd = (input, output) -> {
+	public final Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> computeAdd =
+		(input, output) -> {
 
-		final Cursor<O> inputCursor = Views.iterable(input).cursor();
-		final Cursor<O> outputCursor = Views.iterable(output).cursor();
+			final Cursor<O> inputCursor = Views.iterable(input).cursor();
+			final Cursor<O> outputCursor = Views.iterable(output).cursor();
 
-		double tmp = 0.0d;
-		while (outputCursor.hasNext()) {
+			double tmp = 0.0d;
+			while (outputCursor.hasNext()) {
 
-			final O inputValue = inputCursor.next();
-			final O outputValue = outputCursor.next();
+				final O inputValue = inputCursor.next();
+				final O outputValue = outputCursor.next();
 
-			tmp += inputValue.getRealDouble();
+				tmp += inputValue.getRealDouble();
 
-			outputValue.setReal(tmp);
-		}
-	};
+				outputValue.setReal(tmp);
+			}
+		};
 
-	public final Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> computeSquareAndAdd = (input,
-			output) -> {
+	public final Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> computeSquareAndAdd =
+		(input, output) -> {
 
-		final Cursor<O> inputCursor = Views.iterable(input).cursor();
-		final Cursor<O> outputCursor = Views.iterable(output).cursor();
+			final Cursor<O> inputCursor = Views.iterable(input).cursor();
+			final Cursor<O> outputCursor = Views.iterable(output).cursor();
 
-		double tmp = 0.0d;
-		while (outputCursor.hasNext()) {
+			double tmp = 0.0d;
+			while (outputCursor.hasNext()) {
 
-			final O inputValue = inputCursor.next();
-			final O outputValue = outputCursor.next();
+				final O inputValue = inputCursor.next();
+				final O outputValue = outputCursor.next();
 
-			tmp += Math.pow(inputValue.getRealDouble(), 2);
+				tmp += Math.pow(inputValue.getRealDouble(), 2);
 
-			outputValue.setReal(tmp);
-		}
-	};
+				outputValue.setReal(tmp);
+			}
+		};
 
 }

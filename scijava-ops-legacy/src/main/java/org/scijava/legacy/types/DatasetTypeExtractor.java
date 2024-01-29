@@ -39,17 +39,20 @@ import net.imagej.Dataset;
 
 public class DatasetTypeExtractor implements TypeExtractor {
 
-	@Override public double getPriority() {
+	@Override
+	public double getPriority() {
 		return Priority.HIGH;
 	}
 
-	@Override public boolean canReify(TypeReifier r, Class<?> object) {
+	@Override
+	public boolean canReify(TypeReifier r, Class<?> object) {
 		return Dataset.class.isAssignableFrom(object);
 	}
 
-	@Override public Type reify(TypeReifier r, Object object) {
+	@Override
+	public Type reify(TypeReifier r, Object object) {
 		if (!(object instanceof Dataset)) throw new IllegalArgumentException(
-				object + " cannot be reified because it is not a Dataset!");
+			object + " cannot be reified because it is not a Dataset!");
 		return r.reify(((Dataset) object).getImgPlus());
 	}
 }

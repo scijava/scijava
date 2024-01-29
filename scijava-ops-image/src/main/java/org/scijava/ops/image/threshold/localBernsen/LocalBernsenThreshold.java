@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -44,7 +44,7 @@ import org.scijava.ops.spi.Nullable;
  * @author Jonathan Hale
  * @author Stefan Helfrich (University of Konstanz)
  * @param <T> input type
- *@implNote op names='threshold.localBernsen'
+ * @implNote op names='threshold.localBernsen'
  */
 public class LocalBernsenThreshold<T extends RealType<T>> implements
 	Computers.Arity5<RandomAccessibleInterval<T>, Shape, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
@@ -74,14 +74,14 @@ public class LocalBernsenThreshold<T extends RealType<T>> implements
 		final RandomAccessibleInterval<BitType> output)
 	{
 		if (outOfBoundsFactory == null) outOfBoundsFactory =
-				new OutOfBoundsBorderFactory<>();
+			new OutOfBoundsBorderFactory<>();
 		compute(input, inputNeighborhoodShape, contrastThreshold, halfMaxValue,
 			outOfBoundsFactory, computeThresholdOp, output);
 	}
 
-	public void compute(
-		final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
-		final Double contrastThreshold, final Double halfMaxValue,
+	public void compute(final RandomAccessibleInterval<T> input,
+		final Shape inputNeighborhoodShape, final Double contrastThreshold,
+		final Double halfMaxValue,
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final Computers.Arity4<Iterable<T>, T, Double, Double, BitType> computeThresholdOp,
 		final RandomAccessibleInterval<BitType> output)
@@ -90,8 +90,7 @@ public class LocalBernsenThreshold<T extends RealType<T>> implements
 			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, contrastThreshold,
 				halfMaxValue, o);
 		applyFilterOp.compute(input, parametrizedComputeThresholdOp,
-			inputNeighborhoodShape, outOfBoundsFactory,
-			 output);
+			inputNeighborhoodShape, outOfBoundsFactory, output);
 	}
 
 }

@@ -205,7 +205,7 @@ public final class SimplificationUtils {
 			.opType()));
 		if (ioIndex > -1) {
 			var nil = Nil.of(outType(info.outputType(), outSimplifier));
-			var copier = env.unary("engine.copy").inType(nil).outType(nil).computer();
+			var copier = env.unary("engine.copy", h).inType(nil).outType(nil).computer();
 			copyOp = org.scijava.ops.api.Ops.rich(copier);
 		}
 		return new SimplifiedOpInfo(info, inFocusers, outSimplifier, copyOp);

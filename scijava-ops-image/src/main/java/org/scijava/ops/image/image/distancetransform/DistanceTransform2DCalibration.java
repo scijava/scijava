@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.image.distancetransform;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ import net.imglib2.type.numeric.RealType;
 /**
  * Computes a distance transform, i.e. for every foreground pixel its distance
  * to the nearest background pixel.
- * 
+ *
  * @author Simon Schmid (University of Konstanz)
  */
 public final class DistanceTransform2DCalibration {
@@ -54,12 +55,15 @@ public final class DistanceTransform2DCalibration {
 	 * meijsters raster scan alogrithm Source:
 	 * http://fab.cba.mit.edu/classes/S62.12/docs/Meijster_distance.pdf
 	 */
-	public static <B extends BooleanType<B>, T extends RealType<T>> void compute(final RandomAccessibleInterval<B> in,
-			final double[] calibration, final RandomAccessibleInterval<T> out) {
+	public static <B extends BooleanType<B>, T extends RealType<T>> void compute(
+		final RandomAccessibleInterval<B> in, final double[] calibration,
+		final RandomAccessibleInterval<T> out)
+	{
 
 		// tempValues stores the integer values of the first phase, i.e. the
 		// first two scans
-		final double[][] tempValues = new double[(int) in.dimension(0)][(int) out.dimension(1)];
+		final double[][] tempValues = new double[(int) in.dimension(0)][(int) out
+			.dimension(1)];
 
 		// first phase
 		final List<Runnable> list = new ArrayList<>();
@@ -90,31 +94,36 @@ class Phase1Runnable2DCal<B extends BooleanType<B>> implements Runnable {
 	private final int width;
 	private final double[] calibration;
 
-	public Phase1Runnable2DCal(final double[][] tempValues, final RandomAccessibleInterval<B> raIn, final int yPos,
-			final double[] calibration) {
+	public Phase1Runnable2DCal(final double[][] tempValues,
+		final RandomAccessibleInterval<B> raIn, final int yPos,
+		final double[] calibration)
+	{
 		this.tempValues = tempValues;
 		this.raIn = raIn.randomAccess();
 		this.y = yPos;
-		this.infinite = calibration[0] * raIn.dimension(0) + calibration[1] * raIn.dimension(1);
+		this.infinite = calibration[0] * raIn.dimension(0) + calibration[1] * raIn
+			.dimension(1);
 		this.width = (int) raIn.dimension(0);
 		this.calibration = calibration;
 	}
 
 	@Override
-	public void run(){
+	public void run() {
 		// scan1
 		raIn.setPosition(0, 0);
 		raIn.setPosition(y, 1);
 		if (!raIn.get().get()) {
 			tempValues[0][y] = 0;
-		} else {
+		}
+		else {
 			tempValues[0][y] = infinite;
 		}
 		for (int x = 1; x < width; x++) {
 			raIn.setPosition(x, 0);
 			if (!raIn.get().get()) {
 				tempValues[x][y] = 0;
-			} else {
+			}
+			else {
 				tempValues[x][y] = tempValues[x - 1][y] + calibration[0];
 			}
 		}
@@ -137,8 +146,10 @@ class Phase2Runnable2DCal<T extends RealType<T>> implements Runnable {
 	private final int height;
 	private final double[] calibration;
 
-	public Phase2Runnable2DCal(final double[][] tempValues, final RandomAccessibleInterval<T> raOut, final int xPos,
-			final double[] calibration) {
+	public Phase2Runnable2DCal(final double[][] tempValues,
+		final RandomAccessibleInterval<T> raOut, final int xPos,
+		final double[] calibration)
+	{
 		this.tempValues = tempValues;
 		this.raOut = raOut;
 		this.xPos = xPos;
@@ -147,15 +158,18 @@ class Phase2Runnable2DCal<T extends RealType<T>> implements Runnable {
 	}
 
 	// help function used from the algorithm to compute distances
-	private double distancefunc(final int x, final int i, final double raOutValue) {
-		return calibration[1] * calibration[1] * (x - i) * (x - i) + raOutValue * raOutValue;
+	private double distancefunc(final int x, final int i,
+		final double raOutValue)
+	{
+		return calibration[1] * calibration[1] * (x - i) * (x - i) + raOutValue *
+			raOutValue;
 	}
 
 	// help function used from the algorithm
 	private int sep(final int i, final int u, final double w, final double v) {
-		return (int) Math.floor(Math.nextUp(
-				(u * u - i * i + w * w / (calibration[1] * calibration[1]) - v * v / (calibration[1] * calibration[1]))
-						/ (2 * (u - i))));
+		return (int) Math.floor(Math.nextUp((u * u - i * i + w * w /
+			(calibration[1] * calibration[1]) - v * v / (calibration[1] *
+				calibration[1])) / (2 * (u - i))));
 	}
 
 	@Override
@@ -168,15 +182,18 @@ class Phase2Runnable2DCal<T extends RealType<T>> implements Runnable {
 
 		// scan 3
 		for (int u = 1; u < height; u++) {
-			while (q >= 0
-					&& distancefunc(t[q], s[q], tempValues[xPos][s[q]]) > distancefunc(t[q], u, tempValues[xPos][u])) {
+			while (q >= 0 && distancefunc(t[q], s[q],
+				tempValues[xPos][s[q]]) > distancefunc(t[q], u, tempValues[xPos][u]))
+			{
 				q--;
 			}
 			if (q < 0) {
 				q = 0;
 				s[0] = u;
-			} else {
-				final int w = 1 + sep(s[q], u, tempValues[xPos][u], tempValues[xPos][s[q]]);
+			}
+			else {
+				final int w = 1 + sep(s[q], u, tempValues[xPos][u],
+					tempValues[xPos][s[q]]);
 				if (w < height) {
 					q++;
 					s[q] = u;
@@ -190,7 +207,8 @@ class Phase2Runnable2DCal<T extends RealType<T>> implements Runnable {
 		for (int u = height - 1; u >= 0; u--) {
 			ra.setPosition(u, 1);
 			ra.setPosition(xPos, 0);
-			ra.get().setReal(Math.sqrt(distancefunc(u, s[q], tempValues[xPos][s[q]])));
+			ra.get().setReal(Math.sqrt(distancefunc(u, s[q],
+				tempValues[xPos][s[q]])));
 			if (u == t[q]) {
 				q--;
 			}

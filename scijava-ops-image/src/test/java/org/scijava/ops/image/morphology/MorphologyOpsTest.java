@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -63,34 +63,43 @@ public class MorphologyOpsTest extends AbstractOpTest {
 		// create two bittypes images
 		Img<FloatType> inputWithoutHoles = openFloatImg("img_without_holes.png");
 		Img<FloatType> inputWithHoles = openFloatImg("img_with_holes.png");
-		Img<FloatType> invertedInputWithFilledHoles = openFloatImg("inverted_img_with_filled_holes.png");
+		Img<FloatType> invertedInputWithFilledHoles = openFloatImg(
+			"inverted_img_with_filled_holes.png");
 
 		Cursor<FloatType> inputWithoutHolesCursor = inputWithoutHoles.cursor();
 		Cursor<FloatType> inputWithHolesCursor = inputWithHoles.cursor();
-		Cursor<FloatType> invertedInputWithFilledHolesCursor = invertedInputWithFilledHoles.cursor();
+		Cursor<FloatType> invertedInputWithFilledHolesCursor =
+			invertedInputWithFilledHoles.cursor();
 
-		imgWithoutHoles = ops.op("create.img").arity2().input(inputWithoutHoles, new BitType()).outType(new Nil<Img<BitType>>() {})
-				.apply();
-		imgWithHoles = ops.op("create.img").arity2().input(inputWithHoles, new BitType()).outType(new Nil<Img<BitType>>() {})
-				.apply();
-		invertedImgWithFilledHoles = ops.op("create.img").arity2().input(invertedInputWithFilledHoles, new BitType())
-				.outType(new Nil<Img<BitType>>() {}).apply();
+		imgWithoutHoles = ops.op("create.img").arity2().input(inputWithoutHoles,
+			new BitType()).outType(new Nil<Img<BitType>>()
+		{}).apply();
+		imgWithHoles = ops.op("create.img").arity2().input(inputWithHoles,
+			new BitType()).outType(new Nil<Img<BitType>>()
+		{}).apply();
+		invertedImgWithFilledHoles = ops.op("create.img").arity2().input(
+			invertedInputWithFilledHoles, new BitType()).outType(
+				new Nil<Img<BitType>>()
+				{}).apply();
 
 		Cursor<BitType> imgWithoutHolesCursor = imgWithoutHoles.cursor();
 		Cursor<BitType> imgWithHolesCursor = imgWithHoles.cursor();
-		Cursor<BitType> invertedImgWithFilledHolesCursor = invertedImgWithFilledHoles.cursor();
+		Cursor<BitType> invertedImgWithFilledHolesCursor =
+			invertedImgWithFilledHoles.cursor();
 
 		while (inputWithoutHolesCursor.hasNext()) {
-			imgWithoutHolesCursor.next().set((inputWithoutHolesCursor.next().get() > 0) ? true : false);
+			imgWithoutHolesCursor.next().set((inputWithoutHolesCursor.next()
+				.get() > 0) ? true : false);
 		}
 
 		while (inputWithHolesCursor.hasNext()) {
-			imgWithHolesCursor.next().set((inputWithHolesCursor.next().get() > 0) ? true : false);
+			imgWithHolesCursor.next().set((inputWithHolesCursor.next().get() > 0)
+				? true : false);
 		}
 
 		while (invertedInputWithFilledHolesCursor.hasNext()) {
-			invertedImgWithFilledHolesCursor.next()
-					.set((invertedInputWithFilledHolesCursor.next().get() > 0) ? true : false);
+			invertedImgWithFilledHolesCursor.next().set(
+				(invertedInputWithFilledHolesCursor.next().get() > 0) ? true : false);
 		}
 
 		initialized = true;
@@ -98,8 +107,8 @@ public class MorphologyOpsTest extends AbstractOpTest {
 
 	@Test
 	public void testExtractHoles() {
-		assertNotNull(ops.op("morphology.extractHoles").arity2().input(imgWithoutHoles,
-			new DiamondShape(1)).outType(new Nil<Img<BitType>>()
+		assertNotNull(ops.op("morphology.extractHoles").arity2().input(
+			imgWithoutHoles, new DiamondShape(1)).outType(new Nil<Img<BitType>>()
 		{}).apply(), "Img Without Holes");
 		assertNotNull(ops.op("morphology.extractHoles").arity2().input(imgWithHoles,
 			new DiamondShape(1)).outType(new Nil<Img<BitType>>()
@@ -108,8 +117,11 @@ public class MorphologyOpsTest extends AbstractOpTest {
 
 	@Test
 	public void testFillHoles() {
-		Img<BitType> result = ops.op("create.img").arity1().input(imgWithHoles).outType(new Nil<Img<BitType>>() {}).apply();
-		ops.op("morphology.fillHoles").arity2().input(imgWithHoles, new DiamondShape(1)).output(result).compute();
+		Img<BitType> result = ops.op("create.img").arity1().input(imgWithHoles)
+			.outType(new Nil<Img<BitType>>()
+			{}).apply();
+		ops.op("morphology.fillHoles").arity2().input(imgWithHoles,
+			new DiamondShape(1)).output(result).compute();
 
 		Cursor<BitType> resultC = result.cursor();
 		final BitType one = new BitType(true);
@@ -120,15 +132,20 @@ public class MorphologyOpsTest extends AbstractOpTest {
 
 	@Test
 	public void testFillHoles1() {
-		Img<BitType> result = ops.op("create.img").arity1().input(invertedImgWithFilledHoles).outType(new Nil<Img<BitType>>() {})
-				.apply();
-		Img<BitType> inverted = ops.op("create.img").arity1().input(invertedImgWithFilledHoles).outType(new Nil<Img<BitType>>() {})
-				.apply();
-		ops.op("image.invert").arity1().input(imgWithHoles).output(inverted).compute();
-		ops.op("morphology.fillHoles").arity2().input(inverted, new DiamondShape(1)).output(result).compute();
+		Img<BitType> result = ops.op("create.img").arity1().input(
+			invertedImgWithFilledHoles).outType(new Nil<Img<BitType>>()
+		{}).apply();
+		Img<BitType> inverted = ops.op("create.img").arity1().input(
+			invertedImgWithFilledHoles).outType(new Nil<Img<BitType>>()
+		{}).apply();
+		ops.op("image.invert").arity1().input(imgWithHoles).output(inverted)
+			.compute();
+		ops.op("morphology.fillHoles").arity2().input(inverted, new DiamondShape(1))
+			.output(result).compute();
 
 		Cursor<BitType> resultC = result.localizingCursor();
-		RandomAccess<BitType> groundTruthRA = invertedImgWithFilledHoles.randomAccess();
+		RandomAccess<BitType> groundTruthRA = invertedImgWithFilledHoles
+			.randomAccess();
 
 		while (resultC.hasNext()) {
 			boolean r = resultC.next().get();
@@ -140,8 +157,9 @@ public class MorphologyOpsTest extends AbstractOpTest {
 	@Test
 	public void testFillHoles2() {
 		RandomAccessibleInterval<BitType> result = ops.op("morphology.fillHoles")
-				.arity2().input(imgWithoutHoles, new RectangleShape(1, false))
-				.outType(new Nil<RandomAccessibleInterval<BitType>>() {}).apply();
+			.arity2().input(imgWithoutHoles, new RectangleShape(1, false)).outType(
+				new Nil<RandomAccessibleInterval<BitType>>()
+				{}).apply();
 		Cursor<BitType> groundTruthC = imgWithoutHoles.localizingCursor();
 		RandomAccess<BitType> resultRA = result.randomAccess();
 

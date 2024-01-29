@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.engine.math;
 
 import java.util.function.Function;
@@ -42,21 +43,25 @@ public class Sqrt implements OpCollection {
 	// --------- Functions ---------
 
 	@OpField(names = NAMES, params = "number1, result")
-	public static final Function<Double, Double> MathSqrtDoubleFunction = Math::sqrt;
+	public static final Function<Double, Double> MathSqrtDoubleFunction =
+		Math::sqrt;
 
 	// --------- Computers ---------
 
 	@OpField(names = NAMES, params = "array1, resultArray")
-	public static final Computers.Arity1<double[], double[]> MathPointwiseSqrtDoubleArrayComputer = (arr1, arr2) -> {
-		for (int i = 0; i < arr1.length; i++)
-			arr2[i] = Math.sqrt(arr1[i]);
-	};
+	public static final Computers.Arity1<double[], double[]> MathPointwiseSqrtDoubleArrayComputer =
+		(arr1, arr2) -> {
+			for (int i = 0; i < arr1.length; i++)
+				arr2[i] = Math.sqrt(arr1[i]);
+		};
 
 	// --------- Inplaces ---------
 
 	@OpField(names = NAMES, params = "arrayIO")
-	public static final Inplaces.Arity1<double[]> MathPointwiseSqrtDoubleArrayInplace = (arr) -> {
-		for(int i = 0; i < arr.length; i++) arr[i] = Math.sqrt(arr[i]);
-	};
+	public static final Inplaces.Arity1<double[]> MathPointwiseSqrtDoubleArrayInplace =
+		(arr) -> {
+			for (int i = 0; i < arr.length; i++)
+				arr[i] = Math.sqrt(arr[i]);
+		};
 
 }

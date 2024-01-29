@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -52,7 +52,7 @@ import org.scijava.types.Types;
 
 /**
  * Metadata about an Op implementation defined as a field.
- * 
+ *
  * @author Curtis Rueden
  */
 public class OpFieldInfo implements OpInfo {
@@ -66,19 +66,30 @@ public class OpFieldInfo implements OpInfo {
 	private Struct struct;
 	private final Hints hints;
 
-	public OpFieldInfo(final Object instance, final Field field, final Hints hints, final String... names) {
-		this(instance, field, Versions.getVersion(field.getDeclaringClass()), hints, Priority.NORMAL, names);
+	public OpFieldInfo(final Object instance, final Field field,
+		final Hints hints, final String... names)
+	{
+		this(instance, field, Versions.getVersion(field.getDeclaringClass()), hints,
+			Priority.NORMAL, names);
 	}
 
-	public OpFieldInfo(final Object instance, final Field field, final Hints hints, final double priority, final String... names) {
-		this(instance, field, Versions.getVersion(field.getDeclaringClass()), hints, priority, names);
+	public OpFieldInfo(final Object instance, final Field field,
+		final Hints hints, final double priority, final String... names)
+	{
+		this(instance, field, Versions.getVersion(field.getDeclaringClass()), hints,
+			priority, names);
 	}
 
-	public OpFieldInfo(final Object instance, final Field field, final String version, final Hints hints, final String... names) {
+	public OpFieldInfo(final Object instance, final Field field,
+		final String version, final Hints hints, final String... names)
+	{
 		this(instance, field, version, hints, Priority.NORMAL, names);
 	}
 
-	public OpFieldInfo(final Object instance, final Field field, final String version, final Hints hints, final double priority, final String... names) {
+	public OpFieldInfo(final Object instance, final Field field,
+		final String version, final Hints hints, final double priority,
+		final String... names)
+	{
 		this.instance = instance;
 		this.version = version;
 		this.field = field;
@@ -96,7 +107,8 @@ public class OpFieldInfo implements OpInfo {
 			// NB: Field is not static; instance must match field.getDeclaringClass().
 			if (!field.getDeclaringClass().isInstance(instance)) {
 				// Mismatch between given object and the class containing the field
-				// But: we need to have proper case logic for the field being static or not.
+				// But: we need to have proper case logic for the field being static or
+				// not.
 			}
 		}
 		// Reject all non public fields
@@ -108,7 +120,8 @@ public class OpFieldInfo implements OpInfo {
 		// ALLOWED!
 		Type structType = Types.fieldType(field, field.getDeclaringClass());
 		FieldInstance fieldInstance = new FieldInstance(field, instance);
-		struct = Structs.from(fieldInstance, structType, new FieldParameterMemberParser());
+		struct = Structs.from(fieldInstance, structType,
+			new FieldParameterMemberParser());
 		Infos.validate(this);
 	}
 
@@ -145,26 +158,28 @@ public class OpFieldInfo implements OpInfo {
 		// Get generic string without modifiers and return type
 		String fullyQualifiedField = field.toGenericString();
 		int lastDotPos = fullyQualifiedField.lastIndexOf('.');
-		fullyQualifiedField = fullyQualifiedField.substring(0, lastDotPos) + "$" + fullyQualifiedField.substring(lastDotPos + 1);
+		fullyQualifiedField = fullyQualifiedField.substring(0, lastDotPos) + "$" +
+			fullyQualifiedField.substring(lastDotPos + 1);
 		String packageName = field.getDeclaringClass().getPackageName();
 		int classNameIndex = fullyQualifiedField.lastIndexOf(packageName);
 		return fullyQualifiedField.substring(classNameIndex);
 	}
 
 	@Override
-	public StructInstance<?> createOpInstance(List<?> dependencies)
-	{
+	public StructInstance<?> createOpInstance(List<?> dependencies) {
 		if (dependencies != null && !dependencies.isEmpty())
 			throw new IllegalArgumentException(
 				"Op fields are not allowed to have any Op dependencies.");
-		// NB: In general, there is no way to create a new instance of the field value.
+		// NB: In general, there is no way to create a new instance of the field
+		// value.
 		// Calling clone() may or may not work; it does not work with e.g. lambdas.
 		// Better to just use the same value directly, rather than trying to copy.
 		try {
 			final Object object = field.get(instance);
 			// TODO: Wrap object in a generic holder with the same interface.
 			return struct().createInstance(object);
-		} catch (final IllegalAccessException exc) {
+		}
+		catch (final IllegalAccessException exc) {
 			// FIXME
 			exc.printStackTrace();
 			throw new RuntimeException(exc);
@@ -191,8 +206,8 @@ public class OpFieldInfo implements OpInfo {
 	 * {@code @}</li>
 	 * </ol>
 	 * <p>
-	 * For example, for a field {@code baz} in class
-	 * {@code com.example.foo.Bar}, you might have
+	 * For example, for a field {@code baz} in class {@code com.example.foo.Bar},
+	 * you might have
 	 * <p>
 	 * {@code com.example.foo.Bar.baz@1.0.0}
 	 * <p>
@@ -206,8 +221,7 @@ public class OpFieldInfo implements OpInfo {
 
 	@Override
 	public boolean equals(final Object o) {
-		if (!(o instanceof OpFieldInfo))
-			return false;
+		if (!(o instanceof OpFieldInfo)) return false;
 		final OpInfo that = (OpInfo) o;
 		return struct().equals(that.struct());
 	}
@@ -218,6 +232,8 @@ public class OpFieldInfo implements OpInfo {
 	}
 
 	@Override
-	public String toString() { return Infos.describeVerbose(this); }
+	public String toString() {
+		return Infos.describeVerbose(this);
+	}
 
 }

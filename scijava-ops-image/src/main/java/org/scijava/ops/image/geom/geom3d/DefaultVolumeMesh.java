@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.geom.geom3d;
 
 import java.util.function.Function;
@@ -38,9 +39,10 @@ import org.apache.commons.math3.util.MathArrays;
 
 /**
  * Generic implementation of {@link org.scijava.ops.image.Ops.Geometric.Size}.
- * 
+ *
  * @author Tim-Oliver Buchholz (University of Konstanz)
- * @implNote op names='geom.size', label='Geometric (2D): Size', priority='9999.'
+ * @implNote op names='geom.size', label='Geometric (2D): Size',
+ *           priority='9999.'
  */
 public class DefaultVolumeMesh implements Function<Mesh, DoubleType> {
 
@@ -55,17 +57,18 @@ public class DefaultVolumeMesh implements Function<Mesh, DoubleType> {
 		double volume = 0;
 		for (final Triangle triangle : input.triangles()) {
 			volume += signedVolumeOfTriangle(//
-					triangle.v0x(), triangle.v0y(), triangle.v0z(), //
-					triangle.v1x(), triangle.v1y(), triangle.v1z(), //
-					triangle.v2x(), triangle.v2y(), triangle.v2z());
+				triangle.v0x(), triangle.v0y(), triangle.v0z(), //
+				triangle.v1x(), triangle.v1y(), triangle.v1z(), //
+				triangle.v2x(), triangle.v2y(), triangle.v2z());
 		}
 		return new DoubleType(Math.abs(volume));
 	}
 
 	private double signedVolumeOfTriangle(//
-			final double p0x, final double p0y, final double p0z, //
-			final double p1x, final double p1y, final double p1z, //
-			final double p2x, final double p2y, final double p2z) {
+		final double p0x, final double p0y, final double p0z, //
+		final double p1x, final double p1y, final double p1z, //
+		final double p2x, final double p2y, final double p2z)
+	{
 		// cross product
 		final double cpx = MathArrays.linearCombination(p1y, p2z, -p1z, p2y);
 		final double cpy = MathArrays.linearCombination(p1z, p2x, -p1x, p2z);

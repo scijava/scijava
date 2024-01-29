@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -65,166 +65,190 @@ public final class ConvertTypes<C extends ComplexType<C>, T extends IntegerType<
 	 * @container output
 	 * @implNote op names='convert.bit'
 	 */
-	public final Computers.Arity1<C, BitType> complexToBit = (input, output) -> output.set(input.getRealDouble() != 0);
+	public final Computers.Arity1<C, BitType> complexToBit = (input,
+		output) -> output.set(input.getRealDouble() != 0);
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.bit', priority='10.'
 	 */
-	public final Computers.Arity1<T, BitType> integerToBit = (input, output) -> output.set(input.getIntegerLong() != 0);
+	public final Computers.Arity1<T, BitType> integerToBit = (input,
+		output) -> output.set(input.getIntegerLong() != 0);
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.uint2'
 	 */
-	public final Computers.Arity1<C, Unsigned2BitType> complexToUint2 = (input, output) -> output.set((long) input.getRealDouble());
+	public final Computers.Arity1<C, Unsigned2BitType> complexToUint2 = (input,
+		output) -> output.set((long) input.getRealDouble());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.uint2', priority='10.'
 	 */
-	public final Computers.Arity1<T, Unsigned2BitType> integerToUint2 = (input, output) -> output.set(input.getIntegerLong());
+	public final Computers.Arity1<T, Unsigned2BitType> integerToUint2 = (input,
+		output) -> output.set(input.getIntegerLong());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.uint4'
 	 */
-	public final Computers.Arity1<C, Unsigned4BitType> complexToUint4 = (input, output) -> output.set((long) input.getRealDouble());
+	public final Computers.Arity1<C, Unsigned4BitType> complexToUint4 = (input,
+		output) -> output.set((long) input.getRealDouble());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.uint4', priority='10.'
 	 */
-	public final Computers.Arity1<T, Unsigned4BitType> integerToUint4 = (input, output) -> output.set(input.getIntegerLong());
+	public final Computers.Arity1<T, Unsigned4BitType> integerToUint4 = (input,
+		output) -> output.set(input.getIntegerLong());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.int8, convert.byte'
 	 */
-	public final Computers.Arity1<C, ByteType> complexToInt8 = (input, output) -> output.set((byte) input.getRealDouble());
+	public final Computers.Arity1<C, ByteType> complexToInt8 = (input,
+		output) -> output.set((byte) input.getRealDouble());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.int8, convert.byte', priority='10.'
 	 */
-	public final Computers.Arity1<T, ByteType> integerToInt8 = (input, output) -> output.set((byte) input.getIntegerLong());
+	public final Computers.Arity1<T, ByteType> integerToInt8 = (input,
+		output) -> output.set((byte) input.getIntegerLong());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.uint8'
 	 */
-	public final Computers.Arity1<C, UnsignedByteType> complexToUint8 = (input, output) -> output.set((int) input.getRealDouble());
+	public final Computers.Arity1<C, UnsignedByteType> complexToUint8 = (input,
+		output) -> output.set((int) input.getRealDouble());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.uint8', priority='10.'
 	 */
-	public final Computers.Arity1<T, UnsignedByteType> integerToUint8 = (input, output) -> output.set(input.getInteger());
+	public final Computers.Arity1<T, UnsignedByteType> integerToUint8 = (input,
+		output) -> output.set(input.getInteger());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.uint12'
 	 */
-	public final Computers.Arity1<C, Unsigned12BitType> complexToUint12 = (input, output) -> output.set((long) input.getRealDouble());
+	public final Computers.Arity1<C, Unsigned12BitType> complexToUint12 = (input,
+		output) -> output.set((long) input.getRealDouble());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.uint12', priority='10.'
 	 */
-	public final Computers.Arity1<T, Unsigned12BitType> integerToUint12 = (input, output) -> output.set(input.getIntegerLong());
+	public final Computers.Arity1<T, Unsigned12BitType> integerToUint12 = (input,
+		output) -> output.set(input.getIntegerLong());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.int16'
 	 */
-	public final Computers.Arity1<C, ShortType> complexToInt16 = (input, output) -> output.set((short) input.getRealDouble());
+	public final Computers.Arity1<C, ShortType> complexToInt16 = (input,
+		output) -> output.set((short) input.getRealDouble());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.int16', priority='10.'
 	 */
-	public final Computers.Arity1<T, ShortType> integerToInt16 = (input, output) -> output.set((short) input.getIntegerLong());
+	public final Computers.Arity1<T, ShortType> integerToInt16 = (input,
+		output) -> output.set((short) input.getIntegerLong());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.uint16'
 	 */
-	public final Computers.Arity1<C, UnsignedShortType> complexToUint16 = (input, output) -> output.set((int) input.getRealDouble());
+	public final Computers.Arity1<C, UnsignedShortType> complexToUint16 = (input,
+		output) -> output.set((int) input.getRealDouble());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.uint16', priority='10.'
 	 */
-	public final Computers.Arity1<T, UnsignedShortType> integerToUint16 = (input, output) -> output.set(input.getInteger());
+	public final Computers.Arity1<T, UnsignedShortType> integerToUint16 = (input,
+		output) -> output.set(input.getInteger());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.int32'
 	 */
-	public final Computers.Arity1<C, IntType> complexToInt32 = (input, output) -> output.set((int) input.getRealDouble());
+	public final Computers.Arity1<C, IntType> complexToInt32 = (input,
+		output) -> output.set((int) input.getRealDouble());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.int32', priority='10.'
 	 */
-	public final Computers.Arity1<T, IntType> integerToInt32 = (input, output) -> output.set(input.getInteger());
+	public final Computers.Arity1<T, IntType> integerToInt32 = (input,
+		output) -> output.set(input.getInteger());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.uint32'
 	 */
-	public final Computers.Arity1<C, UnsignedIntType> complexToUint32 = (input, output) -> output.set((long) input.getRealDouble());
+	public final Computers.Arity1<C, UnsignedIntType> complexToUint32 = (input,
+		output) -> output.set((long) input.getRealDouble());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.uint32', priority='10.'
 	 */
-	public final Computers.Arity1<T, UnsignedIntType> integerToUint32 = (input, output) -> output.set(input.getIntegerLong());
+	public final Computers.Arity1<T, UnsignedIntType> integerToUint32 = (input,
+		output) -> output.set(input.getIntegerLong());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.int64'
 	 */
-	public final Computers.Arity1<C, LongType> complexToInt64 = (input, output) -> output.set((long) input.getRealDouble());
+	public final Computers.Arity1<C, LongType> complexToInt64 = (input,
+		output) -> output.set((long) input.getRealDouble());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.int64', priority='10.'
 	 */
-	public final Computers.Arity1<T, LongType> integerToInt64 = (input, output) -> output.set(input.getIntegerLong());
+	public final Computers.Arity1<T, LongType> integerToInt64 = (input,
+		output) -> output.set(input.getIntegerLong());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.uint64'
 	 */
-	public final Computers.Arity1<C, UnsignedLongType> complexToUint64 = (input, output) -> {
+	public final Computers.Arity1<C, UnsignedLongType> complexToUint64 = (input,
+		output) -> {
 		final BigDecimal bd = BigDecimal.valueOf(input.getRealDouble());
 		final BigDecimal r = bd.remainder(BigDecimal.ONE);
 		if (r.compareTo(BigDecimal.ZERO) == 0) {
 			output.set(bd.toBigIntegerExact().longValue());
-		} else {
+		}
+		else {
 			output.set(bd.toBigInteger().longValue());
 		}
 	};
@@ -234,20 +258,22 @@ public final class ConvertTypes<C extends ComplexType<C>, T extends IntegerType<
 	 * @container output
 	 * @implNote op names='convert.uint64', priority='10.'
 	 */
-	public final Computers.Arity1<T, UnsignedLongType> integerToUint64 = (input, output) -> output.set(input.getIntegerLong());
-
+	public final Computers.Arity1<T, UnsignedLongType> integerToUint64 = (input,
+		output) -> output.set(input.getIntegerLong());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.uint128'
 	 */
-	public final Computers.Arity1<C, Unsigned128BitType> complexToUint128 = (input, output) -> {
+	public final Computers.Arity1<C, Unsigned128BitType> complexToUint128 = (
+		input, output) -> {
 		final BigDecimal bd = BigDecimal.valueOf(input.getRealDouble());
 		final BigDecimal r = bd.remainder(BigDecimal.ONE);
 		if (r.compareTo(BigDecimal.ZERO) == 0) {
 			output.set(bd.toBigIntegerExact());
-		} else {
+		}
+		else {
 			output.set(bd.toBigInteger());
 		}
 	};
@@ -257,35 +283,39 @@ public final class ConvertTypes<C extends ComplexType<C>, T extends IntegerType<
 	 * @container output
 	 * @implNote op names='convert.uint128', priority='10.'
 	 */
-	public final Computers.Arity1<T, Unsigned128BitType> integerToUint128 = (input, output) -> output.set(input.getBigInteger());
+	public final Computers.Arity1<T, Unsigned128BitType> integerToUint128 = (
+		input, output) -> output.set(input.getBigInteger());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.float32'
 	 */
-	public final Computers.Arity1<C, FloatType> complexToFloat32 = (input, output) -> output.set(input.getRealFloat());
+	public final Computers.Arity1<C, FloatType> complexToFloat32 = (input,
+		output) -> output.set(input.getRealFloat());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.cfloat32'
 	 */
-	public final Computers.Arity1<C, ComplexFloatType> complexToCfloat32 = (input, output) -> output.set(input.getRealFloat(),
-			input.getImaginaryFloat());
+	public final Computers.Arity1<C, ComplexFloatType> complexToCfloat32 = (input,
+		output) -> output.set(input.getRealFloat(), input.getImaginaryFloat());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.float64'
 	 */
-	public final Computers.Arity1<C, DoubleType> complexToFloat64 = (input, output) -> output.set(input.getRealDouble());
+	public final Computers.Arity1<C, DoubleType> complexToFloat64 = (input,
+		output) -> output.set(input.getRealDouble());
 
 	/**
 	 * @input input
 	 * @container output
 	 * @implNote op names='convert.cfloat64'
 	 */
-	public final Computers.Arity1<C, ComplexDoubleType> complexToCfloat64 = (input, output) -> output.set(input.getRealDouble(),
-			input.getImaginaryDouble());
+	public final Computers.Arity1<C, ComplexDoubleType> complexToCfloat64 = (
+		input, output) -> output.set(input.getRealDouble(), input
+			.getImaginaryDouble());
 }

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.filter.bilateral;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,15 +44,16 @@ public class DefaultBilateralTest extends AbstractOpTest {
 
 	@Test
 	public void testBigImage() {
-		final byte[] data = { 7, 8, 9, 1, 2, 3, 7, 9, 8, 1, 3, 2, 8, 7, 9, 2, 1, 3, 8, 9, 7, 2, 3, 1, 9, 7, 8, 3, 1, 2,
-				9, 8, 7, 3, 2, 1 };
+		final byte[] data = { 7, 8, 9, 1, 2, 3, 7, 9, 8, 1, 3, 2, 8, 7, 9, 2, 1, 3,
+			8, 9, 7, 2, 3, 1, 9, 7, 8, 3, 1, 2, 9, 8, 7, 3, 2, 1 };
 		final Img<ByteType> in = ArrayImgs.bytes(data, 6, 6);
 		final Img<ByteType> out = TestImgGeneration.byteArray(false, 6, 6);
 
-		ops.op("filter.bilateral").arity4().input(in, 15.0, 5.0, 2).output(out).compute();
+		ops.op("filter.bilateral").arity4().input(in, 15.0, 5.0, 2).output(out)
+			.compute();
 
-		final byte[] expected = { 8, 7, 6, 4, 3, 2, 8, 7, 6, 4, 3, 2, 8, 7, 6, 4, 3, 2, 8, 7, 6, 4, 3, 2, 8, 7, 6, 4, 3,
-				2, 8, 7, 6, 4, 3, 2 };
+		final byte[] expected = { 8, 7, 6, 4, 3, 2, 8, 7, 6, 4, 3, 2, 8, 7, 6, 4, 3,
+			2, 8, 7, 6, 4, 3, 2, 8, 7, 6, 4, 3, 2, 8, 7, 6, 4, 3, 2 };
 
 		Cursor<ByteType> cout = out.cursor();
 		for (int i = 0; i < expected.length; i++) {
@@ -65,7 +67,8 @@ public class DefaultBilateralTest extends AbstractOpTest {
 		final Img<ByteType> in = ArrayImgs.bytes(data, 2, 2);
 		final Img<ByteType> out = TestImgGeneration.byteArray(false, 2, 2);
 
-		ops.op("filter.bilateral").arity4().input(in, 15.0, 5.0, 1).output(out).compute();
+		ops.op("filter.bilateral").arity4().input(in, 15.0, 5.0, 1).output(out)
+			.compute();
 
 		Cursor<ByteType> cout = out.cursor();
 		final byte[] expected = { 5, 5, 5, 5 };
@@ -79,14 +82,16 @@ public class DefaultBilateralTest extends AbstractOpTest {
 	@Test
 	public void testArrayToCellImg() {
 
-		final byte[] data = { 7, 8, 9, 1, 2, 3, 7, 9, 8, 1, 3, 2, 8, 7, 9, 2, 1, 3, 8, 9, 7, 2, 3, 1, 9, 7, 8, 3, 1, 2,
-				9, 8, 7, 3, 2, 1 };
+		final byte[] data = { 7, 8, 9, 1, 2, 3, 7, 9, 8, 1, 3, 2, 8, 7, 9, 2, 1, 3,
+			8, 9, 7, 2, 3, 1, 9, 7, 8, 3, 1, 2, 9, 8, 7, 3, 2, 1 };
 		final Img<ByteType> in = ArrayImgs.bytes(data, 6, 6);
 		final Img<ByteType> out = TestImgGeneration.byteArray(false, 6, 6);
 		final Img<ByteType> cellOut = TestImgGeneration.byteArray(false, 6, 6);
 
-		ops.op("filter.bilateral").arity4().input(in, 15.0, 5.0, 2).output(out).compute();
-		ops.op("filter.bilateral").arity4().input(in, 15.0, 5.0, 2).output(cellOut).compute();
+		ops.op("filter.bilateral").arity4().input(in, 15.0, 5.0, 2).output(out)
+			.compute();
+		ops.op("filter.bilateral").arity4().input(in, 15.0, 5.0, 2).output(cellOut)
+			.compute();
 
 		Cursor<ByteType> cout = out.cursor();
 		Cursor<ByteType> cCellOut = cellOut.cursor();
@@ -115,12 +120,13 @@ public class DefaultBilateralTest extends AbstractOpTest {
 
 	@Test
 	public void testZeroes() {
-		final byte[] data = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0, 0, 0, 0 };
+		final byte[] data = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		final Img<ByteType> in = ArrayImgs.bytes(data, 6, 6);
 		final Img<ByteType> out = TestImgGeneration.byteArray(false, 6, 6);
 
-		ops.op("filter.bilateral").arity4().input(in, 15.0, 5.0, 2).output(out).compute();
+		ops.op("filter.bilateral").arity4().input(in, 15.0, 5.0, 2).output(out)
+			.compute();
 
 		Cursor<ByteType> cout = out.cursor();
 		while (cout.hasNext()) {
@@ -131,15 +137,18 @@ public class DefaultBilateralTest extends AbstractOpTest {
 
 	@Test
 	public void testNegatives() {
-		final byte[] data = { -7, -8, -9, -1, -2, -3, -7, -9, -8, -1, -3, -2, -8, -7, -9, -2, -1, -3, -8, -9, -7, -2,
-				-3, -1, -9, -7, -8, -3, -1, -2, -9, -8, -7, -3, -2, -1 };
+		final byte[] data = { -7, -8, -9, -1, -2, -3, -7, -9, -8, -1, -3, -2, -8,
+			-7, -9, -2, -1, -3, -8, -9, -7, -2, -3, -1, -9, -7, -8, -3, -1, -2, -9,
+			-8, -7, -3, -2, -1 };
 		final Img<ByteType> in = ArrayImgs.bytes(data, 6, 6);
 		final Img<ByteType> out = TestImgGeneration.byteArray(false, 6, 6);
 
-		ops.op("filter.bilateral").arity4().input(in, 15.0, 5.0, 2).output(out).compute();
+		ops.op("filter.bilateral").arity4().input(in, 15.0, 5.0, 2).output(out)
+			.compute();
 
-		final byte[] expected = { -8, -7, -6, -4, -3, -2, -8, -7, -6, -4, -3, -2, -8, -7, -6, -4, -3, -2, -8, -7, -6,
-				-4, -3, -2, -8, -7, -6, -4, -3, -2, -8, -7, -6, -4, -3, -2 };
+		final byte[] expected = { -8, -7, -6, -4, -3, -2, -8, -7, -6, -4, -3, -2,
+			-8, -7, -6, -4, -3, -2, -8, -7, -6, -4, -3, -2, -8, -7, -6, -4, -3, -2,
+			-8, -7, -6, -4, -3, -2 };
 
 		Cursor<ByteType> cout = out.cursor();
 		for (int i = 0; i < expected.length; i++) {

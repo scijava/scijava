@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -46,7 +46,7 @@ import org.scijava.ops.spi.OpMethod;
 import org.scijava.types.Types;
 
 public class OpAdaptationInfoTest extends AbstractTestEnvironment implements
-		OpCollection
+	OpCollection
 {
 
 	@BeforeAll
@@ -56,10 +56,11 @@ public class OpAdaptationInfoTest extends AbstractTestEnvironment implements
 		ops.register(new FunctionsToComputers.Function2ToComputer2<>());
 	}
 
-	@OpMethod(names="test.adaptationDescription", type= BiFunction.class)
+	@OpMethod(names = "test.adaptationDescription", type = BiFunction.class)
 	public static double[] adaptableOp(final Double t, final Double u) {
-		return new double[] {t, u};
+		return new double[] { t, u };
 	}
+
 	static class ClassOp implements BiFunction<Double, Double, Double> {
 
 		@Override
@@ -72,10 +73,11 @@ public class OpAdaptationInfoTest extends AbstractTestEnvironment implements
 	public void testAdaptedDescription() {
 		// Match the above Op as a Computer
 		var adapted = ops.binary("test.adaptationDescription") //
-				.inType(Double.class, Double.class) //
-				.outType(double[].class) //
-				.computer();
-		String expected = "org.scijava.ops.engine.matcher.adapt.OpAdaptationInfoTest.adaptableOp(java.lang.Double,java.lang.Double)\n\t" +
+			.inType(Double.class, Double.class) //
+			.outType(double[].class) //
+			.computer();
+		String expected =
+			"org.scijava.ops.engine.matcher.adapt.OpAdaptationInfoTest.adaptableOp(java.lang.Double,java.lang.Double)\n\t" +
 				"Adaptor: org.scijava.ops.engine.adapt.functional.FunctionsToComputers$Function2ToComputer2\n\t\t" +
 				"Depends upon: org.scijava.ops.engine.copy.CopyOpCollection$copyDoubleArray\n\t" //
 				+ "> input1 : java.lang.Double\n\t" //

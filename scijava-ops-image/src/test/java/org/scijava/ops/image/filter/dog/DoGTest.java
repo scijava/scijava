@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -49,7 +49,7 @@ import net.imglib2.view.Views;
 
 /**
  * Tests Difference of Gaussians (DoG) implementations.
- * 
+ *
  * @author Christian Dietz (University of Konstanz)
  */
 public class DoGTest extends AbstractOpTest {
@@ -63,30 +63,35 @@ public class DoGTest extends AbstractOpTest {
 		final Img<ByteType> in = TestImgGeneration.byteArray(true, dims);
 		final Img<ByteType> out1 = TestImgGeneration.byteArray(false, dims);
 		final Img<ByteType> out2 = TestImgGeneration.byteArray(false, dims);
-		final OutOfBoundsFactory<ByteType, Img<ByteType>> outOfBounds = new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
+		final OutOfBoundsFactory<ByteType, Img<ByteType>> outOfBounds =
+			new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
 
-		ops.op("filter.DoG").arity4().input(in, sigmas1, sigmas2, outOfBounds).output(out1).compute();
+		ops.op("filter.DoG").arity4().input(in, sigmas1, sigmas2, outOfBounds)
+			.output(out1).compute();
 
 		// test against native imglib2 implementation
-		DifferenceOfGaussian.DoG(sigmas1, sigmas2, Views.extendMirrorSingle(in), out2,
-				Executors.newFixedThreadPool(10));
+		DifferenceOfGaussian.DoG(sigmas1, sigmas2, Views.extendMirrorSingle(in),
+			out2, Executors.newFixedThreadPool(10));
 
 		final Cursor<ByteType> out1Cursor = out1.cursor();
 		final Cursor<ByteType> out2Cursor = out2.cursor();
 
 		while (out1Cursor.hasNext()) {
-			Assertions.assertEquals(out1Cursor.next().getRealDouble(), out2Cursor.next().getRealDouble(), 0);
+			Assertions.assertEquals(out1Cursor.next().getRealDouble(), out2Cursor
+				.next().getRealDouble(), 0);
 		}
 	}
 
 	@Test
 	public void dogRAISingleSigmasTest() {
-		final OutOfBoundsFactory<ByteType, Img<ByteType>> outOfBounds = new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
-		final RandomAccessibleInterval<ByteType> res = ops.op("create.img")
-				.arity2().input(TestImgGeneration.byteArray(true, new long[] { 10, 10 }), new ByteType())
-				.outType(new Nil<RandomAccessibleInterval<ByteType>>() {}).apply();
-		ops.op("filter.DoG").arity4().input(TestImgGeneration.byteArray(true, new long[] { 10, 10 }), 1., 2., outOfBounds)
-				.output(res).compute();
+		final OutOfBoundsFactory<ByteType, Img<ByteType>> outOfBounds =
+			new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
+		final RandomAccessibleInterval<ByteType> res = ops.op("create.img").arity2()
+			.input(TestImgGeneration.byteArray(true, new long[] { 10, 10 }),
+				new ByteType()).outType(new Nil<RandomAccessibleInterval<ByteType>>()
+			{}).apply();
+		ops.op("filter.DoG").arity4().input(TestImgGeneration.byteArray(true,
+			new long[] { 10, 10 }), 1., 2., outOfBounds).output(res).compute();
 
 		Assertions.assertNotNull(res);
 	}

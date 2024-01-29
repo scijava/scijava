@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.engine.reduce;
 
 import org.junit.jupiter.api.Assertions;
@@ -43,7 +44,7 @@ import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpMethod;
 
 public class NullableArgumentsFromIFaceTest extends AbstractTestEnvironment
-		implements OpCollection
+	implements OpCollection
 {
 
 	@BeforeAll
@@ -52,7 +53,8 @@ public class NullableArgumentsFromIFaceTest extends AbstractTestEnvironment
 		ops.register(new TestOpNullableFromIFace());
 	}
 
-	@OpMethod(names = "test.nullableSubtract", type = BiFunctionWithNullable.class)
+	@OpMethod(names = "test.nullableSubtract",
+		type = BiFunctionWithNullable.class)
 	public static Double foo(Double i1, Double i2, Double i3) {
 		if (i3 == null) i3 = 0.;
 		return i1 - i2 - i3;
@@ -60,14 +62,16 @@ public class NullableArgumentsFromIFaceTest extends AbstractTestEnvironment
 
 	@Test
 	public void testMethodWithOneNullable() {
-		Double o = ops.op("test.nullableSubtract").arity3().input(2., 5., 7.).outType(Double.class).apply();
+		Double o = ops.op("test.nullableSubtract").arity3().input(2., 5., 7.)
+			.outType(Double.class).apply();
 		Double expected = -10.0;
 		Assertions.assertEquals(expected, o);
 	}
 
 	@Test
 	public void testMethodWithoutNullables() {
-		Double o = ops.op("test.nullableSubtract").arity2().input(2., 5.).outType(Double.class).apply();
+		Double o = ops.op("test.nullableSubtract").arity2().input(2., 5.).outType(
+			Double.class).apply();
 		Double expected = -3.0;
 		Assertions.assertEquals(expected, o);
 	}
@@ -84,7 +88,8 @@ public class NullableArgumentsFromIFaceTest extends AbstractTestEnvironment
 		Boolean in1 = true;
 		Boolean in2 = true;
 		Boolean in3 = false;
-		Boolean o = ops.op("test.nullableAnd").arity3().input(in1, in2, in3).outType(Boolean.class).apply();
+		Boolean o = ops.op("test.nullableAnd").arity3().input(in1, in2, in3)
+			.outType(Boolean.class).apply();
 		Boolean expected = false;
 		Assertions.assertEquals(expected, o);
 	}
@@ -93,7 +98,8 @@ public class NullableArgumentsFromIFaceTest extends AbstractTestEnvironment
 	public void testFieldWithoutNullables() {
 		Boolean in1 = true;
 		Boolean in2 = true;
-		Boolean o = ops.op("test.nullableAnd").arity2().input(in1, in2).outType(Boolean.class).apply();
+		Boolean o = ops.op("test.nullableAnd").arity2().input(in1, in2).outType(
+			Boolean.class).apply();
 		Boolean expected = true;
 		Assertions.assertEquals(expected, o);
 	}
@@ -103,7 +109,8 @@ public class NullableArgumentsFromIFaceTest extends AbstractTestEnvironment
 		Boolean in1 = true;
 		Boolean in2 = false;
 		Boolean in3 = false;
-		Boolean o = ops.op("test.nullableOr").arity3().input(in1, in2, in3).outType(Boolean.class).apply();
+		Boolean o = ops.op("test.nullableOr").arity3().input(in1, in2, in3).outType(
+			Boolean.class).apply();
 		Boolean expected = true;
 		Assertions.assertEquals(expected, o);
 	}
@@ -112,7 +119,8 @@ public class NullableArgumentsFromIFaceTest extends AbstractTestEnvironment
 	public void testClassWithoutNullables() {
 		Boolean in1 = true;
 		Boolean in2 = false;
-		Boolean o = ops.op("test.nullableOr").arity2().input(in1, in2).outType(Boolean.class).apply();
+		Boolean o = ops.op("test.nullableOr").arity2().input(in1, in2).outType(
+			Boolean.class).apply();
 		Boolean expected = true;
 		Assertions.assertEquals(expected, o);
 	}
@@ -136,8 +144,8 @@ public class NullableArgumentsFromIFaceTest extends AbstractTestEnvironment
 			Boolean.class //
 		);
 		// Try to create an OpMethodInfo
-		Assertions.assertThrows(NullablesOnMultipleMethodsException.class, () ->
-			new OpMethodInfo(//
+		Assertions.assertThrows(NullablesOnMultipleMethodsException.class,
+			() -> new OpMethodInfo(//
 				m, //
 				BiFunctionWithNullable.class, //
 				new Hints(), //
@@ -145,12 +153,16 @@ public class NullableArgumentsFromIFaceTest extends AbstractTestEnvironment
 			));
 	}
 
-	public final BiFunctionWithNullable<Double, Double, Double, Double> foo = new BiFunctionWithNullable<Double, Double, Double, Double>() {
-		@Override public Double apply(Double in1, Double in2, @Nullable Double in3) {
-			if (in3 == null) in3 = 0.;
-			return in1 + in2 + in3;
-		}
-	};
+	public final BiFunctionWithNullable<Double, Double, Double, Double> foo =
+		new BiFunctionWithNullable<Double, Double, Double, Double>()
+		{
+
+			@Override
+			public Double apply(Double in1, Double in2, @Nullable Double in3) {
+				if (in3 == null) in3 = 0.;
+				return in1 + in2 + in3;
+			}
+		};
 
 	/**
 	 * Ensures that an {@link InvalidOpException} is thrown when {@link Nullable}

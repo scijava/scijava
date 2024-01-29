@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -43,10 +43,10 @@ public class CopyOpCollectionTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testCopyOp() {
-		double[] input = {1, 2, 3};
-		double[] output = {4, 5, 6};
+		double[] input = { 1, 2, 3 };
+		double[] output = { 4, 5, 6 };
 		ops.op("copy.array").arity1().input(input).output(output).compute();
-		
+
 		Assertions.assertArrayEquals(input, output, 0.);
 	}
 

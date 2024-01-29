@@ -100,19 +100,19 @@ public class FocusedOpInfo implements OpInfo {
 		SimplifiedOpRequest simpleReq, OpEnvironment env)
 	{
 		this( //
-				simpleInfo, //
-				simpleReq.srcReq().getType(), //
-				simpleReq.inputSimplifiers(), //
-				simpleReq.outputFocuser(), //
-				null, //
-				env //
+			simpleInfo, //
+			simpleReq.srcReq().getType(), //
+			simpleReq.inputSimplifiers(), //
+			simpleReq.outputFocuser(), //
+			null, //
+			env //
 		);
 	}
 
-	public FocusedOpInfo(SimplifiedOpInfo simpleInfo,
-		Type opType,
+	public FocusedOpInfo(SimplifiedOpInfo simpleInfo, Type opType,
 		List<RichOp<Function<?, ?>>> inputSimplifiers,
-		RichOp<Function<?, ?>> outputFocuser, RichOp<Computers.Arity1<?, ?>> copier, OpEnvironment env)
+		RichOp<Function<?, ?>> outputFocuser, RichOp<Computers.Arity1<?, ?>> copier,
+		OpEnvironment env)
 	{
 		this.simpleInfo = simpleInfo;
 		this.inputSimplifiers = inputSimplifiers;
@@ -129,11 +129,14 @@ public class FocusedOpInfo implements OpInfo {
 		this.copyOp = ensureNonNull(copier);
 	}
 
-	private RichOp<Computers.Arity1<?,?>> ensureNonNull(RichOp<Computers.Arity1<?,?>> copier) {
+	private RichOp<Computers.Arity1<?, ?>> ensureNonNull(
+		RichOp<Computers.Arity1<?, ?>> copier)
+	{
 		if (copier != null) {
 			return copier;
 		}
-		return simplifierCopyOp(this.env, Types.raw(this.opType), this.inputTypes());
+		return simplifierCopyOp(this.env, Types.raw(this.opType), this
+			.inputTypes());
 	}
 
 	@Override
@@ -166,9 +169,10 @@ public class FocusedOpInfo implements OpInfo {
 
 	@Override
 	public String implementationName() {
-		StringBuilder sb = new StringBuilder(simpleInfo.srcInfo().implementationName());
+		StringBuilder sb = new StringBuilder(simpleInfo.srcInfo()
+			.implementationName());
 		sb.append("|focused");
-		for(Member<?> m: struct()) {
+		for (Member<?> m : struct()) {
 			if (m.isInput() || m.isOutput()) {
 				sb.append("_");
 				sb.append(SimplificationUtils.getClassName(m.getType()));
@@ -193,21 +197,20 @@ public class FocusedOpInfo implements OpInfo {
 			.object();
 		// Create Functions to Simplify and then Focus each input
 		List<Function<?, ?>> inputProcessors = new ArrayList<>();
-		for(int i = 0; i < inputSimplifiers.size(); i++) {
-			inputProcessors.add(combineFunctions(inputSimplifiers.get(i), simpleInfo.inputFocusers.get(i)));
+		for (int i = 0; i < inputSimplifiers.size(); i++) {
+			inputProcessors.add(combineFunctions(inputSimplifiers.get(i),
+				simpleInfo.inputFocusers.get(i)));
 		}
 		// Create Function to Simplify and then Focus the output
-		Function<?, ?> outputProcessor = combineFunctions(simpleInfo.outputSimplifier, outputFocuser);
+		Function<?, ?> outputProcessor = combineFunctions(
+			simpleInfo.outputSimplifier, outputFocuser);
 		// Grab the output copier if it exists.
-		Computers.Arity1<?, ?> outputCopier = copyOp == null ? null : copyOp.asOpType();
+		Computers.Arity1<?, ?> outputCopier = copyOp == null ? null : copyOp
+			.asOpType();
 
 		try {
-			Object simpleOp = SimplificationUtils.javassistOp(op,
-					this,
-					inputProcessors,
-					outputProcessor,
-					outputCopier
-			);
+			Object simpleOp = SimplificationUtils.javassistOp(op, this,
+				inputProcessors, outputProcessor, outputCopier);
 			return struct().createInstance(simpleOp);
 		}
 		catch (Throwable ex) {
@@ -219,7 +222,7 @@ public class FocusedOpInfo implements OpInfo {
 	/**
 	 * Helper function that coerces type variables, so that we can call
 	 * {@link Function#andThen(Function)} and return the composition.
-	 * 
+	 *
 	 * @param f1 the first {@link Function}, mapping X to Y
 	 * @param f2 the second {@link Function}, mapping Y to Z
 	 * @return the composition, mapping X to Z
@@ -369,9 +372,9 @@ public class FocusedOpInfo implements OpInfo {
 	}
 
 	/**
-	 * Calls a {@code engine.lossReporter} Op to determine the <b>worst-case</b> loss
-	 * from a {@code T} to a {@code R}. If no {@code engine.lossReporter} exists for such
-	 * a conversion, we assume infinite loss.
+	 * Calls a {@code engine.lossReporter} Op to determine the <b>worst-case</b>
+	 * loss from a {@code T} to a {@code R}. If no {@code engine.lossReporter}
+	 * exists for such a conversion, we assume infinite loss.
 	 *
 	 * @param <T> -the generic type we are converting from.
 	 * @param <R> - generic type we are converting to.
@@ -396,8 +399,9 @@ public class FocusedOpInfo implements OpInfo {
 				.getType() });
 			Hints h = new Hints(BaseOpHints.Adaptation.FORBIDDEN,
 				BaseOpHints.Simplification.FORBIDDEN);
-			LossReporter<T, R> op = env.op("engine.lossReporter", specialTypeNil, new Nil[] {
-				Nil.of(nilFromType), Nil.of(nilToType) }, Nil.of(Double.class), h);
+			LossReporter<T, R> op = env.op("engine.lossReporter", specialTypeNil,
+				new Nil[] { Nil.of(nilFromType), Nil.of(nilToType) }, Nil.of(
+					Double.class), h);
 			return op.apply(from, to);
 		}
 		catch (OpMatchingException e) {

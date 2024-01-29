@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.transform.collapseView;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -61,15 +62,20 @@ public class CollapseViewTest extends AbstractOpTest {
 
 	@Test
 	public void defaultCollapseTest() {
-		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
+			new int[] { 10, 10 });
 
-		Function<RandomAccessibleInterval<DoubleType>, CompositeIntervalView<DoubleType, ? extends GenericComposite<DoubleType>>> collapseFunc = OpBuilder
-				.matchFunction(ops, "transform.collapseView", new Nil<RandomAccessibleInterval<DoubleType>>() {
-				}, new Nil<CompositeIntervalView<DoubleType, ? extends GenericComposite<DoubleType>>>() {
-				});
+		Function<RandomAccessibleInterval<DoubleType>, CompositeIntervalView<DoubleType, ? extends GenericComposite<DoubleType>>> collapseFunc =
+			OpBuilder.matchFunction(ops, "transform.collapseView",
+				new Nil<RandomAccessibleInterval<DoubleType>>()
+				{},
+				new Nil<CompositeIntervalView<DoubleType, ? extends GenericComposite<DoubleType>>>()
+				{});
 
-		CompositeIntervalView<DoubleType, ? extends GenericComposite<DoubleType>> il2 = Views.collapse(img);
-		CompositeIntervalView<DoubleType, ? extends GenericComposite<DoubleType>> opr = collapseFunc.apply(img);
+		CompositeIntervalView<DoubleType, ? extends GenericComposite<DoubleType>> il2 =
+			Views.collapse(img);
+		CompositeIntervalView<DoubleType, ? extends GenericComposite<DoubleType>> opr =
+			collapseFunc.apply(img);
 
 		assertEquals(il2.numDimensions(), opr.numDimensions());
 	}
@@ -77,17 +83,21 @@ public class CollapseViewTest extends AbstractOpTest {
 	@Test
 	public void collapseRATest() {
 
-		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10, 10 });
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
+			new int[] { 10, 10, 10 });
 
-		Function<RandomAccessible<DoubleType>, CompositeView<DoubleType, ? extends GenericComposite<DoubleType>>> collapseFunc = OpBuilder
-				.matchFunction(ops, "transform.collapseView", new Nil<RandomAccessible<DoubleType>>() {
-				}, new Nil<CompositeView<DoubleType, ? extends GenericComposite<DoubleType>>>() {
-				});
+		Function<RandomAccessible<DoubleType>, CompositeView<DoubleType, ? extends GenericComposite<DoubleType>>> collapseFunc =
+			OpBuilder.matchFunction(ops, "transform.collapseView",
+				new Nil<RandomAccessible<DoubleType>>()
+				{},
+				new Nil<CompositeView<DoubleType, ? extends GenericComposite<DoubleType>>>()
+				{});
 
-		CompositeView<DoubleType, ? extends GenericComposite<DoubleType>> il2 = Views
-				.collapse((RandomAccessible<DoubleType>) img);
+		CompositeView<DoubleType, ? extends GenericComposite<DoubleType>> il2 =
+			Views.collapse((RandomAccessible<DoubleType>) img);
 
-		CompositeView<DoubleType, ? extends GenericComposite<DoubleType>> opr = collapseFunc.apply(img);
+		CompositeView<DoubleType, ? extends GenericComposite<DoubleType>> opr =
+			collapseFunc.apply(img);
 
 		assertEquals(il2.numDimensions(), opr.numDimensions());
 	}

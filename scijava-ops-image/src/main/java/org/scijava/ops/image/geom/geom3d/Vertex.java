@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.geom.geom3d;
 
 import java.util.ArrayList;
@@ -45,14 +46,14 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 public class Vertex extends Vector3D implements RealLocalizable {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
 	private double distanceToFaceInFront = 0;
-	
+
 	private List<TriangularFacet> facesInFront = new ArrayList<>();
-	
+
 	public Vertex(final double x, final double y, final double z) {
 		super(x, y, z);
 	}
@@ -68,12 +69,11 @@ public class Vertex extends Vector3D implements RealLocalizable {
 	public void addFaceInFront(final TriangularFacet f) {
 		facesInFront.add(f);
 	}
-	
+
 	public void clearFacesInFront() {
 		facesInFront.clear();
 	}
-	
-	
+
 	public List<Vertex> getPointsInFront() {
 		Iterator<TriangularFacet> it = facesInFront.iterator();
 		List<Vertex> l = new ArrayList<>();
@@ -113,13 +113,13 @@ public class Vertex extends Vector3D implements RealLocalizable {
 	@Override
 	public float getFloatPosition(final int d) {
 		switch (d) {
-			case 0 :
+			case 0:
 				return (float) getX();
-			case 1 :
+			case 1:
 				return (float) getY();
-			case 2 : 
+			case 2:
 				return (float) getZ();
-			default :
+			default:
 				return -1;
 		}
 	}
@@ -127,13 +127,13 @@ public class Vertex extends Vector3D implements RealLocalizable {
 	@Override
 	public double getDoublePosition(final int d) {
 		switch (d) {
-			case 0 :
+			case 0:
 				return getX();
-			case 1 :
+			case 1:
 				return getY();
-			case 2 : 
+			case 2:
 				return getZ();
-			default :
+			default:
 				return -1;
 		}
 	}

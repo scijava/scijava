@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -41,17 +41,17 @@ import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * Op to calculate the {@code stats.momentNAboutMean} using
- * {@code stats.mean} and {@code stats.size}. N can be bounded to any positive {@link Integer}
- * 
+ * Op to calculate the {@code stats.momentNAboutMean} using {@code stats.mean}
+ * and {@code stats.size}. N can be bounded to any positive {@link Integer}
+ *
  * @author Gabriel Selzer
- * @param <I>
- *            input type
- * @param <O>
- *            output type
+ * @param <I> input type
+ * @param <O> output type
  * @implNote op names='stats.momentNAboutMean', priority='100.'
  */
-public class DefaultMomentNAboutMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity2<RandomAccessibleInterval<I>, Integer, O> {
+public class DefaultMomentNAboutMean<I extends RealType<I>, O extends RealType<O>>
+	implements Computers.Arity2<RandomAccessibleInterval<I>, Integer, O>
+{
 
 	@OpDependency(name = "stats.mean")
 	private Computers.Arity1<RandomAccessibleInterval<I>, DoubleType> meanComputer;
@@ -69,27 +69,31 @@ public class DefaultMomentNAboutMean<I extends RealType<I>, O extends RealType<O
 	 *          will be stored
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<I> input, final Integer n, final O output) {
+	public void compute(final RandomAccessibleInterval<I> input, final Integer n,
+		final O output)
+	{
 		final DoubleType mean = new DoubleType();
 		meanComputer.compute(input, mean);
 		final DoubleType size = new DoubleType();
 		sizeComputer.compute(input, size);
 
-		List<DoubleType> chunkSums = LoopBuilder.setImages(input).multiThreaded().forEachChunk(chunk -> {
-			DoubleType chunkSum = new DoubleType(0);
-			DoubleType difference = new DoubleType();
-			DoubleType product = new DoubleType();
-			chunk.forEachPixel(pixel -> {
-				difference.set(pixel.getRealDouble());
-				difference.sub(mean);
-				powOp.compute(difference, n, product);
-				chunkSum.add(product);
+		List<DoubleType> chunkSums = LoopBuilder.setImages(input).multiThreaded()
+			.forEachChunk(chunk -> {
+				DoubleType chunkSum = new DoubleType(0);
+				DoubleType difference = new DoubleType();
+				DoubleType product = new DoubleType();
+				chunk.forEachPixel(pixel -> {
+					difference.set(pixel.getRealDouble());
+					difference.sub(mean);
+					powOp.compute(difference, n, product);
+					chunkSum.add(product);
+				});
+				return chunkSum;
 			});
-			return chunkSum;
-		});
 
 		DoubleType sum = new DoubleType(0);
-		for(DoubleType chunkSum : chunkSums) sum.add(chunkSum);
+		for (DoubleType chunkSum : chunkSums)
+			sum.add(chunkSum);
 		sum.div(size);
 
 		output.setReal(sum.getRealDouble());

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -55,11 +55,13 @@ import org.scijava.types.Nil;
 
 /**
  * Testing functionality of SlicingIterableIntervals
- * 
+ *
  * @author Christian Dietz (University of Konstanz)
  * @author Brian Northan
  */
-public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends AbstractOpTest {
+public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends
+	AbstractOpTest
+{
 
 	private Img<ByteType> in;
 
@@ -95,7 +97,8 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends Abs
 			ops.bakeLambdaType(test,
 				new Nil<Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>>>()
 				{}.getType());
-		ops.op("transform.slice").arity4().input(in, wrapped, xyAxis, true).output(out).compute();
+		ops.op("transform.slice").arity4().input(in, wrapped, xyAxis, true).output(
+			out).compute();
 
 		for (final Cursor<ByteType> cur = out.cursor(); cur.hasNext();) {
 			cur.fwd();
@@ -133,8 +136,8 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends Abs
 			ops.bakeLambdaType(test,
 				new Nil<Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>>>()
 				{}.getType());
-		ops.op("transform.slice").arity4().input(inSequence, wrapped, xyAxis, true).output(outSequence)
-			.compute();
+		ops.op("transform.slice").arity4().input(inSequence, wrapped, xyAxis, true)
+			.output(outSequence).compute();
 
 		for (final Cursor<ByteType> cur = outSequence.cursor(); cur.hasNext();) {
 			cur.fwd();
@@ -146,15 +149,15 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends Abs
 	public void testNonZeroMinimumInterval() {
 
 		Img<ByteType> img3D = ArrayImgs.bytes(50, 50, 3);
-		IntervalView<ByteType> interval2D = Views.interval(img3D,
-				new FinalInterval(new long[] { 25, 25, 2 }, new long[] { 35, 35, 2 }));
+		IntervalView<ByteType> interval2D = Views.interval(img3D, new FinalInterval(
+			new long[] { 25, 25, 2 }, new long[] { 35, 35, 2 }));
 		final int[] xyAxis = new int[] { 0, 1 };
 
 		// iterate through every slice, should return a single
 		// RandomAccessibleInterval<?> from 25, 25, 2 to 35, 35, 2
 
-		final SlicesII<ByteType>
-				hyperSlices = new SlicesII<>(interval2D, xyAxis, true);
+		final SlicesII<ByteType> hyperSlices = new SlicesII<>(interval2D, xyAxis,
+			true);
 		final Cursor<RandomAccessibleInterval<ByteType>> c = hyperSlices.cursor();
 		int i = 0;
 		while (c.hasNext()) {
@@ -173,8 +176,8 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends Abs
 		final int numSlices = 25;
 		final int numTimePoints = 5;
 
-		final Img<UnsignedByteType> testImage = TestImgGeneration.unsignedByteArray(true, xSize, ySize, numChannels,
-				numSlices, numTimePoints);
+		final Img<UnsignedByteType> testImage = TestImgGeneration.unsignedByteArray(
+			true, xSize, ySize, numChannels, numSlices, numTimePoints);
 
 		final int[] axisIndices = new int[3];
 
@@ -184,9 +187,11 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends Abs
 		axisIndices[1] = 1;
 		axisIndices[2] = 3;
 
-		final SlicesII<UnsignedByteType> hyperSlices = new SlicesII<>(testImage, axisIndices, true);
+		final SlicesII<UnsignedByteType> hyperSlices = new SlicesII<>(testImage,
+			axisIndices, true);
 
-		final Cursor<RandomAccessibleInterval<UnsignedByteType>> c = hyperSlices.cursor();
+		final Cursor<RandomAccessibleInterval<UnsignedByteType>> c = hyperSlices
+			.cursor();
 
 		int numHyperSlices = 0;
 		while (c.hasNext()) {

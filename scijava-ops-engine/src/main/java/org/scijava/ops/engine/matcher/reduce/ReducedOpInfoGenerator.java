@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -72,14 +72,14 @@ public class ReducedOpInfoGenerator implements OpInfoGenerator {
 	private List<OpInfo> reduce(OpInfo info) {
 		// Find the correct InfoReducer
 		Optional<? extends InfoReducer> optionalReducer = infoReducers //
-				.parallelStream() //
-				.filter(infoReducer -> infoReducer.canReduce(info)) //
-				.findAny();
-		if(optionalReducer.isEmpty()) return Collections.emptyList();
+			.parallelStream() //
+			.filter(infoReducer -> infoReducer.canReduce(info)) //
+			.findAny();
+		if (optionalReducer.isEmpty()) return Collections.emptyList();
 		// We can only reduce as many times as we have optional params
 		int numReductions = (int) info.struct().members().parallelStream() //
-				.filter(m -> !m.isRequired()) //
-				.count(); //
+			.filter(m -> !m.isRequired()) //
+			.count(); //
 		// add a ReducedOpInfo for all possible reductions
 		InfoReducer reducer = optionalReducer.get();
 		LongFunction<OpInfo> func = l -> reducer.reduce(info, (int) l);
@@ -88,5 +88,5 @@ public class ReducedOpInfoGenerator implements OpInfoGenerator {
 			.filter(Objects::nonNull) //
 			.collect(Collectors.toList());
 	}
-	
+
 }

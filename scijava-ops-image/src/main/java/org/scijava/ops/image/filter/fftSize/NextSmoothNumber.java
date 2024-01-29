@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -41,7 +41,7 @@ package org.scijava.ops.image.filter.fftSize;
  * log(p) to a[i], a[i + p<sup>j</sup>], a[i + 2p<sup>j</sup>] and so on, up
  * until the end of the array. When we’ve finished, if any a[i] &ge; log(x),
  * then x + i is y-smooth. </blockquote>
- * 
+ *
  * @author Johannes Schindelin
  * @author Brian Northan
  */
@@ -62,8 +62,8 @@ public final class NextSmoothNumber {
 	}
 
 	public static int nextSmooth(final int y, final int x, final int z) {
-		double delta=0.000001;
-		
+		double delta = 0.000001;
+
 		final double[] a = new double[z];
 		handlePrime(2, x, a);
 		handlePrime(3, x, a);
@@ -71,7 +71,7 @@ public final class NextSmoothNumber {
 		handlePrime(7, x, a);
 		double log = Math.log(x);
 		for (int i = 0; i < a.length; i++) {
-			if (a[i]  >= log - delta) return x + i;
+			if (a[i] >= log - delta) return x + i;
 		}
 		// System.err.println(Arrays.toString(a));
 		// System.err.println(a[32805 - x]);

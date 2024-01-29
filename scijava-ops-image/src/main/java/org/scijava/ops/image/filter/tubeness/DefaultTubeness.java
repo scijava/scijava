@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -64,17 +64,17 @@ import net.imglib2.view.Views;
  * the large eigenvalue is negative, we return its absolute value and otherwise
  * return 0.
  * <ul>
- * <li>Source image is filtered first by a gaussian with 𝜎 that sets its scale.</li>
+ * <li>Source image is filtered first by a gaussian with 𝜎 that sets its
+ * scale.</li>
  * <li>The the Hessian matrix is calculated for each pixel.</li>
  * <li>We yield the eigenvalues of the Hessian matrix. The output of the
  * tubeness filter is a combination of these eigenvalues:</li>
  * <ul>
  * <li>in 2D where {@code λ₂} is the largest eigenvalue:
- * {@code out = 𝜎 × 𝜎 × |λ₂|} if {@code λ₂} is negative, 0
- * otherwise.</li>
- * <li>in 3D where {@code λ₂} and {@code λ₃} are the largest
- * eigenvalues:, {@code out = 𝜎 × 𝜎 × sqrt( λ₂ * λ₃ )} if {@code λ₂}
- * and {@code λ₃} are negative, 0 otherwise.</li>
+ * {@code out = 𝜎 × 𝜎 × |λ₂|} if {@code λ₂} is negative, 0 otherwise.</li>
+ * <li>in 3D where {@code λ₂} and {@code λ₃} are the largest eigenvalues:,
+ * {@code out = 𝜎 × 𝜎 × sqrt( λ₂ * λ₃ )} if {@code λ₂} and {@code λ₃} are
+ * negative, 0 otherwise.</li>
  * </ul>
  * </ul>
  * This results in enhancing filaments of roughly {@code 𝜎 / sqrt(d)}
@@ -87,9 +87,8 @@ import net.imglib2.view.Views;
  *      "https://github.com/fiji/VIB/blob/master/src/main/java/features/Tubeness_.java">Tubeness
  *      VIB plugin code</a>
  * @author Jean-Yves Tinevez
- * @param <T>
- *            the type of the source pixels. Must extends {@link RealType}.
- *@implNote op names='filter.tubeness'
+ * @param <T> the type of the source pixels. Must extends {@link RealType}.
+ * @implNote op names='filter.tubeness'
  */
 public class DefaultTubeness<T extends RealType<T>> implements
 	Computers.Arity3<RandomAccessibleInterval<T>, Double, double[], IterableInterval<DoubleType>>
@@ -98,13 +97,14 @@ public class DefaultTubeness<T extends RealType<T>> implements
 	@OpDependency(name = "create.imgFactory")
 	private Function<Dimensions, ImgFactory<DoubleType>> createFactoryOp;
 
-	//TODO: make sure this works
+	// TODO: make sure this works
 	@OpDependency(name = "transform.project")
 	private Computers.Arity3<RandomAccessibleInterval<DoubleType>, Computers.Arity1<Iterable<DoubleType>, DoubleType>, Integer, IterableInterval<DoubleType>> projector;
 
 	@Override
-	public void compute(final RandomAccessibleInterval<T> input, final Double sigma,
-		final double[] calibration, final IterableInterval<DoubleType> tubeness)
+	public void compute(final RandomAccessibleInterval<T> input,
+		final Double sigma, final double[] calibration,
+		final IterableInterval<DoubleType> tubeness)
 	{
 
 		final int numDimensions = input.numDimensions();
@@ -129,10 +129,14 @@ public class DefaultTubeness<T extends RealType<T>> implements
 		hessianDims[numDimensions] = numDimensions * (numDimensions + 1) / 2;
 		gradientDims[numDimensions] = numDimensions;
 		final Dimensions hessianDimensions = FinalDimensions.wrap(hessianDims);
-		final FinalDimensions gradientDimensions = FinalDimensions.wrap(gradientDims);
-		final ImgFactory<DoubleType> factory = createFactoryOp.apply(hessianDimensions);
-		final Img<DoubleType> hessian = factory.create(hessianDimensions, new DoubleType());
-		final Img<DoubleType> gradient = factory.create(gradientDimensions, new DoubleType());
+		final FinalDimensions gradientDimensions = FinalDimensions.wrap(
+			gradientDims);
+		final ImgFactory<DoubleType> factory = createFactoryOp.apply(
+			hessianDimensions);
+		final Img<DoubleType> hessian = factory.create(hessianDimensions,
+			new DoubleType());
+		final Img<DoubleType> gradient = factory.create(gradientDimensions,
+			new DoubleType());
 		final Img<DoubleType> gaussian = factory.create(input, new DoubleType());
 
 		// Handle multithreading.
@@ -141,8 +145,9 @@ public class DefaultTubeness<T extends RealType<T>> implements
 		try {
 			var es = Parallelization.getExecutorService();
 			// Hessian calculation.
-			HessianMatrix.calculateMatrix(Views.extendBorder(input), gaussian, gradient, hessian,
-					new OutOfBoundsBorderFactory<>(), nThreads, es, sigma);
+			HessianMatrix.calculateMatrix(Views.extendBorder(input), gaussian,
+				gradient, hessian, new OutOfBoundsBorderFactory<>(), nThreads, es,
+				sigma);
 
 			// Hessian eigenvalues.
 			final RandomAccessibleInterval<DoubleType> evs = TensorEigenValues
@@ -152,26 +157,32 @@ public class DefaultTubeness<T extends RealType<T>> implements
 
 			final Computers.Arity1<Iterable<DoubleType>, DoubleType> method;
 			switch (numDimensions) {
-			case 2:
-				method = new Tubeness2D(sigma);
-				break;
-			case 3:
-				method = new Tubeness3D(sigma);
-				break;
-			default:
-				System.err.println("Cannot compute tubeness for " + numDimensions + "D images.");
-				return;
+				case 2:
+					method = new Tubeness2D(sigma);
+					break;
+				case 3:
+					method = new Tubeness3D(sigma);
+					break;
+				default:
+					System.err.println("Cannot compute tubeness for " + numDimensions +
+						"D images.");
+					return;
 			}
 			projector.compute(evs, method, numDimensions, tubeness);
 
 			return;
-		} catch (final IncompatibleTypeException | InterruptedException | ExecutionException e) {
+		}
+		catch (final IncompatibleTypeException | InterruptedException
+				| ExecutionException e)
+		{
 			e.printStackTrace();
 			return;
 		}
 	}
 
-	private static final class Tubeness2D implements Computers.Arity1<Iterable<DoubleType>, DoubleType> {
+	private static final class Tubeness2D implements
+		Computers.Arity1<Iterable<DoubleType>, DoubleType>
+	{
 
 		private final double sigma;
 
@@ -180,19 +191,21 @@ public class DefaultTubeness<T extends RealType<T>> implements
 		}
 
 		@Override
-		public void compute(final Iterable<DoubleType> input, final DoubleType output) {
+		public void compute(final Iterable<DoubleType> input,
+			final DoubleType output)
+		{
 			// Use just the largest one.
 			final Iterator<DoubleType> it = input.iterator();
 			it.next();
 			final double val = it.next().get();
-			if (val >= 0.)
-				output.setZero();
-			else
-				output.set(sigma * sigma * Math.abs(val));
+			if (val >= 0.) output.setZero();
+			else output.set(sigma * sigma * Math.abs(val));
 		}
 	}
 
-	private static final class Tubeness3D implements Computers.Arity1<Iterable<DoubleType>, DoubleType> {
+	private static final class Tubeness3D implements
+		Computers.Arity1<Iterable<DoubleType>, DoubleType>
+	{
 
 		private final double sigma;
 
@@ -201,32 +214,34 @@ public class DefaultTubeness<T extends RealType<T>> implements
 		}
 
 		@Override
-		public void compute(final Iterable<DoubleType> input, final DoubleType output) {
+		public void compute(final Iterable<DoubleType> input,
+			final DoubleType output)
+		{
 			// Use the two largest ones.
 			final Iterator<DoubleType> it = input.iterator();
 			it.next();
 			final double val1 = it.next().get();
 			final double val2 = it.next().get();
-			if (val1 >= 0. || val2 >= 0.)
-				output.setZero();
-			else
-				output.set(sigma * sigma * Math.sqrt(val1 * val2));
+			if (val1 >= 0. || val2 >= 0.) output.setZero();
+			else output.set(sigma * sigma * Math.sqrt(val1 * val2));
 		}
 	}
 }
 
 /**
- *@implNote op names='filter.tubeness'
+ * @implNote op names='filter.tubeness'
  */
 class DefaultTubenessWithoutCalibration<T extends RealType<T>> implements
-		Computers.Arity2<RandomAccessibleInterval<T>, Double, IterableInterval<DoubleType>> {
+	Computers.Arity2<RandomAccessibleInterval<T>, Double, IterableInterval<DoubleType>>
+{
 
 	@OpDependency(name = "filter.tubeness")
 	Computers.Arity3<RandomAccessibleInterval<T>, Double, double[], IterableInterval<DoubleType>> tubenessOp;
 
 	@Override
 	public void compute(RandomAccessibleInterval<T> in1, Double in3,
-			IterableInterval<DoubleType> out) {
+		IterableInterval<DoubleType> out)
+	{
 		tubenessOp.compute(in1, in3, new double[] {}, out);
 	}
 }

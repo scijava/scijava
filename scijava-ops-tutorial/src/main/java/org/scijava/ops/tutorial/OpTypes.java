@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -54,16 +54,15 @@ public class OpTypes {
 		/*
 		While there are no restrictions on the FunctionalInterface that an Op,
 		implements, there are three main categories used by the majority of Ops.
-		
+
 		We will showcase each of the types below.
 		 */
 		OpEnvironment ops = OpEnvironment.build();
 
 		/**
-		 * The most basic category of Ops are Functions.
-		 *
-		 * Function Ops encapsulate their functionality within a method named "apply",
-		 * which takes in some number of inputs and returns a single output.
+		 * The most basic category of Ops are Functions. Function Ops encapsulate
+		 * their functionality within a method named "apply", which takes in some
+		 * number of inputs and returns a single output.
 		 */
 		@OpClass(names = "tutorial.add")
 		class SampleFunction implements Op, BiFunction<Double, Double, Double> {
@@ -103,14 +102,14 @@ public class OpTypes {
 		The request for a Computer is very similar to the request for a Function:
 		 */
 		Computers.Arity2<double[], Double, double[]> powerOp = ops //
-				// Look for a "math.power" Op
-				.binary("math.power") //
-				//
-				.inType(double[].class, Double.class) //
-				.outType(double[].class) //
-				.computer();
+			// Look for a "math.power" Op
+			.binary("math.power") //
+			//
+			.inType(double[].class, Double.class) //
+			.outType(double[].class) //
+			.computer();
 
-		double[] bases = new double[] {1, 2, 3, 4};
+		double[] bases = new double[] { 1, 2, 3, 4 };
 		double exponent = 2.;
 		double[] powers = new double[4];
 
@@ -125,8 +124,10 @@ public class OpTypes {
 		 */
 
 		Inplaces.Arity4_1<RandomAccessibleInterval<BitType>, Interval, Shape, Integer> openOp =
-		ops.quaternary("morphology.open") //
-				.inType(new Nil<RandomAccessibleInterval<BitType>>() {}, Nil.of(Interval.class), Nil.of(Shape.class), Nil.of(Integer.class)).inplace1();
+			ops.quaternary("morphology.open") //
+				.inType(new Nil<RandomAccessibleInterval<BitType>>()
+				{}, Nil.of(Interval.class), Nil.of(Shape.class), Nil.of(Integer.class))
+				.inplace1();
 
 	}
 }

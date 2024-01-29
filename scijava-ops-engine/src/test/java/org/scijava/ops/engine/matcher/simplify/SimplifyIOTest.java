@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.engine.matcher.simplify;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -42,7 +43,9 @@ import org.scijava.ops.engine.copy.CopyOpCollection;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 
-public class SimplifyIOTest extends AbstractTestEnvironment implements OpCollection{
+public class SimplifyIOTest extends AbstractTestEnvironment implements
+	OpCollection
+{
 
 	@BeforeAll
 	public static void AddNeededOps() {
@@ -58,14 +61,15 @@ public class SimplifyIOTest extends AbstractTestEnvironment implements OpCollect
 	@Test
 	public void testFunctionOutputSimplification() {
 		Integer in = 4;
-		Integer square = ops.op("test.math.square").arity1().input(in).outType(Integer.class).apply();
-		
+		Integer square = ops.op("test.math.square").arity1().input(in).outType(
+			Integer.class).apply();
+
 		assertEquals(square, 16, 0.);
 	}
-	
+
 	@OpField(names = "test.math.square")
 	public final Computers.Arity1<Double[], Double[]> squareArray = (in, out) -> {
-		for(int i = 0; i < in.length && i < out.length; i++) {
+		for (int i = 0; i < in.length && i < out.length; i++) {
 			out[i] = squareOp.apply(in[i]);
 		}
 	};
@@ -83,35 +87,34 @@ public class SimplifyIOTest extends AbstractTestEnvironment implements OpCollect
 			io[i] += in0[i];
 		}
 	};
-	
+
 	@Test
 	public void basicComputerTest() {
-		Integer[] in = new Integer[] {1, 2, 3};
-		Integer[] out = new Integer[] {4, 5, 6}; 
-		
+		Integer[] in = new Integer[] { 1, 2, 3 };
+		Integer[] out = new Integer[] { 4, 5, 6 };
+
 		ops.op("test.math.square").arity1().input(in).output(out).compute();
-		assertArrayEquals(out, new Integer[] {1, 4, 9});
+		assertArrayEquals(out, new Integer[] { 1, 4, 9 });
 	}
 
 	@Test
 	public void basicInplace2_1Test() {
-		Integer[] io = new Integer[] {1, 2, 3};
-		Integer[] in1 = new Integer[] {4, 5, 6}; 
-		Integer[] expected = new Integer[] {5, 7, 9};
-		
+		Integer[] io = new Integer[] { 1, 2, 3 };
+		Integer[] in1 = new Integer[] { 4, 5, 6 };
+		Integer[] expected = new Integer[] { 5, 7, 9 };
+
 		ops.op("test.math.add").arity2().input(io, in1).mutate1();
 		assertArrayEquals(io, expected);
 	}
 
 	@Test
 	public void basicInplace2_2Test() {
-		Integer[] in0 = new Integer[] {4, 5, 6}; 
-		Integer[] io = new Integer[] {1, 2, 3};
-		Integer[] expected = new Integer[] {5, 7, 9};
-		
+		Integer[] in0 = new Integer[] { 4, 5, 6 };
+		Integer[] io = new Integer[] { 1, 2, 3 };
+		Integer[] expected = new Integer[] { 5, 7, 9 };
+
 		ops.op("test.math.add").arity2().input(in0, io).mutate2();
 		assertArrayEquals(io, expected);
 	}
 
 }
-

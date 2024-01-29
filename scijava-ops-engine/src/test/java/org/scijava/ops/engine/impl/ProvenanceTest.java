@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -108,15 +108,16 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 	@OpField(names = "test.provenanceMapped")
 	public final Function<Double, Thing> mappedFunc = Thing::new;
 
-	@OpClass(names="test.provenanceMapper")
+	@OpClass(names = "test.provenanceMapper")
 	public static class MapperFunc implements Function<Double[], Thing>, Op {
 
-		@OpDependency(name="test.provenanceMapped")
+		@OpDependency(name = "test.provenanceMapped")
 		public Function<Double, Thing> func;
 
-		@Override public Thing apply(Double[] doubles) {
-			return Arrays.stream(doubles).map(func).reduce(Thing::append)
-					.orElse(null);
+		@Override
+		public Thing apply(Double[] doubles) {
+			return Arrays.stream(doubles).map(func).reduce(Thing::append).orElse(
+				null);
 
 		}
 	}
@@ -143,12 +144,12 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 
 	@Test
 	public void testProvenance() {
-		String s = ops.op("test.provenance").arity0().outType(String.class).create();
+		String s = ops.op("test.provenance").arity0().outType(String.class)
+			.create();
 		List<RichOp<?>> executionsUpon = ops.history().executionsUpon(s);
 		Assertions.assertEquals(1, executionsUpon.size());
 		// Assert only one info in the execution hierarchy
-		InfoTree executionHierarchy = ops.history().infoTree(executionsUpon.get(
-			0));
+		InfoTree executionHierarchy = ops.history().infoTree(executionsUpon.get(0));
 		Assertions.assertEquals(0, executionHierarchy.dependencies().size());
 		OpInfo info = executionHierarchy.info();
 		Assertions.assertTrue(info.implementationName().contains(this.getClass()
@@ -162,16 +163,16 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		l1.add(2.0);
 		l1.add(3.0);
 		l1.add(4.0);
-		Double out1 = ops.op("test.provenance").arity1().input(l1).outType(Double.class)
-			.apply();
+		Double out1 = ops.op("test.provenance").arity1().input(l1).outType(
+			Double.class).apply();
 
 		List<Long> l2 = new ArrayList<>();
 		l2.add(5L);
 		l2.add(6L);
 		l2.add(7L);
 		l2.add(8L);
-		Double out2 = ops.op("test.provenance").arity1().input(l2).outType(Double.class)
-			.apply();
+		Double out2 = ops.op("test.provenance").arity1().input(l2).outType(
+			Double.class).apply();
 
 		List<RichOp<?>> history1 = ops.history().executionsUpon(out1);
 		List<RichOp<?>> history2 = ops.history().executionsUpon(out2);
@@ -214,8 +215,8 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		int length = 200;
 		Double[] array = new Double[length];
 		Arrays.fill(array, 1.);
-		Function<Double[], Thing> mapper = ops.op("test.provenanceMapper").arity1().input(
-			array).outType(Thing.class).function();
+		Function<Double[], Thing> mapper = ops.op("test.provenanceMapper").arity1()
+			.input(array).outType(Thing.class).function();
 
 		// Get the InfoTree associated with the above call
 		InfoTree tree = ops.history().infoTree(mapper);
@@ -231,8 +232,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		OpInfo mappedInfo = mappedInfos.next();
 		Assertions.assertEquals(1, tree.dependencies().size(),
 			"Expected only one dependency of the mapper Op!");
-		Assertions.assertEquals(mappedInfo,
-				tree.dependencies().get(0).info());
+		Assertions.assertEquals(mappedInfo, tree.dependencies().get(0).info());
 	}
 
 	@Test
@@ -242,16 +242,16 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		int length = 200;
 		Double[] array = new Double[length];
 		Arrays.fill(array, 1.);
-		Thing out = ops.op("test.provenanceMapper", hints).arity1().input(array).outType(
-			Thing.class).apply();
+		Thing out = ops.op("test.provenanceMapper", hints).arity1().input(array)
+			.outType(Thing.class).apply();
 
 		// Assert that two Ops operated on the return.
 		List<RichOp<?>> mutators = ops.history().executionsUpon(out);
 		Assertions.assertEquals(2, mutators.size());
 
 		// Run the mapped Op, assert still two runs on the mapper
-		Thing out1 = ops.op("test.provenanceMapped", hints).arity1().input(2.).outType(Thing.class)
-			.apply();
+		Thing out1 = ops.op("test.provenanceMapped", hints).arity1().input(2.)
+			.outType(Thing.class).apply();
 		mutators = ops.history().executionsUpon(out);
 		Assertions.assertEquals(2, mutators.size());
 		// Assert one run on the mapped Op as well
@@ -291,17 +291,17 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 	public void testOpWithDependencyRecoveryFromString() {
 		// Get the Op
 		Function<Double[], Thing> mapper = ops //
-				.op("test.provenanceMapper") //
-				.arity1() //
-				.input(new Double[] {5.0, 10.0, 15.0}) //
-				.outType(Thing.class) //
-				.function();
+			.op("test.provenanceMapper") //
+			.arity1() //
+			.input(new Double[] { 5.0, 10.0, 15.0 }) //
+			.outType(Thing.class) //
+			.function();
 		// Get the signature from the Op
 		String signature = ops.history().signatureOf(mapper);
 		// Generate the Op from the signature and an Op type
 		Nil<Function<Double, Thing>> specialType = new Nil<>() {};
 		Function<Double, Thing> actual = ops //
-				.opFromSignature(signature, specialType);
+			.opFromSignature(signature, specialType);
 		// Assert Op similarity
 		Assertions.assertTrue(wrappedOpEquality(mapper, actual));
 	}
@@ -360,24 +360,29 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 	public void testSimplificationRecovery() {
 		// Get the Op
 		Computers.Arity1<ObjectArray<Number>, ObjectArray<Number>> c = ops //
-				.op("test.provenanceComputer") //
-				.arity1() //
-				.inType(new Nil<ObjectArray<Number>>() {}) //
-				.outType(new Nil<ObjectArray<Number>>() {}) //
-				.computer();
+			.op("test.provenanceComputer") //
+			.arity1() //
+			.inType(new Nil<ObjectArray<Number>>()
+			{}) //
+			.outType(new Nil<ObjectArray<Number>>()
+			{}) //
+			.computer();
 		// Get the signature from the Op
 		String signature = ops.history().signatureOf(c);
 		// Generate the Op from the signature and an Op type
-		Nil<Computers.Arity1<ObjectArray<Number>, ObjectArray<Number>>> special = new Nil<>() {};
-		Computers.Arity1<ObjectArray<Number>, ObjectArray<Number>> fromString = ops.opFromSignature(
-				signature, special);
+		Nil<Computers.Arity1<ObjectArray<Number>, ObjectArray<Number>>> special =
+			new Nil<>()
+			{};
+		Computers.Arity1<ObjectArray<Number>, ObjectArray<Number>> fromString = ops
+			.opFromSignature(signature, special);
 		// Assert Op similarity
 		Assertions.assertTrue(wrappedOpEquality(c, fromString));
 		// Assert Op functionality similarity
 		ObjectArray<Number> in = new ObjectArray<>(new Number[] { 1, 2, 3 });
 		ObjectArray<Number> actual = new ObjectArray<>(new Number[] { 0, 0, 0 });
 		fromString.compute(in, actual);
-		ObjectArray<Number> expected = new ObjectArray<>(new Number[] { 1., 2., 3. });
+		ObjectArray<Number> expected = new ObjectArray<>(new Number[] { 1., 2.,
+			3. });
 		Assertions.assertEquals(expected, actual);
 	}
 
@@ -467,7 +472,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 	 * <li><b>Both</b> {@code op1} and {@code op2} are {@link RichOp}s</li>
 	 * <li>The backing Op {@link Class}es are equal</li>
 	 * </ol>
-	 * 
+	 *
 	 * @param op1 an Op
 	 * @param op2 another Op
 	 * @return true iff the two conditions above are true

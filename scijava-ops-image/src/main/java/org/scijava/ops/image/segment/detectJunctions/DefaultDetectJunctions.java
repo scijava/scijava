@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -53,11 +53,13 @@ import org.scijava.ops.spi.Nullable;
  * TODO refactor the op to determine junction points between n-d
  * {@link WritablePolyline}
  * </p>
- * 
+ *
  * @author Gabe Selzer
- *@implNote op names='segment.detectJunctions'
+ * @implNote op names='segment.detectJunctions'
  */
-public class DefaultDetectJunctions implements BiFunction<List<? extends WritablePolyline>, Double, List<RealPoint>> {
+public class DefaultDetectJunctions implements
+	BiFunction<List<? extends WritablePolyline>, Double, List<RealPoint>>
+{
 
 	private double threshold = 2;
 
@@ -67,24 +69,27 @@ public class DefaultDetectJunctions implements BiFunction<List<? extends Writabl
 
 	private boolean areClose(RealPoint p1, List<RealPoint> points) {
 		for (RealPoint p : points) {
-			if (areClose(p1, p) == true)
-				return true;
+			if (areClose(p1, p) == true) return true;
 		}
 		return false;
 	}
 
-	private static Interval slightlyEnlarge(RealInterval realInterval, long border) {
-		return Intervals.expand(Intervals.smallestContainingInterval(realInterval), border);
+	private static Interval slightlyEnlarge(RealInterval realInterval,
+		long border)
+	{
+		return Intervals.expand(Intervals.smallestContainingInterval(realInterval),
+			border);
 	}
 
 	private double getDistance(double[] point1, RealLocalizable point2) {
-		return Math.sqrt(Math.pow(point2.getDoublePosition(0) - point1[0], 2)
-				+ Math.pow(point2.getDoublePosition(1) - point1[1], 2));
+		return Math.sqrt(Math.pow(point2.getDoublePosition(0) - point1[0], 2) + Math
+			.pow(point2.getDoublePosition(1) - point1[1], 2));
 	}
 
 	private double getDistance(RealLocalizable point1, RealLocalizable point2) {
-		return Math.sqrt(Math.pow(point2.getDoublePosition(0) - point1.getDoublePosition(0), 2)
-				+ Math.pow(point2.getDoublePosition(1) - point1.getDoublePosition(1), 2));
+		return Math.sqrt(Math.pow(point2.getDoublePosition(0) - point1
+			.getDoublePosition(0), 2) + Math.pow(point2.getDoublePosition(1) - point1
+				.getDoublePosition(1), 2));
 	}
 
 	private RealPoint makeRealPoint(RealLocalizableRealPositionable input) {
@@ -95,21 +100,22 @@ public class DefaultDetectJunctions implements BiFunction<List<? extends Writabl
 	 * TODO
 	 *
 	 * @param lines
-	 * @param threshold Maximum distance between polylines to be considered a junction
+	 * @param threshold Maximum distance between polylines to be considered a
+	 *          junction
 	 * @return junctions
 	 */
 	@Override
-	public List<RealPoint> apply(final List<? extends WritablePolyline> lines, @Nullable
-	Double threshold) {
+	public List<RealPoint> apply(final List<? extends WritablePolyline> lines,
+		@Nullable Double threshold)
+	{
 
 		// check arguments for validity
-		if (lines.size() < 1)
-			return new ArrayList<RealPoint>();
+		if (lines.size() < 1) return new ArrayList<RealPoint>();
 		if (lines.get(0).vertex(0).numDimensions() != 2)
-			throw new IllegalArgumentException("Only 2-dimensional WritablePolylines are supported!");
+			throw new IllegalArgumentException(
+				"Only 2-dimensional WritablePolylines are supported!");
 
-		if (threshold != null)
-			this.threshold = threshold;
+		if (threshold != null) this.threshold = threshold;
 
 		// output that allows for both split polyline inputs and a
 		// realPointCollection for our junctions.
@@ -120,11 +126,11 @@ public class DefaultDetectJunctions implements BiFunction<List<? extends Writabl
 			for (int second = first + 1; second < lines.size(); second++) {
 				WritablePolyline secondLine = lines.get(second);
 				// interval containing both plines
-				Interval intersect = Intervals.intersect(slightlyEnlarge(firstLine, 2), slightlyEnlarge(secondLine, 2));
+				Interval intersect = Intervals.intersect(slightlyEnlarge(firstLine, 2),
+					slightlyEnlarge(secondLine, 2));
 				// if the two do not intersect, then don't bother checking them against
 				// each other.
-				if (Intervals.isEmpty(intersect))
-					continue;
+				if (Intervals.isEmpty(intersect)) continue;
 
 				// create an arraylist to contain all of the junctions for these two
 				// lines (so that we can filter the junctions before putting them in
@@ -139,8 +145,10 @@ public class DefaultDetectJunctions implements BiFunction<List<? extends Writabl
 						RealLocalizableRealPositionable q2 = secondLine.vertex(q + 1);
 
 						// special cases if both lines are vertical
-						boolean pVertical = Math.round(p1.getDoublePosition(0)) == Math.round(p2.getDoublePosition(0));
-						boolean qVertical = Math.round(q1.getDoublePosition(0)) == Math.round(q2.getDoublePosition(0));
+						boolean pVertical = Math.round(p1.getDoublePosition(0)) == Math
+							.round(p2.getDoublePosition(0));
+						boolean qVertical = Math.round(q1.getDoublePosition(0)) == Math
+							.round(q2.getDoublePosition(0));
 
 						// intersection point between the lines created by line segments p
 						// and q.
@@ -151,36 +159,43 @@ public class DefaultDetectJunctions implements BiFunction<List<? extends Writabl
 						if (pVertical && qVertical) {
 							parallelRoutine(p1, p2, q1, q2, currentPairJunctions, true);
 							continue;
-						} else if (pVertical) {
-							double mq = (q2.getDoublePosition(1) - q1.getDoublePosition(1))
-									/ (q2.getDoublePosition(0) - q1.getDoublePosition(0));
-							double bq = (q1.getDoublePosition(1) - mq * q1.getDoublePosition(0));
+						}
+						else if (pVertical) {
+							double mq = (q2.getDoublePosition(1) - q1.getDoublePosition(1)) /
+								(q2.getDoublePosition(0) - q1.getDoublePosition(0));
+							double bq = (q1.getDoublePosition(1) - mq * q1.getDoublePosition(
+								0));
 							double x = p1.getDoublePosition(0);
 							double y = mq * x + bq;
 							intersectionPoint[0] = x;
 							intersectionPoint[1] = y;
-						} else if (qVertical) {
-							double mp = (p2.getDoublePosition(1) - p1.getDoublePosition(1))
-									/ (p2.getDoublePosition(0) - p1.getDoublePosition(0));
-							double bp = (p1.getDoublePosition(1) - mp * p1.getDoublePosition(0));
+						}
+						else if (qVertical) {
+							double mp = (p2.getDoublePosition(1) - p1.getDoublePosition(1)) /
+								(p2.getDoublePosition(0) - p1.getDoublePosition(0));
+							double bp = (p1.getDoublePosition(1) - mp * p1.getDoublePosition(
+								0));
 							double x = q1.getDoublePosition(0);
 							double y = mp * x + bp;
 							intersectionPoint[0] = x;
 							intersectionPoint[1] = y;
-						} else {
+						}
+						else {
 
-							double mp = (p2.getDoublePosition(1) - p1.getDoublePosition(1))
-									/ (p2.getDoublePosition(0) - p1.getDoublePosition(0));
-							double mq = (q2.getDoublePosition(1) - q1.getDoublePosition(1))
-									/ (q2.getDoublePosition(0) - q1.getDoublePosition(0));
+							double mp = (p2.getDoublePosition(1) - p1.getDoublePosition(1)) /
+								(p2.getDoublePosition(0) - p1.getDoublePosition(0));
+							double mq = (q2.getDoublePosition(1) - q1.getDoublePosition(1)) /
+								(q2.getDoublePosition(0) - q1.getDoublePosition(0));
 
 							if (mp == mq) {
 								parallelRoutine(p1, p2, q1, q2, currentPairJunctions, false);
 								continue;
 							}
 
-							double bp = (p2.getDoublePosition(1) - mp * p2.getDoublePosition(0));
-							double bq = (q2.getDoublePosition(1) - mq * q2.getDoublePosition(0));
+							double bp = (p2.getDoublePosition(1) - mp * p2.getDoublePosition(
+								0));
+							double bq = (q2.getDoublePosition(1) - mq * q2.getDoublePosition(
+								0));
 
 							// point of intersection of lines created by line segments p and
 							// q.
@@ -198,12 +213,13 @@ public class DefaultDetectJunctions implements BiFunction<List<? extends Writabl
 						double distq2 = getDistance(intersectionPoint, q2);
 
 						// max distance from line segment to intersection point
-						double maxDist = Math.max(Math.min(distp1, distp2), Math.min(distq1, distq2));
+						double maxDist = Math.max(Math.min(distp1, distp2), Math.min(distq1,
+							distq2));
 
 						// if the maximum distance is close enough to the two lines, then
 						// these lines are close enough to form a junction
-						if (maxDist <= threshold)
-							currentPairJunctions.add(new RealPoint(intersectionPoint));
+						if (maxDist <= threshold) currentPairJunctions.add(new RealPoint(
+							intersectionPoint));
 					}
 				}
 				// filter out the current pair's junctions by removing duplicates and
@@ -236,10 +252,8 @@ public class DefaultDetectJunctions implements BiFunction<List<? extends Writabl
 					j--;
 				}
 			}
-			if (list.size() > 0)
-				list.add(i, averagePoints(similars));
-			else
-				list.add(averagePoints(similars));
+			if (list.size() > 0) list.add(i, averagePoints(similars));
+			else list.add(averagePoints(similars));
 		}
 	}
 
@@ -254,29 +268,30 @@ public class DefaultDetectJunctions implements BiFunction<List<? extends Writabl
 		return new RealPoint(pos);
 	}
 
-	private <L extends RealLocalizable & RealPositionable> void parallelRoutine(RealLocalizableRealPositionable p1,
-			RealLocalizableRealPositionable p2, RealLocalizableRealPositionable q1, RealLocalizableRealPositionable q2,
-			List<RealPoint> junctions, boolean areVertical) {
+	private <L extends RealLocalizable & RealPositionable> void parallelRoutine(
+		RealLocalizableRealPositionable p1, RealLocalizableRealPositionable p2,
+		RealLocalizableRealPositionable q1, RealLocalizableRealPositionable q2,
+		List<RealPoint> junctions, boolean areVertical)
+	{
 
 		// find out whether or not they are on the same line
 		boolean sameLine = false;
-		if (areVertical && Math.round(p1.getDoublePosition(0)) == Math.round(q1.getDoublePosition(0)))
-			sameLine = true;
+		if (areVertical && Math.round(p1.getDoublePosition(0)) == Math.round(q1
+			.getDoublePosition(0))) sameLine = true;
 		else {
-			double m = (q2.getDoublePosition(1) - q1.getDoublePosition(1))
-					/ (q2.getDoublePosition(0) - q1.getDoublePosition(0));
+			double m = (q2.getDoublePosition(1) - q1.getDoublePosition(1)) / (q2
+				.getDoublePosition(0) - q1.getDoublePosition(0));
 			double bp = (p2.getDoublePosition(1) - m * p2.getDoublePosition(0));
 			double bq = (q2.getDoublePosition(1) - m * q2.getDoublePosition(0));
 
-			if (bp == bq)
-				sameLine = true;
+			if (bp == bq) sameLine = true;
 		}
 
 		// if the two line segments do not belong to the same line, then if the
 		// minimum distance between the two points is greater than the threshold,
 		// there is no junction
-		if (!sameLine && Math.min(Math.min(getDistance(p1, q1), getDistance(p2, q1)),
-				Math.min(getDistance(p1, q2), getDistance(p2, q2))) > threshold)
+		if (!sameLine && Math.min(Math.min(getDistance(p1, q1), getDistance(p2,
+			q1)), Math.min(getDistance(p1, q2), getDistance(p2, q2))) > threshold)
 			return;
 
 		int foundJunctions = 0;
@@ -286,28 +301,36 @@ public class DefaultDetectJunctions implements BiFunction<List<? extends Writabl
 		// be junctions. There can be at most 2 junctions between these two line
 		// segments.
 		// check p1 to be a junction
-		if ((getDistance(p1, q1) < lengthq && getDistance(p1, q2) < lengthq && sameLine)
-				|| Math.min(getDistance(p1, q1), getDistance(p1, q2)) < threshold) {
+		if ((getDistance(p1, q1) < lengthq && getDistance(p1, q2) < lengthq &&
+			sameLine) || Math.min(getDistance(p1, q1), getDistance(p1,
+				q2)) < threshold)
+		{
 			junctions.add(makeRealPoint(p1));
 			foundJunctions++;
 		}
 		// check p2 to be a junction
-		if ((getDistance(p2, q1) < lengthq && getDistance(p2, q2) < lengthq && sameLine)
-				|| Math.min(getDistance(p2, q1), getDistance(p2, q2)) < threshold) {
+		if ((getDistance(p2, q1) < lengthq && getDistance(p2, q2) < lengthq &&
+			sameLine) || Math.min(getDistance(p2, q1), getDistance(p2,
+				q2)) < threshold)
+		{
 			junctions.add(makeRealPoint(p2));
 			foundJunctions++;
 		}
 
 		// check q1 to be a junction
-		if (((getDistance(q1, p1) < lengthp && getDistance(q1, p2) < lengthp && sameLine)
-				|| (Math.min(getDistance(q1, p1), getDistance(q1, p2)) < threshold)) && foundJunctions < 2) {
+		if (((getDistance(q1, p1) < lengthp && getDistance(q1, p2) < lengthp &&
+			sameLine) || (Math.min(getDistance(q1, p1), getDistance(q1,
+				p2)) < threshold)) && foundJunctions < 2)
+		{
 			junctions.add(makeRealPoint(q1));
 			foundJunctions++;
 		}
 
 		// check q2 to be a junction
-		if (((getDistance(q2, p1) < lengthp && getDistance(q2, p2) < lengthp && sameLine)
-				|| (Math.min(getDistance(q2, p1), getDistance(q2, p2)) < threshold)) && foundJunctions < 2) {
+		if (((getDistance(q2, p1) < lengthp && getDistance(q2, p2) < lengthp &&
+			sameLine) || (Math.min(getDistance(q2, p1), getDistance(q2,
+				p2)) < threshold)) && foundJunctions < 2)
+		{
 			junctions.add(makeRealPoint(q2));
 			foundJunctions++;
 		}

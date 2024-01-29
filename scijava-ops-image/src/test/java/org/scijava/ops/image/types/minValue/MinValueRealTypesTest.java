@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.types.minValue;
 
 import org.scijava.ops.image.AbstractOpTest;
@@ -53,144 +54,166 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Regression Tests for {@link MinValueRealTypes} ops.
- * 
+ *
  * @author Gabriel Selzer
  */
-public class MinValueRealTypesTest extends AbstractOpTest{
-	
+public class MinValueRealTypesTest extends AbstractOpTest {
+
 	@Test
 	public void testMinValueBitType() {
-		BitType minValue = ops.op("types.minValue").arity1().input(new BitType()).outType(BitType.class).apply();
+		BitType minValue = ops.op("types.minValue").arity1().input(new BitType())
+			.outType(BitType.class).apply();
 		BitType expected = new BitType(false);
 		Assertions.assertTrue(minValue.equals(expected));
 	}
 
 	@Test
 	public void testMinValueBoolType() {
-		BoolType minValue = ops.op("types.minValue").arity1().input(new BoolType()).outType(BoolType.class).apply();
+		BoolType minValue = ops.op("types.minValue").arity1().input(new BoolType())
+			.outType(BoolType.class).apply();
 		BoolType expected = new BoolType(false);
 		Assertions.assertTrue(minValue.equals(expected));
 	}
 
 	@Test
 	public void testMinValueNativeBoolType() {
-		NativeBoolType minValue = ops.op("types.minValue").arity1().input(new NativeBoolType()).outType(NativeBoolType.class).apply();
+		NativeBoolType minValue = ops.op("types.minValue").arity1().input(
+			new NativeBoolType()).outType(NativeBoolType.class).apply();
 		NativeBoolType expected = new NativeBoolType(false);
 		Assertions.assertTrue(minValue.equals(expected));
 	}
-	
+
 	@Test
 	public void testMinValueByteType() {
-		ByteType minValue = ops.op("types.minValue").arity1().input(new ByteType()).outType(ByteType.class).apply();
+		ByteType minValue = ops.op("types.minValue").arity1().input(new ByteType())
+			.outType(ByteType.class).apply();
 		ByteType expected = new ByteType(Byte.MIN_VALUE);
 		Assertions.assertTrue(minValue.equals(expected));
 	}
-	
+
 	@Test
 	public void testMinValueUnsignedByteType() {
-		UnsignedByteType minValue = ops.op("types.minValue").arity1().input(new UnsignedByteType()).outType(UnsignedByteType.class).apply();
+		UnsignedByteType minValue = ops.op("types.minValue").arity1().input(
+			new UnsignedByteType()).outType(UnsignedByteType.class).apply();
 		UnsignedByteType expected = new UnsignedByteType(0);
 		Assertions.assertTrue(minValue.equals(expected));
 	}
-	
+
 	@Test
 	public void testMinValueIntType() {
-		IntType minValue = ops.op("types.minValue").arity1().input(new IntType()).outType(IntType.class).apply();
+		IntType minValue = ops.op("types.minValue").arity1().input(new IntType())
+			.outType(IntType.class).apply();
 		IntType expected = new IntType(Integer.MIN_VALUE);
 		Assertions.assertTrue(minValue.equals(expected));
 	}
-	
+
 	@Test
 	public void testMinValueUnsignedIntType() {
-		UnsignedIntType minValue = ops.op("types.minValue").arity1().input(new UnsignedIntType()).outType(UnsignedIntType.class).apply();
+		UnsignedIntType minValue = ops.op("types.minValue").arity1().input(
+			new UnsignedIntType()).outType(UnsignedIntType.class).apply();
 		UnsignedIntType expected = new UnsignedIntType(0);
 		Assertions.assertTrue(minValue.equals(expected));
 	}
-	
+
 	@Test
 	public void testMinValueLongType() {
-		LongType minValue = ops.op("types.minValue").arity1().input(new LongType()).outType(LongType.class).apply();
+		LongType minValue = ops.op("types.minValue").arity1().input(new LongType())
+			.outType(LongType.class).apply();
 		LongType expected = new LongType(Long.MIN_VALUE);
 		Assertions.assertTrue(minValue.equals(expected));
 	}
-	
+
 	@Test
 	public void testMinValueUnsignedLongType() {
-		UnsignedLongType minValue = ops.op("types.minValue").arity1().input(new UnsignedLongType()).outType(UnsignedLongType.class).apply();
+		UnsignedLongType minValue = ops.op("types.minValue").arity1().input(
+			new UnsignedLongType()).outType(UnsignedLongType.class).apply();
 		UnsignedLongType expected = new UnsignedLongType(0);
 		Assertions.assertTrue(minValue.equals(expected));
 	}
-	
+
 	@Test
 	public void testMinValueShortType() {
-		ShortType minValue = ops.op("types.minValue").arity1().input(new ShortType()).outType(ShortType.class).apply();
+		ShortType minValue = ops.op("types.minValue").arity1().input(
+			new ShortType()).outType(ShortType.class).apply();
 		ShortType expected = new ShortType(Short.MIN_VALUE);
 		Assertions.assertTrue(minValue.equals(expected));
 	}
-	
+
 	@Test
 	public void testMinValueUnsignedShortType() {
-		UnsignedShortType minValue = ops.op("types.minValue").arity1().input(new UnsignedShortType()).outType(UnsignedShortType.class).apply();
+		UnsignedShortType minValue = ops.op("types.minValue").arity1().input(
+			new UnsignedShortType()).outType(UnsignedShortType.class).apply();
 		UnsignedShortType expected = new UnsignedShortType(0);
 		Assertions.assertTrue(minValue.equals(expected));
 	}
-	
+
 	@Test
 	public void testMinValueUnsigned2BitType() {
-		Unsigned2BitType minValue = ops.op("types.minValue").arity1().input(new Unsigned2BitType()).outType(Unsigned2BitType.class).apply();
+		Unsigned2BitType minValue = ops.op("types.minValue").arity1().input(
+			new Unsigned2BitType()).outType(Unsigned2BitType.class).apply();
 		Unsigned2BitType expected = new Unsigned2BitType(0);
 		Assertions.assertTrue(minValue.equals(expected));
 	}
-	
+
 	@Test
 	public void testMinValueUnsigned4BitType() {
-		Unsigned4BitType minValue = ops.op("types.minValue").arity1().input(new Unsigned4BitType()).outType(Unsigned4BitType.class).apply();
+		Unsigned4BitType minValue = ops.op("types.minValue").arity1().input(
+			new Unsigned4BitType()).outType(Unsigned4BitType.class).apply();
 		Unsigned4BitType expected = new Unsigned4BitType(0);
 		Assertions.assertTrue(minValue.equals(expected));
 	}
-	
+
 	@Test
 	public void testMinValueUnsigned12BitType() {
-		Unsigned12BitType minValue = ops.op("types.minValue").arity1().input(new Unsigned12BitType()).outType(Unsigned12BitType.class).apply();
+		Unsigned12BitType minValue = ops.op("types.minValue").arity1().input(
+			new Unsigned12BitType()).outType(Unsigned12BitType.class).apply();
 		Unsigned12BitType expected = new Unsigned12BitType(0);
 		Assertions.assertTrue(minValue.equals(expected));
 	}
-	
+
 	@Test
 	public void testMinValueUnsigned128BitType() {
-		Unsigned128BitType minValue = ops.op("types.minValue").arity1().input(new Unsigned128BitType()).outType(Unsigned128BitType.class).apply();
+		Unsigned128BitType minValue = ops.op("types.minValue").arity1().input(
+			new Unsigned128BitType()).outType(Unsigned128BitType.class).apply();
 		Unsigned128BitType expected = new Unsigned128BitType(0, 0);
 		Assertions.assertTrue(minValue.equals(expected));
 	}
-	
+
 	@Test
 	public void testMinValueFloatType() {
-		FloatType minValue = ops.op("types.minValue").arity1().input(new FloatType()).outType(FloatType.class).apply();
+		FloatType minValue = ops.op("types.minValue").arity1().input(
+			new FloatType()).outType(FloatType.class).apply();
 		FloatType expected = new FloatType(Float.MIN_VALUE);
 		Assertions.assertTrue(minValue.equals(expected));
 	}
-	
+
 	@Test
 	public void testMinValueDoubleType() {
-		DoubleType minValue = ops.op("types.minValue").arity1().input(new DoubleType()).outType(DoubleType.class).apply();
+		DoubleType minValue = ops.op("types.minValue").arity1().input(
+			new DoubleType()).outType(DoubleType.class).apply();
 		DoubleType expected = new DoubleType(Double.MIN_VALUE);
 		Assertions.assertTrue(minValue.equals(expected));
 	}
-	
+
 	@Test
 	public void testMinValueUnsignedVariableBitLengthType() {
 		// bit length of 5
-		UnsignedVariableBitLengthType minValue5 = ops.op("types.minValue").arity1().input(new UnsignedVariableBitLengthType(5)).outType(UnsignedVariableBitLengthType.class).apply();
-		UnsignedVariableBitLengthType expected5 = new UnsignedVariableBitLengthType(0, 5);
+		UnsignedVariableBitLengthType minValue5 = ops.op("types.minValue").arity1()
+			.input(new UnsignedVariableBitLengthType(5)).outType(
+				UnsignedVariableBitLengthType.class).apply();
+		UnsignedVariableBitLengthType expected5 = new UnsignedVariableBitLengthType(
+			0, 5);
 		Assertions.assertTrue(minValue5.equals(expected5));
 
 		// - Ensure different bitlength results in same minimum value - //
-		
+
 		// bit length of 17
-		UnsignedVariableBitLengthType minValue17 = ops.op("types.minValue").arity1().input(new UnsignedVariableBitLengthType(17)).outType(UnsignedVariableBitLengthType.class).apply();
-		UnsignedVariableBitLengthType expected17 = new UnsignedVariableBitLengthType(0, 17);
+		UnsignedVariableBitLengthType minValue17 = ops.op("types.minValue").arity1()
+			.input(new UnsignedVariableBitLengthType(17)).outType(
+				UnsignedVariableBitLengthType.class).apply();
+		UnsignedVariableBitLengthType expected17 =
+			new UnsignedVariableBitLengthType(0, 17);
 		Assertions.assertTrue(minValue17.equals(expected17));
 	}
 
 }
-

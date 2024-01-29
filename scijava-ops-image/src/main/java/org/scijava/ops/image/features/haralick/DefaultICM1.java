@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -41,13 +41,15 @@ import org.scijava.ops.spi.OpDependency;
 
 /**
  * Implementation of Information Measure of Correlation 1 Haralick Feature
- * 
+ *
  * @author Andreas Graumann (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
  * @author Tim-Oliver Buchholz (University of Konstanz)
- *@implNote op names='features.haralick.icm1'
+ * @implNote op names='features.haralick.icm1'
  */
-public class DefaultICM1<T extends RealType<T>> extends AbstractHaralickFeature<T> {
+public class DefaultICM1<T extends RealType<T>> extends
+	AbstractHaralickFeature<T>
+{
 
 	@OpDependency(name = "features.haralick.coocHXY")
 	private Function<double[][], double[]> coocHXYFunc;
@@ -64,14 +66,18 @@ public class DefaultICM1<T extends RealType<T>> extends AbstractHaralickFeature<
 	 * @return the output
 	 */
 	@Override
-	public DoubleType apply(final RandomAccessibleInterval<T> input, final Integer numGreyLevels, final Integer distance,
-			final MatrixOrientation orientation) {
-		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels, distance, orientation);
+	public DoubleType apply(final RandomAccessibleInterval<T> input,
+		final Integer numGreyLevels, final Integer distance,
+		final MatrixOrientation orientation)
+	{
+		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels,
+			distance, orientation);
 
 		final double[] coochxy = coocHXYFunc.apply(matrix);
 
-		final double res = (entropy.apply(input, numGreyLevels, distance, orientation).get() - coochxy[2])
-				/ (coochxy[0] > coochxy[1] ? coochxy[0] : coochxy[1]);
+		final double res = (entropy.apply(input, numGreyLevels, distance,
+			orientation).get() - coochxy[2]) / (coochxy[0] > coochxy[1] ? coochxy[0]
+				: coochxy[1]);
 
 		DoubleType output = new DoubleType();
 		output.set(res);

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -42,11 +42,15 @@ import org.scijava.function.Computers;
 
 /**
  * Convolves an image naively.
- *@implNote op names='filter.convolve,filter.convolveNaive'
+ *
+ * @implNote op names='filter.convolve,filter.convolveNaive'
  */
 public class ConvolveNaiveC<I extends RealType<I>, K extends RealType<K>, O extends RealType<O>>
-		implements Computers.Arity2<RandomAccessible<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> {
-	// TODO: should this be binary so we can use different kernels?? Not sure.. what
+	implements
+	Computers.Arity2<RandomAccessible<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>>
+{
+	// TODO: should this be binary so we can use different kernels?? Not sure..
+	// what
 	// if someone tried to re-use
 	// with a big kernel that should be matched with ConvolveFFT
 
@@ -58,11 +62,13 @@ public class ConvolveNaiveC<I extends RealType<I>, K extends RealType<K>, O exte
 	 * @param output
 	 */
 	@Override
-	public void compute(final RandomAccessible<I> input, final RandomAccessibleInterval<K> kernel,
-			final RandomAccessibleInterval<O> output) {
+	public void compute(final RandomAccessible<I> input,
+		final RandomAccessibleInterval<K> kernel,
+		final RandomAccessibleInterval<O> output)
+	{
 		// conforms only if the kernel is sufficiently small
-		if (Intervals.numElements(kernel) > 9)
-			throw new IllegalArgumentException("The kernel is too large to perform computation!");
+		if (Intervals.numElements(kernel) > 9) throw new IllegalArgumentException(
+			"The kernel is too large to perform computation!");
 
 		// TODO: try a decomposition of the kernel into n 1-dim kernels
 
@@ -74,7 +80,8 @@ public class ConvolveNaiveC<I extends RealType<I>, K extends RealType<K>, O exte
 			max[d] = kernel.dimension(d) + output.dimension(d);
 		}
 
-		final RandomAccess<I> inRA = input.randomAccess(new FinalInterval(min, max));
+		final RandomAccess<I> inRA = input.randomAccess(new FinalInterval(min,
+			max));
 
 		final Cursor<K> kernelC = Views.iterable(kernel).localizingCursor();
 
@@ -104,7 +111,8 @@ public class ConvolveNaiveC<I extends RealType<I>, K extends RealType<K>, O exte
 				for (int i = 0; i < kernelRadius.length; i++) {
 					// dimension can have zero extension e.g. vertical 1d kernel
 					if (kernelRadius[i] > 0) {
-						inRA.setPosition(pos[i] + kernelC.getLongPosition(i) - kernelRadius[i], i);
+						inRA.setPosition(pos[i] + kernelC.getLongPosition(i) -
+							kernelRadius[i], i);
 					}
 				}
 

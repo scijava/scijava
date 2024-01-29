@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -79,8 +79,8 @@ public class OpMethodInfoTest {
 	@Test
 	public void testNonFuncIFace() throws NoSuchMethodException {
 		var m = this.getClass().getDeclaredMethod("staticOp");
-		Assertions.assertThrows(FunctionalTypeOpException.class, () ->
-			new OpMethodInfo( //
+		Assertions.assertThrows(FunctionalTypeOpException.class,
+			() -> new OpMethodInfo( //
 				m, //
 				getClass(), //
 				new Hints(), //
@@ -90,24 +90,25 @@ public class OpMethodInfoTest {
 	@Test
 	public void testWrongOpType() throws NoSuchMethodException {
 		var m = this.getClass().getDeclaredMethod("staticOp");
-		Assertions.assertThrows(FunctionalTypeOpException.class, () ->
-			new OpMethodInfo( //
-					m, //
-					Function.class, //
-					new Hints(), //
-					"staticOp"));
+		Assertions.assertThrows(FunctionalTypeOpException.class,
+			() -> new OpMethodInfo( //
+				m, //
+				Function.class, //
+				new Hints(), //
+				"staticOp"));
 	}
 
 	public static void mutateDouble(final Double input, final Double io) {}
 
 	@Test
 	public void testImmutableOutput() throws NoSuchMethodException {
-		var m = this.getClass().getDeclaredMethod("mutateDouble", Double.class, Double.class);
-		Assertions.assertThrows(FunctionalTypeOpException.class, () ->
-				new OpMethodInfo( //
-						m, //
-						Computers.Arity1.class, //
-						new Hints(), //
-						"mutateDouble"));
+		var m = this.getClass().getDeclaredMethod("mutateDouble", Double.class,
+			Double.class);
+		Assertions.assertThrows(FunctionalTypeOpException.class,
+			() -> new OpMethodInfo( //
+				m, //
+				Computers.Arity1.class, //
+				new Hints(), //
+				"mutateDouble"));
 	}
 }

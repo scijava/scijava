@@ -1,3 +1,4 @@
+
 package org.scijava.ops.image.image.watershed;
 
 import java.util.function.BiFunction;
@@ -24,16 +25,14 @@ import org.scijava.ops.spi.OpDependency;
  * @implNote op names='image.watershed'
  */
 public class WatershedBinaryFunction<T extends BooleanType<T>, B extends BooleanType<B>>
-		implements
-		Functions.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>>
+	implements
+	Functions.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>>
 {
 
 	@OpDependency(name = "image.watershed")
-	private Computers.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>>
-			watershedOp;
+	private Computers.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> watershedOp;
 	@OpDependency(name = "create.imgLabeling")
-	private BiFunction<Dimensions, IntType, ImgLabeling<Integer, IntType>>
-			labelingCreator;
+	private BiFunction<Dimensions, IntType, ImgLabeling<Integer, IntType>> labelingCreator;
 
 	/**
 	 * TODO
@@ -45,18 +44,18 @@ public class WatershedBinaryFunction<T extends BooleanType<T>, B extends Boolean
 	 * @param mask
 	 * @return the outputLabeling
 	 */
-	@Override public ImgLabeling<Integer, IntType> apply( //
-			RandomAccessibleInterval<T> in, //
-			Boolean useEightConnectivity, //
-			Boolean drawWatersheds, //
-			double[] sigma, //
-			@Nullable RandomAccessibleInterval<B> mask //
-	)
-	{
-		ImgLabeling<Integer, IntType> outputLabeling =
-				labelingCreator.apply(in, new IntType());
+	@Override
+	public ImgLabeling<Integer, IntType> apply( //
+		RandomAccessibleInterval<T> in, //
+		Boolean useEightConnectivity, //
+		Boolean drawWatersheds, //
+		double[] sigma, //
+		@Nullable RandomAccessibleInterval<B> mask //
+	) {
+		ImgLabeling<Integer, IntType> outputLabeling = labelingCreator.apply(in,
+			new IntType());
 		watershedOp.compute(in, useEightConnectivity, drawWatersheds, sigma, mask,
-				outputLabeling);
+			outputLabeling);
 		return outputLabeling;
 	}
 }

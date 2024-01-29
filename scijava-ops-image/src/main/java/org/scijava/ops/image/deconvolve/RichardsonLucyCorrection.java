@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -46,9 +46,9 @@ import org.scijava.ops.spi.OpDependency;
 
 /**
  * Computes Richardson Lucy correction factor for (@link
- * RandomAccessibleInterval) (Lucy, L. B. (1974).
- * "An iterative technique for the rectification of observed distributions".)
- * 
+ * RandomAccessibleInterval) (Lucy, L. B. (1974). "An iterative technique for
+ * the rectification of observed distributions".)
+ *
  * @author Brian Northan
  * @param <I>
  * @param <O>
@@ -65,30 +65,31 @@ public class RichardsonLucyCorrection<I extends RealType<I>, O extends RealType<
 
 	/** fft of kernel (needs to be previously computed) **/
 	private RandomAccessibleInterval<C> fftKernel;
-	
+
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, O, Img<O>> create;
-	
+
 	@OpDependency(name = "copy.rai")
 	private Function<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> copy;
 
 //	@OpDependency(name = "math.divide") TODO: match an Op here?
-	private BiConsumer<RandomAccessibleInterval<O>, RandomAccessibleInterval<I>> divide = (denomResult, numer) -> {
-		final O tmp = Util.getTypeFromInterval(denomResult).createVariable();
-		LoopBuilder.setImages(denomResult, numer).forEachPixel((d, n) -> {
-			if (d.getRealFloat() > 0) {
-				tmp.setReal(n.getRealFloat());
-				tmp.div(d);
-				d.set(tmp);
-			}
-			else d.setZero();
-		});
-	};
+	private BiConsumer<RandomAccessibleInterval<O>, RandomAccessibleInterval<I>> divide =
+		(denomResult, numer) -> {
+			final O tmp = Util.getTypeFromInterval(denomResult).createVariable();
+			LoopBuilder.setImages(denomResult, numer).forEachPixel((d, n) -> {
+				if (d.getRealFloat() > 0) {
+					tmp.setReal(n.getRealFloat());
+					tmp.div(d);
+					d.set(tmp);
+				}
+				else d.setZero();
+			});
+		};
 
 	@OpDependency(name = "filter.correlate")
 	private Computers.Arity6<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>, //
-		RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, //
-		Boolean, RandomAccessibleInterval<O>> correlateOp;
+			RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, //
+			Boolean, RandomAccessibleInterval<O>> correlateOp;
 
 	/**
 	 * computes the correction factor of the Richardson Lucy Algorithm
@@ -112,7 +113,8 @@ public class RichardsonLucyCorrection<I extends RealType<I>, O extends RealType<
 
 		// correlate with psf to compute the correction factor
 		// Note: FFT of psf is pre-computed and set as an input parameter of the op
-		correlateOp.compute(reblurred, null, fftBuffer, fftKernel, true, false, correction);
+		correlateOp.compute(reblurred, null, fftBuffer, fftKernel, true, false,
+			correction);
 
 	}
 

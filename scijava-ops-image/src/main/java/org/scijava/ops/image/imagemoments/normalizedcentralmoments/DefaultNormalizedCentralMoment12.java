@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -39,15 +39,16 @@ import org.scijava.ops.spi.OpDependency;
 
 /**
  * Op to calculate the {@code imageMoments.normalizedCentralMoment12}.
- * 
+ *
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
  * @param <I> input type
  * @param <O> output type
- * @implNote op names='imageMoments.normalizedCentralMoment12', label='Image Moment: NormalizedCentralMoment12'
+ * @implNote op names='imageMoments.normalizedCentralMoment12', label='Image
+ *           Moment: NormalizedCentralMoment12'
  */
 public class DefaultNormalizedCentralMoment12<I extends RealType<I>, O extends RealType<O>>
-	implements AbstractImageMomentOp<I, O> 
+	implements AbstractImageMomentOp<I, O>
 {
 
 	@OpDependency(name = "imageMoments.centralMoment00")
@@ -57,13 +58,15 @@ public class DefaultNormalizedCentralMoment12<I extends RealType<I>, O extends R
 	private Computers.Arity1<RandomAccessibleInterval<I>, O> centralMoment12Func;
 
 	@Override
-	public void computeMoment(final RandomAccessibleInterval<I> input, final O output) {
+	public void computeMoment(final RandomAccessibleInterval<I> input,
+		final O output)
+	{
 		final O moment00 = output.createVariable();
 		centralMoment00Func.compute(input, moment00);
 		final O moment12 = output.createVariable();
 		centralMoment12Func.compute(input, moment12);
 
-		output.setReal(moment12.getRealDouble() /
-			Math.pow(moment00.getRealDouble(), 1 + ((1 + 2) / 2.0)));
+		output.setReal(moment12.getRealDouble() / Math.pow(moment00.getRealDouble(),
+			1 + ((1 + 2) / 2.0)));
 	}
 }

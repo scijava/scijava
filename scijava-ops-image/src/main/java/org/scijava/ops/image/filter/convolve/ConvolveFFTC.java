@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -29,7 +29,6 @@
 
 package org.scijava.ops.image.filter.convolve;
 
-
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
@@ -40,7 +39,7 @@ import org.scijava.ops.spi.Nullable;
 
 /**
  * Convolve op for (@link RandomAccessibleInterval)
- * 
+ *
  * @author Brian Northan
  * @param <I>
  * @param <O>
@@ -49,7 +48,9 @@ import org.scijava.ops.spi.Nullable;
  * @implNote op names='filter.convolve', priority='-100.'
  */
 public class ConvolveFFTC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
-		implements Computers.Arity6<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, RandomAccessibleInterval<O>> {
+	implements
+	Computers.Arity6<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, RandomAccessibleInterval<O>>
+{
 
 	@OpDependency(name = "math.multiply")
 	private Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> mul;
@@ -72,11 +73,14 @@ public class ConvolveFFTC<I extends RealType<I>, O extends RealType<O>, K extend
 	 * @param out
 	 */
 	@Override
-	public void compute(RandomAccessibleInterval<I> in, RandomAccessibleInterval<K> kernel,
-			RandomAccessibleInterval<C> fftInput, RandomAccessibleInterval<C> fftKernel,
-			@Nullable Boolean performInputFFT, @Nullable Boolean performKernelFFT, RandomAccessibleInterval<O> out) {
+	public void compute(RandomAccessibleInterval<I> in,
+		RandomAccessibleInterval<K> kernel, RandomAccessibleInterval<C> fftInput,
+		RandomAccessibleInterval<C> fftKernel, @Nullable Boolean performInputFFT,
+		@Nullable Boolean performKernelFFT, RandomAccessibleInterval<O> out)
+	{
 		if (performInputFFT == null) performInputFFT = true;
 		if (performKernelFFT == null) performKernelFFT = true;
-		linearFilter.compute(in, kernel, performInputFFT, performKernelFFT, mul, fftInput, fftKernel, out);
+		linearFilter.compute(in, kernel, performInputFFT, performKernelFFT, mul,
+			fftInput, fftKernel, out);
 	}
 }

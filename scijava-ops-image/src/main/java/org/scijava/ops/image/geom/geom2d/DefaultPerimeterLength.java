@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -40,11 +40,13 @@ import org.scijava.function.Computers;
 
 /**
  * Generic implementation of {@code geom.boundarySize}.
- * 
+ *
  * @author Daniel Seebacher (University of Konstanz)
  * @implNote op names='geom.boundarySize', label='Geometric (2D): Perimeter'
  */
-public class DefaultPerimeterLength implements Computers.Arity1<Polygon2D, DoubleType> {
+public class DefaultPerimeterLength implements
+	Computers.Arity1<Polygon2D, DoubleType>
+{
 
 	/**
 	 * TODO
@@ -60,8 +62,10 @@ public class DefaultPerimeterLength implements Computers.Arity1<Polygon2D, Doubl
 		for (int i = 0; i < size; i++) {
 			final int nexti = (i + 1) % size;
 
-			final double dx2 = vertices.get(nexti).getDoublePosition(0) - vertices.get(i).getDoublePosition(0);
-			final double dy2 = vertices.get(nexti).getDoublePosition(1) - vertices.get(i).getDoublePosition(1);
+			final double dx2 = vertices.get(nexti).getDoublePosition(0) - vertices
+				.get(i).getDoublePosition(0);
+			final double dy2 = vertices.get(nexti).getDoublePosition(1) - vertices
+				.get(i).getDoublePosition(1);
 
 			perimeter += Math.sqrt(dx2 * dx2 + dy2 * dy2);
 		}

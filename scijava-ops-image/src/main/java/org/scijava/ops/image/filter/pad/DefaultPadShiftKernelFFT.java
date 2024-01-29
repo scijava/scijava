@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -41,7 +41,7 @@ import net.imglib2.type.numeric.ComplexType;
 /**
  * Op used to pad the kernel using the default FFT padding scheme and shift the
  * center of the kernel to the origin
- * 
+ *
  * @author bnorthan
  * @param <T>
  * @param <I>
@@ -49,7 +49,8 @@ import net.imglib2.type.numeric.ComplexType;
  * @implNote op names='filter.padShiftFFTKernel', priority='100.'
  */
 public class DefaultPadShiftKernelFFT<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
-		extends PadShiftKernel<T, I, O> {
+	extends PadShiftKernel<T, I, O>
+{
 
 	@OpDependency(name = "filter.fftSize")
 	private BiFunction<Dimensions, Boolean, long[][]> fftSizeOp;
@@ -58,6 +59,5 @@ public class DefaultPadShiftKernelFFT<T extends ComplexType<T>, I extends Random
 	protected Function<Dimensions, long[][]> getFFTSizeOp() {
 		return in -> fftSizeOp.apply(in, true);
 	}
-
 
 }

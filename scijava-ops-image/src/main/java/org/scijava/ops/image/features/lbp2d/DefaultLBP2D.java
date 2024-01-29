@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -47,13 +47,14 @@ import org.scijava.ops.spi.OpDependency;
 
 /**
  * Default implementation of 2d local binary patterns
- * 
+ *
  * @author Andreas Graumann (University of Konstanz)
  * @param <I>
- *@implNote op names='features.lbp2d'
+ * @implNote op names='features.lbp2d'
  */
-public class DefaultLBP2D<I extends RealType<I>>
-		implements Functions.Arity3<RandomAccessibleInterval<I>, Integer, Integer, ArrayList<LongType>> {
+public class DefaultLBP2D<I extends RealType<I>> implements
+	Functions.Arity3<RandomAccessibleInterval<I>, Integer, Integer, ArrayList<LongType>>
+{
 
 	@OpDependency(name = "image.histogram")
 	private BiFunction<ArrayList<LongType>, Integer, Histogram1d<LongType>> histOp;
@@ -67,16 +68,18 @@ public class DefaultLBP2D<I extends RealType<I>>
 	 * @return the output
 	 */
 	@Override
-	public ArrayList<LongType> apply(RandomAccessibleInterval<I> input, Integer distance, Integer histogramSize) {
+	public ArrayList<LongType> apply(RandomAccessibleInterval<I> input,
+		Integer distance, Integer histogramSize)
+	{
 		ArrayList<LongType> output = new ArrayList<>();
 
-		if (input.numDimensions() != 2)
-			throw new IllegalArgumentException("Only 2 dimensional images allowed!");
+		if (input.numDimensions() != 2) throw new IllegalArgumentException(
+			"Only 2 dimensional images allowed!");
 		ArrayList<LongType> numberList = new ArrayList<>();
 		RandomAccess<I> raInput = Views.extendZero(input).randomAccess();
 		final Cursor<I> cInput = Views.flatIterable(input).cursor();
-		final ClockwiseDistanceNeighborhoodIterator<I> cNeigh = new ClockwiseDistanceNeighborhoodIterator<>(raInput,
-				distance);
+		final ClockwiseDistanceNeighborhoodIterator<I> cNeigh =
+			new ClockwiseDistanceNeighborhoodIterator<>(raInput, distance);
 
 		while (cInput.hasNext()) {
 			cInput.next();
@@ -105,21 +108,25 @@ public class DefaultLBP2D<I extends RealType<I>>
 
 	}
 
-	final class ClockwiseDistanceNeighborhoodIterator<T extends Type<T>> implements java.util.Iterator<T> {
+	final class ClockwiseDistanceNeighborhoodIterator<T extends Type<T>>
+		implements java.util.Iterator<T>
+	{
 
 		final private RandomAccess<T> m_ra;
 
 		final private int m_distance;
 
-		final private int[][] CLOCKWISE_OFFSETS = { { 0, -1 }, { 1, 0 }, { 1, 0 }, { 0, 1 }, { 0, 1 }, { -1, 0 },
-				{ -1, 0 }, { 0, -1 } };
+		final private int[][] CLOCKWISE_OFFSETS = { { 0, -1 }, { 1, 0 }, { 1, 0 }, {
+			0, 1 }, { 0, 1 }, { -1, 0 }, { -1, 0 }, { 0, -1 } };
 
 		// index of offset to be executed at next next() call.
 		private int m_curOffset = 0;
 
 		private int m_startIndex = 8;
 
-		public ClockwiseDistanceNeighborhoodIterator(final RandomAccess<T> ra, final int distance) {
+		public ClockwiseDistanceNeighborhoodIterator(final RandomAccess<T> ra,
+			final int distance)
+		{
 			m_ra = ra;
 			m_distance = distance;
 		}

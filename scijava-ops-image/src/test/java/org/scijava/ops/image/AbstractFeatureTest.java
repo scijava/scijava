@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -75,8 +75,8 @@ import org.scijava.util.LongArray;
  */
 public class AbstractFeatureTest extends AbstractOpTest {
 
-	protected static final boolean expensiveTestsEnabled = 
-		"enabled".equals(System.getProperty("scijava.ops.image.expensive.tests"));
+	protected static final boolean expensiveTestsEnabled = "enabled".equals(System
+		.getProperty("scijava.ops.image.expensive.tests"));
 
 	/**
 	 * Really small number, used for assertEquals with floating or double values.
@@ -139,7 +139,7 @@ public class AbstractFeatureTest extends AbstractOpTest {
 	/**
 	 * Simple class to generate empty, randomly filled or constantly filled images
 	 * of various types.
-	 * 
+	 *
 	 * @author Daniel Seebacher (University of Konstanz)
 	 * @author Andreas Graumann (University of Konstanz)
 	 */
@@ -149,7 +149,7 @@ public class AbstractFeatureTest extends AbstractOpTest {
 
 		/**
 		 * Create the image generator with a predefined seed.
-		 * 
+		 *
 		 * @param seed a seed which is used by the random generator.
 		 */
 		public ImageGenerator(final long seed) {
@@ -250,47 +250,51 @@ public class AbstractFeatureTest extends AbstractOpTest {
 	}
 
 	protected static Img<FloatType> getTestImage2D() {
-		return openRelativeFloatImg(AbstractFeatureTest.class, "features/2d_geometric_features_testlabel.tif");
+		return openRelativeFloatImg(AbstractFeatureTest.class,
+			"features/2d_geometric_features_testlabel.tif");
 	}
-	
+
 	protected static Polygon2D getPolygon() {
 		final List<RealPoint> vertices = new ArrayList<>();
 		try {
-			Files.lines(Paths.get(AbstractFeatureTest.class.getResource("features/2d_geometric_features_polygon.txt").toURI()))
-										.forEach(l -> {
-											String[] coord = l.split(" ");
-											RealPoint v = new RealPoint(new double[]{	Double.parseDouble(coord[0]), 
-																				Double.parseDouble(coord[1])});
-											vertices.add(v);
-										});
-		} catch (IOException | URISyntaxException exc) {
+			Files.lines(Paths.get(AbstractFeatureTest.class.getResource(
+				"features/2d_geometric_features_polygon.txt").toURI())).forEach(l -> {
+					String[] coord = l.split(" ");
+					RealPoint v = new RealPoint(new double[] { Double.parseDouble(
+						coord[0]), Double.parseDouble(coord[1]) });
+					vertices.add(v);
+				});
+		}
+		catch (IOException | URISyntaxException exc) {
 			exc.printStackTrace();
 		}
 		return new DefaultWritablePolygon2D(vertices);
 	}
 
 	protected static Img<FloatType> getTestImage3D() {
-		return openRelativeFloatImg(AbstractFeatureTest.class, "features/3d_geometric_features_testlabel.tif");
+		return openRelativeFloatImg(AbstractFeatureTest.class,
+			"features/3d_geometric_features_testlabel.tif");
 	}
-	
+
 	protected static Mesh getMesh() {
 		final Mesh m = new NaiveDoubleMesh();
 		// To prevent duplicates, map each (x, y, z) triple to its own index.
 		final Map<Vector3D, Long> indexMap = new HashMap<>();
 		final LongArray indices = new LongArray();
 		try {
-			Files.lines(Paths.get(AbstractFeatureTest.class.getResource("features/3d_geometric_features_mesh.txt").toURI()))
-										.forEach(l -> {
-											String[] coord = l.split(" ");
-											final double x = Double.parseDouble(coord[0]);
-											final double y = Double.parseDouble(coord[1]);
-											final double z = Double.parseDouble(coord[2]);
-											final Vector3D vertex = new Vector3D(x, y, z);
-											final long vIndex = indexMap.computeIfAbsent(vertex, //
-												v -> m.vertices().add(x, y, z));
-											indices.add(vIndex);
-										});
-		} catch (IOException | URISyntaxException exc) {
+			Files.lines(Paths.get(AbstractFeatureTest.class.getResource(
+				"features/3d_geometric_features_mesh.txt").toURI())).forEach(l -> {
+					String[] coord = l.split(" ");
+					final double x = Double.parseDouble(coord[0]);
+					final double y = Double.parseDouble(coord[1]);
+					final double z = Double.parseDouble(coord[2]);
+					final Vector3D vertex = new Vector3D(x, y, z);
+					final long vIndex = indexMap.computeIfAbsent(vertex, //
+						v -> m.vertices().add(x, y, z));
+					indices.add(vIndex);
+				});
+		}
+		catch (IOException | URISyntaxException exc) {
 			exc.printStackTrace();
 		}
 		for (int i = 0; i < indices.size(); i += 3) {
@@ -302,18 +306,20 @@ public class AbstractFeatureTest extends AbstractOpTest {
 		return m;
 	}
 
-	protected static <T extends RealType<T>> LabelRegion<String> createLabelRegion(
-		final RandomAccessibleInterval<T> interval, final float min, final float max, long... dims)
+	protected static <T extends RealType<T>> LabelRegion<String>
+		createLabelRegion(final RandomAccessibleInterval<T> interval,
+			final float min, final float max, long... dims)
 	{
 		if (dims == null || dims.length == 0) {
 			dims = new long[interval.numDimensions()];
 			interval.dimensions(dims);
 		}
-		final ImgLabeling<String, IntType> labeling = 
-			new ImgLabeling<>(ArrayImgs.ints(dims));
+		final ImgLabeling<String, IntType> labeling = new ImgLabeling<>(ArrayImgs
+			.ints(dims));
 
 		final RandomAccess<LabelingType<String>> ra = labeling.randomAccess();
-		final RandomAccessibleIntervalCursor<T> c = new RandomAccessibleIntervalCursor<>(interval);		
+		final RandomAccessibleIntervalCursor<T> c =
+			new RandomAccessibleIntervalCursor<>(interval);
 		final long[] pos = new long[labeling.numDimensions()];
 		while (c.hasNext()) {
 			final T item = c.next();

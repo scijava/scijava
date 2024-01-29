@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.copy;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,9 +47,8 @@ import org.scijava.types.Nil;
 
 /**
  * Test @link {@link CopyLabelingMapping}.
- * 
- * @author Tim-Oliver Buchholz (University of Konstanz)
  *
+ * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 public class CopyLabelingMappingTest extends AbstractOpTest {
 
@@ -57,9 +57,10 @@ public class CopyLabelingMappingTest extends AbstractOpTest {
 	@BeforeEach
 	public void createData() {
 		final ImgLabeling<String, IntType> imgL = ops.op("create.imgLabeling")
-				.arity2().input(new FinalDimensions(10, 10), new IntType()) //
-				.outType(new Nil<ImgLabeling<String, IntType>>() {}) //
-				.apply();
+			.arity2().input(new FinalDimensions(10, 10), new IntType()) //
+			.outType(new Nil<ImgLabeling<String, IntType>>()
+			{}) //
+			.apply();
 
 		final Cursor<LabelingType<String>> inc = imgL.cursor();
 
@@ -78,8 +79,9 @@ public class CopyLabelingMappingTest extends AbstractOpTest {
 	@Test
 	public void copyLabelingWithoutOutputTest() {
 
-		LabelingMapping<String> out = ops.op("copy.labelingMapping").arity1().input(input)
-				.outType(new Nil<LabelingMapping<String>>() {}).apply();
+		LabelingMapping<String> out = ops.op("copy.labelingMapping").arity1().input(
+			input).outType(new Nil<LabelingMapping<String>>()
+		{}).apply();
 
 		Iterator<String> outIt = out.getLabels().iterator();
 
@@ -91,7 +93,9 @@ public class CopyLabelingMappingTest extends AbstractOpTest {
 	@Test
 	public void copyLabelingWithOutputTest() {
 
-		LabelingMapping<String> out = ops.op("create.labelingMapping").arity0().outType(new Nil<LabelingMapping<String>>() {}).create();
+		LabelingMapping<String> out = ops.op("create.labelingMapping").arity0()
+			.outType(new Nil<LabelingMapping<String>>()
+			{}).create();
 
 		ops.op("copy.labelingMapping").arity1().input(input).output(out).compute();
 

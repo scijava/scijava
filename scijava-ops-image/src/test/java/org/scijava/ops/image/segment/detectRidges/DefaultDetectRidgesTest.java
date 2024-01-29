@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -47,9 +47,8 @@ import org.scijava.types.Nil;
 
 /**
  * Tests for {@link DefaultDetectRidges}
- * 
- * @author Gabe Selzer
  *
+ * @author Gabe Selzer
  */
 public class DefaultDetectRidgesTest extends AbstractOpTest {
 
@@ -64,8 +63,9 @@ public class DefaultDetectRidgesTest extends AbstractOpTest {
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			@SuppressWarnings("unused")
 			List<DefaultWritablePolyline> polylines = ops.op("segment.detectRidges")
-					.arity5().input(input, width, lowerThreshold, higherThreshold, ridgeLengthMin)
-					.outType(new Nil<List<DefaultWritablePolyline>>() {}).apply();
+				.arity5().input(input, width, lowerThreshold, higherThreshold,
+					ridgeLengthMin).outType(new Nil<List<DefaultWritablePolyline>>()
+				{}).apply();
 		});
 	}
 
@@ -80,8 +80,9 @@ public class DefaultDetectRidgesTest extends AbstractOpTest {
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			@SuppressWarnings("unused")
 			List<DefaultWritablePolyline> polylines = ops.op("segment.detectRidges")
-					.arity5().input(input, width, lowerThreshold, higherThreshold, ridgeLengthMin)
-					.outType(new Nil<List<DefaultWritablePolyline>>() {}).apply();
+				.arity5().input(input, width, lowerThreshold, higherThreshold,
+					ridgeLengthMin).outType(new Nil<List<DefaultWritablePolyline>>()
+				{}).apply();
 		});
 	}
 
@@ -118,33 +119,43 @@ public class DefaultDetectRidgesTest extends AbstractOpTest {
 		double width = 1, lowerThreshold = 2, higherThreshold = 4;
 
 		List<DefaultWritablePolyline> polylines = ops.op("segment.detectRidges")
-				.arity5().input(input, width, lowerThreshold, higherThreshold, ridgeLengthMin)
-				.outType(new Nil<List<DefaultWritablePolyline>>() {}).apply();
+			.arity5().input(input, width, lowerThreshold, higherThreshold,
+				ridgeLengthMin).outType(new Nil<List<DefaultWritablePolyline>>()
+			{}).apply();
 
 		int vertexCount = 0;
 		for (DefaultWritablePolyline pline : polylines) {
 			for (int i = 0; i < pline.numVertices(); i++) {
 				RealLocalizableRealPositionable p = pline.vertex(i);
-				assertEquals(p.getDoublePosition(0), plineVertices[vertexCount++], 1e-5);
-				assertEquals(p.getDoublePosition(1), plineVertices[vertexCount++], 1e-5);
+				assertEquals(p.getDoublePosition(0), plineVertices[vertexCount++],
+					1e-5);
+				assertEquals(p.getDoublePosition(1), plineVertices[vertexCount++],
+					1e-5);
 			}
 		}
 
 	}
 
-	double[] plineVertices = { 15.0, 12.0, 15.0, 11.0, 15.0, 10.0, 15.0, 9.0, 15.0, 8.0, 15.0, 7.0, 15.0, 6.0, 15.0,
-			5.0, 15.0, 4.0, 15.0, 3.0, 15.0, 2.0, 15.0, 1.0, 1.0, 15.0, 2.0, 15.0, 3.0, 15.0, 4.0, 15.0, 5.0, 15.0, 6.0,
-			15.0, 7.0, 15.0, 8.0, 15.0, 9.0, 15.0, 10.0, 15.0, 11.0, 15.0, 12.0, 15.0, 22.99751187109411,
-			18.020211123079733, 23.91666828802532, 18.083331199962224, 24.916668629361407, 19.083331370638593,
-			25.916668800037776, 20.08333171197468, 25.979788876920267, 21.00248812890589, 25.999999914664198, 22.0,
-			25.979788876920267, 22.99751187109411, 25.916668800037776, 23.91666828802532, 24.916668629361407,
-			24.916668629361407, 23.91666828802532, 25.916668800037776, 22.99751187109411, 25.979788876920267, 22.0,
-			25.999999914664198, 21.00248812890589, 25.979788876920267, 20.08333171197468, 25.916668800037776,
-			19.083331370638593, 24.916668629361407, 18.083331199962224, 23.91666828802532, 18.020211123079733,
-			22.99751187109411, 18.000000085335802, 22.0, 18.020211123079733, 21.00248812890589, 18.083331199962224,
-			20.08333171197468, 19.083331370638593, 19.083331370638593, 20.08333171197468, 18.083331199962224,
-			21.00248812890589, 18.020211123079733, 22.0, 18.000000085335802, 9.999999999999869, 9.000000085339167, 9.0,
-			9.0, 8.0, 8.0, 7.0, 7.0, 6.0, 6.0, 5.0, 5.0, 4.0, 4.0, 3.0, 3.0, 2.0, 2.0, 1.0, 1.0, 0.0,
-			0.8333387946876465 };
+	double[] plineVertices = { 15.0, 12.0, 15.0, 11.0, 15.0, 10.0, 15.0, 9.0,
+		15.0, 8.0, 15.0, 7.0, 15.0, 6.0, 15.0, 5.0, 15.0, 4.0, 15.0, 3.0, 15.0, 2.0,
+		15.0, 1.0, 1.0, 15.0, 2.0, 15.0, 3.0, 15.0, 4.0, 15.0, 5.0, 15.0, 6.0, 15.0,
+		7.0, 15.0, 8.0, 15.0, 9.0, 15.0, 10.0, 15.0, 11.0, 15.0, 12.0, 15.0,
+		22.99751187109411, 18.020211123079733, 23.91666828802532,
+		18.083331199962224, 24.916668629361407, 19.083331370638593,
+		25.916668800037776, 20.08333171197468, 25.979788876920267,
+		21.00248812890589, 25.999999914664198, 22.0, 25.979788876920267,
+		22.99751187109411, 25.916668800037776, 23.91666828802532,
+		24.916668629361407, 24.916668629361407, 23.91666828802532,
+		25.916668800037776, 22.99751187109411, 25.979788876920267, 22.0,
+		25.999999914664198, 21.00248812890589, 25.979788876920267,
+		20.08333171197468, 25.916668800037776, 19.083331370638593,
+		24.916668629361407, 18.083331199962224, 23.91666828802532,
+		18.020211123079733, 22.99751187109411, 18.000000085335802, 22.0,
+		18.020211123079733, 21.00248812890589, 18.083331199962224,
+		20.08333171197468, 19.083331370638593, 19.083331370638593,
+		20.08333171197468, 18.083331199962224, 21.00248812890589,
+		18.020211123079733, 22.0, 18.000000085335802, 9.999999999999869,
+		9.000000085339167, 9.0, 9.0, 8.0, 8.0, 7.0, 7.0, 6.0, 6.0, 5.0, 5.0, 4.0,
+		4.0, 3.0, 3.0, 2.0, 2.0, 1.0, 1.0, 0.0, 0.8333387946876465 };
 
 }

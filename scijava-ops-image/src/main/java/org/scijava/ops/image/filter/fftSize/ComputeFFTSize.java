@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -40,11 +40,13 @@ import org.scijava.function.Functions;
 
 /**
  * Op that calculates FFT sizes.
- * 
+ *
  * @author Brian Northan
- *@implNote op names='filter.fftSize'
+ * @implNote op names='filter.fftSize'
  */
-public class ComputeFFTSize implements Functions.Arity5<Dimensions, long[], long[], Boolean, Boolean, Pair<long[], long[]>> {
+public class ComputeFFTSize implements
+	Functions.Arity5<Dimensions, long[], long[], Boolean, Boolean, Pair<long[], long[]>>
+{
 
 	/**
 	 * TODO
@@ -57,27 +59,34 @@ public class ComputeFFTSize implements Functions.Arity5<Dimensions, long[], long
 	 * @return the outputs
 	 */
 	@Override
-	public Pair<long[], long[]> apply(Dimensions inputDimensions, long[] paddedSize, long[] fftSize, Boolean forward,
-			Boolean fast) {
+	public Pair<long[], long[]> apply(Dimensions inputDimensions,
+		long[] paddedSize, long[] fftSize, Boolean forward, Boolean fast)
+	{
 
 		long[] paddedOutput = Arrays.copyOf(paddedSize, paddedSize.length);
 		long[] fftOutput = Arrays.copyOf(fftSize, fftSize.length);
 
 		if (fast && forward) {
 
-			FFTMethods.dimensionsRealToComplexFast(inputDimensions, paddedOutput, fftOutput);
+			FFTMethods.dimensionsRealToComplexFast(inputDimensions, paddedOutput,
+				fftOutput);
 
-		} else if (!fast && forward) {
-			FFTMethods.dimensionsRealToComplexSmall(inputDimensions, paddedOutput, fftOutput);
+		}
+		else if (!fast && forward) {
+			FFTMethods.dimensionsRealToComplexSmall(inputDimensions, paddedOutput,
+				fftOutput);
 
 		}
 		if (fast && !forward) {
 
-			FFTMethods.dimensionsComplexToRealFast(inputDimensions, paddedOutput, fftOutput);
+			FFTMethods.dimensionsComplexToRealFast(inputDimensions, paddedOutput,
+				fftOutput);
 
-		} else if (!fast && !forward) {
+		}
+		else if (!fast && !forward) {
 
-			FFTMethods.dimensionsComplexToRealSmall(inputDimensions, paddedOutput, fftOutput);
+			FFTMethods.dimensionsComplexToRealSmall(inputDimensions, paddedOutput,
+				fftOutput);
 
 		}
 

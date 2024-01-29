@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -45,8 +45,7 @@ public final class LiftNeighborhoodComputersToImg {
 	}
 
 	/**
-	 * @implNote op names='engine.adapt', priority='100.',
-	 *           type=Function
+	 * @implNote op names='engine.adapt', priority='100.', type=Function
 	 */
 	public static <T, U>
 		Computers.Arity2<RandomAccessibleInterval<T>, Shape, RandomAccessibleInterval<U>>
@@ -64,8 +63,7 @@ public final class LiftNeighborhoodComputersToImg {
 	}
 
 	/**
-	 * @implNote op names='engine.adapt', priority='100.',
-	 *           type=Function
+	 * @implNote op names='engine.adapt', priority='100.', type=Function
 	 */
 	public static <T, U, F extends RandomAccessibleInterval<T>>
 		Computers.Arity3<F, Shape, OutOfBoundsFactory<T, F>, RandomAccessibleInterval<U>>
@@ -80,8 +78,7 @@ public final class LiftNeighborhoodComputersToImg {
 	}
 
 	/**
-	 * @implNote op names='engine.adapt', priority='100.',
-	 *           type=Function
+	 * @implNote op names='engine.adapt', priority='100.', type=Function
 	 */
 	public static <T, U, V>
 		Computers.Arity3<RandomAccessibleInterval<T>, V, Shape, RandomAccessibleInterval<U>>
@@ -100,8 +97,7 @@ public final class LiftNeighborhoodComputersToImg {
 	}
 
 	/**
-	 * @implNote op names='engine.adapt', priority='100.',
-	 *           type=Function
+	 * @implNote op names='engine.adapt', priority='100.', type=Function
 	 */
 	public static <T, U, V, F extends RandomAccessibleInterval<T>>
 		Computers.Arity4<F, V, Shape, OutOfBoundsFactory<T, F>, RandomAccessibleInterval<U>>
@@ -117,8 +113,7 @@ public final class LiftNeighborhoodComputersToImg {
 	}
 
 	/**
-	 * @implNote op names='engine.adapt', priority='100.',
-	 *           type=Function
+	 * @implNote op names='engine.adapt', priority='100.', type=Function
 	 */
 	public static <T, U, V, W>
 		Computers.Arity4<RandomAccessibleInterval<T>, V, W, Shape, RandomAccessibleInterval<U>>
@@ -137,8 +132,7 @@ public final class LiftNeighborhoodComputersToImg {
 	}
 
 	/**
-	 * @implNote op names='engine.adapt', priority='100.',
-	 *           type=Function
+	 * @implNote op names='engine.adapt', priority='100.', type=Function
 	 */
 	public static <T, U, V, W, F extends RandomAccessibleInterval<T>>
 		Computers.Arity5<F, V, W, Shape, OutOfBoundsFactory<T, F>, RandomAccessibleInterval<U>>

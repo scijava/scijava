@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -37,14 +37,15 @@ import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * Generic implementation of {@link org.scijava.ops.image.Ops.Geometric.Convexity}.
- * 
- * Based on
+ * Generic implementation of
+ * {@link org.scijava.ops.image.Ops.Geometric.Convexity}. Based on
  * http://www.math.uci.edu/icamp/summer/research_11/park/shape_descriptors_survey.pdf.
- * 
+ *
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
-public abstract class AbstractConvexity<I> implements Computers.Arity1<I, DoubleType> {
+public abstract class AbstractConvexity<I> implements
+	Computers.Arity1<I, DoubleType>
+{
 
 	@OpDependency(name = "geom.boundarySize")
 	private Function<I, DoubleType> boundarySize;
@@ -54,7 +55,8 @@ public abstract class AbstractConvexity<I> implements Computers.Arity1<I, Double
 
 	@Override
 	public void compute(final I input, final DoubleType output) {
-		output.set(boundarySizeConvexHull.apply(input).get() / boundarySize.apply(input).get());
+		output.set(boundarySizeConvexHull.apply(input).get() / boundarySize.apply(
+			input).get());
 	}
 
 }

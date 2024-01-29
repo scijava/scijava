@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.transform.intervalView;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -66,13 +67,13 @@ public class IntervalViewTest extends AbstractOpTest {
 	@Test
 	public void defaultIntervalTest() {
 
-		BiFunction<RandomAccessible<DoubleType>, Interval, IntervalView<DoubleType>> intervalFunc = OpBuilder
-				.matchFunction(ops, "transform.intervalView", new Nil<RandomAccessible<DoubleType>>() {
-				}, new Nil<Interval>() {
-				}, new Nil<IntervalView<DoubleType>>() {
-				});
+		BiFunction<RandomAccessible<DoubleType>, Interval, IntervalView<DoubleType>> intervalFunc =
+			OpBuilder.matchFunction(ops, "transform.intervalView",
+				new Nil<RandomAccessible<DoubleType>>()
+				{}, new Nil<Interval>() {}, new Nil<IntervalView<DoubleType>>() {});
 
-		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
+			new int[] { 10, 10 });
 
 		MersenneTwisterFast r = new MersenneTwisterFast(SEED);
 		for (DoubleType d : img) {
@@ -93,23 +94,25 @@ public class IntervalViewTest extends AbstractOpTest {
 	@Test
 	public void intervalMinMaxTest() {
 
-		Functions.Arity3<RandomAccessible<DoubleType>, long[], long[], IntervalView<DoubleType>> intervalFunc = OpBuilder
-				.matchFunction(ops, "transform.intervalView", new Nil<RandomAccessible<DoubleType>>() {
-				}, new Nil<long[]>() {
-				}, new Nil<long[]>() {
-				}, new Nil<IntervalView<DoubleType>>() {
-				});
+		Functions.Arity3<RandomAccessible<DoubleType>, long[], long[], IntervalView<DoubleType>> intervalFunc =
+			OpBuilder.matchFunction(ops, "transform.intervalView",
+				new Nil<RandomAccessible<DoubleType>>()
+				{}, new Nil<long[]>() {}, new Nil<long[]>() {},
+				new Nil<IntervalView<DoubleType>>()
+				{});
 
-		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
+			new int[] { 10, 10 });
 
 		MersenneTwisterFast r = new MersenneTwisterFast(SEED);
 		for (DoubleType d : img) {
 			d.set(r.nextDouble());
 		}
 
-		Cursor<DoubleType> il2 = Views.interval(img, new long[] { 1, 1 }, new long[] { 8, 9 }).localizingCursor();
-		RandomAccess<DoubleType> opr = intervalFunc.apply(img, new long[] { 1, 1 }, new long[] { 8, 9 })
-				.randomAccess();
+		Cursor<DoubleType> il2 = Views.interval(img, new long[] { 1, 1 },
+			new long[] { 8, 9 }).localizingCursor();
+		RandomAccess<DoubleType> opr = intervalFunc.apply(img, new long[] { 1, 1 },
+			new long[] { 8, 9 }).randomAccess();
 
 		while (il2.hasNext()) {
 			DoubleType e = il2.next();

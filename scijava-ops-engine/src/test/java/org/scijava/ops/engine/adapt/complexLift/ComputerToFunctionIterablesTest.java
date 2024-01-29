@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -52,18 +52,19 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 /**
  * Tests the adaptation of {@link Computers} running on a type into
  * {@link Computers} running on an {@link Iterable} of that type.
- * 
- * @author Gabriel Selzer
  *
+ * @author Gabriel Selzer
  */
 public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 
 	@BeforeAll
 	public static void AddNeededOps() {
-		Object[] lifters = objsFromNoArgConstructors(ComputersToFunctionsAndLift.class.getDeclaredClasses());
+		Object[] lifters = objsFromNoArgConstructors(
+			ComputersToFunctionsAndLift.class.getDeclaredClasses());
 		ops.register(lifters);
 		ops.register(new FunctionToIterables());
-		Object[] adapters = objsFromNoArgConstructors(ComputersToFunctionsViaFunction.class.getDeclaredClasses());
+		Object[] adapters = objsFromNoArgConstructors(
+			ComputersToFunctionsViaFunction.class.getDeclaredClasses());
 		ops.register(adapters);
 		ops.register(new CreateOpCollection());
 		ops.register(new OpBuilderTestOps());
@@ -72,128 +73,178 @@ public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputer1ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
-		final List<double[]> expected = Arrays.asList(new double[] {1., 2., 3. });
-		final Iterable<double[]> out = ops.op("test.addArrays").arity1().input(in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final List<double[]> expected = Arrays.asList(new double[] { 1., 2., 3. });
+		final Iterable<double[]> out = ops.op("test.addArrays").arity1().input(in)
+			.outType(new Nil<Iterable<double[]>>()
+			{}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
 	@Test
 	public void testComputer2ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
-		final List<double[]> expected = Arrays.asList(new double[] {2., 4., 6. });
-		final Iterable<double[]> out = ops.op("test.addArrays").arity2().input(in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final List<double[]> expected = Arrays.asList(new double[] { 2., 4., 6. });
+		final Iterable<double[]> out = ops.op("test.addArrays").arity2().input(in,
+			in).outType(new Nil<Iterable<double[]>>()
+		{}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
 	@Test
 	public void testComputer3ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
-		final List<double[]> expected = Arrays.asList(new double[] {3., 6., 9. });
-		final Iterable<double[]> out = ops.op("test.addArrays").arity3().input(in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final List<double[]> expected = Arrays.asList(new double[] { 3., 6., 9. });
+		final Iterable<double[]> out = ops.op("test.addArrays").arity3().input(in,
+			in, in).outType(new Nil<Iterable<double[]>>()
+		{}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
 	@Test
 	public void testComputer4ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
-		final List<double[]> expected = Arrays.asList(new double[] {4., 8., 12. });
-		final Iterable<double[]> out = ops.op("test.addArrays").arity4().input(in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final List<double[]> expected = Arrays.asList(new double[] { 4., 8., 12. });
+		final Iterable<double[]> out = ops.op("test.addArrays").arity4().input(in,
+			in, in, in).outType(new Nil<Iterable<double[]>>()
+		{}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
 	@Test
 	public void testComputer5ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
-		final List<double[]> expected = Arrays.asList(new double[] {5., 10., 15. });
-		final Iterable<double[]> out = ops.op("test.addArrays").arity5().input(in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final List<double[]> expected = Arrays.asList(new double[] { 5., 10.,
+			15. });
+		final Iterable<double[]> out = ops.op("test.addArrays").arity5().input(in,
+			in, in, in, in).outType(new Nil<Iterable<double[]>>()
+		{}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
 	@Test
 	public void testComputer6ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
-		final List<double[]> expected = Arrays.asList(new double[] {6., 12., 18. });
-		final Iterable<double[]> out = ops.op("test.addArrays").arity6().input(in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final List<double[]> expected = Arrays.asList(new double[] { 6., 12.,
+			18. });
+		final Iterable<double[]> out = ops.op("test.addArrays").arity6().input(in,
+			in, in, in, in, in).outType(new Nil<Iterable<double[]>>()
+		{}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
 	@Test
 	public void testComputer7ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
-		final List<double[]> expected = Arrays.asList(new double[] {7., 14., 21. });
-		final Iterable<double[]> out = ops.op("test.addArrays").arity7().input(in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final List<double[]> expected = Arrays.asList(new double[] { 7., 14.,
+			21. });
+		final Iterable<double[]> out = ops.op("test.addArrays").arity7().input(in,
+			in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>()
+		{}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
 	@Test
 	public void testComputer8ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
-		final List<double[]> expected = Arrays.asList(new double[] {8., 16., 24. });
-		final Iterable<double[]> out = ops.op("test.addArrays").arity8().input(in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final List<double[]> expected = Arrays.asList(new double[] { 8., 16.,
+			24. });
+		final Iterable<double[]> out = ops.op("test.addArrays").arity8().input(in,
+			in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>()
+		{}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
 	@Test
 	public void testComputer9ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
-		final List<double[]> expected = Arrays.asList(new double[] {9., 18., 27. });
-		final Iterable<double[]> out = ops.op("test.addArrays").arity9().input(in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final List<double[]> expected = Arrays.asList(new double[] { 9., 18.,
+			27. });
+		final Iterable<double[]> out = ops.op("test.addArrays").arity9().input(in,
+			in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>()
+		{}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
 	@Test
 	public void testComputer10ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
-		final List<double[]> expected = Arrays.asList(new double[] {10., 20., 30. });
-		final Iterable<double[]> out = ops.op("test.addArrays").arity10().input(in, in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final List<double[]> expected = Arrays.asList(new double[] { 10., 20.,
+			30. });
+		final Iterable<double[]> out = ops.op("test.addArrays").arity10().input(in,
+			in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>()
+		{}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
 	@Test
 	public void testComputer11ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
-		final List<double[]> expected = Arrays.asList(new double[] {11., 22., 33. });
-		final Iterable<double[]> out = ops.op("test.addArrays").arity11().input(in, in, in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final List<double[]> expected = Arrays.asList(new double[] { 11., 22.,
+			33. });
+		final Iterable<double[]> out = ops.op("test.addArrays").arity11().input(in,
+			in, in, in, in, in, in, in, in, in, in).outType(
+				new Nil<Iterable<double[]>>()
+				{}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
 	@Test
 	public void testComputer12ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
-		final List<double[]> expected = Arrays.asList(new double[] {12., 24., 36. });
-		final Iterable<double[]> out = ops.op("test.addArrays").arity12().input(in, in, in, in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final List<double[]> expected = Arrays.asList(new double[] { 12., 24.,
+			36. });
+		final Iterable<double[]> out = ops.op("test.addArrays").arity12().input(in,
+			in, in, in, in, in, in, in, in, in, in, in).outType(
+				new Nil<Iterable<double[]>>()
+				{}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
 	@Test
 	public void testComputer13ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
-		final List<double[]> expected = Arrays.asList(new double[] {13., 26., 39. });
-		final Iterable<double[]> out = ops.op("test.addArrays").arity13().input(in, in, in, in, in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final List<double[]> expected = Arrays.asList(new double[] { 13., 26.,
+			39. });
+		final Iterable<double[]> out = ops.op("test.addArrays").arity13().input(in,
+			in, in, in, in, in, in, in, in, in, in, in, in).outType(
+				new Nil<Iterable<double[]>>()
+				{}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
 	@Test
 	public void testComputer14ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
-		final List<double[]> expected = Arrays.asList(new double[] {14., 28., 42. });
-		final Iterable<double[]> out = ops.op("test.addArrays").arity14().input(in, in, in, in, in, in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final List<double[]> expected = Arrays.asList(new double[] { 14., 28.,
+			42. });
+		final Iterable<double[]> out = ops.op("test.addArrays").arity14().input(in,
+			in, in, in, in, in, in, in, in, in, in, in, in, in).outType(
+				new Nil<Iterable<double[]>>()
+				{}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
 	@Test
 	public void testComputer15ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
-		final List<double[]> expected = Arrays.asList(new double[] {15., 30., 45. });
-		final Iterable<double[]> out = ops.op("test.addArrays").arity15().input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final List<double[]> expected = Arrays.asList(new double[] { 15., 30.,
+			45. });
+		final Iterable<double[]> out = ops.op("test.addArrays").arity15().input(in,
+			in, in, in, in, in, in, in, in, in, in, in, in, in, in).outType(
+				new Nil<Iterable<double[]>>()
+				{}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
 	@Test
 	public void testComputer16ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
-		final List<double[]> expected = Arrays.asList(new double[] {16., 32., 48. });
-		final Iterable<double[]> out = ops.op("test.addArrays").arity16().input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final List<double[]> expected = Arrays.asList(new double[] { 16., 32.,
+			48. });
+		final Iterable<double[]> out = ops.op("test.addArrays").arity16().input(in,
+			in, in, in, in, in, in, in, in, in, in, in, in, in, in, in).outType(
+				new Nil<Iterable<double[]>>()
+				{}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 

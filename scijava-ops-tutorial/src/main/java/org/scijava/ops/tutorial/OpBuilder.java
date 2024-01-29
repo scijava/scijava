@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -36,13 +36,14 @@ import org.scijava.ops.api.OpEnvironment;
 /**
  * The OpBuilder syntax leads to concise, script-like Op execution.
  * <p>
- * Below we show how you can use the OpBuilder syntax to call Ops on your inputs,
- * <em>or</em> how to instead retrieve an Op for more use later.
+ * Below we show how you can use the OpBuilder syntax to call Ops on your
+ * inputs, <em>or</em> how to instead retrieve an Op for more use later.
  */
 public class OpBuilder {
 
 	public static void main(String... args) {
-		// All Ops calls start from an OpEnvironment. This environment determines the available Ops.
+		// All Ops calls start from an OpEnvironment. This environment determines
+		// the available Ops.
 		OpEnvironment ops = OpEnvironment.build();
 
 		/*
@@ -115,9 +116,9 @@ public class OpBuilder {
 		 */
 		Double result;
 		result = ops.binary("math.add") // provide the name
-				.input(1.0, 2.0) // provide the inputs
-				.outType(Double.class) // provide the output TYPE
-				.apply(); // call apply()
+			.input(1.0, 2.0) // provide the inputs
+			.outType(Double.class) // provide the output TYPE
+			.apply(); // call apply()
 
 		System.out.println("1+2 added within OpBuilder: " + result);
 
@@ -134,7 +135,7 @@ public class OpBuilder {
 		matching if you want to call the same Op again later.
 		 */
 		BiFunction<Double, Double, Double> function = // Now, we get a function
-				ops.binary("math.add") // again, provide the name
+			ops.binary("math.add") // again, provide the name
 				.input(1.0, 2.0) // again, provide the inputs
 				.outType(Double.class) // again, provide the output TYPE
 				.function(); // this time, call function()
@@ -150,10 +151,10 @@ public class OpBuilder {
 		 */
 
 		BiFunction<Double, Double, Double> function2 = // Now, we get a function
-				ops.binary("math.add") // again, provide the name
-						.inType(Double.class, Double.class) // we want to give two Doubles
-						.outType(Double.class) // again, provide the output TYPE
-						.function(); // this time, call function()
+			ops.binary("math.add") // again, provide the name
+				.inType(Double.class, Double.class) // we want to give two Doubles
+				.outType(Double.class) // again, provide the output TYPE
+				.function(); // this time, call function()
 
 		result = function.apply(1.0, 2.0);
 

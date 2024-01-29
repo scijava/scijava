@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -44,12 +44,13 @@ import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
 
 public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
-		implements OpCollection {
+	implements OpCollection
+{
 
 	public static void goodDep( //
-			@OpDependency(name = "someDep") Function<String, Long> op, //
-			List<String> in, //
-			List<Long> out //
+		@OpDependency(name = "someDep") Function<String, Long> op, //
+		List<String> in, //
+		List<Long> out //
 	) {
 		out.clear();
 		for (String s : in)
@@ -59,23 +60,23 @@ public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
 	@Test
 	public void testOpDependencyBefore() throws NoSuchMethodException {
 		var m = this.getClass().getDeclaredMethod(//
-				"goodDep", //
-				Function.class, //
-				List.class, //
-				List.class //
+			"goodDep", //
+			Function.class, //
+			List.class, //
+			List.class //
 		);
 		var info = new OpMethodInfo( //
-				m, //
-				Computers.Arity1.class, //
-				new Hints(), //
-				"test.dependencyBeforeInput" //
+			m, //
+			Computers.Arity1.class, //
+			new Hints(), //
+			"test.dependencyBeforeInput" //
 		);
 	}
 
 	public static void badDep( //
-			List<String> in, //
-			@OpDependency(name = "someDep") Function<String, Long> op, //
-			List<Long> out //
+		List<String> in, //
+		@OpDependency(name = "someDep") Function<String, Long> op, //
+		List<Long> out //
 	) {
 		out.clear();
 		for (String s : in)
@@ -85,19 +86,19 @@ public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
 	@Test
 	public void testOpDependencyAfter() throws NoSuchMethodException {
 		var m = this.getClass().getDeclaredMethod(//
-				"badDep", //
-				List.class, //
-				Function.class, //
-				List.class //
+			"badDep", //
+			List.class, //
+			Function.class, //
+			List.class //
 		);
 		createInvalidInfo(m, Computers.Arity1.class, "test.dependencyAfterInput");
 	}
 
 	public static void goodThenBadDep( //
-			@OpDependency(name = "someDep") Function<String, Long> op, //
-			List<String> in, //
-			@OpDependency(name = "someOtherDep") Function<String, Long> op2, //
-			List<Long> out //
+		@OpDependency(name = "someDep") Function<String, Long> op, //
+		List<String> in, //
+		@OpDependency(name = "someOtherDep") Function<String, Long> op2, //
+		List<Long> out //
 	) {
 		out.clear();
 		for (String s : in)
@@ -107,13 +108,14 @@ public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
 	@Test
 	public void testOpDependencyBeforeAndAfter() throws NoSuchMethodException {
 		var m = this.getClass().getDeclaredMethod(//
-				"goodThenBadDep", //
-				Function.class, //
-				List.class, //
-				Function.class, //
-				List.class //
+			"goodThenBadDep", //
+			Function.class, //
+			List.class, //
+			Function.class, //
+			List.class //
 		);
-		createInvalidInfo(m, Computers.Arity1.class, "test.dependencyBeforeAndAfterInput");
+		createInvalidInfo(m, Computers.Arity1.class,
+			"test.dependencyBeforeAndAfterInput");
 	}
 
 	/**

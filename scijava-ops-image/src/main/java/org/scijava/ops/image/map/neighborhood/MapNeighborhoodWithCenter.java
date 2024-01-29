@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -45,9 +45,10 @@ import net.imglib2.view.Views;
 /**
  * Evaluates a {@link CenterAwareComputerOp} for each {@link Neighborhood} on
  * the input {@link RandomAccessibleInterval} and sets the value of the
- * corresponding pixel on the output {@link IterableInterval}. Similar
- * to {@link DefaultMapNeighborhood}, but passes the center pixel to the op as well.
- * 
+ * corresponding pixel on the output {@link IterableInterval}. Similar to
+ * {@link DefaultMapNeighborhood}, but passes the center pixel to the op as
+ * well.
+ *
  * @author Jonathan Hale (University of Konstanz)
  * @author Stefan Helfrich (University of Konstanz)
  * @see OpEnvironment#map(IterableInterval, RandomAccessibleInterval, Shape,
@@ -55,7 +56,8 @@ import net.imglib2.view.Views;
  * @see CenterAwareComputerOp
  * @implNote op names='map.neighborhood'
  */
-public class MapNeighborhoodWithCenter<I, O> implements Computers.Arity3<RandomAccessibleInterval<I>, Shape, Computers.Arity2<Iterable<I>, I, O>, IterableInterval<O>>
+public class MapNeighborhoodWithCenter<I, O> implements
+	Computers.Arity3<RandomAccessibleInterval<I>, Shape, Computers.Arity2<Iterable<I>, I, O>, IterableInterval<O>>
 {
 
 	/**
@@ -68,17 +70,20 @@ public class MapNeighborhoodWithCenter<I, O> implements Computers.Arity3<RandomA
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<I> in1, final Shape in2,
-		final Computers.Arity2<Iterable<I>, I, O> centerAwareOp, final IterableInterval<O> out)
+		final Computers.Arity2<Iterable<I>, I, O> centerAwareOp,
+		final IterableInterval<O> out)
 	{
 		// TODO can we do this through a mapper?
 		RandomAccess<I> inRA = in1.randomAccess();
-		Cursor<Neighborhood<I>> neighborhoodsCursor = in2.neighborhoodsSafe(in1).cursor();
-		Cursor<O> outCursor = out.cursor(); 
-		while(outCursor.hasNext()) {
+		Cursor<Neighborhood<I>> neighborhoodsCursor = in2.neighborhoodsSafe(in1)
+			.cursor();
+		Cursor<O> outCursor = out.cursor();
+		while (outCursor.hasNext()) {
 			outCursor.fwd();
 			inRA.setPosition(outCursor);
 			neighborhoodsCursor.fwd();
-			centerAwareOp.compute(neighborhoodsCursor.get(), inRA.get(), outCursor.get());
+			centerAwareOp.compute(neighborhoodsCursor.get(), inRA.get(), outCursor
+				.get());
 		}
 	}
 
@@ -94,7 +99,7 @@ public class MapNeighborhoodWithCenter<I, O> implements Computers.Arity3<RandomA
  * multi-thread the process. Note that this process should be thread-safe so
  * long as the computer is state-less (which is a part of the contract for Ops).
  * We also assume that the input and output have identical dimensions.
- * 
+ *
  * @author Gabriel Selzer
  * @implNote op names='map.neighborhood', priority='100.'
  */

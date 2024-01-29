@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.tutorial;
 
 import java.util.ArrayList;
@@ -67,12 +68,12 @@ import org.scijava.types.Nil;
  * </ul>
  * Users are then notified by the progress of Ops by installing
  * {@link ProgressListener}s.
- * 
+ *
  * @author Gabriel Selzer
  */
 public class ReportingProgress implements OpCollection {
 
-	@OpField(names="tutorial.long.op")
+	@OpField(names = "tutorial.long.op")
 	public final Function<Integer, List<Long>> primes = numPrimes -> {
 		var primes = new ArrayList<Long>();
 		long val = 1, sqrt;
@@ -91,11 +92,11 @@ public class ReportingProgress implements OpCollection {
 		// Progress.setStageMax(N)
 		Progress.setStageMax(numPrimes);
 		// Find each of our primes
-		while(primes.size() < numPrimes) {
+		while (primes.size() < numPrimes) {
 			sqrt = (long) Math.sqrt(++val);
 			couldBePrime = true;
 			// Evaluate "prime-ness" of number
-			for(int i = 2; i <= sqrt; i++) {
+			for (int i = 2; i <= sqrt; i++) {
 				if (val % i == 0) {
 					couldBePrime = false;
 					break;
@@ -132,7 +133,8 @@ public class ReportingProgress implements OpCollection {
 		// Get the function.
 		var op = ops.unary("tutorial.long.op") //
 			.inType(Integer.class) //
-			.outType(new Nil<List<Long>>() {}) //
+			.outType(new Nil<List<Long>>()
+			{}) //
 			.function();
 
 		// When we apply the Op, we will automatically print the progress out to
@@ -140,7 +142,6 @@ public class ReportingProgress implements OpCollection {
 		var numPrimes = 100;
 		var primes = op.apply(numPrimes);
 		System.out.println("First " + numPrimes + " primes: " + primes);
-
 
 	}
 

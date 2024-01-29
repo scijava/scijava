@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -54,17 +54,21 @@ public class GaussTest extends AbstractOpTest {
 	/** Tests the Gaussian. */
 	@Test
 	public void gaussRegressionTest() {
-		final Img<ByteType> in = TestImgGeneration.byteArray(true, new long[] { 10, 10 });
-		final Img<ByteType> out1 = ops.op("create.img").arity2().input(in, Util.getTypeFromInterval(in))
-				.outType(new Nil<Img<ByteType>>() {}).apply();
+		final Img<ByteType> in = TestImgGeneration.byteArray(true, new long[] { 10,
+			10 });
+		final Img<ByteType> out1 = ops.op("create.img").arity2().input(in, Util
+			.getTypeFromInterval(in)).outType(new Nil<Img<ByteType>>()
+		{}).apply();
 		final double sigma = 5;
-		final Img<ByteType> out2 = ops.op("create.img").arity2().input(in, Util.getTypeFromInterval(in))
-				.outType(new Nil<Img<ByteType>>() {}).apply();
+		final Img<ByteType> out2 = ops.op("create.img").arity2().input(in, Util
+			.getTypeFromInterval(in)).outType(new Nil<Img<ByteType>>()
+		{}).apply();
 
 		ops.op("filter.gauss").arity2().input(in, sigma).output(out1).compute();
 		try {
 			Gauss3.gauss(sigma, Views.extendMirrorSingle(in), out2);
-		} catch (IncompatibleTypeException e) {
+		}
+		catch (IncompatibleTypeException e) {
 			throw new RuntimeException(e);
 		}
 
@@ -73,7 +77,8 @@ public class GaussTest extends AbstractOpTest {
 		final Cursor<ByteType> c2 = out2.cursor();
 
 		while (c1.hasNext()) {
-			Assertions.assertEquals(c1.next().getRealDouble(), c2.next().getRealDouble(), 0);
+			Assertions.assertEquals(c1.next().getRealDouble(), c2.next()
+				.getRealDouble(), 0);
 		}
 	}
 
@@ -82,7 +87,8 @@ public class GaussTest extends AbstractOpTest {
 	// @Test
 	// public void gaussMatchingTest() {
 	//
-	// Gauss defaultGaussRAI = ops.op(Ops.Filter.Gauss.class, ArrayImgs.bytes(1, 2),
+	// Gauss defaultGaussRAI = ops.op(Ops.Filter.Gauss.class, ArrayImgs.bytes(1,
+	// 2),
 	// new double[] {1, 2});
 	// assertTrue(defaultGaussRAI instanceof DefaultGaussRAI);
 	//

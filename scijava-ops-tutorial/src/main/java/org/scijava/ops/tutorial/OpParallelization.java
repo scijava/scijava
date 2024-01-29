@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -41,14 +41,12 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 
 /**
  * SciJava Ops includes a mechanism for automatically introducing concurrency to
- * Ops.
- *
- * Developers can utilize this mechanism by writing their Ops on the smallest
- * element of the computation, be that a single pixel, or a {@link Neighborhood}.
- * SciJava Ops will then "lift" these Ops, creating parallelized Ops that run
- * on an entire {@link net.imglib2.RandomAccessibleInterval}
- *
- * This tutorial showcases these lifting mechanisms.
+ * Ops. Developers can utilize this mechanism by writing their Ops on the
+ * smallest element of the computation, be that a single pixel, or a
+ * {@link Neighborhood}. SciJava Ops will then "lift" these Ops, creating
+ * parallelized Ops that run on an entire
+ * {@link net.imglib2.RandomAccessibleInterval} This tutorial showcases these
+ * lifting mechanisms.
  *
  * @author Gabriel Selzer
  */
@@ -57,7 +55,7 @@ public class OpParallelization implements OpCollection {
 	/**
 	 * This Op, which is really just a computation on a single pixel, lets the
 	 * framework assume the burden of parallelization
-	 * 
+	 *
 	 * @param input the input pixel
 	 * @param output the preallocated output pixel
 	 */
@@ -114,14 +112,14 @@ public class OpParallelization implements OpCollection {
 		// for a given pixel includes all of its immediate neighbors (including
 		// diagonal)
 		var shape = new RectangleShape(1, false);
-		ops.op("tutorial.neighborhoodAverage").arity2().input(inImg, shape)
-				.output(outImg).compute();
+		ops.op("tutorial.neighborhoodAverage").arity2().input(inImg, shape).output(
+			outImg).compute();
 		// Get the original value, and the radius-1 neighborhood value
 		original = inImg.firstElement().get();
 		var mean = outImg.firstElement().get();
 		System.out.println("Original image was filled with value " + original +
-				", and the radius-1 mean at the corner is (4 * " + original + " / 9) = " +
-				mean);
+			", and the radius-1 mean at the corner is (4 * " + original + " / 9) = " +
+			mean);
 	}
 
 }

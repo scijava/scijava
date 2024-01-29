@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -44,7 +44,8 @@ import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 
 public class SimplificationPriorityTest extends AbstractTestEnvironment
-		implements OpCollection {
+	implements OpCollection
+{
 
 	@BeforeAll
 	public static void AddNeededOps() {
@@ -91,59 +92,58 @@ public class SimplificationPriorityTest extends AbstractTestEnvironment
 		Assertions.assertEquals(2., output, 0.);
 	}
 
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "engine.simplify")
 	public final Function<FromThing, BasicThing> fromToBasic =
 		from -> new BasicThing();
 
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "engine.focus")
 	public final Function<BasicThing, LosslessThing> basicToLossless =
 		basic -> new LosslessThing();
 
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "engine.focus")
 	public final Function<BasicThing, SomewhatLossyThing> basicToSomewhat =
 		basic -> new SomewhatLossyThing();
 
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "engine.focus")
 	public final Function<BasicThing, VeryLossyThing> basicToVery =
 		basic -> new VeryLossyThing();
 
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "engine.focus")
 	public final Function<BasicThing, InconceivablyLossyThing> basicToInconceivable =
 		basic -> new InconceivablyLossyThing();
 
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "engine.lossReporter")
 	public final LossReporter<FromThing, LosslessThing> fromToLossless = (nil1,
 		nil2) -> 1.;
 
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "engine.lossReporter")
 	public final LossReporter<FromThing, SomewhatLossyThing> fromToSomewhat = (
 		nil1, nil2) -> 1e3;
 
-	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpHints(hints = { Simplification.FORBIDDEN })
 	@OpField(names = "engine.lossReporter")
 	public final LossReporter<FromThing, VeryLossyThing> fromToVery = (nil1,
 		nil2) -> 1e6;
 
 	@OpField(names = "test.thing")
-	public final BiFunction<LosslessThing, VeryLossyThing, Double> thingBiFunc1 = (
-		in1, in2) -> 0.;
+	public final BiFunction<LosslessThing, VeryLossyThing, Double> thingBiFunc1 =
+		(in1, in2) -> 0.;
 
 	@OpField(names = "test.thing")
 	public final BiFunction<SomewhatLossyThing, SomewhatLossyThing, Double> thingBiFunc2 =
 		(in1, in2) -> 1.;
 
 	@OpField(names = "test.thing")
-	public final Function<SomewhatLossyThing, Double> thingFunc1 =
-		(in1) -> 2.;
+	public final Function<SomewhatLossyThing, Double> thingFunc1 = (in1) -> 2.;
 
 	@OpField(names = "test.thing")
-	public final Function<InconceivablyLossyThing, Double> thingFunc2 =
-		(in1) -> 3.;
+	public final Function<InconceivablyLossyThing, Double> thingFunc2 = (
+		in1) -> 3.;
 }

@@ -48,7 +48,7 @@ public class OpBuilderTestOps implements OpCollection {
 
 	/*
 	 * -- FUNCTIONS --
-	 * 
+	 *
 	 * The general procedure for these Ops: Given a set of inputs in1, in2, ...,
 	 * inN, The output will be sum(in1, in2, ..., inN).
 	 */
@@ -81,70 +81,93 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 5
 	@OpField(names = "test.addDoubles")
 	public final Functions.Arity5<Double, Double, Double, Double, Double, Double> addDoubles5 = //
-		(input1, input2, input3, input4, input5) -> input1 + input2 + input3 + input4 + input5;
+		(input1, input2, input3, input4, input5) -> input1 + input2 + input3 +
+			input4 + input5;
 
 	// ARITY 6
 	@OpField(names = "test.addDoubles")
 	public final Functions.Arity6<Double, Double, Double, Double, Double, Double, Double> addDoubles6 = //
-		(input1, input2, input3, input4, input5, input6) -> input1 + input2 + input3 + input4 + input5 + input6;
+		(input1, input2, input3, input4, input5, input6) -> input1 + input2 +
+			input3 + input4 + input5 + input6;
 
 	// ARITY 7
 	@OpField(names = "test.addDoubles")
 	public final Functions.Arity7<Double, Double, Double, Double, Double, Double, Double, Double> addDoubles7 = //
-		(input1, input2, input3, input4, input5, input6, input7) -> input1 + input2 + input3 + input4 + input5 + input6 + input7;
+		(input1, input2, input3, input4, input5, input6, input7) -> input1 +
+			input2 + input3 + input4 + input5 + input6 + input7;
 
 	// ARITY 8
 	@OpField(names = "test.addDoubles")
 	public final Functions.Arity8<Double, Double, Double, Double, Double, Double, Double, Double, Double> addDoubles8 = //
-		(input1, input2, input3, input4, input5, input6, input7, input8) -> input1 + input2 + input3 + input4 + input5 + input6 + input7 + input8;
+		(input1, input2, input3, input4, input5, input6, input7, input8) -> input1 +
+			input2 + input3 + input4 + input5 + input6 + input7 + input8;
 
 	// ARITY 9
 	@OpField(names = "test.addDoubles")
 	public final Functions.Arity9<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> addDoubles9 = //
-		(input1, input2, input3, input4, input5, input6, input7, input8, input9) -> input1 + input2 + input3 + input4 + input5 + input6 + input7 + input8 + input9;
+		(input1, input2, input3, input4, input5, input6, input7, input8,
+			input9) -> input1 + input2 + input3 + input4 + input5 + input6 + input7 +
+				input8 + input9;
 
 	// ARITY 10
 	@OpField(names = "test.addDoubles")
 	public final Functions.Arity10<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> addDoubles10 = //
-		(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) -> input1 + input2 + input3 + input4 + input5 + input6 + input7 + input8 + input9 + input10;
+		(input1, input2, input3, input4, input5, input6, input7, input8, input9,
+			input10) -> input1 + input2 + input3 + input4 + input5 + input6 + input7 +
+				input8 + input9 + input10;
 
 	// ARITY 11
 	@OpField(names = "test.addDoubles")
 	public final Functions.Arity11<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> addDoubles11 = //
-		(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) -> input1 + input2 + input3 + input4 + input5 + input6 + input7 + input8 + input9 + input10 + input11;
+		(input1, input2, input3, input4, input5, input6, input7, input8, input9,
+			input10, input11) -> input1 + input2 + input3 + input4 + input5 + input6 +
+				input7 + input8 + input9 + input10 + input11;
 
 	// ARITY 12
 	@OpField(names = "test.addDoubles")
 	public final Functions.Arity12<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> addDoubles12 = //
-		(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) -> input1 + input2 + input3 + input4 + input5 + input6 + input7 + input8 + input9 + input10 + input11 + input12;
+		(input1, input2, input3, input4, input5, input6, input7, input8, input9,
+			input10, input11, input12) -> input1 + input2 + input3 + input4 + input5 +
+				input6 + input7 + input8 + input9 + input10 + input11 + input12;
 
 	// ARITY 13
 	@OpField(names = "test.addDoubles")
 	public final Functions.Arity13<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> addDoubles13 = //
-		(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) -> input1 + input2 + input3 + input4 + input5 + input6 + input7 + input8 + input9 + input10 + input11 + input12 + input13;
+		(input1, input2, input3, input4, input5, input6, input7, input8, input9,
+			input10, input11, input12, input13) -> input1 + input2 + input3 + input4 +
+				input5 + input6 + input7 + input8 + input9 + input10 + input11 +
+				input12 + input13;
 
 	// ARITY 14
 	@OpField(names = "test.addDoubles")
 	public final Functions.Arity14<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> addDoubles14 = //
-		(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) -> input1 + input2 + input3 + input4 + input5 + input6 + input7 + input8 + input9 + input10 + input11 + input12 + input13 + input14;
+		(input1, input2, input3, input4, input5, input6, input7, input8, input9,
+			input10, input11, input12, input13, input14) -> input1 + input2 + input3 +
+				input4 + input5 + input6 + input7 + input8 + input9 + input10 +
+				input11 + input12 + input13 + input14;
 
 	// ARITY 15
 	@OpField(names = "test.addDoubles")
 	public final Functions.Arity15<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> addDoubles15 = //
-		(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) -> input1 + input2 + input3 + input4 + input5 + input6 + input7 + input8 + input9 + input10 + input11 + input12 + input13 + input14 + input15;
+		(input1, input2, input3, input4, input5, input6, input7, input8, input9,
+			input10, input11, input12, input13, input14, input15) -> input1 + input2 +
+				input3 + input4 + input5 + input6 + input7 + input8 + input9 + input10 +
+				input11 + input12 + input13 + input14 + input15;
 
 	// ARITY 16
 	@OpField(names = "test.addDoubles")
 	public final Functions.Arity16<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> addDoubles16 = //
-		(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) -> input1 + input2 + input3 + input4 + input5 + input6 + input7 + input8 + input9 + input10 + input11 + input12 + input13 + input14 + input15 + input16;
-
+		(input1, input2, input3, input4, input5, input6, input7, input8, input9,
+			input10, input11, input12, input13, input14, input15, input16) -> input1 +
+				input2 + input3 + input4 + input5 + input6 + input7 + input8 + input9 +
+				input10 + input11 + input12 + input13 + input14 + input15 + input16;
 
 	/*
 	 * -- INPLACES --
-	 * 
+	 *
 	 * The general procedure for these Ops: Given a set of inputs in1, in2, ... ,
 	 * io, ..., inN, the output will be io = in1 * in2 * ... * io * ... * inN.
-	 * N.B. We do this in arrays since the doubles themselves are immutable. 
+	 * N.B. We do this in arrays since the doubles themselves are immutable.
 	 */
 	// ARITY 1
 	@OpField(names = "test.mulArrays1_1")
@@ -1605,7 +1628,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 14
 	@OpField(names = "test.mulArrays14_1")
 	public final Inplaces.Arity14_1<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles14_1 = //
-		(io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14) -> {
+		(io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13,
+			in14) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in2[i];
 				io[i] *= in3[i];
@@ -1626,7 +1650,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 14
 	@OpField(names = "test.mulArrays14_2")
 	public final Inplaces.Arity14_2<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles14_2 = //
-		(in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14) -> {
+		(in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13,
+			in14) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in3[i];
@@ -1647,7 +1672,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 14
 	@OpField(names = "test.mulArrays14_3")
 	public final Inplaces.Arity14_3<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles14_3 = //
-		(in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14) -> {
+		(in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13,
+			in14) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -1668,7 +1694,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 14
 	@OpField(names = "test.mulArrays14_4")
 	public final Inplaces.Arity14_4<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles14_4 = //
-		(in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14) -> {
+		(in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11, in12, in13,
+			in14) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -1689,7 +1716,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 14
 	@OpField(names = "test.mulArrays14_5")
 	public final Inplaces.Arity14_5<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles14_5 = //
-		(in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11, in12, in13, in14) -> {
+		(in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11, in12, in13,
+			in14) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -1710,7 +1738,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 14
 	@OpField(names = "test.mulArrays14_6")
 	public final Inplaces.Arity14_6<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles14_6 = //
-		(in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11, in12, in13, in14) -> {
+		(in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11, in12, in13,
+			in14) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -1731,7 +1760,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 14
 	@OpField(names = "test.mulArrays14_7")
 	public final Inplaces.Arity14_7<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles14_7 = //
-		(in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11, in12, in13, in14) -> {
+		(in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11, in12, in13,
+			in14) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -1752,7 +1782,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 14
 	@OpField(names = "test.mulArrays14_8")
 	public final Inplaces.Arity14_8<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles14_8 = //
-		(in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11, in12, in13, in14) -> {
+		(in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11, in12, in13,
+			in14) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -1773,7 +1804,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 14
 	@OpField(names = "test.mulArrays14_9")
 	public final Inplaces.Arity14_9<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles14_9 = //
-		(in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11, in12, in13, in14) -> {
+		(in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11, in12, in13,
+			in14) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -1794,7 +1826,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 14
 	@OpField(names = "test.mulArrays14_10")
 	public final Inplaces.Arity14_10<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles14_10 = //
-		(in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11, in12, in13, in14) -> {
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11, in12, in13,
+			in14) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -1815,7 +1848,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 14
 	@OpField(names = "test.mulArrays14_11")
 	public final Inplaces.Arity14_11<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles14_11 = //
-		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io, in12, in13, in14) -> {
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io, in12, in13,
+			in14) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -1836,7 +1870,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 14
 	@OpField(names = "test.mulArrays14_12")
 	public final Inplaces.Arity14_12<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles14_12 = //
-		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, io, in13, in14) -> {
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, io, in13,
+			in14) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -1857,7 +1892,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 14
 	@OpField(names = "test.mulArrays14_13")
 	public final Inplaces.Arity14_13<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles14_13 = //
-		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, io, in14) -> {
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, io,
+			in14) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -1878,7 +1914,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 14
 	@OpField(names = "test.mulArrays14_14")
 	public final Inplaces.Arity14_14<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles14_14 = //
-		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, io) -> {
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13,
+			io) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -1899,7 +1936,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 15
 	@OpField(names = "test.mulArrays15_1")
 	public final Inplaces.Arity15_1<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles15_1 = //
-		(io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15) -> {
+		(io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in2[i];
 				io[i] *= in3[i];
@@ -1921,7 +1959,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 15
 	@OpField(names = "test.mulArrays15_2")
 	public final Inplaces.Arity15_2<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles15_2 = //
-		(in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15) -> {
+		(in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in3[i];
@@ -1943,7 +1982,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 15
 	@OpField(names = "test.mulArrays15_3")
 	public final Inplaces.Arity15_3<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles15_3 = //
-		(in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15) -> {
+		(in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -1965,7 +2005,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 15
 	@OpField(names = "test.mulArrays15_4")
 	public final Inplaces.Arity15_4<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles15_4 = //
-		(in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15) -> {
+		(in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -1987,7 +2028,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 15
 	@OpField(names = "test.mulArrays15_5")
 	public final Inplaces.Arity15_5<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles15_5 = //
-		(in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15) -> {
+		(in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2009,7 +2051,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 15
 	@OpField(names = "test.mulArrays15_6")
 	public final Inplaces.Arity15_6<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles15_6 = //
-		(in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11, in12, in13, in14, in15) -> {
+		(in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2031,7 +2074,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 15
 	@OpField(names = "test.mulArrays15_7")
 	public final Inplaces.Arity15_7<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles15_7 = //
-		(in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11, in12, in13, in14, in15) -> {
+		(in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11, in12, in13, in14,
+			in15) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2053,7 +2097,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 15
 	@OpField(names = "test.mulArrays15_8")
 	public final Inplaces.Arity15_8<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles15_8 = //
-		(in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11, in12, in13, in14, in15) -> {
+		(in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11, in12, in13, in14,
+			in15) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2075,7 +2120,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 15
 	@OpField(names = "test.mulArrays15_9")
 	public final Inplaces.Arity15_9<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles15_9 = //
-		(in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11, in12, in13, in14, in15) -> {
+		(in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11, in12, in13, in14,
+			in15) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2097,7 +2143,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 15
 	@OpField(names = "test.mulArrays15_10")
 	public final Inplaces.Arity15_10<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles15_10 = //
-		(in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11, in12, in13, in14, in15) -> {
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11, in12, in13, in14,
+			in15) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2119,7 +2166,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 15
 	@OpField(names = "test.mulArrays15_11")
 	public final Inplaces.Arity15_11<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles15_11 = //
-		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io, in12, in13, in14, in15) -> {
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io, in12, in13, in14,
+			in15) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2141,7 +2189,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 15
 	@OpField(names = "test.mulArrays15_12")
 	public final Inplaces.Arity15_12<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles15_12 = //
-		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, io, in13, in14, in15) -> {
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, io, in13, in14,
+			in15) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2163,7 +2212,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 15
 	@OpField(names = "test.mulArrays15_13")
 	public final Inplaces.Arity15_13<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles15_13 = //
-		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, io, in14, in15) -> {
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, io, in14,
+			in15) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2185,7 +2235,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 15
 	@OpField(names = "test.mulArrays15_14")
 	public final Inplaces.Arity15_14<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles15_14 = //
-		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, io, in15) -> {
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, io,
+			in15) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2207,7 +2258,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 15
 	@OpField(names = "test.mulArrays15_15")
 	public final Inplaces.Arity15_15<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles15_15 = //
-		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, io) -> {
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			io) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2229,7 +2281,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 16
 	@OpField(names = "test.mulArrays16_1")
 	public final Inplaces.Arity16_1<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles16_1 = //
-		(io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> {
+		(io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15, in16) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in2[i];
 				io[i] *= in3[i];
@@ -2252,7 +2305,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 16
 	@OpField(names = "test.mulArrays16_2")
 	public final Inplaces.Arity16_2<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles16_2 = //
-		(in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> {
+		(in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15, in16) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in3[i];
@@ -2275,7 +2329,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 16
 	@OpField(names = "test.mulArrays16_3")
 	public final Inplaces.Arity16_3<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles16_3 = //
-		(in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> {
+		(in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15, in16) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2298,7 +2353,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 16
 	@OpField(names = "test.mulArrays16_4")
 	public final Inplaces.Arity16_4<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles16_4 = //
-		(in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> {
+		(in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15, in16) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2321,7 +2377,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 16
 	@OpField(names = "test.mulArrays16_5")
 	public final Inplaces.Arity16_5<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles16_5 = //
-		(in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> {
+		(in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15, in16) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2344,7 +2401,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 16
 	@OpField(names = "test.mulArrays16_6")
 	public final Inplaces.Arity16_6<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles16_6 = //
-		(in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> {
+		(in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15, in16) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2367,7 +2425,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 16
 	@OpField(names = "test.mulArrays16_7")
 	public final Inplaces.Arity16_7<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles16_7 = //
-		(in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> {
+		(in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11, in12, in13, in14,
+			in15, in16) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2390,7 +2449,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 16
 	@OpField(names = "test.mulArrays16_8")
 	public final Inplaces.Arity16_8<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles16_8 = //
-		(in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11, in12, in13, in14, in15, in16) -> {
+		(in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11, in12, in13, in14,
+			in15, in16) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2413,7 +2473,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 16
 	@OpField(names = "test.mulArrays16_9")
 	public final Inplaces.Arity16_9<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles16_9 = //
-		(in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11, in12, in13, in14, in15, in16) -> {
+		(in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11, in12, in13, in14,
+			in15, in16) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2436,7 +2497,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 16
 	@OpField(names = "test.mulArrays16_10")
 	public final Inplaces.Arity16_10<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles16_10 = //
-		(in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11, in12, in13, in14, in15, in16) -> {
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11, in12, in13, in14,
+			in15, in16) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2459,7 +2521,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 16
 	@OpField(names = "test.mulArrays16_11")
 	public final Inplaces.Arity16_11<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles16_11 = //
-		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io, in12, in13, in14, in15, in16) -> {
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io, in12, in13, in14,
+			in15, in16) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2482,7 +2545,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 16
 	@OpField(names = "test.mulArrays16_12")
 	public final Inplaces.Arity16_12<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles16_12 = //
-		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, io, in13, in14, in15, in16) -> {
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, io, in13, in14,
+			in15, in16) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2505,7 +2569,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 16
 	@OpField(names = "test.mulArrays16_13")
 	public final Inplaces.Arity16_13<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles16_13 = //
-		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, io, in14, in15, in16) -> {
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, io, in14,
+			in15, in16) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2528,7 +2593,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 16
 	@OpField(names = "test.mulArrays16_14")
 	public final Inplaces.Arity16_14<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles16_14 = //
-		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, io, in15, in16) -> {
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, io,
+			in15, in16) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2551,7 +2617,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 16
 	@OpField(names = "test.mulArrays16_15")
 	public final Inplaces.Arity16_15<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles16_15 = //
-		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, io, in16) -> {
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			io, in16) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2574,7 +2641,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 16
 	@OpField(names = "test.mulArrays16_16")
 	public final Inplaces.Arity16_16<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> powDoubles16_16 = //
-		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, io) -> {
+		(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14,
+			in15, io) -> {
 			for (int i = 0; i < io.length; i++) { //
 				io[i] *= in1[i];
 				io[i] *= in2[i];
@@ -2594,10 +2662,9 @@ public class OpBuilderTestOps implements OpCollection {
 			}
 		};
 
-
 	/*
 	 * -- COMPUTERS --
-	 * 
+	 *
 	 * The general procedure: given a set of inputs in1, in2, ... , inN, the output
 	 * is given as in1 * in2 * ... * inN. N.B. we use arrays here since the doubles
 	 * themselves are immutable
@@ -2706,7 +2773,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 8
 	@OpField(names = "test.addArrays")
 	public final Computers.Arity8<double[], double[], double[], double[], double[], double[], double[], double[], double[]> addArrays8 = //
-		(input1, input2, input3, input4, input5, input6, input7, input8, output) -> {
+		(input1, input2, input3, input4, input5, input6, input7, input8,
+			output) -> {
 			for (int i = 0; i < output.length; i++) {
 				output[i] = 0;
 				output[i] += input1[i];
@@ -2723,7 +2791,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 9
 	@OpField(names = "test.addArrays")
 	public final Computers.Arity9<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> addArrays9 = //
-		(input1, input2, input3, input4, input5, input6, input7, input8, input9, output) -> {
+		(input1, input2, input3, input4, input5, input6, input7, input8, input9,
+			output) -> {
 			for (int i = 0; i < output.length; i++) {
 				output[i] = 0;
 				output[i] += input1[i];
@@ -2741,7 +2810,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 10
 	@OpField(names = "test.addArrays")
 	public final Computers.Arity10<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> addArrays10 = //
-		(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, output) -> {
+		(input1, input2, input3, input4, input5, input6, input7, input8, input9,
+			input10, output) -> {
 			for (int i = 0; i < output.length; i++) {
 				output[i] = 0;
 				output[i] += input1[i];
@@ -2760,7 +2830,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 11
 	@OpField(names = "test.addArrays")
 	public final Computers.Arity11<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> addArrays11 = //
-		(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, output) -> {
+		(input1, input2, input3, input4, input5, input6, input7, input8, input9,
+			input10, input11, output) -> {
 			for (int i = 0; i < output.length; i++) {
 				output[i] = 0;
 				output[i] += input1[i];
@@ -2780,7 +2851,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 12
 	@OpField(names = "test.addArrays")
 	public final Computers.Arity12<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> addArrays12 = //
-		(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, output) -> {
+		(input1, input2, input3, input4, input5, input6, input7, input8, input9,
+			input10, input11, input12, output) -> {
 			for (int i = 0; i < output.length; i++) {
 				output[i] = 0;
 				output[i] += input1[i];
@@ -2801,7 +2873,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 13
 	@OpField(names = "test.addArrays")
 	public final Computers.Arity13<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> addArrays13 = //
-		(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, output) -> {
+		(input1, input2, input3, input4, input5, input6, input7, input8, input9,
+			input10, input11, input12, input13, output) -> {
 			for (int i = 0; i < output.length; i++) {
 				output[i] = 0;
 				output[i] += input1[i];
@@ -2823,7 +2896,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 14
 	@OpField(names = "test.addArrays")
 	public final Computers.Arity14<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> addArrays14 = //
-		(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, output) -> {
+		(input1, input2, input3, input4, input5, input6, input7, input8, input9,
+			input10, input11, input12, input13, input14, output) -> {
 			for (int i = 0; i < output.length; i++) {
 				output[i] = 0;
 				output[i] += input1[i];
@@ -2846,7 +2920,8 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 15
 	@OpField(names = "test.addArrays")
 	public final Computers.Arity15<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> addArrays15 = //
-		(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, output) -> {
+		(input1, input2, input3, input4, input5, input6, input7, input8, input9,
+			input10, input11, input12, input13, input14, input15, output) -> {
 			for (int i = 0; i < output.length; i++) {
 				output[i] = 0;
 				output[i] += input1[i];
@@ -2870,7 +2945,9 @@ public class OpBuilderTestOps implements OpCollection {
 	// ARITY 16
 	@OpField(names = "test.addArrays")
 	public final Computers.Arity16<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> addArrays16 = //
-		(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16, output) -> {
+		(input1, input2, input3, input4, input5, input6, input7, input8, input9,
+			input10, input11, input12, input13, input14, input15, input16,
+			output) -> {
 			for (int i = 0; i < output.length; i++) {
 				output[i] = 0;
 				output[i] += input1[i];

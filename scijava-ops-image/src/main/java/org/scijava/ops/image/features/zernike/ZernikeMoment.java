@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.features.zernike;
 
 import org.scijava.ops.image.util.BigComplex;
@@ -33,11 +34,11 @@ import org.scijava.ops.image.util.BigComplex;
 /**
  * Class to hold a zernike moment, including its polynom, order, repition and
  * complex representation
- * 
- * @author Andreas Graumann (University of Konstanz)
  *
+ * @author Andreas Graumann (University of Konstanz)
  */
 public class ZernikeMoment {
+
 	private Polynom p;
 	private int n;
 	private int m;
@@ -46,7 +47,6 @@ public class ZernikeMoment {
 	public double imag = 0;
 
 	/**
-	 * 
 	 * @return Phase of moment * 180/PI
 	 */
 	public double getPhase() {
@@ -54,7 +54,6 @@ public class ZernikeMoment {
 	}
 
 	/**
-	 * 
 	 * @return Magnitude of moment
 	 */
 	public double getMagnitude() {
@@ -62,7 +61,6 @@ public class ZernikeMoment {
 	}
 
 	/**
-	 * 
 	 * @return Zernime moment in complex representation
 	 */
 	public BigComplex getZm() {
@@ -70,9 +68,8 @@ public class ZernikeMoment {
 	}
 
 	/**
-	 * 
 	 * Set zernike moment in complex representation
-	 * 
+	 *
 	 * @param _zm
 	 */
 	public void setZm(BigComplex _zm) {
@@ -80,7 +77,6 @@ public class ZernikeMoment {
 	}
 
 	/**
-	 * 
 	 * @return Get radial polynom p
 	 */
 	public Polynom getP() {
@@ -88,9 +84,8 @@ public class ZernikeMoment {
 	}
 
 	/**
-	 * 
 	 * Set radial polynom p
-	 * 
+	 *
 	 * @param _p
 	 */
 	public void setP(Polynom _p) {
@@ -98,7 +93,6 @@ public class ZernikeMoment {
 	}
 
 	/**
-	 * 
 	 * @return Order n
 	 */
 	public int getN() {
@@ -106,9 +100,8 @@ public class ZernikeMoment {
 	}
 
 	/**
-	 * 
 	 * Set order n
-	 * 
+	 *
 	 * @param _n
 	 */
 	public void setN(int _n) {
@@ -116,7 +109,6 @@ public class ZernikeMoment {
 	}
 
 	/**
-	 * 
 	 * @return Repitition m
 	 */
 	public int getM() {
@@ -124,9 +116,8 @@ public class ZernikeMoment {
 	}
 
 	/**
-	 * 
 	 * Set repitition m
-	 * 
+	 *
 	 * @param _m
 	 */
 	public void setM(int _m) {

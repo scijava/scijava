@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -45,8 +45,8 @@ import org.scijava.struct.StructInstance;
 import org.scijava.types.Types;
 
 /**
- * Container class for a possible operation match between an {@link OpRequest} and
- * an {@link OpInfo}.
+ * Container class for a possible operation match between an {@link OpRequest}
+ * and an {@link OpInfo}.
  *
  * @author Curtis Rueden
  * @author Gabriel Selzer
@@ -54,14 +54,14 @@ import org.scijava.types.Types;
 public class OpCandidate {
 
 	public static enum StatusCode {
-		MATCH, //
-		OUTPUT_TYPES_DO_NOT_MATCH, //
-		TOO_MANY_ARGS, //
-		TOO_FEW_ARGS, //
-		ARG_TYPES_DO_NOT_MATCH, //
-		REQUIRED_ARG_IS_NULL, //
-		CANNOT_CONVERT, //
-		DOES_NOT_CONFORM, OTHER //
+			MATCH, //
+			OUTPUT_TYPES_DO_NOT_MATCH, //
+			TOO_MANY_ARGS, //
+			TOO_FEW_ARGS, //
+			ARG_TYPES_DO_NOT_MATCH, //
+			REQUIRED_ARG_IS_NULL, //
+			CANNOT_CONVERT, //
+			DOES_NOT_CONFORM, OTHER //
 	}
 
 	private final OpEnvironment env;
@@ -75,12 +75,14 @@ public class OpCandidate {
 	private String message;
 	private Member<?> statusItem;
 
-	/** (Null-)Padded arguments of the op if the op has not required parameters.
-	 * If the op does not, this will be the same as {@link #request}.getArgs(). */
+	/**
+	 * (Null-)Padded arguments of the op if the op has not required parameters. If
+	 * the op does not, this will be the same as {@link #request}.getArgs().
+	 */
 	private final Type[] paddedArgs;
 
-	public OpCandidate(final OpEnvironment env, final OpRequest request, final OpInfo info,
-		final Map<TypeVariable<?>, Type> typeVarAssigns)
+	public OpCandidate(final OpEnvironment env, final OpRequest request,
+		final OpInfo info, final Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
 		this.env = env;
 		this.request = request;
@@ -91,12 +93,17 @@ public class OpCandidate {
 		this.reifiedType = getReifiedType(request, info, typeVarAssigns);
 	}
 
-	public OpCandidate(final OpEnvironment env, final OpRequest request, final OpInfo info) {
-			this(env, request, info, typeVarAssignsFromRequestAndInfo(request, info));
+	public OpCandidate(final OpEnvironment env, final OpRequest request,
+		final OpInfo info)
+	{
+		this(env, request, info, typeVarAssignsFromRequestAndInfo(request, info));
 	}
 
-	public static Type getReifiedType(OpRequest request, OpInfo info, Map<TypeVariable<?>, Type> typeVarAssigns) {
-		Type exactSuperType = Types.getExactSuperType(info.opType(), Types.raw(request.getType()));
+	public static Type getReifiedType(OpRequest request, OpInfo info,
+		Map<TypeVariable<?>, Type> typeVarAssigns)
+	{
+		Type exactSuperType = Types.getExactSuperType(info.opType(), Types.raw(
+			request.getType()));
 		return Types.mapVarToTypes(exactSuperType, typeVarAssigns);
 	}
 
@@ -119,13 +126,16 @@ public class OpCandidate {
 	public Type getType() {
 		return reifiedType;
 	}
-	
+
 	/** Gets the priority of this result */
 	public double priority() {
 		return info.priority();
 	}
 
-	/** Gets the mapping between {@link TypeVariable}s and {@link Type}s that makes the {@link OpCandidate} pair legal. */
+	/**
+	 * Gets the mapping between {@link TypeVariable}s and {@link Type}s that makes
+	 * the {@link OpCandidate} pair legal.
+	 */
 	public Map<TypeVariable<?>, Type> typeVarAssigns() {
 		return typeVarAssigns;
 	}
@@ -154,7 +164,9 @@ public class OpCandidate {
 	}
 
 	/** Sets the status of the matching. */
-	public void setStatus(final StatusCode code, final String message, final Member<?> item) {
+	public void setStatus(final StatusCode code, final String message,
+		final Member<?> item)
+	{
 		this.code = code;
 		this.message = message;
 		this.statusItem = item;
@@ -166,8 +178,8 @@ public class OpCandidate {
 	}
 
 	/**
-	 * Gets the status item related to the matching status, if any. Typically,
-	 * if set, this is the parameter for which matching failed.
+	 * Gets the status item related to the matching status, if any. Typically, if
+	 * set, this is the parameter for which matching failed.
 	 */
 	public Member<?> getStatusItem() {
 		return statusItem;
@@ -176,41 +188,39 @@ public class OpCandidate {
 	/** Gets a descriptive status message in human readable form. */
 	public String getStatus() {
 		final StatusCode statusCode = getStatusCode();
-		if (statusCode == null)
-			return null;
+		if (statusCode == null) return null;
 
 		final StringBuilder sb = new StringBuilder();
 		switch (statusCode) {
-		case MATCH:
-			sb.append("MATCH");
-			break;
-		case OUTPUT_TYPES_DO_NOT_MATCH:
-			sb.append("Output types do not match");
-			break;
-		case TOO_MANY_ARGS:
-			sb.append("Too many arguments");
-			break;
-		case TOO_FEW_ARGS:
-			sb.append("Not enough arguments");
-			break;
-		case ARG_TYPES_DO_NOT_MATCH:
-			sb.append("Argument types do not match");
-			break;
-		case REQUIRED_ARG_IS_NULL:
-			sb.append("Missing required argument");
-			break;
-		case CANNOT_CONVERT:
-			sb.append("Inconvertible type");
-			break;
-		case DOES_NOT_CONFORM:
-			sb.append("Inputs do not conform to op rules");
-			break;
-		default:
-			return message;
+			case MATCH:
+				sb.append("MATCH");
+				break;
+			case OUTPUT_TYPES_DO_NOT_MATCH:
+				sb.append("Output types do not match");
+				break;
+			case TOO_MANY_ARGS:
+				sb.append("Too many arguments");
+				break;
+			case TOO_FEW_ARGS:
+				sb.append("Not enough arguments");
+				break;
+			case ARG_TYPES_DO_NOT_MATCH:
+				sb.append("Argument types do not match");
+				break;
+			case REQUIRED_ARG_IS_NULL:
+				sb.append("Missing required argument");
+				break;
+			case CANNOT_CONVERT:
+				sb.append("Inconvertible type");
+				break;
+			case DOES_NOT_CONFORM:
+				sb.append("Inputs do not conform to op rules");
+				break;
+			default:
+				return message;
 		}
 		final String msg = message;
-		if (msg != null)
-			sb.append(": ").append(msg);
+		if (msg != null) sb.append(": ").append(msg);
 
 		return sb.toString();
 	}
@@ -220,8 +230,7 @@ public class OpCandidate {
 		return info.toString();
 	}
 
-	public StructInstance<?> createOpInstance(List<?> dependencies)
-	{
+	public StructInstance<?> createOpInstance(List<?> dependencies) {
 		if (getStatusCode().equals(StatusCode.MATCH)) {
 			return opInfo().createOpInstance(dependencies);
 		}
@@ -231,17 +240,19 @@ public class OpCandidate {
 				getStatus());
 	}
 
-	public Object createOp(List<?> dependencies)
-	{
+	public Object createOp(List<?> dependencies) {
 		return createOpInstance(dependencies).object();
 	}
 
 	// -- Helper methods -- //
-	private static Map<TypeVariable<?>, Type> typeVarAssignsFromRequestAndInfo(final OpRequest request, final OpInfo info) {
+	private static Map<TypeVariable<?>, Type> typeVarAssignsFromRequestAndInfo(
+		final OpRequest request, final OpInfo info)
+	{
 		Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
 		if (!request.typesMatch(info.opType(), typeVarAssigns))
-			throw new IllegalArgumentException(
-					"OpInfo " + info + " cannot satisfy the requirements contained within OpRequest " + request);
+			throw new IllegalArgumentException("OpInfo " + info +
+				" cannot satisfy the requirements contained within OpRequest " +
+				request);
 		return typeVarAssigns;
 	}
 
@@ -250,8 +261,7 @@ public class OpCandidate {
 		return Arrays.copyOf(padded, padded.length, Type[].class);
 	}
 
-	private Object[] padArgs(final OpCandidate candidate,
-			Object... args) {
+	private Object[] padArgs(final OpCandidate candidate, Object... args) {
 		List<Member<?>> members;
 		String argName;
 		members = candidate.opInfo().inputs();
@@ -260,8 +270,7 @@ public class OpCandidate {
 		int inputCount = 0, requiredCount = 0;
 		for (final Member<?> item : members) {
 			inputCount++;
-			if (!item.isRequired())
-				requiredCount++;
+			if (!item.isRequired()) requiredCount++;
 		}
 		if (args.length == inputCount) {
 			// correct number of arguments
@@ -269,16 +278,16 @@ public class OpCandidate {
 		}
 		if (args.length > inputCount) {
 			// too many arguments
-			candidate.setStatus(StatusCode.TOO_MANY_ARGS,
-					"\nNumber of " + argName + " given: " + args.length + "  >  " +
-							"Number of " + argName + " of op: " + inputCount);
+			candidate.setStatus(StatusCode.TOO_MANY_ARGS, "\nNumber of " + argName +
+				" given: " + args.length + "  >  " + "Number of " + argName +
+				" of op: " + inputCount);
 			return null;
 		}
 		if (args.length < requiredCount) {
 			// too few arguments
-			candidate.setStatus(StatusCode.TOO_FEW_ARGS,
-					"\nNumber of " + argName + " given: " + args.length + "  <  " +
-							"Number of required " + argName + " of op: " + requiredCount);
+			candidate.setStatus(StatusCode.TOO_FEW_ARGS, "\nNumber of " + argName +
+				" given: " + args.length + "  <  " + "Number of required " + argName +
+				" of op: " + requiredCount);
 			return null;
 		}
 

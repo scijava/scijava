@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.features.zernike;
 
 import org.scijava.ops.image.util.BigComplex;
@@ -36,14 +37,14 @@ import net.imglib2.type.numeric.RealType;
 import org.scijava.function.Functions;
 
 /**
- * 
  * Computes a specific zernike moment
- * 
+ *
  * @author Andreas Graumann (University of Konstanz)
- *@implNote op names='features.zernike.computer'
+ * @implNote op names='features.zernike.computer'
  */
-public class ZernikeComputer<T extends RealType<T>>
-		implements Functions.Arity3<IterableInterval<T>, Integer, Integer, ZernikeMoment> {
+public class ZernikeComputer<T extends RealType<T>> implements
+	Functions.Arity3<IterableInterval<T>, Integer, Integer, ZernikeMoment>
+{
 
 	/**
 	 * TODO
@@ -54,7 +55,9 @@ public class ZernikeComputer<T extends RealType<T>>
 	 * @return the zernike moment
 	 */
 	@Override
-	public ZernikeMoment apply(final IterableInterval<T> ii, final Integer order, final Integer repetition) {
+	public ZernikeMoment apply(final IterableInterval<T> ii, final Integer order,
+		final Integer repetition)
+	{
 
 		final double width2 = (ii.dimension(0) - 1) / 2.0;
 		final double height2 = (ii.dimension(1) - 1) / 2.0;
@@ -89,22 +92,22 @@ public class ZernikeComputer<T extends RealType<T>>
 			if (r <= 1 && cur.get().getRealDouble() != 0.0) {
 				// calculate theta for this position
 				final double theta = Math.atan2(xm, ym);
-				moment.getZm().add(multiplyExp(1, moment.getP().evaluate(r), theta, moment.getM()));
+				moment.getZm().add(multiplyExp(1, moment.getP().evaluate(r), theta,
+					moment.getM()));
 			}
 		}
 		// normalization
-		normalize(moment.getZm(), moment.getN(), getNumberOfPixelsInUnitDisk(radius));
+		normalize(moment.getZm(), moment.getN(), getNumberOfPixelsInUnitDisk(
+			radius));
 		return moment;
 	}
 
 	/**
 	 * Computes the number of whole pixels within a disk with radius r. This is
 	 * based on Gauss's Circle Problem.
-	 * 
 	 * http://mathworld.wolfram.com/GausssCircleProblem.html
-	 * 
-	 * @param r
-	 *            the radius
+	 *
+	 * @param r the radius
 	 * @return number of pixels within the disk
 	 */
 	private long getNumberOfPixelsInUnitDisk(final double r) {
@@ -117,21 +120,18 @@ public class ZernikeComputer<T extends RealType<T>>
 	}
 
 	/**
-	 * 
 	 * Multiplication of pixel * rad * exp(-m*theta) using eulers formula
 	 * (pixel*rad) * (cos(m*theta) - i*sin(m*theta))
-	 * 
-	 * @param pixel
-	 *            Current pixel
-	 * @param rad
-	 *            Computed value of radial polynom,
-	 * @param theta
-	 *            Angle of current position
-	 * @param m
-	 *            Repitition m
+	 *
+	 * @param pixel Current pixel
+	 * @param rad Computed value of radial polynom,
+	 * @param theta Angle of current position
+	 * @param m Repitition m
 	 * @return Computed term
 	 */
-	private BigComplex multiplyExp(final double pixel, final double rad, final double theta, final int m) {
+	private BigComplex multiplyExp(final double pixel, final double rad,
+		final double theta, final int m)
+	{
 		BigComplex c = new BigComplex();
 		c.setReal(pixel * rad * Math.cos(m * theta));
 		c.setImag(-(pixel * rad * Math.sin(m * theta)));
@@ -139,34 +139,30 @@ public class ZernikeComputer<T extends RealType<T>>
 	}
 
 	/**
-	 * 
 	 * Normalization of all calculated zernike moments in complex representation
-	 * 
-	 * @param complex
-	 *            Complex representation of zernike moment
-	 * @param n
-	 *            Order n
-	 * @param count
-	 *            Number of pixel within unit circle
+	 *
+	 * @param complex Complex representation of zernike moment
+	 * @param n Order n
+	 * @param count Number of pixel within unit circle
 	 */
-	private void normalize(final BigComplex complex, final int n, final long count) {
+	private void normalize(final BigComplex complex, final int n,
+		final long count)
+	{
 		complex.setReal(complex.getRealDouble() * (n + 1) / count);
 		complex.setImag(complex.getImaginaryDouble() * (n + 1) / count);
 	}
 
 	/**
-	 * 
 	 * Initialize a zernike moment with a given order and repition
-	 * 
-	 * @param o
-	 *            Order n
-	 * @param repitition
-	 *            Repitition m
-	 * @param d
-	 *            Pascal matrix
+	 *
+	 * @param o Order n
+	 * @param repitition Repitition m
+	 * @param d Pascal matrix
 	 * @return Empty Zernike moment of order n and repitition m
 	 */
-	private ZernikeMoment initZernikeMoment(final int o, final int repitition, final double[][] d) {
+	private ZernikeMoment initZernikeMoment(final int o, final int repitition,
+		final double[][] d)
+	{
 
 		if (o - Math.abs(repitition) % 2 != 0) {
 			// throw new IllegalArgumentException("This combination of order an
@@ -177,16 +173,12 @@ public class ZernikeComputer<T extends RealType<T>>
 	}
 
 	/**
-	 * 
-	 * Create one zernike moment of order n and repitition m with suitable
-	 * radial polynom
-	 * 
-	 * @param d
-	 *            Pascal matrix
-	 * @param n
-	 *            Order n
-	 * @param m
-	 *            Repition m
+	 * Create one zernike moment of order n and repitition m with suitable radial
+	 * polynom
+	 *
+	 * @param d Pascal matrix
+	 * @param n Order n
+	 * @param m Repition m
 	 * @return Empty Zernike moment of order n and repition m
 	 */
 	private ZernikeMoment createZernikeMoment(double[][] d, int n, int m) {
@@ -201,9 +193,8 @@ public class ZernikeComputer<T extends RealType<T>>
 
 	/**
 	 * Efficient calculation of pascal's triangle up to order max
-	 * 
-	 * @param max
-	 *            maximal order of pascal's triangle
+	 *
+	 * @param max maximal order of pascal's triangle
 	 * @return pascal's triangle
 	 */
 	private double[][] computePascalsTriangle(int max) {
@@ -221,18 +212,15 @@ public class ZernikeComputer<T extends RealType<T>>
 	}
 
 	/**
-	 * 
-	 * @param n
-	 *            Order n
-	 * @param m
-	 *            Repitition m
-	 * @param k
-	 *            Radius k
-	 * @param d
-	 *            Pascal matrix
+	 * @param n Order n
+	 * @param m Repitition m
+	 * @param k Radius k
+	 * @param d Pascal matrix
 	 * @return computed term
 	 */
-	public static int computeBinomialFactorial(final int n, final int m, final int k, double[][] d) {
+	public static int computeBinomialFactorial(final int n, final int m,
+		final int k, double[][] d)
+	{
 		int fac1 = (int) d[n - k][k];
 		int fac2 = (int) d[n - 2 * k][(n - m) / 2 - k];
 		int sign = (int) Math.pow(-1, k);
@@ -249,18 +237,16 @@ public class ZernikeComputer<T extends RealType<T>>
 //	}
 
 	/**
-	 * 
 	 * Creates a radial polynom for zernike moment with order n and repitition m
-	 * 
-	 * @param n
-	 *            Order n
-	 * @param m
-	 *            Repitition m
-	 * @param d
-	 *            Pascal matrix
+	 *
+	 * @param n Order n
+	 * @param m Repitition m
+	 * @param d Pascal matrix
 	 * @return Radial polnom for moment of order n and repition m
 	 */
-	public static Polynom createRadialPolynom(final int n, final int m, final double[][] d) {
+	public static Polynom createRadialPolynom(final int n, final int m,
+		final double[][] d)
+	{
 		final Polynom result = new Polynom(n);
 		for (int s = 0; s <= (n - Math.abs(m)) / 2; ++s) {
 			final int pos = n - 2 * s;

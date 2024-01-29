@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.morphology;
 
 import java.util.function.Function;
@@ -56,9 +57,7 @@ import org.scijava.function.Computers;
  * table2D</a> algorithms
  *
  * @author Gabriel Selzer
- *
- * @param <B>
- *            - any Type extending {@link BooleanType}
+ * @param <B> - any Type extending {@link BooleanType}
  */
 public class Table2Ds<B extends BooleanType<B>> {
 
@@ -67,14 +66,16 @@ public class Table2Ds<B extends BooleanType<B>> {
 	 * @output result
 	 * @implNote op names='morphology.branchpoints'
 	 */
-	public final Function<Img<B>, Img<B>> branchPointsFunc = Branchpoints::branchpoints;
+	public final Function<Img<B>, Img<B>> branchPointsFunc =
+		Branchpoints::branchpoints;
 
 	/**
 	 * @input input
 	 * @container result
 	 * @implNote op names='morphology.branchpoints'
 	 */
-	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> branchPointsComputer = Branchpoints::branchpoints;
+	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> branchPointsComputer =
+		Branchpoints::branchpoints;
 
 	/**
 	 * @input input
@@ -88,7 +89,8 @@ public class Table2Ds<B extends BooleanType<B>> {
 	 * @container result
 	 * @implNote op names='morphology.bridge'
 	 */
-	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> bridgeComputer = Bridge::bridge;
+	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> bridgeComputer =
+		Bridge::bridge;
 
 	/**
 	 * @input input
@@ -102,7 +104,8 @@ public class Table2Ds<B extends BooleanType<B>> {
 	 * @container result
 	 * @implNote op names='morphology.clean'
 	 */
-	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> cleanComputer = Clean::clean;
+	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> cleanComputer =
+		Clean::clean;
 
 	/**
 	 * @input input
@@ -116,7 +119,8 @@ public class Table2Ds<B extends BooleanType<B>> {
 	 * @container result
 	 * @implNote op names='morphology.endpoints'
 	 */
-	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> endpointsComputer = Endpoints::endpoints;
+	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> endpointsComputer =
+		Endpoints::endpoints;
 
 	/**
 	 * @input input
@@ -130,7 +134,8 @@ public class Table2Ds<B extends BooleanType<B>> {
 	 * @container result
 	 * @implNote op names='morphology.fill'
 	 */
-	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> fillComputer = Fill::fill;
+	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> fillComputer =
+		Fill::fill;
 
 	/**
 	 * @input input
@@ -144,7 +149,8 @@ public class Table2Ds<B extends BooleanType<B>> {
 	 * @container result
 	 * @implNote op names='morphology.hbreak'
 	 */
-	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> hbreakComputer = Hbreak::hbreak;
+	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> hbreakComputer =
+		Hbreak::hbreak;
 
 	/**
 	 * @input input
@@ -158,7 +164,8 @@ public class Table2Ds<B extends BooleanType<B>> {
 	 * @container result
 	 * @implNote op names='morphology.life'
 	 */
-	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> lifeComputer = Life::life;
+	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> lifeComputer =
+		Life::life;
 
 	/**
 	 * @input input
@@ -172,7 +179,8 @@ public class Table2Ds<B extends BooleanType<B>> {
 	 * @container result
 	 * @implNote op names='morphology.majority'
 	 */
-	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> majorityComputer = Majority::majority;
+	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> majorityComputer =
+		Majority::majority;
 
 	/**
 	 * @input input
@@ -186,7 +194,8 @@ public class Table2Ds<B extends BooleanType<B>> {
 	 * @container result
 	 * @implNote op names='morphology.remove'
 	 */
-	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> removeComputer = Remove::remove;
+	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> removeComputer =
+		Remove::remove;
 
 	/**
 	 * @input input
@@ -200,7 +209,8 @@ public class Table2Ds<B extends BooleanType<B>> {
 	 * @container result
 	 * @implNote op names='morphology.spur'
 	 */
-	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> spurComputer = Spur::spur;
+	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> spurComputer =
+		Spur::spur;
 
 	/**
 	 * @input input
@@ -214,7 +224,8 @@ public class Table2Ds<B extends BooleanType<B>> {
 	 * @container result
 	 * @implNote op names='morphology.thicken'
 	 */
-	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> thickenComputer = Thicken::thicken;
+	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> thickenComputer =
+		Thicken::thicken;
 
 	/**
 	 * @input input
@@ -228,7 +239,8 @@ public class Table2Ds<B extends BooleanType<B>> {
 	 * @container result
 	 * @implNote op names='morphology.thin'
 	 */
-	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> thinComputer = Thin::thin;
+	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> thinComputer =
+		Thin::thin;
 
 	/**
 	 * @input input
@@ -242,6 +254,7 @@ public class Table2Ds<B extends BooleanType<B>> {
 	 * @container result
 	 * @implNote op names='morphology.vbreak'
 	 */
-	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> vbreakComputer = Vbreak::vbreak;
+	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> vbreakComputer =
+		Vbreak::vbreak;
 
 }

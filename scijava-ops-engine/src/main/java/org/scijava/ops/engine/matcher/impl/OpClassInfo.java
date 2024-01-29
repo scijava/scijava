@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -51,7 +51,7 @@ import org.scijava.types.Types;
 
 /**
  * Metadata about an Op implementation defined as a class.
- * 
+ *
  * @author Curtis Rueden
  * @author David Kolb
  */
@@ -64,15 +64,21 @@ public class OpClassInfo implements OpInfo {
 	private final double priority;
 	private final Hints hints;
 
-	public OpClassInfo(final Class<?> opClass, final Hints hints, final String... names) {
+	public OpClassInfo(final Class<?> opClass, final Hints hints,
+		final String... names)
+	{
 		this(opClass, Versions.getVersion(opClass), hints, Priority.NORMAL, names);
 	}
 
-	public OpClassInfo(final Class<?> opClass, final String version, final Hints hints, final String... names) {
+	public OpClassInfo(final Class<?> opClass, final String version,
+		final Hints hints, final String... names)
+	{
 		this(opClass, version, hints, Priority.NORMAL, names);
 	}
 
-	public OpClassInfo(final Class<?> opClass, final String version, final Hints hints, final double priority, final String... names) {
+	public OpClassInfo(final Class<?> opClass, final String version,
+		final Hints hints, final double priority, final String... names)
+	{
 		this.opClass = opClass;
 		this.version = version;
 		this.names = Arrays.asList(names);
@@ -167,13 +173,12 @@ public class OpClassInfo implements OpInfo {
 	public AnnotatedElement getAnnotationBearer() {
 		return opClass;
 	}
-	
+
 	// -- Object methods --
 
 	@Override
 	public boolean equals(final Object o) {
-		if (!(o instanceof OpClassInfo))
-			return false;
+		if (!(o instanceof OpClassInfo)) return false;
 		final OpInfo that = (OpInfo) o;
 		return struct().equals(that.struct());
 	}
@@ -184,7 +189,9 @@ public class OpClassInfo implements OpInfo {
 	}
 
 	@Override
-	public String toString() { return Infos.describeVerbose(this); }
+	public String toString() {
+		return Infos.describeVerbose(this);
+	}
 
 	@Override
 	public String version() {
@@ -192,8 +199,7 @@ public class OpClassInfo implements OpInfo {
 	}
 
 	/**
-	 * For a {@link Class}, we define the implementation as the concatenation
-	 * of:
+	 * For a {@link Class}, we define the implementation as the concatenation of:
 	 * <ol>
 	 * <li>The fully qualified name of the class</li>
 	 * <li>The version of the class containing the field, with a preceding
@@ -211,6 +217,5 @@ public class OpClassInfo implements OpInfo {
 	}
 
 	// -- Helper methods
-
 
 }

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.geom.geom3d;
 
 import java.util.function.BiFunction;
@@ -56,12 +57,13 @@ import org.scijava.ops.spi.OpDependency;
  * Thanks to Tomas Möller for sharing his public domain code:
  * http://fileadmin.cs.lth.se/cs/personal/tomas_akenine-moller/code/tribox.txt
  * </p>
- * 
+ *
  * @author Kyle Harrington (University of Idaho)
- *@implNote op names='geom.voxelization'
+ * @implNote op names='geom.voxelization'
  */
-public class DefaultVoxelization3D
-		implements Functions.Arity4<Mesh, Integer, Integer, Integer, RandomAccessibleInterval<BitType>> {
+public class DefaultVoxelization3D implements
+	Functions.Arity4<Mesh, Integer, Integer, Integer, RandomAccessibleInterval<BitType>>
+{
 
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, BitType, Img<BitType>> imgCreator;
@@ -77,15 +79,14 @@ public class DefaultVoxelization3D
 	 */
 	@Override
 	public RandomAccessibleInterval<BitType> apply(final Mesh input,
-			@Nullable Integer width, @Nullable Integer height, @Nullable Integer depth) {
-		if (width == null)
-			width = 10;
-		if (height == null)
-			height = 10;
-		if (depth == null)
-			depth = 10;
+		@Nullable Integer width, @Nullable Integer height, @Nullable Integer depth)
+	{
+		if (width == null) width = 10;
+		if (height == null) height = 10;
+		if (depth == null) depth = 10;
 
-		Img<BitType> outImg = imgCreator.apply(new FinalInterval(width, height, depth), new BitType());
+		Img<BitType> outImg = imgCreator.apply(new FinalInterval(width, height,
+			depth), new BitType());
 
 		Vertices verts = input.vertices();
 
@@ -93,24 +94,25 @@ public class DefaultVoxelization3D
 		RealPoint maxPoint = new RealPoint(verts.iterator().next());
 
 		for (RealLocalizable v : verts) {
-			if (v.getDoublePosition(0) < minPoint.getDoublePosition(0))
-				minPoint.setPosition(v.getDoublePosition(0), 0);
-			if (v.getDoublePosition(1) < minPoint.getDoublePosition(1))
-				minPoint.setPosition(v.getDoublePosition(1), 1);
-			if (v.getDoublePosition(2) < minPoint.getDoublePosition(2))
-				minPoint.setPosition(v.getDoublePosition(2), 2);
+			if (v.getDoublePosition(0) < minPoint.getDoublePosition(0)) minPoint
+				.setPosition(v.getDoublePosition(0), 0);
+			if (v.getDoublePosition(1) < minPoint.getDoublePosition(1)) minPoint
+				.setPosition(v.getDoublePosition(1), 1);
+			if (v.getDoublePosition(2) < minPoint.getDoublePosition(2)) minPoint
+				.setPosition(v.getDoublePosition(2), 2);
 
-			if (v.getDoublePosition(0) > maxPoint.getDoublePosition(0))
-				maxPoint.setPosition(v.getDoublePosition(0), 0);
-			if (v.getDoublePosition(1) > maxPoint.getDoublePosition(1))
-				maxPoint.setPosition(v.getDoublePosition(1), 1);
-			if (v.getDoublePosition(2) > maxPoint.getDoublePosition(2))
-				maxPoint.setPosition(v.getDoublePosition(2), 2);
+			if (v.getDoublePosition(0) > maxPoint.getDoublePosition(0)) maxPoint
+				.setPosition(v.getDoublePosition(0), 0);
+			if (v.getDoublePosition(1) > maxPoint.getDoublePosition(1)) maxPoint
+				.setPosition(v.getDoublePosition(1), 1);
+			if (v.getDoublePosition(2) > maxPoint.getDoublePosition(2)) maxPoint
+				.setPosition(v.getDoublePosition(2), 2);
 		}
 
-		RealPoint dimPoint = new RealPoint((maxPoint.getDoublePosition(0) - minPoint.getDoublePosition(0)),
-				(maxPoint.getDoublePosition(1) - minPoint.getDoublePosition(1)),
-				(maxPoint.getDoublePosition(2) - minPoint.getDoublePosition(2)));
+		RealPoint dimPoint = new RealPoint((maxPoint.getDoublePosition(0) - minPoint
+			.getDoublePosition(0)), (maxPoint.getDoublePosition(1) - minPoint
+				.getDoublePosition(1)), (maxPoint.getDoublePosition(2) - minPoint
+					.getDoublePosition(2)));
 
 		double[] stepSizes = new double[3];
 		stepSizes[0] = dimPoint.getDoublePosition(0) / width;
@@ -126,30 +128,38 @@ public class DefaultVoxelization3D
 			final Vector3D v2 = new Vector3D(tri.v1x(), tri.v1y(), tri.v1z());
 			final Vector3D v3 = new Vector3D(tri.v2x(), tri.v2y(), tri.v2z());
 
-			double[] minSubBoundary = new double[] {
-					Math.min(Math.min(v1.getX(), v2.getX()), v3.getX()) - minPoint.getDoublePosition(0),
-					Math.min(Math.min(v1.getY(), v2.getY()), v3.getY()) - minPoint.getDoublePosition(1),
-					Math.min(Math.min(v1.getZ(), v2.getZ()), v3.getZ()) - minPoint.getDoublePosition(2) };
-			double[] maxSubBoundary = new double[] {
-					Math.max(Math.max(v1.getX(), v2.getX()), v3.getX()) - minPoint.getDoublePosition(0),
-					Math.max(Math.max(v1.getY(), v2.getY()), v3.getY()) - minPoint.getDoublePosition(1),
-					Math.max(Math.max(v1.getZ(), v2.getZ()), v3.getZ()) - minPoint.getDoublePosition(2) };
+			double[] minSubBoundary = new double[] { Math.min(Math.min(v1.getX(), v2
+				.getX()), v3.getX()) - minPoint.getDoublePosition(0), Math.min(Math.min(
+					v1.getY(), v2.getY()), v3.getY()) - minPoint.getDoublePosition(1),
+				Math.min(Math.min(v1.getZ(), v2.getZ()), v3.getZ()) - minPoint
+					.getDoublePosition(2) };
+			double[] maxSubBoundary = new double[] { Math.max(Math.max(v1.getX(), v2
+				.getX()), v3.getX()) - minPoint.getDoublePosition(0), Math.max(Math.max(
+					v1.getY(), v2.getY()), v3.getY()) - minPoint.getDoublePosition(1),
+				Math.max(Math.max(v1.getZ(), v2.getZ()), v3.getZ()) - minPoint
+					.getDoublePosition(2) };
 
 			RandomAccess<BitType> ra = outImg.randomAccess();// Should use the
-																// interval
-																// implementation
-																// for speed
+			// interval
+			// implementation
+			// for speed
 
 			long[] indices = new long[3];
-			for (indices[0] = (long) Math.floor(minSubBoundary[0] / stepSizes[0]); indices[0] < Math
-					.floor(maxSubBoundary[0] / stepSizes[0]); indices[0]++) {
-				for (indices[1] = (long) Math.floor(minSubBoundary[1] / stepSizes[1]); indices[1] < Math
-						.floor(maxSubBoundary[1] / stepSizes[1]); indices[1]++) {
-					for (indices[2] = (long) Math.floor(minSubBoundary[2] / stepSizes[2]); indices[2] < Math
-							.floor(maxSubBoundary[2] / stepSizes[2]); indices[2]++) {
+			for (indices[0] = (long) Math.floor(minSubBoundary[0] /
+				stepSizes[0]); indices[0] < Math.floor(maxSubBoundary[0] /
+					stepSizes[0]); indices[0]++)
+			{
+				for (indices[1] = (long) Math.floor(minSubBoundary[1] /
+					stepSizes[1]); indices[1] < Math.floor(maxSubBoundary[1] /
+						stepSizes[1]); indices[1]++)
+				{
+					for (indices[2] = (long) Math.floor(minSubBoundary[2] /
+						stepSizes[2]); indices[2] < Math.floor(maxSubBoundary[2] /
+							stepSizes[2]); indices[2]++)
+					{
 						ra.setPosition(indices);
 						if (!ra.get().get())// Don't check if voxel is already
-											// filled
+						// filled
 						{
 							double[] voxelCenter = new double[3];
 
@@ -180,7 +190,9 @@ public class DefaultVoxelization3D
 		return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
 	}
 
-	private int planeBoxOverlap(double[] normalArray, double[] vertArray, double[] maxboxArray) {
+	private int planeBoxOverlap(double[] normalArray, double[] vertArray,
+		double[] maxboxArray)
+	{
 		double[] vminArray = new double[3];
 		double[] vmaxArray = new double[3];
 		for (int q = 0; q <= 2; q++) {
@@ -188,7 +200,8 @@ public class DefaultVoxelization3D
 			if (normalArray[q] > 0.0F) {
 				vminArray[q] = (-maxboxArray[q] - v);
 				maxboxArray[q] -= v;
-			} else {
+			}
+			else {
 				maxboxArray[q] -= v;
 				vmaxArray[q] = (-maxboxArray[q] - v);
 			}
@@ -202,8 +215,9 @@ public class DefaultVoxelization3D
 		return 0;
 	}
 
-	private int axisTest_x01(double e0, double e02, double fez, double fey, double[] v0, double[] v1, double[] v2,
-			double[] boxhalfsize) {
+	private int axisTest_x01(double e0, double e02, double fez, double fey,
+		double[] v0, double[] v1, double[] v2, double[] boxhalfsize)
+	{
 		double p0 = e0 * v0[1] - e02 * v0[2];
 		double p2 = e0 * v2[1] - e02 * v2[2];
 		double max;
@@ -212,7 +226,8 @@ public class DefaultVoxelization3D
 		if (p0 < p2) {
 			min = p0;
 			max = p2;
-		} else {
+		}
+		else {
 			min = p2;
 			max = p0;
 		}
@@ -223,8 +238,9 @@ public class DefaultVoxelization3D
 		return 1;
 	}
 
-	private int axisTest_x2(double a, double b, double fa, double fb, double[] v0, double[] v1, double[] v2,
-			double[] boxhalfsize) {
+	private int axisTest_x2(double a, double b, double fa, double fb, double[] v0,
+		double[] v1, double[] v2, double[] boxhalfsize)
+	{
 		double p0 = a * v0[1] - b * v0[2];
 		double p1 = a * v1[1] - b * v1[2];
 		double max;
@@ -233,7 +249,8 @@ public class DefaultVoxelization3D
 		if (p0 < p1) {
 			min = p0;
 			max = p1;
-		} else {
+		}
+		else {
 			min = p1;
 			max = p0;
 		}
@@ -244,8 +261,9 @@ public class DefaultVoxelization3D
 		return 1;
 	}
 
-	private int axisTest_y02(double a, double b, double fa, double fb, double[] v0, double[] v1, double[] v2,
-			double[] boxhalfsize) {
+	private int axisTest_y02(double a, double b, double fa, double fb,
+		double[] v0, double[] v1, double[] v2, double[] boxhalfsize)
+	{
 		double p0 = -a * v0[0] + b * v0[2];
 		double p2 = -a * v2[0] + b * v2[2];
 		double max;
@@ -254,7 +272,8 @@ public class DefaultVoxelization3D
 		if (p0 < p2) {
 			min = p0;
 			max = p2;
-		} else {
+		}
+		else {
 			min = p2;
 			max = p0;
 		}
@@ -265,8 +284,9 @@ public class DefaultVoxelization3D
 		return 1;
 	}
 
-	private int axisTest_y1(double a, double b, double fa, double fb, double[] v0, double[] v1, double[] v2,
-			double[] boxhalfsize) {
+	private int axisTest_y1(double a, double b, double fa, double fb, double[] v0,
+		double[] v1, double[] v2, double[] boxhalfsize)
+	{
 		double p0 = -a * v0[0] + b * v0[2];
 		double p1 = -a * v1[0] + b * v1[2];
 		double max;
@@ -275,7 +295,8 @@ public class DefaultVoxelization3D
 		if (p0 < p1) {
 			min = p0;
 			max = p1;
-		} else {
+		}
+		else {
 			min = p1;
 			max = p0;
 		}
@@ -286,8 +307,9 @@ public class DefaultVoxelization3D
 		return 1;
 	}
 
-	private int axisTest_z12(double a, double b, double fa, double fb, double[] v0, double[] v1, double[] v2,
-			double[] boxhalfsize) {
+	private int axisTest_z12(double a, double b, double fa, double fb,
+		double[] v0, double[] v1, double[] v2, double[] boxhalfsize)
+	{
 		double p1 = a * v1[0] - b * v1[1];
 		double p2 = a * v2[0] - b * v2[1];
 		double max;
@@ -296,7 +318,8 @@ public class DefaultVoxelization3D
 		if (p2 < p1) {
 			min = p2;
 			max = p1;
-		} else {
+		}
+		else {
 			min = p1;
 			max = p2;
 		}
@@ -307,8 +330,9 @@ public class DefaultVoxelization3D
 		return 1;
 	}
 
-	private int axisTest_z0(double a, double b, double fa, double fb, double[] v0, double[] v1, double[] v2,
-			double[] boxhalfsize) {
+	private int axisTest_z0(double a, double b, double fa, double fb, double[] v0,
+		double[] v1, double[] v2, double[] boxhalfsize)
+	{
 		double p0 = a * v0[0] - b * v0[1];
 		double p1 = a * v1[0] - b * v1[1];
 		double max;
@@ -317,7 +341,8 @@ public class DefaultVoxelization3D
 		if (p0 < p1) {
 			min = p0;
 			max = p1;
-		} else {
+		}
+		else {
 			min = p1;
 			max = p0;
 		}
@@ -340,7 +365,9 @@ public class DefaultVoxelization3D
 		dest[2] = (v1[0] * v2[1] - v1[1] * v2[0]);
 	}
 
-	private int triBoxOverlap(double[] boxcenter, double[] boxhalfsize, Vector3D pf1, Vector3D pf2, Vector3D pf3) {
+	private int triBoxOverlap(double[] boxcenter, double[] boxhalfsize,
+		Vector3D pf1, Vector3D pf2, Vector3D pf3)
+	{
 		double[] vert1 = pf1.toArray();
 		double[] vert2 = pf2.toArray();
 		double[] vert3 = pf3.toArray();

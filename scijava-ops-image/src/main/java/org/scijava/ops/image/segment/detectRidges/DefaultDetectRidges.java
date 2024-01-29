@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -53,17 +53,18 @@ import org.scijava.ops.spi.OpDependency;
 
 /**
  * Performs the Ridge Detection algorithm on a 2-Dimensional, gray-scale image.
- * 
+ *
  * @author Gabe Selzer
- *@implNote op names='segment.detectRidges'
+ * @implNote op names='segment.detectRidges'
  */
 public class DefaultDetectRidges<T extends RealType<T>> implements
-		Functions.Arity5<RandomAccessibleInterval<T>, Double, Double, Double, Integer, List<DefaultWritablePolyline>> {
+	Functions.Arity5<RandomAccessibleInterval<T>, Double, Double, Double, Integer, List<DefaultWritablePolyline>>
+{
 
 	/**
-	 * The threshold for angle differences between the eigenvectors of two different
-	 * ridge points. The eigenvector is fixed for angle differences above this
-	 * threshold.
+	 * The threshold for angle differences between the eigenvectors of two
+	 * different ridge points. The eigenvector is fixed for angle differences
+	 * above this threshold.
 	 */
 	double angleThreshold = 100;
 
@@ -80,35 +81,30 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 	private Computers.Arity3<RandomAccessibleInterval<DoubleType>, double[], int[], RandomAccessibleInterval<DoubleType>> partialDerivativeOp;
 
 	/**
-	 * Recursively determines the next line point and adds it to the running list of
-	 * line points.
-	 * 
-	 * @param gradientRA
-	 *            - the {@link RandomAccess} of the gradient image.
-	 * @param pRA
-	 *            - the {@link RandomAccess} of the eigenvector image.
-	 * @param nRA
-	 *            - the {@link RandomAccess} of the subpixel line location image.
-	 * @param points
-	 *            - the {@link ArrayList} containing the line points.
-	 * @param octant
-	 *            - integer denoting the octant of the last gradient vector,
-	 *            oriented with 1 being 0 degrees and increasing in the
-	 *            counterclockwise direction.
-	 * @param lastnx
-	 *            - the x component of the gradient vector of the last line point.
-	 * @param lastny
-	 *            - the y component of the gradient vector of the last line point.
-	 * @param lastpx
-	 *            - the x component of the subpixel line location of the last line
-	 *            point.
-	 * @param lastpy
-	 *            - the y component of the subpixel line location of the last line
-	 *            point.
+	 * Recursively determines the next line point and adds it to the running list
+	 * of line points.
+	 *
+	 * @param gradientRA - the {@link RandomAccess} of the gradient image.
+	 * @param pRA - the {@link RandomAccess} of the eigenvector image.
+	 * @param nRA - the {@link RandomAccess} of the subpixel line location image.
+	 * @param points - the {@link ArrayList} containing the line points.
+	 * @param octant - integer denoting the octant of the last gradient vector,
+	 *          oriented with 1 being 0 degrees and increasing in the
+	 *          counterclockwise direction.
+	 * @param lastnx - the x component of the gradient vector of the last line
+	 *          point.
+	 * @param lastny - the y component of the gradient vector of the last line
+	 *          point.
+	 * @param lastpx - the x component of the subpixel line location of the last
+	 *          line point.
+	 * @param lastpy - the y component of the subpixel line location of the last
+	 *          line point.
 	 */
-	private void getNextPoint(RandomAccess<DoubleType> gradientRA, RandomAccess<DoubleType> pRA,
-			RandomAccess<DoubleType> nRA, List<RealPoint> points, int octant, double lastnx, double lastny,
-			double lastpx, double lastpy, Double lowerThreshold) {
+	private void getNextPoint(RandomAccess<DoubleType> gradientRA,
+		RandomAccess<DoubleType> pRA, RandomAccess<DoubleType> nRA,
+		List<RealPoint> points, int octant, double lastnx, double lastny,
+		double lastpx, double lastpy, Double lowerThreshold)
+	{
 		Point currentPos = new Point(gradientRA);
 		// variables for the best line point of the three.
 		Point salientPoint = new Point(gradientRA);
@@ -129,8 +125,11 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 			gradientRA.move(modifier[1], 1);
 			// make sure that we only do the calculations if there is a line point
 			// there.
-			if (gradientRA.get().get() > lowerThreshold /* && isMaxRA.get().get() > 0 */) {
-				long[] vectorArr = { gradientRA.getLongPosition(0), gradientRA.getLongPosition(1), 0 };
+			if (gradientRA.get()
+				.get() > lowerThreshold /* && isMaxRA.get().get() > 0 */)
+			{
+				long[] vectorArr = { gradientRA.getLongPosition(0), gradientRA
+					.getLongPosition(1), 0 };
 				nRA.setPosition(vectorArr);
 				double nx = nRA.get().get();
 				nRA.fwd(2);
@@ -140,7 +139,8 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 				pRA.fwd(2);
 				double py = pRA.get().get();
 				double currentAngle = RidgeDetectionUtils.getAngle(nx, ny);
-				double subpixelDiff = Math.sqrt(Math.pow(px - lastpx, 2) + Math.pow(py - lastpy, 2));
+				double subpixelDiff = Math.sqrt(Math.pow(px - lastpx, 2) + Math.pow(py -
+					lastpy, 2));
 				double angleDiff = Math.abs(currentAngle - lastAngle);
 				lastPointInLine = false;
 				// A salient line point will have the smallest combination of these
@@ -170,8 +170,9 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 		if (!lastPointInLine) {
 			// take the most salient point
 			gradientRA.setPosition(salientPoint);
-			points.add(RidgeDetectionUtils.get2DRealPoint(gradientRA.getDoublePosition(0) + salientpx,
-					gradientRA.getDoublePosition(1) + salientpy));
+			points.add(RidgeDetectionUtils.get2DRealPoint(gradientRA
+				.getDoublePosition(0) + salientpx, gradientRA.getDoublePosition(1) +
+					salientpy));
 
 			// the gradient vector itself refers to the greatest change in intensity,
 			// and for a pixel on a line this vector will be perpendicular to the
@@ -182,14 +183,13 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 			// vector by 180 degrees for the purposes of this detector. We set the
 			// threshold for angle fixing just above 90 degrees since any lower would
 			// prevent ridges curving.
-			double potentialGradient = RidgeDetectionUtils.getAngle(salientnx, salientny);
+			double potentialGradient = RidgeDetectionUtils.getAngle(salientnx,
+				salientny);
 			// we increase any angles too close to zero since, for example, having one
 			// angle at 5 degrees and another at 355 would not satisfy the conditional
 			// even though they are close enough to satisfy.
-			if (lastAngle < angleThreshold)
-				lastAngle += 360;
-			if (potentialGradient < angleThreshold)
-				potentialGradient += 360;
+			if (lastAngle < angleThreshold) lastAngle += 360;
+			if (potentialGradient < angleThreshold) potentialGradient += 360;
 
 			if (Math.abs(potentialGradient - lastAngle) > angleThreshold) {
 				salientnx = -salientnx;
@@ -197,8 +197,9 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 			}
 
 			// perform the operation again on the new end of the line being formed.
-			getNextPoint(gradientRA, pRA, nRA, points, RidgeDetectionUtils.getOctant(salientnx, salientny), salientnx,
-					salientny, salientpx, salientpy, lowerThreshold);
+			getNextPoint(gradientRA, pRA, nRA, points, RidgeDetectionUtils.getOctant(
+				salientnx, salientny), salientnx, salientny, salientpx, salientpy,
+				lowerThreshold);
 		}
 	}
 
@@ -207,32 +208,34 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 	 *
 	 * @param input
 	 * @param width The diameter of the lines to search for.
-	 * @param lowerThreshold The threshold for which the gradient of a subsequent line point must be above.
-	 * @param higherThreshold The threshold for which the gradient of a initial line point must be above.
-	 * @param ridgeLengthMin The minimum number of connected line points necessary to define a ridge. Can be used to remove small noisy ridges.
+	 * @param lowerThreshold The threshold for which the gradient of a subsequent
+	 *          line point must be above.
+	 * @param higherThreshold The threshold for which the gradient of a initial
+	 *          line point must be above.
+	 * @param ridgeLengthMin The minimum number of connected line points necessary
+	 *          to define a ridge. Can be used to remove small noisy ridges.
 	 * @return the {@link List} of ridges
 	 */
 	@Override
 	public List<DefaultWritablePolyline> apply(
-			final RandomAccessibleInterval<T> input,
-			final Double width,
-			final Double lowerThreshold,
-			final Double higherThreshold,
-			@Nullable Integer ridgeLengthMin
-	) {
+		final RandomAccessibleInterval<T> input, final Double width,
+		final Double lowerThreshold, final Double higherThreshold,
+		@Nullable Integer ridgeLengthMin)
+	{
 		if (ridgeLengthMin == null) {
 			ridgeLengthMin = 1;
 		}
 
 		// ensure validity of inputs
-		if (input.numDimensions() != 2)
-			throw new IllegalArgumentException("Input image must be of two dimensions!");
+		if (input.numDimensions() != 2) throw new IllegalArgumentException(
+			"Input image must be of two dimensions!");
 
 		double sigma = (width / (2 * Math.sqrt(3)));
 
 		// generate the metadata images
-		RidgeDetectionMetadata ridgeDetectionMetadata = new RidgeDetectionMetadata(input, sigma, lowerThreshold,
-				higherThreshold, convertOp, createOp, copyOp, partialDerivativeOp);
+		RidgeDetectionMetadata ridgeDetectionMetadata = new RidgeDetectionMetadata(
+			input, sigma, lowerThreshold, higherThreshold, convertOp, createOp,
+			copyOp, partialDerivativeOp);
 
 		// retrieve the metadata images
 		Img<DoubleType> p_values = ridgeDetectionMetadata.getPValues();
@@ -240,8 +243,8 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 		Img<DoubleType> gradients = ridgeDetectionMetadata.getGradients();
 
 		// create RandomAccesses for the metadata images
-		OutOfBoundsConstantValueFactory<DoubleType, RandomAccessibleInterval<DoubleType>> oscvf = new OutOfBoundsConstantValueFactory<>(
-				new DoubleType(0));
+		OutOfBoundsConstantValueFactory<DoubleType, RandomAccessibleInterval<DoubleType>> oscvf =
+			new OutOfBoundsConstantValueFactory<>(new DoubleType(0));
 		RandomAccess<DoubleType> pRA = oscvf.create(p_values);
 		RandomAccess<DoubleType> nRA = oscvf.create(n_values);
 		RandomAccess<DoubleType> gradientRA = oscvf.create(gradients);
@@ -259,7 +262,8 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 			List<RealPoint> points = new ArrayList<>();
 
 			// get all of the necessary metadata from the image.
-			long[] eigenvectorPos = { gradientRA.getLongPosition(0), gradientRA.getLongPosition(1), 0 };
+			long[] eigenvectorPos = { gradientRA.getLongPosition(0), gradientRA
+				.getLongPosition(1), 0 };
 
 			// obtain the n-values
 			nRA.setPosition(eigenvectorPos);
@@ -275,22 +279,23 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 
 			// start the list by adding the current point, which is the most line-like
 			// point on the polyline
-			points.add(RidgeDetectionUtils.get2DRealPoint(gradientRA.getDoublePosition(0) + px,
-					gradientRA.getDoublePosition(1) + py));
+			points.add(RidgeDetectionUtils.get2DRealPoint(gradientRA
+				.getDoublePosition(0) + px, gradientRA.getDoublePosition(1) + py));
 
 			// go in the direction to the left of the perpendicular value
-			getNextPoint(gradientRA, pRA, nRA, points, RidgeDetectionUtils.getOctant(eigenx, eigeny), eigenx, eigeny,
-					px, py, lowerThreshold);
+			getNextPoint(gradientRA, pRA, nRA, points, RidgeDetectionUtils.getOctant(
+				eigenx, eigeny), eigenx, eigeny, px, py, lowerThreshold);
 
 			// flip the array list around so that we get one cohesive line
-			gradientRA.setPosition(new long[] { eigenvectorPos[0], eigenvectorPos[1] });
+			gradientRA.setPosition(new long[] { eigenvectorPos[0],
+				eigenvectorPos[1] });
 			Collections.reverse(points);
 
 			// go in the opposite direction as before.
 			eigenx = -eigenx;
 			eigeny = -eigeny;
-			getNextPoint(gradientRA, pRA, nRA, points, RidgeDetectionUtils.getOctant(eigenx, eigeny), eigenx, eigeny,
-					px, py, lowerThreshold);
+			getNextPoint(gradientRA, pRA, nRA, points, RidgeDetectionUtils.getOctant(
+				eigenx, eigeny), eigenx, eigeny, px, py, lowerThreshold);
 
 			// set the value to 0 so that it is not reused.
 			gradientRA.get().setReal(0);

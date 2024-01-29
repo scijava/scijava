@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.adapt.complexLift;
 
 import java.util.function.BiFunction;
@@ -57,16 +58,17 @@ public final class LiftNeighborhoodComputersToFunctionsOnImgs {
 	}
 
 	/**
-	 * @implNote op names='engine.adapt', priority='100.', type='java.util.function.Function'
+	 * @implNote op names='engine.adapt', priority='100.',
+	 *           type='java.util.function.Function'
 	 */
 	public static <T, U> BiFunction<RandomAccessibleInterval<T>, Shape, Img<T>>
-	adaptUsingShape(
-			@OpDependency(name="engine.create", adaptable = false) BiFunction<Dimensions, T, Img<T>> creator,
-			Computers.Arity1<Neighborhood<T>, T> op
-	)
+		adaptUsingShape(@OpDependency(name = "engine.create",
+			adaptable = false) BiFunction<Dimensions, T, Img<T>> creator,
+			Computers.Arity1<Neighborhood<T>, T> op)
 	{
 		OutOfBoundsMirrorFactory<T, RandomAccessibleInterval<T>> oobf //
-			= new OutOfBoundsMirrorFactory<>(OutOfBoundsMirrorFactory.Boundary.SINGLE);
+			= new OutOfBoundsMirrorFactory<>(
+				OutOfBoundsMirrorFactory.Boundary.SINGLE);
 		return (in, shape) -> {
 			var output = creator.apply(in, Util.getTypeFromInterval(in));
 			var extended = Views.extend(in, oobf);
@@ -78,13 +80,14 @@ public final class LiftNeighborhoodComputersToFunctionsOnImgs {
 	}
 
 	/**
-	 * @implNote op names='engine.adapt', priority='100.', type='java.util.function.Function'
+	 * @implNote op names='engine.adapt', priority='100.',
+	 *           type='java.util.function.Function'
 	 */
 	@OpMethod(names = "engine.adapt", type = Function.class)
 	public static <T, F extends RandomAccessibleInterval<T>>
-	Functions.Arity3<F, Shape, OutOfBoundsFactory<T, ? super F>, Img<T>>
-	adaptUsingShapeAndOOBF(
-			@OpDependency(name="engine.create", adaptable = false) BiFunction<Dimensions, T, Img<T>> creator,
+		Functions.Arity3<F, Shape, OutOfBoundsFactory<T, ? super F>, Img<T>>
+		adaptUsingShapeAndOOBF(@OpDependency(name = "engine.create",
+			adaptable = false) BiFunction<Dimensions, T, Img<T>> creator,
 			Computers.Arity1<Neighborhood<T>, T> op)
 	{
 		return (in, shape, oobf) -> {

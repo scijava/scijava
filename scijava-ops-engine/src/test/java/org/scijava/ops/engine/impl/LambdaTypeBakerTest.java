@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.engine.impl;
 
 import java.lang.reflect.Type;
@@ -42,16 +43,16 @@ public class LambdaTypeBakerTest {
 	@Test
 	public void testBakeType() {
 		Function<Double, Double> func = (in) -> in * 2;
-		Type funcType = new Nil<Function<Double, Double>>() {
-		}.getType();
+		Type funcType = new Nil<Function<Double, Double>>() {}.getType();
 
-		Function<Double, Double> wrappedFunction = LambdaTypeBaker.bakeLambdaType(func, funcType);
+		Function<Double, Double> wrappedFunction = LambdaTypeBaker.bakeLambdaType(
+			func, funcType);
 
 		Assertions.assertTrue(wrappedFunction instanceof GenericTyped,
-				"wrappedFunction should be a GenericTyped but is not!");
+			"wrappedFunction should be a GenericTyped but is not!");
 		Type type = ((GenericTyped) wrappedFunction).getType();
-		Assertions.assertEquals(funcType, type,
-				"wrappedFunction type " + type + "is not equivalent to the provided type " + funcType + "!");
+		Assertions.assertEquals(funcType, type, "wrappedFunction type " + type +
+			"is not equivalent to the provided type " + funcType + "!");
 	}
 
 }

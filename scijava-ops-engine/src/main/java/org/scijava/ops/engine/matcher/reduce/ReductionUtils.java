@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.engine.matcher.reduce;
 
 import java.lang.invoke.MethodHandles;
@@ -68,7 +69,7 @@ public final class ReductionUtils {
 	 * arguments of the given Op (these arguments are dictated by the list of
 	 * {@code Simplifier}s.
 	 * <li>
-	 * 
+	 *
 	 * @param originalOp - the Op that will be simplified
 	 * @param reducedInfo - the {@link ReducedOpInfo} containing the information
 	 *          required to reduce {@code originalOp}.
@@ -77,7 +78,9 @@ public final class ReductionUtils {
 	 *         then mutated to satisfy the desired output of the wrapper.
 	 * @throws Throwable
 	 */
-	protected static Object javassistOp(Object originalOp, ReducedOpInfo reducedInfo) throws Throwable {
+	protected static Object javassistOp(Object originalOp,
+		ReducedOpInfo reducedInfo) throws Throwable
+	{
 		ClassPool pool = ClassPool.getDefault();
 
 		// NB LambdaMetaFactory only works if this Module (org.scijava.ops.engine)
@@ -104,6 +107,7 @@ public final class ReductionUtils {
 
 	/**
 	 * A valid class name must be unique.
+	 *
 	 * @param reducedInfo
 	 * @return the class name
 	 */
@@ -113,7 +117,7 @@ public final class ReductionUtils {
 		String packageName = getPackageName();
 		StringBuilder sb = new StringBuilder(packageName + ".");
 
-		// -- class name -- 
+		// -- class name --
 		// Start with the class of the implementation
 		String originalName = className(reducedInfo);
 		// Add the input members for uniqueness
@@ -121,8 +125,9 @@ public final class ReductionUtils {
 
 		// -- ensure the name is valid --
 		String className = originalName.concat(simplifiedParameters);
-		if(className.chars().anyMatch(c -> !Character.isJavaIdentifierPart(c)))
-			throw new IllegalArgumentException(className + " is not a valid class name!");
+		if (className.chars().anyMatch(c -> !Character.isJavaIdentifierPart(c)))
+			throw new IllegalArgumentException(className +
+				" is not a valid class name!");
 
 		// -- full name is package + class --
 		sb.append(className);
@@ -147,8 +152,10 @@ public final class ReductionUtils {
 			classStart = implName.substring(0, methodStart).lastIndexOf('.') + 1;
 		}
 
-		String originalName = implName.substring(classStart); // we only want the class name
-		// replace non-valid identifiers with underscore (the underscore is arbitrary)
+		String originalName = implName.substring(classStart); // we only want the
+																													// class name
+		// replace non-valid identifiers with underscore (the underscore is
+		// arbitrary)
 		return originalName.replaceAll("[^A-Z^a-z0-9$_]", "_");
 	}
 
@@ -166,20 +173,21 @@ public final class ReductionUtils {
 	 * {@link Class}es of array types return "[]" when
 	 * {@link Class#getSimpleName()} is called. Those characters are invalid in a
 	 * class name, so we exchange them for the suffix "_Arr".
-	 * 
+	 *
 	 * @param clazz - the {@link Class} for which we need a name
 	 * @return - a name that is legal as part of a class name.
 	 */
 	private static String getClassName(Class<?> clazz) {
 		String className = clazz.getSimpleName();
-		if(className.chars().allMatch(c -> Character.isJavaIdentifierPart(c)))
+		if (className.chars().allMatch(c -> Character.isJavaIdentifierPart(c)))
 			return className;
-		if(clazz.isArray())
-			return clazz.getComponentType().getSimpleName() + "_Arr";
+		if (clazz.isArray()) return clazz.getComponentType().getSimpleName() +
+			"_Arr";
 		return className;
 	}
 
-	private static CtClass generateSimplifiedWrapper(ClassPool pool, String className, ReducedOpInfo reducedInfo) throws Throwable
+	private static CtClass generateSimplifiedWrapper(ClassPool pool,
+		String className, ReducedOpInfo reducedInfo) throws Throwable
 	{
 		CtClass cc = pool.makeClass(className);
 		// Add implemented interface
@@ -187,7 +195,8 @@ public final class ReductionUtils {
 		cc.addInterface(jasOpType);
 
 		// Add Op field
-		CtField opField = createOpField(pool, cc, Types.raw(reducedInfo.srcInfo().opType()), "op");
+		CtField opField = createOpField(pool, cc, Types.raw(reducedInfo.srcInfo()
+			.opType()), "op");
 		cc.addField(opField);
 
 		// Add constructor to take the Simplifiers, as well as the original op.
@@ -196,22 +205,25 @@ public final class ReductionUtils {
 		cc.addConstructor(constructor);
 
 		// add functional interface method
-		CtMethod functionalMethod = CtNewMethod.make(createFunctionalMethod(reducedInfo),
-			cc);
+		CtMethod functionalMethod = CtNewMethod.make(createFunctionalMethod(
+			reducedInfo), cc);
 		cc.addMethod(functionalMethod);
 		return cc;
 	}
 
-	private static CtField createOpField(ClassPool pool, CtClass cc, Class<?> opType, String fieldName)
-			throws NotFoundException, CannotCompileException
-		{
-			CtClass fType = pool.get(opType.getName());
-			CtField f = new CtField(fType, fieldName, cc);
-			f.setModifiers(Modifier.PRIVATE + Modifier.FINAL);
-			return f;
-		}
+	private static CtField createOpField(ClassPool pool, CtClass cc,
+		Class<?> opType, String fieldName) throws NotFoundException,
+		CannotCompileException
+	{
+		CtClass fType = pool.get(opType.getName());
+		CtField f = new CtField(fType, fieldName, cc);
+		f.setModifiers(Modifier.PRIVATE + Modifier.FINAL);
+		return f;
+	}
 
-	private static String createConstructor(CtClass cc, ReducedOpInfo reducedInfo) {
+	private static String createConstructor(CtClass cc,
+		ReducedOpInfo reducedInfo)
+	{
 		StringBuilder sb = new StringBuilder();
 		// constructor signature
 		sb.append("public " + cc.getSimpleName() + "(");
@@ -237,9 +249,9 @@ public final class ReductionUtils {
 	 * not fully support generics</a>, so we must ensure that the types are raw.
 	 * At compile time, the raw types are equivalent to the generic types, so this
 	 * should not pose any issues.
-	 * 
-	 * @param info - the {@link ReducedOpInfo} containing the
-	 *          information needed to write the method.
+	 *
+	 * @param info - the {@link ReducedOpInfo} containing the information needed
+	 *          to write the method.
 	 * @return a {@link String} that can be used by
 	 *         {@link CtMethod#make(String, CtClass)} to generate the functional
 	 *         method of the simplified Op
@@ -255,10 +267,10 @@ public final class ReductionUtils {
 		// determine the name of the output:
 		String opOutput = "out";
 
-		//-- signature -- //
+		// -- signature -- //
 		sb.append(generateSignature(m));
 
-		//-- body --//
+		// -- body --//
 
 		// processing
 		sb.append(" {");
@@ -269,9 +281,8 @@ public final class ReductionUtils {
 		int i;
 		List<Member<?>> totalArguments = info.srcInfo().inputs();
 		int totalArgs = totalArguments.size();
-		long totalOptionals = totalArguments
-			.parallelStream().filter(member -> !member.isRequired())
-			.count();
+		long totalOptionals = totalArguments.parallelStream().filter(
+			member -> !member.isRequired()).count();
 		long neededOptionals = totalOptionals - info.paramsReduced();
 		int reducedArg = 0;
 		int nullables = 0;
@@ -281,7 +292,8 @@ public final class ReductionUtils {
 			// arguments
 			if (totalArguments.get(i).isRequired()) {
 				sb.append(" in" + reducedArg++);
-			} else if (nullables < neededOptionals) {
+			}
+			else if (nullables < neededOptionals) {
 				sb.append(" in" + reducedArg++);
 				nullables++;
 			}
@@ -297,17 +309,18 @@ public final class ReductionUtils {
 		return sb.toString();
 	}
 
-
 	/**
-	 * Returns the index of the argument that is both the input and the output. <b>If there is no such argument (i.e. the Op produces a pure output), -1 is returned</b>
+	 * Returns the index of the argument that is both the input and the output.
+	 * <b>If there is no such argument (i.e. the Op produces a pure output), -1 is
+	 * returned</b>
 	 *
 	 * @return the index of the mutable argument.
 	 */
 	private static int ioArgIndex(final OpInfo info) {
 		List<Member<?>> inputs = info.inputs();
-		Optional<Member<?>>
-				ioArg = inputs.stream().filter(m -> m.isInput() && m.isOutput()).findFirst();
-		if(ioArg.isEmpty()) return -1;
+		Optional<Member<?>> ioArg = inputs.stream().filter(m -> m.isInput() && m
+			.isOutput()).findFirst();
+		if (ioArg.isEmpty()) return -1;
 		Member<?> ioMember = ioArg.get();
 		return inputs.indexOf(ioMember);
 	}

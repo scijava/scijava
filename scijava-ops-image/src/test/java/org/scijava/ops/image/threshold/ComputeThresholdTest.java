@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -45,7 +45,9 @@ import org.scijava.types.Nil;
  */
 public class ComputeThresholdTest extends AbstractThresholdTest {
 
-	/** Tests {@link org.scijava.ops.image.threshold.huang.ComputeHuangThreshold}. */
+	/**
+	 * Tests {@link org.scijava.ops.image.threshold.huang.ComputeHuangThreshold}.
+	 */
 	@Test
 	public void testHuang() {
 		testComputeThresholdOp(36874, "threshold.huang");
@@ -66,7 +68,10 @@ public class ComputeThresholdTest extends AbstractThresholdTest {
 		testComputeThresholdOp(34859, "threshold.intermodes");
 	}
 
-	/** Tests {@link org.scijava.ops.image.threshold.isoData.ComputeIsoDataThreshold}. */
+	/**
+	 * Tests
+	 * {@link org.scijava.ops.image.threshold.isoData.ComputeIsoDataThreshold}.
+	 */
 	@Test
 	public void testIsoData() {
 		testComputeThresholdOp(33095, "threshold.isoData");
@@ -96,33 +101,44 @@ public class ComputeThresholdTest extends AbstractThresholdTest {
 		testComputeThresholdOp(46698, "threshold.maxLikelihood");
 	}
 
-	/** Tests {@link org.scijava.ops.image.threshold.mean.ComputeMeanThreshold}. */
+	/**
+	 * Tests {@link org.scijava.ops.image.threshold.mean.ComputeMeanThreshold}.
+	 */
 	@Test
 	public void testMean() {
 		testComputeThresholdOp(32591, "threshold.mean");
 	}
 
 	/**
-	 * Tests {@link org.scijava.ops.image.threshold.minError.ComputeMinErrorThreshold}.
+	 * Tests
+	 * {@link org.scijava.ops.image.threshold.minError.ComputeMinErrorThreshold}.
 	 */
 	@Test
 	public void testMinError() {
 		testComputeThresholdOp(32843, "threshold.minError");
 	}
 
-	/** Tests {@link org.scijava.ops.image.threshold.minimum.ComputeMinimumThreshold}. */
+	/**
+	 * Tests
+	 * {@link org.scijava.ops.image.threshold.minimum.ComputeMinimumThreshold}.
+	 */
 	@Test
 	public void testMinimum() {
 		testComputeThresholdOp(44935, "threshold.minimum");
 	}
 
-	/** Tests {@link org.scijava.ops.image.threshold.moments.ComputeMomentsThreshold}. */
+	/**
+	 * Tests
+	 * {@link org.scijava.ops.image.threshold.moments.ComputeMomentsThreshold}.
+	 */
 	@Test
 	public void testMoments() {
 		testComputeThresholdOp(34355, "threshold.moments");
 	}
 
-	/** Tests {@link org.scijava.ops.image.threshold.otsu.ComputeOtsuThreshold}. */
+	/**
+	 * Tests {@link org.scijava.ops.image.threshold.otsu.ComputeOtsuThreshold}.
+	 */
 	@Test
 	public void testOtsu() {
 		testComputeThresholdOp(34103, "threshold.otsu");
@@ -147,7 +163,8 @@ public class ComputeThresholdTest extends AbstractThresholdTest {
 	}
 
 	/**
-	 * Tests {@link org.scijava.ops.image.threshold.shanbhag.ComputeShanbhagThreshold}.
+	 * Tests
+	 * {@link org.scijava.ops.image.threshold.shanbhag.ComputeShanbhagThreshold}.
 	 */
 	@Test
 	public void testShanbhag() {
@@ -155,7 +172,8 @@ public class ComputeThresholdTest extends AbstractThresholdTest {
 	}
 
 	/**
-	 * Tests {@link org.scijava.ops.image.threshold.triangle.ComputeTriangleThreshold}.
+	 * Tests
+	 * {@link org.scijava.ops.image.threshold.triangle.ComputeTriangleThreshold}.
 	 */
 	@Test
 	public void testTriangle() {

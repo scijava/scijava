@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.common3;
 
 import java.io.ByteArrayOutputStream;
@@ -37,7 +38,7 @@ import java.util.Map;
 
 /**
  * Utility class for working with {@link Exception}s.
- * 
+ *
  * @author Curtis Rueden
  * @author Gabriel Selzer
  */
@@ -61,7 +62,9 @@ public final class Exceptions {
 	 * Creates a new {@link IllegalArgumentException} with the given cause and
 	 * message strings joined by commas.
 	 */
-	public static IllegalArgumentException iae(final Throwable cause, final String... notes) {
+	public static IllegalArgumentException iae(final Throwable cause,
+		final String... notes)
+	{
 		final String s = String.join(", ", notes);
 		final IllegalArgumentException exc = new IllegalArgumentException(s);
 		if (cause != null) exc.initCause(cause);
@@ -102,12 +105,11 @@ public final class Exceptions {
 	public static String dumpAll() {
 		final StringBuilder sb = new StringBuilder();
 
-		final Map<Thread, StackTraceElement[]> stackTraces =
-			Thread.getAllStackTraces();
+		final Map<Thread, StackTraceElement[]> stackTraces = Thread
+			.getAllStackTraces();
 
 		// sort list of threads by name
-		final ArrayList<Thread> threads =
-			new ArrayList<>(stackTraces.keySet());
+		final ArrayList<Thread> threads = new ArrayList<>(stackTraces.keySet());
 		Collections.sort(threads, (t1, t2) -> t1.getName().compareTo(t2.getName()));
 
 		for (final Thread t : threads) {

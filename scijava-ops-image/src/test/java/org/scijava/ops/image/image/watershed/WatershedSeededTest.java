@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.image.watershed;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -55,7 +56,7 @@ import net.imglib2.type.numeric.real.FloatType;
 
 /**
  * Test for the seeded watershed op.
- * 
+ *
  * @author Simon Schmid (University of Konstanz)
  **/
 public class WatershedSeededTest extends AbstractOpTest {
@@ -84,8 +85,9 @@ public class WatershedSeededTest extends AbstractOpTest {
 
 		// compute labeled seeds
 		final ImgLabeling<Integer, IntType> labeledSeeds = ops.op("labeling.cca")
-				.arity2().input(bits, StructuringElement.EIGHT_CONNECTED)
-				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
+			.arity2().input(bits, StructuringElement.EIGHT_CONNECTED).outType(
+				new Nil<ImgLabeling<Integer, IntType>>()
+				{}).apply();
 
 		testWithoutMask(input, labeledSeeds);
 
@@ -93,7 +95,8 @@ public class WatershedSeededTest extends AbstractOpTest {
 	}
 
 	private void testWithoutMask(final RandomAccessibleInterval<FloatType> in,
-			final ImgLabeling<Integer, IntType> seeds) {
+		final ImgLabeling<Integer, IntType> seeds)
+	{
 		// create mask which is 1 everywhere
 		long[] dims = new long[in.numDimensions()];
 		in.dimensions(dims);
@@ -106,14 +109,18 @@ public class WatershedSeededTest extends AbstractOpTest {
 		 * use 8-connected neighborhood
 		 */
 		// compute result without watersheds
-		ImgLabeling<Integer, IntType> out = ops.op("image.watershed").arity4().input(in, seeds, true, false)
-				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
+		ImgLabeling<Integer, IntType> out = ops.op("image.watershed").arity4()
+			.input(in, seeds, true, false).outType(
+				new Nil<ImgLabeling<Integer, IntType>>()
+				{}).apply();
 
 		assertResults(in, out, seeds, mask, false, false);
 
 		// compute result with watersheds
-		ImgLabeling<Integer, IntType> out2 = ops.op("image.watershed").arity4().input(in, seeds, true, true)
-				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
+		ImgLabeling<Integer, IntType> out2 = ops.op("image.watershed").arity4()
+			.input(in, seeds, true, true).outType(
+				new Nil<ImgLabeling<Integer, IntType>>()
+				{}).apply();
 
 		assertResults(in, out2, seeds, mask, true, false);
 
@@ -121,19 +128,25 @@ public class WatershedSeededTest extends AbstractOpTest {
 		 * use 4-connected neighborhood
 		 */
 		// compute result without watersheds
-		ImgLabeling<Integer, IntType> out3 = ops.op("image.watershed").arity4().input(in, seeds, false, false)
-				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
+		ImgLabeling<Integer, IntType> out3 = ops.op("image.watershed").arity4()
+			.input(in, seeds, false, false).outType(
+				new Nil<ImgLabeling<Integer, IntType>>()
+				{}).apply();
 
 		assertResults(in, out3, seeds, mask, false, false);
 
 		// compute result with watersheds
-		ImgLabeling<Integer, IntType> out4 = ops.op("image.watershed").arity4().input(in, seeds, false, true)
-				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
+		ImgLabeling<Integer, IntType> out4 = ops.op("image.watershed").arity4()
+			.input(in, seeds, false, true).outType(
+				new Nil<ImgLabeling<Integer, IntType>>()
+				{}).apply();
 
 		assertResults(in, out4, seeds, mask, true, false);
 	}
 
-	private void testWithMask(final RandomAccessibleInterval<FloatType> in, final ImgLabeling<Integer, IntType> seeds) {
+	private void testWithMask(final RandomAccessibleInterval<FloatType> in,
+		final ImgLabeling<Integer, IntType> seeds)
+	{
 		// create mask which is 1 everywhere
 		long[] dims = new long[in.numDimensions()];
 		in.dimensions(dims);
@@ -153,14 +166,18 @@ public class WatershedSeededTest extends AbstractOpTest {
 		 * use 8-connected neighborhood
 		 */
 		// compute result without watersheds
-		ImgLabeling<Integer, IntType> out = ops.op("image.watershed").arity5().input(in, seeds, true, false, mask)
-				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
+		ImgLabeling<Integer, IntType> out = ops.op("image.watershed").arity5()
+			.input(in, seeds, true, false, mask).outType(
+				new Nil<ImgLabeling<Integer, IntType>>()
+				{}).apply();
 
 		assertResults(in, out, seeds, mask, false, true);
 
 		// compute result with watersheds
-		ImgLabeling<Integer, IntType> out2 = ops.op("image.watershed").arity5().input(in, seeds, true, true, mask)
-				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
+		ImgLabeling<Integer, IntType> out2 = ops.op("image.watershed").arity5()
+			.input(in, seeds, true, true, mask).outType(
+				new Nil<ImgLabeling<Integer, IntType>>()
+				{}).apply();
 
 		assertResults(in, out2, seeds, mask, true, true);
 
@@ -168,21 +185,28 @@ public class WatershedSeededTest extends AbstractOpTest {
 		 * use 4-connected neighborhood
 		 */
 		// compute result without watersheds
-		ImgLabeling<Integer, IntType> out3 = ops.op("image.watershed").arity5().input(in, seeds, false, false, mask)
-				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
+		ImgLabeling<Integer, IntType> out3 = ops.op("image.watershed").arity5()
+			.input(in, seeds, false, false, mask).outType(
+				new Nil<ImgLabeling<Integer, IntType>>()
+				{}).apply();
 
 		assertResults(in, out3, seeds, mask, false, true);
 
 		// compute result with watersheds
-		ImgLabeling<Integer, IntType> out4 = ops.op("image.watershed").arity5().input(in, seeds, false, true, mask)
-				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
+		ImgLabeling<Integer, IntType> out4 = ops.op("image.watershed").arity5()
+			.input(in, seeds, false, true, mask).outType(
+				new Nil<ImgLabeling<Integer, IntType>>()
+				{}).apply();
 
 		assertResults(in, out4, seeds, mask, true, true);
 	}
 
-	private void assertResults(final RandomAccessibleInterval<FloatType> in, final ImgLabeling<Integer, IntType> out,
-			final ImgLabeling<Integer, IntType> seeds, final RandomAccessibleInterval<BitType> mask,
-			final boolean withWatersheds, final boolean smallMask) {
+	private void assertResults(final RandomAccessibleInterval<FloatType> in,
+		final ImgLabeling<Integer, IntType> out,
+		final ImgLabeling<Integer, IntType> seeds,
+		final RandomAccessibleInterval<BitType> mask, final boolean withWatersheds,
+		final boolean smallMask)
+	{
 
 		final Cursor<LabelingType<Integer>> curOut = out.cursor();
 		final RandomAccess<BitType> raMask = mask.randomAccess();
@@ -191,7 +215,8 @@ public class WatershedSeededTest extends AbstractOpTest {
 			raMask.setPosition(curOut);
 			if (raMask.get().get()) {
 				assertEquals(1, curOut.get().size());
-			} else {
+			}
+			else {
 				assertEquals(true, curOut.get().isEmpty());
 			}
 		}
@@ -210,7 +235,8 @@ public class WatershedSeededTest extends AbstractOpTest {
 		assertEquals(in.numDimensions(), out.numDimensions());
 		assertEquals(in.dimension(0), out.dimension(0));
 		assertEquals(in.dimension(1), out.dimension(1));
-		assertEquals(3 + (withWatersheds ? 1 : 0), labelSet.size() + (smallMask ? 1 : 0));
+		assertEquals(3 + (withWatersheds ? 1 : 0), labelSet.size() + (smallMask ? 1
+			: 0));
 	}
 
 }

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -43,9 +43,11 @@ import org.scijava.ops.spi.OpDependency;
  *
  * @author Brian Northan
  * @param <T>
- *@implNote op names='filter.createFFTOutput'
+ * @implNote op names='filter.createFFTOutput'
  */
-public class CreateOutputFFTMethods<T> implements Functions.Arity3<Dimensions, T, Boolean, Img<T>> {
+public class CreateOutputFFTMethods<T> implements
+	Functions.Arity3<Dimensions, T, Boolean, Img<T>>
+{
 
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, T, Img<T>> create;
@@ -59,13 +61,15 @@ public class CreateOutputFFTMethods<T> implements Functions.Arity3<Dimensions, T
 	 * @return the output
 	 */
 	@Override
-	public Img<T> apply(Dimensions paddedDimensions, T outType, @Nullable Boolean fast) {
+	public Img<T> apply(Dimensions paddedDimensions, T outType,
+		@Nullable Boolean fast)
+	{
 		if (fast == null) {
 			fast = true;
 		}
 
-		Dimensions paddedFFTMethodsFFTDimensions = FFTMethodsUtility.getFFTDimensionsRealToComplex(fast,
-				paddedDimensions);
+		Dimensions paddedFFTMethodsFFTDimensions = FFTMethodsUtility
+			.getFFTDimensionsRealToComplex(fast, paddedDimensions);
 
 		return create.apply(paddedFFTMethodsFFTDimensions, outType);
 	}

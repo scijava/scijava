@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -51,13 +51,13 @@ import org.scijava.ops.spi.OpDependency;
  * Vector Accelerator implements acceleration scheme described in Acceleration
  * of iterative image restoration algorithms David S.C. Biggs and Mark Andrews
  * Applied Optics, Vol. 36, Issue 8, pp. 1766-1775 (1997)
- * 
+ *
  * @author bnorthan
  * @param <T>
  * @implNote op names='deconvolve.accelerate', priority='0.'
  */
 public class VectorAccelerator<T extends RealType<T> & NativeType<T>> implements
-	Inplaces.Arity1<RandomAccessibleInterval<T>> 
+	Inplaces.Arity1<RandomAccessibleInterval<T>>
 {
 
 	Img<T> xkm1_previous = null;
@@ -69,7 +69,7 @@ public class VectorAccelerator<T extends RealType<T> & NativeType<T>> implements
 
 	@OpDependency(name = "create.img")
 	private Functions.Arity3<Dimensions, T, ImgFactory<T>, Img<T>> create;
-	
+
 	private Function<Dimensions, Img<T>> createReduced;
 
 	double accelerationFactor = 0.0f;

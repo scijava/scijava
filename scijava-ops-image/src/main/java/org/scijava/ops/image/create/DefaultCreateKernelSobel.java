@@ -5,13 +5,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -41,14 +41,12 @@ import net.imglib2.view.Views;
 
 /**
  * Creates a separated sobel kernel.
- * 
- * @author Eike Heinz, University of Konstanz
  *
- * @param <T>
- *            type of input
+ * @author Eike Heinz, University of Konstanz
+ * @param <T> type of input
  */
 
-public final class DefaultCreateKernelSobel{
+public final class DefaultCreateKernelSobel {
 
 	private DefaultCreateKernelSobel() {
 		// Prevent instantiation of static utility class
@@ -56,7 +54,10 @@ public final class DefaultCreateKernelSobel{
 
 	private static final float[] values = { 1.0f, 2.0f, 1.0f, -1.0f, 0.0f, 1.0f };
 
-	public static <T extends Type<T>, C extends ComplexType<C>> RandomAccessibleInterval<C> createKernel(C type, BiFunction<Dimensions, T, Img<T>> createFunc) {
+	public static <T extends Type<T>, C extends ComplexType<C>>
+		RandomAccessibleInterval<C> createKernel(C type,
+			BiFunction<Dimensions, T, Img<T>> createFunc)
+	{
 		long[] dim = new long[4];
 
 		dim[0] = 3;
@@ -68,7 +69,9 @@ public final class DefaultCreateKernelSobel{
 
 		dim[dim.length - 1] = 2;
 
-		RandomAccessibleInterval<C> output = (RandomAccessibleInterval<C>) createFunc.apply(new FinalInterval(dim), (T) type);
+		RandomAccessibleInterval<C> output =
+			(RandomAccessibleInterval<C>) createFunc.apply(new FinalInterval(dim),
+				(T) type);
 		final Cursor<C> cursor = Views.iterable(output).cursor();
 		int i = 0;
 		while (cursor.hasNext()) {

@@ -37,7 +37,7 @@ import org.scijava.priority.Priority;
 /**
  * An interface whose implementations are able to describe all the Ops in an
  * {@link OpEnvironment} that could satisfy an {@link OpRequest}.
- * 
+ *
  * @author Gabriel Selzer
  */
 public interface OpDescriptionGenerator extends
@@ -47,7 +47,7 @@ public interface OpDescriptionGenerator extends
 	/**
 	 * Returns a {@link String} with a "simple" description for each Op in
 	 * {@code env} matching {@code request}.
-	 * 
+	 *
 	 * @param env an {@link OpEnvironment} containing Ops that may match
 	 *          {@code request}
 	 * @param request an {@link OpRequest} to filter on.

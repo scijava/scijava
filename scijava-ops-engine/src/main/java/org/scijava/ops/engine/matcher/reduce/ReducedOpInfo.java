@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.engine.matcher.reduce;
 
 import java.lang.reflect.AnnotatedElement;
@@ -59,6 +60,7 @@ public class ReducedOpInfo implements OpInfo {
 
 	private final Hints hints;
 	private final Struct struct;
+
 	public ReducedOpInfo(OpInfo src, Type reducedOpType, int paramsReduced) {
 		this.srcInfo = src;
 		this.reducedOpType = reducedOpType;
@@ -80,21 +82,22 @@ public class ReducedOpInfo implements OpInfo {
 	 * <li>When the output is <b>also</b> an input</li>
 	 * <li>When the output is <b>not</b> an input</li>
 	 * </ol>
-	 * 
-	 * @return a {@link RetypingRequest} defining how to create the {@link Struct} of this {@link ReducedOpInfo}
+	 *
+	 * @return a {@link RetypingRequest} defining how to create the {@link Struct}
+	 *         of this {@link ReducedOpInfo}
 	 */
 	private RetypingRequest retypingRequest() {
-		if(srcInfo.output().isInput()) {
+		if (srcInfo.output().isInput()) {
 			return mutableOutputOpRetypingRequest();
 		}
 		return pureOutputOpRetypingRequest();
 	}
 
 	/**
-	 * For an Op with n inputs and one <b>mutable</b> output, we want to retain the
-	 * mutable output (wherever it is in the {@link Struct}), as well as the first
-	 * {@code n-paramsReduced-1} <b>pure</b> inputs.
-	 * 
+	 * For an Op with n inputs and one <b>mutable</b> output, we want to retain
+	 * the mutable output (wherever it is in the {@link Struct}), as well as the
+	 * first {@code n-paramsReduced-1} <b>pure</b> inputs.
+	 *
 	 * @return a {@link RetypingRequest} defining how to create the {@link Struct}
 	 *         of this {@link ReducedOpInfo}
 	 */
@@ -123,7 +126,7 @@ public class ReducedOpInfo implements OpInfo {
 	 * For an Op with n inputs and one <b>pure</b> output, we want to retain the
 	 * first {@code n-paramsReduced} <b>pure</b> inputs as well as that pure
 	 * output.
-	 * 
+	 *
 	 * @return a {@link RetypingRequest} defining how to create the {@link Struct}
 	 *         of this {@link ReducedOpInfo}
 	 */
@@ -150,7 +153,8 @@ public class ReducedOpInfo implements OpInfo {
 		return struct;
 	}
 
-	@Override public Hints declaredHints() {
+	@Override
+	public Hints declaredHints() {
 		return hints;
 	}
 
@@ -167,7 +171,7 @@ public class ReducedOpInfo implements OpInfo {
 	@Override
 	public String implementationName() {
 		// TODO: improve this name
-		return srcInfo.implementationName() + "Reduction" + paramsReduced; 
+		return srcInfo.implementationName() + "Reduction" + paramsReduced;
 	}
 
 	@Override
@@ -190,13 +194,13 @@ public class ReducedOpInfo implements OpInfo {
 		return srcInfo.getAnnotationBearer();
 	}
 
-	@Override public String version() {
+	@Override
+	public String version() {
 		return srcInfo().version();
 	}
 
 	/**
-	 * For a reduced Op, we define the implementation as the concatenation
-	 * of:
+	 * For a reduced Op, we define the implementation as the concatenation of:
 	 * <ol>
 	 * <li>The number of reduced parameters
 	 * <li>The id of the source Op

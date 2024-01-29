@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -50,25 +50,25 @@ public class FunctionsTest extends AbstractTestEnvironment {
 		ops.register(new Power());
 	}
 
-	private static Nil<Double> nilDouble = new Nil<>() {
-	};
+	private static Nil<Double> nilDouble = new Nil<>() {};
 
 	@Test
 	public void testUnaryFunctions() {
-		Function<Double, Double> sqrtFunction = OpBuilder.matchFunction(ops, "math.sqrt", nilDouble, nilDouble);
+		Function<Double, Double> sqrtFunction = OpBuilder.matchFunction(ops,
+			"math.sqrt", nilDouble, nilDouble);
 		double answer = sqrtFunction.apply(16.0);
 		assert 4.0 == answer;
 	}
 
 	@Test
 	public void testBinaryFunctions() {
-		BiFunction<Double, Double, Double> addFunction = OpBuilder.matchFunction(ops, "math.add", nilDouble, nilDouble,
-				nilDouble);
+		BiFunction<Double, Double, Double> addFunction = OpBuilder.matchFunction(
+			ops, "math.add", nilDouble, nilDouble, nilDouble);
 		double answer = addFunction.apply(16.0, 14.0);
 		assert 30.0 == answer;
 
-		BiFunction<Double, Double, Double> powerFunction = OpBuilder.matchFunction(ops, "math.pow", nilDouble,
-				nilDouble, nilDouble);
+		BiFunction<Double, Double, Double> powerFunction = OpBuilder.matchFunction(
+			ops, "math.pow", nilDouble, nilDouble, nilDouble);
 		answer = powerFunction.apply(2.0, 10.0);
 		assert 1024.0 == answer;
 	}

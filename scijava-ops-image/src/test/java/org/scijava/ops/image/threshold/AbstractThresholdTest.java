@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -62,7 +62,7 @@ public class AbstractThresholdTest extends AbstractOpTest {
 	private final int ySize = 10;
 
 	protected Img<UnsignedShortType> in;
-	
+
 	private BiFunction<Img<UnsignedShortType>, Integer, Histogram1d<UnsignedShortType>> createFunc;
 
 	@BeforeEach
@@ -83,8 +83,10 @@ public class AbstractThresholdTest extends AbstractOpTest {
 				ra.get().setReal(r.nextInt(65535));
 			}
 		}
-		
-		createFunc = OpBuilder.matchFunction(ops, "image.histogram", new Nil<Img<UnsignedShortType>>() {}, new Nil<Integer>() {}, new Nil<Histogram1d<UnsignedShortType>>() {});
+
+		createFunc = OpBuilder.matchFunction(ops, "image.histogram",
+			new Nil<Img<UnsignedShortType>>()
+			{}, new Nil<Integer>() {}, new Nil<Histogram1d<UnsignedShortType>>() {});
 	}
 
 	protected Histogram1d<UnsignedShortType> histogram() {
@@ -93,8 +95,8 @@ public class AbstractThresholdTest extends AbstractOpTest {
 	}
 
 	protected void assertThreshold(final int expected, final Object actual) {
-		final Object value =
-			actual instanceof List ? ListUtils.first((List<?>) actual) : actual;
+		final Object value = actual instanceof List ? ListUtils.first(
+			(List<?>) actual) : actual;
 		assertTrue(value instanceof UnsignedShortType);
 		final UnsignedShortType threshold = (UnsignedShortType) value;
 		assertEquals(expected, threshold.get());

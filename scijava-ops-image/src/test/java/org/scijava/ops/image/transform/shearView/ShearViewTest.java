@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.transform.shearView;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -64,25 +65,27 @@ public class ShearViewTest extends AbstractOpTest {
 	@Test
 	public void defaultShearTest() {
 
-		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Integer, TransformView<DoubleType>> shearFunc = OpBuilder
-				.matchFunction(ops, "transform.shearView", new Nil<RandomAccessible<DoubleType>>() {
-				}, new Nil<Integer>() {
-				}, new Nil<Integer>() {
-				}, new Nil<TransformView<DoubleType>>() {
-				});
+		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Integer, TransformView<DoubleType>> shearFunc =
+			OpBuilder.matchFunction(ops, "transform.shearView",
+				new Nil<RandomAccessible<DoubleType>>()
+				{}, new Nil<Integer>() {}, new Nil<Integer>() {},
+				new Nil<TransformView<DoubleType>>()
+				{});
 
-		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 2, 2 });
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
+			new int[] { 2, 2 });
 		Cursor<DoubleType> imgC = img.cursor();
 		while (imgC.hasNext()) {
 			imgC.next().set(1);
 		}
 
 		TransformView<DoubleType> il2 = Views.shear(Views.extendZero(img), 0, 1);
-		TransformView<DoubleType> opr = shearFunc.apply(Views.extendZero(img), 0, 1);
-		Cursor<DoubleType> il2C = Views.interval(il2, new FinalInterval(new long[] { 0, 0 }, new long[] { 3, 3 }))
-				.cursor();
-		RandomAccess<DoubleType> oprRA = Views
-				.interval(opr, new FinalInterval(new long[] { 0, 0 }, new long[] { 3, 3 })).randomAccess();
+		TransformView<DoubleType> opr = shearFunc.apply(Views.extendZero(img), 0,
+			1);
+		Cursor<DoubleType> il2C = Views.interval(il2, new FinalInterval(new long[] {
+			0, 0 }, new long[] { 3, 3 })).cursor();
+		RandomAccess<DoubleType> oprRA = Views.interval(opr, new FinalInterval(
+			new long[] { 0, 0 }, new long[] { 3, 3 })).randomAccess();
 
 		while (il2C.hasNext()) {
 			il2C.next();
@@ -95,26 +98,26 @@ public class ShearViewTest extends AbstractOpTest {
 	@Test
 	public void ShearIntervalTest() {
 
-		Functions.Arity4<RandomAccessible<DoubleType>, Interval, Integer, Integer, IntervalView<DoubleType>> shearFunc = OpBuilder
-				.matchFunction(ops, "transform.shearView", new Nil<RandomAccessible<DoubleType>>() {
-				}, new Nil<Interval>() {
-				}, new Nil<Integer>() {
-				}, new Nil<Integer>() {
-				}, new Nil<IntervalView<DoubleType>>() {
-				});
+		Functions.Arity4<RandomAccessible<DoubleType>, Interval, Integer, Integer, IntervalView<DoubleType>> shearFunc =
+			OpBuilder.matchFunction(ops, "transform.shearView",
+				new Nil<RandomAccessible<DoubleType>>()
+				{}, new Nil<Interval>() {}, new Nil<Integer>() {},
+				new Nil<Integer>()
+				{}, new Nil<IntervalView<DoubleType>>() {});
 
-		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 2, 2 });
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
+			new int[] { 2, 2 });
 		Cursor<DoubleType> imgC = img.cursor();
 		while (imgC.hasNext()) {
 			imgC.next().set(1);
 		}
 
-		Cursor<DoubleType> il2 = Views
-				.shear(Views.extendZero(img), new FinalInterval(new long[] { 0, 0 }, new long[] { 3, 3 }), 0, 1)
-				.cursor();
-		RandomAccess<DoubleType> opr = shearFunc
-				.apply(Views.extendZero(img), new FinalInterval(new long[] { 0, 0 }, new long[] { 3, 3 }), 0, 1)
-				.randomAccess();
+		Cursor<DoubleType> il2 = Views.shear(Views.extendZero(img),
+			new FinalInterval(new long[] { 0, 0 }, new long[] { 3, 3 }), 0, 1)
+			.cursor();
+		RandomAccess<DoubleType> opr = shearFunc.apply(Views.extendZero(img),
+			new FinalInterval(new long[] { 0, 0 }, new long[] { 3, 3 }), 0, 1)
+			.randomAccess();
 
 		while (il2.hasNext()) {
 			il2.next();

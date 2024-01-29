@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -83,8 +83,7 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>, U exten
 	@OpDependency(name = "image.squareIntegral")
 	private Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>> squareIntegralImgOp;
 
-	protected
-		Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>>
+	protected Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>>
 		getIntegralImageOp(final int integralImageOrder)
 	{
 		if (integralImageOrder == 1) return integralImgOp;
@@ -95,8 +94,7 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>, U exten
 				". There is no op available to do that (available orders are: 1, 2).");
 	}
 
-	protected void compute(
-		final RandomAccessibleInterval<T> input,
+	protected void compute(final RandomAccessibleInterval<T> input,
 		RectangleShape inputNeighborhoodShape,
 		OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final List<Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>>> integralImageOps,
@@ -114,9 +112,8 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>, U exten
 			new ArrayList<>(integralImageOps.size());
 		for (final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>> //
 		integralImageOp : integralImageOps) {
-			final RandomAccessibleInterval<U> requiredIntegralImg =
-				getIntegralImage(input, inputNeighborhoodShape, outOfBoundsFactory,
-					integralImageOp);
+			final RandomAccessibleInterval<U> requiredIntegralImg = getIntegralImage(
+				input, inputNeighborhoodShape, outOfBoundsFactory, integralImageOp);
 			listOfIntegralImages.add(requiredIntegralImg);
 		}
 
@@ -136,27 +133,33 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>, U exten
 			removeLeadingZeros(compositeRAI, inputNeighborhoodShape);
 
 		RandomAccessibleInterval<RectangleNeighborhood<Composite<U>>> neighborhoodsRAI =
-				asRectangularNeighborhoodInterval(inputNeighborhoodShape, extendedCompositeRAI);
-	
+			asRectangularNeighborhoodInterval(inputNeighborhoodShape,
+				extendedCompositeRAI);
+
 		LoopBuilder.setImages(neighborhoodsRAI, input, output) //
 			.multiThreaded() //
 			.forEachPixel(thresholdOp::compute);
 	}
 
-	private <A>
-		RandomAccessibleInterval<RectangleNeighborhood<A>>
+	private <A> RandomAccessibleInterval<RectangleNeighborhood<A>>
 		asRectangularNeighborhoodInterval(RectangleShape inputNeighborhoodShape,
 			final RandomAccessibleInterval<A> extendedCompositeRAI)
 	{
-		final NeighborhoodsAccessible<A> neighborhoods = inputNeighborhoodShape.neighborhoodsRandomAccessibleSafe(extendedCompositeRAI);
-		final IntervalView<Neighborhood<A>> interval = Views.interval(neighborhoods, extendedCompositeRAI);
-		
-		if (!(Util.getTypeFromInterval(interval) instanceof RectangleNeighborhood)) {
-			throw new IllegalStateException("RectangleShape did not produce a RandomAccess<RectangleNeighborhood>!");
+		final NeighborhoodsAccessible<A> neighborhoods = inputNeighborhoodShape
+			.neighborhoodsRandomAccessibleSafe(extendedCompositeRAI);
+		final IntervalView<Neighborhood<A>> interval = Views.interval(neighborhoods,
+			extendedCompositeRAI);
+
+		if (!(Util.getTypeFromInterval(
+			interval) instanceof RectangleNeighborhood))
+		{
+			throw new IllegalStateException(
+				"RectangleShape did not produce a RandomAccess<RectangleNeighborhood>!");
 		}
-		@SuppressWarnings({"unchecked", "rawtypes"})
-		final RandomAccessibleInterval<RectangleNeighborhood<A>> result = (RandomAccessibleInterval) interval;
-		return result ;
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		final RandomAccessibleInterval<RectangleNeighborhood<A>> result =
+			(RandomAccessibleInterval) interval;
+		return result;
 	}
 
 	/**
@@ -166,11 +169,10 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>, U exten
 	 * @param input The RAI for which an integral image is computed
 	 * @return An extended integral image for the input RAI
 	 */
-	private RandomAccessibleInterval<U>
-		getIntegralImage(final RandomAccessibleInterval<T> input,
-			final RectangleShape shape,
-			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-			final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>> integralOp)
+	private RandomAccessibleInterval<U> getIntegralImage(
+		final RandomAccessibleInterval<T> input, final RectangleShape shape,
+		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
+		final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>> integralOp)
 	{
 		final ExtendedRandomAccessibleInterval<T, RandomAccessibleInterval<T>> extendedInput =
 			Views.extend(input, outOfBoundsFactory);

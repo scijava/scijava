@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -42,23 +42,23 @@ import org.scijava.ops.spi.OpDependency;
 
 /**
  * Op to calculate the {@code stats.sumOfInverses}.
- * 
+ *
  * @author Gabriel Selzer
- * @param <I>
- *            input type
- * @param <O>
- *            output type
+ * @param <I> input type
+ * @param <O> output type
  * @implNote op names='stats.sumOfInverses', priority='100.'
  */
-public class DefaultSumOfInverses<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity2<RandomAccessibleInterval<I>, O, O> {
-	
+public class DefaultSumOfInverses<I extends RealType<I>, O extends RealType<O>>
+	implements Computers.Arity2<RandomAccessibleInterval<I>, O, O>
+{
+
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, O, RandomAccessibleInterval<O>> imgCreator;
-	
-	//TODO: Can we lift this? Would require making a RAI of Doubles.
+
+	// TODO: Can we lift this? Would require making a RAI of Doubles.
 	@OpDependency(name = "math.reciprocal")
 	private Computers.Arity2<I, Double, O> reciprocalOp;
-	
+
 	@OpDependency(name = "stats.sum")
 	private Computers.Arity1<RandomAccessibleInterval<O>, O> sumOp;
 
@@ -71,10 +71,13 @@ public class DefaultSumOfInverses<I extends RealType<I>, O extends RealType<O>> 
 	 * @param output the output buffer
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<I> input, final O dbzValue, final O output) {
+	public void compute(final RandomAccessibleInterval<I> input, final O dbzValue,
+		final O output)
+	{
 		RandomAccessibleInterval<O> tmpImg = imgCreator.apply(input, output);
-		//TODO: Can we lift this? Would require making a RAI of Doubles.
-		LoopBuilder.setImages(input, tmpImg).multiThreaded().forEachPixel((inPixel, outPixel) -> {
+		// TODO: Can we lift this? Would require making a RAI of Doubles.
+		LoopBuilder.setImages(input, tmpImg).multiThreaded().forEachPixel((inPixel,
+			outPixel) -> {
 			reciprocalOp.compute(inPixel, dbzValue.getRealDouble(), outPixel);
 		});
 		sumOp.compute(tmpImg, output);

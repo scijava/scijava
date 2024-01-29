@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.filter.mean;
 
 import org.scijava.ops.image.AbstractOpTest;
@@ -40,16 +41,22 @@ import net.imglib2.type.numeric.integer.ByteType;
 import org.junit.jupiter.api.Test;
 import org.scijava.types.Nil;
 
-public class MeanFilterTest extends AbstractOpTest{
-	
+public class MeanFilterTest extends AbstractOpTest {
+
 	@Test
 	public void meanFilterTest() {
-		
-		Img<ByteType> img = ops.op("create.img").arity2().input(new FinalInterval(5, 5), new ByteType()).outType(new Nil<Img<ByteType>>() {}).apply();
+
+		Img<ByteType> img = ops.op("create.img").arity2().input(new FinalInterval(5,
+			5), new ByteType()).outType(new Nil<Img<ByteType>>()
+		{}).apply();
 		RectangleShape shape = new RectangleShape(1, false);
-		OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>> oobf = new OutOfBoundsBorderFactory<>();
-		Img<ByteType> output = ops.op("create.img").arity1().input(img).outType(new Nil<Img<ByteType>>() {}).apply();
-		ops.op("stats.mean").arity3().input(img, shape, oobf).output(output).compute();
+		OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>> oobf =
+			new OutOfBoundsBorderFactory<>();
+		Img<ByteType> output = ops.op("create.img").arity1().input(img).outType(
+			new Nil<Img<ByteType>>()
+			{}).apply();
+		ops.op("stats.mean").arity3().input(img, shape, oobf).output(output)
+			.compute();
 
 		// Try with no OutOfBoundsFactory
 		ops.op("filter.mean").arity2().input(img, shape).output(output).compute();
@@ -58,10 +65,14 @@ public class MeanFilterTest extends AbstractOpTest{
 	@Test
 	public void rawTypeAdaptationTest() {
 
-		Img<ByteType> img = ops.op("create.img").arity2().input(new FinalInterval(5, 5), new ByteType()).outType(new Nil<Img<ByteType>>() {}).apply();
+		Img<ByteType> img = ops.op("create.img").arity2().input(new FinalInterval(5,
+			5), new ByteType()).outType(new Nil<Img<ByteType>>()
+		{}).apply();
 		RectangleShape shape = new RectangleShape(1, false);
-		OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>> oobf = new OutOfBoundsBorderFactory<>();
-		var result = ops.op("filter.mean").arity3().input(img, shape, oobf).outType(Img.class).apply();
+		OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>> oobf =
+			new OutOfBoundsBorderFactory<>();
+		var result = ops.op("filter.mean").arity3().input(img, shape, oobf).outType(
+			Img.class).apply();
 
 	}
 }

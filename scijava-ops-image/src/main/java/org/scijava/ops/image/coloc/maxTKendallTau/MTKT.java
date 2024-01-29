@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -56,21 +56,20 @@ import org.scijava.ops.spi.OpDependency;
  *
  * @param <T> Type of the first image
  * @param <U> Type of the second image
- * 
  * @author Ellen T Arena
  * @author Shulei Wang
  * @author Curtis Rueden
- *@implNote op names='coloc.maxTKendallTau'
+ * @implNote op names='coloc.maxTKendallTau'
  */
-public class MTKT<T extends RealType<T>, U extends RealType<U>>
-	implements Functions.Arity3<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Long, Double> 
+public class MTKT<T extends RealType<T>, U extends RealType<U>> implements
+	Functions.Arity3<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Long, Double>
 {
 
 	@OpDependency(name = "image.histogram")
 	private Function<Iterable<T>, Histogram1d<T>> histogramOpT;
 	@OpDependency(name = "image.histogram")
 	private Function<Iterable<U>, Histogram1d<U>> histogramOpU;
-	
+
 	@OpDependency(name = "threshold.otsu")
 	private Computers.Arity1<Histogram1d<T>, T> thresholdOpT;
 	@OpDependency(name = "threshold.otsu")
@@ -85,7 +84,9 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>>
 	 * @return the output
 	 */
 	@Override
-	public Double apply(final RandomAccessibleInterval<T> image1, final RandomAccessibleInterval<U> image2, @Nullable Long seed) {
+	public Double apply(final RandomAccessibleInterval<T> image1,
+		final RandomAccessibleInterval<U> image2, @Nullable Long seed)
+	{
 		// check image sizes
 		// TODO: Add these checks to conforms().
 		if (!Intervals.equalDimensions(image1, image2)) {
@@ -108,7 +109,8 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>>
 		final double thresh1 = thresholdT(image1);
 		final double thresh2 = thresholdU(image2);
 
-		double[][] rank = rankTransformation(image1, image2, thresh1, thresh2, n, seed);
+		double[][] rank = rankTransformation(image1, image2, thresh1, thresh2, n,
+			seed);
 
 		double maxtau = calculateMaxKendallTau(rank, thresh1, thresh2, n);
 		return maxtau;
@@ -128,8 +130,10 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>>
 		return result.getRealDouble();
 	}
 
-	static <T extends RealType<T>, U extends RealType<U>> double[][] rankTransformation(final RandomAccessibleInterval<T> image1, final RandomAccessibleInterval<U> image2, final double thres1,
-		final double thres2, final int n, long seed)
+	static <T extends RealType<T>, U extends RealType<U>> double[][]
+		rankTransformation(final RandomAccessibleInterval<T> image1,
+			final RandomAccessibleInterval<U> image2, final double thres1,
+			final double thres2, final int n, long seed)
 	{
 		// FIRST...
 		final int[] rankIndex1 = rankSamples(image1, seed);
@@ -137,10 +141,8 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>>
 
 		IntArray validIndex = new IntArray(new int[n]);
 		validIndex.setSize(0);
-		for (int i = 0; i < n; i++)
-		{
-			if(rankIndex1[i] >= thres1 && rankIndex2[i] >= thres2)
-			{
+		for (int i = 0; i < n; i++) {
+			if (rankIndex1[i] >= thres1 && rankIndex2[i] >= thres2) {
 				validIndex.addValue(i);
 			}
 		}
@@ -154,10 +156,13 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>>
 		return finalRanks;
 	}
 
-	private static <V extends RealType<V>> int[] rankSamples(RandomAccessibleInterval<V> image, long seed) {
+	private static <V extends RealType<V>> int[] rankSamples(
+		RandomAccessibleInterval<V> image, long seed)
+	{
 		final long elementCount = Intervals.numElements(image);
 		if (elementCount > Integer.MAX_VALUE) {
-			throw new IllegalArgumentException("Image dimensions too large: " + elementCount);
+			throw new IllegalArgumentException("Image dimensions too large: " +
+				elementCount);
 		}
 		final int n = (int) elementCount;
 
@@ -186,7 +191,10 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>>
 	{
 		final int rn = rank.length;
 		int an;
-		final double step = 1 + 1.0 / Math.log(Math.log(n)); /// ONE PROBLEM IS HERE - STEP SIZE IS PERHAPS TOO SMALL??
+		final double step = 1 + 1.0 / Math.log(Math.log(n)); /// ONE PROBLEM IS HERE
+																													/// - STEP SIZE IS
+																													/// PERHAPS TOO
+																													/// SMALL??
 		double tempOff1 = 1;
 		double tempOff2;
 		IntArray activeIndex = new IntArray();
@@ -221,11 +229,12 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>>
 		}
 		return maxNormalTau;
 	}
+
 	static double calculateKendallTau(final double[][] rank,
 		final IntArray activeIndex)
 	{
 		final int an = activeIndex.size();
-		
+
 		int indicatr = 0;
 		final double[][] partRank = new double[2][an];
 		for (final Integer i : activeIndex) {
@@ -241,9 +250,11 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>>
 			index[i] = i;
 		}
 
-		IntArraySorter.sort(index, (a, b) -> Double.compare(partRank1[a], partRank1[b]));
+		IntArraySorter.sort(index, (a, b) -> Double.compare(partRank1[a],
+			partRank1[b]));
 
-		final MergeSort mergeSort = new MergeSort(index, (a, b) -> Double.compare(partRank2[a], partRank2[b]));
+		final MergeSort mergeSort = new MergeSort(index, (a, b) -> Double.compare(
+			partRank2[a], partRank2[b]));
 
 		final long n0 = an * (long) (an - 1) / 2;
 		final long S = mergeSort.sort();

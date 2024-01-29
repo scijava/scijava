@@ -5,13 +5,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -46,16 +46,16 @@ import org.scijava.types.Nil;
 
 /**
  * Test for Hessian matrice op.
- * 
- * @author Eike Heinz, University of Konstanz
  *
+ * @author Eike Heinz, University of Konstanz
  */
 
 public class HessianFilterTest extends AbstractOpTest {
 
 	@Test
 	public void test() {
-		Img<FloatType> img = TestImgGeneration.floatArray(false, new long[] { 50, 50 });
+		Img<FloatType> img = TestImgGeneration.floatArray(false, new long[] { 50,
+			50 });
 
 		Cursor<FloatType> cursorImg = img.cursor();
 		int counterX = 0;
@@ -63,7 +63,8 @@ public class HessianFilterTest extends AbstractOpTest {
 		while (cursorImg.hasNext()) {
 			if (counterX > 20 && counterX < 30 || counterY > 20 && counterY < 30) {
 				cursorImg.next().setOne();
-			} else {
+			}
+			else {
 				cursorImg.next().setZero();
 			}
 			counterX++;
@@ -78,8 +79,10 @@ public class HessianFilterTest extends AbstractOpTest {
 			}
 		}
 
-		CompositeIntervalView<FloatType, RealComposite<FloatType>> out = ops.op("filter.hessian").arity1().input(img)
-				.outType(new Nil<CompositeIntervalView<FloatType, RealComposite<FloatType>>>() {}).apply();
+		CompositeIntervalView<FloatType, RealComposite<FloatType>> out = ops.op(
+			"filter.hessian").arity1().input(img).outType(
+				new Nil<CompositeIntervalView<FloatType, RealComposite<FloatType>>>()
+				{}).apply();
 
 		Cursor<RealComposite<FloatType>> outCursor = Views.iterable(out).cursor();
 
@@ -88,7 +91,8 @@ public class HessianFilterTest extends AbstractOpTest {
 			assertEquals(values.get(1), values.get(2));
 		}
 
-		CompositeView<FloatType, RealComposite<FloatType>>.CompositeRandomAccess outRA = out.randomAccess();
+		CompositeView<FloatType, RealComposite<FloatType>>.CompositeRandomAccess outRA =
+			out.randomAccess();
 
 		// two numbers represent a coordinate: 20|0 ; 21|0 ...
 		int[] positions = new int[] { 20, 0, 21, 0, 19, 31, 19, 30 };

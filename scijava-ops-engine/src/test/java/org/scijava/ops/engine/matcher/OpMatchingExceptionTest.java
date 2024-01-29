@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -47,7 +47,9 @@ import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpField;
 
-public class OpMatchingExceptionTest extends AbstractTestEnvironment implements OpCollection {
+public class OpMatchingExceptionTest extends AbstractTestEnvironment implements
+	OpCollection
+{
 
 	@BeforeAll
 	public static void addNeededOps() {
@@ -57,7 +59,8 @@ public class OpMatchingExceptionTest extends AbstractTestEnvironment implements 
 		ops.register(new MissingDependencyOp());
 		ops.register(new MissingDependencyOpArr1());
 		ops.register(new MissingDependencyOpArr2());
-		ops.register(new ComputersToFunctionsViaFunction.Computer1ToFunction1ViaFunction());
+		ops.register(
+			new ComputersToFunctionsViaFunction.Computer1ToFunction1ViaFunction());
 		ops.register(new CreateOpCollection());
 	}
 
@@ -74,13 +77,12 @@ public class OpMatchingExceptionTest extends AbstractTestEnvironment implements 
 	@Test
 	public void duplicateErrorRegressionTest() {
 		try {
-			ops.op("test.duplicateOp").arity1().inType(Double.class).outType(Double.class)
-				.function();
+			ops.op("test.duplicateOp").arity1().inType(Double.class).outType(
+				Double.class).function();
 			Assertions.fail();
 		}
 		catch (OpMatchingException e) {
-			Assertions.assertTrue(e.getMessage().startsWith(
-				"No match found!"));
+			Assertions.assertTrue(e.getMessage().startsWith("No match found!"));
 			Assertions.assertTrue(Arrays.stream(e.getSuppressed()).anyMatch(s -> s
 				.getMessage().startsWith("Multiple 'test.duplicateOp/" +
 					"java.util.function.Function<java.lang.Double, java.lang.Double>' " +
@@ -94,8 +96,8 @@ public class OpMatchingExceptionTest extends AbstractTestEnvironment implements 
 	@Test
 	public void missingDependencyRegressionTest() {
 		try {
-			ops.op("test.missingDependencyOp").arity1().input(1.).outType(Double.class)
-				.apply();
+			ops.op("test.missingDependencyOp").arity1().input(1.).outType(
+				Double.class).apply();
 			Assertions.fail("Expected DependencyMatchingException");
 		}
 		catch (DependencyMatchingException e) {
@@ -116,7 +118,8 @@ public class OpMatchingExceptionTest extends AbstractTestEnvironment implements 
 		}
 		catch (DependencyMatchingException e) {
 			String message = e.getMessage();
-			Assertions.assertTrue(message.contains("Name: \"test.missingDependencyOp\""));
+			Assertions.assertTrue(message.contains(
+				"Name: \"test.missingDependencyOp\""));
 			Assertions.assertTrue(message.contains("Name: \"test.nonexistingOp\""));
 		}
 	}
@@ -129,7 +132,8 @@ public class OpMatchingExceptionTest extends AbstractTestEnvironment implements 
 	public void missingDependencyViaAdaptationTest() {
 		Double[] d = new Double[0];
 		try {
-			ops.op("test.adaptMissingDep").arity1().input(d).outType(Double[].class).apply();
+			ops.op("test.adaptMissingDep").arity1().input(d).outType(Double[].class)
+				.apply();
 			Assertions.fail("Expected DependencyMatchingException");
 		}
 		catch (DependencyMatchingException e) {
@@ -194,7 +198,9 @@ class MissingDependencyOp implements Function<Double, Double>, Op {
 }
 
 @OpClass(names = "test.adaptMissingDep")
-class MissingDependencyOpArr1 implements Computers.Arity1<Double[], Double[]>, Op {
+class MissingDependencyOpArr1 implements Computers.Arity1<Double[], Double[]>,
+	Op
+{
 
 	@OpDependency(name = "test.nonexistingOp")
 	private Function<Double, Double> op;

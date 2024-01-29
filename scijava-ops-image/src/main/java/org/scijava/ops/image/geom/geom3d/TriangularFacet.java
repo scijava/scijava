@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.geom.geom3d;
 
 import java.util.ArrayList;
@@ -35,14 +36,14 @@ import java.util.List;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 /**
- * This is the triangle implementation of Facet Interface.
- * A facet consists of three vertices. The triangles orientation
- * is counter clock wise. 
- * 
- * @author Tim-Oliver Buchholz (University of Konstanz)
+ * This is the triangle implementation of Facet Interface. A facet consists of
+ * three vertices. The triangles orientation is counter clock wise.
  *
+ * @author Tim-Oliver Buchholz (University of Konstanz)
  */
-public class TriangularFacet extends UpdateablePointSet<TriangularFacet> implements Facet {
+public class TriangularFacet extends UpdateablePointSet<TriangularFacet>
+	implements Facet
+{
 
 	/**
 	 * The centroid of this facet.
@@ -59,10 +60,9 @@ public class TriangularFacet extends UpdateablePointSet<TriangularFacet> impleme
 	 */
 	private double area = -1;
 
-
 	/**
-	 * If a facet has points in front, they are stored in this list.
-	 * This list is used in {@link DefaultConvexHull3D}.
+	 * If a facet has points in front, they are stored in this list. This list is
+	 * used in {@link DefaultConvexHull3D}.
 	 */
 	private List<Vertex> verticesInFront;
 
@@ -76,6 +76,7 @@ public class TriangularFacet extends UpdateablePointSet<TriangularFacet> impleme
 
 	/**
 	 * Creates a new facet of three vertices.
+	 *
 	 * @param v0 the first vertex
 	 * @param v1 the second vertex
 	 * @param v2 the third vertex
@@ -88,9 +89,10 @@ public class TriangularFacet extends UpdateablePointSet<TriangularFacet> impleme
 		verticesInFront = new ArrayList<>();
 		neighbors = new ArrayList<>();
 	}
-	
+
 	/**
 	 * Get the area of this facet.
+	 *
 	 * @return the area
 	 */
 	public double getArea() {
@@ -104,13 +106,14 @@ public class TriangularFacet extends UpdateablePointSet<TriangularFacet> impleme
 	 * Compute the area of this facet.
 	 */
 	private void computeArea() {
-		Vector3D cross = vertices.get(0).subtract(vertices.get(1))
-				.crossProduct(vertices.get(2).subtract(vertices.get(0)));
+		Vector3D cross = vertices.get(0).subtract(vertices.get(1)).crossProduct(
+			vertices.get(2).subtract(vertices.get(0)));
 		area = cross.getNorm() * 0.5;
 	}
 
 	/**
 	 * Get the centroid of this facet.
+	 *
 	 * @return the centroid
 	 */
 	public Vector3D getCentroid() {
@@ -135,6 +138,7 @@ public class TriangularFacet extends UpdateablePointSet<TriangularFacet> impleme
 
 	/**
 	 * Get the normal of this facet.
+	 *
 	 * @return the normal
 	 */
 	public Vector3D getNormal() {
@@ -156,6 +160,7 @@ public class TriangularFacet extends UpdateablePointSet<TriangularFacet> impleme
 
 	/**
 	 * Computes the offset of this facet
+	 *
 	 * @return the offset
 	 */
 	public double getPlaneOffset() {
@@ -164,6 +169,7 @@ public class TriangularFacet extends UpdateablePointSet<TriangularFacet> impleme
 
 	/**
 	 * Computes the distance from a point to this facet
+	 *
 	 * @param p the point
 	 * @return the distance
 	 */
@@ -171,8 +177,9 @@ public class TriangularFacet extends UpdateablePointSet<TriangularFacet> impleme
 		return getNormal().normalize().dotProduct(p) - getPlaneOffset();
 	}
 
-	/** 
+	/**
 	 * Adds a vertex to the points in front of this facet.
+	 *
 	 * @param v the vertex
 	 * @param distanceToPlane of this vertex
 	 */
@@ -180,12 +187,13 @@ public class TriangularFacet extends UpdateablePointSet<TriangularFacet> impleme
 		if (verticesInFront.isEmpty()) {
 			v.setDistanceToFaceInFront(distanceToPlane);
 			verticesInFront.add(v);
-		} else {
-			if (verticesInFront.get(0)
-					.getDistanceToFaceInFront() < distanceToPlane) {
+		}
+		else {
+			if (verticesInFront.get(0).getDistanceToFaceInFront() < distanceToPlane) {
 				v.setDistanceToFaceInFront(distanceToPlane);
 				verticesInFront.add(0, v);
-			} else {
+			}
+			else {
 				verticesInFront.add(v);
 			}
 		}
@@ -193,14 +201,16 @@ public class TriangularFacet extends UpdateablePointSet<TriangularFacet> impleme
 
 	/**
 	 * All points which are in front of this plane.
+	 *
 	 * @return points which are in front
 	 */
 	public List<Vertex> getVerticesInFront() {
 		return verticesInFront;
 	}
-	
+
 	/**
 	 * The vertex which is in front and farthest apart of the plane
+	 *
 	 * @return vertex with maximum distance to the plane
 	 */
 	public Vertex getMaximumDistanceVertex() {
@@ -226,56 +236,43 @@ public class TriangularFacet extends UpdateablePointSet<TriangularFacet> impleme
 		long temp;
 		temp = Double.doubleToLongBits(area);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result
-				+ ((centroid == null) ? 0 : centroid.hashCode());
-		result = prime * result
-				+ ((neighbors == null) ? 0 : neighbors.hashCode());
-		result = prime * result
-				+ ((normal == null) ? 0 : normal.hashCode());
-		result = prime * result
-				+ ((verticesInFront == null) ? 0 : verticesInFront.hashCode());
-		result = prime * result
-				+ ((vertices == null) ? 0 : vertices.hashCode());
+		result = prime * result + ((centroid == null) ? 0 : centroid.hashCode());
+		result = prime * result + ((neighbors == null) ? 0 : neighbors.hashCode());
+		result = prime * result + ((normal == null) ? 0 : normal.hashCode());
+		result = prime * result + ((verticesInFront == null) ? 0 : verticesInFront
+			.hashCode());
+		result = prime * result + ((vertices == null) ? 0 : vertices.hashCode());
 		return result;
 	}
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
 		TriangularFacet other = (TriangularFacet) obj;
-		if (Double.doubleToLongBits(area) != Double
-				.doubleToLongBits(other.area))
+		if (Double.doubleToLongBits(area) != Double.doubleToLongBits(other.area))
 			return false;
 		if (centroid == null) {
-			if (other.centroid != null)
-				return false;
-		} else if (!centroid.equals(other.centroid))
-			return false;
+			if (other.centroid != null) return false;
+		}
+		else if (!centroid.equals(other.centroid)) return false;
 		if (neighbors == null) {
-			if (other.neighbors != null)
-				return false;
-		} else if (!neighbors.equals(other.neighbors))
-			return false;
+			if (other.neighbors != null) return false;
+		}
+		else if (!neighbors.equals(other.neighbors)) return false;
 		if (normal == null) {
-			if (other.normal != null)
-				return false;
-		} else if (!normal.equals(other.normal))
-			return false;
+			if (other.normal != null) return false;
+		}
+		else if (!normal.equals(other.normal)) return false;
 		if (verticesInFront == null) {
-			if (other.verticesInFront != null)
-				return false;
-		} else if (!verticesInFront.equals(other.verticesInFront))
-			return false;
+			if (other.verticesInFront != null) return false;
+		}
+		else if (!verticesInFront.equals(other.verticesInFront)) return false;
 		if (vertices == null) {
-			if (other.vertices != null)
-				return false;
-		} else if (!vertices.equals(other.vertices))
-			return false;
+			if (other.vertices != null) return false;
+		}
+		else if (!vertices.equals(other.vertices)) return false;
 		return true;
 	}
 }

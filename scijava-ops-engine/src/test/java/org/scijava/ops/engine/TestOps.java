@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -41,9 +41,8 @@ import org.scijava.ops.spi.OpClass;
  * functionality. These Ops SHOULD NEVER be changed or used outside of the tests
  * that rely on them, however all should feel free to add more tests to this
  * class as needed.
- * 
- * @author Gabriel Selzer
  *
+ * @author Gabriel Selzer
  */
 public class TestOps {
 
@@ -52,7 +51,9 @@ public class TestOps {
 	// AutoTransformTest
 
 	@OpClass(names = "test.liftSqrt")
-	public static class LiftSqrt implements Computers.Arity1<double[], double[]>, Op {
+	public static class LiftSqrt implements Computers.Arity1<double[], double[]>,
+		Op
+	{
 
 		@Override
 		public void compute(double[] in, double[] out) {
@@ -65,7 +66,10 @@ public class TestOps {
 	// AdaptersTest
 
 	@OpClass(names = "test.adaptersC")
-	public static class testAddTwoArraysComputer implements Computers.Arity2<double[], double[], double[]>, Op {
+	public static class testAddTwoArraysComputer implements
+		Computers.Arity2<double[], double[], double[]>, Op
+	{
+
 		@Override
 		public void compute(double[] arr1, double[] arr2, double[] out) {
 			for (int i = 0; i < out.length; i++)
@@ -74,7 +78,10 @@ public class TestOps {
 	}
 
 	@OpClass(names = "test.adaptersF")
-	public static class testAddTwoArraysFunction implements BiFunction<double[], double[], double[]>, Op {
+	public static class testAddTwoArraysFunction implements
+		BiFunction<double[], double[], double[]>, Op
+	{
+
 		@Override
 		public double[] apply(double[] arr1, double[] arr2) {
 			double[] out = new double[arr1.length];
@@ -88,6 +95,7 @@ public class TestOps {
 
 	@OpClass(names = "test.liftFunction")
 	public static class liftFunction implements Function<Double, Double>, Op {
+
 		@Override
 		public Double apply(Double in) {
 			return in + 1;
@@ -95,7 +103,10 @@ public class TestOps {
 	}
 
 	@OpClass(names = "test.liftComputer")
-	public static class liftComputer implements Computers.Arity1<double[], double[]>, Op {
+	public static class liftComputer implements
+		Computers.Arity1<double[], double[]>, Op
+	{
+
 		@Override
 		public void compute(double[] in, double[] out) {
 			for (int i = 0; i < in.length; i++)

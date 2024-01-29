@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -73,19 +73,22 @@ public final class DefaultCreateKernel2ndDerivBiGauss {
 		// Prevent instantiation of static utility class
 	}
 
-	public static <T extends Type<T>, C extends ComplexType<C>> RandomAccessibleInterval<C> createKernel(final double[] sigmas,
-			final Integer dimensionality, final C typeVar, final BiFunction<Dimensions, T, Img<T>> createImgFunc) {
+	public static <T extends Type<T>, C extends ComplexType<C>>
+		RandomAccessibleInterval<C> createKernel(final double[] sigmas,
+			final Integer dimensionality, final C typeVar,
+			final BiFunction<Dimensions, T, Img<T>> createImgFunc)
+	{
 		// both sigmas must be available
-		if (sigmas.length < 2)
-			throw new IllegalArgumentException("Two sigmas (for inner and outer Gauss)" + " must be supplied.");
+		if (sigmas.length < 2) throw new IllegalArgumentException(
+			"Two sigmas (for inner and outer Gauss)" + " must be supplied.");
 
 		// both sigmas must be reasonable
-		if (sigmas[0] <= 0 || sigmas[1] <= 0)
-			throw new IllegalArgumentException("Input sigmas must be both positive.");
+		if (sigmas[0] <= 0 || sigmas[1] <= 0) throw new IllegalArgumentException(
+			"Input sigmas must be both positive.");
 
 		// dimension as well...
-		if (dimensionality <= 0)
-			throw new IllegalArgumentException("Input dimensionality must both positive.");
+		if (dimensionality <= 0) throw new IllegalArgumentException(
+			"Input dimensionality must both positive.");
 
 		// the size and center of the output image
 		final long[] dims = new long[dimensionality];
@@ -111,16 +114,19 @@ public final class DefaultCreateKernel2ndDerivBiGauss {
 		 * 1.0/(2.50663*sigmas[1]*sigmas[1]*sigmas[1]) }; //2.50663 = sqrt(2*PI)
 		 */
 		// less math version:
-		// note that originally there was C[0] for inner Gauss, k*C[1] for outer Gauss
+		// note that originally there was C[0] for inner Gauss, k*C[1] for outer
+		// Gauss
 		// we get rid of k by using new C[0] and C[1]:
 		final double[] C = { 1.0 / (2.50663 * sigmas[0] * sigmas[0] * sigmas[0]),
-				1.0 / (2.50663 * sigmas[1] * sigmas[0] * sigmas[0]) };
+			1.0 / (2.50663 * sigmas[1] * sigmas[0] * sigmas[0]) };
 
 		// prepare squared input sigmas
 		final double sigmasSq[] = { sigmas[0] * sigmas[0], sigmas[1] * sigmas[1] };
 
 		// prepare the output image
-		final RandomAccessibleInterval<C> out = (RandomAccessibleInterval<C>) createImgFunc.apply(new FinalInterval(dims), (T) typeVar);
+		final RandomAccessibleInterval<C> out =
+			(RandomAccessibleInterval<C>) createImgFunc.apply(new FinalInterval(dims),
+				(T) typeVar);
 
 		// fill the output image
 		final Cursor<C> cursor = Views.iterable(out).cursor();
@@ -131,8 +137,9 @@ public final class DefaultCreateKernel2ndDerivBiGauss {
 			cursor.localize(dims);
 
 			// calculate distance from the image centre
-			double dist = 0.; // TODO: can JVM reuse this var or is it allocated again and again (and
-								// multipling in the memory)?
+			double dist = 0.; // TODO: can JVM reuse this var or is it allocated again
+												// and again (and
+			// multipling in the memory)?
 			for (int d = 0; d < dims.length; d++) {
 				final double dx = dims[d] - centre[d];
 				dist += dx * dx;
@@ -145,7 +152,8 @@ public final class DefaultCreateKernel2ndDerivBiGauss {
 				// the inner one
 				val = dist / sigmasSq[0] - 1.0;
 				val *= C[0] * Math.exp(-0.5 * dist / sigmasSq[0]);
-			} else {
+			}
+			else {
 				// the outer one, get new distance first:
 				dist = Math.sqrt(dist) - (sigmas[0] - sigmas[1]);
 				dist *= dist;

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -37,14 +37,14 @@ import org.scijava.ops.engine.exceptions.InvalidOpException;
  * Exception thrown when an Op declared as a {@link Method} is an instance
  * method of some class. This is not allowed, as the Op engine doesn't know how
  * to instantiate the declaring class of an instance method.
- * 
+ *
  * @author Gabriel Selzer
  */
 public class InstanceOpMethodException extends InvalidOpException {
 
 	/**
 	 * Default constructor
-	 * 
+	 *
 	 * @param method the instance method
 	 */
 	public InstanceOpMethodException(final Method method) {

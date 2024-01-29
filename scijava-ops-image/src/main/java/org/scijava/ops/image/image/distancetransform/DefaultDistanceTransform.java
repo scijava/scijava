@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.image.distancetransform;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ import net.imglib2.util.IntervalIndexer;
 /**
  * Computes a distance transform, i.e. for every foreground pixel its distance
  * to the nearest background pixel.
- * 
+ *
  * @author Simon Schmid (University of Konstanz)
  */
 public final class DefaultDistanceTransform {
@@ -56,8 +57,9 @@ public final class DefaultDistanceTransform {
 	 * extended version of meijsters raster scan alogrithm to compute n-d inputs
 	 * Source: http://fab.cba.mit.edu/classes/S62.12/docs/Meijster_distance.pdf
 	 */
-	public static <B extends BooleanType<B>, T extends RealType<T>> void compute(final RandomAccessibleInterval<B> in,
-			final RandomAccessibleInterval<T> out) {
+	public static <B extends BooleanType<B>, T extends RealType<T>> void compute(
+		final RandomAccessibleInterval<B> in, final RandomAccessibleInterval<T> out)
+	{
 		// stores the size of each dimension
 		final int[] dimensSizes = new int[in.numDimensions()];
 
@@ -86,8 +88,10 @@ public final class DefaultDistanceTransform {
 			if (positions[index] < dimensSizes[index] - 1) {
 				positions[index]++;
 				index = positions.length - 1;
-				list.add(new InitPhase<>(actualValues, in, dimensSizes, positions.clone()));
-			} else {
+				list.add(new InitPhase<>(actualValues, in, dimensSizes, positions
+					.clone()));
+			}
+			else {
 				positions[index] = 0;
 				index--;
 			}
@@ -105,20 +109,26 @@ public final class DefaultDistanceTransform {
 		/*
 		 * next phases calculates remaining dimensions
 		 */
-		for (int actualDimension = 1; actualDimension < in.numDimensions(); actualDimension++) {
+		for (int actualDimension = 1; actualDimension < in
+			.numDimensions(); actualDimension++)
+		{
 			Arrays.fill(positions, 0);
 			positions[actualDimension] = -1;
 			index = positions.length - 1;
-			list.add(new NextPhase<>(actualValues, dimensSizes, positions.clone(), actualDimension));
+			list.add(new NextPhase<>(actualValues, dimensSizes, positions.clone(),
+				actualDimension));
 			while (index >= 0) {
 				if (positions[index] == -1) {
 					index--;
-				} else {
+				}
+				else {
 					if (positions[index] < dimensSizes[index] - 1) {
 						positions[index]++;
 						index = positions.length - 1;
-						list.add(new NextPhase<>(actualValues, dimensSizes, positions.clone(), actualDimension));
-					} else {
+						list.add(new NextPhase<>(actualValues, dimensSizes, positions
+							.clone(), actualDimension));
+					}
+					else {
 						positions[index] = 0;
 						index--;
 					}
@@ -136,15 +146,18 @@ public final class DefaultDistanceTransform {
 		Arrays.fill(positions, 0);
 		final RandomAccess<T> raOut = out.randomAccess();
 		raOut.setPosition(positions);
-		raOut.get().setReal(Math.sqrt(actualValues[IntervalIndexer.positionToIndex(positions, dimensSizes)]));
+		raOut.get().setReal(Math.sqrt(actualValues[IntervalIndexer.positionToIndex(
+			positions, dimensSizes)]));
 		index = dimensSizes.length - 1;
 		while (index >= 0) {
 			if (positions[index] < dimensSizes[index] - 1) {
 				positions[index]++;
 				index = positions.length - 1;
 				raOut.setPosition(positions);
-				raOut.get().setReal(Math.sqrt(actualValues[IntervalIndexer.positionToIndex(positions, dimensSizes)]));
-			} else {
+				raOut.get().setReal(Math.sqrt(actualValues[IntervalIndexer
+					.positionToIndex(positions, dimensSizes)]));
+			}
+			else {
 				positions[index] = 0;
 				index--;
 			}
@@ -152,15 +165,20 @@ public final class DefaultDistanceTransform {
 	}
 }
 
-class InitPhase<B extends BooleanType<B>, T extends RealType<T>> implements Runnable {
+class InitPhase<B extends BooleanType<B>, T extends RealType<T>> implements
+	Runnable
+{
+
 	private final int[] actualValues;
 	private final RandomAccess<B> raIn;
 	private final int infinite;
 	private final int[] dimensSizes;
 	private final int[] positions;
 
-	public InitPhase(final int[] actualValues, final RandomAccessibleInterval<B> raIn, final int[] dimensSizes,
-			final int[] positions) {
+	public InitPhase(final int[] actualValues,
+		final RandomAccessibleInterval<B> raIn, final int[] dimensSizes,
+		final int[] positions)
+	{
 		this.actualValues = actualValues;
 		this.raIn = raIn.randomAccess();
 		int inf = 0;
@@ -178,19 +196,23 @@ class InitPhase<B extends BooleanType<B>, T extends RealType<T>> implements Runn
 		raIn.setPosition(positions);
 		if (!raIn.get().get()) {
 			actualValues[IntervalIndexer.positionToIndex(positions, dimensSizes)] = 0;
-		} else {
-			actualValues[IntervalIndexer.positionToIndex(positions, dimensSizes)] = infinite;
+		}
+		else {
+			actualValues[IntervalIndexer.positionToIndex(positions, dimensSizes)] =
+				infinite;
 		}
 		for (int x = 1; x < dimensSizes[0]; x++) {
 			positions[0] = x;
 			raIn.setPosition(positions);
 			if (!raIn.get().get()) {
-				actualValues[IntervalIndexer.positionToIndex(positions, dimensSizes)] = 0;
-			} else {
+				actualValues[IntervalIndexer.positionToIndex(positions, dimensSizes)] =
+					0;
+			}
+			else {
 				final int[] temp = positions.clone();
 				temp[0] = x - 1;
-				actualValues[IntervalIndexer.positionToIndex(positions,
-						dimensSizes)] = actualValues[IntervalIndexer.positionToIndex(temp, dimensSizes)] + 1;
+				actualValues[IntervalIndexer.positionToIndex(positions, dimensSizes)] =
+					actualValues[IntervalIndexer.positionToIndex(temp, dimensSizes)] + 1;
 			}
 		}
 		// scan2
@@ -198,10 +220,12 @@ class InitPhase<B extends BooleanType<B>, T extends RealType<T>> implements Runn
 			positions[0] = x;
 			final int[] temp = positions.clone();
 			temp[0] = x + 1;
-			if (actualValues[IntervalIndexer.positionToIndex(temp, dimensSizes)] < actualValues[IntervalIndexer
-					.positionToIndex(positions, dimensSizes)]) {
-				actualValues[IntervalIndexer.positionToIndex(positions, dimensSizes)] = 1
-						+ actualValues[IntervalIndexer.positionToIndex(temp, dimensSizes)];
+			if (actualValues[IntervalIndexer.positionToIndex(temp,
+				dimensSizes)] < actualValues[IntervalIndexer.positionToIndex(positions,
+					dimensSizes)])
+			{
+				actualValues[IntervalIndexer.positionToIndex(positions, dimensSizes)] =
+					1 + actualValues[IntervalIndexer.positionToIndex(temp, dimensSizes)];
 			}
 		}
 	}
@@ -209,14 +233,16 @@ class InitPhase<B extends BooleanType<B>, T extends RealType<T>> implements Runn
 }
 
 class NextPhase<T extends RealType<T>> implements Runnable {
+
 	private final int[] actualValues;
 	private final int[] dimensSizes;
 	private final int[] positions;
 	private final int[] positions2;
 	private final int actualDimension;
 
-	public NextPhase(final int[] actualValues, final int[] dimensSizes, final int[] positions,
-			final int actualDimension) {
+	public NextPhase(final int[] actualValues, final int[] dimensSizes,
+		final int[] positions, final int actualDimension)
+	{
 		this.actualValues = actualValues;
 		this.dimensSizes = dimensSizes;
 		this.positions = positions;
@@ -246,22 +272,25 @@ class NextPhase<T extends RealType<T>> implements Runnable {
 		for (int u = 1; u < dimensSizes[actualDimension]; u++) {
 			positions[actualDimension] = s[q];
 			positions2[actualDimension] = u;
-			while (q >= 0 && distancefunc(t[q], s[q],
-					actualValues[IntervalIndexer.positionToIndex(positions, dimensSizes)]) > distancefunc(t[q], u,
-							actualValues[IntervalIndexer.positionToIndex(positions2, dimensSizes)])) {
+			while (q >= 0 && distancefunc(t[q], s[q], actualValues[IntervalIndexer
+				.positionToIndex(positions, dimensSizes)]) > distancefunc(t[q], u,
+					actualValues[IntervalIndexer.positionToIndex(positions2,
+						dimensSizes)]))
+			{
 				q--;
-				if (q >= 0)
-					positions[actualDimension] = s[q];
+				if (q >= 0) positions[actualDimension] = s[q];
 			}
 			if (q < 0) {
 				q = 0;
 				s[0] = u;
-			} else {
+			}
+			else {
 				positions[actualDimension] = s[q];
 				positions2[actualDimension] = u;
-				final double w = 1
-						+ sep(s[q], u, actualValues[IntervalIndexer.positionToIndex(positions2, dimensSizes)],
-								actualValues[IntervalIndexer.positionToIndex(positions, dimensSizes)]);
+				final double w = 1 + sep(s[q], u, actualValues[IntervalIndexer
+					.positionToIndex(positions2, dimensSizes)],
+					actualValues[IntervalIndexer.positionToIndex(positions,
+						dimensSizes)]);
 				if (w < dimensSizes[actualDimension]) {
 					q++;
 					s[q] = u;
@@ -274,14 +303,16 @@ class NextPhase<T extends RealType<T>> implements Runnable {
 		final int[] newValues = new int[dimensSizes[actualDimension]];
 		for (int u = dimensSizes[actualDimension] - 1; u >= 0; u--) {
 			positions[actualDimension] = s[q];
-			newValues[u] = distancefunc(u, s[q], actualValues[IntervalIndexer.positionToIndex(positions, dimensSizes)]);
+			newValues[u] = distancefunc(u, s[q], actualValues[IntervalIndexer
+				.positionToIndex(positions, dimensSizes)]);
 			if (u == t[q]) {
 				q--;
 			}
 		}
 		for (int u = dimensSizes[actualDimension] - 1; u >= 0; u--) {
 			positions[actualDimension] = u;
-			actualValues[IntervalIndexer.positionToIndex(positions, dimensSizes)] = newValues[u];
+			actualValues[IntervalIndexer.positionToIndex(positions, dimensSizes)] =
+				newValues[u];
 		}
 	}
 

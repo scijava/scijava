@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -57,31 +57,33 @@ public class OpRetypingMemberParser implements
 	 * <li>That {@code srcStruct} is valid</li>
 	 * <li>That there are {@code inputs.length} input {@link Member}s in
 	 * {@code srcStruct}</li>
-	 * <li>That there is <b>one</b> output {@link Member} in {@code srcStruct}</li>
+	 * <li>That there is <b>one</b> output {@link Member} in
+	 * {@code srcStruct}</li>
 	 * </ol>
 	 * We should consider adding the evalutation of these assumptions
-	 * 
+	 *
 	 * @param source the {@link RetypingRequest} from which we create the new
 	 *          {@link List} of {@link Member}s
 	 * @return a new {@link Struct} reflecting the simplified arguments / focused
 	 *         output of this {@link SimplifiedOpInfo}
 	 */
 	@Override
-	public List<Member<?>> parse(RetypingRequest source, Type structType)
-	{
+	public List<Member<?>> parse(RetypingRequest source, Type structType) {
 		List<Member<?>> original = source.struct().members();
 		List<FunctionalMethodType> newFmts = source.newFmts();
-		List<Member<?>> ios = original.stream().filter(m -> m.isInput() || m.isOutput()).collect(
-				Collectors.toList());
-		if (ios.size() == newFmts.size())
-			return strictConversion(original, newFmts);
-		else
-			return synthesizedConversion(newFmts, original);
+		List<Member<?>> ios = original.stream().filter(m -> m.isInput() || m
+			.isOutput()).collect(Collectors.toList());
+		if (ios.size() == newFmts.size()) return strictConversion(original,
+			newFmts);
+		else return synthesizedConversion(newFmts, original);
 	}
 
-	private List<Member<?>> synthesizedConversion(List<FunctionalMethodType> newFmts, List<Member<?>> original) {
+	private List<Member<?>> synthesizedConversion(
+		List<FunctionalMethodType> newFmts, List<Member<?>> original)
+	{
 		// Create new members for all new I/O members
-		List<Member<?>> newMembers = IntStream.range(0, newFmts.size()).boxed().map(foo -> mapToMember(foo, newFmts.get(foo))).collect(Collectors.toList());
+		List<Member<?>> newMembers = IntStream.range(0, newFmts.size()).boxed().map(
+			foo -> mapToMember(foo, newFmts.get(foo))).collect(Collectors.toList());
 		// Add any non-I/O members (e.g. dependencies)
 		for (Member<?> m : original) {
 			if (!m.isInput() && !m.isOutput()) {
@@ -94,33 +96,33 @@ public class OpRetypingMemberParser implements
 	private Member<?> mapToMember(int i, FunctionalMethodType fmt) {
 		return new Member<>() {
 
-			@Override public String getKey() {
+			@Override
+			public String getKey() {
 				ItemIO ioType = fmt.itemIO();
-				if (ioType == ItemIO.INPUT)
-					return "in" + i + 1;
-				else if (ioType == ItemIO.CONTAINER)
-					return "container";
-				else if (ioType == ItemIO.MUTABLE)
-					return "mutable";
-				else if (ioType == ItemIO.OUTPUT)
-					return "output";
-				else
-					return "";
+				if (ioType == ItemIO.INPUT) return "in" + i + 1;
+				else if (ioType == ItemIO.CONTAINER) return "container";
+				else if (ioType == ItemIO.MUTABLE) return "mutable";
+				else if (ioType == ItemIO.OUTPUT) return "output";
+				else return "";
 			}
 
-			@Override public Type getType() {
+			@Override
+			public Type getType() {
 				return fmt.type();
 			}
 
-			@Override public ItemIO getIOType() {
+			@Override
+			public ItemIO getIOType() {
 				return fmt.itemIO();
 			}
 		};
 	}
 
-	private List<Member<?>> strictConversion(List<Member<?>> originalMembers, List<FunctionalMethodType> newFmts) {
+	private List<Member<?>> strictConversion(List<Member<?>> originalMembers,
+		List<FunctionalMethodType> newFmts)
+	{
 		FunctionalMethodType outputFmt = newFmts.stream().filter(fmt -> fmt
-				.itemIO() == ItemIO.OUTPUT || fmt.itemIO() == ItemIO.MUTABLE || fmt
+			.itemIO() == ItemIO.OUTPUT || fmt.itemIO() == ItemIO.MUTABLE || fmt
 				.itemIO() == ItemIO.CONTAINER).findFirst().get();
 		List<Member<?>> newMembers = new ArrayList<>();
 		int inputIndex = 0;
@@ -137,7 +139,8 @@ public class OpRetypingMemberParser implements
 
 	}
 
-	public List<Member<?>> parse(Struct s, List<FunctionalMethodType> newFmts, Type structType)
+	public List<Member<?>> parse(Struct s, List<FunctionalMethodType> newFmts,
+		Type structType)
 	{
 		return parse(new RetypingRequest(s, newFmts), structType);
 	}

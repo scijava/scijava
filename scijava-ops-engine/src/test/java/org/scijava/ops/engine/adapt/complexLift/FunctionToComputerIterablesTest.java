@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -50,10 +50,12 @@ public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 
 	@BeforeAll
 	public static void AddNeededOps() {
-		Object[] lifterOps = objsFromNoArgConstructors(FunctionsToComputersAndLift.class.getDeclaredClasses());
+		Object[] lifterOps = objsFromNoArgConstructors(
+			FunctionsToComputersAndLift.class.getDeclaredClasses());
 		ops.register(lifterOps);
 		ops.register(new ComputerToIterables());
-		Object[] adapterOps = objsFromNoArgConstructors(FunctionsToComputers.class.getDeclaredClasses());
+		Object[] adapterOps = objsFromNoArgConstructors(FunctionsToComputers.class
+			.getDeclaredClasses());
 		ops.register(adapterOps);
 		ops.register(new CopyOpCollection());
 		ops.register(new FunctionToComputerAdaptTestOps());
@@ -64,7 +66,7 @@ public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
 		ops.op("test.FtC").arity1().input(in).output(output).compute();
-		Assertions.assertArrayEquals(new double[] {2, 4}, output.get(0), 0);
+		Assertions.assertArrayEquals(new double[] { 2, 4 }, output.get(0), 0);
 	}
 
 	@Test
@@ -72,7 +74,7 @@ public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
 		ops.op("test.FtC").arity2().input(in, in).output(output).compute();
-		Assertions.assertArrayEquals(new double[] {4, 8}, output.get(0), 0);
+		Assertions.assertArrayEquals(new double[] { 4, 8 }, output.get(0), 0);
 	}
 
 	@Test
@@ -80,7 +82,7 @@ public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
 		ops.op("test.FtC").arity3().input(in, in, in).output(output).compute();
-		Assertions.assertArrayEquals(new double[] {6, 12}, output.get(0), 0);
+		Assertions.assertArrayEquals(new double[] { 6, 12 }, output.get(0), 0);
 	}
 
 	@Test
@@ -88,103 +90,114 @@ public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
 		ops.op("test.FtC").arity4().input(in, in, in, in).output(output).compute();
-		Assertions.assertArrayEquals(new double[] {8, 16}, output.get(0), 0);
+		Assertions.assertArrayEquals(new double[] { 8, 16 }, output.get(0), 0);
 	}
 
 	@Test
 	public void testFunction5ToComputer5() {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
-		ops.op("test.FtC").arity5().input(in, in, in, in, in).output(output).compute();
-		Assertions.assertArrayEquals(new double[] {10, 20}, output.get(0), 0);
+		ops.op("test.FtC").arity5().input(in, in, in, in, in).output(output)
+			.compute();
+		Assertions.assertArrayEquals(new double[] { 10, 20 }, output.get(0), 0);
 	}
 
 	@Test
 	public void testFunction6ToComputer6() {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
-		ops.op("test.FtC").arity6().input(in, in, in, in, in, in).output(output).compute();
-		Assertions.assertArrayEquals(new double[] {12, 24}, output.get(0), 0);
+		ops.op("test.FtC").arity6().input(in, in, in, in, in, in).output(output)
+			.compute();
+		Assertions.assertArrayEquals(new double[] { 12, 24 }, output.get(0), 0);
 	}
 
 	@Test
 	public void testFunction7ToComputer7() {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
-		ops.op("test.FtC").arity7().input(in, in, in, in, in, in, in).output(output).compute();
-		Assertions.assertArrayEquals(new double[] {14, 28}, output.get(0), 0);
+		ops.op("test.FtC").arity7().input(in, in, in, in, in, in, in).output(output)
+			.compute();
+		Assertions.assertArrayEquals(new double[] { 14, 28 }, output.get(0), 0);
 	}
 
 	@Test
 	public void testFunction8ToComputer8() {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
-		ops.op("test.FtC").arity8().input(in, in, in, in, in, in, in, in).output(output).compute();
-		Assertions.assertArrayEquals(new double[] {16, 32}, output.get(0), 0);
+		ops.op("test.FtC").arity8().input(in, in, in, in, in, in, in, in).output(
+			output).compute();
+		Assertions.assertArrayEquals(new double[] { 16, 32 }, output.get(0), 0);
 	}
 
 	@Test
 	public void testFunction9ToComputer9() {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
-		ops.op("test.FtC").arity9().input(in, in, in, in, in, in, in, in, in).output(output).compute();
-		Assertions.assertArrayEquals(new double[] {18, 36}, output.get(0), 0);
+		ops.op("test.FtC").arity9().input(in, in, in, in, in, in, in, in, in)
+			.output(output).compute();
+		Assertions.assertArrayEquals(new double[] { 18, 36 }, output.get(0), 0);
 	}
 
 	@Test
 	public void testFunction10ToComputer10() {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
-		ops.op("test.FtC").arity10().input(in, in, in, in, in, in, in, in, in, in).output(output).compute();
-		Assertions.assertArrayEquals(new double[] {20, 40}, output.get(0), 0);
+		ops.op("test.FtC").arity10().input(in, in, in, in, in, in, in, in, in, in)
+			.output(output).compute();
+		Assertions.assertArrayEquals(new double[] { 20, 40 }, output.get(0), 0);
 	}
 
 	@Test
 	public void testFunction11ToComputer11() {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
-		ops.op("test.FtC").arity11().input(in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
-		Assertions.assertArrayEquals(new double[] {22, 44}, output.get(0), 0);
+		ops.op("test.FtC").arity11().input(in, in, in, in, in, in, in, in, in, in,
+			in).output(output).compute();
+		Assertions.assertArrayEquals(new double[] { 22, 44 }, output.get(0), 0);
 	}
 
 	@Test
 	public void testFunction12ToComputer12() {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
-		ops.op("test.FtC").arity12().input(in, in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
-		Assertions.assertArrayEquals(new double[] {24, 48}, output.get(0), 0);
+		ops.op("test.FtC").arity12().input(in, in, in, in, in, in, in, in, in, in,
+			in, in).output(output).compute();
+		Assertions.assertArrayEquals(new double[] { 24, 48 }, output.get(0), 0);
 	}
 
 	@Test
 	public void testFunction13ToComputer13() {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
-		ops.op("test.FtC").arity13().input(in, in, in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
-		Assertions.assertArrayEquals(new double[] {26, 52}, output.get(0), 0);
+		ops.op("test.FtC").arity13().input(in, in, in, in, in, in, in, in, in, in,
+			in, in, in).output(output).compute();
+		Assertions.assertArrayEquals(new double[] { 26, 52 }, output.get(0), 0);
 	}
 
 	@Test
 	public void testFunction14ToComputer14() {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
-		ops.op("test.FtC").arity14().input(in, in, in, in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
-		Assertions.assertArrayEquals(new double[] {28, 56}, output.get(0), 0);
+		ops.op("test.FtC").arity14().input(in, in, in, in, in, in, in, in, in, in,
+			in, in, in, in).output(output).compute();
+		Assertions.assertArrayEquals(new double[] { 28, 56 }, output.get(0), 0);
 	}
 
 	@Test
 	public void testFunction15ToComputer15() {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
-		ops.op("test.FtC").arity15().input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
-		Assertions.assertArrayEquals(new double[] {30, 60}, output.get(0), 0);
+		ops.op("test.FtC").arity15().input(in, in, in, in, in, in, in, in, in, in,
+			in, in, in, in, in).output(output).compute();
+		Assertions.assertArrayEquals(new double[] { 30, 60 }, output.get(0), 0);
 	}
 
 	@Test
 	public void testFunction16ToComputer16() {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
-		ops.op("test.FtC").arity16().input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
-		Assertions.assertArrayEquals(new double[] {32, 64}, output.get(0), 0);
+		ops.op("test.FtC").arity16().input(in, in, in, in, in, in, in, in, in, in,
+			in, in, in, in, in, in).output(output).compute();
+		Assertions.assertArrayEquals(new double[] { 32, 64 }, output.get(0), 0);
 	}
 }
-

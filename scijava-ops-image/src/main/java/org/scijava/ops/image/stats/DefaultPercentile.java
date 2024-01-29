@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -37,18 +37,17 @@ import org.scijava.ops.spi.OpDependency;
 
 /**
  * Op to calculate the n-th {@code stats.percentile}.
- * 
+ *
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
  * @author Jan Eglinger
- * @param <I>
- *            input type
- * @param <O>
- *            output type
- *@implNote op names='stats.percentile'
+ * @param <I> input type
+ * @param <O> output type
+ * @implNote op names='stats.percentile'
  */
 public class DefaultPercentile<I extends RealType<I>, O extends RealType<O>>
-		implements Computers.Arity2<Iterable<I>, Double, O> {
+	implements Computers.Arity2<Iterable<I>, Double, O>
+{
 
 	@OpDependency(name = "stats.quantile")
 	private Computers.Arity2<Iterable<I>, Double, O> op;
@@ -61,10 +60,12 @@ public class DefaultPercentile<I extends RealType<I>, O extends RealType<O>>
 	 * @param percentile
 	 */
 	@Override
-	public void compute(final Iterable<I> input, final Double percent, final O output) {
+	public void compute(final Iterable<I> input, final Double percent,
+		final O output)
+	{
 		if (percent < 0 || percent > 100) {
 			throw new IllegalArgumentException(
-					"Percent must be between 0 and 100 (inclusive) but was " + percent);
+				"Percent must be between 0 and 100 (inclusive) but was " + percent);
 		}
 		op.compute(input, percent / 100, output);
 	}

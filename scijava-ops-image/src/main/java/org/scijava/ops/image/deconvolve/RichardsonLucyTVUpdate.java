@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -52,14 +52,14 @@ import org.scijava.ops.spi.Nullable;
  * regularization for 3D confocal microscope deconvolution Microsc Res Rech 2006
  * Apr; 69(4)- 260-6 The div_unit_grad function has been adapted from IOCBIOS,
  * Pearu Peterson https://code.google.com/p/iocbio/
- * 
+ *
  * @author Brian Northan
  * @param <I> TODO Documentation
  * @param <T> TODO Documentation
  * @implNote op names='deconvolve.richardsonLucyUpdate', priority='100.'
  */
 public class RichardsonLucyTVUpdate<T extends RealType<T> & NativeType<T>, I extends RandomAccessibleInterval<T>>
-	implements Computers.Arity3<I, Float, RandomAccessibleInterval<T>, I> 
+	implements Computers.Arity3<I, Float, RandomAccessibleInterval<T>, I>
 {
 
 	@OpDependency(name = "create.img")
@@ -74,8 +74,9 @@ public class RichardsonLucyTVUpdate<T extends RealType<T> & NativeType<T>, I ext
 	 * @param estimate
 	 */
 	@Override
-	public void compute(final I correction, final Float regularizationFactor, @Nullable
-	RandomAccessibleInterval<T> variation, final I estimate) {
+	public void compute(final I correction, final Float regularizationFactor,
+		@Nullable RandomAccessibleInterval<T> variation, final I estimate)
+	{
 
 		if (variation == null) {
 			Type<T> type = Util.getTypeFromInterval(correction);
@@ -125,7 +126,9 @@ public class RichardsonLucyTVUpdate<T extends RealType<T> & NativeType<T>, I ext
 	 * Efficient multithreaded version of div_unit_grad adapted from IOCBIOS,
 	 * Pearu Peterson https://code.google.com/p/iocbio/
 	 */
-	void divUnitGradFastThread(RandomAccessibleInterval<T> estimate, RandomAccessibleInterval<T> variation) {
+	void divUnitGradFastThread(RandomAccessibleInterval<T> estimate,
+		RandomAccessibleInterval<T> variation)
+	{
 		final int Nx, Ny, Nz;
 
 		Nx = (int) estimate.dimension(0);

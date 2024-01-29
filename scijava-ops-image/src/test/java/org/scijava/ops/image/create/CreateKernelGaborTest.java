@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -48,7 +48,7 @@ import org.scijava.types.Nil;
 
 /**
  * Tests {@link DefaultCreateKernelGabor} and its derivates.
- * 
+ *
  * @author Vladimír Ulman
  */
 public class CreateKernelGaborTest extends AbstractOpTest {
@@ -60,35 +60,35 @@ public class CreateKernelGaborTest extends AbstractOpTest {
 		final double[] period = { 4.0, 1.0 };
 
 		// define functions used in the test
-		Functions.Arity3<double[], double[], C, RandomAccessibleInterval<C>> createFunc = OpBuilder.matchFunction(ops,
-				"create.kernelGabor", new Nil<double[]>() {
-				}, new Nil<double[]>() {
-				}, new Nil<C>() {
-				}, new Nil<RandomAccessibleInterval<C>>() {
-				});
-		BiFunction<Double, double[], RandomAccessibleInterval<DoubleType>> createFuncSingleSigma = OpBuilder
-				.matchFunction(ops, "create.kernelGabor", new Nil<Double>() {
-				}, new Nil<double[]>() {
-				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
-				});
-		BiFunction<double[], double[], RandomAccessibleInterval<DoubleType>> createFuncDouble = OpBuilder.matchFunction(ops,
-				"create.kernelGabor", new Nil<double[]>() {
-				}, new Nil<double[]>() {
-				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
-				});
-		BiFunction<double[], double[], RandomAccessibleInterval<FloatType>> createFuncFloat = OpBuilder.matchFunction(ops,
-				"create.kernelGabor", new Nil<double[]>() {
-				}, new Nil<double[]>() {
-				}, new Nil<RandomAccessibleInterval<FloatType>>() {
-				});
-		BiFunction<double[], double[], RandomAccessibleInterval<ComplexDoubleType>> createFuncComplexDouble = OpBuilder.matchFunction(ops,
-				"create.kernelGabor", new Nil<double[]>() {
-				}, new Nil<double[]>() {
-				}, new Nil<RandomAccessibleInterval<ComplexDoubleType>>() {
-				});
-		
+		Functions.Arity3<double[], double[], C, RandomAccessibleInterval<C>> createFunc =
+			OpBuilder.matchFunction(ops, "create.kernelGabor", new Nil<double[]>()
+			{}, new Nil<double[]>() {}, new Nil<C>() {},
+				new Nil<RandomAccessibleInterval<C>>()
+				{});
+		BiFunction<Double, double[], RandomAccessibleInterval<DoubleType>> createFuncSingleSigma =
+			OpBuilder.matchFunction(ops, "create.kernelGabor", new Nil<Double>()
+			{}, new Nil<double[]>() {},
+				new Nil<RandomAccessibleInterval<DoubleType>>()
+				{});
+		BiFunction<double[], double[], RandomAccessibleInterval<DoubleType>> createFuncDouble =
+			OpBuilder.matchFunction(ops, "create.kernelGabor", new Nil<double[]>()
+			{}, new Nil<double[]>() {},
+				new Nil<RandomAccessibleInterval<DoubleType>>()
+				{});
+		BiFunction<double[], double[], RandomAccessibleInterval<FloatType>> createFuncFloat =
+			OpBuilder.matchFunction(ops, "create.kernelGabor", new Nil<double[]>()
+			{}, new Nil<double[]>() {},
+				new Nil<RandomAccessibleInterval<FloatType>>()
+				{});
+		BiFunction<double[], double[], RandomAccessibleInterval<ComplexDoubleType>> createFuncComplexDouble =
+			OpBuilder.matchFunction(ops, "create.kernelGabor", new Nil<double[]>()
+			{}, new Nil<double[]>() {},
+				new Nil<RandomAccessibleInterval<ComplexDoubleType>>()
+				{});
+
 		// test the main convenience function:
-		RandomAccessibleInterval<DoubleType> kernelD = createFuncDouble.apply(sigmas, period);
+		RandomAccessibleInterval<DoubleType> kernelD = createFuncDouble.apply(
+			sigmas, period);
 
 		// sizes are okay?
 		assertEquals(kernelD.dimension(0), 37);
@@ -105,21 +105,25 @@ public class CreateKernelGaborTest extends AbstractOpTest {
 		final double[] shortSigmas = { 2.0 * sigma };
 		try {
 			kernelD = createFuncDouble.apply(shortSigmas, period);
-		} catch (IllegalArgumentException e) {
+		}
+		catch (IllegalArgumentException e) {
 			++wasCaught;
 		}
 		try {
 			kernelD = createFuncSingleSigma.apply(-sigma, period);
-		} catch (IllegalArgumentException e) {
+		}
+		catch (IllegalArgumentException e) {
 			++wasCaught;
 		}
 		assertEquals(2, wasCaught);
 
 		// does it work also for pure complex types?
-		RandomAccessibleInterval<ComplexDoubleType> kernelCD = createFuncComplexDouble.apply(sigmas, period);
+		RandomAccessibleInterval<ComplexDoubleType> kernelCD =
+			createFuncComplexDouble.apply(sigmas, period);
 		RandomAccess<ComplexDoubleType> samplerCD = kernelCD.randomAccess();
 		samplerCD.setPosition(position);
-		assertEquals(samplerD.get().getRealDouble(), samplerCD.get().getRealDouble(), 0.00001);
+		assertEquals(samplerD.get().getRealDouble(), samplerCD.get()
+			.getRealDouble(), 0.00001);
 
 		// imaginary part should be around 0.0 in the kernel centre, is it?
 		assertEquals(0.0, samplerCD.get().getImaginaryDouble(), 0.001);
@@ -131,7 +135,8 @@ public class CreateKernelGaborTest extends AbstractOpTest {
 		assertEquals(0.0, samplerCD.get().getImaginaryDouble(), 0.001);
 
 		// does the general kernel calculation work?
-		kernelCD = (RandomAccessibleInterval<ComplexDoubleType>) createFunc.apply(sigmas, period, (C) new ComplexDoubleType());
+		kernelCD = (RandomAccessibleInterval<ComplexDoubleType>) createFunc.apply(
+			sigmas, period, (C) new ComplexDoubleType());
 		samplerCD = kernelCD.randomAccess();
 		samplerCD.setPosition(position);
 		assertEquals(0.0, samplerCD.get().getImaginaryDouble(), 0.001);
@@ -139,7 +144,8 @@ public class CreateKernelGaborTest extends AbstractOpTest {
 		// 3D kernel for just y-axis?
 		final double[] sigmas3D = { 0.0, 5.0, 0.0 };
 		final double[] period3D = { 0.0, 2.0, 0.0 };
-		final RandomAccessibleInterval<FloatType> kernelF = createFuncFloat.apply(sigmas3D, period3D);
+		final RandomAccessibleInterval<FloatType> kernelF = createFuncFloat.apply(
+			sigmas3D, period3D);
 		RandomAccess<FloatType> samplerF = kernelF.randomAccess();
 
 		// minimal size in x and z axes?

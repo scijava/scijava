@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -57,8 +57,9 @@ public class MergeLabelingTest extends AbstractOpTest {
 
 	@BeforeEach
 	public void setUpTest() {
-		in1 = ops.op("create.imgLabeling").arity2().input(new FinalInterval(2, 2), new ByteType())
-				.outType(new Nil<ImgLabeling<Integer, ByteType>>() {}).apply();
+		in1 = ops.op("create.imgLabeling").arity2().input(new FinalInterval(2, 2),
+			new ByteType()).outType(new Nil<ImgLabeling<Integer, ByteType>>()
+		{}).apply();
 		RandomAccess<LabelingType<Integer>> randomAccess = in1.randomAccess();
 		randomAccess.setPosition(new int[] { 0, 0 });
 		randomAccess.get().add(0);
@@ -69,8 +70,9 @@ public class MergeLabelingTest extends AbstractOpTest {
 		randomAccess.setPosition(new int[] { 1, 1 });
 		randomAccess.get().add(3);
 
-		in2 = ops.op("create.imgLabeling").arity2().input(new FinalInterval(2, 2), new ByteType())
-				.outType(new Nil<ImgLabeling<Integer, ByteType>>() {}).apply();
+		in2 = ops.op("create.imgLabeling").arity2().input(new FinalInterval(2, 2),
+			new ByteType()).outType(new Nil<ImgLabeling<Integer, ByteType>>()
+		{}).apply();
 		randomAccess = in2.randomAccess();
 		randomAccess.setPosition(new int[] { 0, 0 });
 		randomAccess.get().add(10);
@@ -81,14 +83,16 @@ public class MergeLabelingTest extends AbstractOpTest {
 		randomAccess.setPosition(new int[] { 1, 1 });
 		randomAccess.get().add(13);
 
-		out = ops.op("create.imgLabeling").arity2().input(new FinalInterval(2, 2), new ByteType())
-				.outType(new Nil<ImgLabeling<Integer, ByteType>>() {}).apply();
+		out = ops.op("create.imgLabeling").arity2().input(new FinalInterval(2, 2),
+			new ByteType()).outType(new Nil<ImgLabeling<Integer, ByteType>>()
+		{}).apply();
 	}
 
 	@Test
 	public void testMerging() {
-		final ImgLabeling<Integer, ByteType> run = ops.op("labeling.merge").arity2().input(in1, in2)
-				.outType(new Nil<ImgLabeling<Integer, ByteType>>() {}).apply();
+		final ImgLabeling<Integer, ByteType> run = ops.op("labeling.merge").arity2()
+			.input(in1, in2).outType(new Nil<ImgLabeling<Integer, ByteType>>()
+			{}).apply();
 		assertTrue(run.firstElement().contains(0));
 		assertTrue(run.firstElement().contains(10));
 		assertTrue(!run.firstElement().contains(3));
@@ -96,15 +100,17 @@ public class MergeLabelingTest extends AbstractOpTest {
 
 	@Test
 	public void testMask() {
-		final Img<BitType> mask = ops.op("create.img").arity2().input(in1, new BitType())
-				.outType(new Nil<Img<BitType>>() {}).apply();
+		final Img<BitType> mask = ops.op("create.img").arity2().input(in1,
+			new BitType()).outType(new Nil<Img<BitType>>()
+		{}).apply();
 		final RandomAccess<BitType> maskRA = mask.randomAccess();
 		maskRA.setPosition(new int[] { 0, 0 });
 		maskRA.get().set(true);
 		maskRA.setPosition(new int[] { 1, 1 });
 		maskRA.get().set(true);
-		out = ops.op("labeling.merge").arity3().input(in1, in2, mask)
-				.outType(new Nil<ImgLabeling<Integer, ByteType>>() {}).apply();
+		out = ops.op("labeling.merge").arity3().input(in1, in2, mask).outType(
+			new Nil<ImgLabeling<Integer, ByteType>>()
+			{}).apply();
 		final RandomAccess<LabelingType<Integer>> outRA = out.randomAccess();
 		outRA.setPosition(new int[] { 0, 0 });
 		assertTrue(outRA.get().contains(0));

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -79,8 +79,8 @@ public class LocalSauvolaThreshold<T extends RealType<T>> extends
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
-		final Shape inputNeighborhoodShape, @Nullable final Double k, @Nullable
-	final Double r,
+		final Shape inputNeighborhoodShape, @Nullable final Double k,
+		@Nullable final Double r,
 		@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final RandomAccessibleInterval<BitType> output)
 	{
@@ -95,15 +95,13 @@ public class LocalSauvolaThreshold<T extends RealType<T>> extends
 		}
 		else {
 			final Computers.Arity2<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
-					(i1, i2, o) -> computeThresholdNonIntegralOp.compute(i1, i2, k, r, o);
+				(i1, i2, o) -> computeThresholdNonIntegralOp.compute(i1, i2, k, r, o);
 			applyFilterOp.compute(input, parametrizedComputeThresholdOp,
-					inputNeighborhoodShape, outOfBoundsFactory,
-					output);
+				inputNeighborhoodShape, outOfBoundsFactory, output);
 		}
 	}
 
-	public void computeIntegral(
-		final RandomAccessibleInterval<T> input,
+	public void computeIntegral(final RandomAccessibleInterval<T> input,
 		final RectangleShape inputNeighborhoodShape, final Double k, final Double r,
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<DoubleType>> integralImageOp,
@@ -113,9 +111,9 @@ public class LocalSauvolaThreshold<T extends RealType<T>> extends
 	{
 		final Computers.Arity2<RectangleNeighborhood<? extends Composite<DoubleType>>, T, BitType> parametrizedComputeThresholdOp = //
 			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, k, r, o);
-		compute(input, inputNeighborhoodShape,
-			outOfBoundsFactory, Arrays.asList(integralImageOp, squareIntegralImageOp),
-			parametrizedComputeThresholdOp, output);
+		compute(input, inputNeighborhoodShape, outOfBoundsFactory, Arrays.asList(
+			integralImageOp, squareIntegralImageOp), parametrizedComputeThresholdOp,
+			output);
 	}
 
 }

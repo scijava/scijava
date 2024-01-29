@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.engine.reduce;
 
 import java.util.function.Function;
@@ -41,7 +42,7 @@ import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpMethod;
 
 public class ReductionWithDependenciesTest extends AbstractTestEnvironment
-		implements OpCollection
+	implements OpCollection
 {
 
 	@BeforeAll
@@ -53,10 +54,11 @@ public class ReductionWithDependenciesTest extends AbstractTestEnvironment
 	public static Double bar() {
 		return 5.;
 	}
-	
+
 	@OpMethod(names = "test.nullableWithDependency", type = Function.class)
-	public static Double foo(@OpDependency(name = "test.fooDependency") Producer<Double> bar, @Nullable
-			Double opt) {
+	public static Double foo(@OpDependency(
+		name = "test.fooDependency") Producer<Double> bar, @Nullable Double opt)
+	{
 		if (opt == null) opt = 0.;
 		return bar.create() + opt;
 	}
@@ -64,14 +66,16 @@ public class ReductionWithDependenciesTest extends AbstractTestEnvironment
 	@Test
 	public void testDependencyFirstMethodWithNullable() {
 		Double opt = 7.;
-		Double o = ops.op("test.nullableWithDependency").arity1().input(opt).outType(Double.class).apply();
+		Double o = ops.op("test.nullableWithDependency").arity1().input(opt)
+			.outType(Double.class).apply();
 		Double expected = 12.;
 		Assertions.assertEquals(expected, o);
 	}
 
 	@Test
 	public void testDependencyFirstMethodWithoutNullable() {
-		Double o = ops.op("test.nullableWithDependency").arity0().outType(Double.class).create();
+		Double o = ops.op("test.nullableWithDependency").arity0().outType(
+			Double.class).create();
 		Double expected = 5.;
 		Assertions.assertEquals(expected, o);
 	}

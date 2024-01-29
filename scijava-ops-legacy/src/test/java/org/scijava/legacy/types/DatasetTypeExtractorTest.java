@@ -49,7 +49,8 @@ import org.scijava.types.Types;
  */
 public class DatasetTypeExtractorTest {
 
-	@Test public void testDatasetTypeExtractor() {
+	@Test
+	public void testDatasetTypeExtractor() {
 		// Create a TypeReifier
 		var reifier = new DefaultTypeReifier(Discoverer.all(ServiceLoader::load));
 		// Create a Dataset

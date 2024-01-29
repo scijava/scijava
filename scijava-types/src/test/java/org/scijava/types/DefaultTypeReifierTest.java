@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -109,7 +109,8 @@ public class DefaultTypeReifierTest {
 		final List<String> stringList = //
 			new ArrayList<>(Collections.singletonList("Hi"));
 		final Type stringListType = types.reify(stringList);
-		Assertions.assertEquals(new Nil<ArrayList<String>>() {}.getType(), stringListType);
+		Assertions.assertEquals(new Nil<ArrayList<String>>() {}.getType(),
+			stringListType);
 	}
 
 	/** Tests type extraction for {@link Map} objects. */
@@ -118,7 +119,8 @@ public class DefaultTypeReifierTest {
 		final Map<String, Integer> mapSI = //
 			new HashMap<>(Collections.singletonMap("Curtis", 37));
 		final Type mapSIType = types.reify(mapSI);
-		Assertions.assertEquals(new Nil<HashMap<String, Integer>>() {}.getType(), mapSIType);
+		Assertions.assertEquals(new Nil<HashMap<String, Integer>>() {}.getType(),
+			mapSIType);
 	}
 
 	/** Tests nested type extraction of a complex object. */
@@ -139,8 +141,9 @@ public class DefaultTypeReifierTest {
 		testScores.add(highlights);
 
 		final Type testScoresType = types.reify(testScores);
-		Assertions.assertEquals(new Nil<ArrayList<HashMap<String, ArrayList<Integer>>>>() {}
-			.getType(), testScoresType);
+		Assertions.assertEquals(
+			new Nil<ArrayList<HashMap<String, ArrayList<Integer>>>>()
+			{}.getType(), testScoresType);
 	}
 
 	/**
@@ -153,7 +156,8 @@ public class DefaultTypeReifierTest {
 		blueBag.add(new BlueThing());
 
 		final Type blueBagType = types.reify(blueBag);
-		Assertions.assertEquals(new Nil<Bag<BlueThing>>() {}.getType(), blueBagType);
+		Assertions.assertEquals(new Nil<Bag<BlueThing>>() {}.getType(),
+			blueBagType);
 
 		final Bag<RedThing> redBag = new Bag<>();
 		redBag.add(new RedThing());

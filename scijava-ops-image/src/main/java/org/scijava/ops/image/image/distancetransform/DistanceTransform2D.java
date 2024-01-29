@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.image.distancetransform;
 
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ import org.scijava.concurrent.Parallelization;
 /**
  * Computes a distance transform, i.e. for every foreground pixel its distance
  * to the nearest background pixel.
- * 
+ *
  * @author Simon Schmid (University of Konstanz)
  */
 public final class DistanceTransform2D {
@@ -53,12 +54,14 @@ public final class DistanceTransform2D {
 	 * meijsters raster scan alogrithm Source:
 	 * http://fab.cba.mit.edu/classes/S62.12/docs/Meijster_distance.pdf
 	 */
-	public static <B extends BooleanType<B>, T extends RealType<T>> void compute(final RandomAccessibleInterval<B> in,
-			final RandomAccessibleInterval<T> out) {
+	public static <B extends BooleanType<B>, T extends RealType<T>> void compute(
+		final RandomAccessibleInterval<B> in, final RandomAccessibleInterval<T> out)
+	{
 
 		// tempValues stores the integer values of the first phase, i.e. the
 		// first two scans
-		final int[][] tempValues = new int[(int) in.dimension(0)][(int) out.dimension(1)];
+		final int[][] tempValues = new int[(int) in.dimension(0)][(int) out
+			.dimension(1)];
 
 		// first phase
 		final List<Runnable> list = new ArrayList<>();
@@ -88,7 +91,9 @@ class Phase1Runnable2D<B extends BooleanType<B>> implements Runnable {
 	private final int infinite;
 	private final int width;
 
-	public Phase1Runnable2D(final int[][] tempValues, final RandomAccessibleInterval<B> raIn, final int yPos) {
+	public Phase1Runnable2D(final int[][] tempValues,
+		final RandomAccessibleInterval<B> raIn, final int yPos)
+	{
 		this.tempValues = tempValues;
 		this.raIn = raIn.randomAccess();
 		this.y = yPos;
@@ -103,14 +108,16 @@ class Phase1Runnable2D<B extends BooleanType<B>> implements Runnable {
 		raIn.setPosition(y, 1);
 		if (!raIn.get().get()) {
 			tempValues[0][y] = 0;
-		} else {
+		}
+		else {
 			tempValues[0][y] = infinite;
 		}
 		for (int x = 1; x < width; x++) {
 			raIn.setPosition(x, 0);
 			if (!raIn.get().get()) {
 				tempValues[x][y] = 0;
-			} else {
+			}
+			else {
 				tempValues[x][y] = tempValues[x - 1][y] + 1;
 			}
 		}
@@ -132,7 +139,9 @@ class Phase2Runnable2D<T extends RealType<T>> implements Runnable {
 	private final int xPos;
 	private final int height;
 
-	public Phase2Runnable2D(final int[][] tempValues, final RandomAccessibleInterval<T> raOut, final int xPos) {
+	public Phase2Runnable2D(final int[][] tempValues,
+		final RandomAccessibleInterval<T> raOut, final int xPos)
+	{
 		this.tempValues = tempValues;
 		this.raOut = raOut;
 		this.xPos = xPos;
@@ -159,15 +168,18 @@ class Phase2Runnable2D<T extends RealType<T>> implements Runnable {
 
 		// scan 3
 		for (int u = 1; u < height; u++) {
-			while (q >= 0
-					&& distancefunc(t[q], s[q], tempValues[xPos][s[q]]) > distancefunc(t[q], u, tempValues[xPos][u])) {
+			while (q >= 0 && distancefunc(t[q], s[q],
+				tempValues[xPos][s[q]]) > distancefunc(t[q], u, tempValues[xPos][u]))
+			{
 				q--;
 			}
 			if (q < 0) {
 				q = 0;
 				s[0] = u;
-			} else {
-				final int w = 1 + sep(s[q], u, tempValues[xPos][u], tempValues[xPos][s[q]]);
+			}
+			else {
+				final int w = 1 + sep(s[q], u, tempValues[xPos][u],
+					tempValues[xPos][s[q]]);
 				if (w < height) {
 					q++;
 					s[q] = u;
@@ -181,7 +193,8 @@ class Phase2Runnable2D<T extends RealType<T>> implements Runnable {
 		for (int u = height - 1; u >= 0; u--) {
 			ra.setPosition(u, 1);
 			ra.setPosition(xPos, 0);
-			ra.get().setReal(Math.sqrt(distancefunc(u, s[q], tempValues[xPos][s[q]])));
+			ra.get().setReal(Math.sqrt(distancefunc(u, s[q],
+				tempValues[xPos][s[q]])));
 			if (u == t[q]) {
 				q--;
 			}

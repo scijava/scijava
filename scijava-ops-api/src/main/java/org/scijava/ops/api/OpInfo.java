@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -40,7 +40,7 @@ import org.scijava.struct.StructInstance;
 
 /**
  * Metadata about an Op implementation.
- * 
+ *
  * @author Curtis Rueden
  * @author David Kolb
  * @author Gabriel Selzer
@@ -53,7 +53,10 @@ public interface OpInfo extends Comparable<OpInfo> {
 	/** name(s) of the op. */
 	List<String> names();
 
-	/** Generic type of the op. This will be the parameterized type of the concrete class */
+	/**
+	 * Generic type of the op. This will be the parameterized type of the concrete
+	 * class
+	 */
 	Type opType();
 
 	/** Gets the associated {@link Struct} metadata. */
@@ -79,8 +82,8 @@ public interface OpInfo extends Comparable<OpInfo> {
 	/** Gets the op's output parameters. */
 	default List<Member<?>> outputs() {
 		return struct().members().stream() //
-				.filter(Member::isOutput) //
-				.collect(Collectors.toList());
+			.filter(Member::isOutput) //
+			.collect(Collectors.toList());
 	}
 
 	/** Gets the op's output parameter, if there is <b>exactly</b> one. */
@@ -90,8 +93,7 @@ public interface OpInfo extends Comparable<OpInfo> {
 		if (outputs.size() == 0) throw new IllegalStateException(
 			"No outputs in Struct " + struct());
 		if (outputs.size() == 1) return outputs.get(0);
-		throw new IllegalStateException(
-			"Multiple outputs in Struct " + struct());
+		throw new IllegalStateException("Multiple outputs in Struct " + struct());
 	}
 
 	/** Gets the op's output parameter, if there is <b>exactly</b> one. */
@@ -102,10 +104,15 @@ public interface OpInfo extends Comparable<OpInfo> {
 	/** The op's priority. */
 	double priority();
 
-	/** A fully qualified, unambiguous name for this specific op implementation. */
+	/**
+	 * A fully qualified, unambiguous name for this specific op implementation.
+	 */
 	String implementationName();
 
-	/** Create a StructInstance using the Struct metadata backed by an object of the op itself. */
+	/**
+	 * Create a StructInstance using the Struct metadata backed by an object of
+	 * the op itself.
+	 */
 	StructInstance<?> createOpInstance(List<?> dependencies);
 
 	AnnotatedElement getAnnotationBearer();

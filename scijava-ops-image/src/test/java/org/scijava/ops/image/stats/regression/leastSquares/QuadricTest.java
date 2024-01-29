@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -51,17 +51,20 @@ import org.junit.jupiter.api.Test;
 public class QuadricTest extends AbstractOpTest {
 
 	private static final double alpha = Math.cos(Math.PI / 4.0);
-	private static final List<Vector3d> unitSpherePoints = Stream.of(new Vector3d(1, 0, 0), new Vector3d(-1, 0, 0),
-			new Vector3d(0, 1, 0), new Vector3d(0, -1, 0), new Vector3d(0, 0, 1), new Vector3d(0, 0, -1),
-			new Vector3d(alpha, alpha, 0), new Vector3d(-alpha, alpha, 0), new Vector3d(alpha, -alpha, 0),
-			new Vector3d(-alpha, -alpha, 0), new Vector3d(0, alpha, alpha), new Vector3d(0, -alpha, alpha),
-			new Vector3d(0, alpha, -alpha), new Vector3d(0, -alpha, -alpha), new Vector3d(alpha, 0, alpha),
-			new Vector3d(alpha, 0, -alpha), new Vector3d(-alpha, 0, alpha), new Vector3d(-alpha, 0, -alpha))
-			.collect(toList());
+	private static final List<Vector3d> unitSpherePoints = Stream.of(new Vector3d(
+		1, 0, 0), new Vector3d(-1, 0, 0), new Vector3d(0, 1, 0), new Vector3d(0, -1,
+			0), new Vector3d(0, 0, 1), new Vector3d(0, 0, -1), new Vector3d(alpha,
+				alpha, 0), new Vector3d(-alpha, alpha, 0), new Vector3d(alpha, -alpha,
+					0), new Vector3d(-alpha, -alpha, 0), new Vector3d(0, alpha, alpha),
+		new Vector3d(0, -alpha, alpha), new Vector3d(0, alpha, -alpha),
+		new Vector3d(0, -alpha, -alpha), new Vector3d(alpha, 0, alpha),
+		new Vector3d(alpha, 0, -alpha), new Vector3d(-alpha, 0, alpha),
+		new Vector3d(-alpha, 0, -alpha)).collect(toList());
 
 	@Test
 	public void testEquation() {
-		final Matrix4dc solution = ops.op("stats.leastSquares").arity1().input(unitSpherePoints).outType(Matrix4dc.class).apply();
+		final Matrix4dc solution = ops.op("stats.leastSquares").arity1().input(
+			unitSpherePoints).outType(Matrix4dc.class).apply();
 		final double a = solution.m00();
 		final double b = solution.m11();
 		final double c = solution.m22();
@@ -73,8 +76,9 @@ public class QuadricTest extends AbstractOpTest {
 		final double i = solution.m23();
 
 		for (final Vector3d p : unitSpherePoints) {
-			final double polynomial = a * p.x * p.x + b * p.y * p.y + c * p.z * p.z + 2 * d * p.x * p.y
-					+ 2 * e * p.x * p.z + 2 * f * p.y * p.z + 2 * g * p.x + 2 * h * p.y + 2 * i * p.z;
+			final double polynomial = a * p.x * p.x + b * p.y * p.y + c * p.z * p.z +
+				2 * d * p.x * p.y + 2 * e * p.x * p.z + 2 * f * p.y * p.z + 2 * g *
+					p.x + 2 * h * p.y + 2 * i * p.z;
 			assertEquals(1.0, polynomial, 1e-12,
 				"The matrix does not solve the polynomial equation");
 		}
@@ -83,16 +87,19 @@ public class QuadricTest extends AbstractOpTest {
 	@Test
 	public void testMatchingFailsIfTooFewPoints() {
 		final int nPoints = Math.max(0, Quadric.MIN_DATA - 1);
-		final List<Vector3d> points = Stream.generate(Vector3d::new).limit(nPoints).collect(toList());
+		final List<Vector3d> points = Stream.generate(Vector3d::new).limit(nPoints)
+			.collect(toList());
 
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			ops.op("stats.leastSquares").arity1().input(points).outType(Matrix4d.class).apply();
+			ops.op("stats.leastSquares").arity1().input(points).outType(
+				Matrix4d.class).apply();
 		});
 	}
 
 	@Test
 	public void testMatrixElements() {
-		final Matrix4dc solution = ops.op("stats.leastSquares").arity1().input(unitSpherePoints).outType(Matrix4d.class).apply();
+		final Matrix4dc solution = ops.op("stats.leastSquares").arity1().input(
+			unitSpherePoints).outType(Matrix4d.class).apply();
 
 		assertEquals(1.0, solution.m00(), 1e-12, "The matrix element is incorrect");
 		assertEquals(1.0, solution.m11(), 1e-12, "The matrix element is incorrect");
@@ -103,7 +110,8 @@ public class QuadricTest extends AbstractOpTest {
 		assertEquals(0.0, solution.m12(), 1e-12, "The matrix element is incorrect");
 		assertEquals(0.0, solution.m13(), 1e-12, "The matrix element is incorrect");
 		assertEquals(0.0, solution.m23(), 1e-12, "The matrix element is incorrect");
-		assertEquals(-1.0, solution.m33(), 1e-12, "The matrix element is incorrect");
+		assertEquals(-1.0, solution.m33(), 1e-12,
+			"The matrix element is incorrect");
 		final Matrix4d transposed = new Matrix4d();
 		solution.transpose(transposed);
 		assertEquals(solution, transposed, "Matrix is not symmetric");

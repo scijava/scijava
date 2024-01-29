@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -52,17 +52,17 @@ import net.imglib2.view.Views;
 /**
  * Base class for Op unit testing.
  * <p>
- * <i>All</i> {@link Op} unit tests need to have an {@link OpEnvironment} instance.
- * Following the DRY principle, we should implement it only once. Here.
+ * <i>All</i> {@link Op} unit tests need to have an {@link OpEnvironment}
+ * instance. Following the DRY principle, we should implement it only once.
+ * Here.
  * </p>
  *
  * @author Johannes Schindelin
  * @author Curtis Rueden
  */
-public abstract class AbstractOpTest{
+public abstract class AbstractOpTest {
 
 	protected static final OpEnvironment ops = OpEnvironment.build();
-
 
 	private int seed;
 
@@ -87,8 +87,7 @@ public abstract class AbstractOpTest{
 	/**
 	 * Open a sample image from a resource path relative to {@link AbstractOpTest}
 	 */
-	public Img<UnsignedByteType> openUnsignedByteImg(final String resourcePath)
-	{
+	public Img<UnsignedByteType> openUnsignedByteImg(final String resourcePath) {
 		return openRelativeUnsignedByteImg(getClass(), resourcePath);
 	}
 
@@ -115,8 +114,8 @@ public abstract class AbstractOpTest{
 	/**
 	 * Open a sample image from a resource path relative to a specified base class
 	 */
-	public static Img<UnsignedByteType> openRelativeUnsignedByteImg(final Class<?> base,
-		final String resourcePath)
+	public static Img<UnsignedByteType> openRelativeUnsignedByteImg(
+		final Class<?> base, final String resourcePath)
 	{
 		final URL url = base.getResource(resourcePath);
 		return IO.openUnsignedByte(url.getPath()).getImg();
@@ -146,7 +145,7 @@ public abstract class AbstractOpTest{
 
 	public <T extends RealType<T>> double[] asArray(final Iterable<T> image) {
 		return StreamSupport.stream(image.spliterator(), false).mapToDouble(
-				ComplexType::getRealDouble).toArray();
+			ComplexType::getRealDouble).toArray();
 	}
 
 }

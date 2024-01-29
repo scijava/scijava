@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -68,20 +68,24 @@ public final class Structs {
 
 	/**
 	 * Helper to check for several modifiers at once.
-	 * 
+	 *
 	 * @param message
 	 * @param actualModifiers
 	 * @param requiredModifiers
 	 */
-	public static void checkModifiers(String message,
-			final int actualModifiers, final boolean negate, final int... requiredModifiers) {
+	public static void checkModifiers(String message, final int actualModifiers,
+		final boolean negate, final int... requiredModifiers)
+	{
 		for (int mod : requiredModifiers) {
 			if (negate) {
 				if ((actualModifiers & mod) != 0) {
-					throw new IllegalArgumentException(message + "Illegal modifier. Must not be " + Modifier.toString(mod));
+					throw new IllegalArgumentException(message +
+						"Illegal modifier. Must not be " + Modifier.toString(mod));
 				}
-			} else {
-				throw new IllegalArgumentException(message + "Illegal modifier. Must be " + Modifier.toString(mod));
+			}
+			else {
+				throw new IllegalArgumentException(message +
+					"Illegal modifier. Must be " + Modifier.toString(mod));
 			}
 		}
 	}

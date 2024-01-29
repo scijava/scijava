@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -52,12 +52,13 @@ public final class Classes {
 	/**
 	 * Gets the class loader to use. This will be the current thread's context
 	 * class loader if non-null; otherwise it will be the system class loader.
-	 * 
+	 *
 	 * @see Thread#getContextClassLoader()
 	 * @see ClassLoader#getSystemClassLoader()
 	 */
 	public static ClassLoader classLoader() {
-		final ClassLoader contextCL = Thread.currentThread().getContextClassLoader();
+		final ClassLoader contextCL = Thread.currentThread()
+			.getContextClassLoader();
 		return contextCL != null ? contextCL : ClassLoader.getSystemClassLoader();
 	}
 
@@ -428,7 +429,7 @@ public final class Classes {
 	 * use {@link Field#setAccessible(boolean)} in order to manipulate the field's
 	 * contents.
 	 * </p>
-	 * 
+	 *
 	 * @param c The class (or subclass thereof) containing the desired field.
 	 * @param name
 	 * @return The first field with the given name in the class's superclass
@@ -462,7 +463,7 @@ public final class Classes {
 	 * accessible; if the method is not {@code public}, calling code will need to
 	 * use {@link Method#setAccessible(boolean)} in order to invoke the method.
 	 * </p>
-	 * 
+	 *
 	 * @param c The class (or subclass thereof) containing the desired method.
 	 * @param name Name of the method.
 	 * @param parameterTypes Types of the method parameters.
@@ -534,7 +535,6 @@ public final class Classes {
 	 * impose logic beyond that of this method, for breaking ties, if a total
 	 * ordering consistent with equals is always required.
 	 * </p>
-	 *
 	 */
 	public static int compare(final Class<?> c1, final Class<?> c2) {
 		if (c1 == c2) return 0;

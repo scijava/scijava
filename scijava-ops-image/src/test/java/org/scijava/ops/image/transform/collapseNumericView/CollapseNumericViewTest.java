@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.transform.collapseNumericView;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -59,38 +60,44 @@ import org.scijava.types.Nil;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 public class CollapseNumericViewTest extends AbstractOpTest {
-	
-	private static CompositeIntervalView<NativeARGBDoubleType, ? extends NumericComposite<NativeARGBDoubleType>> foo() {
+
+	private static
+		CompositeIntervalView<NativeARGBDoubleType, ? extends NumericComposite<NativeARGBDoubleType>>
+		foo()
+	{
 		return null;
 	}
 
 	@Test
 	public void defaultCollapseNumericTest() {
 
-		Img<NativeARGBDoubleType> img = new ArrayImgFactory<>(new NativeARGBDoubleType()).create(new int[] { 10, 10 });
-		
-		Function<Img<NativeARGBDoubleType>, CompositeIntervalView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>>> collapseFunc = 
-				ops.op("transform.collapseNumericView").arity1().input(img).outType(new Nil<CompositeIntervalView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>>>() {}).function();
+		Img<NativeARGBDoubleType> img = new ArrayImgFactory<>(
+			new NativeARGBDoubleType()).create(new int[] { 10, 10 });
 
-		CompositeIntervalView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>> il2 = Views
-				.collapseNumeric((RandomAccessibleInterval<NativeARGBDoubleType>) img);
-		CompositeIntervalView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>> opr = collapseFunc
-				.apply(img);
+		Function<Img<NativeARGBDoubleType>, CompositeIntervalView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>>> collapseFunc =
+			ops.op("transform.collapseNumericView").arity1().input(img).outType(
+				new Nil<CompositeIntervalView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>>>()
+				{}).function();
+
+		CompositeIntervalView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>> il2 =
+			Views.collapseNumeric(
+				(RandomAccessibleInterval<NativeARGBDoubleType>) img);
+		CompositeIntervalView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>> opr =
+			collapseFunc.apply(img);
 
 		assertEquals(il2.numDimensions(), opr.numDimensions());
 
-		BiFunction<RandomAccessible<NativeARGBDoubleType>, Integer, CompositeView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>>> collapseFuncRA = OpBuilder
-				.matchFunction(ops, "transform.collapseNumericView",
-						new Nil<RandomAccessible<NativeARGBDoubleType>>() {
-				}, new Nil<Integer>() {
-				},
-						new Nil<CompositeView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>>>() {
-				});
+		BiFunction<RandomAccessible<NativeARGBDoubleType>, Integer, CompositeView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>>> collapseFuncRA =
+			OpBuilder.matchFunction(ops, "transform.collapseNumericView",
+				new Nil<RandomAccessible<NativeARGBDoubleType>>()
+				{}, new Nil<Integer>() {},
+				new Nil<CompositeView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>>>()
+				{});
 
-		CompositeView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>> il2_2 = Views
-				.collapseNumeric((RandomAccessible<NativeARGBDoubleType>) img, 1);
-		CompositeView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>> opr_2 = collapseFuncRA.apply(img,
-				1);
+		CompositeView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>> il2_2 =
+			Views.collapseNumeric((RandomAccessible<NativeARGBDoubleType>) img, 1);
+		CompositeView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>> opr_2 =
+			collapseFuncRA.apply(img, 1);
 
 		assertEquals(il2_2.numDimensions(), opr_2.numDimensions());
 	}

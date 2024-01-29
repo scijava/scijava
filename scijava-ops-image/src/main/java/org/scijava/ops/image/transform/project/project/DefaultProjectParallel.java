@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -39,7 +39,6 @@ import net.imglib2.util.Intervals;
 import org.scijava.function.Computers;
 
 /**
- *
  * @param <T>
  * @param <V>
  * @implNote op name='transform.project', priority='99.'
@@ -57,7 +56,8 @@ public class DefaultProjectParallel<T, V> implements
 	 * @param output
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<T> input, Computers.Arity1<Iterable<T>, V> method, Integer dim,
+	public void compute(final RandomAccessibleInterval<T> input,
+		Computers.Arity1<Iterable<T>, V> method, Integer dim,
 		final RandomAccessibleInterval<V> output)
 	{
 		// TODO this first check is too simple, but for now ok
@@ -68,23 +68,24 @@ public class DefaultProjectParallel<T, V> implements
 			throw new IllegalArgumentException(
 				"ERROR: input image must contain dimension " + dim);
 
-		LoopBuilder.setImages(output, Intervals.positions(output)).multiThreaded().forEachChunk(chunk -> {
-			RandomAccess<T> chunkRA = input.randomAccess();
-			chunk.forEachPixel((pixel, position) -> {
-				for (int d = 0; d < input.numDimensions(); d++) {
-					if (d != dim) {
-						chunkRA
-						.setPosition(position.getIntPosition(d - (d > dim ? 1 : 0)), d);
+		LoopBuilder.setImages(output, Intervals.positions(output)).multiThreaded()
+			.forEachChunk(chunk -> {
+				RandomAccess<T> chunkRA = input.randomAccess();
+				chunk.forEachPixel((pixel, position) -> {
+					for (int d = 0; d < input.numDimensions(); d++) {
+						if (d != dim) {
+							chunkRA.setPosition(position.getIntPosition(d - (d > dim ? 1
+								: 0)), d);
+						}
 					}
-				}
 
-				method.compute(new DimensionIterable(input.dimension(dim), dim, chunkRA),
-					pixel);
-				
+					method.compute(new DimensionIterable(input.dimension(dim), dim,
+						chunkRA), pixel);
+
+				});
+
+				return null;
 			});
-
-			return null;
-		});
 	}
 
 	final class DimensionIterable implements Iterable<T> {
@@ -93,7 +94,9 @@ public class DefaultProjectParallel<T, V> implements
 		private final int dim;
 		private final RandomAccess<T> access;
 
-		public DimensionIterable(final long size, final int dim, final RandomAccess<T> access) {
+		public DimensionIterable(final long size, final int dim,
+			final RandomAccess<T> access)
+		{
 			this.size = size;
 			this.dim = dim;
 			this.access = access;

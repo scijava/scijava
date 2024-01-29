@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -47,14 +47,16 @@ public class ClassParameterMemberParser implements
 {
 
 	@Override
-	public List<SynthesizedParameterMember<?>> parse(Class<?> source, Type structType)
+	public List<SynthesizedParameterMember<?>> parse(Class<?> source,
+		Type structType)
 	{
 		if (source == null) return null;
 
 		final ArrayList<SynthesizedParameterMember<?>> items = new ArrayList<>();
 
 		// NB: Reject abstract classes.
-		Structs.checkModifiers(source.getName() + ": ", source.getModifiers(), true, Modifier.ABSTRACT);
+		Structs.checkModifiers(source.getName() + ": ", source.getModifiers(), true,
+			Modifier.ABSTRACT);
 
 		// Obtain source's Op method.
 		Method opMethod;
@@ -68,11 +70,13 @@ public class ClassParameterMemberParser implements
 
 		// obtain a parameterData
 		Class<?> fIface = FunctionalInterfaces.findFrom(source);
-		ParameterData paramData = new SynthesizedMethodParameterData(opMethod, fIface);
+		ParameterData paramData = new SynthesizedMethodParameterData(opMethod,
+			fIface);
 
 		try {
 			FunctionalParameters.parseFunctionalParameters(items, source, paramData);
-		} catch (IllegalArgumentException exc) {
+		}
+		catch (IllegalArgumentException exc) {
 			throw new FunctionalTypeOpException(source, exc);
 		}
 
@@ -80,9 +84,10 @@ public class ClassParameterMemberParser implements
 	}
 
 	/**
-	 * Returns the declared {@link FunctionalInterface} method implemented by the Op
-	 * {@code c}, or, as a fallback, the functional method w.r.t. its declaration.
-	 * 
+	 * Returns the declared {@link FunctionalInterface} method implemented by the
+	 * Op {@code c}, or, as a fallback, the functional method w.r.t. its
+	 * declaration.
+	 *
 	 * @param c the Op {@link Class}
 	 * @return the {@link Method} of the {@link FunctionalInterface} implemented
 	 *         by {@code c}
@@ -97,7 +102,8 @@ public class ClassParameterMemberParser implements
 			.toArray(Class[]::new);
 		try {
 			return c.getMethod(fMethod.getName(), rawParamTypes);
-		} catch(NoSuchMethodException e) {
+		}
+		catch (NoSuchMethodException e) {
 			return fMethod;
 		}
 	}

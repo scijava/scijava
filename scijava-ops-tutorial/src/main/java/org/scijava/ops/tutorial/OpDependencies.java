@@ -13,7 +13,7 @@ import org.scijava.ops.spi.OpMethod;
  * A simple showcase of an Op that uses an {@link OpDependency}. Using
  * {@link OpDependency}s to break up your code into simple, reusable blocks, Ops
  * become more modular and enable specialization for unseen types.
- * 
+ *
  * @author Gabriel Selzer
  */
 public class OpDependencies implements OpCollection {
@@ -49,13 +49,15 @@ public class OpDependencies implements OpCollection {
 	public static void main(String... args) {
 		OpEnvironment ops = OpEnvironment.build();
 		// The mean of this array is 3.0
-		double[] arr = {1.0, 2.0, 3.0, 4.0, 5.0};
+		double[] arr = { 1.0, 2.0, 3.0, 4.0, 5.0 };
 
-		// Note that we call only deal with the "stats.mean" Op - the Engine takes care of matching the dependencies for us!
-		double mean = ops.unary("stats.mean").input(arr).outType(Double.class).apply();
+		// Note that we call only deal with the "stats.mean" Op - the Engine takes
+		// care of matching the dependencies for us!
+		double mean = ops.unary("stats.mean").input(arr).outType(Double.class)
+			.apply();
 
-		System.out.println("The mean of array " + Arrays.toString(arr) + " is " + mean);
-
+		System.out.println("The mean of array " + Arrays.toString(arr) + " is " +
+			mean);
 
 	}
 

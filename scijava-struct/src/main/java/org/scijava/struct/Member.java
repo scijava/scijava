@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.struct;
 
 import java.lang.reflect.Field;
@@ -35,7 +36,7 @@ import org.scijava.types.Types;
 
 /**
  * One element (i.e. item/field/member) of a {@link Struct}.
- * 
+ *
  * @author Curtis Rueden
  * @author Christian Dietz
  */
@@ -51,12 +52,12 @@ public interface Member<T> {
 
 	/**
 	 * Gets the type of the member, including Java generic parameters.
-	 * 
+	 *
 	 * @see Field#getGenericType()
 	 */
 	// TODO: Use Type<T> or Nil<T> from new scijava-types.
 	Type getType();
-	
+
 	/**
 	 * Gets the {@link Class} of the member's type, or null if {@link #getType()}
 	 * does not return a raw class.
@@ -72,12 +73,14 @@ public interface Member<T> {
 
 	/** Gets whether the member is an input. */
 	default boolean isInput() {
-		return getIOType() == ItemIO.INPUT || getIOType() == ItemIO.CONTAINER || getIOType() == ItemIO.MUTABLE;
+		return getIOType() == ItemIO.INPUT || getIOType() == ItemIO.CONTAINER ||
+			getIOType() == ItemIO.MUTABLE;
 	}
 
 	/** Gets whether the member is an output. */
 	default boolean isOutput() {
-		return getIOType() == ItemIO.OUTPUT || getIOType() == ItemIO.CONTAINER || getIOType() == ItemIO.MUTABLE;
+		return getIOType() == ItemIO.OUTPUT || getIOType() == ItemIO.CONTAINER ||
+			getIOType() == ItemIO.MUTABLE;
 	}
 
 	default boolean isStruct() {

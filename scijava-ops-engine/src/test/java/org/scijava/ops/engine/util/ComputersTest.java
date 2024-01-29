@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -46,13 +46,12 @@ public class ComputersTest extends AbstractTestEnvironment {
 		ops.register(new Add());
 	}
 
-	private static Nil<double[]> nilDoubleArray = new Nil<>() {
-	};
+	private static Nil<double[]> nilDoubleArray = new Nil<>() {};
 
 	@Test
 	public void testUnaryComputers() {
-		Computers.Arity1<double[], double[]> sqrtComputer = OpBuilder.matchComputer(ops,
-			"math.sqrt", nilDoubleArray, nilDoubleArray);
+		Computers.Arity1<double[], double[]> sqrtComputer = OpBuilder.matchComputer(
+			ops, "math.sqrt", nilDoubleArray, nilDoubleArray);
 
 		double[] result = new double[3];
 		sqrtComputer.compute(new double[] { 4.0, 100.0, 25.0 }, result);
@@ -66,7 +65,8 @@ public class ComputersTest extends AbstractTestEnvironment {
 				nilDoubleArray);
 
 		double[] result = new double[3];
-		addComputer.compute(new double[] { 4.0, 100.0, 25.0 }, new double[] { 4d, 10d, 1.5 }, result);
+		addComputer.compute(new double[] { 4.0, 100.0, 25.0 }, new double[] { 4d,
+			10d, 1.5 }, result);
 		arrayEquals(result, 8d, 110d, 26.5);
 	}
 }

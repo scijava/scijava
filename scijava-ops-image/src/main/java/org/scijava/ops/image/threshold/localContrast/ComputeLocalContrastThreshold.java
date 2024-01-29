@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -44,7 +44,7 @@ import org.scijava.ops.spi.OpDependency;
  *
  * @author Jonathan Hale
  * @author Stefan Helfrich (University of Konstanz)
- *@implNote op names='threshold.localContrast'
+ * @implNote op names='threshold.localContrast'
  */
 public class ComputeLocalContrastThreshold<T extends RealType<T>> implements
 	Computers.Arity2<Iterable<T>, T, BitType>
@@ -69,8 +69,7 @@ public class ComputeLocalContrastThreshold<T extends RealType<T>> implements
 
 	public static <T extends RealType<T>> void compute(
 		final Iterable<T> inputNeighborhood, final T inputCenterPixel,
-		final Function<Iterable<T>, Pair<T, T>> minMaxOp,
-		final BitType output)
+		final Function<Iterable<T>, Pair<T, T>> minMaxOp, final BitType output)
 	{
 		final Pair<T, T> outputs = minMaxOp.apply(inputNeighborhood);
 

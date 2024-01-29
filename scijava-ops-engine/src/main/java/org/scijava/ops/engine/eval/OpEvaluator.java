@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -49,7 +49,7 @@ import org.scijava.types.Nil;
 
 /**
  * A Parsington {@link Evaluator} using available Ops.
- * 
+ *
  * @author Curtis Rueden
  */
 public class OpEvaluator extends DefaultStackEvaluator {
@@ -67,32 +67,32 @@ public class OpEvaluator extends DefaultStackEvaluator {
 		// TODO: Consider creating a plugin extension point for defining these.
 
 		// -- dot --
-		//opMap.put(Operators.DOT, "dot");
+		// opMap.put(Operators.DOT, "dot");
 
 		// -- groups --
-		//opMap.put(Operators.PARENS, "parens");
-		//opMap.put(Operators.BRACKETS, "brackets");
-		//opMap.put(Operators.BRACES, "braces");
+		// opMap.put(Operators.PARENS, "parens");
+		// opMap.put(Operators.BRACKETS, "brackets");
+		// opMap.put(Operators.BRACES, "braces");
 
 		// -- transpose, power --
-		//opMap.put(Operators.TRANSPOSE, "transpose");
-		//opMap.put(Operators.DOT_TRANSPOSE, "dotTranspose");
+		// opMap.put(Operators.TRANSPOSE, "transpose");
+		// opMap.put(Operators.DOT_TRANSPOSE, "dotTranspose");
 		opMap.put(Operators.POW, "math.pow");
-		//opMap.put(Operators.DOT_POW, "dotPow");
+		// opMap.put(Operators.DOT_POW, "dotPow");
 
 		// -- unary --
 		opMap.put(Operators.POS, "identity");
 		opMap.put(Operators.NEG, "math.negate");
-		//opMap.put(Operators.COMPLEMENT, "complement");
-		//opMap.put(Operators.NOT, "not");
+		// opMap.put(Operators.COMPLEMENT, "complement");
+		// opMap.put(Operators.NOT, "not");
 
 		// -- multiplicative --
 		opMap.put(Operators.MUL, "math.multiply");
 		opMap.put(Operators.DIV, "math.divide");
 		opMap.put(Operators.MOD, "math.remainder");
-		//opMap.put(Operators.RIGHT_DIV, "rightDiv");
-		//opMap.put(Operators.DOT_DIV, "dotDiv");
-		//opMap.put(Operators.DOT_RIGHT_DIV, "dotRightDiv");
+		// opMap.put(Operators.RIGHT_DIV, "rightDiv");
+		// opMap.put(Operators.DOT_DIV, "dotDiv");
+		// opMap.put(Operators.DOT_RIGHT_DIV, "dotRightDiv");
 
 		// -- additive --
 		opMap.put(Operators.ADD, "math.add");
@@ -104,14 +104,14 @@ public class OpEvaluator extends DefaultStackEvaluator {
 		opMap.put(Operators.UNSIGNED_RIGHT_SHIFT, "math.unsignedLeftShift");
 
 		// -- colon --
-		//opMap.put(Operators.COLON, "colon");
+		// opMap.put(Operators.COLON, "colon");
 
 		// -- relational --
 		opMap.put(Operators.LESS_THAN, "math.lessThan");
 		opMap.put(Operators.GREATER_THAN, "math.greaterThan");
 		opMap.put(Operators.LESS_THAN_OR_EQUAL, "math.lessThanOrEqual");
 		opMap.put(Operators.GREATER_THAN_OR_EQUAL, "math.greaterThanOrEqual");
-		//opMap.put(Operators.INSTANCEOF, "instanceof");
+		// opMap.put(Operators.INSTANCEOF, "instanceof");
 
 		// -- equality --
 		opMap.put(Operators.EQUAL, "math.equal");
@@ -140,16 +140,18 @@ public class OpEvaluator extends DefaultStackEvaluator {
 	public Object execute(final String opName, final Object... args) {
 		// Unwrap the arguments.
 		final Object[] argValues = new Object[args.length];
-		for (int i=0; i<args.length; i++) {
+		for (int i = 0; i < args.length; i++) {
 			argValues[i] = value(args[i]);
 		}
-		
+
 		// generate Nils from types
-		Nil<?>[] inTypes = Arrays.stream(args).map((obj) -> type(value(obj))).toArray(Nil[]::new);
+		Nil<?>[] inTypes = Arrays.stream(args).map((obj) -> type(value(obj)))
+			.toArray(Nil[]::new);
 		Nil<Object> outType = new Nil<>() {};
 
 		// Try executing the op.
-		Functions.ArityN<Object> func = FunctionUtils.matchN(ops, opName, outType, inTypes);
+		Functions.ArityN<Object> func = FunctionUtils.matchN(ops, opName, outType,
+			inTypes);
 		return func.apply(argValues);
 	}
 

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.image.watershed;
 
 import java.util.ArrayList;
@@ -90,17 +91,16 @@ import org.scijava.ops.spi.OpDependency;
  * <p>
  * Output is a labeling of the different catchment basins.
  * </p>
- * 
- * @param <T>
- *            element type of input
- * @param <B>
- *            element type of mask
- * 
+ *
+ * @param <T> element type of input
+ * @param <B> element type of mask
  * @author Simon Schmid (University of Konstanz)
- *@implNote op names='image.watershed'
+ * @implNote op names='image.watershed'
  */
-public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> implements
-		Computers.Arity5<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> {
+public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>>
+	implements
+	Computers.Arity5<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>>
+{
 
 	// @SuppressWarnings("rawtypes")
 	// private UnaryFunctionOp<Interval, ImgLabeling> createOp;
@@ -136,12 +136,12 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> im
 	 */
 	@Override
 	public void compute( //
-			final RandomAccessibleInterval<T> in, //
-			final ImgLabeling<Integer, IntType> seeds, //
-			final Boolean useEightConnectivity, //
-			final Boolean drawWatersheds, //
-			@Nullable final RandomAccessibleInterval<B> maskInput, //
-			final ImgLabeling<Integer, IntType> out //
+		final RandomAccessibleInterval<T> in, //
+		final ImgLabeling<Integer, IntType> seeds, //
+		final Boolean useEightConnectivity, //
+		final Boolean drawWatersheds, //
+		@Nullable final RandomAccessibleInterval<B> maskInput, //
+		final ImgLabeling<Integer, IntType> out //
 	) {
 
 		// ensure that the parameters conform with the requirements of the op
@@ -149,19 +149,19 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> im
 		if (maskInput != null) {
 			conformed = Intervals.equalDimensions(maskInput, in);
 		}
-		if (!conformed)
-			throw new IllegalArgumentException("maskInput must be of the same size as the input");
+		if (!conformed) throw new IllegalArgumentException(
+			"maskInput must be of the same size as the input");
 
 		conformed &= Intervals.equalDimensions(seeds, in);
-		if (!conformed)
-			throw new IllegalArgumentException("seed labeling must be of the same size as the input");
+		if (!conformed) throw new IllegalArgumentException(
+			"seed labeling must be of the same size as the input");
 
 		// extend border to be able to do a quick check, if a voxel is inside
 		final LabelingType<Integer> oustide = out.firstElement().copy();
 		oustide.clear();
 		oustide.add(OUTSIDE);
-		final ExtendedRandomAccessibleInterval<LabelingType<Integer>, ImgLabeling<Integer, IntType>> outExt = Views
-				.extendValue(out, oustide);
+		final ExtendedRandomAccessibleInterval<LabelingType<Integer>, ImgLabeling<Integer, IntType>> outExt =
+			Views.extendValue(out, oustide);
 		final OutOfBounds<LabelingType<Integer>> raOut = outExt.randomAccess();
 
 		// if no mask provided, set the mask to the whole image
@@ -190,10 +190,12 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> im
 		final Shape shape;
 		if (useEightConnectivity) {
 			shape = new RectangleShape(1, true);
-		} else {
+		}
+		else {
 			shape = new DiamondShape(1);
 		}
-		final RandomAccessible<Neighborhood<T>> neighborhoods = shape.neighborhoodsRandomAccessible(in);
+		final RandomAccessible<Neighborhood<T>> neighborhoods = shape
+			.neighborhoodsRandomAccessible(in);
 		final RandomAccess<Neighborhood<T>> raNeigh = neighborhoods.randomAccess();
 
 		/*
@@ -206,7 +208,8 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> im
 		final IterableRegion<B> maskRegions = Regions.iterable(mask);
 		final IterableInterval<LabelingType<Integer>> seedsMasked = Regions.sample(
 			(IterableInterval<Void>) maskRegions, seeds);
-		final Cursor<LabelingType<Integer>> cursorSeeds = seedsMasked.localizingCursor();
+		final Cursor<LabelingType<Integer>> cursorSeeds = seedsMasked
+			.localizingCursor();
 
 		while (cursorSeeds.hasNext()) {
 			final Set<Integer> l = cursorSeeds.next();
@@ -214,11 +217,13 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> im
 				continue;
 			}
 			if (l.size() > 1) {
-				throw new IllegalArgumentException("Seeds must have exactly one label!");
+				throw new IllegalArgumentException(
+					"Seeds must have exactly one label!");
 			}
 			final Integer label = l.iterator().next();
 			if (label < 0) {
-				throw new IllegalArgumentException("Seeds must have positive integers as labels!");
+				throw new IllegalArgumentException(
+					"Seeds must have positive integers as labels!");
 			}
 			raNeigh.setPosition(cursorSeeds);
 
@@ -231,11 +236,12 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> im
 				raMask.setPosition(neighborhood);
 				raOut.setPosition(neighborhood);
 				final Integer labelNeigh = raOut.get().iterator().next();
-				if (labelNeigh != INQUEUE && labelNeigh != OUTSIDE && !raOut.isOutOfBounds() && raMask.get().get()
-						&& raSeeds.get().isEmpty()) {
+				if (labelNeigh != INQUEUE && labelNeigh != OUTSIDE && !raOut
+					.isOutOfBounds() && raMask.get().get() && raSeeds.get().isEmpty())
+				{
 					raOut.setPosition(neighborhood);
-					pq.add(new WatershedVoxel(IntervalIndexer.positionToIndex(neighborhood, in),
-							neighborhood.get().getRealDouble()));
+					pq.add(new WatershedVoxel(IntervalIndexer.positionToIndex(
+						neighborhood, in), neighborhood.get().getRealDouble()));
 					raOut.get().clear();
 					raOut.get().add(INQUEUE);
 				}
@@ -280,10 +286,14 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> im
 				if (!raOut.get().isEmpty()) {
 					final Integer label = raOut.get().iterator().next();
 					if (label == INIT && raMask.get().get()) {
-						neighborVoxels.add(new WatershedVoxel(IntervalIndexer.positionToIndex(neighborhood, out),
-								neighborhood.get().getRealDouble()));
-					} else {
-						if (label > WSHED && (!drawWatersheds || !neighborLabels.contains(label))) {
+						neighborVoxels.add(new WatershedVoxel(IntervalIndexer
+							.positionToIndex(neighborhood, out), neighborhood.get()
+								.getRealDouble()));
+					}
+					else {
+						if (label > WSHED && (!drawWatersheds || !neighborLabels.contains(
+							label)))
+						{
 							// store labels of neighbors in a list
 							neighborLabels.add(label);
 						}
@@ -309,9 +319,10 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> im
 						raOut.get().add(INQUEUE);
 						pq.add(v);
 					}
-				} else if (neighborLabels.size() > 1)
-					raOut.get().add(WSHED);
-			} else {
+				}
+				else if (neighborLabels.size() > 1) raOut.get().add(WSHED);
+			}
+			else {
 				if (neighborLabels.size() > 0) {
 					raOut.setPosition(pos);
 					raOut.get().clear();
@@ -319,11 +330,12 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> im
 					// take the label which most of the neighbors have
 					if (neighborLabels.size() > 2) {
 						final Map<Integer, Long> countLabels = neighborLabels.stream()
-								.collect(Collectors.groupingBy(e -> e, Collectors.counting()));
-						final Integer keyMax = Collections
-								.max(countLabels.entrySet(), Comparator.comparingLong(Map.Entry::getValue)).getKey();
+							.collect(Collectors.groupingBy(e -> e, Collectors.counting()));
+						final Integer keyMax = Collections.max(countLabels.entrySet(),
+							Comparator.comparingLong(Map.Entry::getValue)).getKey();
 						raOut.get().add(keyMax);
-					} else {
+					}
+					else {
 						raOut.get().add(neighborLabels.get(0));
 					}
 					// now that we know the voxel is labeled, add neighbors to
@@ -355,9 +367,9 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> im
 	}
 
 	/**
-	 * Used to store the voxels in the priority queue. "Lower" voxels will be given
-	 * out first. If two voxels have the same value, the one which joined the queue
-	 * earlier will be given out.
+	 * Used to store the voxels in the priority queue. "Lower" voxels will be
+	 * given out first. If two voxels have the same value, the one which joined
+	 * the queue earlier will be given out.
 	 */
 	class WatershedVoxel implements Comparable<WatershedVoxel> {
 
@@ -382,8 +394,7 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> im
 		@Override
 		public int compareTo(WatershedVoxel o) {
 			int res = Double.compare(value, o.value);
-			if (res == 0)
-				res = seqNum < o.seqNum ? -1 : 1;
+			if (res == 0) res = seqNum < o.seqNum ? -1 : 1;
 
 			return res;
 		}
@@ -393,4 +404,3 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> im
 }
 
 // Convenience Ops
-

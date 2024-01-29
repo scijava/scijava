@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -39,13 +39,15 @@ import org.scijava.types.Nil;
 
 /**
  * A {@link LossReporter} used when a type is not simplified.
- * 
+ *
  * @author Gabriel Selzer
  * @param <T> - the type that is not being simplified.
  */
-@OpHints(hints = {Simplification.FORBIDDEN})
-@OpClass(names = "engine.lossReporter", priority= Priority.VERY_HIGH)
-public class IdentityLossReporter<U, T extends U> implements LossReporter<T, U>, Op {
+@OpHints(hints = { Simplification.FORBIDDEN })
+@OpClass(names = "engine.lossReporter", priority = Priority.VERY_HIGH)
+public class IdentityLossReporter<U, T extends U> implements LossReporter<T, U>,
+	Op
+{
 
 	/**
 	 * @param t the Nil describing the type that is being converted from

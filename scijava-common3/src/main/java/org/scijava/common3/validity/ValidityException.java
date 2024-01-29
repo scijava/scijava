@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.common3.validity;
 
 import java.util.Collections;
@@ -46,7 +47,9 @@ public final class ValidityException extends RuntimeException {
 		this(Collections.singletonList(new ValidityProblem(message)));
 	}
 
-	public ValidityException(@SuppressWarnings("exports") final List<ValidityProblem> problems) {
+	public ValidityException(
+		@SuppressWarnings("exports") final List<ValidityProblem> problems)
+	{
 		this.problems = problems;
 	}
 
@@ -54,13 +57,14 @@ public final class ValidityException extends RuntimeException {
 	public List<ValidityProblem> problems() {
 		return problems;
 	}
-	
+
 	@Override
 	public String getMessage() {
 		String message = super.getMessage();
 		if (message == null) {
 			message = "";
-		} else {
+		}
+		else {
 			message += "\n";
 		}
 		for (ValidityProblem p : problems) {

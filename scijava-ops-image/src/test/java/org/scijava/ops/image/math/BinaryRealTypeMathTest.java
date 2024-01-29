@@ -48,7 +48,7 @@ public class BinaryRealTypeMathTest extends AbstractOpTest {
 	private static final IntType B = new IntType(7);
 
 	// TODO inplace would be nice
-	private static String[] methods = new String[]{"function", "computer"};
+	private static String[] methods = new String[] { "function", "computer" };
 
 	// ADD
 	@Test
@@ -105,28 +105,29 @@ public class BinaryRealTypeMathTest extends AbstractOpTest {
 
 	@Test
 	public void testOr() {
-		test("math.or", (int)((long) A.get() | (long) B.get()));
+		test("math.or", (int) ((long) A.get() | (long) B.get()));
 	}
 
 	// XOR
 
 	@Test
 	public void testXor() {
-		test("math.xor", (int)((long)A.get() ^ (long)B.get()));
+		test("math.xor", (int) ((long) A.get() ^ (long) B.get()));
 	}
 
 	// AND
 
 	@Test
 	public void testAnd() {
-		test("math.and", (int)((long)A.get() & (long)B.get()));
+		test("math.and", (int) ((long) A.get() & (long) B.get()));
 	}
 
 	// -- Helpers --
 
 	/**
-	 * Helper method to test that the given Op name run on {@link #A} and {@link #B}
-	 * produces the expected value when run using each method type in {@link #methods}
+	 * Helper method to test that the given Op name run on {@link #A} and
+	 * {@link #B} produces the expected value when run using each method type in
+	 * {@link #methods}
 	 *
 	 * @param opNames comma space-separated list of op names to test
 	 * @param expectedValue Expected value from op invocation
@@ -138,7 +139,7 @@ public class BinaryRealTypeMathTest extends AbstractOpTest {
 //				if (m.equals("function"))
 //					c = ops.binary(opName).input(A, B).outType(DoubleType.class).apply();
 //				else if (m.equals("computer"))
-					ops.binary(opName).input(A, B).output(c).compute();
+				ops.binary(opName).input(A, B).output(c).compute();
 				assertEquals(expectedValue, c.get());
 			}
 		}

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -45,12 +45,13 @@ import org.scijava.ops.spi.Op;
  * Op to calculate the {@code stats.mean} from an integral image using a
  * specialized {@code Cursor} implementation.
  *
- * @param <I>
- *            input type
+ * @param <I> input type
  * @author Stefan Helfrich (University of Konstanz)
- *@implNote op names='stats.integralMean'
+ * @implNote op names='stats.integralMean'
  */
-public class IntegralMean<I extends RealType<I>> implements Computers.Arity1<RectangleNeighborhood<? extends Composite<I>>, DoubleType> {
+public class IntegralMean<I extends RealType<I>> implements
+	Computers.Arity1<RectangleNeighborhood<? extends Composite<I>>, DoubleType>
+{
 
 	/**
 	 * TODO
@@ -59,10 +60,13 @@ public class IntegralMean<I extends RealType<I>> implements Computers.Arity1<Rec
 	 * @param integralMean
 	 */
 	@Override
-	public void compute(final RectangleNeighborhood<? extends Composite<I>> input, final DoubleType output) {
+	public void compute(final RectangleNeighborhood<? extends Composite<I>> input,
+		final DoubleType output)
+	{
 		// computation according to
 		// https://en.wikipedia.org/wiki/Summed_area_table
-		final IntegralCursor<? extends Composite<I>> cursor = new IntegralCursor<>(input);
+		final IntegralCursor<? extends Composite<I>> cursor = new IntegralCursor<>(
+			input);
 		final int dimensions = input.numDimensions();
 
 		// Compute \sum (-1)^{dim - ||cornerVector||_{1}} * I(x^{cornerVector})
@@ -82,7 +86,8 @@ public class IntegralMean<I extends RealType<I>> implements Computers.Arity1<Rec
 
 			// Determine if the value has to be added (factor==1) or subtracted
 			// (factor==-1)
-			final DoubleType factor = new DoubleType(Math.pow(-1.0d, dimensions - IntegralMean.norm(cornerInteger)));
+			final DoubleType factor = new DoubleType(Math.pow(-1.0d, dimensions -
+				IntegralMean.norm(cornerInteger)));
 			valueAsDoubleType.mul(factor);
 
 			sum.add(valueAsDoubleType);
@@ -98,11 +103,11 @@ public class IntegralMean<I extends RealType<I>> implements Computers.Arity1<Rec
 	}
 
 	/**
-	 * Computes L1 norm of the position of an {@code IntegralCursor}. Computation is
-	 * based on determining the number of 1 bits in the position.
+	 * Computes L1 norm of the position of an {@code IntegralCursor}. Computation
+	 * is based on determining the number of 1 bits in the position.
 	 *
-	 * @param cornerPosition
-	 *            position vector of an {@code IntegralCursor} encoded as integer
+	 * @param cornerPosition position vector of an {@code IntegralCursor} encoded
+	 *          as integer
 	 * @return L1 norm of the position
 	 */
 	public static int norm(final int cornerPosition) {

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -70,10 +70,10 @@ public class JavaMethodYAMLInfoCreator extends AbstractYAMLOpInfoCreator {
 		String clsString = rawIdentifier.substring(0, clsIndex);
 		Class<?> src = Classes.load(clsString);
 		// parse method
-		String methodString = rawIdentifier.substring(clsIndex + 1, rawIdentifier.indexOf(
-			'('));
-		String[] paramStrings = rawIdentifier.substring(rawIdentifier.indexOf('(') + 1,
-			rawIdentifier.indexOf(')')).split("\\s*,\\s*");
+		String methodString = rawIdentifier.substring(clsIndex + 1, rawIdentifier
+			.indexOf('('));
+		String[] paramStrings = rawIdentifier.substring(rawIdentifier.indexOf('(') +
+			1, rawIdentifier.indexOf(')')).split("\\s*,\\s*");
 		Class<?>[] paramClasses = new Class<?>[paramStrings.length];
 		for (int i = 0; i < paramStrings.length; i++) {
 			paramClasses[i] = deriveType(identifier, paramStrings[i]);
@@ -88,9 +88,11 @@ public class JavaMethodYAMLInfoCreator extends AbstractYAMLOpInfoCreator {
 		return new OpMethodInfo(method, opType, new Hints(), priority, names);
 	}
 
-	private Class<?> deriveOpType(String identifier, String typeString, Method method) {
+	private Class<?> deriveOpType(String identifier, String typeString,
+		Method method)
+	{
 		int parameterCount = method.getParameterCount();
-		for(Parameter p: method.getParameters()) {
+		for (Parameter p : method.getParameters()) {
 			if (p.isAnnotationPresent(OpDependency.class)) {
 				parameterCount--;
 			}
@@ -101,8 +103,8 @@ public class JavaMethodYAMLInfoCreator extends AbstractYAMLOpInfoCreator {
 				return Functions.functionOfArity(parameterCount);
 			}
 			else {
-				throw new RuntimeException(
-						"Op " + identifier + " could not be loaded: Computers and Inplaces must declare their Op type in their @implNote annotation For example, if your Inplace is designed to mutate the first argument, please write \"type='Inplace1'\"");
+				throw new RuntimeException("Op " + identifier +
+					" could not be loaded: Computers and Inplaces must declare their Op type in their @implNote annotation For example, if your Inplace is designed to mutate the first argument, please write \"type='Inplace1'\"");
 			}
 		}
 		// Handle op type inference
@@ -110,9 +112,10 @@ public class JavaMethodYAMLInfoCreator extends AbstractYAMLOpInfoCreator {
 			try {
 				int ioIndex = Integer.parseInt(typeString.replaceAll("[^0-9]", "")) - 1;
 				return Inplaces.inplaceOfArity(parameterCount, ioIndex);
-			} catch(NumberFormatException e) {
-				throw new RuntimeException(
-						"Op " + identifier + " could not be loaded: Inplaces must declare the index of the mutable parameter. For example, if your Inplace is designed to mutate the first argument, please write \"Inplace1\"");
+			}
+			catch (NumberFormatException e) {
+				throw new RuntimeException("Op " + identifier +
+					" could not be loaded: Inplaces must declare the index of the mutable parameter. For example, if your Inplace is designed to mutate the first argument, please write \"Inplace1\"");
 			}
 		}
 		else if (Pattern.matches("^[Cc]omputer\\s*[0-9]*$", typeString)) {
@@ -125,29 +128,29 @@ public class JavaMethodYAMLInfoCreator extends AbstractYAMLOpInfoCreator {
 		return deriveType(identifier, typeString);
 	}
 
-	private Class<?> deriveType(String identifier, String typeString){
+	private Class<?> deriveType(String identifier, String typeString) {
 		try {
 			return Classes.load(typeString, false);
-		} catch (Throwable t) {
+		}
+		catch (Throwable t) {
 			if (typeString.lastIndexOf('.') > -1) {
 				var lastIndex = typeString.lastIndexOf('.');
-				return deriveType(identifier, typeString.substring(0, lastIndex) + '$' + typeString.substring(lastIndex + 1));
+				return deriveType(identifier, typeString.substring(0, lastIndex) + '$' +
+					typeString.substring(lastIndex + 1));
 			}
 			else {
-				throw new RuntimeException(
-						"Op " + identifier + " could not be loaded: Could not load class " +
-								typeString, t);
+				throw new RuntimeException("Op " + identifier +
+					" could not be loaded: Could not load class " + typeString, t);
 			}
 		}
 	}
 
-
 	private static String sanitizeGenerics(String method) {
 		int nested = 0;
 		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < method.length(); i++) {
+		for (int i = 0; i < method.length(); i++) {
 			char c = method.charAt(i);
-			if(c == '<') {
+			if (c == '<') {
 				nested++;
 			}
 			if (nested == 0) {

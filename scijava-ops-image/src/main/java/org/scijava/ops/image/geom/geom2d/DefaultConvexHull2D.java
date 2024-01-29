@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -42,9 +42,9 @@ import net.imglib2.roi.geom.real.Polygon2D;
 
 /**
  * Generic implementation of {@code geom.convexHull}.
- * 
+ *
  * @author Daniel Seebacher (University of Konstanz)
- *@implNote op names='geom.convexHull'
+ * @implNote op names='geom.convexHull'
  */
 public class DefaultConvexHull2D implements Function<Polygon2D, Polygon2D> {
 
@@ -58,7 +58,8 @@ public class DefaultConvexHull2D implements Function<Polygon2D, Polygon2D> {
 	@Override
 	public Polygon2D apply(final Polygon2D input) {
 		// create a copy of points because se will get resorted, etc.
-		List<? extends RealLocalizable> RealPoints = new ArrayList<>(GeomUtils.vertices(input));
+		List<? extends RealLocalizable> RealPoints = new ArrayList<>(GeomUtils
+			.vertices(input));
 
 		// Sort RealPoints of P by x-coordinate (in case of a tie, sort by
 		// y-coordinate).
@@ -70,7 +71,8 @@ public class DefaultConvexHull2D implements Function<Polygon2D, Polygon2D> {
 				final Double o2x = new Double(o2.getDoublePosition(0));
 				final int result = o1x.compareTo(o2x);
 				if (result == 0) {
-					return new Double(o1.getDoublePosition(1)).compareTo(new Double(o2.getDoublePosition(1)));
+					return new Double(o1.getDoublePosition(1)).compareTo(new Double(o2
+						.getDoublePosition(1)));
 				}
 
 				return result;
@@ -89,7 +91,9 @@ public class DefaultConvexHull2D implements Function<Polygon2D, Polygon2D> {
 			// RealPoints of L and RealPoint P[i] does not make a
 			// counter-clockwise
 			// turn: remove last RealPoint from L
-			while (L.size() >= 2 && ccw(L.get(L.size() - 2), L.get(L.size() - 1), p) <= 0) {
+			while (L.size() >= 2 && ccw(L.get(L.size() - 2), L.get(L.size() - 1),
+				p) <= 0)
+			{
 				L.remove(L.size() - 1);
 			}
 			L.add(p);
@@ -102,7 +106,9 @@ public class DefaultConvexHull2D implements Function<Polygon2D, Polygon2D> {
 			// RealPoints of U and RealPoint P[i] does not make a
 			// counter-clockwise
 			// turn: remove last RealPoint from U
-			while (U.size() >= 2 && ccw(U.get(U.size() - 2), U.get(U.size() - 1), p) <= 0) {
+			while (U.size() >= 2 && ccw(U.get(U.size() - 2), U.get(U.size() - 1),
+				p) <= 0)
+			{
 				U.remove(U.size() - 1);
 			}
 			U.add(p);
@@ -123,18 +129,19 @@ public class DefaultConvexHull2D implements Function<Polygon2D, Polygon2D> {
 	 * product. Returns a positive value, if OAB makes a counter-clockwise turn,
 	 * negative for clockwise turn, and zero if RealPoints are collinear.
 	 *
-	 * @param o
-	 *            first RealPoint
-	 * @param a
-	 *            second RealPoint
-	 * @param b
-	 *            third RealPoint
+	 * @param o first RealPoint
+	 * @param a second RealPoint
+	 * @param b third RealPoint
 	 * @return Returns a positive value, if OAB makes a counter-clockwise wturn,
 	 *         negative for clockwise turn, and zero if RealPoints are collinear.
 	 */
-	private double ccw(final RealLocalizable o, final RealLocalizable a, final RealLocalizable b) {
-		return (a.getDoublePosition(0) - o.getDoublePosition(0)) * (b.getDoublePosition(1) - o.getDoublePosition(1))
-				- (a.getDoublePosition(1) - o.getDoublePosition(1)) * (b.getDoublePosition(0) - o.getDoublePosition(0));
+	private double ccw(final RealLocalizable o, final RealLocalizable a,
+		final RealLocalizable b)
+	{
+		return (a.getDoublePosition(0) - o.getDoublePosition(0)) * (b
+			.getDoublePosition(1) - o.getDoublePosition(1)) - (a.getDoublePosition(
+				1) - o.getDoublePosition(1)) * (b.getDoublePosition(0) - o
+					.getDoublePosition(0));
 	}
 
 }

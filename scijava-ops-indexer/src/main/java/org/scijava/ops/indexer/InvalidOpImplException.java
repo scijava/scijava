@@ -35,5 +35,7 @@ package org.scijava.ops.indexer;
  */
 class InvalidOpImplException extends RuntimeException {
 
-	protected InvalidOpImplException(final String message) { super(message); }
+	protected InvalidOpImplException(final String message) {
+		super(message);
+	}
 }

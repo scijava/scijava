@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -50,14 +50,15 @@ import org.scijava.ops.spi.OpDependency;
 
 /**
  * Implementation of Tamura's Directionality Feature
- * 
+ *
  * @author Andreas Graumann (University of Konstanz)
  * @param <I>
  * @param <O>
  * @implNote op names='features.tamura.directionality'
  */
 public class DefaultDirectionalityFeature<I extends RealType<I>, O extends RealType<O>>
-	implements Computers.Arity2<RandomAccessibleInterval<I>, Integer, O> {
+	implements Computers.Arity2<RandomAccessibleInterval<I>, Integer, O>
+{
 
 	@OpDependency(name = "image.histogram")
 	private BiFunction<Iterable<DoubleType>, Integer, Histogram1d<DoubleType>> histOp;
@@ -78,9 +79,9 @@ public class DefaultDirectionalityFeature<I extends RealType<I>, O extends RealT
 	public void compute(final RandomAccessibleInterval<I> input,
 		@Nullable Integer histogramSize, final O output)
 	{
-		if (input.numDimensions() != 2)
-			throw new IllegalArgumentException("Only 2 dimensional images allowed!");
-		if(histogramSize == null) histogramSize = 16;
+		if (input.numDimensions() != 2) throw new IllegalArgumentException(
+			"Only 2 dimensional images allowed!");
+		if (histogramSize == null) histogramSize = 16;
 
 		// List to store all directions occuring within the image on borders
 		ArrayList<DoubleType> dirList = new ArrayList<>();
@@ -130,7 +131,7 @@ public class DefaultDirectionalityFeature<I extends RealType<I>, O extends RealT
 		// Otherwise compute histogram over all occuring directions
 		// and calculate inverse second moment on it as output
 		else {
-			Histogram1d<DoubleType> hist = histOp.apply( dirList, histogramSize);
+			Histogram1d<DoubleType> hist = histOp.apply(dirList, histogramSize);
 			double std = stdOp.apply(hist).getRealDouble();
 			output.setReal(1 / std);
 		}

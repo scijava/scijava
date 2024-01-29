@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -44,11 +44,13 @@ import org.scijava.ops.spi.OpField;
 
 /**
  * Basic simplify test
- * 
+ *
  * @author Gabriel Selzer
  * @author Curtis Rueden
  */
-public class SimplifyTest extends AbstractTestEnvironment implements OpCollection {
+public class SimplifyTest extends AbstractTestEnvironment implements
+	OpCollection
+{
 
 	@BeforeAll
 	public static void AddNeededOps() {
@@ -72,14 +74,15 @@ public class SimplifyTest extends AbstractTestEnvironment implements OpCollectio
 	public final BiFunction<Long, Long, Double> powOpL = Math::pow;
 
 	@OpField(names = "test.math.powDouble", params = "base, exponent, result")
-	public final BiFunction<Integer[], Double, Double> powOpArray = (b, e) -> Math.pow(b[0], e);
+	public final BiFunction<Integer[], Double, Double> powOpArray = (b, e) -> Math
+		.pow(b[0], e);
 
 	@Test
 	public void testSimplify() {
 		Integer number = 2;
 		Integer exponent = 2;
-		Double result = ops.op("test.math.powDouble").arity2().input(number, exponent)
-			.outType(Double.class).apply();
+		Double result = ops.op("test.math.powDouble").arity2().input(number,
+			exponent).outType(Double.class).apply();
 		assertEquals(4.0, result, 0);
 	}
 
@@ -87,25 +90,26 @@ public class SimplifyTest extends AbstractTestEnvironment implements OpCollectio
 	public void testSimplifySome() {
 		Integer number = 2;
 		Double exponent = 2.;
-		Double result = ops.op("test.math.powDouble").arity2().input(number, exponent)
-			.outType(Double.class).apply();
+		Double result = ops.op("test.math.powDouble").arity2().input(number,
+			exponent).outType(Double.class).apply();
 		assertEquals(4.0, result, 0);
 	}
-	
+
 	@Test
 	public void testSimplifyArray() {
-		byte[] number = {2};
+		byte[] number = { 2 };
 		Double exponent = 3.;
-		Double result = ops.op("test.math.powDouble").arity2().input(number, exponent)
-			.outType(Double.class).apply();
+		Double result = ops.op("test.math.powDouble").arity2().input(number,
+			exponent).outType(Double.class).apply();
 		assertEquals(8.0, result, 0);
 	}
 
 	@Test
 	public void testSimplifiedOp() {
 		BiFunction<Number, Number, Double> numFunc = ops.op("test.math.powDouble")
-			.arity2().inType(Number.class, Number.class).outType(Double.class).function();
-		
+			.arity2().inType(Number.class, Number.class).outType(Double.class)
+			.function();
+
 		Double result = numFunc.apply(3., 4.);
 		assertEquals(81., result, 0);
 	}

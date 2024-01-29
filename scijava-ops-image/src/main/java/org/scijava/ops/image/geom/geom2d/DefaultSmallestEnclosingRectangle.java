@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -44,11 +44,14 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 /**
  * Generic implementation of {@code geom.smallestBoundingBox}.
- * 
+ *
  * @author Daniel Seebacher (University of Konstanz)
- * @implNote op names='geom.smallestEnclosingBoundingBox', label='Geometric (2D): Smallest Enclosing Rectangle'
+ * @implNote op names='geom.smallestEnclosingBoundingBox', label='Geometric
+ *           (2D): Smallest Enclosing Rectangle'
  */
-public class DefaultSmallestEnclosingRectangle implements Function<Polygon2D, Polygon2D> {
+public class DefaultSmallestEnclosingRectangle implements
+	Function<Polygon2D, Polygon2D>
+{
 
 	@OpDependency(name = "geom.convexHull")
 	private Function<Polygon2D, Polygon2D> convexHullFunc;
@@ -63,15 +66,14 @@ public class DefaultSmallestEnclosingRectangle implements Function<Polygon2D, Po
 	 * Rotates the given Polygon2D consisting of a list of RealPoints by the given
 	 * angle about the given center.
 	 *
-	 * @param inPoly
-	 *            A Polygon2D consisting of a list of RealPoint RealPoints
-	 * @param angle
-	 *            the rotation angle
-	 * @param center
-	 *            the rotation center
+	 * @param inPoly A Polygon2D consisting of a list of RealPoint RealPoints
+	 * @param angle the rotation angle
+	 * @param center the rotation center
 	 * @return a rotated polygon
 	 */
-	private Polygon2D rotate(final Polygon2D inPoly, final double angle, final RealLocalizable center) {
+	private Polygon2D rotate(final Polygon2D inPoly, final double angle,
+		final RealLocalizable center)
+	{
 
 		List<RealLocalizable> out = new ArrayList<>();
 
@@ -81,13 +83,13 @@ public class DefaultSmallestEnclosingRectangle implements Function<Polygon2D, Po
 			double cosTheta = Math.cos(angle);
 			double sinTheta = Math.sin(angle);
 
-			double x = cosTheta * (RealPoint.getDoublePosition(0) - center.getDoublePosition(0))
-					- sinTheta * (RealPoint.getDoublePosition(1) - center.getDoublePosition(1))
-					+ center.getDoublePosition(0);
+			double x = cosTheta * (RealPoint.getDoublePosition(0) - center
+				.getDoublePosition(0)) - sinTheta * (RealPoint.getDoublePosition(1) -
+					center.getDoublePosition(1)) + center.getDoublePosition(0);
 
-			double y = sinTheta * (RealPoint.getDoublePosition(0) - center.getDoublePosition(0))
-					+ cosTheta * (RealPoint.getDoublePosition(1) - center.getDoublePosition(1))
-					+ center.getDoublePosition(1);
+			double y = sinTheta * (RealPoint.getDoublePosition(0) - center
+				.getDoublePosition(0)) + cosTheta * (RealPoint.getDoublePosition(1) -
+					center.getDoublePosition(1)) + center.getDoublePosition(1);
 
 			out.add(new RealPoint(x, y));
 		}
@@ -102,8 +104,8 @@ public class DefaultSmallestEnclosingRectangle implements Function<Polygon2D, Po
 	@Override
 	public Polygon2D apply(final Polygon2D input) {
 		// ensure validity of inputs
-		if (input == null)
-			throw new IllegalArgumentException("Input cannot be null!");
+		if (input == null) throw new IllegalArgumentException(
+			"Input cannot be null!");
 
 		Polygon2D ch = convexHullFunc.apply(input);
 		RealLocalizable cog = centroidFunc.apply(ch);
@@ -112,8 +114,9 @@ public class DefaultSmallestEnclosingRectangle implements Function<Polygon2D, Po
 		double minArea = Double.POSITIVE_INFINITY;
 		// for each edge (i.e. line from P(i-1) to P(i)
 		for (int i = 1; i < ch.numVertices() - 1; i++) {
-			final double angle = Math.atan2(ch.vertex(i).getDoublePosition(1) - ch.vertex(i - 1).getDoublePosition(1),
-					ch.vertex(i).getDoublePosition(0) - ch.vertex(i - 1).getDoublePosition(0));
+			final double angle = Math.atan2(ch.vertex(i).getDoublePosition(1) - ch
+				.vertex(i - 1).getDoublePosition(1), ch.vertex(i).getDoublePosition(0) -
+					ch.vertex(i - 1).getDoublePosition(0));
 
 			// rotate the polygon in such a manner that the line has an angle of 0
 			final Polygon2D rotatedPoly = rotate(ch, -angle, cog);
@@ -133,9 +136,10 @@ public class DefaultSmallestEnclosingRectangle implements Function<Polygon2D, Po
 		}
 
 		// edge (n-1) to 0
-		final double angle = Math.atan2(
-				ch.vertex(0).getDoublePosition(1) - ch.vertex(ch.numVertices() - 1).getDoublePosition(1),
-				ch.vertex(0).getDoublePosition(0) - ch.vertex(ch.numVertices() - 1).getDoublePosition(0));
+		final double angle = Math.atan2(ch.vertex(0).getDoublePosition(1) - ch
+			.vertex(ch.numVertices() - 1).getDoublePosition(1), ch.vertex(0)
+				.getDoublePosition(0) - ch.vertex(ch.numVertices() - 1)
+					.getDoublePosition(0));
 
 		// rotate the polygon in such a manner that the line has an angle of 0
 		final Polygon2D rotatedPoly = rotate(ch, -angle, cog);

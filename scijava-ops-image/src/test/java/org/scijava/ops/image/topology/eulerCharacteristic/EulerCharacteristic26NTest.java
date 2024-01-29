@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.topology.eulerCharacteristic;
 
 import static org.scijava.ops.image.topology.eulerCharacteristic.TestHelper.drawCube;
@@ -47,13 +48,15 @@ import org.junit.jupiter.api.Test;
  * @author Richard Domander (Royal Veterinary College, London)
  */
 public class EulerCharacteristic26NTest extends AbstractOpTest {
+
 	@Test
 	public void testConforms() throws AssertionError {
 		final Img<BitType> img = ArrayImgs.bits(3, 3);
 
 		final DoubleType result = new DoubleType();
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			ops.op("topology.eulerCharacteristic26N").arity1().input(img).output(result).compute();
+			ops.op("topology.eulerCharacteristic26N").arity1().input(img).output(
+				result).compute();
 		});
 	}
 
@@ -73,7 +76,8 @@ public class EulerCharacteristic26NTest extends AbstractOpTest {
 			setNeighbor(neighborhood, 0, 1, 1, n & 0b01000000);
 			setNeighbor(neighborhood, 1, 1, 1, n & 0b10000000);
 
-			final int result = EulerCharacteristic26N.neighborhoodEulerIndex(neighborhood, 0, 0, 0);
+			final int result = EulerCharacteristic26N.neighborhoodEulerIndex(
+				neighborhood, 0, 0, 0);
 
 			assertEquals(n, result, "LUT index is incorrect");
 		}
@@ -93,9 +97,11 @@ public class EulerCharacteristic26NTest extends AbstractOpTest {
 		final Img<BitType> img = drawCube(1, 1, 1, 1);
 
 		final DoubleType result = new DoubleType();
-		ops.op("topology.eulerCharacteristic26N").arity1().input(img).output(result).compute();
+		ops.op("topology.eulerCharacteristic26N").arity1().input(img).output(result)
+			.compute();
 
-		assertEquals(1.0, result.get(), 1e-12, "Euler characteristic (χ) is incorrect");
+		assertEquals(1.0, result.get(), 1e-12,
+			"Euler characteristic (χ) is incorrect");
 	}
 
 	/**
@@ -110,9 +116,11 @@ public class EulerCharacteristic26NTest extends AbstractOpTest {
 		final Img<BitType> img = drawCube(1, 1, 1, 0);
 
 		final DoubleType result = new DoubleType();
-		ops.op("topology.eulerCharacteristic26N").arity1().input(img).output(result).compute();
+		ops.op("topology.eulerCharacteristic26N").arity1().input(img).output(result)
+			.compute();
 
-		assertEquals(0.0, result.get(), 1e-12, "Euler characteristic (χ) is incorrect");
+		assertEquals(0.0, result.get(), 1e-12,
+			"Euler characteristic (χ) is incorrect");
 	}
 
 	/**
@@ -131,9 +139,11 @@ public class EulerCharacteristic26NTest extends AbstractOpTest {
 		access.get().setZero();
 
 		final DoubleType result = new DoubleType();
-		ops.op("topology.eulerCharacteristic26N").arity1().input(img).output(result).compute();
+		ops.op("topology.eulerCharacteristic26N").arity1().input(img).output(result)
+			.compute();
 
-		assertEquals(2.0, result.get(), 1e-12, "Euler characteristic (χ) is incorrect");
+		assertEquals(2.0, result.get(), 1e-12,
+			"Euler characteristic (χ) is incorrect");
 	}
 
 	/**
@@ -162,13 +172,17 @@ public class EulerCharacteristic26NTest extends AbstractOpTest {
 		access.get().setOne();
 
 		final DoubleType result = new DoubleType();
-		ops.op("topology.eulerCharacteristic26N").arity1().input(cube).output(result).compute();
+		ops.op("topology.eulerCharacteristic26N").arity1().input(cube).output(
+			result).compute();
 
-		assertEquals(0.0, result.get(), 1e-12, "Euler characteristic (χ) is incorrect");
+		assertEquals(0.0, result.get(), 1e-12,
+			"Euler characteristic (χ) is incorrect");
 	}
 
 	// region -- Helper methods --
-	private void setNeighbor(RandomAccess<BitType> access, long x, long y, long z, long value) {
+	private void setNeighbor(RandomAccess<BitType> access, long x, long y, long z,
+		long value)
+	{
 		access.setPosition(x, 0);
 		access.setPosition(y, 1);
 		access.setPosition(z, 2);

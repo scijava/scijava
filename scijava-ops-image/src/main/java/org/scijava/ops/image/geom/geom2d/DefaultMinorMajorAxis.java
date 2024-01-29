@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -44,22 +44,25 @@ import net.imglib2.util.ValuePair;
 
 /**
  * Generic implementation of {@code geom.secondMultiVariate}.
- * 
+ *
  * @author Daniel Seebacher (University of Konstanz)
- *@implNote op names='geom.secondMoment'
+ * @implNote op names='geom.secondMoment'
  */
-public class DefaultMinorMajorAxis implements Function<Polygon2D, Pair<DoubleType, DoubleType>> {
+public class DefaultMinorMajorAxis implements
+	Function<Polygon2D, Pair<DoubleType, DoubleType>>
+{
 
 	/**
-	 * Code taken from ImageJ1 (EllipseFitter -> getEllipseParam()) and adapted
-	 * to work with a {@link Polygon2D}
+	 * Code taken from ImageJ1 (EllipseFitter -> getEllipseParam()) and adapted to
+	 * work with a {@link Polygon2D}
 	 *
 	 * @param input
-	 * @param points
-	 *            vertices of polygon in counter clockwise order.
+	 * @param points vertices of polygon in counter clockwise order.
 	 * @return the minor and major axis
 	 */
-	private double[] getMinorMajorAxis(final Polygon2D input, final List<RealLocalizable> points) {
+	private double[] getMinorMajorAxis(final Polygon2D input,
+		final List<RealLocalizable> points)
+	{
 		double[] moments = getMoments(input, points);
 
 		double m00 = moments[0];
@@ -95,14 +98,14 @@ public class DefaultMinorMajorAxis implements Function<Polygon2D, Pair<DoubleTyp
 				tmp = a22;
 				a22 = a11;
 				a11 = tmp;
-			} else if (a11 != a22) {
+			}
+			else if (a11 != a22) {
 				ta = Math.PI / 2d;
 			}
 		}
 
 		tmp = Math.sin(ta);
-		if (tmp == 0.0)
-			tmp = 0.000001;
+		if (tmp == 0.0) tmp = 0.000001;
 		double z = a12 * Math.cos(ta) / tmp;
 		double major = Math.sqrt(1.0 / Math.abs(a22 + z));
 		double minor = Math.sqrt(1.0 / Math.abs(a11 - z));
@@ -113,8 +116,7 @@ public class DefaultMinorMajorAxis implements Function<Polygon2D, Pair<DoubleTyp
 		minor = minor * scale * 2.0;
 		double angle = 180.0 * ta / Math.PI;
 
-		if (angle == 180.0)
-			angle = 0.0;
+		if (angle == 180.0) angle = 0.0;
 		if (major < minor) {
 			tmp = major;
 			major = minor;
@@ -126,13 +128,14 @@ public class DefaultMinorMajorAxis implements Function<Polygon2D, Pair<DoubleTyp
 
 	/**
 	 * Calculates moments for {@link Polygon2D}
-	 * 
-	 * @param points
-	 *            vertices of polygon in counter clockwise order.
+	 *
+	 * @param points vertices of polygon in counter clockwise order.
 	 * @return moments m00, n20, n11 and n02
 	 * @see "On  Calculation of Arbitrary Moments of Polygon2Ds, Carsten Steger, October 1996"
 	 */
-	private double[] getMoments(final Polygon2D input, final List<RealLocalizable> points) {
+	private double[] getMoments(final Polygon2D input,
+		final List<RealLocalizable> points)
+	{
 
 		// calculate normalized moment
 		double m00 = 0;
@@ -143,18 +146,20 @@ public class DefaultMinorMajorAxis implements Function<Polygon2D, Pair<DoubleTyp
 		double m20 = 0;
 
 		for (int i = 1; i < points.size(); i++) {
-			double a = getX(input, i - 1) * getY(input, i) - getX(input, i) * getY(input, i - 1);
+			double a = getX(input, i - 1) * getY(input, i) - getX(input, i) * getY(
+				input, i - 1);
 
 			m00 += a;
 			m10 += a * (getX(input, i - 1) + getX(input, i));
 			m01 += a * (getY(input, i - 1) + getY(input, i));
 
-			m20 += a * (Math.pow(getX(input, i - 1), 2) + getX(input, i - 1) * getX(input, i)
-					+ Math.pow(getX(input, i), 2));
-			m11 += a * (2 * getX(input, i - 1) * getY(input, i - 1) + getX(input, i - 1) * getY(input, i)
-					+ getX(input, i) * getY(input, i - 1) + 2 * getX(input, i) * getY(input, i));
-			m02 += a * (Math.pow(getY(input, i - 1), 2) + getY(input, i - 1) * getY(input, i)
-					+ Math.pow(getY(input, i), 2));
+			m20 += a * (Math.pow(getX(input, i - 1), 2) + getX(input, i - 1) * getX(
+				input, i) + Math.pow(getX(input, i), 2));
+			m11 += a * (2 * getX(input, i - 1) * getY(input, i - 1) + getX(input, i -
+				1) * getY(input, i) + getX(input, i) * getY(input, i - 1) + 2 * getX(
+					input, i) * getY(input, i));
+			m02 += a * (Math.pow(getY(input, i - 1), 2) + getY(input, i - 1) * getY(
+				input, i) + Math.pow(getY(input, i), 2));
 		}
 
 		m00 /= 2d;
@@ -174,15 +179,13 @@ public class DefaultMinorMajorAxis implements Function<Polygon2D, Pair<DoubleTyp
 
 	private double getY(final Polygon2D input, final int index) {
 		int i = index;
-		if (i == input.numVertices())
-			i = 0;
+		if (i == input.numVertices()) i = 0;
 		return input.vertex(i).getDoublePosition(1);
 	}
 
 	private double getX(final Polygon2D input, final int index) {
 		int i = index;
-		if (i == input.numVertices())
-			i = 0;
+		if (i == input.numVertices()) i = 0;
 		return input.vertex(i).getDoublePosition(0);
 	}
 
@@ -194,7 +197,7 @@ public class DefaultMinorMajorAxis implements Function<Polygon2D, Pair<DoubleTyp
 	 */
 	@Override
 	public Pair<DoubleType, DoubleType> apply(final Polygon2D input) {
-		
+
 		List<RealLocalizable> points = new ArrayList<>(GeomUtils.vertices(input));
 
 		// Sort RealLocalizables of P by x-coordinate (in case of a tie,
@@ -208,7 +211,8 @@ public class DefaultMinorMajorAxis implements Function<Polygon2D, Pair<DoubleTyp
 				final Double o2x = new Double(o2.getDoublePosition(0));
 				final int result = o2x.compareTo(o1x);
 				if (result == 0) {
-					return new Double(o2.getDoublePosition(1)).compareTo(new Double(o1.getDoublePosition(1)));
+					return new Double(o2.getDoublePosition(1)).compareTo(new Double(o1
+						.getDoublePosition(1)));
 				}
 				return result;
 			}
@@ -217,6 +221,7 @@ public class DefaultMinorMajorAxis implements Function<Polygon2D, Pair<DoubleTyp
 
 		// calculate minor and major axis
 		double[] minorMajorAxis = getMinorMajorAxis(input, points);
-		return new ValuePair<>(new DoubleType(minorMajorAxis[0]), new DoubleType(minorMajorAxis[1]));
+		return new ValuePair<>(new DoubleType(minorMajorAxis[0]), new DoubleType(
+			minorMajorAxis[1]));
 	}
 }

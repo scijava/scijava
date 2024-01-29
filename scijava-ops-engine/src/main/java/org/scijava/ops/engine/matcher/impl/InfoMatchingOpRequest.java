@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.engine.matcher.impl;
 
 import java.lang.reflect.ParameterizedType;
@@ -39,7 +40,6 @@ import org.scijava.ops.api.OpRequest;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 import org.scijava.types.inference.GenericAssignability;
-
 
 public class InfoMatchingOpRequest implements OpRequest {
 
@@ -75,11 +75,10 @@ public class InfoMatchingOpRequest implements OpRequest {
 			if (!Types.isAssignable(from, this.type, this.map))
 				throw new IllegalArgumentException();
 		}
-		args = info.inputs().stream().map(m -> Types
-			.substituteTypeVariables(m.getType(), this.map)).toArray(Type[]::new);
-		outType = Types.substituteTypeVariables(info.output().getType(),
-			this.map);
-		
+		args = info.inputs().stream().map(m -> Types.substituteTypeVariables(m
+			.getType(), this.map)).toArray(Type[]::new);
+		outType = Types.substituteTypeVariables(info.output().getType(), this.map);
+
 	}
 
 	@Override

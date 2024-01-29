@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -65,7 +65,8 @@ public class OpFieldImplData extends OpImplData {
 	 */
 	@Override
 	void parseAdditionalTags(Element source, List<String[]> additionalTags) {
-		// Create the list of Op parameters by checking for @input, @container, @mutable, @output tags
+		// Create the list of Op parameters by checking for @input, @container,
+		// @mutable, @output tags
 		for (String[] tag : additionalTags) {
 			switch (tag[0]) {
 				case "@input":
@@ -92,12 +93,13 @@ public class OpFieldImplData extends OpImplData {
 
 		}
 
-		// With the number of inputs and outputs collected, validate that we have the correct number of eaach
+		// With the number of inputs and outputs collected, validate that we have
+		// the correct number of eaach
 		Element fieldType = env.getTypeUtils().asElement(source.asType());
 		if (fieldType instanceof TypeElement) {
 			// Find functional method of the Op type
-			ExecutableElement fMethod = ProcessingUtils
-				.findFunctionalMethod(env, (TypeElement) fieldType);
+			ExecutableElement fMethod = ProcessingUtils.findFunctionalMethod(env,
+				(TypeElement) fieldType);
 			// Determine number of outputs (in practice, always 0 or 1)
 			int numReturns = 0;
 			for (OpParameter p : params) {
@@ -112,7 +114,8 @@ public class OpFieldImplData extends OpImplData {
 					" has " + numReturns + " @output tag(s) when it should have " +
 					expNumReturns);
 			}
-			// Compare number of inputs with the number of @input, @container, @mutable tags
+			// Compare number of inputs with the number of @input, @container,
+			// @mutable tags
 			int numParams = params.size() - numReturns;
 			int expNumParams = fMethod.getParameters().size();
 			if (numParams != expNumParams) {

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -95,9 +95,8 @@ public class LocalMeanThreshold<T extends RealType<T>> extends
 			// NB: under these conditions, the RectangleShape will produce
 			// RectangleNeighborhoods (which is needed to perform the computations via
 			// an IntegralImg).
-			computeIntegral(input, rShape, c,
-				outOfBoundsFactory, getIntegralImageOp(INTEGRAL_IMAGE_ORDER),
-				computeThresholdIntegralOp, output);
+			computeIntegral(input, rShape, c, outOfBoundsFactory, getIntegralImageOp(
+				INTEGRAL_IMAGE_ORDER), computeThresholdIntegralOp, output);
 		}
 		else {
 			computeNonIntegral(input, inputNeighborhoodShape, c, outOfBoundsFactory,
@@ -105,9 +104,8 @@ public class LocalMeanThreshold<T extends RealType<T>> extends
 		}
 	}
 
-	public void computeNonIntegral(
-		final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
-		final Double c,
+	public void computeNonIntegral(final RandomAccessibleInterval<T> input,
+		final Shape inputNeighborhoodShape, final Double c,
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final Computers.Arity3<Iterable<T>, T, Double, BitType> computeThresholdOp,
 		final RandomAccessibleInterval<BitType> output)
@@ -115,12 +113,10 @@ public class LocalMeanThreshold<T extends RealType<T>> extends
 		final Computers.Arity2<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
 			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, c, o);
 		applyFilterOp.compute(input, parametrizedComputeThresholdOp,
-			inputNeighborhoodShape, outOfBoundsFactory,
-			output);
+			inputNeighborhoodShape, outOfBoundsFactory, output);
 	}
 
-	public void computeIntegral(
-		final RandomAccessibleInterval<T> input,
+	public void computeIntegral(final RandomAccessibleInterval<T> input,
 		final RectangleShape inputNeighborhoodShape, final Double c,
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<DoubleType>> integralImageOp,
@@ -129,9 +125,8 @@ public class LocalMeanThreshold<T extends RealType<T>> extends
 	{
 		final Computers.Arity2<RectangleNeighborhood<? extends Composite<DoubleType>>, T, BitType> parametrizedComputeThresholdOp = //
 			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, c, o);
-		compute(input, inputNeighborhoodShape,
-			outOfBoundsFactory, Arrays.asList(integralImageOp),
-			parametrizedComputeThresholdOp, output);
+		compute(input, inputNeighborhoodShape, outOfBoundsFactory, Arrays.asList(
+			integralImageOp), parametrizedComputeThresholdOp, output);
 	}
 
 }

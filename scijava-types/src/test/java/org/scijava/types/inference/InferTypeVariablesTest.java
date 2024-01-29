@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -52,7 +52,9 @@ public class InferTypeVariablesTest {
 
 	static abstract class RecursiveThing<T extends RecursiveThing<T>> {}
 
-	static abstract class RecursiveSubThing<U> extends RecursiveThing<RecursiveSubThing<U>> {}
+	static abstract class RecursiveSubThing<U> extends
+		RecursiveThing<RecursiveSubThing<U>>
+	{}
 
 	class StrangeThing<N extends Number, T> extends Thing<T> {}
 
@@ -411,20 +413,22 @@ public class InferTypeVariablesTest {
 
 	// NB RecursiveSubThing<L> extends RecursiveThing<RecursiveSubThing<L>>
 	@Test
-	public <T extends RecursiveThing<T>, L extends RecursiveThing<L>> void inferImgLabelingFromRAI() {
+	public <T extends RecursiveThing<T>, L extends RecursiveThing<L>> void
+		inferImgLabelingFromRAI()
+	{
 		// This is a confusing test. Key insight
 		// RecursiveSubThing has *two* type variables:
-		// 	one *any* param, declared by RST
-		// 	one recursive param, declared by superclass RecursiveThing
+		// one *any* param, declared by RST
+		// one recursive param, declared by superclass RecursiveThing
 		// The "L" in this test is the "any" param, even though it itself is also
 		// recursive in this case.
 		var paramType = new Nil<RecursiveSubThing<L>>() {}.getType();
 		var argType = new Nil<T>() {}.getType();
 
 		Map<TypeVariable<?>, Type> typeAssigns = new HashMap<>();
-		GenericAssignability.inferTypeVariables(new java.lang.reflect.Type[] {paramType},
-				new java.lang.reflect.Type[] {argType}, typeAssigns);
-		TypeVariable<?> typeVar = (TypeVariable<?>) new Nil<L>(){}.getType();
+		GenericAssignability.inferTypeVariables(new java.lang.reflect.Type[] {
+			paramType }, new java.lang.reflect.Type[] { argType }, typeAssigns);
+		TypeVariable<?> typeVar = (TypeVariable<?>) new Nil<L>() {}.getType();
 		final Map<TypeVariable<?>, Type> expected = new HashMap<>();
 		expected.put(typeVar, Any.class);
 		Assertions.assertEquals(expected, typeAssigns);

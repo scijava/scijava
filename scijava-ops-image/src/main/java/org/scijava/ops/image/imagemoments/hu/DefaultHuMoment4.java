@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -39,17 +39,19 @@ import org.scijava.ops.spi.OpDependency;
 
 /**
  * Op to calculate the {@code imageMoments.huMoment4}.
- * 
+ *
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
- * @param <I>
- *            input type
- * @param <O>
- *            output type
- * @see <a href="https://en.wikipedia.org/wiki/Image_moment#Rotation_invariants"> This page </a>
+ * @param <I> input type
+ * @param <O> output type
+ * @see <a href=
+ *      "https://en.wikipedia.org/wiki/Image_moment#Rotation_invariants"> This
+ *      page </a>
  * @implNote op names='imageMoments.huMoment4', label='Image Moment: HuMoment4'
  */
-public class DefaultHuMoment4<I extends RealType<I>, O extends RealType<O>> implements AbstractImageMomentOp<I, O> {
+public class DefaultHuMoment4<I extends RealType<I>, O extends RealType<O>>
+	implements AbstractImageMomentOp<I, O>
+{
 
 	@OpDependency(name = "imageMoments.normalizedCentralMoment30")
 	private Computers.Arity1<RandomAccessibleInterval<I>, O> normalizedCentralMoment30Func;

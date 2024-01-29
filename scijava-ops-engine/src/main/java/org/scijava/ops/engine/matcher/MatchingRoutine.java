@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -37,12 +37,10 @@ import org.scijava.ops.engine.OpCandidate;
 /**
  * A plugin type employing a particular strategy to generate an
  * {@link OpCandidate}.
- * 
+ *
  * @author Gabriel Selzer
  */
-public interface MatchingRoutine extends
-	Comparable<MatchingRoutine>
-{
+public interface MatchingRoutine extends Comparable<MatchingRoutine> {
 
 	void checkSuitability(MatchingConditions conditions)
 		throws OpMatchingException;
@@ -59,7 +57,7 @@ public interface MatchingRoutine extends
 	 * Generates an {@link OpCandidate} from the Ops in the provided
 	 * {@link OpEnvironment}, conforming to the provided
 	 * {@link MatchingConditions}
-	 * 
+	 *
 	 * @param conditions the {@link MatchingConditions} the returned Op must
 	 *          conform to
 	 * @param matcher the {@link OpMatcher} responsible for matching

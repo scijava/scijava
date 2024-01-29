@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -43,14 +43,15 @@ import org.scijava.ops.spi.Nullable;
 
 /**
  * Default implementation of {@link SigmaFilterOp}.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
- * @param <T>
- *            type
+ * @param <T> type
  * @implNote op names='filter.sigma', priority='-100.'
  */
-public class DefaultSigmaFilter<T extends RealType<T>, V extends RealType<V>> implements
-		Computers.Arity5<RandomAccessibleInterval<T>, Shape, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<V>> {
+public class DefaultSigmaFilter<T extends RealType<T>, V extends RealType<V>>
+	implements
+	Computers.Arity5<RandomAccessibleInterval<T>, Shape, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<V>>
+{
 
 	@OpDependency(name = "stats.variance")
 	private Computers.Arity1<Iterable<T>, DoubleType> varianceOp;
@@ -69,61 +70,68 @@ public class DefaultSigmaFilter<T extends RealType<T>, V extends RealType<V>> im
 	 * @param output
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
-			final Double range, final Double minPixelFraction,
-			@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-			final RandomAccessibleInterval<V> output) {
-		if (outOfBoundsFactory == null)
-			outOfBoundsFactory = new OutOfBoundsMirrorFactory<>(
-					OutOfBoundsMirrorFactory.Boundary.SINGLE);
+	public void compute(final RandomAccessibleInterval<T> input,
+		final Shape inputNeighborhoodShape, final Double range,
+		final Double minPixelFraction,
+		@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
+		final RandomAccessibleInterval<V> output)
+	{
+		if (outOfBoundsFactory == null) outOfBoundsFactory =
+			new OutOfBoundsMirrorFactory<>(OutOfBoundsMirrorFactory.Boundary.SINGLE);
 
-		if (range <= 0)
-			throw new IllegalArgumentException("range must be positive!");
-		Computers.Arity2<Iterable<T>, T, V> mappedOp = (in1, in2, out) -> op.compute(in1, in2, range, minPixelFraction, out);
-		RandomAccessibleInterval<T> extended = Views.interval((Views.extend(input, outOfBoundsFactory)), input);
+		if (range <= 0) throw new IllegalArgumentException(
+			"range must be positive!");
+		Computers.Arity2<Iterable<T>, T, V> mappedOp = (in1, in2, out) -> op
+			.compute(in1, in2, range, minPixelFraction, out);
+		RandomAccessibleInterval<T> extended = Views.interval((Views.extend(input,
+			outOfBoundsFactory)), input);
 		mapper.compute(extended, inputNeighborhoodShape, mappedOp, output);
 	}
 
-	final Computers.Arity4<Iterable<T>, T, Double, Double, V> op = new Computers.Arity4<Iterable<T>, T, Double, Double, V>() {
+	final Computers.Arity4<Iterable<T>, T, Double, Double, V> op =
+		new Computers.Arity4<Iterable<T>, T, Double, Double, V>()
+		{
 
-		@Override
-		public void compute(final Iterable<T> neighborhood, final T center, final Double range,
-				final Double minPixelFraction, final V output) {
+			@Override
+			public void compute(final Iterable<T> neighborhood, final T center,
+				final Double range, final Double minPixelFraction, final V output)
+		{
 
-			DoubleType varianceResult = new DoubleType();
-			varianceOp.compute(neighborhood, varianceResult);
-			double varianceValue = varianceResult.getRealDouble() * range;
+				DoubleType varianceResult = new DoubleType();
+				varianceOp.compute(neighborhood, varianceResult);
+				double varianceValue = varianceResult.getRealDouble() * range;
 
-			final double centerValue = center.getRealDouble();
-			double sumAll = 0;
-			double sumWithin = 0;
-			long countAll = 0;
-			long countWithin = 0;
+				final double centerValue = center.getRealDouble();
+				double sumAll = 0;
+				double sumWithin = 0;
+				long countAll = 0;
+				long countWithin = 0;
 
-			for (T neighbor : neighborhood) {
-				final double pixelValue = neighbor.getRealDouble();
-				final double diff = centerValue - pixelValue;
+				for (T neighbor : neighborhood) {
+					final double pixelValue = neighbor.getRealDouble();
+					final double diff = centerValue - pixelValue;
 
-				sumAll += pixelValue;
-				++countAll;
+					sumAll += pixelValue;
+					++countAll;
 
-				if (diff > varianceValue || diff < -varianceValue) {
-					continue;
+					if (diff > varianceValue || diff < -varianceValue) {
+						continue;
+					}
+
+					// pixel within variance range
+					sumWithin += pixelValue;
+					++countWithin;
 				}
 
-				// pixel within variance range
-				sumWithin += pixelValue;
-				++countWithin;
+				if (countWithin < (int) (minPixelFraction * countAll)) {
+					output.setReal(sumAll / countAll); // simply mean
+				}
+				else {
+					// mean over pixels in variance range only
+					output.setReal(sumWithin / countWithin);
+				}
 			}
 
-			if (countWithin < (int) (minPixelFraction * countAll)) {
-				output.setReal(sumAll / countAll); // simply mean
-			} else {
-				// mean over pixels in variance range only
-				output.setReal(sumWithin / countWithin);
-			}
-		}
-
-	};
+		};
 
 }

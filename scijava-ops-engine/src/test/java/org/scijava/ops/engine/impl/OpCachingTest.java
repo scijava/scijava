@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -63,12 +63,12 @@ public class OpCachingTest implements OpCollection {
 	@BeforeEach
 	public void setUp() {
 		Discoverer serviceLoading = Discoverer.using(ServiceLoader::load) //
-				.onlyFor( //
-						OpWrapper.class, //
-						MatchingRoutine.class, //
-						OpInfoGenerator.class, //
-						InfoTreeGenerator.class //
-				);
+			.onlyFor( //
+				OpWrapper.class, //
+				MatchingRoutine.class, //
+				OpInfoGenerator.class, //
+				InfoTreeGenerator.class //
+			);
 		// register needed classes in StaticDiscoverer
 		ManualDiscoverer discoverer = new ManualDiscoverer();
 		discoverer.register(new OpCachingTest());
@@ -82,7 +82,6 @@ public class OpCachingTest implements OpCollection {
 	 * Basic Op used to test cache functionality. NB we use an {@link OpField}
 	 * here because we KNOW that we will only create ONE instance of this Op under
 	 * the hood.
-	 *
 	 */
 	@OpField(names = "test.basicOp")
 	public final Producer<String> basicOp = () -> "This Op should be cached";
@@ -155,20 +154,20 @@ public class OpCachingTest implements OpCollection {
 		Optional<MatchingConditions> complicatedOptional = opCache.keySet().stream()
 			.filter(condition -> condition.request().getName().equals(
 				"test.complicatedOp")).findFirst();
-		Assertions.assertFalse(complicatedOptional
-					.isEmpty(), "test.complicatedOp not in cache!");
-		Assertions.assertTrue(
-				opCache.get(complicatedOptional.get()).op() instanceof ComplicatedOp,
-				"Object in cache was not an instance of ComplicatedOp!");
+		Assertions.assertFalse(complicatedOptional.isEmpty(),
+			"test.complicatedOp not in cache!");
+		Assertions.assertTrue(opCache.get(complicatedOptional.get())
+			.op() instanceof ComplicatedOp,
+			"Object in cache was not an instance of ComplicatedOp!");
 
 		// assert that basic Op is also in the cache
 		Optional<MatchingConditions> basicOptional = opCache.keySet().stream()
 			.filter(condition -> condition.request().getName().equals("test.basicOp"))
 			.findFirst();
 		Assertions.assertFalse(basicOptional.isEmpty(),
-				"test.basicOp not in cache despite being an OpDependency of test.complicatedOp");
+			"test.basicOp not in cache despite being an OpDependency of test.complicatedOp");
 		Assertions.assertEquals(opCache.get(basicOptional.get()).op(), basicOp,
-				"Object in cache was not the same Object that was returned!");
+			"Object in cache was not the same Object that was returned!");
 	}
 
 }

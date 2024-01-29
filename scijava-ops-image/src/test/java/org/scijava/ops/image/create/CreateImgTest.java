@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -93,9 +93,9 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractOpTest {
 			}
 
 			// create img
-			final Function<Interval, Img<?>> createFunc = OpBuilder.matchFunction(ops, "create.img", new Nil<Interval>() {
-			}, new Nil<Img<?>>() {
-			});
+			final Function<Interval, Img<?>> createFunc = OpBuilder.matchFunction(ops,
+				"create.img", new Nil<Interval>()
+				{}, new Nil<Img<?>>() {});
 			final Img<?> img = createFunc.apply(new FinalInterval(min, max));
 
 			assertArrayEquals(min, Intervals.minAsLongArray(img), "Image Minimum:");
@@ -119,36 +119,35 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractOpTest {
 			}
 
 			// create img
-			BiFunction<Dimensions, DoubleType, Img<DoubleType>> createFunc = OpBuilder.matchFunction(ops, "create.img",
-					new Nil<Dimensions>() {
-					}, new Nil<DoubleType>() {
-					}, new Nil<Img<DoubleType>>() {
-					});
+			BiFunction<Dimensions, DoubleType, Img<DoubleType>> createFunc = OpBuilder
+				.matchFunction(ops, "create.img", new Nil<Dimensions>()
+				{}, new Nil<DoubleType>() {}, new Nil<Img<DoubleType>>() {});
 			@SuppressWarnings("unchecked")
-			final Img<DoubleType> img = createFunc.apply(new FinalDimensions(dim), new DoubleType());
+			final Img<DoubleType> img = createFunc.apply(new FinalDimensions(dim),
+				new DoubleType());
 
-			assertArrayEquals(dim, Intervals.dimensionsAsLongArray(img), "Image Dimensions:");
+			assertArrayEquals(dim, Intervals.dimensionsAsLongArray(img),
+				"Image Dimensions:");
 		}
 	}
 
 	@Test
 	public void testImgFromImg() {
 		// create img
-		BiFunction<Dimensions, ByteType, Img<ByteType>> createFuncDimsType = OpBuilder.matchFunction(ops, "create.img",
-				new Nil<Dimensions>() {
-				}, new Nil<ByteType>() {
-				}, new Nil<Img<ByteType>>() {
-				});
-		final Img<ByteType> img = createFuncDimsType.apply(new FinalDimensions(1), new ByteType());
-		Function<Img<ByteType>, Img<ByteType>> createFuncImg = OpBuilder.matchFunction(ops, "create.img",
-				new Nil<Img<ByteType>>() {
-				}, new Nil<Img<ByteType>>() {
-				});
+		BiFunction<Dimensions, ByteType, Img<ByteType>> createFuncDimsType =
+			OpBuilder.matchFunction(ops, "create.img", new Nil<Dimensions>()
+			{}, new Nil<ByteType>() {}, new Nil<Img<ByteType>>() {});
+		final Img<ByteType> img = createFuncDimsType.apply(new FinalDimensions(1),
+			new ByteType());
+		Function<Img<ByteType>, Img<ByteType>> createFuncImg = OpBuilder
+			.matchFunction(ops, "create.img", new Nil<Img<ByteType>>()
+			{}, new Nil<Img<ByteType>>() {});
 		@SuppressWarnings("unchecked")
 		final Img<ByteType> newImg = createFuncImg.apply(img);
 
 		// should both be ByteType. New Img shouldn't be DoubleType (default)
-		assertEquals(img.firstElement().getClass(), newImg.firstElement().getClass());
+		assertEquals(img.firstElement().getClass(), newImg.firstElement()
+			.getClass());
 	}
 
 	@Test
@@ -162,13 +161,14 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractOpTest {
 				{});
 
 		@SuppressWarnings("unchecked")
-		final Img<DoubleType> arrayImg = createFunc.apply(dim, new DoubleType(), new ArrayImgFactory<>(new DoubleType()));
+		final Img<DoubleType> arrayImg = createFunc.apply(dim, new DoubleType(),
+			new ArrayImgFactory<>(new DoubleType()));
 		final Class<?> arrayFactoryClass = arrayImg.factory().getClass();
 		assertEquals(ArrayImgFactory.class, arrayFactoryClass, "Image Factory: ");
 
 		@SuppressWarnings("unchecked")
 		final Img<DoubleType> cellImg = createFunc.apply(dim, new DoubleType(),
-				new CellImgFactory<>(new DoubleType()));
+			new CellImgFactory<>(new DoubleType()));
 		final Class<?> cellFactoryClass = cellImg.factory().getClass();
 		assertEquals(CellImgFactory.class, cellFactoryClass, "Image Factory: ");
 	}
@@ -176,79 +176,81 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractOpTest {
 	@Test
 	public void testImageType() {
 		final Dimensions dim = new FinalDimensions(10, 10, 10);
-		
-		BiFunction<Dimensions, T, Img<T>> createFunc = OpBuilder.matchFunction(ops, "create.img", new Nil<Dimensions>() {}, new Nil<T>() {}, new Nil<Img<T>>() {});
+
+		BiFunction<Dimensions, T, Img<T>> createFunc = OpBuilder.matchFunction(ops,
+			"create.img", new Nil<Dimensions>()
+			{}, new Nil<T>() {}, new Nil<Img<T>>() {});
 
 		assertEquals(BitType.class, ((Img<?>) createFunc.apply(dim,
 			(T) new BitType())).firstElement().getClass(), "Image Type: ");
 
-		assertEquals(ByteType.class,
-				((Img<?>) createFunc.apply(dim, (T) new ByteType())).firstElement().getClass(), "Image Type: ");
+		assertEquals(ByteType.class, ((Img<?>) createFunc.apply(dim,
+			(T) new ByteType())).firstElement().getClass(), "Image Type: ");
 
-		assertEquals(UnsignedByteType.class,
-				((Img<?>) createFunc.apply(dim, (T) new UnsignedByteType())).firstElement().getClass(), "Image Type: ");
+		assertEquals(UnsignedByteType.class, ((Img<?>) createFunc.apply(dim,
+			(T) new UnsignedByteType())).firstElement().getClass(), "Image Type: ");
 
-		assertEquals(IntType.class,
-				((Img<?>) createFunc.apply(dim, (T) new IntType())).firstElement().getClass(), "Image Type: ");
+		assertEquals(IntType.class, ((Img<?>) createFunc.apply(dim,
+			(T) new IntType())).firstElement().getClass(), "Image Type: ");
 
-		assertEquals(FloatType.class,
-				((Img<?>) createFunc.apply(dim, (T) new FloatType())).firstElement().getClass(), "Image Type: ");
+		assertEquals(FloatType.class, ((Img<?>) createFunc.apply(dim,
+			(T) new FloatType())).firstElement().getClass(), "Image Type: ");
 
-		assertEquals(DoubleType.class,
-				((Img<?>) createFunc.apply(dim, (T)new DoubleType())).firstElement().getClass(), "Image Type: ");
+		assertEquals(DoubleType.class, ((Img<?>) createFunc.apply(dim,
+			(T) new DoubleType())).firstElement().getClass(), "Image Type: ");
 	}
 
 	@Test
 	public void testCreateFromImgSameType() {
 		final Img<ByteType> input = PlanarImgs.bytes(10, 10, 10);
-		BiFunction<Dimensions, ByteType, Img<ByteType>> createFunc = OpBuilder.matchFunction(ops, "create.img",
-				new Nil<Dimensions>() {
-				}, new Nil<ByteType>() {
-				}, new Nil<Img<ByteType>>() {
-				});
-		final Img<?> res = createFunc.apply(input, input.firstElement().createVariable());
+		BiFunction<Dimensions, ByteType, Img<ByteType>> createFunc = OpBuilder
+			.matchFunction(ops, "create.img", new Nil<Dimensions>()
+			{}, new Nil<ByteType>() {}, new Nil<Img<ByteType>>() {});
+		final Img<?> res = createFunc.apply(input, input.firstElement()
+			.createVariable());
 
 		assertEquals(ByteType.class, res.firstElement().getClass(), "Image Type: ");
-		assertArrayEquals(Intervals.dimensionsAsLongArray(input),
-				Intervals.dimensionsAsLongArray(res), "Image Dimensions: ");
-		assertEquals(input.factory().getClass(), res.factory().getClass(), "Image Factory: ");
+		assertArrayEquals(Intervals.dimensionsAsLongArray(input), Intervals
+			.dimensionsAsLongArray(res), "Image Dimensions: ");
+		assertEquals(input.factory().getClass(), res.factory().getClass(),
+			"Image Factory: ");
 	}
 
 	@Test
 	public void testCreateFromImgDifferentType() {
 		final Img<ByteType> input = PlanarImgs.bytes(10, 10, 10);
-		BiFunction<Dimensions, ShortType, Img<ShortType>> createFunc = OpBuilder.matchFunction(ops, "create.img",
-				new Nil<Dimensions>() {
-				}, new Nil<ShortType>() {
-				}, new Nil<Img<ShortType>>() {
-				});
+		BiFunction<Dimensions, ShortType, Img<ShortType>> createFunc = OpBuilder
+			.matchFunction(ops, "create.img", new Nil<Dimensions>()
+			{}, new Nil<ShortType>() {}, new Nil<Img<ShortType>>() {});
 		final Img<?> res = createFunc.apply(input, new ShortType());
 
-		assertEquals(ShortType.class, res.firstElement().getClass(), "Image Type: ");
-		assertArrayEquals(Intervals.dimensionsAsLongArray(input),
-				Intervals.dimensionsAsLongArray(res), "Image Dimensions: ");
-		assertEquals(input.factory().getClass(), res.factory().getClass(), "Image Factory: ");
+		assertEquals(ShortType.class, res.firstElement().getClass(),
+			"Image Type: ");
+		assertArrayEquals(Intervals.dimensionsAsLongArray(input), Intervals
+			.dimensionsAsLongArray(res), "Image Dimensions: ");
+		assertEquals(input.factory().getClass(), res.factory().getClass(),
+			"Image Factory: ");
 	}
 
 	@Test
 	public void testCreateFromRaiDifferentType() {
-		final IntervalView<ByteType> input = Views.interval(PlanarImgs.bytes(10, 10, 10),
-				new FinalInterval(new long[] { 10, 10, 1 }));
+		final IntervalView<ByteType> input = Views.interval(PlanarImgs.bytes(10, 10,
+			10), new FinalInterval(new long[] { 10, 10, 1 }));
 
-		BiFunction<Dimensions, ShortType, Img<ShortType>> createFunc = OpBuilder.matchFunction(ops, "create.img",
-				new Nil<Dimensions>() {
-				}, new Nil<ShortType>() {
-				}, new Nil<Img<ShortType>>() {
-				});
+		BiFunction<Dimensions, ShortType, Img<ShortType>> createFunc = OpBuilder
+			.matchFunction(ops, "create.img", new Nil<Dimensions>()
+			{}, new Nil<ShortType>() {}, new Nil<Img<ShortType>>() {});
 
 		final Img<?> res = createFunc.apply(input, new ShortType());
 
-		assertEquals(ShortType.class, res.firstElement().getClass(), "Image Type: ");
+		assertEquals(ShortType.class, res.firstElement().getClass(),
+			"Image Type: ");
 
-		assertArrayEquals(Intervals.dimensionsAsLongArray(input),
-				Intervals.dimensionsAsLongArray(res), "Image Dimensions: ");
+		assertArrayEquals(Intervals.dimensionsAsLongArray(input), Intervals
+			.dimensionsAsLongArray(res), "Image Dimensions: ");
 
-		assertEquals(ArrayImgFactory.class, res.factory().getClass(), "Image Factory: ");
+		assertEquals(ArrayImgFactory.class, res.factory().getClass(),
+			"Image Factory: ");
 	}
 
 	/**
@@ -259,31 +261,33 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractOpTest {
 	public void testCreateFromIntegerArray() {
 		final Integer[] dims = new Integer[] { 25, 25, 10 };
 
-		Function<Integer[], Img<?>> createFunc = OpBuilder.matchFunction(ops, "create.img", new Nil<Integer[]>() {
-		}, new Nil<Img<?>>() {
-		});
+		Function<Integer[], Img<?>> createFunc = OpBuilder.matchFunction(ops,
+			"create.img", new Nil<Integer[]>()
+			{}, new Nil<Img<?>>() {});
 		final Img<?> res = createFunc.apply(dims);
 
 		for (int i = 0; i < dims.length; i++) {
-			assertEquals(dims[i].longValue(), res.dimension(i), "Image Dimension " + i + ": ");
+			assertEquals(dims[i].longValue(), res.dimension(i), "Image Dimension " +
+				i + ": ");
 		}
 	}
 
 	/**
-	 * A simple test to ensure {@link Long} arrays are not eaten by the varargs when
-	 * passed as the only argument.
+	 * A simple test to ensure {@link Long} arrays are not eaten by the varargs
+	 * when passed as the only argument.
 	 */
 	@Test
 	public void testCreateFromLongArray() {
 		final Long[] dims = new Long[] { 25l, 25l, 10l };
 
-		Function<Long[], Img<?>> createFunc = OpBuilder.matchFunction(ops, "create.img", new Nil<Long[]>() {
-		}, new Nil<Img<?>>() {
-		});
+		Function<Long[], Img<?>> createFunc = OpBuilder.matchFunction(ops,
+			"create.img", new Nil<Long[]>()
+			{}, new Nil<Img<?>>() {});
 		final Img<?> res = createFunc.apply(dims);
 
 		for (int i = 0; i < dims.length; i++) {
-			assertEquals(dims[i].longValue(), res.dimension(i), "Image Dimension " + i + ": ");
+			assertEquals(dims[i].longValue(), res.dimension(i), "Image Dimension " +
+				i + ": ");
 		}
 	}
 

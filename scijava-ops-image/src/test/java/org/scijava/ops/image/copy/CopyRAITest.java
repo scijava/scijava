@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -73,9 +73,11 @@ public class CopyRAITest extends AbstractOpTest {
 
 	@BeforeEach
 	public void createData() {
-		input = new ArrayImgFactory<>(new UnsignedByteType()).create(new int[] { 120, 100 });
+		input = new ArrayImgFactory<>(new UnsignedByteType()).create(new int[] {
+			120, 100 });
 
-		final MersenneTwisterFast r = new MersenneTwisterFast(System.currentTimeMillis());
+		final MersenneTwisterFast r = new MersenneTwisterFast(System
+			.currentTimeMillis());
 
 		final Cursor<UnsignedByteType> inc = input.cursor();
 
@@ -87,14 +89,15 @@ public class CopyRAITest extends AbstractOpTest {
 		final long[] start = new long[] { 16, 16, 16 };
 		final long[] end = new long[] { 47, 47, 47 };
 
-		input2 = ops.op("create.img").arity2().input(new FinalDimensions(size1), new UnsignedByteType())
-				.outType(new Nil<Img<UnsignedByteType>>() {}).apply();
+		input2 = ops.op("create.img").arity2().input(new FinalDimensions(size1),
+			new UnsignedByteType()).outType(new Nil<Img<UnsignedByteType>>()
+		{}).apply();
 
 		// create the same input but force it to be a planar image
-		inputPlanar = ops.op("create.img")
-				.arity3().input(new FinalDimensions(size1), new UnsignedByteType(),
-						new PlanarImgFactory<>(new UnsignedByteType()))
-				.outType(new Nil<Img<UnsignedByteType>>() {}).apply();
+		inputPlanar = ops.op("create.img").arity3().input(new FinalDimensions(
+			size1), new UnsignedByteType(), new PlanarImgFactory<>(
+				new UnsignedByteType())).outType(new Nil<Img<UnsignedByteType>>()
+		{}).apply();
 
 		// get centered views
 		view = Views.interval(input2, new FinalInterval(start, end));
@@ -132,7 +135,8 @@ public class CopyRAITest extends AbstractOpTest {
 
 	@Test
 	public void copyRAIWithOutputTest() {
-		final Img<UnsignedByteType> output = input.factory().create(input, input.firstElement());
+		final Img<UnsignedByteType> output = input.factory().create(input, input
+			.firstElement());
 
 		ops.op("copy.rai").arity1().input(input).output(output).compute();
 
@@ -148,15 +152,18 @@ public class CopyRAITest extends AbstractOpTest {
 	public void copyRAIDifferentSizeTest() {
 
 		// create a copy op
-		final Computers.Arity1<IntervalView<UnsignedByteType>, RandomAccessibleInterval<UnsignedByteType>> copy = OpBuilder
-				.matchComputer(ops, "copy.rai", new Nil<IntervalView<UnsignedByteType>>() {},
-						new Nil<RandomAccessibleInterval<UnsignedByteType>>() {});
+		final Computers.Arity1<IntervalView<UnsignedByteType>, RandomAccessibleInterval<UnsignedByteType>> copy =
+			OpBuilder.matchComputer(ops, "copy.rai",
+				new Nil<IntervalView<UnsignedByteType>>()
+				{}, new Nil<RandomAccessibleInterval<UnsignedByteType>>() {});
 
 		assertNotNull(copy);
 
-		final Img<UnsignedByteType> out = ops.op("create.img").arity2().input(new FinalDimensions(size2), new UnsignedByteType()) //
-				.outType(new Nil<Img<UnsignedByteType>>() {}) //
-				.apply();
+		final Img<UnsignedByteType> out = ops.op("create.img").arity2().input(
+			new FinalDimensions(size2), new UnsignedByteType()) //
+			.outType(new Nil<Img<UnsignedByteType>>()
+			{}) //
+			.apply();
 
 		// copy view to output and assert that is equal to the mean of the view
 		copy.compute(view, out);
@@ -165,13 +172,15 @@ public class CopyRAITest extends AbstractOpTest {
 		assertEquals(sum.getRealDouble(), 100.0, delta);
 
 		// also try with a planar image
-		final Img<UnsignedByteType> outFromPlanar = ops.op("create.img")
-				.arity2().input(new FinalDimensions(size2), new UnsignedByteType()).outType(new Nil<Img<UnsignedByteType>>() {})
-				.apply();
+		final Img<UnsignedByteType> outFromPlanar = ops.op("create.img").arity2()
+			.input(new FinalDimensions(size2), new UnsignedByteType()).outType(
+				new Nil<Img<UnsignedByteType>>()
+				{}).apply();
 
 		copy.compute(viewPlanar, outFromPlanar);
 		DoubleType sumFromPlanar = new DoubleType();
-		ops.op("stats.mean").arity1().input(outFromPlanar).output(sumFromPlanar).compute();
+		ops.op("stats.mean").arity1().input(outFromPlanar).output(sumFromPlanar)
+			.compute();
 		assertEquals(sumFromPlanar.getRealDouble(), 100.0, delta);
 
 	}

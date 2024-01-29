@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.features.hog;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,7 +44,7 @@ import net.imglib2.type.numeric.real.FloatType;
  * The HoG Op is tested by comparing its result with the ground-truth which was
  * created on a certain test image. So this test runs only with this certain
  * test image. The correctness of the ground-truth has been verified by hand.
- * 
+ *
  * @author Simon Schmid (University of Konstanz)
  */
 public class HistogramOfOrientedGradients2DTest extends AbstractOpTest {
@@ -56,8 +57,10 @@ public class HistogramOfOrientedGradients2DTest extends AbstractOpTest {
 		Img<FloatType> hogInputImg = openFloatImg("HoG2DInput.png");
 
 		// use numOrientations = 9 and spanOfNeighborhood = 2 for test
-		RandomAccessibleInterval<FloatType> hogOp = ops.op("features.hog").arity3().input(hogInputImg, 9, 2)
-				.outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
+		RandomAccessibleInterval<FloatType> hogOp = ops.op("features.hog").arity3()
+			.input(hogInputImg, 9, 2).outType(
+				new Nil<RandomAccessibleInterval<FloatType>>()
+				{}).apply();
 
 		RandomAccess<FloatType> raOp = hogOp.randomAccess();
 		RandomAccess<FloatType> raTest = hogTestImg.randomAccess();

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -35,13 +35,13 @@ import org.scijava.ops.api.OpEnvironment;
 
 /**
  * An example Op, registered by YAML into the {@link OpEnvironment}
+ *
  * @author Gabriel Selzer
  * @implNote op names=example.add, priority=100.0
  */
 public class YAMLClassOp implements BiFunction<Double, Double, Double> {
 
 	/**
-	 *
 	 * @param aDouble the first input
 	 * @param aDouble2 the second input
 	 * @return the result
@@ -52,7 +52,9 @@ public class YAMLClassOp implements BiFunction<Double, Double, Double> {
 	}
 
 	/**
-	 * An example inner class Op, registered by YAML into the {@link OpEnvironment}
+	 * An example inner class Op, registered by YAML into the
+	 * {@link OpEnvironment}
+	 *
 	 * @implNote op names=example.div
 	 * @author Gabriel Selzer
 	 * @author Daffy Duck
@@ -62,7 +64,6 @@ public class YAMLClassOp implements BiFunction<Double, Double, Double> {
 	{
 
 		/**
-		 *
 		 * @param aDouble the first input
 		 * @param aDouble2 the second input
 		 * @return the result

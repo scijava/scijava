@@ -1,3 +1,4 @@
+
 package org.scijava.ops.benchmarks;
 
 import java.io.FileWriter;
@@ -38,7 +39,7 @@ public class PerformanceBenchmark {
 	 * method name to the time measured.
 	 * </p>
 	 */
-	private final List< Map< String, Long > > results = new ArrayList<>();
+	private final List<Map<String, Long>> results = new ArrayList<>();
 	private final OpEnvironment env = OpEnvironment.build();
 
 	private final OpService ops;
@@ -139,8 +140,8 @@ public class PerformanceBenchmark {
 		}
 
 		// write to disk
-		final String path =
-				"results-" + prefix + "-" + width + "x" + height + ".csv";
+		final String path = "results-" + prefix + "-" + width + "x" + height +
+			".csv";
 		final PrintWriter out = new PrintWriter(new FileWriter(path));
 		out.print(sb);
 		out.close();
@@ -225,7 +226,7 @@ public class PerformanceBenchmark {
 	}
 
 	private void reportTime(final String label, final long time,
-			final long... otherTimes)
+		final long... otherTimes)
 	{
 		final StringBuilder sb = new StringBuilder();
 		sb.append("\t");
@@ -274,7 +275,7 @@ public class PerformanceBenchmark {
 	}
 
 	private void invertUsingImageJOps(final byte[] data) {
-		ops.run("image.invert", new Object[] {data});
+		ops.run("image.invert", new Object[] { data });
 	}
 
 	// -- Randomization methods --
@@ -296,7 +297,7 @@ public class PerformanceBenchmark {
 	}
 
 	private void randomizeUsingImageJOps(final byte[] data) {
-		ops.run("math.randomUniform", new Object[] {data});
+		ops.run("math.randomUniform", new Object[] { data });
 	}
 
 	private static double expensiveOperation(final int value) {

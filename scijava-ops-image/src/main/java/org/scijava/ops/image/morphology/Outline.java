@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -51,29 +51,27 @@ import org.scijava.function.Computers;
  * the input. Rectangles become outlines, solid cubes become surfaces etc.
  *
  * @author Richard Domander (Royal Veterinary College, London)
- *@implNote op names='morphology.outline'
+ * @implNote op names='morphology.outline'
  */
-public class Outline<B extends BooleanType<B>>
-		implements Computers.Arity2<RandomAccessibleInterval<B>, Boolean, RandomAccessibleInterval<BitType>> {
+public class Outline<B extends BooleanType<B>> implements
+	Computers.Arity2<RandomAccessibleInterval<B>, Boolean, RandomAccessibleInterval<BitType>>
+{
 
 	/**
 	 * Copies the outlines of the objects in the input interval into the output
 	 *
-	 * @param input
-	 *            a binary interval
-	 * @param excludeEdges
-	 *            are elements on stack edges outline or not
-	 *            <p>
-	 *            For example, a 2D square:<br>
-	 *            0 0 0 0<br>
-	 *            1 1 1 0<br>
-	 *            E 1 1 0<br>
-	 *            1 1 1 0<br>
-	 *            0 0 0 0<br>
-	 *            Element E is removed if parameter true, kept if false
-	 *            </p>
-	 * @param output
-	 *            outlines of the objects in interval
+	 * @param input a binary interval
+	 * @param excludeEdges are elements on stack edges outline or not
+	 *          <p>
+	 *          For example, a 2D square:<br>
+	 *          0 0 0 0<br>
+	 *          1 1 1 0<br>
+	 *          E 1 1 0<br>
+	 *          1 1 1 0<br>
+	 *          0 0 0 0<br>
+	 *          Element E is removed if parameter true, kept if false
+	 *          </p>
+	 * @param output outlines of the objects in interval
 	 */
 	/**
 	 * TODO
@@ -83,14 +81,16 @@ public class Outline<B extends BooleanType<B>>
 	 * @param output
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<B> input, final Boolean excludeEdges,
-			final RandomAccessibleInterval<BitType> output) {
+	public void compute(final RandomAccessibleInterval<B> input,
+		final Boolean excludeEdges, final RandomAccessibleInterval<BitType> output)
+	{
 		if (!Intervals.equalDimensions(input, output))
-			throw new IllegalArgumentException("input and output must have equal dimensions!");
+			throw new IllegalArgumentException(
+				"input and output must have equal dimensions!");
 		final Cursor<B> inputCursor = Views.iterable(input).localizingCursor();
 		final long[] coordinates = new long[input.numDimensions()];
-		final ExtendedRandomAccessibleInterval<B, RandomAccessibleInterval<B>> extendedInput = extendInterval(input,
-				excludeEdges);
+		final ExtendedRandomAccessibleInterval<B, RandomAccessibleInterval<B>> extendedInput =
+			extendInterval(input, excludeEdges);
 		final RandomAccess<BitType> outputAccess = output.randomAccess();
 		while (inputCursor.hasNext()) {
 			inputCursor.fwd();
@@ -103,8 +103,9 @@ public class Outline<B extends BooleanType<B>>
 	}
 
 	// region -- Helper methods --
-	private ExtendedRandomAccessibleInterval<B, RandomAccessibleInterval<B>> extendInterval(
-			RandomAccessibleInterval<B> interval, boolean excludeEdges) {
+	private ExtendedRandomAccessibleInterval<B, RandomAccessibleInterval<B>>
+		extendInterval(RandomAccessibleInterval<B> interval, boolean excludeEdges)
+	{
 		final B type = Util.getTypeFromInterval(interval).createVariable();
 		type.set(excludeEdges);
 		return Views.extendValue(interval, type);
@@ -114,18 +115,20 @@ public class Outline<B extends BooleanType<B>>
 	 * Creates a view that spans from (x-1, y-1, ... i-1) to (x+1, y+1, ... i+1)
 	 * around the given coordinates
 	 *
-	 * @param interval
-	 *            the space of the coordinates
-	 * @param coordinates
-	 *            coordinates (x, y, ... i)
+	 * @param interval the space of the coordinates
+	 * @param coordinates coordinates (x, y, ... i)
 	 * @return a view of a neighbourhood in the space
 	 */
 	private IntervalView<B> neighbourhoodInterval(
-			final ExtendedRandomAccessibleInterval<B, RandomAccessibleInterval<B>> interval, final long[] coordinates) {
+		final ExtendedRandomAccessibleInterval<B, RandomAccessibleInterval<B>> interval,
+		final long[] coordinates)
+	{
 		final int dimensions = interval.numDimensions();
 		final BoundingBox box = new BoundingBox(dimensions);
-		final long[] minBounds = Arrays.stream(coordinates).map(c -> c - 1).toArray();
-		final long[] maxBounds = Arrays.stream(coordinates).map(c -> c + 1).toArray();
+		final long[] minBounds = Arrays.stream(coordinates).map(c -> c - 1)
+			.toArray();
+		final long[] maxBounds = Arrays.stream(coordinates).map(c -> c + 1)
+			.toArray();
 		box.update(minBounds);
 		box.update(maxBounds);
 		return Views.offsetInterval(interval, box);
@@ -146,22 +149,23 @@ public class Outline<B extends BooleanType<B>>
 	/**
 	 * Checks if an element is part of the outline of an object
 	 *
-	 * @param source
-	 *            the location of the element
-	 * @param coordinates
-	 *            coordinates of the element
+	 * @param source the location of the element
+	 * @param coordinates coordinates of the element
 	 * @return true if element is foreground and has at least one background
 	 *         neighbour
 	 */
-	private boolean isOutline(final ExtendedRandomAccessibleInterval<B, RandomAccessibleInterval<B>> source,
-			final long[] coordinates) {
+	private boolean isOutline(
+		final ExtendedRandomAccessibleInterval<B, RandomAccessibleInterval<B>> source,
+		final long[] coordinates)
+	{
 		final OutOfBounds<B> access = source.randomAccess();
 		access.setPosition(coordinates);
 		if (!access.get().get()) {
 			return false;
 		}
 
-		final IntervalView<B> neighbourhood = neighbourhoodInterval(source, coordinates);
+		final IntervalView<B> neighbourhood = neighbourhoodInterval(source,
+			coordinates);
 		return isAnyBackground(neighbourhood);
 	}
 	// endregion

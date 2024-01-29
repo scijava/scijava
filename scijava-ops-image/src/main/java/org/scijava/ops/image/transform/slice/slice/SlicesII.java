@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -48,10 +48,12 @@ import net.imglib2.view.Views;
 /**
  * Helper class to iterate through subsets of {@link RandomAccessibleInterval}s
  * (e.g. {@link Img}s)
- * 
+ *
  * @author Christian Dietz (University of Konstanz)
  */
-public class SlicesII<T> extends AbstractInterval implements IterableInterval<RandomAccessibleInterval<T>> {
+public class SlicesII<T> extends AbstractInterval implements
+	IterableInterval<RandomAccessibleInterval<T>>
+{
 
 	private final Interval slice;
 
@@ -60,18 +62,16 @@ public class SlicesII<T> extends AbstractInterval implements IterableInterval<Ra
 	private boolean dropSingltonDimensions;
 
 	/**
-	 * @param source
-	 *            {@link RandomAccessibleInterval} which will be virtually
-	 *            cropped
-	 * @param axesOfInterest
-	 *            axes which define a plane, cube, hypercube, ...! All other
-	 *            axes will be iterated.
-	 * @param dropSingletonDimensions
-	 *            if true, dimensions of size one will be discarded in the
-	 *            sliced images
+	 * @param source {@link RandomAccessibleInterval} which will be virtually
+	 *          cropped
+	 * @param axesOfInterest axes which define a plane, cube, hypercube, ...! All
+	 *          other axes will be iterated.
+	 * @param dropSingletonDimensions if true, dimensions of size one will be
+	 *          discarded in the sliced images
 	 */
-	public SlicesII(final RandomAccessibleInterval<T> source, final int[] axesOfInterest,
-			final boolean dropSingletonDimensions) {
+	public SlicesII(final RandomAccessibleInterval<T> source,
+		final int[] axesOfInterest, final boolean dropSingletonDimensions)
+	{
 		super(initIntervals(source, axesOfInterest));
 
 		final long[] sliceMin = new long[source.numDimensions()];
@@ -90,19 +90,21 @@ public class SlicesII<T> extends AbstractInterval implements IterableInterval<Ra
 	}
 
 	/**
-	 * @param source
-	 *            {@link RandomAccessibleInterval} which will be virtually
-	 *            cropped
-	 * @param axesOfInterest
-	 *            axes which define a plane, cube, hypercube, ...! All other
-	 *            axes will be iterated.
+	 * @param source {@link RandomAccessibleInterval} which will be virtually
+	 *          cropped
+	 * @param axesOfInterest axes which define a plane, cube, hypercube, ...! All
+	 *          other axes will be iterated.
 	 */
-	public SlicesII(final RandomAccessibleInterval<T> source, final int[] axesOfInterest) {
+	public SlicesII(final RandomAccessibleInterval<T> source,
+		final int[] axesOfInterest)
+	{
 		this(source, axesOfInterest, true);
 	}
 
 	// init method
-	private static Interval initIntervals(final Interval src, final int[] axesOfInterest) {
+	private static Interval initIntervals(final Interval src,
+		final int[] axesOfInterest)
+	{
 
 		final long[] dimensionsToIterate = new long[src.numDimensions()];
 		src.dimensions(dimensionsToIterate);
@@ -153,17 +155,21 @@ public class SlicesII<T> extends AbstractInterval implements IterableInterval<Ra
 
 	/**
 	 * Help class.
-	 * 
+	 *
 	 * @author Christian Dietz (University of Konstanz)
 	 */
-	private class SlicesIICursor extends IntervalIterator implements Cursor<RandomAccessibleInterval<T>> {
+	private class SlicesIICursor extends IntervalIterator implements
+		Cursor<RandomAccessibleInterval<T>>
+	{
 
 		private final long[] tmpPosition;
 		private final RandomAccessibleInterval<T> src;
 		private final long[] sliceDims;
 		private final long[] sliceOffset;
 
-		public SlicesIICursor(final RandomAccessibleInterval<T> src, final Interval fixedAxes, final Interval slice) {
+		public SlicesIICursor(final RandomAccessibleInterval<T> src,
+			final Interval fixedAxes, final Interval slice)
+		{
 			super(fixedAxes);
 
 			this.src = src;

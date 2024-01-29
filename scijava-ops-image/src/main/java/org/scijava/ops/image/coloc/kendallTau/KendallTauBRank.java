@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.coloc.kendallTau;
 
 import java.util.Arrays;
@@ -69,10 +70,12 @@ import net.imglib2.util.Pair;
  * @author Johannes Schindelin
  * @author Ellen T Arena
  * @param <T>
- *@implNote op names='coloc.kendallTau'
+ * @implNote op names='coloc.kendallTau'
  */
 public class KendallTauBRank<T extends RealType<T>, U extends RealType<U>>
-		/* extends Algorithm<T> */ implements BiFunction<Iterable<T>, Iterable<U>, Double> {
+	/* extends Algorithm<T> */ implements
+	BiFunction<Iterable<T>, Iterable<U>, Double>
+{
 
 	/**
 	 * TODO
@@ -84,15 +87,18 @@ public class KendallTauBRank<T extends RealType<T>, U extends RealType<U>>
 	@Override
 	public Double apply(Iterable<T> image1, Iterable<U> image2) {
 		if (!ColocUtil.sameIterationOrder(image1, image2))
-			throw new IllegalArgumentException("Input and output must be of the same iteration order!");
+			throw new IllegalArgumentException(
+				"Input and output must be of the same iteration order!");
 		final Iterable<Pair<T, U>> samples = new IterablePair<>(image1, image2);
 		return calculateMergeSort(samples);
 	}
 
 	private double[][] getPairs(final Iterable<Pair<T, U>> samples) {
-		// TODO: it is ridiculous that this has to be counted all the time (i.e. in most
+		// TODO: it is ridiculous that this has to be counted all the time (i.e. in
+		// most
 		// if not all measurements!).
-		// We only need an upper bound to begin with, so even the number of pixels in
+		// We only need an upper bound to begin with, so even the number of pixels
+		// in
 		// the first channel would be enough!
 		int capacity = 0;
 		for (@SuppressWarnings("unused")
@@ -125,15 +131,14 @@ public class KendallTauBRank<T extends RealType<T>, U extends RealType<U>>
 	 * supposed to be the method described in:
 	 * </p>
 	 * <blockquote>Knight, W. (1966). "A Computer Method for Calculating Kendall's
-	 * Tau with Ungrouped Data". Journal of the American Statistical Association 61
-	 * (314): 436–439. doi:10.2307/2282833.</blockquote>
+	 * Tau with Ungrouped Data". Journal of the American Statistical Association
+	 * 61 (314): 436–439. doi:10.2307/2282833.</blockquote>
 	 * <p>
 	 * but since that article is not available as Open Access, it is unnecessarily
 	 * hard to verify.
 	 * </p>
-	 * 
-	 * @param samples
-	 *            the iterator of the pairs
+	 *
+	 * @param samples the iterator of the pairs
 	 * @return Tau-b
 	 */
 	private double calculateMergeSort(final Iterable<Pair<T, U>> samples) {
@@ -156,7 +161,8 @@ public class KendallTauBRank<T extends RealType<T>, U extends RealType<U>>
 			return result != 0 ? result : Double.compare(ya, yb);
 		});
 
-		// The trick is to count the ties of x (n1) and the joint ties of x and y (n3)
+		// The trick is to count the ties of x (n1) and the joint ties of x and y
+		// (n3)
 		// now, while
 		// index is sorted with regards to x.
 		long n0 = n * (long) (n - 1) / 2;
@@ -179,7 +185,8 @@ public class KendallTauBRank<T extends RealType<T>, U extends RealType<U>>
 					n3 += (i1 - i2 + 2) * (long) (i1 - i2 + 1) / 2;
 				}
 				y0 = y1;
-			} while (i1 < n && x[index[i1]] == x0);
+			}
+			while (i1 < n && x[index[i1]] == x0);
 			n1 += (i1 - i + 1) * (long) (i1 - i) / 2;
 			i = i1;
 		}
@@ -209,7 +216,8 @@ public class KendallTauBRank<T extends RealType<T>, U extends RealType<U>>
 			i = i1;
 		}
 
-		return (n0 - n1 - n2 + n3 - 2 * S) / Math.sqrt((n0 - n1) * (double) (n0 - n2));
+		return (n0 - n1 - n2 + n3 - 2 * S) / Math.sqrt((n0 - n1) * (double) (n0 -
+			n2));
 	}
 
 	private final static class MergeSort {
@@ -231,13 +239,14 @@ public class KendallTauBRank<T extends RealType<T>, U extends RealType<U>>
 		 * <p>
 		 * This implements a non-recursive merge sort.
 		 * </p>
-		 * 
+		 *
 		 * @return the equivalent number of BubbleSort swaps
 		 */
 		public long sort() {
 			long swaps = 0;
 			int n = index.length;
-			// There are merge sorts which perform in-place, but their runtime is worse than
+			// There are merge sorts which perform in-place, but their runtime is
+			// worse than
 			// O(n log n)
 			int[] index2 = new int[n];
 			for (int step = 1; step < n; step <<= 1) {
@@ -259,15 +268,18 @@ public class KendallTauBRank<T extends RealType<T>, U extends RealType<U>>
 						if (compare > 0) {
 							swaps += begin2 - i;
 							index2[k++] = index[j++];
-						} else {
+						}
+						else {
 							index2[k++] = index[i++];
 						}
 					}
 					if (i < begin2) {
 						do {
 							index2[k++] = index[i++];
-						} while (i < begin2);
-					} else {
+						}
+						while (i < begin2);
+					}
+					else {
 						while (j < end) {
 							index2[k++] = index[j++];
 						}

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -58,10 +58,13 @@ import net.imglib2.view.Views;
  * (2017) IEEE Signal Processing "Automated and Robust Quantification of
  * Colocalization in Dual-Color Fluorescence Microscopy: A Nonparametric
  * Statistical Approach".
- *@implNote op names='coloc.pValue'
+ *
+ * @implNote op names='coloc.pValue'
  */
-public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> implements
-		Computers.Arity6<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double>, Integer, Dimensions, Long, PValueResult> {
+public class DefaultPValue<T extends RealType<T>, U extends RealType<U>>
+	implements
+	Computers.Arity6<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double>, Integer, Dimensions, Long, PValueResult>
+{
 
 	/**
 	 * TODO
@@ -76,13 +79,13 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> impleme
 	 */
 	@Override
 	public void compute( //
-			final RandomAccessibleInterval<T> image1, //
-			final RandomAccessibleInterval<U> image2, //
-			final BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> op, //
-			@Nullable Integer nrRandomizations, //
-			@Nullable Dimensions psfSize, //
-			@Nullable Long seed, //
-			final PValueResult output //
+		final RandomAccessibleInterval<T> image1, //
+		final RandomAccessibleInterval<U> image2, //
+		final BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> op, //
+		@Nullable Integer nrRandomizations, //
+		@Nullable Dimensions psfSize, //
+		@Nullable Long seed, //
+		final PValueResult output //
 	) {
 		// Check nullable arguments
 		if (nrRandomizations == null) {
@@ -114,7 +117,7 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> impleme
 		}
 
 		List<Integer> params = IntStream.rangeClosed(0, numTasks - 1) //
-		 .boxed().collect(Collectors.toList());
+			.boxed().collect(Collectors.toList());
 
 		// NB final variable needed for use in lambda
 		final Integer nr = nrRandomizations;
@@ -122,14 +125,14 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> impleme
 			int offset = t * nr / numTasks;
 			int count = (t + 1) * nr / numTasks - offset;
 			// a new one per thread and each needs its own seed
-			final ShuffledView<T> shuffled = new ShuffledView<>(trimmedImage1, blockSize, seeds[offset]);
-			Img<T> buffer = Util.getSuitableImgFactory(shuffled, type1).create(shuffled);
+			final ShuffledView<T> shuffled = new ShuffledView<>(trimmedImage1,
+				blockSize, seeds[offset]);
+			Img<T> buffer = Util.getSuitableImgFactory(shuffled, type1).create(
+				shuffled);
 			for (int i = 0; i < count; i++) {
 				int index = offset + i;
-				if (index >= nr)
-					break;
-				if (i > 0)
-					shuffled.shuffleBlocks(seeds[index]);
+				if (index >= nr) break;
+				if (i > 0) shuffled.shuffleBlocks(seeds[index]);
 				copy(shuffled, buffer);
 				sampleDistribution[index] = op.apply(buffer, trimmedImage2);
 			}
@@ -137,10 +140,10 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> impleme
 
 		try {
 			executor.forEach(params, task);
-		} catch (final Exception exc) {
+		}
+		catch (final Exception exc) {
 			final Throwable cause = exc.getCause();
-			if (cause instanceof RuntimeException)
-				throw (RuntimeException) cause;
+			if (cause instanceof RuntimeException) throw (RuntimeException) cause;
 			throw new RuntimeException(exc);
 		}
 
@@ -159,7 +162,9 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> impleme
 		}
 	}
 
-	private double calculatePvalue(final double input, final double[] distribution) {
+	private double calculatePvalue(final double input,
+		final double[] distribution)
+	{
 		double count = 0;
 		for (int i = 0; i < distribution.length; i++) {
 			if (distribution[i] > input) {
@@ -170,23 +175,26 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> impleme
 		return pval;
 	}
 
-	private static int[] blockSize(final Dimensions image, final Dimensions psfSize) {
-		if (psfSize != null)
-			return Intervals.dimensionsAsIntArray(psfSize);
+	private static int[] blockSize(final Dimensions image,
+		final Dimensions psfSize)
+	{
+		if (psfSize != null) return Intervals.dimensionsAsIntArray(psfSize);
 
 		final int[] blockSize = new int[image.numDimensions()];
 		for (int d = 0; d < blockSize.length; d++) {
 			final long size = (long) Math.floor(Math.sqrt(image.dimension(d)));
 			if (size > Integer.MAX_VALUE) {
-				throw new IllegalArgumentException("Image dimension #" + d + " is too large: " + image.dimension(d));
+				throw new IllegalArgumentException("Image dimension #" + d +
+					" is too large: " + image.dimension(d));
 			}
 			blockSize[d] = (int) size;
 		}
 		return blockSize;
 	}
 
-	private static <V> RandomAccessibleInterval<V> trim(final RandomAccessibleInterval<V> image,
-			final int[] blockSize) {
+	private static <V> RandomAccessibleInterval<V> trim(
+		final RandomAccessibleInterval<V> image, final int[] blockSize)
+	{
 		final long[] min = Intervals.minAsLongArray(image);
 		final long[] max = Intervals.maxAsLongArray(image);
 		for (int d = 0; d < blockSize.length; d++) {

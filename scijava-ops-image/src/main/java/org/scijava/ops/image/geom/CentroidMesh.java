@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -39,10 +39,9 @@ import net.imglib2.type.numeric.real.DoubleType;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * Generic implementation of {@code geom.centroid}.
- * 
- * Computation based on http://wwwf.imperial.ac.uk/~rn/centroid.pdf.
- * 
+ * Generic implementation of {@code geom.centroid}. Computation based on
+ * http://wwwf.imperial.ac.uk/~rn/centroid.pdf.
+ *
  * @author Tim-Oliver Buchholz (University of Konstanz)
  * @implNote op names='geom.centroid', label='Geometric: Centroid'
  */
@@ -80,9 +79,12 @@ public class CentroidMesh implements Function<Mesh, RealLocalizable> {
 			final double v2x = input.vertices().x(v2);
 			final double v2y = input.vertices().y(v2);
 			final double v2z = input.vertices().z(v2);
-			c_x += (1 / 24d) * nx * (Math.pow((v0x + v1x), 2) + Math.pow((v1x + v2x), 2) + Math.pow((v2x + v0x), 2));
-			c_y += (1 / 24d) * ny * (Math.pow((v0y + v1y), 2) + Math.pow((v1y + v2y), 2) + Math.pow((v2y + v0y), 2));
-			c_z += (1 / 24d) * nz * (Math.pow((v0z + v1z), 2) + Math.pow((v1z + v2z), 2) + Math.pow((v2z + v0z), 2));
+			c_x += (1 / 24d) * nx * (Math.pow((v0x + v1x), 2) + Math.pow((v1x + v2x),
+				2) + Math.pow((v2x + v0x), 2));
+			c_y += (1 / 24d) * ny * (Math.pow((v0y + v1y), 2) + Math.pow((v1y + v2y),
+				2) + Math.pow((v2y + v0y), 2));
+			c_z += (1 / 24d) * nz * (Math.pow((v0z + v1z), 2) + Math.pow((v1z + v2z),
+				2) + Math.pow((v2z + v0z), 2));
 		}
 
 		double d = 1 / (2 * sizeFunc.apply(input).get());

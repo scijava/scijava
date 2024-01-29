@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -42,7 +42,6 @@ import org.scijava.priority.Priority;
 
 public interface InfoTreeGenerator extends Prioritized<InfoTreeGenerator> {
 
-
 	/**
 	 * Generates an {@link InfoTree}. This {@link InfoTreeGenerator} is only
 	 * responsible for generating the <b>outer layer</b> of the {@link InfoTree},
@@ -57,14 +56,14 @@ public interface InfoTreeGenerator extends Prioritized<InfoTreeGenerator> {
 	 * @return an {@link InfoTree} matching the specifications of
 	 *         {@code signature}
 	 */
-	InfoTree generate(OpEnvironment env, String signature, Map<String, OpInfo> idMap,
-		Collection<InfoTreeGenerator> generators);
+	InfoTree generate(OpEnvironment env, String signature,
+		Map<String, OpInfo> idMap, Collection<InfoTreeGenerator> generators);
 
 	/**
 	 * Filters through a list of {@link InfoTreeGenerator}s to find the generator
 	 * best suited towards generating {@code signature}
 	 * <p>
-	 * 
+	 *
 	 * @param signature the signature that must be generated
 	 * @param generators the list of {@link InfoTreeGenerator}s
 	 * @return the {@link InfoTreeGenerator} best suited to the task
@@ -85,8 +84,8 @@ public interface InfoTreeGenerator extends Prioritized<InfoTreeGenerator> {
 	static InfoTree generateDependencyTree(OpEnvironment env, String subsignature,
 		Map<String, OpInfo> idMap, Collection<InfoTreeGenerator> generators)
 	{
-		InfoTreeGenerator genOpt = InfoTreeGenerator
-			.findSuitableGenerator(subsignature, generators);
+		InfoTreeGenerator genOpt = InfoTreeGenerator.findSuitableGenerator(
+			subsignature, generators);
 		return genOpt.generate(env, subsignature, idMap, generators);
 	}
 

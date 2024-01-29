@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -40,32 +40,37 @@ import org.scijava.ops.spi.Op;
 
 /**
  * Op to calculate the {@code imageMoments.moment00}.
- * 
+ *
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
  * @param <I> input type
  * @param <O> output type
- * @implNote op names='imageMoments.moment00', label='Image Moment: Moment00', priority='10000.'
+ * @implNote op names='imageMoments.moment00', label='Image Moment: Moment00',
+ *           priority='10000.'
  */
 public class DefaultMoment00<I extends RealType<I>, O extends RealType<O>>
 	implements AbstractImageMomentOp<I, O>
 {
 
 	@Override
-	public void computeMoment(final RandomAccessibleInterval<I> input, final O output) {
+	public void computeMoment(final RandomAccessibleInterval<I> input,
+		final O output)
+	{
 
-		List<O> sums = LoopBuilder.setImages(input).multiThreaded().forEachChunk(chunk -> {
-			O sum = output.createVariable();
-			sum.setZero();
-			O temp = output.createVariable();
-			chunk.forEachPixel(pixel -> {
-				temp.setReal(pixel.getRealDouble());
-				sum.add(temp);
+		List<O> sums = LoopBuilder.setImages(input).multiThreaded().forEachChunk(
+			chunk -> {
+				O sum = output.createVariable();
+				sum.setZero();
+				O temp = output.createVariable();
+				chunk.forEachPixel(pixel -> {
+					temp.setReal(pixel.getRealDouble());
+					sum.add(temp);
+				});
+				return sum;
 			});
-			return sum;
-		});
-		
+
 		output.setZero();
-		for(O sum : sums) output.add(sum);
+		for (O sum : sums)
+			output.add(sum);
 	}
 }

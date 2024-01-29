@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -46,7 +46,7 @@ import org.scijava.ops.spi.Nullable;
 
 /**
  * Op used to pad the image by extending the borders
- * 
+ *
  * @author bnorthan
  * @param <T>
  * @param <I>
@@ -54,7 +54,9 @@ import org.scijava.ops.spi.Nullable;
  * @implNote op names='filter.padInput', priority='100.'
  */
 public class PadInput<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
-		implements Functions.Arity3<I, Dimensions, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, O> {
+	implements
+	Functions.Arity3<I, Dimensions, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, O>
+{
 
 	@OpDependency(name = "filter.padIntervalCentered")
 	private BiFunction<I, Dimensions, O> paddingIntervalCentered;
@@ -70,13 +72,16 @@ public class PadInput<T extends ComplexType<T>, I extends RandomAccessibleInterv
 	 * @return the output
 	 */
 	public O apply(final I input, final Dimensions paddedDimensions,
-			@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> obf) {
+		@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> obf)
+	{
 
 		if (obf == null) {
-			obf = new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(input).createVariable());
+			obf = new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(
+				input).createVariable());
 		}
 
-		Interval inputInterval = paddingIntervalCentered.apply(input, paddedDimensions);
+		Interval inputInterval = paddingIntervalCentered.apply(input,
+			paddedDimensions);
 
 		return (O) Views.interval(Views.extend(input, obf), inputInterval);
 	}

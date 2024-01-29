@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -44,7 +44,7 @@ import org.scijava.types.Nil;
 
 /**
  * Tests {@link DefaultEval}.
- * 
+ *
  * @author Curtis Rueden
  */
 public class EvalTest extends AbstractTestEnvironment {
@@ -63,8 +63,8 @@ public class EvalTest extends AbstractTestEnvironment {
 		vars.put("c", 5);
 
 		var evaluator = ops.ternary("expression.eval") //
-				.input("a+c", ops, vars) //
-				.function();
+			.input("a+c", ops, vars) //
+			.function();
 
 		assertEquals(7., evaluator.apply("a+c", ops, vars));
 		assertEquals(3., evaluator.apply("c-a", ops, vars));
@@ -77,8 +77,8 @@ public class EvalTest extends AbstractTestEnvironment {
 	@Test
 	public void testMathWithoutVars() {
 		var result = ops.binary("expression.eval") //
-				.input("5+2", ops) //
-				.apply();
+			.input("5+2", ops) //
+			.apply();
 
 		assertEquals(7., result);
 	}

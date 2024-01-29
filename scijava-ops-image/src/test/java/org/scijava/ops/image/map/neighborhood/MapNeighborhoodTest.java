@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -61,14 +61,15 @@ public class MapNeighborhoodTest extends AbstractOpTest {
 	}
 
 	/**
-	 * Test if every neighborhood pixel of the image was really accessed during the
-	 * map operation.
+	 * Test if every neighborhood pixel of the image was really accessed during
+	 * the map operation.
 	 *
 	 * @see DefaultMapNeighborhood
 	 */
 	@Test
 	public void testMapNeighborhoodsAccess() {
-		ops.op("map.neighborhood").arity3().input(in, new RectangleShape(1, false), new CountNeighbors()).output(out).compute();
+		ops.op("map.neighborhood").arity3().input(in, new RectangleShape(1, false),
+			new CountNeighbors()).output(out).compute();
 
 		for (final ByteType t : out) {
 			assertEquals(9, t.get());
@@ -117,11 +118,15 @@ public class MapNeighborhoodTest extends AbstractOpTest {
 	 *
 	 * @author Jonathan Hale
 	 */
-	private static class CountNeighbors implements Computers.Arity1<Iterable<ByteType>, ByteType> {
+	private static class CountNeighbors implements
+		Computers.Arity1<Iterable<ByteType>, ByteType>
+	{
 
 		@Override
 		public void compute(final Iterable<ByteType> input, final ByteType output) {
-			for (Iterator<ByteType> iter = input.iterator(); iter.hasNext(); iter.next()) {
+			for (Iterator<ByteType> iter = input.iterator(); iter.hasNext(); iter
+				.next())
+			{
 				output.inc();
 			}
 		}
@@ -133,16 +138,22 @@ public class MapNeighborhoodTest extends AbstractOpTest {
 	 *
 	 * @author Jonathan Hale
 	 */
-	private static class CountNeighborsWithCenter implements Computers.Arity2<Iterable<ByteType>, ByteType, ByteType> {
+	private static class CountNeighborsWithCenter implements
+		Computers.Arity2<Iterable<ByteType>, ByteType, ByteType>
+	{
 
 		@Override
-		public void compute(final Iterable<ByteType> neighborhood, final ByteType center, final ByteType output) {
+		public void compute(final Iterable<ByteType> neighborhood,
+			final ByteType center, final ByteType output)
+		{
 			ByteType a = center;
 
 			a.set((byte) 0);
 			output.set((byte) 0);
 
-			for (Iterator<ByteType> iter = neighborhood.iterator(); iter.hasNext(); iter.next()) {
+			for (Iterator<ByteType> iter = neighborhood.iterator(); iter
+				.hasNext(); iter.next())
+			{
 				output.inc();
 				a.inc();
 			}
@@ -155,7 +166,9 @@ public class MapNeighborhoodTest extends AbstractOpTest {
 	 *
 	 * @author Jonathan Hale
 	 */
-	private static class Increment implements Computers.Arity1<ByteType, ByteType> {
+	private static class Increment implements
+		Computers.Arity1<ByteType, ByteType>
+	{
 
 		@Override
 		public void compute(final ByteType input, final ByteType output) {

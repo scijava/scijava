@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.types.extractors;
 
 import java.lang.reflect.ParameterizedType;
@@ -51,11 +52,13 @@ public class ParameterizedTypeExtractor implements TypeExtractor {
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
-	@Override public double getPriority() {
+	@Override
+	public double getPriority() {
 		return Priority.EXTREMELY_LOW;
 	}
 
-	@Override public boolean canReify(TypeReifier r, Class<?> object) {
+	@Override
+	public boolean canReify(TypeReifier r, Class<?> object) {
 		return object.getTypeParameters().length > 0;
 	}
 
@@ -103,8 +106,8 @@ public class ParameterizedTypeExtractor implements TypeExtractor {
 	 * <p>
 	 * In this way, the behavior of the generic type extraction is fully
 	 * extensible, since additional {@link TypeExtractor} plugins can always be
-	 * introduced which extract types more intelligently in cases where more
-	 * <em>a priori</em> knowledge about that type is available at runtime.
+	 * introduced which extract types more intelligently in cases where more <em>a
+	 * priori</em> knowledge about that type is available at runtime.
 	 * </p>
 	 */
 	public Type reify(final TypeReifier r, final Object o) {
@@ -189,7 +192,6 @@ public class ParameterizedTypeExtractor implements TypeExtractor {
 	 * {@link TypeExtractor} plugin which handles <em>exactly</em> the given
 	 * supertype.
 	 * </p>
-	 *
 	 */
 	private Map<TypeVariable<?>, Type> args(TypeReifier t, final Object o,
 		final Class<?> superType)
@@ -208,14 +210,16 @@ public class ParameterizedTypeExtractor implements TypeExtractor {
 			final Type extractedType = extractor.get().reify(t, o);
 			// Populate type variables to fully populate the supertype.
 			if (extractedType instanceof ParameterizedType) {
-				Map<TypeVariable<?>, Type> typeVars = Types.args(c, (ParameterizedType) extractedType);
+				Map<TypeVariable<?>, Type> typeVars = Types.args(c,
+					(ParameterizedType) extractedType);
 				for (TypeVariable<?> typeVar : c.getTypeParameters()) {
 					typeVars.putIfAbsent(typeVar, new Any());
 				}
 				return typeVars;
 			}
 			return Collections.emptyMap();
-		} catch (StackOverflowError e) {
+		}
+		catch (StackOverflowError e) {
 			Map<TypeVariable<?>, Type> typeVars = new HashMap<>();
 			for (TypeVariable<?> typeVar : c.getTypeParameters()) {
 				typeVars.putIfAbsent(typeVar, new Any());
@@ -224,6 +228,5 @@ public class ParameterizedTypeExtractor implements TypeExtractor {
 		}
 
 	}
-
 
 }

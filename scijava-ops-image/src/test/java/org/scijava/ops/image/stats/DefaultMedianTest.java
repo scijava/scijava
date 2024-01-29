@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -100,7 +100,8 @@ public class DefaultMedianTest extends AbstractOpTest {
 			.randomlyFilledUnsignedByteWithSeed(new long[] { 100, 100 }, 1234567890L);
 
 		final DoubleType result = new DoubleType();
-		ops.op("stats.median").arity1().input(randomlyFilledImg).output(result).compute();
+		ops.op("stats.median").arity1().input(randomlyFilledImg).output(result)
+			.compute();
 
 		assertEquals(128d, result.getRealDouble(), 0.00001d);
 	}

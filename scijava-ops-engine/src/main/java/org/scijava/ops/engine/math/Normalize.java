@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.engine.math;
 
 import java.util.Arrays;
@@ -39,16 +40,18 @@ public class Normalize {
 	public static final String NAMES = "math.minmax";
 
 	@OpClass(names = NAMES)
-	public static class MathMinMaxNormalizeFunction implements Functions.Arity3<double[], Double, Double, double[]>, Op {
+	public static class MathMinMaxNormalizeFunction implements
+		Functions.Arity3<double[], Double, Double, double[]>, Op
+	{
 
-			/**
+		/**
 		 * TODO
-		 * 
+		 *
 		 * @param t
 		 * @param newMin
 		 * @param newMax
 		 */
-	@Override
+		@Override
 		public double[] apply(double[] t, Double newMin, Double newMax) {
 			if (newMax == null) {
 				newMax = 1.0;
@@ -56,19 +59,21 @@ public class Normalize {
 			if (newMin >= newMax) {
 				throw new IllegalStateException("Min must be smaller than max.");
 			}
-			
+
 			double min = Arrays.stream(t).min().getAsDouble();
 			double max = Arrays.stream(t).max().getAsDouble();
 			double nMin = newMin;
 			double nMax = newMax;
-			
+
 			return Arrays.stream(t).map(d -> norm(d, min, max, nMin, nMax)).toArray();
 		}
-		
-		private double norm(double d, double dataMin, double dataMax, double newMin, double newMax) {
-			return newMin + (((d - dataMin)*(newMax - newMin))/(dataMax - dataMin));
+
+		private double norm(double d, double dataMin, double dataMax, double newMin,
+			double newMax)
+		{
+			return newMin + (((d - dataMin) * (newMax - newMin)) / (dataMax -
+				dataMin));
 		}
 	}
 
-	
 }

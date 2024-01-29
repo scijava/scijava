@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.transform.permuteView;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -68,29 +69,36 @@ public class PermuteViewTest extends AbstractOpTest {
 
 	private static final long SEED = 0x12345678;
 
-	public static <T> RandomAccessible<T> deinterval(RandomAccessibleInterval<T> input) {
+	public static <T> RandomAccessible<T> deinterval(
+		RandomAccessibleInterval<T> input)
+	{
 		return Views.extendBorder(input);
 	}
 
 	@Test
 	public void defaultPermuteTest() {
 
-		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Integer, MixedTransformView<DoubleType>> permuteFunc = OpBuilder
-				.matchFunction(ops, "transform.permuteView", new Nil<RandomAccessible<DoubleType>>() {
-				}, new Nil<Integer>() {
-				}, new Nil<Integer>() {
-				}, new Nil<MixedTransformView<DoubleType>>() {
-				});
+		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Integer, MixedTransformView<DoubleType>> permuteFunc =
+			OpBuilder.matchFunction(ops, "transform.permuteView",
+				new Nil<RandomAccessible<DoubleType>>()
+				{}, new Nil<Integer>() {}, new Nil<Integer>() {},
+				new Nil<MixedTransformView<DoubleType>>()
+				{});
 
-		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
+			new int[] { 10, 10 });
 
-		MixedTransformView<DoubleType> il2 = Views.permute((RandomAccessible<DoubleType>) img, 1, 0);
-		MixedTransformView<DoubleType> opr = permuteFunc.apply(deinterval(img), 1, 0);
+		MixedTransformView<DoubleType> il2 = Views.permute(
+			(RandomAccessible<DoubleType>) img, 1, 0);
+		MixedTransformView<DoubleType> opr = permuteFunc.apply(deinterval(img), 1,
+			0);
 
 		for (int i = 0; i < il2.getTransformToSource().getMatrix().length; i++) {
-			for (int j = 0; j < il2.getTransformToSource().getMatrix()[i].length; j++) {
-				assertEquals(il2.getTransformToSource().getMatrix()[i][j], opr.getTransformToSource().getMatrix()[i][j],
-						1e-10);
+			for (int j = 0; j < il2.getTransformToSource()
+				.getMatrix()[i].length; j++)
+			{
+				assertEquals(il2.getTransformToSource().getMatrix()[i][j], opr
+					.getTransformToSource().getMatrix()[i][j], 1e-10);
 			}
 		}
 	}
@@ -98,20 +106,22 @@ public class PermuteViewTest extends AbstractOpTest {
 	@Test
 	public void defaultPermuteCoordinatesTest() {
 
-		BiFunction<RandomAccessibleInterval<DoubleType>, int[], IntervalView<DoubleType>> permuteFunc = OpBuilder
-				.matchFunction(ops, "transform.permuteCoordinatesView", new Nil<RandomAccessibleInterval<DoubleType>>() {
-				}, new Nil<int[]>() {
-				}, new Nil<IntervalView<DoubleType>>() {
-				});
+		BiFunction<RandomAccessibleInterval<DoubleType>, int[], IntervalView<DoubleType>> permuteFunc =
+			OpBuilder.matchFunction(ops, "transform.permuteCoordinatesView",
+				new Nil<RandomAccessibleInterval<DoubleType>>()
+				{}, new Nil<int[]>() {}, new Nil<IntervalView<DoubleType>>() {});
 
-		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 2, 2 });
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
+			new int[] { 2, 2 });
 		Cursor<DoubleType> c = img.cursor();
 		MersenneTwisterFast r = new MersenneTwisterFast(SEED);
 		while (c.hasNext()) {
 			c.next().set(r.nextDouble());
 		}
-		Cursor<DoubleType> il2 = Views.permuteCoordinates(img, new int[] { 0, 1 }).cursor();
-		RandomAccess<DoubleType> opr = permuteFunc.apply(img, new int[] { 0, 1 }).randomAccess();
+		Cursor<DoubleType> il2 = Views.permuteCoordinates(img, new int[] { 0, 1 })
+			.cursor();
+		RandomAccess<DoubleType> opr = permuteFunc.apply(img, new int[] { 0, 1 })
+			.randomAccess();
 
 		while (il2.hasNext()) {
 			il2.next();
@@ -124,22 +134,24 @@ public class PermuteViewTest extends AbstractOpTest {
 	@Test
 	public void permuteCoordinatesOfDimensionTest() {
 
-		Functions.Arity3<RandomAccessibleInterval<DoubleType>, int[], Integer, IntervalView<DoubleType>> permuteFunc = OpBuilder
-				.matchFunction(ops, "transform.permuteCoordinatesView", new Nil<RandomAccessibleInterval<DoubleType>>() {
-				}, new Nil<int[]>() {
-				}, new Nil<Integer>() {
-				}, new Nil<IntervalView<DoubleType>>() {
-				});
+		Functions.Arity3<RandomAccessibleInterval<DoubleType>, int[], Integer, IntervalView<DoubleType>> permuteFunc =
+			OpBuilder.matchFunction(ops, "transform.permuteCoordinatesView",
+				new Nil<RandomAccessibleInterval<DoubleType>>()
+				{}, new Nil<int[]>() {}, new Nil<Integer>() {},
+				new Nil<IntervalView<DoubleType>>()
+				{});
 
-		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 2, 2 });
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
+			new int[] { 2, 2 });
 		Cursor<DoubleType> c = img.cursor();
 		MersenneTwisterFast r = new MersenneTwisterFast(SEED);
 		while (c.hasNext()) {
 			c.next().set(r.nextDouble());
 		}
-		Cursor<DoubleType> il2 = Views.permuteCoordinates(img, new int[] { 0, 1 }, 1).cursor();
+		Cursor<DoubleType> il2 = Views.permuteCoordinates(img, new int[] { 0, 1 },
+			1).cursor();
 		RandomAccess<DoubleType> opr = permuteFunc.apply(img, new int[] { 0, 1 }, 1)
-				.randomAccess();
+			.randomAccess();
 
 		while (il2.hasNext()) {
 			il2.next();
@@ -152,22 +164,22 @@ public class PermuteViewTest extends AbstractOpTest {
 	@Test
 	public void defaultPermuteCoordinatesInverseTest() {
 
-		BiFunction<RandomAccessibleInterval<DoubleType>, int[], IntervalView<DoubleType>> permuteFunc = OpBuilder
-				.matchFunction(ops, "transform.permuteCoordinatesInverseView",
-						new Nil<RandomAccessibleInterval<DoubleType>>() {
-				}, new Nil<int[]>() {
-				}, new Nil<IntervalView<DoubleType>>() {
-				});
+		BiFunction<RandomAccessibleInterval<DoubleType>, int[], IntervalView<DoubleType>> permuteFunc =
+			OpBuilder.matchFunction(ops, "transform.permuteCoordinatesInverseView",
+				new Nil<RandomAccessibleInterval<DoubleType>>()
+				{}, new Nil<int[]>() {}, new Nil<IntervalView<DoubleType>>() {});
 
-		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 2, 2 });
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
+			new int[] { 2, 2 });
 		Cursor<DoubleType> c = img.cursor();
 		MersenneTwisterFast r = new MersenneTwisterFast(SEED);
 		while (c.hasNext()) {
 			c.next().set(r.nextDouble());
 		}
-		Cursor<DoubleType> il2 = Views.permuteCoordinatesInverse(img, new int[] { 0, 1 }).cursor();
+		Cursor<DoubleType> il2 = Views.permuteCoordinatesInverse(img, new int[] { 0,
+			1 }).cursor();
 		RandomAccess<DoubleType> opr = permuteFunc.apply(img, new int[] { 0, 1 })
-				.randomAccess();
+			.randomAccess();
 
 		while (il2.hasNext()) {
 			il2.next();
@@ -179,26 +191,27 @@ public class PermuteViewTest extends AbstractOpTest {
 	@Test
 	public void permuteCoordinatesInverseOfDimensionTest() {
 
-		Functions.Arity3<RandomAccessibleInterval<DoubleType>, int[], Integer, IntervalView<DoubleType>> permuteFunc = OpBuilder
-				.matchFunction(ops, "transform.permuteCoordinatesInverseView",
-						new Nil<RandomAccessibleInterval<DoubleType>>() {
-				}, new Nil<int[]>() {
-				}, new Nil<Integer>() {
-				}, new Nil<IntervalView<DoubleType>>() {
-				});
+		Functions.Arity3<RandomAccessibleInterval<DoubleType>, int[], Integer, IntervalView<DoubleType>> permuteFunc =
+			OpBuilder.matchFunction(ops, "transform.permuteCoordinatesInverseView",
+				new Nil<RandomAccessibleInterval<DoubleType>>()
+				{}, new Nil<int[]>() {}, new Nil<Integer>() {},
+				new Nil<IntervalView<DoubleType>>()
+				{});
 
-		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 2, 2 });
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
+			new int[] { 2, 2 });
 		Cursor<DoubleType> c = img.cursor();
 		MersenneTwisterFast r = new MersenneTwisterFast(SEED);
 		while (c.hasNext()) {
 			c.next().set(r.nextDouble());
 		}
 
-		IntervalView<DoubleType> out = Views.permuteCoordinatesInverse(img, new int[] { 0, 1 }, 1);
+		IntervalView<DoubleType> out = Views.permuteCoordinatesInverse(img,
+			new int[] { 0, 1 }, 1);
 
 		Cursor<DoubleType> il2 = out.cursor();
 		RandomAccess<DoubleType> opr = permuteFunc.apply(img, new int[] { 0, 1 }, 1)
-				.randomAccess();
+			.randomAccess();
 
 		while (il2.hasNext()) {
 			il2.next();
@@ -210,28 +223,30 @@ public class PermuteViewTest extends AbstractOpTest {
 	@Test
 	public void testIntervalPermute() {
 
-		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Integer, Integer, IntervalView<DoubleType>> permuteFunc = OpBuilder
-				.matchFunction(ops, "transform.permuteView",
-						new Nil<RandomAccessibleInterval<DoubleType>>() {
-				}, new Nil<Integer>() {
-				}, new Nil<Integer>() {
-				}, new Nil<IntervalView<DoubleType>>() {
-				});
+		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Integer, Integer, IntervalView<DoubleType>> permuteFunc =
+			OpBuilder.matchFunction(ops, "transform.permuteView",
+				new Nil<RandomAccessibleInterval<DoubleType>>()
+				{}, new Nil<Integer>() {}, new Nil<Integer>() {},
+				new Nil<IntervalView<DoubleType>>()
+				{});
 
-		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
+			new int[] { 10, 10 });
 
-		IntervalView<DoubleType> expected = Views.permute((RandomAccessibleInterval<DoubleType>) img, 1, 0);
+		IntervalView<DoubleType> expected = Views.permute(
+			(RandomAccessibleInterval<DoubleType>) img, 1, 0);
 		IntervalView<DoubleType> actual = permuteFunc.apply(img, 1, 0);
 
-		for (int i = 0; i < ((MixedTransformView<DoubleType>) expected.getSource()).getTransformToSource()
-				.getMatrix().length; i++) {
-			for (int j = 0; j < ((MixedTransformView<DoubleType>) expected.getSource()).getTransformToSource()
-					.getMatrix()[i].length; j++) {
-				assertEquals(
-						((MixedTransformView<DoubleType>) expected.getSource()).getTransformToSource()
-						.getMatrix()[i][j],
-						((MixedTransformView<DoubleType>) actual.getSource()).getTransformToSource().getMatrix()[i][j],
-						1e-10);
+		for (int i = 0; i < ((MixedTransformView<DoubleType>) expected.getSource())
+			.getTransformToSource().getMatrix().length; i++)
+		{
+			for (int j = 0; j < ((MixedTransformView<DoubleType>) expected
+				.getSource()).getTransformToSource().getMatrix()[i].length; j++)
+			{
+				assertEquals(((MixedTransformView<DoubleType>) expected.getSource())
+					.getTransformToSource().getMatrix()[i][j],
+					((MixedTransformView<DoubleType>) actual.getSource())
+						.getTransformToSource().getMatrix()[i][j], 1e-10);
 			}
 		}
 	}
@@ -239,11 +254,10 @@ public class PermuteViewTest extends AbstractOpTest {
 	@Test
 	public void testIntervalPermuteCoordinates() {
 
-		BiFunction<RandomAccessibleInterval<DoubleType>, int[], IntervalView<DoubleType>> permuteFunc = OpBuilder
-				.matchFunction(ops, "transform.permuteCoordinatesView", new Nil<RandomAccessibleInterval<DoubleType>>() {
-				}, new Nil<int[]>() {
-				}, new Nil<IntervalView<DoubleType>>() {
-				});
+		BiFunction<RandomAccessibleInterval<DoubleType>, int[], IntervalView<DoubleType>> permuteFunc =
+			OpBuilder.matchFunction(ops, "transform.permuteCoordinatesView",
+				new Nil<RandomAccessibleInterval<DoubleType>>()
+				{}, new Nil<int[]>() {}, new Nil<IntervalView<DoubleType>>() {});
 
 		Img<DoubleType> img = ArrayImgs.doubles(2, 2);
 		Cursor<DoubleType> c = img.cursor();
@@ -251,9 +265,11 @@ public class PermuteViewTest extends AbstractOpTest {
 		while (c.hasNext()) {
 			c.next().set(r.nextDouble());
 		}
-		IntervalView<DoubleType> expected = Views.permuteCoordinates(img, new int[] { 0, 1 });
+		IntervalView<DoubleType> expected = Views.permuteCoordinates(img,
+			new int[] { 0, 1 });
 		Cursor<DoubleType> e = expected.cursor();
-		RandomAccessibleInterval<DoubleType> actual = permuteFunc.apply(img, new int[] { 0, 1 });
+		RandomAccessibleInterval<DoubleType> actual = permuteFunc.apply(img,
+			new int[] { 0, 1 });
 		RandomAccess<DoubleType> actualRA = actual.randomAccess();
 
 		while (e.hasNext()) {
@@ -269,13 +285,12 @@ public class PermuteViewTest extends AbstractOpTest {
 	@Test
 	public void testIntervalPermuteDimensionCoordinates() {
 
-		Functions.Arity3<RandomAccessibleInterval<DoubleType>, int[], Integer, IntervalView<DoubleType>> permuteFunc = OpBuilder
-				.matchFunction(ops, "transform.permuteCoordinatesInverseView",
-						new Nil<RandomAccessibleInterval<DoubleType>>() {
-				}, new Nil<int[]>() {
-				}, new Nil<Integer>() {
-				}, new Nil<IntervalView<DoubleType>>() {
-				});
+		Functions.Arity3<RandomAccessibleInterval<DoubleType>, int[], Integer, IntervalView<DoubleType>> permuteFunc =
+			OpBuilder.matchFunction(ops, "transform.permuteCoordinatesInverseView",
+				new Nil<RandomAccessibleInterval<DoubleType>>()
+				{}, new Nil<int[]>() {}, new Nil<Integer>() {},
+				new Nil<IntervalView<DoubleType>>()
+				{});
 
 		Img<DoubleType> img = ArrayImgs.doubles(2, 2);
 		Cursor<DoubleType> c = img.cursor();
@@ -283,10 +298,11 @@ public class PermuteViewTest extends AbstractOpTest {
 		while (c.hasNext()) {
 			c.next().set(r.nextDouble());
 		}
-		IntervalView<DoubleType> expected = Views.permuteCoordinates(img, new int[] { 0, 1 }, 1);
+		IntervalView<DoubleType> expected = Views.permuteCoordinates(img,
+			new int[] { 0, 1 }, 1);
 		Cursor<DoubleType> e = expected.cursor();
-		RandomAccessibleInterval<DoubleType> actual = permuteFunc.apply(img, new int[] { 0, 1 },
-				1);
+		RandomAccessibleInterval<DoubleType> actual = permuteFunc.apply(img,
+			new int[] { 0, 1 }, 1);
 		RandomAccess<DoubleType> actualRA = actual.randomAccess();
 
 		while (e.hasNext()) {
@@ -302,12 +318,10 @@ public class PermuteViewTest extends AbstractOpTest {
 	@Test
 	public void testIntervalPermuteInverseCoordinates() {
 
-		BiFunction<RandomAccessibleInterval<DoubleType>, int[], IntervalView<DoubleType>> permuteFunc = OpBuilder
-				.matchFunction(ops, "transform.permuteCoordinatesInverseView",
-						new Nil<RandomAccessibleInterval<DoubleType>>() {
-				}, new Nil<int[]>() {
-				}, new Nil<IntervalView<DoubleType>>() {
-				});
+		BiFunction<RandomAccessibleInterval<DoubleType>, int[], IntervalView<DoubleType>> permuteFunc =
+			OpBuilder.matchFunction(ops, "transform.permuteCoordinatesInverseView",
+				new Nil<RandomAccessibleInterval<DoubleType>>()
+				{}, new Nil<int[]>() {}, new Nil<IntervalView<DoubleType>>() {});
 
 		Img<DoubleType> img = ArrayImgs.doubles(2, 2);
 		Cursor<DoubleType> c = img.cursor();
@@ -315,10 +329,11 @@ public class PermuteViewTest extends AbstractOpTest {
 		while (c.hasNext()) {
 			c.next().set(r.nextDouble());
 		}
-		IntervalView<DoubleType> expected = Views.permuteCoordinatesInverse(img, new int[] { 0, 1 });
+		IntervalView<DoubleType> expected = Views.permuteCoordinatesInverse(img,
+			new int[] { 0, 1 });
 		Cursor<DoubleType> e = expected.cursor();
 		RandomAccessibleInterval<DoubleType> actual = permuteFunc.apply(img,
-				new int[] { 0, 1 });
+			new int[] { 0, 1 });
 		RandomAccess<DoubleType> actualRA = actual.randomAccess();
 
 		while (e.hasNext()) {
@@ -334,13 +349,12 @@ public class PermuteViewTest extends AbstractOpTest {
 	@Test
 	public void testIntervalPermuteInverseDimensionCoordinates() {
 
-		Functions.Arity3<RandomAccessibleInterval<DoubleType>, int[], Integer, IntervalView<DoubleType>> permuteFunc = OpBuilder
-				.matchFunction(ops, "transform.permuteCoordinatesInverseView",
-						new Nil<RandomAccessibleInterval<DoubleType>>() {
-				}, new Nil<int[]>() {
-				}, new Nil<Integer>() {
-				}, new Nil<IntervalView<DoubleType>>() {
-				});
+		Functions.Arity3<RandomAccessibleInterval<DoubleType>, int[], Integer, IntervalView<DoubleType>> permuteFunc =
+			OpBuilder.matchFunction(ops, "transform.permuteCoordinatesInverseView",
+				new Nil<RandomAccessibleInterval<DoubleType>>()
+				{}, new Nil<int[]>() {}, new Nil<Integer>() {},
+				new Nil<IntervalView<DoubleType>>()
+				{});
 
 		Img<DoubleType> img = ArrayImgs.doubles(2, 2);
 		Cursor<DoubleType> c = img.cursor();
@@ -348,10 +362,11 @@ public class PermuteViewTest extends AbstractOpTest {
 		while (c.hasNext()) {
 			c.next().set(r.nextDouble());
 		}
-		IntervalView<DoubleType> expected = Views.permuteCoordinatesInverse(img, new int[] { 0, 1 }, 1);
+		IntervalView<DoubleType> expected = Views.permuteCoordinatesInverse(img,
+			new int[] { 0, 1 }, 1);
 		Cursor<DoubleType> e = expected.cursor();
 		RandomAccessibleInterval<DoubleType> actual = permuteFunc.apply(img,
-				new int[] { 0, 1 }, 1);
+			new int[] { 0, 1 }, 1);
 		RandomAccess<DoubleType> actualRA = actual.randomAccess();
 
 		while (e.hasNext()) {

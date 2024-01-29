@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -241,7 +241,8 @@ public class UnaryRealTypeMathTest extends AbstractOpTest {
 	public void testInvert() {
 		final LongType in = new LongType(LARGE_NUM);
 		final LongType out = in.createVariable();
-		ops.op("math.invert").arity3().input(in, 9007199254740992.0, 9007199254740994.0).output(out).compute();
+		ops.op("math.invert").arity3().input(in, 9007199254740992.0,
+			9007199254740994.0).output(out).compute();
 		assertEquals(out.get(), LARGE_NUM + 1);
 	}
 
@@ -281,7 +282,8 @@ public class UnaryRealTypeMathTest extends AbstractOpTest {
 	public void testMax() {
 		final LongType in = new LongType(LARGE_NUM);
 		final LongType out = in.createVariable();
-		ops.op("math.max").arity2().input(in, LARGE_NUM + 1.0).output(out).compute();
+		ops.op("math.max").arity2().input(in, LARGE_NUM + 1.0).output(out)
+			.compute();
 		assertEquals(out.get(), LARGE_NUM - 1);
 	}
 
@@ -289,7 +291,8 @@ public class UnaryRealTypeMathTest extends AbstractOpTest {
 	public void testMin() {
 		final LongType in = new LongType(LARGE_NUM);
 		final LongType out = in.createVariable();
-		ops.op("math.min").arity2().input(in, LARGE_NUM - 1.0).output(out).compute();
+		ops.op("math.min").arity2().input(in, LARGE_NUM - 1.0).output(out)
+			.compute();
 		assertEquals(out.get(), LARGE_NUM - 1);
 	}
 

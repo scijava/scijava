@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.types;
 
 import java.util.function.BiFunction;
@@ -45,25 +46,26 @@ import org.scijava.types.TypeExtractor;
 
 /**
  * Tests various {@link TypeExtractor}s.
- * 
- * @author Gabriel Selzer
  *
+ * @author Gabriel Selzer
  */
 public class TypeExtractorTests extends AbstractOpTest {
 
 	/**
 	 * @implNote op names='test.oobcvfTypeExtractor'
 	 */
-	public final Function<OutOfBoundsConstantValueFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>>, String> func = (
-			oobf) -> "oobcvf";
+	public final Function<OutOfBoundsConstantValueFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>>, String> func =
+		(oobf) -> "oobcvf";
 
 	@Test
 	public void testOutOfBoundsConstantValueFactoryTypeExtractors() {
-		OutOfBoundsFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>> oobf = new OutOfBoundsConstantValueFactory<>(
-				new UnsignedByteType(5));
+		OutOfBoundsFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>> oobf =
+			new OutOfBoundsConstantValueFactory<>(new UnsignedByteType(5));
 
-		String output = (String) ops.op("test.oobcvfTypeExtractor").arity1().input(oobf).apply();
-		// make sure that output matches the return from the Op above, specific to the
+		String output = (String) ops.op("test.oobcvfTypeExtractor").arity1().input(
+			oobf).apply();
+		// make sure that output matches the return from the Op above, specific to
+		// the
 		// type of OOBF we passed through.
 		assert output.equals("oobcvf");
 	}
@@ -72,12 +74,18 @@ public class TypeExtractorTests extends AbstractOpTest {
 	/**
 	 * @implNote op names='test.oobrvfTypeExtractor'
 	 */
-	public final BiFunction<OutOfBoundsRandomValueFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>>, RandomAccessibleInterval<UnsignedByteType>, String> funcRandom = ( oobf, rai) -> "oobrvf"; 
-	
-	@Test public void testOutOfBoundsRandomValueFactoryTypeExtractors() { 
-		OutOfBoundsFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>> oobf = new OutOfBoundsRandomValueFactory<>( 
-				new UnsignedByteType(7), 7, 7);
-		Img<UnsignedByteType> img = ArrayImgs.unsignedBytes(new long[] { 10, 10 }); 
-		String output = (String) ops.op("test.oobrvfTypeExtractor").arity2().input(oobf, img).apply(); // make sure that output matches the return from the Op above, specific to the // type of OOBF we passed through.
-		assert output.equals("oobrvf"); } 
+	public final BiFunction<OutOfBoundsRandomValueFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>>, RandomAccessibleInterval<UnsignedByteType>, String> funcRandom =
+		(oobf, rai) -> "oobrvf";
+
+	@Test
+	public void testOutOfBoundsRandomValueFactoryTypeExtractors() {
+		OutOfBoundsFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>> oobf =
+			new OutOfBoundsRandomValueFactory<>(new UnsignedByteType(7), 7, 7);
+		Img<UnsignedByteType> img = ArrayImgs.unsignedBytes(new long[] { 10, 10 });
+		String output = (String) ops.op("test.oobrvfTypeExtractor").arity2().input(
+			oobf, img).apply(); // make sure that output matches the return from the
+													// Op above, specific to the // type of OOBF we passed
+													// through.
+		assert output.equals("oobrvf");
 	}
+}

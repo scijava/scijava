@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -34,7 +34,7 @@ package org.scijava.ops.image.threshold;
 
 /**
  * Utility methods used by the various threshold methods.
- * 
+ *
  * @author Barry DeZonia
  * @author Gabriel Landini
  */
@@ -51,8 +51,7 @@ public final class Thresholds {
 		for (int k = 1; k < len - 1; k++) {
 			if (y[k - 1] < y[k] && y[k + 1] < y[k]) {
 				modes++;
-				if (modes > 2)
-					return false;
+				if (modes > 2) return false;
 			}
 		}
 		return (modes == 2);

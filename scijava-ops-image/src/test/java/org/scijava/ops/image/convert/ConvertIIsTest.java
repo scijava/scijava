@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -46,7 +46,7 @@ import org.scijava.types.Nil;
 
 /**
  * Tests {@code ConvertIIs} + {@link RealTypeConverter} ops.
- * 
+ *
  * @author Curtis Rueden
  */
 public class ConvertIIsTest extends AbstractOpTest {
@@ -56,10 +56,14 @@ public class ConvertIIsTest extends AbstractOpTest {
 
 	@BeforeEach
 	public void createImages() {
-		final FinalDimensions dims = FinalDimensions.wrap(new long[] {10, 10});
-		in = ops.op("create.img").arity2().input(dims, new ShortType()).outType(new Nil<IterableInterval<ShortType>>() {}).apply();
+		final FinalDimensions dims = FinalDimensions.wrap(new long[] { 10, 10 });
+		in = ops.op("create.img").arity2().input(dims, new ShortType()).outType(
+			new Nil<IterableInterval<ShortType>>()
+			{}).apply();
 		addNoise(in);
-		out = ops.op("create.img").arity2().input(dims, new ByteType()).outType(new Nil<Img<ByteType>>() {}).apply();
+		out = ops.op("create.img").arity2().input(dims, new ByteType()).outType(
+			new Nil<Img<ByteType>>()
+			{}).apply();
 	}
 
 	@Test
@@ -87,12 +91,15 @@ public class ConvertIIsTest extends AbstractOpTest {
 			assertEquals(copy(value), ra.get().get());
 		}
 	}
-	
+
 	// -- Helper methods --
 
 	private void addNoise(final IterableInterval<ShortType> image) {
-		IterableInterval<ShortType> copy = ops.op("copy.img").arity1().input(image).outType(new Nil<IterableInterval<ShortType>>() {}).apply();
-		ops.op("filter.addNoise").arity4().input(copy, -32768., 32767., 10000.).output(image).compute();
+		IterableInterval<ShortType> copy = ops.op("copy.img").arity1().input(image)
+			.outType(new Nil<IterableInterval<ShortType>>()
+			{}).apply();
+		ops.op("filter.addNoise").arity4().input(copy, -32768., 32767., 10000.)
+			.output(image).compute();
 	}
 
 	private byte clip(final short value) {

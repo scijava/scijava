@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -49,18 +49,14 @@ import org.scijava.ops.spi.OpField;
 import org.scijava.types.Nil;
 
 public class SimplifiedOpInfoTest extends AbstractTestEnvironment implements
-		OpCollection
+	OpCollection
 {
 
 	@BeforeAll
 	public static void addNeededOps() {
-		ops.register(
-				new SimplifiedOpInfoTest(),
-				new PrimitiveSimplifiers(),
-				new PrimitiveArraySimplifiers(),
-				new IdentityCollection<>(),
-				new SimpleOp()
-		);
+		ops.register(new SimplifiedOpInfoTest(), new PrimitiveSimplifiers(),
+			new PrimitiveArraySimplifiers(), new IdentityCollection<>(),
+			new SimpleOp());
 	}
 
 	@OpClass(names = "test.simplifiedDescription")
@@ -74,14 +70,15 @@ public class SimplifiedOpInfoTest extends AbstractTestEnvironment implements
 
 	private SimplifiedOpInfo createSimpleInfo() {
 		OpClassInfo info = new OpClassInfo(SimpleOp.class, new Hints(),
-				"test.simplifiedDescription");
+			"test.simplifiedDescription");
 		return SimplificationUtils.simplifyInfo(ops, info);
 	}
 
 	@Test
 	public void testSimplifiedDescription() {
 		SimplifiedOpInfo info = createSimpleInfo();
-		String expected = "org.scijava.ops.engine.matcher.simplify.SimplifiedOpInfoTest$SimpleOp|simple\n\t" //
+		String expected =
+			"org.scijava.ops.engine.matcher.simplify.SimplifiedOpInfoTest$SimpleOp|simple\n\t" //
 				+ "> input1 : java.lang.Number\n\t" //
 				+ "> input2 : java.lang.Number\n\t" //
 				+ "Returns : org.scijava.collections.ObjectArray<java.lang.Number>";
@@ -93,16 +90,19 @@ public class SimplifiedOpInfoTest extends AbstractTestEnvironment implements
 	public void testSimplifiedExecution() {
 		SimplifiedOpInfo info = createSimpleInfo();
 		BiFunction<Number, Number, ObjectArray<Number>> op =
-				(BiFunction<Number, Number, ObjectArray<Number>>) info.createOpInstance(Collections.emptyList()).object();
-		ObjectArray<Number> expected = new ObjectArray<>(new Double[] {5., 6.});
+			(BiFunction<Number, Number, ObjectArray<Number>>) info.createOpInstance(
+				Collections.emptyList()).object();
+		ObjectArray<Number> expected = new ObjectArray<>(new Double[] { 5., 6. });
 		ObjectArray<Number> actual = op.apply(5, 6);
 		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
 	public void testSimplifiedOpFromEnvironment() {
-		var op = ops.binary("test.simplifiedDescription").inType(Number.class, Number.class).outType(new Nil<ObjectArray<Number>>() {}).function();
-		ObjectArray<Number> expected = new ObjectArray<>(new Double[] {5., 6.});
+		var op = ops.binary("test.simplifiedDescription").inType(Number.class,
+			Number.class).outType(new Nil<ObjectArray<Number>>()
+		{}).function();
+		ObjectArray<Number> expected = new ObjectArray<>(new Double[] { 5., 6. });
 		ObjectArray<Number> actual = op.apply(5, 6);
 		Assertions.assertEquals(expected, actual);
 	}
@@ -122,20 +122,20 @@ public class SimplifiedOpInfoTest extends AbstractTestEnvironment implements
 	@Test
 	public void testSimpleDescriptions() {
 		String actual = ops.unary("test.coalesceSimpleDescription").helpVerbose();
-		String expected =  "test.coalesceSimpleDescription:\n" +
-				"\t- org.scijava.ops.engine.matcher.simplify.SimplifiedOpInfoTest$comp1\n" +
-				"\t\t> input1 : java.util.List<java.lang.Long>\n" +
-				"\t\t> container1 : @CONTAINER java.util.List<java.lang.Long>\n" +
-				"\t- org.scijava.ops.engine.matcher.simplify.SimplifiedOpInfoTest$func1\n" +
-				"\t\t> input1 : java.lang.Double\n" + "\t\tReturns : java.lang.Double\n" +
-				"\t- org.scijava.ops.engine.matcher.simplify.SimplifiedOpInfoTest$func2\n" +
-				"\t\t> input1 : java.lang.Long\n" + "\t\tReturns : java.lang.Long";
+		String expected = "test.coalesceSimpleDescription:\n" +
+			"\t- org.scijava.ops.engine.matcher.simplify.SimplifiedOpInfoTest$comp1\n" +
+			"\t\t> input1 : java.util.List<java.lang.Long>\n" +
+			"\t\t> container1 : @CONTAINER java.util.List<java.lang.Long>\n" +
+			"\t- org.scijava.ops.engine.matcher.simplify.SimplifiedOpInfoTest$func1\n" +
+			"\t\t> input1 : java.lang.Double\n" + "\t\tReturns : java.lang.Double\n" +
+			"\t- org.scijava.ops.engine.matcher.simplify.SimplifiedOpInfoTest$func2\n" +
+			"\t\t> input1 : java.lang.Long\n" + "\t\tReturns : java.lang.Long";
 
 		Assertions.assertEquals(expected, actual);
 
 		actual = ops.unary("test.coalesceSimpleDescription").help();
-		expected =  //
-				"test.coalesceSimpleDescription:\n\t- (input1, @CONTAINER container1) -> None\n\t- (input1) -> Number";
+		expected = //
+			"test.coalesceSimpleDescription:\n\t- (input1, @CONTAINER container1) -> None\n\t- (input1) -> Number";
 		Assertions.assertEquals(expected, actual);
 		// Finally test that different number of outputs doesn't retrieve the Ops
 		actual = ops.nullary("test.coalesceSimpleDescription").help();

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -63,7 +63,8 @@ import org.scijava.ops.spi.OpDependency;
  * @implNote op names='deconvolve.normalizationFactor', priority='-100.'
  */
 public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
-	implements Inplaces.Arity5_1<RandomAccessibleInterval<O>, Dimensions, Dimensions, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>>
+	implements
+	Inplaces.Arity5_1<RandomAccessibleInterval<O>, Dimensions, Dimensions, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>>
 {
 
 	/**
@@ -94,17 +95,18 @@ public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends Re
 	private Computers.Arity6<RandomAccessibleInterval<O>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, RandomAccessibleInterval<O>> correlater;
 
 //	@OpDependency(name = "math.divide") TODO: match an Op here?
-	private BiConsumer<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> divide = (numerResult, denom) -> {
-		final O tmp = Util.getTypeFromInterval(numerResult).createVariable();
-		LoopBuilder.setImages(numerResult, denom).forEachPixel((n, d) -> {
-			if (n.getRealFloat() > 0) {
-				tmp.set(n);
-				tmp.div(d);
-				n.set(tmp);
-			}
-			else n.setZero();
-		});
-	};
+	private BiConsumer<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> divide =
+		(numerResult, denom) -> {
+			final O tmp = Util.getTypeFromInterval(numerResult).createVariable();
+			LoopBuilder.setImages(numerResult, denom).forEachPixel((n, d) -> {
+				if (n.getRealFloat() > 0) {
+					tmp.set(n);
+					tmp.div(d);
+					n.set(tmp);
+				}
+				else n.setZero();
+			});
+		};
 
 	/**
 	 * apply the normalization image needed for semi noncirculant model see
@@ -117,7 +119,10 @@ public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends Re
 	 * @param fftKernel
 	 */
 	@Override
-	public void mutate(RandomAccessibleInterval<O> arg, final Dimensions k, final Dimensions l, final RandomAccessibleInterval<C> fftInput, final RandomAccessibleInterval<C> fftKernel) {
+	public void mutate(RandomAccessibleInterval<O> arg, final Dimensions k,
+		final Dimensions l, final RandomAccessibleInterval<C> fftInput,
+		final RandomAccessibleInterval<C> fftKernel)
+	{
 		this.k = k;
 		this.l = l;
 		this.fftInput = fftInput;
@@ -125,15 +130,18 @@ public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends Re
 
 		// if the normalization image hasn't been computed yet, then compute it
 		if (normalization == null) {
-			this.createNormalizationImageSemiNonCirculant(arg, Util.getTypeFromInterval(arg));
+			this.createNormalizationImageSemiNonCirculant(arg, Util
+				.getTypeFromInterval(arg));
 		}
-		
+
 		// normalize for non-circulant deconvolution
 		// arg = arg / normalization
 		divide.accept(arg, normalization);
 	}
 
-	protected void createNormalizationImageSemiNonCirculant(Interval fastFFTInterval, O type) {
+	protected void createNormalizationImageSemiNonCirculant(
+		Interval fastFFTInterval, O type)
+	{
 
 		// k is the window size (valid image region)
 		final int length = k.numDimensions();
@@ -209,7 +217,8 @@ public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends Re
 		final Img<O> tempImg = create.apply(fd, type);
 
 		// 3. correlate psf with the output of step 2.
-		correlater.compute(normalization, null, fftInput, fftKernel, true, false, tempImg);
+		correlater.compute(normalization, null, fftInput, fftKernel, true, false,
+			tempImg);
 
 		normalization = tempImg;
 

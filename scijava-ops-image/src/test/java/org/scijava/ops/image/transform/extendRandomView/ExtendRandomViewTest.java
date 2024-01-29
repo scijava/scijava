@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops.image.transform.extendRandomView;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -56,23 +57,25 @@ import org.scijava.types.Nil;
  */
 public class ExtendRandomViewTest extends AbstractOpTest {
 
-	Nil<RandomAccessibleInterval<DoubleType>> raiNil = new Nil<RandomAccessibleInterval<DoubleType>>() {
-	};
-	Nil<Double> doubleNil = new Nil<Double>() {
-	};
+	Nil<RandomAccessibleInterval<DoubleType>> raiNil =
+		new Nil<RandomAccessibleInterval<DoubleType>>()
+		{};
+	Nil<Double> doubleNil = new Nil<Double>() {};
 
 	@Test
 	public void extendRandomTest() {
-		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Double, Double, RandomAccessible<DoubleType>> extendFunc = OpBuilder
-				.matchFunction(ops, "transform.extendRandomView", raiNil, doubleNil, doubleNil,
-						new Nil<RandomAccessible<DoubleType>>() {
-				});
+		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Double, Double, RandomAccessible<DoubleType>> extendFunc =
+			OpBuilder.matchFunction(ops, "transform.extendRandomView", raiNil,
+				doubleNil, doubleNil, new Nil<RandomAccessible<DoubleType>>()
+				{});
 
-		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
+			new int[] { 10, 10 });
 
 		RandomAccess<DoubleType> il2 = Views.extendRandom(img, 0, 0).randomAccess();
 
-		RandomAccess<DoubleType> opr = extendFunc.apply(img, 0.0, 0.0).randomAccess();
+		RandomAccess<DoubleType> opr = extendFunc.apply(img, 0.0, 0.0)
+			.randomAccess();
 
 		il2.setPosition(new int[] { -1, -1 });
 		opr.setPosition(new int[] { -1, -1 });

@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -43,9 +43,9 @@ import org.scijava.ops.spi.OpDependency;
 
 /**
  * This Op computes the 2nd multi variate of a {@link Mesh} (Label).
- * 
+ *
  * @author Tim-Oliver Buchholz (University of Konstanz)
- *@implNote op names='geom.secondMoment'
+ * @implNote op names='geom.secondMoment'
  */
 public class DefaultInertiaTensor3DMesh implements Function<Mesh, RealMatrix> {
 
@@ -56,13 +56,13 @@ public class DefaultInertiaTensor3DMesh implements Function<Mesh, RealMatrix> {
 	 * TODO
 	 *
 	 * @param input the {@link Mesh}
-	 * @return the 2nd multi variate, stored within a {@link RealMatrix} inertiaTensor
+	 * @return the 2nd multi variate, stored within a {@link RealMatrix}
+	 *         inertiaTensor
 	 */
 	@Override
 	public RealMatrix apply(final Mesh input) {
 		// ensure validity of inputs
-		if (input == null)
-			throw new IllegalArgumentException("Input is null!");
+		if (input == null) throw new IllegalArgumentException("Input is null!");
 		final RealLocalizable cent = centroid.apply(input);
 		final double originX = cent.getDoublePosition(0);
 		final double originY = cent.getDoublePosition(1);
@@ -80,7 +80,7 @@ public class DefaultInertiaTensor3DMesh implements Function<Mesh, RealMatrix> {
 			final double y3 = triangle.v2y() - originY;
 			final double z3 = triangle.v2z() - originZ;
 			tensor = tensor.add(//
-					tetrahedronInertiaTensor(x1, y1, z1, x2, y2, z2, x3, y3, z3));
+				tetrahedronInertiaTensor(x1, y1, z1, x2, y2, z2, x3, y3, z3));
 		}
 
 		return tensor;
@@ -93,51 +93,43 @@ public class DefaultInertiaTensor3DMesh implements Function<Mesh, RealMatrix> {
 	 * <p>
 	 * Note: In the paper b' and c' are swapped.
 	 * </p>
-	 * 
-	 * @param x1
-	 *            X coordinate of first triangle vertex
-	 * @param y1
-	 *            Y coordinate of first triangle vertex
-	 * @param z1
-	 *            Z coordinate of first triangle vertex
-	 * @param x2
-	 *            X coordinate of second triangle vertex
-	 * @param y2
-	 *            Y coordinate of second triangle vertex
-	 * @param z2
-	 *            Z coordinate of second triangle vertex
-	 * @param x3
-	 *            X coordinate of third triangle vertex
-	 * @param y3
-	 *            Y coordinate of third triangle vertex
-	 * @param z3
-	 *            Z coordinate of third triangle vertex
+	 *
+	 * @param x1 X coordinate of first triangle vertex
+	 * @param y1 Y coordinate of first triangle vertex
+	 * @param z1 Z coordinate of first triangle vertex
+	 * @param x2 X coordinate of second triangle vertex
+	 * @param y2 Y coordinate of second triangle vertex
+	 * @param z2 Z coordinate of second triangle vertex
+	 * @param x3 X coordinate of third triangle vertex
+	 * @param y3 Y coordinate of third triangle vertex
+	 * @param z3 Z coordinate of third triangle vertex
 	 * @return inertia tensor of this tetrahedron
 	 */
 	private BlockRealMatrix tetrahedronInertiaTensor(//
-			final double x1, final double y1, final double z1, //
-			final double x2, final double y2, final double z2, //
-			final double x3, final double y3, final double z3) {
-		final double volume = tetrahedronVolume(new Vector3D(x1, y1, z1), new Vector3D(x2, y2, z2),
-				new Vector3D(x3, y3, z3));
+		final double x1, final double y1, final double z1, //
+		final double x2, final double y2, final double z2, //
+		final double x3, final double y3, final double z3)
+	{
+		final double volume = tetrahedronVolume(new Vector3D(x1, y1, z1),
+			new Vector3D(x2, y2, z2), new Vector3D(x3, y3, z3));
 
-		final double a = 6 * volume * (y1 * y1 + y1 * y2 + y2 * y2 + y1 * y3 + y2 * y3 + y3 * y3 + z1 * z1 + z1 * z2
-				+ z2 * z2 + z1 * z3 + z2 * z3 + z3 * z3) / 60.0;
-		final double b = 6 * volume * (x1 * x1 + x1 * x2 + x2 * x2 + x1 * x3 + x2 * x3 + x3 * x3 + z1 * z1 + z1 * z2
-				+ z2 * z2 + z1 * z3 + z2 * z3 + z3 * z3) / 60.0;
-		final double c = 6 * volume * (x1 * x1 + x1 * x2 + x2 * x2 + x1 * x3 + x2 * x3 + x3 * x3 + y1 * y1 + y1 * y2
-				+ y2 * y2 + y1 * y3 + y2 * y3 + y3 * y3) / 60.0;
-		final double aa = 6 * volume
-				* (2 * y1 * z1 + y2 * z1 + y3 * z1 + y1 * z2 + 2 * y2 * z2 + y3 * z2 + y1 * z3 + y2 * z3 + 2 * y3 * z3)
-				/ 120.0;
+		final double a = 6 * volume * (y1 * y1 + y1 * y2 + y2 * y2 + y1 * y3 + y2 *
+			y3 + y3 * y3 + z1 * z1 + z1 * z2 + z2 * z2 + z1 * z3 + z2 * z3 + z3 *
+				z3) / 60.0;
+		final double b = 6 * volume * (x1 * x1 + x1 * x2 + x2 * x2 + x1 * x3 + x2 *
+			x3 + x3 * x3 + z1 * z1 + z1 * z2 + z2 * z2 + z1 * z3 + z2 * z3 + z3 *
+				z3) / 60.0;
+		final double c = 6 * volume * (x1 * x1 + x1 * x2 + x2 * x2 + x1 * x3 + x2 *
+			x3 + x3 * x3 + y1 * y1 + y1 * y2 + y2 * y2 + y1 * y3 + y2 * y3 + y3 *
+				y3) / 60.0;
+		final double aa = 6 * volume * (2 * y1 * z1 + y2 * z1 + y3 * z1 + y1 * z2 +
+			2 * y2 * z2 + y3 * z2 + y1 * z3 + y2 * z3 + 2 * y3 * z3) / 120.0;
 
-		final double bb = 6 * volume
-				* (2 * x1 * y1 + x2 * y1 + x3 * y1 + x1 * y2 + 2 * x2 * y2 + x3 * y2 + x1 * y3 + x2 * y3 + 2 * x3 * y3)
-				/ 120.0;
+		final double bb = 6 * volume * (2 * x1 * y1 + x2 * y1 + x3 * y1 + x1 * y2 +
+			2 * x2 * y2 + x3 * y2 + x1 * y3 + x2 * y3 + 2 * x3 * y3) / 120.0;
 
-		final double cc = 6 * volume
-				* (2 * x1 * z1 + x2 * z1 + x3 * z1 + x1 * z2 + 2 * x2 * z2 + x3 * z2 + x1 * z3 + x2 * z3 + 2 * x3 * z3)
-				/ 120.0;
+		final double cc = 6 * volume * (2 * x1 * z1 + x2 * z1 + x3 * z1 + x1 * z2 +
+			2 * x2 * z2 + x3 * z2 + x1 * z3 + x2 * z3 + 2 * x3 * z3) / 120.0;
 
 		final BlockRealMatrix t = new BlockRealMatrix(3, 3);
 		t.setRow(0, new double[] { a, -bb, -cc });

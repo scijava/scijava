@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -71,7 +71,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 		OpEnvironment env)
 	{
 		final ArrayList<OpCandidate> candidates = new ArrayList<>();
-		
+
 		for (final OpInfo info : getInfos(env, conditions)) {
 			Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
 			if (typesMatch(info.opType(), conditions.request().getType(),
@@ -117,7 +117,9 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 		return validCandidates;
 	}
 
-	protected List<OpCandidate> filterMatches(final List<OpCandidate> candidates) {
+	protected List<OpCandidate> filterMatches(
+		final List<OpCandidate> candidates)
+	{
 		final List<OpCandidate> validCandidates = checkCandidates(candidates);
 
 		// List of valid candidates needs to be sorted according to priority.
@@ -172,8 +174,8 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 
 	/**
 	 * Checks whether the output types of the candidate are applicable to the
-	 * input types of the {@link OpRequest}. Sets candidate status code if there are
-	 * too many, to few, or not matching types.
+	 * input types of the {@link OpRequest}. Sets candidate status code if there
+	 * are too many, to few, or not matching types.
 	 *
 	 * @param candidate the candidate to check inputs for
 	 * @param typeBounds possibly predetermined type bounds for type variables
@@ -298,12 +300,14 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	 * using {@link Types#isApplicable(Type[], Type[])}.
 	 */
 	protected boolean typesMatch(final Type opType, final Type reqType,
-			final Map<TypeVariable<?>, Type> typeVarAssigns)
+		final Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
 		if (reqType == null) return true;
 		try {
 			if (reqType instanceof ParameterizedType) {
-				if (!GenericAssignability.checkGenericAssignability(opType, (ParameterizedType) reqType, typeVarAssigns, true)) {
+				if (!GenericAssignability.checkGenericAssignability(opType,
+					(ParameterizedType) reqType, typeVarAssigns, true))
+				{
 					return false;
 				}
 			}
@@ -312,7 +316,8 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 					return false;
 				}
 			}
-		} catch (IllegalStateException e) {
+		}
+		catch (IllegalStateException e) {
 			return false;
 		}
 		return true;

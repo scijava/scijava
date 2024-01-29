@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.types;
 
 import java.lang.reflect.ParameterizedType;
@@ -66,21 +67,21 @@ public interface TypeReifier {
 	 * <p>
 	 * For objects whose concrete type has no parameters, this method simply
 	 * returns {@code o.getClass()}. For example:
-	 * 
+	 *
 	 * <pre>
 	 *      StringList implements List&lt;String&gt;
 	 * </pre>
-	 * 
+	 *
 	 * will return {@code StringList.class}.
 	 * <p>
 	 * The interesting case is for objects whose concrete class <em>does</em> have
 	 * type parameters. E.g.:
-	 * 
+	 *
 	 * <pre>
 	 *      NumberList&lt;N extends Number&gt; implements List&lt;N&gt;
 	 *      ListMap&lt;K, V, T&gt; implements Map&lt;K, V&gt;, List&lt;T&gt;
 	 * </pre>
-	 * 
+	 *
 	 * For such types, we try to fill the type parameters recursively, using
 	 * {@link TypeExtractor} plugins that know how to glean types at runtime from
 	 * specific sorts of objects.
@@ -95,13 +96,13 @@ public interface TypeReifier {
 	 * <p>
 	 * In this way, the behavior of the generic type extraction is fully
 	 * extensible, since additional {@link TypeExtractor} plugins can always be
-	 * introduced which extract types more intelligently in cases where more
-	 * <em>a priori</em> knowledge about that type is available at runtime.
+	 * introduced which extract types more intelligently in cases where more <em>a
+	 * priori</em> knowledge about that type is available at runtime.
 	 * </p>
 	 */
 	default Type reify(final Object o) {
 		if (o == null) return new Any();
-		
+
 		if (o instanceof GenericTyped) {
 			// Object implements the GenericTyped interface; it explicitly declares
 			// the generic type by which it wants to be known. This makes life easy!
@@ -168,7 +169,7 @@ public interface TypeReifier {
 	 * <p>
 	 * For example, if you call:
 	 * </p>
-	 * 
+	 *
 	 * <pre>
 	 * args(Collections.singleton("Hi"), Iterable.class)
 	 * </pre>
@@ -181,7 +182,7 @@ public interface TypeReifier {
 	 * {@link TypeExtractor} plugin which handles <em>exactly</em> the given
 	 * supertype.
 	 * </p>
-	 * 
+	 *
 	 * @see #reify(Object)
 	 */
 	default <T> Map<TypeVariable<?>, Type> args(final Object o,

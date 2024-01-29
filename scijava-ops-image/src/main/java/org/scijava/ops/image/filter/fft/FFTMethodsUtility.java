@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -46,7 +46,7 @@ public final class FFTMethodsUtility {
 
 	/**
 	 * Calculates padding size and complex FFT size for real to complex FFT
-	 * 
+	 *
 	 * @param fast if true calculate size for fast FFT
 	 * @param inputDimensions original real dimensions
 	 * @param paddedDimensions padded real dimensions
@@ -68,7 +68,7 @@ public final class FFTMethodsUtility {
 
 	/**
 	 * Calculates padding size size for real to complex FFT
-	 * 
+	 *
 	 * @param fast if true calculate size for fast FFT
 	 * @param inputDimensions original real dimensions
 	 * @return padded real dimensions
@@ -87,7 +87,7 @@ public final class FFTMethodsUtility {
 
 	/**
 	 * Calculates complex FFT size for real to complex FFT
-	 * 
+	 *
 	 * @param fast if true calculate size for fast FFT
 	 * @param inputDimensions original real dimensions
 	 * @return complex FFT dimensions

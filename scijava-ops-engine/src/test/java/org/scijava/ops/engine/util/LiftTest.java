@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -49,27 +49,31 @@ public class LiftTest extends AbstractTestEnvironment {
 
 	@BeforeAll
 	public static void AddNeededOps() {
-		Object[] objects = objsFromNoArgConstructors(TestOps.class.getDeclaredClasses());
+		Object[] objects = objsFromNoArgConstructors(TestOps.class
+			.getDeclaredClasses());
 		ops.register(objects);
 	}
 
-	Nil<Double> nilDouble = new Nil<>() {
-	};
+	Nil<Double> nilDouble = new Nil<>() {};
 
-	Nil<double[]> nilDoubleArray = new Nil<>() {
-	};
+	Nil<double[]> nilDoubleArray = new Nil<>() {};
 
 	@Test
-	public void testliftFunction(){
-		Function<Double, Double> powFunction = OpBuilder.matchFunction(ops, "test.liftFunction", nilDouble, nilDouble);
+	public void testliftFunction() {
+		Function<Double, Double> powFunction = OpBuilder.matchFunction(ops,
+			"test.liftFunction", nilDouble, nilDouble);
 
-		Function<Iterable<Double>, Iterable<Double>> liftedToIterable = Maps.FunctionMaps.Iterables.liftBoth(powFunction);
-		Iterable<Double> res2 = liftedToIterable.apply(Arrays.asList(1.0, 2.0, 3.0, 4.0));
+		Function<Iterable<Double>, Iterable<Double>> liftedToIterable =
+			Maps.FunctionMaps.Iterables.liftBoth(powFunction);
+		Iterable<Double> res2 = liftedToIterable.apply(Arrays.asList(1.0, 2.0, 3.0,
+			4.0));
 		Assertions.assertTrue(arrayEquals(toArray(res2), 2.0, 3.0, 4.0, 5.0));
 
-		Function<Double[], Double[]> liftedToArray = Maps.FunctionMaps.Arrays.liftBoth(powFunction, Double.class);
+		Function<Double[], Double[]> liftedToArray = Maps.FunctionMaps.Arrays
+			.liftBoth(powFunction, Double.class);
 		Double[] res3 = liftedToArray.apply(new Double[] { 1.0, 2.0, 3.0, 4.0 });
-		Assertions.assertTrue(arrayEquals(Arrays.stream(res3).mapToDouble(d -> d).toArray(), 2.0, 3.0, 4.0, 5.0));
+		Assertions.assertTrue(arrayEquals(Arrays.stream(res3).mapToDouble(d -> d)
+			.toArray(), 2.0, 3.0, 4.0, 5.0));
 	}
 
 	private static double[] toArray(Iterable<Double> iter) {
@@ -79,10 +83,11 @@ public class LiftTest extends AbstractTestEnvironment {
 	@Test
 	public void testliftComputer() {
 
-		Computers.Arity1<double[], double[]> powComputer = OpBuilder.matchComputer(ops, "test.liftComputer", nilDoubleArray, nilDoubleArray);
+		Computers.Arity1<double[], double[]> powComputer = OpBuilder.matchComputer(
+			ops, "test.liftComputer", nilDoubleArray, nilDoubleArray);
 
-		Computers.Arity1<Iterable<double[]>, Iterable<double[]>> liftedToIterable = Maps.ComputerMaps.Iterables
-				.liftBoth(powComputer);
+		Computers.Arity1<Iterable<double[]>, Iterable<double[]>> liftedToIterable =
+			Maps.ComputerMaps.Iterables.liftBoth(powComputer);
 		Iterable<double[]> res = wrap(new double[4]);
 		liftedToIterable.compute(wrap(new double[] { 1.0, 2.0, 3.0, 4.0 }), res);
 

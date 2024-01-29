@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -59,19 +59,18 @@ public class ConvertMapTest extends AbstractOpTest {
 		final byte[] inArray = { 12, 122, 9, -6, 56, 34, 108, 1, 73 };
 		final Img<UnsignedByteType> in = generateUnsignedByteImg(inArray);
 
-		final float[] outArray =
-			{ 134.7f, -13089.3208f, 209.3f, 0.6f, 84.0f, -543.1f, 0f, 34.908f,
-				592087.0957f };
+		final float[] outArray = { 134.7f, -13089.3208f, 209.3f, 0.6f, 84.0f,
+			-543.1f, 0f, 34.908f, 592087.0957f };
 		final Img<FloatType> out = generateFloatImg(outArray);
 
 		final Cursor<UnsignedByteType> inC1 = in.cursor();
 		final Cursor<FloatType> outC1 = out.cursor();
 
 		while (inC1.hasNext()) {
-			assertNotEquals(inC1.next().getRealDouble(),
-				outC1.next().getRealDouble(), 0d);
+			assertNotEquals(inC1.next().getRealDouble(), outC1.next().getRealDouble(),
+				0d);
 		}
-		
+
 		ops.op("convert.float32").arity1().input(in).output(out).compute();
 
 //		ops.run(Ops.Map.class, out, in, new ComplexToFloat32<UnsignedByteType>());
@@ -80,16 +79,16 @@ public class ConvertMapTest extends AbstractOpTest {
 		final Cursor<FloatType> outC2 = out.cursor();
 
 		while (inC2.hasNext()) {
-			assertEquals(inC2.next().getRealDouble(), outC2.next().getRealDouble(), 0);
+			assertEquals(inC2.next().getRealDouble(), outC2.next().getRealDouble(),
+				0);
 		}
 	}
 
 	@Test
 	public void testLossy() {
 
-		final float[] inArray =
-			{ 12.7f, -13089.3208f, 78.023f, 0.04f, 12.01f, -1208.90f, 109432.109f,
-				1204.88f, 87.6f };
+		final float[] inArray = { 12.7f, -13089.3208f, 78.023f, 0.04f, 12.01f,
+			-1208.90f, 109432.109f, 1204.88f, 87.6f };
 		final Img<FloatType> in = generateFloatImg(inArray);
 
 		final byte[] outArray = { 4, 123, 18, 64, 90, 120, 12, 17, 73 };
@@ -118,8 +117,8 @@ public class ConvertMapTest extends AbstractOpTest {
 	// -- Helper methods --
 	private static Img<FloatType> generateFloatImg(final float[] values) {
 
-		final float[] array =
-			new float[(int) Intervals.numElements(new FinalInterval(dims))];
+		final float[] array = new float[(int) Intervals.numElements(
+			new FinalInterval(dims))];
 
 		if (array.length != values.length) {
 			throw new RuntimeException("Number of values doesn't match dimmensions");
@@ -136,8 +135,8 @@ public class ConvertMapTest extends AbstractOpTest {
 		final byte[] values)
 	{
 
-		final byte[] array =
-			new byte[(int) Intervals.numElements(new FinalInterval(dims))];
+		final byte[] array = new byte[(int) Intervals.numElements(new FinalInterval(
+			dims))];
 
 		if (array.length != values.length) {
 			throw new RuntimeException("Number of values doesn't match dimmensions");

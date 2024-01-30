@@ -260,7 +260,7 @@ public class PerformanceBenchmark {
 
 	/**
 	 * @param data the data to invert
-	 * @implNote op name="invert",type=Inplace1
+	 * @implNote op name="benchmark.invert",type=Inplace1
 	 */
 	public static void invertRaw(final byte[] data) {
 		for (int i = 0; i < data.length; i++) {
@@ -271,7 +271,7 @@ public class PerformanceBenchmark {
 	}
 
 	private void invertUsingSciJavaOps(final byte[] data) {
-		env.unary("invert").input(data).mutate();
+		env.unary("benchmark.invert").input(data).mutate();
 	}
 
 	private void invertUsingImageJOps(final byte[] data) {
@@ -282,7 +282,7 @@ public class PerformanceBenchmark {
 
 	/**
 	 * @param data the data to invert
-	 * @implNote op name="randomize",type=Inplace1
+	 * @implNote op name="benchmark.randomize",type=Inplace1
 	 */
 	public static void randomizeRaw(final byte[] data) {
 		for (int i = 0; i < data.length; i++) {
@@ -293,7 +293,7 @@ public class PerformanceBenchmark {
 	}
 
 	private void randomizeUsingSciJavaOps(final byte[] data) {
-		env.unary("randomize").input(data).mutate();
+		env.unary("benchmark.randomize").input(data).mutate();
 	}
 
 	private void randomizeUsingImageJOps(final byte[] data) {

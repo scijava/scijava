@@ -41,15 +41,24 @@ public final class Computers {
 	 * nice to use a BiMap from e.g. Google Guava, but that would require a
 	 * dependency on that component :(
 	 */
-	public static final HashMap<Integer, Class<?>> ALL_COMPUTERS;
+	public static final HashMap<Integer, HashMap<Integer, Class<?>>> ALL_COMPUTERS;
 	public static final HashMap<Class<?>, Integer> ALL_ARITIES;
 
 	static {
 		ALL_COMPUTERS = new HashMap<>();
 		ALL_ARITIES = new HashMap<>();
+		for(int i = 0; i <= $maxArity; i++) {
+			ALL_COMPUTERS.put(i, new HashMap<>());
+		}
 #foreach($arity in $arities)
-		ALL_COMPUTERS.put($arity, Computers.Arity${arity}.class);
+		ALL_COMPUTERS.get($arity).put($arity, Computers.Arity${arity}.class);
 		ALL_ARITIES.put(Computers.Arity${arity}.class, $arity);
+#end
+#foreach($arity in [1..$maxArity])
+#foreach($a in [1..$arity])
+#set($pos = $a - 1)
+		ALL_COMPUTERS.get($arity).put($pos, Computers.Arity${arity}_${a}.class);
+#end
 #end
 	}
 
@@ -72,8 +81,28 @@ public final class Computers {
 	 *           arity {@code arity}.
 	 */
 	public static Class<?> computerOfArity(int arity) {
-		if (ALL_COMPUTERS.containsKey(arity)) return ALL_COMPUTERS.get(arity);
-		throw new IllegalArgumentException("No Computer of arity " + arity);
+		return computerOfArity(arity, arity + 1);
+	}
+
+	/**
+	 * @param arity an {@code int} corresponding to a {@code Computer} of that
+	 *          arity.
+	 * @param pos an {@code int} corresponding to the position of the {@code Computer}'s output
+	 * @return the {@code Computer} of arity {@code arity}.
+	 * @throws IllegalArgumentException iff there is no known {@code Computer} of
+	 *           arity {@code arity}.
+	 */
+	public static Class<?> computerOfArity(int arity, int pos) {
+		if (!ALL_COMPUTERS.containsKey(arity)) {
+			throw new IllegalArgumentException("No Computer of arity " + arity);
+		}
+		HashMap<Integer, Class<?>> computersOfArity = ALL_COMPUTERS.get(arity);
+		if (!computersOfArity.containsKey(pos)) {
+			throw new IllegalArgumentException( //
+				"No Computer of arity " + arity + " with output index " + pos //
+			);
+		}
+		return computersOfArity.get(pos);
 	}
 
 	/**
@@ -103,5 +132,28 @@ public final class Computers {
 			compute($computeArgs.call($arity));
 		}
 	}
+#end##foreach($arity)
+
+#foreach($arity in [1..$maxArity])
+#foreach($a in [1..${arity}])
+#set($rawClass = "Arity${arity}_${a}")
+#set($genericParams = $extraGenerics.call($arity, $a))
+#set($inheritedParams = $generics.call($arity))
+#set($gClass = "$rawClass$genericParams")
+
+	@FunctionalInterface
+	public interface $gClass extends
+		Arity$arity$inheritedParams
+	{
+
+		void compute$a($extraComputeParams.call($arity, $a));
+
+		@Override
+		default void compute($computeParams.call($arity))
+		{
+			compute$a($extraComputeArgs.call($arity, $a));
+		}
+	}
+#end##foreach($a)
 #end##foreach($arity)
 }

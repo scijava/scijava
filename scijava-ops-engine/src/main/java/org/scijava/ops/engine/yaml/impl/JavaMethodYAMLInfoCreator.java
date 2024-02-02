@@ -118,10 +118,15 @@ public class JavaMethodYAMLInfoCreator extends AbstractYAMLOpInfoCreator {
 					" could not be loaded: Inplaces must declare the index of the mutable parameter. For example, if your Inplace is designed to mutate the first argument, please write \"Inplace1\"");
 			}
 		}
-		else if (Pattern.matches("^[Cc]omputer\\s*[0-9]*$", typeString)) {
+		else if (Pattern.matches("^[Cc]omputer$", typeString)) {
 			return Computers.computerOfArity(parameterCount - 1);
 		}
-		else if (Pattern.matches("^[Ff]unction\\s*[0-9]*$", typeString)) {
+		else if (Pattern.matches("^[Cc]omputer\\s*[0-9]*$", typeString)) {
+			Integer a = Integer.parseInt(typeString.substring(typeString.indexOf(
+				'r') + 1).trim());
+			return Computers.computerOfArity(parameterCount - 1, a - 1);
+		}
+		else if (Pattern.matches("^[Ff]unction$", typeString)) {
 			return Functions.functionOfArity(parameterCount);
 		}
 		// Finally, pass off to the class loader function.

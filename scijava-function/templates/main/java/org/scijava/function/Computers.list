@@ -21,4 +21,22 @@ matchParams = ```
   String.join(', ', nilArgs)
 }
 ```
-
+extraGenerics = ```
+{ arity, a ->
+  generics = genericParamTypes(arity).swap(a-1, arity)
+  '<' + String.join(', ', generics) + '>'
+}
+```
+extraComputeParams = ```
+{ arity, a->
+  typeParams = typeParamsList(arity).swap(a-1, arity)
+  typeParams.set(a-1, "@Container " + typeParams.get(a-1))
+  String.join(', ', typeParams)
+}
+```
+extraComputeArgs = ```
+{ arity, a->
+  names = genericsNamesList(arity).swap(a-1, arity)
+  String.join(', ', names)
+}
+```

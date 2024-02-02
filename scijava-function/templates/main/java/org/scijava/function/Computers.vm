@@ -33,34 +33,16 @@ public final class Computers {
 		// NB: Prevent instantiation of utility class.
 	}
 
-	// -- Static Utility Methods -- //
-
 	/**
-	 * All known computer types and their arities. The entries are sorted by
-	 * arity, i.e., the {@code i}-th entry has an arity of {@code i}. It might be
-	 * nice to use a BiMap from e.g. Google Guava, but that would require a
-	 * dependency on that component :(
+	 * All known computer types and their arities. The types are indexed, first by the number of <em>pure inputs</em>
+	 * in their functional method, then by the (1-indexed) <em>index</em> of the preallocated output.
+	 * <p>
+	 * Note that this data structure is populated at the bottom of the file, so it does not impede quick browsing
+	 * of the functional interfaces
+	 * </p>
 	 */
-	public static final HashMap<Integer, HashMap<Integer, Class<?>>> ALL_COMPUTERS;
-	public static final HashMap<Class<?>, Integer> ALL_ARITIES;
-
-	static {
-		ALL_COMPUTERS = new HashMap<>();
-		ALL_ARITIES = new HashMap<>();
-		for(int i = 0; i <= $maxArity; i++) {
-			ALL_COMPUTERS.put(i, new HashMap<>());
-		}
-#foreach($arity in $arities)
-		ALL_COMPUTERS.get($arity).put($arity, Computers.Arity${arity}.class);
-		ALL_ARITIES.put(Computers.Arity${arity}.class, $arity);
-#end
-#foreach($arity in [1..$maxArity])
-#foreach($a in [1..$arity])
-#set($pos = $a - 1)
-		ALL_COMPUTERS.get($arity).put($pos, Computers.Arity${arity}_${a}.class);
-#end
-#end
-	}
+	public static final Class<?>[][] ALL_COMPUTERS = new Class<?>[$maxArity + 1][$maxArity + 1];
+	public static final HashMap<Class<?>, Integer> ALL_ARITIES = new HashMap<>();
 
 	/**
 	 * @return {@code true} if the given type is a known
@@ -70,7 +52,7 @@ public final class Computers {
 	 * @throws NullPointerException If {@code c} is {@code null}.
 	 */
 	public static boolean isComputer(Class<?> c) {
-		return ALL_COMPUTERS.containsValue(c);
+		return ALL_ARITIES.containsKey(c);
 	}
 
 	/**
@@ -81,28 +63,27 @@ public final class Computers {
 	 *           arity {@code arity}.
 	 */
 	public static Class<?> computerOfArity(int arity) {
-		return computerOfArity(arity, arity + 1);
+		// If pos is not given, we assume we're looking for one of the ArityX implementations,
+		// which is theoretically equivalent to a ArityX_X.
+		return computerOfArity(arity, arity);
 	}
 
 	/**
 	 * @param arity an {@code int} corresponding to a {@code Computer} of that
 	 *          arity.
-	 * @param pos an {@code int} corresponding to the position of the {@code Computer}'s output
+	 * @param pos an {@code int} corresponding to the position of the
+	 *          {@code Computer}'s output
 	 * @return the {@code Computer} of arity {@code arity}.
 	 * @throws IllegalArgumentException iff there is no known {@code Computer} of
 	 *           arity {@code arity}.
 	 */
 	public static Class<?> computerOfArity(int arity, int pos) {
-		if (!ALL_COMPUTERS.containsKey(arity)) {
-			throw new IllegalArgumentException("No Computer of arity " + arity);
-		}
-		HashMap<Integer, Class<?>> computersOfArity = ALL_COMPUTERS.get(arity);
-		if (!computersOfArity.containsKey(pos)) {
+		if ((arity > ALL_COMPUTERS.length + 1) || pos > arity) {
 			throw new IllegalArgumentException( //
 				"No Computer of arity " + arity + " with output index " + pos //
 			);
 		}
-		return computersOfArity.get(pos);
+		return ALL_COMPUTERS[arity][pos];
 	}
 
 	/**
@@ -156,4 +137,18 @@ public final class Computers {
 	}
 #end##foreach($a)
 #end##foreach($arity)
+
+	static {
+#foreach($arity in $arities)
+#end
+#foreach($arity in [1..$maxArity])
+#foreach($a in [1..$arity])
+#set($pos = $a - 1)
+		ALL_COMPUTERS[$arity][$pos] = Computers.Arity${arity}_${a}.class;
+		ALL_ARITIES.put(Computers.Arity${arity}_${a}.class, $arity);
+#end
+		ALL_COMPUTERS[$arity][$arity] = Computers.Arity${arity}.class;
+		ALL_ARITIES.put(Computers.Arity${arity}.class, $arity);
+#end
+    }
 }

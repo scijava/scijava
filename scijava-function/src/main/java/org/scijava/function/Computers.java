@@ -33,194 +33,17 @@ public final class Computers {
 		// NB: Prevent instantiation of utility class.
 	}
 
-	// -- Static Utility Methods -- //
-
 	/**
-	 * All known computer types and their arities. The entries are sorted by
-	 * arity, i.e., the {@code i}-th entry has an arity of {@code i}. It might be
-	 * nice to use a BiMap from e.g. Google Guava, but that would require a
-	 * dependency on that component :(
+	 * All known computer types and their arities. The types are indexed, first by
+	 * the number of <em>pure inputs</em> in their functional method, then by the
+	 * (1-indexed) <em>index</em> of the preallocated output.
+	 * <p>
+	 * Note that this data structure is populated at the bottom of the file, so it
+	 * does not impede quick browsing of the functional interfaces
+	 * </p>
 	 */
-	public static final HashMap<Integer, HashMap<Integer, Class<?>>> ALL_COMPUTERS;
-	public static final HashMap<Class<?>, Integer> ALL_ARITIES;
-
-	static {
-		ALL_COMPUTERS = new HashMap<>();
-		ALL_ARITIES = new HashMap<>();
-		for (int i = 0; i <= 16; i++) {
-			ALL_COMPUTERS.put(i, new HashMap<>());
-		}
-		ALL_COMPUTERS.get(0).put(0, Computers.Arity0.class);
-		ALL_ARITIES.put(Computers.Arity0.class, 0);
-		ALL_COMPUTERS.get(1).put(1, Computers.Arity1.class);
-		ALL_ARITIES.put(Computers.Arity1.class, 1);
-		ALL_COMPUTERS.get(2).put(2, Computers.Arity2.class);
-		ALL_ARITIES.put(Computers.Arity2.class, 2);
-		ALL_COMPUTERS.get(3).put(3, Computers.Arity3.class);
-		ALL_ARITIES.put(Computers.Arity3.class, 3);
-		ALL_COMPUTERS.get(4).put(4, Computers.Arity4.class);
-		ALL_ARITIES.put(Computers.Arity4.class, 4);
-		ALL_COMPUTERS.get(5).put(5, Computers.Arity5.class);
-		ALL_ARITIES.put(Computers.Arity5.class, 5);
-		ALL_COMPUTERS.get(6).put(6, Computers.Arity6.class);
-		ALL_ARITIES.put(Computers.Arity6.class, 6);
-		ALL_COMPUTERS.get(7).put(7, Computers.Arity7.class);
-		ALL_ARITIES.put(Computers.Arity7.class, 7);
-		ALL_COMPUTERS.get(8).put(8, Computers.Arity8.class);
-		ALL_ARITIES.put(Computers.Arity8.class, 8);
-		ALL_COMPUTERS.get(9).put(9, Computers.Arity9.class);
-		ALL_ARITIES.put(Computers.Arity9.class, 9);
-		ALL_COMPUTERS.get(10).put(10, Computers.Arity10.class);
-		ALL_ARITIES.put(Computers.Arity10.class, 10);
-		ALL_COMPUTERS.get(11).put(11, Computers.Arity11.class);
-		ALL_ARITIES.put(Computers.Arity11.class, 11);
-		ALL_COMPUTERS.get(12).put(12, Computers.Arity12.class);
-		ALL_ARITIES.put(Computers.Arity12.class, 12);
-		ALL_COMPUTERS.get(13).put(13, Computers.Arity13.class);
-		ALL_ARITIES.put(Computers.Arity13.class, 13);
-		ALL_COMPUTERS.get(14).put(14, Computers.Arity14.class);
-		ALL_ARITIES.put(Computers.Arity14.class, 14);
-		ALL_COMPUTERS.get(15).put(15, Computers.Arity15.class);
-		ALL_ARITIES.put(Computers.Arity15.class, 15);
-		ALL_COMPUTERS.get(16).put(16, Computers.Arity16.class);
-		ALL_ARITIES.put(Computers.Arity16.class, 16);
-		ALL_COMPUTERS.get(1).put(0, Computers.Arity1_1.class);
-		ALL_COMPUTERS.get(2).put(0, Computers.Arity2_1.class);
-		ALL_COMPUTERS.get(2).put(1, Computers.Arity2_2.class);
-		ALL_COMPUTERS.get(3).put(0, Computers.Arity3_1.class);
-		ALL_COMPUTERS.get(3).put(1, Computers.Arity3_2.class);
-		ALL_COMPUTERS.get(3).put(2, Computers.Arity3_3.class);
-		ALL_COMPUTERS.get(4).put(0, Computers.Arity4_1.class);
-		ALL_COMPUTERS.get(4).put(1, Computers.Arity4_2.class);
-		ALL_COMPUTERS.get(4).put(2, Computers.Arity4_3.class);
-		ALL_COMPUTERS.get(4).put(3, Computers.Arity4_4.class);
-		ALL_COMPUTERS.get(5).put(0, Computers.Arity5_1.class);
-		ALL_COMPUTERS.get(5).put(1, Computers.Arity5_2.class);
-		ALL_COMPUTERS.get(5).put(2, Computers.Arity5_3.class);
-		ALL_COMPUTERS.get(5).put(3, Computers.Arity5_4.class);
-		ALL_COMPUTERS.get(5).put(4, Computers.Arity5_5.class);
-		ALL_COMPUTERS.get(6).put(0, Computers.Arity6_1.class);
-		ALL_COMPUTERS.get(6).put(1, Computers.Arity6_2.class);
-		ALL_COMPUTERS.get(6).put(2, Computers.Arity6_3.class);
-		ALL_COMPUTERS.get(6).put(3, Computers.Arity6_4.class);
-		ALL_COMPUTERS.get(6).put(4, Computers.Arity6_5.class);
-		ALL_COMPUTERS.get(6).put(5, Computers.Arity6_6.class);
-		ALL_COMPUTERS.get(7).put(0, Computers.Arity7_1.class);
-		ALL_COMPUTERS.get(7).put(1, Computers.Arity7_2.class);
-		ALL_COMPUTERS.get(7).put(2, Computers.Arity7_3.class);
-		ALL_COMPUTERS.get(7).put(3, Computers.Arity7_4.class);
-		ALL_COMPUTERS.get(7).put(4, Computers.Arity7_5.class);
-		ALL_COMPUTERS.get(7).put(5, Computers.Arity7_6.class);
-		ALL_COMPUTERS.get(7).put(6, Computers.Arity7_7.class);
-		ALL_COMPUTERS.get(8).put(0, Computers.Arity8_1.class);
-		ALL_COMPUTERS.get(8).put(1, Computers.Arity8_2.class);
-		ALL_COMPUTERS.get(8).put(2, Computers.Arity8_3.class);
-		ALL_COMPUTERS.get(8).put(3, Computers.Arity8_4.class);
-		ALL_COMPUTERS.get(8).put(4, Computers.Arity8_5.class);
-		ALL_COMPUTERS.get(8).put(5, Computers.Arity8_6.class);
-		ALL_COMPUTERS.get(8).put(6, Computers.Arity8_7.class);
-		ALL_COMPUTERS.get(8).put(7, Computers.Arity8_8.class);
-		ALL_COMPUTERS.get(9).put(0, Computers.Arity9_1.class);
-		ALL_COMPUTERS.get(9).put(1, Computers.Arity9_2.class);
-		ALL_COMPUTERS.get(9).put(2, Computers.Arity9_3.class);
-		ALL_COMPUTERS.get(9).put(3, Computers.Arity9_4.class);
-		ALL_COMPUTERS.get(9).put(4, Computers.Arity9_5.class);
-		ALL_COMPUTERS.get(9).put(5, Computers.Arity9_6.class);
-		ALL_COMPUTERS.get(9).put(6, Computers.Arity9_7.class);
-		ALL_COMPUTERS.get(9).put(7, Computers.Arity9_8.class);
-		ALL_COMPUTERS.get(9).put(8, Computers.Arity9_9.class);
-		ALL_COMPUTERS.get(10).put(0, Computers.Arity10_1.class);
-		ALL_COMPUTERS.get(10).put(1, Computers.Arity10_2.class);
-		ALL_COMPUTERS.get(10).put(2, Computers.Arity10_3.class);
-		ALL_COMPUTERS.get(10).put(3, Computers.Arity10_4.class);
-		ALL_COMPUTERS.get(10).put(4, Computers.Arity10_5.class);
-		ALL_COMPUTERS.get(10).put(5, Computers.Arity10_6.class);
-		ALL_COMPUTERS.get(10).put(6, Computers.Arity10_7.class);
-		ALL_COMPUTERS.get(10).put(7, Computers.Arity10_8.class);
-		ALL_COMPUTERS.get(10).put(8, Computers.Arity10_9.class);
-		ALL_COMPUTERS.get(10).put(9, Computers.Arity10_10.class);
-		ALL_COMPUTERS.get(11).put(0, Computers.Arity11_1.class);
-		ALL_COMPUTERS.get(11).put(1, Computers.Arity11_2.class);
-		ALL_COMPUTERS.get(11).put(2, Computers.Arity11_3.class);
-		ALL_COMPUTERS.get(11).put(3, Computers.Arity11_4.class);
-		ALL_COMPUTERS.get(11).put(4, Computers.Arity11_5.class);
-		ALL_COMPUTERS.get(11).put(5, Computers.Arity11_6.class);
-		ALL_COMPUTERS.get(11).put(6, Computers.Arity11_7.class);
-		ALL_COMPUTERS.get(11).put(7, Computers.Arity11_8.class);
-		ALL_COMPUTERS.get(11).put(8, Computers.Arity11_9.class);
-		ALL_COMPUTERS.get(11).put(9, Computers.Arity11_10.class);
-		ALL_COMPUTERS.get(11).put(10, Computers.Arity11_11.class);
-		ALL_COMPUTERS.get(12).put(0, Computers.Arity12_1.class);
-		ALL_COMPUTERS.get(12).put(1, Computers.Arity12_2.class);
-		ALL_COMPUTERS.get(12).put(2, Computers.Arity12_3.class);
-		ALL_COMPUTERS.get(12).put(3, Computers.Arity12_4.class);
-		ALL_COMPUTERS.get(12).put(4, Computers.Arity12_5.class);
-		ALL_COMPUTERS.get(12).put(5, Computers.Arity12_6.class);
-		ALL_COMPUTERS.get(12).put(6, Computers.Arity12_7.class);
-		ALL_COMPUTERS.get(12).put(7, Computers.Arity12_8.class);
-		ALL_COMPUTERS.get(12).put(8, Computers.Arity12_9.class);
-		ALL_COMPUTERS.get(12).put(9, Computers.Arity12_10.class);
-		ALL_COMPUTERS.get(12).put(10, Computers.Arity12_11.class);
-		ALL_COMPUTERS.get(12).put(11, Computers.Arity12_12.class);
-		ALL_COMPUTERS.get(13).put(0, Computers.Arity13_1.class);
-		ALL_COMPUTERS.get(13).put(1, Computers.Arity13_2.class);
-		ALL_COMPUTERS.get(13).put(2, Computers.Arity13_3.class);
-		ALL_COMPUTERS.get(13).put(3, Computers.Arity13_4.class);
-		ALL_COMPUTERS.get(13).put(4, Computers.Arity13_5.class);
-		ALL_COMPUTERS.get(13).put(5, Computers.Arity13_6.class);
-		ALL_COMPUTERS.get(13).put(6, Computers.Arity13_7.class);
-		ALL_COMPUTERS.get(13).put(7, Computers.Arity13_8.class);
-		ALL_COMPUTERS.get(13).put(8, Computers.Arity13_9.class);
-		ALL_COMPUTERS.get(13).put(9, Computers.Arity13_10.class);
-		ALL_COMPUTERS.get(13).put(10, Computers.Arity13_11.class);
-		ALL_COMPUTERS.get(13).put(11, Computers.Arity13_12.class);
-		ALL_COMPUTERS.get(13).put(12, Computers.Arity13_13.class);
-		ALL_COMPUTERS.get(14).put(0, Computers.Arity14_1.class);
-		ALL_COMPUTERS.get(14).put(1, Computers.Arity14_2.class);
-		ALL_COMPUTERS.get(14).put(2, Computers.Arity14_3.class);
-		ALL_COMPUTERS.get(14).put(3, Computers.Arity14_4.class);
-		ALL_COMPUTERS.get(14).put(4, Computers.Arity14_5.class);
-		ALL_COMPUTERS.get(14).put(5, Computers.Arity14_6.class);
-		ALL_COMPUTERS.get(14).put(6, Computers.Arity14_7.class);
-		ALL_COMPUTERS.get(14).put(7, Computers.Arity14_8.class);
-		ALL_COMPUTERS.get(14).put(8, Computers.Arity14_9.class);
-		ALL_COMPUTERS.get(14).put(9, Computers.Arity14_10.class);
-		ALL_COMPUTERS.get(14).put(10, Computers.Arity14_11.class);
-		ALL_COMPUTERS.get(14).put(11, Computers.Arity14_12.class);
-		ALL_COMPUTERS.get(14).put(12, Computers.Arity14_13.class);
-		ALL_COMPUTERS.get(14).put(13, Computers.Arity14_14.class);
-		ALL_COMPUTERS.get(15).put(0, Computers.Arity15_1.class);
-		ALL_COMPUTERS.get(15).put(1, Computers.Arity15_2.class);
-		ALL_COMPUTERS.get(15).put(2, Computers.Arity15_3.class);
-		ALL_COMPUTERS.get(15).put(3, Computers.Arity15_4.class);
-		ALL_COMPUTERS.get(15).put(4, Computers.Arity15_5.class);
-		ALL_COMPUTERS.get(15).put(5, Computers.Arity15_6.class);
-		ALL_COMPUTERS.get(15).put(6, Computers.Arity15_7.class);
-		ALL_COMPUTERS.get(15).put(7, Computers.Arity15_8.class);
-		ALL_COMPUTERS.get(15).put(8, Computers.Arity15_9.class);
-		ALL_COMPUTERS.get(15).put(9, Computers.Arity15_10.class);
-		ALL_COMPUTERS.get(15).put(10, Computers.Arity15_11.class);
-		ALL_COMPUTERS.get(15).put(11, Computers.Arity15_12.class);
-		ALL_COMPUTERS.get(15).put(12, Computers.Arity15_13.class);
-		ALL_COMPUTERS.get(15).put(13, Computers.Arity15_14.class);
-		ALL_COMPUTERS.get(15).put(14, Computers.Arity15_15.class);
-		ALL_COMPUTERS.get(16).put(0, Computers.Arity16_1.class);
-		ALL_COMPUTERS.get(16).put(1, Computers.Arity16_2.class);
-		ALL_COMPUTERS.get(16).put(2, Computers.Arity16_3.class);
-		ALL_COMPUTERS.get(16).put(3, Computers.Arity16_4.class);
-		ALL_COMPUTERS.get(16).put(4, Computers.Arity16_5.class);
-		ALL_COMPUTERS.get(16).put(5, Computers.Arity16_6.class);
-		ALL_COMPUTERS.get(16).put(6, Computers.Arity16_7.class);
-		ALL_COMPUTERS.get(16).put(7, Computers.Arity16_8.class);
-		ALL_COMPUTERS.get(16).put(8, Computers.Arity16_9.class);
-		ALL_COMPUTERS.get(16).put(9, Computers.Arity16_10.class);
-		ALL_COMPUTERS.get(16).put(10, Computers.Arity16_11.class);
-		ALL_COMPUTERS.get(16).put(11, Computers.Arity16_12.class);
-		ALL_COMPUTERS.get(16).put(12, Computers.Arity16_13.class);
-		ALL_COMPUTERS.get(16).put(13, Computers.Arity16_14.class);
-		ALL_COMPUTERS.get(16).put(14, Computers.Arity16_15.class);
-		ALL_COMPUTERS.get(16).put(15, Computers.Arity16_16.class);
-	}
+	public static final Class<?>[][] ALL_COMPUTERS = new Class<?>[16 + 1][16 + 1];
+	public static final HashMap<Class<?>, Integer> ALL_ARITIES = new HashMap<>();
 
 	/**
 	 * @return {@code true} if the given type is a known computer type,
@@ -230,8 +53,7 @@ public final class Computers {
 	 * @throws NullPointerException If {@code c} is {@code null}.
 	 */
 	public static boolean isComputer(Class<?> c) {
-		return ALL_COMPUTERS.values().stream().anyMatch(map -> map.containsValue(
-			c));
+		return ALL_ARITIES.containsKey(c);
 	}
 
 	/**
@@ -242,6 +64,9 @@ public final class Computers {
 	 *           arity {@code arity}.
 	 */
 	public static Class<?> computerOfArity(int arity) {
+		// If pos is not given, we assume we're looking for one of the ArityX
+		// implementations,
+		// which is theoretically equivalent to a ArityX_X.
 		return computerOfArity(arity, arity);
 	}
 
@@ -255,16 +80,12 @@ public final class Computers {
 	 *           arity {@code arity}.
 	 */
 	public static Class<?> computerOfArity(int arity, int pos) {
-		if (!ALL_COMPUTERS.containsKey(arity)) {
-			throw new IllegalArgumentException("No Computer of arity " + arity);
-		}
-		HashMap<Integer, Class<?>> computersOfArity = ALL_COMPUTERS.get(arity);
-		if (!computersOfArity.containsKey(pos)) {
+		if ((arity > ALL_COMPUTERS.length + 1) || pos > arity) {
 			throw new IllegalArgumentException( //
 				"No Computer of arity " + arity + " with output index " + pos //
 			);
 		}
-		return computersOfArity.get(pos);
+		return ALL_COMPUTERS[arity][pos];
 	}
 
 	/**
@@ -2886,5 +2707,312 @@ public final class Computers {
 			compute16(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
 				in13, in14, in15, out, in16);
 		}
+	}
+
+	static {
+		ALL_COMPUTERS[1][0] = Computers.Arity1_1.class;
+		ALL_ARITIES.put(Computers.Arity1_1.class, 1);
+		ALL_COMPUTERS[1][1] = Computers.Arity1.class;
+		ALL_ARITIES.put(Computers.Arity1.class, 1);
+		ALL_COMPUTERS[2][0] = Computers.Arity2_1.class;
+		ALL_ARITIES.put(Computers.Arity2_1.class, 2);
+		ALL_COMPUTERS[2][1] = Computers.Arity2_2.class;
+		ALL_ARITIES.put(Computers.Arity2_2.class, 2);
+		ALL_COMPUTERS[2][2] = Computers.Arity2.class;
+		ALL_ARITIES.put(Computers.Arity2.class, 2);
+		ALL_COMPUTERS[3][0] = Computers.Arity3_1.class;
+		ALL_ARITIES.put(Computers.Arity3_1.class, 3);
+		ALL_COMPUTERS[3][1] = Computers.Arity3_2.class;
+		ALL_ARITIES.put(Computers.Arity3_2.class, 3);
+		ALL_COMPUTERS[3][2] = Computers.Arity3_3.class;
+		ALL_ARITIES.put(Computers.Arity3_3.class, 3);
+		ALL_COMPUTERS[3][3] = Computers.Arity3.class;
+		ALL_ARITIES.put(Computers.Arity3.class, 3);
+		ALL_COMPUTERS[4][0] = Computers.Arity4_1.class;
+		ALL_ARITIES.put(Computers.Arity4_1.class, 4);
+		ALL_COMPUTERS[4][1] = Computers.Arity4_2.class;
+		ALL_ARITIES.put(Computers.Arity4_2.class, 4);
+		ALL_COMPUTERS[4][2] = Computers.Arity4_3.class;
+		ALL_ARITIES.put(Computers.Arity4_3.class, 4);
+		ALL_COMPUTERS[4][3] = Computers.Arity4_4.class;
+		ALL_ARITIES.put(Computers.Arity4_4.class, 4);
+		ALL_COMPUTERS[4][4] = Computers.Arity4.class;
+		ALL_ARITIES.put(Computers.Arity4.class, 4);
+		ALL_COMPUTERS[5][0] = Computers.Arity5_1.class;
+		ALL_ARITIES.put(Computers.Arity5_1.class, 5);
+		ALL_COMPUTERS[5][1] = Computers.Arity5_2.class;
+		ALL_ARITIES.put(Computers.Arity5_2.class, 5);
+		ALL_COMPUTERS[5][2] = Computers.Arity5_3.class;
+		ALL_ARITIES.put(Computers.Arity5_3.class, 5);
+		ALL_COMPUTERS[5][3] = Computers.Arity5_4.class;
+		ALL_ARITIES.put(Computers.Arity5_4.class, 5);
+		ALL_COMPUTERS[5][4] = Computers.Arity5_5.class;
+		ALL_ARITIES.put(Computers.Arity5_5.class, 5);
+		ALL_COMPUTERS[5][5] = Computers.Arity5.class;
+		ALL_ARITIES.put(Computers.Arity5.class, 5);
+		ALL_COMPUTERS[6][0] = Computers.Arity6_1.class;
+		ALL_ARITIES.put(Computers.Arity6_1.class, 6);
+		ALL_COMPUTERS[6][1] = Computers.Arity6_2.class;
+		ALL_ARITIES.put(Computers.Arity6_2.class, 6);
+		ALL_COMPUTERS[6][2] = Computers.Arity6_3.class;
+		ALL_ARITIES.put(Computers.Arity6_3.class, 6);
+		ALL_COMPUTERS[6][3] = Computers.Arity6_4.class;
+		ALL_ARITIES.put(Computers.Arity6_4.class, 6);
+		ALL_COMPUTERS[6][4] = Computers.Arity6_5.class;
+		ALL_ARITIES.put(Computers.Arity6_5.class, 6);
+		ALL_COMPUTERS[6][5] = Computers.Arity6_6.class;
+		ALL_ARITIES.put(Computers.Arity6_6.class, 6);
+		ALL_COMPUTERS[6][6] = Computers.Arity6.class;
+		ALL_ARITIES.put(Computers.Arity6.class, 6);
+		ALL_COMPUTERS[7][0] = Computers.Arity7_1.class;
+		ALL_ARITIES.put(Computers.Arity7_1.class, 7);
+		ALL_COMPUTERS[7][1] = Computers.Arity7_2.class;
+		ALL_ARITIES.put(Computers.Arity7_2.class, 7);
+		ALL_COMPUTERS[7][2] = Computers.Arity7_3.class;
+		ALL_ARITIES.put(Computers.Arity7_3.class, 7);
+		ALL_COMPUTERS[7][3] = Computers.Arity7_4.class;
+		ALL_ARITIES.put(Computers.Arity7_4.class, 7);
+		ALL_COMPUTERS[7][4] = Computers.Arity7_5.class;
+		ALL_ARITIES.put(Computers.Arity7_5.class, 7);
+		ALL_COMPUTERS[7][5] = Computers.Arity7_6.class;
+		ALL_ARITIES.put(Computers.Arity7_6.class, 7);
+		ALL_COMPUTERS[7][6] = Computers.Arity7_7.class;
+		ALL_ARITIES.put(Computers.Arity7_7.class, 7);
+		ALL_COMPUTERS[7][7] = Computers.Arity7.class;
+		ALL_ARITIES.put(Computers.Arity7.class, 7);
+		ALL_COMPUTERS[8][0] = Computers.Arity8_1.class;
+		ALL_ARITIES.put(Computers.Arity8_1.class, 8);
+		ALL_COMPUTERS[8][1] = Computers.Arity8_2.class;
+		ALL_ARITIES.put(Computers.Arity8_2.class, 8);
+		ALL_COMPUTERS[8][2] = Computers.Arity8_3.class;
+		ALL_ARITIES.put(Computers.Arity8_3.class, 8);
+		ALL_COMPUTERS[8][3] = Computers.Arity8_4.class;
+		ALL_ARITIES.put(Computers.Arity8_4.class, 8);
+		ALL_COMPUTERS[8][4] = Computers.Arity8_5.class;
+		ALL_ARITIES.put(Computers.Arity8_5.class, 8);
+		ALL_COMPUTERS[8][5] = Computers.Arity8_6.class;
+		ALL_ARITIES.put(Computers.Arity8_6.class, 8);
+		ALL_COMPUTERS[8][6] = Computers.Arity8_7.class;
+		ALL_ARITIES.put(Computers.Arity8_7.class, 8);
+		ALL_COMPUTERS[8][7] = Computers.Arity8_8.class;
+		ALL_ARITIES.put(Computers.Arity8_8.class, 8);
+		ALL_COMPUTERS[8][8] = Computers.Arity8.class;
+		ALL_ARITIES.put(Computers.Arity8.class, 8);
+		ALL_COMPUTERS[9][0] = Computers.Arity9_1.class;
+		ALL_ARITIES.put(Computers.Arity9_1.class, 9);
+		ALL_COMPUTERS[9][1] = Computers.Arity9_2.class;
+		ALL_ARITIES.put(Computers.Arity9_2.class, 9);
+		ALL_COMPUTERS[9][2] = Computers.Arity9_3.class;
+		ALL_ARITIES.put(Computers.Arity9_3.class, 9);
+		ALL_COMPUTERS[9][3] = Computers.Arity9_4.class;
+		ALL_ARITIES.put(Computers.Arity9_4.class, 9);
+		ALL_COMPUTERS[9][4] = Computers.Arity9_5.class;
+		ALL_ARITIES.put(Computers.Arity9_5.class, 9);
+		ALL_COMPUTERS[9][5] = Computers.Arity9_6.class;
+		ALL_ARITIES.put(Computers.Arity9_6.class, 9);
+		ALL_COMPUTERS[9][6] = Computers.Arity9_7.class;
+		ALL_ARITIES.put(Computers.Arity9_7.class, 9);
+		ALL_COMPUTERS[9][7] = Computers.Arity9_8.class;
+		ALL_ARITIES.put(Computers.Arity9_8.class, 9);
+		ALL_COMPUTERS[9][8] = Computers.Arity9_9.class;
+		ALL_ARITIES.put(Computers.Arity9_9.class, 9);
+		ALL_COMPUTERS[9][9] = Computers.Arity9.class;
+		ALL_ARITIES.put(Computers.Arity9.class, 9);
+		ALL_COMPUTERS[10][0] = Computers.Arity10_1.class;
+		ALL_ARITIES.put(Computers.Arity10_1.class, 10);
+		ALL_COMPUTERS[10][1] = Computers.Arity10_2.class;
+		ALL_ARITIES.put(Computers.Arity10_2.class, 10);
+		ALL_COMPUTERS[10][2] = Computers.Arity10_3.class;
+		ALL_ARITIES.put(Computers.Arity10_3.class, 10);
+		ALL_COMPUTERS[10][3] = Computers.Arity10_4.class;
+		ALL_ARITIES.put(Computers.Arity10_4.class, 10);
+		ALL_COMPUTERS[10][4] = Computers.Arity10_5.class;
+		ALL_ARITIES.put(Computers.Arity10_5.class, 10);
+		ALL_COMPUTERS[10][5] = Computers.Arity10_6.class;
+		ALL_ARITIES.put(Computers.Arity10_6.class, 10);
+		ALL_COMPUTERS[10][6] = Computers.Arity10_7.class;
+		ALL_ARITIES.put(Computers.Arity10_7.class, 10);
+		ALL_COMPUTERS[10][7] = Computers.Arity10_8.class;
+		ALL_ARITIES.put(Computers.Arity10_8.class, 10);
+		ALL_COMPUTERS[10][8] = Computers.Arity10_9.class;
+		ALL_ARITIES.put(Computers.Arity10_9.class, 10);
+		ALL_COMPUTERS[10][9] = Computers.Arity10_10.class;
+		ALL_ARITIES.put(Computers.Arity10_10.class, 10);
+		ALL_COMPUTERS[10][10] = Computers.Arity10.class;
+		ALL_ARITIES.put(Computers.Arity10.class, 10);
+		ALL_COMPUTERS[11][0] = Computers.Arity11_1.class;
+		ALL_ARITIES.put(Computers.Arity11_1.class, 11);
+		ALL_COMPUTERS[11][1] = Computers.Arity11_2.class;
+		ALL_ARITIES.put(Computers.Arity11_2.class, 11);
+		ALL_COMPUTERS[11][2] = Computers.Arity11_3.class;
+		ALL_ARITIES.put(Computers.Arity11_3.class, 11);
+		ALL_COMPUTERS[11][3] = Computers.Arity11_4.class;
+		ALL_ARITIES.put(Computers.Arity11_4.class, 11);
+		ALL_COMPUTERS[11][4] = Computers.Arity11_5.class;
+		ALL_ARITIES.put(Computers.Arity11_5.class, 11);
+		ALL_COMPUTERS[11][5] = Computers.Arity11_6.class;
+		ALL_ARITIES.put(Computers.Arity11_6.class, 11);
+		ALL_COMPUTERS[11][6] = Computers.Arity11_7.class;
+		ALL_ARITIES.put(Computers.Arity11_7.class, 11);
+		ALL_COMPUTERS[11][7] = Computers.Arity11_8.class;
+		ALL_ARITIES.put(Computers.Arity11_8.class, 11);
+		ALL_COMPUTERS[11][8] = Computers.Arity11_9.class;
+		ALL_ARITIES.put(Computers.Arity11_9.class, 11);
+		ALL_COMPUTERS[11][9] = Computers.Arity11_10.class;
+		ALL_ARITIES.put(Computers.Arity11_10.class, 11);
+		ALL_COMPUTERS[11][10] = Computers.Arity11_11.class;
+		ALL_ARITIES.put(Computers.Arity11_11.class, 11);
+		ALL_COMPUTERS[11][11] = Computers.Arity11.class;
+		ALL_ARITIES.put(Computers.Arity11.class, 11);
+		ALL_COMPUTERS[12][0] = Computers.Arity12_1.class;
+		ALL_ARITIES.put(Computers.Arity12_1.class, 12);
+		ALL_COMPUTERS[12][1] = Computers.Arity12_2.class;
+		ALL_ARITIES.put(Computers.Arity12_2.class, 12);
+		ALL_COMPUTERS[12][2] = Computers.Arity12_3.class;
+		ALL_ARITIES.put(Computers.Arity12_3.class, 12);
+		ALL_COMPUTERS[12][3] = Computers.Arity12_4.class;
+		ALL_ARITIES.put(Computers.Arity12_4.class, 12);
+		ALL_COMPUTERS[12][4] = Computers.Arity12_5.class;
+		ALL_ARITIES.put(Computers.Arity12_5.class, 12);
+		ALL_COMPUTERS[12][5] = Computers.Arity12_6.class;
+		ALL_ARITIES.put(Computers.Arity12_6.class, 12);
+		ALL_COMPUTERS[12][6] = Computers.Arity12_7.class;
+		ALL_ARITIES.put(Computers.Arity12_7.class, 12);
+		ALL_COMPUTERS[12][7] = Computers.Arity12_8.class;
+		ALL_ARITIES.put(Computers.Arity12_8.class, 12);
+		ALL_COMPUTERS[12][8] = Computers.Arity12_9.class;
+		ALL_ARITIES.put(Computers.Arity12_9.class, 12);
+		ALL_COMPUTERS[12][9] = Computers.Arity12_10.class;
+		ALL_ARITIES.put(Computers.Arity12_10.class, 12);
+		ALL_COMPUTERS[12][10] = Computers.Arity12_11.class;
+		ALL_ARITIES.put(Computers.Arity12_11.class, 12);
+		ALL_COMPUTERS[12][11] = Computers.Arity12_12.class;
+		ALL_ARITIES.put(Computers.Arity12_12.class, 12);
+		ALL_COMPUTERS[12][12] = Computers.Arity12.class;
+		ALL_ARITIES.put(Computers.Arity12.class, 12);
+		ALL_COMPUTERS[13][0] = Computers.Arity13_1.class;
+		ALL_ARITIES.put(Computers.Arity13_1.class, 13);
+		ALL_COMPUTERS[13][1] = Computers.Arity13_2.class;
+		ALL_ARITIES.put(Computers.Arity13_2.class, 13);
+		ALL_COMPUTERS[13][2] = Computers.Arity13_3.class;
+		ALL_ARITIES.put(Computers.Arity13_3.class, 13);
+		ALL_COMPUTERS[13][3] = Computers.Arity13_4.class;
+		ALL_ARITIES.put(Computers.Arity13_4.class, 13);
+		ALL_COMPUTERS[13][4] = Computers.Arity13_5.class;
+		ALL_ARITIES.put(Computers.Arity13_5.class, 13);
+		ALL_COMPUTERS[13][5] = Computers.Arity13_6.class;
+		ALL_ARITIES.put(Computers.Arity13_6.class, 13);
+		ALL_COMPUTERS[13][6] = Computers.Arity13_7.class;
+		ALL_ARITIES.put(Computers.Arity13_7.class, 13);
+		ALL_COMPUTERS[13][7] = Computers.Arity13_8.class;
+		ALL_ARITIES.put(Computers.Arity13_8.class, 13);
+		ALL_COMPUTERS[13][8] = Computers.Arity13_9.class;
+		ALL_ARITIES.put(Computers.Arity13_9.class, 13);
+		ALL_COMPUTERS[13][9] = Computers.Arity13_10.class;
+		ALL_ARITIES.put(Computers.Arity13_10.class, 13);
+		ALL_COMPUTERS[13][10] = Computers.Arity13_11.class;
+		ALL_ARITIES.put(Computers.Arity13_11.class, 13);
+		ALL_COMPUTERS[13][11] = Computers.Arity13_12.class;
+		ALL_ARITIES.put(Computers.Arity13_12.class, 13);
+		ALL_COMPUTERS[13][12] = Computers.Arity13_13.class;
+		ALL_ARITIES.put(Computers.Arity13_13.class, 13);
+		ALL_COMPUTERS[13][13] = Computers.Arity13.class;
+		ALL_ARITIES.put(Computers.Arity13.class, 13);
+		ALL_COMPUTERS[14][0] = Computers.Arity14_1.class;
+		ALL_ARITIES.put(Computers.Arity14_1.class, 14);
+		ALL_COMPUTERS[14][1] = Computers.Arity14_2.class;
+		ALL_ARITIES.put(Computers.Arity14_2.class, 14);
+		ALL_COMPUTERS[14][2] = Computers.Arity14_3.class;
+		ALL_ARITIES.put(Computers.Arity14_3.class, 14);
+		ALL_COMPUTERS[14][3] = Computers.Arity14_4.class;
+		ALL_ARITIES.put(Computers.Arity14_4.class, 14);
+		ALL_COMPUTERS[14][4] = Computers.Arity14_5.class;
+		ALL_ARITIES.put(Computers.Arity14_5.class, 14);
+		ALL_COMPUTERS[14][5] = Computers.Arity14_6.class;
+		ALL_ARITIES.put(Computers.Arity14_6.class, 14);
+		ALL_COMPUTERS[14][6] = Computers.Arity14_7.class;
+		ALL_ARITIES.put(Computers.Arity14_7.class, 14);
+		ALL_COMPUTERS[14][7] = Computers.Arity14_8.class;
+		ALL_ARITIES.put(Computers.Arity14_8.class, 14);
+		ALL_COMPUTERS[14][8] = Computers.Arity14_9.class;
+		ALL_ARITIES.put(Computers.Arity14_9.class, 14);
+		ALL_COMPUTERS[14][9] = Computers.Arity14_10.class;
+		ALL_ARITIES.put(Computers.Arity14_10.class, 14);
+		ALL_COMPUTERS[14][10] = Computers.Arity14_11.class;
+		ALL_ARITIES.put(Computers.Arity14_11.class, 14);
+		ALL_COMPUTERS[14][11] = Computers.Arity14_12.class;
+		ALL_ARITIES.put(Computers.Arity14_12.class, 14);
+		ALL_COMPUTERS[14][12] = Computers.Arity14_13.class;
+		ALL_ARITIES.put(Computers.Arity14_13.class, 14);
+		ALL_COMPUTERS[14][13] = Computers.Arity14_14.class;
+		ALL_ARITIES.put(Computers.Arity14_14.class, 14);
+		ALL_COMPUTERS[14][14] = Computers.Arity14.class;
+		ALL_ARITIES.put(Computers.Arity14.class, 14);
+		ALL_COMPUTERS[15][0] = Computers.Arity15_1.class;
+		ALL_ARITIES.put(Computers.Arity15_1.class, 15);
+		ALL_COMPUTERS[15][1] = Computers.Arity15_2.class;
+		ALL_ARITIES.put(Computers.Arity15_2.class, 15);
+		ALL_COMPUTERS[15][2] = Computers.Arity15_3.class;
+		ALL_ARITIES.put(Computers.Arity15_3.class, 15);
+		ALL_COMPUTERS[15][3] = Computers.Arity15_4.class;
+		ALL_ARITIES.put(Computers.Arity15_4.class, 15);
+		ALL_COMPUTERS[15][4] = Computers.Arity15_5.class;
+		ALL_ARITIES.put(Computers.Arity15_5.class, 15);
+		ALL_COMPUTERS[15][5] = Computers.Arity15_6.class;
+		ALL_ARITIES.put(Computers.Arity15_6.class, 15);
+		ALL_COMPUTERS[15][6] = Computers.Arity15_7.class;
+		ALL_ARITIES.put(Computers.Arity15_7.class, 15);
+		ALL_COMPUTERS[15][7] = Computers.Arity15_8.class;
+		ALL_ARITIES.put(Computers.Arity15_8.class, 15);
+		ALL_COMPUTERS[15][8] = Computers.Arity15_9.class;
+		ALL_ARITIES.put(Computers.Arity15_9.class, 15);
+		ALL_COMPUTERS[15][9] = Computers.Arity15_10.class;
+		ALL_ARITIES.put(Computers.Arity15_10.class, 15);
+		ALL_COMPUTERS[15][10] = Computers.Arity15_11.class;
+		ALL_ARITIES.put(Computers.Arity15_11.class, 15);
+		ALL_COMPUTERS[15][11] = Computers.Arity15_12.class;
+		ALL_ARITIES.put(Computers.Arity15_12.class, 15);
+		ALL_COMPUTERS[15][12] = Computers.Arity15_13.class;
+		ALL_ARITIES.put(Computers.Arity15_13.class, 15);
+		ALL_COMPUTERS[15][13] = Computers.Arity15_14.class;
+		ALL_ARITIES.put(Computers.Arity15_14.class, 15);
+		ALL_COMPUTERS[15][14] = Computers.Arity15_15.class;
+		ALL_ARITIES.put(Computers.Arity15_15.class, 15);
+		ALL_COMPUTERS[15][15] = Computers.Arity15.class;
+		ALL_ARITIES.put(Computers.Arity15.class, 15);
+		ALL_COMPUTERS[16][0] = Computers.Arity16_1.class;
+		ALL_ARITIES.put(Computers.Arity16_1.class, 16);
+		ALL_COMPUTERS[16][1] = Computers.Arity16_2.class;
+		ALL_ARITIES.put(Computers.Arity16_2.class, 16);
+		ALL_COMPUTERS[16][2] = Computers.Arity16_3.class;
+		ALL_ARITIES.put(Computers.Arity16_3.class, 16);
+		ALL_COMPUTERS[16][3] = Computers.Arity16_4.class;
+		ALL_ARITIES.put(Computers.Arity16_4.class, 16);
+		ALL_COMPUTERS[16][4] = Computers.Arity16_5.class;
+		ALL_ARITIES.put(Computers.Arity16_5.class, 16);
+		ALL_COMPUTERS[16][5] = Computers.Arity16_6.class;
+		ALL_ARITIES.put(Computers.Arity16_6.class, 16);
+		ALL_COMPUTERS[16][6] = Computers.Arity16_7.class;
+		ALL_ARITIES.put(Computers.Arity16_7.class, 16);
+		ALL_COMPUTERS[16][7] = Computers.Arity16_8.class;
+		ALL_ARITIES.put(Computers.Arity16_8.class, 16);
+		ALL_COMPUTERS[16][8] = Computers.Arity16_9.class;
+		ALL_ARITIES.put(Computers.Arity16_9.class, 16);
+		ALL_COMPUTERS[16][9] = Computers.Arity16_10.class;
+		ALL_ARITIES.put(Computers.Arity16_10.class, 16);
+		ALL_COMPUTERS[16][10] = Computers.Arity16_11.class;
+		ALL_ARITIES.put(Computers.Arity16_11.class, 16);
+		ALL_COMPUTERS[16][11] = Computers.Arity16_12.class;
+		ALL_ARITIES.put(Computers.Arity16_12.class, 16);
+		ALL_COMPUTERS[16][12] = Computers.Arity16_13.class;
+		ALL_ARITIES.put(Computers.Arity16_13.class, 16);
+		ALL_COMPUTERS[16][13] = Computers.Arity16_14.class;
+		ALL_ARITIES.put(Computers.Arity16_14.class, 16);
+		ALL_COMPUTERS[16][14] = Computers.Arity16_15.class;
+		ALL_ARITIES.put(Computers.Arity16_15.class, 16);
+		ALL_COMPUTERS[16][15] = Computers.Arity16_16.class;
+		ALL_ARITIES.put(Computers.Arity16_16.class, 16);
+		ALL_COMPUTERS[16][16] = Computers.Arity16.class;
+		ALL_ARITIES.put(Computers.Arity16.class, 16);
 	}
 }

@@ -42,7 +42,7 @@ public class YAMLMethodOp {
 	/**
 	 * An example Op, implemented by a {@link Method}
 	 *
-	 * @implNote op name=example.sub
+	 * @implNote op name=example.sub, type=Function
 	 * @param aDouble the first double
 	 * @param aDouble2 the second double
 	 * @return the difference
@@ -79,6 +79,23 @@ public class YAMLMethodOp {
 		out.clear();
 		for (int i = 0; i < aList.size(); i++) {
 			out.add(aList.get(i) & aList2.get(i));
+		}
+	}
+
+	/**
+	 * A third example Op, implemented by a {@link Method}
+	 *
+	 * @implNote op name=example.or, type=Computer2
+	 * @param aList the first integer {@link List}
+	 * @param out the logical and of the two integer {@link List}s
+	 * @param aList2 the second integer {@link List}
+	 */
+	public static void or(List<Integer> aList, List<Integer> out,
+		List<Integer> aList2)
+	{
+		out.clear();
+		for (int i = 0; i < aList.size(); i++) {
+			out.add(aList.get(i) | aList2.get(i));
 		}
 	}
 

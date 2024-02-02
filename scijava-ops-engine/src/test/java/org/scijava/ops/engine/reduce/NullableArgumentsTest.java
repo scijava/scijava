@@ -33,6 +33,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
+import org.scijava.function.Container;
 import org.scijava.function.Functions;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.spi.OpCollection;
@@ -161,6 +162,50 @@ public class NullableArgumentsTest extends AbstractTestEnvironment //
 			String.class).apply();
 		String expected = "a";
 		Assertions.assertEquals(expected, out);
+	}
+
+	@OpMethod(names = "test.nullableOr", type = Computers.Arity3_3.class)
+	public static void nullablePermutedComputer( //
+		int[] in1, //
+		@Nullable int[] in2, //
+		@Container int[] out, //
+		@Nullable int[] in3 //
+	) {
+		if (in2 == null) in2 = new int[in1.length];
+		if (in3 == null) in3 = new int[in1.length];
+		for (int i = 0; i < out.length; i++) {
+			out[i] = in1[i] | in2[i] | in3[i];
+		}
+	}
+
+	@Test
+	public void testPermutedMethodWithTwoNullables() {
+		int[] out = new int[1];
+		ops.op("test.nullableOr").arity3().input( //
+			new int[] { 1 }, //
+			new int[] { 2 }, //
+			new int[] { 4 } //
+		).output(out).compute();
+		Assertions.assertEquals(7, out[0]);
+	}
+
+	@Test
+	public void testPermutedMethodWithOneNullable() {
+		int[] out = new int[1];
+		ops.op("test.nullableOr").arity2().input( //
+			new int[] { 1 }, //
+			new int[] { 2 } //
+		).output(out).compute();
+		Assertions.assertEquals(3, out[0]);
+	}
+
+	@Test
+	public void testPermutedMethodWithoutNullables() {
+		int[] out = new int[1];
+		ops.op("test.nullableOr").arity1().input( //
+			new int[] { 1 } //
+		).output(out).compute();
+		Assertions.assertEquals(1, out[0]);
 	}
 
 }

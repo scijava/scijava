@@ -89,7 +89,16 @@ public class YAMLOpTest extends AbstractTestEnvironment {
 		List<Integer> l2 = Arrays.asList(3);
 		List<Integer> out = new ArrayList<>();
 		ops.op("example.and").arity2().input(l1, l2).output(out).compute();
-		Assertions.assertEquals(1, l1.get(0), 1e-6);
+		Assertions.assertEquals(1, out.get(0), 1e-6);
+	}
+
+	@Test
+	public void testYAMLMethodExtraComputerShortType() {
+		List<Integer> l1 = Arrays.asList(1);
+		List<Integer> l2 = Arrays.asList(2);
+		List<Integer> out = new ArrayList<>();
+		ops.op("example.or").arity2().input(l1, l2).output(out).compute();
+		Assertions.assertEquals(3, out.get(0), 1e-6);
 	}
 
 	@Test

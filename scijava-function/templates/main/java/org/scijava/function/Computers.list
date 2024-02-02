@@ -21,4 +21,27 @@ matchParams = ```
   String.join(', ', nilArgs)
 }
 ```
-
+permutedGenerics = ```
+{ arity, a ->
+  generics = genericParamTypes(arity)
+  outVal = generics.removeAt(arity)
+  generics.add(a-1, outVal)
+  '<' + String.join(', ', generics) + '>'
+}
+```
+permutedComputeParams = ```
+{ arity, a->
+  typeParams = typeParamsList(arity)
+  outVal = "@Container " + typeParams.removeAt(arity)
+  typeParams.add(a-1, outVal)
+  String.join(', ', typeParams)
+}
+```
+permutedComputeArgs = ```
+{ arity, a->
+  names = genericsNamesList(arity)
+  outVal = names.removeAt(arity)
+  names.add(a-1, outVal)
+  String.join(', ', names)
+}
+```

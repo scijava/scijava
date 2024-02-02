@@ -118,7 +118,7 @@ public final class Computers {
 #foreach($arity in [1..$maxArity])
 #foreach($a in [1..${arity}])
 #set($rawClass = "Arity${arity}_${a}")
-#set($genericParams = $extraGenerics.call($arity, $a))
+#set($genericParams = $permutedGenerics.call($arity, $a))
 #set($inheritedParams = $generics.call($arity))
 #set($gClass = "$rawClass$genericParams")
 
@@ -127,12 +127,12 @@ public final class Computers {
 		Arity$arity$inheritedParams
 	{
 
-		void compute$a($extraComputeParams.call($arity, $a));
+		void compute$a($permutedComputeParams.call($arity, $a));
 
 		@Override
 		default void compute($computeParams.call($arity))
 		{
-			compute$a($extraComputeArgs.call($arity, $a));
+			compute$a($permutedComputeArgs.call($arity, $a));
 		}
 	}
 #end##foreach($a)

@@ -255,6 +255,17 @@ public final class SimplificationUtils {
 			.computer());
 	}
 
+	/**
+	 * Helper method to check if an op is an "identity" op - i.e. a naive wrapper
+	 * that does no modification to its base op.
+	 *
+	 * @param op {@link RichOp} to check
+	 * @return {@code true} iff the op is an identity op
+	 */
+	public static boolean isIdentity(RichOp<?> op) {
+		return Ops.info(op).names().contains("engine.identity");
+	}
+
 	private static Nil<?> outType(Type originalOutput,
 		RichOp<Function<?, ?>> outputSimplifier)
 	{

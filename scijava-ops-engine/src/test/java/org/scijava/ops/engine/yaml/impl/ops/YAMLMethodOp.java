@@ -42,7 +42,7 @@ public class YAMLMethodOp {
 	/**
 	 * An example Op, implemented by a {@link Method}
 	 *
-	 * @implNote op name=example.sub
+	 * @implNote op name=example.sub, type=Function
 	 * @param aDouble the first double
 	 * @param aDouble2 the second double
 	 * @return the difference

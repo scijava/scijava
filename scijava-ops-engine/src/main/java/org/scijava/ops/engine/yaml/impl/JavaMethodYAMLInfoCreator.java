@@ -33,7 +33,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.net.URI;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import org.scijava.common3.Classes;
 import org.scijava.function.Computers;
@@ -107,30 +106,39 @@ public class JavaMethodYAMLInfoCreator extends AbstractYAMLOpInfoCreator {
 					" could not be loaded: Computers and Inplaces must declare their Op type in their @implNote annotation For example, if your Inplace is designed to mutate the first argument, please write \"type='Inplace1'\"");
 			}
 		}
-		// Handle op type inference
-		if (Pattern.matches("^[Ii]nplace\\s*[0-9]*$", typeString)) {
-			try {
-				int ioIndex = Integer.parseInt(typeString.replaceAll("[^0-9]", "")) - 1;
-				return Inplaces.inplaceOfArity(parameterCount, ioIndex);
-			}
-			catch (NumberFormatException e) {
-				throw new RuntimeException("Op " + identifier +
-					" could not be loaded: Inplaces must declare the index of the mutable parameter. For example, if your Inplace is designed to mutate the first argument, please write \"Inplace1\"");
-			}
-		}
-		else if (Pattern.matches("^[Cc]omputer$", typeString)) {
-			return Computers.computerOfArity(parameterCount - 1);
-		}
-		else if (Pattern.matches("^[Cc]omputer\\s*[0-9]*$", typeString)) {
-			Integer a = Integer.parseInt(typeString.substring(typeString.indexOf(
-				'r') + 1).trim());
-			return Computers.computerOfArity(parameterCount - 1, a - 1);
-		}
-		else if (Pattern.matches("^[Ff]unction$", typeString)) {
-			return Functions.functionOfArity(parameterCount);
-		}
+
+		Class<?> alias = findAlias(typeString.trim(), parameterCount);
+		if (alias != null) return alias;
+
 		// Finally, pass off to the class loader function.
 		return deriveType(identifier, typeString);
+	}
+
+	private Class<?> findAlias(String typeString, int parameterCount) {
+		// We match any aliases matching the regex pattern "(or_of_aliases)(\\d*)"
+		int ioPosition = parameterCount - 1;
+		int aliasEnd = typeString.length() - 1;
+		// If the last char is a digit, we have a positional suffix
+		if (Character.isDigit(typeString.charAt(aliasEnd))) {
+			// Find the positional suffix
+			for (; aliasEnd >= 0; aliasEnd--) {
+				if (!Character.isDigit(typeString.charAt(aliasEnd))) {
+					ioPosition = Integer.parseInt(typeString.substring(aliasEnd + 1)) - 1;
+					break;
+				}
+			}
+		}
+		// Check if (typeString - positional suffix) is an alias
+		switch (typeString.substring(0, aliasEnd + 1)) {
+			case "Computer":
+				return Computers.computerOfArity(parameterCount - 1, ioPosition);
+			case "Function":
+				return Functions.functionOfArity(parameterCount);
+			case "Inplace":
+				return Inplaces.inplaceOfArity(parameterCount, ioPosition);
+			default:
+				return null;
+		}
 	}
 
 	private Class<?> deriveType(String identifier, String typeString) {

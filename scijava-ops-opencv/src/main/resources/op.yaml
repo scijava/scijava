@@ -1,0 +1,34 @@
+- op:
+    names: [filter.gauss]
+    description: |2
+       OpenCV filter gauss
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur%28org.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.opencv.opencv_core.Size%2Cdouble%29
+    priority: 100.0
+    version: 0-SNAPSHOT
+    parameters:
+    - parameter type: INPUT
+      name: in
+      description: |
+        the input {@link Mat} to blur
+      type: org.bytedeco.opencv.opencv_core.Mat
+    - parameter type: CONTAINER
+      name: out
+      description: |
+        a preallocated {@link Mat} to populate
+      type: org.bytedeco.opencv.opencv_core.Mat
+    - parameter type: INPUT
+      name: size
+      description: |
+        desired kernel size
+      type: org.bytedeco.opencv.opencv_core.Size
+    - parameter type: INPUT
+      name: StDev
+      description: |
+        desired standard deviation/blur intensity
+      type: double
+    authors:
+    - |
+      OpenCV developers https://opencv.org/
+    - |
+      JavaCV developers https://github.com/bytedeco/javacv
+    tags: {type: Computer2}

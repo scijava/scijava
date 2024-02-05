@@ -58,6 +58,7 @@
 		<module>scijava-ops-image</module>
 		<module>scijava-ops-legacy</module>
 		<module>scijava-ops-indexer</module>
+		<module>scijava-ops-opencv</module>
 		<module>scijava-ops-spi</module>
 		<module>scijava-ops-tutorial</module>
 		<module>scijava-persist</module>

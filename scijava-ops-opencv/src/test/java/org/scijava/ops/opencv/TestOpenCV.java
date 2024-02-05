@@ -44,13 +44,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestOpenCV {
 
-	private static final String TEST_OP = "filter.gauss";
+	private static final String TEST_OP = "cv.GaussianBlur";
 	private static final String EXPECTED_HELP = //
-			"filter.gauss:\n" //
+			"cv.GaussianBlur:\n" //
 					+ "\t- (in, @CONTAINER container1, size, StDev) -> None";
 
 	private static final String EXPECTED_HELP_VERBOSE = //
-			"filter.gauss:\n" //
+			"cv.GaussianBlur:\n" //
 					+ "\t- org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur(org.bytedeco.opencv.opencv_core.Mat,org.bytedeco.opencv.opencv_core.Mat,org.bytedeco.opencv.opencv_core.Size,double)\n" //
 					+ "\t\t> in : org.bytedeco.opencv.opencv_core.Mat\n" //
 					+ "\t\t\tthe input {@link Mat} to blur\n" + "\t\t> container1 : @CONTAINER org.bytedeco.opencv.opencv_core.Mat\n" //

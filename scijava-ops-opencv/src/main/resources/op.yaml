@@ -1,5 +1,5 @@
 - op:
-    names: [filter.gauss]
+    names: [cv.GaussianBlur]
     description: |2
        OpenCV filter gauss
     source: javaMethod:/org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur%28org.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.opencv.opencv_core.Size%2Cdouble%29

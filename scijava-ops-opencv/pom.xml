@@ -265,6 +265,34 @@
 			<artifactId>imagej-opencv</artifactId>
 		</dependency>
 
+		<!-- OpenCV dependencies -->
+		<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>openblas</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>opencv</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>javacpp</artifactId>
+		</dependency>
+
+		<!-- OpenCV runtime native dependencies -->
+		<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>openblas</artifactId>
+			<scope>runtime</scope>
+			<classifier>${scijava.natives.classifier.opencv}</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>opencv</artifactId>
+			<classifier>${scijava.natives.classifier.opencv}</classifier>
+			<scope>runtime</scope>
+		</dependency>
+
 		<!-- Test scope dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>

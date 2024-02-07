@@ -532,6 +532,7 @@ module org.scijava.ops.engine {
 		org.scijava.ops.engine.adapt.functional.InplacesToFunctions.Inplace16_14ToFunction16,
 		org.scijava.ops.engine.adapt.functional.InplacesToFunctions.Inplace16_15ToFunction16,
 		org.scijava.ops.engine.adapt.functional.InplacesToFunctions.Inplace16_16ToFunction16,
+		org.scijava.ops.engine.conversionLoss.impl.IdentityLossReporter,
 		org.scijava.ops.engine.eval.DefaultEval,
 		org.scijava.ops.engine.stats.Mean.MeanFunction;
 

@@ -228,7 +228,9 @@ public final class SimplificationUtils {
 	) {
 		int ioIndex = SimplificationUtils.findMutableArgIndex(Types.raw(info
 			.opType()));
-		if (ioIndex > -1 && !(isIdentity(inFocusers.get(ioIndex)) && isIdentity(outSimplifier))) {
+		if (ioIndex > -1 && !(isIdentity(inFocusers.get(ioIndex)) && isIdentity(
+			outSimplifier)))
+		{
 			// Otherwise, we need an Op to convert the simple output back into the
 			// pre-focused input
 			// Determine simple output type.
@@ -237,19 +239,19 @@ public final class SimplificationUtils {
 			var focuserInfo = Ops.info(inFocusers.get(ioIndex));
 			Map<TypeVariable<?>, Type> typeAssigns = new HashMap<>();
 			GenericAssignability.inferTypeVariables( //
-					new Type[] { focuserInfo.outputType() }, //
-					new Type[] { info.inputTypes().get(ioIndex) }, //
-					typeAssigns //
+				new Type[] { focuserInfo.outputType() }, //
+				new Type[] { info.inputTypes().get(ioIndex) }, //
+				typeAssigns //
 			);
 			var unfocusedInput = Nil.of(Types.mapVarToTypes( //
-					focuserInfo.inputTypes().get(0), //
-					typeAssigns //
+				focuserInfo.inputTypes().get(0), //
+				typeAssigns //
 			));
 			// Match a copier
 			return Ops.rich(env.unary("engine.copy", h) //
-					.inType(simpleOut) //
-					.outType(unfocusedInput) //
-					.computer());
+				.inType(simpleOut) //
+				.outType(unfocusedInput) //
+				.computer());
 		}
 		// No mutable parameter and/or pathway is an identity pathway, so no copy
 		// op necessary

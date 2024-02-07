@@ -147,8 +147,8 @@ public class SimplifiedOpInfoTest extends AbstractTestEnvironment implements
 
 		// Test that with 2 inputs we do get the binary inplace Op, but no others
 		actual = ops.binary("test.coalesceSimpleDescription").help();
-		expected =  //
-				"test.coalesceSimpleDescription:\n\t- (@MUTABLE mutable1, input1) -> None";
+		expected = //
+			"test.coalesceSimpleDescription:\n\t- (@MUTABLE mutable1, input1) -> None";
 		Assertions.assertEquals(expected, actual);
 
 		// Finally test that with no inputs we don't get any of the Ops

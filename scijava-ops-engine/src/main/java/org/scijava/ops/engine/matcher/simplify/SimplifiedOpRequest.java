@@ -106,10 +106,12 @@ public class SimplifiedOpRequest implements OpRequest {
 		type = SimplificationUtils.retypeOpType(req.getType(), inTypes, outType);
 		// TODO: Fix
 		int mutableIndex = SimplificationUtils.findMutableArgIndex(Types.raw(type));
-		if (mutableIndex >= 0 && !(isIdentity(inSimplifiers.get(mutableIndex))
-				&& isIdentity(outFocuser))) {
+		if (mutableIndex >= 0 && !(isIdentity(inSimplifiers.get(mutableIndex)) &&
+			isIdentity(outFocuser)))
+		{
 			this.outputCopier = simplifierCopyOp(env, req.getArgs()[mutableIndex]);
-		} else {
+		}
+		else {
 			this.outputCopier = null;
 		}
 	}

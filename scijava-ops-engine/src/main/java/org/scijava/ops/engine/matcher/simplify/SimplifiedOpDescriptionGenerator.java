@@ -149,6 +149,10 @@ public class SimplifiedOpDescriptionGenerator implements
 			if (info instanceof ReducedOpInfo) {
 				continue;
 			}
+			if (info instanceof SimplifiedOpInfo) {
+				if (((SimplifiedOpInfo) info).srcInfo() instanceof ReducedOpInfo)
+					continue;
+			}
 
 			var numPureInputs = info.inputs().stream() //
 				.filter(m -> !m.isOutput()) //

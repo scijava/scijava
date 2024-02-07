@@ -36,10 +36,12 @@ import org.scijava.function.Computers;
 import org.scijava.function.Container;
 import org.scijava.function.Functions;
 import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.copy.CopyOpCollection;
+import org.scijava.ops.engine.matcher.simplify.PrimitiveArraySimplifiers;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpMethod;
-import org.scijava.ops.spi.Nullable;
 
 import java.util.Arrays;
 
@@ -164,7 +166,9 @@ public class NullableArgumentsTest extends AbstractTestEnvironment //
 		Assertions.assertEquals(expected, out);
 	}
 
-	@OpMethod(names = "test.nullableOr", type = Computers.Arity3_3.class)
+	private static final String PERMUTED_NAME = "test.nullableOr";
+
+	@OpMethod(names = PERMUTED_NAME, type = Computers.Arity3_3.class)
 	public static void nullablePermutedComputer( //
 		int[] in1, //
 		@Nullable int[] in2, //
@@ -181,7 +185,7 @@ public class NullableArgumentsTest extends AbstractTestEnvironment //
 	@Test
 	public void testPermutedMethodWithTwoNullables() {
 		int[] out = new int[1];
-		ops.op("test.nullableOr").arity3().input( //
+		ops.op(PERMUTED_NAME).arity3().input( //
 			new int[] { 1 }, //
 			new int[] { 2 }, //
 			new int[] { 4 } //
@@ -192,7 +196,7 @@ public class NullableArgumentsTest extends AbstractTestEnvironment //
 	@Test
 	public void testPermutedMethodWithOneNullable() {
 		int[] out = new int[1];
-		ops.op("test.nullableOr").arity2().input( //
+		ops.op(PERMUTED_NAME).arity2().input( //
 			new int[] { 1 }, //
 			new int[] { 2 } //
 		).output(out).compute();
@@ -202,10 +206,18 @@ public class NullableArgumentsTest extends AbstractTestEnvironment //
 	@Test
 	public void testPermutedMethodWithoutNullables() {
 		int[] out = new int[1];
-		ops.op("test.nullableOr").arity1().input( //
+		ops.op(PERMUTED_NAME).arity1().input( //
 			new int[] { 1 } //
 		).output(out).compute();
 		Assertions.assertEquals(1, out[0]);
 	}
 
+	@Test
+	public void testNullableHelp() {
+		// Add in a couple Ops needed for simplification
+		ops.register(new PrimitiveArraySimplifiers<>(), new CopyOpCollection<>());
+		var expected = PERMUTED_NAME +
+			":\n\t- (input1, input2 = null, @CONTAINER container1, input3 = null) -> None";
+		Assertions.assertEquals(ops.op("test.nullableOr").help(), expected);
+	}
 }

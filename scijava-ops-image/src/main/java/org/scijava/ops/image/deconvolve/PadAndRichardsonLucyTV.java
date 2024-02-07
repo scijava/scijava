@@ -89,10 +89,10 @@ public class PadAndRichardsonLucyTV<I extends RealType<I> & NativeType<I>, O ext
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, O, RandomAccessibleInterval<O>> outputCreator;
 
-	@OpDependency(name = "filter.pad")
+	@OpDependency(name = "filter.padInputFFTMethods")
 	private Functions.Arity4<RandomAccessibleInterval<I>, Dimensions, Boolean, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<I>> padOp;
 
-	@OpDependency(name = "filter.padShiftFFTKernel")
+	@OpDependency(name = "filter.padShiftKernelFFTMethods")
 	private BiFunction<RandomAccessibleInterval<K>, Dimensions, RandomAccessibleInterval<K>> padKernelOp;
 
 	@OpDependency(name = "filter.createFFTOutput")
@@ -103,7 +103,7 @@ public class PadAndRichardsonLucyTV<I extends RealType<I> & NativeType<I>, O ext
 			RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, //
 			Boolean, C, Integer, Inplaces.Arity1<RandomAccessibleInterval<O>>, //
 			Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>>, //
-			RandomAccessibleInterval<O>, List<Inplaces.Arity1<RandomAccessibleInterval<O>>>, //
+		  List<Inplaces.Arity1<RandomAccessibleInterval<O>>>, RandomAccessibleInterval<O>, //
 			RandomAccessibleInterval<O>> richardsonLucyOp;
 
 	private Boolean nonCirculant;
@@ -146,8 +146,8 @@ public class PadAndRichardsonLucyTV<I extends RealType<I> & NativeType<I>, O ext
 
 			return (input, kernel, out) -> {
 				richardsonLucyOp.compute(input, kernel, fftImg, fftKernel, true, true,
-					complexType, maxIterations, accelerator, computeEstimateOp, fg.apply(
-						raiExtendedInput), list, out);
+					complexType, maxIterations, accelerator, computeEstimateOp, list, fg.apply(
+						raiExtendedInput), out);
 			};
 		}
 

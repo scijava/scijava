@@ -84,8 +84,8 @@ public class OpData {
 	private final List<String> authors;
 
 	public OpData(final String source, final String version,
-			final List<String> names, final List<OpParameter> params,
-			final Map<String, Object> tags, List<String> authors)
+		final List<String> names, final List<OpParameter> params,
+		final Map<String, Object> tags, List<String> authors)
 	{
 		this.source = source;
 		this.version = version;
@@ -105,8 +105,8 @@ public class OpData {
 	 */
 	private void validateOpData() {
 		if (Objects.isNull(names) || names.isEmpty()) {
-			throw new InvalidOpException(
-					"Invalid Op defined in : " + source + ". Op names cannot be empty!");
+			throw new InvalidOpException("Invalid Op defined in : " + source +
+				". Op names cannot be empty!");
 		}
 
 		int outputs = 0;
@@ -114,8 +114,8 @@ public class OpData {
 			if (p.ioType.equals(OpParameter.IO_TYPE.OUTPUT)) outputs++;
 		}
 		if (outputs > 1) {
-			throw new InvalidOpException(
-					"Invalid Op defined in : " + source + ". Ops cannot have more than one output!");
+			throw new InvalidOpException("Invalid Op defined in : " + source +
+				". Ops cannot have more than one output!");
 		}
 	}
 
@@ -133,8 +133,8 @@ public class OpData {
 		map.put("priority", priority);
 		map.put("authors", authors.toArray(String[]::new));
 		List<Map<String, Object>> foo = params.stream() //
-				.map(OpParameter::data) //
-				.collect(Collectors.toList());
+			.map(OpParameter::data) //
+			.collect(Collectors.toList());
 		map.put("parameters", foo.toArray(Map[]::new));
 		map.put("tags", tags);
 		return Collections.singletonMap("op", map);

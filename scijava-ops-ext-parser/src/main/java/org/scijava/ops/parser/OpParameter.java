@@ -43,7 +43,7 @@ public class OpParameter {
 
 	/** Op parameters must be one of the following types */
 	public enum IO_TYPE {
-		INPUT, OUTPUT, MUTABLE, CONTAINER
+			INPUT, OUTPUT, MUTABLE, CONTAINER
 	}
 
 	protected final IO_TYPE ioType;
@@ -54,17 +54,16 @@ public class OpParameter {
 	/**
 	 * Default constructor
 	 *
-	 * @param name        the name of the parameter
-	 * @param type        the {@link Type} of the parameter, stringified
-	 * @param ioType      the {@link IO_TYPE} of the parameter. Note that
-	 *                    functional outputs should use {@link IO_TYPE#OUTPUT},
-	 *                    output buffers should use {@link IO_TYPE#CONTAINER}, and
-	 *                    data structures that are operated on inplace should use
-	 *                    {@link IO_TYPE#MUTABLE}.
+	 * @param name the name of the parameter
+	 * @param type the {@link Type} of the parameter, stringified
+	 * @param ioType the {@link IO_TYPE} of the parameter. Note that functional
+	 *          outputs should use {@link IO_TYPE#OUTPUT}, output buffers should
+	 *          use {@link IO_TYPE#CONTAINER}, and data structures that are
+	 *          operated on inplace should use {@link IO_TYPE#MUTABLE}.
 	 * @param description a description of the parameter
 	 */
 	public OpParameter(String name, String type, IO_TYPE ioType,
-			String description)
+		String description)
 	{
 		// Assign io
 		this.name = name;

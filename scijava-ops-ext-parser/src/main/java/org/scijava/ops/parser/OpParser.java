@@ -44,15 +44,15 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * Entry point for parsing external libraries to ops (via {@link #main}). <br/>
  * Expected YAML structure is:
  * <ul>
- *   <li>namespace:string # Optional string for aliasing methods to
- *   "namespace.methodName"</li>
- *   <li>version:string # Optional version number for versioning input YAML</li>
- *   <li>authors:List #Optional list of authors to apply to all ops</li>
- *   <li>containers:List # Optional list fully-qualified data structure classes
- *   to consider as potential containers</li>
- *   <li>class:(method:alias) # One or more. Map of class name containing op
- *   methods to a map of method names within that class, mapped to the
- *   "SciJava Ops-style" name for that method</li>
+ * <li>namespace:string # Optional string for aliasing methods to
+ * "namespace.methodName"</li>
+ * <li>version:string # Optional version number for versioning input YAML</li>
+ * <li>authors:List #Optional list of authors to apply to all ops</li>
+ * <li>containers:List # Optional list fully-qualified data structure classes to
+ * consider as potential containers</li>
+ * <li>class:(method:alias) # One or more. Map of class name containing op
+ * methods to a map of method names within that class, mapped to the "SciJava
+ * Ops-style" name for that method</li>
  * </ul>
  *
  * @author Mark Hiner
@@ -66,17 +66,16 @@ public final class OpParser {
 
 	/**
 	 * @param args One argument is required: path to a YAML file containing Op
-	 *             information to wrap.
+	 *          information to wrap.
 	 * @throws ClassNotFoundException If any of the indicated classes to be
-	 *                                wrapped as ops are not found.
+	 *           wrapped as ops are not found.
 	 */
-	public static void main(String... args) throws ClassNotFoundException
-	{
+	public static void main(String... args) throws ClassNotFoundException {
 		if (args.length < 1) {
 			throw new RuntimeException("OpParser requires at least one argument: " //
-					+ "a YAML file containing mappings of fully-qualified class names " //
-					+ "to subsequent mappings of static methods (without params) in" //
-					+ "that class to op names.");
+				+ "a YAML file containing mappings of fully-qualified class names " //
+				+ "to subsequent mappings of static methods (without params) in" //
+				+ "that class to op names.");
 		}
 
 		Yaml yaml = new Yaml();
@@ -100,8 +99,8 @@ public final class OpParser {
 			namespace = (String) opsYaml.remove(NS_KEY);
 		}
 		if (opsYaml.containsKey(CONTAINER_KEY)) {
-			containerClasses =
-					new HashSet<>((List<String>) opsYaml.remove(CONTAINER_KEY));
+			containerClasses = new HashSet<>((List<String>) opsYaml.remove(
+				CONTAINER_KEY));
 		}
 		if (opsYaml.containsKey(VERSION_KEY)) {
 			version = (String) opsYaml.remove(VERSION_KEY);
@@ -118,8 +117,8 @@ public final class OpParser {
 			// As our YAML specification for desired method names, we want all
 			// overloaded implementations of those methods.
 			Multimap<String, Method> methods = makeMultimap(clazz);
-			final Map<String, String> opMethods =
-					(Map<String, String>) opDeclaration.getValue();
+			final Map<String, String> opMethods = (Map<String, String>) opDeclaration
+				.getValue();
 			for (Map.Entry<String, String> opMethod : opMethods.entrySet()) {
 				final String methodName = opMethod.getKey();
 				List<String> opNames = new ArrayList<>();
@@ -136,11 +135,11 @@ public final class OpParser {
 				for (Method method : methods.get(methodName)) {
 					Map<String, Object> tags = new HashMap<>();
 					List<OpParameter> params = new ArrayList<>();
-					String opSource =
-							parseOpSource(className, methodName, method.getParameterTypes());
+					String opSource = parseOpSource(className, methodName, method
+						.getParameterTypes());
 					parseParams(method, params, tags, containerClasses);
-					OpData data =
-							new OpData(opSource, version, opNames, params, tags, authors);
+					OpData data = new OpData(opSource, version, opNames, params, tags,
+						authors);
 					ops.add(data);
 				}
 			}
@@ -158,42 +157,42 @@ public final class OpParser {
 	/**
 	 * Helper method to generate a properly formatted "source" string
 	 *
-	 * @param className      The base class containing the target Op
-	 * @param methodName     The method within the base class that will be the
-	 *                       Op's source
+	 * @param className The base class containing the target Op
+	 * @param methodName The method within the base class that will be the Op's
+	 *          source
 	 * @param parameterTypes The array of parameters for the given method
 	 * @return A source string that can be written as part of an op.yaml
 	 */
 	private static String parseOpSource(String className, String methodName,
-			Class<?>[] parameterTypes)
+		Class<?>[] parameterTypes)
 	{
 		String opSource = "javaMethod:/" //
-				+ className //
-				+ "." //
-				+ methodName //
-				+ "%28" //
-				+ Arrays.stream(parameterTypes).map(Class::getName)
-				.collect(Collectors.joining("%2C")) //
-				+ "%29";
+			+ className //
+			+ "." //
+			+ methodName //
+			+ "%28" //
+			+ Arrays.stream(parameterTypes).map(Class::getName).collect(Collectors
+				.joining("%2C")) //
+			+ "%29";
 		return opSource;
 	}
 
 	/**
 	 * Helper method to populate 1) the list of {@link OpParameter}s and 2) tag
-	 * {@link Map} required for a particular Op's YAML. <br/> Methods are assumed
-	 * to be functions unless 2 or more {@code containerClass} parameters are
-	 * found in {@code params}. In that case, the second entry is considered the
-	 * {@code CONTAINER} and the {@code tags} will include an appropriate
-	 * {@code ComputerN} entry.
+	 * {@link Map} required for a particular Op's YAML. <br/>
+	 * Methods are assumed to be functions unless 2 or more {@code containerClass}
+	 * parameters are found in {@code params}. In that case, the second entry is
+	 * considered the {@code CONTAINER} and the {@code tags} will include an
+	 * appropriate {@code ComputerN} entry.
 	 *
-	 * @param method           The {@link Method} being wrapped to an Op
-	 * @param params           Empty list of {@link OpParameter}s to be populated
-	 * @param tags             Empty {@link Map} of tags to be populated
+	 * @param method The {@link Method} being wrapped to an Op
+	 * @param params Empty list of {@link OpParameter}s to be populated
+	 * @param tags Empty {@link Map} of tags to be populated
 	 * @param containerClasses Known parameter classes that should be considered
-	 *                         potential {@code IO_TYPE#CONTAINER}s
+	 *          potential {@code IO_TYPE#CONTAINER}s
 	 */
 	private static void parseParams(Method method, List<OpParameter> params,
-			Map<String, Object> tags, Set<String> containerClasses)
+		Map<String, Object> tags, Set<String> containerClasses)
 	{
 		int containersSeen = 0;
 		int containerIndex = -1;
@@ -225,8 +224,8 @@ public final class OpParser {
 	 * overloaded methods.
 	 */
 	private static Multimap<String, Method> makeMultimap(final Class<?> clazz) {
-		Multimap<String, Method> multimap =
-				MultimapBuilder.hashKeys().arrayListValues().build();
+		Multimap<String, Method> multimap = MultimapBuilder.hashKeys()
+			.arrayListValues().build();
 		for (Method m : clazz.getMethods()) {
 			multimap.put(m.getName(), m);
 		}
@@ -237,10 +236,10 @@ public final class OpParser {
 	 * Helper method to write an {@link OpData} list to an {@code op.yaml} file.
 	 */
 	private static void outputYamlDoc(List<OpData> collectedData)
-			throws IOException
+		throws IOException
 	{
-		var data = collectedData.stream().map(OpData::dumpData)
-				.collect(Collectors.toList());
+		var data = collectedData.stream().map(OpData::dumpData).collect(Collectors
+			.toList());
 		Yaml yaml = new Yaml();
 		String doc = yaml.dump(data);
 		File f = new File("op.yaml");

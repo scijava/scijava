@@ -52,70 +52,79 @@ public class TestOpenCV {
 	private static final String TEST_OP = "cv.GaussianBlur";
 	private static final String TEST_OP_ALIAS = "filter.gauss";
 	private static final String EXPECTED_HELP = //
-			"cv.GaussianBlur:\n" //
-					+ "\t- (in1, @CONTAINER container1, in2, in3) -> None\n"//
-					+ "\t- (in1, @CONTAINER container1, in2, in3, in4, in5) -> None";
+		"cv.GaussianBlur:\n" //
+			+ "\t- (in1, @CONTAINER container1, in2, in3) -> None\n"//
+			+ "\t- (in1, @CONTAINER container1, in2, in3, in4, in5) -> None";
 
 	private static final String EXPECTED_HELP_VERBOSE = //
-			"cv.GaussianBlur:\n" //
-					+ "\t- org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur(org.bytedeco.opencv.opencv_core.GpuMat,org.bytedeco.opencv.opencv_core.GpuMat,org.bytedeco.opencv.opencv_core.Size,double)\n" //
-					+ "\t\t> in1 : org.bytedeco.opencv.opencv_core.GpuMat\n" //
-					+ "\t\t> container1 : @CONTAINER org.bytedeco.opencv.opencv_core.GpuMat\n" //
-					+ "\t\t> in2 : org.bytedeco.opencv.opencv_core.Size\n" //
-					+ "\t\t> in3 : java.lang.Double\n" //
-					+ "\t- org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur(org.bytedeco.opencv.opencv_core.GpuMat,org.bytedeco.opencv.opencv_core.GpuMat,org.bytedeco.opencv.opencv_core.Size,double,double,int)\n" //
-					+ "\t\t> in1 : org.bytedeco.opencv.opencv_core.GpuMat\n" //
-					+ "\t\t> container1 : @CONTAINER org.bytedeco.opencv.opencv_core.GpuMat\n" //
-					+ "\t\t> in2 : org.bytedeco.opencv.opencv_core.Size\n" //
-					+ "\t\t> in3 : java.lang.Double\n" //
-					+ "\t\t> in4 : java.lang.Double\n" //
-					+ "\t\t> in5 : java.lang.Integer\n" //
-					+ "\t- org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur(org.bytedeco.opencv.opencv_core.Mat,org.bytedeco.opencv.opencv_core.Mat,org.bytedeco.opencv.opencv_core.Size,double)\n" //
-					+ "\t\t> in1 : org.bytedeco.opencv.opencv_core.Mat\n" //
-					+ "\t\t> container1 : @CONTAINER org.bytedeco.opencv.opencv_core.Mat\n" //
-					+ "\t\t> in2 : org.bytedeco.opencv.opencv_core.Size\n" //
-					+ "\t\t> in3 : java.lang.Double\n" //
-					+ "\t- org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur(org.bytedeco.opencv.opencv_core.Mat,org.bytedeco.opencv.opencv_core.Mat,org.bytedeco.opencv.opencv_core.Size,double,double,int)\n" //
-					+ "\t\t> in1 : org.bytedeco.opencv.opencv_core.Mat\n" //
-					+ "\t\t> container1 : @CONTAINER org.bytedeco.opencv.opencv_core.Mat\n" //
-					+ "\t\t> in2 : org.bytedeco.opencv.opencv_core.Size\n" //
-					+ "\t\t> in3 : java.lang.Double\n" //
-					+ "\t\t> in4 : java.lang.Double\n" //
-					+ "\t\t> in5 : java.lang.Integer\n" //
-					+ "\t- org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur(org.bytedeco.opencv.opencv_core.UMat,org.bytedeco.opencv.opencv_core.UMat,org.bytedeco.opencv.opencv_core.Size,double)\n" //
-					+ "\t\t> in1 : org.bytedeco.opencv.opencv_core.UMat\n" //
-					+ "\t\t> container1 : @CONTAINER org.bytedeco.opencv.opencv_core.UMat\n" //
-					+ "\t\t> in2 : org.bytedeco.opencv.opencv_core.Size\n" //
-					+ "\t\t> in3 : java.lang.Double\n" //
-					+ "\t- org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur(org.bytedeco.opencv.opencv_core.UMat,org.bytedeco.opencv.opencv_core.UMat,org.bytedeco.opencv.opencv_core.Size,double,double,int)\n" //
-					+ "\t\t> in1 : org.bytedeco.opencv.opencv_core.UMat\n" //
-					+ "\t\t> container1 : @CONTAINER org.bytedeco.opencv.opencv_core.UMat\n" //
-					+ "\t\t> in2 : org.bytedeco.opencv.opencv_core.Size\n" //
-					+ "\t\t> in3 : java.lang.Double\n" //
-					+ "\t\t> in4 : java.lang.Double\n" //
-					+ "\t\t> in5 : java.lang.Integer";
+		"cv.GaussianBlur:\n" //
+			+
+			"\t- org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur(org.bytedeco.opencv.opencv_core.GpuMat,org.bytedeco.opencv.opencv_core.GpuMat,org.bytedeco.opencv.opencv_core.Size,double)\n" //
+			+ "\t\t> in1 : org.bytedeco.opencv.opencv_core.GpuMat\n" //
+			+ "\t\t> container1 : @CONTAINER org.bytedeco.opencv.opencv_core.GpuMat\n" //
+			+ "\t\t> in2 : org.bytedeco.opencv.opencv_core.Size\n" //
+			+ "\t\t> in3 : java.lang.Double\n" //
+			+
+			"\t- org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur(org.bytedeco.opencv.opencv_core.GpuMat,org.bytedeco.opencv.opencv_core.GpuMat,org.bytedeco.opencv.opencv_core.Size,double,double,int)\n" //
+			+ "\t\t> in1 : org.bytedeco.opencv.opencv_core.GpuMat\n" //
+			+ "\t\t> container1 : @CONTAINER org.bytedeco.opencv.opencv_core.GpuMat\n" //
+			+ "\t\t> in2 : org.bytedeco.opencv.opencv_core.Size\n" //
+			+ "\t\t> in3 : java.lang.Double\n" //
+			+ "\t\t> in4 : java.lang.Double\n" //
+			+ "\t\t> in5 : java.lang.Integer\n" //
+			+
+			"\t- org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur(org.bytedeco.opencv.opencv_core.Mat,org.bytedeco.opencv.opencv_core.Mat,org.bytedeco.opencv.opencv_core.Size,double)\n" //
+			+ "\t\t> in1 : org.bytedeco.opencv.opencv_core.Mat\n" //
+			+ "\t\t> container1 : @CONTAINER org.bytedeco.opencv.opencv_core.Mat\n" //
+			+ "\t\t> in2 : org.bytedeco.opencv.opencv_core.Size\n" //
+			+ "\t\t> in3 : java.lang.Double\n" //
+			+
+			"\t- org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur(org.bytedeco.opencv.opencv_core.Mat,org.bytedeco.opencv.opencv_core.Mat,org.bytedeco.opencv.opencv_core.Size,double,double,int)\n" //
+			+ "\t\t> in1 : org.bytedeco.opencv.opencv_core.Mat\n" //
+			+ "\t\t> container1 : @CONTAINER org.bytedeco.opencv.opencv_core.Mat\n" //
+			+ "\t\t> in2 : org.bytedeco.opencv.opencv_core.Size\n" //
+			+ "\t\t> in3 : java.lang.Double\n" //
+			+ "\t\t> in4 : java.lang.Double\n" //
+			+ "\t\t> in5 : java.lang.Integer\n" //
+			+
+			"\t- org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur(org.bytedeco.opencv.opencv_core.UMat,org.bytedeco.opencv.opencv_core.UMat,org.bytedeco.opencv.opencv_core.Size,double)\n" //
+			+ "\t\t> in1 : org.bytedeco.opencv.opencv_core.UMat\n" //
+			+ "\t\t> container1 : @CONTAINER org.bytedeco.opencv.opencv_core.UMat\n" //
+			+ "\t\t> in2 : org.bytedeco.opencv.opencv_core.Size\n" //
+			+ "\t\t> in3 : java.lang.Double\n" //
+			+
+			"\t- org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur(org.bytedeco.opencv.opencv_core.UMat,org.bytedeco.opencv.opencv_core.UMat,org.bytedeco.opencv.opencv_core.Size,double,double,int)\n" //
+			+ "\t\t> in1 : org.bytedeco.opencv.opencv_core.UMat\n" //
+			+ "\t\t> container1 : @CONTAINER org.bytedeco.opencv.opencv_core.UMat\n" //
+			+ "\t\t> in2 : org.bytedeco.opencv.opencv_core.Size\n" //
+			+ "\t\t> in3 : java.lang.Double\n" //
+			+ "\t\t> in4 : java.lang.Double\n" //
+			+ "\t\t> in5 : java.lang.Integer";
 
 	private static final String EXPECTED_USAGE = //
-			"cv.GaussianBlur:\n" //
-					+ "\t- (in1, @CONTAINER container1, in2, in3) -> None";
+		"cv.GaussianBlur:\n" //
+			+ "\t- (in1, @CONTAINER container1, in2, in3) -> None";
 
 	private static final String EXPECTED_USAGE_VERBOSE = //
-			"cv.GaussianBlur:\n" //
-					+ "\t- org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur(org.bytedeco.opencv.opencv_core.GpuMat,org.bytedeco.opencv.opencv_core.GpuMat,org.bytedeco.opencv.opencv_core.Size,double)\n" //
-					+ "\t\t> in1 : org.bytedeco.opencv.opencv_core.GpuMat\n" //
-					+ "\t\t> container1 : @CONTAINER org.bytedeco.opencv.opencv_core.GpuMat\n" //
-					+ "\t\t> in2 : org.bytedeco.opencv.opencv_core.Size\n" //
-					+ "\t\t> in3 : java.lang.Double\n" //
-					+ "\t- org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur(org.bytedeco.opencv.opencv_core.Mat,org.bytedeco.opencv.opencv_core.Mat,org.bytedeco.opencv.opencv_core.Size,double)\n" //
-					+ "\t\t> in1 : org.bytedeco.opencv.opencv_core.Mat\n" //
-					+ "\t\t> container1 : @CONTAINER org.bytedeco.opencv.opencv_core.Mat\n" //
-					+ "\t\t> in2 : org.bytedeco.opencv.opencv_core.Size\n" //
-					+ "\t\t> in3 : java.lang.Double\n" //
-					+ "\t- org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur(org.bytedeco.opencv.opencv_core.UMat,org.bytedeco.opencv.opencv_core.UMat,org.bytedeco.opencv.opencv_core.Size,double)\n" //
-					+ "\t\t> in1 : org.bytedeco.opencv.opencv_core.UMat\n" //
-					+ "\t\t> container1 : @CONTAINER org.bytedeco.opencv.opencv_core.UMat\n" //
-					+ "\t\t> in2 : org.bytedeco.opencv.opencv_core.Size\n" //
-					+ "\t\t> in3 : java.lang.Double";
+		"cv.GaussianBlur:\n" //
+			+
+			"\t- org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur(org.bytedeco.opencv.opencv_core.GpuMat,org.bytedeco.opencv.opencv_core.GpuMat,org.bytedeco.opencv.opencv_core.Size,double)\n" //
+			+ "\t\t> in1 : org.bytedeco.opencv.opencv_core.GpuMat\n" //
+			+ "\t\t> container1 : @CONTAINER org.bytedeco.opencv.opencv_core.GpuMat\n" //
+			+ "\t\t> in2 : org.bytedeco.opencv.opencv_core.Size\n" //
+			+ "\t\t> in3 : java.lang.Double\n" //
+			+
+			"\t- org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur(org.bytedeco.opencv.opencv_core.Mat,org.bytedeco.opencv.opencv_core.Mat,org.bytedeco.opencv.opencv_core.Size,double)\n" //
+			+ "\t\t> in1 : org.bytedeco.opencv.opencv_core.Mat\n" //
+			+ "\t\t> container1 : @CONTAINER org.bytedeco.opencv.opencv_core.Mat\n" //
+			+ "\t\t> in2 : org.bytedeco.opencv.opencv_core.Size\n" //
+			+ "\t\t> in3 : java.lang.Double\n" //
+			+
+			"\t- org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur(org.bytedeco.opencv.opencv_core.UMat,org.bytedeco.opencv.opencv_core.UMat,org.bytedeco.opencv.opencv_core.Size,double)\n" //
+			+ "\t\t> in1 : org.bytedeco.opencv.opencv_core.UMat\n" //
+			+ "\t\t> container1 : @CONTAINER org.bytedeco.opencv.opencv_core.UMat\n" //
+			+ "\t\t> in2 : org.bytedeco.opencv.opencv_core.Size\n" //
+			+ "\t\t> in3 : java.lang.Double";
 
 	/**
 	 * Verify we get all the expected ops for {@link #TEST_OP}
@@ -140,8 +149,8 @@ public class TestOpenCV {
 		int stDev = 100;
 		Size size = new Size(5, 5);
 
-		OpBuilder.Arity3_IV_OV<Mat, Size, Integer, Mat> builder =
-				ops.ternary(TEST_OP).input(src, size, stDev).output(opsFish);
+		OpBuilder.Arity3_IV_OV<Mat, Size, Integer, Mat> builder = ops.ternary(
+			TEST_OP).input(src, size, stDev).output(opsFish);
 
 		// Check help strings from the builder perspective
 		assertEquals(EXPECTED_USAGE, builder.help());
@@ -159,7 +168,7 @@ public class TestOpenCV {
 		// Repeat with alias
 		opsFish = new Mat(src.rows(), src.cols(), src.type());
 		ops.ternary(TEST_OP_ALIAS).input(src, size, stDev).output(opsFish)
-				.compute();
+			.compute();
 
 		// Verify the images are the same once more
 		verifyMats(opencvFish, opsFish);
@@ -184,7 +193,7 @@ public class TestOpenCV {
 	 * Helper method to open sample data via OpenCV
 	 */
 	private Mat openFish() {
-		return imread(new File(
-				getClass().getResource("/HappyFish.jpg").getFile()).getAbsolutePath());
+		return imread(new File(getClass().getResource("/HappyFish.jpg").getFile())
+			.getAbsolutePath());
 	}
 }

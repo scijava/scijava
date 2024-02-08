@@ -56,7 +56,7 @@ import org.scijava.ops.spi.OpDependency;
  * @param <O>
  * @param <K>
  * @param <C>
- * @implNote op names='filter.convolve', priority='100.'
+ * @implNote op names='filter.convolve'
  */
 public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
 	/* extends AbstractFFTFilterF<I, O, K, C> */ implements

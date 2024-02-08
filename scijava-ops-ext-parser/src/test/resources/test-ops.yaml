@@ -1,0 +1,10 @@
+namespace: "test"
+version: "1"
+containers:
+  - "int"
+authors:
+  - "Nobody"
+  - "Everybody"
+
+java.util.Arrays:
+  deepToString: "arrays.toStringDeep"

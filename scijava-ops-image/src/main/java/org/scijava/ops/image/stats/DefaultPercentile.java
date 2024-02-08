@@ -45,8 +45,8 @@ import org.scijava.ops.spi.OpDependency;
  * @param <O> output type
  * @implNote op names='stats.percentile'
  */
-public class DefaultPercentile<I extends RealType<I>, O extends RealType<O>>
-	implements Computers.Arity2<Iterable<I>, Double, O>
+public class DefaultPercentile<I extends RealType<I>, N extends Number, O extends RealType<O>>
+	implements Computers.Arity2<Iterable<I>, N, O>
 {
 
 	@OpDependency(name = "stats.quantile")
@@ -60,13 +60,13 @@ public class DefaultPercentile<I extends RealType<I>, O extends RealType<O>>
 	 * @param percentile
 	 */
 	@Override
-	public void compute(final Iterable<I> input, final Double percent,
+	public void compute(final Iterable<I> input, final N percent,
 		final O output)
 	{
-		if (percent < 0 || percent > 100) {
+		if (percent.doubleValue() < 0 || percent.doubleValue() > 100) {
 			throw new IllegalArgumentException(
 				"Percent must be between 0 and 100 (inclusive) but was " + percent);
 		}
-		op.compute(input, percent / 100, output);
+		op.compute(input, percent.doubleValue() / 100, output);
 	}
 }

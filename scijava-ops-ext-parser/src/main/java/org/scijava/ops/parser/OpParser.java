@@ -35,6 +35,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
 import java.lang.reflect.Method;
+import java.net.URLEncoder;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -167,13 +168,11 @@ public final class OpParser {
 		Class<?>[] parameterTypes)
 	{
 		String opSource = "javaMethod:/" //
-			+ className //
-			+ "." //
-			+ methodName //
-			+ "%28" //
-			+ Arrays.stream(parameterTypes).map(Class::getName).collect(Collectors
-				.joining("%2C")) //
-			+ "%29";
+			+ URLEncoder.encode(className //
+				+ "." //
+				+ methodName //
+				+ Arrays.stream(parameterTypes).map(Class::getName).collect(Collectors
+					.joining(",", "(", ")")));
 		return opSource;
 	}
 

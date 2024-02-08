@@ -79,7 +79,28 @@ public final class OpParser {
 				+ "that class to op names.");
 		}
 
-		Yaml yaml = new Yaml();
+		// Parse the config yaml to an Op yaml representation
+		final String opYaml = parseOpDocument(args[0]);
+
+		// Write out the results
+		try {
+			outputYamlDoc(opYaml);
+		}
+		catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * Performs the actual parsing logic
+	 *
+	 * @param inputYamlPath YAML file to parse
+	 * @return A string representation of the resulting YAML Op configuration
+	 */
+	public static String parseOpDocument(String inputYamlPath)
+		throws ClassNotFoundException
+	{
+		Yaml configYaml = new Yaml();
 		String namespace = null;
 		List<OpData> ops = new ArrayList<>();
 		Set<String> containerClasses = new HashSet<>();
@@ -88,8 +109,8 @@ public final class OpParser {
 		Map<String, Object> opsYaml;
 
 		// -- Parse the yaml --
-		try (FileReader reader = new FileReader(args[0])) {
-			opsYaml = yaml.load(reader);
+		try (FileReader reader = new FileReader(inputYamlPath)) {
+			opsYaml = configYaml.load(reader);
 		}
 		catch (IOException e) {
 			throw new RuntimeException(e);
@@ -146,13 +167,8 @@ public final class OpParser {
 			}
 		}
 
-		// Write out the results
-		try {
-			outputYamlDoc(ops);
-		}
-		catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		var data = ops.stream().map(OpData::dumpData).collect(Collectors.toList());
+		return new Yaml().dump(data);
 	}
 
 	/**
@@ -234,16 +250,10 @@ public final class OpParser {
 	/**
 	 * Helper method to write an {@link OpData} list to an {@code op.yaml} file.
 	 */
-	private static void outputYamlDoc(List<OpData> collectedData)
-		throws IOException
-	{
-		var data = collectedData.stream().map(OpData::dumpData).collect(Collectors
-			.toList());
-		Yaml yaml = new Yaml();
-		String doc = yaml.dump(data);
+	private static void outputYamlDoc(String opYaml) throws IOException {
 		File f = new File("op.yaml");
 		try (OutputStream os = new FileOutputStream(f)) {
-			os.write(doc.getBytes(UTF_8));
+			os.write(opYaml.getBytes(UTF_8));
 		}
 	}
 }

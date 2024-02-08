@@ -27,6 +27,7 @@ The input YAML should be formatted as follows:
 
 ```yaml
 namespace: "ns" # Optional. If present, your ops will all have "ns.MethodName" aliases.
+                # (in addition to the per-method manually assigned aliases)
 version: "x" # Optional. If present, all ops will include this version metadata.
 
 # Optional list of authors to apply to all Ops

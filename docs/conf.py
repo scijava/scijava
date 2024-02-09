@@ -17,6 +17,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.viewcode",
     "sphinx_search.extension",
+    "sphinx_tabs.tabs",
     "myst_nb",
 ]
 

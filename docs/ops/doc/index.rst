@@ -27,6 +27,12 @@ The combination of these libraries allows declarative image analysis workflows, 
 
 .. toctree::
    :maxdepth: 2
+   :caption: ⚙️ Examples
+
+   examples/example_gaussian_subtraction
+
+.. toctree::
+   :maxdepth: 2
    :caption: 🛠️ Development
 
    WritingYourOwnOpPackage

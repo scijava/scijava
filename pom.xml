@@ -107,6 +107,9 @@
 		<script-maven-plugin.version>1.0.0</script-maven-plugin.version>
 		<jruby.version>9.2.11.1</jruby.version>
 		<scijava.parse.ops>true</scijava.parse.ops>
+
+		<!-- No java source files for this project -->
+		<maven.javadoc.skip>true</maven.javadoc.skip>
 	</properties>
 	<build>
 		<plugins>

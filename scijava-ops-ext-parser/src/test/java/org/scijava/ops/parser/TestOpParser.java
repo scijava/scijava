@@ -49,7 +49,7 @@ public class TestOpParser {
 
 		String expected = //
 			"- op:" //
-				+ "\n    names: [arrays.toStringDeep, test.deepToString]" //
+				+ "\n    names: [arrays.toStringDeep, fun.stringMaker, test.deepToString]" //
 				+ "\n    description: ''" //
 				+
 				"\n    source: javaMethod:/java.util.Arrays.deepToString%28%5BLjava.lang.Object%3B%29" //
@@ -61,7 +61,7 @@ public class TestOpParser {
 				+ "\n    authors: [Nobody, Everybody]" //
 				+ "\n    tags: {}" //
 				+ "\n- op:" //
-				+ "\n    names: [system.arraycopy, test.arraycopy]" //
+				+ "\n    names: [ext.arraycopy, test.arraycopy]" //
 				+ "\n    description: a useful op" //
 				+
 				"\n    source: javaMethod:/java.lang.System.arraycopy%28java.lang.Object%2Cint%2Cjava.lang.Object%2Cint%2Cint%29" //

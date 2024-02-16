@@ -152,8 +152,16 @@ public final class OpParser {
 				final double priority = Double.parseDouble((String) opMetadata
 					.getOrDefault(PRIORITY_KEY, "0.0"));
 
-				opNames.add((String) opMetadata.getOrDefault(ALIAS_KEY, "ext" +
-					methodName));
+				if (opMetadata.containsKey(ALIAS_KEY)) {
+					Object alias = opMetadata.get(ALIAS_KEY);
+					if (alias instanceof String) {
+						opNames.add((String)alias);
+					} else if (alias instanceof List) {
+						opNames.addAll((List<String>)alias);
+					}
+				} else {
+					opNames.add("ext." + methodName);
+				}
 
 				List<String> opAuthors = authors;
 				if (opMetadata.containsKey(AUTHOR_KEY)) {

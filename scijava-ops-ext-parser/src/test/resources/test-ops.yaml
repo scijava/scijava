@@ -6,11 +6,12 @@ authors:
 
 java.util.Arrays:
   deepToString:
-    alias: "arrays.toStringDeep"
+    alias:
+      - "arrays.toStringDeep"
+      - "fun.stringMaker"
 
 java.lang.System:
   arraycopy:
-    alias: "system.arraycopy"
     priority: "50"
     description: "a useful op"
     authors:

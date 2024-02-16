@@ -29,6 +29,19 @@
 
 package org.scijava.progress;
 
+/**
+ * An object that can subscribe to {@link Task} updates through the
+ * {@link Progress} class. Its singular method,
+ * {@link ProgressListener#acknowledgeUpdate(Task)} is called when an
+ * {@link Object} it is listening to:
+ * <ul>
+ * <li>is registered via {@link Progress#register(Object)}</li>
+ * <li>Updates its progress using e.g. {@link Progress#update()}</li>
+ * <li>is completed via {@link Progress#complete()}</li>
+ * </ul>
+ *
+ * @author Gabriel Selzer
+ */
 @FunctionalInterface
 public interface ProgressListener {
 

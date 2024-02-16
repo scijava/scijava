@@ -9,11 +9,11 @@ public class TestSuiteProgressListener implements ProgressListener {
 	private final long expectedIterations;
 	private double currentIterations = 0;
 
+	private boolean registered = false;
 	private boolean completed = false;
 
 	public TestSuiteProgressListener(final long expectedIterations) {
-		this.id = null;
-		this.expectedIterations = expectedIterations;
+		this(expectedIterations, null);
 	}
 
 	public TestSuiteProgressListener(final long expectedIterations,
@@ -26,10 +26,17 @@ public class TestSuiteProgressListener implements ProgressListener {
 	@Override
 	public void acknowledgeUpdate(Task task) {
 		if (id != null && !task.description().equals(id)) return;
+		// Registration ping
+		if (!registered) {
+			registered = true;
+			return;
+		}
+		// Progress pings
 		if (!task.isComplete()) {
 			Assertions.assertEquals(++currentIterations / expectedIterations, task
 				.progress(), 1e-6);
 		}
+		// Completion ping
 		else {
 			Assertions.assertFalse(completed);
 			Assertions.assertEquals(1., task.progress(), 1e-6);
@@ -43,6 +50,7 @@ public class TestSuiteProgressListener implements ProgressListener {
 
 	public void reset() {
 		this.currentIterations = 0;
+		this.registered = false;
 		this.completed = false;
 	}
 

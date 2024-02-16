@@ -52,6 +52,8 @@ public interface RichOp<T> extends GenericTyped {
 
 	Hints hints();
 
+	String name();
+
 	/**
 	 * Getter for this {@link RichOp}'s <b>raw</b> Op instance
 	 *

@@ -251,12 +251,26 @@ public final class OpParser {
 	 * overloaded methods.
 	 */
 	private static Multimap<String, Method> makeMultimap(final Class<?> clazz) {
-		Multimap<String, Method> multimap = MultimapBuilder.hashKeys()
-			.arrayListValues().build();
+		Multimap<String, Method> multimap = MultimapBuilder.treeKeys()
+			.treeSetValues(OpParser::compareParamCount).build();
 		for (Method m : clazz.getMethods()) {
 			multimap.put(m.getName(), m);
 		}
 		return multimap;
+	}
+
+	/**
+	 * Simple comparison method for two {@link Method}s that just orders by number
+	 * of parameters.
+	 */
+	private static int compareParamCount(Method m1, Method m2) {
+		int result = Integer.compare(m1.getParameterCount(), m2
+			.getParameterCount());
+		for (int i = 0; result == 0 && i < m1.getParameterCount(); i++) {
+			result = m1.getParameterTypes()[i].getName().compareTo(m2
+				.getParameterTypes()[i].getName());
+		}
+		return result;
 	}
 
 	/**

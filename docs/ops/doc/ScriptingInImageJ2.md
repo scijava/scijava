@@ -4,11 +4,10 @@ Using SciJava Ops and ImageJ Ops2 within scripts provide the most powerful aspec
 
 ## Obtaining an OpEnvironment
 
-To run Ops, scripts must first create an `OpEnvironment`. The following line will create a new `OpEnvironment` containing all Ops available in the environment:
+To run Ops, scripts require an `OpEnvironment`. The easiest way to obtain an `OpEnvironment` with all available Ops is to declare an `OpEnvironment` as a script parameter:
 
 ```text
-import org.scijava.ops.api.OpEnvironment
-ops = OpEnvironment.getEnvironment()
+#@ OpEnvironment ops
 ```
 
 ## Obtaining inputs
@@ -35,13 +34,10 @@ out = ops.op("filter.gauss").arity2().input(imgInput, new Double(3.0)).apply()
 The below script can be pasted into the Script Editor. **Ensure that the Script Editor is configured to run a Groovy script**.
 
 ```text
+#@ OpEnvironment ops
 #@ ThreadService ts
 #@ Img imgInput
 #@output Img out
-
-// Obtain an OpEnvironment
-import org.scijava.ops.api.OpEnvironment
-ops = OpEnvironment.getEnvironment()
 
 // Call some Ops!
 out = ops.op("filter.gauss").arity2().input(imgInput, new Double(3.0)).apply()

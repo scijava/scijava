@@ -26,11 +26,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-module org.scijava.legacy {
+open module org.scijava.legacy {
 
 	requires net.imagej;
+	requires org.scijava;
 	requires org.scijava.types;
 	requires org.scijava.priority;
+	requires org.scijava.ops.api;
 
 	provides org.scijava.types.TypeExtractor with org.scijava.legacy.types.DatasetTypeExtractor;
 }

@@ -75,10 +75,15 @@ public class SubtaskProgressTest {
 
 			int subtasksCompleted = 0;
 			double middleStageCurrent = 1;
-			double middleStageMax = numIterations;
+			final double middleStageMax = numIterations;
+			boolean started = false;
 
 			@Override
 			public void acknowledgeUpdate(Task task) {
+				if (!started) {
+					started = true;
+					return;
+				}
 				if (subtasksCompleted == 0) {
 					Assertions.assertEquals(1. / 3, task.progress(), 1e-6);
 					subtasksCompleted++;
@@ -115,16 +120,20 @@ public class SubtaskProgressTest {
 		String id = "Running a task with subtasks";
 		Progress.addListener(progressible, new ProgressListener() {
 
-			double currentIterations = 1;
-			double maxIterations = 3;
+			double currentIterations = 0;
+			final double maxIterations = 3;
 
 			@Override
 			public void acknowledgeUpdate(Task task) {
-				Assertions.assertEquals(Math.min(1., currentIterations / maxIterations),
-					task.progress(), 1e-6);
+				if (!task.isComplete()) {
+					Assertions.assertEquals( //
+						Math.min(currentIterations, maxIterations) / maxIterations, //
+						task.progress(), //
+						1e-6 //
+					);
+					currentIterations++;
+				}
 				Assertions.assertEquals(id, task.description());
-				currentIterations++;
-
 			}
 
 		});

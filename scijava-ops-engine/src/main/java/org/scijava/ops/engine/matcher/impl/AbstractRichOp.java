@@ -35,6 +35,7 @@ import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.api.RichOp;
+import org.scijava.ops.engine.MatchingConditions;
 import org.scijava.progress.Progress;
 
 /**
@@ -51,16 +52,16 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 
 	private final OpInstance<T> instance;
 	private final OpEnvironment env;
-	private final Hints hints;
+	private final MatchingConditions conditions;
 
 	public boolean record = true;
 
 	public AbstractRichOp(final OpInstance<T> instance, final OpEnvironment env,
-		final Hints hints)
+		final MatchingConditions conditions)
 	{
 		this.instance = instance;
 		this.env = env;
-		this.hints = hints;
+		this.conditions = conditions;
 
 		this.env.history().logOp(this);
 	}
@@ -72,7 +73,12 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 
 	@Override
 	public Hints hints() {
-		return hints;
+		return conditions.hints();
+	}
+
+	@Override
+	public String name() {
+		return conditions.request().getName();
 	}
 
 	@Override
@@ -82,7 +88,7 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 
 	@Override
 	public void preprocess(Object... inputs) {
-		Progress.register(this);
+		Progress.register(this, conditions.request().getName());
 	}
 
 	@Override

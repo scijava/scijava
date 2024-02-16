@@ -276,10 +276,12 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		@SuppressWarnings("unchecked")
 		OpInstance<T> instance = (OpInstance<T>) tree.newInstance(specialType
 			.getType());
-		Hints hints = getDefaultHints();
-		RichOp<T> wrappedOp = wrapOp(instance, hints);
+		var conditions = MatchingConditions.from( //
+			new InfoMatchingOpRequest(tree.info(), Nil.of(tree.info().opType())), //
+			getDefaultHints() //
+		);
+		RichOp<T> wrappedOp = wrapOp(instance, conditions);
 		return wrappedOp.asOpType();
-
 	}
 
 	@Override
@@ -540,12 +542,12 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * Wraps the matched op into an Op that knows its generic typing.
 	 *
 	 * @param instance - the {@link OpInstance} to wrap.
-	 * @param hints - the {@link Hints} used to create the {@link OpInstance}
+	 * @param conditions - the {@link Hints} used to create the {@link OpInstance}
 	 * @return an Op wrapping of op.
 	 */
 	@SuppressWarnings("unchecked")
-	private <T> RichOp<T> wrapOp(OpInstance<T> instance, Hints hints)
-		throws IllegalArgumentException
+	private <T> RichOp<T> wrapOp(OpInstance<T> instance,
+		MatchingConditions conditions) throws IllegalArgumentException
 	{
 		if (wrappers == null) initWrappers();
 
@@ -572,7 +574,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			// wrap the Op
 			final OpWrapper<T> opWrapper = (OpWrapper<T>) wrappers.get(Types.raw(
 				reifiedSuperType));
-			return opWrapper.wrap(instance, this, hints);
+			return opWrapper.wrap(instance, this, conditions);
 		}
 		catch (IllegalArgumentException | SecurityException exc) {
 			throw new IllegalArgumentException(exc.getMessage() != null ? exc
@@ -670,11 +672,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	private RichOp<?> wrapViaCache(MatchingConditions conditions) {
 		OpInstance<?> instance = getInstance(conditions);
-		return wrap(instance, conditions.hints());
-	}
-
-	private RichOp<?> wrap(OpInstance<?> instance, Hints hints) {
-		return wrapOp(instance, hints);
+		return wrapOp(instance, conditions);
 	}
 
 	/**

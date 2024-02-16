@@ -29,10 +29,10 @@
 
 package org.scijava.ops.engine.matcher.impl;
 
-import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.api.RichOp;
+import org.scijava.ops.engine.MatchingConditions;
 import org.scijava.ops.engine.OpWrapper;
 import org.scijava.ops.engine.conversionLoss.LossReporter;
 import org.scijava.types.Nil;
@@ -53,7 +53,7 @@ public class LossReporterWrapper<I, O> //
 	@Override
 	public RichOp<LossReporter<I, O>> wrap( //
 		final OpInstance<LossReporter<I, O>> instance, OpEnvironment env,
-		Hints hints)
+		MatchingConditions conditions)
 	{
 		class GenericTypedLossReporter //
 			extends AbstractRichOp<LossReporter<I, O>> //
@@ -61,7 +61,7 @@ public class LossReporterWrapper<I, O> //
 		{
 
 			public GenericTypedLossReporter() {
-				super(instance, env, hints);
+				super(instance, env, conditions);
 			}
 
 			@Override

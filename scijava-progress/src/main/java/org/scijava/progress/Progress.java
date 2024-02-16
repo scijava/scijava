@@ -187,6 +187,8 @@ public final class Progress {
 			t = parent.task().createSubtask(description);
 		}
 		deque.push(new ProgressibleObject(progressible, t));
+		// Ping Listeners about the registration of progressible
+		pingListeners(deque.peek());
 	}
 
 	/**

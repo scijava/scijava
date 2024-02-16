@@ -49,13 +49,18 @@ public class StatusBasedProgressTest {
 		int numIterations = 10;
 		Progress.addListener(progressible, new ProgressListener() {
 
+			boolean registered = false;
 			int numUpdates = 0;
 
 			@Override
 			public void acknowledgeUpdate(Task task) {
+				if (!registered) {
+					registered = true;
+					return;
+				}
 				if (numUpdates++ < numIterations) {
-					Assertions.assertTrue(task.status().equals("Setting status: " +
-						(numUpdates)));
+					Assertions.assertEquals(task.status(), "Setting status: " +
+						(numUpdates));
 				}
 				else {
 					Assertions.assertEquals(1., task.progress(), 1e-6);

@@ -13,11 +13,11 @@ import org.scijava.function.Container;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
-import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInstance;
-import org.scijava.ops.engine.OpWrapper;
 import org.scijava.ops.api.RichOp;
+import org.scijava.ops.engine.OpWrapper;
+import org.scijava.ops.engine.MatchingConditions;
 
 public class OpWrappers {
 
@@ -29,7 +29,7 @@ public class OpWrappers {
 		public RichOp<Producer<T>> wrap( //
             final OpInstance<Producer<T>> instance, //
             final OpEnvironment env, //
-            final Hints hints)
+            final MatchingConditions conditions)
 		{
 			class GenericTypedProducer //
 				extends AbstractRichOp<Producer<T>> //
@@ -38,7 +38,7 @@ public class OpWrappers {
 
 				public GenericTypedProducer()
 				{
-					super(instance, env, hints);
+					super(instance, env, conditions);
 				}
 
 				@Override
@@ -76,7 +76,7 @@ public class OpWrappers {
 		public RichOp<$fg> wrap( //
 			final OpInstance<$fg> instance, //
 			final OpEnvironment env, //
-			final Hints hints)
+			final MatchingConditions conditions)
 		{
 			class GenericTypedFunction${arity} //
 				extends AbstractRichOp<$fg> //
@@ -85,7 +85,7 @@ public class OpWrappers {
 
 				public GenericTypedFunction${arity}()
 				{
-					super(instance, env, hints);
+					super(instance, env, conditions);
 				}
 
 				@Override
@@ -124,7 +124,7 @@ public class OpWrappers {
 		public RichOp<$cg> wrap( //
 			final OpInstance<$cg> instance, //
 			final OpEnvironment env, //
-			final Hints hints)
+			final MatchingConditions conditions)
 		{
 			class GenericTypedComputer${arity} //
 				extends AbstractRichOp<$cg> //
@@ -132,7 +132,7 @@ public class OpWrappers {
 			{
 				public GenericTypedComputer${arity}()
 				{
-					super(instance, env, hints);
+					super(instance, env, conditions);
 				}
 
 				@Override
@@ -171,7 +171,7 @@ public class OpWrappers {
 		public RichOp<$ig> wrap( //
 			final OpInstance<$ig> instance, //
 			final OpEnvironment env, //
-			final Hints hints)
+			final MatchingConditions conditions)
 		{
 			class GenericTypedInplace${inplaceSuffix.call($arity, $a)} //
 				extends AbstractRichOp<$ig> //
@@ -179,7 +179,7 @@ public class OpWrappers {
 			{
 				public GenericTypedInplace${inplaceSuffix.call($arity, $a)}()
 				{
-					super(instance, env, hints);
+					super(instance, env, conditions);
 				}
 
 				@Override

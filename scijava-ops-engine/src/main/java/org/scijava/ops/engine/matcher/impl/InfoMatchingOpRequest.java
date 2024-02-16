@@ -29,17 +29,17 @@
 
 package org.scijava.ops.engine.matcher.impl;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRequest;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 import org.scijava.types.inference.GenericAssignability;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class InfoMatchingOpRequest implements OpRequest {
 
@@ -75,10 +75,18 @@ public class InfoMatchingOpRequest implements OpRequest {
 			if (!Types.isAssignable(from, this.type, this.map))
 				throw new IllegalArgumentException();
 		}
-		args = info.inputs().stream().map(m -> Types.substituteTypeVariables(m
-			.getType(), this.map)).toArray(Type[]::new);
-		outType = Types.substituteTypeVariables(info.output().getType(), this.map);
+		args = info.inputs().stream().map(m -> mappedType(m.getType(), this.map))
+			.toArray(Type[]::new);
+		outType = mappedType(info.outputType(), this.map);
+	}
 
+	private Type mappedType(Type t, Map<TypeVariable<?>, Type> map) {
+		try {
+			return Types.substituteTypeVariables(t, map);
+		}
+		catch (Exception e) {
+			return t;
+		}
 	}
 
 	@Override

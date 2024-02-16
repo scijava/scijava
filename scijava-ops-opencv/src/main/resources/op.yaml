@@ -1,4 +1,144 @@
 - op:
+    names: [engine.adapt, cv.getUnsignedByteMat]
+    description: ''
+    source: javaMethod:/net.imagej.opencv.ImgToMatConverter.getUnsignedByteMat%28net.imglib2.RandomAccessibleInterval%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: net.imglib2.RandomAccessibleInterval}
+    authors: [Gabriella Turek]
+    tags: {}
+- op:
+    names: [engine.adapt, cv.getByteMat]
+    description: ''
+    source: javaMethod:/net.imagej.opencv.ImgToMatConverter.getByteMat%28net.imglib2.RandomAccessibleInterval%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: net.imglib2.RandomAccessibleInterval}
+    authors: [Gabriella Turek]
+    tags: {}
+- op:
+    names: [engine.adapt, cv.getIntMat]
+    description: ''
+    source: javaMethod:/net.imagej.opencv.ImgToMatConverter.getIntMat%28net.imglib2.RandomAccessibleInterval%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: net.imglib2.RandomAccessibleInterval}
+    authors: [Gabriella Turek]
+    tags: {}
+- op:
+    names: [engine.adapt, cv.getFloatMat]
+    description: ''
+    source: javaMethod:/net.imagej.opencv.ImgToMatConverter.getFloatMat%28net.imglib2.RandomAccessibleInterval%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: net.imglib2.RandomAccessibleInterval}
+    authors: [Gabriella Turek]
+    tags: {}
+- op:
+    names: [engine.adapt, cv.getDoubleMat]
+    description: ''
+    source: javaMethod:/net.imagej.opencv.ImgToMatConverter.getDoubleMat%28net.imglib2.RandomAccessibleInterval%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: net.imglib2.RandomAccessibleInterval}
+    authors: [Gabriella Turek]
+    tags: {}
+- op:
+    names: [engine.adapt, cv.toUnsignedByteImg]
+    description: ''
+    source: javaMethod:/net.imagej.opencv.MatToImgConverter.toUnsignedByteImg%28org.bytedeco.opencv.opencv_core.Mat%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    authors: [Gabriella Turek]
+    tags: {}
+- op:
+    names: [engine.adapt, cv.toByteImg]
+    description: ''
+    source: javaMethod:/net.imagej.opencv.MatToImgConverter.toByteImg%28org.bytedeco.opencv.opencv_core.Mat%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    authors: [Gabriella Turek]
+    tags: {}
+- op:
+    names: [engine.adapt, cv.toIntImg]
+    description: ''
+    source: javaMethod:/net.imagej.opencv.MatToImgConverter.toIntImg%28org.bytedeco.opencv.opencv_core.Mat%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    authors: [Gabriella Turek]
+    tags: {}
+- op:
+    names: [engine.adapt, cv.toFloatImg]
+    description: ''
+    source: javaMethod:/net.imagej.opencv.MatToImgConverter.toFloatImg%28org.bytedeco.opencv.opencv_core.Mat%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    authors: [Gabriella Turek]
+    tags: {}
+- op:
+    names: [engine.adapt, cv.toDoubleImg]
+    description: ''
+    source: javaMethod:/net.imagej.opencv.MatToImgConverter.toDoubleImg%28org.bytedeco.opencv.opencv_core.Mat%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    authors: [Gabriella Turek]
+    tags: {}
+- op:
+    names: [engine.adapt, cv.toByteArray]
+    description: ''
+    source: javaMethod:/net.imagej.opencv.MatToImgConverter.toByteArray%28org.bytedeco.opencv.opencv_core.Mat%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    authors: [Gabriella Turek]
+    tags: {}
+- op:
+    names: [engine.adapt, cv.toIntArray]
+    description: ''
+    source: javaMethod:/net.imagej.opencv.MatToImgConverter.toIntArray%28org.bytedeco.opencv.opencv_core.Mat%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    authors: [Gabriella Turek]
+    tags: {}
+- op:
+    names: [engine.adapt, cv.toFloatArray]
+    description: ''
+    source: javaMethod:/net.imagej.opencv.MatToImgConverter.toFloatArray%28org.bytedeco.opencv.opencv_core.Mat%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    authors: [Gabriella Turek]
+    tags: {}
+- op:
+    names: [engine.adapt, cv.toDoubleArray]
+    description: ''
+    source: javaMethod:/net.imagej.opencv.MatToImgConverter.toDoubleArray%28org.bytedeco.opencv.opencv_core.Mat%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    authors: [Gabriella Turek]
+    tags: {}
+- op:
     names: [filter.median, cv.medianBlur]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_imgproc.medianBlur%28org.bytedeco.opencv.opencv_core.GpuMat%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%29

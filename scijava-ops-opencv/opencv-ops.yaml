@@ -4,6 +4,52 @@ authors:
   - "OpenCV authors"
   - "bytedeco/JavaCV authors"
 
+net.imagej.opencv.ImgToMatConverter:
+  getUnsignedByteMat:
+    alias: "engine.adapt"
+    authors: "Gabriella Turek"
+  getByteMat:
+    alias: "engine.adapt"
+    authors: "Gabriella Turek"
+  getIntMat:
+    alias: "engine.adapt"
+    authors: "Gabriella Turek"
+  getFloatMat:
+    alias: "engine.adapt"
+    authors: "Gabriella Turek"
+  getDoubleMat:
+    alias: "engine.adapt"
+    authors: "Gabriella Turek"
+
+net.imagej.opencv.MatToImgConverter:
+  toUnsignedByteImg:
+    alias: "engine.adapt"
+    authors: "Gabriella Turek"
+  toByteImg:
+    alias: "engine.adapt"
+    authors: "Gabriella Turek"
+  toIntImg:
+    alias: "engine.adapt"
+    authors: "Gabriella Turek"
+  toFloatImg:
+    alias: "engine.adapt"
+    authors: "Gabriella Turek"
+  toDoubleImg:
+    alias: "engine.adapt"
+    authors: "Gabriella Turek"
+  toByteArray:
+    alias: "engine.adapt"
+    authors: "Gabriella Turek"
+  toIntArray:
+    alias: "engine.adapt"
+    authors: "Gabriella Turek"
+  toFloatArray:
+    alias: "engine.adapt"
+    authors: "Gabriella Turek"
+  toDoubleArray:
+    alias: "engine.adapt"
+    authors: "Gabriella Turek"
+
 org.bytedeco.opencv.global.opencv_imgproc:
   medianBlur:
     alias: "filter.median"

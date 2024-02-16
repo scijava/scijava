@@ -46,15 +46,26 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * Entry point for parsing external libraries to ops (via {@link #main}). <br/>
  * Expected YAML structure is:
  * <ul>
- * <li>namespace:string # Optional string for aliasing methods to
+ * <li>namespace:String # Optional string for aliasing methods to
  * "namespace.methodName"</li>
- * <li>version:string # Optional version number for versioning input YAML</li>
- * <li>authors:List #Optional list of authors to apply to all ops</li>
- * <li>containers:List # Optional list fully-qualified data structure classes to
- * consider as potential containers</li>
- * <li>class:(method:alias) # One or more. Map of class name containing op
- * methods to a map of method names within that class, mapped to the "SciJava
- * Ops-style" name for that method</li>
+ * <li>version:String # Optional version number for versioning input YAML</li>
+ * <li>authors:String|List #Optional one or more authors to apply to all
+ * ops</li>
+ * <li>class:(Op map) # One or more. Map of class name containing op methods to
+ * a map of method names within that class. Supported fields for each method
+ * include:
+ * <ul>
+ * <li>priority:String # Optional priority for Ops of this method</li>
+ * <li>description:String # Optional description for Ops of this method</li>
+ * <li>authors:String|List # Optional, as global list, but per-method list takes
+ * precedence</li>
+ * <li>type:String # Optional SciJava Ops type shorthand (e.g. Computer2). If
+ * omitted, Ops for this method are assumed to be functions.</li>
+ * <li>alias:String|List # Optional, one or more names for the Ops to be aliased
+ * under. This is in addition to the namespace aliasing. If omitted, defaults to
+ * 'ext.Method'</li>
+ * </ul>
+ * </li>
  * </ul>
  *
  * @author Mark Hiner

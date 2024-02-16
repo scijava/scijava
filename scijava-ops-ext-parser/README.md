@@ -28,31 +28,39 @@ The input YAML should be formatted as follows:
 ```yaml
 namespace: "ns" # Optional. If present, your ops will all have "ns.MethodName" aliases.
                 # (in addition to the per-method manually assigned aliases)
-version: "x" # Optional. If present, all ops will include this version metadata.
+version: "0" # Optional. If present, all ops will include this version metadata.
 
-# Optional list of authors to apply to all Ops
+# Optional single or list of authors to apply to all Ops
 authors:
   - "author 1"
   - "author 2"
   - ...
 
-# Optional. If "containers" is present, the value is a list of fully qualified
-# class names. Op methods that contain 2 or more of parameters with these types
-# will be marked as Computers, with the second occurrance being the "output"
-# param.
-containers:
-  - "container.1.name"
-  - "container.2.name"
-  - ...
-
-# You can include as many base classes as you wish. Each fully-qualified class
-# name should map to a map of method names to aliases. All methods in the base
-# class with that name will be indexed under the given alias. The alias should
-# be "SciJava" style - e.g. if your method performs a Gaussian filter, alias it
-# "filter.gauss"
+# The remaining entries define the actual Ops to include. Ops are specified by
+# fully-qualified class name. You can include as many base classes as you wish.
+# Each class name should map to a map of method names to metadata for Ops of
+# that method. You may include as many methods as desired from the base class.
+# All methods with that name in the base class will be processed as Ops.
 fully.qualified.className:
-  method1Name: "method1.alias"
-  method2Name: "method2.alias"
+  methodName:
+    # The alias should be "SciJava" style - e.g. if your method performs a
+    # Gaussian filter, alias it "filter.gauss"
+    alias: "method.alias"
+    # Same as the global authors key. Method-specific authors supersede
+    # (replace) the global entry for these Ops.
+    authors: "author name"
+    # The type specification is essential for non-Function methods. If your
+    # methods include a pre-allocated buffer or an item that is modified as part
+    # of execution, their type should be 'ComputerN' or 'InplaceN' respectively,
+    # where 'N' is the one-based index of the parameter being modified.
+    type: "Type"
+    # Optional priority to apply to all Ops for this method, used during
+    # Op matching in the case multiple Ops satisfy the parameter and name
+    # for a given request.
+    priority: "0.0"
+    # Optional description to apply to all Ops for this method. This will appear
+    # in help text queries for the Op.
+    description: "method description"
   ...
 ...
 ```

@@ -49,7 +49,8 @@ public class TestOpParser {
 
 		String expected = //
 			"- op:" //
-				+ "\n    names: [arrays.toStringDeep, fun.stringMaker, test.deepToString]" //
+				+
+				"\n    names: [arrays.toStringDeep, fun.stringMaker, test.deepToString]" //
 				+ "\n    description: ''" //
 				+
 				"\n    source: javaMethod:/java.util.Arrays.deepToString%28%5BLjava.lang.Object%3B%29" //

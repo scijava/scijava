@@ -14,7 +14,6 @@ java.lang.System:
   arraycopy:
     priority: "50"
     description: "a useful op"
-    authors:
-      - "You-know-who"
+    authors: "You-know-who"
     type: "Computer2"
 

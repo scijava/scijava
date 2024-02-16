@@ -127,7 +127,8 @@ public final class OpParser {
 			version = (String) opsYaml.remove(VERSION_KEY);
 		}
 		if (opsYaml.containsKey(AUTHOR_KEY)) {
-			authors = (List<String>) opsYaml.remove(AUTHOR_KEY);
+			authors = getListHelper(AUTHOR_KEY, opsYaml);
+			opsYaml.remove(AUTHOR_KEY);
 		}
 
 		// We assume the remaining entries are nested maps of classes to (maps of
@@ -155,17 +156,19 @@ public final class OpParser {
 				if (opMetadata.containsKey(ALIAS_KEY)) {
 					Object alias = opMetadata.get(ALIAS_KEY);
 					if (alias instanceof String) {
-						opNames.add((String)alias);
-					} else if (alias instanceof List) {
-						opNames.addAll((List<String>)alias);
+						opNames.add((String) alias);
 					}
-				} else {
+					else if (alias instanceof List) {
+						opNames.addAll((List<String>) alias);
+					}
+				}
+				else {
 					opNames.add("ext." + methodName);
 				}
 
 				List<String> opAuthors = authors;
 				if (opMetadata.containsKey(AUTHOR_KEY)) {
-					opAuthors = (List<String>) opMetadata.get(AUTHOR_KEY);
+					opAuthors = getListHelper(AUTHOR_KEY, opMetadata);
 				}
 
 				// If a global namespace is specified, we also alias the Op by its
@@ -195,6 +198,22 @@ public final class OpParser {
 
 		var data = ops.stream().map(OpData::dumpData).collect(Collectors.toList());
 		return new Yaml().dump(data);
+	}
+
+	/**
+	 * Helper method to extract a key from a map that may point to a single
+	 * {@link String}, or a {@link List} thereof.
+	 */
+	private static List<String> getListHelper(String key,
+		Map<String, Object> map)
+	{
+		Object value = map.get(key);
+		if (value instanceof List) {
+			return (List<String>) value;
+		}
+		List<String> result = new ArrayList<>();
+		result.add((String) value);
+		return result;
 	}
 
 	/**

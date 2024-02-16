@@ -1,10 +1,19 @@
 namespace: "test"
 version: "1"
-containers:
-  - "int"
 authors:
   - "Nobody"
   - "Everybody"
 
 java.util.Arrays:
-  deepToString: "arrays.toStringDeep"
+  deepToString:
+    alias: "arrays.toStringDeep"
+
+java.lang.System:
+  arraycopy:
+    alias: "system.arraycopy"
+    priority: "50"
+    description: "a useful op"
+    authors:
+      - "You-know-who"
+    type: "Computer2"
+

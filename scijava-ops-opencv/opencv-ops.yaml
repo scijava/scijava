@@ -1,78 +1,208 @@
 namespace: "cv"
 version: "1"
-containers:
-  - "org.bytedeco.opencv.opencv_core.Mat"
-  - "org.bytedeco.opencv.opencv_core.GpuMat"
-  - "org.bytedeco.opencv.opencv_core.UMat"
 authors:
   - "OpenCV authors"
   - "bytedeco/JavaCV authors"
 
 org.bytedeco.opencv.global.opencv_imgproc:
-  medianBlur: "filter.median"
-  GaussianBlur: "filter.gauss"
-  bilateralFilter: "filter.bilateral"
-  boxFilter: "filter.box"
-  sqrBoxFilter: "filter.sqrbox"
-  blur: "fliter.blur"
-  filter2d: "filter.convolve"
-  Sobel: "filter.sobel"
-  sepFilter2D: "filter.sep"
-  spatialGradient: "filter.spgrad"
-  Scharr: "filter.scharr"
-  Laplacian: "filter.laplacian"
-  Canny: "filter.Canny"
-  erode: "morphology.erode"
-  dilate: "morphology.dilate"
-  resize: "transform.resize"
-  warpAffine: "transform.affine"
-  warpPerspective: "transform.perspective"
-  remap: "transform.remap"
-  invertAffineTransform: "transform.invaffine"
-  logPolar: "transform.polarLog"
-  linearPolar: "transform.polarLinear"
-  warpPolar: "transform.polar"
-  integral3: "stats.integral3"
-  integral: "stats.integral"
-  integral2: "stats.integral2"
-  accumulate: "track.accumulate"
-  accumulateSquare: "track.accumulateSquare"
-  accumulateProduct: "track.accumulateProduct"
-  accumulateWeighted: "track.accumulateWeighted"
-  createHanningWindow: "track.hanningWindow"
-  divSpectrums: "track.divSpectrums"
-  adaptiveThreshold: "threshold.adaptive"
-  pyrDown: "image.pyrdown"
-  pyrUp: "image.pyrup"
-  buildPyramid: "image.pyrbuild"
-  calcHist: "image.histogram"
-  calcBlackProject: "image.blackProject"
-  equalizeHist: "image.equalize"
-  watershed: "image.watershed"
-  pyrMeanShiftFiltering: "image.pyrshift"
-  grabCut: "image.grabCut"
-  distanceTransform: "morphology.distanceTransform"
-  distanceTransformWithLabels: "morphology.distanceTransformLabeled"
-  floodFill: "morphology.floodFill"
-  blendLinear: "image.blend"
-  cvtColor: "image.colorConvert"
-  cvtColorTwoPlane: "image.colorConvertTwoPlane"
-  demosaicing: "image.demosaic"
-  HuMoments: "imageMoments.huMoment"
-  findContours: "geom.contour"
-  boxPoints: "geom.boxPoints"
-  minEnclosingCircle: "geom.enclosingCircle"
-  convexHull: "geom.convexHull"
-  applyColorMap: "image.applyColorMap"
-  line: "geom.line"
-  arrowedLine: "geom.arrowedLined"
-  rectangle: "geom.rectangle"
-  circle: "geom.circle"
-  ellipse: "geom.ellipse"
-  drawMarker: "geom.drawMarker"
-  fillConvexPoly: "geom.fillConvexPoly"
-  fillPoly: "geom.fillPoly"
-  polylines: "geom.polylines"
-  drawContours: "geom.drawContours"
-  ellipse2Poly: "geom.ellipse2Poly"
-  putText: "image.putText"
+  medianBlur:
+    alias: "filter.median"
+    type: "Computer2"
+  GaussianBlur:
+    alias: "filter.gauss"
+    type: "Computer2"
+  bilateralFilter:
+    alias: "filter.bilateral"
+    type: "Computer2"
+  boxFilter:
+    alias: "filter.box"
+    type: "Computer2"
+  sqrBoxFilter:
+    alias: "filter.sqrbox"
+    type: "Computer2"
+  blur:
+    alias: "fliter.blur"
+    type: "Computer2"
+  filter2d:
+    alias: "filter.convolve"
+    type: "Computer2"
+  Sobel:
+    alias: "filter.sobel"
+    type: "Computer2"
+  sepFilter2D:
+    alias: "filter.sep"
+    type: "Computer2"
+  spatialGradient:
+    alias: "filter.spgrad"
+    type: "Computer2"
+  Scharr:
+    alias: "filter.scharr"
+    type: "Computer2"
+  Laplacian:
+    alias: "filter.laplacian"
+    type: "Computer2"
+  Canny:
+    alias: "filter.Canny"
+    type: "Computer2"
+  erode:
+    alias: "morphology.erode"
+    type: "Computer2"
+  dilate:
+    alias: "morphology.dilate"
+    type: "Computer2"
+  resize:
+    alias: "transform.resize"
+    type: "Computer2"
+  warpAffine:
+    alias: "transform.affine"
+    type: "Computer2"
+  warpPerspective:
+    alias: "transform.perspective"
+    type: "Computer2"
+  remap:
+    alias: "transform.remap"
+    type: "Computer2"
+  invertAffineTransform:
+    alias: "transform.invaffine"
+    type: "Computer2"
+  logPolar:
+    alias: "transform.polarLog"
+    type: "Computer2"
+  linearPolar:
+    alias: "transform.polarLinear"
+    type: "Computer2"
+  warpPolar:
+    alias: "transform.polar"
+    type: "Computer2"
+  integral3:
+    alias: "stats.integral3"
+    type: "Computer2"
+  integral:
+    alias: "stats.integral"
+    type: "Computer2"
+  integral2:
+    alias: "stats.integral2"
+    type: "Computer2"
+  accumulate:
+    alias: "track.accumulate"
+    type: "Computer2"
+  accumulateSquare:
+    alias: "track.accumulateSquare"
+    type: "Computer2"
+  accumulateProduct:
+    alias: "track.accumulateProduct"
+    type: "Computer2"
+  accumulateWeighted:
+    alias: "track.accumulateWeighted"
+    type: "Computer2"
+  createHanningWindow:
+    alias: "track.hanningWindow"
+    type: "Computer2"
+  divSpectrums:
+    alias: "track.divSpectrums"
+    type: "Computer2"
+  adaptiveThreshold:
+    alias: "threshold.adaptive"
+    type: "Computer2"
+  pyrDown:
+    alias: "image.pyrdown"
+    type: "Computer2"
+  pyrUp:
+    alias: "image.pyrup"
+    type: "Computer2"
+  buildPyramid:
+    alias: "image.pyrbuild"
+    type: "Computer2"
+  calcHist:
+    alias: "image.histogram"
+    type: "Computer2"
+  calcBlackProject:
+    alias: "image.blackProject"
+    type: "Computer2"
+  equalizeHist:
+    alias: "image.equalize"
+    type: "Computer2"
+  watershed:
+    alias: "image.watershed"
+    type: "Computer2"
+  pyrMeanShiftFiltering:
+    alias: "image.pyrshift"
+    type: "Computer2"
+  grabCut:
+    alias: "image.grabCut"
+    type: "Computer2"
+  distanceTransform:
+    alias: "morphology.distanceTransform"
+    type: "Computer2"
+  distanceTransformWithLabels:
+    alias: "morphology.distanceTransformLabeled"
+    type: "Computer2"
+  floodFill:
+    alias: "morphology.floodFill"
+    type: "Computer2"
+  blendLinear:
+    alias: "image.blend"
+    type: "Computer2"
+  cvtColor:
+    alias: "image.colorConvert"
+    type: "Computer2"
+  cvtColorTwoPlane:
+    alias: "image.colorConvertTwoPlane"
+    type: "Computer2"
+  demosaicing:
+    alias: "image.demosaic"
+    type: "Computer2"
+  HuMoments:
+    alias: "imageMoments.huMoment"
+    type: "Computer2"
+  findContours:
+    alias: "geom.contour"
+    type: "Computer2"
+  boxPoints:
+    alias: "geom.boxPoints"
+    type: "Computer2"
+  minEnclosingCircle:
+    alias: "geom.enclosingCircle"
+    type: "Computer2"
+  convexHull:
+    alias: "geom.convexHull"
+    type: "Computer2"
+  applyColorMap:
+    alias: "image.applyColorMap"
+    type: "Computer2"
+  line:
+    alias: "geom.line"
+    type: "Computer2"
+  arrowedLine:
+    alias: "geom.arrowedLined"
+    type: "Computer2"
+  rectangle:
+    alias: "geom.rectangle"
+    type: "Computer2"
+  circle:
+    alias: "geom.circle"
+    type: "Computer2"
+  ellipse:
+    alias: "geom.ellipse"
+    type: "Computer2"
+  drawMarker:
+    alias: "geom.drawMarker"
+    type: "Computer2"
+  fillConvexPoly:
+    alias: "geom.fillConvexPoly"
+    type: "Computer2"
+  fillPoly:
+    alias: "geom.fillPoly"
+    type: "Computer2"
+  polylines:
+    alias: "geom.polylines"
+    type: "Computer2"
+  drawContours:
+    alias: "geom.drawContours"
+    type: "Computer2"
+  ellipse2Poly:
+    alias: "geom.ellipse2Poly"
+    type: "Computer2"
+  putText:
+    alias: "image.putText"
+    type: "Computer2"

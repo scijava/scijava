@@ -29,6 +29,7 @@
 
 package org.scijava.ops.parser;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import org.yaml.snakeyaml.Yaml;
@@ -61,9 +62,12 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public final class OpParser {
 
 	private static final String NS_KEY = "namespace";
-	private static final String CONTAINER_KEY = "containers";
 	private static final String VERSION_KEY = "version";
 	private static final String AUTHOR_KEY = "authors";
+	private static final String PRIORITY_KEY = "priority";
+	private static final String ALIAS_KEY = "alias";
+	private static final String TYPE_KEY = "type";
+	private static final String DESCRIPTION_KEY = "description";
 
 	/**
 	 * @param args One argument is required: path to a YAML file containing Op
@@ -103,7 +107,6 @@ public final class OpParser {
 		Yaml configYaml = new Yaml();
 		String namespace = null;
 		List<OpData> ops = new ArrayList<>();
-		Set<String> containerClasses = new HashSet<>();
 		List<String> authors = new ArrayList<>();
 		String version = "unknown";
 		Map<String, Object> opsYaml;
@@ -120,10 +123,6 @@ public final class OpParser {
 		if (opsYaml.containsKey(NS_KEY)) {
 			namespace = (String) opsYaml.remove(NS_KEY);
 		}
-		if (opsYaml.containsKey(CONTAINER_KEY)) {
-			containerClasses = new HashSet<>((List<String>) opsYaml.remove(
-				CONTAINER_KEY));
-		}
 		if (opsYaml.containsKey(VERSION_KEY)) {
 			version = (String) opsYaml.remove(VERSION_KEY);
 		}
@@ -139,29 +138,48 @@ public final class OpParser {
 			// As our YAML specification for desired method names, we want all
 			// overloaded implementations of those methods.
 			Multimap<String, Method> methods = makeMultimap(clazz);
-			final Map<String, String> opMethods = (Map<String, String>) opDeclaration
-				.getValue();
-			for (Map.Entry<String, String> opMethod : opMethods.entrySet()) {
+			final Map<String, Map<String, Object>> opMethods =
+				(Map<String, Map<String, Object>>) opDeclaration.getValue();
+			for (Map.Entry<String, Map<String, Object>> opMethod : opMethods
+				.entrySet())
+			{
 				final String methodName = opMethod.getKey();
-				List<String> opNames = new ArrayList<>();
-				// The value for each op method is the "SciJava Ops-style" name
-				opNames.add(opMethod.getValue());
+				final List<String> opNames = new ArrayList<>();
+				final Map<String, Object> opMetadata = opMethod.getValue();
+				final String opType = (String) opMetadata.getOrDefault(TYPE_KEY, "");
+				final String description = (String) opMetadata.getOrDefault(
+					DESCRIPTION_KEY, "");
+				final double priority = Double.parseDouble((String) opMetadata
+					.getOrDefault(PRIORITY_KEY, "0.0"));
 
-				// If a namespace is specified, we also alias the Op by its method name
+				opNames.add((String) opMetadata.getOrDefault(ALIAS_KEY, "ext" +
+					methodName));
+
+				List<String> opAuthors = authors;
+				if (opMetadata.containsKey(AUTHOR_KEY)) {
+					opAuthors = (List<String>) opMetadata.get(AUTHOR_KEY);
+				}
+
+				// If a global namespace is specified, we also alias the Op by its
+				// method name
 				// for a "classic" path to calling the op
 				if (namespace != null) {
 					opNames.add(namespace + "." + methodName);
 				}
 
 				// For each overloaded method we create one OpData instance
+				if (!methods.containsKey(methodName)) {
+					throw new InvalidOpException("No method named " + methodName +
+						" in class " + className);
+				}
 				for (Method method : methods.get(methodName)) {
 					Map<String, Object> tags = new HashMap<>();
 					List<OpParameter> params = new ArrayList<>();
 					String opSource = parseOpSource(className, methodName, method
 						.getParameterTypes());
-					parseParams(method, params, tags, containerClasses);
+					parseParams(method, params, tags, opType);
 					OpData data = new OpData(opSource, version, opNames, params, tags,
-						authors);
+						opAuthors, priority, description);
 					ops.add(data);
 				}
 			}
@@ -183,13 +201,12 @@ public final class OpParser {
 	private static String parseOpSource(String className, String methodName,
 		Class<?>[] parameterTypes)
 	{
-		String opSource = "javaMethod:/" //
+		return "javaMethod:/" //
 			+ URLEncoder.encode(className //
 				+ "." //
 				+ methodName //
 				+ Arrays.stream(parameterTypes).map(Class::getName).collect(Collectors
-					.joining(",", "(", ")")));
-		return opSource;
+					.joining(",", "(", ")")), UTF_8);
 	}
 
 	/**
@@ -203,31 +220,26 @@ public final class OpParser {
 	 * @param method The {@link Method} being wrapped to an Op
 	 * @param params Empty list of {@link OpParameter}s to be populated
 	 * @param tags Empty {@link Map} of tags to be populated
-	 * @param containerClasses Known parameter classes that should be considered
-	 *          potential {@code IO_TYPE#CONTAINER}s
+	 * @param type Empty string if an {@code ItemIO.FUNCTION}, otherwise
+	 *          "ComputerN" where N is the parameter index of the container.
 	 */
-	private static void parseParams(Method method, List<OpParameter> params,
-		Map<String, Object> tags, Set<String> containerClasses)
+	private static void parseParams(final Method method,
+		final List<OpParameter> params, Map<String, Object> tags, final String type)
 	{
-		int containersSeen = 0;
 		int containerIndex = -1;
+		if (!Strings.isNullOrEmpty(type)) {
+			containerIndex = Integer.parseInt(type.substring(type.length() - 1)) - 1;
+		}
 
 		// Iterate over each parameter
 		Class<?>[] types = method.getParameterTypes();
 		for (int i = 0; i < types.length; i++) {
 			String className = types[i].getName();
 			OpParameter.IO_TYPE ioType = OpParameter.IO_TYPE.INPUT;
-			String paramName = "in" + (i + 1 - (containersSeen > 1 ? 1 : 0));
-			// If this the second containerClass seen, mark it as the output type and
-			// include a Computer tag
-			if (containerClasses.contains(className)) {
-				if (containersSeen == 1) {
-					ioType = OpParameter.IO_TYPE.CONTAINER;
-					paramName = "out";
-					containerIndex = i + 1;
-					tags.put("type", "Computer" + containerIndex);
-				}
-				containersSeen++;
+			String paramName = method.getParameters()[i].getName();
+			if (i == containerIndex) {
+				ioType = OpParameter.IO_TYPE.CONTAINER;
+				tags.put("type", type);
 			}
 			params.add(new OpParameter(paramName, className, ioType, ""));
 		}

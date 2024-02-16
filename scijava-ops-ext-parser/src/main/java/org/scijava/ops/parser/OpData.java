@@ -71,12 +71,12 @@ public class OpData {
 	/**
 	 * The priority of this Op.
 	 */
-	protected double priority = 0.0;
+	private final double priority;
 
 	/**
 	 * A description of the functionality provided by this Op.
 	 */
-	protected String description = "";
+	private final String description;
 
 	/**
 	 * A {@link List} of the authors of this Op
@@ -85,7 +85,8 @@ public class OpData {
 
 	public OpData(final String source, final String version,
 		final List<String> names, final List<OpParameter> params,
-		final Map<String, Object> tags, List<String> authors)
+		final Map<String, Object> tags, List<String> authors, double priority,
+		String description)
 	{
 		this.source = source;
 		this.version = version;
@@ -93,6 +94,8 @@ public class OpData {
 		this.params = params;
 		this.tags = tags;
 		this.authors = authors;
+		this.priority = priority;
+		this.description = description;
 
 		validateOpData();
 	}

@@ -57,9 +57,29 @@ public class TestOpParser {
 				+ "\n    version: '1'" //
 				+ "\n    parameters:" //
 				+
-				"\n    - {parameter type: INPUT, name: in1, description: '', type: '[Ljava.lang.Object;'}" //
+				"\n    - {parameter type: INPUT, name: arg0, description: '', type: '[Ljava.lang.Object;'}" //
 				+ "\n    authors: [Nobody, Everybody]" //
 				+ "\n    tags: {}" //
+				+ "\n- op:" //
+				+ "\n    names: [system.arraycopy, test.arraycopy]" //
+				+ "\n    description: a useful op" //
+				+
+				"\n    source: javaMethod:/java.lang.System.arraycopy%28java.lang.Object%2Cint%2Cjava.lang.Object%2Cint%2Cint%29" //
+				+ "\n    priority: 50.0" //
+				+ "\n    version: '1'" //
+				+ "\n    parameters:" //
+				+
+				"\n    - {parameter type: INPUT, name: arg0, description: '', type: java.lang.Object}" //
+				+
+				"\n    - {parameter type: CONTAINER, name: arg1, description: '', type: int}" //
+				+
+				"\n    - {parameter type: INPUT, name: arg2, description: '', type: java.lang.Object}" //
+				+
+				"\n    - {parameter type: INPUT, name: arg3, description: '', type: int}" //
+				+
+				"\n    - {parameter type: INPUT, name: arg4, description: '', type: int}" //
+				+ "\n    authors: [You-know-who]" //
+				+ "\n    tags: {type: Computer2}" //
 				+ "\n";
 		Assertions.assertEquals(expected, actual);
 	}

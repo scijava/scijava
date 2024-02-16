@@ -23,7 +23,7 @@ org.bytedeco.opencv.global.opencv_imgproc:
   blur:
     alias: "fliter.blur"
     type: "Computer2"
-  filter2d:
+  filter2D:
     alias: "filter.convolve"
     type: "Computer2"
   Sobel:
@@ -116,8 +116,8 @@ org.bytedeco.opencv.global.opencv_imgproc:
   calcHist:
     alias: "image.histogram"
     type: "Computer2"
-  calcBlackProject:
-    alias: "image.blackProject"
+  calcBackProject:
+    alias: "image.backProject"
     type: "Computer2"
   equalizeHist:
     alias: "image.equalize"

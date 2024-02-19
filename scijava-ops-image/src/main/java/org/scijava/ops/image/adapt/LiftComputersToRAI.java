@@ -34,14 +34,16 @@
 
 package org.scijava.ops.image.adapt;
 
-import java.util.function.Function;
-
-import org.scijava.function.Computers;
-import org.scijava.function.Functions;
-
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.loops.LoopBuilder;
-import net.imglib2.util.Util;
+import net.imglib2.type.numeric.integer.LongType;
+import net.imglib2.util.Intervals;
+import org.scijava.function.Computers;
+import org.scijava.function.Functions;
+import org.scijava.progress.Progress;
+import org.scijava.progress.Task;
+
+import java.util.function.Function;
 
 /**
  * Lifts {@link Functions} operating on some types {@code I1, I2, ..., In},
@@ -71,8 +73,19 @@ public final class LiftComputersToRAI {
 		Computers.Arity1<RAII1, RAIO> lift11(Computers.Arity1<I1, O> computer)
 	{
 		return (raiInput1, raiOutput) -> {
+			Task t = Progress.currentTask();
+			t.defineTotalProgress(1);
+			t.setStageMax(Intervals.numElements(raiInput1));
 			LoopBuilder.setImages(raiInput1, raiOutput).multiThreaded() //
-				.forEachPixel((i1, out) -> computer.compute(i1, out));
+				.forEachChunk((chunk) -> {
+					var counter = new LongType(0L);
+					chunk.forEachPixel((i1, out) -> {
+						computer.compute(i1, out);
+						counter.inc();
+					});
+					Progress.update(counter.getIntegerLong(), t);
+					return null;
+				});
 		};
 	}
 

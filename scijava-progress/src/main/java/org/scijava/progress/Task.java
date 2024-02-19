@@ -44,6 +44,9 @@ public class Task {
 
 	// -- FIELDS -- //
 
+	/** The Object that will update its progress */
+	private final Object progressible;
+
 	/** Parent of this task */
 	private final Task parent;
 
@@ -86,12 +89,19 @@ public class Task {
 	/** Computation status as defined by the task */
 	private String status = "Executing...";
 
-	public Task(final String description) {
-		this.parent = null;
-		this.description = description;
+	public Task( //
+		final Object progressible, //
+		final String description //
+	) {
+		this(progressible, null, description);
 	}
 
-	public Task(final Task parent, final String description) {
+	public Task(
+		final Object progressible, //
+		final Task parent, //
+		final String description //
+	) {
+		this.progressible = progressible;
 		this.parent = parent;
 		this.description = description;
 	}
@@ -117,8 +127,11 @@ public class Task {
 	 *
 	 * @return the subtask.
 	 */
-	public synchronized Task createSubtask(String description) {
-		final Task sub = new Task(this, description);
+	public synchronized Task createSubtask( //
+		Object progressible, //
+		String description //
+	) {
+		final Task sub = new Task(progressible, this, description);
 		subTasks.add(sub);
 		return sub;
 	}
@@ -260,6 +273,14 @@ public class Task {
 		if (current.longValue() == max.longValue()) {
 			resetStage();
 		}
+	}
+
+	/**
+	 * Gets the progressible {@link Object} contributing to this {@link Task}'s progress.
+	 * @return the progressible {@link Object}
+	 */
+	public Object progressible() {
+		return progressible;
 	}
 
 }

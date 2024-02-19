@@ -35,9 +35,11 @@ import java.util.ServiceLoader;
 import net.imagej.DefaultDataset;
 import net.imagej.ImgPlus;
 import net.imglib2.img.array.ArrayImgs;
+import net.imglib2.type.numeric.integer.UnsignedByteType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.scijava.discovery.Discoverer;
+import org.scijava.ops.api.OpEnvironment;
 import org.scijava.types.Any;
 import org.scijava.types.DefaultTypeReifier;
 import org.scijava.types.Types;
@@ -64,6 +66,11 @@ public class DatasetTypeExtractorTest {
 		// is enough to unit test the TypeExtractor
 		var actual = new DatasetTypeExtractor().reify(reifier, ds);
 		var expected = Types.parameterize(ImgPlus.class, new Type[] { new Any() });
+		Assertions.assertEquals(expected, actual);
+		OpEnvironment env = OpEnvironment.build();
+		actual = env.genericType(ds);
+		expected = Types.parameterize(ImgPlus.class, new Type[] {
+			UnsignedByteType.class });
 		Assertions.assertEquals(expected, actual);
 	}
 

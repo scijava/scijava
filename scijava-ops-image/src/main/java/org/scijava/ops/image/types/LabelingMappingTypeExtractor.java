@@ -53,7 +53,7 @@ public class LabelingMappingTypeExtractor extends
 {
 
 	@Override
-	protected Class<?> getRawType() {
+	public Class<?> baseClass() {
 		return LabelingMapping.class;
 	}
 

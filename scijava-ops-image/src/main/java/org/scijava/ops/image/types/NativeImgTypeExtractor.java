@@ -58,7 +58,7 @@ public class NativeImgTypeExtractor extends SubTypeExtractor<NativeImg<?, ?>> {
 	}
 
 	@Override
-	protected Class<?> getRawType() {
+	public Class<?> baseClass() {
 		return NativeImg.class;
 	}
 

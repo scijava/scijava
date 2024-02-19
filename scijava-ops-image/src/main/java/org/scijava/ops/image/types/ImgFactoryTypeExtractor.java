@@ -45,7 +45,7 @@ import net.imglib2.img.ImgFactory;
 public class ImgFactoryTypeExtractor extends SubTypeExtractor<ImgFactory<?>> {
 
 	@Override
-	protected Class<?> getRawType() {
+	public Class<?> baseClass() {
 		return ImgFactory.class;
 	}
 

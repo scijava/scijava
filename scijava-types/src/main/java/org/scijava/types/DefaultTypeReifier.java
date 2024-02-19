@@ -29,17 +29,13 @@
 
 package org.scijava.types;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.scijava.discovery.Discoverer;
+
+import java.util.*;
 
 public class DefaultTypeReifier implements TypeReifier {
 
-	private List<TypeExtractor> extractors;
+	private Map<Class<?>, TypeExtractor> extractors;
 	private final Collection<Discoverer> discoverers;
 
 	public DefaultTypeReifier(Discoverer... discoverers) {
@@ -52,12 +48,12 @@ public class DefaultTypeReifier implements TypeReifier {
 
 	@Override
 	public Optional<TypeExtractor> getExtractor(final Class<?> c) {
-		return extractors().stream().filter(t -> t.canReify(this, c)).findFirst();
+		return Optional.ofNullable(extractors().getOrDefault(c, null));
 	}
 
 	// -- Helper methods --
 
-	private List<TypeExtractor> extractors() {
+	private Map<Class<?>, TypeExtractor> extractors() {
 		if (extractors == null) initExtractors();
 		return extractors;
 	}
@@ -67,9 +63,13 @@ public class DefaultTypeReifier implements TypeReifier {
 		extractors = getInstances();
 	}
 
-	private List<TypeExtractor> getInstances() {
-		return discoverers.parallelStream() //
+	private Map<Class<?>, TypeExtractor> getInstances() {
+		Map<Class<?>, TypeExtractor> instances = new HashMap<>();
+		discoverers.stream() //
 			.flatMap(d -> d.discover(TypeExtractor.class).stream()) //
-			.sorted().collect(Collectors.toList());
+			// Find the correct set for each extractor and add it.
+			.sorted() //
+			.forEach(e -> instances.putIfAbsent(e.baseClass(), e));
+		return instances;
 	}
 }

@@ -59,7 +59,7 @@ public class RAITypeExtractor extends
 	}
 
 	@Override
-	protected Class<?> getRawType() {
+	public Class<?> baseClass() {
 		return RandomAccessibleInterval.class;
 	}
 

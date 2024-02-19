@@ -56,7 +56,7 @@ public class MapTypeExtractor extends SubTypeExtractor<Map<?, ?>> {
 	}
 
 	@Override
-	protected Class<?> getRawType() {
+	public Class<?> baseClass() {
 		return Map.class;
 	}
 

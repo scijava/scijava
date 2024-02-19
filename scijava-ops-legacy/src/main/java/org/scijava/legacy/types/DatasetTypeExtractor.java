@@ -45,8 +45,8 @@ public class DatasetTypeExtractor implements TypeExtractor {
 	}
 
 	@Override
-	public boolean canReify(TypeReifier r, Class<?> object) {
-		return Dataset.class.isAssignableFrom(object);
+	public Class<?> baseClass() {
+		return Dataset.class;
 	}
 
 	@Override

@@ -110,56 +110,24 @@ public interface TypeReifier {
 		}
 
 		final Class<?> c = o.getClass();
-		final TypeVariable<?>[] typeVars = c.getTypeParameters();
-		final int numVars = typeVars.length;
+		// Here we will store all of our object's resolved type variables.
 
-		if (numVars == 0) {
-			// if the class is synthetic, we are probably missing something due to
-			// type erasure.
-			if (c.isSynthetic()) {
-				log.warn("Object " + o + " is synthetic. " +
-					"Its type parameters are not reifiable and thus will likely cause unintended behavior!");
+		for (final var token : TypeToken.of(c).getTypes()) {
+			Optional<TypeExtractor> opt = getExtractor(token.getRawType());
+			if (opt.isPresent()) {
+				return opt.get().reify(this, o);
 			}
-			// Object has no generic parameters; we are done!
+		}
+
+		final TypeVariable<?>[] typeVars = c.getTypeParameters();
+		if (typeVars.length == 0) {
 			return c;
 		}
-
-		// Object has parameters which need to be resolved. Let's do it.
-
-		// Here we will store all of our object's resolved type variables.
-		final Map<TypeVariable<?>, Type> resolved = new HashMap<>();
-
-		for (final TypeToken<?> token : TypeToken.of(c).getTypes()) {
-			if (resolved.size() == numVars) break; // Got 'em all!
-
-			final Type type = token.getType();
-			if (!Types.containsTypeVars(type)) {
-				// No type variables are buried in this type; it is useless to us!
-				continue;
-			}
-
-			// Populate relevant type variables from the reified supertype!
-			final Map<TypeVariable<?>, Type> vars = //
-				args(o, token.getRawType());
-
-			if (vars != null) {
-				// Remember any resolved type variables.
-				// Note that vars may contain other type variables from other layers
-				// of the generic type hierarchy, which we don't care about here.
-				for (final TypeVariable<?> typeVar : typeVars) {
-					if (vars.containsKey(typeVar)) {
-						resolved.putIfAbsent(typeVar, vars.get(typeVar));
-					}
-				}
-			}
-		}
-
 		// fill in any remaining unresolved type parameters with wildcards
+		final Map<TypeVariable<?>, Type> resolved = new HashMap<>();
 		for (final TypeVariable<?> typeVar : typeVars) {
-			resolved.putIfAbsent(typeVar, new Any());
+			resolved.putIfAbsent(typeVar, Any.class);
 		}
-
-		// now apply all the type variables we resolved
 		return Types.parameterize(c, resolved);
 	}
 

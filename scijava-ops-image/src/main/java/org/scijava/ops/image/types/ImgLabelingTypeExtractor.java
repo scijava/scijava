@@ -50,7 +50,7 @@ public class ImgLabelingTypeExtractor extends
 {
 
 	@Override
-	protected Class<?> getRawType() {
+	public Class<?> baseClass() {
 		return ImgLabeling.class;
 	}
 

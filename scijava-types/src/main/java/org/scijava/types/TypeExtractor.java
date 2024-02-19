@@ -46,9 +46,9 @@ import org.scijava.priority.Priority;
  */
 public interface TypeExtractor extends Prioritized<TypeExtractor> {
 
-	boolean canReify(final TypeReifier r, final Class<?> object);
-
 	Type reify(final TypeReifier r, final Object object);
+
+	Class<?> baseClass();
 
 	@Override
 	default double getPriority() {

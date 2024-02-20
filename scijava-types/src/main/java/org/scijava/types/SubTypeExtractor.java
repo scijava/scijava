@@ -60,7 +60,7 @@ public abstract class SubTypeExtractor<T> implements TypeExtractor {
 	@Override
 	public Type reify(final TypeReifier r, final Object object) {
 		if (!baseClass().isAssignableFrom(object.getClass()))
-			throw new IllegalArgumentException(this +
+			throw new IllegalArgumentException(this.getClass().getName() +
 				" can only reify Objects of Class " + baseClass().getSimpleName() +
 				"!");
 		@SuppressWarnings("unchecked")

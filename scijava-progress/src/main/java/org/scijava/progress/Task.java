@@ -82,6 +82,7 @@ public class Task {
 
 	/** True iff {@link Task#max} has been defined for the current stage */
 	private boolean updateDefined = false;
+	private final boolean silent;
 
 	/** String identifying the task */
 	private final String description;
@@ -93,17 +94,26 @@ public class Task {
 		final Object progressible, //
 		final String description //
 	) {
-		this(progressible, null, description);
+		this(progressible, null, description, false);
 	}
 
-	public Task(
+	public Task( //
 		final Object progressible, //
-		final Task parent, //
-		final String description //
+		final String description, //
+		final boolean silent //
 	) {
+		this(progressible, null, description, silent);
+	}
+
+	public Task(final Object progressible, //
+		final Task parent, //
+		final String description, //
+		final boolean silent)
+	{
 		this.progressible = progressible;
 		this.parent = parent;
 		this.description = description;
+		this.silent = silent;
 	}
 
 	/**
@@ -129,9 +139,9 @@ public class Task {
 	 */
 	public synchronized Task createSubtask( //
 		Object progressible, //
-		String description //
+		String description, boolean silent//
 	) {
-		final Task sub = new Task(progressible, this, description);
+		final Task sub = new Task(progressible, this, description, silent);
 		subTasks.add(sub);
 		return sub;
 	}
@@ -276,11 +286,16 @@ public class Task {
 	}
 
 	/**
-	 * Gets the progressible {@link Object} contributing to this {@link Task}'s progress.
+	 * Gets the progressible {@link Object} contributing to this {@link Task}'s
+	 * progress.
+	 *
 	 * @return the progressible {@link Object}
 	 */
 	public Object progressible() {
 		return progressible;
 	}
 
+	public boolean isSilent() {
+		return silent;
+	}
 }

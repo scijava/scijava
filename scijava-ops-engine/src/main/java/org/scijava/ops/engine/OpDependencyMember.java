@@ -29,6 +29,7 @@
 
 package org.scijava.ops.engine;
 
+import org.scijava.ops.api.Hints;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 
@@ -39,7 +40,7 @@ public interface OpDependencyMember<T> extends Member<T> {
 
 	String getDependencyName();
 
-	boolean isAdaptable();
+	Hints hints();
 
 	// -- Member methods --
 

@@ -72,9 +72,7 @@ public final class Progress {
 		{
 
 			@Override
-			protected ArrayDeque<Task> childValue(
-				ArrayDeque<Task> parentValue)
-		{
+			protected ArrayDeque<Task> childValue(ArrayDeque<Task> parentValue) {
 				// Child threads should be aware of the Tasks operating on the parent.
 				// For example, a progressible Object might wish to parallelize one of
 				// its stages; the child threads must know which Task to update
@@ -159,7 +157,7 @@ public final class Progress {
 	 *          progress.
 	 */
 	public static void register(final Object progressible) {
-		register(progressible, progressible.toString());
+		register(progressible, progressible.toString(), false);
 	}
 
 	/**
@@ -175,16 +173,33 @@ public final class Progress {
 	public static void register(final Object progressible,
 		final String description)
 	{
+		register(progressible, description, false);
+	}
+
+	/**
+	 * Creates a new {@link Task} for {@code progressible}. This method makes the
+	 * assumption that {@code progressible} is responsible for any calls to
+	 * {@link Progress}' progress-reporting API between the time this method is
+	 * called and the time when {@link Progress#complete()} is called.
+	 *
+	 * @param progressible an {@link Object} that would like to report its
+	 *          progress.
+	 * @param description a {@link String} describing {@code progressible}
+	 * @param silent if true, does not ping listeners
+	 */
+	public static void register(final Object progressible,
+		final String description, final boolean silent)
+	{
 		Task t;
 		var deque = progressibleStack.get();
 		var parent = deque.peek();
 		if (parent == null) {
 			// completely new execution hierarchy
-			t = new Task(progressible, description);
+			t = new Task(progressible, description, silent);
 		}
 		else {
 			// part of an existing execution hierarchy
-			t = parent.createSubtask(progressible, description);
+			t = parent.createSubtask(progressible, description, silent);
 		}
 //		deque.push(new Task(progressible, t));
 		deque.push(t);
@@ -199,6 +214,9 @@ public final class Progress {
 	 * @param task an {@link Object} reporting its progress.
 	 */
 	private static void pingListeners(Task task) {
+		if (task.isSilent()) {
+			return;
+		}
 		// Ping object-specific listeners
 		List<ProgressListener> list = progressibleListeners.getOrDefault( //
 			task.progressible(), //

@@ -86,4 +86,15 @@ public final class BaseOpHints {
 
 	}
 
+	public static final class Progress {
+
+		private Progress() {
+			// Prevent instantiation of static utility class
+		}
+
+		public static final String PREFIX = "progress";
+		public static final String TRACK = PREFIX + ".TRACK";
+
+	}
+
 }

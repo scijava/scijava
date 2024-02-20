@@ -13,6 +13,8 @@ import org.scijava.event.EventSubscriber;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.script.ScriptService;
 
+import java.util.Collections;
+
 /**
  * Tests {@link OpEnvironmentService} API.
  *
@@ -69,8 +71,9 @@ public class OpEnvironmentServiceTest {
 		// Expected Pings:
 		// 1 - When the task is started
 		// 2 - When the task maximum is set
-		// 3 - When the task value is set to maximum
-		// 4 - When the task is finished
+		// 3 - When the task value is set to 0
+		// 4 - When the task value is set to maximum
+		// 5 - When the task is finished
 		int[] totalPings = { 0 };
 		EventSubscriber<TaskEvent> e = new EventSubscriber<>() {
 
@@ -81,11 +84,11 @@ public class OpEnvironmentServiceTest {
 				// Assert that the max progress is set on the SECOND event
 				Assertions.assertEquals(totalPings[0] < 2 ? 0L : 100L, t
 					.getProgressMaximum());
-				// Assert that the current progress is set on the THIRD event
-				long expectedValue = totalPings[0] < 3 ? 0L : 100L;
+				// Assert that the current progress is set on the FOURTH event
+				long expectedValue = totalPings[0] < 4 ? 0L : 100L;
 				Assertions.assertEquals(expectedValue, t.getProgressValue());
 				// Assert that the task is finished on the FIFTH event
-				Assertions.assertEquals(totalPings[0] == 4, t.isDone());
+				Assertions.assertEquals(totalPings[0] == 5, t.isDone());
 			}
 
 			@Override
@@ -95,6 +98,7 @@ public class OpEnvironmentServiceTest {
 		};
 		event.subscribe(e);
 		env.binary("math.div").input(2, 3).apply();
-		Assertions.assertEquals(4, totalPings[0]);
+		Assertions.assertEquals(5, totalPings[0]);
+		event.unsubscribe(Collections.singletonList(e));
 	}
 }

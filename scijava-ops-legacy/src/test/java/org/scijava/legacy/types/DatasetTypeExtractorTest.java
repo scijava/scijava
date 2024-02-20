@@ -54,6 +54,9 @@ public class DatasetTypeExtractorTest {
 	@Test
 	public void testDatasetTypeExtractor() {
 		// Create a TypeReifier
+		// NB the use of Discoverer.all(ServiceLoader::load) finds no TypeExtractors
+		// because the scijava-ops-legacy module does not use the TypeExtractor
+		// interface. Thus it cannot actually reify anything.
 		var reifier = new DefaultTypeReifier(Discoverer.all(ServiceLoader::load));
 		// Create a Dataset
 		var img = ArrayImgs.unsignedBytes(10, 10);
@@ -61,12 +64,15 @@ public class DatasetTypeExtractorTest {
 		// NB we pass a null context to avoid a SciJava Common dependency
 		var ds = new DefaultDataset(null, imgPlus);
 		// Assert correct reification
-		// NB without a dependency on scijava-ops-image we cannot reify
-		// the ImgPlus, but asserting an ImgPlus is the reified type
-		// is enough to unit test the TypeExtractor
+		// NB The generic parameter will be an Any due to the emtpy TypeReifier
+		// as described above.
 		var actual = new DatasetTypeExtractor().reify(reifier, ds);
-		var expected = Types.parameterize(ImgPlus.class, new Type[] { new Any() });
+		var expected = Types.parameterize(ImgPlus.class, new Type[] { Any.class });
 		Assertions.assertEquals(expected, actual);
+		// NB In the below check, the generic parameter will be UnsignedByteType,
+		// because the scijava-ops-engine module DOES use TypeExtractr, so it can
+		// discover the implementations. The IterableTypeExtractor is likely the
+		// concrete TypeExtractor utilized to get the UnsignedByteType!
 		OpEnvironment env = OpEnvironment.build();
 		actual = env.genericType(ds);
 		expected = Types.parameterize(ImgPlus.class, new Type[] {

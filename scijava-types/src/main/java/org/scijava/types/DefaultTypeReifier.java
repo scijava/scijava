@@ -30,6 +30,8 @@
 package org.scijava.types;
 
 import org.scijava.discovery.Discoverer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -37,6 +39,8 @@ public class DefaultTypeReifier implements TypeReifier {
 
 	private Map<Class<?>, TypeExtractor> extractors;
 	private final Collection<Discoverer> discoverers;
+
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	public DefaultTypeReifier(Discoverer... discoverers) {
 		this(Arrays.asList(discoverers));
@@ -69,7 +73,14 @@ public class DefaultTypeReifier implements TypeReifier {
 			.flatMap(d -> d.discover(TypeExtractor.class).stream()) //
 			// Find the correct set for each extractor and add it.
 			.sorted() //
-			.forEach(e -> instances.putIfAbsent(e.baseClass(), e));
+			.forEach(e -> {
+				var existing = instances.putIfAbsent(e.baseClass(), e);
+				if (existing != null) {
+					log.warn("TypeExtractor " + e + " ignored - " + existing //
+						+ " has already declared responsibility for reifying Class " //
+						+ e.baseClass());
+				}
+			});
 		return instances;
 	}
 }

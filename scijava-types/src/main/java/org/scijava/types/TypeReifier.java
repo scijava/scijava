@@ -101,29 +101,41 @@ public interface TypeReifier {
 	 * </p>
 	 */
 	default Type reify(final Object o) {
+		// Anys cannot be resolved
 		if (o == null) return new Any();
 
+		// GenericTyped objects are easy - they know their type!
 		if (o instanceof GenericTyped) {
 			// Object implements the GenericTyped interface; it explicitly declares
 			// the generic type by which it wants to be known. This makes life easy!
 			return ((GenericTyped) o).getType();
 		}
 
+		// Otherwise, we'll need to look at the class
 		final Class<?> c = o.getClass();
-		// Here we will store all of our object's resolved type variables.
-
+		// NB TypeToken.getTypes() returns all subtypes before all supertypes.
+		// This means that if we write a TypeExtractor that works on a subtype
+		// and a TypeExtractor that will work on the supertype, we will always use
+		// the subtype TypeExtractor first because we'll encounter the subtype
+		// first.
 		for (final var token : TypeToken.of(c).getTypes()) {
 			Optional<TypeExtractor> opt = getExtractor(token.getRawType());
+			// If token has a TypeExtractor
 			if (opt.isPresent()) {
+				// Use it!
 				return opt.get().reify(this, o);
 			}
 		}
 
+		// Otherwise, we aren't going to gain any extra information
 		final TypeVariable<?>[] typeVars = c.getTypeParameters();
+		// If the class has no type variables, just return it. Note that, for
+		// extensibility reasons, this should happen after we check the type
+		// extractors
 		if (typeVars.length == 0) {
 			return c;
 		}
-		// fill in any remaining unresolved type parameters with wildcards
+		// Otherwise parameterize with all Anys
 		final Map<TypeVariable<?>, Type> resolved = new HashMap<>();
 		for (final TypeVariable<?> typeVar : typeVars) {
 			resolved.putIfAbsent(typeVar, Any.class);

@@ -32,6 +32,8 @@ package org.scijava.ops.engine.struct;
 import java.lang.reflect.Type;
 import java.util.function.Supplier;
 
+import org.scijava.ops.api.Hints;
+import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.engine.OpDependencyMember;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.Member;
@@ -53,6 +55,7 @@ public abstract class AnnotatedOpDependencyMember<T> implements
 
 	private final Type type;
 	private final OpDependency annotation;
+	private final Hints hints;
 
 	/**
 	 * This constructor is ideal for situations where the key and description are
@@ -93,6 +96,7 @@ public abstract class AnnotatedOpDependencyMember<T> implements
 		this.descriptionGenerated = false;
 		this.type = type;
 		this.annotation = annotation;
+		this.hints = new Hints(annotation.hints());
 	}
 
 	public OpDependency getAnnotation() {
@@ -108,7 +112,7 @@ public abstract class AnnotatedOpDependencyMember<T> implements
 
 	@Override
 	public boolean isAdaptable() {
-		return annotation.adaptable();
+		return !hints.contains(BaseOpHints.Adaptation.FORBIDDEN);
 	}
 
 	// -- Member methods --

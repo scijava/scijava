@@ -57,7 +57,7 @@ public class IterableTypeExtractor extends SubTypeExtractor<Iterable<?>> {
 	}
 
 	@Override
-	protected Class<?> getRawType() {
+	public Class<?> baseClass() {
 		return Iterable.class;
 	}
 

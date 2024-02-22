@@ -101,65 +101,45 @@ public interface TypeReifier {
 	 * </p>
 	 */
 	default Type reify(final Object o) {
+		// Anys cannot be resolved
 		if (o == null) return new Any();
 
+		// GenericTyped objects are easy - they know their type!
 		if (o instanceof GenericTyped) {
 			// Object implements the GenericTyped interface; it explicitly declares
 			// the generic type by which it wants to be known. This makes life easy!
 			return ((GenericTyped) o).getType();
 		}
 
+		// Otherwise, we'll need to look at the class
 		final Class<?> c = o.getClass();
-		final TypeVariable<?>[] typeVars = c.getTypeParameters();
-		final int numVars = typeVars.length;
-
-		if (numVars == 0) {
-			// if the class is synthetic, we are probably missing something due to
-			// type erasure.
-			if (c.isSynthetic()) {
-				log.warn("Object " + o + " is synthetic. " +
-					"Its type parameters are not reifiable and thus will likely cause unintended behavior!");
+		// NB TypeToken.getTypes() returns all subtypes before all supertypes.
+		// This means that if we write a TypeExtractor that works on a subtype
+		// and a TypeExtractor that will work on the supertype, we will always use
+		// the subtype TypeExtractor first because we'll encounter the subtype
+		// first.
+		for (final var token : TypeToken.of(c).getTypes()) {
+			Optional<TypeExtractor> opt = getExtractor(token.getRawType());
+			// If token has a TypeExtractor
+			if (opt.isPresent()) {
+				// Use it!
+				return opt.get().reify(this, o);
 			}
-			// Object has no generic parameters; we are done!
+		}
+
+		// Otherwise, we aren't going to gain any extra information
+		final TypeVariable<?>[] typeVars = c.getTypeParameters();
+		// If the class has no type variables, just return it. Note that, for
+		// extensibility reasons, this should happen after we check the type
+		// extractors
+		if (typeVars.length == 0) {
 			return c;
 		}
-
-		// Object has parameters which need to be resolved. Let's do it.
-
-		// Here we will store all of our object's resolved type variables.
+		// Otherwise parameterize with all Anys
 		final Map<TypeVariable<?>, Type> resolved = new HashMap<>();
-
-		for (final TypeToken<?> token : TypeToken.of(c).getTypes()) {
-			if (resolved.size() == numVars) break; // Got 'em all!
-
-			final Type type = token.getType();
-			if (!Types.containsTypeVars(type)) {
-				// No type variables are buried in this type; it is useless to us!
-				continue;
-			}
-
-			// Populate relevant type variables from the reified supertype!
-			final Map<TypeVariable<?>, Type> vars = //
-				args(o, token.getRawType());
-
-			if (vars != null) {
-				// Remember any resolved type variables.
-				// Note that vars may contain other type variables from other layers
-				// of the generic type hierarchy, which we don't care about here.
-				for (final TypeVariable<?> typeVar : typeVars) {
-					if (vars.containsKey(typeVar)) {
-						resolved.putIfAbsent(typeVar, vars.get(typeVar));
-					}
-				}
-			}
-		}
-
-		// fill in any remaining unresolved type parameters with wildcards
 		for (final TypeVariable<?> typeVar : typeVars) {
-			resolved.putIfAbsent(typeVar, new Any());
+			resolved.putIfAbsent(typeVar, Any.class);
 		}
-
-		// now apply all the type variables we resolved
 		return Types.parameterize(c, resolved);
 	}
 

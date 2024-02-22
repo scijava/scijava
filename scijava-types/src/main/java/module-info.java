@@ -45,7 +45,6 @@ module org.scijava.types {
 	uses org.scijava.types.TypeExtractor;
 
 	provides org.scijava.types.TypeExtractor with //
-			org.scijava.types.extractors.ParameterizedTypeExtractor,
 			org.scijava.types.extractors.IterableTypeExtractor,
 			org.scijava.types.extractors.MapTypeExtractor;
 

@@ -52,7 +52,7 @@ public class OutOfBoundsRandomValueFactoryTypeExtractor extends
 {
 
 	@Override
-	protected Class<?> getRawType() {
+	public Class<?> baseClass() {
 		return OutOfBoundsRandomValueFactory.class;
 	}
 

@@ -60,7 +60,7 @@ public class OutOfBoundsFactoryTypeExtractor extends
 	}
 
 	@Override
-	protected Class<?> getRawType() {
+	public Class<?> baseClass() {
 		return OutOfBoundsFactory.class;
 	}
 

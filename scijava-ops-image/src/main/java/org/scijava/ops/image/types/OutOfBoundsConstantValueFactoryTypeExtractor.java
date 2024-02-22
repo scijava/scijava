@@ -50,7 +50,7 @@ public class OutOfBoundsConstantValueFactoryTypeExtractor extends
 {
 
 	@Override
-	protected Class<?> getRawType() {
+	public Class<?> baseClass() {
 		return OutOfBoundsConstantValueFactory.class;
 	}
 

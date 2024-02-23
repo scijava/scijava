@@ -1,19 +1,48 @@
+/*-
+ * #%L
+ * ImageJ2 software for multidimensional image processing and analysis.
+ * %%
+ * Copyright (C) 2014 - 2024 ImageJ2 developers.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
 
-package net.imagej.ops.coloc.saca;
+package org.scijava.ops.image.coloc.saca;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
 
-import net.imagej.ops.coloc.IntComparator;
+import org.scijava.ops.image.coloc.IntComparator;
 
 /**
- * Helper class for the AdaptiveKTau op.
+ * Helper class for Spatially Adaptive Colocalization Analysis (SACA) op.
  *
  * @author Shulei Wang
+ * @author Ellen TA Dobson
  * @author Curtis Rueden
- * @author Ellen T Arena
  */
+
 final class WtKendallTau {
 
 	private static final Comparator<double[]> SORT_X = (row1, row2) -> Double
@@ -38,7 +67,6 @@ final class WtKendallTau {
 		final double swap = sort(rankedindex, rankedw, Integer::compare, index1,
 			index2, w1, w2, cumw);
 		final double tw = totw(W) / 2;
-
 		final double tau = (tw - 2 * swap) / tw;
 
 		return tau;
@@ -68,31 +96,36 @@ final class WtKendallTau {
 			combinedData[i][2] = IW[i];
 		}
 
-		// sort X
+		// sort and rank X
 		Arrays.sort(combinedData, SORT_X);
-
 		rank1D(combinedData, 0, rng);
-		
-		// sort Y
-		Arrays.sort(combinedData, SORT_Y);
 
+		// sort and rank Y
+		Arrays.sort(combinedData, SORT_Y);
 		rank1D(combinedData, 1, rng);
-		
+
 		return combinedData;
 	}
 
-	private static void rank1D(final double[][] combinedData, final int dim, final Random rng) {
+	private static void rank1D(final double[][] combinedData, final int dim,
+		final Random rng)
+	{
 		int start = 0;
 		int end = 1;
 		int rank = 1;
+
 		while (start < combinedData.length) {
-			if(end < combinedData.length && combinedData[start][dim] == combinedData[end][dim]) {
+			if (end < combinedData.length &&
+				combinedData[start][dim] == combinedData[end][dim])
+			{
 				// tied value; count how many tied values there are in a row
 				do {
 					end++;
 				}
-				while(end < combinedData.length && combinedData[start][dim] == combinedData[end][dim]);
-				// now assign unique rank randomly over these indices -- Fisher-Yates shuffle!
+				while (end < combinedData.length &&
+					combinedData[start][dim] == combinedData[end][dim]);
+				// now assign unique rank randomly over these indices -- Fisher-Yates
+				// shuffle!
 				for (int i = start; i < end - 1; i++) {
 					final int newIndex = start + rng.nextInt(end - start);
 					final double[] tmp = combinedData[i];

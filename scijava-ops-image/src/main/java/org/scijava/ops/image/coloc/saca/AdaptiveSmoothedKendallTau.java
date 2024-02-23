@@ -1,95 +1,104 @@
+/*
+ * #%L
+ * ImageJ2 software for multidimensional image processing and analysis.
+ * %%
+ * Copyright (C) 2014 - 2023 ImageJ2 developers.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
 
-package net.imagej.ops.coloc.saca;
+package org.scijava.ops.image.coloc.saca;
 
+import java.lang.Math;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Function;
 
-import net.imglib2.Cursor;
-import net.imglib2.Localizable;
 import net.imglib2.RandomAccess;
-import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.Localizable;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.type.numeric.real.DoubleType;
-import net.imglib2.util.Intervals;
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.img.ImgFactory;
 import net.imglib2.util.Localizables;
 import net.imglib2.util.Util;
 import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
 import net.imglib2.view.composite.CompositeIntervalView;
 import net.imglib2.view.composite.GenericComposite;
+import net.imglib2.type.numeric.real.DoubleType;
 
 /**
- * Adapted from Shulei's original Java code for AdaptiveSmoothedKendallTau from
- * his RKColocal R package.
- * (https://github.com/lakerwsl/RKColocal/blob/master/RKColocal_0.0.1.0000.tar.gz)
+ * Helper class for Spatially Adaptive Colocalization Analysis (SACA) op.
  *
  * @author Shulei Wang
- * @author Curtis Rueden
- * @author Ellen T Arena
+ * @author Ellen TA Dobson
  */
+
 public final class AdaptiveSmoothedKendallTau {
 
 	private AdaptiveSmoothedKendallTau() {}
 
-	public static <I extends RealType<I>, O extends RealType<O>> void execute(
-		final RandomAccessibleInterval<I> image1,
-		final RandomAccessibleInterval<I> image2, final I thres1, final I thres2,
-		final RandomAccessibleInterval<O> result, final long seed)
-	{
-		execute(image1, image2, thres1, thres2, new DoubleType(), result, seed);
-	}
-
-	public static <I extends RealType<I>, T extends RealType<T>, O extends RealType<O>> void execute(
-		final RandomAccessibleInterval<I> image1,
-		final RandomAccessibleInterval<I> image2, final I thres1, final I thres2,
-		final T intermediate, final RandomAccessibleInterval<O> result,
-		final long seed)
-	{
-		final Function<RandomAccessibleInterval<I>, RandomAccessibleInterval<T>> factory =
-			img -> Util.getSuitableImgFactory(img, intermediate).create(img);
-		execute(image1, image2, thres1, thres2, factory, result, seed);
-	}
-
-	public static <I extends RealType<I>, T extends RealType<T>, O extends RealType<O>> void execute(
-		final RandomAccessibleInterval<I> image1,
-		final RandomAccessibleInterval<I> image2, final I thres1, final I thres2,
-		Function<RandomAccessibleInterval<I>, RandomAccessibleInterval<T>> factory,
-		final RandomAccessibleInterval<O> result, final long seed)
+	// TODO: check that output float type is actually what we want here.
+	public static <I extends RealType<I>> RandomAccessibleInterval<DoubleType>
+		execute(final RandomAccessibleInterval<I> image1,
+			final RandomAccessibleInterval<I> image2, final I thres1, final I thres2,
+			final long seed)
 	{
 		final long nr = image1.dimension(1);
 		final long nc = image1.dimension(0);
-		final RandomAccessibleInterval<T> oldtau = factory.apply(image1);
-		final RandomAccessibleInterval<T> newtau = factory.apply(image1);
-		final RandomAccessibleInterval<T> oldsqrtN = factory.apply(image1);
-		final RandomAccessibleInterval<T> newsqrtN = factory.apply(image1);
-		final List<RandomAccessibleInterval<T>> stop = new ArrayList<>();
-		for (int s = 0; s < 3; s++)
-			stop.add(factory.apply(image1));
+		final ImgFactory<DoubleType> factory = Util.getSuitableImgFactory(image1,
+			new DoubleType());
+		final RandomAccessibleInterval<DoubleType> oldtau = factory.create(image1);
+		final RandomAccessibleInterval<DoubleType> newtau = factory.create(image1);
+		final RandomAccessibleInterval<DoubleType> oldsqrtN = factory.create(
+			image1);
+		final RandomAccessibleInterval<DoubleType> newsqrtN = factory.create(
+			image1);
+		final RandomAccessibleInterval<DoubleType> result = factory.create(image1);
+		final List<RandomAccessibleInterval<DoubleType>> stop = new ArrayList<>();
 		final double Dn = Math.sqrt(Math.log(nr * nc)) * 2;
 		final int TU = 15;
 		final int TL = 8;
 		final double Lambda = Dn;
+		final double stepsize = 1.15;
+		final Random rng = new Random(seed);
+		boolean isCheck = false;
+		double size = 1;
+		int intSize;
+
+		for (int s = 0; s < 3; s++)
+			stop.add(factory.create(image1));
 
 		LoopBuilder.setImages(oldsqrtN).forEachPixel(t -> t.setOne());
-
-		double size = 1;
-		final double stepsize = 1.15; // empirically the best, but could have users
-																	// set
-		int intSize;
-		boolean IsCheck = false;
-
-		final Random rng = new Random(seed);
 
 		for (int s = 0; s < TU; s++) {
 			intSize = (int) Math.floor(size);
 			singleiteration(image1, image2, thres1, thres2, stop, oldtau, oldsqrtN,
-				newtau, newsqrtN, result, Lambda, Dn, intSize, IsCheck, rng);
+				newtau, newsqrtN, result, Lambda, Dn, intSize, isCheck, rng);
 			size *= stepsize;
 			if (s == TL) {
-				IsCheck = true;
+				isCheck = true;
 				LoopBuilder.setImages(stop.get(1), stop.get(2), newtau, newsqrtN)
 					.forEachPixel((ts1, ts2, tTau, tSqrtN) -> {
 						ts1.set(tTau);
@@ -97,18 +106,20 @@ public final class AdaptiveSmoothedKendallTau {
 					});
 			}
 		}
+		// get factory and create imgs
+		return result;
 	}
 
-	private static <I extends RealType<I>, T extends RealType<T>, O extends RealType<O>>
-		void singleiteration(final RandomAccessibleInterval<I> image1,
-			final RandomAccessibleInterval<I> image2, final I thres1, final I thres2,
-			final List<RandomAccessibleInterval<T>> stop,
-			final RandomAccessibleInterval<T> oldtau,
-			final RandomAccessibleInterval<T> oldsqrtN,
-			final RandomAccessibleInterval<T> newtau,
-			final RandomAccessibleInterval<T> newsqrtN,
-			final RandomAccessibleInterval<O> result, final double Lambda,
-			final double Dn, final int Bsize, final boolean isCheck, final Random rng)
+	private static <I extends RealType<I>> void singleiteration(
+		final RandomAccessibleInterval<I> image1,
+		final RandomAccessibleInterval<I> image2, final I thres1, final I thres2,
+		final List<RandomAccessibleInterval<DoubleType>> stop,
+		final RandomAccessibleInterval<DoubleType> oldtau,
+		final RandomAccessibleInterval<DoubleType> oldsqrtN,
+		final RandomAccessibleInterval<DoubleType> newtau,
+		final RandomAccessibleInterval<DoubleType> newsqrtN,
+		final RandomAccessibleInterval<DoubleType> result, final double Lambda,
+		final double Dn, final int Bsize, final boolean isCheck, final Random rng)
 	{
 		final double[][] kernel = kernelGenerate(Bsize);
 
@@ -127,25 +138,28 @@ public final class AdaptiveSmoothedKendallTau {
 		final double[] w2 = new double[totnum];
 		final double[] cumw = new double[totnum];
 
-		RandomAccessibleInterval<T> workingImageStack = Views.stack(oldtau, newtau, oldsqrtN, newsqrtN, stop.get(0), stop.get(1), stop.get(2));
-		CompositeIntervalView<T, ? extends GenericComposite<T>> workingImage =
+		RandomAccessibleInterval<DoubleType> workingImageStack = Views.stack(oldtau,
+			newtau, oldsqrtN, newsqrtN, stop.get(0), stop.get(1), stop.get(2));
+		CompositeIntervalView<DoubleType, ? extends GenericComposite<DoubleType>> workingImage =
 			Views.collapse(workingImageStack);
 
-		IntervalView<Localizable> positions = Views.interval( Localizables.randomAccessible(result.numDimensions() ), result );
+		IntervalView<Localizable> positions = Views.interval(Localizables
+			.randomAccessible(result.numDimensions()), result);
 		final long nr = result.dimension(1);
 		final long nc = result.dimension(0);
 		final RandomAccess<I> gdImage1 = image1.randomAccess();
 		final RandomAccess<I> gdImage2 = image2.randomAccess();
-		final RandomAccess<T> gdTau = oldtau.randomAccess();
-		final RandomAccess<T> gdSqrtN = oldsqrtN.randomAccess();
-		LoopBuilder.setImages(positions, result, workingImage).forEachPixel((pos, resPixel, workingPixel) -> {
-			T oldtauPix = workingPixel.get(0);
-			T newtauPix = workingPixel.get(1);
-			T oldsqrtNPix = workingPixel.get(2);
-			T newsqrtNPix = workingPixel.get(3);
-			T stop0Pix = workingPixel.get(4);
-			T stop1Pix = workingPixel.get(5);
-			T stop2Pix = workingPixel.get(6);
+		final RandomAccess<DoubleType> gdTau = oldtau.randomAccess();
+		final RandomAccess<DoubleType> gdSqrtN = oldsqrtN.randomAccess();
+		LoopBuilder.setImages(positions, result, workingImage).forEachPixel((pos,
+			resPixel, workingPixel) -> {
+			DoubleType oldtauPix = workingPixel.get(0);
+			DoubleType newtauPix = workingPixel.get(1);
+			DoubleType oldsqrtNPix = workingPixel.get(2);
+			DoubleType newsqrtNPix = workingPixel.get(3);
+			DoubleType stop0Pix = workingPixel.get(4);
+			DoubleType stop1Pix = workingPixel.get(5);
+			DoubleType stop2Pix = workingPixel.get(6);
 			final long row = pos.getLongPosition(1);
 			updateRange(row, Bsize, nr, rowrange);
 			if (isCheck) {
@@ -157,15 +171,15 @@ public final class AdaptiveSmoothedKendallTau {
 			updateRange(col, Bsize, nc, colrange);
 			getData(Dn, kernel, gdImage1, gdImage2, gdTau, gdSqrtN, LocX, LocY, LocW,
 				rowrange, colrange, totnum);
-			newsqrtNPix.setReal(Math.sqrt(NTau(thres1, thres2, LocW, LocX,
-				LocY)));
+			newsqrtNPix.setReal(Math.sqrt(NTau(thres1, thres2, LocW, LocX, LocY)));
 			if (newsqrtNPix.getRealDouble() <= 0) {
 				newtauPix.setZero();
 				resPixel.setZero();
 			}
 			else {
-				final double tau = WtKendallTau.calculate(LocX, LocY, LocW, combinedData,
-					rankedindex, rankedw, index1, index2, w1, w2, cumw, rng);
+				final double tau = WtKendallTau.calculate(LocX, LocY, LocW,
+					combinedData, rankedindex, rankedw, index1, index2, w1, w2, cumw,
+					rng);
 				newtauPix.setReal(tau);
 				resPixel.setReal(tau * newsqrtNPix.getRealDouble() * 1.5);
 			}
@@ -179,8 +193,8 @@ public final class AdaptiveSmoothedKendallTau {
 					newsqrtNPix.set(oldsqrtNPix);
 				}
 			}
-		});		
-		
+		});
+
 		// TODO: instead of copying pixels here, swap oldTau and newTau every time.
 		// :-)
 		LoopBuilder.setImages(oldtau, newtau, oldsqrtN, newsqrtN).forEachPixel((
@@ -188,7 +202,6 @@ public final class AdaptiveSmoothedKendallTau {
 			tOldTau.set(tNewTau);
 			tOldSqrtN.set(tNewSqrtN);
 		});
-
 	}
 
 	private static <I extends RealType<I>, T extends RealType<T>> void getData(

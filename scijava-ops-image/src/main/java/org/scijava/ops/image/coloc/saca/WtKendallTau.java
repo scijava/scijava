@@ -29,6 +29,7 @@
 
 package org.scijava.ops.image.coloc.saca;
 
+import java.lang.Double;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
@@ -67,7 +68,14 @@ final class WtKendallTau {
 		final double swap = sort(rankedindex, rankedw, Integer::compare, index1,
 			index2, w1, w2, cumw);
 		final double tw = totw(W) / 2;
-		final double tau = (tw - 2 * swap) / tw;
+
+		// compute tau and check for NaN results
+		double tauTemp = (tw - 2 * swap) / tw;
+		if (Double.isNaN(tauTemp)) {
+			tauTemp = 0.0;
+		}
+
+		final double tau = tauTemp;
 
 		return tau;
 	}

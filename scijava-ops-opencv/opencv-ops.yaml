@@ -8,47 +8,61 @@ net.imagej.opencv.ImgToMatConverter:
   getUnsignedByteMat:
     alias: "engine.adapt"
     authors: "Gabriella Turek"
+    priority: "4.0"
   getByteMat:
     alias: "engine.adapt"
     authors: "Gabriella Turek"
+    priority: "3.0"
   getIntMat:
     alias: "engine.adapt"
     authors: "Gabriella Turek"
+    priority: "2.0"
   getFloatMat:
     alias: "engine.adapt"
     authors: "Gabriella Turek"
+    priority: "1.0"
   getDoubleMat:
     alias: "engine.adapt"
     authors: "Gabriella Turek"
+    priority: "0.0"
 
 net.imagej.opencv.MatToImgConverter:
   toUnsignedByteImg:
     alias: "engine.adapt"
     authors: "Gabriella Turek"
+    priority: "4.0"
   toByteImg:
     alias: "engine.adapt"
     authors: "Gabriella Turek"
+    priority: "3.0"
   toIntImg:
     alias: "engine.adapt"
     authors: "Gabriella Turek"
+    priority: "2.0"
   toFloatImg:
     alias: "engine.adapt"
     authors: "Gabriella Turek"
+    priority: "1.0"
   toDoubleImg:
     alias: "engine.adapt"
     authors: "Gabriella Turek"
+    priority: "0.0"
   toByteArray:
     alias: "engine.adapt"
     authors: "Gabriella Turek"
+    priority: "3.0"
   toIntArray:
     alias: "engine.adapt"
     authors: "Gabriella Turek"
+    priority: "2.0"
   toFloatArray:
     alias: "engine.adapt"
     authors: "Gabriella Turek"
+    priority: "1.0"
   toDoubleArray:
     alias: "engine.adapt"
     authors: "Gabriella Turek"
+    priority: "0.0"
 
 org.bytedeco.opencv.global.opencv_imgproc:
   medianBlur:

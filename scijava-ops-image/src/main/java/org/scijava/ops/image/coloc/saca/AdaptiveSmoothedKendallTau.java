@@ -90,7 +90,8 @@ public final class AdaptiveSmoothedKendallTau {
 		for (int s = 0; s < 3; s++)
 			stop.add(factory.create(image1));
 
-		LoopBuilder.setImages(oldsqrtN).forEachPixel(t -> t.setOne());
+		LoopBuilder.setImages(oldsqrtN).multiThreaded().forEachPixel(t -> t
+			.setOne());
 
 		for (int s = 0; s < TU; s++) {
 			intSize = (int) Math.floor(size);
@@ -100,7 +101,7 @@ public final class AdaptiveSmoothedKendallTau {
 			if (s == TL) {
 				isCheck = true;
 				LoopBuilder.setImages(stop.get(1), stop.get(2), newtau, newsqrtN)
-					.forEachPixel((ts1, ts2, tTau, tSqrtN) -> {
+					.multiThreaded().forEachPixel((ts1, ts2, tTau, tSqrtN) -> {
 						ts1.set(tTau);
 						ts2.set(tSqrtN);
 					});
@@ -197,11 +198,11 @@ public final class AdaptiveSmoothedKendallTau {
 
 		// TODO: instead of copying pixels here, swap oldTau and newTau every time.
 		// :-)
-		LoopBuilder.setImages(oldtau, newtau, oldsqrtN, newsqrtN).forEachPixel((
-			tOldTau, tNewTau, tOldSqrtN, tNewSqrtN) -> {
-			tOldTau.set(tNewTau);
-			tOldSqrtN.set(tNewSqrtN);
-		});
+		LoopBuilder.setImages(oldtau, newtau, oldsqrtN, newsqrtN).multiThreaded()
+			.forEachPixel((tOldTau, tNewTau, tOldSqrtN, tNewSqrtN) -> {
+				tOldTau.set(tNewTau);
+				tOldSqrtN.set(tNewSqrtN);
+			});
 	}
 
 	private static <I extends RealType<I>, T extends RealType<T>> void getData(

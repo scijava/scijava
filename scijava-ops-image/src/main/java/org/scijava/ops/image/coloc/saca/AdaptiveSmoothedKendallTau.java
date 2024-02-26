@@ -124,21 +124,6 @@ public final class AdaptiveSmoothedKendallTau {
 	{
 		final double[][] kernel = kernelGenerate(Bsize);
 
-		final long[] rowrange = new long[4];
-		final long[] colrange = new long[4];
-		final int totnum = (2 * Bsize + 1) * (2 * Bsize + 1);
-		final double[] LocX = new double[totnum];
-		final double[] LocY = new double[totnum];
-		final double[] LocW = new double[totnum];
-		final double[][] combinedData = new double[totnum][3];
-		final int[] rankedindex = new int[totnum];
-		final double[] rankedw = new double[totnum];
-		final int[] index1 = new int[totnum];
-		final int[] index2 = new int[totnum];
-		final double[] w1 = new double[totnum];
-		final double[] w2 = new double[totnum];
-		final double[] cumw = new double[totnum];
-
 		RandomAccessibleInterval<DoubleType> workingImageStack = Views.stack(oldtau,
 			newtau, oldsqrtN, newsqrtN, stop.get(0), stop.get(1), stop.get(2));
 		CompositeIntervalView<DoubleType, ? extends GenericComposite<DoubleType>> workingImage =
@@ -146,55 +131,73 @@ public final class AdaptiveSmoothedKendallTau {
 
 		IntervalView<Localizable> positions = Views.interval(Localizables
 			.randomAccessible(result.numDimensions()), result);
-		final long nr = result.dimension(1);
-		final long nc = result.dimension(0);
-		final RandomAccess<I> gdImage1 = image1.randomAccess();
-		final RandomAccess<I> gdImage2 = image2.randomAccess();
-		final RandomAccess<DoubleType> gdTau = oldtau.randomAccess();
-		final RandomAccess<DoubleType> gdSqrtN = oldsqrtN.randomAccess();
-		LoopBuilder.setImages(positions, result, workingImage).forEachPixel((pos,
-			resPixel, workingPixel) -> {
-			DoubleType oldtauPix = workingPixel.get(0);
-			DoubleType newtauPix = workingPixel.get(1);
-			DoubleType oldsqrtNPix = workingPixel.get(2);
-			DoubleType newsqrtNPix = workingPixel.get(3);
-			DoubleType stop0Pix = workingPixel.get(4);
-			DoubleType stop1Pix = workingPixel.get(5);
-			DoubleType stop2Pix = workingPixel.get(6);
-			final long row = pos.getLongPosition(1);
-			updateRange(row, Bsize, nr, rowrange);
-			if (isCheck) {
-				if (stop0Pix.getRealDouble() != 0) {
-					return;
-				}
-			}
-			final long col = pos.getLongPosition(0);
-			updateRange(col, Bsize, nc, colrange);
-			getData(Dn, kernel, gdImage1, gdImage2, gdTau, gdSqrtN, LocX, LocY, LocW,
-				rowrange, colrange, totnum);
-			newsqrtNPix.setReal(Math.sqrt(NTau(thres1, thres2, LocW, LocX, LocY)));
-			if (newsqrtNPix.getRealDouble() <= 0) {
-				newtauPix.setZero();
-				resPixel.setZero();
-			}
-			else {
-				final double tau = WtKendallTau.calculate(LocX, LocY, LocW,
-					combinedData, rankedindex, rankedw, index1, index2, w1, w2, cumw,
-					rng);
-				newtauPix.setReal(tau);
-				resPixel.setReal(tau * newsqrtNPix.getRealDouble() * 1.5);
-			}
+		LoopBuilder.setImages(positions, result, workingImage).multiThreaded()
+			.forEachChunk(chunk -> {
+				final long[] rowrange = new long[4];
+				final long[] colrange = new long[4];
+				final int totnum = (2 * Bsize + 1) * (2 * Bsize + 1);
+				final double[] LocX = new double[totnum];
+				final double[] LocY = new double[totnum];
+				final double[] LocW = new double[totnum];
+				final double[][] combinedData = new double[totnum][3];
+				final int[] rankedindex = new int[totnum];
+				final double[] rankedw = new double[totnum];
+				final int[] index1 = new int[totnum];
+				final int[] index2 = new int[totnum];
+				final double[] w1 = new double[totnum];
+				final double[] w2 = new double[totnum];
+				final double[] cumw = new double[totnum];
+				final long nr = result.dimension(1);
+				final long nc = result.dimension(0);
+				final RandomAccess<I> gdImage1 = image1.randomAccess();
+				final RandomAccess<I> gdImage2 = image2.randomAccess();
+				final RandomAccess<DoubleType> gdTau = oldtau.randomAccess();
+				final RandomAccess<DoubleType> gdSqrtN = oldsqrtN.randomAccess();
+				chunk.forEachPixel((pos, resPixel, workingPixel) -> {
+					DoubleType oldtauPix = workingPixel.get(0);
+					DoubleType newtauPix = workingPixel.get(1);
+					DoubleType oldsqrtNPix = workingPixel.get(2);
+					DoubleType newsqrtNPix = workingPixel.get(3);
+					DoubleType stop0Pix = workingPixel.get(4);
+					DoubleType stop1Pix = workingPixel.get(5);
+					DoubleType stop2Pix = workingPixel.get(6);
+					final long row = pos.getLongPosition(1);
+					updateRange(row, Bsize, nr, rowrange);
+					if (isCheck) {
+						if (stop0Pix.getRealDouble() != 0) {
+							return;
+						}
+					}
+					final long col = pos.getLongPosition(0);
+					updateRange(col, Bsize, nc, colrange);
+					getData(Dn, kernel, gdImage1, gdImage2, gdTau, gdSqrtN, LocX, LocY,
+						LocW, rowrange, colrange, totnum);
+					newsqrtNPix.setReal(Math.sqrt(NTau(thres1, thres2, LocW, LocX,
+						LocY)));
+					if (newsqrtNPix.getRealDouble() <= 0) {
+						newtauPix.setZero();
+						resPixel.setZero();
+					}
+					else {
+						final double tau = WtKendallTau.calculate(LocX, LocY, LocW,
+							combinedData, rankedindex, rankedw, index1, index2, w1, w2, cumw,
+							rng);
+						newtauPix.setReal(tau);
+						resPixel.setReal(tau * newsqrtNPix.getRealDouble() * 1.5);
+					}
 
-			if (isCheck) {
-				final double taudiff = Math.abs(stop1Pix.getRealDouble() - newtauPix
-					.getRealDouble()) * stop2Pix.getRealDouble();
-				if (taudiff > Lambda) {
-					stop0Pix.setOne();
-					newtauPix.set(oldtauPix);
-					newsqrtNPix.set(oldsqrtNPix);
-				}
-			}
-		});
+					if (isCheck) {
+						final double taudiff = Math.abs(stop1Pix.getRealDouble() - newtauPix
+							.getRealDouble()) * stop2Pix.getRealDouble();
+						if (taudiff > Lambda) {
+							stop0Pix.setOne();
+							newtauPix.set(oldtauPix);
+							newsqrtNPix.set(oldsqrtNPix);
+						}
+					}
+				});
+				return null;
+			});
 
 		// TODO: instead of copying pixels here, swap oldTau and newTau every time.
 		// :-)

@@ -59,6 +59,8 @@ public class TestOpParser {
 				+ "\n    parameters:" //
 				+
 				"\n    - {parameter type: INPUT, name: arg0, description: '', type: '[Ljava.lang.Object;'}" //
+				+
+				"\n    - {parameter type: OUTPUT, name: output, description: '', type: java.lang.String}" //
 				+ "\n    authors: [Nobody, Everybody]" //
 				+ "\n    tags: {}" //
 				+ "\n- op:" //

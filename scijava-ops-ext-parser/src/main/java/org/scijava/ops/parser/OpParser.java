@@ -281,6 +281,14 @@ public final class OpParser {
 			}
 			params.add(new OpParameter(paramName, className, ioType, ""));
 		}
+
+		if (containerIndex < 0) {
+			method.getReturnType();
+			OpParameter.IO_TYPE ioType = OpParameter.IO_TYPE.OUTPUT;
+			String paramName = "output";
+			params.add(new OpParameter(paramName, method.getReturnType().getName(),
+				ioType, ""));
+		}
 	}
 
 	/**

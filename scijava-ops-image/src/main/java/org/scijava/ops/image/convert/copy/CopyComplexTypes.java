@@ -27,56 +27,56 @@
  * #L%
  */
 
-package org.scijava.ops.image.convert.copy;
+ package org.scijava.ops.image.convert.copy;
 
-import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.loops.LoopBuilder;
-import net.imglib2.type.numeric.ComplexType;
-import net.imglib2.type.numeric.RealType;
-
-/**
- * Copies the value of one {@link RealType} into another using {@code double}
- * precision.
- *
- * @author Martin Horn (University of Konstanz)
- * @author Gabriel Selzer
- */
-public class CopyComplexTypes {
-
-	/**
-	 * Copies the real and imaginary components from {@code input} to
-	 * {@code output}.
-	 *
-	 * @param input the input
-	 * @param output the preallocated output
-	 * @implNote op names='convert.copy, engine.copy', priority='-10000',
-	 *           type=Computer
-	 */
-	public static <I extends ComplexType<I>, O extends ComplexType<O>> void
-		copyComplexTypes(I input, O output)
-	{
-		output.setReal(input.getRealDouble());
-		output.setImaginary(input.getImaginaryDouble());
-	}
-
-	/**
-	 * Copies the real and imaginary components from each element of {@code input}
-	 * to the corresponding element of {@code output}.
-	 *
-	 * @param input the input
-	 * @param output the preallocated output
-	 * @implNote op names='convert.copy, engine.copy', priority='-10000',
-	 *           type=Computer
-	 */
-	public static < //
-			I extends ComplexType<I>, //
-			O extends ComplexType<O>, //
-			RAII extends RandomAccessibleInterval<I>, //
-			RAIO extends RandomAccessibleInterval<O> //
-	> void copyRAIs(RAII input, RAIO output) {
-		LoopBuilder.setImages(input, output) //
-			.multiThreaded() //
-			.forEachPixel(CopyComplexTypes::copyComplexTypes);
-	}
-
-}
+ import net.imglib2.RandomAccessibleInterval;
+ import net.imglib2.loops.LoopBuilder;
+ import net.imglib2.type.numeric.ComplexType;
+ import net.imglib2.type.numeric.RealType;
+ 
+ /**
+  * Copies the value of one {@link RealType} into another using {@code double}
+  * precision.
+  *
+  * @author Martin Horn (University of Konstanz)
+  * @author Gabriel Selzer
+  */
+ public class CopyComplexTypes {
+ 
+	 /**
+	  * Copies the real and imaginary components from {@code input} to
+	  * {@code output}.
+	  *
+	  * @param input the input
+	  * @param output the preallocated output
+	  * @implNote op names='convert.copy, engine.copy', priority='-10000',
+	  *           type=Computer
+	  */
+	 public static <I extends ComplexType<I>, O extends ComplexType<O>> void
+		 copyComplexTypes(I input, O output)
+	 {
+		 output.setReal(input.getRealDouble());
+		 output.setImaginary(input.getImaginaryDouble());
+	 }
+ 
+	 /**
+	  * Copies the real and imaginary components from each element of {@code input}
+	  * to the corresponding element of {@code output}.
+	  *
+	  * @param input the input
+	  * @param output the preallocated output
+	  * @implNote op names='convert.copy, engine.copy', priority='-10000',
+	  *           type=Computer
+	  */
+	 public static < //
+			 I extends ComplexType<I>, //
+			 O extends ComplexType<O>, //
+			 RAII extends RandomAccessibleInterval<I>, //
+			 RAIO extends RandomAccessibleInterval<O> //
+	 > void copyRAIs(RAII input, RAIO output) {
+		 LoopBuilder.setImages(input, output) //
+			 .multiThreaded() //
+			 .forEachPixel(CopyComplexTypes::copyComplexTypes);
+	 }
+ 
+ }

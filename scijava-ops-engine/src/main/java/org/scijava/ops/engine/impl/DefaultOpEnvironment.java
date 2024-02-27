@@ -670,10 +670,17 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	private OpRequest inferOpRequest(OpDependencyMember<?> dependency,
 		Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
+		final Map<TypeVariable<?>, Type> inferences = new HashMap<>(typeVarAssigns);
+		for (var entry : inferences.entrySet()) {
+			var value = entry.getValue();
+			if (value.equals(Any.class) || value instanceof Any) {
+				inferences.put(entry.getKey(), entry.getKey());
+			}
+		}
 		final Type mappedDependencyType = Types.mapVarToTypes(new Type[] {
-			dependency.getType() }, typeVarAssigns)[0];
+			dependency.getType() }, inferences)[0];
 		final String dependencyName = dependency.getDependencyName();
-		return inferOpRequest(mappedDependencyType, dependencyName, typeVarAssigns);
+		return inferOpRequest(mappedDependencyType, dependencyName, inferences);
 	}
 
 	/**

@@ -167,6 +167,12 @@ public class OpFieldInfo implements OpInfo {
 
 	@Override
 	public StructInstance<?> createOpInstance(List<?> dependencies) {
+		// NB: dependencies are not allowed on field Ops, since field Ops can only
+		// point to a single instance, which allows successive matching calls to
+		// overwrite the dependencies used on earlier matching calls.
+		// This can happen if (a) a single Field is matched multiple times, using
+		// different dependencies, or if (b) multiple fields point to the same
+		// object.
 		if (dependencies != null && !dependencies.isEmpty())
 			throw new IllegalArgumentException(
 				"Op fields are not allowed to have any Op dependencies.");

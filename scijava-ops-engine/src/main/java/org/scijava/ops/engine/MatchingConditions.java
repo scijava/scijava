@@ -70,4 +70,9 @@ public class MatchingConditions {
 		return Objects.hash(request(), hints());
 	}
 
+	@Override
+	public String toString() {
+		return request().toString();
+	}
+
 }

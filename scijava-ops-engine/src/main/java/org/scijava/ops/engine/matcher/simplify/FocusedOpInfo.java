@@ -30,6 +30,7 @@
 package org.scijava.ops.engine.matcher.simplify;
 
 import org.scijava.function.Computers;
+import org.scijava.function.Container;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
@@ -52,6 +53,7 @@ import org.scijava.types.inference.FunctionalInterfaces;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -200,7 +202,7 @@ public class FocusedOpInfo implements OpInfo {
 			.object();
 		// Create Functions to Simplify and then Focus each input
 		List<Function<?, ?>> inputProcessors = resolvePathways(inputSimplifiers,
-			simpleInfo.inputFocusers);
+			simpleInfo);
 		// Create Function to Simplify and then Focus the output
 		Function<?, ?> outputProcessor = resolvePathway(simpleInfo.outputSimplifier,
 			outputFocuser);
@@ -221,19 +223,35 @@ public class FocusedOpInfo implements OpInfo {
 		}
 	}
 
+	private static int ioIndex(Type cls) {
+		var method = FunctionalInterfaces.functionalMethodOf(cls);
+		var params = method.getAnnotatedParameterTypes();
+		for(int i = 0; i < params.length; i++) {
+			if (params[i].isAnnotationPresent(Container.class))
+				return i;
+		}
+		return -1;
+	}
+
+
 	/**
 	 * Calls {@link #resolvePathway} for each pair of simplifier and focuser.
 	 *
 	 * @param simplifiers the simplifiers
-	 * @param focusers the focusers
+	 * @param simpleInfo the simplified info containing input focusers
 	 * @return a list of resolved pathways through the simplifiers and focusers
 	 */
 	private static List<Function<?, ?>> resolvePathways( //
 		List<RichOp<Function<?, ?>>> simplifiers, //
-		List<RichOp<Function<?, ?>>> focusers //
+		SimplifiedOpInfo simpleInfo //
 	) {
+		var inputFocusers = new ArrayList<>(simpleInfo.inputFocusers);
+		int fromIoIndex = ioIndex(simpleInfo.srcInfo().opType());
+		if (fromIoIndex > -1 && fromIoIndex < simplifiers.size() - 1) {
+			inputFocusers.add(inputFocusers.remove(fromIoIndex));
+		}
 		return IntStream.range(0, simplifiers.size()) //
-			.mapToObj(i -> resolvePathway(simplifiers.get(i), focusers.get(i))) //
+			.mapToObj(i -> resolvePathway(simplifiers.get(i), inputFocusers.get(i))) //
 			.collect(Collectors.toList());
 	}
 

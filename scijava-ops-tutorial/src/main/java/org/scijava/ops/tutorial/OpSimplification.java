@@ -44,19 +44,22 @@ import org.scijava.ops.spi.OpField;
  * <p>
  * A more complex type of transformation is called "simplification". This type
  * involves transforming some subset of Op inputs into a different, but similar
- * type. This process makes use of two different Op types:
+ * type. This process makes use of three different Op types:
  * <ul>
  * <li>"engine.simplify" Ops transform user inputs into a broader data type</li>
  * <li>"engine.focus" Ops transform that broader type into the type used by the
  * Op</li>
+ * <li>"engine.copy" Ops are necessary to propagate changes to the simplified
+ * type back to the original parameter</li>
  * </ul>
- * functional type X and returning an Op of functional type Y.
  * <p>
- * Adaptation can be used to call a Function like a Computer, or to call an Op
- * that operates on Doubles like an Op that operates on a List of Doubles.
+ * Simplification can be used to call a method implemented for parameters of one
+ * type on a completely different type. This can be as simple as using an
+ * Integer instead of a Double, or go beyond the Java type assignability with
+ * custom defined type conversion (e.g. images from one library to another).
  * <p>
- * Below, we can see how this works by calling the above Field Op, supposed to
- * work on Doubles, on an array of Doubles[]
+ * Below, we can see how this works by calling the above Field Op, implemented
+ * for Double, on a Double[] instead
  */
 public class OpSimplification implements OpCollection {
 

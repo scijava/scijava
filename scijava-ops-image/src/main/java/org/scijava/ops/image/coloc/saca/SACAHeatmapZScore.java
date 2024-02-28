@@ -54,10 +54,10 @@ import org.scijava.ops.spi.OpDependency;
  * @author Ellen TA Dobson
  * @author Edward Evans
  * @param <I> input type
- * @implNote op names='coloc.saca', priority='100.'
+ * @implNote op names='coloc.saca.heatmapZScore', priority='100.'
  */
 
-public class SACA<I extends RealType<I>> implements
+public class SACAHeatmapZScore<I extends RealType<I>> implements
 	Functions.Arity5<RandomAccessibleInterval<I>, RandomAccessibleInterval<I>, I, I, Long, RandomAccessibleInterval<DoubleType>>
 {
 

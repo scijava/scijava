@@ -60,10 +60,11 @@ public final class AdaptiveSmoothedKendallTau {
 	private AdaptiveSmoothedKendallTau() {}
 
 	// TODO: check that output float type is actually what we want here.
-	public static <I extends RealType<I>> RandomAccessibleInterval<DoubleType>
-		execute(final RandomAccessibleInterval<I> image1,
-			final RandomAccessibleInterval<I> image2, final I thres1, final I thres2,
-			final long seed)
+	public static <I extends RealType<I>> void execute(
+		final RandomAccessibleInterval<I> image1,
+		final RandomAccessibleInterval<I> image2,
+		final RandomAccessibleInterval<DoubleType> result, final I thres1,
+		final I thres2, final long seed)
 	{
 		final long nr = image1.dimension(1);
 		final long nc = image1.dimension(0);
@@ -75,7 +76,6 @@ public final class AdaptiveSmoothedKendallTau {
 			image1);
 		final RandomAccessibleInterval<DoubleType> newsqrtN = factory.create(
 			image1);
-		final RandomAccessibleInterval<DoubleType> result = factory.create(image1);
 		final List<RandomAccessibleInterval<DoubleType>> stop = new ArrayList<>();
 		final double Dn = Math.sqrt(Math.log(nr * nc)) * 2;
 		final int TU = 15;
@@ -107,8 +107,6 @@ public final class AdaptiveSmoothedKendallTau {
 					});
 			}
 		}
-		// get factory and create imgs
-		return result;
 	}
 
 	private static <I extends RealType<I>> void singleiteration(

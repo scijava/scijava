@@ -39,7 +39,7 @@ import net.imglib2.view.Views;
 
 import java.util.function.Function;
 
-import org.scijava.function.Functions;
+import org.scijava.function.Computers;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
@@ -58,7 +58,7 @@ import org.scijava.ops.spi.OpDependency;
  */
 
 public class SACAHeatmapZScore<I extends RealType<I>> implements
-	Functions.Arity5<RandomAccessibleInterval<I>, RandomAccessibleInterval<I>, I, I, Long, RandomAccessibleInterval<DoubleType>>
+	Computers.Arity5<RandomAccessibleInterval<I>, RandomAccessibleInterval<I>, I, I, Long, RandomAccessibleInterval<DoubleType>>
 {
 
 	@OpDependency(name = "image.histogram")
@@ -75,14 +75,15 @@ public class SACAHeatmapZScore<I extends RealType<I>> implements
 	 * @param thres1 threshold 1 value; otsu threshold applied if null
 	 * @param thres2 threshold 2 value; otsu threshold applied if null
 	 * @param seed seed to use; default 0xdeadbeefL
-	 * @return the output
+	 * @param result result image
 	 */
 
 	@Override
-	public RandomAccessibleInterval<DoubleType> apply(
-		final RandomAccessibleInterval<I> image1,
-		final RandomAccessibleInterval<I> image2, @Nullable I thres1,
-		@Nullable I thres2, @Nullable Long seed)
+	public void compute(final RandomAccessibleInterval<I> image1,
+		final RandomAccessibleInterval<I> image2,
+
+		@Nullable I thres1, @Nullable I thres2, @Nullable Long seed,
+		RandomAccessibleInterval<DoubleType> result)
 	{
 		// ensure images have the same dimensions
 		FinalDimensions dims1 = new FinalDimensions(image1.dimensionsAsLongArray());
@@ -92,14 +93,14 @@ public class SACAHeatmapZScore<I extends RealType<I>> implements
 				"Input image dimensions do not match.");
 		}
 
-		// get seed and thresholds if necessary
+		// set seed, compute thresholds and create empty result if necessary
 		if (seed == null) seed = 0xdeadbeefL;
 		if (thres1 == null) thres1 = otsuOp.apply(histOp.apply(Views.iterable(
 			image1)));
 		if (thres2 == null) thres2 = otsuOp.apply(histOp.apply(Views.iterable(
 			image2)));
 
-		return AdaptiveSmoothedKendallTau.execute(image1, image2, thres1, thres2,
+		AdaptiveSmoothedKendallTau.execute(image1, image2, result, thres1, thres2,
 			seed);
 	}
 }

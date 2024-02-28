@@ -38,6 +38,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -61,6 +62,7 @@ import org.scijava.ops.engine.util.Infos;
 import org.scijava.priority.Priority;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
+import org.scijava.types.Any;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 import org.scijava.types.inference.GenericAssignability;
@@ -117,9 +119,19 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 			}
 
 			try {
-				// resolve adaptor dependencies
-				final Map<TypeVariable<?>, Type> adaptorBounds = new HashMap<>();
-				final Map<TypeVariable<?>, Type> dependencyBounds = new HashMap<>();
+				// grab the first type parameter from the OpInfo and search for
+				// an Op that will then be adapted (this will be the only input of the
+				// adaptor since we know it is a Function)
+				Type adaptFrom = adaptor.inputTypes().get(0);
+				Type srcOpType = Types.substituteTypeVariables(adaptFrom, map);
+				final OpRequest srcOpRequest = inferOpRequest(srcOpType, conditions
+					.request().getName(), map);
+				final OpCandidate srcCandidate = matcher.match(MatchingConditions.from(
+					srcOpRequest, adaptationHints), env);
+				// Then, once we've matched an Op, use the bounds of that match
+				// to refine the bounds on the adaptor (for dependency matching)
+				captureTypeVarsFromCandidate(adaptFrom, srcCandidate, map);
+				// Finally, resolve the adaptor's dependencies
 				List<InfoTree> depTrees = Infos.dependencies(adaptor).stream() //
 					.map(d -> {
 						OpRequest request = inferOpRequest(d, map);
@@ -127,53 +139,13 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 						Nil<?>[] args = Arrays.stream(request.getArgs()).map(Nil::of)
 							.toArray(Nil[]::new);
 						Nil<?> outType = Nil.of(request.getOutType());
-						InfoTree tree = env.infoTree(request.getName(), type, args, outType,
+						return env.infoTree(request.getName(), type, args, outType,
 							adaptationHints);
-						// Check if the bounds of the dependency can inform the type of the
-						// adapted Op
-						final Type matchedOpType = tree.info().opType();
-						// Find adaptor type variable bounds fulfilled by matched Op
-						GenericAssignability.inferTypeVariables( //
-							new Type[] { d.getType() }, //
-							new Type[] { matchedOpType }, //
-							dependencyBounds //
-						);
-						for (TypeVariable<?> typeVar : map.keySet()) {
-							// Ignore TypeVariables not present in this particular dependency
-							if (!dependencyBounds.containsKey(typeVar)) continue;
-							Type matchedType = dependencyBounds.get(typeVar);
-							// Resolve any type variables from the dependency request that we
-							// can
-							GenericAssignability.inferTypeVariables( //
-								new Type[] { request.getType() }, //
-								new Type[] { matchedOpType }, //
-								adaptorBounds //
-							);
-							Type mapped = Types.mapVarToTypes(matchedType, adaptorBounds);
-							// If the type variable is more specific now, update it
-							if (mapped != null && Types.isAssignable(mapped, map.get(
-								typeVar)))
-					{
-								map.put(typeVar, mapped);
-							}
-						}
-						dependencyBounds.clear();
-						return tree;
 					}).collect(Collectors.toList());
-				InfoTree adaptorChain = new InfoTree(adaptor, depTrees);
-
-				// grab the first type parameter from the OpInfo and search for
-				// an Op that will then be adapted (this will be the only input of the
-				// adaptor since we know it is a Function)
-				Type srcOpType = Types.substituteTypeVariables(adaptor.inputs().get(0)
-					.getType(), map);
-				final OpRequest srcOpRequest = inferOpRequest(srcOpType, conditions
-					.request().getName(), map);
-				final OpCandidate srcCandidate = matcher.match(MatchingConditions.from(
-					srcOpRequest, adaptationHints), env);
-				map.putAll(srcCandidate.typeVarAssigns());
+				// And return the Adaptor, wrapped up into an OpCandidate
 				Type adapterOpType = Types.substituteTypeVariables(adaptor.output()
 					.getType(), map);
+				InfoTree adaptorChain = new InfoTree(adaptor, depTrees);
 				OpAdaptationInfo adaptedInfo = new OpAdaptationInfo(srcCandidate
 					.opInfo(), adapterOpType, adaptorChain);
 				OpCandidate adaptedCandidate = new OpCandidate(env, conditions
@@ -194,6 +166,41 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 
 		matchingExceptions.stream().forEach(agglomerated::addSuppressed);
 		throw agglomerated;
+	}
+
+	/**
+	 * Helper method that captures all type variable mappings found in the search
+	 * for an Op that could satisfy an adaptor input {@code srcType}.
+	 *
+	 * @param srcType the type of the Op input to an adaptor
+	 * @param candidate the {@link OpCandidate} matched for the adaptor input
+	 * @param map the mapping
+	 */
+	private void captureTypeVarsFromCandidate(Type srcType, OpCandidate candidate,
+		Map<TypeVariable<?>, Type> map)
+	{
+		Consumer<Map<TypeVariable<?>, Type>> typeVarConsumer = assigns -> {
+			for (var key : assigns.keySet()) {
+				if (map.containsKey(key)) {
+					var existing = map.get(key);
+					var replacement = assigns.get(key);
+					// Ignore bounds that are weaker than current bounds.
+					if (Types.isAssignable(existing, replacement) && !existing.equals(
+						Any.class) && !(existing instanceof Any))
+					{
+						continue;
+					}
+				}
+				map.put(key, assigns.get(key));
+			}
+		};
+		// First, capture assignments between the Adaptor and the matched Op
+		final Map<TypeVariable<?>, Type> srcBounds = new HashMap<>();
+		GenericAssignability.inferTypeVariables(new Type[] { srcType }, new Type[] {
+			candidate.getType() }, srcBounds);
+		typeVarConsumer.accept(srcBounds);
+		// Then, capture assignments between the original OpRef and the matched Op
+		typeVarConsumer.accept(candidate.typeVarAssigns());
 	}
 
 	private OpRequest inferOpRequest(OpDependencyMember<?> dependency,

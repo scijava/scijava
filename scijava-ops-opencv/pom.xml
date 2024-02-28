@@ -312,6 +312,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
+			<artifactId>scijava-ops-image</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
 			<artifactId>scijava-io-http</artifactId>
 			<scope>test</scope>
 		</dependency>

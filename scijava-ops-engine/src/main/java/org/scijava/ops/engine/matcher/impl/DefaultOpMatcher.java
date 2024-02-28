@@ -80,7 +80,8 @@ public class DefaultOpMatcher implements OpMatcher {
 		final OpEnvironment env //
 	) {
 		// Develop help message
-		var msg = "No match found! Perhaps you meant: \n" + env.help(request);
+		var msg = "No match found! Perhaps you meant: \n" + env.helpVerbose(
+			request);
 		OpMatchingException agglomerated = new OpMatchingException(msg);
 		list.forEach(agglomerated::addSuppressed);
 		return agglomerated;

@@ -29,12 +29,6 @@
 
 package org.scijava.ops.engine.matcher.simplify;
 
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
-
 import org.scijava.function.Computers;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
@@ -54,6 +48,14 @@ import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
+import org.scijava.types.inference.FunctionalInterfaces;
+
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Type;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * A {@link SimplifiedOpInfo} whose inputs and outputs have been focused to
@@ -193,21 +195,21 @@ public class FocusedOpInfo implements OpInfo {
 	@Override
 	public StructInstance<?> createOpInstance(List<?> dependencies) {
 		// Original Op
-		final Object op = simpleInfo.srcInfo().createOpInstance(dependencies)
+		final Object op = simpleInfo.srcInfo() //
+			.createOpInstance(dependencies) //
 			.object();
 		// Create Functions to Simplify and then Focus each input
-		List<Function<?, ?>> inputProcessors = new ArrayList<>();
-		for (int i = 0; i < inputSimplifiers.size(); i++) {
-			inputProcessors.add(combineFunctions(inputSimplifiers.get(i),
-				simpleInfo.inputFocusers.get(i)));
-		}
+		List<Function<?, ?>> inputProcessors = resolvePathways(inputSimplifiers,
+			simpleInfo.inputFocusers);
 		// Create Function to Simplify and then Focus the output
-		Function<?, ?> outputProcessor = combineFunctions(
-			simpleInfo.outputSimplifier, outputFocuser);
-		// Grab the output copier if it exists.
-		Computers.Arity1<?, ?> outputCopier = copyOp == null ? null : copyOp
-			.asOpType();
-
+		Function<?, ?> outputProcessor = resolvePathway(simpleInfo.outputSimplifier,
+			outputFocuser);
+		// Grab the output copier
+		Boolean[] insIgnored = inputProcessors.stream() //
+			.map(IGNORED::equals) //
+			.toArray(Boolean[]::new);
+		boolean outIgnored = IGNORED.equals(outputProcessor);
+		Computers.Arity1<?, ?> outputCopier = resolveCopier(insIgnored, outIgnored);
 		try {
 			Object simpleOp = SimplificationUtils.javassistOp(op, this,
 				inputProcessors, outputProcessor, outputCopier);
@@ -220,8 +222,24 @@ public class FocusedOpInfo implements OpInfo {
 	}
 
 	/**
-	 * Helper function that coerces type variables, so that we can call
-	 * {@link Function#andThen(Function)} and return the composition.
+	 * Calls {@link #resolvePathway} for each pair of simplifier and focuser.
+	 *
+	 * @param simplifiers the simplifiers
+	 * @param focusers the focusers
+	 * @return a list of resolved pathways through the simplifiers and focusers
+	 */
+	private static List<Function<?, ?>> resolvePathways( //
+		List<RichOp<Function<?, ?>>> simplifiers, //
+		List<RichOp<Function<?, ?>>> focusers //
+	) {
+		return IntStream.range(0, simplifiers.size()) //
+			.mapToObj(i -> resolvePathway(simplifiers.get(i), focusers.get(i))) //
+			.collect(Collectors.toList());
+	}
+
+	/**
+	 * Helper function that coerces a simplifier and focuser into a single
+	 * {@link Function}.
 	 *
 	 * @param f1 the first {@link Function}, mapping X to Y
 	 * @param f2 the second {@link Function}, mapping Y to Z
@@ -231,18 +249,44 @@ public class FocusedOpInfo implements OpInfo {
 	 * @param <U> the output type of the second function.
 	 */
 	@SuppressWarnings("unchecked")
-	private static <T, U> Function<?, ?> combineFunctions(
-		RichOp<Function<?, ?>> f1, RichOp<Function<?, ?>> f2)
+	private static <T, U> Function<?, ?> resolvePathway(RichOp<Function<?, ?>> f1,
+		RichOp<Function<?, ?>> f2)
 	{
+		// Ignore pathway if it is unnecessary
+		Type fromType = Ops.info(f1).inputTypes().get(0);
+		Type toType = Ops.info(f2).outputType();
+		if (Types.isAssignable(fromType, toType)) {
+			return IGNORED;
+		}
+		// Otherwise, use andThen to combine functions
 		Function<?, T> foo1 = (Function<?, T>) f1.asOpType();
 		Function<T, U> foo2 = (Function<T, U>) f2.asOpType();
 		return foo1.andThen(foo2);
+	}
+
+	private Computers.Arity1<?, ?> resolveCopier(Boolean[] insIgnored,
+		boolean outIgnored)
+	{
+		// Sometimes, there is no Copy Op (i.e. for Functions)
+		if (copyOp == null) return null;
+		// Sometimes, we don't need to copy, and the "copier" can just be an
+		// identity
+		Class<?> srcType = FunctionalInterfaces.findFrom(simpleInfo.srcInfo()
+			.opType());
+		int ioIndex = SimplificationUtils.findMutableArgIndex(srcType);
+		if (ioIndex > -1 && insIgnored[ioIndex] && outIgnored) {
+			return (T, U) -> {};
+		}
+		// Otherwise, we need a copier
+		return copyOp.asOpType();
 	}
 
 	@Override
 	public AnnotatedElement getAnnotationBearer() {
 		return simpleInfo.getAnnotationBearer();
 	}
+
+	private static final Function<?, ?> IGNORED = (t) -> t;
 
 	@Override
 	public String version() {

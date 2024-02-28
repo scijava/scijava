@@ -226,13 +226,11 @@ public class FocusedOpInfo implements OpInfo {
 	private static int ioIndex(Type cls) {
 		var method = FunctionalInterfaces.functionalMethodOf(cls);
 		var params = method.getAnnotatedParameterTypes();
-		for(int i = 0; i < params.length; i++) {
-			if (params[i].isAnnotationPresent(Container.class))
-				return i;
+		for (int i = 0; i < params.length; i++) {
+			if (params[i].isAnnotationPresent(Container.class)) return i;
 		}
 		return -1;
 	}
-
 
 	/**
 	 * Calls {@link #resolvePathway} for each pair of simplifier and focuser.

@@ -158,6 +158,9 @@ public class TestOpenCV {
 
 		// Blur with ops
 		builder.compute();
+		// NB: would be nice to be able to adapt to function but currently cannot
+		// because https://github.com/imagej/imagej-opencv/issues/2
+//		ops.ternary(TEST_OP).input(src, size, stDev).outType(Mat.class).apply();
 
 		// Blur directly with JavaCV
 		GaussianBlur(src, opencvFish, size, stDev);

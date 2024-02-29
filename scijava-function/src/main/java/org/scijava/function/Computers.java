@@ -2710,6 +2710,8 @@ public final class Computers {
 	}
 
 	static {
+		ALL_COMPUTERS[0][0] = Computers.Arity0.class;
+		ALL_ARITIES.put(Computers.Arity0.class, 0);
 		ALL_COMPUTERS[1][0] = Computers.Arity1_1.class;
 		ALL_ARITIES.put(Computers.Arity1_1.class, 1);
 		ALL_COMPUTERS[1][1] = Computers.Arity1.class;

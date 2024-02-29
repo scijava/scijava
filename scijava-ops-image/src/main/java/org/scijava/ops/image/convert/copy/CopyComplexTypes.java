@@ -29,30 +29,54 @@
 
 package org.scijava.ops.image.convert.copy;
 
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.loops.LoopBuilder;
+import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
-
-import org.scijava.function.Computers;
 
 /**
  * Copies the value of one {@link RealType} into another using {@code double}
  * precision.
  *
  * @author Martin Horn (University of Konstanz)
- * @implNote op names='convert.copy'
+ * @author Gabriel Selzer
  */
-public class CopyRealTypes<I extends RealType<I>, O extends RealType<O>>
-	implements Computers.Arity1<I, O>
-{
+public class CopyComplexTypes {
 
 	/**
-	 * TODO
+	 * Copies the real and imaginary components from {@code input} to
+	 * {@code output}.
 	 *
-	 * @param input
-	 * @param output
+	 * @param input the input
+	 * @param output the preallocated output
+	 * @implNote op names='convert.copy, engine.copy', priority='-10000',
+	 *           type=Computer
 	 */
-	@Override
-	public void compute(final I input, final O output) {
+	public static <I extends ComplexType<I>, O extends ComplexType<O>> void
+		copyComplexTypes(I input, O output)
+	{
 		output.setReal(input.getRealDouble());
+		output.setImaginary(input.getImaginaryDouble());
+	}
+
+	/**
+	 * Copies the real and imaginary components from each element of {@code input}
+	 * to the corresponding element of {@code output}.
+	 *
+	 * @param input the input
+	 * @param output the preallocated output
+	 * @implNote op names='convert.copy, engine.copy', priority='-10000',
+	 *           type=Computer
+	 */
+	public static < //
+			I extends ComplexType<I>, //
+			O extends ComplexType<O>, //
+			RAII extends RandomAccessibleInterval<I>, //
+			RAIO extends RandomAccessibleInterval<O> //
+	> void copyRAIs(RAII input, RAIO output) {
+		LoopBuilder.setImages(input, output) //
+			.multiThreaded() //
+			.forEachPixel(CopyComplexTypes::copyComplexTypes);
 	}
 
 }

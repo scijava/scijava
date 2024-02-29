@@ -44,12 +44,7 @@ import java.util.function.Function;
 import org.scijava.function.Computers;
 import org.scijava.function.Container;
 import org.scijava.function.Mutable;
-import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpMatchingException;
-import org.scijava.ops.api.OpRequest;
-import org.scijava.ops.api.RichOp;
+import org.scijava.ops.api.*;
 import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.engine.util.Infos;
 import org.scijava.ops.engine.util.internal.AnnotationUtils;
@@ -203,19 +198,61 @@ public final class SimplificationUtils {
 			outSimplifier = org.scijava.ops.api.Ops.rich(identity);
 		}
 
-		RichOp<Computers.Arity1<?, ?>> copyOp = null;
-		int ioIndex = SimplificationUtils.findMutableArgIndex(Types.raw(info
-			.opType()));
-		if (ioIndex > -1) {
-			var nil = Nil.of(outType(info.outputType(), outSimplifier));
-			var copier = env.unary("engine.copy", h).inType(nil).outType(nil)
-				.computer();
-			copyOp = org.scijava.ops.api.Ops.rich(copier);
-		}
+		RichOp<Computers.Arity1<?, ?>> copyOp = getCopyOp(env, info, inFocusers,
+			outSimplifier, h);
 		return new SimplifiedOpInfo(info, inFocusers, outSimplifier, copyOp);
 	}
 
-	private static Type outType(Type originalOutput,
+	/**
+	 * Helper method that finds the {@code engine.copy} Op needed for a
+	 * {@link SimplifiedOpInfo}
+	 *
+	 * @param env the {@link OpEnvironment} containing {@code engine.copy} Ops.
+	 * @param info the original {@link OpInfo}.
+	 * @param inFocusers the {@code engine.focus} Ops used to focus the inputs to
+	 *          the simplified Op
+	 * @param outSimplifier the {@code engine.simplify} Op used to simplify the
+	 *          output for the simplified Op
+	 * @param h {@link Hints} to be used in matching the copy Op.
+	 * @return a {@code engine.copy} Op
+	 */
+	private static RichOp<Computers.Arity1<?, ?>> getCopyOp( //
+		OpEnvironment env, //
+		OpInfo info, //
+		List<RichOp<Function<?, ?>>> inFocusers, //
+		RichOp<Function<?, ?>> outSimplifier, //
+		Hints h //
+	) {
+		int ioIndex = SimplificationUtils.findMutableArgIndex(Types.raw(info
+			.opType()));
+		// If IO index is -1, output is returned - no need to copy.
+		if (ioIndex == -1) {
+			return null;
+		}
+		// Otherwise, we need an Op to convert the simple output back into the
+		// pre-focused input
+		// Determine simple output type.
+		var simpleOut = outType(info.outputType(), outSimplifier);
+		// Determine unfocused input type.
+		var focuserInfo = Ops.info(inFocusers.get(ioIndex));
+		Map<TypeVariable<?>, Type> typeAssigns = new HashMap<>();
+		GenericAssignability.inferTypeVariables( //
+			new Type[] { focuserInfo.outputType() }, //
+			new Type[] { info.inputTypes().get(ioIndex) }, //
+			typeAssigns //
+		);
+		var unfocusedInput = Nil.of(Types.mapVarToTypes( //
+			focuserInfo.inputTypes().get(0), //
+			typeAssigns //
+		));
+		// Match a copier
+		return Ops.rich(env.unary("engine.copy", h) //
+			.inType(simpleOut) //
+			.outType(unfocusedInput) //
+			.computer());
+	}
+
+	private static Nil<?> outType(Type originalOutput,
 		RichOp<Function<?, ?>> outputSimplifier)
 	{
 		Map<TypeVariable<?>, Type> typeAssigns = new HashMap<>();
@@ -225,8 +262,9 @@ public final class SimplificationUtils {
 			new Type[] { originalOutput }, //
 			typeAssigns //
 		);
-		return Types.mapVarToTypes(org.scijava.ops.api.Ops.info(outputSimplifier)
-			.outputType(), typeAssigns);
+		Type outType = Types.mapVarToTypes(org.scijava.ops.api.Ops.info(
+			outputSimplifier).outputType(), typeAssigns);
+		return Nil.of(outType);
 	}
 
 	/**

@@ -139,6 +139,8 @@ public final class Computers {
 #end##foreach($arity)
 
 	static {
+		ALL_COMPUTERS[0][0] = Computers.Arity0.class;
+		ALL_ARITIES.put(Computers.Arity0.class, 0);
 #foreach($arity in $arities)
 #end
 #foreach($arity in [1..$maxArity])

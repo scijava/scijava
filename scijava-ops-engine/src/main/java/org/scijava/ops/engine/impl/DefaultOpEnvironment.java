@@ -85,10 +85,7 @@ import org.scijava.ops.spi.OpDependency;
 import org.scijava.priority.Priority;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
-import org.scijava.types.DefaultTypeReifier;
-import org.scijava.types.Nil;
-import org.scijava.types.TypeReifier;
-import org.scijava.types.Types;
+import org.scijava.types.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -633,10 +630,28 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		Map<TypeVariable<?>, Type> typeVarAssigns, Hints hints)
 	{
 
+		// All type variables mapped to Any must be removed before matching
+		// dependencies. Consider the case of matching a request for a
+		// Function<Any, Double>, which has matched an Op that is a
+		// Function<List<N extends Number>, Double> with a Function<N, Double>
+		// dependency. In this case, N maps to Any because List<N> maps to Any. We
+		// cannot simply search for a Function<Any, Double> dependency, however,
+		// because that might return a Function<Byte, Double> which would not work
+		// for an arbitrary input of type <N extends Number>. Therefore, the correct
+		// bound on the dependency is Function<N extends Number, Double> i.e. we
+		// must ignore the Any.
+		Map<TypeVariable<?>, Type> dependencyTypeVarAssigns = new HashMap<>();
+		for (var entry : typeVarAssigns.entrySet()) {
+			var value = entry.getValue();
+			if (!value.equals(Any.class) && !(value instanceof Any)) {
+				dependencyTypeVarAssigns.put(entry.getKey(), entry.getValue());
+			}
+		}
+		// Then, match dependencies
 		final List<RichOp<?>> dependencyChains = new ArrayList<>();
-
 		for (final OpDependencyMember<?> dependency : Infos.dependencies(info)) {
-			final OpRequest dep = inferOpRequest(dependency, typeVarAssigns);
+			final OpRequest dep = inferOpRequest(dependency,
+				dependencyTypeVarAssigns);
 			try {
 				// TODO: Consider a new Hint implementation
 				Hints hintsCopy = hints.plus(DependencyMatching.IN_PROGRESS,

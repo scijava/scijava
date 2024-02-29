@@ -32,17 +32,24 @@ package org.scijava.ops.engine.matcher;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Producer;
+import org.scijava.ops.api.Ops;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaSource;
 import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpField;
+import org.scijava.ops.spi.OpMethod;
+import org.scijava.priority.Priority;
 import org.scijava.types.Any;
 
 /**
@@ -104,6 +111,36 @@ public class MatchingWithAnyTest extends AbstractTestEnvironment implements
 		final StringContainer out = ops.op("test.integerAndLongAndNotAnyComputer")
 			.arity2().input(in1, in2).outType(StringContainer.class).apply();
 		assertEquals(Long.toString(in1 + in2), out.getValue());
+	}
+
+	@Test
+	public void testMatchingAnyWithDependencies() {
+		var op = ops.op("test.AnyWithDependencies").arity1().inType(Any.class)
+			.outType(Double.class).function();
+		var richOp = Ops.rich(op);
+		var info = Ops.info(op);
+		Assertions.assertTrue(info.toString().contains("dependentAnyOp"));
+		var dInfo = richOp.infoTree().dependencies().get(0);
+		Assertions.assertTrue(dInfo.toString().contains("lowPriority"));
+	}
+
+	@OpMethod(names = "test.AnyWithDependencies", type = Function.class)
+	public static <N extends Number> Double dependentAnyOp(@OpDependency(
+		name = "test.AnyDependent") Function<N, Double> e, List<N> input)
+	{
+		return input.stream().map(e).reduce(0.0, Double::sum);
+	}
+
+	@OpMethod(names = "test.AnyDependent", type = Function.class,
+		priority = Priority.HIGH)
+	public static Double highPriorityDependingOp(String input) {
+		throw new IllegalStateException("This should not be called!");
+	}
+
+	@OpMethod(names = "test.AnyDependent", type = Function.class,
+		priority = Priority.LOW)
+	public static Double lowPriorityDependingOp(Number input) {
+		return input.doubleValue();
 	}
 
 	@OpField(names = "test.functionAndLongToLong")

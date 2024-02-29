@@ -205,7 +205,7 @@ public class FocusedOpInfo implements OpInfo {
 			simpleInfo);
 		// Create Function to Simplify and then Focus the output
 		Function<?, ?> outputProcessor = resolvePathway(simpleInfo.outputSimplifier,
-			outputFocuser);
+			outputFocuser, Ops.info(outputFocuser).outputType());
 		// Grab the output copier
 		Boolean[] insIgnored = inputProcessors.stream() //
 			.map(IGNORED::equals) //
@@ -243,13 +243,16 @@ public class FocusedOpInfo implements OpInfo {
 		List<RichOp<Function<?, ?>>> simplifiers, //
 		SimplifiedOpInfo simpleInfo //
 	) {
+		var types = new ArrayList<>(simpleInfo.srcInfo().inputTypes());
 		var inputFocusers = new ArrayList<>(simpleInfo.inputFocusers);
 		int fromIoIndex = ioIndex(simpleInfo.srcInfo().opType());
 		if (fromIoIndex > -1 && fromIoIndex < simplifiers.size() - 1) {
 			inputFocusers.add(inputFocusers.remove(fromIoIndex));
+			types.add(types.remove(fromIoIndex));
 		}
 		return IntStream.range(0, simplifiers.size()) //
-			.mapToObj(i -> resolvePathway(simplifiers.get(i), inputFocusers.get(i))) //
+			.mapToObj(i -> resolvePathway(simplifiers.get(i), inputFocusers.get(i),
+				types.get(i))) //
 			.collect(Collectors.toList());
 	}
 
@@ -259,6 +262,9 @@ public class FocusedOpInfo implements OpInfo {
 	 *
 	 * @param f1 the first {@link Function}, mapping X to Y
 	 * @param f2 the second {@link Function}, mapping Y to Z
+	 * @param toType the original destination {@link Type} for this pathway. If
+	 *          the input to this pathway can be directly cast to this type, we
+	 *          can ignore this pathway.
 	 * @return the composition, mapping X to Z
 	 * @param <T> the output type of the first function, which is also the input
 	 *          type of the second function.
@@ -266,11 +272,10 @@ public class FocusedOpInfo implements OpInfo {
 	 */
 	@SuppressWarnings("unchecked")
 	private static <T, U> Function<?, ?> resolvePathway(RichOp<Function<?, ?>> f1,
-		RichOp<Function<?, ?>> f2)
+		RichOp<Function<?, ?>> f2, Type toType)
 	{
 		// Ignore pathway if it is unnecessary
 		Type fromType = Ops.info(f1).inputTypes().get(0);
-		Type toType = Ops.info(f2).outputType();
 		if (Types.isAssignable(fromType, toType)) {
 			return IGNORED;
 		}

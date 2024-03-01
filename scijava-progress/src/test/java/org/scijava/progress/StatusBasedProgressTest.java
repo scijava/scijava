@@ -37,9 +37,12 @@ import org.junit.jupiter.api.Test;
 public class StatusBasedProgressTest {
 
 	public final Function<Integer, Integer> statusSpinningTask = (in) -> {
+		final Task task = new Task(this.statusSpinningTask);
+		task.start();
 		for (int i = 0; i < in; i++) {
-			Progress.setStatus("Setting status: " + (i + 1));
+			task.setStatus("Setting status: " + (i + 1));
 		}
+		task.complete();
 		return in;
 	};
 
@@ -47,7 +50,7 @@ public class StatusBasedProgressTest {
 	public void testStatusUpdate() {
 		Function<Integer, Integer> progressible = statusSpinningTask;
 		int numIterations = 10;
-		Progress.addListener(progressible, new ProgressListener() {
+		ProgressListeners.addListener(progressible, new ProgressListener() {
 
 			boolean registered = false;
 			int numUpdates = 0;
@@ -68,9 +71,7 @@ public class StatusBasedProgressTest {
 			}
 
 		});
-		Progress.register(progressible);
 		progressible.apply(numIterations);
-		Progress.complete();
 	}
 
 }

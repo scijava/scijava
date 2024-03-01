@@ -29,14 +29,17 @@
 
 package org.scijava.progress;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
+import static org.scijava.progress.ProgressListeners.globalListeners;
+import static org.scijava.progress.ProgressListeners.progressibleListeners;
+
 /**
  * Keeps track of progress associated with an execution of progressable code.
- * {@link Task}s should <b>not</b> be updated by the code itself; it should be
- * update via {@link Progress#update()}.
  *
  * @author Gabriel Selzer
  */
@@ -48,7 +51,7 @@ public class Task {
 	private final Object progressible;
 
 	/** Parent of this task */
-	private final Task parent;
+	private Task parent;
 
 	/** Subtasks created by this task */
 	private final Set<Task> subTasks = new HashSet<>();
@@ -90,6 +93,10 @@ public class Task {
 	/** Computation status as defined by the task */
 	private String status = "Executing...";
 
+	public Task( final Object progressible ) {
+		this(progressible, progressible.toString());
+	}
+
 	public Task( //
 		final Object progressible, //
 		final String description //
@@ -116,6 +123,12 @@ public class Task {
 		this.silent = silent;
 	}
 
+	public void start() {
+		reset();
+		ProgressListeners.register(this);
+		ping();
+	}
+
 	/**
 	 * Records the completion of this {@link Task}
 	 */
@@ -129,21 +142,17 @@ public class Task {
 			throw new IllegalStateException("Task declared " + numSubTasks +
 				" subtasks, however only " + subTasksCompleted + " were completed!");
 		this.completed = true;
+		ping();
 		if (parent != null) parent.recordSubtaskCompletion(this);
+		ProgressListeners.unregister(this);
 	}
 
 	/**
 	 * Creates a subtask, recording it to keep track of progress.
-	 *
-	 * @return the subtask.
 	 */
-	public synchronized Task createSubtask( //
-		Object progressible, //
-		String description, boolean silent//
-	) {
-		final Task sub = new Task(progressible, this, description, silent);
-		subTasks.add(sub);
-		return sub;
+	public synchronized void addSubtask( Task subTask ) {
+		subTasks.add(subTask);
+		subTask.parent = this;
 	}
 
 	/**
@@ -220,6 +229,7 @@ public class Task {
 			task + " is not a subtask of Task " + this);
 		subTasks.remove(task);
 		if (tasksDefined) subTasksCompleted.getAndIncrement();
+		ping();
 	}
 
 	private void resetStage() {
@@ -248,6 +258,7 @@ public class Task {
 	 */
 	public void setStatus(final String status) {
 		this.status = status;
+		ping();
 	}
 
 	/**
@@ -269,7 +280,15 @@ public class Task {
 	}
 
 	/**
-	 * Used by a progressible {@link Object}, through {@link Progress} to
+	 * Used by a progressible {@link Object}, through {@link ProgressListeners} to
+	 * increment progress by 1.
+	 */
+	public void update() {
+		update(1);
+	}
+
+	/**
+	 * Used by a progressible {@link Object}, through {@link ProgressListeners} to
 	 * increment progress
 	 *
 	 * @param numElements the number of elements completed
@@ -283,6 +302,34 @@ public class Task {
 		if (current.longValue() == max.longValue()) {
 			resetStage();
 		}
+		ping();
+	}
+
+	/**
+	 * Activates all callback {@link ProgressListener}s listening for progress
+	 * updates on executions of {@code o}
+	 */
+	public void ping() {
+		// Ping object-specific listeners
+		List<ProgressListener> list = progressibleListeners.getOrDefault( //
+			progressible(), //
+			Collections.emptyList() //
+		);
+		synchronized (list) {
+			list.forEach(l -> l.acknowledgeUpdate(this));
+		}
+		// Ping global listeners
+		synchronized (globalListeners) {
+			globalListeners.forEach(l -> l.acknowledgeUpdate(this));
+		}
+	}
+
+	public void reset() {
+		current.set(0);
+		max.set(1);
+		stagesCompleted.set(0);
+		subTasksCompleted.set(0);
+		completed = false;
 	}
 
 	/**
@@ -298,4 +345,9 @@ public class Task {
 	public boolean isSilent() {
 		return silent;
 	}
+
+	public boolean isSilent() {
+		return silent;
+	}
+
 }

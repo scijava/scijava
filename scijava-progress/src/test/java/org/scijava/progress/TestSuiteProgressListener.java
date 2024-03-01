@@ -26,7 +26,7 @@ public class TestSuiteProgressListener implements ProgressListener {
 	@Override
 	public void acknowledgeUpdate(Task task) {
 		if (id != null && !task.description().equals(id)) return;
-		// Registration ping
+		// Started ping
 		if (!registered) {
 			registered = true;
 			return;

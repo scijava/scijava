@@ -36,7 +36,7 @@ import java.util.function.Function;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
-import org.scijava.progress.Progress;
+import org.scijava.progress.ProgressListeners;
 import org.scijava.progress.ProgressListener;
 import org.scijava.progress.StandardOutputProgressLogger;
 import org.scijava.types.Nil;
@@ -45,7 +45,7 @@ import org.scijava.types.Nil;
  * Long-running Ops can be confusing for users. By defining and then reporting
  * progress, Ops can tell the user how far it has gotten in the computation.
  * <p>
- * At the heart of progress reporting is the {@link Progress} class, responsible
+ * At the heart of progress reporting is the {@link ProgressListeners} class, responsible
  * for conveying Ops' progress to users. SciJava Progress defines progress on a
  * scale of [0, 1], where:
  * <ul>
@@ -54,7 +54,7 @@ import org.scijava.types.Nil;
  * <li>values in between define work in progress</li>
  * </ul>
  * <p>
- * Ops tell the {@link Progress} a few things:
+ * Ops tell the {@link ProgressListeners} a few things:
  * <ol>
  * <li>The number of "stages" of computation, including any "subtasks"</li>
  * <li>The number of tasks in each stage</li>
@@ -82,7 +82,7 @@ public class ReportingProgress implements OpCollection {
 		// Define the number of stages, and the number of subtasks
 		// One stage - finding the primes
 		// Zero subtasks - we call no other Ops
-		Progress.defineTotalProgress(1, 0);
+		ProgressListeners.defineTotalProgress(1, 0);
 		// Progress is defined within the range [0, 1],
 		// where 0 denotes an Op that has not yet started.
 		// and 1 denotes completion.
@@ -90,7 +90,7 @@ public class ReportingProgress implements OpCollection {
 		// setStageMax is used to define the denominator for the Progress fraction.
 		// If you have N discrete packets of computation, you should call
 		// Progress.setStageMax(N)
-		Progress.setStageMax(numPrimes);
+		ProgressListeners.setStageMax(numPrimes);
 		// Find each of our primes
 		while (primes.size() < numPrimes) {
 			sqrt = (long) Math.sqrt(++val);
@@ -107,7 +107,7 @@ public class ReportingProgress implements OpCollection {
 				primes.add(val);
 				// Progress.update() increments the numerator of Progress,
 				// identifying that one (more) discrete packet of computation is done.
-				Progress.update();
+				ProgressListeners.update();
 			}
 		}
 
@@ -124,7 +124,7 @@ public class ReportingProgress implements OpCollection {
 		// To listen to Op progress updates, the ProgressListener must be registered
 		// through the Progress API. To listen to all Op executions, use the
 		// following call:
-		Progress.addGlobalListener(l);
+		ProgressListeners.addGlobalListener(l);
 		// If listening to every Op would be overwhelming, the Progress API also
 		// allows ProgressListeners to be registered for a specific Op, using the
 		// following call:

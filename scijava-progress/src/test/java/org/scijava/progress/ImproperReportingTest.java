@@ -29,12 +29,11 @@
 
 package org.scijava.progress;
 
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.IntStream;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Tests that improper progress reporting results in failure
@@ -47,13 +46,20 @@ public class ImproperReportingTest {
 	 * A progressible task that tries to update its progress without defining what
 	 * that progress means
 	 */
-	public final Function<Integer, int[]> arrayCreator = (size) -> {
-		int[] arr = new int[size];
-		for (int i = 0; i < arr.length; i++) {
-			arr[i] = 1;
-			Progress.update();
+	public final Function<Integer, int[]> arrayCreator = new Function<>() {
+
+		Task t = new Task(this);
+
+		@Override
+		public int[] apply(Integer size) {
+			int[] arr = new int[size];
+			for (int i = 0; i < arr.length; i++) {
+				arr[i] = 1;
+				t.update();
+			}
+			t.complete();
+			return arr;
 		}
-		return arr;
 	};
 
 	/**
@@ -62,18 +68,24 @@ public class ImproperReportingTest {
 	 */
 	@Test
 	public void testDefineTooFewStages() {
-		assertISEFromTask( //
-			// task
-			() -> {
+		assertISEFromTask(new Supplier<String>() {
+
+			private final Task task = new Task(this);
+
+			@Override
+			public String get() {
+				task.start();
 				// defines 2 stages
-				Progress.defineTotalProgress(2);
+				task.defineTotalProgress(2);
 				// but completes 3 stages
 				for (int i = 0; i < 3; i++) {
-					Progress.setStageMax(1);
-					Progress.update();
+					task.setStageMax(1);
+					task.update();
 				}
+				task.complete();
 				return "All done";
-			});
+			}
+		});
 	}
 
 	/**
@@ -82,26 +94,29 @@ public class ImproperReportingTest {
 	 */
 	@Test
 	public void testDefineTooManyStages() {
-		assertISEFromTask( //
-			// task
-			() -> {
+		assertISEFromTask(new Supplier<String>() {
+			private final Task task = new Task(this);
+
+			@Override
+			public String get() {
+					task.start();
 				// defines 3 stages
-				Progress.defineTotalProgress(3);
+				task.defineTotalProgress(3);
 				// but completes 2 stages
 				for (int i = 0; i < 2; i++) {
-					Progress.setStageMax(1);
-					Progress.update();
+					task.setStageMax(1);
+					task.update();
 				}
+				task.complete();
 				return "All done!";
-			});
+			}
+		});
 	}
 
 	/**
 	 * A testing subtask
 	 */
-	private final Function<Integer, Integer> subtask = (in) -> {
-		return in;
-	};
+	private final Function<Integer, Integer> subtask = in -> in;
 
 	/**
 	 * Tests that tasks who updated progress past the defined maximum result in a
@@ -109,20 +124,23 @@ public class ImproperReportingTest {
 	 */
 	@Test
 	public void testDefineTooFewSubTasks() {
-		assertISEFromTask( //
-			// task
-			() -> {
+		assertISEFromTask(new Supplier<String>() {
+			private final Task task = new Task(this);
+
+			@Override
+			public String get() {
+					task.start();
 				// define 2 subtasks
-				Progress.defineTotalProgress(0, 2);
+				task.defineTotalProgress(0, 2);
 				// but complete 3 subtasks
 				for (int i = 0; i < 3; i++) {
 					// Call subtask
-					Progress.register(subtask);
 					subtask.apply(4);
-					Progress.complete();
 				}
+				task.complete();
 				return "All done!";
-			});
+			}
+		});
 	}
 
 	/**
@@ -131,20 +149,23 @@ public class ImproperReportingTest {
 	 */
 	@Test
 	public void testDefineTooManySubTasks() {
-		assertISEFromTask( //
-			// task
-			() -> {
+		assertISEFromTask(new Supplier<String>() {
+			private final Task task = new Task(this);
+
+			@Override
+			public String get() {
+				task.start();
 				// define 3 subtasks
-				Progress.defineTotalProgress(0, 3);
+				task.defineTotalProgress(0, 3);
 				// but run 2 subtasks
 				for (int i = 0; i < 2; i++) {
 					// Call subtask
-					Progress.register(subtask);
 					subtask.apply(4);
-					Progress.complete();
 				}
+				task.complete();
 				return "All done!";
-			});
+			}
+		});
 	}
 
 	/**
@@ -154,19 +175,13 @@ public class ImproperReportingTest {
 	@Test
 	public void testUpdateWithoutSetMax() {
 		Function<Integer, int[]> task = arrayCreator;
-		Progress.register(task);
 		Assertions.assertThrows(IllegalStateException.class, () -> task.apply(3));
-		Progress.complete();
 	}
 
 	// -- Helper methods -- //
 
 	private void assertISEFromTask(Supplier<?> task) {
-		Assertions.assertThrows(IllegalStateException.class, () -> {
-			Progress.register(task);
-			task.get();
-			Progress.complete();
-		});
+		Assertions.assertThrows(IllegalStateException.class, task::get);
 	}
 
 }

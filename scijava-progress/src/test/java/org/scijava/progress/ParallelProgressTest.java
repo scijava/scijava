@@ -50,42 +50,48 @@ public class ParallelProgressTest {
 	 * @output the number of iterations performed
 	 */
 	public final Function<Integer, Integer> iterator = (iterations) -> {
+		final Task itrTask = new Task(this.iterator);
+		itrTask.start();
 		// set up progress reporter
-		Progress.defineTotalProgress(1);
-		Progress.setStageMax(iterations);
+		itrTask.defineTotalProgress(1);
+		itrTask.setStageMax(iterations);
 
 		for (int i = 0; i < iterations; i++) {
-			Progress.update();
+			itrTask.update();
 		}
+		itrTask.complete();
 		return iterations;
 	};
+
 
 	/**
 	 * A task that utilizes parallel progress reporting in one of its stages
 	 */
-	public final BiFunction<Integer, Integer, Integer> parallelProgressTask = (
-		numThreads, iterationsPerThread) -> {
+	public final BiFunction<Integer, Integer, Integer> parallelProgressTask =
+		(numThreads, iterationsPerThread) -> {
+			Task pptTask = new Task(this.parallelProgressTask);
+			pptTask.start();
+			pptTask.defineTotalProgress(1);
+			pptTask.setStageMax(numThreads * iterationsPerThread);
+			Thread[] threadArr = new Thread[numThreads];
 
-		Progress.defineTotalProgress(1);
-		Progress.setStageMax(numThreads * iterationsPerThread);
-		Thread[] threadArr = new Thread[numThreads];
-
-		for (int i = 0; i < numThreads; i++) {
-			threadArr[i] = new Thread(() -> {
-				for (int j = 0; j < iterationsPerThread; j++) {
-					Progress.update();
-				}
-			});
-			threadArr[i].start();
-		}
-		try {
-			for (int i = 0; i < numThreads; i++)
-				threadArr[i].join();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+			for (int i = 0; i < numThreads; i++) {
+				threadArr[i] = new Thread(() -> {
+					for (int j = 0; j < iterationsPerThread; j++) {
+						pptTask.update();
+					}
+				});
+				threadArr[i].start();
+			}
+			try {
+				for (int i = 0; i < numThreads; i++)
+					threadArr[i].join();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			pptTask.complete();
+			return null;
 	};
 
 	/**
@@ -99,15 +105,14 @@ public class ParallelProgressTest {
 	public static Integer parallelDepTask(Function<Integer, Integer> dep,
 		Integer numThreads, Integer iterationsPerThread)
 	{
-
-		Progress.defineTotalProgress(0, numThreads);
+		final Task task = new Task(ParallelProgressTest.class, "parallelDepTask");
+		task.start();
+		task.defineTotalProgress(0, numThreads);
 		Thread[] threadArr = new Thread[numThreads];
 
 		for (int i = 0; i < numThreads; i++) {
 			threadArr[i] = new Thread(() -> {
-				Progress.register(dep);
 				dep.apply(iterationsPerThread);
-				Progress.complete();
 			});
 			threadArr[i].start();
 		}
@@ -118,6 +123,7 @@ public class ParallelProgressTest {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+		task.complete();
 		return numThreads * iterationsPerThread;
 	}
 
@@ -130,7 +136,7 @@ public class ParallelProgressTest {
 		BiFunction<Integer, Integer, Integer> task = parallelProgressTask;
 		int numThreads = 4;
 		int iterationsPerThread = 1000;
-		Progress.addListener(task, new ProgressListener() {
+		ProgressListeners.addListener(task, new ProgressListener() {
 
 			double lastProgress = 0;
 
@@ -142,9 +148,7 @@ public class ParallelProgressTest {
 			}
 
 		});
-		Progress.register(task);
 		task.apply(numThreads, iterationsPerThread);
-		Progress.complete();
 	}
 
 	/**
@@ -157,7 +161,7 @@ public class ParallelProgressTest {
 			iterator, in1, in2);
 		int numThreads = 4;
 		int iterationsPerThread = 1000;
-		Progress.addListener(task, new ProgressListener() {
+		ProgressListeners.addListener(task, new ProgressListener() {
 
 			double lastProgress = 0;
 
@@ -172,9 +176,7 @@ public class ParallelProgressTest {
 			}
 
 		});
-		Progress.register(task);
 		task.apply(numThreads, iterationsPerThread);
-		Progress.complete();
 	}
 
 }

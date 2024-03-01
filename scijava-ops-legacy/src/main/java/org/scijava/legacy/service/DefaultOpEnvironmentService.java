@@ -5,7 +5,7 @@ import org.scijava.ops.api.OpEnvironment;
 import org.scijava.plugin.Attr;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.progress.Progress;
+import org.scijava.progress.ProgressListeners;
 import org.scijava.progress.ProgressListener;
 import org.scijava.progress.Task;
 import org.scijava.script.ScriptService;
@@ -41,7 +41,7 @@ public class DefaultOpEnvironmentService extends AbstractService implements
 
 		// Set up progress, if StatusService available
 		if (taskService != null) {
-			Progress.addGlobalListener(new SciJavaProgressListener(taskService));
+			ProgressListeners.addGlobalListener(new SciJavaProgressListener(taskService));
 		}
 	}
 

@@ -40,7 +40,7 @@ import net.imglib2.type.numeric.integer.LongType;
 import net.imglib2.util.Intervals;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
-import org.scijava.progress.Progress;
+import org.scijava.progress.ProgressListeners;
 import org.scijava.progress.Task;
 
 import java.util.function.Function;
@@ -73,7 +73,7 @@ public final class LiftComputersToRAI {
 		Computers.Arity1<RAII1, RAIO> lift11(Computers.Arity1<I1, O> computer)
 	{
 		return (raiInput1, raiOutput) -> {
-			Task t = Progress.currentTask();
+			Task t = ProgressListeners.currentTask();
 			t.defineTotalProgress(1);
 			t.setStageMax(Intervals.numElements(raiInput1));
 			LoopBuilder.setImages(raiInput1, raiOutput).multiThreaded() //
@@ -83,7 +83,7 @@ public final class LiftComputersToRAI {
 						computer.compute(i1, out);
 						counter.inc();
 					});
-					Progress.update(counter.getIntegerLong(), t);
+					ProgressListeners.update(counter.getIntegerLong(), t);
 					return null;
 				});
 		};

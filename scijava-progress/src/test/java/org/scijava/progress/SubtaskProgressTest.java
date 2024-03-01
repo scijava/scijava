@@ -44,19 +44,24 @@ public class SubtaskProgressTest {
 	/**
 	 * Function that updates its progress {@code iterations} times during its
 	 * operation.
-	 *
-	 * @input iterations the number of times the task should update its progress.
-	 * @output the number of iterations performed
 	 */
-	public final Function<Integer, Integer> iterator = (iterations) -> {
-		// set up progress reporter
-		Progress.defineTotalProgress(1);
-		Progress.setStageMax(iterations);
+	public final Function<Integer, Integer> iterator = new Function<>() {
+		private int i = 1;
 
-		for (int i = 0; i < iterations; i++) {
-			Progress.update();
+		@Override
+		public Integer apply(Integer iterations) {
+			Task t = new Task(this, "Pass " + i++ + " on dependency");
+			t.start();
+			// set up progress reporter
+			t.defineTotalProgress(1);
+			t.setStageMax(iterations);
+
+			for (int i = 0; i < iterations; i++) {
+				t.update();
+			}
+			t.complete();
+			return iterations;
 		}
-		return iterations;
 	};
 
 	/**
@@ -71,7 +76,7 @@ public class SubtaskProgressTest {
 
 		int numIterations = 100;
 		String id = "Running a complex Task with subtasks";
-		Progress.addListener(progressible, new ProgressListener() {
+		ProgressListeners.addListener(progressible, new ProgressListener() {
 
 			int subtasksCompleted = 0;
 			double middleStageCurrent = 1;
@@ -101,9 +106,7 @@ public class SubtaskProgressTest {
 			}
 
 		});
-		Progress.register(progressible, id);
 		progressible.apply(numIterations);
-		Progress.complete();
 	}
 
 	/**
@@ -118,7 +121,7 @@ public class SubtaskProgressTest {
 
 		int numIterations = 100;
 		String id = "Running a task with subtasks";
-		Progress.addListener(progressible, new ProgressListener() {
+		ProgressListeners.addListener(progressible, new ProgressListener() {
 
 			double currentIterations = 0;
 			final double maxIterations = 3;
@@ -137,10 +140,7 @@ public class SubtaskProgressTest {
 			}
 
 		});
-		Progress.register(progressible, id);
 		progressible.apply(numIterations);
-		Progress.complete();
-
 	}
 
 }
@@ -155,6 +155,7 @@ class DependentComplexProgressReportingTask implements
 	Function<Integer, Integer>
 {
 
+	private static String id = "Running a complex Task with subtasks";
 	private Function<Integer, Integer> dependency;
 
 	public DependentComplexProgressReportingTask(
@@ -165,24 +166,21 @@ class DependentComplexProgressReportingTask implements
 
 	@Override
 	public Integer apply(Integer t) {
-		Progress.defineTotalProgress(1, 2);
-		callDep(t, 1);
+		Task task = new Task(this, id);
+		task.defineTotalProgress(1, 2);
+		task.start();
 
-		Progress.setStageMax(t);
+		dependency.apply(t);
+
+		task.setStageMax(t);
 		for (int i = 0; i < t; i++) {
-			Progress.update();
+			task.update();
 		}
 
-		callDep(t, 2);
+		dependency.apply(t);
+		task.complete();
 		return 3 * t;
 	}
-
-	private void callDep(Integer t, Integer i) {
-		Progress.register(dependency, "Pass " + i + " on dependency");
-		dependency.apply(t);
-		Progress.complete();
-	}
-
 }
 
 /**
@@ -201,12 +199,13 @@ class DependentProgressReportingTask implements Function<Integer, Integer> {
 
 	@Override
 	public Integer apply(Integer t) {
-		Progress.defineTotalProgress(0, 3);
+		Task task = new Task(this, "Running a task with subtasks");
+		task.defineTotalProgress(0, 3);
+		task.start();
 		for (int i = 0; i < 3; i++) {
-			Progress.register(dependency, "Pass " + i + " of dependency");
 			dependency.apply(t);
-			Progress.complete();
 		}
+		task.complete();
 		return 3 * t;
 	}
 

@@ -37,7 +37,8 @@ import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.api.RichOp;
 import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.engine.MatchingConditions;
-import org.scijava.progress.Progress;
+import org.scijava.progress.ProgressListeners;
+import org.scijava.progress.Task;
 
 /**
  * An abstract implementation of {@link RichOp}. While this class has <b>no
@@ -90,7 +91,7 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 	@Override
 	public void preprocess(Object... inputs) {
 		boolean silent = !hints().contains(BaseOpHints.Progress.TRACK);
-		Progress.register(this, conditions.request().getName(), silent);
+		ProgressListeners.register(this, conditions.request().getName(), silent);
 	}
 
 	@Override
@@ -98,7 +99,7 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 		if (record) {
 			env.history().logOutput(this, output);
 		}
-		Progress.complete();
+		ProgressListeners.complete();
 	}
 
 	@Override
@@ -116,4 +117,11 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 		return instance().toString();
 	}
 
+	private static class OpTask extends Task {
+
+		public OpTask(Object progressible, String description, boolean silent)
+		{
+			super(progressible, description, silent);
+		}
+	}
 }

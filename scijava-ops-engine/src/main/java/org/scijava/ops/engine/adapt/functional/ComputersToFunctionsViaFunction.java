@@ -39,6 +39,7 @@ import java.util.function.Function;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
+import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
@@ -57,7 +58,7 @@ public class ComputersToFunctionsViaFunction {
 		Function<Computers.Arity1<I, O>, Function<I, O>>, Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		Function<I, O> creator;
 
 		/**
@@ -80,7 +81,7 @@ public class ComputersToFunctionsViaFunction {
 		Function<Computers.Arity2<I1, I2, O>, BiFunction<I1, I2, O>>, Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		Function<I1, O> creator;
 
 		/**
@@ -104,7 +105,7 @@ public class ComputersToFunctionsViaFunction {
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		Function<I1, O> creator;
 
 		/**
@@ -131,7 +132,7 @@ public class ComputersToFunctionsViaFunction {
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		Function<I1, O> creator;
 
 		/**
@@ -158,7 +159,7 @@ public class ComputersToFunctionsViaFunction {
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		Function<I1, O> creator;
 
 		/**
@@ -185,7 +186,7 @@ public class ComputersToFunctionsViaFunction {
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		Function<I1, O> creator;
 
 		/**
@@ -212,7 +213,7 @@ public class ComputersToFunctionsViaFunction {
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		Function<I1, O> creator;
 
 		/**
@@ -239,7 +240,7 @@ public class ComputersToFunctionsViaFunction {
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		Function<I1, O> creator;
 
 		/**
@@ -266,7 +267,7 @@ public class ComputersToFunctionsViaFunction {
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		Function<I1, O> creator;
 
 		/**
@@ -293,7 +294,7 @@ public class ComputersToFunctionsViaFunction {
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		Function<I1, O> creator;
 
 		/**
@@ -321,7 +322,7 @@ public class ComputersToFunctionsViaFunction {
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		Function<I1, O> creator;
 
 		/**
@@ -350,7 +351,7 @@ public class ComputersToFunctionsViaFunction {
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		Function<I1, O> creator;
 
 		/**
@@ -381,7 +382,7 @@ public class ComputersToFunctionsViaFunction {
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		Function<I1, O> creator;
 
 		/**
@@ -412,7 +413,7 @@ public class ComputersToFunctionsViaFunction {
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		Function<I1, O> creator;
 
 		/**
@@ -443,7 +444,7 @@ public class ComputersToFunctionsViaFunction {
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		Function<I1, O> creator;
 
 		/**
@@ -474,7 +475,7 @@ public class ComputersToFunctionsViaFunction {
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		Function<I1, O> creator;
 
 		/**

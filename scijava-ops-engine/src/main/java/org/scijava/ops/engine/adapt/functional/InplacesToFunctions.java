@@ -40,6 +40,7 @@ import java.util.function.Function;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
+import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
 import org.scijava.ops.spi.OpCollection;
@@ -60,9 +61,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Function<Inplaces.Arity1<IO>, Function<IO, IO>>, Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -85,9 +86,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Function<Inplaces.Arity2_1<IO, I2>, BiFunction<IO, I2, IO>>, Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -110,9 +111,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Function<Inplaces.Arity2_2<I1, IO>, BiFunction<I1, IO, IO>>, Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -136,9 +137,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -164,9 +165,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -192,9 +193,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -220,9 +221,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -248,9 +249,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -276,9 +277,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -304,9 +305,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -332,9 +333,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -360,9 +361,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -388,9 +389,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -416,9 +417,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -444,9 +445,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -472,9 +473,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -500,9 +501,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -528,9 +529,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -556,9 +557,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -584,9 +585,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -612,9 +613,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -641,9 +642,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -670,9 +671,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -699,9 +700,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -728,9 +729,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -757,9 +758,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -786,9 +787,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -815,9 +816,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -844,9 +845,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -874,9 +875,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -904,9 +905,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -934,9 +935,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -964,9 +965,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -994,9 +995,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1024,9 +1025,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1054,9 +1055,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1084,9 +1085,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1114,9 +1115,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1144,9 +1145,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1174,9 +1175,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1204,9 +1205,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1234,9 +1235,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1264,9 +1265,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1294,9 +1295,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1324,9 +1325,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1354,9 +1355,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1384,9 +1385,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1414,9 +1415,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1444,9 +1445,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1474,9 +1475,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1504,9 +1505,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1534,9 +1535,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1564,9 +1565,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1594,9 +1595,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1624,9 +1625,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1654,9 +1655,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1684,9 +1685,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1714,9 +1715,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1744,9 +1745,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1774,9 +1775,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1804,9 +1805,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1834,9 +1835,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1864,9 +1865,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1894,9 +1895,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1924,9 +1925,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1954,9 +1955,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -1984,9 +1985,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2017,9 +2018,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2050,9 +2051,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2083,9 +2084,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2116,9 +2117,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2149,9 +2150,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2182,9 +2183,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2215,9 +2216,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2248,9 +2249,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2281,9 +2282,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2313,9 +2314,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2345,9 +2346,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2377,9 +2378,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2410,9 +2411,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2443,9 +2444,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2476,9 +2477,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2509,9 +2510,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2542,9 +2543,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2575,9 +2576,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2608,9 +2609,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2641,9 +2642,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2674,9 +2675,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2707,9 +2708,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2740,9 +2741,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2773,9 +2774,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2806,9 +2807,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2839,9 +2840,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2872,9 +2873,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2905,9 +2906,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2938,9 +2939,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -2971,9 +2972,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3004,9 +3005,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3037,9 +3038,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3070,9 +3071,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3103,9 +3104,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3136,9 +3137,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3169,9 +3170,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3202,9 +3203,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3235,9 +3236,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3268,9 +3269,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3301,9 +3302,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3334,9 +3335,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3367,9 +3368,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3400,9 +3401,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3433,9 +3434,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3466,9 +3467,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3499,9 +3500,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3532,9 +3533,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3565,9 +3566,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3598,9 +3599,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3631,9 +3632,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3664,9 +3665,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3697,9 +3698,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3730,9 +3731,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3763,9 +3764,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3797,9 +3798,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3831,9 +3832,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3865,9 +3866,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3899,9 +3900,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3933,9 +3934,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -3967,9 +3968,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -4001,9 +4002,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -4035,9 +4036,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -4069,9 +4070,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -4103,9 +4104,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -4137,9 +4138,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -4171,9 +4172,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -4205,9 +4206,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -4239,9 +4240,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**
@@ -4273,9 +4274,9 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**

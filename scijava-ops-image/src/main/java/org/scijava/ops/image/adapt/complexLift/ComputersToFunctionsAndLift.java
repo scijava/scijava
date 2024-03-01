@@ -61,9 +61,9 @@ public final class ComputersToFunctionsAndLift {
 		implements Function<Computers.Arity1<I1, O>, Function<RAII1, RAIO>>, Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity1<I1, O>, Computers.Arity1<RAII1, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity1<RAII1, RAIO>, Function<RAII1, RAIO>> adapter;
 
 		/**
@@ -90,9 +90,9 @@ public final class ComputersToFunctionsAndLift {
 		Function<Computers.Arity2<I1, I2, O>, BiFunction<RAII1, I2, RAIO>>, Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity2<I1, I2, O>, Computers.Arity2<RAII1, I2, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity2<RAII1, I2, RAIO>, BiFunction<RAII1, I2, RAIO>> adapter;
 
 		/**
@@ -121,9 +121,9 @@ public final class ComputersToFunctionsAndLift {
 		Function<Computers.Arity2<I1, I2, O>, BiFunction<RAII1, RAII2, RAIO>>, Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity2<I1, I2, O>, Computers.Arity2<RAII1, RAII2, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity2<RAII1, RAII2, RAIO>, BiFunction<RAII1, RAII2, RAIO>> adapter;
 
 		/**
@@ -154,9 +154,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity3<I1, I2, I3, O>, Computers.Arity3<RAII1, I2, I3, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity3<RAII1, I2, I3, RAIO>, Functions.Arity3<RAII1, I2, I3, RAIO>> adapter;
 
 		/**
@@ -187,9 +187,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity3<I1, I2, I3, O>, Computers.Arity3<RAII1, RAII2, I3, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity3<RAII1, RAII2, I3, RAIO>, Functions.Arity3<RAII1, RAII2, I3, RAIO>> adapter;
 
 		/**
@@ -220,9 +220,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity3<I1, I2, I3, O>, Computers.Arity3<RAII1, RAII2, RAII3, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity3<RAII1, RAII2, RAII3, RAIO>, Functions.Arity3<RAII1, RAII2, RAII3, RAIO>> adapter;
 
 		/**
@@ -254,9 +254,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity4<I1, I2, I3, I4, O>, Computers.Arity4<RAII1, I2, I3, I4, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity4<RAII1, I2, I3, I4, RAIO>, Functions.Arity4<RAII1, I2, I3, I4, RAIO>> adapter;
 
 		/**
@@ -288,9 +288,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity4<I1, I2, I3, I4, O>, Computers.Arity4<RAII1, RAII2, I3, I4, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity4<RAII1, RAII2, I3, I4, RAIO>, Functions.Arity4<RAII1, RAII2, I3, I4, RAIO>> adapter;
 
 		/**
@@ -322,9 +322,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity4<I1, I2, I3, I4, O>, Computers.Arity4<RAII1, RAII2, RAII3, I4, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity4<RAII1, RAII2, RAII3, I4, RAIO>, Functions.Arity4<RAII1, RAII2, RAII3, I4, RAIO>> adapter;
 
 		/**
@@ -356,9 +356,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity4<I1, I2, I3, I4, O>, Computers.Arity4<RAII1, RAII2, RAII3, RAII4, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity4<RAII1, RAII2, RAII3, RAII4, RAIO>, Functions.Arity4<RAII1, RAII2, RAII3, RAII4, RAIO>> adapter;
 
 		/**
@@ -391,9 +391,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Computers.Arity5<RAII1, I2, I3, I4, I5, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity5<RAII1, I2, I3, I4, I5, RAIO>, Functions.Arity5<RAII1, I2, I3, I4, I5, RAIO>> adapter;
 
 		/**
@@ -426,9 +426,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Computers.Arity5<RAII1, RAII2, I3, I4, I5, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity5<RAII1, RAII2, I3, I4, I5, RAIO>, Functions.Arity5<RAII1, RAII2, I3, I4, I5, RAIO>> adapter;
 
 		/**
@@ -461,9 +461,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Computers.Arity5<RAII1, RAII2, RAII3, I4, I5, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity5<RAII1, RAII2, RAII3, I4, I5, RAIO>, Functions.Arity5<RAII1, RAII2, RAII3, I4, I5, RAIO>> adapter;
 
 		/**
@@ -496,9 +496,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Computers.Arity5<RAII1, RAII2, RAII3, RAII4, I5, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity5<RAII1, RAII2, RAII3, RAII4, I5, RAIO>, Functions.Arity5<RAII1, RAII2, RAII3, RAII4, I5, RAIO>> adapter;
 
 		/**
@@ -531,9 +531,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Computers.Arity5<RAII1, RAII2, RAII3, RAII4, RAII5, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity5<RAII1, RAII2, RAII3, RAII4, RAII5, RAIO>, Functions.Arity5<RAII1, RAII2, RAII3, RAII4, RAII5, RAIO>> adapter;
 
 		/**
@@ -567,9 +567,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Computers.Arity6<RAII1, I2, I3, I4, I5, I6, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity6<RAII1, I2, I3, I4, I5, I6, RAIO>, Functions.Arity6<RAII1, I2, I3, I4, I5, I6, RAIO>> adapter;
 
 		/**
@@ -603,9 +603,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Computers.Arity6<RAII1, RAII2, I3, I4, I5, I6, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity6<RAII1, RAII2, I3, I4, I5, I6, RAIO>, Functions.Arity6<RAII1, RAII2, I3, I4, I5, I6, RAIO>> adapter;
 
 		/**
@@ -639,9 +639,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Computers.Arity6<RAII1, RAII2, RAII3, I4, I5, I6, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity6<RAII1, RAII2, RAII3, I4, I5, I6, RAIO>, Functions.Arity6<RAII1, RAII2, RAII3, I4, I5, I6, RAIO>> adapter;
 
 		/**
@@ -675,9 +675,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Computers.Arity6<RAII1, RAII2, RAII3, RAII4, I5, I6, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity6<RAII1, RAII2, RAII3, RAII4, I5, I6, RAIO>, Functions.Arity6<RAII1, RAII2, RAII3, RAII4, I5, I6, RAIO>> adapter;
 
 		/**
@@ -711,9 +711,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Computers.Arity6<RAII1, RAII2, RAII3, RAII4, RAII5, I6, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity6<RAII1, RAII2, RAII3, RAII4, RAII5, I6, RAIO>, Functions.Arity6<RAII1, RAII2, RAII3, RAII4, RAII5, I6, RAIO>> adapter;
 
 		/**
@@ -747,9 +747,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Computers.Arity6<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity6<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAIO>, Functions.Arity6<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAIO>> adapter;
 
 		/**
@@ -784,9 +784,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Computers.Arity7<RAII1, I2, I3, I4, I5, I6, I7, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity7<RAII1, I2, I3, I4, I5, I6, I7, RAIO>, Functions.Arity7<RAII1, I2, I3, I4, I5, I6, I7, RAIO>> adapter;
 
 		/**
@@ -821,9 +821,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Computers.Arity7<RAII1, RAII2, I3, I4, I5, I6, I7, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity7<RAII1, RAII2, I3, I4, I5, I6, I7, RAIO>, Functions.Arity7<RAII1, RAII2, I3, I4, I5, I6, I7, RAIO>> adapter;
 
 		/**
@@ -858,9 +858,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Computers.Arity7<RAII1, RAII2, RAII3, I4, I5, I6, I7, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity7<RAII1, RAII2, RAII3, I4, I5, I6, I7, RAIO>, Functions.Arity7<RAII1, RAII2, RAII3, I4, I5, I6, I7, RAIO>> adapter;
 
 		/**
@@ -895,9 +895,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Computers.Arity7<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity7<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, RAIO>, Functions.Arity7<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, RAIO>> adapter;
 
 		/**
@@ -932,9 +932,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Computers.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, RAIO>, Functions.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, RAIO>> adapter;
 
 		/**
@@ -969,9 +969,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Computers.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, RAIO>, Functions.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, RAIO>> adapter;
 
 		/**
@@ -1006,9 +1006,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Computers.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAIO>, Functions.Arity7<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAIO>> adapter;
 
 		/**
@@ -1045,9 +1045,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<RAII1, I2, I3, I4, I5, I6, I7, I8, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity8<RAII1, I2, I3, I4, I5, I6, I7, I8, RAIO>, Functions.Arity8<RAII1, I2, I3, I4, I5, I6, I7, I8, RAIO>> adapter;
 
 		/**
@@ -1083,9 +1083,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<RAII1, RAII2, I3, I4, I5, I6, I7, I8, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity8<RAII1, RAII2, I3, I4, I5, I6, I7, I8, RAIO>, Functions.Arity8<RAII1, RAII2, I3, I4, I5, I6, I7, I8, RAIO>> adapter;
 
 		/**
@@ -1121,9 +1121,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity8<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, RAIO>, Functions.Arity8<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, RAIO>> adapter;
 
 		/**
@@ -1159,9 +1159,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity8<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, RAIO>, Functions.Arity8<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, RAIO>> adapter;
 
 		/**
@@ -1197,9 +1197,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, RAIO>, Functions.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, RAIO>> adapter;
 
 		/**
@@ -1235,9 +1235,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, RAIO>, Functions.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, RAIO>> adapter;
 
 		/**
@@ -1274,9 +1274,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, RAIO>, Functions.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, RAIO>> adapter;
 
 		/**
@@ -1313,9 +1313,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAIO>, Functions.Arity8<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAIO>> adapter;
 
 		/**
@@ -1353,9 +1353,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity9<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, RAIO>, Functions.Arity9<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, RAIO>> adapter;
 
 		/**
@@ -1392,9 +1392,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity9<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, RAIO>, Functions.Arity9<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, RAIO>> adapter;
 
 		/**
@@ -1431,9 +1431,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity9<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, RAIO>, Functions.Arity9<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, RAIO>> adapter;
 
 		/**
@@ -1470,9 +1470,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity9<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, RAIO>, Functions.Arity9<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, RAIO>> adapter;
 
 		/**
@@ -1510,9 +1510,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, RAIO>, Functions.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, RAIO>> adapter;
 
 		/**
@@ -1550,9 +1550,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, RAIO>, Functions.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, RAIO>> adapter;
 
 		/**
@@ -1590,9 +1590,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, RAIO>, Functions.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, RAIO>> adapter;
 
 		/**
@@ -1630,9 +1630,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, RAIO>, Functions.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, RAIO>> adapter;
 
 		/**
@@ -1670,9 +1670,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAIO>, Functions.Arity9<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAIO>> adapter;
 
 		/**
@@ -1711,9 +1711,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity10<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, RAIO>, Functions.Arity10<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, RAIO>> adapter;
 
 		/**
@@ -1752,9 +1752,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity10<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, RAIO>, Functions.Arity10<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, RAIO>> adapter;
 
 		/**
@@ -1794,9 +1794,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity10<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, RAIO>, Functions.Arity10<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, RAIO>> adapter;
 
 		/**
@@ -1836,9 +1836,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity10<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, RAIO>, Functions.Arity10<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, RAIO>> adapter;
 
 		/**
@@ -1878,9 +1878,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, RAIO>, Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, RAIO>> adapter;
 
 		/**
@@ -1920,9 +1920,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, RAIO>, Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, RAIO>> adapter;
 
 		/**
@@ -1962,9 +1962,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, RAIO>, Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, RAIO>> adapter;
 
 		/**
@@ -2004,9 +2004,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, RAIO>, Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, RAIO>> adapter;
 
 		/**
@@ -2046,9 +2046,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, RAIO>, Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, RAIO>> adapter;
 
 		/**
@@ -2088,9 +2088,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAIO>, Functions.Arity10<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAIO>> adapter;
 
 		/**
@@ -2131,9 +2131,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity11<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO>, Functions.Arity11<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO>> adapter;
 
 		/**
@@ -2174,9 +2174,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity11<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO>, Functions.Arity11<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO>> adapter;
 
 		/**
@@ -2217,9 +2217,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity11<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO>, Functions.Arity11<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, RAIO>> adapter;
 
 		/**
@@ -2260,9 +2260,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity11<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, RAIO>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, RAIO>> adapter;
 
 		/**
@@ -2303,9 +2303,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, RAIO>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, RAIO>> adapter;
 
 		/**
@@ -2346,9 +2346,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, RAIO>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, RAIO>> adapter;
 
 		/**
@@ -2389,9 +2389,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, RAIO>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, RAIO>> adapter;
 
 		/**
@@ -2432,9 +2432,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, RAIO>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, RAIO>> adapter;
 
 		/**
@@ -2475,9 +2475,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, RAIO>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, RAIO>> adapter;
 
 		/**
@@ -2518,9 +2518,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, RAIO>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, RAIO>> adapter;
 
 		/**
@@ -2561,9 +2561,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAIO>, Functions.Arity11<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAIO>> adapter;
 
 		/**
@@ -2605,9 +2605,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>, Functions.Arity12<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>> adapter;
 
 		/**
@@ -2649,9 +2649,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>, Functions.Arity12<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>> adapter;
 
 		/**
@@ -2693,9 +2693,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>, Functions.Arity12<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>> adapter;
 
 		/**
@@ -2737,9 +2737,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, RAIO>> adapter;
 
 		/**
@@ -2781,9 +2781,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, RAIO>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, RAIO>> adapter;
 
 		/**
@@ -2825,9 +2825,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, RAIO>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, RAIO>> adapter;
 
 		/**
@@ -2869,9 +2869,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, RAIO>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, RAIO>> adapter;
 
 		/**
@@ -2913,9 +2913,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, RAIO>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, RAIO>> adapter;
 
 		/**
@@ -2957,9 +2957,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, RAIO>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, RAIO>> adapter;
 
 		/**
@@ -3001,9 +3001,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, RAIO>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, RAIO>> adapter;
 
 		/**
@@ -3045,9 +3045,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, RAIO>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, RAIO>> adapter;
 
 		/**
@@ -3089,9 +3089,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAIO>, Functions.Arity12<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAIO>> adapter;
 
 		/**
@@ -3134,9 +3134,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>, Functions.Arity13<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>> adapter;
 
 		/**
@@ -3179,9 +3179,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>, Functions.Arity13<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>> adapter;
 
 		/**
@@ -3224,9 +3224,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>, Functions.Arity13<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>> adapter;
 
 		/**
@@ -3269,9 +3269,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>> adapter;
 
 		/**
@@ -3314,9 +3314,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, RAIO>> adapter;
 
 		/**
@@ -3359,9 +3359,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, RAIO>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, RAIO>> adapter;
 
 		/**
@@ -3404,9 +3404,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, RAIO>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, RAIO>> adapter;
 
 		/**
@@ -3449,9 +3449,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, RAIO>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, RAIO>> adapter;
 
 		/**
@@ -3494,9 +3494,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, RAIO>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, RAIO>> adapter;
 
 		/**
@@ -3539,9 +3539,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, RAIO>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, RAIO>> adapter;
 
 		/**
@@ -3584,9 +3584,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, RAIO>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, RAIO>> adapter;
 
 		/**
@@ -3629,9 +3629,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, RAIO>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, RAIO>> adapter;
 
 		/**
@@ -3674,9 +3674,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAIO>, Functions.Arity13<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAIO>> adapter;
 
 		/**
@@ -3720,9 +3720,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>, Functions.Arity14<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> adapter;
 
 		/**
@@ -3766,9 +3766,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> adapter;
 
 		/**
@@ -3812,9 +3812,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> adapter;
 
 		/**
@@ -3858,9 +3858,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> adapter;
 
 		/**
@@ -3904,9 +3904,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> adapter;
 
 		/**
@@ -3950,9 +3950,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, RAIO>> adapter;
 
 		/**
@@ -3996,9 +3996,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, RAIO>> adapter;
 
 		/**
@@ -4042,9 +4042,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, RAIO>> adapter;
 
 		/**
@@ -4088,9 +4088,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, RAIO>> adapter;
 
 		/**
@@ -4134,9 +4134,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, RAIO>> adapter;
 
 		/**
@@ -4180,9 +4180,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, RAIO>> adapter;
 
 		/**
@@ -4226,9 +4226,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, RAIO>> adapter;
 
 		/**
@@ -4272,9 +4272,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, RAIO>> adapter;
 
 		/**
@@ -4318,9 +4318,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAIO>, Functions.Arity14<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAIO>> adapter;
 
 		/**
@@ -4365,9 +4365,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> adapter;
 
 		/**
@@ -4412,9 +4412,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> adapter;
 
 		/**
@@ -4459,9 +4459,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> adapter;
 
 		/**
@@ -4506,9 +4506,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> adapter;
 
 		/**
@@ -4553,9 +4553,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> adapter;
 
 		/**
@@ -4600,9 +4600,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> adapter;
 
 		/**
@@ -4647,9 +4647,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, I15, RAIO>> adapter;
 
 		/**
@@ -4694,9 +4694,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, I15, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, I15, RAIO>> adapter;
 
 		/**
@@ -4741,9 +4741,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, I15, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, I15, RAIO>> adapter;
 
 		/**
@@ -4788,9 +4788,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, I15, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, I15, RAIO>> adapter;
 
 		/**
@@ -4835,9 +4835,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, I15, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, I15, RAIO>> adapter;
 
 		/**
@@ -4882,9 +4882,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, I15, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, I15, RAIO>> adapter;
 
 		/**
@@ -4929,9 +4929,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, I15, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, I15, RAIO>> adapter;
 
 		/**
@@ -4976,9 +4976,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, I15, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, I15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, I15, RAIO>> adapter;
 
 		/**
@@ -5023,9 +5023,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, RAIO>, Functions.Arity15<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, RAIO>> adapter;
 
 		/**
@@ -5071,9 +5071,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> adapter;
 
 		/**
@@ -5119,9 +5119,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> adapter;
 
 		/**
@@ -5167,9 +5167,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> adapter;
 
 		/**
@@ -5215,9 +5215,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> adapter;
 
 		/**
@@ -5263,9 +5263,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> adapter;
 
 		/**
@@ -5311,9 +5311,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> adapter;
 
 		/**
@@ -5359,9 +5359,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, I8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> adapter;
 
 		/**
@@ -5407,9 +5407,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, I9, I10, I11, I12, I13, I14, I15, I16, RAIO>> adapter;
 
 		/**
@@ -5455,9 +5455,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, I15, I16, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, I10, I11, I12, I13, I14, I15, I16, RAIO>> adapter;
 
 		/**
@@ -5503,9 +5503,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, I15, I16, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, I11, I12, I13, I14, I15, I16, RAIO>> adapter;
 
 		/**
@@ -5551,9 +5551,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, I15, I16, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, I12, I13, I14, I15, I16, RAIO>> adapter;
 
 		/**
@@ -5599,9 +5599,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, I15, I16, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, I13, I14, I15, I16, RAIO>> adapter;
 
 		/**
@@ -5647,9 +5647,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, I15, I16, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, I14, I15, I16, RAIO>> adapter;
 
 		/**
@@ -5695,9 +5695,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, I15, I16, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, I15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, I15, I16, RAIO>> adapter;
 
 		/**
@@ -5743,9 +5743,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, I16, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, I16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, I16, RAIO>> adapter;
 
 		/**
@@ -5791,9 +5791,9 @@ public final class ComputersToFunctionsAndLift {
 		Op
 	{
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, RAII16, RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints = { "adaptation.FORBIDDEN" })
 		Function<Computers.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, RAII16, RAIO>, Functions.Arity16<RAII1, RAII2, RAII3, RAII4, RAII5, RAII6, RAII7, RAII8, RAII9, RAII10, RAII11, RAII12, RAII13, RAII14, RAII15, RAII16, RAIO>> adapter;
 
 		/**

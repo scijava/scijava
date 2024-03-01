@@ -67,14 +67,12 @@ public final class Progress {
 	 * A record of the progressible {@link Object}s running on each
 	 * {@link Thread}.
 	 */
-	private static final ThreadLocal<ArrayDeque<ProgressibleObject>> progressibleStack =
+	private static final ThreadLocal<ArrayDeque<Task>> progressibleStack =
 		new InheritableThreadLocal<>()
 		{
 
 			@Override
-			protected ArrayDeque<ProgressibleObject> childValue(
-				ArrayDeque<ProgressibleObject> parentValue)
-		{
+			protected ArrayDeque<Task> childValue(ArrayDeque<Task> parentValue) {
 				// Child threads should be aware of the Tasks operating on the parent.
 				// For example, a progressible Object might wish to parallelize one of
 				// its stages; the child threads must know which Task to update
@@ -82,7 +80,7 @@ public final class Progress {
 			}
 
 			@Override
-			protected ArrayDeque<ProgressibleObject> initialValue() {
+			protected ArrayDeque<Task> initialValue() {
 				return new ArrayDeque<>();
 			}
 		};
@@ -138,15 +136,25 @@ public final class Progress {
 	 */
 	public static void complete() {
 		// update completed task
-		ProgressibleObject completed = progressibleStack.get().pop();
-		if (!completed.task().isComplete()) {
-			completed.task().complete();
+		Task t = progressibleStack.get().pop();
+		if (!t.isComplete()) {
+			t.complete();
 			// ping relevant listeners
-			pingListeners(completed);
+			pingListeners(t);
 			if (progressibleStack.get().peek() != null) {
 				pingListeners(progressibleStack.get().peek());
 			}
 		}
+	}
+
+	/**
+	 * Adds a new NOP {@link Task} to the current execution chain, used to ignore
+	 * {@link Progress} calls by a progressible object. This NOP task will handle
+	 * all {@code Progress} calls on this {@link Thread} between the time this
+	 * method is invoked and the time when {@link Progress#complete()} is called.
+	 */
+	public static void ignore() {
+		progressibleStack.get().push(IGNORED);
 	}
 
 	/**
@@ -180,13 +188,13 @@ public final class Progress {
 		var parent = deque.peek();
 		if (parent == null) {
 			// completely new execution hierarchy
-			t = new Task(description);
+			t = new Task(progressible, description);
 		}
 		else {
 			// part of an existing execution hierarchy
-			t = parent.task().createSubtask(description);
+			t = parent.createSubtask(progressible, description);
 		}
-		deque.push(new ProgressibleObject(progressible, t));
+		deque.push(t);
 		// Ping Listeners about the registration of progressible
 		pingListeners(deque.peek());
 	}
@@ -195,18 +203,23 @@ public final class Progress {
 	 * Activates all callback {@link ProgressListener}s listening for progress
 	 * updates on executions of {@code o}
 	 *
-	 * @param o an {@link Object} reporting its progress.
+	 * @param task an {@link Object} reporting its progress.
 	 */
-	private static void pingListeners(ProgressibleObject o) {
+	private static void pingListeners(Task task) {
+		if (task == IGNORED) {
+			return;
+		}
 		// Ping object-specific listeners
-		List<ProgressListener> list = progressibleListeners.getOrDefault(o.object(),
-			Collections.emptyList());
+		List<ProgressListener> list = progressibleListeners.getOrDefault( //
+			task.progressible(), //
+			Collections.emptyList() //
+		);
 		synchronized (list) {
-			list.forEach(l -> l.acknowledgeUpdate(o.task()));
+			list.forEach(l -> l.acknowledgeUpdate(task));
 		}
 		// Ping global listeners
 		synchronized (globalListeners) {
-			globalListeners.forEach(l -> l.acknowledgeUpdate(o.task()));
+			globalListeners.forEach(l -> l.acknowledgeUpdate(task));
 		}
 	}
 
@@ -215,9 +228,8 @@ public final class Progress {
 	 *
 	 * @return the currently-execution {@link Task}
 	 */
-	private static Task currentTask() {
-		ProgressibleObject o = progressibleStack.get().peek();
-		return o.task();
+	public static Task currentTask() {
+		return progressibleStack.get().peek();
 	}
 
 	/**
@@ -234,11 +246,24 @@ public final class Progress {
 	 * Updates the progress of the current {@link Task}, pinging any interested
 	 * {@link ProgressListener}s.
 	 *
+	 * @param numElements the number of elements completed in the current stage.
 	 * @see Task#update(long)
 	 */
 	public static void update(long numElements) {
-		currentTask().update(numElements);
-		pingListeners(progressibleStack.get().peek());
+		update(numElements, currentTask());
+	}
+
+	/**
+	 * Updates the progress of the provided {@link Task}, pinging any interested
+	 * {@link ProgressListener}s.
+	 *
+	 * @param numElements the number of elements completed in the current stage.
+	 * @param task the {@link Task} to update
+	 * @see Task#update(long)
+	 */
+	public static void update(final long numElements, final Task task) {
+		task.update(numElements);
+		pingListeners(task);
 	}
 
 	/**
@@ -280,29 +305,35 @@ public final class Progress {
 		currentTask().setStageMax(max);
 	}
 
-}
+	/**
+	 * An internally-used {@link Task} implementation used to suppress
+	 * {@link Progress} updates in a performant manner This class should not be
+	 * instantiated more than once, as a {@code static} instance is enough to be
+	 * used everywhere.
+	 */
+	private static final class NOPTask extends Task {
 
-/**
- * An {@link Object} that reports its progress
- *
- * @author Gabriel Selzer
- */
-class ProgressibleObject {
+		private NOPTask() {
+			super(null, null, null);
+		}
 
-	private final Object o;
-	private final Task t;
+		@Override
+		public boolean isComplete() {
+			return true;
+		}
 
-	public ProgressibleObject(Object o, Task t) {
-		this.o = o;
-		this.t = t;
+		@Override
+		public void complete() {
+			// NB: No-op
+		}
+
+		@Override
+		public void update(long numElements) {
+			// NB: No-op
+		}
+
 	}
 
-	public Object object() {
-		return o;
-	}
-
-	public Task task() {
-		return t;
-	}
+	private static final NOPTask IGNORED = new NOPTask();
 
 }

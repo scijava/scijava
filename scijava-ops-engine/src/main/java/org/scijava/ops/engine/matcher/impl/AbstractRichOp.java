@@ -35,6 +35,7 @@ import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.api.RichOp;
+import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.engine.MatchingConditions;
 import org.scijava.progress.Progress;
 
@@ -88,7 +89,12 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 
 	@Override
 	public void preprocess(Object... inputs) {
-		Progress.register(this, conditions.request().getName());
+		if (hints().contains(BaseOpHints.Progress.TRACK)) {
+			Progress.register(this, conditions.request().getName());
+		}
+		else {
+			Progress.ignore();
+		}
 	}
 
 	@Override

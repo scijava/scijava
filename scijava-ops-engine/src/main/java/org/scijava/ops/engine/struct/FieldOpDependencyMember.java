@@ -31,7 +31,6 @@ package org.scijava.ops.engine.struct;
 
 import java.lang.reflect.Field;
 
-import org.scijava.function.Producer;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.MemberInstance;
 import org.scijava.struct.ValueAccessible;

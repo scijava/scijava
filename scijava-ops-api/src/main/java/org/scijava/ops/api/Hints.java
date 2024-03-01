@@ -84,6 +84,23 @@ public class Hints {
 	}
 
 	/**
+	 * Reutrns a <b>new</b> {@link Hints} with:
+	 * <ol>
+	 * <li>All hints in this {@link Hints}</li>
+	 * <li>All hints in {@code other}</li>
+	 * </ol>
+	 *
+	 * @param other the other {@link Hints} object
+	 * @return a <b>new</b> {@link Hints} containing the union of the two sets of
+	 *         hints
+	 */
+	public Hints plus(Hints other) {
+		Set<String> newHints = new HashSet<>(this.hints);
+		newHints.addAll(other.hints);
+		return new Hints(newHints);
+	}
+
+	/**
 	 * Returns a <b>new</b> {@link Hints} with <b>only</b> the hints in this
 	 * {@link Hints} that are not also in {@code hints}
 	 *

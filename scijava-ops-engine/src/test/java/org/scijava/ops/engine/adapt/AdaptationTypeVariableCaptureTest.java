@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.spi.*;
 import org.scijava.priority.Priority;
 import org.scijava.types.Any;
@@ -41,7 +42,7 @@ public class AdaptationTypeVariableCaptureTest<N extends Number> extends
 		Function<Computers.Arity1<I, O>, Function<I, O>>, Op
 	{
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints = { Adaptation.FORBIDDEN })
 		Function<I, O> creator;
 
 		/**

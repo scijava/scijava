@@ -29,13 +29,12 @@
 
 package org.scijava.legacy.types;
 
-import java.lang.reflect.Type;
-
+import net.imagej.Dataset;
 import org.scijava.priority.Priority;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 
-import net.imagej.Dataset;
+import java.lang.reflect.Type;
 
 public class DatasetTypeExtractor implements TypeExtractor {
 
@@ -55,4 +54,5 @@ public class DatasetTypeExtractor implements TypeExtractor {
 			object + " cannot be reified because it is not a Dataset!");
 		return r.reify(((Dataset) object).getImgPlus());
 	}
+
 }

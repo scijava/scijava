@@ -13,6 +13,8 @@ import org.scijava.event.EventSubscriber;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.script.ScriptService;
 
+import java.util.Collections;
+
 /**
  * Tests {@link OpEnvironmentService} API.
  *
@@ -97,5 +99,6 @@ public class OpEnvironmentServiceTest {
 		event.subscribe(e);
 		env.binary("math.div").input(2, 3).apply();
 		Assertions.assertEquals(5, totalPings[0]);
+		event.unsubscribe(Collections.singletonList(e));
 	}
 }

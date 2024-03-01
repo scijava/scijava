@@ -40,6 +40,7 @@ import java.util.function.Function;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Producer;
+import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
@@ -58,7 +59,7 @@ public class FunctionsToComputers {
 		Function<Producer<O>, Computers.Arity0<O>>, Op
 	{
 
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		Computers.Arity1<O, O> copyOp;
 
 		/**
@@ -80,7 +81,7 @@ public class FunctionsToComputers {
 		Function<Function<I, O>, Computers.Arity1<I, O>>, Op
 	{
 
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		Computers.Arity1<O, O> copyOp;
 
 		/**
@@ -102,7 +103,7 @@ public class FunctionsToComputers {
 		Function<BiFunction<I1, I2, O>, Computers.Arity2<I1, I2, O>>, Op
 	{
 
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		Computers.Arity1<O, O> copyOp;
 
 		/**
@@ -125,7 +126,7 @@ public class FunctionsToComputers {
 		Op
 	{
 
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		Computers.Arity1<O, O> copyOp;
 
 		/**
@@ -150,7 +151,7 @@ public class FunctionsToComputers {
 		Op
 	{
 
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		Computers.Arity1<O, O> copyOp;
 
 		/**
@@ -175,7 +176,7 @@ public class FunctionsToComputers {
 		Op
 	{
 
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		Computers.Arity1<O, O> copyOp;
 
 		/**
@@ -200,7 +201,7 @@ public class FunctionsToComputers {
 		Op
 	{
 
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		Computers.Arity1<O, O> copyOp;
 
 		/**
@@ -226,7 +227,7 @@ public class FunctionsToComputers {
 		Op
 	{
 
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		Computers.Arity1<O, O> copyOp;
 
 		/**
@@ -252,7 +253,7 @@ public class FunctionsToComputers {
 		Op
 	{
 
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		Computers.Arity1<O, O> copyOp;
 
 		/**
@@ -278,7 +279,7 @@ public class FunctionsToComputers {
 		Op
 	{
 
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		Computers.Arity1<O, O> copyOp;
 
 		/**
@@ -304,7 +305,7 @@ public class FunctionsToComputers {
 		Op
 	{
 
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		Computers.Arity1<O, O> copyOp;
 
 		/**
@@ -331,7 +332,7 @@ public class FunctionsToComputers {
 		Op
 	{
 
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		Computers.Arity1<O, O> copyOp;
 
 		/**
@@ -359,7 +360,7 @@ public class FunctionsToComputers {
 		Op
 	{
 
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		Computers.Arity1<O, O> copyOp;
 
 		/**
@@ -389,7 +390,7 @@ public class FunctionsToComputers {
 		Op
 	{
 
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		Computers.Arity1<O, O> copyOp;
 
 		/**
@@ -419,7 +420,7 @@ public class FunctionsToComputers {
 		Op
 	{
 
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		Computers.Arity1<O, O> copyOp;
 
 		/**
@@ -449,7 +450,7 @@ public class FunctionsToComputers {
 		Op
 	{
 
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		Computers.Arity1<O, O> copyOp;
 
 		/**
@@ -479,7 +480,7 @@ public class FunctionsToComputers {
 		Op
 	{
 
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints = { Adaptation.FORBIDDEN })
 		Computers.Arity1<O, O> copyOp;
 
 		/**

@@ -39,6 +39,7 @@ import java.util.function.Function;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
+import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
@@ -57,9 +58,9 @@ public class ComputersToFunctionsAndLift {
 	public static class Computer${arity}ToFunction${arity}AndLiftViaSource$generics.call($arity)
 			implements Function<$computerArity.call($arity)$generics.call($arity), $functionArity.call($arity)$iterableGenerics.call($arity)>, Op {
 
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints={Adaptation.FORBIDDEN})
 		Function<$computerArity.call($arity)$generics.call($arity), $functionArity.call($arity)$generics.call($arity)> adaptor;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints={Adaptation.FORBIDDEN})
 		Function<$functionArity.call($arity)$generics.call($arity), $functionArity.call($arity)$iterableGenerics.call($arity)> lifter;
 
 		/**

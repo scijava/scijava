@@ -39,6 +39,7 @@ import java.util.function.Function;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
+import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
@@ -59,7 +60,7 @@ public class ComputersToFunctionsViaFunction {
 			Op
 		 {
 
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints={Adaptation.FORBIDDEN})
 		Function<I#if($arity == 1)#{else}1#end, O> creator;
 
 		/**

@@ -71,9 +71,9 @@ public final class ComputersToFunctionsAndLift {
 		 implements Function<Computers.Arity$arity<#foreach($a in [1..$arity])I$a, #{end}O>, $functionNames.call($arity)<#foreach($a in [1..$arity])#if($a <= $rai)RAI#{end}I$a, #{end}RAIO>>,
 			Op
 	{
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints={"adaptation.FORBIDDEN"})
 		Function<Computers.Arity${arity}<#foreach($a in [1..$arity])I$a, #{end}O>, Computers.Arity${arity}<#foreach($a in [1..$arity])#if($a <= $rai)RAI#{end}I$a, #{end}RAIO>> lifter;
-		@OpDependency(name = "engine.adapt", adaptable = false)
+		@OpDependency(name = "engine.adapt", hints={"adaptation.FORBIDDEN"})
 		Function<Computers.Arity${arity}<#foreach($a in [1..$arity])#if($a <= $rai)RAI#{end}I$a, #{end}RAIO>, $functionNames.call($arity)<#foreach($a in [1..$arity])#if($a <= $rai)RAI#{end}I$a, #{end}RAIO>> adapter;
 
 		/**

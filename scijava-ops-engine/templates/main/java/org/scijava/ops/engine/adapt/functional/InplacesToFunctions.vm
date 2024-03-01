@@ -40,6 +40,7 @@ import java.util.function.Function;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
+import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
 import org.scijava.ops.spi.OpCollection;
@@ -59,9 +60,9 @@ public class InplacesToFunctions$generics.call($classArity, $classArity) impleme
 	@OpClass(names = "engine.adapt")
 	public static class Inplace$inplaceSuffix.call($arity, $a)ToFunction${arity}$generics.call($arity, $a) implements Function<$inplaceType.call($arity, $a)$generics.call($arity, $a), $functionArity.call($arity)$functionGenerics.call($arity, $a)>, Op {
 		
-		@OpDependency(name = "engine.create", adaptable = false)
+		@OpDependency(name = "engine.create", hints={Adaptation.FORBIDDEN})
 		private Function<IO, IO> createOp;
-		@OpDependency(name = "engine.copy", adaptable = false)
+		@OpDependency(name = "engine.copy", hints={Adaptation.FORBIDDEN})
 		private Computers.Arity1<IO, IO> copyOp;
 
 		/**

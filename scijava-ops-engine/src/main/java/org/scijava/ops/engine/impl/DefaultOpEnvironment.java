@@ -29,48 +29,14 @@
 
 package org.scijava.ops.engine.impl;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.ServiceLoader;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-
+import com.google.common.collect.TreeMultimap;
 import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.ManualDiscoverer;
 import org.scijava.meta.Versions;
-import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.InfoTree;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpHistory;
-import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpInstance;
-import org.scijava.ops.api.OpMatchingException;
-import org.scijava.ops.api.OpRequest;
-import org.scijava.ops.api.RichOp;
+import org.scijava.ops.api.*;
+import org.scijava.ops.engine.*;
 import org.scijava.ops.engine.BaseOpHints.Adaptation;
-import org.scijava.ops.engine.BaseOpHints.DependencyMatching;
 import org.scijava.ops.engine.BaseOpHints.Simplification;
-import org.scijava.ops.engine.DependencyMatchingException;
-import org.scijava.ops.engine.InfoTreeGenerator;
-import org.scijava.ops.engine.MatchingConditions;
-import org.scijava.ops.engine.OpCandidate;
-import org.scijava.ops.engine.OpDependencyMember;
-import org.scijava.ops.engine.OpDescriptionGenerator;
-import org.scijava.ops.engine.OpInfoGenerator;
-import org.scijava.ops.engine.OpWrapper;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.engine.matcher.impl.DefaultOpMatcher;
@@ -89,7 +55,12 @@ import org.scijava.types.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.TreeMultimap;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Default implementation of {@link OpEnvironment}, whose ops and related state
@@ -647,20 +618,23 @@ public class DefaultOpEnvironment implements OpEnvironment {
 				dependencyTypeVarAssigns.put(entry.getKey(), entry.getValue());
 			}
 		}
+		// Let dependency matching hints contain all user hints, and additional
+		// dependency-matching hints
+		Hints baseDepHints = hints //
+			.plus( //
+				BaseOpHints.DependencyMatching.IN_PROGRESS, //
+				BaseOpHints.Simplification.FORBIDDEN //
+			).minus(BaseOpHints.Progress.TRACK);
 		// Then, match dependencies
 		final List<RichOp<?>> dependencyChains = new ArrayList<>();
 		for (final OpDependencyMember<?> dependency : Infos.dependencies(info)) {
 			final OpRequest dep = inferOpRequest(dependency,
 				dependencyTypeVarAssigns);
 			try {
-				// TODO: Consider a new Hint implementation
-				Hints hintsCopy = hints.plus(DependencyMatching.IN_PROGRESS,
-					Simplification.FORBIDDEN);
-				if (!dependency.isAdaptable()) {
-					hintsCopy = hintsCopy.plus(Adaptation.FORBIDDEN);
-				}
+				// Add hints requested by the dependency
+				Hints depHints = baseDepHints.plus(dependency.hints());
 
-				MatchingConditions conditions = generateCacheHit(dep, hintsCopy);
+				MatchingConditions conditions = generateCacheHit(dep, depHints);
 				dependencyChains.add(wrapViaCache(conditions));
 			}
 			catch (final OpMatchingException e) {
@@ -795,7 +769,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	@Override
 	public Hints getDefaultHints() {
 		if (environmentHints != null) return environmentHints.copy();
-		return new Hints();
+		return new Hints(BaseOpHints.Progress.TRACK);
 	}
 
 	@Override

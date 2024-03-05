@@ -4,6 +4,26 @@ authors:
   - "OpenCV authors"
   - "bytedeco/JavaCV authors"
 
+org.scijava.ops.opencv.MatCopier:
+  copy:
+    alias: "engine.copy"
+    type: "Computer2"
+    authors:
+      - "Gabriella Turek"
+      - "Mark Hiner"
+  copyU:
+    alias: "engine.copy"
+    type: "Computer2"
+    authors:
+      - "Gabriella Turek"
+      - "Mark Hiner"
+  copyGpu:
+    alias: "engine.copy"
+    type: "Computer2"
+    authors:
+      - "Gabriella Turek"
+      - "Mark Hiner"
+
 net.imagej.opencv.ImgToMatConverter:
   getUnsignedByteMat:
     alias: "engine.focus"

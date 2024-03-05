@@ -45,15 +45,11 @@ import java.util.stream.Collectors;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.InfoTree;
 import org.scijava.ops.api.OpMatchingException;
-import org.scijava.ops.engine.OpCandidate;
+import org.scijava.ops.engine.*;
 import org.scijava.ops.engine.OpCandidate.StatusCode;
-import org.scijava.ops.engine.OpDependencyMember;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRequest;
-import org.scijava.ops.engine.BaseOpHints.Adaptation;
-import org.scijava.ops.engine.DependencyMatchingException;
-import org.scijava.ops.engine.MatchingConditions;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.engine.matcher.impl.DefaultOpRequest;
@@ -73,8 +69,10 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 	public void checkSuitability(MatchingConditions conditions)
 		throws OpMatchingException
 	{
-		if (conditions.hints().containsAny(Adaptation.IN_PROGRESS,
-			Adaptation.FORBIDDEN)) //
+		if (conditions.hints().containsAny( //
+			BaseOpHints.Adaptation.IN_PROGRESS, //
+			BaseOpHints.Adaptation.FORBIDDEN //
+		)) //
 			throw new OpMatchingException(
 				"Adaptation is not suitable: Adaptation is disabled");
 	}
@@ -103,7 +101,10 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 	public OpCandidate findMatch(MatchingConditions conditions, OpMatcher matcher,
 		OpEnvironment env) throws OpMatchingException
 	{
-		Hints adaptationHints = conditions.hints().plus(Adaptation.IN_PROGRESS);
+		Hints adaptationHints = conditions.hints().plus( //
+			BaseOpHints.Adaptation.IN_PROGRESS, //
+			BaseOpHints.History.IGNORE //
+		);
 		List<Exception> matchingExceptions = new ArrayList<>();
 		List<DependencyMatchingException> depExceptions = new ArrayList<>();
 		for (final OpInfo adaptor : env.infos("engine.adapt")) {

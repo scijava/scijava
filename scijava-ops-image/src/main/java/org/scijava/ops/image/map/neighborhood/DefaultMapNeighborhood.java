@@ -114,19 +114,8 @@ class MapNeighborhoodAllRAI<I, O> implements
 		RandomAccessibleInterval<Neighborhood<I>> neighborhoodInput = Views
 			.interval(in2.neighborhoodsRandomAccessibleSafe(in1), in1);
 
-		// Temporarily disable recording history
-		boolean isRecording = Ops.isRecordingExecutions(op);
-		if (isRecording) {
-			Ops.recordExecutions(op, false);
-		}
-
 		LoopBuilder.setImages(neighborhoodInput, out).multiThreaded().forEachPixel(
 			op::compute);
-
-		// Re-enable recording history if necessary
-		if (isRecording) {
-			Ops.recordExecutions(op, true);
-		}
 	}
 
 }

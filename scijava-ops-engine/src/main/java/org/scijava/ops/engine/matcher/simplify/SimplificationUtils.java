@@ -168,8 +168,11 @@ public final class SimplificationUtils {
 	}
 
 	public static SimplifiedOpInfo simplifyInfo(OpEnvironment env, OpInfo info) {
-		Hints h = new Hints(BaseOpHints.Adaptation.FORBIDDEN,
-			BaseOpHints.Simplification.FORBIDDEN);
+		Hints h = new Hints( //
+			BaseOpHints.Adaptation.FORBIDDEN, //
+			BaseOpHints.Simplification.FORBIDDEN, //
+			BaseOpHints.History.IGNORE //
+		);
 		List<RichOp<Function<?, ?>>> inFocusers = new ArrayList<>();
 		Type[] args = info.inputTypes().toArray(Type[]::new);
 		for (Type arg : args) {

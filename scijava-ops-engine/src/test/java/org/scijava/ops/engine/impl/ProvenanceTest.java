@@ -29,24 +29,15 @@
 
 package org.scijava.ops.engine.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.function.Function;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.collections.ObjectArray;
 import org.scijava.function.Computers;
 import org.scijava.function.Producer;
-import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.InfoTree;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.RichOp;
+import org.scijava.ops.api.*;
 import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaFunction;
 import org.scijava.ops.engine.adapt.lift.FunctionToArrays;
 import org.scijava.ops.engine.copy.CopyOpCollection;
@@ -54,13 +45,15 @@ import org.scijava.ops.engine.create.CreateOpCollection;
 import org.scijava.ops.engine.matcher.simplify.PrimitiveArraySimplifiers;
 import org.scijava.ops.engine.matcher.simplify.PrimitiveLossReporters;
 import org.scijava.ops.engine.matcher.simplify.PrimitiveSimplifiers;
-import org.scijava.ops.spi.Op;
-import org.scijava.ops.spi.OpClass;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.OpField;
+import org.scijava.ops.spi.*;
 import org.scijava.priority.Priority;
 import org.scijava.types.Nil;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.function.Function;
 
 public class ProvenanceTest extends AbstractTestEnvironment implements
 	OpCollection
@@ -70,11 +63,11 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 	public static void AddNeededOps() {
 		ops.register(new ProvenanceTest());
 		ops.register(new MapperFunc());
-		ops.register(new FunctionToArrays());
+		ops.register(new FunctionToArrays<>());
 		ops.register(new PrimitiveSimplifiers());
-		ops.register(new PrimitiveArraySimplifiers());
+		ops.register(new PrimitiveArraySimplifiers<>());
 		ops.register(new PrimitiveLossReporters());
-		ops.register(new CopyOpCollection());
+		ops.register(new CopyOpCollection<>());
 		ops.register(new CreateOpCollection());
 		Object[] adaptors = objsFromNoArgConstructors(
 			ComputersToFunctionsViaFunction.class.getDeclaredClasses());
@@ -149,7 +142,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		List<RichOp<?>> executionsUpon = ops.history().executionsUpon(s);
 		Assertions.assertEquals(1, executionsUpon.size());
 		// Assert only one info in the execution hierarchy
-		InfoTree executionHierarchy = ops.history().infoTree(executionsUpon.get(0));
+		InfoTree executionHierarchy = Ops.infoTree(executionsUpon.get(0));
 		Assertions.assertEquals(0, executionHierarchy.dependencies().size());
 		OpInfo info = executionHierarchy.info();
 		Assertions.assertTrue(info.implementationName().contains(this.getClass()
@@ -178,7 +171,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		List<RichOp<?>> history2 = ops.history().executionsUpon(out2);
 
 		Assertions.assertEquals(1, history1.size());
-		InfoTree opExecutionChain = ops.history().infoTree(history1.get(0));
+		InfoTree opExecutionChain = Ops.infoTree(history1.get(0));
 		Assertions.assertEquals(0, opExecutionChain.dependencies().size());
 		String expected =
 			"public final java.util.function.Function org.scijava.ops.engine.impl.ProvenanceTest.baz";
@@ -186,7 +179,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 			.getAnnotationBearer().toString());
 
 		Assertions.assertEquals(1, history2.size());
-		opExecutionChain = ops.history().infoTree(history2.get(0));
+		opExecutionChain = Ops.infoTree(history2.get(0));
 		Assertions.assertEquals(0, opExecutionChain.dependencies().size());
 		expected =
 			"public final java.util.function.Function org.scijava.ops.engine.impl.ProvenanceTest.bar";
@@ -200,13 +193,16 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		int length = 200;
 		Double[] array = new Double[length];
 		Arrays.fill(array, 1.);
-		Thing out = ops.op("test.provenanceMapper").arity1().input(array).outType(
-			Thing.class).apply();
+		var expectedName = "test.provenanceMapper";
+		Thing out = ops.op(expectedName).arity1().input(array).outType(Thing.class)
+			.apply();
 
 		// Assert two executions upon this Object, once from the mapped function,
 		// once from the mapper
 		List<RichOp<?>> executionsUpon = ops.history().executionsUpon(out);
-		Assertions.assertEquals(2, executionsUpon.size());
+		Assertions.assertEquals(1, executionsUpon.size());
+		var actualName = executionsUpon.get(0).name();
+		Assertions.assertEquals(expectedName, actualName);
 	}
 
 	@Test
@@ -219,7 +215,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 			.input(array).outType(Thing.class).function();
 
 		// Get the InfoTree associated with the above call
-		InfoTree tree = ops.history().infoTree(mapper);
+		InfoTree tree = Ops.infoTree(mapper);
 
 		// Assert the mapper is in the tree
 		Iterator<OpInfo> mapperInfos = ops.infos("test.provenanceMapper")
@@ -238,22 +234,21 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 	@Test
 	public void testMappingProvenanceAndCaching() {
 		// call (and run) the Op
-		Hints hints = new Hints();
 		int length = 200;
 		Double[] array = new Double[length];
 		Arrays.fill(array, 1.);
-		Thing out = ops.op("test.provenanceMapper", hints).arity1().input(array)
-			.outType(Thing.class).apply();
+		Thing out = ops.op("test.provenanceMapper").arity1().input(array).outType(
+			Thing.class).apply();
 
 		// Assert that two Ops operated on the return.
 		List<RichOp<?>> mutators = ops.history().executionsUpon(out);
-		Assertions.assertEquals(2, mutators.size());
+		Assertions.assertEquals(1, mutators.size());
 
 		// Run the mapped Op, assert still two runs on the mapper
-		Thing out1 = ops.op("test.provenanceMapped", hints).arity1().input(2.)
-			.outType(Thing.class).apply();
+		Thing out1 = ops.op("test.provenanceMapped").arity1().input(2.).outType(
+			Thing.class).apply();
 		mutators = ops.history().executionsUpon(out);
-		Assertions.assertEquals(2, mutators.size());
+		Assertions.assertEquals(1, mutators.size());
 		// Assert one run on the mapped Op as well
 		mutators = ops.history().executionsUpon(out1);
 		Assertions.assertEquals(1, mutators.size());
@@ -273,14 +268,20 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 			.input(5.0) //
 			.outType(Thing.class) //
 			.function();
+		// Assert only one execution
+		Thing out = mapper.apply(1.0);
+		Assertions.assertEquals(1, ops.history().executionsUpon(out).size());
 		// Get the signature from the Op
-		String signature = ops.history().signatureOf(mapper);
+		String signature = Ops.signature(mapper);
 		// Generate the Op from the signature and an Op type
 		Nil<Function<Double, Thing>> specialType = new Nil<>() {};
 		Function<Double, Thing> actual = ops //
 			.opFromSignature(signature, specialType);
 		// Assert Op similarity
 		Assertions.assertTrue(wrappedOpEquality(mapper, actual));
+		// Assert only one execution
+		out = mapper.apply(1.0);
+		Assertions.assertEquals(1, ops.history().executionsUpon(out).size());
 	}
 
 	/**
@@ -296,14 +297,20 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 			.input(new Double[] { 5.0, 10.0, 15.0 }) //
 			.outType(Thing.class) //
 			.function();
+		// Assert only one execution
+		Thing out = mapper.apply(new Double[] { 1., 2. });
+		Assertions.assertEquals(1, ops.history().executionsUpon(out).size());
 		// Get the signature from the Op
-		String signature = ops.history().signatureOf(mapper);
+		String signature = Ops.signature(mapper);
 		// Generate the Op from the signature and an Op type
-		Nil<Function<Double, Thing>> specialType = new Nil<>() {};
-		Function<Double, Thing> actual = ops //
+		Nil<Function<Double[], Thing>> specialType = new Nil<>() {};
+		Function<Double[], Thing> actual = ops //
 			.opFromSignature(signature, specialType);
 		// Assert Op similarity
 		Assertions.assertTrue(wrappedOpEquality(mapper, actual));
+		// Assert only one execution
+		out = actual.apply(new Double[] { 1., 2. });
+		Assertions.assertEquals(1, ops.history().executionsUpon(out).size());
 	}
 
 	/**
@@ -319,14 +326,20 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 			.inType(Double[].class) //
 			.outType(Thing[].class) //
 			.function();
+		// Assert only one execution
+		Thing[] out = f.apply(new Double[] { 1., 2. });
+		Assertions.assertEquals(1, ops.history().executionsUpon(out).size());
 		// Get the signature from the Op
-		String signature = ops.history().signatureOf(f);
+		String signature = Ops.signature(f);
 		// Generate the Op from the signature and an Op type
 		Nil<Function<Double[], Thing[]>> special = new Nil<>() {};
 		Function<Double[], Thing[]> actual = ops. //
 			opFromSignature(signature, special);
 		// Assert Op similarity
 		Assertions.assertTrue(wrappedOpEquality(f, actual));
+		// Assert only one execution
+		out = f.apply(new Double[] { 1., 2. });
+		Assertions.assertEquals(1, ops.history().executionsUpon(out).size());
 	}
 
 	/**
@@ -342,14 +355,20 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 			.inType(Double[][].class) //
 			.outType(Thing[].class) //
 			.function();
+		// Assert only one execution
+		Thing[] out = f.apply(new Double[][] { new Double[] { 1., 2. } });
+		Assertions.assertEquals(1, ops.history().executionsUpon(out).size());
 		// Get the signature from the Op
-		String signature = ops.history().signatureOf(f);
+		String signature = Ops.signature(f);
 		// Generate the Op from the signature and an Op type
 		Nil<Function<Double[][], Thing[]>> special = new Nil<>() {};
 		Function<Double[][], Thing[]> actual = ops //
 			.opFromSignature(signature, special);
 		// Assert Op similarity
 		Assertions.assertTrue(wrappedOpEquality(f, actual));
+		// Assert only one execution
+		out = f.apply(new Double[][] { new Double[] { 1., 2. } });
+		Assertions.assertEquals(1, ops.history().executionsUpon(out).size());
 	}
 
 	/**
@@ -367,8 +386,16 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 			.outType(new Nil<ObjectArray<Number>>()
 			{}) //
 			.computer();
+		// Assert only one execution
+		ObjectArray<Number> in = new ObjectArray<>(new Number[] { 1, 2, 3 });
+		ObjectArray<Number> actual = new ObjectArray<>(new Number[] { 0, 0, 0 });
+		c.compute(in, actual);
+		ObjectArray<Number> expected = new ObjectArray<>(new Number[] { 1., 2.,
+			3. });
+		Assertions.assertEquals(expected, actual);
+		Assertions.assertEquals(1, ops.history().executionsUpon(actual).size());
 		// Get the signature from the Op
-		String signature = ops.history().signatureOf(c);
+		String signature = Ops.signature(c);
 		// Generate the Op from the signature and an Op type
 		Nil<Computers.Arity1<ObjectArray<Number>, ObjectArray<Number>>> special =
 			new Nil<>()
@@ -378,12 +405,12 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		// Assert Op similarity
 		Assertions.assertTrue(wrappedOpEquality(c, fromString));
 		// Assert Op functionality similarity
-		ObjectArray<Number> in = new ObjectArray<>(new Number[] { 1, 2, 3 });
-		ObjectArray<Number> actual = new ObjectArray<>(new Number[] { 0, 0, 0 });
+		in = new ObjectArray<>(new Number[] { 2, 3, 4 });
+		actual = new ObjectArray<>(new Number[] { 0, 0, 0 });
 		fromString.compute(in, actual);
-		ObjectArray<Number> expected = new ObjectArray<>(new Number[] { 1., 2.,
-			3. });
+		expected = new ObjectArray<>(new Number[] { 2., 3., 4. });
 		Assertions.assertEquals(expected, actual);
+		Assertions.assertEquals(1, ops.history().executionsUpon(actual).size());
 	}
 
 	/**
@@ -399,18 +426,26 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 			.inType(Integer[].class) //
 			.outType(Integer[].class) //
 			.computer();
+		// Assert only one execution
+		Integer[] in = new Integer[] { 1, 2, 3 };
+		Integer[] actual = new Integer[] { 0, 0, 0 };
+		c.compute(in, actual);
+		Integer[] expected = new Integer[] { 1, 2, 3 };
+		Assertions.assertArrayEquals(expected, actual);
+		Assertions.assertEquals(1, ops.history().executionsUpon(actual).size());
 		// Get the signature from the Op
-		String signature = ops.history().signatureOf(c);
+		String signature = Ops.signature(c);
 		// Generate the Op from the signature and an Op typ
 		Nil<Computers.Arity1<Integer[], Integer[]>> special = new Nil<>() {};
 		Computers.Arity1<Integer[], Integer[]> fromString = ops.opFromSignature(
 			signature, special);
 		// Assert Op functionality similarity
-		Integer[] in = { 1, 2, 3 };
-		Integer[] actual = { 0, 0, 0 };
+		in = new Integer[] { 2, 3, 4 };
+		actual = new Integer[] { 0, 0, 0 };
 		fromString.compute(in, actual);
-		Integer[] expected = { 1, 2, 3 };
+		expected = new Integer[] { 2, 3, 4 };
 		Assertions.assertArrayEquals(expected, actual);
+		Assertions.assertEquals(1, ops.history().executionsUpon(actual).size());
 	}
 
 	/**
@@ -426,8 +461,14 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 			.inType(Integer[].class) //
 			.outType(Integer[].class) //
 			.function();
+		// Assert only one execution
+		Integer[] in = new Integer[] { 1, 2, 3 };
+		Integer[] actual = c.apply(in);
+		Integer[] expected = new Integer[] { 1, 2, 3 };
+		Assertions.assertArrayEquals(expected, actual);
+		Assertions.assertEquals(1, ops.history().executionsUpon(actual).size());
 		// Get the signature from the Op
-		String signature = ops.history().signatureOf(c);
+		String signature = Ops.signature(c);
 		// Generate the Op from the signature and the Op type
 		Nil<Function<Integer[], Integer[]>> special = new Nil<>() {};
 		Function<Integer[], Integer[]> fromString = ops //
@@ -435,10 +476,11 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		// Assert Op similarity
 		Assertions.assertTrue(wrappedOpEquality(c, fromString));
 		// Assert Op functionality similarity
-		Integer[] in = { 1, 2, 3 };
-		Integer[] actual = fromString.apply(in);
-		Integer[] expected = { 1, 2, 3 };
+		in = new Integer[] { 2, 3, 4 };
+		actual = fromString.apply(in);
+		expected = new Integer[] { 2, 3, 4 };
 		Assertions.assertArrayEquals(expected, actual);
+		Assertions.assertEquals(1, ops.history().executionsUpon(actual).size());
 	}
 
 	/**
@@ -454,14 +496,26 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 			.inType(Double[].class) //
 			.outType(Double[].class) //
 			.function();
+		// Assert only one execution
+		Double[] in = new Double[] { 1.0, 2.0, 3.0 };
+		Double[] actual = f.apply(in);
+		Double[] expected = new Double[] { 1.0, 2.0, 3.0 };
+		Assertions.assertArrayEquals(expected, actual);
+		Assertions.assertEquals(1, ops.history().executionsUpon(actual).size());
 		// Get the signature from the Op
-		String signature = ops.history().signatureOf(f);
+		String signature = Ops.signature(f);
 		// Generate the Op from the signature and the Op type
 		Nil<Function<Double[], Double[]>> special = new Nil<>() {};
-		Function<Double[], Double[]> actual = ops //
+		Function<Double[], Double[]> fromString = ops //
 			.opFromSignature(signature, special);
 		// Assert Op similarity
-		Assertions.assertTrue(wrappedOpEquality(f, actual));
+		Assertions.assertTrue(wrappedOpEquality(f, fromString));
+		// Assert only one execution
+		in = new Double[] { 2.0, 3.0, 4.0 };
+		actual = f.apply(in);
+		expected = new Double[] { 2.0, 3.0, 4.0 };
+		Assertions.assertArrayEquals(expected, actual);
+		Assertions.assertEquals(1, ops.history().executionsUpon(actual).size());
 	}
 
 	// -- Helper Methods -- //

@@ -77,29 +77,7 @@ public interface OpHistory extends Prioritized<OpHistory> {
 	 */
 	List<RichOp<?>> executionsUpon(Object o);
 
-	/**
-	 * Returns the hierarchy of {@link OpInfo}s describing the dependency tree of
-	 * the {@link Object} {@code op}.
-	 *
-	 * @param op the {@link Object} returned by a matching call. NB {@code op}
-	 *          <b>must</b> be the {@link Object} returned by the outermost
-	 *          matching call, as the dependency {@link Object}s are not recorded.
-	 * @return the {@link InfoTree} describing the dependency tree
-	 */
-	InfoTree infoTree(Object op);
-
-	default String signatureOf(Object op) {
-		return infoTree(op).signature();
-	}
-
 	// -- HISTORY MAINTENANCE API -- //
-
-	/**
-	 * Logs the creation of {@link RichOp}
-	 *
-	 * @param op the {@link RichOp} containing relevant information
-	 */
-	void logOp(RichOp<?> op);
 
 	/**
 	 * Logs the {@link Object} output of the {@link RichOp} {@code op}.

@@ -67,15 +67,37 @@ public final class Ops {
 	}
 
 	/**
+	 * Convenience function for getting the {@link InfoTree} behind {@code op}
+	 *
+	 * @param op the Op
+	 * @return the {@link InfoTree} of {@code op}
+	 * @throws IllegalArgumentException if {@code op} is not an Op
+	 */
+	public static InfoTree infoTree(Object op) {
+		return rich(op).instance().infoTree();
+	}
+
+	/**
 	 * Convenience function for getting the {@link OpInfo} of {@code op}
 	 *
 	 * @param op the Op
 	 * @return the {@link OpInfo} that generated {@code op}
-	 * @param <T> the type of {@code op}
 	 * @throws IllegalArgumentException if {@code op} is not an Op
 	 */
-	public static <T> OpInfo info(T op) {
-		return rich(op).instance().infoTree().info();
+	public static OpInfo info(Object op) {
+		return infoTree(op).info();
+	}
+
+	/**
+	 * Convenience function for getting the signature of {@code op}
+	 *
+	 * @param op the Op
+	 * @return the signature of {@code op}, which can be used to completely
+	 *         restore {@code op}
+	 * @throws IllegalArgumentException if {@code op} is not an Op
+	 */
+	public static String signature(Object op) {
+		return infoTree(op).signature();
 	}
 
 }

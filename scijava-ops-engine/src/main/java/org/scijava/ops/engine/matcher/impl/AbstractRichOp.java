@@ -63,8 +63,6 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 		this.instance = instance;
 		this.env = env;
 		this.conditions = conditions;
-
-		this.env.history().logOp(this);
 	}
 
 	@Override

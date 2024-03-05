@@ -29,23 +29,13 @@
 
 package org.scijava.ops.engine.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.function.Function;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.collections.ObjectArray;
 import org.scijava.function.Computers;
 import org.scijava.function.Producer;
-import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.InfoTree;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.RichOp;
+import org.scijava.ops.api.*;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaFunction;
@@ -55,13 +45,15 @@ import org.scijava.ops.engine.create.CreateOpCollection;
 import org.scijava.ops.engine.matcher.simplify.PrimitiveArraySimplifiers;
 import org.scijava.ops.engine.matcher.simplify.PrimitiveLossReporters;
 import org.scijava.ops.engine.matcher.simplify.PrimitiveSimplifiers;
-import org.scijava.ops.spi.Op;
-import org.scijava.ops.spi.OpClass;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.OpField;
+import org.scijava.ops.spi.*;
 import org.scijava.priority.Priority;
 import org.scijava.types.Nil;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.function.Function;
 
 public class ProvenanceTest extends AbstractTestEnvironment implements
 	OpCollection
@@ -71,11 +63,11 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 	public static void AddNeededOps() {
 		ops.register(new ProvenanceTest());
 		ops.register(new MapperFunc());
-		ops.register(new FunctionToArrays());
+		ops.register(new FunctionToArrays<>());
 		ops.register(new PrimitiveSimplifiers());
-		ops.register(new PrimitiveArraySimplifiers());
+		ops.register(new PrimitiveArraySimplifiers<>());
 		ops.register(new PrimitiveLossReporters());
-		ops.register(new CopyOpCollection());
+		ops.register(new CopyOpCollection<>());
 		ops.register(new CreateOpCollection());
 		Object[] adaptors = objsFromNoArgConstructors(
 			ComputersToFunctionsViaFunction.class.getDeclaredClasses());
@@ -151,7 +143,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		List<RichOp<?>> executionsUpon = ops.history().executionsUpon(s);
 		Assertions.assertEquals(1, executionsUpon.size());
 		// Assert only one info in the execution hierarchy
-		InfoTree executionHierarchy = ops.history().infoTree(executionsUpon.get(0));
+		InfoTree executionHierarchy = Ops.infoTree(executionsUpon.get(0));
 		Assertions.assertEquals(0, executionHierarchy.dependencies().size());
 		OpInfo info = executionHierarchy.info();
 		Assertions.assertTrue(info.implementationName().contains(this.getClass()
@@ -180,7 +172,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		List<RichOp<?>> history2 = ops.history().executionsUpon(out2);
 
 		Assertions.assertEquals(1, history1.size());
-		InfoTree opExecutionChain = ops.history().infoTree(history1.get(0));
+		InfoTree opExecutionChain = Ops.infoTree(history1.get(0));
 		Assertions.assertEquals(0, opExecutionChain.dependencies().size());
 		String expected =
 			"public final java.util.function.Function org.scijava.ops.engine.impl.ProvenanceTest.baz";
@@ -188,7 +180,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 			.getAnnotationBearer().toString());
 
 		Assertions.assertEquals(1, history2.size());
-		opExecutionChain = ops.history().infoTree(history2.get(0));
+		opExecutionChain = Ops.infoTree(history2.get(0));
 		Assertions.assertEquals(0, opExecutionChain.dependencies().size());
 		expected =
 			"public final java.util.function.Function org.scijava.ops.engine.impl.ProvenanceTest.bar";
@@ -221,7 +213,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 			.input(array).outType(Thing.class).function();
 
 		// Get the InfoTree associated with the above call
-		InfoTree tree = ops.history().infoTree(mapper);
+		InfoTree tree = Ops.infoTree(mapper);
 
 		// Assert the mapper is in the tree
 		Iterator<OpInfo> mapperInfos = ops.infos("test.provenanceMapper")
@@ -275,7 +267,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 			.outType(Thing.class) //
 			.function();
 		// Get the signature from the Op
-		String signature = ops.history().signatureOf(mapper);
+		String signature = Ops.signature(mapper);
 		// Generate the Op from the signature and an Op type
 		Nil<Function<Double, Thing>> specialType = new Nil<>() {};
 		Function<Double, Thing> actual = ops //
@@ -298,7 +290,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 			.outType(Thing.class) //
 			.function();
 		// Get the signature from the Op
-		String signature = ops.history().signatureOf(mapper);
+		String signature = Ops.signature(mapper);
 		// Generate the Op from the signature and an Op type
 		Nil<Function<Double, Thing>> specialType = new Nil<>() {};
 		Function<Double, Thing> actual = ops //
@@ -321,7 +313,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 			.outType(Thing[].class) //
 			.function();
 		// Get the signature from the Op
-		String signature = ops.history().signatureOf(f);
+		String signature = Ops.signature(f);
 		// Generate the Op from the signature and an Op type
 		Nil<Function<Double[], Thing[]>> special = new Nil<>() {};
 		Function<Double[], Thing[]> actual = ops. //
@@ -344,7 +336,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 			.outType(Thing[].class) //
 			.function();
 		// Get the signature from the Op
-		String signature = ops.history().signatureOf(f);
+		String signature = Ops.signature(f);
 		// Generate the Op from the signature and an Op type
 		Nil<Function<Double[][], Thing[]>> special = new Nil<>() {};
 		Function<Double[][], Thing[]> actual = ops //
@@ -369,7 +361,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 			{}) //
 			.computer();
 		// Get the signature from the Op
-		String signature = ops.history().signatureOf(c);
+		String signature = Ops.signature(c);
 		// Generate the Op from the signature and an Op type
 		Nil<Computers.Arity1<ObjectArray<Number>, ObjectArray<Number>>> special =
 			new Nil<>()
@@ -401,7 +393,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 			.outType(Integer[].class) //
 			.computer();
 		// Get the signature from the Op
-		String signature = ops.history().signatureOf(c);
+		String signature = Ops.signature(c);
 		// Generate the Op from the signature and an Op typ
 		Nil<Computers.Arity1<Integer[], Integer[]>> special = new Nil<>() {};
 		Computers.Arity1<Integer[], Integer[]> fromString = ops.opFromSignature(
@@ -428,7 +420,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 			.outType(Integer[].class) //
 			.function();
 		// Get the signature from the Op
-		String signature = ops.history().signatureOf(c);
+		String signature = Ops.signature(c);
 		// Generate the Op from the signature and the Op type
 		Nil<Function<Integer[], Integer[]>> special = new Nil<>() {};
 		Function<Integer[], Integer[]> fromString = ops //
@@ -456,7 +448,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 			.outType(Double[].class) //
 			.function();
 		// Get the signature from the Op
-		String signature = ops.history().signatureOf(f);
+		String signature = Ops.signature(f);
 		// Generate the Op from the signature and the Op type
 		Nil<Function<Double[], Double[]>> special = new Nil<>() {};
 		Function<Double[], Double[]> actual = ops //

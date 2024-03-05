@@ -64,13 +64,6 @@ public class DefaultOpHistory implements OpHistory {
 
 	// -- DATA STRCUTURES -- //
 
-	/**
-	 * {@link Map} responsible for recording the {@link InfoTree} of
-	 * {@link OpInfo}s involved to produce the result of a particular matching
-	 * call
-	 */
-	private final Map<RichOp<?>, InfoTree> dependencyChain = new WeakHashMap<>();
-
 	private final Map<Object, List<RichOp<?>>> mutationMap = new WeakHashMap<>();
 
 	// -- USER API -- //
@@ -89,21 +82,7 @@ public class DefaultOpHistory implements OpHistory {
 		return mutationMap.getOrDefault(o, Collections.emptyList());
 	}
 
-	@Override
-	public InfoTree infoTree(Object op) {
-		if (op instanceof RichOp<?>) {
-			return dependencyChain.get(op);
-		}
-		throw new IllegalArgumentException("Object " + op +
-			" is not an Op known to this OpHistory!");
-	}
-
 	// -- HISTORY MAINTENANCE API -- //
-
-	@Override
-	public void logOp(RichOp<?> op) {
-		dependencyChain.put(op, op.infoTree());
-	}
 
 	@Override
 	public void logOutput(RichOp<?> op, Object output) {

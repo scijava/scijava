@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.InfoTree;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.Ops;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.priority.Priority;
@@ -33,7 +34,7 @@ public class InfoTreeGeneratorTest extends AbstractTestEnvironment implements
 		// and by our dummy generator
 		var op = ops.unary("test.infoTreeGeneration").inType(Double.class).outType(
 			Double.class).function();
-		String signature = ops.history().signatureOf(op);
+		String signature = Ops.signature(op);
 		// Run treeFromID to make sure our generator doesn't run
 		var infoTree = ops.treeFromID(signature);
 		// Assert non-null output

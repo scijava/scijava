@@ -238,7 +238,9 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@Override
-	public <T> T opFromInfoChain(final InfoTree tree, final Nil<T> specialType) {
+	public <T> T opFromInfoChain(final InfoTree tree, final Nil<T> specialType,
+		Hints hints)
+	{
 		if (!(specialType.getType() instanceof ParameterizedType))
 			throw new IllegalArgumentException("TODO");
 		@SuppressWarnings("unchecked")
@@ -246,7 +248,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			.getType());
 		var conditions = MatchingConditions.from( //
 			new InfoMatchingOpRequest(tree.info(), Nil.of(tree.info().opType())), //
-			getDefaultHints() //
+			hints //
 		);
 		RichOp<T> wrappedOp = wrapOp(instance, conditions);
 		return wrappedOp.asOpType();
@@ -623,7 +625,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		Hints baseDepHints = hints //
 			.plus( //
 				BaseOpHints.DependencyMatching.IN_PROGRESS, //
-				BaseOpHints.Simplification.FORBIDDEN //
+				BaseOpHints.Simplification.FORBIDDEN, //
+				BaseOpHints.History.IGNORE //
 			).minus(BaseOpHints.Progress.TRACK);
 		// Then, match dependencies
 		final List<RichOp<?>> dependencyChains = new ArrayList<>();

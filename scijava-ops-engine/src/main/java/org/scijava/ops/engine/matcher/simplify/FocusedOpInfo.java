@@ -381,7 +381,7 @@ public class FocusedOpInfo implements OpInfo {
 		Type copyType = args.get(mutableIndex);
 		// prevent further simplification/adaptation
 		Hints hints = new Hints(BaseOpHints.Adaptation.FORBIDDEN,
-			BaseOpHints.Simplification.FORBIDDEN);
+			BaseOpHints.Simplification.FORBIDDEN, BaseOpHints.History.IGNORE);
 		Nil<?> copyNil = Nil.of(copyType);
 		var op = env.unary("engine.copy", hints).inType(copyNil).outType(copyNil)
 			.computer();
@@ -457,8 +457,11 @@ public class FocusedOpInfo implements OpInfo {
 				.getType() });
 			Type nilToType = Types.parameterize(Nil.class, new Type[] { to
 				.getType() });
-			Hints h = new Hints(BaseOpHints.Adaptation.FORBIDDEN,
-				BaseOpHints.Simplification.FORBIDDEN);
+			Hints h = new Hints( //
+				BaseOpHints.Adaptation.FORBIDDEN, //
+				BaseOpHints.Simplification.FORBIDDEN, //
+				BaseOpHints.History.IGNORE //
+			);
 			LossReporter<T, R> op = env.op("engine.lossReporter", specialTypeNil,
 				new Nil[] { Nil.of(nilFromType), Nil.of(nilToType) }, Nil.of(
 					Double.class), h);

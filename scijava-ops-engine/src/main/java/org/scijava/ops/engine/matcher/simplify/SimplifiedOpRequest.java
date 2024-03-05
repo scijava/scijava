@@ -46,8 +46,7 @@ import org.scijava.ops.api.OpMatchingException;
 import org.scijava.ops.api.OpRequest;
 import org.scijava.ops.api.Ops;
 import org.scijava.ops.api.RichOp;
-import org.scijava.ops.engine.BaseOpHints.Adaptation;
-import org.scijava.ops.engine.BaseOpHints.Simplification;
+import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.types.Any;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
@@ -73,7 +72,11 @@ public class SimplifiedOpRequest implements OpRequest {
 	private final RichOp<Computers.Arity1<?, ?>> outputCopier;
 
 	public SimplifiedOpRequest(OpRequest req, OpEnvironment env) {
-		Hints h = new Hints(Adaptation.FORBIDDEN, Simplification.FORBIDDEN);
+		Hints h = new Hints( //
+			BaseOpHints.Adaptation.FORBIDDEN, //
+			BaseOpHints.Simplification.FORBIDDEN, //
+			BaseOpHints.History.IGNORE //
+		);
 		this.name = req.getName();
 		this.srcReq = req;
 		// Find the simplifiers and focusers
@@ -160,7 +163,11 @@ public class SimplifiedOpRequest implements OpRequest {
 		OpEnvironment env, Type copyType) throws OpMatchingException
 	{
 		// prevent further simplification/adaptation
-		Hints hints = new Hints(Adaptation.FORBIDDEN, Simplification.FORBIDDEN);
+		Hints hints = new Hints( //
+			BaseOpHints.Adaptation.FORBIDDEN, //
+			BaseOpHints.Simplification.FORBIDDEN, //
+			BaseOpHints.History.IGNORE //
+		);
 		Nil<?> copyNil = Nil.of(copyType);
 		var op = env.unary("engine.copy", hints).inType(copyNil).outType(copyNil)
 			.computer();

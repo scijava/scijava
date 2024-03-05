@@ -104,7 +104,7 @@ public final class BaseOpHints {
 		}
 
 		public static final String PREFIX = "history";
-		public static final String RECORD = PREFIX + ".RECORD";
+		public static final String IGNORE = PREFIX + ".IGNORE";
 
 	}
 

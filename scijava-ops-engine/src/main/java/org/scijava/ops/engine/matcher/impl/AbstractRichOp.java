@@ -97,7 +97,7 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 
 	@Override
 	public void postprocess(Object output) {
-		if (hints().contains(BaseOpHints.History.RECORD)) {
+		if (!hints().contains(BaseOpHints.History.IGNORE)) {
 			env.history().logOutput(this, output);
 		}
 		Progress.complete();

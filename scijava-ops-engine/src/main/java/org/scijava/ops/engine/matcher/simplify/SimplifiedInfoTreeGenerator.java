@@ -36,11 +36,8 @@ import java.util.Map;
 import java.util.function.Function;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.api.InfoTree;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.Ops;
-import org.scijava.ops.api.RichOp;
+import org.scijava.ops.api.*;
+import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.engine.InfoTreeGenerator;
 import org.scijava.types.Nil;
 
@@ -63,6 +60,7 @@ public class SimplifiedInfoTreeGenerator implements InfoTreeGenerator {
 
 		List<RichOp<Function<?, ?>>> reqFocusers = new ArrayList<>();
 		String reqFocuserComp = components.get(compIndex);
+		Hints dependencyHints = new Hints(BaseOpHints.History.IGNORE);
 		while (reqFocuserComp.startsWith(
 			SimplifiedOpInfo.INPUT_FOCUSER_DELIMITER))
 		{
@@ -73,7 +71,7 @@ public class SimplifiedInfoTreeGenerator implements InfoTreeGenerator {
 
 			reqFocusers.add(Ops.rich(env.opFromInfoChain(reqFocuserChain,
 				new Nil<>()
-				{})));
+				{}, dependencyHints)));
 			reqFocuserComp = components.get(++compIndex);
 		}
 		// Proceed to output simplifier
@@ -88,7 +86,7 @@ public class SimplifiedInfoTreeGenerator implements InfoTreeGenerator {
 			env, outSimpSignature, idMap, generators);
 		RichOp<Function<?, ?>> outSimplifier = Ops.rich(env.opFromInfoChain(
 			outputSimplifierChain, new Nil<>()
-			{}));
+			{}, dependencyHints));
 
 		// Proceed to output copier
 		RichOp<Computers.Arity1<?, ?>> copier = null;
@@ -102,7 +100,8 @@ public class SimplifiedInfoTreeGenerator implements InfoTreeGenerator {
 		if (!outCopySignature.isEmpty()) {
 			InfoTree copierTree = InfoTreeGenerator.generateDependencyTree(env,
 				outCopySignature, idMap, generators);
-			copier = Ops.rich(env.opFromInfoChain(copierTree, new Nil<>() {}));
+			copier = Ops.rich(env.opFromInfoChain(copierTree, new Nil<>() {},
+				dependencyHints));
 		}
 
 		// Proceed to original info

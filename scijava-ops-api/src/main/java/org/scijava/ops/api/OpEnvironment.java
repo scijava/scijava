@@ -183,7 +183,11 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	InfoTree infoTree(final String opName, final Nil<?> specialType,
 		final Nil<?>[] inTypes, final Nil<?> outType, Hints hints);
 
-	<T> T opFromInfoChain(InfoTree tree, Nil<T> specialType);
+	default <T> T opFromInfoChain(InfoTree tree, Nil<T> specialType) {
+		return opFromInfoChain(tree, specialType, getDefaultHints());
+	}
+
+	<T> T opFromInfoChain(InfoTree tree, Nil<T> specialType, Hints hints);
 
 	/**
 	 * Returns an Op fitting the provided arguments.

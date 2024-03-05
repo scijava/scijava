@@ -107,20 +107,4 @@ public interface RichOp<T> extends GenericTyped {
 	default void postprocess(Object output) {
 		// By default, do nothing
 	}
-
-	/**
-	 * Returns true iff this {@link RichOp} is logging its executions in its
-	 * {@link OpHistory}
-	 *
-	 * @return true iff it is recording its executions
-	 */
-	boolean isRecordingExecutions();
-
-	/**
-	 * Designates whether this {@link RichOp} should log its executions to its
-	 * {@link OpHistory}
-	 *
-	 * @param record tells this {@link RichOp} to record its executions iff true.
-	 */
-	void recordExecutions(boolean record);
 }

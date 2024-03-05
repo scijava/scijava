@@ -769,7 +769,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	@Override
 	public Hints getDefaultHints() {
 		if (environmentHints != null) return environmentHints.copy();
-		return new Hints(BaseOpHints.Progress.TRACK);
+		return new Hints();
 	}
 
 	@Override

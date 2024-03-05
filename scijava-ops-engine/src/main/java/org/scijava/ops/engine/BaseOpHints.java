@@ -97,4 +97,15 @@ public final class BaseOpHints {
 
 	}
 
+	public static final class History {
+
+		private History() {
+			// Prevent instantiation of static utility class
+		}
+
+		public static final String PREFIX = "history";
+		public static final String RECORD = PREFIX + ".RECORD";
+
+	}
+
 }

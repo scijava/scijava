@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.scijava.Context;
 import org.scijava.app.StatusService;
+import org.scijava.ops.api.Hints;
 import org.scijava.task.Task;
 import org.scijava.task.TaskService;
 import org.scijava.task.event.TaskEvent;
@@ -97,7 +98,8 @@ public class OpEnvironmentServiceTest {
 			}
 		};
 		event.subscribe(e);
-		env.binary("math.div").input(2, 3).apply();
+		var hints = new Hints("progress.TRACK");
+		env.binary("math.div", hints).input(2, 3).apply();
 		Assertions.assertEquals(5, totalPings[0]);
 		event.unsubscribe(Collections.singletonList(e));
 	}

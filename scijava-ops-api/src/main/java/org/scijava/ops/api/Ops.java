@@ -78,27 +78,4 @@ public final class Ops {
 		return rich(op).instance().infoTree().info();
 	}
 
-	/**
-	 * Convenience function for accessing {@link RichOp#recordExecutions(boolean)}
-	 *
-	 * @param op the Op
-	 * @param record true iff {@code op} should record its executions
-	 * @param <T> the type of the Op
-	 * @throws IllegalArgumentException if {@code op} is not an Op
-	 */
-	public static <T> void recordExecutions(T op, boolean record) {
-		rich(op).recordExecutions(record);
-	}
-
-	/**
-	 * Convenience function for accessing {@link RichOp#isRecordingExecutions()}
-	 *
-	 * @param op the Op
-	 * @param <T> the type of the Op
-	 * @return true iff Op is recording its executions
-	 */
-	public static <T> boolean isRecordingExecutions(T op) {
-		return isRich(op) && rich(op).isRecordingExecutions();
-	}
-
 }

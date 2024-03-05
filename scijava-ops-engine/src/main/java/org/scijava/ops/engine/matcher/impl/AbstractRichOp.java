@@ -99,20 +99,10 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 
 	@Override
 	public void postprocess(Object output) {
-		if (record) {
+		if (hints().contains(BaseOpHints.History.RECORD)) {
 			env.history().logOutput(this, output);
 		}
 		Progress.complete();
-	}
-
-	@Override
-	public boolean isRecordingExecutions() {
-		return record;
-	}
-
-	@Override
-	public void recordExecutions(boolean record) {
-		this.record = record;
 	}
 
 	@Override

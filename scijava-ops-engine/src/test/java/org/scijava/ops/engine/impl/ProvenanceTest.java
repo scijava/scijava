@@ -47,6 +47,7 @@ import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.RichOp;
 import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaFunction;
 import org.scijava.ops.engine.adapt.lift.FunctionToArrays;
 import org.scijava.ops.engine.copy.CopyOpCollection;
@@ -79,6 +80,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		Object[] adaptors = objsFromNoArgConstructors(
 			ComputersToFunctionsViaFunction.class.getDeclaredClasses());
 		ops.register(adaptors);
+		ops.setDefaultHints(new Hints(BaseOpHints.History.RECORD));
 	}
 
 	// -- Test Ops -- //
@@ -238,20 +240,19 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 	@Test
 	public void testMappingProvenanceAndCaching() {
 		// call (and run) the Op
-		Hints hints = new Hints();
 		int length = 200;
 		Double[] array = new Double[length];
 		Arrays.fill(array, 1.);
-		Thing out = ops.op("test.provenanceMapper", hints).arity1().input(array)
-			.outType(Thing.class).apply();
+		Thing out = ops.op("test.provenanceMapper").arity1().input(array).outType(
+			Thing.class).apply();
 
 		// Assert that two Ops operated on the return.
 		List<RichOp<?>> mutators = ops.history().executionsUpon(out);
 		Assertions.assertEquals(2, mutators.size());
 
 		// Run the mapped Op, assert still two runs on the mapper
-		Thing out1 = ops.op("test.provenanceMapped", hints).arity1().input(2.)
-			.outType(Thing.class).apply();
+		Thing out1 = ops.op("test.provenanceMapped").arity1().input(2.).outType(
+			Thing.class).apply();
 		mutators = ops.history().executionsUpon(out);
 		Assertions.assertEquals(2, mutators.size());
 		// Assert one run on the mapped Op as well

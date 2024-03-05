@@ -124,19 +124,8 @@ class MapNeighborhoodWithCenterAllRAI<I, O> implements
 		RandomAccessibleInterval<Neighborhood<I>> neighborhoodInput = Views
 			.interval(in2.neighborhoodsRandomAccessibleSafe(in1), in1);
 
-		// Temporarily disable recording history
-		boolean isRecording = Ops.isRecordingExecutions(centerAwareOp);
-		if (isRecording) {
-			Ops.recordExecutions(centerAwareOp, false);
-		}
-
 		LoopBuilder.setImages(neighborhoodInput, in1, out).multiThreaded()
 			.forEachPixel(centerAwareOp::compute);
-
-		// Re-enable recording history if necessary
-		if (isRecording) {
-			Ops.recordExecutions(centerAwareOp, true);
-		}
 	}
 
 }

@@ -39,6 +39,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.collections.ObjectArray;
 import org.scijava.function.Computers;
+import org.scijava.function.Inplaces;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.matcher.impl.OpClassInfo;
@@ -119,6 +120,12 @@ public class SimplifiedOpInfoTest extends AbstractTestEnvironment implements
 		out.addAll(in);
 	};
 
+	@OpField(names = "test.coalesceSimpleDescription")
+	public final Inplaces.Arity2_1<List<Long>, Long> inplace1 = (in1, in2) -> {
+		in1.clear();
+		in1.add(in2);
+	};
+
 	@Test
 	public void testSimpleDescriptions() {
 		String actual = ops.unary("test.coalesceSimpleDescription").helpVerbose();
@@ -137,7 +144,14 @@ public class SimplifiedOpInfoTest extends AbstractTestEnvironment implements
 		expected = //
 			"test.coalesceSimpleDescription:\n\t- (input1, @CONTAINER container1) -> None\n\t- (input1) -> Number";
 		Assertions.assertEquals(expected, actual);
-		// Finally test that different number of outputs doesn't retrieve the Ops
+
+		// Test that with 2 inputs we do get the binary inplace Op, but no others
+		actual = ops.binary("test.coalesceSimpleDescription").help();
+		expected = //
+			"test.coalesceSimpleDescription:\n\t- (@MUTABLE mutable1, input1) -> None";
+		Assertions.assertEquals(expected, actual);
+
+		// Finally test that with no inputs we don't get any of the Ops
 		actual = ops.nullary("test.coalesceSimpleDescription").help();
 		expected = "No Ops found matching this request.";
 		Assertions.assertEquals(expected, actual);

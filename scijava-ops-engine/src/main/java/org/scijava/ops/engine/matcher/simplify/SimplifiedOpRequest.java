@@ -52,6 +52,8 @@ import org.scijava.types.Nil;
 import org.scijava.types.Types;
 import org.scijava.types.inference.GenericAssignability;
 
+import static org.scijava.ops.engine.matcher.simplify.SimplificationUtils.isIdentity;
+
 public class SimplifiedOpRequest implements OpRequest {
 
 	/** Name of the op, or null for any name. */
@@ -104,8 +106,14 @@ public class SimplifiedOpRequest implements OpRequest {
 		type = SimplificationUtils.retypeOpType(req.getType(), inTypes, outType);
 		// TODO: Fix
 		int mutableIndex = SimplificationUtils.findMutableArgIndex(Types.raw(type));
-		this.outputCopier = mutableIndex == -1 ? null : simplifierCopyOp(env, req
-			.getArgs()[mutableIndex]);
+		if (mutableIndex >= 0 && !(isIdentity(inSimplifiers.get(mutableIndex)) &&
+			isIdentity(outFocuser)))
+		{
+			this.outputCopier = simplifierCopyOp(env, req.getArgs()[mutableIndex]);
+		}
+		else {
+			this.outputCopier = null;
+		}
 	}
 
 	private Type[] simpleArgs(Type[] args, List<RichOp<Function<?, ?>>> ops) {

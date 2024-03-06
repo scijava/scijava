@@ -228,31 +228,45 @@ public final class SimplificationUtils {
 	) {
 		int ioIndex = SimplificationUtils.findMutableArgIndex(Types.raw(info
 			.opType()));
-		// If IO index is -1, output is returned - no need to copy.
-		if (ioIndex == -1) {
-			return null;
+		if (ioIndex > -1 && !(isIdentity(inFocusers.get(ioIndex)) && isIdentity(
+			outSimplifier)))
+		{
+			// Otherwise, we need an Op to convert the simple output back into the
+			// pre-focused input
+			// Determine simple output type.
+			var simpleOut = outType(info.outputType(), outSimplifier);
+			// Determine unfocused input type.
+			var focuserInfo = Ops.info(inFocusers.get(ioIndex));
+			Map<TypeVariable<?>, Type> typeAssigns = new HashMap<>();
+			GenericAssignability.inferTypeVariables( //
+				new Type[] { focuserInfo.outputType() }, //
+				new Type[] { info.inputTypes().get(ioIndex) }, //
+				typeAssigns //
+			);
+			var unfocusedInput = Nil.of(Types.mapVarToTypes( //
+				focuserInfo.inputTypes().get(0), //
+				typeAssigns //
+			));
+			// Match a copier
+			return Ops.rich(env.unary("engine.copy", h) //
+				.inType(simpleOut) //
+				.outType(unfocusedInput) //
+				.computer());
 		}
-		// Otherwise, we need an Op to convert the simple output back into the
-		// pre-focused input
-		// Determine simple output type.
-		var simpleOut = outType(info.outputType(), outSimplifier);
-		// Determine unfocused input type.
-		var focuserInfo = Ops.info(inFocusers.get(ioIndex));
-		Map<TypeVariable<?>, Type> typeAssigns = new HashMap<>();
-		GenericAssignability.inferTypeVariables( //
-			new Type[] { focuserInfo.outputType() }, //
-			new Type[] { info.inputTypes().get(ioIndex) }, //
-			typeAssigns //
-		);
-		var unfocusedInput = Nil.of(Types.mapVarToTypes( //
-			focuserInfo.inputTypes().get(0), //
-			typeAssigns //
-		));
-		// Match a copier
-		return Ops.rich(env.unary("engine.copy", h) //
-			.inType(simpleOut) //
-			.outType(unfocusedInput) //
-			.computer());
+		// No mutable parameter and/or pathway is an identity pathway, so no copy
+		// op necessary
+		return null;
+	}
+
+	/**
+	 * Helper method to check if an op is an "identity" op - i.e. a naive wrapper
+	 * that does no modification to its base op.
+	 *
+	 * @param op {@link RichOp} to check
+	 * @return {@code true} iff the op is an identity op
+	 */
+	public static boolean isIdentity(RichOp<?> op) {
+		return Ops.info(op).names().contains("engine.identity");
 	}
 
 	private static Nil<?> outType(Type originalOutput,

@@ -42,6 +42,7 @@ import org.scijava.ops.engine.OpDescriptionGenerator;
 import org.scijava.ops.engine.matcher.reduce.ReducedOpInfo;
 import org.scijava.ops.engine.util.Infos;
 import org.scijava.priority.Priority;
+import org.scijava.struct.ItemIO;
 
 /**
  * An {@link OpDescriptionGenerator} implementation which makes use of
@@ -154,8 +155,9 @@ public class SimplifiedOpDescriptionGenerator implements
 					continue;
 			}
 
+			// Container types are matched as outputs in OpRequests
 			var numPureInputs = info.inputs().stream() //
-				.filter(m -> !m.isOutput()) //
+				.filter(m -> !ItemIO.CONTAINER.equals(m.getIOType())) //
 				.count();
 
 			if (req.getArgs() == null || req.getArgs().length == numPureInputs) {

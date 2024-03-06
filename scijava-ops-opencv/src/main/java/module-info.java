@@ -30,14 +30,6 @@ module org.scijava.ops.opencv {
 	exports org.scijava.ops.opencv;
 
 	requires java.scripting;
-	requires org.scijava.collections;
-	requires org.scijava.concurrent;
-	requires org.scijava.function;
-	requires org.scijava.meta;
-	requires org.scijava.ops.api;
-	requires org.scijava.ops.spi;
-	requires org.scijava.priority;
-	requires org.scijava.types;
 
 	// FIXME: these module names derive from filenames and are thus unstable
 	requires org.bytedeco.opencv;

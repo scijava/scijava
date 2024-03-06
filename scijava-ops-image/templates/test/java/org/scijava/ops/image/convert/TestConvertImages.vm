@@ -9,9 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigInteger;
 
-import org.scijava.ops.image.AbstractOpTest;
 import net.imglib2.FinalDimensions;
-import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.complex.ComplexDoubleType;
 import net.imglib2.type.numeric.complex.ComplexFloatType;
@@ -29,7 +28,10 @@ import net.imglib2.type.numeric.integer.UnsignedLongType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
+import net.imglib2.view.Views;
 import org.junit.jupiter.api.Test;
+import org.scijava.ops.image.AbstractOpTest;
+import org.scijava.types.Nil;
 
 /**
  * Tests the {@link ConvertComplexTypes} ops.
@@ -73,7 +75,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.$toType.built").input(img).apply();
+        var converted = ops.op("convert.$toType.built").input(img).apply();
 		var cursor = ((IterableInterval<$imgLibType>) converted).cursor();
 		while(cursor.hasNext()) {
 #if($toType.op.contains("C"))

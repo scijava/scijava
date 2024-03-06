@@ -37,9 +37,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigInteger;
 
-import org.scijava.ops.image.AbstractOpTest;
 import net.imglib2.FinalDimensions;
-import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.complex.ComplexDoubleType;
 import net.imglib2.type.numeric.complex.ComplexFloatType;
@@ -57,7 +56,10 @@ import net.imglib2.type.numeric.integer.UnsignedLongType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
+import net.imglib2.view.Views;
 import org.junit.jupiter.api.Test;
+import org.scijava.ops.image.AbstractOpTest;
+import org.scijava.types.Nil;
 
 /**
  * Tests the {@link ConvertComplexTypes} ops.
@@ -84,7 +86,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.bit").input(img).apply();
+        var converted = ops.op("convert.bit").input(img).apply();
 		var cursor = ((IterableInterval<BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.bit(1), cursor.next().get());
@@ -111,7 +113,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.bit").input(img).apply();
+        var converted = ops.op("convert.bit").input(img).apply();
 		var cursor = ((IterableInterval<BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.bit(2), cursor.next().get());
@@ -138,7 +140,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.bit").input(img).apply();
+        var converted = ops.op("convert.bit").input(img).apply();
 		var cursor = ((IterableInterval<BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.bit(15), cursor.next().get());
@@ -165,7 +167,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.bit").input(img).apply();
+        var converted = ops.op("convert.bit").input(img).apply();
 		var cursor = ((IterableInterval<BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.bit((byte) 8), cursor.next().get());
@@ -200,7 +202,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.bit").input(img).apply();
+        var converted = ops.op("convert.bit").input(img).apply();
 		var cursor = ((IterableInterval<BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.bit(100), cursor.next().get());
@@ -227,7 +229,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.bit").input(img).apply();
+        var converted = ops.op("convert.bit").input(img).apply();
 		var cursor = ((IterableInterval<BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.bit(212L), cursor.next().get());
@@ -254,7 +256,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.bit").input(img).apply();
+        var converted = ops.op("convert.bit").input(img).apply();
 		var cursor = ((IterableInterval<BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.bit((short) 52), cursor.next().get());
@@ -289,7 +291,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.bit").input(img).apply();
+        var converted = ops.op("convert.bit").input(img).apply();
 		var cursor = ((IterableInterval<BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.bit(480), cursor.next().get());
@@ -316,7 +318,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.bit").input(img).apply();
+        var converted = ops.op("convert.bit").input(img).apply();
 		var cursor = ((IterableInterval<BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.bit(301), cursor.next().get());
@@ -351,7 +353,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.bit").input(img).apply();
+        var converted = ops.op("convert.bit").input(img).apply();
 		var cursor = ((IterableInterval<BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.bit(20L), cursor.next().get());
@@ -378,7 +380,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.bit").input(img).apply();
+        var converted = ops.op("convert.bit").input(img).apply();
 		var cursor = ((IterableInterval<BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.bit(891L), cursor.next().get());
@@ -413,7 +415,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.bit").input(img).apply();
+        var converted = ops.op("convert.bit").input(img).apply();
 		var cursor = ((IterableInterval<BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.bit(1049L), cursor.next().get());
@@ -448,7 +450,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.bit").input(img).apply();
+        var converted = ops.op("convert.bit").input(img).apply();
 		var cursor = ((IterableInterval<BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.bit(beef), cursor.next().get());
@@ -483,7 +485,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.bit").input(img).apply();
+        var converted = ops.op("convert.bit").input(img).apply();
 		var cursor = ((IterableInterval<BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.bit(123453.125f), cursor.next().get());
@@ -518,7 +520,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.bit").input(img).apply();
+        var converted = ops.op("convert.bit").input(img).apply();
 		var cursor = ((IterableInterval<BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.bit(5839.25f), cursor.next().get());
@@ -553,7 +555,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.bit").input(img).apply();
+        var converted = ops.op("convert.bit").input(img).apply();
 		var cursor = ((IterableInterval<BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.bit(4098d), cursor.next().get());
@@ -596,7 +598,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.bit").input(img).apply();
+        var converted = ops.op("convert.bit").input(img).apply();
 		var cursor = ((IterableInterval<BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.bit(9087d), cursor.next().get());
@@ -631,7 +633,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint2").input(img).apply();
+        var converted = ops.op("convert.uint2").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned2BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint2(1), cursor.next().get());
@@ -658,7 +660,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint2").input(img).apply();
+        var converted = ops.op("convert.uint2").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned2BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint2(2), cursor.next().get());
@@ -685,7 +687,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint2").input(img).apply();
+        var converted = ops.op("convert.uint2").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned2BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint2(15), cursor.next().get());
@@ -712,7 +714,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint2").input(img).apply();
+        var converted = ops.op("convert.uint2").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned2BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint2((byte) 8), cursor.next().get());
@@ -747,7 +749,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint2").input(img).apply();
+        var converted = ops.op("convert.uint2").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned2BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint2(100), cursor.next().get());
@@ -774,7 +776,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint2").input(img).apply();
+        var converted = ops.op("convert.uint2").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned2BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint2(212L), cursor.next().get());
@@ -801,7 +803,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint2").input(img).apply();
+        var converted = ops.op("convert.uint2").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned2BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint2((short) 52), cursor.next().get());
@@ -836,7 +838,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint2").input(img).apply();
+        var converted = ops.op("convert.uint2").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned2BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint2(480), cursor.next().get());
@@ -863,7 +865,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint2").input(img).apply();
+        var converted = ops.op("convert.uint2").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned2BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint2(301), cursor.next().get());
@@ -898,7 +900,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint2").input(img).apply();
+        var converted = ops.op("convert.uint2").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned2BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint2(20L), cursor.next().get());
@@ -925,7 +927,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint2").input(img).apply();
+        var converted = ops.op("convert.uint2").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned2BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint2(891L), cursor.next().get());
@@ -960,7 +962,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint2").input(img).apply();
+        var converted = ops.op("convert.uint2").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned2BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint2(1049L), cursor.next().get());
@@ -995,7 +997,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint2").input(img).apply();
+        var converted = ops.op("convert.uint2").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned2BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint2(beef), cursor.next().get());
@@ -1030,7 +1032,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint2").input(img).apply();
+        var converted = ops.op("convert.uint2").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned2BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint2(123453.125f), cursor.next().get());
@@ -1065,7 +1067,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint2").input(img).apply();
+        var converted = ops.op("convert.uint2").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned2BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint2(5839.25f), cursor.next().get());
@@ -1100,7 +1102,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint2").input(img).apply();
+        var converted = ops.op("convert.uint2").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned2BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint2(4098d), cursor.next().get());
@@ -1143,7 +1145,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint2").input(img).apply();
+        var converted = ops.op("convert.uint2").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned2BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint2(9087d), cursor.next().get());
@@ -1178,7 +1180,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint4").input(img).apply();
+        var converted = ops.op("convert.uint4").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned4BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint4(1), cursor.next().get());
@@ -1205,7 +1207,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint4").input(img).apply();
+        var converted = ops.op("convert.uint4").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned4BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint4(2), cursor.next().get());
@@ -1232,7 +1234,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint4").input(img).apply();
+        var converted = ops.op("convert.uint4").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned4BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint4(15), cursor.next().get());
@@ -1259,7 +1261,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint4").input(img).apply();
+        var converted = ops.op("convert.uint4").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned4BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint4((byte) 8), cursor.next().get());
@@ -1294,7 +1296,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint4").input(img).apply();
+        var converted = ops.op("convert.uint4").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned4BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint4(100), cursor.next().get());
@@ -1321,7 +1323,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint4").input(img).apply();
+        var converted = ops.op("convert.uint4").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned4BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint4(212L), cursor.next().get());
@@ -1348,7 +1350,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint4").input(img).apply();
+        var converted = ops.op("convert.uint4").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned4BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint4((short) 52), cursor.next().get());
@@ -1383,7 +1385,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint4").input(img).apply();
+        var converted = ops.op("convert.uint4").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned4BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint4(480), cursor.next().get());
@@ -1410,7 +1412,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint4").input(img).apply();
+        var converted = ops.op("convert.uint4").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned4BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint4(301), cursor.next().get());
@@ -1445,7 +1447,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint4").input(img).apply();
+        var converted = ops.op("convert.uint4").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned4BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint4(20L), cursor.next().get());
@@ -1472,7 +1474,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint4").input(img).apply();
+        var converted = ops.op("convert.uint4").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned4BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint4(891L), cursor.next().get());
@@ -1507,7 +1509,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint4").input(img).apply();
+        var converted = ops.op("convert.uint4").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned4BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint4(1049L), cursor.next().get());
@@ -1542,7 +1544,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint4").input(img).apply();
+        var converted = ops.op("convert.uint4").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned4BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint4(beef), cursor.next().get());
@@ -1577,7 +1579,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint4").input(img).apply();
+        var converted = ops.op("convert.uint4").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned4BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint4(123453.125f), cursor.next().get());
@@ -1612,7 +1614,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint4").input(img).apply();
+        var converted = ops.op("convert.uint4").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned4BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint4(5839.25f), cursor.next().get());
@@ -1647,7 +1649,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint4").input(img).apply();
+        var converted = ops.op("convert.uint4").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned4BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint4(4098d), cursor.next().get());
@@ -1690,7 +1692,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint4").input(img).apply();
+        var converted = ops.op("convert.uint4").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned4BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint4(9087d), cursor.next().get());
@@ -1725,7 +1727,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int8").input(img).apply();
+        var converted = ops.op("convert.int8").input(img).apply();
 		var cursor = ((IterableInterval<ByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int8(1), cursor.next().get());
@@ -1752,7 +1754,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int8").input(img).apply();
+        var converted = ops.op("convert.int8").input(img).apply();
 		var cursor = ((IterableInterval<ByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int8(2), cursor.next().get());
@@ -1779,7 +1781,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int8").input(img).apply();
+        var converted = ops.op("convert.int8").input(img).apply();
 		var cursor = ((IterableInterval<ByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int8(15), cursor.next().get());
@@ -1806,7 +1808,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int8").input(img).apply();
+        var converted = ops.op("convert.int8").input(img).apply();
 		var cursor = ((IterableInterval<ByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int8((byte) 8), cursor.next().get());
@@ -1841,7 +1843,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int8").input(img).apply();
+        var converted = ops.op("convert.int8").input(img).apply();
 		var cursor = ((IterableInterval<ByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int8(100), cursor.next().get());
@@ -1868,7 +1870,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int8").input(img).apply();
+        var converted = ops.op("convert.int8").input(img).apply();
 		var cursor = ((IterableInterval<ByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int8(212L), cursor.next().get());
@@ -1895,7 +1897,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int8").input(img).apply();
+        var converted = ops.op("convert.int8").input(img).apply();
 		var cursor = ((IterableInterval<ByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int8((short) 52), cursor.next().get());
@@ -1930,7 +1932,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int8").input(img).apply();
+        var converted = ops.op("convert.int8").input(img).apply();
 		var cursor = ((IterableInterval<ByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int8(480), cursor.next().get());
@@ -1957,7 +1959,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int8").input(img).apply();
+        var converted = ops.op("convert.int8").input(img).apply();
 		var cursor = ((IterableInterval<ByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int8(301), cursor.next().get());
@@ -1992,7 +1994,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int8").input(img).apply();
+        var converted = ops.op("convert.int8").input(img).apply();
 		var cursor = ((IterableInterval<ByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int8(20L), cursor.next().get());
@@ -2019,7 +2021,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int8").input(img).apply();
+        var converted = ops.op("convert.int8").input(img).apply();
 		var cursor = ((IterableInterval<ByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int8(891L), cursor.next().get());
@@ -2054,7 +2056,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int8").input(img).apply();
+        var converted = ops.op("convert.int8").input(img).apply();
 		var cursor = ((IterableInterval<ByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int8(1049L), cursor.next().get());
@@ -2089,7 +2091,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int8").input(img).apply();
+        var converted = ops.op("convert.int8").input(img).apply();
 		var cursor = ((IterableInterval<ByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int8(beef), cursor.next().get());
@@ -2124,7 +2126,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int8").input(img).apply();
+        var converted = ops.op("convert.int8").input(img).apply();
 		var cursor = ((IterableInterval<ByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int8(123453.125f), cursor.next().get());
@@ -2159,7 +2161,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int8").input(img).apply();
+        var converted = ops.op("convert.int8").input(img).apply();
 		var cursor = ((IterableInterval<ByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int8(5839.25f), cursor.next().get());
@@ -2194,7 +2196,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int8").input(img).apply();
+        var converted = ops.op("convert.int8").input(img).apply();
 		var cursor = ((IterableInterval<ByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int8(4098d), cursor.next().get());
@@ -2237,7 +2239,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int8").input(img).apply();
+        var converted = ops.op("convert.int8").input(img).apply();
 		var cursor = ((IterableInterval<ByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int8(9087d), cursor.next().get());
@@ -2272,7 +2274,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint8").input(img).apply();
+        var converted = ops.op("convert.uint8").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint8(1), cursor.next().get());
@@ -2299,7 +2301,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint8").input(img).apply();
+        var converted = ops.op("convert.uint8").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint8(2), cursor.next().get());
@@ -2326,7 +2328,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint8").input(img).apply();
+        var converted = ops.op("convert.uint8").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint8(15), cursor.next().get());
@@ -2353,7 +2355,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint8").input(img).apply();
+        var converted = ops.op("convert.uint8").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint8((byte) 8), cursor.next().get());
@@ -2388,7 +2390,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint8").input(img).apply();
+        var converted = ops.op("convert.uint8").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint8(100), cursor.next().get());
@@ -2415,7 +2417,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint8").input(img).apply();
+        var converted = ops.op("convert.uint8").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint8(212L), cursor.next().get());
@@ -2442,7 +2444,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint8").input(img).apply();
+        var converted = ops.op("convert.uint8").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint8((short) 52), cursor.next().get());
@@ -2477,7 +2479,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint8").input(img).apply();
+        var converted = ops.op("convert.uint8").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint8(480), cursor.next().get());
@@ -2504,7 +2506,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint8").input(img).apply();
+        var converted = ops.op("convert.uint8").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint8(301), cursor.next().get());
@@ -2539,7 +2541,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint8").input(img).apply();
+        var converted = ops.op("convert.uint8").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint8(20L), cursor.next().get());
@@ -2566,7 +2568,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint8").input(img).apply();
+        var converted = ops.op("convert.uint8").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint8(891L), cursor.next().get());
@@ -2601,7 +2603,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint8").input(img).apply();
+        var converted = ops.op("convert.uint8").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint8(1049L), cursor.next().get());
@@ -2636,7 +2638,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint8").input(img).apply();
+        var converted = ops.op("convert.uint8").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint8(beef), cursor.next().get());
@@ -2671,7 +2673,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint8").input(img).apply();
+        var converted = ops.op("convert.uint8").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint8(123453.125f), cursor.next().get());
@@ -2706,7 +2708,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint8").input(img).apply();
+        var converted = ops.op("convert.uint8").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint8(5839.25f), cursor.next().get());
@@ -2741,7 +2743,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint8").input(img).apply();
+        var converted = ops.op("convert.uint8").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint8(4098d), cursor.next().get());
@@ -2784,7 +2786,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint8").input(img).apply();
+        var converted = ops.op("convert.uint8").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedByteType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint8(9087d), cursor.next().get());
@@ -2819,7 +2821,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint12").input(img).apply();
+        var converted = ops.op("convert.uint12").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned12BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint12(1), cursor.next().get());
@@ -2846,7 +2848,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint12").input(img).apply();
+        var converted = ops.op("convert.uint12").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned12BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint12(2), cursor.next().get());
@@ -2873,7 +2875,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint12").input(img).apply();
+        var converted = ops.op("convert.uint12").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned12BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint12(15), cursor.next().get());
@@ -2900,7 +2902,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint12").input(img).apply();
+        var converted = ops.op("convert.uint12").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned12BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint12((byte) 8), cursor.next().get());
@@ -2935,7 +2937,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint12").input(img).apply();
+        var converted = ops.op("convert.uint12").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned12BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint12(100), cursor.next().get());
@@ -2962,7 +2964,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint12").input(img).apply();
+        var converted = ops.op("convert.uint12").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned12BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint12(212L), cursor.next().get());
@@ -2989,7 +2991,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint12").input(img).apply();
+        var converted = ops.op("convert.uint12").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned12BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint12((short) 52), cursor.next().get());
@@ -3024,7 +3026,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint12").input(img).apply();
+        var converted = ops.op("convert.uint12").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned12BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint12(480), cursor.next().get());
@@ -3051,7 +3053,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint12").input(img).apply();
+        var converted = ops.op("convert.uint12").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned12BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint12(301), cursor.next().get());
@@ -3086,7 +3088,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint12").input(img).apply();
+        var converted = ops.op("convert.uint12").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned12BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint12(20L), cursor.next().get());
@@ -3113,7 +3115,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint12").input(img).apply();
+        var converted = ops.op("convert.uint12").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned12BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint12(891L), cursor.next().get());
@@ -3148,7 +3150,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint12").input(img).apply();
+        var converted = ops.op("convert.uint12").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned12BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint12(1049L), cursor.next().get());
@@ -3183,7 +3185,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint12").input(img).apply();
+        var converted = ops.op("convert.uint12").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned12BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint12(beef), cursor.next().get());
@@ -3218,7 +3220,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint12").input(img).apply();
+        var converted = ops.op("convert.uint12").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned12BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint12(123453.125f), cursor.next().get());
@@ -3253,7 +3255,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint12").input(img).apply();
+        var converted = ops.op("convert.uint12").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned12BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint12(5839.25f), cursor.next().get());
@@ -3288,7 +3290,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint12").input(img).apply();
+        var converted = ops.op("convert.uint12").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned12BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint12(4098d), cursor.next().get());
@@ -3331,7 +3333,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint12").input(img).apply();
+        var converted = ops.op("convert.uint12").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned12BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint12(9087d), cursor.next().get());
@@ -3366,7 +3368,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int16").input(img).apply();
+        var converted = ops.op("convert.int16").input(img).apply();
 		var cursor = ((IterableInterval<ShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int16(1), cursor.next().get());
@@ -3393,7 +3395,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int16").input(img).apply();
+        var converted = ops.op("convert.int16").input(img).apply();
 		var cursor = ((IterableInterval<ShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int16(2), cursor.next().get());
@@ -3420,7 +3422,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int16").input(img).apply();
+        var converted = ops.op("convert.int16").input(img).apply();
 		var cursor = ((IterableInterval<ShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int16(15), cursor.next().get());
@@ -3447,7 +3449,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int16").input(img).apply();
+        var converted = ops.op("convert.int16").input(img).apply();
 		var cursor = ((IterableInterval<ShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int16((byte) 8), cursor.next().get());
@@ -3482,7 +3484,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int16").input(img).apply();
+        var converted = ops.op("convert.int16").input(img).apply();
 		var cursor = ((IterableInterval<ShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int16(100), cursor.next().get());
@@ -3509,7 +3511,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int16").input(img).apply();
+        var converted = ops.op("convert.int16").input(img).apply();
 		var cursor = ((IterableInterval<ShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int16(212L), cursor.next().get());
@@ -3536,7 +3538,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int16").input(img).apply();
+        var converted = ops.op("convert.int16").input(img).apply();
 		var cursor = ((IterableInterval<ShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int16((short) 52), cursor.next().get());
@@ -3571,7 +3573,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int16").input(img).apply();
+        var converted = ops.op("convert.int16").input(img).apply();
 		var cursor = ((IterableInterval<ShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int16(480), cursor.next().get());
@@ -3598,7 +3600,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int16").input(img).apply();
+        var converted = ops.op("convert.int16").input(img).apply();
 		var cursor = ((IterableInterval<ShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int16(301), cursor.next().get());
@@ -3633,7 +3635,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int16").input(img).apply();
+        var converted = ops.op("convert.int16").input(img).apply();
 		var cursor = ((IterableInterval<ShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int16(20L), cursor.next().get());
@@ -3660,7 +3662,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int16").input(img).apply();
+        var converted = ops.op("convert.int16").input(img).apply();
 		var cursor = ((IterableInterval<ShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int16(891L), cursor.next().get());
@@ -3695,7 +3697,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int16").input(img).apply();
+        var converted = ops.op("convert.int16").input(img).apply();
 		var cursor = ((IterableInterval<ShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int16(1049L), cursor.next().get());
@@ -3730,7 +3732,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int16").input(img).apply();
+        var converted = ops.op("convert.int16").input(img).apply();
 		var cursor = ((IterableInterval<ShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int16(beef), cursor.next().get());
@@ -3765,7 +3767,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int16").input(img).apply();
+        var converted = ops.op("convert.int16").input(img).apply();
 		var cursor = ((IterableInterval<ShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int16(123453.125f), cursor.next().get());
@@ -3800,7 +3802,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int16").input(img).apply();
+        var converted = ops.op("convert.int16").input(img).apply();
 		var cursor = ((IterableInterval<ShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int16(5839.25f), cursor.next().get());
@@ -3835,7 +3837,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int16").input(img).apply();
+        var converted = ops.op("convert.int16").input(img).apply();
 		var cursor = ((IterableInterval<ShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int16(4098d), cursor.next().get());
@@ -3878,7 +3880,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int16").input(img).apply();
+        var converted = ops.op("convert.int16").input(img).apply();
 		var cursor = ((IterableInterval<ShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int16(9087d), cursor.next().get());
@@ -3913,7 +3915,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint16").input(img).apply();
+        var converted = ops.op("convert.uint16").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint16(1), cursor.next().get());
@@ -3940,7 +3942,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint16").input(img).apply();
+        var converted = ops.op("convert.uint16").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint16(2), cursor.next().get());
@@ -3967,7 +3969,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint16").input(img).apply();
+        var converted = ops.op("convert.uint16").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint16(15), cursor.next().get());
@@ -3994,7 +3996,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint16").input(img).apply();
+        var converted = ops.op("convert.uint16").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint16((byte) 8), cursor.next().get());
@@ -4029,7 +4031,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint16").input(img).apply();
+        var converted = ops.op("convert.uint16").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint16(100), cursor.next().get());
@@ -4056,7 +4058,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint16").input(img).apply();
+        var converted = ops.op("convert.uint16").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint16(212L), cursor.next().get());
@@ -4083,7 +4085,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint16").input(img).apply();
+        var converted = ops.op("convert.uint16").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint16((short) 52), cursor.next().get());
@@ -4118,7 +4120,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint16").input(img).apply();
+        var converted = ops.op("convert.uint16").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint16(480), cursor.next().get());
@@ -4145,7 +4147,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint16").input(img).apply();
+        var converted = ops.op("convert.uint16").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint16(301), cursor.next().get());
@@ -4180,7 +4182,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint16").input(img).apply();
+        var converted = ops.op("convert.uint16").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint16(20L), cursor.next().get());
@@ -4207,7 +4209,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint16").input(img).apply();
+        var converted = ops.op("convert.uint16").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint16(891L), cursor.next().get());
@@ -4242,7 +4244,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint16").input(img).apply();
+        var converted = ops.op("convert.uint16").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint16(1049L), cursor.next().get());
@@ -4277,7 +4279,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint16").input(img).apply();
+        var converted = ops.op("convert.uint16").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint16(beef), cursor.next().get());
@@ -4312,7 +4314,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint16").input(img).apply();
+        var converted = ops.op("convert.uint16").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint16(123453.125f), cursor.next().get());
@@ -4347,7 +4349,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint16").input(img).apply();
+        var converted = ops.op("convert.uint16").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint16(5839.25f), cursor.next().get());
@@ -4382,7 +4384,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint16").input(img).apply();
+        var converted = ops.op("convert.uint16").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint16(4098d), cursor.next().get());
@@ -4425,7 +4427,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint16").input(img).apply();
+        var converted = ops.op("convert.uint16").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedShortType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint16(9087d), cursor.next().get());
@@ -4460,7 +4462,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int32").input(img).apply();
+        var converted = ops.op("convert.int32").input(img).apply();
 		var cursor = ((IterableInterval<IntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int32(1), cursor.next().get());
@@ -4487,7 +4489,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int32").input(img).apply();
+        var converted = ops.op("convert.int32").input(img).apply();
 		var cursor = ((IterableInterval<IntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int32(2), cursor.next().get());
@@ -4514,7 +4516,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int32").input(img).apply();
+        var converted = ops.op("convert.int32").input(img).apply();
 		var cursor = ((IterableInterval<IntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int32(15), cursor.next().get());
@@ -4541,7 +4543,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int32").input(img).apply();
+        var converted = ops.op("convert.int32").input(img).apply();
 		var cursor = ((IterableInterval<IntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int32((byte) 8), cursor.next().get());
@@ -4576,7 +4578,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int32").input(img).apply();
+        var converted = ops.op("convert.int32").input(img).apply();
 		var cursor = ((IterableInterval<IntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int32(100), cursor.next().get());
@@ -4603,7 +4605,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int32").input(img).apply();
+        var converted = ops.op("convert.int32").input(img).apply();
 		var cursor = ((IterableInterval<IntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int32(212L), cursor.next().get());
@@ -4630,7 +4632,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int32").input(img).apply();
+        var converted = ops.op("convert.int32").input(img).apply();
 		var cursor = ((IterableInterval<IntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int32((short) 52), cursor.next().get());
@@ -4665,7 +4667,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int32").input(img).apply();
+        var converted = ops.op("convert.int32").input(img).apply();
 		var cursor = ((IterableInterval<IntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int32(480), cursor.next().get());
@@ -4692,7 +4694,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int32").input(img).apply();
+        var converted = ops.op("convert.int32").input(img).apply();
 		var cursor = ((IterableInterval<IntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int32(301), cursor.next().get());
@@ -4727,7 +4729,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int32").input(img).apply();
+        var converted = ops.op("convert.int32").input(img).apply();
 		var cursor = ((IterableInterval<IntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int32(20L), cursor.next().get());
@@ -4754,7 +4756,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int32").input(img).apply();
+        var converted = ops.op("convert.int32").input(img).apply();
 		var cursor = ((IterableInterval<IntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int32(891L), cursor.next().get());
@@ -4789,7 +4791,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int32").input(img).apply();
+        var converted = ops.op("convert.int32").input(img).apply();
 		var cursor = ((IterableInterval<IntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int32(1049L), cursor.next().get());
@@ -4824,7 +4826,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int32").input(img).apply();
+        var converted = ops.op("convert.int32").input(img).apply();
 		var cursor = ((IterableInterval<IntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int32(beef), cursor.next().get());
@@ -4859,7 +4861,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int32").input(img).apply();
+        var converted = ops.op("convert.int32").input(img).apply();
 		var cursor = ((IterableInterval<IntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int32(123453.125f), cursor.next().get());
@@ -4894,7 +4896,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int32").input(img).apply();
+        var converted = ops.op("convert.int32").input(img).apply();
 		var cursor = ((IterableInterval<IntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int32(5839.25f), cursor.next().get());
@@ -4929,7 +4931,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int32").input(img).apply();
+        var converted = ops.op("convert.int32").input(img).apply();
 		var cursor = ((IterableInterval<IntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int32(4098d), cursor.next().get());
@@ -4972,7 +4974,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int32").input(img).apply();
+        var converted = ops.op("convert.int32").input(img).apply();
 		var cursor = ((IterableInterval<IntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int32(9087d), cursor.next().get());
@@ -5007,7 +5009,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint32").input(img).apply();
+        var converted = ops.op("convert.uint32").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedIntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint32(1), cursor.next().get());
@@ -5034,7 +5036,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint32").input(img).apply();
+        var converted = ops.op("convert.uint32").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedIntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint32(2), cursor.next().get());
@@ -5061,7 +5063,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint32").input(img).apply();
+        var converted = ops.op("convert.uint32").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedIntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint32(15), cursor.next().get());
@@ -5088,7 +5090,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint32").input(img).apply();
+        var converted = ops.op("convert.uint32").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedIntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint32((byte) 8), cursor.next().get());
@@ -5123,7 +5125,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint32").input(img).apply();
+        var converted = ops.op("convert.uint32").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedIntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint32(100), cursor.next().get());
@@ -5150,7 +5152,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint32").input(img).apply();
+        var converted = ops.op("convert.uint32").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedIntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint32(212L), cursor.next().get());
@@ -5177,7 +5179,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint32").input(img).apply();
+        var converted = ops.op("convert.uint32").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedIntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint32((short) 52), cursor.next().get());
@@ -5212,7 +5214,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint32").input(img).apply();
+        var converted = ops.op("convert.uint32").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedIntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint32(480), cursor.next().get());
@@ -5239,7 +5241,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint32").input(img).apply();
+        var converted = ops.op("convert.uint32").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedIntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint32(301), cursor.next().get());
@@ -5274,7 +5276,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint32").input(img).apply();
+        var converted = ops.op("convert.uint32").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedIntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint32(20L), cursor.next().get());
@@ -5301,7 +5303,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint32").input(img).apply();
+        var converted = ops.op("convert.uint32").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedIntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint32(891L), cursor.next().get());
@@ -5336,7 +5338,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint32").input(img).apply();
+        var converted = ops.op("convert.uint32").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedIntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint32(1049L), cursor.next().get());
@@ -5371,7 +5373,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint32").input(img).apply();
+        var converted = ops.op("convert.uint32").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedIntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint32(beef), cursor.next().get());
@@ -5406,7 +5408,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint32").input(img).apply();
+        var converted = ops.op("convert.uint32").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedIntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint32(123453.125f), cursor.next().get());
@@ -5441,7 +5443,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint32").input(img).apply();
+        var converted = ops.op("convert.uint32").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedIntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint32(5839.25f), cursor.next().get());
@@ -5476,7 +5478,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint32").input(img).apply();
+        var converted = ops.op("convert.uint32").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedIntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint32(4098d), cursor.next().get());
@@ -5519,7 +5521,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint32").input(img).apply();
+        var converted = ops.op("convert.uint32").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedIntType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint32(9087d), cursor.next().get());
@@ -5554,7 +5556,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int64").input(img).apply();
+        var converted = ops.op("convert.int64").input(img).apply();
 		var cursor = ((IterableInterval<LongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int64(1), cursor.next().get());
@@ -5581,7 +5583,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int64").input(img).apply();
+        var converted = ops.op("convert.int64").input(img).apply();
 		var cursor = ((IterableInterval<LongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int64(2), cursor.next().get());
@@ -5608,7 +5610,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int64").input(img).apply();
+        var converted = ops.op("convert.int64").input(img).apply();
 		var cursor = ((IterableInterval<LongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int64(15), cursor.next().get());
@@ -5635,7 +5637,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int64").input(img).apply();
+        var converted = ops.op("convert.int64").input(img).apply();
 		var cursor = ((IterableInterval<LongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int64((byte) 8), cursor.next().get());
@@ -5670,7 +5672,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int64").input(img).apply();
+        var converted = ops.op("convert.int64").input(img).apply();
 		var cursor = ((IterableInterval<LongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int64(100), cursor.next().get());
@@ -5697,7 +5699,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int64").input(img).apply();
+        var converted = ops.op("convert.int64").input(img).apply();
 		var cursor = ((IterableInterval<LongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int64(212L), cursor.next().get());
@@ -5724,7 +5726,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int64").input(img).apply();
+        var converted = ops.op("convert.int64").input(img).apply();
 		var cursor = ((IterableInterval<LongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int64((short) 52), cursor.next().get());
@@ -5759,7 +5761,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int64").input(img).apply();
+        var converted = ops.op("convert.int64").input(img).apply();
 		var cursor = ((IterableInterval<LongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int64(480), cursor.next().get());
@@ -5786,7 +5788,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int64").input(img).apply();
+        var converted = ops.op("convert.int64").input(img).apply();
 		var cursor = ((IterableInterval<LongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int64(301), cursor.next().get());
@@ -5821,7 +5823,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int64").input(img).apply();
+        var converted = ops.op("convert.int64").input(img).apply();
 		var cursor = ((IterableInterval<LongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int64(20L), cursor.next().get());
@@ -5848,7 +5850,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int64").input(img).apply();
+        var converted = ops.op("convert.int64").input(img).apply();
 		var cursor = ((IterableInterval<LongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int64(891L), cursor.next().get());
@@ -5883,7 +5885,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int64").input(img).apply();
+        var converted = ops.op("convert.int64").input(img).apply();
 		var cursor = ((IterableInterval<LongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int64(1049L), cursor.next().get());
@@ -5918,7 +5920,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int64").input(img).apply();
+        var converted = ops.op("convert.int64").input(img).apply();
 		var cursor = ((IterableInterval<LongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int64(beef), cursor.next().get());
@@ -5953,7 +5955,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int64").input(img).apply();
+        var converted = ops.op("convert.int64").input(img).apply();
 		var cursor = ((IterableInterval<LongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int64(123453.125f), cursor.next().get());
@@ -5988,7 +5990,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int64").input(img).apply();
+        var converted = ops.op("convert.int64").input(img).apply();
 		var cursor = ((IterableInterval<LongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int64(5839.25f), cursor.next().get());
@@ -6023,7 +6025,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int64").input(img).apply();
+        var converted = ops.op("convert.int64").input(img).apply();
 		var cursor = ((IterableInterval<LongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int64(4098d), cursor.next().get());
@@ -6066,7 +6068,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.int64").input(img).apply();
+        var converted = ops.op("convert.int64").input(img).apply();
 		var cursor = ((IterableInterval<LongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.int64(9087d), cursor.next().get());
@@ -6101,7 +6103,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint64").input(img).apply();
+        var converted = ops.op("convert.uint64").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedLongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint64(1), cursor.next().getBigInteger());
@@ -6128,7 +6130,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint64").input(img).apply();
+        var converted = ops.op("convert.uint64").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedLongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint64(2), cursor.next().getBigInteger());
@@ -6155,7 +6157,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint64").input(img).apply();
+        var converted = ops.op("convert.uint64").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedLongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint64(15), cursor.next().getBigInteger());
@@ -6182,7 +6184,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint64").input(img).apply();
+        var converted = ops.op("convert.uint64").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedLongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint64((byte) 8), cursor.next().getBigInteger());
@@ -6217,7 +6219,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint64").input(img).apply();
+        var converted = ops.op("convert.uint64").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedLongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint64(100), cursor.next().getBigInteger());
@@ -6244,7 +6246,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint64").input(img).apply();
+        var converted = ops.op("convert.uint64").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedLongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint64(212L), cursor.next().getBigInteger());
@@ -6271,7 +6273,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint64").input(img).apply();
+        var converted = ops.op("convert.uint64").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedLongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint64((short) 52), cursor.next().getBigInteger());
@@ -6306,7 +6308,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint64").input(img).apply();
+        var converted = ops.op("convert.uint64").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedLongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint64(480), cursor.next().getBigInteger());
@@ -6333,7 +6335,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint64").input(img).apply();
+        var converted = ops.op("convert.uint64").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedLongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint64(301), cursor.next().getBigInteger());
@@ -6368,7 +6370,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint64").input(img).apply();
+        var converted = ops.op("convert.uint64").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedLongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint64(20L), cursor.next().getBigInteger());
@@ -6395,7 +6397,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint64").input(img).apply();
+        var converted = ops.op("convert.uint64").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedLongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint64(891L), cursor.next().getBigInteger());
@@ -6430,7 +6432,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint64").input(img).apply();
+        var converted = ops.op("convert.uint64").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedLongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint64(1049L), cursor.next().getBigInteger());
@@ -6465,7 +6467,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint64").input(img).apply();
+        var converted = ops.op("convert.uint64").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedLongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint64(beef), cursor.next().getBigInteger());
@@ -6500,7 +6502,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint64").input(img).apply();
+        var converted = ops.op("convert.uint64").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedLongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint64(123453.125f), cursor.next().getBigInteger());
@@ -6535,7 +6537,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint64").input(img).apply();
+        var converted = ops.op("convert.uint64").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedLongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint64(5839.25f), cursor.next().getBigInteger());
@@ -6570,7 +6572,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint64").input(img).apply();
+        var converted = ops.op("convert.uint64").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedLongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint64(4098d), cursor.next().getBigInteger());
@@ -6613,7 +6615,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint64").input(img).apply();
+        var converted = ops.op("convert.uint64").input(img).apply();
 		var cursor = ((IterableInterval<UnsignedLongType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint64(9087d), cursor.next().getBigInteger());
@@ -6648,7 +6650,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint128").input(img).apply();
+        var converted = ops.op("convert.uint128").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned128BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint128(1), cursor.next().get());
@@ -6675,7 +6677,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint128").input(img).apply();
+        var converted = ops.op("convert.uint128").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned128BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint128(2), cursor.next().get());
@@ -6702,7 +6704,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint128").input(img).apply();
+        var converted = ops.op("convert.uint128").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned128BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint128(15), cursor.next().get());
@@ -6729,7 +6731,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint128").input(img).apply();
+        var converted = ops.op("convert.uint128").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned128BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint128((byte) 8), cursor.next().get());
@@ -6764,7 +6766,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint128").input(img).apply();
+        var converted = ops.op("convert.uint128").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned128BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint128(100), cursor.next().get());
@@ -6791,7 +6793,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint128").input(img).apply();
+        var converted = ops.op("convert.uint128").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned128BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint128(212L), cursor.next().get());
@@ -6818,7 +6820,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint128").input(img).apply();
+        var converted = ops.op("convert.uint128").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned128BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint128((short) 52), cursor.next().get());
@@ -6853,7 +6855,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint128").input(img).apply();
+        var converted = ops.op("convert.uint128").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned128BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint128(480), cursor.next().get());
@@ -6880,7 +6882,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint128").input(img).apply();
+        var converted = ops.op("convert.uint128").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned128BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint128(301), cursor.next().get());
@@ -6915,7 +6917,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint128").input(img).apply();
+        var converted = ops.op("convert.uint128").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned128BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint128(20L), cursor.next().get());
@@ -6942,7 +6944,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint128").input(img).apply();
+        var converted = ops.op("convert.uint128").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned128BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint128(891L), cursor.next().get());
@@ -6977,7 +6979,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint128").input(img).apply();
+        var converted = ops.op("convert.uint128").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned128BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint128(1049L), cursor.next().get());
@@ -7012,7 +7014,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint128").input(img).apply();
+        var converted = ops.op("convert.uint128").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned128BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint128(beef), cursor.next().get());
@@ -7047,7 +7049,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint128").input(img).apply();
+        var converted = ops.op("convert.uint128").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned128BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint128(123453.125f), cursor.next().get());
@@ -7082,7 +7084,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint128").input(img).apply();
+        var converted = ops.op("convert.uint128").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned128BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint128(5839.25f), cursor.next().get());
@@ -7117,7 +7119,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint128").input(img).apply();
+        var converted = ops.op("convert.uint128").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned128BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint128(4098d), cursor.next().get());
@@ -7160,7 +7162,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.uint128").input(img).apply();
+        var converted = ops.op("convert.uint128").input(img).apply();
 		var cursor = ((IterableInterval<Unsigned128BitType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.uint128(9087d), cursor.next().get());
@@ -7195,7 +7197,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float32").input(img).apply();
+        var converted = ops.op("convert.float32").input(img).apply();
 		var cursor = ((IterableInterval<FloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(1), cursor.next().get(), 0);
@@ -7222,7 +7224,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float32").input(img).apply();
+        var converted = ops.op("convert.float32").input(img).apply();
 		var cursor = ((IterableInterval<FloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(2), cursor.next().get(), 0);
@@ -7249,7 +7251,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float32").input(img).apply();
+        var converted = ops.op("convert.float32").input(img).apply();
 		var cursor = ((IterableInterval<FloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(15), cursor.next().get(), 0);
@@ -7276,7 +7278,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float32").input(img).apply();
+        var converted = ops.op("convert.float32").input(img).apply();
 		var cursor = ((IterableInterval<FloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32((byte) 8), cursor.next().get(), 0);
@@ -7311,7 +7313,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float32").input(img).apply();
+        var converted = ops.op("convert.float32").input(img).apply();
 		var cursor = ((IterableInterval<FloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(100), cursor.next().get(), 0);
@@ -7338,7 +7340,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float32").input(img).apply();
+        var converted = ops.op("convert.float32").input(img).apply();
 		var cursor = ((IterableInterval<FloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(212L), cursor.next().get(), 0);
@@ -7365,7 +7367,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float32").input(img).apply();
+        var converted = ops.op("convert.float32").input(img).apply();
 		var cursor = ((IterableInterval<FloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32((short) 52), cursor.next().get(), 0);
@@ -7400,7 +7402,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float32").input(img).apply();
+        var converted = ops.op("convert.float32").input(img).apply();
 		var cursor = ((IterableInterval<FloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(480), cursor.next().get(), 0);
@@ -7427,7 +7429,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float32").input(img).apply();
+        var converted = ops.op("convert.float32").input(img).apply();
 		var cursor = ((IterableInterval<FloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(301), cursor.next().get(), 0);
@@ -7462,7 +7464,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float32").input(img).apply();
+        var converted = ops.op("convert.float32").input(img).apply();
 		var cursor = ((IterableInterval<FloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(20L), cursor.next().get(), 0);
@@ -7489,7 +7491,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float32").input(img).apply();
+        var converted = ops.op("convert.float32").input(img).apply();
 		var cursor = ((IterableInterval<FloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(891L), cursor.next().get(), 0);
@@ -7524,7 +7526,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float32").input(img).apply();
+        var converted = ops.op("convert.float32").input(img).apply();
 		var cursor = ((IterableInterval<FloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(1049L), cursor.next().get(), 0);
@@ -7559,7 +7561,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float32").input(img).apply();
+        var converted = ops.op("convert.float32").input(img).apply();
 		var cursor = ((IterableInterval<FloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(beef), cursor.next().get(), 0);
@@ -7594,7 +7596,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float32").input(img).apply();
+        var converted = ops.op("convert.float32").input(img).apply();
 		var cursor = ((IterableInterval<FloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(123453.125f), cursor.next().get(), 0);
@@ -7629,7 +7631,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float32").input(img).apply();
+        var converted = ops.op("convert.float32").input(img).apply();
 		var cursor = ((IterableInterval<FloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(5839.25f), cursor.next().get(), 0);
@@ -7664,7 +7666,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float32").input(img).apply();
+        var converted = ops.op("convert.float32").input(img).apply();
 		var cursor = ((IterableInterval<FloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(4098d), cursor.next().get(), 0);
@@ -7707,7 +7709,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float32").input(img).apply();
+        var converted = ops.op("convert.float32").input(img).apply();
 		var cursor = ((IterableInterval<FloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(9087d), cursor.next().get(), 0);
@@ -7742,7 +7744,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat32").input(img).apply();
+        var converted = ops.op("convert.cfloat32").input(img).apply();
 		var cursor = ((IterableInterval<ComplexFloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(1), cursor.next().getRealFloat(), 0);
@@ -7771,7 +7773,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat32").input(img).apply();
+        var converted = ops.op("convert.cfloat32").input(img).apply();
 		var cursor = ((IterableInterval<ComplexFloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(2), cursor.next().getRealFloat(), 0);
@@ -7800,7 +7802,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat32").input(img).apply();
+        var converted = ops.op("convert.cfloat32").input(img).apply();
 		var cursor = ((IterableInterval<ComplexFloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(15), cursor.next().getRealFloat(), 0);
@@ -7829,7 +7831,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat32").input(img).apply();
+        var converted = ops.op("convert.cfloat32").input(img).apply();
 		var cursor = ((IterableInterval<ComplexFloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32((byte) 8), cursor.next().getRealFloat(), 0);
@@ -7867,7 +7869,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat32").input(img).apply();
+        var converted = ops.op("convert.cfloat32").input(img).apply();
 		var cursor = ((IterableInterval<ComplexFloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(100), cursor.next().getRealFloat(), 0);
@@ -7896,7 +7898,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat32").input(img).apply();
+        var converted = ops.op("convert.cfloat32").input(img).apply();
 		var cursor = ((IterableInterval<ComplexFloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(212L), cursor.next().getRealFloat(), 0);
@@ -7925,7 +7927,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat32").input(img).apply();
+        var converted = ops.op("convert.cfloat32").input(img).apply();
 		var cursor = ((IterableInterval<ComplexFloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32((short) 52), cursor.next().getRealFloat(), 0);
@@ -7963,7 +7965,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat32").input(img).apply();
+        var converted = ops.op("convert.cfloat32").input(img).apply();
 		var cursor = ((IterableInterval<ComplexFloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(480), cursor.next().getRealFloat(), 0);
@@ -7992,7 +7994,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat32").input(img).apply();
+        var converted = ops.op("convert.cfloat32").input(img).apply();
 		var cursor = ((IterableInterval<ComplexFloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(301), cursor.next().getRealFloat(), 0);
@@ -8030,7 +8032,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat32").input(img).apply();
+        var converted = ops.op("convert.cfloat32").input(img).apply();
 		var cursor = ((IterableInterval<ComplexFloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(20L), cursor.next().getRealFloat(), 0);
@@ -8059,7 +8061,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat32").input(img).apply();
+        var converted = ops.op("convert.cfloat32").input(img).apply();
 		var cursor = ((IterableInterval<ComplexFloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(891L), cursor.next().getRealFloat(), 0);
@@ -8097,7 +8099,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat32").input(img).apply();
+        var converted = ops.op("convert.cfloat32").input(img).apply();
 		var cursor = ((IterableInterval<ComplexFloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(1049L), cursor.next().getRealFloat(), 0);
@@ -8135,7 +8137,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat32").input(img).apply();
+        var converted = ops.op("convert.cfloat32").input(img).apply();
 		var cursor = ((IterableInterval<ComplexFloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(beef), cursor.next().getRealFloat(), 0);
@@ -8173,7 +8175,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat32").input(img).apply();
+        var converted = ops.op("convert.cfloat32").input(img).apply();
 		var cursor = ((IterableInterval<ComplexFloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(123453.125f), cursor.next().getRealFloat(), 0);
@@ -8211,7 +8213,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat32").input(img).apply();
+        var converted = ops.op("convert.cfloat32").input(img).apply();
 		var cursor = ((IterableInterval<ComplexFloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(5839.25f), cursor.next().getRealFloat(), 0);
@@ -8249,7 +8251,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat32").input(img).apply();
+        var converted = ops.op("convert.cfloat32").input(img).apply();
 		var cursor = ((IterableInterval<ComplexFloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(4098d), cursor.next().getRealFloat(), 0);
@@ -8296,7 +8298,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat32").input(img).apply();
+        var converted = ops.op("convert.cfloat32").input(img).apply();
 		var cursor = ((IterableInterval<ComplexFloatType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float32(9087d), cursor.next().getRealFloat(), 0);
@@ -8334,7 +8336,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float64").input(img).apply();
+        var converted = ops.op("convert.float64").input(img).apply();
 		var cursor = ((IterableInterval<DoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(1), cursor.next().get(), 0);
@@ -8361,7 +8363,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float64").input(img).apply();
+        var converted = ops.op("convert.float64").input(img).apply();
 		var cursor = ((IterableInterval<DoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(2), cursor.next().get(), 0);
@@ -8388,7 +8390,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float64").input(img).apply();
+        var converted = ops.op("convert.float64").input(img).apply();
 		var cursor = ((IterableInterval<DoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(15), cursor.next().get(), 0);
@@ -8415,7 +8417,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float64").input(img).apply();
+        var converted = ops.op("convert.float64").input(img).apply();
 		var cursor = ((IterableInterval<DoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64((byte) 8), cursor.next().get(), 0);
@@ -8450,7 +8452,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float64").input(img).apply();
+        var converted = ops.op("convert.float64").input(img).apply();
 		var cursor = ((IterableInterval<DoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(100), cursor.next().get(), 0);
@@ -8477,7 +8479,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float64").input(img).apply();
+        var converted = ops.op("convert.float64").input(img).apply();
 		var cursor = ((IterableInterval<DoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(212L), cursor.next().get(), 0);
@@ -8504,7 +8506,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float64").input(img).apply();
+        var converted = ops.op("convert.float64").input(img).apply();
 		var cursor = ((IterableInterval<DoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64((short) 52), cursor.next().get(), 0);
@@ -8539,7 +8541,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float64").input(img).apply();
+        var converted = ops.op("convert.float64").input(img).apply();
 		var cursor = ((IterableInterval<DoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(480), cursor.next().get(), 0);
@@ -8566,7 +8568,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float64").input(img).apply();
+        var converted = ops.op("convert.float64").input(img).apply();
 		var cursor = ((IterableInterval<DoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(301), cursor.next().get(), 0);
@@ -8601,7 +8603,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float64").input(img).apply();
+        var converted = ops.op("convert.float64").input(img).apply();
 		var cursor = ((IterableInterval<DoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(20L), cursor.next().get(), 0);
@@ -8628,7 +8630,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float64").input(img).apply();
+        var converted = ops.op("convert.float64").input(img).apply();
 		var cursor = ((IterableInterval<DoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(891L), cursor.next().get(), 0);
@@ -8663,7 +8665,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float64").input(img).apply();
+        var converted = ops.op("convert.float64").input(img).apply();
 		var cursor = ((IterableInterval<DoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(1049L), cursor.next().get(), 0);
@@ -8698,7 +8700,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float64").input(img).apply();
+        var converted = ops.op("convert.float64").input(img).apply();
 		var cursor = ((IterableInterval<DoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(beef), cursor.next().get(), 0);
@@ -8733,7 +8735,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float64").input(img).apply();
+        var converted = ops.op("convert.float64").input(img).apply();
 		var cursor = ((IterableInterval<DoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(123453.125f), cursor.next().get(), 0);
@@ -8768,7 +8770,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float64").input(img).apply();
+        var converted = ops.op("convert.float64").input(img).apply();
 		var cursor = ((IterableInterval<DoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(5839.25f), cursor.next().get(), 0);
@@ -8803,7 +8805,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float64").input(img).apply();
+        var converted = ops.op("convert.float64").input(img).apply();
 		var cursor = ((IterableInterval<DoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(4098d), cursor.next().get(), 0);
@@ -8846,7 +8848,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.float64").input(img).apply();
+        var converted = ops.op("convert.float64").input(img).apply();
 		var cursor = ((IterableInterval<DoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(9087d), cursor.next().get(), 0);
@@ -8881,7 +8883,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat64").input(img).apply();
+        var converted = ops.op("convert.cfloat64").input(img).apply();
 		var cursor = ((IterableInterval<ComplexDoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(1), cursor.next().getRealDouble(), 0);
@@ -8910,7 +8912,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat64").input(img).apply();
+        var converted = ops.op("convert.cfloat64").input(img).apply();
 		var cursor = ((IterableInterval<ComplexDoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(2), cursor.next().getRealDouble(), 0);
@@ -8939,7 +8941,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat64").input(img).apply();
+        var converted = ops.op("convert.cfloat64").input(img).apply();
 		var cursor = ((IterableInterval<ComplexDoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(15), cursor.next().getRealDouble(), 0);
@@ -8968,7 +8970,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat64").input(img).apply();
+        var converted = ops.op("convert.cfloat64").input(img).apply();
 		var cursor = ((IterableInterval<ComplexDoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64((byte) 8), cursor.next().getRealDouble(), 0);
@@ -9006,7 +9008,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat64").input(img).apply();
+        var converted = ops.op("convert.cfloat64").input(img).apply();
 		var cursor = ((IterableInterval<ComplexDoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(100), cursor.next().getRealDouble(), 0);
@@ -9035,7 +9037,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat64").input(img).apply();
+        var converted = ops.op("convert.cfloat64").input(img).apply();
 		var cursor = ((IterableInterval<ComplexDoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(212L), cursor.next().getRealDouble(), 0);
@@ -9064,7 +9066,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat64").input(img).apply();
+        var converted = ops.op("convert.cfloat64").input(img).apply();
 		var cursor = ((IterableInterval<ComplexDoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64((short) 52), cursor.next().getRealDouble(), 0);
@@ -9102,7 +9104,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat64").input(img).apply();
+        var converted = ops.op("convert.cfloat64").input(img).apply();
 		var cursor = ((IterableInterval<ComplexDoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(480), cursor.next().getRealDouble(), 0);
@@ -9131,7 +9133,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat64").input(img).apply();
+        var converted = ops.op("convert.cfloat64").input(img).apply();
 		var cursor = ((IterableInterval<ComplexDoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(301), cursor.next().getRealDouble(), 0);
@@ -9169,7 +9171,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat64").input(img).apply();
+        var converted = ops.op("convert.cfloat64").input(img).apply();
 		var cursor = ((IterableInterval<ComplexDoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(20L), cursor.next().getRealDouble(), 0);
@@ -9198,7 +9200,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat64").input(img).apply();
+        var converted = ops.op("convert.cfloat64").input(img).apply();
 		var cursor = ((IterableInterval<ComplexDoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(891L), cursor.next().getRealDouble(), 0);
@@ -9236,7 +9238,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat64").input(img).apply();
+        var converted = ops.op("convert.cfloat64").input(img).apply();
 		var cursor = ((IterableInterval<ComplexDoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(1049L), cursor.next().getRealDouble(), 0);
@@ -9274,7 +9276,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat64").input(img).apply();
+        var converted = ops.op("convert.cfloat64").input(img).apply();
 		var cursor = ((IterableInterval<ComplexDoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(beef), cursor.next().getRealDouble(), 0);
@@ -9312,7 +9314,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat64").input(img).apply();
+        var converted = ops.op("convert.cfloat64").input(img).apply();
 		var cursor = ((IterableInterval<ComplexDoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(123453.125f), cursor.next().getRealDouble(), 0);
@@ -9350,7 +9352,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat64").input(img).apply();
+        var converted = ops.op("convert.cfloat64").input(img).apply();
 		var cursor = ((IterableInterval<ComplexDoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(5839.25f), cursor.next().getRealDouble(), 0);
@@ -9388,7 +9390,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat64").input(img).apply();
+        var converted = ops.op("convert.cfloat64").input(img).apply();
 		var cursor = ((IterableInterval<ComplexDoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(4098d), cursor.next().getRealDouble(), 0);
@@ -9435,7 +9437,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.cfloat64").input(img).apply();
+        var converted = ops.op("convert.cfloat64").input(img).apply();
 		var cursor = ((IterableInterval<ComplexDoubleType>) converted).cursor();
 		while(cursor.hasNext()) {
             assertEquals(Types.float64(9087d), cursor.next().getRealDouble(), 0);

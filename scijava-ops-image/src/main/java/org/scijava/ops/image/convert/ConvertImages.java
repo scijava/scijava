@@ -30,7 +30,14 @@
 package org.scijava.ops.image.convert;
 
 import net.imglib2.Dimensions;
+import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.Sampler;
+import net.imglib2.converter.Converters;
+import net.imglib2.converter.readwrite.SamplerConverter;
+import net.imglib2.converter.readwrite.WriteConvertedIterableRandomAccessibleInterval;
+import net.imglib2.img.basictypeaccess.DoubleAccess;
+import net.imglib2.img.basictypeaccess.LongAccess;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.ComplexType;
@@ -39,6 +46,7 @@ import net.imglib2.type.numeric.complex.ComplexFloatType;
 import net.imglib2.type.numeric.integer.*;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
+import net.imglib2.util.Util;
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
 
@@ -53,24 +61,33 @@ public final class ConvertImages {
 
 	/**
 	 * @implNote op names='convert.bit, engine.convert', type=Function
-	 * @param creator a {@link BiFunction} to create the output image
-	 * @param converter a {@link Computers.Arity1} to convert the type to a
-	 *          {@link BitType}
 	 * @param input the input image
 	 * @return an output image whose values are equivalent to {@code input}s
 	 *         values but whose element types are {@link BitType}s.
 	 */
 	public static <C extends ComplexType<C>, RAIC extends RandomAccessibleInterval<C>>
-		RandomAccessibleInterval<BitType> typeToBit(@OpDependency(
-			name = "create.img") BiFunction<Dimensions, BitType, RandomAccessibleInterval<BitType>> creator,
-			@OpDependency(
-				name = "convert.bit") Computers.Arity1<C, BitType> converter,
-			final RAIC input)
+		RandomAccessibleInterval<BitType> typeToBit(final RAIC input)
 	{
-        var output = creator.apply(input,
-			new BitType());
-		LoopBuilder.setImages(input, output).forEachPixel(converter);
-		return output;
+		final C ZERO = Util.getTypeFromInterval(input).createVariable();
+		ZERO.setZero();
+		final C ONE = Util.getTypeFromInterval(input).createVariable();
+		ONE.setOne();
+
+		return Converters.convert(input, sampler -> new BitType(new LongAccess() {
+			@Override
+			public long getValue(int index) {
+				return sampler.get().equals(ZERO) ? 0L : 1L;
+			}
+
+			@Override
+			public void setValue(int index, long value) {
+				if (value == 0L) {
+					sampler.get().set(ZERO);
+				} else {
+					sampler.get().set(ONE);
+				}
+			}
+		}));
 	}
 
 	/**
@@ -387,31 +404,30 @@ public final class ConvertImages {
 	}
 
 	/**
-	 * @param creator a {@link BiFunction} to create the output image
-	 * @param converter a {@link Computers.Arity1} to convert the type to a
-	 *          {@link DoubleType}
 	 * @param input the input image
 	 * @return an output image whose values are equivalent to {@code input}'s
 	 *         values but whose element types are {@link DoubleType}s.
 	 * @implNote op names='convert.float64, engine.convert', type=Function
 	 */
 	public static <C extends ComplexType<C>, RAIC extends RandomAccessibleInterval<C>>
-		RandomAccessibleInterval<DoubleType> typeToDouble32(@OpDependency(
-			name = "create.img") BiFunction<Dimensions, DoubleType, RandomAccessibleInterval<DoubleType>> creator,
-			@OpDependency(
-				name = "convert.float64") Computers.Arity1<C, DoubleType> converter,
-			final RAIC input)
+		RandomAccessibleInterval<DoubleType> typeToDoubleType(final RAIC input)
 	{
-        var output = creator.apply(input,
-			new DoubleType());
-		LoopBuilder.setImages(input, output).forEachPixel(converter);
-		return output;
+		return Converters.convert(input, sampler -> new DoubleType(new DoubleAccess() {
+
+			@Override
+			public double getValue(int index) {
+				return sampler.get().getRealDouble();
+			}
+
+			@Override
+			public void setValue(int index, double value) {
+				sampler.get().setReal(value);
+				sampler.get().setImaginary(0);
+			}
+		}));
 	}
 
 	/**
-	 * @param creator a {@link BiFunction} to create the output image
-	 * @param converter a {@link Computers.Arity1} to convert the type to a
-	 *          {@link ComplexDoubleType}
 	 * @param input the input image
 	 * @return an output image whose values are equivalent to {@code input}'s
 	 *         values but whose element types are {@link ComplexDoubleType}s.
@@ -419,16 +435,28 @@ public final class ConvertImages {
 	 */
 	public static <C extends ComplexType<C>, RAIC extends RandomAccessibleInterval<C>>
 		RandomAccessibleInterval<ComplexDoubleType> typeToComplexDouble32(
-			@OpDependency(
-				name = "create.img") BiFunction<Dimensions, ComplexDoubleType, RandomAccessibleInterval<ComplexDoubleType>> creator,
-			@OpDependency(
-				name = "convert.cfloat64") Computers.Arity1<C, ComplexDoubleType> converter,
 			final RAIC input)
 	{
-        var output = creator.apply(input,
-			new ComplexDoubleType());
-		LoopBuilder.setImages(input, output).forEachPixel(converter);
-		return output;
+		return Converters.convert(input, sampler -> new ComplexDoubleType(new DoubleAccess() {
+
+			@Override
+			public double getValue(int index) {
+				if (index % 2 == 0) {
+					return sampler.get().getRealDouble();
+				} else {
+					return sampler.get().getImaginaryDouble();
+				}
+			}
+
+			@Override
+			public void setValue(int index, double value) {
+				if (index % 2 == 0) {
+					sampler.get().setReal(value);
+				} else {
+					sampler.get().setImaginary(value);
+				}
+			}
+		}));
 	}
 
 }

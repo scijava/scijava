@@ -4,9 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigInteger;
 
-import org.scijava.ops.image.AbstractOpTest;
 import net.imglib2.FinalDimensions;
-import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.complex.ComplexDoubleType;
 import net.imglib2.type.numeric.complex.ComplexFloatType;
@@ -24,7 +23,10 @@ import net.imglib2.type.numeric.integer.UnsignedLongType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
+import net.imglib2.view.Views;
 import org.junit.jupiter.api.Test;
+import org.scijava.ops.image.AbstractOpTest;
+import org.scijava.types.Nil;
 
 /**
  * Tests the {@link ConvertTypes} ops.
@@ -67,9 +69,10 @@ public class TestConvertImages extends AbstractOpTest{
 				.input(new FinalDimensions(2, 2), b) //
 				.apply();
 		ops.unary("image.fill").input(b).output(img).compute();
+		Nil<RandomAccessibleInterval<$imgLibType>> nil = new Nil<>() {};
 		// Create the converted image
-    var converted = ops.unary("convert.$toType.built").input(img).apply();
-		var cursor = ((IterableInterval<$imgLibType>) converted).cursor();
+		var converted = ops.unary("convert.$toType.built").input(img).outType(nil).apply();
+		var cursor = Views.iterable(converted).cursor();
 		while(cursor.hasNext()) {
 #if($toType.op.contains("C"))
             assertEquals($methodName($value.r), cursor.next().$getR, 0);
@@ -86,8 +89,8 @@ public class TestConvertImages extends AbstractOpTest{
 #else
     b.set($value.v);
 		ops.unary("image.fill").input(b).output(img).compute();
-		converted = ops.unary("convert.$toType.built").input(img).apply();
-		cursor = ((IterableInterval<$imgLibType>) converted).cursor();
+		converted = ops.unary("convert.$toType.built").input(img).outType(nil).apply();
+		cursor = Views.iterable(converted).cursor();
 		while(cursor.hasNext()) {
 #if($toType.op.contains("C"))
             assertEquals($methodName($value.r), cursor.next().$getR, 0);

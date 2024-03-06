@@ -72,14 +72,19 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	{
 		final ArrayList<OpCandidate> candidates = new ArrayList<>();
 
-		for (final OpInfo info : getInfos(env, conditions)) {
-			Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
-			if (typesMatch(info.opType(), conditions.request().getType(),
-				typeVarAssigns))
-			{
-				OpCandidate candidate = new OpCandidate(env, conditions.request(), info,
-					typeVarAssigns);
-				candidates.add(candidate);
+		Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
+		var matchPriority = -Double.MAX_VALUE;
+		for (var info : getInfos(env, conditions)) {
+			if (info.priority() < matchPriority) {
+				break;
+			}
+			typeVarAssigns.clear();
+			boolean matches = typesMatch(info.opType(), conditions.request()
+				.getType(), typeVarAssigns);
+			if (matches) {
+				candidates.add(new OpCandidate(env, conditions.request(), info,
+					new HashMap<>(typeVarAssigns)));
+				matchPriority = info.priority();
 			}
 		}
 		List<OpRequest> reqs = Collections.singletonList(conditions.request());

@@ -71,9 +71,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	 * @param out the output image
 	 * @implNote op names='test.convert.image.Unsigned2BitType', type='Computer'
 	 */
-	public static void computeUnsigned2BitType(
-		RandomAccessibleInterval<Unsigned2BitType> out)
-	{
+	public static void computeUnsigned2BitType(RandomAccessibleInterval<Unsigned2BitType> out) {
 		LoopBuilder.setImages(out).forEachPixel(o -> o.setReal(1.0));
 	}
 
@@ -92,9 +90,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	 * @param out the output image
 	 * @implNote op names='test.convert.image.Unsigned4BitType', type='Computer'
 	 */
-	public static void computeUnsigned4BitType(
-		RandomAccessibleInterval<Unsigned4BitType> out)
-	{
+	public static void computeUnsigned4BitType(RandomAccessibleInterval<Unsigned4BitType> out) {
 		LoopBuilder.setImages(out).forEachPixel(o -> o.setReal(1.0));
 	}
 
@@ -113,9 +109,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	 * @param out the output image
 	 * @implNote op names='test.convert.image.UnsignedByteType', type='Computer'
 	 */
-	public static void computeUnsignedByteType(
-		RandomAccessibleInterval<UnsignedByteType> out)
-	{
+	public static void computeUnsignedByteType(RandomAccessibleInterval<UnsignedByteType> out) {
 		LoopBuilder.setImages(out).forEachPixel(o -> o.setReal(1.0));
 	}
 
@@ -152,9 +146,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	 * @param out the output image
 	 * @implNote op names='test.convert.image.UnsignedShortType', type='Computer'
 	 */
-	public static void computeUnsignedShortType(
-		RandomAccessibleInterval<UnsignedShortType> out)
-	{
+	public static void computeUnsignedShortType(RandomAccessibleInterval<UnsignedShortType> out) {
 		LoopBuilder.setImages(out).forEachPixel(o -> o.setReal(1.0));
 	}
 
@@ -191,9 +183,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	 * @param out the output image
 	 * @implNote op names='test.convert.image.Unsigned12BitType', type='Computer'
 	 */
-	public static void computeUnsigned12BitType(
-		RandomAccessibleInterval<Unsigned12BitType> out)
-	{
+	public static void computeUnsigned12BitType(RandomAccessibleInterval<Unsigned12BitType> out) {
 		LoopBuilder.setImages(out).forEachPixel(o -> o.setReal(1.0));
 	}
 
@@ -212,9 +202,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	 * @param out the output image
 	 * @implNote op names='test.convert.image.UnsignedIntType', type='Computer'
 	 */
-	public static void computeUnsignedIntType(
-		RandomAccessibleInterval<UnsignedIntType> out)
-	{
+	public static void computeUnsignedIntType(RandomAccessibleInterval<UnsignedIntType> out) {
 		LoopBuilder.setImages(out).forEachPixel(o -> o.setReal(1.0));
 	}
 
@@ -250,9 +238,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	 * @param out the output image
 	 * @implNote op names='test.convert.image.UnsignedLongType', type='Computer'
 	 */
-	public static void computeUnsignedLongType(
-		RandomAccessibleInterval<UnsignedLongType> out)
-	{
+	public static void computeUnsignedLongType(RandomAccessibleInterval<UnsignedLongType> out) {
 		LoopBuilder.setImages(out).forEachPixel(o -> o.setReal(1.0));
 	}
 
@@ -287,11 +273,13 @@ public class RAIConvertersTest extends AbstractOpTest {
 
 	/**
 	 * @param out the output image
+<<<<<<< HEAD:scijava-ops-image/src/test/java/org/scijava/ops/image/convert/RAIConvertersTest.java
 	 * @implNote op names='test.convert.image.Unsigned128BitType', type='Computer'
+=======
+	 * @implNote op names='test.simplify.image.Unsigned128BitType', type='Computer'
+>>>>>>> WIP: Write wrapper focusers:scijava-ops-image/src/test/java/org/scijava/ops/image/simplify/RAIFocusersTest.java
 	 */
-	public static void computeUnsigned128BitType(
-		RandomAccessibleInterval<Unsigned128BitType> out)
-	{
+	public static void computeUnsigned128BitType(RandomAccessibleInterval<Unsigned128BitType> out) {
 		LoopBuilder.setImages(out).forEachPixel(o -> o.setReal(1.0));
 	}
 
@@ -328,9 +316,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	 * @param out the output image
 	 * @implNote op names='test.convert.image.DoubleType', type='Computer'
 	 */
-	public static void computeDoubleType(
-		RandomAccessibleInterval<DoubleType> out)
-	{
+	public static void computeDoubleType(RandomAccessibleInterval<DoubleType> out) {
 		LoopBuilder.setImages(out).forEachPixel(o -> o.setReal(1.0));
 	}
 

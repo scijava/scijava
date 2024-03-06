@@ -39,6 +39,8 @@ import org.scijava.function.Computers;
 import org.scijava.ops.api.*;
 import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.engine.InfoTreeGenerator;
+import org.scijava.ops.engine.matcher.impl.DefaultOpRequest;
+import org.scijava.ops.engine.matcher.impl.InfoMatchingOpRequest;
 import org.scijava.types.Nil;
 
 /**

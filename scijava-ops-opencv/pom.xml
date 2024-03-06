@@ -124,22 +124,8 @@
 			<groupId>org.bytedeco</groupId>
 			<artifactId>opencv</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.bytedeco</groupId>
-			<artifactId>javacpp</artifactId>
-		</dependency>
 
 		<!-- OpenCV runtime native dependencies -->
-		<dependency>
-			<groupId>org.bytedeco</groupId>
-			<artifactId>openblas</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.bytedeco</groupId>
-			<artifactId>openblas</artifactId>
-			<scope>runtime</scope>
-			<classifier>${scijava.natives.classifier.opencv}</classifier>
-		</dependency>
 		<dependency>
 			<groupId>org.bytedeco</groupId>
 			<artifactId>opencv</artifactId>
@@ -161,11 +147,6 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

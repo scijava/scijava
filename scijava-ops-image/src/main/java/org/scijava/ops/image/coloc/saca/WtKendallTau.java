@@ -37,7 +37,8 @@ import java.util.Random;
 import org.scijava.ops.image.coloc.IntComparator;
 
 /**
- * Helper class for Spatially Adaptive Colocalization Analysis (SACA) op.
+ * Helper class for Spatially Adaptive Colocalization Analysis (SACA) framework.
+ * This class is used by the AdaptiveSmoothedKendallTau class.
  *
  * @author Shulei Wang
  * @author Ellen TA Dobson

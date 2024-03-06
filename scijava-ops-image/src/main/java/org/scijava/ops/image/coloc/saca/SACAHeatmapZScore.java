@@ -44,11 +44,6 @@ import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * Spatially Adaptive Colocalization Analysis (SACA) Adapted from Shulei's
- * original Java code for AdaptiveSmoothedKendallTau from his RKColocal R
- * package.
- * (https://github.com/lakerwsl/RKColocal/blob/master/RKColocal_0.0.1.0000.tar.gz)
- *
  * @author Shulei Wang
  * @author Curtis Rueden
  * @author Ellen TA Dobson
@@ -68,14 +63,20 @@ public class SACAHeatmapZScore<I extends RealType<I>> implements
 	private Function<Histogram1d<I>, I> otsuOp;
 
 	/**
-	 * Spatially Adaptive Colocalization Analysis (SACA)
+	 * Spatially Adaptive Colocalization Analysis (SACA) Z-score heatmap. This Op
+	 * utilizes the SACA framework to identify colocalized pixels and their
+	 * strength as a Z-score heatmap. The Z-score heatmap is a produced by
+	 * Shulei's adaptive smoothed kendall tau algorithim. SACA was adapted from
+	 * Shulei's java code for AdaptiveSmoothedKendallTau in his RKColocal package
+	 * (https://github.com/lakerwsl/RKColocal/blob/master/RKColocal_0.0.1.0000.tar.gz).
 	 *
 	 * @param image1 input image 1
 	 * @param image2 input image 2
 	 * @param thres1 threshold 1 value; otsu threshold applied if null
 	 * @param thres2 threshold 2 value; otsu threshold applied if null
-	 * @param seed seed to use; default 0xdeadbeefL
-	 * @param result result image
+	 * @param seed seed value to use; default 0xdeadbeefL
+	 * @param result Adaptive smoothed kendall tau Z-score heatmap (i.e.
+	 *          colocalization strength)
 	 */
 
 	@Override

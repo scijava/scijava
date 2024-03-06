@@ -32,7 +32,9 @@ package org.scijava.ops.image.coloc.saca;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
 /**
- * Helper class for Spatially Adaptive Colocalization Analysis (SACA) op.
+ * Helper class for Spatially Adaptive Colocalization Analysis (SACA) framework.
+ * This class is used by the "coloc.saca.sigMask" Op to produce a binary mask of
+ * significantly colocalized pixels. This class replicates R's qnorm function.
  *
  * @author Shulei Wang
  * @author Ellen TA Dobson

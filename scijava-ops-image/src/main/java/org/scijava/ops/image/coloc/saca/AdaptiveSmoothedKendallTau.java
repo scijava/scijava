@@ -2,7 +2,7 @@
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2023 ImageJ2 developers.
+ * Copyright (C) 2014 - 2024 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -49,7 +49,9 @@ import net.imglib2.view.composite.GenericComposite;
 import net.imglib2.type.numeric.real.DoubleType;
 
 /**
- * Helper class for Spatially Adaptive Colocalization Analysis (SACA) op.
+ * Helper class for Spatially Adaptive Colocalization Analysis (SACA) framework.
+ * This class is used by the "coloc.saca.heatmapZScore" Op to produce the Z-score
+ * heatmap of pixel colocalization strength.
  *
  * @author Shulei Wang
  * @author Ellen TA Dobson

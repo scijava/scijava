@@ -36,11 +36,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.spi.Nullable;
 
 /**
- * Spatially Adaptive Colocalization Analysis (SACA) Adapted from Shulei's
- * original Java code for AdaptiveSmoothedKendallTau from his RKColocal R
- * package.
- * (https://github.com/lakerwsl/RKColocal/blob/master/RKColocal_0.0.1.0000.tar.gz)
- *
  * @author Shulei Wang
  * @author Curtis Rueden
  * @author Ellen TA Dobson
@@ -53,21 +48,25 @@ public class SACAHeatmapPValue implements
 {
 
 	/**
-	 * Spatially Adaptive Colocalization Analysis (SACA) P Value heatmap
+	 * Spatially Adaptive Colocalization Analysis (SACA) p-value heatmap. This Op
+	 * returns the pixelwise p-value of the input Z-score heatmap produced by the
+	 * SACA framework. SACA was adapted from Shulei's java code for
+	 * AdaptiveSmoothedKendallTau in his RKColocal package
+	 * (https://github.com/lakerwsl/RKColocal/blob/master/RKColocal_0.0.1.0000.tar.gz).
 	 *
-	 * @param heatmap input heatmap returned from 'coloc.saca.heatmapZScore'
+	 * @param heatmap input Z-score heatmap returned from 'coloc.saca.heatmapZScore'
 	 * @param lowerTail lower tail (default=false)
-	 * @param result P value heatmap output
+	 * @param result p value heatmap output
 	 */
 
 	@Override
 	public void compute(final RandomAccessibleInterval<DoubleType> heatmap,
 		@Nullable Boolean lowerTail, RandomAccessibleInterval<DoubleType> result)
 	{
-        // set lowerTail if necessary
-        if (lowerTail == null) lowerTail = true;
+		// set lowerTail if necessary
+		if (lowerTail == null) lowerTail = true;
 
-        // compute the normal distribution
+		// compute the normal distribution
 		PNorm.compute(heatmap, lowerTail, result);
 	}
 }

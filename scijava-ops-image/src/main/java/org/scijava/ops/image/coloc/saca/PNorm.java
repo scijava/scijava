@@ -36,7 +36,9 @@ import net.imglib2.type.numeric.real.DoubleType;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
 /**
- * Helper class for Spatially Adaptive Colocalization Analysis (SACA) op.
+ * Helper class for Spatially Adaptive Colocalization Analysis (SACA) framework.
+ * This class is used by the "coloc.saca.heatmapPValue" Op to produce a heatmap of
+ * pixelwise p-values. This class replicates R's pnorm function.
  *
  * @author Edward Evans
  */
@@ -51,7 +53,8 @@ public final class PNorm {
 		// compute normal distribution over the image
 		NormalDistribution normalDistribution = new NormalDistribution();
 
-		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel((i, o) -> {
+		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel((i,
+			o) -> {
 			double normDistValue = normalDistribution.cumulativeProbability(i.get());
 			if (!lowerTail) {
 				normDistValue = 1 - normDistValue;

@@ -29,23 +29,16 @@
 
 package org.scijava.ops.image.coloc.saca;
 
-import net.imglib2.img.Img;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.util.Intervals;
-import net.imglib2.util.Util;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * Spatially Adaptive Colocalization Analysis (SACA) Adapted from Shulei's
- * original Java code for AdaptiveSmoothedKendallTau from his RKColocal R
- * package.
- * (https://github.com/lakerwsl/RKColocal/blob/master/RKColocal_0.0.1.0000.tar.gz)
- *
  * @author Shulei Wang
  * @author Curtis Rueden
  * @author Ellen TA Dobson
@@ -61,9 +54,14 @@ public class SACASigMask implements
 	private Computers.Arity2<RandomAccessibleInterval<DoubleType>, DoubleType, RandomAccessibleInterval<BitType>> thresOp;
 
 	/**
-	 * Spatially Adaptive Colocalization Analysis (SACA) Significant pixel mask.
+	 * Spatially Adaptive Colocalization Analysis (SACA) significant pixel mask.
+	 * This Op returns a binary mask of the significantly colocalized pixels from
+	 * the input Z-score heatmap produced by the SACA framework. SACA was adapted
+	 * from Shulei's java code for AdaptiveSmoothedKendallTau in his RKColocal
+	 * package
+	 * (https://github.com/lakerwsl/RKColocal/blob/master/RKColocal_0.0.1.0000.tar.gz).
 	 *
-	 * @param heatmap input heatmap returned from 'coloc.saca.heatmapZScore'
+	 * @param heatmap input Z-score heatmap returned from 'coloc.saca.heatmapZScore'
 	 * @param alpha significance cuttoff, type 1 error (default=0.05)
 	 * @param mean mean value (default=0)
 	 * @param sd standard div (default=1)

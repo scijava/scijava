@@ -133,7 +133,6 @@
 		<dependency>
 			<groupId>org.bytedeco</groupId>
 			<artifactId>openblas</artifactId>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.bytedeco</groupId>

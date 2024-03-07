@@ -42,12 +42,10 @@ import org.junit.jupiter.api.Test;
 import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.ManualDiscoverer;
 import org.scijava.function.Producer;
+import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInstance;
-import org.scijava.ops.engine.InfoTreeGenerator;
-import org.scijava.ops.engine.MatchingConditions;
-import org.scijava.ops.engine.OpInfoGenerator;
-import org.scijava.ops.engine.OpWrapper;
+import org.scijava.ops.engine.*;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
@@ -127,7 +125,9 @@ public class OpCachingTest implements OpCollection {
 		Producer<String> newProducer = () -> newString;
 		OpInstance<?> invaderInstance = OpInstance.of(newProducer, cachedInstance
 			.infoTree(), new Nil<Producer<String>>()
-		{}.getType());
+		{
+
+			}.getType());
 		opCache.replace(cachedConditions, invaderInstance);
 
 		Producer<String> invadedOp = defOpEnv.op("test.basicOp").arity0().outType(
@@ -170,6 +170,60 @@ public class OpCachingTest implements OpCollection {
 			"Object in cache was not the same Object that was returned!");
 	}
 
+	@Test
+	public void testHintOmitsCaching() throws Exception {
+		DefaultOpEnvironment defOpEnv = getDefaultOpEnv();
+
+		// Empty the cache
+		Map<MatchingConditions, OpInstance<?>> opCache = getOpCache(defOpEnv);
+		opCache.clear();
+		Assertions.assertEquals(opCache.size(), 0, 0);
+
+		// Match the Op with a cache-ignoring hint
+		Hints h = new Hints(BaseOpHints.Cache.IGNORE);
+		Producer<String> op = defOpEnv.op("test.complicatedOp", h) //
+			.arity0() //
+			.outType(String.class) //
+			.producer();
+		// Assert the cache is still empty
+		Assertions.assertEquals(opCache.size(), 0, 0);
+	}
+
+	@Test
+	public void testHintOmitsCacheRetrieval() throws Exception {
+		// put the Op in the cache
+		DefaultOpEnvironment defOpEnv = getDefaultOpEnv();
+		Producer<String> op = defOpEnv.op("test.basicOp").arity0().outType(
+			String.class).producer();
+
+		Map<MatchingConditions, OpInstance<?>> opCache = getOpCache(defOpEnv);
+
+		// assert there is exactly one Op in the cache
+		OpInstance<?> cachedInstance = opCache.values().iterator().next();
+		Assertions.assertEquals(opCache.size(), 1, 0);
+		Assertions.assertEquals(basicOp, cachedInstance.op(),
+			"Object in cache was not the same Object that was returned!");
+
+		// replace that cache entry
+		MatchingConditions cachedConditions = opCache.keySet().iterator().next();
+		String newString = "This Op invaded the cache!";
+		Producer<String> newProducer = () -> newString;
+		OpInstance<?> invaderInstance = OpInstance.of(newProducer, cachedInstance
+			.infoTree(), new Nil<Producer<String>>()
+		{
+
+			}.getType());
+		opCache.replace(cachedConditions, invaderInstance);
+
+		// ensure the cache-ignoring hint avoids the replacement
+		Hints h = new Hints(BaseOpHints.Cache.IGNORE);
+		op = defOpEnv.op("test.basicOp", h) //
+			.arity0() //
+			.outType(String.class) //
+			.producer();
+		Assertions.assertNotEquals(op, cachedInstance.op(),
+			"Object in cache was the same Object that was returned!");
+	}
 }
 
 @OpClass(names = "test.complicatedOp")

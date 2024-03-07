@@ -1,4 +1,5 @@
 sphinx-multiproject
 sphinx_rtd_theme
+sphinx-tabs
 myst-nb
 readthedocs-sphinx-search

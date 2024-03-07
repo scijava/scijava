@@ -108,4 +108,15 @@ public final class BaseOpHints {
 
 	}
 
+	public static final class Cache {
+
+		private Cache() {
+			// Prevent instantiation of static utility class
+		}
+
+		public static final String PREFIX = "cache";
+		public static final String IGNORE = PREFIX + ".IGNORE";
+
+	}
+
 }

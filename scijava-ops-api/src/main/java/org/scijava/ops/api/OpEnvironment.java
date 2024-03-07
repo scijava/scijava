@@ -36,6 +36,7 @@ import java.util.SortedSet;
 
 import org.scijava.discovery.Discoverer;
 import org.scijava.priority.Prioritized;
+import org.scijava.priority.Priority;
 import org.scijava.types.Nil;
 
 /**
@@ -137,8 +138,14 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 * @param outType the return of the Op (note that it may also be an argument)
 	 * @return an instance of an Op aligning with the search parameters
 	 */
-	<T> T op(final String opName, final Nil<T> specialType,
-		final Nil<?>[] inTypes, final Nil<?> outType);
+	default <T> T op( //
+		final String opName, //
+		final Nil<T> specialType, //
+		final Nil<?>[] inTypes, //
+		final Nil<?> outType //
+	) {
+		return op(opName, specialType, inTypes, outType, getDefaultHints());
+	}
 
 	/**
 	 * Returns an Op fitting the provided arguments.
@@ -167,8 +174,14 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 * @param outType the return of the Op (note that it may also be an argument)
 	 * @return an instance of an Op aligning with the search parameters
 	 */
-	InfoTree infoTree(final String opName, final Nil<?> specialType,
-		final Nil<?>[] inTypes, final Nil<?> outType);
+	default InfoTree infoTree( //
+		final String opName, //
+		final Nil<?> specialType, //
+		final Nil<?>[] inTypes, //
+		final Nil<?> outType //
+	) {
+		return infoTree(opName, specialType, inTypes, outType, getDefaultHints());
+	}
 
 	/**
 	 * Returns an {@link InfoTree} fitting the provided arguments.
@@ -197,7 +210,12 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 * @param specialType the generic {@link Type} of the Op
 	 * @return an instance of an Op aligning with the search parameters
 	 */
-	<T> T opFromSignature(final String signature, final Nil<T> specialType);
+	default <T> T opFromSignature(final String signature,
+		final Nil<T> specialType)
+	{
+		InfoTree info = treeFromID(signature);
+		return opFromInfoChain(info, specialType);
+	}
 
 	InfoTree treeFromID(final String signature);
 
@@ -966,7 +984,9 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 * @param names - the name(s) of the Op
 	 * @return an {@link OpInfo} which can make instances of {@code opClass}
 	 */
-	OpInfo opify(Class<?> opClass, String... names);
+	default OpInfo opify(Class<?> opClass, String... names) {
+		return opify(opClass, Priority.NORMAL, names);
+	}
 
 	/**
 	 * Creates an {@link OpInfo} from an {@link Class} with the given priority.

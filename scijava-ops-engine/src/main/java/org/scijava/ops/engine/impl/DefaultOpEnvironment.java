@@ -197,24 +197,14 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@Override
-	public <T> T op(final String opName, final Nil<T> specialType,
-		final Nil<?>[] inTypes, final Nil<?> outType)
-	{
-		return op(opName, specialType, inTypes, outType, getDefaultHints());
-	}
-
-	@Override
-	public <T> T op(final String opName, final Nil<T> specialType,
-		final Nil<?>[] inTypes, final Nil<?> outType, Hints hints)
-	{
+	public <T> T op( //
+		final String opName, //
+		final Nil<T> specialType, //
+		final Nil<?>[] inTypes, //
+		final Nil<?> outType, //
+		Hints hints //
+	) {
 		return findOp(opName, specialType, inTypes, outType, hints).asOpType();
-	}
-
-	@Override
-	public InfoTree infoTree(String opName, Nil<?> specialType, Nil<?>[] inTypes,
-		Nil<?> outType)
-	{
-		return infoTree(opName, specialType, inTypes, outType, getDefaultHints());
 	}
 
 	@Override
@@ -227,14 +217,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	@Override
 	public InfoTree treeFromInfo(OpInfo info, Nil<?> specialType, Hints hints) {
 		return findOp(info, specialType, hints).infoTree();
-	}
-
-	@Override
-	public <T> T opFromSignature(final String signature,
-		final Nil<T> specialType)
-	{
-		InfoTree info = treeFromID(signature);
-		return opFromInfoChain(info, specialType);
 	}
 
 	@Override
@@ -269,11 +251,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	@Override
 	public Type genericType(Object obj) {
 		return typeService.reify(obj);
-	}
-
-	@Override
-	public OpInfo opify(final Class<?> opClass, String... names) {
-		return opify(opClass, Priority.NORMAL, names);
 	}
 
 	@Override
@@ -398,8 +375,9 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	{
 		final OpRequest request = DefaultOpRequest.fromTypes(opName, specialType
 			.getType(), outType != null ? outType.getType() : null, toTypes(inTypes));
-		MatchingConditions conditions = generateCacheHit(request, hints);
-		return (RichOp<T>) wrapViaCache(conditions);
+		var conditions = MatchingConditions.from(request, hints);
+		OpInstance<T> instance = (OpInstance<T>) generateCacheHit(conditions);
+		return wrapOp(instance, conditions);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -407,8 +385,16 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		Hints hints) throws OpMatchingException
 	{
 		OpRequest request = new InfoMatchingOpRequest(info, specialType);
-		MatchingConditions conditions = insertCacheHit(request, hints, info);
-		return (OpInstance<T>) getInstance(conditions);
+
+		// create new OpCandidate from request and info
+		OpCandidate candidate = new OpCandidate(this, request, info);
+
+		MatchingConditions conditions = MatchingConditions.from(request, hints);
+		var instance = instantiateOp(candidate, conditions.hints());
+
+		// cache instance
+		setInstance(conditions, instance);
+		return (OpInstance<T>) instance;
 	}
 
 	private Type[] toTypes(Nil<?>... nils) {
@@ -419,33 +405,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	/**
-	 * Creates an Op instance from an {@link OpInfo} with the provided
-	 * {@link MatchingConditions} as the guidelines for {@link OpInfo} selection.
-	 * This Op instance is put into the {@link #opCache}, and is retrievable via
-	 * {@link DefaultOpEnvironment#wrapViaCache(MatchingConditions)}
-	 *
-	 * @param request the {@link OpRequest} request
-	 * @param hints the {@link Hints} containing matching preferences
-	 * @param info the {@link OpInfo} describing the Op that should match these
-	 *          conditions1
-	 * @return the {@link MatchingConditions} that will return the Op described by
-	 *         {@code info} from the op cache
-	 */
-	private MatchingConditions insertCacheHit(final OpRequest request, //
-		final Hints hints, //
-		final OpInfo info //
-	) {
-		MatchingConditions conditions = MatchingConditions.from(request, hints);
-
-		// create new OpCandidate from request and info
-		OpCandidate candidate = new OpCandidate(this, request, info);
-
-		instantiateAndCache(conditions, candidate);
-
-		return conditions;
-	}
-
-	/**
 	 * Finds an Op instance matching the request described by {@link OpRequest}
 	 * {@code request} and stores this Op in {@link #opCache}. NB the return must
 	 * be an {@link Object} here (instead of some type variable T where T is the
@@ -453,38 +412,37 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * provide that T (since the {@link OpRequest} could require that the Op
 	 * returned is of multiple types).
 	 *
-	 * @param request the {@link OpRequest} request
-	 * @param hints the {@link Hints} containing matching preferences
-	 * @return the {@link MatchingConditions} that will return the Op found from
-	 *         the op cache
+	 * @param conditions the {@link MatchingConditions} defining a proper match
+	 * @return the {@link OpInstance} generated to satisfy {@code conditions}
 	 */
-	private MatchingConditions generateCacheHit(OpRequest request, Hints hints) {
-		MatchingConditions conditions = MatchingConditions.from(request, hints);
+	private OpInstance<?> generateCacheHit(MatchingConditions conditions) {
 		// see if the request has been matched already
 		OpInstance<?> cachedOp = getInstance(conditions);
-		if (cachedOp != null) return conditions;
+		if (cachedOp != null) return cachedOp;
 
 		// obtain suitable OpCandidate
-		OpCandidate candidate = findOpCandidate(conditions.request(), conditions
-			.hints());
-
-		instantiateAndCache(conditions, candidate);
-
-		return conditions;
-	}
-
-	private void instantiateAndCache(MatchingConditions conditions,
-		OpCandidate candidate)
-	{
-		// obtain Op instance (with dependencies)
-		OpInstance<?> op = instantiateOp(candidate, conditions.hints());
+		var candidate = findOpCandidate(conditions.request(), conditions.hints());
+		var instance = instantiateOp(candidate, conditions.hints());
 
 		// cache instance
-		opCache.putIfAbsent(conditions, op);
+		setInstance(conditions, instance);
+		return instance;
 	}
 
 	private OpInstance<?> getInstance(MatchingConditions conditions) {
+		if (conditions.hints().contains(BaseOpHints.Cache.IGNORE)) {
+			return null;
+		}
 		return opCache.get(conditions);
+	}
+
+	private void setInstance(MatchingConditions conditions,
+		OpInstance<?> instance)
+	{
+		if (conditions.hints().contains(BaseOpHints.Cache.IGNORE)) {
+			return;
+		}
+		opCache.put(conditions, instance);
 	}
 
 	private OpCandidate findOpCandidate(OpRequest request, Hints hints) {
@@ -631,18 +589,19 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		// Then, match dependencies
 		final List<RichOp<?>> dependencyChains = new ArrayList<>();
 		for (final OpDependencyMember<?> dependency : Infos.dependencies(info)) {
-			final OpRequest dep = inferOpRequest(dependency,
+			final OpRequest request = inferOpRequest(dependency,
 				dependencyTypeVarAssigns);
 			try {
-				// Add hints requested by the dependency
-				Hints depHints = baseDepHints.plus(dependency.hints());
+				var conditions = MatchingConditions.from(request,
+					// Add hints requested by the dependency
+					baseDepHints.plus(dependency.hints()));
 
-				MatchingConditions conditions = generateCacheHit(dep, depHints);
-				dependencyChains.add(wrapViaCache(conditions));
+				OpInstance<?> instance = generateCacheHit(conditions);
+				dependencyChains.add(wrapOp(instance, conditions));
 			}
 			catch (final OpMatchingException e) {
 				String message = DependencyMatchingException.message(info
-					.implementationName(), dependency.getKey(), dep);
+					.implementationName(), dependency.getKey(), request);
 				if (e instanceof DependencyMatchingException) {
 					throw new DependencyMatchingException(message,
 						(DependencyMatchingException) e);
@@ -660,11 +619,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			dependency.getType() }, typeVarAssigns)[0];
 		final String dependencyName = dependency.getDependencyName();
 		return inferOpRequest(mappedDependencyType, dependencyName, typeVarAssigns);
-	}
-
-	private RichOp<?> wrapViaCache(MatchingConditions conditions) {
-		OpInstance<?> instance = getInstance(conditions);
-		return wrapOp(instance, conditions);
 	}
 
 	/**

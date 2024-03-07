@@ -353,7 +353,8 @@ public class OpBuilder {
 						Object.class });
 				}
 			};
-			return env.op(opName, specialType, new Nil<?>[0], Nil.of(Object.class));
+			return env.op(opName, specialType, new Nil<?>[0], Nil.of(Object.class),
+				OpBuilder.this.hints);
 		}
 
 		/**
@@ -432,7 +433,8 @@ public class OpBuilder {
 						.getType() });
 				}
 			};
-			return env.op(opName, specialType, new Nil<?>[0], outType);
+			return env.op(opName, specialType, new Nil<?>[0], outType,
+				OpBuilder.this.hints);
 		}
 
 		/**

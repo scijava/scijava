@@ -54,8 +54,8 @@ public class TestOpenCV {
 	private static final String TEST_OP_ALIAS = "filter.gauss";
 	private static final String EXPECTED_HELP = //
 		"cv.GaussianBlur:\n" //
-			+ "\t- (arg0, @CONTAINER container1, arg2, arg3) -> None\n"//
-			+ "\t- (arg0, @CONTAINER container1, arg2, arg3, arg4, arg5) -> None";
+			+ "\t- (image, @CONTAINER image, Size, number) -> None\n"//
+			+ "\t- (image, @CONTAINER image, Size, number, number, number) -> None";
 
 	private static final String EXPECTED_HELP_VERBOSE = //
 		"cv.GaussianBlur:\n" //
@@ -104,7 +104,7 @@ public class TestOpenCV {
 
 	private static final String EXPECTED_USAGE = //
 		"cv.GaussianBlur:\n" //
-			+ "\t- (arg0, @CONTAINER container1, arg2, arg3) -> None";
+			+ "\t- (image, @CONTAINER image, Size, number) -> None";
 
 	private static final String EXPECTED_USAGE_VERBOSE = //
 		"cv.GaussianBlur:\n" //

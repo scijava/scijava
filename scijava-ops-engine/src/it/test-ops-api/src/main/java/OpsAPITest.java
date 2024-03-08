@@ -75,12 +75,12 @@ public class OpsAPITest {
 			"Expected at least one math.pow Op");
 		Assertions.assertFalse(help.toLowerCase().contains("long"),
 			"Found a math.pow Op that deals with Longs - testing the hints won't work here!");
-		// Ensure an Op matches without simplification
+		// Ensure an Op matches without conversion
 		// NB this call must come first, or the cache will be hit based on the previous call.
-		Hints h = new Hints("simplification.FORBIDDEN");
+		Hints h = new Hints("conversion.FORBIDDEN");
 		Assertions.assertThrows(OpMatchingException.class, () -> ops.op("math.pow", h).arity2().input(in, exponent).outType(Long.class).apply());
 
-		// Ensure an Op matches with simplification
+		// Ensure an Op matches with conversion
 		var power = ops.op("math.pow").arity2().input(in, exponent).outType(Long.class).apply();
 		Assertions.assertEquals((long) Math.pow(in, exponent), power);
 	}

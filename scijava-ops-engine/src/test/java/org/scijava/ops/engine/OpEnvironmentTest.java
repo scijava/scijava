@@ -136,7 +136,7 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 		// ...but make sure that if we really need help with the internal namespace,
 		// we can get it
 		actual = helpEnv.help("engine.adapt");
-		expected = "engine.adapt:\n\t- () -> String";
+		expected = "engine.adapt:\n\t- () -> java.lang.String";
 		Assertions.assertEquals(expected, actual);
 	}
 

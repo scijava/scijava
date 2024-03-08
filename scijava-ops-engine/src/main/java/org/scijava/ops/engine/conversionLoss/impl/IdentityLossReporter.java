@@ -1,8 +1,8 @@
 /*-
  * #%L
- * ImageJ2 software for multidimensional image processing and analysis.
+ * SciJava Operations Engine: a framework for reusable algorithms.
  * %%
- * Copyright (C) 2014 - 2023 ImageJ2 developers.
+ * Copyright (C) 2016 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,31 +27,37 @@
  * #L%
  */
 
-package org.scijava.ops.image;
+package org.scijava.ops.engine.conversionLoss.impl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.scijava.ops.spi.OpHints;
+import org.scijava.ops.engine.BaseOpHints.Conversion;
+import org.scijava.ops.engine.conversionLoss.LossReporter;
+import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpClass;
+import org.scijava.priority.Priority;
+import org.scijava.types.Nil;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpInfo;
+/**
+ * A {@link LossReporter} used when a type is not converted.
+ *
+ * @author Gabriel Selzer
+ * @param <T> - the type that is not being converted.
+ * @see org.scijava.ops.engine.matcher.convert.IdentityCollection
+ */
+@OpHints(hints = { Conversion.FORBIDDEN })
+@OpClass(names = "engine.lossReporter", priority = Priority.VERY_HIGH)
+public class IdentityLossReporter<U, T extends U> implements LossReporter<T, U>,
+	Op
+{
 
-public class OpRegressionTest {
-
-	protected static final OpEnvironment ops = OpEnvironment.build();
-
-	@Test
-	public void opDiscoveryRegressionIT() {
-		long expected = 1907;
-		long actual = ops.infos().size();
-		assertEquals(expected, actual);
+	/**
+	 * @param t the Nil describing the type that is being converted from
+	 * @param u the Nil describing the type that is being converted to
+	 * @return the worst-case loss converting from type T to type T (i.e. 0)
+	 */
+	@Override
+	public Double apply(Nil<T> t, Nil<U> u) {
+		return 0.;
 	}
 
-	@Test
-	public void opDescriptionRegressionIT() {
-		// Ensure no ops have a null description
-		for (OpInfo info : ops.infos())
-			Assertions.assertNotNull(info.toString(), () -> "Info from " + info.id() +
-				" has a null description");
-	}
 }

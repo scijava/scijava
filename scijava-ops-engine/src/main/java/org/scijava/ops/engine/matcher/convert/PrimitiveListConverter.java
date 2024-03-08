@@ -1,8 +1,8 @@
 /*-
  * #%L
- * ImageJ2 software for multidimensional image processing and analysis.
+ * SciJava Operations Engine: a framework for reusable algorithms.
  * %%
- * Copyright (C) 2014 - 2023 ImageJ2 developers.
+ * Copyright (C) 2016 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,31 +27,33 @@
  * #L%
  */
 
-package org.scijava.ops.image;
+package org.scijava.ops.engine.matcher.convert;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.List;
+import java.util.function.Function;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpClass;
 
-public class OpRegressionTest {
+/**
+ * Converts {@link List}s of types extending {@link Number}.
+ *
+ * @author Gabriel Selzer
+ */
+@OpClass(names = "engine.convert")
+public class PrimitiveListConverter<T extends Number> implements
+	Function<List<T>, List<Number>>, Op
+{
 
-	protected static final OpEnvironment ops = OpEnvironment.build();
-
-	@Test
-	public void opDiscoveryRegressionIT() {
-		long expected = 1907;
-		long actual = ops.infos().size();
-		assertEquals(expected, actual);
+	@Override
+	/**
+	 * @param t the input List
+	 * @return a List whose elements have been converted
+	 */
+	public List<Number> apply(List<T> t) {
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		List<Number> numberList = (List) t;
+		return numberList;
 	}
 
-	@Test
-	public void opDescriptionRegressionIT() {
-		// Ensure no ops have a null description
-		for (OpInfo info : ops.infos())
-			Assertions.assertNotNull(info.toString(), () -> "Info from " + info.id() +
-				" has a null description");
-	}
 }

@@ -1,8 +1,8 @@
 /*-
  * #%L
- * ImageJ2 software for multidimensional image processing and analysis.
+ * SciJava Operations Engine: a framework for reusable algorithms.
  * %%
- * Copyright (C) 2014 - 2023 ImageJ2 developers.
+ * Copyright (C) 2016 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,31 +27,40 @@
  * #L%
  */
 
-package org.scijava.ops.image;
+package org.scijava.ops.engine.matcher.convert;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Assertions;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpInfo;
 
-public class OpRegressionTest {
-
-	protected static final OpEnvironment ops = OpEnvironment.build();
+public class PrimitiveListConverterTest {
 
 	@Test
-	public void opDiscoveryRegressionIT() {
-		long expected = 1907;
-		long actual = ops.infos().size();
-		assertEquals(expected, actual);
+	public void testLinkedListConverter() {
+		List<Long> list = new LinkedList<>();
+		list.add(5l);
+		PrimitiveListConverter<Long> converter = new PrimitiveListConverter<>();
+		List<Number> newList = converter.apply(list);
+		assertTrue(newList instanceof LinkedList);
+		assertFalse(newList instanceof ArrayList);
+		assertEquals(newList.get(0), 5l);
 	}
 
 	@Test
-	public void opDescriptionRegressionIT() {
-		// Ensure no ops have a null description
-		for (OpInfo info : ops.infos())
-			Assertions.assertNotNull(info.toString(), () -> "Info from " + info.id() +
-				" has a null description");
+	public void testArrayListConverter() {
+		List<Long> list = new ArrayList<>();
+		list.add(5l);
+		PrimitiveListConverter<Long> converter = new PrimitiveListConverter<>();
+		List<Number> newList = converter.apply(list);
+		assertFalse(newList instanceof LinkedList);
+		assertTrue(newList instanceof ArrayList);
+		assertEquals(newList.get(0), 5l);
 	}
+
 }

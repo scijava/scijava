@@ -1,0 +1,23 @@
+.include templates/main/java/org/scijava/ops/image/adapt/Globals.list
+
+[RAIConvertersTest.java]
+
+types = ```
+  [
+      'BitType',
+      'Unsigned2BitType',
+      'Unsigned4BitType',
+      'UnsignedByteType',
+      'ByteType',
+      'UnsignedShortType',
+      'ShortType',
+      'Unsigned12BitType',
+      'UnsignedIntType',
+      'IntType',
+      'UnsignedLongType',
+      'LongType',
+      'Unsigned128BitType',
+      'FloatType',
+      'DoubleType',
+  ];
+```

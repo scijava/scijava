@@ -52,13 +52,13 @@ public final class BaseOpHints {
 		public static final String FORBIDDEN = PREFIX + ".FORBIDDEN";
 	}
 
-	public static final class Simplification {
+	public static final class Conversion {
 
-		private Simplification() {
+		private Conversion() {
 			// Prevent instantiation of static utility class
 		}
 
-		public static final String PREFIX = "simplification";
+		public static final String PREFIX = "conversion";
 		public static final String FORBIDDEN = PREFIX + ".FORBIDDEN";
 		public static final String IN_PROGRESS = PREFIX + ".IN_PROGRESS";
 	}
@@ -82,7 +82,11 @@ public final class BaseOpHints {
 		}
 
 		public static final String PREFIX = "dependencyMatching";
+		// Used by an OpEnvironment to hint that dependency matching is underway
 		public static final String IN_PROGRESS = PREFIX + ".IN_PROGRESS";
+		// Used by an Op to hint that it does not wish to be a dependency of another
+		// Op.
+		public static final String FORBIDDEN = PREFIX + ".FORBIDDEN";
 
 	}
 

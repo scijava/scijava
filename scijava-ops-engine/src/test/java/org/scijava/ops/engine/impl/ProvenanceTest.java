@@ -37,14 +37,15 @@ import org.scijava.function.Computers;
 import org.scijava.function.Producer;
 import org.scijava.ops.api.*;
 import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaFunction;
 import org.scijava.ops.engine.adapt.lift.FunctionToArrays;
 import org.scijava.ops.engine.copy.CopyOpCollection;
 import org.scijava.ops.engine.create.CreateOpCollection;
-import org.scijava.ops.engine.matcher.simplify.PrimitiveArraySimplifiers;
-import org.scijava.ops.engine.matcher.simplify.PrimitiveLossReporters;
-import org.scijava.ops.engine.matcher.simplify.PrimitiveSimplifiers;
+import org.scijava.ops.engine.matcher.convert.IdentityCollection;
+import org.scijava.ops.engine.matcher.convert.PrimitiveArrayConverters;
+import org.scijava.ops.engine.conversionLoss.impl.PrimitiveLossReporters;
+import org.scijava.ops.engine.matcher.convert.PrimitiveConverters;
+import org.scijava.ops.engine.matcher.convert.UtilityConverters;
 import org.scijava.ops.spi.*;
 import org.scijava.priority.Priority;
 import org.scijava.types.Nil;
@@ -64,8 +65,9 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		ops.register(new ProvenanceTest());
 		ops.register(new MapperFunc());
 		ops.register(new FunctionToArrays<>());
-		ops.register(new PrimitiveSimplifiers());
-		ops.register(new PrimitiveArraySimplifiers<>());
+		ops.register(new IdentityCollection<>());
+		ops.register(new UtilityConverters());
+		ops.register(new PrimitiveArrayConverters<>());
 		ops.register(new PrimitiveLossReporters());
 		ops.register(new CopyOpCollection<>());
 		ops.register(new CreateOpCollection());
@@ -373,10 +375,10 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 
 	/**
 	 * Tests the ability of {@link OpEnvironment#opFromSignature(String, Nil)} to
-	 * generate an Op that has been adapted and simplified.
+	 * generate an Op that has been adapted and converted.
 	 */
 	@Test
-	public void testSimplificationRecovery() {
+	public void testConversionRecovery() {
 		// Get the Op
 		Computers.Arity1<ObjectArray<Number>, ObjectArray<Number>> c = ops //
 			.op("test.provenanceComputer") //
@@ -415,7 +417,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 
 	/**
 	 * Tests the ability of {@link OpEnvironment#opFromSignature(String, Nil)} to
-	 * generate an Op that has been adapted and simplified.
+	 * generate an Op that has been adapted and converted.
 	 */
 	@Test
 	public void testFocusedRecovery() {
@@ -450,10 +452,10 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 
 	/**
 	 * Tests the ability of {@link OpEnvironment#opFromSignature(String, Nil)} to
-	 * generate an Op that has been adapted <b>and</b> simplified.
+	 * generate an Op that has been adapted <b>and</b> converted.
 	 */
 	@Test
-	public void testSimplificationAdaptationRecovery() {
+	public void testConversionAdaptationRecovery() {
 		// Get the Op
 		Function<Integer[], Integer[]> c = ops //
 			.op("test.provenanceComputer") //

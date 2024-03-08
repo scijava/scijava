@@ -177,5 +177,10 @@
 			<artifactId>scifio</artifactId>
 			<scope>test</scope>
 		</dependency>
-  </dependencies>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-types</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
 </project>

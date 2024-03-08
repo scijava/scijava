@@ -292,7 +292,13 @@ public final class Types {
 		for (int i = 0; i < types.length; i++) {
 			if (types[i] instanceof TypeVariable<?>) {
 				TypeVariable<?> typeVar = (TypeVariable<?>) types[i];
-				types[i] = greatestCommonSuperType(typeVar.getBounds(), false);
+				Type[] bounds = typeVar.getBounds();
+				for (int j = 0; j < bounds.length; j++) {
+					if (Types.isRecursive(bounds[j])) {
+						bounds[j] = Types.raw(bounds[j]);
+					}
+				}
+				types[i] = greatestCommonSuperType(bounds, false);
 			}
 			// wildcards themselves are not supported, however we know that the
 			// greatest superType of any wildcard is its upper bound
@@ -567,6 +573,14 @@ public final class Types {
 	 *         {@code False} otherwise
 	 */
 	public static boolean isRecursive(final Type type) {
+//		if (type instanceof TypeVariable<?>) {
+//			TypeVariable<?> typeVar = (TypeVariable<?>) type;
+//			for (var bound : typeVar.getBounds()) {
+//				if (isRecursive(bound)) {
+//					return true;
+//				}
+//			}
+//		}
 		// type = Foo<T extends Foo<T>>
 		if (type instanceof ParameterizedType) {
 			ParameterizedType parameterizedType = (ParameterizedType) type;
@@ -1921,13 +1935,17 @@ public final class Types {
 				// represents some type i.e. not null) in toTypeVarAssigns and
 				// typeVarAssigns.
 				// Effectively toResolved = fromResolved.
-				if (toTypeArg == null && toResolved == null && fromResolved != null &&
-					typeVarAssigns != null)
-				{
-					TypeVariable<?> unbounded = (TypeVariable<?>) toTypeVarAssigns.get(
-						var);
-					typeVarAssigns.put(unbounded, fromResolved);
-					toResolved = fromResolved;
+				if (toTypeArg == null && toResolved == null && typeVarAssigns != null) {
+					if (fromResolved != null) {
+						TypeVariable<?> unbounded = (TypeVariable<?>) toTypeVarAssigns.get(
+							var);
+						typeVarAssigns.put(unbounded, fromResolved);
+						toResolved = fromResolved;
+					}
+					else {
+						typeVarAssigns.put((TypeVariable<?>) toTypeVarAssigns.get(var),
+							fromTypeVarAssigns.get(var));
+					}
 				}
 
 				// parameters must either be absent from the subject type, within

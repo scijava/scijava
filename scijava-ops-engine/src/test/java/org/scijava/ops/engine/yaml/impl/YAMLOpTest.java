@@ -38,6 +38,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.describe.PrimitiveDescriptors;
 
 /**
  * Tests discovery of YAML discovery implementations
@@ -111,7 +112,8 @@ public class YAMLOpTest extends AbstractTestEnvironment {
 	@Test
 	public void testYAMLDescription() {
 		var actual = ops.help("example.mul");
-		var expected = "example.mul:\n\t- (a, b) -> Double";
+		var expected =
+			"example.mul:\n\t- (java.lang.Double, java.lang.Double) -> java.lang.Double";
 		Assertions.assertEquals(expected, actual);
 	}
 

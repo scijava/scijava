@@ -46,7 +46,7 @@ import org.scijava.ops.spi.OpField;
  * involves transforming some subset of Op inputs into a different, but similar
  * type. This process makes use of three different Op types:
  * <ul>
- * <li>"engine.simplify" Ops transform user inputs into a broader data type</li>
+ * <li>"engine.convert" Ops transform user inputs into a broader data type</li>
  * <li>"engine.focus" Ops transform that broader type into the type used by the
  * Op</li>
  * <li>"engine.copy" Ops are necessary to propagate changes to the simplified
@@ -97,11 +97,11 @@ public class OpSimplification implements OpCollection {
 		if the inputs are Numbers, SciJava Ops could use this "engine.focus" Op to make
 		those Numbers into Doubles
 
-		3. SciJava Ops finds a "engine.simplify" Op that can make Numbers from Integers.
-		Thus, if the inputs are Integers, SciJava Ops can use this "engine.simplify" Op
+		3. SciJava Ops finds a "engine.convert" Op that can make Numbers from Integers.
+		Thus, if the inputs are Integers, SciJava Ops can use this "engine.convert" Op
 		to make those Integers into Numbers
 
-		4. By using the "engine.simplify" and then the "engine.focus" Op, SciJava Ops can convert
+		4. By using the "engine.convert" and then the "engine.focus" Op, SciJava Ops can convert
 		the Integer inputs into Double inputs, and by creating a similar chain
 		in reverse, can convert the Double output into an Integer output.
 		Thus, we get an Op that can run on Integers!

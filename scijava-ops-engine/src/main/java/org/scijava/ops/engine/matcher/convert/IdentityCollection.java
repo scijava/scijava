@@ -1,8 +1,8 @@
 /*-
  * #%L
- * ImageJ2 software for multidimensional image processing and analysis.
+ * SciJava Operations Engine: a framework for reusable algorithms.
  * %%
- * Copyright (C) 2014 - 2023 ImageJ2 developers.
+ * Copyright (C) 2016 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,31 +27,38 @@
  * #L%
  */
 
-package org.scijava.ops.image;
+package org.scijava.ops.engine.matcher.convert;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.scijava.function.Inplaces;
+import org.scijava.ops.engine.BaseOpHints.Conversion;
+import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpField;
+import org.scijava.ops.spi.OpHints;
+import org.scijava.priority.Priority;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpInfo;
+import java.util.function.Function;
 
-public class OpRegressionTest {
+/**
+ * An {@link OpCollection} containing {@code identity} Ops.
+ *
+ * @author Gabriel Selzer
+ * @param <T>
+ */
+public class IdentityCollection<T> implements OpCollection {
 
-	protected static final OpEnvironment ops = OpEnvironment.build();
+	/**
+	 * @input t the object to be converted
+	 * @output the converted object (since we are doing an identity conversion,
+	 *         this is just a reference to the input object).
+	 */
+	@OpHints(hints = { Conversion.FORBIDDEN })
+	@OpField(names = "engine.convert, engine.identity", priority = Priority.LAST)
+	public final Function<T, T> identity = (t) -> t;
 
-	@Test
-	public void opDiscoveryRegressionIT() {
-		long expected = 1907;
-		long actual = ops.infos().size();
-		assertEquals(expected, actual);
-	}
-
-	@Test
-	public void opDescriptionRegressionIT() {
-		// Ensure no ops have a null description
-		for (OpInfo info : ops.infos())
-			Assertions.assertNotNull(info.toString(), () -> "Info from " + info.id() +
-				" has a null description");
-	}
+	/**
+	 * @mutable t the object to be "mutated"
+	 */
+	@OpHints(hints = { Conversion.FORBIDDEN })
+	@OpField(names = "engine.identity", priority = Priority.LAST)
+	public final Inplaces.Arity1<T> inplace = (t) -> {};
 }

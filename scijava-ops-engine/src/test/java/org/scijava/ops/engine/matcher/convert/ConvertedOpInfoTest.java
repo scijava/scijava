@@ -27,47 +27,58 @@
  * #L%
  */
 
-package org.scijava.ops.engine.impl;
+package org.scijava.ops.engine.matcher.convert;
 
 import java.util.List;
-import java.util.ServiceLoader;
-import java.util.stream.Collectors;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.scijava.discovery.Discoverer;
-import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.engine.OpInfoGenerator;
+import org.scijava.collections.ObjectArray;
+import org.scijava.function.Computers;
+import org.scijava.function.Inplaces;
+import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.describe.PrimitiveDescriptors;
 import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpClass;
 import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpField;
+import org.scijava.types.Nil;
 
-public class ServiceLoaderDiscoveryIntegrationTest {
+public class ConvertedOpInfoTest extends AbstractTestEnvironment implements
+	OpCollection
+{
 
-	@Test
-	public void opDiscoveryRegressionIT() {
-		final Discoverer d = Discoverer.using(ServiceLoader::load);
-		final List<Op> discoveries = d.discover(Op.class);
-		Assertions.assertEquals(236, discoveries.size());
+	@BeforeAll
+	public static void addNeededOps() {
+		ops.register( //
+			new ConvertedOpInfoTest(), //
+			new PrimitiveConverters(), //
+			new PrimitiveArrayConverters(), //
+			new IdentityCollection<>(), //
+			new SimpleOp() //
+		);
+	}
 
-		@SuppressWarnings("unused")
-		final OpInfoGenerator g = new OpClassOpInfoGenerator();
-		final List<OpInfo> infos = discoveries.stream() //
-			.flatMap(c -> g.generateInfosFrom(c).stream()) //
-			.collect(Collectors.toList());
-		Assertions.assertEquals(236, infos.size());
+	@OpClass(names = "test.convertedDescription")
+	static class SimpleOp implements BiFunction<Double, Double, Double[]>, Op {
+
+		@Override
+		public Double[] apply(Double t, Double u) {
+			return new Double[] { t, u };
+		}
 	}
 
 	@Test
-	public void opCollectionDiscoveryRegressionIT() {
-		final Discoverer d = Discoverer.using(ServiceLoader::load);
-		final List<OpCollection> discoveries = d.discover(OpCollection.class);
-		Assertions.assertEquals(21, discoveries.size());
-		@SuppressWarnings("unused")
-		final OpInfoGenerator g = new OpCollectionInfoGenerator();
-		final List<OpInfo> infos = discoveries.stream() //
-			.flatMap(c -> g.generateInfosFrom(c).stream()) //
-			.collect(Collectors.toList());
-		Assertions.assertEquals(295, infos.size());
+	public void testConvertedOpFromEnvironment() {
+		var op = ops.binary("test.convertedDescription").inType(Number.class,
+			Number.class).outType(new Nil<ObjectArray<Number>>()
+		{}).function();
+		ObjectArray<Number> expected = new ObjectArray<>(new Double[] { 5., 6. });
+		ObjectArray<Number> actual = op.apply(5, 6);
+		Assertions.assertEquals(expected, actual);
 	}
 
 }

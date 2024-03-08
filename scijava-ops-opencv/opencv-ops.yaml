@@ -24,63 +24,77 @@ org.scijava.ops.opencv.MatCopier:
       - "Gabriella Turek"
       - "Mark Hiner"
 
+org.scijava.ops.opencv.OpenCVDescriptors:
+  matDescriptor:
+    alias: "engine.describe"
+    authors:
+      - "Gabriel Selzer"
+  gpuMatDescriptor:
+    alias: "engine.describe"
+    authors:
+      - "Gabriel Selzer"
+  uMatDescriptor:
+    alias: "engine.describe"
+    authors:
+      - "Gabriel Selzer"
+
 net.imagej.opencv.ImgToMatConverter:
   getUnsignedByteMat:
-    alias: "engine.focus"
+    alias: "engine.convert"
     authors: "Gabriella Turek"
     priority: "4.0"
   getByteMat:
-    alias: "engine.focus"
+    alias: "engine.convert"
     authors: "Gabriella Turek"
     priority: "3.0"
   getIntMat:
-    alias: "engine.focus"
+    alias: "engine.convert"
     authors: "Gabriella Turek"
     priority: "2.0"
   getFloatMat:
-    alias: "engine.focus"
+    alias: "engine.convert"
     authors: "Gabriella Turek"
     priority: "1.0"
   getDoubleMat:
-    alias: "engine.focus"
+    alias: "engine.convert"
     authors: "Gabriella Turek"
     priority: "0.0"
 
 net.imagej.opencv.MatToImgConverter:
   toUnsignedByteImg:
-    alias: "engine.simplify"
+    alias: "engine.convert"
     authors: "Gabriella Turek"
     priority: "4.0"
   toByteImg:
-    alias: "engine.simplify"
+    alias: "engine.convert"
     authors: "Gabriella Turek"
     priority: "3.0"
   toIntImg:
-    alias: "engine.simplify"
+    alias: "engine.convert"
     authors: "Gabriella Turek"
     priority: "2.0"
   toFloatImg:
-    alias: "engine.simplify"
+    alias: "engine.convert"
     authors: "Gabriella Turek"
     priority: "1.0"
   toDoubleImg:
-    alias: "engine.simplify"
+    alias: "engine.convert"
     authors: "Gabriella Turek"
     priority: "0.0"
   toByteArray:
-    alias: "engine.simplify"
+    alias: "engine.convert"
     authors: "Gabriella Turek"
     priority: "3.0"
   toIntArray:
-    alias: "engine.simplify"
+    alias: "engine.convert"
     authors: "Gabriella Turek"
     priority: "2.0"
   toFloatArray:
-    alias: "engine.simplify"
+    alias: "engine.convert"
     authors: "Gabriella Turek"
     priority: "1.0"
   toDoubleArray:
-    alias: "engine.simplify"
+    alias: "engine.convert"
     authors: "Gabriella Turek"
     priority: "0.0"
 

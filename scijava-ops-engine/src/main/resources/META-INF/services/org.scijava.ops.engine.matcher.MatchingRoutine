@@ -2,4 +2,4 @@
 # Instead, modify and re-run <basedir>/bin/generate-meta-inf.sh from the top-level
 org.scijava.ops.engine.matcher.impl.RuntimeSafeMatchingRoutine
 org.scijava.ops.engine.matcher.adapt.AdaptationMatchingRoutine
-org.scijava.ops.engine.matcher.simplify.SimplificationMatchingRoutine
+org.scijava.ops.engine.matcher.convert.ConversionMatchingRoutine

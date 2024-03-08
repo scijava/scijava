@@ -1,8 +1,8 @@
 /*-
  * #%L
- * ImageJ2 software for multidimensional image processing and analysis.
+ * SciJava Operations Engine: a framework for reusable algorithms.
  * %%
- * Copyright (C) 2014 - 2023 ImageJ2 developers.
+ * Copyright (C) 2016 - 2023 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,31 +27,22 @@
  * #L%
  */
 
-package org.scijava.ops.image;
+package org.scijava.ops.engine.conversionLoss.impl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.scijava.ops.spi.OpHints;
+import org.scijava.ops.engine.BaseOpHints.Conversion;
+import org.scijava.ops.engine.conversionLoss.LossReporter;
+import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpField;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpInfo;
+public class PrimitiveArrayLossReporters implements OpCollection {
 
-public class OpRegressionTest {
+	@OpHints(hints = { Conversion.FORBIDDEN })
+	@OpField(names = "engine.lossReporter")
+	public final LossReporter<Byte[], Integer[]> bArrIArr = (from, to) -> 0.;
 
-	protected static final OpEnvironment ops = OpEnvironment.build();
+	@OpHints(hints = { Conversion.FORBIDDEN })
+	@OpField(names = "engine.lossReporter")
+	public final LossReporter<Double[], Integer[]> dArrIArr = (from, to) -> 0.;
 
-	@Test
-	public void opDiscoveryRegressionIT() {
-		long expected = 1907;
-		long actual = ops.infos().size();
-		assertEquals(expected, actual);
-	}
-
-	@Test
-	public void opDescriptionRegressionIT() {
-		// Ensure no ops have a null description
-		for (OpInfo info : ops.infos())
-			Assertions.assertNotNull(info.toString(), () -> "Info from " + info.id() +
-				" has a null description");
-	}
 }

@@ -27,47 +27,54 @@
  * #L%
  */
 
-package org.scijava.ops.engine.impl;
-
-import java.util.List;
-import java.util.ServiceLoader;
-import java.util.stream.Collectors;
+package org.scijava.ops.engine.matcher.convert;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.scijava.discovery.Discoverer;
-import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.engine.OpInfoGenerator;
-import org.scijava.ops.spi.Op;
+import org.scijava.function.Computers;
+import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaFunction;
+import org.scijava.ops.engine.copy.CopyOpCollection;
+import org.scijava.ops.engine.create.CreateOpCollection;
 import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpField;
 
-public class ServiceLoaderDiscoveryIntegrationTest {
+public class ConversionAdaptationTest extends AbstractTestEnvironment implements
+	OpCollection
+{
 
-	@Test
-	public void opDiscoveryRegressionIT() {
-		final Discoverer d = Discoverer.using(ServiceLoader::load);
-		final List<Op> discoveries = d.discover(Op.class);
-		Assertions.assertEquals(236, discoveries.size());
-
-		@SuppressWarnings("unused")
-		final OpInfoGenerator g = new OpClassOpInfoGenerator();
-		final List<OpInfo> infos = discoveries.stream() //
-			.flatMap(c -> g.generateInfosFrom(c).stream()) //
-			.collect(Collectors.toList());
-		Assertions.assertEquals(236, infos.size());
+	@BeforeAll
+	public static void AddNeededOps() {
+		ops.register(new ConversionAdaptationTest());
+		ops.register(new CopyOpCollection<>());
+		ops.register(new CreateOpCollection());
+		ops.register(new IdentityCollection<>());
+		ops.register(new PrimitiveConverters<>());
+		ops.register(new PrimitiveArrayConverters<>());
+		ops.register(new UtilityConverters());
+		Object[] adapters = objsFromNoArgConstructors(
+			ComputersToFunctionsViaFunction.class.getDeclaredClasses());
+		ops.register(adapters);
 	}
 
+	@OpField(names = "test.math.modulus")
+	public final Computers.Arity2<Integer[], Integer, Integer[]> modOp = (inArr,
+		mod, outArr) -> {
+		for (int i = 0; i < inArr.length && i < outArr.length; i++) {
+			outArr[i] = inArr[i] % mod;
+		}
+	};
+
 	@Test
-	public void opCollectionDiscoveryRegressionIT() {
-		final Discoverer d = Discoverer.using(ServiceLoader::load);
-		final List<OpCollection> discoveries = d.discover(OpCollection.class);
-		Assertions.assertEquals(21, discoveries.size());
-		@SuppressWarnings("unused")
-		final OpInfoGenerator g = new OpCollectionInfoGenerator();
-		final List<OpInfo> infos = discoveries.stream() //
-			.flatMap(c -> g.generateInfosFrom(c).stream()) //
-			.collect(Collectors.toList());
-		Assertions.assertEquals(295, infos.size());
+	public void adaptAndConvertTest() {
+		Double[] inArr = { 1., 4., 6. };
+		Double modulus = 3.;
+
+		Double[] expected = { 1., 1., 0. };
+		Double[] actual = ops.op("test.math.modulus").arity2().input(inArr, modulus)
+			.outType(Double[].class).apply();
+		Assertions.assertArrayEquals(expected, actual);
 	}
 
 }

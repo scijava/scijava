@@ -7,7 +7,7 @@ libraries.
 
 ## Configuring the utility
 
-The {@code OpParser} is a Java-based program that runs a `main` method
+The `OpParser` is a Java-based program that runs a `main` method
 expecting a path to the YAML configuration for your library. It will also need
 to run in an environment with the target libraries on the classpath (e.g. as
 Maven dependencies).

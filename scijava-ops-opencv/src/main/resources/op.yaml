@@ -219,6 +219,1380 @@
     authors: [Gabriella Turek]
     tags: {}
 - op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.GpuMat%2Corg.bytedeco.opencv.opencv_core.GpuMat%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.opencv.opencv_core.Mat%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.UMat%2Corg.bytedeco.opencv.opencv_core.UMat%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.GpuMat%2Corg.bytedeco.opencv.opencv_core.GpuMat%2C%5BF%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: '[F'}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.GpuMat%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cfloat%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: float}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.GpuMat%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cjava.nio.FloatBuffer%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: java.nio.FloatBuffer}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.GpuMat%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Corg.bytedeco.javacpp.FloatPointer%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.FloatPointer}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.opencv.opencv_core.Mat%2C%5BF%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: '[F'}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.opencv.opencv_core.Mat%2Cfloat%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: float}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.opencv.opencv_core.Mat%2Cjava.nio.FloatBuffer%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: java.nio.FloatBuffer}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.javacpp.FloatPointer%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.FloatPointer}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.UMat%2Corg.bytedeco.opencv.opencv_core.UMat%2C%5BF%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: '[F'}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.UMat%2Corg.bytedeco.opencv.opencv_core.UMat%2Cfloat%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: float}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.UMat%2Corg.bytedeco.opencv.opencv_core.UMat%2Cjava.nio.FloatBuffer%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: java.nio.FloatBuffer}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.UMat%2Corg.bytedeco.opencv.opencv_core.UMat%2Corg.bytedeco.javacpp.FloatPointer%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.FloatPointer}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.GpuMat%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: float}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.opencv.opencv_core.Mat%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: float}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.UMat%2Corg.bytedeco.opencv.opencv_core.UMat%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: float}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.GpuMat%2Corg.bytedeco.opencv.opencv_core.GpuMat%2C%5BF%2Cint%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: '[F'}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: int}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.GpuMat%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cfloat%2Cint%2Cint%2Corg.bytedeco.opencv.opencv_core.Stream%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: float}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: int}
+    - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.opencv.opencv_core.Stream}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.GpuMat%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cjava.nio.FloatBuffer%2Cint%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: java.nio.FloatBuffer}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: int}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.GpuMat%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Corg.bytedeco.javacpp.FloatPointer%2Cint%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.FloatPointer}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: int}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.opencv.opencv_core.Mat%2C%5BF%2Cint%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: '[F'}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: int}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.opencv.opencv_core.Mat%2Cfloat%2Cint%2Cint%2Corg.bytedeco.opencv.opencv_core.Stream%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: float}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: int}
+    - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.opencv.opencv_core.Stream}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.opencv.opencv_core.Mat%2Cjava.nio.FloatBuffer%2Cint%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: java.nio.FloatBuffer}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: int}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.javacpp.FloatPointer%2Cint%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.FloatPointer}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: int}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.UMat%2Corg.bytedeco.opencv.opencv_core.UMat%2C%5BF%2Cint%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: '[F'}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: int}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.UMat%2Corg.bytedeco.opencv.opencv_core.UMat%2Cfloat%2Cint%2Cint%2Corg.bytedeco.opencv.opencv_core.Stream%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: float}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: int}
+    - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.opencv.opencv_core.Stream}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.UMat%2Corg.bytedeco.opencv.opencv_core.UMat%2Cjava.nio.FloatBuffer%2Cint%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: java.nio.FloatBuffer}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: int}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoising]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoising%28org.bytedeco.opencv.opencv_core.UMat%2Corg.bytedeco.opencv.opencv_core.UMat%2Corg.bytedeco.javacpp.FloatPointer%2Cint%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.FloatPointer}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: int}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.GpuMat%2Corg.bytedeco.opencv.opencv_core.GpuMat%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.opencv.opencv_core.Mat%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.UMat%2Corg.bytedeco.opencv.opencv_core.UMat%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.GpuMat%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cfloat%2Cfloat%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: float}
+    - {parameter type: INPUT, name: arg3, description: '', type: float}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.opencv.opencv_core.Mat%2Cfloat%2Cfloat%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: float}
+    - {parameter type: INPUT, name: arg3, description: '', type: float}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.UMat%2Corg.bytedeco.opencv.opencv_core.UMat%2Cfloat%2Cfloat%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: float}
+    - {parameter type: INPUT, name: arg3, description: '', type: float}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.GpuMat%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cfloat%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: float}
+    - {parameter type: INPUT, name: arg3, description: '', type: float}
+    - {parameter type: INPUT, name: arg4, description: '', type: int}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.opencv.opencv_core.Mat%2Cfloat%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: float}
+    - {parameter type: INPUT, name: arg3, description: '', type: float}
+    - {parameter type: INPUT, name: arg4, description: '', type: int}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.UMat%2Corg.bytedeco.opencv.opencv_core.UMat%2Cfloat%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: float}
+    - {parameter type: INPUT, name: arg3, description: '', type: float}
+    - {parameter type: INPUT, name: arg4, description: '', type: int}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.GpuMat%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cfloat%2Cfloat%2Cint%2Cint%2Corg.bytedeco.opencv.opencv_core.Stream%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: float}
+    - {parameter type: INPUT, name: arg3, description: '', type: float}
+    - {parameter type: INPUT, name: arg4, description: '', type: int}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    - {parameter type: INPUT, name: arg6, description: '', type: org.bytedeco.opencv.opencv_core.Stream}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.opencv.opencv_core.Mat%2Cfloat%2Cfloat%2Cint%2Cint%2Corg.bytedeco.opencv.opencv_core.Stream%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: float}
+    - {parameter type: INPUT, name: arg3, description: '', type: float}
+    - {parameter type: INPUT, name: arg4, description: '', type: int}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    - {parameter type: INPUT, name: arg6, description: '', type: org.bytedeco.opencv.opencv_core.Stream}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.UMat%2Corg.bytedeco.opencv.opencv_core.UMat%2Cfloat%2Cfloat%2Cint%2Cint%2Corg.bytedeco.opencv.opencv_core.Stream%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: float}
+    - {parameter type: INPUT, name: arg3, description: '', type: float}
+    - {parameter type: INPUT, name: arg4, description: '', type: int}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    - {parameter type: INPUT, name: arg6, description: '', type: org.bytedeco.opencv.opencv_core.Stream}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%2C%5BF%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: '[F'}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%2C%5BF%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: '[F'}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%2C%5BF%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: '[F'}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%2Corg.bytedeco.javacpp.FloatPointer%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.javacpp.FloatPointer}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%2Corg.bytedeco.javacpp.FloatPointer%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.javacpp.FloatPointer}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%2Corg.bytedeco.javacpp.FloatPointer%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.javacpp.FloatPointer}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%2Cjava.nio.FloatBuffer%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: java.nio.FloatBuffer}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%2Cjava.nio.FloatBuffer%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: java.nio.FloatBuffer}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%2Cjava.nio.FloatBuffer%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: java.nio.FloatBuffer}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: float}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: float}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: float}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: float}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: float}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: float}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: float}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: float}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: float}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%2C%5BF%2Cint%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: '[F'}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    - {parameter type: INPUT, name: arg7, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%2C%5BF%2Cint%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: '[F'}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    - {parameter type: INPUT, name: arg7, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%2C%5BF%2Cint%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: '[F'}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    - {parameter type: INPUT, name: arg7, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%2Corg.bytedeco.javacpp.FloatPointer%2Cint%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.javacpp.FloatPointer}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    - {parameter type: INPUT, name: arg7, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%2Corg.bytedeco.javacpp.FloatPointer%2Cint%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.javacpp.FloatPointer}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    - {parameter type: INPUT, name: arg7, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%2Corg.bytedeco.javacpp.FloatPointer%2Cint%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.javacpp.FloatPointer}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    - {parameter type: INPUT, name: arg7, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%2Cjava.nio.FloatBuffer%2Cint%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: java.nio.FloatBuffer}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    - {parameter type: INPUT, name: arg7, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%2Cjava.nio.FloatBuffer%2Cint%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: java.nio.FloatBuffer}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    - {parameter type: INPUT, name: arg7, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%2Cjava.nio.FloatBuffer%2Cint%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: java.nio.FloatBuffer}
+    - {parameter type: INPUT, name: arg5, description: '', type: int}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    - {parameter type: INPUT, name: arg7, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%2Cfloat%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: float}
+    - {parameter type: INPUT, name: arg5, description: '', type: float}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    - {parameter type: INPUT, name: arg7, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%2Cfloat%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: float}
+    - {parameter type: INPUT, name: arg5, description: '', type: float}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    - {parameter type: INPUT, name: arg7, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%2Cfloat%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: float}
+    - {parameter type: INPUT, name: arg5, description: '', type: float}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    - {parameter type: INPUT, name: arg7, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%2Cfloat%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: float}
+    - {parameter type: INPUT, name: arg5, description: '', type: float}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    - {parameter type: INPUT, name: arg7, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%2Cfloat%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: float}
+    - {parameter type: INPUT, name: arg5, description: '', type: float}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    - {parameter type: INPUT, name: arg7, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%2Cfloat%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: float}
+    - {parameter type: INPUT, name: arg5, description: '', type: float}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    - {parameter type: INPUT, name: arg7, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%2Cfloat%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: float}
+    - {parameter type: INPUT, name: arg5, description: '', type: float}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    - {parameter type: INPUT, name: arg7, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%2Cfloat%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: float}
+    - {parameter type: INPUT, name: arg5, description: '', type: float}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    - {parameter type: INPUT, name: arg7, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
+    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    description: ''
+    source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%2Cfloat%2Cfloat%2Cint%2Cint%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
+    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg2, description: '', type: int}
+    - {parameter type: INPUT, name: arg3, description: '', type: int}
+    - {parameter type: INPUT, name: arg4, description: '', type: float}
+    - {parameter type: INPUT, name: arg5, description: '', type: float}
+    - {parameter type: INPUT, name: arg6, description: '', type: int}
+    - {parameter type: INPUT, name: arg7, description: '', type: int}
+    authors: [OpenCV authors, bytedeco/JavaCV authors]
+    tags: {type: Computer2}
+- op:
     names: [filter.median, cv.medianBlur]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_imgproc.medianBlur%28org.bytedeco.opencv.opencv_core.GpuMat%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%29

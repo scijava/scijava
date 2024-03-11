@@ -125,6 +125,18 @@
 			<artifactId>opencv</artifactId>
 		</dependency>
 
+		<!--
+			NB: Added to expose a bug with classpath-based testing,
+			where tests complain that org.scijava.ops.api is inaccessible
+			when org.scijava.types is in the main module-info.java,
+			but tests work fine without it.
+		-->
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-types</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 		<!-- OpenCV runtime native dependencies -->
 		<dependency>
 			<groupId>org.bytedeco</groupId>
@@ -150,6 +162,11 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-api</artifactId>
 			<version>${project.version}</version>
@@ -170,6 +187,19 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-io-http</artifactId>
+			<scope>test</scope>
+			<!-- HACK: Avoid JPMS issue with okio + okio-jvm. -->
+			<exclusions>
+				<exclusion>
+					<groupId>com.squareup.okio</groupId>
+					<artifactId>okio</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.okio</groupId>
+			<artifactId>okio-jvm</artifactId>
+			<version>${okio.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

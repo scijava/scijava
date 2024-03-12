@@ -30,6 +30,7 @@ The combination of these libraries allows declarative image analysis workflows, 
    :caption: ⚙️ Examples
 
    examples/example_gaussian_subtraction
+   examples/opencv_denoise
 
 .. toctree::
    :maxdepth: 2

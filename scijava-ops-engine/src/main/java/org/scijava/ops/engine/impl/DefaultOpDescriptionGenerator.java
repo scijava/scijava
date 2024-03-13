@@ -133,7 +133,7 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 			return op.apply(from);
 		}
 		catch (OpMatchingException e) {
-			return from.getType().getTypeName();
+			return Types.raw(from.getType()).getSimpleName();
 		}
 	}
 

@@ -36,9 +36,7 @@ import org.scijava.function.Computers;
 import org.scijava.function.Container;
 import org.scijava.function.Functions;
 import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.engine.copy.CopyOpCollection;
-import org.scijava.ops.engine.describe.PrimitiveDescriptors;
-import org.scijava.ops.engine.matcher.convert.PrimitiveArrayConverters;
+import org.scijava.ops.engine.describe.BaseDescriptors;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
@@ -52,7 +50,7 @@ public class NullableArgumentsTest extends AbstractTestEnvironment //
 
 	@BeforeAll
 	public static void addNeededOps() {
-		ops.register(new PrimitiveDescriptors<>());
+		ops.register(new BaseDescriptors<>());
 		ops.register(new NullableArgumentsTest());
 		ops.register(new TestOpNullableArg());
 	}

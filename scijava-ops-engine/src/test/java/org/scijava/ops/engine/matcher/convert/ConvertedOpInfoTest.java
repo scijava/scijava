@@ -29,22 +29,16 @@
 
 package org.scijava.ops.engine.matcher.convert;
 
-import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.collections.ObjectArray;
-import org.scijava.function.Computers;
-import org.scijava.function.Inplaces;
 import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.engine.describe.PrimitiveDescriptors;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
 import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
 import org.scijava.types.Nil;
 
 public class ConvertedOpInfoTest extends AbstractTestEnvironment implements

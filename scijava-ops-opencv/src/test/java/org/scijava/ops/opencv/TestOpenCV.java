@@ -54,8 +54,10 @@ public class TestOpenCV {
 	private static final String TEST_OP_ALIAS = "filter.gauss";
 	private static final String EXPECTED_HELP = //
 		"cv.GaussianBlur:\n" //
-			+ "\t- (image, @CONTAINER image, Size, number) -> None\n"//
-			+ "\t- (image, @CONTAINER image, Size, number, number, number) -> None";
+			+
+			"\t- (image, @CONTAINER image, org.bytedeco.opencv.opencv_core.Size, number) -> None\n"//
+			+
+			"\t- (image, @CONTAINER image, org.bytedeco.opencv.opencv_core.Size, number, number, number) -> None";
 
 	private static final String EXPECTED_HELP_VERBOSE = //
 		"cv.GaussianBlur:\n" //

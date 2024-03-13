@@ -125,7 +125,7 @@ module org.scijava.ops.engine {
 		org.scijava.ops.engine.conversionLoss.impl.PrimitiveLossReporters,
 		org.scijava.ops.engine.copy.CopyOpCollection,
 		org.scijava.ops.engine.create.CreateOpCollection,
-		org.scijava.ops.engine.describe.PrimitiveDescriptors,
+		org.scijava.ops.engine.describe.BaseDescriptors,
 		org.scijava.ops.engine.matcher.convert.IdentityCollection,
 		org.scijava.ops.engine.matcher.convert.UtilityConverters,
 		org.scijava.ops.engine.math.Add,

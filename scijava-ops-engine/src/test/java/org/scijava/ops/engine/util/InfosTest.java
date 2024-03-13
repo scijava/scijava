@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.engine.describe.PrimitiveDescriptors;
+import org.scijava.ops.engine.describe.BaseDescriptors;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpMethod;
@@ -23,7 +23,7 @@ public class InfosTest extends AbstractTestEnvironment implements OpCollection {
 	public static void addNeededOps() {
 		ops.register( //
 			new InfosTest(), //
-			new PrimitiveDescriptors<>() //
+			new BaseDescriptors<>() //
 		);
 	}
 

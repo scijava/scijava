@@ -38,7 +38,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.engine.describe.PrimitiveDescriptors;
 
 /**
  * Tests discovery of YAML discovery implementations

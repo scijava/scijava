@@ -5,7 +5,7 @@ org.scijava.ops.engine.adapt.lift.ComputerToIterables
 org.scijava.ops.engine.adapt.lift.FunctionToArrays
 org.scijava.ops.engine.adapt.lift.FunctionToIterables
 org.scijava.ops.engine.adapt.lift.InplaceToArrays
-org.scijava.ops.engine.describe.PrimitiveDescriptors
+org.scijava.ops.engine.describe.BaseDescriptors
 org.scijava.ops.engine.matcher.convert.IdentityCollection
 org.scijava.ops.engine.conversionLoss.impl.PrimitiveArrayLossReporters
 org.scijava.ops.engine.conversionLoss.impl.PrimitiveLossReporters

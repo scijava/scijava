@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.engine.describe.PrimitiveDescriptors;
+import org.scijava.ops.engine.describe.BaseDescriptors;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 
@@ -22,7 +22,7 @@ public class DefaultOpDescriptionGeneratorTest extends AbstractTestEnvironment
 	public static void addNeededOps() {
 		ops.register( //
 			new DefaultOpDescriptionGeneratorTest(), //
-			new PrimitiveDescriptors() //
+			new BaseDescriptors() //
 		);
 	}
 

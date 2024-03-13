@@ -81,14 +81,14 @@ module org.scijava.ops.engine {
 		org.scijava.ops.engine.matcher.convert.ConvertedInfoTreeGenerator;
 
 	provides org.scijava.ops.api.OpEnvironment with
-	    org.scijava.ops.engine.impl.DefaultOpEnvironment;
+		org.scijava.ops.engine.impl.DefaultOpEnvironment;
 
 	provides org.scijava.ops.api.OpHistory with
-	    org.scijava.ops.engine.impl.DefaultOpHistory;
+		org.scijava.ops.engine.impl.DefaultOpHistory;
 
 	provides org.scijava.ops.engine.OpInfoGenerator with
-	    org.scijava.ops.engine.impl.OpClassOpInfoGenerator,
-	    org.scijava.ops.engine.impl.OpCollectionInfoGenerator,
+		org.scijava.ops.engine.impl.OpClassOpInfoGenerator,
+		org.scijava.ops.engine.impl.OpCollectionInfoGenerator,
 		org.scijava.ops.engine.matcher.reduce.ReducedOpInfoGenerator;
 
 	provides org.scijava.ops.engine.OpDescriptionGenerator with
@@ -273,27 +273,27 @@ module org.scijava.ops.engine {
 		org.scijava.ops.engine.matcher.convert.ConversionMatchingRoutine;
 
 	provides org.scijava.ops.spi.OpCollection with
-	    org.scijava.ops.engine.adapt.lift.ComputerToArrays,
-	    org.scijava.ops.engine.adapt.lift.ComputerToIterables,
-	    org.scijava.ops.engine.adapt.lift.FunctionToArrays,
-	    org.scijava.ops.engine.adapt.lift.FunctionToIterables,
-	    org.scijava.ops.engine.adapt.lift.InplaceToArrays,
-			org.scijava.ops.engine.describe.PrimitiveDescriptors,
-	    org.scijava.ops.engine.matcher.convert.IdentityCollection,
-			org.scijava.ops.engine.conversionLoss.impl.PrimitiveArrayLossReporters,
-			org.scijava.ops.engine.conversionLoss.impl.PrimitiveLossReporters,
-			org.scijava.ops.engine.matcher.convert.UtilityConverters,
-	    org.scijava.ops.engine.copy.CopyOpCollection,
-	    org.scijava.ops.engine.create.CreateOpCollection,
-	    org.scijava.ops.engine.math.Add,
-	    org.scijava.ops.engine.math.MathOpCollection,
-	    org.scijava.ops.engine.math.Power,
-	    org.scijava.ops.engine.math.Sqrt,
-	    org.scijava.ops.engine.math.Zero,
+		org.scijava.ops.engine.adapt.lift.ComputerToArrays,
+		org.scijava.ops.engine.adapt.lift.ComputerToIterables,
+		org.scijava.ops.engine.adapt.lift.FunctionToArrays,
+		org.scijava.ops.engine.adapt.lift.FunctionToIterables,
+		org.scijava.ops.engine.adapt.lift.InplaceToArrays,
+		org.scijava.ops.engine.conversionLoss.impl.PrimitiveArrayLossReporters,
+		org.scijava.ops.engine.conversionLoss.impl.PrimitiveLossReporters,
+		org.scijava.ops.engine.copy.CopyOpCollection,
+		org.scijava.ops.engine.create.CreateOpCollection,
+		org.scijava.ops.engine.describe.PrimitiveDescriptors,
+		org.scijava.ops.engine.matcher.convert.IdentityCollection,
+		org.scijava.ops.engine.matcher.convert.UtilityConverters,
+		org.scijava.ops.engine.math.Add,
+		org.scijava.ops.engine.math.MathOpCollection,
+		org.scijava.ops.engine.math.Power,
+		org.scijava.ops.engine.math.Sqrt,
+		org.scijava.ops.engine.math.Zero,
 		org.scijava.ops.engine.matcher.convert.PrimitiveArrayConverters,
 		org.scijava.ops.engine.matcher.convert.PrimitiveConverters,
-			org.scijava.ops.engine.stats.Mean,
-			org.scijava.ops.engine.stats.Size;
+		org.scijava.ops.engine.stats.Mean,
+		org.scijava.ops.engine.stats.Size;
 
 
 	provides org.scijava.ops.spi.Op with //
@@ -534,12 +534,12 @@ module org.scijava.ops.engine {
 		org.scijava.ops.engine.eval.DefaultEval,
 		org.scijava.ops.engine.stats.Mean.MeanFunction;
 
-    provides org.scijava.ops.engine.matcher.reduce.InfoReducer with //
-        org.scijava.ops.engine.matcher.reduce.FunctionReducer,
-        org.scijava.ops.engine.matcher.reduce.ComputerReducer;
+	provides org.scijava.ops.engine.matcher.reduce.InfoReducer with //
+		org.scijava.ops.engine.matcher.reduce.FunctionReducer,
+		org.scijava.ops.engine.matcher.reduce.ComputerReducer;
 
-    provides org.scijava.ops.engine.yaml.YAMLOpInfoCreator with
-        org.scijava.ops.engine.yaml.impl.JavaClassYAMLOpInfoCreator,
-        org.scijava.ops.engine.yaml.impl.JavaFieldYAMLOpInfoCreator,
-        org.scijava.ops.engine.yaml.impl.JavaMethodYAMLInfoCreator;
+	provides org.scijava.ops.engine.yaml.YAMLOpInfoCreator with
+		org.scijava.ops.engine.yaml.impl.JavaClassYAMLOpInfoCreator,
+		org.scijava.ops.engine.yaml.impl.JavaFieldYAMLOpInfoCreator,
+		org.scijava.ops.engine.yaml.impl.JavaMethodYAMLInfoCreator;
 }

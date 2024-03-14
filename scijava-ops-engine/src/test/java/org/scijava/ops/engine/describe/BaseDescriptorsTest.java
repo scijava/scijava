@@ -116,8 +116,7 @@ public class BaseDescriptorsTest extends AbstractTestEnvironment implements
 	 */
 	@Test
 	public void testFallbackDescriptions() {
-		var expected =
-			"test.fooDescriptor:\n\t- () -> Foo";
+		var expected = "test.fooDescriptor:\n\t- () -> Foo";
 		var actual = ops.help("test.fooDescriptor");
 		Assertions.assertEquals(expected, actual);
 	}

@@ -39,6 +39,7 @@ import org.scijava.ops.engine.OpCandidate;
 import org.scijava.ops.engine.matcher.MatchingResult;
 import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.engine.matcher.impl.RuntimeSafeMatchingRoutine;
+import org.scijava.ops.spi.Op;
 import org.scijava.priority.Priority;
 
 import java.lang.reflect.Type;
@@ -53,16 +54,18 @@ public class ConversionMatchingRoutine extends RuntimeSafeMatchingRoutine {
 	{
 		if (conditions.hints().containsAny(BaseOpHints.Conversion.IN_PROGRESS,
 			BaseOpHints.Conversion.FORBIDDEN)) //
-			throw new OpMatchingException("Conversion is not disabled");
+			throw new OpMatchingException("Conversion is disabled");
+		if (conditions.request().getName().startsWith("engine.")) {
+			throw new OpMatchingException( //
+				"Conversion is unsuitable for internal engine Ops" //
+			);
+		}
 	}
 
 	@Override
 	public OpCandidate findMatch(MatchingConditions conditions, OpMatcher matcher,
 		OpEnvironment env)
 	{
-		if (conditions.request().getName().equals("engine.create"))
-			throw new OpMatchingException(
-				"TODO: Avoid converting engine namespace Ops");
 		final var convertConditions = MatchingConditions.from( //
 			conditions.request(), //
 			conditions.hints().plus(BaseOpHints.Conversion.IN_PROGRESS) //

@@ -51,6 +51,7 @@ import org.scijava.priority.Priority;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.types.*;
+import org.scijava.types.inference.GenericAssignability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -595,27 +596,16 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			final OpRequest request = inferOpRequest(dependency,
 				dependencyTypeVarAssigns);
 			try {
+				// match Op
 				var depHints = baseDepHints.plus(dependency.hints());
-
-				MatchingConditions conditions = MatchingConditions.from(request,
-					depHints);
-				// see if the request has been matched already
-//				OpInstance<?> cachedOp = getInstance(conditions);
-//				if (cachedOp != null) return conditions;
-
-				// obtain suitable OpCandidate
-				// FIXME: Check cache
-				var candidate = findOpCandidate(request, depHints);
-				var instance = instantiateOp(candidate, depHints);
-
-				// cache instance
-				setInstance(conditions, instance);
-
-				for (var entry : candidate.typeVarAssigns().entrySet()) {
-					dependencyTypeVarAssigns.putIfAbsent(entry.getKey(), entry
-						.getValue());
-				}
+				var conditions = MatchingConditions.from(request, depHints);
+				OpInstance<?> instance = generateCacheHit(conditions);
+				// add Op to dependencies
 				dependencyChains.add(wrapOp(instance, conditions));
+				// refine current type variable knowledge
+				GenericAssignability //
+					.inferTypeVariables(request.getType(), instance.getType()) //
+					.forEach(dependencyTypeVarAssigns::putIfAbsent);
 
 			}
 			catch (final OpMatchingException e) {

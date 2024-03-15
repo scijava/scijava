@@ -239,7 +239,7 @@ public class OpFieldInfo implements OpInfo {
 
 	@Override
 	public String toString() {
-		return Infos.describeVerbose(this);
+		return Infos.describe(this);
 	}
 
 }

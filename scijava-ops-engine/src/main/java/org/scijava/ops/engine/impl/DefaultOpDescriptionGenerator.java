@@ -29,12 +29,6 @@
 
 package org.scijava.ops.engine.impl;
 
-import java.lang.reflect.Type;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.google.common.base.Strings;
 import org.scijava.ops.api.*;
 import org.scijava.ops.engine.BaseOpHints;
@@ -46,6 +40,18 @@ import org.scijava.priority.Priority;
 import org.scijava.struct.ItemIO;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.scijava.struct.ItemIO.CONTAINER;
+import static org.scijava.struct.ItemIO.MUTABLE;
 
 /**
  * An {@link OpDescriptionGenerator} implementation which makes use of
@@ -62,93 +68,26 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 
 	@Override
 	public String simpleDescriptions(OpEnvironment env, OpRequest req) {
-		String name = req.getName();
-		Optional<String> nsString = getNonOpString(env, name);
-		if (nsString.isPresent()) return nsString.get();
-		var infos = env.infos(name);
-		Function<OpInfo, String> descriptor = (info) -> {
-			final StringBuilder sb = new StringBuilder("(");
-			// Step 2: Inputs
-			var inputs = info.inputs().stream().map(member -> {
-				var str = "";
-				var description = describeType(env, Nil.of(member.getType()));
-				switch (member.getIOType()) {
-					case INPUT:
-						str += description;
-						break;
-					case MUTABLE:
-						str += "@MUTABLE " + description;
-						break;
-					case CONTAINER:
-						str += "@CONTAINER " + description;
-						break;
-					default:
-						throw new IllegalArgumentException("Invalid IO type: " + member
-							.getIOType());
-				}
-				if (!member.isRequired()) {
-					str += " = null";
-				}
-				return str;
-			}).collect(Collectors.joining(", "));
-			sb.append(inputs);
-			sb.append(")");
-			// Step 3: Output
-			var output = info.output();
-			sb.append(" -> ");
-			switch (output.getIOType()) {
-				case OUTPUT:
-					var description = describeType(env, Nil.of(output.getType()));
-					sb.append(description);
-					break;
-				case MUTABLE:
-				case CONTAINER:
-					sb.append("None");
-					break;
-				default:
-					throw new IllegalArgumentException("Invalid IO type: " + output
-						.getIOType());
-			}
-			return sb.toString();
-		};
-		return buildOpString(infos, req, descriptor);
-	}
-
-	private static <T> String describeType(OpEnvironment env, Nil<T> from) {
-		Type specialType = Types.parameterize(Function.class, new Type[] { Types
-			.parameterize(Nil.class, new Type[] { from.getType() }), String.class });
-		@SuppressWarnings("unchecked")
-		Nil<Function<Nil<T>, String>> specialTypeNil =
-			(Nil<Function<Nil<T>, String>>) Nil.of(specialType);
-		try {
-			Type nilFromType = Types.parameterize(Nil.class, new Type[] { from
-				.getType() });
-			Hints h = new Hints( //
-				BaseOpHints.Adaptation.FORBIDDEN, //
-				BaseOpHints.Conversion.FORBIDDEN, //
-				BaseOpHints.History.IGNORE //
-			);
-			Function<Nil<T>, String> op = env.op("engine.describe", specialTypeNil,
-				new Nil[] { Nil.of(nilFromType) }, Nil.of(String.class), h);
-			return op.apply(from);
-		}
-		catch (OpMatchingException e) {
-			return Types.raw(from.getType()).getSimpleName();
-		}
+		return buildOpString(req, env, info -> describeUsingOps(info, env));
 	}
 
 	@Override
 	public String verboseDescriptions(OpEnvironment env, OpRequest req) {
-		String name = req.getName();
-		Optional<String> nsString = getNonOpString(env, name);
-		if (nsString.isPresent()) return nsString.get();
-		var infos = env.infos(name);
-		return buildOpString(infos, req, Infos::describeVerbose);
+		return buildOpString(req, env, Infos::describe);
 	}
 
-	private String buildOpString(Collection<OpInfo> infos, OpRequest req,
+	private static String buildOpString(OpRequest req, OpEnvironment env,
 		Function<OpInfo, String> descriptionFunction)
 	{
+		// handle namespaces queries
+		String name = req.getName();
+		Optional<String> nsString = getNonOpString(env, name);
+		if (nsString.isPresent()) {
+			return nsString.get();
+		}
+
+		// handle name queries
+		Collection<OpInfo> infos = env.infos(name);
 		var filtered = filterInfos(infos, req);
 		String opString = filtered.stream() //
 			.map(descriptionFunction) //
@@ -170,7 +109,9 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 	 *         namespace. Returns {@code Optional.empty()} if this is a legitimate
 	 *         op request.
 	 */
-	private Optional<String> getNonOpString(OpEnvironment env, String name) {
+	private static Optional<String> getNonOpString(OpEnvironment env,
+		String name)
+	{
 		String prefix = null;
 		Stream<String> nsStream = null;
 		if (Strings.isNullOrEmpty(name)) {
@@ -200,7 +141,7 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 	 * @return A stream of strings for each Op info not in a protected namespace
 	 *         (e.g. 'engine')
 	 */
-	private Stream<String> publicOpStream(OpEnvironment env) {
+	private static Stream<String> publicOpStream(OpEnvironment env) {
 		return env.infos().stream() //
 			// Get all names from each Op
 			.flatMap(info -> info.names().stream()) //
@@ -211,7 +152,7 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 			.filter(ns -> !ns.startsWith("engine"));
 	}
 
-	private List<OpInfo> filterInfos(Iterable<? extends OpInfo> infos,
+	private static List<OpInfo> filterInfos(Iterable<? extends OpInfo> infos,
 		OpRequest req)
 	{
 		List<OpInfo> filtered = new ArrayList<>();
@@ -236,4 +177,68 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 		}
 		return filtered;
 	}
+
+	private static String describeUsingOps(final OpInfo info,
+		final OpEnvironment env)
+	{
+		final StringBuilder sb = new StringBuilder("(");
+		// describe inputs
+		var memberItr = info.inputs().iterator();
+		while (memberItr.hasNext()) {
+			var m = memberItr.next();
+			// MUTABLE annotation
+			if (m.getIOType() == MUTABLE) {
+				sb.append("@MUTABLE ");
+			}
+			// CONTAINER annotation
+			else if (m.getIOType() == CONTAINER) {
+				sb.append("@CONTAINER ");
+			}
+			// describe member type
+			sb.append(describeType(env, Nil.of(m.getType())));
+			if (!m.isRequired()) {
+				sb.append(" = null");
+			}
+			// describe member optionality
+			if (memberItr.hasNext()) {
+				sb.append(", ");
+			}
+		}
+		sb.append(")");
+		// describe output
+		var output = info.output();
+		sb.append(" -> ");
+		if (output.isInput()) {
+			sb.append("None");
+		}
+		else {
+			sb.append(describeType(env, Nil.of(output.getType())));
+		}
+		// return concatenation
+		return sb.toString();
+	}
+
+	private static <T> String describeType(OpEnvironment env, Nil<T> from) {
+		Type specialType = Types.parameterize(Function.class, new Type[] { Types
+			.parameterize(Nil.class, new Type[] { from.getType() }), String.class });
+		@SuppressWarnings("unchecked")
+		Nil<Function<Nil<T>, String>> specialTypeNil =
+			(Nil<Function<Nil<T>, String>>) Nil.of(specialType);
+		try {
+			Type nilFromType = Types.parameterize(Nil.class, new Type[] { from
+				.getType() });
+			Hints h = new Hints( //
+				BaseOpHints.Adaptation.FORBIDDEN, //
+				BaseOpHints.Conversion.FORBIDDEN, //
+				BaseOpHints.History.IGNORE //
+			);
+			Function<Nil<T>, String> op = env.op("engine.describe", specialTypeNil,
+				new Nil[] { Nil.of(nilFromType) }, Nil.of(String.class), h);
+			return op.apply(from);
+		}
+		catch (OpMatchingException e) {
+			return Types.raw(from.getType()).getSimpleName();
+		}
+	}
+
 }

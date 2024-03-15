@@ -35,9 +35,7 @@ import org.scijava.discovery.ManualDiscoverer;
 import org.scijava.meta.Versions;
 import org.scijava.ops.api.*;
 import org.scijava.ops.engine.*;
-import org.scijava.ops.engine.BaseOpHints.Adaptation;
-import org.scijava.ops.engine.BaseOpHints.DependencyMatching;
-import org.scijava.ops.engine.BaseOpHints.Conversion;
+import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.engine.matcher.impl.DefaultOpMatcher;
@@ -183,21 +181,22 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	private SortedSet<OpInfo> filterInfos(SortedSet<OpInfo> infos, Hints hints) {
-		boolean adapting = hints.contains(Adaptation.IN_PROGRESS);
-		boolean converting = hints.contains(Conversion.IN_PROGRESS);
-		boolean depMatching = hints.contains(DependencyMatching.IN_PROGRESS);
+		boolean adapting = hints.contains(BaseOpHints.Adaptation.IN_PROGRESS);
+		boolean converting = hints.contains(BaseOpHints.Conversion.IN_PROGRESS);
+		boolean depMatching = hints.contains(
+			BaseOpHints.DependencyMatching.IN_PROGRESS);
 		// if we aren't doing any
 		if (!(adapting || converting || depMatching)) return infos;
 		return infos.stream() //
 			// filter out unadaptable ops
 			.filter(info -> !adapting || !info.declaredHints().contains(
-				Adaptation.FORBIDDEN)) //
+				BaseOpHints.Adaptation.FORBIDDEN)) //
 			// filter out unadaptable ops
 			.filter(info -> !converting || !info.declaredHints().contains(
-				Conversion.FORBIDDEN)) //
+				BaseOpHints.Conversion.FORBIDDEN)) //
 			// filter out unadaptable ops
 			.filter(info -> !depMatching || !info.declaredHints().contains(
-				DependencyMatching.FORBIDDEN)) //
+				BaseOpHints.DependencyMatching.FORBIDDEN)) //
 			.collect(Collectors.toCollection(TreeSet::new));
 	}
 
@@ -587,7 +586,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		Hints baseDepHints = hints //
 			.plus( //
 				BaseOpHints.DependencyMatching.IN_PROGRESS, //
-				Conversion.FORBIDDEN, //
+				BaseOpHints.Conversion.FORBIDDEN, //
 				BaseOpHints.History.IGNORE //
 			).minus(BaseOpHints.Progress.TRACK);
 		// Then, match dependencies

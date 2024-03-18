@@ -67,7 +67,7 @@ public class ServiceLoaderDiscoveryIntegrationTest {
 		final List<OpInfo> infos = discoveries.stream() //
 			.flatMap(c -> g.generateInfosFrom(c).stream()) //
 			.collect(Collectors.toList());
-		Assertions.assertEquals(294, infos.size());
+		Assertions.assertEquals(299, infos.size());
 	}
 
 }

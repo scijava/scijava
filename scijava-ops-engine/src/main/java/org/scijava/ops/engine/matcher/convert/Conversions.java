@@ -32,7 +32,6 @@ package org.scijava.ops.engine.matcher.convert;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.*;
@@ -63,80 +62,6 @@ public final class Conversions {
 
 	private Conversions() {
 		// Prevent instantiation of static utility class
-	}
-
-	/**
-	 * Determines the {@link Type} of a retyped Op using its old {@code Type}, a
-	 * new set of {@code args} and a new {@code outType}. Used to create
-	 * {@link ConvertedOpInfo}s. This method assumes that:
-	 * <ul>
-	 * <li>{@code originalOpRefType} is (or is a subtype of) some
-	 * {@link FunctionalInterface}</li>
-	 * <li>all {@link TypeVariable}s declared by that {@code FunctionalInterface}
-	 * are present in the signature of that interface's single abstract
-	 * method.</li>
-	 * </ul>
-	 *
-	 * @param originalOpType - the {@link Type} declared by the source
-	 *          {@link OpRequest}
-	 * @param newArgs - the new argument {@link Type}s requested by the
-	 *          {@link OpRequest}.
-	 * @param newOutType - the new output {@link Type} requested by the
-	 *          {@link OpRequest}.
-	 * @return - a new {@code type} for a {@link ConvertedOpInfo}.
-	 */
-	public static ParameterizedType retypeOpType(Type originalOpType,
-		Type[] newArgs, Type newOutType)
-	{
-		// only retype types that we know how to retype
-		Class<?> opType = Types.raw(originalOpType);
-		Method fMethod = FunctionalInterfaces.functionalMethodOf(opType);
-
-		Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
-
-		// solve input types
-		Type[] genericParameterTypes = paramTypesFromOpType(opType, fMethod);
-		GenericAssignability.inferTypeVariables(genericParameterTypes, newArgs,
-			typeVarAssigns);
-
-		// solve output type
-		Type genericReturnType = returnTypeFromOpType(opType, fMethod);
-		if (genericReturnType != void.class) {
-			GenericAssignability.inferTypeVariables(new Type[] { genericReturnType },
-				new Type[] { newOutType }, typeVarAssigns);
-		}
-
-		// build new (read: converted) Op type
-		return Types.parameterize(opType, typeVarAssigns);
-	}
-
-	static Type[] paramTypesFromOpType(Class<?> opType, Method fMethod) {
-		Type[] genericParameterTypes = fMethod.getGenericParameterTypes();
-		if (fMethod.getDeclaringClass().equals(opType))
-			return genericParameterTypes;
-		return typesFromOpType(opType, fMethod, genericParameterTypes);
-
-	}
-
-	static Type returnTypeFromOpType(Class<?> opType, Method fMethod) {
-		Type genericReturnType = fMethod.getGenericReturnType();
-		if (fMethod.getDeclaringClass().equals(opType)) return genericReturnType;
-		return typesFromOpType(opType, fMethod, genericReturnType)[0];
-	}
-
-	private static Type[] typesFromOpType(Class<?> opType, Method fMethod,
-		Type... types)
-	{
-		Map<TypeVariable<?>, Type> map = new HashMap<>();
-		Class<?> declaringClass = fMethod.getDeclaringClass();
-		Type genericDeclaringClass = Types.parameterizeRaw(declaringClass);
-		Type genericClass = Types.parameterizeRaw(opType);
-		Type superGenericClass = Types.getExactSuperType(genericClass,
-			declaringClass);
-		GenericAssignability.inferTypeVariables(new Type[] {
-			genericDeclaringClass }, new Type[] { superGenericClass }, map);
-
-		return Types.mapVarToTypes(types, map);
 	}
 
 	/**
@@ -208,58 +133,287 @@ public final class Conversions {
 			BaseOpHints.Conversion.FORBIDDEN, //
 			BaseOpHints.History.IGNORE //
 		);
+		final RichOp<Function<?, ?>> identity = identityOp(env);
+		final Map<TypeVariable<?>, Type> vars = new HashMap<>();
 		// Find input converters
 		Type[] fromArgs = request.getArgs();
-		List<Type> toArgs = inputTypesAgainst(info, Types.raw(request.getType()));
-		RichOp<Function<?, ?>> identity = identityOp(env);
+		List<Type> toArgs = inputTypesAgainst(info, Types.raw(reqType));
 		List<RichOp<Function<?, ?>>> preConverters = new ArrayList<>();
-		Map<TypeVariable<?>, Type> vars = new HashMap<>();
 		for (int i = 0; i < fromArgs.length; i++) {
-			// If the request argument can be assigned to the info parameter directly,
-			// we don't need to call a preconverter
-			if (Types.isAssignable(fromArgs[i], toArgs.get(i))) {
-				preConverters.add(identity);
-			}
-			// If direct assignment fails, we need a preconverter
-			else {
-				var source = Nil.of(fromArgs[i]);
-				var preDest = Types.mapVarToTypes(toArgs.get(i), vars);
-				var dest = wildcardVacuousTypeVars(preDest);
-				var op = env.unary("engine.convert", h).inType(source).outType(dest)
-					.function();
-				var rich = Ops.rich(op);
-				resolveTypes(fromArgs[i], preDest, rich, vars);
-				preConverters.add(Ops.rich(op));
-			}
+			var opt = findConverter(fromArgs[i], toArgs.get(i), vars, env, h);
+			preConverters.add(opt.orElse(identity));
 		}
 
 		// Find output converter
+		Optional<ConvertedOpInfo> opt;
+		// Attempt 1: Functions
+		opt = postprocessFunction(info, request, preConverters, vars, env, h);
+		if (opt.isPresent()) {
+			return opt.get();
+		}
+		// Attempt 2: Computer with identity mutable output
+		opt = postprocessIdentity(info, request, preConverters, identity, vars, env,
+			h);
+		if (opt.isPresent()) {
+			return opt.get();
+		}
+		// Attempt 3: Computer with convert and copy of mutable output
+		opt = postprocessConvertAndCopy(info, request, preConverters, vars, env, h);
+		if (opt.isPresent()) {
+			return opt.get();
+		}
+		// Attempt 4: Computer with just copy of mutable output
+		opt = postprocessCopy(info, request, preConverters, vars, env, h);
+		return opt.orElse(null);
+	}
+
+	/**
+	 * Helper that completes the conversion of {@code info}, which refers to a
+	 * {@code Function} op.
+	 *
+	 * @param info the original {@link OpInfo}
+	 * @param request the original {@link OpRequest}
+	 * @param preConverters the {@link List} of {@link RichOp}s responsible for
+	 *          converting the inputs to the {@link ConvertedOpInfo}
+	 * @param vars the {@link Map} of {@link TypeVariable}s to {@link Type}s
+	 *          necessary for the conversion between {@code info} and
+	 *          {@code request}
+	 * @param env the {@link OpEnvironment} used to match Ops necessary to create
+	 *          the {@code ConvertedOpInfo}
+	 * @param hints the {@link Hints} used during Op matching calls to {@code env}
+	 * @return a {@link ConvertedOpInfo}, aligning {@code info} to {@code request}
+	 *         if that is possible
+	 */
+	private static Optional<ConvertedOpInfo> postprocessFunction(OpInfo info,
+		OpRequest request, List<RichOp<Function<?, ?>>> preConverters,
+		Map<TypeVariable<?>, Type> vars, OpEnvironment env, Hints hints)
+	{
+		// This procedure only applies to functions
+		int ioIndex = ioIndex(request.getType());
+		if (ioIndex > -1) {
+			return Optional.empty();
+		}
+		// for functions, we only need a postconverter
 		var fromOut = Nil.of(Types.mapVarToTypes(info.outputType(), vars));
 		var toOut = Nil.of(request.getOutType());
-		int ioIndex = ioIndex(request.getType());
-		RichOp<Function<?, ?>> postConverter;
-		RichOp<Computers.Arity1<?, ?>> copyOp = null;
-		try {
-			var op = env.unary("engine.convert", h).inType(fromOut).outType(toOut)
-				.function();
-			postConverter = Ops.rich(op);
-			copyOp = getCopyOp(env, info, request, h);
-		}
-		catch (OpMatchingException e) {
-			postConverter = identity;
-			if (ioIndex != -1 && (preConverters.get(ioIndex) != identity)) {
-				copyOp = Ops.rich(env.unary("engine.copy", h).inType(fromOut).outType(
-					toOut).computer());
-			}
-		}
-		return new ConvertedOpInfo( //
+		RichOp<Function<?, ?>> postConverter = Ops.rich(env.unary("engine.convert",
+			hints).inType(fromOut).outType(toOut).function());
+		return Optional.of(new ConvertedOpInfo( //
 			info, //
 			request.getType(), //
 			preConverters, //
 			postConverter, //
-			copyOp, //
+			null, //
 			env //
-		);
+		));
+	}
+
+	/**
+	 * Helper that completes the conversion of {@code info}, which refers to an Op
+	 * with a {@link Mutable} output. This particular pathway of
+	 * {@link ConvertedOpInfo} creation provides convenience when the
+	 * {@link Mutable} output was not actually converted, but was instead "edited"
+	 * with {@code identity}.
+	 *
+	 * @param info the original {@link OpInfo}
+	 * @param request the original {@link OpRequest}
+	 * @param preConverters the {@link List} of {@link RichOp}s responsible for
+	 *          converting the inputs to the {@link ConvertedOpInfo}
+	 * @param identity an Op that simply returns the input value
+	 * @param vars the {@link Map} of {@link TypeVariable}s to {@link Type}s
+	 *          necessary for the conversion between {@code info} and
+	 *          {@code request}
+	 * @param env the {@link OpEnvironment} used to match Ops necessary to create
+	 *          the {@code ConvertedOpInfo}
+	 * @param hints the {@link Hints} used during Op matching calls to {@code env}
+	 * @return a {@link ConvertedOpInfo}, aligning {@code info} to {@code request}
+	 *         if that is possible
+	 */
+	private static Optional<ConvertedOpInfo> postprocessIdentity(OpInfo info,
+		OpRequest request, List<RichOp<Function<?, ?>>> preConverters,
+		RichOp<Function<?, ?>> identity, Map<TypeVariable<?>, Type> vars,
+		OpEnvironment env, Hints hints)
+	{
+		// This procedure only applies to Ops with mutable outputs
+		int ioIndex = ioIndex(request.getType());
+		if (ioIndex == -1) {
+			return Optional.empty();
+		}
+		// And only applies when the mutable index was "converted" with identity
+		if (preConverters.get(ioIndex) == identity) {
+			// In this case, we need neither a postprocessor nor a copier,
+			// because the mutable output was directly edited.
+			return Optional.of(new ConvertedOpInfo( //
+				info, //
+				request.getType(), //
+				preConverters, //
+				identity, //
+				null, //
+				env //
+			));
+		}
+		return Optional.empty();
+	}
+
+	/**
+	 * Helper that completes the conversion of {@code info}, which refers to an Op
+	 * with a {@link Mutable} output. This particular pathway of
+	 * {@link ConvertedOpInfo} creation relies on <b>both</b> a
+	 * {@code engine.convert} Op and a {@code engine.copy} Op to directly copy the
+	 * output of the underlying Op into the pre-allocated user output.
+	 *
+	 * @param info the original {@link OpInfo}
+	 * @param request the original {@link OpRequest}
+	 * @param preConverters the {@link List} of {@link RichOp}s responsible for
+	 *          converting the inputs to the {@link ConvertedOpInfo}
+	 * @param vars the {@link Map} of {@link TypeVariable}s to {@link Type}s
+	 *          necessary for the conversion between {@code info} and
+	 *          {@code request}
+	 * @param env the {@link OpEnvironment} used to match Ops necessary to create
+	 *          the {@code ConvertedOpInfo}
+	 * @param hints the {@link Hints} used during Op matching calls to {@code env}
+	 * @return a {@link ConvertedOpInfo}, aligning {@code info} to {@code request}
+	 *         if that is possible
+	 */
+	private static Optional<ConvertedOpInfo> postprocessConvertAndCopy(
+		OpInfo info, OpRequest request, List<RichOp<Function<?, ?>>> preConverters,
+		Map<TypeVariable<?>, Type> vars, OpEnvironment env, Hints hints)
+	{
+		// This procedure only applies to Ops with mutable outputs
+		int ioIndex = ioIndex(request.getType());
+		if (ioIndex == -1) {
+			return Optional.empty();
+		}
+		try {
+			var fromOut = Nil.of(Types.mapVarToTypes(info.outputType(), vars));
+			var toOut = Nil.of(request.getOutType());
+			// First, we convert the output to the type the user requested
+			RichOp<Function<?, ?>> postConverter = Ops.rich( //
+				env.unary("engine.convert", hints) //
+					.inType(fromOut) //
+					.outType(toOut) //
+					.function() //
+			);
+			// Then, we copy the converted output back into the user's object.
+			RichOp<Computers.Arity1<?, ?>> copyOp = Ops.rich(env.unary("engine.copy",
+				hints) //
+				.inType(toOut) //
+				.outType(toOut) //
+				.computer() //
+			);
+			return Optional.of(new ConvertedOpInfo( //
+				info, //
+				request.getType(), //
+				preConverters, //
+				postConverter, //
+				copyOp, //
+				env //
+			));
+		}
+		catch (OpMatchingException e) {
+			return Optional.empty();
+		}
+	}
+
+	/**
+	 * Helper that completes the conversion of {@code info}, which refers to an Op
+	 * with a {@link Mutable} output. This particular pathway of
+	 * {@link ConvertedOpInfo} creation relies on an {@code engine.copy} Op to
+	 * directly copy the output of the underlying Op into the pre-allocated user
+	 * output.
+	 *
+	 * @param info the original {@link OpInfo}
+	 * @param request the original {@link OpRequest}
+	 * @param preConverters the {@link List} of {@link RichOp}s responsible for
+	 *          converting the inputs to the {@link ConvertedOpInfo}
+	 * @param vars the {@link Map} of {@link TypeVariable}s to {@link Type}s
+	 *          necessary for the conversion between {@code info} and
+	 *          {@code request}
+	 * @param env the {@link OpEnvironment} used to match Ops necessary to create
+	 *          the {@code ConvertedOpInfo}
+	 * @param hints the {@link Hints} used during Op matching calls to {@code env}
+	 * @return a {@link ConvertedOpInfo}, aligning {@code info} to {@code request}
+	 *         if that is possible
+	 */
+	private static Optional<ConvertedOpInfo> postprocessCopy(OpInfo info,
+		OpRequest request, List<RichOp<Function<?, ?>>> preConverters,
+		Map<TypeVariable<?>, Type> vars, OpEnvironment env, Hints hints)
+	{
+		// This procedure only applies to Ops with mutable outputs
+		int ioIndex = ioIndex(request.getType());
+		if (ioIndex == -1) {
+			return Optional.empty();
+		}
+		try {
+			var fromOut = Nil.of(Types.mapVarToTypes(info.outputType(), vars));
+			var toOut = Nil.of(request.getOutType());
+			// This is really just a placeholder.
+			RichOp<Function<?, ?>> postConverter = Ops.rich( //
+				env.unary("engine.identity", hints) //
+					.inType(fromOut) //
+					.outType(fromOut) //
+					.function() //
+			);
+			// We try to copy the output directly from the op output into the user's
+			// object
+			RichOp<Computers.Arity1<?, ?>> copyOp = Ops.rich( //
+				env.unary("engine.copy", hints) //
+					.inType(fromOut) //
+					.outType(toOut) //
+					.computer() //
+			);
+			return Optional.of(new ConvertedOpInfo( //
+				info, //
+				request.getType(), //
+				preConverters, //
+				postConverter, //
+				copyOp, //
+				env //
+			));
+		}
+		catch (OpMatchingException e) {
+			return Optional.empty();
+		}
+	}
+
+	/**
+	 * Helper method to find a converter from a user argument of type {@code from}
+	 * to an Op parameter of type {@code to}
+	 *
+	 * @param from the {@link Type} of a user argument
+	 * @param to the {@link Type} of an Op parameter
+	 * @param vars the {@link Map} of {@link TypeVariable}s to {@code Type}s
+	 *          created to this point, throughout the conversion
+	 * @param env the {@link OpEnvironment} used for matching converter Ops
+	 * @param hints the {@link Hints} to use in matching
+	 * @return a rich converter Op, if it is both necessary and can be found
+	 */
+	private static Optional<RichOp<Function<?, ?>>> findConverter(Type from,
+		Type to, Map<TypeVariable<?>, Type> vars, OpEnvironment env, Hints hints)
+	{
+		// If the request argument can be assigned to the info parameter directly,
+		// we don't need to call a preconverter
+		if (Types.isAssignable(from, to)) {
+			return Optional.empty();
+		}
+		// If direct assignment fails, we need a preconverter
+		var source = Nil.of(from);
+		// If the op parameter type has type variables that have been mapped
+		// already, substitute those mappings in.
+		var preDest = Types.mapVarToTypes(to, vars);
+		// Remaining type variables are unlikely to be matched directly. We thus
+		// replace them with wildcards, bounded by the same bounds.
+		var dest = wildcardVacuousTypeVars(preDest);
+		// match the Op
+		var op = env.unary("engine.convert", hints) //
+			.inType(source) //
+			.outType(dest) //
+			.function();
+		var rich = Ops.rich(op);
+		// The resulting Op can give us further information about type variable
+		// mappings - let's find them
+		resolveTypes(from, preDest, rich, vars);
+		return Optional.of(Ops.rich(op));
 	}
 
 	private static void resolveTypes(Type source, Type dest,

@@ -579,13 +579,8 @@ public final class Conversions {
 		StringBuilder sb = new StringBuilder(packageName + ".");
 
 		// class name
-		// FIXME: This procedure, while generally safe, has a bug for method Ops,
-		// where the implementationName return contains parameter types. If those
-		// parameters are described by FQCN, they may contain periods, which will
-		// affect the expected stopping point.
 		String implementationName = altered.implementationName();
-		String className = implementationName.replaceAll("[^a-zA-Z0-9.\\-]", "_");
-		className = className.substring(className.lastIndexOf(".") + 1);
+		String className = implementationName.replaceAll("[^a-zA-Z0-9\\-]", "_");
 		if (className.chars().anyMatch(c -> !Character.isJavaIdentifierPart(c)))
 			throw new IllegalArgumentException(className +
 				" is not a valid class name!");

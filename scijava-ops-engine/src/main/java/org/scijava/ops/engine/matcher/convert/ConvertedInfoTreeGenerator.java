@@ -41,8 +41,6 @@ import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.engine.InfoTreeGenerator;
 import org.scijava.types.Nil;
 
-import static org.scijava.ops.engine.matcher.convert.ConvertedOpInfo.PRECONVERTER_DELIMITER;
-
 /**
  * Generates a {@link InfoTree}, rooted by a {@link ConvertedOpInfo}, from a
  * {@link String} signature.
@@ -78,7 +76,7 @@ public class ConvertedInfoTreeGenerator implements InfoTreeGenerator {
 		for (int i = 0; i < numPreconverters; i++) {
 			String reqFocuserComp = components.remove(0);
 			String reqFocuserSignature = reqFocuserComp.substring(
-				PRECONVERTER_DELIMITER.length());
+				ConvertedOpInfo.PRECONVERTER_DELIMITER.length());
 			InfoTree reqFocuserChain = InfoTreeGenerator.generateDependencyTree(env,
 				reqFocuserSignature, idMap, generators);
 

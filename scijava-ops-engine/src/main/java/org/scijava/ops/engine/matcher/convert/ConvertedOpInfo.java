@@ -29,9 +29,7 @@
 
 package org.scijava.ops.engine.matcher.convert;
 
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
+import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -126,7 +124,7 @@ public class ConvertedOpInfo implements OpInfo {
 			preconverter);
 		Type outType = outType(info.outputType(), postconverter);
 		Class<?> fIface = FunctionalInterfaces.findFrom(info.opType());
-		return Conversions.retypeOpType(fIface, inTypes, outType);
+		return retypeOpType(fIface, inTypes, outType);
 	}
 
 	public ConvertedOpInfo(OpInfo info, Type opType,
@@ -442,6 +440,80 @@ public class ConvertedOpInfo implements OpInfo {
 		catch (OpMatchingException e) {
 			return Double.POSITIVE_INFINITY;
 		}
+	}
+
+	/**
+	 * Determines the {@link Type} of a retyped Op using its old {@code Type}, a
+	 * new set of {@code args} and a new {@code outType}. Used to create
+	 * {@link ConvertedOpInfo}s. This method assumes that:
+	 * <ul>
+	 * <li>{@code originalOpRefType} is (or is a subtype of) some
+	 * {@link FunctionalInterface}</li>
+	 * <li>all {@link TypeVariable}s declared by that {@code FunctionalInterface}
+	 * are present in the signature of that interface's single abstract
+	 * method.</li>
+	 * </ul>
+	 *
+	 * @param originalOpType - the {@link Type} declared by the source
+	 *          {@link OpRequest}
+	 * @param newArgs - the new argument {@link Type}s requested by the
+	 *          {@link OpRequest}.
+	 * @param newOutType - the new output {@link Type} requested by the
+	 *          {@link OpRequest}.
+	 * @return - a new {@code type} for a {@link ConvertedOpInfo}.
+	 */
+	private static ParameterizedType retypeOpType(Type originalOpType,
+		Type[] newArgs, Type newOutType)
+	{
+		// only retype types that we know how to retype
+		Class<?> opType = Types.raw(originalOpType);
+		Method fMethod = FunctionalInterfaces.functionalMethodOf(opType);
+
+		Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
+
+		// solve input types
+		Type[] genericParameterTypes = paramTypesFromOpType(opType, fMethod);
+		GenericAssignability.inferTypeVariables(genericParameterTypes, newArgs,
+			typeVarAssigns);
+
+		// solve output type
+		Type genericReturnType = returnTypeFromOpType(opType, fMethod);
+		if (genericReturnType != void.class) {
+			GenericAssignability.inferTypeVariables(new Type[] { genericReturnType },
+				new Type[] { newOutType }, typeVarAssigns);
+		}
+
+		// build new (read: converted) Op type
+		return Types.parameterize(opType, typeVarAssigns);
+	}
+
+	private static Type[] paramTypesFromOpType(Class<?> opType, Method fMethod) {
+		Type[] genericParameterTypes = fMethod.getGenericParameterTypes();
+		if (fMethod.getDeclaringClass().equals(opType))
+			return genericParameterTypes;
+		return typesFromOpType(opType, fMethod, genericParameterTypes);
+
+	}
+
+	private static Type returnTypeFromOpType(Class<?> opType, Method fMethod) {
+		Type genericReturnType = fMethod.getGenericReturnType();
+		if (fMethod.getDeclaringClass().equals(opType)) return genericReturnType;
+		return typesFromOpType(opType, fMethod, genericReturnType)[0];
+	}
+
+	private static Type[] typesFromOpType(Class<?> opType, Method fMethod,
+		Type... types)
+	{
+		Map<TypeVariable<?>, Type> map = new HashMap<>();
+		Class<?> declaringClass = fMethod.getDeclaringClass();
+		Type genericDeclaringClass = Types.parameterizeRaw(declaringClass);
+		Type genericClass = Types.parameterizeRaw(opType);
+		Type superGenericClass = Types.getExactSuperType(genericClass,
+			declaringClass);
+		GenericAssignability.inferTypeVariables(new Type[] {
+			genericDeclaringClass }, new Type[] { superGenericClass }, map);
+
+		return Types.mapVarToTypes(types, map);
 	}
 
 }

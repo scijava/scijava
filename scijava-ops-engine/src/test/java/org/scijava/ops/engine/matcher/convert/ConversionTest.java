@@ -31,10 +31,15 @@ package org.scijava.ops.engine.matcher.convert;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.lang.reflect.Type;
 import java.util.function.BiFunction;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.scijava.function.Computers;
+import org.scijava.function.Container;
+import org.scijava.ops.api.Ops;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.conversionLoss.impl.IdentityLossReporter;
 import org.scijava.ops.engine.conversionLoss.impl.PrimitiveLossReporters;
@@ -43,6 +48,7 @@ import org.scijava.ops.engine.create.CreateOpCollection;
 import org.scijava.ops.engine.matcher.impl.LossReporterWrapper;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
+import org.scijava.ops.spi.OpMethod;
 
 /**
  * Basic Op conversion test
@@ -115,6 +121,33 @@ public class ConversionTest extends AbstractTestEnvironment implements
 
 		Double result = numFunc.apply(3., 4.);
 		assertEquals(81., result, 0);
+	}
+
+	@OpMethod(names = "test.differentOrder", type = Computers.Arity1_1.class)
+	public static void foo(@Container Integer[] i1, Double[] i2) {
+		for (int i = 0; i < i1.length; i++) {
+			i1[i] = i2[i].intValue() * i2[i].intValue();
+		}
+	}
+
+	@Test
+	public void testConvertedOpInfo() {
+		Long[] i1 = { 1L };
+		Byte[] i2 = { 2 };
+		var op = ops.op("test.differentOrder").arity1().input(i1).output(i2)
+			.computer();
+		var info = Ops.rich(op).infoTree().info();
+		Assertions.assertInstanceOf(ConvertedOpInfo.class, info);
+		// Assert input types are expected
+		Type[] expected = { Long[].class, Byte[].class };
+		Assertions.assertArrayEquals(expected, info.inputTypes().toArray());
+		// Assert the output type is expected
+		Assertions.assertEquals(Byte[].class, info.outputType());
+
+		// Assert the struct types are correct
+		var members = info.struct().members();
+		Assertions.assertEquals(Long[].class, members.get(0).getType());
+		Assertions.assertEquals(Byte[].class, members.get(1).getType());
 	}
 
 }

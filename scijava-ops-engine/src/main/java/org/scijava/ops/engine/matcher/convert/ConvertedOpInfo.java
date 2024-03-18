@@ -120,30 +120,68 @@ public class ConvertedOpInfo implements OpInfo {
 		List<RichOp<Function<?, ?>>> preconverter,
 		RichOp<Function<?, ?>> postconverter)
 	{
-		Type[] inTypes = inTypes(info.inputTypes().toArray(Type[]::new),
-			preconverter);
+		Type[] inTypes = inTypes(info.inputTypes(), preconverter);
 		Type outType = outType(info.outputType(), postconverter);
 		Class<?> fIface = FunctionalInterfaces.findFrom(info.opType());
 		return retypeOpType(fIface, inTypes, outType);
 	}
 
-	public ConvertedOpInfo(OpInfo info, Type opType,
-		List<RichOp<Function<?, ?>>> preconverters,
-		RichOp<Function<?, ?>> postconverter,
-		final RichOp<Computers.Arity1<?, ?>> copyOp, OpEnvironment env)
-	{
+	public ConvertedOpInfo( //
+		OpInfo info, //
+		Type opType, //
+		List<RichOp<Function<?, ?>>> preconverters, //
+		RichOp<Function<?, ?>> postconverter, //
+		final RichOp<Computers.Arity1<?, ?>> copyOp, //
+		OpEnvironment env //
+	) {
 		this.info = info;
 		this.opType = opType;
 		this.preconverters = preconverters;
 		this.postconverter = postconverter;
 		this.copyOp = copyOp;
 		this.env = env;
+		this.struct = generateStruct( //
+			info, //
+			opType, //
+			preconverters, //
+			postconverter //
+		);
+		this.hints = info.declaredHints().plus( //
+			BaseOpHints.Conversion.FORBIDDEN, //
+			"converted" //
+		);
+	}
 
-		Type[] inTypes = inTypes(info.inputTypes().toArray(Type[]::new),
-			preconverters);
+	/**
+	 * Helper method to generate the new {@link Struct}
+	 *
+	 * @param info the original {@link OpInfo}
+	 * @param opType the new Op's {@link Type}
+	 * @param preconverters the {@link Function}s responsible for converting Op
+	 *          parameters
+	 * @param postconverter the {@link Function} responsible for converting the
+	 *          Op's return
+	 * @return the {@link Struct} of the converted Op
+	 */
+	private static Struct generateStruct(OpInfo info, Type opType,
+		List<RichOp<Function<?, ?>>> preconverters,
+		RichOp<Function<?, ?>> postconverter)
+	{
+		List<Type> originalIns = new ArrayList<>(info.inputTypes());
+		List<Member<?>> ioMembers = new ArrayList<>(info.struct().members());
+		// If the mutable index differs between the declared Op type and the
+		// requested Op type, we must move the IO memberr
+		int fromIOIdx = Conversions.mutableIndexOf(Types.raw(info.opType()));
+		int toIOIdx = Conversions.mutableIndexOf(Types.raw(opType));
+		if (fromIOIdx != toIOIdx) {
+			originalIns.add(toIOIdx, originalIns.remove(fromIOIdx));
+			ioMembers.add(toIOIdx, ioMembers.remove(fromIOIdx));
+		}
+		// Determine the new input and output types of the Op
+		Type[] inTypes = inTypes(originalIns, preconverters);
 		Type outType = outType(info.outputType(), postconverter);
 
-		List<Member<?>> ioMembers = info.struct().members();
+		// Create the functional member types of the new OpInfo
 		int index = 0;
 		List<FunctionalMethodType> fmts = new ArrayList<>();
 		for (Member<?> m : ioMembers) {
@@ -152,12 +190,9 @@ public class ConvertedOpInfo implements OpInfo {
 				: null;
 			fmts.add(new FunctionalMethodType(newType, m.getIOType()));
 		}
-		// generate new output fmt
+		// generate new struct
 		RetypingRequest r = new RetypingRequest(info.struct(), fmts);
-		this.struct = Structs.from(r, opType, new OpRetypingMemberParser());
-
-		this.hints = info.declaredHints().plus(BaseOpHints.Conversion.FORBIDDEN,
-			"converted");
+		return Structs.from(r, opType, new OpRetypingMemberParser());
 	}
 
 	public OpInfo srcInfo() {
@@ -310,28 +345,32 @@ public class ConvertedOpInfo implements OpInfo {
 		return sb.toString();
 	}
 
-	private static Type[] inTypes(Type[] originalInputs,
-		List<RichOp<Function<?, ?>>> inputFocusers)
+	private static Type[] inTypes(List<Type> originalInputs,
+		List<RichOp<Function<?, ?>>> preconverters)
 	{
 		Map<TypeVariable<?>, Type> typeAssigns = new HashMap<>();
-		Type[] inTypes = new Type[originalInputs.length];
-		// NB: This feels kind of inefficient, but we have to do each individually
-		// to avoid the case that the same Op is being used for different types.
-		// Here's one use edge case - suppose the Op Identity<T> maps A, B, and C.
-		// The new inTypes should thus be A, B, and C, but if we do them all
-		// together we'll get inTypes Object from the output of the focusers, as
-		// there's only one type variable to map across the three inputs.
-		for (int i = 0; i < originalInputs.length; i++) {
+		Type[] inTypes = new Type[originalInputs.size()];
+		for (int i = 0; i < originalInputs.size(); i++) {
 			typeAssigns.clear();
-			if (inputFocusers.get(i) == null) {
-				inTypes[i] = originalInputs[i];
+			// Start by looking at the input type T of the preconverter
+			var type = preconverters.get(i).instance().getType();
+			var pType = (ParameterizedType) type;
+			inTypes[i] = pType.getActualTypeArguments()[0];
+			// Sometimes, the type of the Op instance can contain wildcards.
+			// These do not help us in determining the new type, so we have to
+			// start over with the input converter input type.
+			if (inTypes[i] instanceof WildcardType) {
+				inTypes[i] = Ops.info(preconverters.get(i)).inputTypes().get(0);
 			}
-			else {
-				var info = Ops.info(inputFocusers.get(i));
-				GenericAssignability.inferTypeVariables(new Type[] { info
-					.outputType() }, new Type[] { originalInputs[i] }, typeAssigns);
-				inTypes[i] = Types.mapVarToTypes(info.inputTypes().get(0), typeAssigns);
-			}
+			// Infer type variables in the preconverter input w.r.t. the
+			// parameter types of the ORIGINAL OpInfo
+			GenericAssignability.inferTypeVariables( //
+				new Type[] { pType.getActualTypeArguments()[1] }, //
+				new Type[] { originalInputs.get(i) }, //
+				typeAssigns //
+			);
+			// Map type variables in T to Types inferred above
+			inTypes[i] = Types.mapVarToTypes(inTypes[i], typeAssigns);
 		}
 		return inTypes;
 	}
@@ -340,14 +379,26 @@ public class ConvertedOpInfo implements OpInfo {
 		Type originalOutput, //
 		RichOp<Function<?, ?>> postconverter //
 	) {
-		Map<TypeVariable<?>, Type> typeAssigns = new HashMap<>();
+		// Start by looking at the output type T of the postconverter
+		var type = postconverter.instance().getType();
+		var pType = (ParameterizedType) type;
+		Type outType = pType.getActualTypeArguments()[1];
+		// Sometimes, the type of the Op instance can contain wildcards.
+		// These do not help us in determining the new type, so we have to
+		// start over with the postconverter's output type.
+		if (outType instanceof WildcardType) {
+			outType = Ops.info(postconverter).outputType();
+		}
+		Map<TypeVariable<?>, Type> vars = new HashMap<>();
+		// Infer type variables in the postconverter input w.r.t. the
+		// parameter types of the ORIGINAL OpInfo
 		GenericAssignability.inferTypeVariables( //
-			new Type[] { Ops.info(postconverter).inputTypes().get(0) }, //
+			new Type[] { pType.getActualTypeArguments()[0] }, //
 			new Type[] { originalOutput }, //
-			typeAssigns //
+			vars //
 		);
-		return Types.mapVarToTypes(Ops.info(postconverter).outputType(),
-			typeAssigns);
+		// map type variables in T to Types inferred in Step 2a
+		return Types.mapVarToTypes(outType, vars);
 	}
 
 	@Override

@@ -76,7 +76,7 @@ public final class Conversions {
 	 * @return the index of the mutable argument (or -1 iff the output is
 	 *         returned).
 	 */
-	public static int findMutableArgIndex(Class<?> c) {
+	public static int mutableIndexOf(Class<?> c) {
 		Method fMethod = FunctionalInterfaces.functionalMethodOf(c);
 		for (int i = 0; i < fMethod.getParameterCount(); i++) {
 			if (AnnotationUtils.getMethodParameterAnnotation(fMethod, i,
@@ -479,7 +479,7 @@ public final class Conversions {
 		OpInfo info, //
 		OpRequest request, Hints hints //
 	) {
-		int ioIndex = Conversions.findMutableArgIndex(Types.raw(info.opType()));
+		int ioIndex = Conversions.mutableIndexOf(Types.raw(info.opType()));
 		// If IO index is -1, output is returned - no need to copy.
 		if (ioIndex == -1) {
 			return null;

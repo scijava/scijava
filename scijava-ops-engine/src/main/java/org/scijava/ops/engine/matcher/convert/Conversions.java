@@ -732,7 +732,7 @@ public final class Conversions {
 	 */
 	private static String createFunctionalMethod(Class<?> opType, int ioIndex,
 		OpInfo altered, List<Function<?, ?>> preconverters,
-		Computers.Arity1<?, ?> postconverter)
+		Computers.Arity1<?, ?> copier)
 	{
 		StringBuilder sb = new StringBuilder();
 
@@ -760,8 +760,7 @@ public final class Conversions {
 		sb.append(fMethodPostprocessing( //
 			opOutput, //
 			ioIndex, //
-			//
-			postconverter //
+			copier //
 		));
 
 		// if pure output, return it

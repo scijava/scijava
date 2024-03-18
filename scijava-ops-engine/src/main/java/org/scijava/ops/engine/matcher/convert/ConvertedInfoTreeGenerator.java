@@ -74,13 +74,17 @@ public class ConvertedInfoTreeGenerator implements InfoTreeGenerator {
 		List<RichOp<Function<?, ?>>> preconverters = new ArrayList<>();
 		int numPreconverters = components.size() - 3;
 		for (int i = 0; i < numPreconverters; i++) {
-			String reqFocuserComp = components.remove(0);
-			String reqFocuserSignature = reqFocuserComp.substring(
+			String preconverterComp = components.remove(0);
+			if (!preconverterComp.startsWith(ConvertedOpInfo.PRECONVERTER_DELIMITER))
+				throw new IllegalArgumentException("Signature " + signature +
+					" does not contain a preconverter signature (starting with " +
+					ConvertedOpInfo.PRECONVERTER_DELIMITER + ")");
+			String preconverterSignature = preconverterComp.substring(
 				ConvertedOpInfo.PRECONVERTER_DELIMITER.length());
-			InfoTree reqFocuserChain = InfoTreeGenerator.generateDependencyTree(env,
-				reqFocuserSignature, idMap, generators);
+			InfoTree preconverterChain = InfoTreeGenerator.generateDependencyTree(env,
+				preconverterSignature, idMap, generators);
 
-			preconverters.add(Ops.rich(env.opFromInfoChain(reqFocuserChain,
+			preconverters.add(Ops.rich(env.opFromInfoChain(preconverterChain,
 				FUNCTION_NIL, dependencyHints)));
 		}
 

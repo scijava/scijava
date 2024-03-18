@@ -41,6 +41,7 @@ import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.engine.matcher.impl.RuntimeSafeMatchingRoutine;
 import org.scijava.ops.spi.Op;
 import org.scijava.priority.Priority;
+import org.scijava.types.inference.GenericAssignability;
 
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -75,23 +76,19 @@ public class ConversionMatchingRoutine extends RuntimeSafeMatchingRoutine {
 		for (final OpInfo info : env.infos(request.getName(), convertConditions
 			.hints()))
 		{
-			Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
 			Conversions.tryConvert(env, info, request).ifPresent(converted -> {
-				// TODO: This ConvertedOpInfo is built for the request - do we even
-				// need to check assignability?
-				boolean assignable = typesMatch( //
-					converted.opType(), //
-					convertConditions.request().getType(), //
-					typeVarAssigns //
+				Map<TypeVariable<?>, Type> map = new HashMap<>();
+				GenericAssignability.inferTypeVariables( //
+					new Type[] { converted.opType() }, //
+					new Type[] { request.getType() }, //
+					map //
 				);
-				if (assignable) {
-					candidates.add(new OpCandidate( //
-						env, //
-						request, //
-						converted, //
-						typeVarAssigns //
-					));
-				}
+				candidates.add(new OpCandidate( //
+					env, //
+					request, //
+					converted, //
+					map //
+				));
 			});
 		}
 		final List<OpCandidate> matches = filterMatches(candidates);

@@ -51,7 +51,6 @@ public class PrimitiveArrayConverters<N extends Number> implements
 	@OpField(names = "engine.convert")
 	public final Function<N[], ObjectArray<Number>> fromNumber = arr -> {
 		var oa = new ObjectArray<>(Number.class, arr.length);
-		// TODO: Why doesn't System.arraycopy work?
 		for (int i = 0; i < arr.length; i++) {
 			oa.set(i, arr[i]);
 		}
@@ -65,7 +64,6 @@ public class PrimitiveArrayConverters<N extends Number> implements
 	public final Function<byte[], ObjectArray<Number>> fromPrimitiveByte =
 		arr -> {
 			var oa = new ObjectArray<>(Number.class, arr.length);
-			// TODO: Why doesn't System.arraycopy work?
 			for (int i = 0; i < arr.length; i++) {
 				oa.set(i, arr[i]);
 			}
@@ -77,7 +75,6 @@ public class PrimitiveArrayConverters<N extends Number> implements
 	public final Function<short[], ObjectArray<Number>> fromPrimitiveShort =
 		arr -> {
 			var oa = new ObjectArray<>(Number.class, arr.length);
-			// TODO: Why doesn't System.arraycopy work?
 			for (int i = 0; i < arr.length; i++) {
 				oa.set(i, arr[i]);
 			}
@@ -88,7 +85,6 @@ public class PrimitiveArrayConverters<N extends Number> implements
 	@OpField(names = "engine.convert")
 	public final Function<int[], ObjectArray<Number>> fromPrimitiveInt = arr -> {
 		var oa = new ObjectArray<>(Number.class, arr.length);
-		// TODO: Why doesn't System.arraycopy work?
 		for (int i = 0; i < arr.length; i++) {
 			oa.set(i, arr[i]);
 		}
@@ -100,7 +96,6 @@ public class PrimitiveArrayConverters<N extends Number> implements
 	public final Function<long[], ObjectArray<Number>> fromPrimitiveLong =
 		arr -> {
 			var oa = new ObjectArray<>(Number.class, arr.length);
-			// TODO: Why doesn't System.arraycopy work?
 			for (int i = 0; i < arr.length; i++) {
 				oa.set(i, arr[i]);
 			}
@@ -112,7 +107,6 @@ public class PrimitiveArrayConverters<N extends Number> implements
 	public final Function<float[], ObjectArray<Number>> fromPrimitiveFloat =
 		arr -> {
 			var oa = new ObjectArray<>(Number.class, arr.length);
-			// TODO: Why doesn't System.arraycopy work?
 			for (int i = 0; i < arr.length; i++) {
 				oa.set(i, arr[i]);
 			}
@@ -124,7 +118,6 @@ public class PrimitiveArrayConverters<N extends Number> implements
 	public final Function<double[], ObjectArray<Number>> fromPrimitiveDouble =
 		arr -> {
 			var oa = new ObjectArray<>(Number.class, arr.length);
-			// TODO: Why doesn't System.arraycopy work?
 			for (int i = 0; i < arr.length; i++) {
 				oa.set(i, arr[i]);
 			}

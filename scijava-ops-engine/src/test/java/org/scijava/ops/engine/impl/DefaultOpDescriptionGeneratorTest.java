@@ -14,6 +14,11 @@ import org.scijava.ops.spi.OpField;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * Tests basic behavior of {@link DefaultOpDescriptionGenerator}.
+ *
+ * @author Gabriel Selzer
+ */
 public class DefaultOpDescriptionGeneratorTest extends AbstractTestEnvironment
 	implements OpCollection
 {
@@ -44,6 +49,11 @@ public class DefaultOpDescriptionGeneratorTest extends AbstractTestEnvironment
 		in1.add(in2);
 	};
 
+	/**
+	 * Tests that, when multiple Ops declare the same number of parameters, and
+	 * when each corresponding parameter index is described in the same way, that
+	 * the two Ops are coalesced into one entry in the help message.
+	 */
 	@Test
 	public void testCoalescedDescriptions() {
 		String actual = ops.unary("test.coalesceDescription").helpVerbose();
@@ -55,20 +65,18 @@ public class DefaultOpDescriptionGeneratorTest extends AbstractTestEnvironment
 			"\t\t> input1 : java.lang.Double\n" + "\t\tReturns : java.lang.Double\n" +
 			"\t- org.scijava.ops.engine.impl.DefaultOpDescriptionGeneratorTest$func2\n" +
 			"\t\t> input1 : java.lang.Long\n" + "\t\tReturns : java.lang.Long";
-
+		// Assert that helpVerbose returns three entries
 		Assertions.assertEquals(expected, actual);
-
+		// But assert that only two entries are seen for help
 		actual = ops.unary("test.coalesceDescription").help();
 		expected = //
 			"test.coalesceDescription:\n\t- (list<number>, @CONTAINER list<number>) -> None\n\t- (number) -> number";
 		Assertions.assertEquals(expected, actual);
-
 		// Test that with 2 inputs we do get the binary inplace Op, but no others
 		actual = ops.binary("test.coalesceDescription").help();
 		expected = //
 			"test.coalesceDescription:\n\t- (@MUTABLE list<number>, number) -> None";
 		Assertions.assertEquals(expected, actual);
-
 		// Finally test that with no inputs we don't get any of the Ops
 		actual = ops.nullary("test.coalesceDescription").help();
 		expected = "No Ops found matching this request.";

@@ -42,32 +42,43 @@ import org.scijava.ops.spi.OpField;
  * calls with just one implementation. The simplest type of transformation is
  * showcased in {@link OpAdaptation}.
  * <p>
- * A more complex type of transformation is called "simplification". This type
- * involves transforming some subset of Op inputs into a different, but similar
- * type. This process makes use of three different Op types:
+ * A more complex transformation, termed parameter "conversion", alters
+ * individual Op parameter types. Parameter conversion makes use of two
+ * different Op types:
  * <ul>
- * <li>"engine.convert" Ops transform user inputs into a broader data type</li>
- * <li>"engine.focus" Ops transform that broader type into the type used by the
- * Op</li>
- * <li>"engine.copy" Ops are necessary to propagate changes to the simplified
- * type back to the original parameter</li>
+ * <li>{@code engine.convert} Ops transform user inputs into a different data
+ * type</li>
+ * <li>{@code engine.copy} Ops propagate changes to mutable Op parameters back
+ * into the user's output buffers.</li>
  * </ul>
  * <p>
- * Simplification can be used to call a method implemented for parameters of one
- * type on a completely different type. This can be as simple as using an
- * Integer instead of a Double, or go beyond the Java type assignability with
- * custom defined type conversion (e.g. images from one library to another).
+ * Conversion can be used to call an Op using parameters of completely different
+ * types. This can be as simple as using an Integer instead of a Double, or go
+ * beyond Java type assignment rules with custom defined type conversion (e.g.
+ * images from one library to another). When this happens, the following steps
+ * are taken:
+ * <ol>
+ * <li>All inputs are converted to types required by the Op, using
+ * {@code engine.convert} "preconverter" Ops.</li>
+ * <li>The Op is invoked on the converted inputs</li>
+ * <li>If the Op defines a <em>pure</em> output object, that output is converted
+ * to the user's requested type using a {@code engine.convert} "postconverter"
+ * Op</li>
+ * <li>If the Op defines a <em>mutable</em> output object (i.e. a pre-allocated
+ * output buffer), the converted pre-allocated output buffer is copied back into
+ * the user's pre-allocated output buffer using a {@code engine.copy} Op.</li>
+ * </ol>
  * <p>
- * Below, we can see how this works by calling the above Field Op, implemented
- * for Double, on a Double[] instead
+ * Below, we can see how this works by calling the below Field Op, implemented
+ * for {@link Double}s, with {@link Integer} arguments
  */
-public class OpSimplification implements OpCollection {
+public class OpConversion implements OpCollection {
 
 	/**
 	 * A simple Op, written as a {@link Field}, that performs a simple
 	 * calculation.
 	 */
-	@OpField(names = "tutorial.simplify")
+	@OpField(names = "tutorial.conversion")
 	public final BiFunction<Double, Double, Double> fieldOp = (a, b) -> {
 		return a * 2 + b;
 	};
@@ -78,8 +89,8 @@ public class OpSimplification implements OpCollection {
 		// Call the Op on some inputs
 		Integer first = 1;
 		Integer second = 2;
-		// Ask for an Op of name "tutorial.simplify"
-		Integer result = ops.binary("tutorial.simplify") //
+		// Ask for an Op of name "tutorial.conversion"
+		Integer result = ops.binary("tutorial.conversion") //
 			// With our two Integer inputs
 			.input(first, second) //
 			// And get an Integer out
@@ -89,22 +100,22 @@ public class OpSimplification implements OpCollection {
 			.apply();
 
 		/*
-		The simplification routine works as follows:
-		1. SciJava Ops determines that there are no existing "tutorial.simplify" Ops
-		that work on Integers
+		The conversion routine works as follows:
+		1. SciJava Ops determines that there are no existing "tutorial.conversion"
+		Ops that work on Integers
 
-		2. SciJava Ops finds a "engine.focus" Op that can make Doubles from Numbers. Thus,
-		if the inputs are Numbers, SciJava Ops could use this "engine.focus" Op to make
-		those Numbers into Doubles
+		2. SciJava Ops finds an "engine.convert" Op that can make Doubles from
+		Integers. Thus, if the inputs are Integers, SciJava Ops could use this
+		"engine.convert" Op to make those Integers into Doubles
 
-		3. SciJava Ops finds a "engine.convert" Op that can make Numbers from Integers.
-		Thus, if the inputs are Integers, SciJava Ops can use this "engine.convert" Op
-		to make those Integers into Numbers
+		2. SciJava Ops finds an "engine.convert" Op that can make Integers from
+		Doubles. Thus, if a Double output is requested, SciJava Ops could use this
+		"engine.convert" Op to make a Double output from an Integer
 
-		4. By using the "engine.convert" and then the "engine.focus" Op, SciJava Ops can convert
-		the Integer inputs into Double inputs, and by creating a similar chain
-		in reverse, can convert the Double output into an Integer output.
-		Thus, we get an Op that can run on Integers!
+		3. By using the "engine.convert" Ops, SciJava Ops can convert each of
+		the Integer inputs into Double inputs, and then can convert the Double
+		output back into the Integer the user requested. Thus, we get an Op that can
+		run on Integers!
 		 */
 		System.out.println(result);
 

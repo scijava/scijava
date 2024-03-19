@@ -148,6 +148,12 @@ public class ConversionTest extends AbstractTestEnvironment implements
 		var members = info.struct().members();
 		Assertions.assertEquals(Long[].class, members.get(0).getType());
 		Assertions.assertEquals(Byte[].class, members.get(1).getType());
+
+		// Assert the implementation name reflects the new parameter types
+		var expImplName = "org.scijava.ops.engine.matcher.convert.ConversionTest" +
+			".foo(java.lang.Integer[],java.lang.Double[])|converted_Long_Arr_Byte_Arr";
+		var actImplName = info.implementationName();
+		Assertions.assertEquals(expImplName, actImplName);
 	}
 
 }

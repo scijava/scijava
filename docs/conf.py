@@ -20,6 +20,8 @@ extensions = [
     "sphinx_tabs.tabs",
     "sphinx_charts.charts",
     "myst_nb",
+    # NB: Needed for newer sphinx versions - see
+    # https://github.com/thclark/sphinx-charts/issues/23
     "sphinxcontrib.jquery"
 ]
 

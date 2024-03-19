@@ -11,8 +11,10 @@ dependencies:
 
   - pip
   - pip:
-      - sphinx-multiproject
+      # NB: Needed for newer sphinx versions - see
+      # https://github.com/thclark/sphinx-charts/issues/23
       - sphinxcontrib-jquery
+      - sphinx-multiproject
       - readthedocs-sphinx-search
       - sphinx-tabs
       - sphinx_charts

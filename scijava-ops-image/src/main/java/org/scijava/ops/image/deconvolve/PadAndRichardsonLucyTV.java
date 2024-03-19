@@ -65,7 +65,7 @@ import org.scijava.ops.spi.OpDependency;
  */
 public class PadAndRichardsonLucyTV<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
 	implements
-	Functions.Arity11<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, O, C, Integer, Boolean, Boolean, Float, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, RandomAccessibleInterval<O>>
+	Functions.Arity10<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, O, C, Integer, Boolean, Boolean, Float, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<O>>
 {
 
 	@OpDependency(name = "deconvolve.richardsonLucyUpdate")
@@ -197,7 +197,6 @@ public class PadAndRichardsonLucyTV<I extends RealType<I> & NativeType<I>, O ext
 	 * @param regularizationFactor
 	 * @param borderSize
 	 * @param obfInput
-	 * @param obfKernel
 	 * @return the deconvolution of the input data
 	 */
 	@Override
@@ -205,8 +204,7 @@ public class PadAndRichardsonLucyTV<I extends RealType<I> & NativeType<I>, O ext
 		RandomAccessibleInterval<K> kernel, O outType, C complexType,
 		Integer maxIterations, Boolean nonCirculant, Boolean accelerate,
 		Float regularizationFactor, @Nullable long[] borderSize,
-		@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,
-		@Nullable OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel)
+		@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput)
 	{
 		if (obfInput == null) obfInput = new OutOfBoundsMirrorFactory<>(
 			OutOfBoundsMirrorFactory.Boundary.SINGLE);

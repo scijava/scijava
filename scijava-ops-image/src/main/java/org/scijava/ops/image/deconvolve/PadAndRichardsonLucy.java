@@ -63,7 +63,7 @@ import org.scijava.ops.spi.OpDependency;
  */
 public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
 	implements
-	Functions.Arity10<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, O, C, Integer, Boolean, Boolean, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, RandomAccessibleInterval<O>>
+	Functions.Arity9<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, O, C, Integer, Boolean, Boolean, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<O>>
 {
 
 	private Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> computeEstimateOp =
@@ -207,7 +207,6 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 	 * @param accelerate indicates whether or not to use acceleration
 	 * @param borderSize
 	 * @param obfInput
-	 * @param obfKernel
 	 * @return the output
 	 */
 	@Override
@@ -215,8 +214,7 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 		RandomAccessibleInterval<K> kernel, O outType, C complexType,
 		Integer maxIterations, @Nullable Boolean nonCirculant,
 		@Nullable Boolean accelerate, @Nullable long[] borderSize,
-		@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,
-		@Nullable OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel)
+		@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput)
 	{
 		if (obfInput == null) obfInput = new OutOfBoundsMirrorFactory<>(
 			OutOfBoundsMirrorFactory.Boundary.SINGLE);

@@ -300,11 +300,9 @@ public class ConvertedOpInfo implements OpInfo {
 
 	private int compareConvertedInfos(ConvertedOpInfo that) {
 		// Compare structs
-		List<Member<?>> theseMembers = new ArrayList<>();
-		this.struct().forEach(theseMembers::add);
-		List<Member<?>> thoseMembers = new ArrayList<>();
-		that.struct().forEach(thoseMembers::add);
-		return theseMembers.hashCode() - thoseMembers.hashCode();
+		int thisHash = this.struct().members().hashCode();
+		int thatHash = that.struct().members().hashCode();
+		return thisHash - thatHash;
 	}
 
 	@Override

@@ -36,7 +36,7 @@ import java.util.function.BiFunction;
 import net.imglib2.Dimensions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
+import net.imglib2.outofbounds.OutOfBoundsMirrorFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.ComplexType;
@@ -218,8 +218,8 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 		@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,
 		@Nullable OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel)
 	{
-		if (obfInput == null) obfInput = new OutOfBoundsConstantValueFactory<>(Util
-			.getTypeFromInterval(input).createVariable());
+		if (obfInput == null) obfInput = new OutOfBoundsMirrorFactory<>(
+			OutOfBoundsMirrorFactory.Boundary.SINGLE);
 
 		if (nonCirculant == null) {
 			this.nonCirculant = false;

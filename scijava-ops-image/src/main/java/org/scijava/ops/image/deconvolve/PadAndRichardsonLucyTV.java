@@ -37,7 +37,7 @@ import java.util.function.Function;
 import net.imglib2.Dimensions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
+import net.imglib2.outofbounds.OutOfBoundsMirrorFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.ComplexType;
@@ -103,7 +103,7 @@ public class PadAndRichardsonLucyTV<I extends RealType<I> & NativeType<I>, O ext
 			RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, //
 			Boolean, C, Integer, Inplaces.Arity1<RandomAccessibleInterval<O>>, //
 			Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>>, //
-		  List<Inplaces.Arity1<RandomAccessibleInterval<O>>>, RandomAccessibleInterval<O>, //
+			List<Inplaces.Arity1<RandomAccessibleInterval<O>>>, RandomAccessibleInterval<O>, //
 			RandomAccessibleInterval<O>> richardsonLucyOp;
 
 	private Boolean nonCirculant;
@@ -146,8 +146,8 @@ public class PadAndRichardsonLucyTV<I extends RealType<I> & NativeType<I>, O ext
 
 			return (input, kernel, out) -> {
 				richardsonLucyOp.compute(input, kernel, fftImg, fftKernel, true, true,
-					complexType, maxIterations, accelerator, computeEstimateOp, list, fg.apply(
-						raiExtendedInput), out);
+					complexType, maxIterations, accelerator, computeEstimateOp, list, fg
+						.apply(raiExtendedInput), out);
 			};
 		}
 
@@ -208,8 +208,8 @@ public class PadAndRichardsonLucyTV<I extends RealType<I> & NativeType<I>, O ext
 		@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,
 		@Nullable OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel)
 	{
-		if (obfInput == null) obfInput = new OutOfBoundsConstantValueFactory<>(Util
-			.getTypeFromInterval(input).createVariable());
+		if (obfInput == null) obfInput = new OutOfBoundsMirrorFactory<>(
+			OutOfBoundsMirrorFactory.Boundary.SINGLE);
 
 		this.nonCirculant = nonCirculant;
 		this.maxIterations = maxIterations;

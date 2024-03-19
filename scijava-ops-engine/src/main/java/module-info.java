@@ -290,6 +290,7 @@ module org.scijava.ops.engine {
 		org.scijava.ops.engine.math.Power,
 		org.scijava.ops.engine.math.Sqrt,
 		org.scijava.ops.engine.math.Zero,
+		org.scijava.ops.engine.matcher.convert.ListConverterCollection,
 		org.scijava.ops.engine.matcher.convert.PrimitiveArrayConverters,
 		org.scijava.ops.engine.matcher.convert.PrimitiveConverters,
 		org.scijava.ops.engine.stats.Mean,

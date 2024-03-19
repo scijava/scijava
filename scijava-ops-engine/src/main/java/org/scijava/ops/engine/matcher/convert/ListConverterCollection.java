@@ -29,31 +29,35 @@
 
 package org.scijava.ops.engine.matcher.convert;
 
+import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.OpMethod;
+import org.scijava.priority.Priority;
+
 import java.util.List;
 import java.util.function.Function;
-
-import org.scijava.ops.spi.Op;
-import org.scijava.ops.spi.OpClass;
+import java.util.stream.Collectors;
 
 /**
  * Converts {@link List}s of types extending {@link Number}.
  *
  * @author Gabriel Selzer
  */
-@OpClass(names = "engine.convert")
-public class PrimitiveListConverter<T extends Number> implements
-	Function<List<T>, List<Number>>, Op
-{
+public class ListConverterCollection implements OpCollection {
 
-	@Override
 	/**
 	 * @param t the input List
 	 * @return a List whose elements have been converted
 	 */
-	public List<Number> apply(List<T> t) {
-		@SuppressWarnings({ "unchecked", "rawtypes" })
-		List<Number> numberList = (List) t;
-		return numberList;
+	@OpMethod( //
+		names = "engine.convert", //
+		type = Function.class, //
+		priority = Priority.LOW //
+	)
+	public static <T, U> List<U> convert(@OpDependency(
+		name = "engine.convert") Function<T, U> elementConverter, List<T> t)
+	{
+		return t.stream().map(elementConverter).collect(Collectors.toList());
 	}
 
 }

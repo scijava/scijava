@@ -29,39 +29,36 @@
 
 package org.scijava.ops.engine.matcher.convert;
 
-import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.util.*;
-import java.util.function.Function;
-
 import org.scijava.function.Computers;
 import org.scijava.function.Container;
 import org.scijava.function.Mutable;
 import org.scijava.ops.api.*;
 import org.scijava.ops.engine.BaseOpHints;
-import org.scijava.ops.engine.util.internal.AnnotationUtils;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 import org.scijava.types.inference.FunctionalInterfaces;
 import org.scijava.types.inference.GenericAssignability;
 
-import javassist.CannotCompileException;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtConstructor;
-import javassist.CtField;
-import javassist.CtMethod;
-import javassist.CtNewConstructor;
-import javassist.CtNewMethod;
-import javassist.NotFoundException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.*;
+import java.util.function.Function;
 
 public final class Conversions {
 
 	private Conversions() {
 		// Prevent instantiation of static utility class
+	}
+
+	public static List<Type> inputTypesAgainst(OpInfo info, Class<?> against) {
+		List<Type> types = info.inputTypes();
+		int fromIoIndex = mutableIndexOf(info.opType());
+		int toIoIndex = mutableIndexOf(against);
+		if (fromIoIndex != toIoIndex) {
+			types.add(toIoIndex, types.remove(fromIoIndex));
+		}
+		return types;
 	}
 
 	/**
@@ -72,33 +69,12 @@ public final class Conversions {
 	 * {@link Method} is its output. We also assume that only one argument is
 	 * annotated.
 	 *
-	 * @param c - the {@link Class} extending a {@link FunctionalInterface}
+	 * @param t - the {@link Type} extending a {@link FunctionalInterface}
 	 * @return the index of the mutable argument (or -1 iff the output is
 	 *         returned).
 	 */
-	public static int mutableIndexOf(Class<?> c) {
-		Method fMethod = FunctionalInterfaces.functionalMethodOf(c);
-		for (int i = 0; i < fMethod.getParameterCount(); i++) {
-			if (AnnotationUtils.getMethodParameterAnnotation(fMethod, i,
-				Mutable.class) != null) return i;
-			if (AnnotationUtils.getMethodParameterAnnotation(fMethod, i,
-				Container.class) != null) return i;
-		}
-		return -1;
-	}
-
-	public static List<Type> inputTypesAgainst(OpInfo info, Class<?> against) {
-		List<Type> types = info.inputTypes();
-		int fromIoIndex = ioIndex(info.opType());
-		int toIoIndex = ioIndex(against);
-		if (fromIoIndex != toIoIndex) {
-			types.add(toIoIndex, types.remove(fromIoIndex));
-		}
-		return types;
-	}
-
-	private static int ioIndex(Type cls) {
-		var method = FunctionalInterfaces.functionalMethodOf(cls);
+	public static int mutableIndexOf(Type t) {
+		var method = FunctionalInterfaces.functionalMethodOf(t);
 		var params = method.getAnnotatedParameterTypes();
 		for (int i = 0; i < params.length; i++) {
 			if (params[i].isAnnotationPresent(Container.class)) return i;
@@ -152,8 +128,7 @@ public final class Conversions {
 			return opt.get();
 		}
 		// Attempt 2: Computer with identity mutable output
-		opt = postprocessIdentity(info, request, preConverters, identity, vars, env,
-			h);
+		opt = postprocessIdentity(info, request, preConverters, identity, env);
 		if (opt.isPresent()) {
 			return opt.get();
 		}
@@ -189,7 +164,7 @@ public final class Conversions {
 		Map<TypeVariable<?>, Type> vars, OpEnvironment env, Hints hints)
 	{
 		// This procedure only applies to functions
-		int ioIndex = ioIndex(request.getType());
+		int ioIndex = mutableIndexOf(request.getType());
 		if (ioIndex > -1) {
 			return Optional.empty();
 		}
@@ -220,22 +195,17 @@ public final class Conversions {
 	 * @param preConverters the {@link List} of {@link RichOp}s responsible for
 	 *          converting the inputs to the {@link ConvertedOpInfo}
 	 * @param identity an Op that simply returns the input value
-	 * @param vars the {@link Map} of {@link TypeVariable}s to {@link Type}s
-	 *          necessary for the conversion between {@code info} and
-	 *          {@code request}
 	 * @param env the {@link OpEnvironment} used to match Ops necessary to create
 	 *          the {@code ConvertedOpInfo}
-	 * @param hints the {@link Hints} used during Op matching calls to {@code env}
 	 * @return a {@link ConvertedOpInfo}, aligning {@code info} to {@code request}
 	 *         if that is possible
 	 */
 	private static Optional<ConvertedOpInfo> postprocessIdentity(OpInfo info,
 		OpRequest request, List<RichOp<Function<?, ?>>> preConverters,
-		RichOp<Function<?, ?>> identity, Map<TypeVariable<?>, Type> vars,
-		OpEnvironment env, Hints hints)
+		RichOp<Function<?, ?>> identity, OpEnvironment env)
 	{
 		// This procedure only applies to Ops with mutable outputs
-		int ioIndex = ioIndex(request.getType());
+		int ioIndex = mutableIndexOf(request.getType());
 		if (ioIndex == -1) {
 			return Optional.empty();
 		}
@@ -280,7 +250,7 @@ public final class Conversions {
 		Map<TypeVariable<?>, Type> vars, OpEnvironment env, Hints hints)
 	{
 		// This procedure only applies to Ops with mutable outputs
-		int ioIndex = ioIndex(request.getType());
+		int ioIndex = mutableIndexOf(request.getType());
 		if (ioIndex == -1) {
 			return Optional.empty();
 		}
@@ -340,7 +310,7 @@ public final class Conversions {
 		Map<TypeVariable<?>, Type> vars, OpEnvironment env, Hints hints)
 	{
 		// This procedure only applies to Ops with mutable outputs
-		int ioIndex = ioIndex(request.getType());
+		int ioIndex = mutableIndexOf(request.getType());
 		if (ioIndex == -1) {
 			return Optional.empty();
 		}
@@ -462,394 +432,6 @@ public final class Conversions {
 			.outType(t) //
 			.function();
 		return Ops.rich(op);
-	}
-
-	/**
-	 * Helper method that finds the {@code engine.copy} Op needed for a
-	 * {@link ConvertedOpInfo}
-	 *
-	 * @param env the {@link OpEnvironment} containing {@code engine.copy} Ops.
-	 * @param info the original {@link OpInfo}.
-	 * @param request the {@link OpRequest}
-	 * @param hints {@link Hints} to be used in matching the copy Op.
-	 * @return a {@code engine.copy} Op
-	 */
-	private static RichOp<Computers.Arity1<?, ?>> getCopyOp( //
-		OpEnvironment env, //
-		OpInfo info, //
-		OpRequest request, Hints hints //
-	) {
-		int ioIndex = Conversions.mutableIndexOf(Types.raw(info.opType()));
-		// If IO index is -1, output is returned - no need to copy.
-		if (ioIndex == -1) {
-			return null;
-		}
-		// Match a copier
-		var outType = Nil.of(request.getOutType());
-		return Ops.rich(env.unary("engine.copy", hints) //
-			.inType(outType) //
-			.outType(outType) //
-			.computer());
-	}
-
-	/**
-	 * Creates a Converted Op class. This class:
-	 * <ul>
-	 * <li>is of the same functional type as the given Op</li>
-	 * <li>has type arguments that are of the converted form of the type arguments
-	 * of the given Op (these arguments are dictated by the
-	 * {@code preconverters}s.</li>
-	 * <li>
-	 *
-	 * @param originalOp - the Op that will be converted
-	 * @return a wrapper of {@code originalOp} taking arguments that are then
-	 *         mutated to satisfy {@code originalOp}, producing outputs that are
-	 *         then mutated to satisfy the desired output of the wrapper.
-	 * @throws Throwable in the case of an error
-	 */
-	public static Object javassistOp( //
-		Object originalOp, //
-		OpInfo alteredInfo, //
-		List<Function<?, ?>> preconverters, //
-		Function<?, ?> postconverter, //
-		Computers.Arity1<?, ?> copyOp //
-	) throws Throwable {
-		ClassPool pool = ClassPool.getDefault();
-
-		// Create wrapper class
-		String className = formClassName(alteredInfo);
-		Class<?> c;
-		try {
-			c = pool.getClassLoader().loadClass(className);
-		}
-		catch (ClassNotFoundException e) {
-			CtClass cc = generateConvertedClass( //
-				pool, //
-				className, //
-				alteredInfo, //
-				preconverters, //
-				//
-				copyOp //
-			);
-			c = cc.toClass(MethodHandles.lookup());
-		}
-
-		// Return Op instance
-		return c.getDeclaredConstructor(constructorClasses(alteredInfo,
-			copyOp != null)).newInstance(constructorArgs(preconverters, postconverter,
-				copyOp, originalOp));
-	}
-
-	private static Class<?>[] constructorClasses( //
-		OpInfo originalInfo, //
-		boolean addCopyOp //
-	) {
-		// there are 2*numInputs input mutators, 2 output mutators
-		int numMutators = originalInfo.inputTypes().size() + 1;
-		// original Op plus a output copier if applicable
-		int numOps = addCopyOp ? 2 : 1;
-		Class<?>[] args = new Class<?>[numMutators + numOps];
-		for (int i = 0; i < numMutators; i++)
-			args[i] = Function.class;
-		args[args.length - numOps] = Types.raw(originalInfo.opType());
-		if (addCopyOp) args[args.length - 1] = Computers.Arity1.class;
-		return args;
-
-	}
-
-	private static Object[] constructorArgs( //
-		List<Function<?, ?>> preconverters, //
-		Function<?, ?> postconverter, //
-		Computers.Arity1<?, ?> outputCopier, //
-		Object op //
-	) {
-		List<Object> args = new ArrayList<>(preconverters);
-		args.add(postconverter);
-		args.add(op);
-		if (outputCopier != null) {
-			args.add(outputCopier);
-		}
-		return args.toArray();
-	}
-
-	// TODO: consider correctness
-	private static String formClassName(OpInfo altered) {
-		// package name - required to be this package for the Lookup to work
-		String packageName = Conversions.class.getPackageName();
-		StringBuilder sb = new StringBuilder(packageName + ".");
-
-		// class name
-		String implementationName = altered.implementationName();
-		String className = implementationName.replaceAll("[^a-zA-Z0-9\\-]", "_");
-		if (className.chars().anyMatch(c -> !Character.isJavaIdentifierPart(c)))
-			throw new IllegalArgumentException(className +
-				" is not a valid class name!");
-
-		sb.append(className);
-		return sb.toString();
-	}
-
-	private static CtClass generateConvertedClass(ClassPool pool, //
-		String className, //
-		OpInfo altered, //
-		List<Function<?, ?>> preconverters, //
-		Computers.Arity1<?, ?> outputCopier //
-	) throws Throwable {
-		CtClass cc = pool.makeClass(className);
-		Class<?> rawType = Types.raw(altered.opType());
-
-		// Add implemented interface
-		CtClass jasOpType = pool.get(rawType.getName());
-		cc.addInterface(jasOpType);
-
-		// Add preconverter fields
-		generateNFields(pool, cc, "preconverter", preconverters.size());
-
-		// Add postconverter field
-		generateNFields(pool, cc, "postconverter", 1);
-
-		// Add Op field
-		CtField opField = createOpField(pool, cc, rawType, "op");
-		cc.addField(opField);
-
-		// Add copy Op field iff not pure output
-		if (outputCopier != null) {
-			CtField copyOpField = createOpField(pool, cc, Computers.Arity1.class,
-				"copyOp");
-			cc.addField(copyOpField);
-		}
-
-		// Add constructor to take the converters, as well as the original op.
-		CtConstructor constructor = CtNewConstructor.make(createConstructor(cc, //
-			altered, //
-			preconverters.size(), //
-			outputCopier != null //
-		), cc);
-		cc.addConstructor(constructor);
-
-		// add functional interface method
-		Class<?> opType = Types.raw(altered.opType());
-		int ioIndex = ioIndex(opType);
-		CtMethod functionalMethod = CtNewMethod.make(createFunctionalMethod( //
-			opType, //
-			ioIndex, //
-			altered, //
-			preconverters, //
-			//
-			outputCopier //
-		), cc);
-		cc.addMethod(functionalMethod);
-		return cc;
-	}
-
-	private static void generateNFields(ClassPool pool, CtClass cc, String base,
-		int numFields) throws NotFoundException, CannotCompileException
-	{
-		for (int i = 0; i < numFields; i++) {
-			CtField f = createMutatorField(pool, cc, base + i);
-			cc.addField(f);
-		}
-	}
-
-	private static CtField createMutatorField(ClassPool pool, CtClass cc,
-		String name) throws NotFoundException, CannotCompileException
-	{
-		CtClass fType = pool.get(Function.class.getName());
-		CtField f = new CtField(fType, name, cc);
-		f.setModifiers(Modifier.PRIVATE + Modifier.FINAL);
-		return f;
-	}
-
-	private static CtField createOpField(ClassPool pool, CtClass cc,
-		Class<?> opType, String fieldName) throws NotFoundException,
-		CannotCompileException
-	{
-		CtClass fType = pool.get(opType.getName());
-		CtField f = new CtField(fType, fieldName, cc);
-		f.setModifiers(Modifier.PRIVATE + Modifier.FINAL);
-		return f;
-	}
-
-	private static String createConstructor(CtClass cc, OpInfo altered, //
-		int numInputProcessors, //
-		boolean hasCopyOp //
-	) {
-		StringBuilder sb = new StringBuilder();
-		// constructor signature
-		sb.append("public ").append(cc.getSimpleName()).append("(");
-		Class<?> depClass = Function.class;
-		// preconverter
-		for (int i = 0; i < numInputProcessors; i++) {
-			sb.append(depClass.getName()).append(" preconverter").append(i);
-			sb.append(",");
-		}
-		// postconverter
-		sb.append(depClass.getName()).append(" postconverter0");
-		sb.append(",");
-		// op
-		sb.append(" ").append(Types.raw(altered.opType()).getName()).append(" op");
-		// copy op
-		if (hasCopyOp) {
-			Class<?> copyOpClass = Computers.Arity1.class;
-			sb.append(", ").append(copyOpClass.getName()).append(" copyOp");
-		}
-		sb.append(") {");
-
-		// assign dependencies to field
-		for (int i = 0; i < numInputProcessors; i++) {
-			sb.append("this.preconverter") //
-				.append(i) //
-				.append(" = preconverter") //
-				.append(i) //
-				.append(";");
-		}
-		sb.append("this.postconverter0" + " = postconverter0" + ";");
-		sb.append("this.op = op;");
-		if (hasCopyOp) {
-			sb.append("this.copyOp = copyOp;");
-		}
-		sb.append("}");
-		return sb.toString();
-	}
-
-	/**
-	 * Creates the functional method of a converted Op. This functional method
-	 * must:
-	 * <ol>
-	 * <li>Preconvert all Op inputs.</li>
-	 * <li>Call the {@code Op} using the converted inputs.</li>
-	 * <li>Postconvert the Op output.</li>
-	 * </ol>
-	 * <b>NB</b> The Javassist compiler
-	 * <a href="https://www.javassist.org/tutorial/tutorial3.html#generics">does
-	 * not fully support generics</a>, so we must ensure that the types are raw.
-	 * At compile time, the raw types are equivalent to the generic types, so this
-	 * should not pose any issues.
-	 *
-	 * @return a {@link String} that can be used by
-	 *         {@link CtMethod#make(String, CtClass)} to generate the functional
-	 *         method of the converted Op
-	 */
-	private static String createFunctionalMethod(Class<?> opType, int ioIndex,
-		OpInfo altered, List<Function<?, ?>> preconverters,
-		Computers.Arity1<?, ?> copier)
-	{
-		StringBuilder sb = new StringBuilder();
-
-		// determine the name of the functional method
-		Method m = FunctionalInterfaces.functionalMethodOf(opType);
-		// determine the name of the output:
-		String opOutput = "originalOut";
-		if (ioIndex > -1) {
-			opOutput = "processed" + ioIndex;
-		}
-
-		// -- signature -- //
-		sb.append(generateSignature(m));
-
-		// -- body --//
-
-		// preprocessing
-		sb.append(" {");
-		sb.append(fMethodPreprocessing(preconverters));
-
-		// processing
-		sb.append(fMethodProcessing(m, opOutput, ioIndex, altered));
-
-		// postprocessing
-		sb.append(fMethodPostprocessing( //
-			opOutput, //
-			ioIndex, //
-			copier //
-		));
-
-		// if pure output, return it
-		if (ioIndex == -1) {
-			sb.append("return processedOutput;");
-		}
-		sb.append("}");
-		return sb.toString();
-	}
-
-	private static String generateSignature(Method m) {
-		StringBuilder sb = new StringBuilder();
-		String methodName = m.getName();
-
-		// method modifiers
-		boolean isVoid = m.getReturnType() == void.class;
-		sb.append("public ") //
-			.append(isVoid ? "void" : "Object") //
-			.append(" ") //
-			.append(methodName) //
-			.append("(");
-
-		int inputs = m.getParameterCount();
-		for (int i = 0; i < inputs; i++) {
-			sb.append(" Object in").append(i);
-			if (i < inputs - 1) sb.append(",");
-		}
-
-		sb.append(" )");
-
-		return sb.toString();
-	}
-
-	private static String fMethodProcessing(Method m, String opOutput,
-		int ioIndex, OpInfo altered)
-	{
-		StringBuilder sb = new StringBuilder();
-		// declare / assign Op's original output
-		if (ioIndex == -1) {
-			sb.append("Object ").append(opOutput).append(" = ");
-		}
-		// call the op
-		sb.append("op.").append(m.getName()).append("(");
-		int numInputs = altered.inputTypes().size();
-		for (int i = 0; i < numInputs; i++) {
-			sb.append(" processed").append(i);
-			if (i + 1 < numInputs) sb.append(",");
-		}
-		sb.append(");");
-		return sb.toString();
-	}
-
-	private static String fMethodPostprocessing(String opOutput, int ioIndex,
-		Computers.Arity1<?, ?> outputCopier)
-	{
-		StringBuilder sb = new StringBuilder();
-
-		// postconvert output
-		sb.append("Object processedOutput = postconverter0.apply(").append(opOutput)
-			.append(");");
-
-		// call copy op iff it exists
-		if (outputCopier != null) {
-			String originalIOArg = "in" + ioIndex;
-			sb.append("copyOp.compute(processedOutput, ") //
-				.append(originalIOArg) //
-				.append(");");
-		}
-
-		return sb.toString();
-	}
-
-	private static String fMethodPreprocessing(
-		List<Function<?, ?>> preconverter)
-	{
-		StringBuilder sb = new StringBuilder();
-
-		// focus all inputs
-		for (int i = 0; i < preconverter.size(); i++) {
-			sb.append("Object processed") //
-				.append(i) //
-				.append(" = preconverter") //
-				.append(i) //
-				.append(".apply(in") //
-				.append(i) //
-				.append(");");
-		}
-
-		return sb.toString();
 	}
 
 	/**

@@ -31,6 +31,7 @@ package org.scijava.ops.engine.hints;
 
 import java.util.function.Function;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.Hints;
@@ -74,14 +75,14 @@ public class ConversionHintTest extends AbstractTestEnvironment implements
 		// make sure we cannot find the Op when adaptation is not allowed
 		hints = hints.plus(Conversion.FORBIDDEN);
 		ops.setDefaultHints(hints);
-		try {
-			ops.op("test.conversion.hints").arity1().inType(Integer[].class).outType(
-				Integer[].class).function();
-			throw new IllegalStateException(
-				"Conversion is forbidden - this op call should not match!");
-		}
-		catch (OpMatchingException e) {}
-
+		Assertions.assertThrows(OpMatchingException.class, () -> ops //
+			.op("test.conversion.hints") //
+			.arity1() //
+			.inType(Integer[].class) //
+			.outType(Integer[].class) //
+			.function(), //
+			"Conversion is forbidden - this op call should not match!" //
+		);
 	}
 
 	@Test
@@ -93,15 +94,14 @@ public class ConversionHintTest extends AbstractTestEnvironment implements
 			hints).arity1().inType(Integer[].class).outType(Integer[].class)
 			.function();
 		// make sure we cannot find the Op when adaptation is not allowed
-		hints = hints.plus(Conversion.FORBIDDEN);
-		try {
-			ops.op("test.conversion.hints", hints).arity1().inType(Integer[].class)
-				.outType(Integer[].class).function();
-			throw new IllegalStateException(
-				"Conversion is forbidden - this op call should not match!");
-		}
-		catch (OpMatchingException e) {}
-
+		final Hints forbid = hints.plus(Conversion.FORBIDDEN);
+		Assertions.assertThrows(OpMatchingException.class, () -> ops //
+			.op("test.conversion.hints", forbid) //
+			.arity1() //
+			.inType(Integer[].class) //
+			.outType(Integer[].class) //
+			.function(), //
+			"Conversion is forbidden - this op call should not match!");
 	}
 
 	@OpHints(hints = { Conversion.FORBIDDEN })
@@ -121,14 +121,14 @@ public class ConversionHintTest extends AbstractTestEnvironment implements
 		// make sure that we cannot match the Op via adaptation even when
 		// conversion
 		// is allowed (since it declares itself to be nonconvertible)
-		try {
-			ops.op("test.conversion.nonconvertible").arity1().inType(Integer[].class)
-				.outType(Integer[].class).function();
-			throw new IllegalStateException(
-				"The only relevant Op is not convertible - this op call should not match!");
-		}
-		catch (OpMatchingException e) {}
-
+		Assertions.assertThrows(OpMatchingException.class, () -> ops //
+			.op("test.conversion.nonconvertible") //
+			.arity1() //
+			.inType(Integer[].class) //
+			.outType(Integer[].class) //
+			.function(), //
+			"The only relevant Op is not convertible - this op call should not match!" //
+		);
 	}
 
 	@Test
@@ -142,10 +142,14 @@ public class ConversionHintTest extends AbstractTestEnvironment implements
 		// make sure that we cannot match the Op via adaptation even when
 		// conversion
 		// is allowed (since it declares itself to be nonconvertible)
-		assertThrows(OpMatchingException.class, () -> ops.op(
-			"test.conversion.nonconvertible", hints).arity1().inType(Integer[].class)
-			.outType(Integer[].class).function(),
-			"The only relevant Op is not convertible - this op call should not match!");
+		assertThrows(OpMatchingException.class, () -> ops //
+			.op("test.conversion.nonconvertible", hints) //
+			.arity1() //
+			.inType(Integer[].class) //
+			.outType(Integer[].class) //
+			.function(), //
+			"The only relevant Op is not convertible - this op call should not match!" //
+		);
 
 	}
 

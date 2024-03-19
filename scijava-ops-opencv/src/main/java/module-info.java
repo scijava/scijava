@@ -30,7 +30,6 @@ module org.scijava.ops.opencv {
 	exports org.scijava.ops.opencv;
 
 	requires java.scripting;
-	requires org.scijava.ops.api;
 	requires org.scijava.types;
 
 	// FIXME: these module names derive from filenames and are thus unstable

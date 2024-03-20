@@ -60,7 +60,6 @@ public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>>
 	private Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, //
 			Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> dogOp;
 
-	// TODO: make the outOfBoundsFactory optional (see DoGTest for the default).
 	/**
 	 * TODO
 	 *

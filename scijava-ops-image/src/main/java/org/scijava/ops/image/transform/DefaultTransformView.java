@@ -58,10 +58,7 @@ public class DefaultTransformView<T extends NumericType<T> & RealType<T>>
 {
 
 	/**
-	 * TODO: declare {@code outputInterval}, {@code interpolator} as optional once
-	 * <a href=https://github.com/scijava/incubator/pull/32>this issue</a> has
-	 * been resolved. Until then, this op <b>must</b> be called as a
-	 * {@link Functions.Arity4}
+	 * TODO
 	 *
 	 * @param input the input
 	 * @param transform the transform to apply

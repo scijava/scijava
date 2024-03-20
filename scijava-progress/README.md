@@ -11,14 +11,15 @@ The `Progress` class is designed to be the middle-man between an operation that 
 Suppose we have a `Function` that does some heavy calculation on a `List`, and wants to notify callers when it finishes one element, before it moves to the next:
 
 ```java
-public class Foo implements Function<List<Integer>, List<Integer>> {
+public class HeavyCalculator implements Function<List<Integer>, List<Integer>> {
 
 	@Override
-	public Integer apply(List<Integer> in) {
+	public List<Integer> apply(List<Integer> in) {
 		List<Integer> out = new ArrayList<>();
 		for(int i = 0; i < in.size(); i++) {
-			out.set(i, doTheComputation(in.get(i)));
+			out.add(doTheComputation(in.get(i)));
 		}
+		return out;
 	}
 
 }
@@ -26,7 +27,7 @@ public class Foo implements Function<List<Integer>, List<Integer>> {
 ```
 
 Firstly, we add the bookkeeping steps:
-1. Notify `Progress` that this Object wants to record its progress by calling `Progress.register(Object progressible)`. This can either be called within our `Function` (by passing `this`), or before the `apply` method is called (by passing our `Foo` instance).
+1. Notify `Progress` that this Object wants to record its progress by calling `Progress.register(Object progressible)`. This can either be called within our `Function` (by passing `this`), or before the `apply` method is called (by passing our `HeavyCalculator` instance).
 2. Define what total progress means using `Progress.defineTotalProgress(int numStages, int numSubTasks)`. We make the distinction between `numStages` and `numSubtasks`:
 
   * `numStages` lets `Progress` know how many stages of computation will be performed within the current task
@@ -37,22 +38,23 @@ Firstly, we add the bookkeeping steps:
 Once these bookkeeping stages are added, we can then call `Progress.update`. Our `Function`, updating progress, would then look like:
 
 ```java
-public class Foo implements Function<List<Integer>, List<Integer>> {
+public class HeavyCalculator implements Function<List<Integer>, List<Integer>> {
 
 	@Override
-	public Integer apply(List<Integer> in) {
+	public List<Integer> apply(List<Integer> in) {
 		Progress.register(this);
 		Progress.defineTotalProgress(1, 0);
 		Progress.setStageMax(in.size());
-		
+
 		// compute
 		List<Integer> out = new ArrayList<>();
 		for(int i = 0; i < in.size(); i++) {
-			out.set(i, doTheComputation(in.get(i)));
+			out.add(doTheComputation(in.get(i)));
 			Progress.update();
 		}
 
 		Progress.complete();
+		return out;
 	}
 
 }
@@ -65,14 +67,14 @@ Ops can also set their `status` through the `Progress` framework, using the meth
 
 Progress is accessed by listeners using the `Progress.addListener(Object progressible, ProgressListener l)` method. This method must be called **before** `progressible`'s code is executed, and all executions of `progressible` will then be sent to `l`.
 
-`ProgressListener` is, at its core, a `FunctionalInterface`, allowing `ProgressListener`s to be defined as lambdas. The functional method, `acknowledgeUpdate(Task t)`, is then called when **any execution** of `l` calls **either** `Progress.update()` or `Progress.setStatus()`. Below is an example of how one might write a `ProgressListener` for `Foo`:
+`ProgressListener` is, at its core, a `FunctionalInterface`, allowing `ProgressListener`s to be defined as lambdas. The functional method, `acknowledgeUpdate(Task t)`, is then called when **any execution** of `l` calls **either** `Progress.update()` or `Progress.setStatus()`. Below is an example of how one might write a `ProgressListener` for `HeavyCalculator`:
 
 ```java
-Foo f = new Foo();
+HeavyCalculator calc = new HeavyCalculator();
 
 // register a listener that prints progress to console
-Progress.addListener(f, (t) -> System.out.println(t.progress()));
+Progress.addListener(calc, t -> System.out.println(t.progress()));
 
-// call Foo
-f.apply(Arrays.asList(1, 2, 3, 4);
+// call HeavyCalculator
+calc.apply(Arrays.asList(1, 2, 3, 4);
 ```

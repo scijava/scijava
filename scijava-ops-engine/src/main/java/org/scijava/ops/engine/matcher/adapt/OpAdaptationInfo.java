@@ -173,7 +173,7 @@ public class OpAdaptationInfo implements OpInfo {
 	@Override
 	public String toString() {
 		// Get the original description
-		String description = Infos.describeVerbose(this);
+		String description = Infos.describe(this);
 		// Make the name friendlier
 		StringBuilder sb = new StringBuilder();
 		sb.append(srcInfo.implementationName());

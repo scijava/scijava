@@ -190,7 +190,7 @@ public class OpClassInfo implements OpInfo {
 
 	@Override
 	public String toString() {
-		return Infos.describeVerbose(this);
+		return Infos.describe(this);
 	}
 
 	@Override

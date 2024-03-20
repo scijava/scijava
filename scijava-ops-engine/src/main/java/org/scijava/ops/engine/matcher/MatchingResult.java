@@ -151,7 +151,7 @@ public class MatchingResult {
 		int count = 0;
 		for (final OpCandidate candidate : candidates) {
 			sb.append(++count + ". ");
-			sb.append("\t" + Infos.describeVerbose(candidate.opInfo()) + "\n");
+			sb.append("\t" + Infos.describe(candidate.opInfo()) + "\n");
 			final String status = candidate.getStatus();
 			if (status != null) sb.append("\t" + status + "\n");
 			if (candidate.getStatusCode() == StatusCode.DOES_NOT_CONFORM) {

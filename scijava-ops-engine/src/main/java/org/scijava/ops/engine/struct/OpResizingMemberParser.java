@@ -33,7 +33,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.scijava.ops.engine.matcher.simplify.SimplifiedOpInfo;
+import org.scijava.ops.engine.matcher.convert.ConvertedOpInfo;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
@@ -61,8 +61,7 @@ public class OpResizingMemberParser implements
 	 *
 	 * @param source the {@link RetypingRequest} from which we create the new
 	 *          {@link List} of {@link Member}s
-	 * @return a new {@link List} reflecting the simplified arguments / focused
-	 *         output of this {@link SimplifiedOpInfo}
+	 * @return a new {@link List} reflecting the reduced number of Op inputs.
 	 */
 	@Override
 	public List<Member<?>> parse(RetypingRequest source, Type structType) {

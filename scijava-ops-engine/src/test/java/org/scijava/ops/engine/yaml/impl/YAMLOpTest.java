@@ -111,7 +111,7 @@ public class YAMLOpTest extends AbstractTestEnvironment {
 	@Test
 	public void testYAMLDescription() {
 		var actual = ops.help("example.mul");
-		var expected = "example.mul:\n\t- (a, b) -> Double";
+		var expected = "example.mul:\n\t- (Double, Double) -> Double";
 		Assertions.assertEquals(expected, actual);
 	}
 

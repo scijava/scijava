@@ -32,7 +32,40 @@
     authors: [Gabriella Turek, Mark Hiner]
     tags: {type: Computer2}
 - op:
-    names: [engine.focus, cv.getUnsignedByteMat]
+    names: [engine.describe, cv.matDescriptor]
+    description: ''
+    source: javaMethod:/org.scijava.ops.opencv.OpenCVDescriptors.matDescriptor%28org.scijava.types.Nil%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.scijava.types.Nil}
+    - {parameter type: OUTPUT, name: output, description: '', type: java.lang.String}
+    authors: [Gabriel Selzer]
+    tags: {}
+- op:
+    names: [engine.describe, cv.gpuMatDescriptor]
+    description: ''
+    source: javaMethod:/org.scijava.ops.opencv.OpenCVDescriptors.gpuMatDescriptor%28org.scijava.types.Nil%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.scijava.types.Nil}
+    - {parameter type: OUTPUT, name: output, description: '', type: java.lang.String}
+    authors: [Gabriel Selzer]
+    tags: {}
+- op:
+    names: [engine.describe, cv.uMatDescriptor]
+    description: ''
+    source: javaMethod:/org.scijava.ops.opencv.OpenCVDescriptors.uMatDescriptor%28org.scijava.types.Nil%29
+    priority: 0.0
+    version: '1'
+    parameters:
+    - {parameter type: INPUT, name: arg0, description: '', type: org.scijava.types.Nil}
+    - {parameter type: OUTPUT, name: output, description: '', type: java.lang.String}
+    authors: [Gabriel Selzer]
+    tags: {}
+- op:
+    names: [engine.convert, cv.getUnsignedByteMat]
     description: ''
     source: javaMethod:/net.imagej.opencv.ImgToMatConverter.getUnsignedByteMat%28net.imglib2.RandomAccessibleInterval%29
     priority: 4.0
@@ -43,7 +76,7 @@
     authors: [Gabriella Turek]
     tags: {}
 - op:
-    names: [engine.focus, cv.getByteMat]
+    names: [engine.convert, cv.getByteMat]
     description: ''
     source: javaMethod:/net.imagej.opencv.ImgToMatConverter.getByteMat%28net.imglib2.RandomAccessibleInterval%29
     priority: 3.0
@@ -54,7 +87,7 @@
     authors: [Gabriella Turek]
     tags: {}
 - op:
-    names: [engine.focus, cv.getIntMat]
+    names: [engine.convert, cv.getIntMat]
     description: ''
     source: javaMethod:/net.imagej.opencv.ImgToMatConverter.getIntMat%28net.imglib2.RandomAccessibleInterval%29
     priority: 2.0
@@ -65,7 +98,7 @@
     authors: [Gabriella Turek]
     tags: {}
 - op:
-    names: [engine.focus, cv.getFloatMat]
+    names: [engine.convert, cv.getFloatMat]
     description: ''
     source: javaMethod:/net.imagej.opencv.ImgToMatConverter.getFloatMat%28net.imglib2.RandomAccessibleInterval%29
     priority: 1.0
@@ -76,7 +109,7 @@
     authors: [Gabriella Turek]
     tags: {}
 - op:
-    names: [engine.focus, cv.getDoubleMat]
+    names: [engine.convert, cv.getDoubleMat]
     description: ''
     source: javaMethod:/net.imagej.opencv.ImgToMatConverter.getDoubleMat%28net.imglib2.RandomAccessibleInterval%29
     priority: 0.0
@@ -87,7 +120,7 @@
     authors: [Gabriella Turek]
     tags: {}
 - op:
-    names: [engine.simplify, cv.toUnsignedByteImg]
+    names: [engine.convert, cv.toUnsignedByteImg]
     description: ''
     source: javaMethod:/net.imagej.opencv.MatToImgConverter.toUnsignedByteImg%28org.bytedeco.opencv.opencv_core.Mat%29
     priority: 4.0
@@ -98,7 +131,7 @@
     authors: [Gabriella Turek]
     tags: {}
 - op:
-    names: [engine.simplify, cv.toByteImg]
+    names: [engine.convert, cv.toByteImg]
     description: ''
     source: javaMethod:/net.imagej.opencv.MatToImgConverter.toByteImg%28org.bytedeco.opencv.opencv_core.Mat%29
     priority: 3.0
@@ -109,7 +142,7 @@
     authors: [Gabriella Turek]
     tags: {}
 - op:
-    names: [engine.simplify, cv.toIntImg]
+    names: [engine.convert, cv.toIntImg]
     description: ''
     source: javaMethod:/net.imagej.opencv.MatToImgConverter.toIntImg%28org.bytedeco.opencv.opencv_core.Mat%29
     priority: 2.0
@@ -120,7 +153,7 @@
     authors: [Gabriella Turek]
     tags: {}
 - op:
-    names: [engine.simplify, cv.toFloatImg]
+    names: [engine.convert, cv.toFloatImg]
     description: ''
     source: javaMethod:/net.imagej.opencv.MatToImgConverter.toFloatImg%28org.bytedeco.opencv.opencv_core.Mat%29
     priority: 1.0
@@ -131,7 +164,7 @@
     authors: [Gabriella Turek]
     tags: {}
 - op:
-    names: [engine.simplify, cv.toDoubleImg]
+    names: [engine.convert, cv.toDoubleImg]
     description: ''
     source: javaMethod:/net.imagej.opencv.MatToImgConverter.toDoubleImg%28org.bytedeco.opencv.opencv_core.Mat%29
     priority: 0.0
@@ -142,7 +175,7 @@
     authors: [Gabriella Turek]
     tags: {}
 - op:
-    names: [engine.simplify, cv.toByteArray]
+    names: [engine.convert, cv.toByteArray]
     description: ''
     source: javaMethod:/net.imagej.opencv.MatToImgConverter.toByteArray%28org.bytedeco.opencv.opencv_core.Mat%29
     priority: 3.0
@@ -153,7 +186,7 @@
     authors: [Gabriella Turek]
     tags: {}
 - op:
-    names: [engine.simplify, cv.toIntArray]
+    names: [engine.convert, cv.toIntArray]
     description: ''
     source: javaMethod:/net.imagej.opencv.MatToImgConverter.toIntArray%28org.bytedeco.opencv.opencv_core.Mat%29
     priority: 2.0
@@ -164,7 +197,7 @@
     authors: [Gabriella Turek]
     tags: {}
 - op:
-    names: [engine.simplify, cv.toFloatArray]
+    names: [engine.convert, cv.toFloatArray]
     description: ''
     source: javaMethod:/net.imagej.opencv.MatToImgConverter.toFloatArray%28org.bytedeco.opencv.opencv_core.Mat%29
     priority: 1.0
@@ -175,7 +208,7 @@
     authors: [Gabriella Turek]
     tags: {}
 - op:
-    names: [engine.simplify, cv.toDoubleArray]
+    names: [engine.convert, cv.toDoubleArray]
     description: ''
     source: javaMethod:/net.imagej.opencv.MatToImgConverter.toDoubleArray%28org.bytedeco.opencv.opencv_core.Mat%29
     priority: 0.0

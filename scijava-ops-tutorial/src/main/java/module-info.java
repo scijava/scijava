@@ -26,11 +26,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-module org.scijava.ops.tutorial {
+module org.scijava.ops.tutorial{
 	exports org.scijava.ops.tutorial;
 
-	// -- Open plugins to scijava-ops, therapi
-	opens org.scijava.ops.tutorial to therapi.runtime.javadoc, org.scijava.ops.engine;
+	// -- Open plugins to scijava-ops
+	opens org.scijava.ops.tutorial to org.scijava.ops.engine;
 
 	requires io.scif;
 	requires java.scripting;
@@ -59,13 +59,13 @@ module org.scijava.ops.tutorial {
 	requires mines.jtk;
 
 	provides org.scijava.ops.spi.OpCollection with
-			org.scijava.ops.tutorial.OpAdaptation,
-			org.scijava.ops.tutorial.OpDependencies,
-			org.scijava.ops.tutorial.OpParallelization,
-			org.scijava.ops.tutorial.OpPriorities,
-			org.scijava.ops.tutorial.OpReduction,
-			org.scijava.ops.tutorial.OpSimplification,
-			org.scijava.ops.tutorial.ReportingProgress,
-			org.scijava.ops.tutorial.UsingNils,
-			org.scijava.ops.tutorial.WritingOpCollections;
+		org.scijava.ops.tutorial.OpAdaptation,
+		org.scijava.ops.tutorial.OpConversion,
+		org.scijava.ops.tutorial.OpDependencies,
+		org.scijava.ops.tutorial.OpParallelization,
+		org.scijava.ops.tutorial.OpPriorities,
+		org.scijava.ops.tutorial.OpReduction,
+		org.scijava.ops.tutorial.ReportingProgress,
+		org.scijava.ops.tutorial.UsingNils,
+		org.scijava.ops.tutorial.WritingOpCollections;
 }

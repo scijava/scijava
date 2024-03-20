@@ -36,8 +36,7 @@ import org.scijava.function.Computers;
 import org.scijava.function.Container;
 import org.scijava.function.Functions;
 import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.engine.copy.CopyOpCollection;
-import org.scijava.ops.engine.matcher.simplify.PrimitiveArraySimplifiers;
+import org.scijava.ops.engine.describe.BaseDescriptors;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
@@ -51,6 +50,7 @@ public class NullableArgumentsTest extends AbstractTestEnvironment //
 
 	@BeforeAll
 	public static void addNeededOps() {
+		ops.register(new BaseDescriptors<>());
 		ops.register(new NullableArgumentsTest());
 		ops.register(new TestOpNullableArg());
 	}
@@ -214,10 +214,9 @@ public class NullableArgumentsTest extends AbstractTestEnvironment //
 
 	@Test
 	public void testNullableHelp() {
-		// Add in a couple Ops needed for simplification
-		ops.register(new PrimitiveArraySimplifiers<>(), new CopyOpCollection<>());
+		// Add in a couple Ops needed for conversion
 		var expected = PERMUTED_NAME +
-			":\n\t- (input1, input2 = null, @CONTAINER container1, input3 = null) -> None";
+			":\n\t- (number[], number[] = null, @CONTAINER number[], number[] = null) -> None";
 		Assertions.assertEquals(ops.op("test.nullableOr").help(), expected);
 	}
 }

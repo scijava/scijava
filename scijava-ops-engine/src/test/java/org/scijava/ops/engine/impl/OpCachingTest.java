@@ -177,7 +177,6 @@ public class OpCachingTest implements OpCollection {
 		// Empty the cache
 		Map<MatchingConditions, OpInstance<?>> opCache = getOpCache(defOpEnv);
 		opCache.clear();
-		Assertions.assertEquals(opCache.size(), 0, 0);
 
 		// Match the Op with a cache-ignoring hint
 		Hints h = new Hints(BaseOpHints.Cache.IGNORE);

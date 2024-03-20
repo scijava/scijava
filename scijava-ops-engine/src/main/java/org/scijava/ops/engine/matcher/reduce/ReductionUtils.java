@@ -62,15 +62,11 @@ public final class ReductionUtils {
 	}
 
 	/**
-	 * Creates a Class given an Op and a {@link ReducedOpInfo}. This class:
-	 * <ul>
-	 * <li>is of the same functional type as the given Op
-	 * <li>has type arguments that are of the simplified form of the type
-	 * arguments of the given Op (these arguments are dictated by the list of
-	 * {@code Simplifier}s.
-	 * <li>
+	 * Creates a Class given an Op and a {@link ReducedOpInfo}. This class
+	 * implements a {@link FunctionalInterface} that is of a smaller arity than
+	 * {@code originalOp}.
 	 *
-	 * @param originalOp - the Op that will be simplified
+	 * @param originalOp - the Op that will be reduced
 	 * @param reducedInfo - the {@link ReducedOpInfo} containing the information
 	 *          required to reduce {@code originalOp}.
 	 * @return a wrapper of {@code originalOp} taking arguments that are then
@@ -96,7 +92,7 @@ public final class ReductionUtils {
 			c = pool.getClassLoader().loadClass(className);
 		}
 		catch (ClassNotFoundException e) {
-			CtClass cc = generateSimplifiedWrapper(pool, className, reducedInfo);
+			CtClass cc = generateReducedWrapper(pool, className, reducedInfo);
 			c = cc.toClass(MethodHandles.lookup());
 		}
 
@@ -121,10 +117,10 @@ public final class ReductionUtils {
 		// Start with the class of the implementation
 		String originalName = className(reducedInfo);
 		// Add the input members for uniqueness
-		String simplifiedParameters = memberNames(reducedInfo);
+		String parameters = memberNames(reducedInfo);
 
 		// -- ensure the name is valid --
-		String className = originalName.concat(simplifiedParameters);
+		String className = originalName.concat(parameters);
 		if (className.chars().anyMatch(c -> !Character.isJavaIdentifierPart(c)))
 			throw new IllegalArgumentException(className +
 				" is not a valid class name!");
@@ -165,8 +161,7 @@ public final class ReductionUtils {
 				Stream.of(reducedInfo.output().getType())) //
 				.map(type -> getClassName(Types.raw(type)));
 		Iterable<String> iterableNames = (Iterable<String>) memberNames::iterator;
-		String simplifiedParameters = String.join("_", iterableNames);
-		return simplifiedParameters;
+		return String.join("_", iterableNames);
 	}
 
 	/**
@@ -186,7 +181,7 @@ public final class ReductionUtils {
 		return className;
 	}
 
-	private static CtClass generateSimplifiedWrapper(ClassPool pool,
+	private static CtClass generateReducedWrapper(ClassPool pool,
 		String className, ReducedOpInfo reducedInfo) throws Throwable
 	{
 		CtClass cc = pool.makeClass(className);
@@ -199,7 +194,7 @@ public final class ReductionUtils {
 			.opType()), "op");
 		cc.addField(opField);
 
-		// Add constructor to take the Simplifiers, as well as the original op.
+		// Add constructor
 		CtConstructor constructor = CtNewConstructor.make(createConstructor(cc,
 			reducedInfo), cc);
 		cc.addConstructor(constructor);
@@ -254,7 +249,7 @@ public final class ReductionUtils {
 	 *          to write the method.
 	 * @return a {@link String} that can be used by
 	 *         {@link CtMethod#make(String, CtClass)} to generate the functional
-	 *         method of the simplified Op
+	 *         method of the reduced Op
 	 */
 	private static String createFunctionalMethod(ReducedOpInfo info) {
 		StringBuilder sb = new StringBuilder();

@@ -248,6 +248,25 @@ public final class GenericAssignability {
 	 * {@link TypeInferenceException} is thrown, the caller should assume that
 	 * some of the mappings within {@code typeMappings} are incorrect.</b>
 	 *
+	 * @param type
+	 * @param inferFrom
+	 * @return the mapping of {@link TypeVariable}s in {@code type} to
+	 *         {@link Type}s in {@code inferFrom}
+	 */
+	public static Map<TypeVariable<?>, Type> inferTypeVariables(Type type,
+		Type inferFrom)
+	{
+		Map<TypeVariable<?>, Type> map = new HashMap<>();
+		inferTypeVariables(new Type[] { type }, new Type[] { inferFrom }, map);
+		return map;
+	}
+
+	/**
+	 * Tries to infer type vars contained in types from corresponding types from
+	 * inferFrom, putting them into the specified map. <b>When a
+	 * {@link TypeInferenceException} is thrown, the caller should assume that
+	 * some of the mappings within {@code typeMappings} are incorrect.</b>
+	 *
 	 * @param types - the types containing {@link TypeVariable}s
 	 * @param inferFroms - the types used to infer the {@link TypeVariable}s
 	 *          within {@code types}
@@ -457,6 +476,11 @@ public final class GenericAssignability {
 	private static void inferTypeVariables(ParameterizedType type, Type inferFrom,
 		Map<TypeVariable<?>, TypeMapping> typeMappings)
 	{
+		// Nothing to infer here...
+		if (type.equals(inferFrom)) {
+			return;
+		}
+
 		if (inferFrom instanceof WildcardType) {
 			inferFrom = getInferrableBound((WildcardType) inferFrom);
 		}

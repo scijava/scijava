@@ -36,15 +36,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.OpMatchingException;
+import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.engine.OpDependencyMember;
 import org.scijava.ops.engine.exceptions.impl.InvalidOpNameException;
 import org.scijava.ops.engine.exceptions.impl.MultipleOutputsOpException;
 import org.scijava.ops.engine.exceptions.impl.UnnamedOpException;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
+import org.scijava.types.Nil;
 import org.scijava.types.Types;
 
 /**
@@ -143,7 +149,7 @@ public final class Infos {
 	 * @param info an {@link OpInfo}
 	 * @return a verbose description of {@code info}
 	 */
-	public static String describeVerbose(final OpInfo info) {
+	public static String describe(final OpInfo info) {
 		final StringBuilder sb = new StringBuilder(info.implementationName());
 		// Step 2: Inputs
 		for (var member : info.inputs()) {
@@ -168,56 +174,6 @@ public final class Infos {
 		Member<?> output = info.output();
 		if (output.getIOType() == ItemIO.OUTPUT) {
 			sb.append("\n\tReturns : ").append(typeString(output.getType(), true));
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * Forms a brief description of {@code info}
-	 *
-	 * @param info an {@link OpInfo}
-	 * @return a brief description of {@code info}
-	 */
-	public static String describe(final OpInfo info) {
-		final StringBuilder sb = new StringBuilder("(");
-		// Step 2: Inputs
-		var inputs = info.inputs().stream().map(member -> {
-			var str = "";
-			switch (member.getIOType()) {
-				case INPUT:
-					str += member.getKey();
-					break;
-				case MUTABLE:
-					str += "@MUTABLE " + member.getKey();
-					break;
-				case CONTAINER:
-					str += "@CONTAINER " + member.getKey();
-					break;
-				default:
-					throw new IllegalArgumentException("Invalid IO type: " + member
-						.getIOType());
-			}
-			if (!member.isRequired()) {
-				str += " = null";
-			}
-			return str;
-		}).collect(Collectors.joining(", "));
-		sb.append(inputs);
-		sb.append(")");
-		// Step 3: Output
-		Member<?> output = info.output();
-		sb.append(" -> ");
-		switch (output.getIOType()) {
-			case OUTPUT:
-				sb.append(typeString(output.getType(), false));
-				break;
-			case MUTABLE:
-			case CONTAINER:
-				sb.append("None");
-				break;
-			default:
-				throw new IllegalArgumentException("Invalid IO type: " + output
-					.getIOType());
 		}
 		return sb.toString();
 	}

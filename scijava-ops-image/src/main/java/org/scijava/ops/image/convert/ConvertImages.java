@@ -63,7 +63,7 @@ import org.scijava.ops.spi.OpDependency;
 public final class ConvertImages {
 
 	/**
-	 * @implNote op names='convert.bit, engine.focus', type=Function
+	 * @implNote op names='convert.bit, engine.convert', type=Function
 	 * @param creator a {@link BiFunction} to create the output image
 	 * @param converter a {@link Computers.Arity1} to convert the type to a
 	 *          {@link BitType}
@@ -91,7 +91,7 @@ public final class ConvertImages {
 	 * @param input the input image
 	 * @return an output image whose values are equivalent to {@code input}'s
 	 *         values but whose element types are {@link Unsigned2BitType}s.
-	 * @implNote op names='convert.uint2, engine.focus', type=Function
+	 * @implNote op names='convert.uint2, engine.convert', type=Function
 	 */
 	public static <C extends ComplexType<C>, RAIC extends RandomAccessibleInterval<C>>
 		RandomAccessibleInterval<Unsigned2BitType> typeToUnsigned2Bit(@OpDependency(
@@ -113,7 +113,7 @@ public final class ConvertImages {
 	 * @param input the input image
 	 * @return an output image whose values are equivalent to {@code input}'s
 	 *         values but whose element types are {@link Unsigned4BitType}s.
-	 * @implNote op names='convert.uint4, engine.focus', type=Function
+	 * @implNote op names='convert.uint4, engine.convert', type=Function
 	 */
 	public static <C extends ComplexType<C>, RAIC extends RandomAccessibleInterval<C>>
 		RandomAccessibleInterval<Unsigned4BitType> typeToUnsigned4Bit(@OpDependency(
@@ -135,7 +135,7 @@ public final class ConvertImages {
 	 * @param input the input image
 	 * @return an output image whose values are equivalent to {@code input}'s
 	 *         values but whose element types are {@link ByteType}s.
-	 * @implNote op names='convert.int8, convert.byte, engine.focus',
+	 * @implNote op names='convert.int8, convert.byte, engine.convert',
 	 *           type=Function
 	 */
 	public static <C extends ComplexType<C>, RAIC extends RandomAccessibleInterval<C>>
@@ -158,7 +158,7 @@ public final class ConvertImages {
 	 * @param input the input image
 	 * @return an output image whose values are equivalent to {@code input}'s
 	 *         values but whose element types are {@link UnsignedByteType}s.
-	 * @implNote op names='convert.uint8, engine.focus', type=Function
+	 * @implNote op names='convert.uint8, engine.convert', type=Function
 	 */
 	public static <C extends ComplexType<C>, RAIC extends RandomAccessibleInterval<C>>
 		RandomAccessibleInterval<UnsignedByteType> typeToUnsignedByte(@OpDependency(
@@ -180,7 +180,7 @@ public final class ConvertImages {
 	 * @param input the input image
 	 * @return an output image whose values are equivalent to {@code input}'s
 	 *         values but whose element types are {@link Unsigned12BitType}s.
-	 * @implNote op names='convert.uint12, engine.focus', type=Function
+	 * @implNote op names='convert.uint12, engine.convert', type=Function
 	 */
 	public static <C extends ComplexType<C>, RAIC extends RandomAccessibleInterval<C>>
 		RandomAccessibleInterval<Unsigned12BitType> typeToUnsigned12Bit(
@@ -203,7 +203,7 @@ public final class ConvertImages {
 	 * @param input the input image
 	 * @return an output image whose values are equivalent to {@code input}'s
 	 *         values but whose element types are {@link ShortType}s.
-	 * @implNote op names='convert.int16, engine.focus', type=Function
+	 * @implNote op names='convert.int16, engine.convert', type=Function
 	 */
 	public static <C extends ComplexType<C>, RAIC extends RandomAccessibleInterval<C>>
 		RandomAccessibleInterval<ShortType> typeToShort(@OpDependency(
@@ -225,7 +225,7 @@ public final class ConvertImages {
 	 * @param input the input image
 	 * @return an output image whose values are equivalent to {@code input}'s
 	 *         values but whose element types are {@link UnsignedShortType}s.
-	 * @implNote op names='convert.uint16, engine.focus', type=Function
+	 * @implNote op names='convert.uint16, engine.convert', type=Function
 	 */
 	public static <C extends ComplexType<C>, RAIC extends RandomAccessibleInterval<C>>
 		RandomAccessibleInterval<UnsignedShortType> typeToUnsignedShort(
@@ -248,7 +248,7 @@ public final class ConvertImages {
 	 * @param input the input image
 	 * @return an output image whose values are equivalent to {@code input}'s
 	 *         values but whose element types are {@link IntType}s.
-	 * @implNote op names='convert.int32, engine.focus', type=Function
+	 * @implNote op names='convert.int32, engine.convert', type=Function
 	 */
 	public static <C extends ComplexType<C>, RAIC extends RandomAccessibleInterval<C>>
 		RandomAccessibleInterval<IntType> typeToInt(@OpDependency(
@@ -270,7 +270,7 @@ public final class ConvertImages {
 	 * @param input the input image
 	 * @return an output image whose values are equivalent to {@code input}'s
 	 *         values but whose element types are {@link UnsignedIntType}s.
-	 * @implNote op names='convert.uint32, engine.focus', type=Function
+	 * @implNote op names='convert.uint32, engine.convert', type=Function
 	 */
 	public static <C extends ComplexType<C>, RAIC extends RandomAccessibleInterval<C>>
 		RandomAccessibleInterval<UnsignedIntType> typeToUnsignedInt(@OpDependency(
@@ -292,7 +292,7 @@ public final class ConvertImages {
 	 * @param input the input image
 	 * @return an output image whose values are equivalent to {@code input}'s
 	 *         values but whose element types are {@link LongType}s.
-	 * @implNote op names='convert.int64, engine.focus', type=Function
+	 * @implNote op names='convert.int64, engine.convert', type=Function
 	 */
 	public static <C extends ComplexType<C>, RAIC extends RandomAccessibleInterval<C>>
 		RandomAccessibleInterval<LongType> typeToLong(@OpDependency(
@@ -314,7 +314,7 @@ public final class ConvertImages {
 	 * @param input the input image
 	 * @return an output image whose values are equivalent to {@code input}'s
 	 *         values but whose element types are {@link UnsignedLongType}s.
-	 * @implNote op names='convert.uint64, engine.focus', type=Function
+	 * @implNote op names='convert.uint64, engine.convert', type=Function
 	 */
 	public static <C extends ComplexType<C>, RAIC extends RandomAccessibleInterval<C>>
 		RandomAccessibleInterval<UnsignedLongType> typeToUnsignedLong(@OpDependency(
@@ -336,7 +336,7 @@ public final class ConvertImages {
 	 * @param input the input image
 	 * @return an output image whose values are equivalent to {@code input}'s
 	 *         values but whose element types are {@link Unsigned128BitType}s.
-	 * @implNote op names='convert.uint128, engine.focus', type=Function
+	 * @implNote op names='convert.uint128, engine.convert', type=Function
 	 */
 	public static <C extends ComplexType<C>, RAIC extends RandomAccessibleInterval<C>>
 		RandomAccessibleInterval<Unsigned128BitType> typeToUnsigned128Bit(
@@ -359,7 +359,7 @@ public final class ConvertImages {
 	 * @param input the input image
 	 * @return an output image whose values are equivalent to {@code input}'s
 	 *         values but whose element types are {@link FloatType}s.
-	 * @implNote op names='convert.float32, engine.focus', type=Function
+	 * @implNote op names='convert.float32, engine.convert', type=Function
 	 */
 	public static <C extends ComplexType<C>, RAIC extends RandomAccessibleInterval<C>>
 		RandomAccessibleInterval<FloatType> typeToFloat32(@OpDependency(
@@ -381,7 +381,7 @@ public final class ConvertImages {
 	 * @param input the input image
 	 * @return an output image whose values are equivalent to {@code input}'s
 	 *         values but whose element types are {@link ComplexFloatType}s.
-	 * @implNote op names='convert.cfloat32, engine.focus', type=Function
+	 * @implNote op names='convert.cfloat32, engine.convert', type=Function
 	 */
 	public static <C extends ComplexType<C>, RAIC extends RandomAccessibleInterval<C>>
 		RandomAccessibleInterval<ComplexFloatType> typeToComplexFloat32(
@@ -404,7 +404,7 @@ public final class ConvertImages {
 	 * @param input the input image
 	 * @return an output image whose values are equivalent to {@code input}'s
 	 *         values but whose element types are {@link DoubleType}s.
-	 * @implNote op names='convert.float64, engine.focus', type=Function
+	 * @implNote op names='convert.float64, engine.convert', type=Function
 	 */
 	public static <C extends ComplexType<C>, RAIC extends RandomAccessibleInterval<C>>
 		RandomAccessibleInterval<DoubleType> typeToDouble32(@OpDependency(
@@ -426,7 +426,7 @@ public final class ConvertImages {
 	 * @param input the input image
 	 * @return an output image whose values are equivalent to {@code input}'s
 	 *         values but whose element types are {@link ComplexDoubleType}s.
-	 * @implNote op names='convert.cfloat64, engine.focus', type=Function
+	 * @implNote op names='convert.cfloat64, engine.convert', type=Function
 	 */
 	public static <C extends ComplexType<C>, RAIC extends RandomAccessibleInterval<C>>
 		RandomAccessibleInterval<ComplexDoubleType> typeToComplexDouble32(

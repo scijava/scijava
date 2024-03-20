@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.scijava.ops.engine.matcher.simplify.SimplifiedOpInfo;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
@@ -64,8 +63,7 @@ public class OpRetypingMemberParser implements
 	 *
 	 * @param source the {@link RetypingRequest} from which we create the new
 	 *          {@link List} of {@link Member}s
-	 * @return a new {@link Struct} reflecting the simplified arguments / focused
-	 *         output of this {@link SimplifiedOpInfo}
+	 * @return a new {@link Struct} reflecting the converted arguments
 	 */
 	@Override
 	public List<Member<?>> parse(RetypingRequest source, Type structType) {

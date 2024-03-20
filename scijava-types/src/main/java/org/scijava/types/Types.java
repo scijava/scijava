@@ -1921,13 +1921,19 @@ public final class Types {
 				// represents some type i.e. not null) in toTypeVarAssigns and
 				// typeVarAssigns.
 				// Effectively toResolved = fromResolved.
-				if (toTypeArg == null && toResolved == null && fromResolved != null &&
-					typeVarAssigns != null)
-				{
-					TypeVariable<?> unbounded = (TypeVariable<?>) toTypeVarAssigns.get(
-						var);
-					typeVarAssigns.put(unbounded, fromResolved);
-					toResolved = fromResolved;
+				if (toTypeArg == null && toResolved == null && typeVarAssigns != null) {
+					// bind unbounded to a concrete type
+					if (fromResolved != null) {
+						TypeVariable<?> unbounded = (TypeVariable<?>) toTypeVarAssigns.get(
+							var);
+						typeVarAssigns.put(unbounded, fromResolved);
+						toResolved = fromResolved;
+					}
+					// bind unbounded to another type variable
+					else {
+						typeVarAssigns.put((TypeVariable<?>) toTypeVarAssigns.get(var),
+							fromTypeVarAssigns.get(var));
+					}
 				}
 
 				// parameters must either be absent from the subject type, within

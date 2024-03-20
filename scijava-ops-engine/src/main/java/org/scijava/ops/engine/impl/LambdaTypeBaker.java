@@ -118,7 +118,7 @@ public final class LambdaTypeBaker {
 	 * <li>knows its generic type by nature of being a {@link GenericTyped}</li>
 	 * </ul>
 	 *
-	 * @param originalOp - the Op that will be simplified
+	 * @param originalOp - the Op whose type will be baked in.
 	 * @param reifiedType - the {@link Type} to bake into {@code originalOp}.
 	 * @return a wrapper of {@code originalOp} taking arguments that are then
 	 *         mutated to satisfy {@code originalOp}, producing outputs that are
@@ -231,8 +231,8 @@ public final class LambdaTypeBaker {
 	}
 
 	/**
-	 * Creates the functional method of a simplified Op. This functional method
-	 * simply wraps the lambda's method: <b>NB</b> The Javassist compiler
+	 * Creates the functional method. This functional method simply wraps the
+	 * lambda's method: <b>NB</b> The Javassist compiler
 	 * <a href="https://www.javassist.org/tutorial/tutorial3.html#generics">does
 	 * not fully support generics</a>, so we must ensure that the types are raw.
 	 * At compile time, the raw types are equivalent to the generic types, so this
@@ -242,7 +242,7 @@ public final class LambdaTypeBaker {
 	 *          information needed to write the method.
 	 * @return a {@link String} that can be used by
 	 *         {@link CtMethod#make(String, CtClass)} to generate the functional
-	 *         method of the simplified Op
+	 *         method
 	 */
 	private static String createFunctionalMethod(Type reifiedType) {
 		StringBuilder sb = new StringBuilder();

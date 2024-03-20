@@ -35,8 +35,7 @@ import org.scijava.discovery.ManualDiscoverer;
 import org.scijava.meta.Versions;
 import org.scijava.ops.api.*;
 import org.scijava.ops.engine.*;
-import org.scijava.ops.engine.BaseOpHints.Adaptation;
-import org.scijava.ops.engine.BaseOpHints.Simplification;
+import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.engine.matcher.impl.DefaultOpMatcher;
@@ -52,6 +51,7 @@ import org.scijava.priority.Priority;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.types.*;
+import org.scijava.types.inference.GenericAssignability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -182,17 +182,22 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	private SortedSet<OpInfo> filterInfos(SortedSet<OpInfo> infos, Hints hints) {
-		boolean adapting = hints.contains(Adaptation.IN_PROGRESS);
-		boolean simplifying = hints.contains(Simplification.IN_PROGRESS);
-		// if we aren't doing any
-		if (!(adapting || simplifying)) return infos;
+		boolean adapting = hints.contains(BaseOpHints.Adaptation.IN_PROGRESS);
+		boolean converting = hints.contains(BaseOpHints.Conversion.IN_PROGRESS);
+		boolean depMatching = hints.contains(
+			BaseOpHints.DependencyMatching.IN_PROGRESS);
+		// if we aren't in any special matching situations, return all Ops
+		if (!(adapting || converting || depMatching)) return infos;
 		return infos.stream() //
 			// filter out unadaptable ops
 			.filter(info -> !adapting || !info.declaredHints().contains(
-				Adaptation.FORBIDDEN)) //
-			// filter out unadaptable ops
-			.filter(info -> !simplifying || !info.declaredHints().contains(
-				Simplification.FORBIDDEN)) //
+				BaseOpHints.Adaptation.FORBIDDEN)) //
+			// filter out nonconvertible ops
+			.filter(info -> !converting || !info.declaredHints().contains(
+				BaseOpHints.Conversion.FORBIDDEN)) //
+			// filter out ops that should not be dependencies
+			.filter(info -> !depMatching || !info.declaredHints().contains(
+				BaseOpHints.DependencyMatching.FORBIDDEN)) //
 			.collect(Collectors.toCollection(TreeSet::new));
 	}
 
@@ -315,8 +320,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		else infos = generateAllInfos(o);
 		infos.forEach(addToOpIndex);
 
-		// Step 2: Discover "secondary" OpInfos e.g. ReducedOpInfos,
-		// SimplifiedOpInfos
+		// Step 2: Discover "secondary" OpInfos e.g. ReducedOpInfos
 		for (OpInfo info : infos) {
 			generateAllInfos(info).forEach(addToOpIndex);
 		}
@@ -583,7 +587,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		Hints baseDepHints = hints //
 			.plus( //
 				BaseOpHints.DependencyMatching.IN_PROGRESS, //
-				BaseOpHints.Simplification.FORBIDDEN, //
+				BaseOpHints.Conversion.FORBIDDEN, //
 				BaseOpHints.History.IGNORE //
 			).minus(BaseOpHints.Progress.TRACK);
 		// Then, match dependencies
@@ -592,12 +596,17 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			final OpRequest request = inferOpRequest(dependency,
 				dependencyTypeVarAssigns);
 			try {
-				var conditions = MatchingConditions.from(request,
-					// Add hints requested by the dependency
-					baseDepHints.plus(dependency.hints()));
-
+				// match Op
+				var depHints = baseDepHints.plus(dependency.hints());
+				var conditions = MatchingConditions.from(request, depHints);
 				OpInstance<?> instance = generateCacheHit(conditions);
+				// add Op to dependencies
 				dependencyChains.add(wrapOp(instance, conditions));
+				// refine current type variable knowledge
+				GenericAssignability //
+					.inferTypeVariables(request.getType(), instance.getType()) //
+					.forEach(dependencyTypeVarAssigns::putIfAbsent);
+
 			}
 			catch (final OpMatchingException e) {
 				String message = DependencyMatchingException.message(info

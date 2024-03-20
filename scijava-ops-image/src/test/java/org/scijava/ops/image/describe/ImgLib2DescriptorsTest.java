@@ -3,16 +3,27 @@ package org.scijava.ops.image.describe;
 
 import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.img.array.ArrayImg;
+import net.imglib2.img.basictypeaccess.DataAccess;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.roi.labeling.ImgLabeling;
+import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.IntegerType;
 import net.imglib2.type.numeric.RealType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.image.AbstractOpTest;
+import org.scijava.types.Types;
 
-public class DescriptorsTest extends AbstractOpTest {
+import java.lang.reflect.ParameterizedType;
+
+/**
+ * Tests {@link ImgLib2Descriptors}.
+ *
+ * @author Gabriel Selzer
+ */
+public class ImgLib2DescriptorsTest extends AbstractOpTest {
 
 	/**
 	 * @implNote op name=example.describeRealType, type=Inplace
@@ -92,6 +103,35 @@ public class DescriptorsTest extends AbstractOpTest {
 		var expected = "example.describeImgLabeling:\n" +
 			"\t- (@MUTABLE labels) -> None";
 		var actual = ops.help("example.describeImgLabeling");
+		Assertions.assertEquals(expected, actual);
+	}
+
+	/**
+	 * @implNote op name=example.describeArrayImg, type=Inplace
+	 */
+	public static <T extends NativeType<T>, A extends DataAccess> void
+		randomAccessibleInterval(ArrayImg<T, A> in)
+	{}
+
+	/**
+	 * This test ensures description extensibility for ImgLib2 image types
+	 */
+	@Test
+	public void testArrayImgDescription() {
+		// First, ensure there is no descriptor FOR ArrayImgs
+		for (var info : ops.infos("engine.describe")) {
+			var in = info.inputTypes().get(0);
+			Assertions.assertInstanceOf(ParameterizedType.class, in);
+			var descriptorType = ((ParameterizedType) in).getActualTypeArguments()[0];
+			Assertions.assertFalse( //
+				Types.isAssignable(descriptorType, ArrayImg.class) //
+			);
+		}
+
+		// Then, ensure that we get a description anyways
+		var expected = "example.describeArrayImg:\n" +
+			"\t- (@MUTABLE image) -> None";
+		var actual = ops.help("example.describeArrayImg");
 		Assertions.assertEquals(expected, actual);
 	}
 

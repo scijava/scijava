@@ -10,14 +10,14 @@ import net.imglib2.type.numeric.NumericType;
 import net.imglib2.type.numeric.RealType;
 import org.scijava.types.Nil;
 
+import java.util.Random;
 import java.util.function.Function;
 
 /**
  * {@code engine.describe} Ops pertaining to ImgLib2 types.
  * <p>
- * Note that each input is a {@code Nil<T>}, where {@code T} is a type variable
- * bounded by the type we actually want to describe. This provides
- * extensibility, as it allows e.g. {@link #raiDesc(Nil)} to be used for e.g.
+ * Note the heavy use of wildcards which provides extensibility, as it allows
+ * e.g. {@link #raiDesc(Nil)} to be used for e.g.
  * {@link net.imglib2.img.array.ArrayImg}s
  * </p>
  *
@@ -26,57 +26,56 @@ import java.util.function.Function;
 public class ImgLib2Descriptors {
 
 	/**
-	 * @param in the type to describe
+	 * @param inType the type (some {@link IterableInterval}) subclass to describe
+	 * @return the description
+	 * @implNote op name="engine.describe", priority='-100.'
+	 */
+	public static String iiDesc( //
+		Nil<? extends IterableInterval<?>> inType //
+	) {
+		return "image";
+	}
+
+	/**
+	 * @param inType the type (some {@link RandomAccessibleInterval} subclass) to
+	 *          describe
 	 * @return the description
 	 * @implNote op name="engine.describe"
 	 */
-	public static <A, T extends IterableInterval<A>> String iiDesc( //
-		Nil<T> in //
+	public static String raiDesc( //
+		Nil<? extends RandomAccessibleInterval<?>> inType //
 	) {
 		return "image";
 	}
 
 	/**
-	 * @param in the type to describe
+	 * @param inType the type (some {@link ImgLabeling} subclass) to describe
 	 * @return the description
 	 * @implNote op name="engine.describe", priority='100.'
 	 */
-	public static <A, T extends RandomAccessibleInterval<A>> String raiDesc( //
-		Nil<T> in //
-	) {
-		return "image";
+	public static String labelDesc(Nil<? extends ImgLabeling<?, ?>> inType) {
+		return "labeling";
 	}
 
 	/**
-	 * @param in the type to describe
+	 * @param inType the type (some {@link RealType} subclass) to describe
 	 * @return the description
-	 * @implNote op name="engine.describe", priority='10000.'
+	 * @implNote op name="engine.describe"
 	 */
-	public static <A, I extends IntegerType<I>, T extends ImgLabeling<A, I>>
-		String labelDesc(Nil<T> in)
-	{
-		return "labels";
-	}
-
-	/**
-	 * @param in the type to describe
-	 * @return the description
-	 * @implNote op name="engine.describe", priority='100.'
-	 */
-	public static <T extends RealType<T>> String realTypeDesc( //
-		Nil<T> in //
+	public static String realTypeDesc( //
+		Nil<? extends RealType<?>> inType //
 	) {
 		return "number";
 	}
 
 	/**
-	 * @param in the type to describe
+	 * @param inType the type (some {@link ComplexType} subclass) to describe
 	 * @return the description
-	 * @implNote op name="engine.describe"
+	 * @implNote op name="engine.describe", priority='-100.'
 	 */
-	public static <T extends ComplexType<T>> String complexTypeDesc( //
-		Nil<T> in //
+	public static String complexTypeDesc( //
+		Nil<? extends ComplexType<?>> inType //
 	) {
-		return "complex number";
+		return "complex-number";
 	}
 }

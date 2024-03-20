@@ -26,7 +26,7 @@ import java.lang.reflect.ParameterizedType;
 public class ImgLib2DescriptorsTest extends AbstractOpTest {
 
 	/**
-	 * @implNote op name=example.describeRealType, type=Inplace
+	 * @implNote op name=test.describeRealType, type=Inplace
 	 */
 	public static <T extends RealType<T>> void realType(T in) {
 		in.mul(in);
@@ -34,14 +34,13 @@ public class ImgLib2DescriptorsTest extends AbstractOpTest {
 
 	@Test
 	public void testRealTypeDescription() {
-		var expected = "example.describeRealType:\n" +
-			"\t- (@MUTABLE number) -> None";
-		var actual = ops.help("example.describeRealType");
+		var expected = "test.describeRealType:\n" + "\t- (@MUTABLE number) -> None";
+		var actual = ops.help("test.describeRealType");
 		Assertions.assertEquals(expected, actual);
 	}
 
 	/**
-	 * @implNote op name=example.describeComplexType, type=Inplace
+	 * @implNote op name=test.describeComplexType, type=Inplace
 	 */
 	public static <T extends ComplexType<T>> void complexType(T in) {
 		in.mul(in);
@@ -49,14 +48,14 @@ public class ImgLib2DescriptorsTest extends AbstractOpTest {
 
 	@Test
 	public void testComplexTypeDescription() {
-		var expected = "example.describeComplexType:\n" +
-			"\t- (@MUTABLE complex number) -> None";
-		var actual = ops.help("example.describeComplexType");
+		var expected = "test.describeComplexType:\n" +
+			"\t- (@MUTABLE complex-number) -> None";
+		var actual = ops.help("test.describeComplexType");
 		Assertions.assertEquals(expected, actual);
 	}
 
 	/**
-	 * @implNote op name=example.describeRAI, type=Inplace
+	 * @implNote op name=test.RAImutator, type=Inplace
 	 */
 	public static <T extends RealType<T>> void randomAccessibleInterval(
 		RandomAccessibleInterval<T> in)
@@ -66,13 +65,13 @@ public class ImgLib2DescriptorsTest extends AbstractOpTest {
 
 	@Test
 	public void testRAIDescription() {
-		var expected = "example.describeRAI:\n" + "\t- (@MUTABLE image) -> None";
-		var actual = ops.help("example.describeRAI");
+		var expected = "test.RAImutator:\n" + "\t- (@MUTABLE image) -> None";
+		var actual = ops.help("test.RAImutator");
 		Assertions.assertEquals(expected, actual);
 	}
 
 	/**
-	 * @implNote op name=example.describeII, type=Inplace
+	 * @implNote op name=test.IIMutator, type=Inplace
 	 */
 	public static <T extends RealType<T>> void iterableInterval(
 		IterableInterval<T> in)
@@ -86,13 +85,13 @@ public class ImgLib2DescriptorsTest extends AbstractOpTest {
 
 	@Test
 	public void testIIDescription() {
-		var expected = "example.describeII:\n" + "\t- (@MUTABLE image) -> None";
-		var actual = ops.help("example.describeII");
+		var expected = "test.IIMutator:\n" + "\t- (@MUTABLE image) -> None";
+		var actual = ops.help("test.IIMutator");
 		Assertions.assertEquals(expected, actual);
 	}
 
 	/**
-	 * @implNote op name=example.describeImgLabeling, type=Inplace
+	 * @implNote op name=test.ImgLabelingMutator, type=Inplace
 	 */
 	public static <T, I extends IntegerType<I>> void imgLabeling(
 		ImgLabeling<T, I> in)
@@ -100,17 +99,17 @@ public class ImgLib2DescriptorsTest extends AbstractOpTest {
 
 	@Test
 	public void testImgLabelingDescription() {
-		var expected = "example.describeImgLabeling:\n" +
-			"\t- (@MUTABLE labels) -> None";
-		var actual = ops.help("example.describeImgLabeling");
+		var expected = "test.ImgLabelingMutator:\n" +
+			"\t- (@MUTABLE labeling) -> None";
+		var actual = ops.help("test.ImgLabelingMutator");
 		Assertions.assertEquals(expected, actual);
 	}
 
 	/**
-	 * @implNote op name=example.describeArrayImg, type=Inplace
+	 * @implNote op name=test.ArrayImgMutator, type=Inplace
 	 */
-	public static <T extends NativeType<T>, A extends DataAccess> void
-		randomAccessibleInterval(ArrayImg<T, A> in)
+	public static <T extends NativeType<T>, A extends DataAccess> void arrayImg(
+		ArrayImg<T, A> in)
 	{}
 
 	/**
@@ -129,9 +128,8 @@ public class ImgLib2DescriptorsTest extends AbstractOpTest {
 		}
 
 		// Then, ensure that we get a description anyways
-		var expected = "example.describeArrayImg:\n" +
-			"\t- (@MUTABLE image) -> None";
-		var actual = ops.help("example.describeArrayImg");
+		var expected = "test.ArrayImgMutator:\n" + "\t- (@MUTABLE image) -> None";
+		var actual = ops.help("test.ArrayImgMutator");
 		Assertions.assertEquals(expected, actual);
 	}
 

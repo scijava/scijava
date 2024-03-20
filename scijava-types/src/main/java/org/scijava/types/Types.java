@@ -1922,12 +1922,14 @@ public final class Types {
 				// typeVarAssigns.
 				// Effectively toResolved = fromResolved.
 				if (toTypeArg == null && toResolved == null && typeVarAssigns != null) {
+					// bind unbounded to a concrete type
 					if (fromResolved != null) {
 						TypeVariable<?> unbounded = (TypeVariable<?>) toTypeVarAssigns.get(
 							var);
 						typeVarAssigns.put(unbounded, fromResolved);
 						toResolved = fromResolved;
 					}
+					// bind unbounded to another type variable
 					else {
 						typeVarAssigns.put((TypeVariable<?>) toTypeVarAssigns.get(var),
 							fromTypeVarAssigns.get(var));

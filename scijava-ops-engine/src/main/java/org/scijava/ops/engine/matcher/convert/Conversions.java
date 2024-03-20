@@ -51,16 +51,6 @@ public final class Conversions {
 		// Prevent instantiation of static utility class
 	}
 
-	public static List<Type> inputTypesAgainst(OpInfo info, Class<?> against) {
-		List<Type> types = info.inputTypes();
-		int fromIoIndex = mutableIndexOf(info.opType());
-		int toIoIndex = mutableIndexOf(against);
-		if (fromIoIndex != toIoIndex) {
-			types.add(toIoIndex, types.remove(fromIoIndex));
-		}
-		return types;
-	}
-
 	/**
 	 * Finds the {@link Mutable} or {@link Container} argument of a
 	 * {@link FunctionalInterface}'s singular abstract method. If there is no
@@ -140,6 +130,26 @@ public final class Conversions {
 		// Attempt 4: Computer with just copy of mutable output
 		opt = postprocessCopy(info, request, preConverters, vars, env, h);
 		return opt.orElse(null);
+	}
+
+	/**
+	 * Derives the input types of {@link OpInfo} {@code info}, if it were to be
+	 * matched as an instance of {@link Class} {@code against}. The primary use
+	 * case for this method is when {@code info} implements some subclass of
+	 * {@code against} that mutates the parameters.
+	 *
+	 * @param info the {@link OpInfo} whose input types should be inferred
+	 * @param against the {@link Class} that has an input argument ordering
+	 * @return the input types
+	 */
+	private static List<Type> inputTypesAgainst(OpInfo info, Class<?> against) {
+		List<Type> types = info.inputTypes();
+		int fromIoIndex = mutableIndexOf(info.opType());
+		int toIoIndex = mutableIndexOf(against);
+		if (fromIoIndex != toIoIndex) {
+			types.add(toIoIndex, types.remove(fromIoIndex));
+		}
+		return types;
 	}
 
 	/**

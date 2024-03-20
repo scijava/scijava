@@ -38,6 +38,7 @@ import net.imglib2.Dimensions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.outofbounds.OutOfBoundsMirrorFactory;
+import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.ComplexType;
@@ -206,10 +207,29 @@ public class PadAndRichardsonLucyTV<I extends RealType<I> & NativeType<I>, O ext
 		Float regularizationFactor, @Nullable long[] borderSize,
 		@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput)
 	{
-		if (obfInput == null) obfInput = new OutOfBoundsMirrorFactory<>(
-			OutOfBoundsMirrorFactory.Boundary.SINGLE);
+		// default to circulant
+		if (nonCirculant == null) {
+			nonCirculant = false;
+			this.nonCirculant = nonCirculant;
+		}
+		else {
+			this.nonCirculant = nonCirculant;
+		}
 
-		this.nonCirculant = nonCirculant;
+		// out of bounds factory will be different depending on if circulant or
+		// non-circulant is used
+		if (obfInput == null) {
+
+			if (!nonCirculant) {
+				obfInput = new OutOfBoundsMirrorFactory<>(
+					OutOfBoundsMirrorFactory.Boundary.SINGLE);
+			}
+			else if (nonCirculant) {
+				obfInput = new OutOfBoundsConstantValueFactory<>(Util
+					.getTypeFromInterval(input).createVariable());
+			}
+		}
+
 		this.maxIterations = maxIterations;
 		this.regularizationFactor = regularizationFactor;
 

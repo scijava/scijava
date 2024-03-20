@@ -36,6 +36,7 @@ import java.util.function.BiFunction;
 import net.imglib2.Dimensions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
 import net.imglib2.outofbounds.OutOfBoundsMirrorFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.NativeType;
@@ -216,16 +217,30 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 		@Nullable Boolean accelerate, @Nullable long[] borderSize,
 		@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput)
 	{
-		if (obfInput == null) obfInput = new OutOfBoundsMirrorFactory<>(
-			OutOfBoundsMirrorFactory.Boundary.SINGLE);
-
+		// default to circulant
 		if (nonCirculant == null) {
-			this.nonCirculant = false;
+			nonCirculant = false;
+			this.nonCirculant = nonCirculant;
 		}
 		else {
 			this.nonCirculant = nonCirculant;
 		}
 
+		// out of bounds factory will be different depending on if circulant or
+		// non-circulant is used
+		if (obfInput == null) {
+
+			if (!nonCirculant) {
+				obfInput = new OutOfBoundsMirrorFactory<>(
+					OutOfBoundsMirrorFactory.Boundary.SINGLE);
+			}
+			else if (nonCirculant) {
+				obfInput = new OutOfBoundsConstantValueFactory<>(Util
+					.getTypeFromInterval(input).createVariable());
+			}
+		}
+
+		// default to no acceleration
 		if (accelerate == null) {
 			accelerate = false;
 		}

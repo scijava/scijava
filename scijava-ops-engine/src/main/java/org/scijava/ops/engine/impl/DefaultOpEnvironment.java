@@ -186,16 +186,16 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		boolean converting = hints.contains(BaseOpHints.Conversion.IN_PROGRESS);
 		boolean depMatching = hints.contains(
 			BaseOpHints.DependencyMatching.IN_PROGRESS);
-		// if we aren't doing any
+		// if we aren't in any special matching situations, return all Ops
 		if (!(adapting || converting || depMatching)) return infos;
 		return infos.stream() //
 			// filter out unadaptable ops
 			.filter(info -> !adapting || !info.declaredHints().contains(
 				BaseOpHints.Adaptation.FORBIDDEN)) //
-			// filter out unadaptable ops
+			// filter out nonconvertible ops
 			.filter(info -> !converting || !info.declaredHints().contains(
 				BaseOpHints.Conversion.FORBIDDEN)) //
-			// filter out unadaptable ops
+			// filter out ops that should not be dependencies
 			.filter(info -> !depMatching || !info.declaredHints().contains(
 				BaseOpHints.DependencyMatching.FORBIDDEN)) //
 			.collect(Collectors.toCollection(TreeSet::new));

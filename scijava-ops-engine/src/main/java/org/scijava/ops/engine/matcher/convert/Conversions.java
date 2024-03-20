@@ -73,6 +73,15 @@ public final class Conversions {
 		return -1;
 	}
 
+	/**
+	 * Tries to convert an {@link OpInfo}, such that its parameter types match the
+	 * argument types of a given {@link OpRequest}.
+	 *
+	 * @param env the {@link OpEnvironment} used for creating conversions
+	 * @param info the {@link OpInfo} to convert
+	 * @param request the {@link OpRequest} defining the needed I/O types.
+	 * @return a {@link ConvertedOpInfo}, if the conversion is possible.
+	 */
 	public static Optional<ConvertedOpInfo> tryConvert(OpEnvironment env,
 		OpInfo info, OpRequest request)
 	{
@@ -84,6 +93,16 @@ public final class Conversions {
 		}
 	}
 
+	/**
+	 * Converts an {@link OpInfo}, such that its parameter types match the
+	 * argument types of a given {@link OpRequest}.
+	 *
+	 * @param env the {@link OpEnvironment} used for creating conversions
+	 * @param info the {@link OpInfo} to convert
+	 * @param request the {@link OpRequest} defining the needed I/O types.
+	 * @return a {@link ConvertedOpInfo} that incorporates conversions for each
+	 *         I/O parameter of {@code info}
+	 */
 	private static ConvertedOpInfo convert(OpEnvironment env, OpInfo info,
 		OpRequest request)
 	{

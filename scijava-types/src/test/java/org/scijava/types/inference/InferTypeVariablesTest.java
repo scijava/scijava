@@ -50,6 +50,8 @@ public class InferTypeVariablesTest {
 
 	static class FooThing extends RecursiveThing<FooThing> {}
 
+	static class BazThing extends RecursiveThing<BazThing> {}
+
 	static abstract class RecursiveThing<T extends RecursiveThing<T>> {}
 
 	static abstract class RecursiveSubThing<U> extends
@@ -137,13 +139,25 @@ public class InferTypeVariablesTest {
 		final Type type = new Nil<List<T[]>>() {}.getType();
 		final Type inferFrom = new Nil<List<? extends Double[]>>() {}.getType();
 
+		// Example - If we try to infer U[] from (? extends Double[]), the U is NOT
+		// malleable, because we can then "refine" U to Number.
+		class Foo<U> implements Function<U[], U> {
+
+			@Override
+			public U apply(U[] ts) {
+				return null;
+			}
+		}
+		// ERRORS
+//		Function<? extends Double[], Number> f = new Foo<>();
+
 		Map<TypeVariable<?>, TypeMapping> typeAssigns = new HashMap<>();
 		GenericAssignability.inferTypeVariables(type, inferFrom, typeAssigns);
 
 		// We expect T=Double
 		TypeVariable<?> typeVarT = (TypeVariable<?>) new Nil<T>() {}.getType();
 		Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
-		expected.put(typeVarT, new TypeMapping(typeVarT, Double.class, true));
+		expected.put(typeVarT, new TypeMapping(typeVarT, Double.class, false));
 
 		Assertions.assertEquals(expected, typeAssigns);
 	}
@@ -153,6 +167,17 @@ public class InferTypeVariablesTest {
 		testInferGenericArrayTypeFromSuperWildcardType()
 			throws TypeInferenceException
 	{
+		// Example - If we try to infer U[] from (? super Double[]), the U is
+		// malleable, because we can then "refine" U to Number.
+		class Foo<U> implements Function<U[], U> {
+
+			@Override
+			public U apply(U[] ts) {
+				return null;
+			}
+		}
+		Function<? super Double[], Number> f = new Foo<>();
+
 		final Type type = new Nil<List<T[]>>() {}.getType();
 		final Type inferFrom = new Nil<List<? super Double[]>>() {}.getType();
 
@@ -250,7 +275,7 @@ public class InferTypeVariablesTest {
 		// We expect O = FooThing
 		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.getType();
 		Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
-		expected.put(typeVarO, new TypeMapping(typeVarO, FooThing.class, true));
+		expected.put(typeVarO, new TypeMapping(typeVarO, FooThing.class, false));
 
 		Assertions.assertEquals(expected, typeAssigns);
 	}
@@ -284,12 +309,12 @@ public class InferTypeVariablesTest {
 		Map<TypeVariable<?>, TypeMapping> typeAssigns = new HashMap<>();
 		GenericAssignability.inferTypeVariables(type, inferFrom, typeAssigns);
 
-		// We expect I= Double, O = Double
+		// We expect I= Double, O = Number
 		Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
 		TypeVariable<?> typeVarI = (TypeVariable<?>) new Nil<I>() {}.getType();
-		expected.put(typeVarI, new TypeMapping(typeVarI, Double.class, true));
+		expected.put(typeVarI, new TypeMapping(typeVarI, Double.class, false));
 		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.getType();
-		expected.put(typeVarO, new TypeMapping(typeVarO, Double.class, true));
+		expected.put(typeVarO, new TypeMapping(typeVarO, Number.class, true));
 
 		Assertions.assertEquals(expected, typeAssigns);
 	}
@@ -305,21 +330,26 @@ public class InferTypeVariablesTest {
 		final Type[] badInferFrom = { Integer.class, Double.class };
 
 		Map<TypeVariable<?>, TypeMapping> typeAssigns = new HashMap<>();
-		GenericAssignability.inferTypeVariablesWithTypeMappings(tArr, badInferFrom,
-			typeAssigns);
-
-		// We expect T=Number
-		TypeVariable<?> typeVarT = (TypeVariable<?>) t;
-		Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
-		expected.put(typeVarT, new TypeMapping(typeVarT, Number.class, true));
-
-		Assertions.assertEquals(expected, typeAssigns);
+		Assertions.assertThrows(TypeInferenceException.class,
+			() -> GenericAssignability.inferTypeVariablesWithTypeMappings(tArr,
+				badInferFrom, typeAssigns));
 	}
 
 	@Test
 	public <T extends Number> void testInferWildcardAndClass()
 		throws TypeInferenceException
 	{
+
+		// Example - the below should throw an exception because this inference is
+		// not allowed.
+		class Foo<N extends Number> implements Function<List<? super N>, N> {
+
+			@Override
+			public N apply(List<? super N> objects) {
+				return null;
+			}
+		}
+//		Function<List<? super Number>, Double> f = new Foo<Double>();
 		final Nil<List<? super T>> listT = new Nil<>() {};
 		final Nil<T> t = new Nil<>() {};
 		final Nil<List<? super Number>> listWildcard = new Nil<>() {};
@@ -328,15 +358,9 @@ public class InferTypeVariablesTest {
 		Type[] inferFroms = new Type[] { listWildcard.getType(), Double.class };
 
 		final Map<TypeVariable<?>, TypeMapping> typeAssigns = new HashMap<>();
-		GenericAssignability.inferTypeVariablesWithTypeMappings(types, inferFroms,
-			typeAssigns);
-
-		// We expect T=Number
-		final Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
-		TypeVariable<?> typeVarT = (TypeVariable<?>) t.getType();
-		expected.put(typeVarT, new TypeMapping(typeVarT, Number.class, true));
-
-		Assertions.assertEquals(expected, typeAssigns);
+		Assertions.assertThrows(TypeInferenceException.class,
+			() -> GenericAssignability.inferTypeVariablesWithTypeMappings(types,
+				inferFroms, typeAssigns));
 	}
 
 	@Test
@@ -377,38 +401,9 @@ public class InferTypeVariablesTest {
 		final Type[] inferFroms = { listDouble, integer };
 
 		final Map<TypeVariable<?>, TypeMapping> typeAssigns = new HashMap<>();
-		GenericAssignability.inferTypeVariablesWithTypeMappings(types, inferFroms,
-			typeAssigns);
-
-		// We expect T=Number
-		final Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
-		TypeVariable<?> typeVar = (TypeVariable<?>) t;
-		expected.put(typeVar, new TypeMapping(typeVar, Number.class, true));
-
-		Assertions.assertEquals(expected, typeAssigns);
-
-		final Type[] types2 = { t, t };
-		final Type listWildcardNumber = new Nil<List<? extends Number>>() {}
-			.getType();
-		final Type wildcardNumber = ((ParameterizedType) listWildcardNumber)
-			.getActualTypeArguments()[0];
-		final Type listWildcardDouble = new Nil<List<? extends Double>>() {}
-			.getType();
-		final Type wildcardDouble = ((ParameterizedType) listWildcardDouble)
-			.getActualTypeArguments()[0];
-
-		final Type[] inferFroms2 = { wildcardNumber, wildcardDouble };
-
-		final Map<TypeVariable<?>, TypeMapping> typeAssigns2 = new HashMap<>();
-		GenericAssignability.inferTypeVariablesWithTypeMappings(types2, inferFroms2,
-			typeAssigns2);
-
-		// We expect T=Number
-		final Map<TypeVariable<?>, TypeMapping> expected2 = new HashMap<>();
-		TypeVariable<?> typeVar2 = (TypeVariable<?>) t;
-		expected2.put(typeVar2, new TypeMapping(typeVar, Number.class, true));
-
-		Assertions.assertEquals(expected2, typeAssigns2);
+		Assertions.assertThrows(TypeInferenceException.class,
+			() -> GenericAssignability.inferTypeVariablesWithTypeMappings(types,
+				inferFroms, typeAssigns));
 	}
 
 	// NB RecursiveSubThing<L> extends RecursiveThing<RecursiveSubThing<L>>

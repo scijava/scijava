@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.lang.reflect.Type;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -154,6 +155,18 @@ public class ConversionTest extends AbstractTestEnvironment implements
 			".foo(java.lang.Integer[],java.lang.Double[])|converted_Long_Arr_Byte_Arr";
 		var actImplName = info.implementationName();
 		Assertions.assertEquals(expImplName, actImplName);
+	}
+
+	@OpMethod(names = "test.anyConversion", type = Function.class)
+	public static Integer foo(Integer i1) {
+		return i1 * i1;
+	}
+
+	@Test
+	public void testConvertAnys() {
+		Double in = 2.0;
+		var out = ops.unary("test.anyConversion").input(in).apply();
+		Assertions.assertInstanceOf(Integer.class, out);
 	}
 
 }

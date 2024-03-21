@@ -119,4 +119,8 @@ public final class Any implements Type {
 		return true;
 	}
 
+	public static boolean is(Object o) {
+		return o instanceof Any || o.equals(Any.class);
+	}
+
 }

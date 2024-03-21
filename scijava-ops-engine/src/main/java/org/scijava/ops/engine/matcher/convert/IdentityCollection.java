@@ -30,6 +30,7 @@
 package org.scijava.ops.engine.matcher.convert;
 
 import org.scijava.function.Inplaces;
+import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.engine.BaseOpHints.Conversion;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
@@ -44,21 +45,23 @@ import java.util.function.Function;
  * @author Gabriel Selzer
  * @param <T>
  */
-public class IdentityCollection<T> implements OpCollection {
+public class IdentityCollection<T, U extends T> implements OpCollection {
 
 	/**
 	 * @input t the object to be converted
 	 * @output the converted object (since we are doing an identity conversion,
 	 *         this is just a reference to the input object).
 	 */
-	@OpHints(hints = { Conversion.FORBIDDEN })
-	@OpField(names = "engine.convert, engine.identity", priority = Priority.LAST)
-	public final Function<T, T> identity = (t) -> t;
+	@OpHints(hints = { Conversion.FORBIDDEN,
+		BaseOpHints.DependencyMatching.FORBIDDEN })
+	@OpField(names = "engine.convert, engine.identity", priority = Priority.FIRST)
+	public final Function<U, T> identity = (t) -> t;
 
 	/**
 	 * @mutable t the object to be "mutated"
 	 */
 	@OpHints(hints = { Conversion.FORBIDDEN })
-	@OpField(names = "engine.identity", priority = Priority.LAST)
+	@OpField(names = "engine.identity", priority = Priority.FIRST)
 	public final Inplaces.Arity1<T> inplace = (t) -> {};
+
 }

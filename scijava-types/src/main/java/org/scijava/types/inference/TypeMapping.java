@@ -34,6 +34,7 @@ import com.google.common.base.Objects;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.lang.reflect.WildcardType;
 
 import org.scijava.types.Any;
 import org.scijava.types.Types;
@@ -85,27 +86,28 @@ public class TypeMapping {
 	 */
 	public void refine(Type otherType, boolean newTypeMalleability) {
 		malleable &= newTypeMalleability;
-		if (mappedType instanceof Any) {
+		if (Any.is(mappedType)) {
 			mappedType = otherType;
 			return;
 		}
-		if (otherType instanceof Any) {
+		if (Any.is(otherType)) {
 			return;
 		}
 		if (mappedType.equals(otherType)) {
 			return;
 		}
-		if (malleable) {
-			// TODO: consider the correct value of that boolean
-			Type superType = Types.greatestCommonSuperType(new Type[] { otherType,
-				mappedType }, false);
-			if (Types.isAssignable(superType, typeVar)) {
-				mappedType = superType;
+		if (otherType instanceof WildcardType) {
+			WildcardType wType = (WildcardType) otherType;
+			if (wType.getLowerBounds().length == 0 && //
+				wType.getUpperBounds().length == 1 && //
+				wType.getUpperBounds()[0].equals(mappedType))
+			{
 				return;
 			}
-			throw new TypeInferenceException(typeVar +
-				" cannot simultaneoustly be mapped to " + otherType + " and " +
-				mappedType);
+		}
+		if (malleable && Types.isAssignable(otherType, mappedType)) {
+			mappedType = otherType;
+			return;
 		}
 		if (Objects.equal(mappedType, otherType)) return;
 		throw new TypeInferenceException(typeVar +

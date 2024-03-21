@@ -280,8 +280,7 @@ public final class Types {
 		final boolean wildcardSingleIface)
 	{
 
-		types = Arrays.stream(types).filter(t -> !(t.equals(Any.class) ||
-			t instanceof Any)).toArray(Type[]::new);
+		types = Arrays.stream(types).filter(t -> !(Any.is(t))).toArray(Type[]::new);
 
 		// return answer quick if the answer is trivial
 		if (types.length == 0) return null;
@@ -679,7 +678,7 @@ public final class Types {
 	private static boolean isApplicableToRawTypes(final Type arg,
 		final Type param)
 	{
-		if (arg instanceof Any || arg.equals(Any.class)) return true;
+		if (Any.is(arg)) return true;
 		final List<Class<?>> srcClasses = Types.raws(arg);
 		final List<Class<?>> destClasses = Types.raws(param);
 		for (final Class<?> destClass : destClasses) {
@@ -729,7 +728,7 @@ public final class Types {
 			if (destType instanceof TypeVariable<?>) {
 				final Type srcType = srcTypes[i];
 				final TypeVariable<?> destTypeVar = (TypeVariable<?>) destType;
-				if (srcType instanceof Any || srcType.equals(Any.class)) continue;
+				if (Any.is(srcType)) continue;
 				if (!isApplicableToTypeParameter(srcType, destTypeVar, typeBounds))
 					return false;
 				ignoredIndices.add(i);
@@ -1674,7 +1673,7 @@ public final class Types {
 				return isAssignable(type, (TypeVariable<?>) toType, typeVarAssigns);
 			}
 
-			if (toType instanceof Any) {
+			if (Any.is(toType)) {
 				return isAssignable(type, (Any) toType, typeVarAssigns);
 			}
 
@@ -1787,7 +1786,7 @@ public final class Types {
 				return false;
 			}
 
-			if (type instanceof Any) return true;
+			if (Any.is(type)) return true;
 
 			throw new IllegalStateException("found an unhandled type: " + type);
 		}
@@ -1941,9 +1940,7 @@ public final class Types {
 				// parameters of the target type.
 				if (fromResolved != null && !fromResolved.equals(toResolved)) {
 					// check for anys
-					if (fromResolved instanceof Any || toResolved instanceof Any ||
-						fromResolved.equals(Any.class) || toResolved.equals(Any.class))
-						continue;
+					if (Any.is(fromResolved) || Any.is(toResolved)) continue;
 					if (fromResolved instanceof ParameterizedType &&
 						toResolved instanceof ParameterizedType)
 					{
@@ -1961,9 +1958,7 @@ public final class Types {
 								typeVarAssigns.put((TypeVariable<?>) toTypes[i], fromTypes[i]);
 								continue;
 							}
-							if (!(fromTypes[i] instanceof Any || toTypes[i] instanceof Any ||
-								fromTypes[i].equals(Any.class) || toTypes[i].equals(Any.class)))
-								return false;
+							if (!(Any.is(fromTypes[i]) || Any.is(toTypes[i]))) return false;
 						}
 						continue;
 					}
@@ -2131,7 +2126,7 @@ public final class Types {
 			final GenericArrayType toGenericArrayType,
 			final Map<TypeVariable<?>, Type> typeVarAssigns)
 		{
-			if (type == null || type instanceof Any || type.equals(Any.class)) {
+			if (type == null || Any.is(type)) {
 				return true;
 			}
 
@@ -2211,7 +2206,7 @@ public final class Types {
 			final WildcardType toWildcardType,
 			final Map<TypeVariable<?>, Type> typeVarAssigns)
 		{
-			if (type == null || type instanceof Any || type.equals(Any.class)) {
+			if (type == null || Any.is(type)) {
 				return true;
 			}
 
@@ -2350,11 +2345,12 @@ public final class Types {
 				for (final Type bound : toTypeVarBounds) {
 					if (!isAssignable(type, bound, typeVarAssigns)) return false;
 				}
+				typeVarAssigns.put(toTypeVariable, type);
 
 				return true;
 			}
 
-			if (type instanceof Any || type.equals(Any.class)) {
+			if (Any.is(type)) {
 				typeVarAssigns.put(toTypeVariable, new Any(toTypeVariable.getBounds()));
 				return true;
 			}
@@ -3495,7 +3491,7 @@ public final class Types {
 			if (type instanceof Class) {
 				return classToString((Class<?>) type, done);
 			}
-			if (type instanceof Any) {
+			if (Any.is(type)) {
 				return type.toString();
 			}
 			if (type instanceof ParameterizedType) {

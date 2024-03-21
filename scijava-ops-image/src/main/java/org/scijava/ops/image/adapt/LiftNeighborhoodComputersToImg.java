@@ -65,8 +65,8 @@ public final class LiftNeighborhoodComputersToImg {
 	/**
 	 * @implNote op names='engine.adapt', priority='100.', type=Function
 	 */
-	public static <T, U, F extends RandomAccessibleInterval<T>>
-		Computers.Arity3<F, Shape, OutOfBoundsFactory<T, F>, RandomAccessibleInterval<U>>
+	public static <T, U, F extends RandomAccessibleInterval<T>, G extends F>
+		Computers.Arity3<G, Shape, OutOfBoundsFactory<T, F>, RandomAccessibleInterval<U>>
 		adapt1UsingShapeAndOOBF(Computers.Arity1<Neighborhood<T>, U> op)
 	{
 		return (in, shape, oobf, out) -> {

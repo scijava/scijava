@@ -115,7 +115,7 @@ org.bytedeco.opencv.global.opencv_imgproc:
     alias: "filter.sqrbox"
     type: "Computer2"
   blur:
-    alias: "fliter.blur"
+    alias: "filter.blur"
     type: "Computer2"
   filter2D:
     alias: "filter.convolve"

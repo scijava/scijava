@@ -3115,13 +3115,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: '[I'}
+    - {parameter type: INPUT, name: arg1, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: '[I'}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg5, description: '', type: '[F'}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3130,13 +3130,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: '[I'}
+    - {parameter type: INPUT, name: arg1, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: '[I'}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg5, description: '', type: '[F'}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3145,13 +3145,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: '[I'}
+    - {parameter type: INPUT, name: arg1, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: '[I'}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg5, description: '', type: '[F'}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3160,13 +3160,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.javacpp.IntPointer}
+    - {parameter type: INPUT, name: arg1, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.javacpp.IntPointer}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.javacpp.FloatPointer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3175,13 +3175,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.javacpp.IntPointer}
+    - {parameter type: INPUT, name: arg1, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.javacpp.IntPointer}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.javacpp.FloatPointer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3190,13 +3190,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.javacpp.IntPointer}
+    - {parameter type: INPUT, name: arg1, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.javacpp.IntPointer}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.javacpp.FloatPointer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3205,13 +3205,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: java.nio.IntBuffer}
+    - {parameter type: INPUT, name: arg1, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: java.nio.IntBuffer}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg5, description: '', type: java.nio.FloatBuffer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3220,13 +3220,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: java.nio.IntBuffer}
+    - {parameter type: INPUT, name: arg1, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: java.nio.IntBuffer}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg5, description: '', type: java.nio.FloatBuffer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3235,13 +3235,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: java.nio.IntBuffer}
+    - {parameter type: INPUT, name: arg1, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: java.nio.IntBuffer}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg5, description: '', type: java.nio.FloatBuffer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3250,14 +3250,14 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: '[I'}
+    - {parameter type: INPUT, name: arg1, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: '[I'}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg5, description: '', type: '[F'}
     - {parameter type: INPUT, name: arg6, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3266,14 +3266,14 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: '[I'}
+    - {parameter type: INPUT, name: arg1, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: '[I'}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg5, description: '', type: '[F'}
     - {parameter type: INPUT, name: arg6, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3282,14 +3282,14 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: '[I'}
+    - {parameter type: INPUT, name: arg1, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: '[I'}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg5, description: '', type: '[F'}
     - {parameter type: INPUT, name: arg6, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3298,14 +3298,14 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.javacpp.IntPointer}
+    - {parameter type: INPUT, name: arg1, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.javacpp.IntPointer}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.javacpp.FloatPointer}
     - {parameter type: INPUT, name: arg6, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3314,14 +3314,14 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.javacpp.IntPointer}
+    - {parameter type: INPUT, name: arg1, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.javacpp.IntPointer}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.javacpp.FloatPointer}
     - {parameter type: INPUT, name: arg6, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3330,14 +3330,14 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.javacpp.IntPointer}
+    - {parameter type: INPUT, name: arg1, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.javacpp.IntPointer}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.javacpp.FloatPointer}
     - {parameter type: INPUT, name: arg6, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3346,14 +3346,14 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: java.nio.IntBuffer}
+    - {parameter type: INPUT, name: arg1, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: java.nio.IntBuffer}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg5, description: '', type: java.nio.FloatBuffer}
     - {parameter type: INPUT, name: arg6, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3362,14 +3362,14 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: java.nio.IntBuffer}
+    - {parameter type: INPUT, name: arg1, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: java.nio.IntBuffer}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg5, description: '', type: java.nio.FloatBuffer}
     - {parameter type: INPUT, name: arg6, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3378,14 +3378,14 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: java.nio.IntBuffer}
+    - {parameter type: INPUT, name: arg1, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: java.nio.IntBuffer}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg5, description: '', type: java.nio.FloatBuffer}
     - {parameter type: INPUT, name: arg6, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3394,15 +3394,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg7, description: '', type: '[F'}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3411,15 +3411,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg7, description: '', type: '[F'}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3428,15 +3428,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg7, description: '', type: '[F'}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3445,15 +3445,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg7, description: '', type: '[F'}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3462,15 +3462,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg7, description: '', type: '[F'}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3479,15 +3479,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg7, description: '', type: '[F'}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3496,15 +3496,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg7, description: '', type: java.nio.FloatBuffer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3513,15 +3513,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg7, description: '', type: java.nio.FloatBuffer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3530,15 +3530,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg7, description: '', type: java.nio.FloatBuffer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3547,15 +3547,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg7, description: '', type: java.nio.FloatBuffer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3564,15 +3564,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg7, description: '', type: java.nio.FloatBuffer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3581,15 +3581,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg7, description: '', type: java.nio.FloatBuffer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3598,15 +3598,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg7, description: '', type: org.bytedeco.javacpp.FloatPointer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3615,15 +3615,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg7, description: '', type: org.bytedeco.javacpp.FloatPointer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3632,15 +3632,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg7, description: '', type: org.bytedeco.javacpp.FloatPointer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3649,15 +3649,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg7, description: '', type: org.bytedeco.javacpp.FloatPointer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3666,15 +3666,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg7, description: '', type: org.bytedeco.javacpp.FloatPointer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3683,15 +3683,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg7, description: '', type: org.bytedeco.javacpp.FloatPointer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3700,17 +3700,17 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg7, description: '', type: '[F'}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     - {parameter type: INPUT, name: arg9, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3719,17 +3719,17 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg7, description: '', type: '[F'}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     - {parameter type: INPUT, name: arg9, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3738,17 +3738,17 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg7, description: '', type: '[F'}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     - {parameter type: INPUT, name: arg9, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3757,17 +3757,17 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg7, description: '', type: '[F'}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     - {parameter type: INPUT, name: arg9, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3776,17 +3776,17 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg7, description: '', type: '[F'}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     - {parameter type: INPUT, name: arg9, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3795,17 +3795,17 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg7, description: '', type: '[F'}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     - {parameter type: INPUT, name: arg9, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3814,17 +3814,17 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg7, description: '', type: java.nio.FloatBuffer}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     - {parameter type: INPUT, name: arg9, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3833,17 +3833,17 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg7, description: '', type: java.nio.FloatBuffer}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     - {parameter type: INPUT, name: arg9, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3852,17 +3852,17 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg7, description: '', type: java.nio.FloatBuffer}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     - {parameter type: INPUT, name: arg9, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3871,17 +3871,17 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg7, description: '', type: java.nio.FloatBuffer}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     - {parameter type: INPUT, name: arg9, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3890,17 +3890,17 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg7, description: '', type: java.nio.FloatBuffer}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     - {parameter type: INPUT, name: arg9, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3909,17 +3909,17 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg7, description: '', type: java.nio.FloatBuffer}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     - {parameter type: INPUT, name: arg9, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3928,17 +3928,17 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg7, description: '', type: org.bytedeco.javacpp.FloatPointer}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     - {parameter type: INPUT, name: arg9, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3947,17 +3947,17 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg7, description: '', type: org.bytedeco.javacpp.FloatPointer}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     - {parameter type: INPUT, name: arg9, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3966,17 +3966,17 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg7, description: '', type: org.bytedeco.javacpp.FloatPointer}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     - {parameter type: INPUT, name: arg9, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -3985,17 +3985,17 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg7, description: '', type: org.bytedeco.javacpp.PointerPointer}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     - {parameter type: INPUT, name: arg9, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -4004,17 +4004,17 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg7, description: '', type: org.bytedeco.javacpp.FloatPointer}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     - {parameter type: INPUT, name: arg9, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -4023,17 +4023,17 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg7, description: '', type: org.bytedeco.javacpp.PointerPointer}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     - {parameter type: INPUT, name: arg9, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -4042,17 +4042,17 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg7, description: '', type: org.bytedeco.javacpp.FloatPointer}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     - {parameter type: INPUT, name: arg9, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.histogram, cv.calcHist]
     description: ''
@@ -4061,17 +4061,17 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg5, description: '', type: int}
     - {parameter type: INPUT, name: arg6, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg7, description: '', type: org.bytedeco.javacpp.FloatPointer}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     - {parameter type: INPUT, name: arg9, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4080,13 +4080,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: '[I'}
+    - {parameter type: INPUT, name: arg1, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: '[F'}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: '[F'}
     - {parameter type: INPUT, name: arg5, description: '', type: double}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4095,13 +4095,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: '[I'}
+    - {parameter type: INPUT, name: arg1, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: '[F'}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: '[F'}
     - {parameter type: INPUT, name: arg5, description: '', type: double}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4110,13 +4110,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: '[I'}
+    - {parameter type: INPUT, name: arg1, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: '[F'}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: '[F'}
     - {parameter type: INPUT, name: arg5, description: '', type: double}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4125,13 +4125,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg5, description: '', type: '[F'}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4140,13 +4140,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg5, description: '', type: '[F'}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4155,13 +4155,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg5, description: '', type: '[F'}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4170,13 +4170,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg5, description: '', type: '[F'}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4185,13 +4185,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg5, description: '', type: '[F'}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4200,13 +4200,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg5, description: '', type: '[F'}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4215,13 +4215,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg5, description: '', type: java.nio.FloatBuffer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4230,13 +4230,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg5, description: '', type: java.nio.FloatBuffer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4245,13 +4245,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg5, description: '', type: java.nio.FloatBuffer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4260,13 +4260,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg5, description: '', type: java.nio.FloatBuffer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4275,13 +4275,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg5, description: '', type: java.nio.FloatBuffer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4290,13 +4290,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg5, description: '', type: java.nio.FloatBuffer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4305,13 +4305,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.javacpp.FloatPointer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4320,13 +4320,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.javacpp.FloatPointer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4335,13 +4335,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.javacpp.FloatPointer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4350,13 +4350,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.javacpp.FloatPointer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4365,13 +4365,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.javacpp.FloatPointer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4380,13 +4380,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.javacpp.FloatPointer}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4395,13 +4395,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.javacpp.IntPointer}
+    - {parameter type: INPUT, name: arg1, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.javacpp.FloatPointer}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.javacpp.FloatPointer}
     - {parameter type: INPUT, name: arg5, description: '', type: double}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4410,13 +4410,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.javacpp.IntPointer}
+    - {parameter type: INPUT, name: arg1, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.javacpp.FloatPointer}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.javacpp.FloatPointer}
     - {parameter type: INPUT, name: arg5, description: '', type: double}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4425,13 +4425,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.MatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.javacpp.IntPointer}
+    - {parameter type: INPUT, name: arg1, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.javacpp.FloatPointer}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.javacpp.FloatPointer}
     - {parameter type: INPUT, name: arg5, description: '', type: double}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4440,13 +4440,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: java.nio.IntBuffer}
+    - {parameter type: INPUT, name: arg1, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: java.nio.FloatBuffer}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: java.nio.FloatBuffer}
     - {parameter type: INPUT, name: arg5, description: '', type: double}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4455,13 +4455,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: java.nio.IntBuffer}
+    - {parameter type: INPUT, name: arg1, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: java.nio.FloatBuffer}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: java.nio.FloatBuffer}
     - {parameter type: INPUT, name: arg5, description: '', type: double}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4470,13 +4470,13 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMatVector}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: java.nio.IntBuffer}
+    - {parameter type: INPUT, name: arg1, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: java.nio.FloatBuffer}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: java.nio.FloatBuffer}
     - {parameter type: INPUT, name: arg5, description: '', type: double}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4485,15 +4485,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg5, description: '', type: '[F'}
     - {parameter type: INPUT, name: arg6, description: '', type: double}
     - {parameter type: INPUT, name: arg7, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4502,15 +4502,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg5, description: '', type: '[F'}
     - {parameter type: INPUT, name: arg6, description: '', type: double}
     - {parameter type: INPUT, name: arg7, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4519,15 +4519,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg5, description: '', type: '[F'}
     - {parameter type: INPUT, name: arg6, description: '', type: double}
     - {parameter type: INPUT, name: arg7, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4536,15 +4536,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg5, description: '', type: '[F'}
     - {parameter type: INPUT, name: arg6, description: '', type: double}
     - {parameter type: INPUT, name: arg7, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4553,15 +4553,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg5, description: '', type: '[F'}
     - {parameter type: INPUT, name: arg6, description: '', type: double}
     - {parameter type: INPUT, name: arg7, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4570,15 +4570,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: '[I'}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg5, description: '', type: '[F'}
     - {parameter type: INPUT, name: arg6, description: '', type: double}
     - {parameter type: INPUT, name: arg7, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4587,15 +4587,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg5, description: '', type: java.nio.FloatBuffer}
     - {parameter type: INPUT, name: arg6, description: '', type: double}
     - {parameter type: INPUT, name: arg7, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4604,15 +4604,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg5, description: '', type: java.nio.FloatBuffer}
     - {parameter type: INPUT, name: arg6, description: '', type: double}
     - {parameter type: INPUT, name: arg7, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4621,15 +4621,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg5, description: '', type: java.nio.FloatBuffer}
     - {parameter type: INPUT, name: arg6, description: '', type: double}
     - {parameter type: INPUT, name: arg7, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4638,15 +4638,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg5, description: '', type: java.nio.FloatBuffer}
     - {parameter type: INPUT, name: arg6, description: '', type: double}
     - {parameter type: INPUT, name: arg7, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4655,15 +4655,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg5, description: '', type: java.nio.FloatBuffer}
     - {parameter type: INPUT, name: arg6, description: '', type: double}
     - {parameter type: INPUT, name: arg7, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4672,15 +4672,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: java.nio.IntBuffer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg5, description: '', type: java.nio.FloatBuffer}
     - {parameter type: INPUT, name: arg6, description: '', type: double}
     - {parameter type: INPUT, name: arg7, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4689,15 +4689,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.javacpp.FloatPointer}
     - {parameter type: INPUT, name: arg6, description: '', type: double}
     - {parameter type: INPUT, name: arg7, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4706,15 +4706,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.javacpp.FloatPointer}
     - {parameter type: INPUT, name: arg6, description: '', type: double}
     - {parameter type: INPUT, name: arg7, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4723,15 +4723,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.javacpp.PointerPointer}
     - {parameter type: INPUT, name: arg6, description: '', type: double}
     - {parameter type: INPUT, name: arg7, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4740,15 +4740,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.javacpp.FloatPointer}
     - {parameter type: INPUT, name: arg6, description: '', type: double}
     - {parameter type: INPUT, name: arg7, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4757,15 +4757,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.javacpp.FloatPointer}
     - {parameter type: INPUT, name: arg6, description: '', type: double}
     - {parameter type: INPUT, name: arg7, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4774,15 +4774,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.javacpp.PointerPointer}
     - {parameter type: INPUT, name: arg6, description: '', type: double}
     - {parameter type: INPUT, name: arg7, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4791,15 +4791,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.SparseMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.javacpp.FloatPointer}
     - {parameter type: INPUT, name: arg6, description: '', type: double}
     - {parameter type: INPUT, name: arg7, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.backProject, cv.calcBackProject]
     description: ''
@@ -4808,15 +4808,15 @@
     version: '1'
     parameters:
     - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: int}
+    - {parameter type: INPUT, name: arg1, description: '', type: int}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.javacpp.IntPointer}
     - {parameter type: INPUT, name: arg3, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: INPUT, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: CONTAINER, name: arg4, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.javacpp.FloatPointer}
     - {parameter type: INPUT, name: arg6, description: '', type: double}
     - {parameter type: INPUT, name: arg7, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Computer5}
 - op:
     names: [image.equalize, cv.equalizeHist]
     description: ''
@@ -8782,14 +8782,14 @@
     priority: 0.0
     version: '1'
     parameters:
-    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: java.lang.String}
+    - {parameter type: CONTAINER, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg1, description: '', type: java.lang.String}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.Point}
     - {parameter type: INPUT, name: arg3, description: '', type: int}
     - {parameter type: INPUT, name: arg4, description: '', type: double}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.opencv.opencv_core.Scalar}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Inplace1}
 - op:
     names: [image.putText, cv.putText]
     description: ''
@@ -8797,14 +8797,14 @@
     priority: 0.0
     version: '1'
     parameters:
-    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.javacpp.BytePointer}
+    - {parameter type: CONTAINER, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg1, description: '', type: org.bytedeco.javacpp.BytePointer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.Point}
     - {parameter type: INPUT, name: arg3, description: '', type: int}
     - {parameter type: INPUT, name: arg4, description: '', type: double}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.opencv.opencv_core.Scalar}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Inplace1}
 - op:
     names: [image.putText, cv.putText]
     description: ''
@@ -8812,14 +8812,14 @@
     priority: 0.0
     version: '1'
     parameters:
-    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: java.lang.String}
+    - {parameter type: CONTAINER, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg1, description: '', type: java.lang.String}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.Point}
     - {parameter type: INPUT, name: arg3, description: '', type: int}
     - {parameter type: INPUT, name: arg4, description: '', type: double}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.opencv.opencv_core.Scalar}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Inplace1}
 - op:
     names: [image.putText, cv.putText]
     description: ''
@@ -8827,14 +8827,14 @@
     priority: 0.0
     version: '1'
     parameters:
-    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.javacpp.BytePointer}
+    - {parameter type: CONTAINER, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg1, description: '', type: org.bytedeco.javacpp.BytePointer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.Point}
     - {parameter type: INPUT, name: arg3, description: '', type: int}
     - {parameter type: INPUT, name: arg4, description: '', type: double}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.opencv.opencv_core.Scalar}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Inplace1}
 - op:
     names: [image.putText, cv.putText]
     description: ''
@@ -8842,14 +8842,14 @@
     priority: 0.0
     version: '1'
     parameters:
-    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: java.lang.String}
+    - {parameter type: CONTAINER, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg1, description: '', type: java.lang.String}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.Point}
     - {parameter type: INPUT, name: arg3, description: '', type: int}
     - {parameter type: INPUT, name: arg4, description: '', type: double}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.opencv.opencv_core.Scalar}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Inplace1}
 - op:
     names: [image.putText, cv.putText]
     description: ''
@@ -8857,14 +8857,14 @@
     priority: 0.0
     version: '1'
     parameters:
-    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.javacpp.BytePointer}
+    - {parameter type: CONTAINER, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg1, description: '', type: org.bytedeco.javacpp.BytePointer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.Point}
     - {parameter type: INPUT, name: arg3, description: '', type: int}
     - {parameter type: INPUT, name: arg4, description: '', type: double}
     - {parameter type: INPUT, name: arg5, description: '', type: org.bytedeco.opencv.opencv_core.Scalar}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Inplace1}
 - op:
     names: [image.putText, cv.putText]
     description: ''
@@ -8872,8 +8872,8 @@
     priority: 0.0
     version: '1'
     parameters:
-    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: java.lang.String}
+    - {parameter type: CONTAINER, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg1, description: '', type: java.lang.String}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.Point}
     - {parameter type: INPUT, name: arg3, description: '', type: int}
     - {parameter type: INPUT, name: arg4, description: '', type: double}
@@ -8882,7 +8882,7 @@
     - {parameter type: INPUT, name: arg7, description: '', type: int}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Inplace1}
 - op:
     names: [image.putText, cv.putText]
     description: ''
@@ -8890,8 +8890,8 @@
     priority: 0.0
     version: '1'
     parameters:
-    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.javacpp.BytePointer}
+    - {parameter type: CONTAINER, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.GpuMat}
+    - {parameter type: INPUT, name: arg1, description: '', type: org.bytedeco.javacpp.BytePointer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.Point}
     - {parameter type: INPUT, name: arg3, description: '', type: int}
     - {parameter type: INPUT, name: arg4, description: '', type: double}
@@ -8900,7 +8900,7 @@
     - {parameter type: INPUT, name: arg7, description: '', type: int}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Inplace1}
 - op:
     names: [image.putText, cv.putText]
     description: ''
@@ -8908,8 +8908,8 @@
     priority: 0.0
     version: '1'
     parameters:
-    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: java.lang.String}
+    - {parameter type: CONTAINER, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg1, description: '', type: java.lang.String}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.Point}
     - {parameter type: INPUT, name: arg3, description: '', type: int}
     - {parameter type: INPUT, name: arg4, description: '', type: double}
@@ -8918,7 +8918,7 @@
     - {parameter type: INPUT, name: arg7, description: '', type: int}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Inplace1}
 - op:
     names: [image.putText, cv.putText]
     description: ''
@@ -8926,8 +8926,8 @@
     priority: 0.0
     version: '1'
     parameters:
-    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.javacpp.BytePointer}
+    - {parameter type: CONTAINER, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.Mat}
+    - {parameter type: INPUT, name: arg1, description: '', type: org.bytedeco.javacpp.BytePointer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.Point}
     - {parameter type: INPUT, name: arg3, description: '', type: int}
     - {parameter type: INPUT, name: arg4, description: '', type: double}
@@ -8936,7 +8936,7 @@
     - {parameter type: INPUT, name: arg7, description: '', type: int}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Inplace1}
 - op:
     names: [image.putText, cv.putText]
     description: ''
@@ -8944,8 +8944,8 @@
     priority: 0.0
     version: '1'
     parameters:
-    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: java.lang.String}
+    - {parameter type: CONTAINER, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg1, description: '', type: java.lang.String}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.Point}
     - {parameter type: INPUT, name: arg3, description: '', type: int}
     - {parameter type: INPUT, name: arg4, description: '', type: double}
@@ -8954,7 +8954,7 @@
     - {parameter type: INPUT, name: arg7, description: '', type: int}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Inplace1}
 - op:
     names: [image.putText, cv.putText]
     description: ''
@@ -8962,8 +8962,8 @@
     priority: 0.0
     version: '1'
     parameters:
-    - {parameter type: INPUT, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
-    - {parameter type: CONTAINER, name: arg1, description: '', type: org.bytedeco.javacpp.BytePointer}
+    - {parameter type: CONTAINER, name: arg0, description: '', type: org.bytedeco.opencv.opencv_core.UMat}
+    - {parameter type: INPUT, name: arg1, description: '', type: org.bytedeco.javacpp.BytePointer}
     - {parameter type: INPUT, name: arg2, description: '', type: org.bytedeco.opencv.opencv_core.Point}
     - {parameter type: INPUT, name: arg3, description: '', type: int}
     - {parameter type: INPUT, name: arg4, description: '', type: double}
@@ -8972,4 +8972,4 @@
     - {parameter type: INPUT, name: arg7, description: '', type: int}
     - {parameter type: INPUT, name: arg8, description: '', type: boolean}
     authors: [OpenCV authors, bytedeco/JavaCV authors]
-    tags: {type: Computer2}
+    tags: {type: Inplace1}

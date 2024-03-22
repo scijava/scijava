@@ -209,10 +209,10 @@ org.bytedeco.opencv.global.opencv_imgproc:
     type: "Computer2"
   calcHist:
     alias: "image.histogram"
-    type: "Computer2"
+    type: "Computer5"
   calcBackProject:
     alias: "image.backProject"
-    type: "Computer2"
+    type: "Computer5"
   equalizeHist:
     alias: "image.equalize"
     type: "Computer2"
@@ -299,4 +299,4 @@ org.bytedeco.opencv.global.opencv_imgproc:
     type: "Computer2"
   putText:
     alias: "image.putText"
-    type: "Computer2"
+    type: "Inplace1"

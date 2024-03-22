@@ -110,9 +110,9 @@ public class LocalMeanThreshold<T extends RealType<T>> extends
 		final Computers.Arity3<Iterable<T>, T, Double, BitType> computeThresholdOp,
 		final RandomAccessibleInterval<BitType> output)
 	{
-		final Computers.Arity2<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
+		final Computers.Arity2<Iterable<T>, T, BitType> parameterizedComputeThresholdOp = //
 			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, c, o);
-		applyFilterOp.compute(input, parametrizedComputeThresholdOp,
+		applyFilterOp.compute(input, parameterizedComputeThresholdOp,
 			inputNeighborhoodShape, outOfBoundsFactory, output);
 	}
 
@@ -123,10 +123,10 @@ public class LocalMeanThreshold<T extends RealType<T>> extends
 		final Computers.Arity3<RectangleNeighborhood<? extends Composite<DoubleType>>, T, Double, BitType> computeThresholdOp,
 		final RandomAccessibleInterval<BitType> output)
 	{
-		final Computers.Arity2<RectangleNeighborhood<? extends Composite<DoubleType>>, T, BitType> parametrizedComputeThresholdOp = //
+		final Computers.Arity2<RectangleNeighborhood<? extends Composite<DoubleType>>, T, BitType> parameterizedComputeThresholdOp = //
 			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, c, o);
 		compute(input, inputNeighborhoodShape, outOfBoundsFactory, Arrays.asList(
-			integralImageOp), parametrizedComputeThresholdOp, output);
+			integralImageOp), parameterizedComputeThresholdOp, output);
 	}
 
 }

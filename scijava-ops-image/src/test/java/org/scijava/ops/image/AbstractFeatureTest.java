@@ -234,7 +234,7 @@ public class AbstractFeatureTest extends AbstractOpTest {
 				origin[i] = dim[i] / 2;
 			ellipse.setOrigin(origin);
 
-			// get iterable intervall and cursor of ellipse
+			// get iterable interval and cursor of ellipse
 			final IterableInterval<UnsignedByteType> ii = ellipse
 				.getIterableIntervalOverROI(img);
 			final Cursor<UnsignedByteType> cursor = ii.cursor();

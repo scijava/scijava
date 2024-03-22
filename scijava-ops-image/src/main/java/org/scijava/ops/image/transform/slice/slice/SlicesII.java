@@ -59,7 +59,7 @@ public class SlicesII<T> extends AbstractInterval implements
 
 	private final RandomAccessibleInterval<T> source;
 
-	private boolean dropSingltonDimensions;
+	private boolean dropSingletonDimensions;
 
 	/**
 	 * @param source {@link RandomAccessibleInterval} which will be virtually
@@ -84,7 +84,7 @@ public class SlicesII<T> extends AbstractInterval implements
 			}
 		}
 
-		this.dropSingltonDimensions = dropSingletonDimensions;
+		this.dropSingletonDimensions = dropSingletonDimensions;
 		this.slice = new FinalInterval(sliceMin, sliceMax);
 		this.source = source;
 	}
@@ -204,7 +204,7 @@ public class SlicesII<T> extends AbstractInterval implements
 
 			final IntervalView<T> res = Views.offsetInterval(src, offset, sliceDims);
 
-			return dropSingltonDimensions ? Views.dropSingletonDimensions(res) : res;
+			return dropSingletonDimensions ? Views.dropSingletonDimensions(res) : res;
 		}
 
 		@Override

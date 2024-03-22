@@ -32,7 +32,7 @@ package org.scijava.ops.image.features.zernike;
 import org.scijava.ops.image.util.BigComplex;
 
 /**
- * Class to hold a zernike moment, including its polynom, order, repition and
+ * Class to hold a zernike moment, including its polynom, order, repetition and
  * complex representation
  *
  * @author Andreas Graumann (University of Konstanz)
@@ -61,7 +61,7 @@ public class ZernikeMoment {
 	}
 
 	/**
-	 * @return Zernime moment in complex representation
+	 * @return Zernike moment in complex representation
 	 */
 	public BigComplex getZm() {
 		return zm;
@@ -109,14 +109,14 @@ public class ZernikeMoment {
 	}
 
 	/**
-	 * @return Repitition m
+	 * @return Repetition m
 	 */
 	public int getM() {
 		return m;
 	}
 
 	/**
-	 * Set repitition m
+	 * Set repetition m
 	 *
 	 * @param _m
 	 */

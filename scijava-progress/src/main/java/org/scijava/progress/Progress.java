@@ -129,7 +129,7 @@ public final class Progress {
 
 	/**
 	 * Completes the current task on this {@link Thread}'s execution hierarchy,
-	 * removing it in the process. This method also takaes care to ping relevant
+	 * removing it in the process. This method also takes care to ping relevant
 	 * {@link ProgressListener}s.
 	 *
 	 * @see Task#complete()

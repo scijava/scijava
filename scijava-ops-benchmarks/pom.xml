@@ -12,7 +12,7 @@
 	<artifactId>scijava-ops-benchmarks</artifactId>
 
 	<name>SciJava Ops Benchmarks</name>
-	<description>SciJava Operations Benchmarks: A set of benchmarking tests for the Scijava Ops Engine library</description>
+	<description>SciJava Operations Benchmarks: A set of benchmarking tests for the SciJava Ops Engine library</description>
 	<url>https://github.com/scijava/scijava-ops-benchmarks</url>
 	<inceptionYear>2023</inceptionYear>
 	<organization>

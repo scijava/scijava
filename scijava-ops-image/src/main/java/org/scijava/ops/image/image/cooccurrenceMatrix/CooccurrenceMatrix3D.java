@@ -38,7 +38,7 @@ import net.imglib2.util.Intervals;
 import net.imglib2.util.Pair;
 
 /**
- * Calculates coocccurrence matrix from an 3D-{@link RandomAccessibleInterval}.
+ * Calculates cooccurrence matrix from an 3D-{@link RandomAccessibleInterval}.
  *
  * @author Stephan Sellien (University of Konstanz)
  * @author Andreas Graumann (University of Konstanz)

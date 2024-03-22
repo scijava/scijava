@@ -40,7 +40,7 @@ import org.scijava.plugin.PluginInfo;
 import org.scijava.service.Service;
 
 /**
- * Scijava service which provides the different Scijava Adapters available in
+ * SciJava service which provides the different SciJava Adapters available in
  * the current context. {@link IObjectScijavaAdapter} plugins are automatically
  * discovered and accessible in this service. In practice, serializer /
  * deserializers are obtained via {@link ScijavaGsonHelper} helper class

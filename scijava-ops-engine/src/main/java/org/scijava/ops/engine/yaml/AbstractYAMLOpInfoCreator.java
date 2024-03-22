@@ -61,7 +61,7 @@ public abstract class AbstractYAMLOpInfoCreator implements YAMLOpInfoCreator {
 		final String srcString = identifier.getPath().substring(1);
 		// Parse version
 		final String version = yaml.get("version").toString();
-		// Parase names
+		// Parse names
 		final String[] names = parseNames(yaml, identifier);
 		// Create the OpInfo
 		OpInfo info;

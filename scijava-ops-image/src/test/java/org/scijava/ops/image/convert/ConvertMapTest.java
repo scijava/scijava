@@ -121,7 +121,7 @@ public class ConvertMapTest extends AbstractOpTest {
 			new FinalInterval(dims))];
 
 		if (array.length != values.length) {
-			throw new RuntimeException("Number of values doesn't match dimmensions");
+			throw new RuntimeException("Number of values doesn't match dimensions");
 		}
 
 		for (int i = 0; i < array.length; i++) {
@@ -139,7 +139,7 @@ public class ConvertMapTest extends AbstractOpTest {
 			dims))];
 
 		if (array.length != values.length) {
-			throw new RuntimeException("Number of values doesn't match dimmensions");
+			throw new RuntimeException("Number of values doesn't match dimensions");
 		}
 
 		for (int i = 0; i < array.length; i++) {

@@ -115,7 +115,7 @@ public interface Discoverer {
 	 *          is capable of discovering all interfaces {@code use}d by the
 	 *          caller module. If we instead called
 	 *          {@link ServiceLoader#load(Class)} directly, we'd only be able to
-	 *          discover implmentations whose interface was {@code use}d by
+	 *          discover implementations whose interface was {@code use}d by
 	 *          {@code module org.scijava.discovery}.
 	 *          <p>
 	 *          It is in the user's best interest to make this {@link Function} as
@@ -143,7 +143,7 @@ public interface Discoverer {
 	}
 
 	/**
-	 * Accumulates mutiple {@link Discoverer}s into one mega-{@code Discoverer}
+	 * Accumulates multiple {@link Discoverer}s into one mega-{@code Discoverer}
 	 *
 	 * @param discoverers the {@link Discoverer}s to be wrapped
 	 * @return the mega-{@link Discoverer}

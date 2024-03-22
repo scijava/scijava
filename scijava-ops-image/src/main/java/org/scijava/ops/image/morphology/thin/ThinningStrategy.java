@@ -69,7 +69,7 @@ public interface ThinningStrategy {
 	public void afterCycle();
 
 	/**
-	 * Returns a seperate copy of this strategy.
+	 * Returns a separate copy of this strategy.
 	 *
 	 * @return A new instance of this strategy with the same values.
 	 */

@@ -44,7 +44,7 @@ import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 
 /**
- * A set of static utilties useful for processing Ops
+ * A set of static utilities useful for processing Ops
  *
  * @author Gabriel Selzer
  */

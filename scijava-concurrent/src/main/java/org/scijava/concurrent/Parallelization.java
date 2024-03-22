@@ -38,7 +38,7 @@ import java.util.concurrent.ExecutorService;
  * The algorithm needs to use the {@link TaskExecutor} returned by
  * {@link Parallelization#getTaskExecutor()} to implement the parallelization.
  * Alternatively it can use {@link Parallelization#getExecutorService()}. But
- * {@link TaskExecutor} is simpler and better suited for image precessing
+ * {@link TaskExecutor} is simpler and better suited for image processing
  * algorithms.
  * <p>
  * The algorithm can be executed singleThreaded, multiThreaded or by using a

@@ -57,7 +57,7 @@ public class OpResizingMemberParser implements
 	 * {@code srcStruct}
 	 * <li>That there is <b>one</b> output {@link Member} in {@code srcStruct}
 	 * </ol>
-	 * We should consider adding the evalutation of these assumptions
+	 * We should consider adding the evaluation of these assumptions
 	 *
 	 * @param source the {@link RetypingRequest} from which we create the new
 	 *          {@link List} of {@link Member}s

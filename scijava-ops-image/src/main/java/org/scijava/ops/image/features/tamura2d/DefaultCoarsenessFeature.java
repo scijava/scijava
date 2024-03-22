@@ -104,7 +104,7 @@ public class DefaultCoarsenessFeature<I extends RealType<I>, O extends RealType<
 	 *
 	 * @param input Input image
 	 * @param meanImages Mean images
-	 * @return Array containing all leadding difference values
+	 * @return Array containing all leading difference values
 	 */
 	private ArrayList<Double> sizedLeadDiffValues(
 		final RandomAccessibleInterval<I> input,
@@ -159,7 +159,7 @@ public class DefaultCoarsenessFeature<I extends RealType<I>, O extends RealType<
 	 *
 	 * @param input Input image
 	 * @param i Size of rectangle shape
-	 * @return Filered mean image
+	 * @return Filtered mean image
 	 */
 	@SuppressWarnings("unchecked")
 	private Img<I> mean(final RandomAccessibleInterval<I> input, final int i) {

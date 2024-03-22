@@ -62,7 +62,7 @@ public class CooccurrenceMatrix<T extends RealType<T>> implements
 	 * @param distance the <em>number of pixels</em> in the direction specified by
 	 *          {@code orientation} to find the co-occurring pixel
 	 * @param orientation specifies the offset between the co-occurring pixels.
-	 * @return the co-occurence matrix
+	 * @return the co-occurrence matrix
 	 */
 	@Override
 	public double[][] apply( //

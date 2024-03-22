@@ -1,4 +1,4 @@
-# Scijava mechanism for object serialization
+# SciJava mechanism for object serialization
 
 The goal of scijava persist is to serialize 'easily' and in a human readable way objects (interfaces) which can't be directly serialized. Gson can do that conveniently. It's mainly what QuPath uses for all sorts of things, and that's why I came to use it.
 

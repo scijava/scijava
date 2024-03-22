@@ -83,7 +83,7 @@ public class DefaultDirectionalityFeature<I extends RealType<I>, O extends RealT
 			"Only 2 dimensional images allowed!");
 		if (histogramSize == null) histogramSize = 16;
 
-		// List to store all directions occuring within the image on borders
+		// List to store all directions occurring within the image on borders
 		ArrayList<DoubleType> dirList = new ArrayList<>();
 
 		// Dimension of input region
@@ -128,7 +128,7 @@ public class DefaultDirectionalityFeature<I extends RealType<I>, O extends RealT
 		if (dirList.isEmpty()) {
 			output.setReal(0.0);
 		}
-		// Otherwise compute histogram over all occuring directions
+		// Otherwise compute histogram over all occurring directions
 		// and calculate inverse second moment on it as output
 		else {
 			Histogram1d<DoubleType> hist = histOp.apply(dirList, histogramSize);

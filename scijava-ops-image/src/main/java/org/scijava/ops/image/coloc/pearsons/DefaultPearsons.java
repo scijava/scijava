@@ -107,7 +107,7 @@ public class DefaultPearsons<T extends RealType<T>, U extends RealType<U>>
 			 *   could get NaN. NaN
 			 */
 			throw new IllegalArgumentException(
-				"A numerical problem occured: the input data is unsuitable for this algorithm. Possibly too few pixels (in range were: " +
+				"A numerical problem occurred: the input data is unsuitable for this algorithm. Possibly too few pixels (in range were: " +
 					iterations + ").");
 		}
 	}
@@ -138,7 +138,7 @@ public class DefaultPearsons<T extends RealType<T>, U extends RealType<U>>
 			this(samples, false, 0.0d, 0.0d);
 		}
 
-		protected Accumulator(final Iterable<Pair<T, U>> samples, boolean substract,
+		protected Accumulator(final Iterable<Pair<T, U>> samples, boolean subtract,
 			double xDiff, double yDiff)
 		{
 
@@ -147,7 +147,7 @@ public class DefaultPearsons<T extends RealType<T>, U extends RealType<U>>
 				double value1 = sample.getA().getRealDouble();
 				double value2 = sample.getB().getRealDouble();
 
-				if (substract) {
+				if (subtract) {
 					value1 -= xDiff;
 					value2 -= yDiff;
 				}

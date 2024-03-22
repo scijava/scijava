@@ -111,7 +111,7 @@ public class TypeMapping {
 		}
 		if (Objects.equal(mappedType, otherType)) return;
 		throw new TypeInferenceException(typeVar +
-			" cannot simultaneoustly be mapped to " + otherType + " and " +
+			" cannot simultaneously be mapped to " + otherType + " and " +
 			mappedType);
 	}
 

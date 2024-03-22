@@ -64,13 +64,13 @@ public class DatasetTypeExtractorTest {
 		// NB we pass a null context to avoid a SciJava Common dependency
 		var ds = new DefaultDataset(null, imgPlus);
 		// Assert correct reification
-		// NB The generic parameter will be an Any due to the emtpy TypeReifier
+		// NB The generic parameter will be an Any due to the empty TypeReifier
 		// as described above.
 		var actual = new DatasetTypeExtractor().reify(reifier, ds);
 		var expected = Types.parameterize(ImgPlus.class, new Type[] { Any.class });
 		Assertions.assertEquals(expected, actual);
 		// NB In the below check, the generic parameter will be UnsignedByteType,
-		// because the scijava-ops-engine module DOES use TypeExtractr, so it can
+		// because the scijava-ops-engine module DOES use TypeExtractor, so it can
 		// discover the implementations. The IterableTypeExtractor is likely the
 		// concrete TypeExtractor utilized to get the UnsignedByteType!
 		OpEnvironment env = OpEnvironment.build();

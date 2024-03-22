@@ -93,7 +93,7 @@ public class ParallelProgressTest {
 	 *
 	 * @param dep the subtask
 	 * @param numThreads the number of threads upon which to run {@code dep}
-	 * @param iterationsPerThread the arugment passed to {@code dep}
+	 * @param iterationsPerThread the argument passed to {@code dep}
 	 * @return {@code numThreads * iterationsPerThread}
 	 */
 	public static Integer parallelDepTask(Function<Integer, Integer> dep,

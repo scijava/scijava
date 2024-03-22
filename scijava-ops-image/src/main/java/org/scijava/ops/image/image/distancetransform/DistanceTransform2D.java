@@ -51,7 +51,7 @@ public final class DistanceTransform2D {
 	}
 
 	/*
-	 * meijsters raster scan alogrithm Source:
+	 * meijsters raster scan algorithm Source:
 	 * http://fab.cba.mit.edu/classes/S62.12/docs/Meijster_distance.pdf
 	 */
 	public static <B extends BooleanType<B>, T extends RealType<T>> void compute(

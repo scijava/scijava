@@ -98,7 +98,7 @@ public class MorphologicalThinningStrategy extends
 	 *  1   1   1           1
 	 *
 	 *  (Zero stands for background, 1 stands for foreground, no value represents a wildcard.)
-	 *  Since the ThinningOp only checks pixels which are in the foreground, the center pixel is alway 1.
+	 *  Since the ThinningOp only checks pixels which are in the foreground, the center pixel is always 1.
 	 */
 	private boolean top(final boolean[] vals) {
 		if (vals[1] == m_background && vals[2] == m_background &&

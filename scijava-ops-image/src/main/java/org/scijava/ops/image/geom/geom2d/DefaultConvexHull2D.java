@@ -127,13 +127,13 @@ public class DefaultConvexHull2D implements Function<Polygon2D, Polygon2D> {
 	/**
 	 * 2D cross product of OA and OB vectors, i.e. z-component of ir 3D cross
 	 * product. Returns a positive value, if OAB makes a counter-clockwise turn,
-	 * negative for clockwise turn, and zero if RealPoints are collinear.
+	 * negative for clockwise turn, and zero if RealPoints are colinear.
 	 *
 	 * @param o first RealPoint
 	 * @param a second RealPoint
 	 * @param b third RealPoint
 	 * @return Returns a positive value, if OAB makes a counter-clockwise wturn,
-	 *         negative for clockwise turn, and zero if RealPoints are collinear.
+	 *         negative for clockwise turn, and zero if RealPoints are colinear.
 	 */
 	private double ccw(final RealLocalizable o, final RealLocalizable a,
 		final RealLocalizable b)

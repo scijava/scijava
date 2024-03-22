@@ -62,7 +62,7 @@ public class ProjectRAIToIterableInterval<T, V> implements
 			throw new IllegalArgumentException(
 				"Input must have one more dimension than output!");
 		if (dim >= input.numDimensions()) throw new IllegalArgumentException(
-			"The dimension provided to compute over does not exitst in the input!");
+			"The dimension provided to compute over does not exist in the input!");
 
 		final Cursor<V> cursor = output.localizingCursor();
 		final RandomAccess<T> access = input.randomAccess();

@@ -300,7 +300,7 @@ public final class GenericAssignability {
 	 *          the types of the args we passed through.)
 	 * @param typeVarAssigns - a Map of all of the Type Variables already
 	 *          determined.
-	 * @param dest - the speical type of the Op that we want to find a match for
+	 * @param dest - the special type of the Op that we want to find a match for
 	 *          (determined by the user / ops.run())
 	 * @return boolean - true if we can safely match this Op even though the types
 	 *         do not directly match up. False otherwise.

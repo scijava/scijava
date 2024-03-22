@@ -266,7 +266,7 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	 * @output result
 	 * @implNote op names='transform.flatIterableView'
 	 */
-	public final Function<RandomAccessibleInterval<T>, IterableInterval<T>> flatIterbleView =
+	public final Function<RandomAccessibleInterval<T>, IterableInterval<T>> flatIterableView =
 		Views::flatIterable;
 
 	/**

@@ -193,7 +193,7 @@ public class RidgeDetectionMetadata {
 				pRA.fwd(2);
 				pRA.get().set(py);
 
-				// set nx t othe first z slice of nValues
+				// set nx to the first z slice of nValues
 				nRA.setPosition(valuesArr);
 				nRA.get().set(nx);
 

@@ -124,7 +124,7 @@ public class PrimitiveArrayConverters<N extends Number> implements
 			return oa;
 		};
 
-	// -- Object Focusers -- //
+	// -- Object Converters -- //
 
 	@OpHints(hints = { Conversion.FORBIDDEN })
 	@OpField(names = "engine.convert")
@@ -157,7 +157,7 @@ public class PrimitiveArrayConverters<N extends Number> implements
 		.stream().map(d -> d == null ? null : d.doubleValue()).toArray(
 			Double[]::new);
 
-	// -- Primitive Focusers -- //
+	// -- Primitive Converters -- //
 
 	@OpHints(hints = { Conversion.FORBIDDEN })
 	@OpField(names = "engine.convert")

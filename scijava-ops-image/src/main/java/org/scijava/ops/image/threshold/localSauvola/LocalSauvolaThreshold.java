@@ -94,9 +94,9 @@ public class LocalSauvolaThreshold<T extends RealType<T>> extends
 				output);
 		}
 		else {
-			final Computers.Arity2<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
+			final Computers.Arity2<Iterable<T>, T, BitType> parameterizedComputeThresholdOp = //
 				(i1, i2, o) -> computeThresholdNonIntegralOp.compute(i1, i2, k, r, o);
-			applyFilterOp.compute(input, parametrizedComputeThresholdOp,
+			applyFilterOp.compute(input, parameterizedComputeThresholdOp,
 				inputNeighborhoodShape, outOfBoundsFactory, output);
 		}
 	}
@@ -109,10 +109,10 @@ public class LocalSauvolaThreshold<T extends RealType<T>> extends
 		final Computers.Arity4<RectangleNeighborhood<? extends Composite<DoubleType>>, T, Double, Double, BitType> computeThresholdOp,
 		final RandomAccessibleInterval<BitType> output)
 	{
-		final Computers.Arity2<RectangleNeighborhood<? extends Composite<DoubleType>>, T, BitType> parametrizedComputeThresholdOp = //
+		final Computers.Arity2<RectangleNeighborhood<? extends Composite<DoubleType>>, T, BitType> parameterizedComputeThresholdOp = //
 			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, k, r, o);
 		compute(input, inputNeighborhoodShape, outOfBoundsFactory, Arrays.asList(
-			integralImageOp, squareIntegralImageOp), parametrizedComputeThresholdOp,
+			integralImageOp, squareIntegralImageOp), parameterizedComputeThresholdOp,
 			output);
 	}
 

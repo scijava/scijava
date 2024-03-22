@@ -36,7 +36,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import org.scijava.function.Computers;
 
 /**
- * An Op which calculates the euler characteristic (χ) of the given binary
+ * An Op which calculates the Euler characteristic (χ) of the given binary
  * image. The object in the image is handled as if it was floating freely in
  * space. That is, elements outside the stack are treated as zeros. Thus voxels
  * touching the edges of the interval do not affect the result. Here Euler

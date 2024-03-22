@@ -1,4 +1,4 @@
-# Scijava Struct: A lightweight framework for collecting Members
+# SciJava Struct: A lightweight framework for collecting Members
 
 This library provides a lightweight framework for collecting sets of typed fields. The project centers around two `Class`es:
 

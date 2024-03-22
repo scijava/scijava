@@ -39,7 +39,7 @@ import net.imglib2.util.Intervals;
 import net.imglib2.util.Pair;
 
 /**
- * Calculates coocccurrence matrix from an 2D-{@link RandomAccessibleInterval}.
+ * Calculates cooccurrence matrix from an 2D-{@link RandomAccessibleInterval}.
  *
  * @author Stephan Sellien (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)

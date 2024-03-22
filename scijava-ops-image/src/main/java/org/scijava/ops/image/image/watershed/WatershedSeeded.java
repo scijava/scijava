@@ -157,11 +157,11 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>>
 			"seed labeling must be of the same size as the input");
 
 		// extend border to be able to do a quick check, if a voxel is inside
-		final LabelingType<Integer> oustide = out.firstElement().copy();
-		oustide.clear();
-		oustide.add(OUTSIDE);
+		final LabelingType<Integer> outside = out.firstElement().copy();
+		outside.clear();
+		outside.add(OUTSIDE);
 		final ExtendedRandomAccessibleInterval<LabelingType<Integer>, ImgLabeling<Integer, IntType>> outExt =
-			Views.extendValue(out, oustide);
+			Views.extendValue(out, outside);
 		final OutOfBounds<LabelingType<Integer>> raOut = outExt.randomAccess();
 
 		// if no mask provided, set the mask to the whole image

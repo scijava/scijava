@@ -297,7 +297,7 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>>
 			while (actualH.compareTo(raIn.get()) == 0) {
 				final long p = imi[i];
 				IntervalIndexer.indexToPosition(p, dist, raDist);
-				// the distance associated with p is reseted to 0
+				// the distance associated with p is reset to 0
 				raDist.get().set(0);
 				raLab.setPosition(raDist);
 

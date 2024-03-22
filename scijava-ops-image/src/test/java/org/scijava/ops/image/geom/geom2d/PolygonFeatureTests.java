@@ -107,8 +107,8 @@ public class PolygonFeatureTests extends AbstractFeatureTest {
 			"geom.circularity");
 	}
 
-	// TODO: this test checks LabelRegionToPolygonConverter, which is a Scijava
-	// Converter and thus has not been converted to the Scijava-ops framwork. What
+	// TODO: this test checks LabelRegionToPolygonConverter, which is a SciJava
+	// Converter and thus has not been converted to the SciJava Ops framework. What
 	// should we do here?
 	@Test
 	public void contour() {

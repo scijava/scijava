@@ -2,7 +2,7 @@
 
 This module provides a framework for executing `Runnable`s and `Callable`s. By abstracting the evaluation of functionality, we can enable the framework to intelligently execute code, increasing performance.
 
-## The `Parallelziation` class
+## The `Parallelization` class
 
 This class provides many static utilities for executing functionality.
 

@@ -54,7 +54,7 @@ public final class DefaultDistanceTransform {
 	}
 
 	/*
-	 * extended version of meijsters raster scan alogrithm to compute n-d inputs
+	 * extended version of meijsters raster scan algorithm to compute n-d inputs
 	 * Source: http://fab.cba.mit.edu/classes/S62.12/docs/Meijster_distance.pdf
 	 */
 	public static <B extends BooleanType<B>, T extends RealType<T>> void compute(

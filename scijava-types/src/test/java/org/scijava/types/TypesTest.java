@@ -427,12 +427,12 @@ public class TypesTest {
 			new Type[] { MapListTT }), -1);
 		assertEquals(Types.isApplicable(new Type[] { MapListDoubleDouble },
 			new Type[] { MapListTT }), -1);
-		// T is already fixed to Double (in a parameterized Map), cannot accomodate
-		// Nubmer.
+		// T is already fixed to Double (in a parameterized Map), cannot accommodate
+		// Number.
 		assertNotEquals(Types.isApplicable(new Type[] { MapListNumberDouble },
 			new Type[] { MapListTT }), -1);
 		// T is already fixed to Double (in a parameterized List) , cannot
-		// accomodate Number
+		// accommodate Number
 		assertNotEquals(Types.isApplicable(new Type[] { MapListDoubleNumber },
 			new Type[] { MapListTT }), -1);
 	}
@@ -640,7 +640,7 @@ public class TypesTest {
 		Nil<List<? extends Number>> nNumberWildcard =
 			new Nil<List<? extends Number>>()
 			{};
-		Nil<List<? extends List<String>>> nListildcard =
+		Nil<List<? extends List<String>>> nListWildcard =
 			new Nil<List<? extends List<String>>>()
 			{};
 
@@ -649,7 +649,7 @@ public class TypesTest {
 		assertEquals(-1, Types.isApplicable(argsOk, params));
 
 		params = new Type[] { n.getType(), c.getType() };
-		argsOk = new Type[] { nNumberWildcard.getType(), nListildcard.getType() };
+		argsOk = new Type[] { nNumberWildcard.getType(), nListWildcard.getType() };
 		assertEquals(-1, Types.isApplicable(argsOk, params));
 
 		params = new Type[] { n.getType(), c.getType() };

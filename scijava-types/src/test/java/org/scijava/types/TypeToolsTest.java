@@ -145,7 +145,7 @@ public class TypeToolsTest {
 			new Type[] { MapListTT }));
 		assertEquals(-1, TypeTools.satisfies(new Type[] { MapListDoubleDouble },
 			new Type[] { MapListTT }));
-		// T is already fixed to Double (in a parameterized Map), cannot accomodate
+		// T is already fixed to Double (in a parameterized Map), cannot accommodate
 		// Number.
 		assertEquals(0, TypeTools.satisfies(new Type[] { MapListNumberDouble },
 			new Type[] { MapListTT }));

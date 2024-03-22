@@ -39,13 +39,13 @@ import net.imglib2.type.numeric.real.DoubleType;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * Implementation of Cluster Promenence Haralick Feature
+ * Implementation of Cluster Prominence Haralick Feature
  *
  * @author Andreas Graumann (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
- * @implNote op names='features.haralick.clusterPromenence'
+ * @implNote op names='features.haralick.clusterProminence'
  */
-public class DefaultClusterPromenence<T extends RealType<T>> extends
+public class DefaultClusterProminence<T extends RealType<T>> extends
 	AbstractHaralickFeature<T>
 {
 

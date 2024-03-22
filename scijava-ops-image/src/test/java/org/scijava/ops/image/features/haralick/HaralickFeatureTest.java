@@ -69,11 +69,11 @@ public class HaralickFeatureTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void clusterPromenence() {
-		DoubleType clusterPromenence = (DoubleType) ops.op(
-			"features.haralick.clusterPromenence").arity4().input(img, 128, 1,
+	public void clusterProminence() {
+		DoubleType clusterProminence = (DoubleType) ops.op(
+			"features.haralick.clusterProminence").arity4().input(img, 128, 1,
 				MatrixOrientation2D.HORIZONTAL).apply();
-		assertEquals(1.913756322645621e+07, clusterPromenence.get(), EPSILON);
+		assertEquals(1.913756322645621e+07, clusterProminence.get(), EPSILON);
 	}
 
 	@Test

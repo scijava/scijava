@@ -37,7 +37,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import org.scijava.function.Computers;
 
 /**
- * An Op which calculates the euler characteristic (χ) of the given 3D binary
+ * An Op which calculates the Euler characteristic (χ) of the given 3D binary
  * image.<br>
  * Here Euler characteristic is defined as χ = β_0 - β_1 + β_2, where β_i are so
  * called Betti numbers

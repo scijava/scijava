@@ -49,9 +49,9 @@ import net.imglib2.view.Views;
  * instance, filtering only along 2nd axis is desired, one may provide the
  * sigmas array filled with zeroes (0) except for the 2nd element.
  * <p>
- * The period vector is a vector along which oscilates the frequency part of the
+ * The period vector is a vector along which oscillates the frequency part of the
  * Gabor filter. The length of this vector equals precisely the wave-length of
- * the oscilations (the length of 1 period).
+ * the oscillations (the length of 1 period).
  * <p>
  * All values are in units of pixels. Both input arrays have to be of the same
  * length.
@@ -119,13 +119,13 @@ public final class DefaultCreateKernelGabor {
 				final double dx = dims[d] - centre[d];
 
 				if (sigmas[d] > 0.)
-					// normal case: cummulate exp's argument
+					// normal case: accumulate exp's argument
 					GaussExp += dx * dx / (sigmas[d] * sigmas[d]);
 				else if (dx != 0.)
 					// sigmas[d] == 0 && we are off the blocking axis
 					blockingExp = 0.f;
 
-				// cummulates scalar product...
+				// accumulate scalar product...
 				freqPart += dx * period[d];
 			}
 			GaussExp = Math.exp(-0.5 * GaussExp) * blockingExp;

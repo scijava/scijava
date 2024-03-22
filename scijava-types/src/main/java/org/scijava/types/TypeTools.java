@@ -183,7 +183,7 @@ public final class TypeTools {
 	 * Determines whether or not the {@link Type} {@code arg} can satisfy the
 	 * {@link TypeVariable} {@code param} given the preexisting limitations of
 	 * {@code param}. If it is determined that this replacement is allowed the
-	 * {@link TypeVariable} is then restriced to the {@link Type} of {@code arg}
+	 * {@link TypeVariable} is then restricted to the {@link Type} of {@code arg}
 	 * (if this is not desired use {@link #satisfiesTypeVariable} instead}.
 	 *
 	 * @param arg - a Type Parameter for a given {@link ParameterizedType}

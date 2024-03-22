@@ -6,7 +6,7 @@
  * their own data structures, algorithm syntax, and other requirements. With all
  * of these differences, library interoperability can be a daunting task. This
  * can lead to algorithm reimplementations, unmaintained code, and a lack of
- * cooperation between open-source communitites. SciJava Ops seeks to unify
+ * cooperation between open-source communities. SciJava Ops seeks to unify
  * different libraries under a single framework, separating the development of
  * new algorithms from the way they are executed. Put more succinctly, the goals
  * of SciJava Ops are the following:
@@ -104,9 +104,9 @@
  * <li>Structural-equivalence in Ops allows us to consider similar Ops in
  * different languages as one, and to delegate to the proper Op using user
  * inputs. In other words, you can call structural-equivalent Ops identically,
- * and Scijava Ops will take care to call the correct Op based on the concrete
+ * and SciJava Ops will take care to call the correct Op based on the concrete
  * inputs provided.</li>
- * <li>Result-equivalence, and therefore reproducability, in Ops, is guaranteed
+ * <li>Result-equivalence, and therefore reproducibility, in Ops, is guaranteed
  * within an OpEnvironment and a set of input objects, but not just for Op
  * calls. This allows us to ensure reproducible pipelines, but also allows us to
  * introduce new Ops into the pipeline or to run pipelines on different inputs

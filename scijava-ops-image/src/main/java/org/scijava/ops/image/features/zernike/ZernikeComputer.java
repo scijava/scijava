@@ -67,7 +67,7 @@ public class ZernikeComputer<T extends RealType<T>> implements
 
 		final double radius = Math.sqrt(width2 * width2 + height2 * height2);
 
-		// Compute pascal's triangle for binomal coefficients: d[x][y] equals (x
+		// Compute pascal's triangle for binomial coefficients: d[x][y] equals (x
 		// over y)
 		final double[][] d = computePascalsTriangle(order);
 
@@ -120,13 +120,13 @@ public class ZernikeComputer<T extends RealType<T>> implements
 	}
 
 	/**
-	 * Multiplication of pixel * rad * exp(-m*theta) using eulers formula
+	 * Multiplication of pixel * rad * exp(-m*theta) using Euler's formula
 	 * (pixel*rad) * (cos(m*theta) - i*sin(m*theta))
 	 *
 	 * @param pixel Current pixel
 	 * @param rad Computed value of radial polynom,
 	 * @param theta Angle of current position
-	 * @param m Repitition m
+	 * @param m Repetition m
 	 * @return Computed term
 	 */
 	private BigComplex multiplyExp(final double pixel, final double rad,
@@ -153,33 +153,33 @@ public class ZernikeComputer<T extends RealType<T>> implements
 	}
 
 	/**
-	 * Initialize a zernike moment with a given order and repition
+	 * Initialize a zernike moment with a given order and repetition
 	 *
 	 * @param o Order n
-	 * @param repitition Repitition m
+	 * @param repetition Repetition m
 	 * @param d Pascal matrix
-	 * @return Empty Zernike moment of order n and repitition m
+	 * @return Empty Zernike moment of order n and repetition m
 	 */
-	private ZernikeMoment initZernikeMoment(final int o, final int repitition,
+	private ZernikeMoment initZernikeMoment(final int o, final int repetition,
 		final double[][] d)
 	{
 
-		if (o - Math.abs(repitition) % 2 != 0) {
+		if (o - Math.abs(repetition) % 2 != 0) {
 			// throw new IllegalArgumentException("This combination of order an
-			// repitition is not valid!");
+			// repetition is not valid!");
 		}
 
-		return createZernikeMoment(d, o, repitition);
+		return createZernikeMoment(d, o, repetition);
 	}
 
 	/**
-	 * Create one zernike moment of order n and repitition m with suitable radial
+	 * Create one zernike moment of order n and repetition m with suitable radial
 	 * polynom
 	 *
 	 * @param d Pascal matrix
 	 * @param n Order n
-	 * @param m Repition m
-	 * @return Empty Zernike moment of order n and repition m
+	 * @param m Repetition m
+	 * @return Empty Zernike moment of order n and repetition m
 	 */
 	private ZernikeMoment createZernikeMoment(double[][] d, int n, int m) {
 		ZernikeMoment p = new ZernikeMoment();
@@ -213,7 +213,7 @@ public class ZernikeComputer<T extends RealType<T>> implements
 
 	/**
 	 * @param n Order n
-	 * @param m Repitition m
+	 * @param m Repetition m
 	 * @param k Radius k
 	 * @param d Pascal matrix
 	 * @return computed term
@@ -237,12 +237,12 @@ public class ZernikeComputer<T extends RealType<T>> implements
 //	}
 
 	/**
-	 * Creates a radial polynom for zernike moment with order n and repitition m
+	 * Creates a radial polynom for zernike moment with order n and repetition m
 	 *
 	 * @param n Order n
-	 * @param m Repitition m
+	 * @param m Repetition m
 	 * @param d Pascal matrix
-	 * @return Radial polnom for moment of order n and repition m
+	 * @return Radial polnom for moment of order n and repetition m
 	 */
 	public static Polynom createRadialPolynom(final int n, final int m,
 		final double[][] d)

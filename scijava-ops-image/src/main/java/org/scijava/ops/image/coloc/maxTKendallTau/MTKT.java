@@ -51,7 +51,7 @@ import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * This algorithm calculates Maximum Trunctated Kendall Tau (MTKT) from Wang et
+ * This algorithm calculates Maximum Truncated Kendall Tau (MTKT) from Wang et
  * al. (2017); computes thresholds using Otsu method.
  *
  * @param <T> Type of the first image
@@ -235,12 +235,12 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>> implements
 	{
 		final int an = activeIndex.size();
 
-		int indicatr = 0;
+		int indicator = 0;
 		final double[][] partRank = new double[2][an];
 		for (final Integer i : activeIndex) {
-			partRank[0][indicatr] = rank[i][0];
-			partRank[1][indicatr] = rank[i][1];
-			indicatr++;
+			partRank[0][indicator] = rank[i][0];
+			partRank[1][indicator] = rank[i][1];
+			indicator++;
 		}
 		final double[] partRank1 = partRank[0];
 		final double[] partRank2 = partRank[1];

@@ -172,7 +172,7 @@ public class FFTTest extends AbstractOpTest {
 			ops.op("filter.ifft").arity1().input(fft2).output(inverseOriginalFast)
 				.compute();
 
-			// invert the "fast" FFT that was acheived by explicitly using an
+			// invert the "fast" FFT that was achieved by explicitly using an
 			// image
 			// that had "fast" dimensions. The inverse will be the fast size
 			// this

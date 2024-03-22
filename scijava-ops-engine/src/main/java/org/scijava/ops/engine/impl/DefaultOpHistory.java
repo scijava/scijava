@@ -62,7 +62,7 @@ import org.scijava.priority.Priority;
  */
 public class DefaultOpHistory implements OpHistory {
 
-	// -- DATA STRCUTURES -- //
+	// -- DATA STRUCTURES -- //
 
 	private final Map<Object, List<RichOp<?>>> mutationMap = new WeakHashMap<>();
 

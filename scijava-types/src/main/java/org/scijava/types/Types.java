@@ -744,7 +744,7 @@ public final class Types {
 	 * Determines whether or not the {@link Type} {@code arg} can satisfy the
 	 * {@link TypeVariable} {@code param} given the preexisting limitations of
 	 * {@code param}. If it is determined that this replacement is allowed the
-	 * {@link TypeVariable} is then restriced to the {@link Type} of {@code arg}
+	 * {@link TypeVariable} is then restricted to the {@link Type} of {@code arg}
 	 *
 	 * @param arg - a Type Parameter for a given {@link ParameterizedType}
 	 * @param param - a {@link TypeVariable} that could potentially be replaced
@@ -938,7 +938,7 @@ public final class Types {
 	/**
 	 * Map type vars in specified type list to types using the specified map. In
 	 * doing so, type vars mapping to other type vars will not be followed but
-	 * just repalced.
+	 * just replaced.
 	 *
 	 * @param typesToMap
 	 * @param typeAssigns
@@ -1259,7 +1259,7 @@ public final class Types {
 		 * {@link TypeVarInfo#fixBounds} should be used instead. Furthermore, it can
 		 * be specified if wildcards should be refused, which means that the method
 		 * will return false if:
-		 * <li>a wilcard is already allowed for this type var</li>
+		 * <li>a wildcard is already allowed for this type var</li>
 		 * <li>{@code bound} is a wildcard and other types are already allowed</li>
 		 * This is useful if the type variable was contained in a parameterized
 		 * type, hence it only allows wildcards if it was not bound to a type yet.
@@ -1290,7 +1290,7 @@ public final class Types {
 		 * parameterizing that {@link ParameterizedType}. Furthermore, it can be
 		 * specified if wildcards should be refused, which means that the method
 		 * will return false if:
-		 * <li>a wilcard is already allowed for this type var</li>
+		 * <li>a wildcard is already allowed for this type var</li>
 		 * <li>{@code bound} is a wildcard and other types are already allowed</li>
 		 * This is useful if the type variable was contained in a parameterized
 		 * type, hence it only allows wildcards if it was not bound to a type yet.
@@ -3336,7 +3336,7 @@ public final class Types {
 		 * Helper method to establish the formal parameters for a parameterized
 		 * type.
 		 *
-		 * @param mappings map containing the assignements
+		 * @param mappings map containing the assignments
 		 * @param variables expected map keys
 		 * @return array of map values corresponding to specified keys
 		 */

@@ -84,7 +84,7 @@ public class Hints {
 	}
 
 	/**
-	 * Reutrns a <b>new</b> {@link Hints} with:
+	 * Returns a <b>new</b> {@link Hints} with:
 	 * <ol>
 	 * <li>All hints in this {@link Hints}</li>
 	 * <li>All hints in {@code other}</li>

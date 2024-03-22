@@ -133,7 +133,7 @@ public class WildcardTypeMapping extends TypeMapping {
 		for (Type lowerBound : lowerBoundList) {
 			if (!Types.isAssignable(lowerBound, mappedType))
 				throw new TypeInferenceException(typeVar +
-					" cannot simultaneoustly be mapped to " + otherType + " and " +
+					" cannot simultaneously be mapped to " + otherType + " and " +
 					mappedType);
 		}
 	}

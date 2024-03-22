@@ -103,7 +103,7 @@ public final class ScijavaGsonHelper {
 
 		// Next, we need to get all serializers which require custom adapters. This
 		// typically happens
-		// when serialiazing interfaces or abstract classes (typical scenario :
+		// when serializing interfaces or abstract classes (typical scenario :
 		// imglib2 RealTransform objects)
 		// The interface or abstract class is the Base class, and runtime classes
 		// are

@@ -81,7 +81,7 @@ public class MapNeighborhoodTest extends AbstractOpTest {
 //	@Test
 //	@Ignore("There is no way to throw an error for invalid typed computers at the moment.")
 //	public
-//		void testMapNeighoodsWrongArgs() {
+//		void testMapNeighborhoodsWrongArgs() {
 //		final Op mapOp =
 //			ops.op(DefaultMapNeighborhood.class, out, in,
 //				new RectangleShape(1, false), new Increment());

@@ -58,7 +58,7 @@ public class DefaultDoG<T extends NumericType<T> & NativeType<T>> implements
 	private Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> tmpCreator;
 
 	@OpDependency(name = "math.subtract")
-	private Computers.Arity2<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> subtractor;
+	private Computers.Arity2<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> subtracter;
 
 	/**
 	 * TODO
@@ -85,7 +85,7 @@ public class DefaultDoG<T extends NumericType<T> & NativeType<T>> implements
 		gauss2.compute(input, output);
 
 		// TODO: is this safe?
-		subtractor.compute(output, tmpInterval, output);
+		subtracter.compute(output, tmpInterval, output);
 	}
 
 }

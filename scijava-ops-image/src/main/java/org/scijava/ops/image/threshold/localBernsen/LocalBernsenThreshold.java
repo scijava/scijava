@@ -86,10 +86,10 @@ public class LocalBernsenThreshold<T extends RealType<T>> implements
 		final Computers.Arity4<Iterable<T>, T, Double, Double, BitType> computeThresholdOp,
 		final RandomAccessibleInterval<BitType> output)
 	{
-		final Computers.Arity2<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
+		final Computers.Arity2<Iterable<T>, T, BitType> parameterizedComputeThresholdOp = //
 			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, contrastThreshold,
 				halfMaxValue, o);
-		applyFilterOp.compute(input, parametrizedComputeThresholdOp,
+		applyFilterOp.compute(input, parameterizedComputeThresholdOp,
 			inputNeighborhoodShape, outOfBoundsFactory, output);
 	}
 

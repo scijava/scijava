@@ -130,7 +130,7 @@ public class MatchingResult {
 			sb.append("Multiple '" + request.getLabel() + "' ops of priority " +
 				priority + ":\n");
 			if (typeCheckingIncomplete(matches)) {
-				sb.append("Incomplete output type checking may have occured!\n");
+				sb.append("Incomplete output type checking may have occurred!\n");
 			}
 			int count = 0;
 			for (final OpCandidate match : matches) {

@@ -198,16 +198,16 @@ public class MatchingUtilsTest {
 	}
 
 	@Test
-	public void genericAssignabilitySingleVarMultipleOccurence() {
-		abstract class SingleVarBoundedNestedMultipleOccurence<I extends Iterable<String>>
+	public void genericAssignabilitySingleVarMultipleOccurrence() {
+		abstract class SingleVarBoundedNestedMultipleOccurrence<I extends Iterable<String>>
 			implements Function<I, I>
 		{}
 
-		abstract class SingleVarBoundedNestedWildcardMultipleOccurence<I extends Iterable<? extends Number>>
+		abstract class SingleVarBoundedNestedWildcardMultipleOccurrence<I extends Iterable<? extends Number>>
 			implements Function<I, I>
 		{}
 
-		abstract class SingleVarBoundedNestedWildcardMultipleOccurenceUsedNested<I extends Iterable<? extends Number>>
+		abstract class SingleVarBoundedNestedWildcardMultipleOccurrenceUsedNested<I extends Iterable<? extends Number>>
 			implements Function<I, List<I>>
 		{}
 
@@ -216,33 +216,33 @@ public class MatchingUtilsTest {
 		Nil<Function<List<String>, List<Integer>>> n1 = new Nil<>() {};
 		Nil<Function<List<String>, Double>> n2 = new Nil<>() {};
 
-		assertAll(SingleVarBoundedNestedMultipleOccurence.class, true, y1, y2);
-		assertAll(SingleVarBoundedNestedMultipleOccurence.class, false, n1, n2);
+		assertAll(SingleVarBoundedNestedMultipleOccurrence.class, true, y1, y2);
+		assertAll(SingleVarBoundedNestedMultipleOccurrence.class, false, n1, n2);
 
 		Nil<Function<List<Double>, List<Double>>> y3 = new Nil<>() {};
 		Nil<Function<Iterable<Double>, Iterable<Double>>> y4 = new Nil<>() {};
 		Nil<Function<Iterable<Double>, Iterable<Integer>>> n3 = new Nil<>() {};
 		Nil<Function<List<String>, Integer>> n4 = new Nil<>() {};
 
-		assertAll(SingleVarBoundedNestedWildcardMultipleOccurence.class, true, y3,
+		assertAll(SingleVarBoundedNestedWildcardMultipleOccurrence.class, true, y3,
 			y4);
-		assertAll(SingleVarBoundedNestedWildcardMultipleOccurence.class, false, n3,
+		assertAll(SingleVarBoundedNestedWildcardMultipleOccurrence.class, false, n3,
 			n4);
 
 		Nil<Function<List<Double>, Iterable<List<Double>>>> n5 = new Nil<>() {};
 		Nil<Function<Iterable<Double>, List<Iterable<Double>>>> y5 = new Nil<>() {};
 
-		assertAll(SingleVarBoundedNestedWildcardMultipleOccurenceUsedNested.class,
+		assertAll(SingleVarBoundedNestedWildcardMultipleOccurrenceUsedNested.class,
 			true, y5);
-		assertAll(SingleVarBoundedNestedWildcardMultipleOccurenceUsedNested.class,
+		assertAll(SingleVarBoundedNestedWildcardMultipleOccurrenceUsedNested.class,
 			false, n5);
 
-		abstract class SingleVarMultipleOccurenceUsedNested<I> implements
+		abstract class SingleVarMultipleOccurrenceUsedNested<I> implements
 			Function<I, List<I>>
 		{}
 
 		Nil<Function<Integer, List<Number>>> n6 = new Nil<>() {};
-		assertAll(SingleVarMultipleOccurenceUsedNested.class, false, n6);
+		assertAll(SingleVarMultipleOccurrenceUsedNested.class, false, n6);
 	}
 
 	@Test
@@ -310,8 +310,8 @@ public class MatchingUtilsTest {
 	}
 
 	@Test
-	public void genericAssignabilityDoubleVarDependingImplicitelyBounded() {
-		abstract class IBoundedByNImplicitely<N extends Number, I extends Iterable<N>>
+	public void genericAssignabilityDoubleVarDependingImplicitlyBounded() {
+		abstract class IBoundedByNImplicitly<N extends Number, I extends Iterable<N>>
 			implements BiFunction<I, I, List<String>>
 		{}
 
@@ -319,7 +319,7 @@ public class MatchingUtilsTest {
 			new Nil<>()
 			{};
 
-		assertAll(IBoundedByNImplicitely.class, true, y1);
+		assertAll(IBoundedByNImplicitly.class, true, y1);
 	}
 
 	@Test

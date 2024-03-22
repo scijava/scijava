@@ -35,7 +35,7 @@ import java.lang.reflect.Method;
 import org.scijava.ops.engine.exceptions.InvalidOpException;
 
 /**
- * Exception thrown when an Op is declared as private. This is unallowed as the
+ * Exception thrown when an Op is declared as private. This is disallowed as the
  * Ops engine cannot access it.
  *
  * @author Gabriel Selzer

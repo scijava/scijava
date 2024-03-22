@@ -69,9 +69,9 @@ public class LocalMidGreyThreshold<T extends RealType<T>> implements
 		@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final RandomAccessibleInterval<BitType> output)
 	{
-		final Computers.Arity2<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
+		final Computers.Arity2<Iterable<T>, T, BitType> parameterizedComputeThresholdOp = //
 			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, c, o);
-		applyFilterOp.compute(input, parametrizedComputeThresholdOp,
+		applyFilterOp.compute(input, parameterizedComputeThresholdOp,
 			inputNeighborhoodShape, outOfBoundsFactory, output);
 	}
 }

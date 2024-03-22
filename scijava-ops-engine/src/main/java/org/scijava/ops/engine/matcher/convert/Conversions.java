@@ -34,6 +34,7 @@ import org.scijava.function.Container;
 import org.scijava.function.Mutable;
 import org.scijava.ops.api.*;
 import org.scijava.ops.engine.BaseOpHints;
+import org.scijava.types.Any;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 import org.scijava.types.inference.FunctionalInterfaces;
@@ -136,7 +137,7 @@ public final class Conversions {
 			return opt.get();
 		}
 		// Attempt 2: Computer with identity mutable output
-		opt = postprocessIdentity(info, request, preConverters, env);
+		opt = postprocessIdentity(info, request, preConverters, vars, env);
 		if (opt.isPresent()) {
 			return opt.get();
 		}
@@ -209,7 +210,8 @@ public final class Conversions {
 			postConverter, //
 			request.getOutType(), //
 			null, //
-			env //
+			env, //
+			vars //
 		));
 	}
 
@@ -231,7 +233,7 @@ public final class Conversions {
 	 */
 	private static Optional<ConvertedOpInfo> postprocessIdentity(OpInfo info,
 		OpRequest request, List<RichOp<Function<?, ?>>> preConverters,
-		OpEnvironment env)
+		Map<TypeVariable<?>, Type> vars, OpEnvironment env)
 	{
 		// This procedure only applies to Ops with mutable outputs
 		int ioIndex = mutableIndexOf(request.getType());
@@ -252,7 +254,8 @@ public final class Conversions {
 				null, //
 				request.getOutType(), //
 				null, //
-				env //
+				env, //
+				vars //
 			));
 		}
 		return Optional.empty();
@@ -312,7 +315,8 @@ public final class Conversions {
 				postConverter, //
 				request.getOutType(), //
 				copyOp, //
-				env //
+				env, //
+				vars //
 			));
 		}
 		catch (OpMatchingException e) {
@@ -375,7 +379,8 @@ public final class Conversions {
 				postConverter, //
 				request.getOutType(), //
 				copyOp, //
-				env //
+				env, //
+				vars //
 			));
 		}
 		catch (OpMatchingException e) {
@@ -443,13 +448,17 @@ public final class Conversions {
 	 */
 	private static Nil<?> wildcardVacuousTypeVars(final Type t) {
 		Type[] typeParams = Types.typeParamsAgainstClass(t, Types.raw(t));
+		if (t instanceof TypeVariable<?>) {
+			TypeVariable<?> tv = (TypeVariable<?>) t;
+			return Nil.of(new Any(tv.getBounds()));
+		}
 		var vars = new HashMap<TypeVariable<?>, Type>();
 		for (Type typeParam : typeParams) {
 			if (typeParam instanceof TypeVariable<?>) {
 				// Get the type variable
 				TypeVariable<?> from = (TypeVariable<?>) typeParam;
 				// Create a wildcard type with the type variable bounds
-				Type to = Types.wildcard(from.getBounds(), null);
+				Type to = new Any(from.getBounds());
 				vars.put(from, to);
 			}
 		}

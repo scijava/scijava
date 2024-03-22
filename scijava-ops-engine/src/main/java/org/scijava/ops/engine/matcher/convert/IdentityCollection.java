@@ -45,7 +45,7 @@ import java.util.function.Function;
  * @author Gabriel Selzer
  * @param <T>
  */
-public class IdentityCollection<T, U extends T> implements OpCollection {
+public class IdentityCollection<T> implements OpCollection {
 
 	/**
 	 * @input t the object to be converted
@@ -55,7 +55,7 @@ public class IdentityCollection<T, U extends T> implements OpCollection {
 	@OpHints(hints = { Conversion.FORBIDDEN,
 		BaseOpHints.DependencyMatching.FORBIDDEN })
 	@OpField(names = "engine.convert, engine.identity", priority = Priority.FIRST)
-	public final Function<U, T> identity = (t) -> t;
+	public final Function<T, T> identity = (t) -> t;
 
 	/**
 	 * @mutable t the object to be "mutated"

@@ -77,17 +77,11 @@ public class ConversionMatchingRoutine extends RuntimeSafeMatchingRoutine {
 			.hints()))
 		{
 			Conversions.tryConvert(env, info, request).ifPresent(converted -> {
-				Map<TypeVariable<?>, Type> map = new HashMap<>();
-				GenericAssignability.inferTypeVariables( //
-					new Type[] { converted.opType() }, //
-					new Type[] { request.getType() }, //
-					map //
-				);
 				candidates.add(new OpCandidate( //
 					env, //
 					request, //
 					converted, //
-					map //
+					converted.typeVarAssigns() //
 				));
 			});
 		}

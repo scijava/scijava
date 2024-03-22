@@ -32,6 +32,7 @@ package org.scijava.ops.engine.matcher.convert;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -40,6 +41,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Container;
+import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.Ops;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.conversionLoss.impl.IdentityLossReporter;
@@ -167,6 +169,45 @@ public class ConversionTest extends AbstractTestEnvironment implements
 		Double in = 2.0;
 		var out = ops.unary("test.anyConversion").input(in).apply();
 		Assertions.assertInstanceOf(Integer.class, out);
+	}
+
+	/**
+	 * An Op, written as a method, whose type variable has multiple bounds.
+	 * <p>
+	 * Note that, for the purposes of this test, the {@link Number} bound is
+	 * necessary even though it is not needed for the functionality of the test
+	 * Op.
+	 * </p>
+	 */
+	@OpMethod(names = "test.boundsConversion", type = BiFunction.class)
+	public static <T extends Number & Comparable<T>> T foo(T in1, T in2) {
+		return in1.compareTo(in2) > 0 ? in1 : in2;
+	}
+
+	/**
+	 * Tests that conversion is possible when {@link TypeVariable}s in the
+	 * {@link OpInfo} are bounded by multiple types.
+	 */
+	@Test
+	public void testConvertMultipleBounds() {
+		// Assert that there's only one possible match for our Op call
+		var name = "test.boundsConversion";
+		var infos = ops.infos(name);
+		Assertions.assertEquals(1, infos.size());
+		// And its input types are TypeVariables with two upper bounds.
+		var inType = infos.first().inputTypes().get(0);
+		Assertions.assertInstanceOf(TypeVariable.class, inType);
+		var numBounds = ((TypeVariable<?>) inType).getBounds().length;
+		Assertions.assertEquals(2, numBounds);
+		// Now, call it such that we need conversion
+		Integer i1 = 1;
+		Double i2 = 2.0;
+		var result = ops.op("test.boundsConversion") //
+			.arity2().input(i1, i2).apply();
+		// Assert the result is an Integer
+		Assertions.assertInstanceOf(Integer.class, result);
+		Integer intResult = (Integer) result;
+		Assertions.assertEquals(2, intResult);
 	}
 
 }

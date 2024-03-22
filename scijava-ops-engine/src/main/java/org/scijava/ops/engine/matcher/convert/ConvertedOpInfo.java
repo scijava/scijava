@@ -94,6 +94,7 @@ public class ConvertedOpInfo implements OpInfo {
 
 	private final OpInfo info;
 	private final OpEnvironment env;
+	private final Map<TypeVariable<?>, Type> typeVarAssigns;
 	final List<RichOp<Function<?, ?>>> preconverters;
 	final List<Type> inTypes;
 	final RichOp<Function<?, ?>> postconverter;
@@ -116,7 +117,8 @@ public class ConvertedOpInfo implements OpInfo {
 			Arrays.asList(inTypes(info.inputTypes(), preconverters)), //
 			postconverter, //
 			outType(info.outputType(), postconverter), copyOp, //
-			env //
+			env, //
+			Collections.emptyMap() //
 		);
 	}
 
@@ -138,7 +140,8 @@ public class ConvertedOpInfo implements OpInfo {
 		RichOp<Function<?, ?>> postconverter, //
 		Type reqOutput, //
 		final RichOp<Computers.Arity1<?, ?>> copyOp, //
-		OpEnvironment env //
+		OpEnvironment env, //
+		Map<TypeVariable<?>, Type> typeVarAssigns //
 	) {
 		this.info = info;
 		this.opType = mapAnys(opType, info);
@@ -153,6 +156,7 @@ public class ConvertedOpInfo implements OpInfo {
 			BaseOpHints.Conversion.FORBIDDEN, //
 			"converted" //
 		);
+		this.typeVarAssigns = typeVarAssigns;
 	}
 
 	/**
@@ -943,4 +947,7 @@ public class ConvertedOpInfo implements OpInfo {
 		return sb.toString();
 	}
 
+	public Map<TypeVariable<?>, Type> typeVarAssigns() {
+		return this.typeVarAssigns;
+	}
 }

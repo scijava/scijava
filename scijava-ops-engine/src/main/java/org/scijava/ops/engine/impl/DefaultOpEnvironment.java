@@ -578,7 +578,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		Map<TypeVariable<?>, Type> dependencyTypeVarAssigns = new HashMap<>();
 		for (var entry : typeVarAssigns.entrySet()) {
 			var value = entry.getValue();
-			if (!value.equals(Any.class) && !(value instanceof Any)) {
+			if (!Any.is(value)) {
 				dependencyTypeVarAssigns.put(entry.getKey(), entry.getValue());
 			}
 		}

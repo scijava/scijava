@@ -186,9 +186,7 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 					var existing = map.get(key);
 					var replacement = assigns.get(key);
 					// Ignore bounds that are weaker than current bounds.
-					if (Types.isAssignable(existing, replacement) && !existing.equals(
-						Any.class) && !(existing instanceof Any))
-					{
+					if (Types.isAssignable(existing, replacement) && !Any.is(existing)) {
 						continue;
 					}
 				}

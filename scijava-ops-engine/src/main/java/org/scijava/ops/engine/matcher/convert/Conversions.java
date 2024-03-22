@@ -118,7 +118,6 @@ public final class Conversions {
 			BaseOpHints.Conversion.FORBIDDEN, //
 			BaseOpHints.History.IGNORE //
 		);
-		final RichOp<Function<?, ?>> identity = identityOp(env);
 		final Map<TypeVariable<?>, Type> vars = new HashMap<>();
 		// Find input converters
 		Type[] fromArgs = request.getArgs();
@@ -126,7 +125,7 @@ public final class Conversions {
 		List<RichOp<Function<?, ?>>> preConverters = new ArrayList<>();
 		for (int i = 0; i < fromArgs.length; i++) {
 			var opt = findConverter(fromArgs[i], toArgs.get(i), vars, env, h);
-			preConverters.add(opt.orElse(identity));
+			preConverters.add(opt);
 		}
 
 		// Find output converter
@@ -137,7 +136,7 @@ public final class Conversions {
 			return opt.get();
 		}
 		// Attempt 2: Computer with identity mutable output
-		opt = postprocessIdentity(info, request, preConverters, identity, env);
+		opt = postprocessIdentity(info, request, preConverters, env);
 		if (opt.isPresent()) {
 			return opt.get();
 		}
@@ -206,7 +205,9 @@ public final class Conversions {
 			info, //
 			request.getType(), //
 			preConverters, //
+			Arrays.asList(request.getArgs()), //
 			postConverter, //
+			request.getOutType(), //
 			null, //
 			env //
 		));
@@ -223,7 +224,6 @@ public final class Conversions {
 	 * @param request the original {@link OpRequest}
 	 * @param preConverters the {@link List} of {@link RichOp}s responsible for
 	 *          converting the inputs to the {@link ConvertedOpInfo}
-	 * @param identity an Op that simply returns the input value
 	 * @param env the {@link OpEnvironment} used to match Ops necessary to create
 	 *          the {@code ConvertedOpInfo}
 	 * @return a {@link ConvertedOpInfo}, aligning {@code info} to {@code request}
@@ -231,7 +231,7 @@ public final class Conversions {
 	 */
 	private static Optional<ConvertedOpInfo> postprocessIdentity(OpInfo info,
 		OpRequest request, List<RichOp<Function<?, ?>>> preConverters,
-		RichOp<Function<?, ?>> identity, OpEnvironment env)
+		OpEnvironment env)
 	{
 		// This procedure only applies to Ops with mutable outputs
 		int ioIndex = mutableIndexOf(request.getType());
@@ -239,14 +239,18 @@ public final class Conversions {
 			return Optional.empty();
 		}
 		// And only applies when the mutable index was "converted" with identity
-		if (preConverters.get(ioIndex) == identity) {
+		if (Ops.info(preConverters.get(ioIndex)).names().contains(
+			"engine.identity"))
+		{
 			// In this case, we need neither a postprocessor nor a copier,
 			// because the mutable output was directly edited.
 			return Optional.of(new ConvertedOpInfo( //
 				info, //
 				request.getType(), //
 				preConverters, //
-				identity, //
+				Arrays.asList(request.getArgs()), //
+				null, //
+				request.getOutType(), //
 				null, //
 				env //
 			));
@@ -304,7 +308,9 @@ public final class Conversions {
 				info, //
 				request.getType(), //
 				preConverters, //
+				Arrays.asList(request.getArgs()), //
 				postConverter, //
+				request.getOutType(), //
 				copyOp, //
 				env //
 			));
@@ -365,7 +371,9 @@ public final class Conversions {
 				info, //
 				request.getType(), //
 				preConverters, //
+				Arrays.asList(request.getArgs()), //
 				postConverter, //
+				request.getOutType(), //
 				copyOp, //
 				env //
 			));
@@ -387,15 +395,9 @@ public final class Conversions {
 	 * @param hints the {@link Hints} to use in matching
 	 * @return a rich converter Op, if it is both necessary and can be found
 	 */
-	private static Optional<RichOp<Function<?, ?>>> findConverter(Type from,
-		Type to, Map<TypeVariable<?>, Type> vars, OpEnvironment env, Hints hints)
+	private static RichOp<Function<?, ?>> findConverter(Type from, Type to,
+		Map<TypeVariable<?>, Type> vars, OpEnvironment env, Hints hints)
 	{
-		// If the request argument can be assigned to the info parameter directly,
-		// we don't need to call a preconverter
-		if (Types.isAssignable(from, to)) {
-			return Optional.empty();
-		}
-		// If direct assignment fails, we need a preconverter
 		var source = Nil.of(from);
 		// If the op parameter type has type variables that have been mapped
 		// already, substitute those mappings in.
@@ -412,7 +414,7 @@ public final class Conversions {
 		// The resulting Op can give us further information about type variable
 		// mappings - let's find them
 		resolveTypes(from, preDest, rich, vars);
-		return Optional.of(Ops.rich(op));
+		return Ops.rich(op);
 	}
 
 	private static void resolveTypes(Type source, Type dest,
@@ -452,15 +454,6 @@ public final class Conversions {
 			}
 		}
 		return Nil.of(Types.mapVarToTypes(t, vars));
-	}
-
-	private static <T> RichOp<Function<?, ?>> identityOp(OpEnvironment env) {
-		Nil<T> t = new Nil<>() {};
-		var op = env.unary("engine.identity") //
-			.inType(t) //
-			.outType(t) //
-			.function();
-		return Ops.rich(op);
 	}
 
 	/**

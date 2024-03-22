@@ -192,7 +192,6 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	}
 
 	/**
-	 * @see SigmaFilterOp
 	 * @see DefaultSigmaFilter
 	 */
 	@Test

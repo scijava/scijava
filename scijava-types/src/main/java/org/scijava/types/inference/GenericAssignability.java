@@ -32,6 +32,7 @@ package org.scijava.types.inference;
 import com.google.common.base.Objects;
 
 import java.lang.reflect.*;
+import java.net.InterfaceAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -445,7 +446,7 @@ public final class GenericAssignability {
 				Type current = typeVarAssigns.putIfAbsent((TypeVariable<?>) inferFrom,
 					type);
 				if (current != null) {
-					if (current instanceof Any) {
+					if (Any.is(current)) {
 						typeVarAssigns.put((TypeVariable<?>) inferFrom, type);
 					}
 					else if (!Objects.equal(type, current)) {
@@ -456,17 +457,23 @@ public final class GenericAssignability {
 		}
 	}
 
-	private static void inferTypeVariables(GenericArrayType type, Type inferFrom,
-		Map<TypeVariable<?>, TypeMapping> typeMappings)
+	private static void inferTypeVariablesFromGenericArray(GenericArrayType type,
+		Type inferFrom, Map<TypeVariable<?>, TypeMapping> typeMappings,
+		boolean malleable)
 	{
 		if (inferFrom instanceof Class<?> && ((Class<?>) inferFrom).isArray()) {
 			Type componentType = type.getGenericComponentType();
 			Type componentInferFrom = ((Class<?>) inferFrom).getComponentType();
-			inferTypeVariables(componentType, componentInferFrom, typeMappings);
+			inferTypeVariables(componentType, componentInferFrom, typeMappings,
+				malleable);
 		}
 		else if (inferFrom instanceof WildcardType) {
 			Type inferrableBound = getInferrableBound((WildcardType) inferFrom);
-			inferTypeVariables(type, inferrableBound, typeMappings);
+			// ? super T -> T IS malleable
+			// ? extends T -> T is NOT malleable
+			boolean newMalleable = ((WildcardType) inferFrom)
+				.getLowerBounds().length == 1;
+			inferTypeVariables(type, inferrableBound, typeMappings, newMalleable);
 		}
 		else throw new TypeInferenceException(inferFrom +
 			" cannot be implicitly cast to " + type +
@@ -484,7 +491,7 @@ public final class GenericAssignability {
 		if (inferFrom instanceof WildcardType) {
 			inferFrom = getInferrableBound((WildcardType) inferFrom);
 		}
-		if (inferFrom instanceof Any || inferFrom.equals(Any.class)) {
+		if (Any.is(inferFrom)) {
 			mapTypeVarsToAny(type, typeMappings);
 			return;
 		}
@@ -565,7 +572,8 @@ public final class GenericAssignability {
 			inferTypeVariables((WildcardType) type, inferFrom, typeMappings);
 		}
 		else if (type instanceof GenericArrayType) {
-			inferTypeVariables((GenericArrayType) type, inferFrom, typeMappings);
+			inferTypeVariablesFromGenericArray((GenericArrayType) type, inferFrom,
+				typeMappings, malleable);
 		}
 		else if (type instanceof Class) {
 			inferTypeVariables((Class<?>) type, inferFrom, typeMappings);
@@ -633,8 +641,25 @@ public final class GenericAssignability {
 					}
 				}
 				else if (!Types.isRecursiveBound(type, bound)) {
-					// Else go into recursion as we encountered a new var.
-					inferTypeVariables(bound, inferFrom, typeMappings);
+					if (bound instanceof TypeVariable) {
+						// This bound might be seen if you write something like
+						// <O extends Number, I extends O> and are trying to infer I from a
+						// Double
+						// The O would be seen here. Right now, we want the O to be assigned
+						// to the broadest
+						// possible type for later assignment
+						TypeVariable<?> tv = (TypeVariable<?>) bound;
+						if (tv.getBounds().length == 1) {
+							var b = tv.getBounds()[0];
+							var map = GenericAssignability.inferTypeVariables(b, inferFrom);
+							var mapped = Types.mapVarToTypes(b, map);
+							inferTypeVariables(tv, mapped, typeMappings, true);
+						}
+					}
+					else {
+						// Else go into recursion as we encountered a new var.
+						inferTypeVariables(bound, inferFrom, typeMappings);
+					}
 				}
 			}
 
@@ -735,7 +760,7 @@ public final class GenericAssignability {
 	static void inferTypeVariables(Type type, Type inferFrom,
 		Map<TypeVariable<?>, TypeMapping> typeMappings)
 	{
-		inferTypeVariables(type, inferFrom, typeMappings, true);
+		inferTypeVariables(type, inferFrom, typeMappings, false);
 	}
 
 	/**
@@ -751,7 +776,7 @@ public final class GenericAssignability {
 	static void inferTypeVariablesWithTypeMappings(Type type[], Type[] inferFrom,
 		Map<TypeVariable<?>, TypeMapping> typeMappings)
 	{
-		inferTypeVariables(type, inferFrom, typeMappings, true);
+		inferTypeVariables(type, inferFrom, typeMappings, false);
 	}
 
 }

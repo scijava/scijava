@@ -32,10 +32,7 @@ package org.scijava.ops.engine.matcher.convert;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.*;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -56,6 +53,7 @@ import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
+import org.scijava.types.Any;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 import org.scijava.types.inference.FunctionalInterfaces;
@@ -97,7 +95,9 @@ public class ConvertedOpInfo implements OpInfo {
 	private final OpInfo info;
 	private final OpEnvironment env;
 	final List<RichOp<Function<?, ?>>> preconverters;
+	final List<Type> inTypes;
 	final RichOp<Function<?, ?>> postconverter;
+	final Type outType;
 	final RichOp<Computers.Arity1<?, ?>> copyOp;
 	private final Type opType;
 	private final Struct struct;
@@ -113,8 +113,9 @@ public class ConvertedOpInfo implements OpInfo {
 			info, //
 			generateOpType(info, preconverters, postconverter), //
 			preconverters, //
+			Arrays.asList(inTypes(info.inputTypes(), preconverters)), //
 			postconverter, //
-			copyOp, //
+			outType(info.outputType(), postconverter), copyOp, //
 			env //
 		);
 	}
@@ -133,22 +134,21 @@ public class ConvertedOpInfo implements OpInfo {
 		OpInfo info, //
 		Type opType, //
 		List<RichOp<Function<?, ?>>> preconverters, //
+		List<Type> reqInputs, //
 		RichOp<Function<?, ?>> postconverter, //
+		Type reqOutput, //
 		final RichOp<Computers.Arity1<?, ?>> copyOp, //
 		OpEnvironment env //
 	) {
 		this.info = info;
-		this.opType = opType;
+		this.opType = mapAnys(opType, info);
 		this.preconverters = preconverters;
+		this.inTypes = reqInputs;
 		this.postconverter = postconverter;
+		this.outType = reqOutput;
 		this.copyOp = copyOp;
 		this.env = env;
-		this.struct = generateStruct( //
-			info, //
-			opType, //
-			preconverters, //
-			postconverter //
-		);
+		this.struct = generateStruct();
 		this.hints = info.declaredHints().plus( //
 			BaseOpHints.Conversion.FORBIDDEN, //
 			"converted" //
@@ -158,18 +158,9 @@ public class ConvertedOpInfo implements OpInfo {
 	/**
 	 * Helper method to generate the new {@link Struct}
 	 *
-	 * @param info the original {@link OpInfo}
-	 * @param opType the new Op's {@link Type}
-	 * @param preconverters the {@link Function}s responsible for converting Op
-	 *          parameters
-	 * @param postconverter the {@link Function} responsible for converting the
-	 *          Op's return
 	 * @return the {@link Struct} of the converted Op
 	 */
-	private static Struct generateStruct(OpInfo info, Type opType,
-		List<RichOp<Function<?, ?>>> preconverters,
-		RichOp<Function<?, ?>> postconverter)
-	{
+	private Struct generateStruct() {
 		List<Type> originalIns = new ArrayList<>(info.inputTypes());
 		List<Member<?>> ioMembers = new ArrayList<>(info.struct().members());
 		// If the mutable index differs between the declared Op type and the
@@ -180,17 +171,13 @@ public class ConvertedOpInfo implements OpInfo {
 			originalIns.add(toIOIdx, originalIns.remove(fromIOIdx));
 			ioMembers.add(toIOIdx, ioMembers.remove(fromIOIdx));
 		}
-		// Determine the new input and output types of the Op
-		Type[] inTypes = inTypes(originalIns, preconverters);
-		Type outType = outType(info.outputType(), postconverter);
-
 		// Create the functional member types of the new OpInfo
 		int index = 0;
 		List<FunctionalMethodType> fmts = new ArrayList<>();
 		for (Member<?> m : ioMembers) {
 			if (m.getIOType() == ItemIO.NONE) continue;
-			Type newType = m.isInput() ? inTypes[index++] : m.isOutput() ? outType
-				: null;
+			Type newType = m.isInput() ? this.inTypes.get(index++) : m.isOutput()
+				? outType : null;
 			fmts.add(new FunctionalMethodType(newType, m.getIOType()));
 		}
 		// generate new struct
@@ -266,7 +253,7 @@ public class ConvertedOpInfo implements OpInfo {
 					}
 					return rich.asOpType();
 				}).collect(Collectors.toList()), //
-				this.postconverter.asOpType(), //
+				this.postconverter == null ? IGNORED : this.postconverter.asOpType(), //
 				this.copyOp == null ? null : this.copyOp.asOpType() //
 			);
 			return struct().createInstance(convertedOp);
@@ -380,6 +367,9 @@ public class ConvertedOpInfo implements OpInfo {
 		Type originalOutput, //
 		RichOp<Function<?, ?>> postconverter //
 	) {
+		if (postconverter == null) {
+			return originalOutput;
+		}
 		// Start by looking at the output type T of the postconverter
 		var type = postconverter.instance().getType();
 		var pType = (ParameterizedType) type;
@@ -408,6 +398,31 @@ public class ConvertedOpInfo implements OpInfo {
 			priority = calculatePriority(env);
 		}
 		return priority;
+	}
+
+	/**
+	 * Helper method that removes any {@link Any}s in the Op type, replacing them
+	 * with the types declared by the original {@link OpInfo}
+	 *
+	 * @param opType the Op {@link Type}, which may have some {@link Any}s
+	 * @param info the original {@link OpInfo} being wrapped
+	 * @return {@code opType}, without any {@link Any}s.
+	 */
+	private static Type mapAnys(Type opType, OpInfo info) {
+		var raw = Types.parameterizeRaw(Types.raw(opType));
+		Map<TypeVariable<?>, Type> reqMap = new HashMap<>();
+		GenericAssignability.inferTypeVariables(new Type[] { raw }, new Type[] {
+			opType }, reqMap);
+		Map<TypeVariable<?>, Type> infoMap = new HashMap<>();
+		GenericAssignability.inferTypeVariables(new Type[] { raw }, new Type[] {
+			info.opType() }, infoMap);
+		for (var key : reqMap.keySet()) {
+			var val = reqMap.get(key);
+			if (Any.is(val)) {
+				reqMap.put(key, infoMap.get(key));
+			}
+		}
+		return Types.mapVarToTypes(raw, reqMap);
 	}
 
 	/**

@@ -105,7 +105,7 @@ public final class MatchingUtils {
 			Type from = froms[i];
 			Type to = tos[i];
 
-			if (to instanceof Any || to.equals(Any.class)) continue;
+			if (Any.is(to)) continue;
 
 			if (from instanceof TypeVariable) {
 				TypeVarInfo typeVarInfo = typeBounds.get(from);

@@ -49,9 +49,9 @@ import net.imglib2.view.Views;
  * instance, filtering only along 2nd axis is desired, one may provide the
  * sigmas array filled with zeroes (0) except for the 2nd element.
  * <p>
- * The period vector is a vector along which oscillates the frequency part of the
- * Gabor filter. The length of this vector equals precisely the wave-length of
- * the oscillations (the length of 1 period).
+ * The period vector is a vector along which oscillates the frequency part of
+ * the Gabor filter. The length of this vector equals precisely the wave-length
+ * of the oscillations (the length of 1 period).
  * <p>
  * All values are in units of pixels. Both input arrays have to be of the same
  * length.

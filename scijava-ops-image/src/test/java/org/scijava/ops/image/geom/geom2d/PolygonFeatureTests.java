@@ -108,8 +108,8 @@ public class PolygonFeatureTests extends AbstractFeatureTest {
 	}
 
 	// TODO: this test checks LabelRegionToPolygonConverter, which is a SciJava
-	// Converter and thus has not been converted to the SciJava Ops framework. What
-	// should we do here?
+	// Converter and thus has not been converted to the SciJava Ops framework.
+	// What should we do here?
 	@Test
 	public void contour() {
 		// ground truth computed with matlab

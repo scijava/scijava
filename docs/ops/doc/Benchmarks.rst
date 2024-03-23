@@ -1,7 +1,6 @@
 SciJava Ops Benchmarks
 ======================
 
-
 This page describes a quantitative analysis of the SciJava Ops framework, and is heavily inspired by a similar comparison of `ImgLib2 <https://imagej.net/libs/imglib2/benchmarks>`_.
 
 Hardware and Software
@@ -17,7 +16,7 @@ The following software components were used:
 
 * Ubuntu 22.04.3 LTS
 * OpenJDK Runtime Environment (build 11.0.21) with OpenJDK 64-Bit Server VM (build 11.0.21, mixed mode, sharing)
-* SciJava Ops Engine version ``0.0-SNAPSHOT``
+* SciJava Incubator commit `57dbbd25 <https://github.com/scijava/incubator/commit/57dbbd253fe9d8947dd2e72ec05c8accff77a7dc>`_
 * ImageJ Ops version ``2.0.0``
 
 All benchmarks are executed using the `Java Microbenchmark Harness <https://github.com/openjdk/jmh>`_, using the following parameters:
@@ -57,31 +56,29 @@ We first benchmark the base penalty of executing this method using SciJava Ops, 
 * Output buffer creation + SciJava Ops invocation
 * SciJava Ops invocation using Op adaptation
   
-The results are shown in the chart below:
+The results are shown in **Figure 1**. We find Op execution through the SciJava Ops framework adds a few milliseconds of additional overhead. A few additional milliseconds of overhead are observed when SciJava Ops is additionally tasked with creating an output buffer.
 
 .. chart:: ../images/BenchmarkMatching.json
 
-	Algorithm execution performance (lower is better)
+	**Figure 1:** Algorithm execution performance (lower is better)
 
-Note that the avove requests are benchmarked without assistance from the Op cache, i.e. they are designed to model the full matching process. As repeated Op requests will utilize the Op cache, we benchmark cached Op retrieval separately, with these results shown below:
+Note that the avove requests are benchmarked without assistance from the Op cache, i.e. they are designed to model the full matching process. As repeated Op requests will utilize the Op cache, we benchmark cached Op retrieval separately, with results shown in **Figure 2**. These benchmarks suggest Op caching helps avoid the additional overhead of Op adaptation as its performance approaches that of normal Op execution.
 
 .. chart:: ../images/BenchmarkCaching.json
 
-	Algorithm execution performance with Op caching (lower is better)
+	**Figure 2:** Algorithm execution performance with Op caching (lower is better)
 
-We can see that with Op caching, TODO
-
-Finally, we benchmark the overhead of SciJava Ops parameter conversion, by considering the situation where we initially have a ``RandomAccessibleInterval<ByteType>``, which we must convert to call our method. In such a situation, we consider the following procedures:
+Finally, we benchmark the overhead of SciJava Ops parameter conversion. Suppose we instead wish to operate upon a ``RandomAccessibleInterval<ByteType>`` - we must convert it to call our Op. We consider the following procedures:
 
 * Image conversion + output buffer creation + static method invocation
 * output buffer creation + SciJava Ops invocation using Op conversion
 * SciJava Ops invocation using Op conversion and Op adaptation
 
-The results are shown in the chart below:
+The results are shown in **Figure 3**; note the Op cache is **not** enabled. We observe overheads on the order of 10 milliseconds to perform Op conversion with and without Op adaptation.
 
 .. chart:: ../images/BenchmarkConversion.json
 
-	Algorithm execution performance with Op conversion (lower is better)
+	**Figure 3:** Algorithm execution performance with Op conversion (lower is better)
 
 Framework Comparison
 --------------------
@@ -108,13 +105,11 @@ We then benchmark the performance of executing this code using the following pat
 * SciJava Ops invocation
 * ImageJ Ops invocation (using a ``Class`` wrapper to make the method discoverable within ImageJ Ops)
 
-The results are shown in the chart below:
+The results are shown in **Figure 4**. When algorithm matching dominates execution time, the SciJava Ops matching framework provides significant improvement in matching performance in comparison with the original ImageJ Ops framework.
 
 .. chart:: ../images/BenchmarkFrameworks.json
 
-	Algorithm execution performance by Framework (lower is better)
-
-From these results, we can see that, when algorithm matching dominates execution time, the SciJava Ops matching framework provides significant improvement in matching performance in comparison with the original ImageJ Ops framework.
+	**Figure 4:** Algorithm execution performance by Framework (lower is better)
 
 Reproducing these Results
 -------------------------

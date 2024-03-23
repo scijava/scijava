@@ -18,7 +18,9 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx_search.extension",
     "sphinx_tabs.tabs",
+    "sphinx_charts.charts",
     "myst_nb",
+    "sphinxcontrib.jquery"
 ]
 
 

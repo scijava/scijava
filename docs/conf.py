@@ -5,8 +5,11 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 # -- General configuration ---------------------------------------------------
-
+import sys
+import os
 from multiproject.utils import get_project
+
+sys.path.insert(0, os.path.abspath('.'))
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -55,6 +58,13 @@ exclude_patterns = [
 # -- MyST-Parser/MyST-NB configuration ---------------------------------------
 myst_heading_anchors = 4
 nb_execution_mode = "off"
+
+# -- Custom Lexers -----------------------------------------------------------
+
+from lexers import FijiGroovyLexer
+
+def setup(app):
+    app.add_lexer('fijigroovy', FijiGroovyLexer)
 
 # -- Options for HTML output -------------------------------------------------
 

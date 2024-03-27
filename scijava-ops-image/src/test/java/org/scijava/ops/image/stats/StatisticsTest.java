@@ -162,6 +162,20 @@ public class StatisticsTest extends AbstractOpTest {
 	}
 
 	@Test
+	public void testMinAdapted() {
+		final UnsignedByteType min = (UnsignedByteType) ops.op("stats.min").arity1()
+			.input(randomlyFilledImg).apply();
+		Assertions.assertEquals(0, min.getRealDouble(), 0.00001d, "Min");
+	}
+
+	@Test
+	public void testMaxAdapted() {
+		final UnsignedByteType min = (UnsignedByteType) ops.op("stats.max").arity1()
+			.input(randomlyFilledImg).apply();
+		Assertions.assertEquals(254d, min.getRealDouble(), 0.00001d, "Max");
+	}
+
+	@Test
 	public void testStdDev() {
 		final DoubleType stdDev = new DoubleType();
 		ops.op("stats.stdDev").arity1().input(randomlyFilledImg).output(stdDev)

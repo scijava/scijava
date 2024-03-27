@@ -61,10 +61,10 @@ nb_execution_mode = "off"
 
 # -- Custom Lexers -----------------------------------------------------------
 
-from lexers import FijiGroovyLexer
+from lexers import SciJavaGroovyLexer
 
 def setup(app):
-    app.add_lexer('fijigroovy', FijiGroovyLexer)
+    app.add_lexer('scijava-groovy', SciJavaGroovyLexer)
 
 # -- Options for HTML output -------------------------------------------------
 

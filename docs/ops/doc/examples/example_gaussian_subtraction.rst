@@ -9,7 +9,7 @@ SciJava Ops via Fiji's sripting engine with `script parameters`_:
 
 .. tabs::
 
-    .. code-tab:: fijigroovy
+    .. code-tab:: scijava-groovy
 
         #@ ImgPlus img
         #@ Double (label="Sigma:", value=5.0) sigma

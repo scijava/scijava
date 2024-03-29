@@ -9,13 +9,13 @@ The following lines can be used to build and execute the benchmarks from the bas
 ```bash
 # Build the benchmarks module
 cd ..
-mvn clean install -pl scijava-ops-benchmarks -am
+mvn -P benchmarks clean install -pl scijava-ops-benchmarks -am
 
 # Copy dependencies into target folder
 cd scijava-ops-benchmarks
+mvn dependency:copy-dependencies
 
 # Execute the benchmarks
-mvn dependency:copy-dependencies
 java -cp "target/scijava-ops-benchmarks-0-SNAPSHOT.jar:target/dependency/*" org.openjdk.jmh.Main
 ```
 

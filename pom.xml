@@ -53,7 +53,6 @@
 		<module>scijava-function</module>
 		<module>scijava-meta</module>
 		<module>scijava-ops-api</module>
-		<module>scijava-ops-benchmarks</module>
 		<module>scijava-ops-engine</module>
 		<module>scijava-ops-image</module>
 		<module>scijava-ops-legacy</module>
@@ -267,6 +266,12 @@
 		</pluginManagement>
 	</build>
 	<profiles>
+		<profile>
+			<id>benchmarks</id>
+			<modules>
+				<module>scijava-ops-benchmarks</module>
+			</modules>
+		</profile>
 		<profile>
 			<id>only-eclipse-incubator</id>
 			<activation>

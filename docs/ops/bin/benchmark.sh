@@ -11,7 +11,7 @@ BENCHMARKS_PATH="$INC_PATH/scijava-ops-benchmarks"
 BENCH_OUT_FILE=scijava-ops-benchmarks_results.txt
 
 cd "$INC_PATH"
-mvn clean install -pl scijava-ops-benchmarks -am
+mvn -P benchmarks clean install -pl scijava-ops-benchmarks -am
 
 cd "$BENCHMARKS_PATH"
 mvn dependency:copy-dependencies

@@ -2345,7 +2345,9 @@ public final class Types {
 				for (final Type bound : toTypeVarBounds) {
 					if (!isAssignable(type, bound, typeVarAssigns)) return false;
 				}
-				typeVarAssigns.put(toTypeVariable, type);
+				if (!Any.is(type)) {
+					typeVarAssigns.put(toTypeVariable, type);
+				}
 
 				return true;
 			}

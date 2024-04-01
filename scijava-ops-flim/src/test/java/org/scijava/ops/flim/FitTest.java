@@ -136,7 +136,6 @@ public class FitTest {
 			.input(param, roi, kernel) //
 			.outType(FitResults.class) //
 			.apply();
-//		FitResults out = (FitResults) ops.run("flim.fitRLD", param, FlimOps.SQUARE_KERNEL_3, roi);
 		System.out.println("RLD with binning finished in " + (System
 			.currentTimeMillis() - ms) + " ms");
 
@@ -167,7 +166,6 @@ public class FitTest {
 	public void testBayesFitImg() {
 		// estimation using RLD
 		param.getChisqMap = true;
-		// param.multithread = false;
 		long ms = System.currentTimeMillis();
 		FitResults out = ops.binary("flim.fitBayes").input(param, roi).outType(
 			FitResults.class).apply();

@@ -11,7 +11,7 @@
 
 	<artifactId>scijava-ops-flim</artifactId>
 
-	<name>SciJava Ops Flim</name>
+	<name>SciJava Ops FLIM</name>
 	<description>A Fluoresence lifetime analysis library for SciJava Ops.</description>
 	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2024</inceptionYear>
@@ -120,6 +120,12 @@
 		</dependency>
 
 		<!-- SciJava dependencies -->
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-concurrent</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-function</artifactId>

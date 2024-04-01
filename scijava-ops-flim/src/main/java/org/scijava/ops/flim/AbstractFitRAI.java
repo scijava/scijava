@@ -46,31 +46,18 @@ public abstract class AbstractFitRAI<I extends RealType<I>, K extends RealType<K
 	@OpDependency(name = "filter.convolve")
 	private Functions.Arity3<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, I, RandomAccessibleInterval<I>> convolveOp;
 
-	private RandomAccessibleInterval<K> kernel;
-
-	private RealMask roi;
-
-	private FitWorker<I> fitWorker;
-
-	private int lifetimeAxis;
-
-	private ParamEstimator<I> est;
-
-	private List<int[]> roiPos;
-
-	private FitParams<I> params;
-
-	private FitResults rslts;
-
-	public void assertConformity(final FitParams<I> in) {
+	private void assertConformity( //
+		final FitParams<I> in, //
+		final RealMask roi, //
+		final RandomAccessibleInterval<K> kernel //
+	) {
 		// requires a 3D image
 		if (in.transMap.numDimensions() != 3) {
 			throw new IllegalArgumentException(
 				"Fitting requires 3-dimensional input");
 		}
 		// lifetime axis must be valid
-		lifetimeAxis = in.ltAxis;
-		if (lifetimeAxis < 0 || lifetimeAxis >= in.transMap.numDimensions()) {
+		if (in.ltAxis < 0 || in.ltAxis >= in.transMap.numDimensions()) {
 			throw new IllegalArgumentException("Lifetime axis must be 0, 1, or 2");
 		}
 
@@ -85,41 +72,50 @@ public abstract class AbstractFitRAI<I extends RealType<I>, K extends RealType<K
 		}
 	}
 
-	public void initialize(FitParams<I> in) {
-
-		// dimension doesn't really matter
-		if (roi == null) {
-			roi = Masks.allRealMask(0);
-		}
-
-		// So that we bin the correct axis
-		if (kernel != null) {
-			kernel = Views.permute(kernel, 2, lifetimeAxis);
-		}
-
-		params = in.copy();
-		initParam();
-		rslts = new FitResults();
-		fitWorker = createWorker(params, rslts);
-		initRslt();
-	}
-
 	/**
 	 * @param params the {@link FitParams} used for fitting
 	 * @param mask a {@link RealMask} defining the areas to fit
 	 * @param kernel kernel used in an optional convolution preprocessing step
-	 * @param handler
+	 * @param handler a {@link FitWorker.FitEventHandler} allowing for callback
+	 *          once computation has completed
 	 * @return the results of fitting
 	 */
 	@Override
-	public FitResults apply(FitParams<I> params, @Nullable RealMask mask,
-		@Nullable RandomAccessibleInterval<K> kernel,
-		@Nullable FitWorker.FitEventHandler<I> handler)
-	{
-		this.kernel = kernel;
-		this.roi = mask;
-		assertConformity(params);
-		initialize(params);
+	public FitResults apply( //
+		FitParams<I> params, //
+		@Nullable RealMask mask, //
+		@Nullable RandomAccessibleInterval<K> kernel, //
+		@Nullable FitWorker.FitEventHandler<I> handler //
+	) {
+		assertConformity(params, mask, kernel);
+
+		// Assign reasonable defaults for nullable params
+		if (mask == null) {
+			mask = Masks.allRealMask(0);
+		}
+		if (kernel != null) {
+			kernel = Views.permute(kernel, 2, params.ltAxis);
+		}
+
+		// -- Initialize -- //
+		params = params.copy(); // TODO: Is this necessary
+		// convolve the image if necessary
+		if (kernel != null) {
+			params.transMap = convolveOp.apply( //
+				params.transMap, //
+				kernel, //
+				Util.getTypeFromInterval(params.transMap));
+		}
+		List<int[]> roiPos = getRoiPositions(mask, params.ltAxis, params.transMap);
+
+		ParamEstimator<I> est = new ParamEstimator<>(params, roiPos);
+		est.estimateStartEnd();
+		est.estimateIThreshold();
+		FitResults rslts = new FitResults();
+		FitWorker<I> fitWorker = createWorker(params, rslts);
+		initRslt(params, fitWorker, est, rslts);
+
+		// -- Run -- //
 		fitWorker.fitBatch(roiPos, handler);
 		return rslts;
 	}
@@ -132,23 +128,13 @@ public abstract class AbstractFitRAI<I extends RealType<I>, K extends RealType<K
 	public abstract FitWorker<I> createWorker(FitParams<I> params,
 		FitResults results);
 
-	private void initParam() {
-		// convolve the image if necessary
-		if (kernel != null) {
-			params.transMap = convolveOp.apply( //
-				params.transMap, //
-				kernel, //
-				Util.getTypeFromInterval(params.transMap));
-		}
-
-		roiPos = getRoiPositions(params.transMap);
-
-		est = new ParamEstimator<>(params, roiPos);
-		est.estimateStartEnd();
-		est.estimateIThreshold();
-	}
-
-	private void initRslt() {
+	private void initRslt( //
+		FitParams<I> params, //
+		FitWorker<I> fitWorker, //
+		ParamEstimator<I> est, //
+		FitResults rslts //
+	) {
+		int lifetimeAxis = params.ltAxis;
 		// get dimensions and replace time axis with decay parameters
 		long[] dimFit = new long[params.transMap.numDimensions()];
 		params.transMap.dimensions(dimFit);
@@ -177,7 +163,9 @@ public abstract class AbstractFitRAI<I extends RealType<I>, K extends RealType<K
 		rslts.intensityMap = est.getIntensityMap();
 	}
 
-	private List<int[]> getRoiPositions(RandomAccessibleInterval<I> trans) {
+	private List<int[]> getRoiPositions(RealMask roi, int lifetimeAxis,
+		RandomAccessibleInterval<I> trans)
+	{
 		final List<int[]> interested = new ArrayList<>();
 		final IntervalView<I> xyPlane = Views.hyperSlice(trans, lifetimeAxis, 0);
 		final Cursor<I> xyCursor = xyPlane.localizingCursor();

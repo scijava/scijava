@@ -40,12 +40,12 @@ import org.scijava.priority.Priority;
 import java.util.function.Function;
 
 /**
- * An {@link OpCollection} containing {@code identity} Ops.
+ * An {@link OpCollection} containing {@code engine.identity} Ops.
  *
  * @author Gabriel Selzer
  * @param <T>
  */
-public class IdentityCollection<T> implements OpCollection {
+public class IdentityCollection<T, U extends T> implements OpCollection {
 
 	/**
 	 * @input t the object to be converted
@@ -55,13 +55,13 @@ public class IdentityCollection<T> implements OpCollection {
 	@OpHints(hints = { Conversion.FORBIDDEN,
 		BaseOpHints.DependencyMatching.FORBIDDEN })
 	@OpField(names = "engine.convert, engine.identity", priority = Priority.FIRST)
-	public final Function<T, T> identity = (t) -> t;
+	public final Function<U, T> identity = t -> t;
 
 	/**
 	 * @mutable t the object to be "mutated"
 	 */
 	@OpHints(hints = { Conversion.FORBIDDEN })
 	@OpField(names = "engine.identity", priority = Priority.FIRST)
-	public final Inplaces.Arity1<T> inplace = (t) -> {};
+	public final Inplaces.Arity1<T> inplace = t -> {};
 
 }

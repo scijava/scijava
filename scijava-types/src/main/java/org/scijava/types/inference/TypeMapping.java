@@ -75,17 +75,13 @@ public class TypeMapping {
 	 * {@code typeVar} and {@code mappedType} <em>given</em> the existing
 	 * malleability of {@code mappedType} and the malleability imposed by
 	 * {@code newType}. If {@code newType} cannot be accommodated, a
-	 * {@link TypeInferenceException} will be thrown. Note that it is not a
-	 * guarantee that either the existing {@code mappedType} or {@code newType}
-	 * will become the new {@link #mappedType} after the method ends;
-	 * {@link #mappedType} could be a supertype of these two {@link Type}s.
+	 * {@link TypeInferenceException} will be thrown.
 	 *
 	 * @param otherType - the type that will be refined into {@link #mappedType}
 	 * @param newTypeMalleability - the malleability of {@code otherType},
 	 *          determined by the context from which {@code otherType} came.
 	 */
 	public void refine(Type otherType, boolean newTypeMalleability) {
-		malleable &= newTypeMalleability;
 		if (Any.is(mappedType)) {
 			mappedType = otherType;
 			return;
@@ -93,10 +89,8 @@ public class TypeMapping {
 		if (Any.is(otherType)) {
 			return;
 		}
-		if (mappedType.equals(otherType)) {
-			return;
-		}
 		if (otherType instanceof WildcardType) {
+			malleable &= newTypeMalleability;
 			WildcardType wType = (WildcardType) otherType;
 			if (wType.getLowerBounds().length == 0 && //
 				wType.getUpperBounds().length == 1 && //
@@ -105,11 +99,15 @@ public class TypeMapping {
 				return;
 			}
 		}
-		if (malleable && Types.isAssignable(otherType, mappedType)) {
+		if (malleable && Types.isAssignable(mappedType, otherType)) {
+			malleable &= newTypeMalleability;
 			mappedType = otherType;
 			return;
 		}
-		if (Objects.equal(mappedType, otherType)) return;
+		if (Objects.equal(mappedType, otherType)) {
+			malleable &= newTypeMalleability;
+			return;
+		}
 		throw new TypeInferenceException(typeVar +
 			" cannot simultaneously be mapped to " + otherType + " and " +
 			mappedType);

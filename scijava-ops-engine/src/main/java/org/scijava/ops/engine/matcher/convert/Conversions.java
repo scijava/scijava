@@ -450,6 +450,7 @@ public final class Conversions {
 		Type[] typeParams = Types.typeParamsAgainstClass(t, Types.raw(t));
 		if (t instanceof TypeVariable<?>) {
 			TypeVariable<?> tv = (TypeVariable<?>) t;
+			// Create an Any with the type variable bounds
 			return Nil.of(new Any(tv.getBounds()));
 		}
 		var vars = new HashMap<TypeVariable<?>, Type>();
@@ -457,7 +458,7 @@ public final class Conversions {
 			if (typeParam instanceof TypeVariable<?>) {
 				// Get the type variable
 				TypeVariable<?> from = (TypeVariable<?>) typeParam;
-				// Create a wildcard type with the type variable bounds
+				// Create an Any with the type variable bounds
 				Type to = new Any(from.getBounds());
 				vars.put(from, to);
 			}

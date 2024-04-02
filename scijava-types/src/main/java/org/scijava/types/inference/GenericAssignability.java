@@ -644,17 +644,11 @@ public final class GenericAssignability {
 					if (bound instanceof TypeVariable) {
 						// This bound might be seen if you write something like
 						// <O extends Number, I extends O> and are trying to infer I from a
-						// Double
-						// The O would be seen here. Right now, we want the O to be assigned
-						// to the broadest
-						// possible type for later assignment
+						// Double, the O would be seen here. It is important that the O
+						// be malleable, as it is not yet fixed, and could be changed to
+						// another type later
 						TypeVariable<?> tv = (TypeVariable<?>) bound;
-						if (tv.getBounds().length == 1) {
-							var b = tv.getBounds()[0];
-							var map = GenericAssignability.inferTypeVariables(b, inferFrom);
-							var mapped = Types.mapVarToTypes(b, map);
-							inferTypeVariables(tv, mapped, typeMappings, true);
-						}
+						inferTypeVariables(tv, inferFrom, typeMappings, true);
 					}
 					else {
 						// Else go into recursion as we encountered a new var.

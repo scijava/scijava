@@ -29,13 +29,6 @@
 
 package org.scijava.ops.engine.matcher.convert;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -52,6 +45,13 @@ import org.scijava.ops.engine.matcher.impl.LossReporterWrapper;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpMethod;
+
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Basic Op conversion test
@@ -145,18 +145,18 @@ public class ConversionTest extends AbstractTestEnvironment implements
 		Type[] expected = { Long[].class, Byte[].class };
 		Assertions.assertArrayEquals(expected, info.inputTypes().toArray());
 		// Assert the output type is expected
-		Assertions.assertEquals(Byte[].class, info.outputType());
+		assertEquals(Byte[].class, info.outputType());
 
 		// Assert the struct types are correct
 		var members = info.struct().members();
-		Assertions.assertEquals(Long[].class, members.get(0).getType());
-		Assertions.assertEquals(Byte[].class, members.get(1).getType());
+		assertEquals(Long[].class, members.get(0).getType());
+		assertEquals(Byte[].class, members.get(1).getType());
 
 		// Assert the implementation name reflects the new parameter types
 		var expImplName = "org.scijava.ops.engine.matcher.convert.ConversionTest" +
 			".foo(java.lang.Integer[],java.lang.Double[])|converted_Long_Arr_Byte_Arr";
 		var actImplName = info.implementationName();
-		Assertions.assertEquals(expImplName, actImplName);
+		assertEquals(expImplName, actImplName);
 	}
 
 	@OpMethod(names = "test.anyConversion", type = Function.class)
@@ -179,7 +179,7 @@ public class ConversionTest extends AbstractTestEnvironment implements
 	 * Op.
 	 * </p>
 	 */
-	@OpMethod(names = "test.boundsConversion", type = BiFunction.class)
+	@OpMethod(names = "test.maxNumberAndComparable", type = BiFunction.class)
 	public static <T extends Number & Comparable<T>> T foo(T in1, T in2) {
 		return in1.compareTo(in2) > 0 ? in1 : in2;
 	}
@@ -191,23 +191,49 @@ public class ConversionTest extends AbstractTestEnvironment implements
 	@Test
 	public void testConvertMultipleBounds() {
 		// Assert that there's only one possible match for our Op call
-		var name = "test.boundsConversion";
+		var name = "test.maxNumberAndComparable";
 		var infos = ops.infos(name);
-		Assertions.assertEquals(1, infos.size());
+		assertEquals(1, infos.size());
 		// And its input types are TypeVariables with two upper bounds.
 		var inType = infos.first().inputTypes().get(0);
 		Assertions.assertInstanceOf(TypeVariable.class, inType);
 		var numBounds = ((TypeVariable<?>) inType).getBounds().length;
-		Assertions.assertEquals(2, numBounds);
+		assertEquals(2, numBounds);
 		// Now, call it such that we need conversion
 		Integer i1 = 1;
 		Double i2 = 2.0;
-		var result = ops.op("test.boundsConversion") //
+		var result = ops.op(name) //
 			.arity2().input(i1, i2).apply();
 		// Assert the result is an Integer
 		Assertions.assertInstanceOf(Integer.class, result);
 		Integer intResult = (Integer) result;
-		Assertions.assertEquals(2, intResult);
+		assertEquals(2, intResult);
+	}
+
+	/**
+	 * An Op, written as a method, whose type variable has multiple bounds.
+	 * <p>
+	 * Note that, for the purposes of this test, the {@link Number} bound is
+	 * necessary even though it is not needed for the functionality of the test
+	 * Op.
+	 * </p>
+	 */
+	@OpMethod(names = "test.maxNumberIntegerNumber", type = BiFunction.class)
+	public static Number max(Number in1, Integer in2) {
+		return in2.compareTo(in1.intValue()) > 0 ? in1 : in2;
+	}
+
+	/**
+	 * Tests that subtypes are "identity-converted"
+	 */
+	@Test
+	public void testIdentityConversion() {
+		// Conversion is required for the second input.
+		// The first input, then, should be identity-converted
+		ops.binary("test.maxNumberIntegerNumber") //
+			.inType(Double.class, Double.class) //
+			.outType(Number.class) //
+			.function();
 	}
 
 }

@@ -11,8 +11,8 @@
 
 	<artifactId>scijava-common3</artifactId>
 
-	<name>SciJava Common 3 </name>
-	<description>SciJava Common 3: Functionality widely used across SciJava modules</description>
+	<name>SciJava Common</name>
+	<description>Common functionality widely used across SciJava modules.</description>
 	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2021</inceptionYear>
 	<organization>

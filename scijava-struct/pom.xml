@@ -12,7 +12,7 @@
 	<artifactId>scijava-struct</artifactId>
 
 	<name>SciJava Struct</name>
-	<description>A lightweight framework for collecting Members</description>
+	<description>A library for describing and introspecting structured data.</description>
 	<url>https://github.com/scijava/incubator</url>
 	<inceptionYear>2021</inceptionYear>
 	<organization>

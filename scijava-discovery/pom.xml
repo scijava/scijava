@@ -12,7 +12,7 @@
 	<artifactId>scijava-discovery</artifactId>
 
 	<name>SciJava Discovery</name>
-	<description>SciJava Discovery: Discovery mechanisms used by the SciJava Framework.</description>
+	<description>Plugin discovery subsystem for SciJava libraries.</description>
 	<url>https://github.com/scijava/scijava-discovery</url>
 	<inceptionYear>2021</inceptionYear>
 	<organization>

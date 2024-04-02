@@ -12,7 +12,7 @@
 	<artifactId>scijava-collections</artifactId>
 
 	<name>SciJava Collections</name>
-	<description>Java collection implementations.</description>
+	<description>Java collections for efficient primitive storage.</description>
 	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2022</inceptionYear>
 	<organization>

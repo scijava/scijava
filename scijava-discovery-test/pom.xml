@@ -12,7 +12,7 @@
 	<artifactId>scijava-discovery-test</artifactId>
 
 	<name>SciJava Discovery Test</name>
-	<description>SciJava Discovery Test: Tests for SciJava Discovery.</description>
+	<description>Integration tests for the scijava-discovery library.</description>
 	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2021</inceptionYear>
 	<organization>

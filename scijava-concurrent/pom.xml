@@ -12,7 +12,7 @@
 	<artifactId>scijava-concurrent</artifactId>
 
 	<name>SciJava Concurrent</name>
-	<description>SciJava library for general parallel processing support.</description>
+	<description>SciJava library facilitating consistent parallel processing.</description>
 	<url>https://github.com/scijava/scijava-concurrent</url>
 	<inceptionYear>2021</inceptionYear>
 	<organization>

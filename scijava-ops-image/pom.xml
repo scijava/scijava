@@ -12,7 +12,7 @@
 	<artifactId>scijava-ops-image</artifactId>
 
 	<name>SciJava Ops Image</name>
-	<description>SciJava Ops Image: Ops for image processing</description>
+	<description>Image processing operations for SciJava Ops.</description>
 	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2023</inceptionYear>
 	<organization>

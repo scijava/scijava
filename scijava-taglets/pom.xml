@@ -12,7 +12,7 @@
 	<artifactId>scijava-taglets</artifactId>
 
 	<name>SciJava Taglets</name>
-	<description>SciJava Taglets: custom javadoc taglets.</description>
+	<description>Custom javadoc taglets for SciJava projects.</description>
 	<url>https://github.com/scijava/scijava-taglets</url>
 	<inceptionYear>2021</inceptionYear>
 	<organization>

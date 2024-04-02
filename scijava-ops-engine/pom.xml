@@ -12,7 +12,7 @@
 	<artifactId>scijava-ops-engine</artifactId>
 
 	<name>SciJava Ops Engine</name>
-	<description>SciJava Operations Engine: a framework for reusable algorithms.</description>
+	<description>Java implementation of the SciJava Ops matching engine.</description>
 	<url>https://github.com/scijava/scijava-ops-engine</url>
 	<inceptionYear>2016</inceptionYear>
 	<organization>

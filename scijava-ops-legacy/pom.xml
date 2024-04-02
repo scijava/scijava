@@ -12,7 +12,7 @@
 	<artifactId>scijava-ops-legacy</artifactId>
 
 	<name>SciJava Ops Legacy</name>
-	<description>Components enabling interoperability between SciJava Ops and ImageJ/ImageJ2.</description>
+	<description>Interoperability between SciJava Ops and ImageJ/ImageJ2.</description>
 	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2023</inceptionYear>
 	<organization>
@@ -86,8 +86,7 @@
 		<package-name>org.scijava.legacy</package-name>
 
 		<license.licenseName>bsd_2</license.licenseName>
-		<license.copyrightOwners>ImageJ2 developers.</license.copyrightOwners>
-		<license.projectName>ImageJ2 software for multidimensional image processing and analysis.</license.projectName>
+		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 
 		<!-- NB: Deploy releases to the SciJava Maven repository. -->
 		<releaseProfiles>sign,deploy-to-scijava</releaseProfiles>
@@ -135,6 +134,7 @@
 			<groupId>net.imagej</groupId>
 			<artifactId>imagej-common</artifactId>
 		</dependency>
+
 		<!-- SciJava dependencies -->
 		<dependency>
 			<groupId>org.scijava</groupId>
@@ -162,6 +162,7 @@
 			<artifactId>imglib2</artifactId>
 		</dependency>
 
+		<!-- Other dependencies -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-math3</artifactId>

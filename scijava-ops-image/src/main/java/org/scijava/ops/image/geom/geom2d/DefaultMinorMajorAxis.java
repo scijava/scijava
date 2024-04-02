@@ -53,8 +53,8 @@ public class DefaultMinorMajorAxis implements
 {
 
 	/**
-	 * Code taken from ImageJ1 (EllipseFitter -> getEllipseParam()) and adapted to
-	 * work with a {@link Polygon2D}
+	 * Code taken from ImageJ ({@code EllipseFitter#getEllipseParam()}) and
+	 * adapted to work with a {@link Polygon2D}.
 	 *
 	 * @param input
 	 * @param points vertices of polygon in counter clockwise order.

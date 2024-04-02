@@ -50,7 +50,7 @@ import org.scijava.ops.spi.OpDependency;
  * <a href="http://www.ee.oulu.fi/mvg/publications/show_pdf.php?ID=24">PDF</a>
  * </p>
  * <p>
- * Original ImageJ1 implementation by Gabriel Landini.
+ * Original ImageJ implementation by Gabriel Landini.
  * </p>
  *
  * @author Stefan Helfrich (University of Konstanz)

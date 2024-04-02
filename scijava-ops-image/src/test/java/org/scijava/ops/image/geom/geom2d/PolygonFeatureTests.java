@@ -190,7 +190,7 @@ public class PolygonFeatureTests extends AbstractFeatureTest {
 	@Test
 	public void majorAxis() {
 		// Fitting ellipse is a to polygon adapted version of a pixel-based
-		// implementation, which is used in ImageJ1. If a new version of ellipse
+		// implementation, which is used in ImageJ. If a new version of ellipse
 		// and fitting ellipse is available in imglib2, this version will be
 		// replaced and the numbers will change.
 		assertEquals(94.1937028134837, ops.op("geom.majorAxis").arity1().input(
@@ -233,7 +233,7 @@ public class PolygonFeatureTests extends AbstractFeatureTest {
 	@Test
 	public void minorAxis() {
 		// Fitting ellipse is a to polygon adapted version of a pixel-based
-		// implementation, which is used in ImageJ1. If a new version of ellipse
+		// implementation, which is used in ImageJ. If a new version of ellipse
 		// and fitting ellipse is available in imglib2, this version will be
 		// replaced and the numbers will change.
 		assertEquals(47.4793300114545, ops.op("geom.minorAxis").arity1().input(

@@ -41,7 +41,7 @@ import org.scijava.ops.spi.OpDependency;
 
 /**
  * Generic implementation of
- * {@link org.scijava.ops.image.Ops.Geometric.Spareness}. Based on ImageJ1.
+ * {@link org.scijava.ops.image.Ops.Geometric.Spareness}. Based on ImageJ.
  *
  * @author Tim-Oliver Buchholz (University of Konstanz)
  * @implNote op names='geom.spareness', label='Geometric (3D): Spareness',

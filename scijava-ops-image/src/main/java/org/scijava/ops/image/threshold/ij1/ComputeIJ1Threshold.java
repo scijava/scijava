@@ -39,7 +39,7 @@ import net.imglib2.type.numeric.RealType;
 // and set the bright or dark objects")
 
 /**
- * Implements the default threshold method from ImageJ 1.x.
+ * Implements the default threshold method from ImageJ.
  *
  * @author Barry DeZonia
  * @author Gabriel Landini

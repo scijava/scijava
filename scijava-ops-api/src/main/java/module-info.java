@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Public interfaces for the SciJava Ops framework.
+ * The public API of SciJava Ops.
  * %%
  * Copyright (C) 2021 - 2024 SciJava developers.
  * %%

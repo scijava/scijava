@@ -1,6 +1,6 @@
 /*
  * #%L
- * A library for describing and introspecting structured data.
+ * A library for building and introspecting structs.
  * %%
  * Copyright (C) 2021 - 2024 SciJava developers.
  * %%

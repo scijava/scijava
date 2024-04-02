@@ -12,7 +12,7 @@
 	<artifactId>scijava-function</artifactId>
 
 	<name>SciJava Functions</name>
-	<description>SciJava Functions: a collection of functional interfaces.</description>
+	<description>Functional interfaces for SciJava-based libraries.</description>
 	<url>https://github.com/scijava/incubator</url>
 	<inceptionYear>2021</inceptionYear>
 	<organization>

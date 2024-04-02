@@ -1,8 +1,8 @@
 /*
  * #%L
- * SciJava Common 3: Functionality widely used across SciJava modules
+ * Common functionality widely used across SciJava modules.
  * %%
- * Copyright (C) 2021 - 2023 SciJava developers.
+ * Copyright (C) 2021 - 2024 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -218,12 +218,11 @@ public final class Apps {
 	 * itself will reside <b>in its Maven build directory</b>. So as long as you
 	 * ask for the base directory relative to a class <em>of the executed
 	 * project</em> it will be found.</li>
-	 * <li><b>Running as an application bundle (e.g., ImageJ).</b> Typically this
-	 * means downloading ImageJ from the web site, unpacking it and running the
-	 * ImageJ launcher (double-clicking ImageJ-win32.exe on Windows,
-	 * double-clicking the {@code ImageJ.app} on OS X, etc.). In this case, all
-	 * components reside in the {@code jars} folder of the application bundle, and
-	 * the base directory will be found one level above that.</li>
+	 * <li><b>Running as an application bundle (e.g., Fiji).</b> Typically this
+	 * means downloading Fiji from its web site, unpacking it and running it using
+	 * its native launcher. In this case, all components reside in the
+	 * {@code jars} folder of the application bundle, and the base directory will
+	 * be found one level above that.</li>
 	 * </ol>
 	 *
 	 * @param classLocation The location from which the base directory should be

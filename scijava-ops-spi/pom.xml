@@ -12,7 +12,7 @@
 	<artifactId>scijava-ops-spi</artifactId>
 
 	<name>SciJava Ops SPI</name>
-	<description>SciJava Operations SPI: service descriptors used by the SciJava Operations framework.</description>
+	<description>Service descriptors used by the SciJava Ops framework.</description>
 	<url>https://github.com/scijava/scijava-ops-spi</url>
 	<inceptionYear>2021</inceptionYear>
 	<organization>

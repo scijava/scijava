@@ -1,8 +1,8 @@
 /*
  * #%L
- * ImageJ2 software for multidimensional image processing and analysis.
+ * Image processing operations for SciJava Ops.
  * %%
- * Copyright (C) 2014 - 2023 ImageJ2 developers.
+ * Copyright (C) 2014 - 2024 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,7 +41,7 @@ import org.scijava.ops.spi.OpDependency;
 
 /**
  * Generic implementation of
- * {@link org.scijava.ops.image.Ops.Geometric.Spareness}. Based on ImageJ1.
+ * {@link org.scijava.ops.image.Ops.Geometric.Spareness}. Based on ImageJ.
  *
  * @author Tim-Oliver Buchholz (University of Konstanz)
  * @implNote op names='geom.spareness', label='Geometric (3D): Spareness',

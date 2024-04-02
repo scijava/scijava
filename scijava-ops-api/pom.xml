@@ -12,7 +12,7 @@
 	<artifactId>scijava-ops-api</artifactId>
 
 	<name>SciJava Ops API</name>
-	<description>SciJava Operations API: Outward-facing Interfaces used by the SciJava Operations framework.</description>
+	<description>The public API of SciJava Ops.</description>
 	<url>https://github.com/scijava/scijava-ops-api</url>
 	<inceptionYear>2021</inceptionYear>
 	<organization>

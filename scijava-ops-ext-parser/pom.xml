@@ -12,7 +12,7 @@
 	<artifactId>scijava-ops-ext-parser</artifactId>
 
 	<name>SciJava Ops External Parser</name>
-	<description>SciJava Ops External Parser: A tool for parsing external libraries to ops</description>
+	<description>A tool for wrapping external libraries as SciJava Ops.</description>
 	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2024</inceptionYear>
 	<organization>

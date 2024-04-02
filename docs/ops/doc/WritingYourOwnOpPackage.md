@@ -4,19 +4,16 @@ Right now, there are two ways to write and expose your own Ops.
 
 ## Ops Through Javadoc
 
-Ops can be declared directly through Javadoc - this yields a couple of benefits, namely:
-* No additional runtime dependencies needed for simple Ops
+The recommended way to declare your Ops is through Javadoc. This approach requires no additional runtime dependencies&mdash;only a correctly formatted `@implNote` tag in the javadoc block of each routine you wish to make available as an Op, plus the scijava-ops-indexer annotation processor component present on your annotation processor path at compile time.
 
-This mechanism of Op declaration is used by the ImageJ Ops2 project
+### Adding the SciJava Ops Indexer to your POM
 
-### Adding the SciJava Javadoc Parser to your POM
+Ops written through Javadoc are discovered by the SciJava Ops Indexer, which creates a file `op.yaml` containing all of the data needed to import each Op you declare.
 
-Ops written through Javadoc are discovered by the SciJava Javadoc Parser, which creates a file `op.yaml` containing all of the data needed to import each Op you declare.
-
-Until the SciJava 3 annotation processor is added to pom-scijava, developers must add the following block of code to the `build` section of your POM:
+Until the SciJava Ops annotation processor is integrated into [pom-scijava](https://github.com/scijava/pom-scijava), developers must add the following block of code to the `build` section of their project POM:
 
 TODO: Replace with the pom-scijava version needed to grab this annotation processor.
-TODO: Replace the SciJava Javadoc Parser version with the correct initial version
+TODO: Replace the SciJava Ops Indexer version with the correct initial version
 ```xml
 <build>
     <plugins>
@@ -26,14 +23,15 @@ TODO: Replace the SciJava Javadoc Parser version with the correct initial versio
                 <annotationProcessorPaths>
                     <path>
                         <groupId>org.scijava</groupId>
-                        <artifactId>scijava-javadoc-parser</artifactId>
-                        <version>${project.version}</version>
+                        <artifactId>scijava-ops-indexer</artifactId>
+                        <version>1.0.0</version>
                     </path>
                 </annotationProcessorPaths>
                 <fork>true</fork>
                 <showWarnings>true</showWarnings>
                 <compilerArgs>
-                    <arg>-Ajavadoc.packages="-"</arg>
+                    <arg>-Aparse.ops=true</arg>
+                    <arg>-Aop.version="${project.version}"</arg>
                 </compilerArgs>
             </configuration>
         </plugin>
@@ -141,9 +139,9 @@ Note again that the only supported functional interfaces that can be used withou
 
 ## Ops using JPMS
 
-The other way to expose Ops is by using the [Java Platform Module System](https://www.oracle.com/corporate/features/understanding-java-9-modules.html). This mechanism is used to expose the Ops declared within SciJava Ops Engine, and may be preferred for its usage of plain Java mechanisms:
+The other way to expose Ops is by using the [Java Platform Module System](https://www.oracle.com/corporate/features/understanding-java-9-modules.html). This mechanism is used to expose the Ops declared within SciJava Ops Engine, and may be preferred for its usage of plain Java mechanisms and strong type safety:
 
-In opposition to the Javadoc mechanism, all projects wishing to declare Ops using JPMS must add a dependency on the SciJava Ops SPI library:
+In contrast to the Javadoc mechanism, all projects wishing to declare Ops using JPMS must add a dependency on the SciJava Ops SPI library:
 
 ```xml
 <dependencies>
@@ -280,7 +278,7 @@ class DoubleSizeOp implements Function<double[], Double> {
 
 ### Element-wise Ops
 
-Simple pixel-wise operations like addition, inversion, and more can be written on a single pixel (i.e. `RealType`) - therefore, ImageJ Ops2 takes care to automagically adapt pixel-wise Ops across a wide variety of image types. If you would like to write a pixel-wise Op, we recommend the following structure.
+Simple pixel-wise operations like addition, inversion, and more can be written on a single pixel (i.e. `RealType`) - therefore, SciJava Ops Image takes care to automagically adapt pixel-wise Ops across a wide variety of image types. If you would like to write a pixel-wise Op, we recommend the following structure.
 
 ```java
 /**
@@ -297,7 +295,7 @@ class MyPixelwiseOp<T extends RealType<T>> implements Computers.Arity2<T, T, T> 
 }
 ```
 
-If you then have ImageJ Ops2, the following Op call will match your pixel-wise Op using ImageJ Ops2's lifting mechanisms:
+The following Op call will match your pixel-wise Op using SciJava Ops's lifting mechanisms:
 
 ```java
 ArrayImg<UnsignedByteType> in1 = ...
@@ -349,7 +347,7 @@ class MyNeighborhoodOp<T extends RealType<T>> implements Computers.Arity1<Neighb
 }
 ```
 
-ImageJ Ops2 will then lift this algorithm to operate on images in parallel, requiring users to only define the shape of the neighborhoods to be used:
+SciJava Ops will then lift this algorithm to operate on images in parallel, requiring users to only define the shape of the neighborhoods to be used:
 
 ```java
 ArrayImg<DoubleType> input = ...

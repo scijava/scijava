@@ -1,8 +1,8 @@
 /*-
  * #%L
- * ImageJ2 software for multidimensional image processing and analysis.
+ * Interoperability between SciJava Ops and ImageJ/ImageJ2.
  * %%
- * Copyright (C) 2023 ImageJ2 developers.
+ * Copyright (C) 2023 - 2024 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 open module org.scijava.legacy {
 
 	requires net.imagej;

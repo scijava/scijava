@@ -1,8 +1,8 @@
 /*-
  * #%L
- * Introspection-related functionality
+ * Utility functions to introspect metadata of SciJava libraries.
  * %%
- * Copyright (C) 2022 - 2023 SciJava developers.
+ * Copyright (C) 2022 - 2024 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 module org.scijava.meta {
 	requires transitive java.xml;
 

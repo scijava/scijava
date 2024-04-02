@@ -1,8 +1,8 @@
 /*-
  * #%L
- * SciJava Discovery: Discovery mechanisms used by the SciJava Framework.
+ * Plugin discovery subsystem for SciJava libraries.
  * %%
- * Copyright (C) 2021 - 2023 SciJava developers.
+ * Copyright (C) 2021 - 2024 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 module org.scijava.discovery {
 
 	exports org.scijava.discovery;

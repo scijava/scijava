@@ -12,9 +12,9 @@
 	<artifactId>scijava-ops-image</artifactId>
 
 	<name>SciJava Ops Image</name>
-	<description>SciJava Ops Image: Ops for image processing</description>
+	<description>Image processing operations for SciJava Ops.</description>
 	<url>https://github.com/scijava/scijava</url>
-	<inceptionYear>2023</inceptionYear>
+	<inceptionYear>2014</inceptionYear>
 	<organization>
 		<name>SciJava</name>
 		<url>https://scijava.org/</url>
@@ -56,20 +56,6 @@
 			</roles>
 		</developer>
 		<developer>
-			<id>dietzc</id>
-			<name>Christian Dietz</name>
-			<url>https://imagej.net/people/dietzc</url>
-			<roles>
-				<role>founder</role>
-				<role>lead</role>
-				<role>developer</role>
-				<role>debugger</role>
-				<role>reviewer</role>
-				<role>support</role>
-				<role>maintainer</role>
-			</roles>
-		</developer>
-		<developer>
 			<id>bnorthan</id>
 			<name>Brian Northan</name>
 			<url>https://imagej.net/people/bnorthan</url>
@@ -80,24 +66,15 @@
 				<role>support</role>
 			</roles>
 		</developer>
-		<developer>
-			<id>gab1one</id>
-			<name>Gabriel Einsdorf</name>
-			<url>https://imagej.net/people/gab1one</url>
-			<roles>
-				<role>developer</role>
-			</roles>
-		</developer>
-		<developer>
-			<id>tibuch</id>
-			<name>Tim-Oliver Buchholz</name>
-			<roles>
-				<role>developer</role>
-				<role>support</role>
-			</roles>
-		</developer>
 	</developers>
 	<contributors>
+		<!-- Co-founders -->
+		<contributor>
+			<name>Christian Birkhold</name>
+			<url>https://imagej.net/people/dietzc</url>
+			<roles><role>founder</role></roles>
+			<properties><id>dietzc</id></properties>
+		</contributor>
 		<contributor>
 			<name>Martin Horn</name>
 			<roles><role>founder</role></roles>
@@ -109,9 +86,25 @@
 			<roles><role>founder</role></roles>
 			<properties><id>dscho</id></properties>
 		</contributor>
+		<!-- Contributors, in alphabetical order by surname. -->
+		<contributor>
+			<name>Matthias Arzt</name>
+			<url>https://imagej.net/people/maarzt</url>
+			<properties><id>maarzt</id></properties>
+		</contributor>
+		<contributor>
+			<name>Tim-Oliver Buchholz</name>
+			<url>https://imagej.net/people/tibuch</url>
+			<properties><id>tibuch</id></properties>
+		</contributor>
 		<contributor>
 			<name>Eric Czech</name>
 			<properties><id>eric-czech</id></properties>
+		</contributor>
+		<contributor>
+			<name>Ellen Dobson</name>
+			<url>https://imagej.net/people/etadobson</url>
+			<properties><id>etadobson</id></properties>
 		</contributor>
 		<contributor>
 			<name>Richard Domander</name>
@@ -119,17 +112,42 @@
 			<properties><id>rimadoma</id></properties>
 		</contributor>
 		<contributor>
+			<name>Michael Doube</name>
+			<url>https://imagej.net/people/mdoube</url>
+			<properties><id>mdoube</id></properties>
+		</contributor>
+		<contributor>
+			<name>Karl Duderstadt</name>
+			<url>https://imagej.net/people/karlduderstadt</url>
+			<properties><id>karlduderstadt</id></properties>
+		</contributor>
+		<contributor>
 			<name>Jan Eglinger</name>
 			<url>https://imagej.net/people/imagejan</url>
 			<properties><id>imagejan</id></properties>
+		</contributor>
+		<contributor>
+			<name>Gabriel Einsdorf</name>
+			<url>https://imagej.net/people/gab1one</url>
+			<properties><id>gab1one</id></properties>
 		</contributor>
 		<contributor>
 			<name>Andreas Graumann</name>
 			<properties><id>angrauma</id></properties>
 		</contributor>
 		<contributor>
+			<name>Robert Haase</name>
+			<url>https://imagej.net/people/haesleinhuepf</url>
+			<properties><id>haesleinhuepf</id></properties>
+		</contributor>
+		<contributor>
 			<name>Jonathan Hale</name>
 			<properties><id>Squareys</id></properties>
+		</contributor>
+		<contributor>
+			<name>Philipp Hanslovsky</name>
+			<url>https://imagej.net/people/hanslovsky</url>
+			<properties><id>hanslovsky</id></properties>
 		</contributor>
 		<contributor>
 			<name>Kyle Harrington</name>
@@ -151,17 +169,55 @@
 			<properties><id>hinerm</id></properties>
 		</contributor>
 		<contributor>
+			<name>Hadrien Mary</name>
+			<url>https://imagej.net/people/hadim</url>
+			<properties><id>hadim</id></properties>
+		</contributor>
+		<contributor>
+			<name>Dave Niles</name>
+			<properties><id>djniles</id></properties>
+		</contributor>
+		<contributor>
 			<name>Aparna Pal</name>
 			<url>https://imagej.net/people/apal4</url>
 			<properties><id>apal4</id></properties>
+		</contributor>
+		<contributor>
+			<name>Tobias Pietzsch</name>
+			<url>https://imagej.net/people/tpietzsch</url>
+			<properties><id>tpietzsch</id></properties>
+		</contributor>
+		<contributor>
+			<name>Igor Pisarev</name>
+			<properties><id>igorpisarev</id></properties>
+		</contributor>
+		<contributor>
+			<name>Stephan Saalfeld</name>
+			<url>https://imagej.net/people/axtimwalde</url>
+			<properties><id>axtimwalde</id></properties>
 		</contributor>
 		<contributor>
 			<name>Simon Schmid</name>
 			<properties><id>SimonSchmid</id></properties>
 		</contributor>
 		<contributor>
+			<name>Deborah Schmidt</name>
+			<url>https://imagej.net/people/frauzufall</url>
+			<properties><id>frauzufall</id></properties>
+		</contributor>
+		<contributor>
 			<name>Daniel Seebacher</name>
 			<properties><id>seebacherd</id></properties>
+		</contributor>
+		<contributor>
+			<name>Jean-Yves Tinevez</name>
+			<url>https://imagej.net/people/tinevez</url>
+			<properties><id>tinevez</id></properties>
+		</contributor>
+		<contributor>
+			<name>Vladimir Ulman</name>
+			<url>https://imagej.net/people/xulman</url>
+			<properties><id>xulman</id></properties>
 		</contributor>
 		<contributor>
 			<name>Alison Walter</name>
@@ -175,6 +231,7 @@
 		</contributor>
 		<contributor>
 			<name>Michael Zinsmaier</name>
+			<url>https://imagej.net/people/MichaelZinsmaier</url>
 			<properties><id>MichaelZinsmaier</id></properties>
 		</contributor>
 	</contributors>

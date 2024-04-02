@@ -12,7 +12,7 @@
 	<artifactId>scijava-meta</artifactId>
 
 	<name>SciJava Meta</name>
-	<description>Introspection-related functionality</description>
+	<description>Utility functions to introspect metadata of SciJava libraries.</description>
 	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2022</inceptionYear>
 	<organization>

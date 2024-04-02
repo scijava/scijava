@@ -12,7 +12,7 @@
 	<artifactId>scijava-ops-opencv</artifactId>
 
 	<name>SciJava Ops OpenCV</name>
-	<description>SciJava Ops OpenCV: OpenCV configuration for ops</description>
+	<description>OpenCV configuration for SciJava Ops.</description>
 	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2023</inceptionYear>
 	<organization>

@@ -4,12 +4,14 @@ The [ImageJ Ops](https://imagej.net/libs/imagej-ops/index) framework is the pred
 
 ## Upgrading pom-scijava
 
-Before doing anything else, you should ensure that your version of pom-scijava is new enough to make use of SciJava 3 goodness.
+Before doing anything else, you should ensure that your version of pom-scijava is new enough to make use of SciJava Ops goodness.
 
 TODO: Replace with the pom-scijava version needed to grab this annotation processor.
 
-Until the SciJava 3 annotation processor is added to pom-scijava, developers must add the following block of code to the `build` section of your POM:
+Until the SciJava Ops annotation processor is integrated into [pom-scijava](https://github.com/scijava/pom-scijava), developers must add the following block of code to the `build` section of their project POM:
 
+TODO: Replace with the pom-scijava version needed to grab this annotation processor.
+TODO: Replace the SciJava Ops Indexer version with the correct initial version
 ```xml
 <build>
     <plugins>
@@ -19,14 +21,15 @@ Until the SciJava 3 annotation processor is added to pom-scijava, developers mus
                 <annotationProcessorPaths>
                     <path>
                         <groupId>org.scijava</groupId>
-                        <artifactId>scijava-javadoc-parser</artifactId>
-                        <version>${project.version}</version>
+                        <artifactId>scijava-ops-indexer</artifactId>
+                        <version>1.0.0</version>
                     </path>
                 </annotationProcessorPaths>
                 <fork>true</fork>
                 <showWarnings>true</showWarnings>
                 <compilerArgs>
-                    <arg>-Ajavadoc.packages="${therapi.packages}"</arg>
+                    <arg>-Aparse.ops=true</arg>
+                    <arg>-Aop.version="${project.version}"</arg>
                 </compilerArgs>
             </configuration>
         </plugin>
@@ -54,7 +57,7 @@ SciJava Ops uses a separate annotation processor to record plugins at compile ti
 
 Additional options include:
 * Providing multiple names by replacing `names='name1'` with `names='name1,name2,...'` to allow your Op to be discoverable under multiple names
-* Providing the Op's priority by appending `priority=<the priority>`. SciJava Ops uses the same priority values as ImageJ Ops2, and relative priorities can be retained by using the new SciJava Priority library.
+* Providing the Op's priority by appending `priority=<the priority>`. SciJava Ops uses the same priority values as ImageJ Ops, and relative priorities can be retained by using the new SciJava Priority library.
 
 The following diff shows the changes needed to replace the `@Plugin` annotation:
 

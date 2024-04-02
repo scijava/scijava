@@ -12,7 +12,7 @@
 	<artifactId>scijava-priority</artifactId>
 
 	<name>SciJava Priority</name>
-	<description>SciJava Priority: A lightweight priority hierarchy</description>
+	<description>SciJava constants facilitating a consistent priority order.</description>
 	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2022</inceptionYear>
 	<organization>

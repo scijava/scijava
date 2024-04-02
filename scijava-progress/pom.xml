@@ -12,7 +12,7 @@
 	<artifactId>scijava-progress</artifactId>
 
 	<name>SciJava Progress</name>
-	<description>SciJava Progress: An Interrupt-Based Framework for Progress Reporting.</description>
+	<description>An interrupt-based subsystem for progress reporting.</description>
 	<url>https://github.com/scijava/scijava-progress</url>
 	<inceptionYear>2021</inceptionYear>
 	<organization>

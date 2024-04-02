@@ -12,7 +12,7 @@
 	<artifactId>scijava-ops-indexer</artifactId>
 
 	<name>SciJava Ops Indexer</name>
-	<description>SciJava Ops Indexer: An annotation processor for indexing Ops</description>
+	<description>An annotation processor for indexing Ops with javadoc.</description>
 	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2021</inceptionYear>
 	<organization>

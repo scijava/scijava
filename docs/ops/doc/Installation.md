@@ -2,13 +2,13 @@
 
 ## Fiji
 
-One easy way to use SciJava Ops is within ImageJ2/Fiji, using SciJava's Script Editor. **Note that to use ImageJ2/Fiji, you must use Java 11+. Instructions on using Java 11+ for ImageJ2/Fiji can be found [here](https://imagej.net/learn/faq#how-do-i-launch-imagej-with-a-different-version-of-java)**.
+One easy way to use SciJava Ops is within [Fiji](https://fiji.sc), using SciJava's Script Editor. **Note that to use Fiji, you must use Java 11+. Instructions on using Java 11+ for Fiji can be found [here](https://imagej.net/learn/faq#how-do-i-launch-imagej-with-a-different-version-of-java)**.
 
-### Installing the SciJava Ops update site
+### Installing SciJava Ops
 
-You can install the SciJava Ops update site (containing ImageJ Ops2, SciJava Ops, and all other required components) by following the [Update site tutorial](https://imagej.net/update-sites/following#add-update-sites). 
+You can install SciJava Ops into Fiji by enabling the SciJava Ops update site, as described in the [Update site tutorial](https://imagej.net/update-sites/following#add-update-sites). 
 
-1. With Fiji open, navigate to `Help --> Update...`
+1. With Fiji open, navigate to `Help &rarr; Update...`
 2. Click `Manage Update Sites` 
 3. In the `Search` bar at the top of the popup, search `SciJava Ops`
 4. Find the `SciJava Ops` row, and check the checkbox in the `Active` column.

@@ -46,7 +46,7 @@ public interface AbstractImageMomentOp<I extends RealType<I>, O extends RealType
 	extends Computers.Arity1<RandomAccessibleInterval<I>, O>
 {
 
-	public void computeMoment(RandomAccessibleInterval<I> input, O output);
+	void computeMoment(RandomAccessibleInterval<I> input, O output);
 
 	/**
 	 * TODO

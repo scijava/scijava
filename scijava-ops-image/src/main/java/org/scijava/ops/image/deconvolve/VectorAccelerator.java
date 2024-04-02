@@ -40,6 +40,7 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
+import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.spi.OpDependency;
 
@@ -55,6 +56,9 @@ import org.scijava.ops.spi.OpDependency;
 public class VectorAccelerator<T extends RealType<T>> implements
 	Inplaces.Arity1<AccelerationState<T>>
 {
+
+	@OpDependency(name = "copy.rai")
+	private Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> copyOp;
 
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, T, Img<T>> create;
@@ -122,14 +126,14 @@ public class VectorAccelerator<T extends RealType<T>> implements
 			// TODO: Revisit where initialization should be done
 			initialize(state);
 
-			Copy(xk_estimate, state.yk_prediction);
+			copyOp.compute(xk_estimate, state.yk_prediction);
 		}
 
 		// make a copy of the estimate to use as previous next time
-		Copy(xk_estimate, state.xkm1_previous);
+		copyOp.compute(xk_estimate, state.xkm1_previous);
 
 		// HACK: TODO: look over how to transfer the memory
-		Copy(state.yk_prediction, state.yk_iterated);
+		copyOp.compute(state.yk_prediction, state.yk_iterated);
 	}
 
 	private double computeAccelerationFactor(AccelerationState<T> state) {
@@ -171,23 +175,6 @@ public class VectorAccelerator<T extends RealType<T>> implements
 		}
 
 		return dotProduct;
-	}
-
-	// TODO replace with Op
-	// copy a into b
-	private void Copy(RandomAccessibleInterval<T> a,
-		RandomAccessibleInterval<T> b)
-	{
-
-		final Cursor<T> cursorA = Views.iterable(a).cursor();
-		final Cursor<T> cursorB = Views.iterable(b).cursor();
-
-		while (cursorA.hasNext()) {
-			cursorA.fwd();
-			cursorB.fwd();
-
-			cursorB.get().set(cursorA.get());
-		}
 	}
 
 	// TODO replace with op.

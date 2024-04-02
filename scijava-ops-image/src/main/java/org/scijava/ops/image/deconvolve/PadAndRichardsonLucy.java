@@ -79,9 +79,6 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 	@OpDependency(name = "math.multiply")
 	private Computers.Arity2<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> multiplyOp;
 
-	@OpDependency(name = "deconvolve.accelerate")
-	private Inplaces.Arity1<AccelerationState<O>> accelerator;
-
 	// TODO: can this go in AbstractFFTFilterF?
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, O, RandomAccessibleInterval<O>> outputCreator;
@@ -98,7 +95,7 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 	@OpDependency(name = "deconvolve.richardsonLucy")
 	private Computers.Arity12<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, //
 			RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, //
-			Boolean, C, Integer, Inplaces.Arity1<AccelerationState<O>>, //
+			Boolean, C, Integer, Boolean, //
 			Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>>, //
 			List<Inplaces.Arity1<RandomAccessibleInterval<O>>>, //
 			RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> richardsonLucyOp;
@@ -136,17 +133,17 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 
 			return (input, kernel, out) -> {
 				richardsonLucyOp.compute(input, kernel, fftImg, fftKernel, true, true,
-					complexType, maxIterations, accelerate ? accelerator : null,
-					computeEstimateOp, list, firstGuess.apply(raiExtendedInput, Util
-						.getTypeFromInterval(out), out), out);
+					complexType, maxIterations, accelerate, computeEstimateOp, list,
+					firstGuess.apply(raiExtendedInput, Util.getTypeFromInterval(out),
+						out), out);
 			};
 		}
 
 		// return a richardson lucy computer
 		return (input, kernel, out) -> {
 			richardsonLucyOp.compute(input, kernel, fftImg, fftKernel, true, true,
-				complexType, maxIterations, accelerate ? accelerator : null,
-				computeEstimateOp, null, null, out);
+				complexType, maxIterations, accelerate, computeEstimateOp, null, null,
+				out);
 		};
 	}
 
@@ -241,9 +238,8 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 		}
 
 		// default to no acceleration
-		if (accelerate == null) {
-			accelerate = false;
-		}
+		if (accelerate == null) accelerate = false;
+
 		this.maxIterations = maxIterations;
 
 		RandomAccessibleInterval<O> output = outputCreator.apply(input, outType);

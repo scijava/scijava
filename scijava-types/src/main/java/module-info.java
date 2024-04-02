@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 module org.scijava.types {
 
 	exports org.scijava.types;

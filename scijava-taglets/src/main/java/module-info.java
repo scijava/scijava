@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 module org.scijava.taglets {
 	exports org.scijava.taglets;
 

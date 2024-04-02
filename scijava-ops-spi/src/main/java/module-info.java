@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 module org.scijava.ops.spi {
 
 	exports org.scijava.ops.spi;

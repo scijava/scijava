@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 module org.scijava.javadoc.parser {
 	exports org.scijava.ops.indexer;
 

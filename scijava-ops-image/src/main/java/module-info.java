@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 open module org.scijava.ops.image {
 	// Note that opening this module is necessary to provide runtime access
 	// from the SciJava Ops Engine module.

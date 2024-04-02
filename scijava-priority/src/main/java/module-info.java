@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 open module org.scijava.priority {
 
 	exports org.scijava.priority;

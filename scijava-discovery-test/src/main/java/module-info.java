@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 module org.scijava.discovery.test {
 
 	opens org.scijava.discovery.test to org.scijava.discovery;

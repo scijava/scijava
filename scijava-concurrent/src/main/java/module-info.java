@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 open module org.scijava.concurrent {
 
 	exports org.scijava.concurrent;

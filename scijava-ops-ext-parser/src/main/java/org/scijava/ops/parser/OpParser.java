@@ -1,6 +1,6 @@
 /*-
  * #%L
- * SciJava Ops External Parser: A tool for parsing external libraries to ops
+ * A tool for wrapping external libraries as SciJava Ops.
  * %%
  * Copyright (C) 2024 SciJava developers.
  * %%

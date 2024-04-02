@@ -1,8 +1,8 @@
 /*
  * #%L
- * SciJava Operations: a framework for reusable algorithms.
+ * Java implementation of the SciJava Ops matching engine.
  * %%
- * Copyright (C) 2018 SciJava developers.
+ * Copyright (C) 2016 - 2024 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:

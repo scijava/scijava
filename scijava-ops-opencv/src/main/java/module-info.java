@@ -1,6 +1,6 @@
 /*-
  * #%L
- * SciJava Ops OpenCV: OpenCV configuration for ops
+ * OpenCV configuration for SciJava Ops.
  * %%
  * Copyright (C) 2023 - 2024 SciJava developers.
  * %%

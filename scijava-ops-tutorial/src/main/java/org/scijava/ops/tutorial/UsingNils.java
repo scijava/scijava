@@ -41,7 +41,7 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.real.DoubleType;
 
 /**
- * ImageJ Ops2 allows users to take advantage of the strong type safety of the
+ * SciJvaa Ops allows users to take advantage of the strong type safety of the
  * Java language, which can provide benefits in certainty and efficiency. The
  * downside of this is verbosity, especially in obtaining generically-typed
  * outputs from OpBuilder calls.

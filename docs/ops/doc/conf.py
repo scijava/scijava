@@ -19,8 +19,8 @@ sys.path.insert(0, os.path.abspath("."))
 # -- Project information -----------------------------------------------------
 
 project = "SciJava Ops"
-copyright = "2022 ImageJ2 developers"
-author = "ImageJ2 developers"
+copyright = "2014-2024 SciJava developers"
+author = "SciJava developers"
 
 
 # -- General configuration ---------------------------------------------------

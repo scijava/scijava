@@ -1,6 +1,6 @@
-# Scripting in ImageJ2
+# Scripting in Fiji
 
-Using SciJava Ops and ImageJ Ops2 within scripts provide the most powerful aspects of Ops. The following page will explain how you can write a script in ImageJ2's Script Editor that utilizes Ops for image processing.
+Using SciJava Ops within scripts unlocks the most powerful aspects of Ops. The following page will explain how you can write a script in Fiji's Script Editor that utilizes Ops for image processing.
 
 ## Obtaining an OpEnvironment
 

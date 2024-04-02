@@ -5,7 +5,7 @@
 
 Welcome to the Ops documentation!
 ====================================
-SciJava Ops is a library for extensible algorithm retrieval and execution. ImageJ Ops2 is a library for scientific image processing, built atop SciJava Ops and deriving from `ImageJ Ops <https://imagej.net/libs/imagej-ops/>`_.
+SciJava Ops is a library for extensible algorithm retrieval and execution. SciJava Ops Image is a collection of Ops for scientific image processing, built on SciJava Ops.
 
 The combination of these libraries allows declarative image analysis workflows, allowing users to think more about the *what* than the *how*.
 
@@ -22,7 +22,7 @@ The combination of these libraries allows declarative image analysis workflows, 
 
    CallingOps
    SearchingForOps
-   ScriptingInImageJ2
+   ScriptingInFiji
    Benchmarks
 
 .. toctree::

@@ -43,8 +43,8 @@ public class OpsIntro {
 
 	public static void main(String... args) {
 		/*
-		ImageJ Ops2 is a library for scientific image processing. The fundamental
-		currency of this library are individual algorithms called Ops.
+		SciJava Ops Image is a library for scientific image processing. The
+		fundamental currency of this library are individual algorithms called Ops.
 
 		All Ops share a few traits that establish a baseline of expected behavior:
 
@@ -63,7 +63,7 @@ public class OpsIntro {
 		 */
 
 		/*
-		The OpEnvironment is the core of ImageJ Ops2. It is a collection of Ops,
+		The OpEnvironment is the core of SciJava Ops. It is a collection of Ops,
 		along with API for accessing Ops, adding new Ops, and other utilities.
 
 		The easiest way to obtain an OpEnvironment is to use the following static

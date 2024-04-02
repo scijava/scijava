@@ -37,7 +37,7 @@ Thank you!*
 The following narrative details the ways in which this approach refines and
 updates the SciJava development process, with the goal of improving and
 streamlining development of projects across the entire software stack,
-including SciJava, ImageJ2, SCIFIO, Fiji, and other SciJava-based software
+including SciJava, ImgLib2, SCIFIO, Fiji, and other SciJava-based software
 layers. This discussion assumes the reader is familiar with the
 [current SciJava development methodology and project
 architecture](https://imagej.net/develop/architecture).
@@ -114,9 +114,10 @@ remains a way to see what everyone is working on easily.
 ##### Minimize complexity
 
 The goal here is to make the projects accessible to potential contributors.
-Currently, even the naming of these projects is confusing&mdash;ImageJ, Fiji,
-SciJava, ImageJ2, SCIFIO... Is there a way moving forward where we can
-streamline naming and consider alternatives?
+Even the naming of projects during the ImageJ2 era was confusing&mdash;ImageJ,
+Fiji, SciJava, ImageJ2, ImgLib2, SCIFIO... To move forward, we are streamlining
+the naming to use "SciJava" in more situations, and eschew use of the terms
+"ImageJ" and "ImageJ2" to avoid confusion with the original ImageJ project.
 
 ##### Release as early as possible, but be completely stable once released
 
@@ -197,15 +198,14 @@ highlighted here needs to be reexamined.\]
 The next iteration of our core development process, addressing these challenges
 and applying lessons learned.
 
-The SciJava, ImageJ2 and Fiji projects are distinct, but heavily overlap.
+The SciJava, ImgLib2 and Fiji projects are distinct, but heavily overlap.
 
-* **ImageJ2** consists of *core libraries* and an *end-user application* for
+* **ImgLib2** consists of *core libraries* for
   scientific multidimensional image processing and analysis.
 * **SciJava** consists of *core Java libraries more general than image
   processing*, including an extensible framework for plugins, an application
   container, and many useful utilities.
-* **Fiji** is a *suite of ImageJ plugins for the life sciences* and a
-  *distribution of ImageJ including those plugins*.
+* **Fiji** is an *end-user application* and *suite of ImageJ plugins for the
 
 #### Proposed iteration of the SciJava development process: the SciJava incubator
 
@@ -318,10 +318,8 @@ together. Makes it clearer who is a "core developer" as well.
     * SciJava: Cultivate a sustainable development community where powerful
       scientific tools grow.
     * ImgLib2: Provide powerful reusable image processing libraries.
-    * ImageJ2: Broaden the paradigm of ImageJ beyond the limitations of the
-      original ImageJ application.
-    * Fiji: Make powerful scientific imaging software tools accessible to
-      biologists. Batteries included.
+    * Fiji: Make powerful scientific imaging software tools accessible to all.
+      Batteries included.
 
 **What about complexity compared to e.g. Python ecosystem?**
 The "genes" of our Java ecosystem, accessibility with type safety, play to
@@ -403,7 +401,6 @@ Multi-module codebase but everything has a single version for a given component.
 
 Which layers?
 - SciJava &rarr; scijava/scijava
-- ImageJ2 &rarr; imagej/imagej3 (!) (but should we move on from this name?)
 - SCIFIO &rarr; scifio/scifio (but it clashes with existing repo)
 - Fiji &rarr; consider consolidating things like `fiji-lib`, `Fiji_Developer`
   into fiji? `fiji-lib` is the thing other plugins can depend on. Unless we

@@ -84,7 +84,7 @@ public class PadAndRichardsonLucyTV<I extends RealType<I> & NativeType<I>, O ext
 	private Functions.Arity3<RandomAccessibleInterval<I>, O, Dimensions, RandomAccessibleInterval<O>> firstGuess;
 
 	@OpDependency(name = "deconvolve.accelerate")
-	private Inplaces.Arity1<RandomAccessibleInterval<O>> accelerator;
+	private Inplaces.Arity1<AccelerationState<O>> accelerator;
 
 	// TODO: can this go in AbstractFFTFilterF?
 	@OpDependency(name = "create.img")
@@ -102,7 +102,7 @@ public class PadAndRichardsonLucyTV<I extends RealType<I> & NativeType<I>, O ext
 	@OpDependency(name = "deconvolve.richardsonLucy")
 	private Computers.Arity12<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, //
 			RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, //
-			Boolean, C, Integer, Inplaces.Arity1<RandomAccessibleInterval<O>>, //
+			Boolean, C, Integer, Inplaces.Arity1<AccelerationState<O>>, //
 			Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>>, //
 			List<Inplaces.Arity1<RandomAccessibleInterval<O>>>, RandomAccessibleInterval<O>, //
 			RandomAccessibleInterval<O>> richardsonLucyOp;

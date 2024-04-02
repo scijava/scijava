@@ -27,23 +27,19 @@
  * #L%
  */
 
-package org.scijava.ops.image.deconvolve.accelerate;
+package org.scijava.ops.image.deconvolve;
 
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 import net.imglib2.Cursor;
 import net.imglib2.Dimensions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
-import net.imglib2.img.ImgFactory;
-import net.imglib2.img.array.ArrayImgFactory;
-import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
-import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.spi.OpDependency;
 
@@ -56,25 +52,13 @@ import org.scijava.ops.spi.OpDependency;
  * @param <T>
  * @implNote op names='deconvolve.accelerate', priority='0.'
  */
-public class VectorAccelerator<T extends RealType<T> & NativeType<T>> implements
-	Inplaces.Arity1<RandomAccessibleInterval<T>>
+public class VectorAccelerator<T extends RealType<T>> implements
+	Inplaces.Arity1<AccelerationState<T>>
 {
 
-	Img<T> xkm1_previous = null;
-	Img<T> yk_prediction = null;
-	Img<T> hk_vector = null;
-
-	Img<T> gk;
-	Img<T> gkm1;
-
 	@OpDependency(name = "create.img")
-	private Functions.Arity3<Dimensions, T, ImgFactory<T>, Img<T>> create;
+	private BiFunction<Dimensions, T, Img<T>> create;
 
-	private Function<Dimensions, Img<T>> createReduced;
-
-	double accelerationFactor = 0.0f;
-
-	ArrayImgFactory<T> factory;
 
 	/**
 	 * TODO
@@ -82,89 +66,86 @@ public class VectorAccelerator<T extends RealType<T> & NativeType<T>> implements
 	 * @param yk_iterated
 	 */
 	@Override
-	public void mutate(RandomAccessibleInterval<T> yk_iterated) {
-		T type = Util.getTypeFromInterval(yk_iterated);
-		factory = new ArrayImgFactory<>(type);
-		createReduced = in -> create.apply(in, type, factory);
-		accelerate(yk_iterated);
+	public void mutate(AccelerationState<T> state) {
+		
+		accelerate(state);
 	}
 
-	public void initialize(RandomAccessibleInterval<T> yk_iterated) {
-		if (yk_prediction == null) {
-
-			long[] temp = new long[yk_iterated.numDimensions()];
-			yk_iterated.dimensions(temp);
+	private void initialize(AccelerationState<T> state) {
+		if (state.yk_prediction == null) {
+			long[] temp = new long[state.yk_iterated.numDimensions()];
+			T type = Util.getTypeFromInterval(state.yk_iterated);
+			state.yk_iterated.dimensions(temp);
 
 			FinalDimensions dims = new FinalDimensions(temp);
 
-			yk_prediction = createReduced.apply(dims);
-			xkm1_previous = createReduced.apply(dims);
-			yk_prediction = createReduced.apply(dims);
-			gk = createReduced.apply(dims);
-			hk_vector = createReduced.apply(dims);
+			state.yk_prediction = create.apply(dims, type);
+			state.xkm1_previous = create.apply(dims, type);
+			state.yk_prediction = create.apply(dims, type);
+			state.gk = create.apply(dims, type);
+			state.hk_vector = create.apply(dims, type);
 
 		}
 
 	}
 
-	public void accelerate(RandomAccessibleInterval<T> yk_iterated) {
+	private void accelerate(AccelerationState<T> state) {
 
 		// use the iterated prediction and the previous value of the prediction
 		// to calculate the acceleration factor
-		if (yk_prediction != null) {
+		if (state.yk_prediction != null) {
 
-			accelerationFactor = computeAccelerationFactor(yk_iterated);
-
-			if ((accelerationFactor < 0)) {
-				gkm1 = null;
-				accelerationFactor = 0.0;
+			state.accelerationFactor = computeAccelerationFactor(state);
+			if ((state.accelerationFactor < 0)) {
+				state.gkm1 = null;
+				state.accelerationFactor = 0.0;
 			}
 
-			if ((accelerationFactor > 1.0f)) {
-				accelerationFactor = 1.0f;
+			if ((state.accelerationFactor > 1.0f)) {
+				state.accelerationFactor = 1.0f;
 			}
 		}
 
 		// current estimate for x is yk_iterated
-		RandomAccessibleInterval<T> xk_estimate = yk_iterated;
+		RandomAccessibleInterval<T> xk_estimate = state.yk_iterated;
 
 		// calculate the change vector between x and x previous
-		if (accelerationFactor > 0) {
-			Subtract(xk_estimate, xkm1_previous, hk_vector);
+		if (state.accelerationFactor > 0) {
+			Subtract(xk_estimate, state.xkm1_previous, state.hk_vector);
 
 			// make the next prediction
-			yk_prediction = AddAndScale(xk_estimate, hk_vector,
-				(float) accelerationFactor);
+			state.yk_prediction = AddAndScale(xk_estimate, state.hk_vector,
+				(float) state.accelerationFactor);
 		}
 		else {
 
 			// TODO: Revisit where initialization should be done
-			initialize(yk_iterated);
+			initialize(state);
 
-			Copy(xk_estimate, yk_prediction);
+			Copy(xk_estimate, state.yk_prediction);
 		}
 
 		// make a copy of the estimate to use as previous next time
-		Copy(xk_estimate, xkm1_previous);
+		Copy(xk_estimate, state.xkm1_previous);
 
 		// HACK: TODO: look over how to transfer the memory
-		Copy(yk_prediction, yk_iterated);
+		Copy(state.yk_prediction, state.yk_iterated);
 	}
 
-	double computeAccelerationFactor(RandomAccessibleInterval<T> yk_iterated) {
+	private double computeAccelerationFactor(AccelerationState<T> state) {
 		// gk=StaticFunctions.Subtract(yk_iterated, yk_prediction);
-		Subtract(yk_iterated, yk_prediction, gk);
+		Subtract(state.yk_iterated, state.yk_prediction, state.gk);
 
-		if (gkm1 != null) {
-			double numerator = DotProduct(gk, gkm1);
-			double denominator = DotProduct(gkm1, gkm1);
+		if (state.gkm1 != null) {
+			double numerator = DotProduct(state.gk, state.gkm1);
+			double denominator = DotProduct(state.gkm1, state.gkm1);
 
-			gkm1 = gk.copy();
+			state.gkm1 = state.gk.copy();
 			return numerator / denominator;
 
 		}
 
-		gkm1 = gk.copy();
+		state.gkm1 = state.gk.copy();
 
 		return 0.0;
 
@@ -173,7 +154,7 @@ public class VectorAccelerator<T extends RealType<T> & NativeType<T>> implements
 	/*
 	 * multiply inputOutput by input and place the result in input
 	 */
-	public double DotProduct(final Img<T> image1, final Img<T> image2) {
+	private double DotProduct(final Img<T> image1, final Img<T> image2) {
 		final Cursor<T> cursorImage1 = image1.cursor();
 		final Cursor<T> cursorImage2 = image2.cursor();
 
@@ -194,7 +175,7 @@ public class VectorAccelerator<T extends RealType<T> & NativeType<T>> implements
 
 	// TODO replace with Op
 	// copy a into b
-	protected void Copy(RandomAccessibleInterval<T> a,
+	private void Copy(RandomAccessibleInterval<T> a,
 		RandomAccessibleInterval<T> b)
 	{
 
@@ -210,7 +191,7 @@ public class VectorAccelerator<T extends RealType<T> & NativeType<T>> implements
 	}
 
 	// TODO replace with op.
-	protected void Subtract(RandomAccessibleInterval<T> a,
+	private void Subtract(RandomAccessibleInterval<T> a,
 		RandomAccessibleInterval<T> input, RandomAccessibleInterval<T> output)
 	{
 
@@ -229,10 +210,10 @@ public class VectorAccelerator<T extends RealType<T> & NativeType<T>> implements
 	}
 
 	// TODO: replace with op
-	public Img<T> AddAndScale(final RandomAccessibleInterval<T> img1,
+	private Img<T> AddAndScale(final RandomAccessibleInterval<T> img1,
 		final Img<T> img2, final float a)
 	{
-		Img<T> out = createReduced.apply(img1);
+		Img<T> out = create.apply(img1, Util.getTypeFromInterval(img1));
 
 		final Cursor<T> cursor1 = Views.iterable(img1).cursor();
 		final Cursor<T> cursor2 = img2.cursor();

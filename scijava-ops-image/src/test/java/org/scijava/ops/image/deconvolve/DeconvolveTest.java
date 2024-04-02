@@ -158,7 +158,7 @@ public class DeconvolveTest extends AbstractOpTest {
 
 		// find a RichardsonLucyC op
 		Computers.Arity12<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<ComplexFloatType>, //
-				RandomAccessibleInterval<ComplexFloatType>, Boolean, Boolean, ComplexFloatType, Integer, Inplaces.Arity1<RandomAccessibleInterval<FloatType>>, //
+				RandomAccessibleInterval<ComplexFloatType>, Boolean, Boolean, ComplexFloatType, Integer, Inplaces.Arity1<AccelerationState<FloatType>>, //
 				Computers.Arity1<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>>, //
 				List<Inplaces.Arity1<RandomAccessibleInterval<FloatType>>>, RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>> deconvolveOpC =
 					ops.op("deconvolve.richardsonLucy", new Nil<>()
@@ -175,7 +175,7 @@ public class DeconvolveTest extends AbstractOpTest {
 						{}, new Nil<Boolean>() {}, new Nil<ComplexFloatType>() {}, //
 						new Nil<Integer>()
 						{},
-						new Nil<Inplaces.Arity1<RandomAccessibleInterval<FloatType>>>()
+						new Nil<Inplaces.Arity1<AccelerationState<FloatType>>>()
 						{}, //
 						new Nil<Computers.Arity1<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>>>()
 						{}, //

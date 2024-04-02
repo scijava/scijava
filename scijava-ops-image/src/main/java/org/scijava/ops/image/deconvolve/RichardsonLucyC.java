@@ -61,7 +61,7 @@ import org.scijava.ops.spi.OpDependency;
 public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
 	implements
 	Computers.Arity12<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, //
-			RandomAccessibleInterval<C>, Boolean, Boolean, C, Integer, Inplaces.Arity1<RandomAccessibleInterval<O>>, //
+			RandomAccessibleInterval<C>, Boolean, Boolean, C, Integer, Inplaces.Arity1<AccelerationState<O>>, //
 			Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>>, //
 			List<Inplaces.Arity1<RandomAccessibleInterval<O>>>, RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> {
 
@@ -129,7 +129,7 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 		Boolean performKernelFFT, //
 		C complexType, //
 		Integer maxIterations, //
-		@Nullable Inplaces.Arity1<RandomAccessibleInterval<O>> accelerator, //
+		@Nullable Inplaces.Arity1<AccelerationState<O>> accelerator, //
 		@Nullable Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> updateOp, //
 		@Nullable List<Inplaces.Arity1<RandomAccessibleInterval<O>>> iterativePostProcessingOps, //
 		@Nullable RandomAccessibleInterval<O> raiExtendedEstimate, //
@@ -166,6 +166,9 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 
 		// -- perform iterations --
 
+		// create acceleration state
+		AccelerationState<O> state = new AccelerationState<>(raiExtendedEstimate);
+
 		for (int i = 0; i < maxIterations; i++) {
 
 			// create reblurred by convolving kernel with estimate
@@ -186,9 +189,9 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 			for (Inplaces.Arity1<RandomAccessibleInterval<O>> pp : iterativePostProcessingOps) {
 				pp.mutate(raiExtendedEstimate);
 			}
-
+	
 			// accelerate the algorithm by taking a larger step
-			accelerator.mutate(raiExtendedEstimate);
+			accelerator.mutate(state);
 		}
 
 		// -- copy crop padded back to original size

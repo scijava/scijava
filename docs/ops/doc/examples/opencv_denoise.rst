@@ -42,10 +42,13 @@ SciJava Ops via Fiji's sripting engine with `script parameters`_:
         ops.op("image.normalize").arity5().input(img, oldMin, oldMax, newMin, newMax).output(img8bit).compute()
 
         // Create a container for the denoise output
-        result = img8bit.copy()
+        output = img8bit.copy()
 
         // Run the denoise op
-        ops.quaternary("filter.denoise").input(img8bit, strength, template, search).output(result).compute();
+        ops.quaternary("filter.denoise").input(img8bit, strength, template, search).output(output).compute();
+
+        // Return the denoised image
+        result = output
 .. _`script parameters`: https://imagej.net/scripting/parameters
 .. _`external libray`: https://docs.opencv.org/4.x/d5/d69/tutorial_py_non_local_means.html
 .. _`images folder`: https://github.com/scijava/incubator/tree/main/docs/ops/images/sample_16bit_T24.png

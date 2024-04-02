@@ -38,9 +38,9 @@ import net.imglib2.outofbounds.OutOfBoundsMirrorFactory;
 import net.imglib2.view.Views;
 import org.scijava.function.Computers;
 
-public final class LiftNeighborhoodComputersToImg {
+public final class LiftNeighborhoodComputersToRAI {
 
-	private LiftNeighborhoodComputersToImg() {
+	private LiftNeighborhoodComputersToRAI() {
 		// prevent instantiation of static utility class
 	}
 

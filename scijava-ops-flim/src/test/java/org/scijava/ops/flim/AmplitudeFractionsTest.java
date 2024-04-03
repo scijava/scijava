@@ -29,58 +29,39 @@
 
 package org.scijava.ops.flim;
 
-import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
-import net.imglib2.img.array.ArrayImg;
-import net.imglib2.img.array.ArrayImgs;
-import net.imglib2.img.basictypeaccess.array.FloatArray;
-import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.real.FloatType;
-import net.imglib2.view.IntervalView;
-import net.imglib2.view.Views;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.scijava.types.Nil;
 
 /**
- * Ops pertaining to fractional contribution calculation
+ * Tests {@link AmplitudeFractions} ops.
  *
  * @author Dasong Gao
  * @author Gabriel Selzer
  */
-public class FractionalContributions {
+public class AmplitudeFractionsTest extends AbstractFlimTest {
 
-	/**
-	 * @param rslt the results from fitting an image
-	 * @param index the index
-	 * @return a percentage image
-	 * @implNote op names="flim.aPercent", type=Function
-	 */
-	public static Img<FloatType> defaultFractionalContribution( //
-		FitResults rslt, //
-		int index //
-	) {
+	@Test
+	public void testDefaultFractionalContribution() {
+		int i = 0;
+		final Img<FloatType> A1Perc = ops.binary("flim.amplitudeFraction") //
+			.input(rslt, 0) //
+			.outType(new Nil<Img<FloatType>>()
+			{}) //
+			.apply();
+		for (final FloatType pix : A1Perc) {
+			int nComp = (int) (DIM[2] - 1) / 2;
+			float sumAj = 0;
 
-		RandomAccessibleInterval<FloatType> paramMap = rslt.paramMap;
-		int nComp = (int) (paramMap.dimension(rslt.ltAxis) - 1) / 2;
+			for (int j = 0; j < nComp; j++)
+				sumAj += getVal(i, j * 2 + 1);
+			final float A1 = getVal(i, 1);
+			final float exp = A1 / sumAj;
 
-		long[] dim = new long[paramMap.numDimensions() - 1];
-		Views.hyperSlice(paramMap, rslt.ltAxis, 0).dimensions(dim);
-
-		ArrayImg<FloatType, FloatArray> APercent = ArrayImgs.floats(dim);
-		ArrayImg<FloatType, FloatArray> ASum = ArrayImgs.floats(dim);
-
-		for (int c = 0; c < nComp; c++)
-			LoopBuilder.setImages(ASum, getSlice(rslt, c * 2 + 1)) //
-				.forEachPixel(FloatType::add);
-		FloatType f = new FloatType();
-		f.setReal(Float.MIN_VALUE);
-		LoopBuilder.setImages(ASum, APercent, getSlice(rslt, index * 2 + 1))
-			.forEachPixel((aS, aP, s) -> {
-				aP.set(s);
-				aP.div(aS);
-			});
-		return APercent;
-	}
-
-	private static IntervalView<FloatType> getSlice(FitResults rslt, int index) {
-		return Views.hyperSlice(rslt.paramMap, rslt.ltAxis, index);
+			Assertions.assertEquals(exp, pix.get(), TOLERANCE);
+			i++;
+		}
 	}
 }

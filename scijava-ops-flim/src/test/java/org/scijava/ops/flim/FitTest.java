@@ -123,7 +123,7 @@ public class FitTest extends AbstractFlimTest {
 	@Test
 	public void testBinning() {
 		long ms = System.currentTimeMillis();
-		var kernel = ops.unary("create.kernelFlim").input(3).apply();
+		var kernel = ops.unary("create.kernelSum").input(3).apply();
 		FitResults out = ops.ternary("flim.fitRLD") //
 			.input(param, roi, kernel) //
 			.outType(FitResults.class) //

@@ -51,7 +51,7 @@ public class Creators {
 	 *
 	 * @param size the width/height of the kernel
 	 * @return a kernel for use in Flim
-	 * @implNote op names="create.kernelFlim" type=Function
+	 * @implNote op names="create.kernelSum" type=Function
 	 */
 	public static Img<DoubleType> makeSquareKernel(int size) {
 		Img<DoubleType> out = ArrayImgs.doubles(size, size, 1);

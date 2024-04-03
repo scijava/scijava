@@ -309,12 +309,12 @@ public class InferTypeVariablesTest {
 		Map<TypeVariable<?>, TypeMapping> typeAssigns = new HashMap<>();
 		GenericAssignability.inferTypeVariables(type, inferFrom, typeAssigns);
 
-		// We expect I= Double, O = Number
+		// We expect I= Double, O = Double
 		Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
 		TypeVariable<?> typeVarI = (TypeVariable<?>) new Nil<I>() {}.getType();
 		expected.put(typeVarI, new TypeMapping(typeVarI, Double.class, false));
 		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.getType();
-		expected.put(typeVarO, new TypeMapping(typeVarO, Number.class, true));
+		expected.put(typeVarO, new TypeMapping(typeVarO, Double.class, true));
 
 		Assertions.assertEquals(expected, typeAssigns);
 	}

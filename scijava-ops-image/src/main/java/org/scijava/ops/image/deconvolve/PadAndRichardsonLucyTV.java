@@ -219,14 +219,13 @@ public class PadAndRichardsonLucyTV<I extends RealType<I> & NativeType<I>, O ext
 		// out of bounds factory will be different depending on if circulant or
 		// non-circulant is used
 		if (obfInput == null) {
-
-			if (!nonCirculant) {
-				obfInput = new OutOfBoundsMirrorFactory<>(
-					OutOfBoundsMirrorFactory.Boundary.SINGLE);
-			}
-			else if (nonCirculant) {
+			if (nonCirculant) {
 				obfInput = new OutOfBoundsConstantValueFactory<>(Util
 					.getTypeFromInterval(input).createVariable());
+			}
+			else {
+				obfInput = new OutOfBoundsMirrorFactory<>(
+					OutOfBoundsMirrorFactory.Boundary.SINGLE);
 			}
 		}
 

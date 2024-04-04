@@ -126,6 +126,10 @@ public abstract class AbstractSingleFitWorker<I extends RealType<I>> extends
 	 */
 	protected void onThreadInit() {}
 
+	protected boolean runMultiThreaded() {
+		return params.multithread;
+	}
+
 	@Override
 	public void fitBatch(List<int[]> pos, FitEventHandler<I> handler) {
 		final AbstractSingleFitWorker<I> thisWorker = this;
@@ -133,7 +137,7 @@ public abstract class AbstractSingleFitWorker<I extends RealType<I>> extends
 		Consumer<int[]> worker = (data) -> {
 			int start = data[0];
 			int size = data[1];
-			if (!params.multithread) {
+			if (!runMultiThreaded()) {
 				// let the first fitting thread do all the work
 				if (start != 0) {
 					return;
@@ -146,7 +150,7 @@ public abstract class AbstractSingleFitWorker<I extends RealType<I>> extends
 			final FitResults lResults;
 			final AbstractSingleFitWorker<I> fitWorker;
 			// don't make copy in single thread mode
-			if (!params.multithread || pos.size() == 1) {
+			if (!runMultiThreaded() || pos.size() == 1) {
 				lParams = params;
 				lResults = results;
 				fitWorker = thisWorker;

@@ -213,6 +213,13 @@ public class BayesFit {
 			child.gridMax = this.gridMax;
 			return child;
 		}
+
+		@Override
+		protected boolean runMultiThreaded() {
+			// TODO: Multithreaded execution runs worse, so we force single-threaded
+			// computation
+			return false;
+		}
 	}
 
 }

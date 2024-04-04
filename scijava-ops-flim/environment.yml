@@ -1,4 +1,4 @@
-name: scijava
+name: scijava-ops-flim
 channels:
   - conda-forge
 dependencies:

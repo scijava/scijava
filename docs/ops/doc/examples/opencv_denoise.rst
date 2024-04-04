@@ -14,30 +14,28 @@ SciJava Ops via Fiji's sripting engine with `script parameters`_:
 
 .. tabs::
 
-    .. code-tab:: groovy
+    .. code-tab:: scijava-groovy
+
+        #@ OpEnvironment ops
         #@ ImgPlus img
         #@ Integer (label="strength:", value=4.0) strength
         #@ Integer (label="template size:", value=7) template
         #@ Integer (label="search size:", value=21) search
         #@output ImgPlus result
 
-        import org.scijava.ops.api.OpEnvironment;
-        import net.imglib2.type.numeric.integer.UnsignedByteType;
-
-        // build the Ops environment
-        ops = OpEnvironment.build();
+        import net.imglib2.type.numeric.integer.UnsignedByteType
 
         // Get the min and max values of our input image
-        oldMin = ops.unary("stats.min").input(img).apply();
-        oldMax = ops.unary("stats.max").input(img).apply();
+        oldMin = ops.unary("stats.min").input(img).apply()
+        oldMax = ops.unary("stats.max").input(img).apply()
 
         // We need to convert to 8-bit since not all data types are currently supported in OpenCV
-        var type = new UnsignedByteType(100);
-        var img8bit = ops.binary("create.img").input(img, type).apply();
+        type = new UnsignedByteType()
+        img8bit = ops.binary("create.img").input(img, type).apply()
 
         // Normalize our input data to the 8-bit min/max
-        newMin = new UnsignedByteType((int)type.getMinValue());
-        newMax = new UnsignedByteType((int)type.getMaxValue());
+        newMin = new UnsignedByteType((int)type.getMinValue())
+        newMax = new UnsignedByteType((int)type.getMaxValue())
 
         ops.op("image.normalize").arity5().input(img, oldMin, oldMax, newMin, newMax).output(img8bit).compute()
 
@@ -45,10 +43,45 @@ SciJava Ops via Fiji's sripting engine with `script parameters`_:
         output = img8bit.copy()
 
         // Run the denoise op
-        ops.quaternary("filter.denoise").input(img8bit, strength, template, search).output(output).compute();
+        ops.quaternary("filter.denoise").input(img8bit, strength, template, search).output(output).compute()
 
         // Return the denoised image
         result = output
+
+    .. code-tab:: python
+
+        #@ OpEnvironment ops
+        #@ ImgPlus img
+        #@ Integer (label="strength:", value=4.0) strength
+        #@ Integer (label="template size:", value=7) template
+        #@ Integer (label="search size:", value=21) search
+        #@output ImgPlus result
+
+        from net.imglib2.type.numeric.integer import UnsignedByteType
+
+        # Get the min and max values of our input image
+        old_min = ops.unary("stats.min").input(img).apply()
+        old_max = ops.unary("stats.max").input(img).apply()
+
+        # We need to convert to 8-bit since not all data types are currently supported in OpenCV
+        type = UnsignedByteType()
+        img8bit = ops.binary("create.img").input(img, type).apply()
+
+        # Normalize our input data to the 8-bit min/max
+        new_min = UnsignedByteType(int(type.getMinValue()))
+        new_max = UnsignedByteType(int(type.getMaxValue()))
+
+        ops.op("image.normalize").arity5().input(img, old_min, old_max, new_min, new_max).output(img8bit).compute()
+
+        # Create a container for the denoise output
+        output = img8bit.copy()
+
+        # Run the denoise op
+        ops.quaternary("filter.denoise").input(img8bit, strength, template, search).output(output).compute()
+
+        # Return the denoised image
+        result = output
+
 .. _`script parameters`: https://imagej.net/scripting/parameters
 .. _`external libray`: https://docs.opencv.org/4.x/d5/d69/tutorial_py_non_local_means.html
 .. _`images folder`: https://github.com/scijava/incubator/tree/main/docs/ops/images/sample_16bit_T24.png

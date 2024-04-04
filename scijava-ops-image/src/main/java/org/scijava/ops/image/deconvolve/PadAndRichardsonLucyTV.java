@@ -202,8 +202,9 @@ public class PadAndRichardsonLucyTV<I extends RealType<I> & NativeType<I>, O ext
 	@Override
 	public RandomAccessibleInterval<O> apply(RandomAccessibleInterval<I> input,
 		RandomAccessibleInterval<K> kernel, O outType, C complexType,
-		Integer maxIterations, @Nullable Boolean nonCirculant, @Nullable Boolean accelerate,
-		Float regularizationFactor, @Nullable long[] borderSize,
+		Integer maxIterations, @Nullable Boolean nonCirculant,
+		@Nullable Boolean accelerate, Float regularizationFactor,
+		@Nullable long[] borderSize,
 		@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput)
 	{
 		// default to circulant

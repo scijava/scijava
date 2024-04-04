@@ -84,7 +84,6 @@ point spread function (PSF) using the Gibson-Lanni model :sup:`2`.
         // deconvole image
         result = ops.op("deconvolve.richardsonLucyTV").arity8().input(img_float, psf, new FloatType(), new ComplexFloatType(), iterations, false, false, regularizationFactor).apply()
 
-
     .. code-tab:: python
 
         #@ OpEnvironment ops

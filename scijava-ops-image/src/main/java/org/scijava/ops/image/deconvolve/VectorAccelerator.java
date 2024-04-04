@@ -63,7 +63,6 @@ public class VectorAccelerator<T extends RealType<T>> implements
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, T, Img<T>> create;
 
-
 	/**
 	 * TODO
 	 *
@@ -71,7 +70,7 @@ public class VectorAccelerator<T extends RealType<T>> implements
 	 */
 	@Override
 	public void mutate(AccelerationState<T> state) {
-		
+
 		accelerate(state);
 	}
 

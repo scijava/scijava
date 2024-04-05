@@ -2,15 +2,52 @@
 Fast Non-Local Means Denoise with OpenCV
 ========================================
 
-In this example we will use a denoise algorithm defined in an `external libray`_: OpenCV.
+In this example we will use a denoise algorithm from the external `OpenCV libray`_.
 
-This method progressively scans neighborhoods of an image looking for repeated search template. These
-repeated areas can then be averaged to eliminate gaussian noise, without the requirement of additional
+This method progressively scans through an image's pixels, comparing a patch centered around
+a pixel of interest (*e.g.* a 5x5 patch) with patches from other pixels from the image. These
+patches are then averaged to eliminate gaussian noise, without the requirement of additional
 images for comparison.
 
-Sample data can be found in the `images folder`_.
+The sample data for this example can be downloaded `here`_.
 
-SciJava Ops via Fiji's sripting engine with `script parameters`_:
+.. figure:: https://media.imagej.net/scijava-ops/1.0.0/opencv_denoise_example_1.png
+
+    Results of OpenCV's non-local means denoise algorithm with the sample data.
+
+
+Denoise parameter descriptions
+==============================
+
++-----------------+-------------------------------------------------------+-------+
+| Parameter       | Description                                           | Value |
++=================+=======================================================+=======+
+| Filter strength | Controls the decay in patch weights as a function     |4      |
+|                 |                                                       |       |
+|                 | of *distance* between patches. The *distance*         |       |
+|                 |                                                       |       |
+|                 | between patches is a measure of how similar they      |       |
+|                 |                                                       |       |
+|                 | are. Large filter strength values allow more distant  |       |
+|                 |                                                       |       |
+|                 | (*i.e.* dissimilar) patches to have more influence on |       |
+|                 |                                                       |       |
+|                 | the denoise output.                                   |       |
++-----------------+-------------------------------------------------------+-------+
+| Patch size      | The size of the patches/blocks from the input image   |7      |
+|                 |                                                       |       |
+|                 | to be compared. Patch sizes should be odd             |       |
+|                 |                                                       |       |
+|                 | (default=7).                                          |       | 
++-----------------+-------------------------------------------------------+-------+
+| Search size     | The size of the area in the input image to search     |21     |
+|                 |                                                       |       |
+|                 | for similar patches to compare. Search sizes          |       |
+|                 |                                                       |       |        
+|                 | should be odd (default=21).                           |       |
++-----------------+-------------------------------------------------------+-------+
+
+SciJava Ops via Fiji's scripting engine with `script parameters`_:
 
 .. tabs::
 
@@ -18,9 +55,9 @@ SciJava Ops via Fiji's sripting engine with `script parameters`_:
 
         #@ OpEnvironment ops
         #@ ImgPlus img
-        #@ Integer (label="strength:", value=4.0) strength
-        #@ Integer (label="template size:", value=7) template
-        #@ Integer (label="search size:", value=21) search
+        #@ Integer (label="Filter strength:", value=4) strength
+        #@ Integer (label="Patch size:", value=7) patch
+        #@ Integer (label="Search size:", value=21) search
         #@output ImgPlus result
 
         import net.imglib2.type.numeric.integer.UnsignedByteType
@@ -43,7 +80,7 @@ SciJava Ops via Fiji's sripting engine with `script parameters`_:
         output = img8bit.copy()
 
         // Run the denoise op
-        ops.quaternary("filter.denoise").input(img8bit, strength, template, search).output(output).compute()
+        ops.quaternary("filter.denoise").input(img8bit, strength, patch, search).output(output).compute()
 
         // Return the denoised image
         result = output
@@ -52,9 +89,9 @@ SciJava Ops via Fiji's sripting engine with `script parameters`_:
 
         #@ OpEnvironment ops
         #@ ImgPlus img
-        #@ Integer (label="strength:", value=4.0) strength
-        #@ Integer (label="template size:", value=7) template
-        #@ Integer (label="search size:", value=21) search
+        #@ Integer (label="Filter strength:", value=4) strength
+        #@ Integer (label="Patch size:", value=7) patch
+        #@ Integer (label="Search size:", value=21) search
         #@output ImgPlus result
 
         from net.imglib2.type.numeric.integer import UnsignedByteType
@@ -77,11 +114,11 @@ SciJava Ops via Fiji's sripting engine with `script parameters`_:
         output = img8bit.copy()
 
         # Run the denoise op
-        ops.quaternary("filter.denoise").input(img8bit, strength, template, search).output(output).compute()
+        ops.quaternary("filter.denoise").input(img8bit, strength, patch, search).output(output).compute()
 
         # Return the denoised image
         result = output
 
 .. _`script parameters`: https://imagej.net/scripting/parameters
-.. _`external libray`: https://docs.opencv.org/4.x/d5/d69/tutorial_py_non_local_means.html
-.. _`images folder`: https://github.com/scijava/incubator/tree/main/docs/ops/images/sample_16bit_T24.png
+.. _`OpenCV libray`: https://docs.opencv.org/4.x/d5/d69/tutorial_py_non_local_means.html
+.. _`here`: https://media.imagej.net/scijava-ops/1.0.0/opencv_denoise_16bit.png

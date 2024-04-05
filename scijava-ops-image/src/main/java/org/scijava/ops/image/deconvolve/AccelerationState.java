@@ -33,6 +33,15 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.RealType;
 
+/**
+ * Helper class for the Vector Accelerator Op. The Acceleration State stores the
+ * Vector Accelerator's data while iterative deconvolution is applied.
+ *
+ * @author Curtis Rueden
+ * @author Edward Evans
+ * @param <T>
+ */
+
 public class AccelerationState<T extends RealType<T>> {
 
 	public final RandomAccessibleInterval<T> yk_iterated;

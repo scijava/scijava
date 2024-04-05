@@ -1,6 +1,6 @@
-=============
-Deconvolution
-=============
+=============================================
+Richardson-Lucy Total Variation Deconvolution
+=============================================
 
 In this example we will use SciJava Ops to perform Richardson-Lucy (RL) deconvolution on a 3D dataset (X, Y, Z) of
 a HeLa cell nucleus stained with DAPI (4′,6-diamidino-2-phenylindole) and imaged on an epifluorescent microscope at 100x.

@@ -7,10 +7,10 @@ a HeLa cell nucleus stained with DAPI (4′,6-diamidino-2-phenylindole) and imag
 The SciJava Ops framework currently supports the standard RL algorithm as well as the Richardson-Lucy Total Variation (RLTV)
 algorithm, which utilizes a regularization factor to limit the noise amplified by the RL algorithm :sup:`1`.
 
-You can download the 3D HeLa cell nuclus data `here`_.
+You can download the 3D HeLa cell nuclus dataset `here`_.
 
 The table below contains the necessary parameter values needed for the ``kernelDiffraction`` Op to create the synthetic
-point spread function (PSF) using the Gibson-Lanni model :sup:`2`.
+point spread function (PSF) using the Gibson-Lanni model :sup:`2` for the sample HeLa cell nucleus dataset.
 
 +--------------------------------------+-------+
 | Parameter                            | Value |
@@ -81,7 +81,7 @@ point spread function (PSF) using the Gibson-Lanni model :sup:`2`.
                                                                 pZ,
                                                                 new FloatType()).apply()
 
-        // deconvole image
+        // deconvolve image
         result = ops.op("deconvolve.richardsonLucyTV").arity8().input(img_float, psf, new FloatType(), new ComplexFloatType(), iterations, false, false, regularizationFactor).apply()
 
     .. code-tab:: python
@@ -128,7 +128,7 @@ point spread function (PSF) using the Gibson-Lanni model :sup:`2`.
                                                                 pZ,
                                                                 FloatType()).apply()
 
-        # deconvole image
+        # deconvolve image
         result = ops.op("deconvolve.richardsonLucyTV").arity8().input(img_float, psf, FloatType(), ComplexFloatType(), iterations, False, False, regularizationFactor).apply()
 
 | :sup:`1`: `Dey et. al, Micros Res Tech 2006`_

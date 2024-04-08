@@ -91,7 +91,7 @@ public class YAMLOpInfoDiscoverer implements Discoverer {
 	 */
 	private List<URL> getOpYAML() {
 		try {
-			Enumeration<URL> e = Classes.classLoader().getResources("op.yaml");
+			Enumeration<URL> e = Classes.classLoader().getResources("ops.yaml");
 			return Collections.list(e);
 		}
 		catch (IOException e) {

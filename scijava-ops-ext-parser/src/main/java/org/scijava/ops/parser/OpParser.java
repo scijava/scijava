@@ -234,7 +234,7 @@ public final class OpParser {
 	 * @param methodName The method within the base class that will be the Op's
 	 *          source
 	 * @param parameterTypes The array of parameters for the given method
-	 * @return A source string that can be written as part of an op.yaml
+	 * @return A source string that can be written as part of an ops.yaml
 	 */
 	private static String parseOpSource(String className, String methodName,
 		Class<?>[] parameterTypes)
@@ -320,10 +320,10 @@ public final class OpParser {
 	}
 
 	/**
-	 * Helper method to write an {@link OpData} list to an {@code op.yaml} file.
+	 * Helper method to write an {@link OpData} list to an {@code ops.yaml} file.
 	 */
 	private static void outputYamlDoc(String opYaml) throws IOException {
-		File f = new File("op.yaml");
+		File f = new File("ops.yaml");
 		try (OutputStream os = new FileOutputStream(f)) {
 			os.write(opYaml.getBytes(UTF_8));
 		}

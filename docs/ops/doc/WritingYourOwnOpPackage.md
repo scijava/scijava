@@ -8,7 +8,7 @@ The recommended way to declare your Ops is through Javadoc. This approach requir
 
 ### Adding the SciJava Ops Indexer to your POM
 
-Ops written through Javadoc are discovered by the SciJava Ops Indexer, which creates a file `op.yaml` containing all of the data needed to import each Op you declare.
+Ops written through Javadoc are discovered by the SciJava Ops Indexer, which creates a file `ops.yaml` containing all of the data needed to import each Op you declare.
 
 Until the SciJava Ops annotation processor is integrated into [pom-scijava](https://github.com/scijava/pom-scijava), developers must add the following block of code to the `build` section of their project POM:
 

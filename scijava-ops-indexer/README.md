@@ -65,7 +65,7 @@ public static Double add(final Double d1, final Double d2) {
 }
 ```
 
-This annotation processor might create the following file `op.yaml` within the JAR build by Maven:
+This annotation processor might create the following file `ops.yaml` within the JAR build by Maven:
 
 ```yaml
 - op:

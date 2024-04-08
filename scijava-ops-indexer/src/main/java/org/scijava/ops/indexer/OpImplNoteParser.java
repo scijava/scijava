@@ -153,7 +153,7 @@ public class OpImplNoteParser extends AbstractProcessor {
 		FileObject resource = processingEnv.getFiler().createResource( //
 			StandardLocation.CLASS_OUTPUT, //
 			"", //
-			"op.yaml" //
+			"ops.yaml" //
 		);
 		try (OutputStream os = resource.openOutputStream()) {
 			os.write(doc.getBytes(UTF_8));

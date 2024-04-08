@@ -5,9 +5,17 @@ Richardson-Lucy Total Variation Deconvolution
 In this example we will use SciJava Ops to perform Richardson-Lucy (RL) deconvolution on a 3D dataset (X, Y, Z) of
 a HeLa cell nucleus stained with DAPI (4′,6-diamidino-2-phenylindole) and imaged on an epifluorescent microscope at 100x.
 The SciJava Ops framework currently supports the standard RL algorithm as well as the Richardson-Lucy Total Variation (RLTV)
-algorithm, which utilizes a regularization factor to limit the noise amplified by the RL algorithm :sup:`1`.
+algorithm, which utilizes a regularization factor to limit the noise amplified by the RL algorithm :sup:`1`. Typically,
+the RLTV algorithm returns improved axial and lateral resolution when compared to RL.
 
 You can download the 3D HeLa cell nuclus dataset `here`_.
+
+.. figure:: https://media.imagej.net/scijava-ops/1.0.0/rltv_example_1.gif
+
+    Results of RLTV deconvolution on the sample data.
+
+RLTV parameter descriptions
+===========================
 
 The table below contains the necessary parameter values needed for the ``kernelDiffraction`` Op to create the synthetic
 point spread function (PSF) using the Gibson-Lanni model :sup:`2` for the sample HeLa cell nucleus dataset.
@@ -34,6 +42,7 @@ point spread function (PSF) using the Gibson-Lanni model :sup:`2` for the sample
 | Regularization factor                | 0.002 |
 +--------------------------------------+-------+
 
+SciJava Ops via Fiji's scripting engine with `script parameters`_:
 
 .. tabs::
 
@@ -137,3 +146,4 @@ point spread function (PSF) using the Gibson-Lanni model :sup:`2` for the sample
 .. _`Dey et. al, Micros Res Tech 2006`: https://pubmed.ncbi.nlm.nih.gov/16586486/
 .. _`Gibson & Lanni, JOSA 1992`: https://pubmed.ncbi.nlm.nih.gov/1738047/
 .. _`here`: https://media.imagej.net/sample_data/3d/hela_nucleus.tif
+.. _`script parameters`: https://imagej.net/scripting/parameters

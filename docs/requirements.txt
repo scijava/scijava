@@ -2,5 +2,6 @@ sphinx-multiproject
 sphinx_rtd_theme
 sphinx-tabs
 sphinx_charts
+sphinx-copybutton
 myst-nb
 readthedocs-sphinx-search

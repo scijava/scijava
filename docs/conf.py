@@ -22,6 +22,7 @@ extensions = [
     "sphinx_search.extension",
     "sphinx_tabs.tabs",
     "sphinx_charts.charts",
+    "sphinx_copybutton",
     "myst_nb",
     # NB: Needed for newer sphinx versions - see
     # https://github.com/thclark/sphinx-charts/issues/23

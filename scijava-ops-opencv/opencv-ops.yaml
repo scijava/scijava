@@ -98,6 +98,20 @@ net.imagej.opencv.MatToImgConverter:
     authors: "Gabriella Turek"
     priority: "0.0"
 
+org.bytedeco.opencv.global.opencv_photo:
+  fastNlMeansDenoising:
+    alias: "filter.denoise"
+    type: "Computer2"
+  fastNlMeansDenoisingColored:
+    alias: "filter.denoise"
+    type: "Computer2"
+  fastNlMeansDenoisingMulti:
+    alias: "filter.denoise"
+    type: "Computer2"
+  fastNlMeansDenoisingColoredMulti:
+    alias: "filter.denoise"
+    type: "Computer2"
+
 org.bytedeco.opencv.global.opencv_imgproc:
   medianBlur:
     alias: "filter.median"

@@ -1,4 +1,4 @@
-name: ops-docs
+name: scijava-docs-ops
 channels:
   - conda-forge
   - defaults
@@ -7,6 +7,7 @@ dependencies:
   - openjdk=11
   - plotly
   - sphinx
+  - sphinx-copybutton
   - sphinx_rtd_theme
 
   - pip

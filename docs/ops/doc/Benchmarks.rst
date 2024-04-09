@@ -112,6 +112,12 @@ The results are shown in **Figure 4**. When algorithm matching dominates executi
 
 	**Figure 4:** Algorithm execution performance by Framework (lower is better)
 
+Finally, here is a figure combining all the metrics above:
+
+.. chart:: ../images/BenchmarkCombined.json
+
+	**Figure 5:** All metrics combined (lower is better)
+
 Reproducing these Results
 -------------------------
 

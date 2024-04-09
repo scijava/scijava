@@ -1,4 +1,5 @@
 import json
+import statistics
 
 import plotly.graph_objects as go
 import plotly.io as io
@@ -16,6 +17,7 @@ figure_titles = {
     "BenchmarkCaching" : "Caching Effects on Op Matching Performance",
     "BenchmarkConversion": "Parameter Conversion Performance",
     "BenchmarkMatching": "Basic Op Matching Performance",
+    "BenchmarkCombined": "Combined Performance Metrics",
 }
 
 # If you'd like to alias a particular test in the chart categories, add an entry to the following dict.
@@ -38,18 +40,38 @@ with open("scijava-ops-benchmarks_results.json") as f:
 
 # Build a map of results by benchmark class
 benchmark_classes = {}
+# And another map of results by benchmark test
+benchmark_tests = {}
 for row in data:
     fqdn_tokens = row["benchmark"].split(".")
     cls, test = fqdn_tokens[-2], fqdn_tokens[-1]
 
+    # NB: Convert seconds to milliseconds
+    score = 1000 * row["primaryMetric"]["score"]
+    error = 1000 * row["primaryMetric"]["scoreError"]
+    stats = {"score": score, "error": error}
+
     if cls not in benchmark_classes:
         benchmark_classes[cls] = {}
 
-    # NB: Convert seconds to milliseconds.
-    benchmark_classes[cls][test] = {
-        "score": 1000 * row["primaryMetric"]["score"],
-        "error": 1000 * row["primaryMetric"]["scoreError"],
-    }
+    benchmark_classes[cls][test] = stats
+
+    if test == "sciJavaOps":
+        # NB: sciJavaOps == runOp
+        test = "runOp"
+    if test not in benchmark_tests:
+        benchmark_tests[test] = []
+
+    benchmark_tests[test].append(stats)
+
+# Aggregate results into combined performance metrics
+benchmark_classes["BenchmarkCombined"] = {}
+for test, stats_list in benchmark_tests.items():
+    # Take the average of all scores for this test
+    score = statistics.fmean(stats["score"] for stats in stats_list)
+    # Take the *worst* of all errors for this test
+    error = max(stats["error"] for stats in stats_list)
+    benchmark_classes["BenchmarkCombined"][test] = {"score": score, "error": error}
 
 # For each class, build a chart and dump it to JSON
 for cls, test in benchmark_classes.items():

@@ -15,6 +15,3 @@ target/
 
 # Jupyter #
 .ipynb_checkpoints
-
-# Docs #
-_build/

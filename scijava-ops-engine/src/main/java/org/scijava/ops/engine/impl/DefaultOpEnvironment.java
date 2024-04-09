@@ -494,7 +494,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 					" does not match a wrappable Op type.");
 			}
 			if (!wrapper.equals(rawType)) {
-				log.warn("OpInfo" + info.implementationName() +
+				log.debug("OpInfo " + info.implementationName() +
 					" could not be wrapped as a " + rawType +
 					", so it is instead wrapped as a " + wrapper +
 					". If you want it to be wrapped as a " + rawType +

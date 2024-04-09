@@ -66,7 +66,7 @@ public class VectorAccelerator<T extends RealType<T>> implements
 	/**
 	 * TODO
 	 *
-	 * @param yk_iterated
+	 * @param state
 	 */
 	@Override
 	public void mutate(AccelerationState<T> state) {
@@ -75,19 +75,18 @@ public class VectorAccelerator<T extends RealType<T>> implements
 	}
 
 	private void initialize(AccelerationState<T> state) {
-		if (state.yk_prediction == null) {
-			long[] temp = new long[state.yk_iterated.numDimensions()];
-			T type = Util.getTypeFromInterval(state.yk_iterated);
-			state.yk_iterated.dimensions(temp);
+		if (state.ykPrediction() == null) {
+			long[] temp = new long[state.ykIterated().numDimensions()];
+			T type = Util.getTypeFromInterval(state.ykIterated());
+			state.ykIterated().dimensions(temp);
 
 			FinalDimensions dims = new FinalDimensions(temp);
 
-			state.yk_prediction = create.apply(dims, type);
-			state.xkm1_previous = create.apply(dims, type);
-			state.yk_prediction = create.apply(dims, type);
-			state.gk = create.apply(dims, type);
-			state.hk_vector = create.apply(dims, type);
-
+			state.ykPrediction(create.apply(dims, type));
+			state.xkm1Previous(create.apply(dims, type));
+			state.ykPrediction(create.apply(dims, type));
+			state.gk(create.apply(dims, type));
+			state.hkVector(create.apply(dims, type));
 		}
 
 	}
@@ -96,62 +95,64 @@ public class VectorAccelerator<T extends RealType<T>> implements
 
 		// use the iterated prediction and the previous value of the prediction
 		// to calculate the acceleration factor
-		if (state.yk_prediction != null) {
+		if (state.ykPrediction() != null) {
 
-			state.accelerationFactor = computeAccelerationFactor(state);
-			if ((state.accelerationFactor < 0)) {
-				state.gkm1 = null;
-				state.accelerationFactor = 0.0;
+			double accelerationFactor = computeAccelerationFactor(state);
+
+			if ((accelerationFactor < 0)) {
+				state.gkm1(null);
+				accelerationFactor = 0.0;
 			}
 
-			if ((state.accelerationFactor > 1.0f)) {
-				state.accelerationFactor = 1.0f;
+			if ((accelerationFactor > 1.0f)) {
+				accelerationFactor = 1.0f;
 			}
+
+			state.accelerationFactor(accelerationFactor);
 		}
 
 		// current estimate for x is yk_iterated
-		RandomAccessibleInterval<T> xk_estimate = state.yk_iterated;
+		RandomAccessibleInterval<T> xk_estimate = state.ykIterated();
 
 		// calculate the change vector between x and x previous
-		if (state.accelerationFactor > 0) {
-			Subtract(xk_estimate, state.xkm1_previous, state.hk_vector);
+		if (state.accelerationFactor() > 0) {
+			Subtract(xk_estimate, state.xkm1Previous(), state.hkVector());
 
 			// make the next prediction
-			state.yk_prediction = AddAndScale(xk_estimate, state.hk_vector,
-				(float) state.accelerationFactor);
+			state.ykPrediction(AddAndScale(xk_estimate, state.hkVector(),
+				(float) state.accelerationFactor()));
 		}
 		else {
 
 			// TODO: Revisit where initialization should be done
 			initialize(state);
 
-			copyOp.compute(xk_estimate, state.yk_prediction);
+			copyOp.compute(xk_estimate, state.ykPrediction());
 		}
 
 		// make a copy of the estimate to use as previous next time
-		copyOp.compute(xk_estimate, state.xkm1_previous);
+		copyOp.compute(xk_estimate, state.xkm1Previous());
 
 		// HACK: TODO: look over how to transfer the memory
-		copyOp.compute(state.yk_prediction, state.yk_iterated);
+		copyOp.compute(state.ykPrediction(), state.ykIterated());
 	}
 
 	private double computeAccelerationFactor(AccelerationState<T> state) {
 		// gk=StaticFunctions.Subtract(yk_iterated, yk_prediction);
-		Subtract(state.yk_iterated, state.yk_prediction, state.gk);
+		Subtract(state.ykIterated(), state.ykPrediction(), state.gk());
 
-		if (state.gkm1 != null) {
-			double numerator = DotProduct(state.gk, state.gkm1);
-			double denominator = DotProduct(state.gkm1, state.gkm1);
+		double result = 0.0;
 
-			state.gkm1 = state.gk.copy();
-			return numerator / denominator;
+		if (state.gkm1() != null) {
+			double numerator = DotProduct(state.gk(), state.gkm1());
+			double denominator = DotProduct(state.gkm1(), state.gkm1());
 
+			result = numerator / denominator;
 		}
 
-		state.gkm1 = state.gk.copy();
+		state.gkm1(state.gk().copy());
 
-		return 0.0;
-
+		return result;
 	}
 
 	/*

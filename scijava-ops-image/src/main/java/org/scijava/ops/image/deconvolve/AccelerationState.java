@@ -44,15 +44,67 @@ import net.imglib2.type.numeric.RealType;
 
 public class AccelerationState<T extends RealType<T>> {
 
-	public final RandomAccessibleInterval<T> yk_iterated;
-	public Img<T> xkm1_previous = null;
-	public Img<T> yk_prediction = null;
-	public Img<T> hk_vector = null;
-	public Img<T> gk;
-	public Img<T> gkm1;
-	public double accelerationFactor = 0.0f;
+	private final RandomAccessibleInterval<T> ykIterated;
+	private Img<T> xkm1Previous = null;
+	private Img<T> ykPrediction = null;
+	private Img<T> hkVector = null;
+	private Img<T> gk;
+	private Img<T> gkm1;
+	private double accelerationFactor = 0.0f;
 
-	public AccelerationState(RandomAccessibleInterval<T> yk_iterated) {
-		this.yk_iterated = yk_iterated;
+	public AccelerationState(RandomAccessibleInterval<T> ykIterated) {
+		this.ykIterated = ykIterated;
+	}
+
+	public RandomAccessibleInterval<T> ykIterated() {
+		return ykIterated;
+	}
+
+	public Img<T> xkm1Previous() {
+		return xkm1Previous;
+	}
+
+	public void xkm1Previous(Img<T> xkm1Previous) {
+		this.xkm1Previous = xkm1Previous;
+	}
+
+	public Img<T> ykPrediction() {
+		return ykPrediction;
+	}
+
+	public void ykPrediction(Img<T> ykPrediction) {
+		this.ykPrediction = ykPrediction;
+	}
+
+	public Img<T> hkVector() {
+		return hkVector;
+	}
+
+	public void hkVector(Img<T> hkVector) {
+		this.hkVector = hkVector;
+	}
+
+	public Img<T> gk() {
+		return gk;
+	}
+
+	public void gk(Img<T> gk) {
+		this.gk = gk;
+	}
+
+	public Img<T> gkm1() {
+		return gkm1;
+	}
+
+	public void gkm1(Img<T> gkm1) {
+		this.gkm1 = gkm1;
+	}
+
+	public double accelerationFactor() {
+		return accelerationFactor;
+	}
+
+	public void accelerationFactor(double accelerationFactor) {
+		this.accelerationFactor = accelerationFactor;
 	}
 }

@@ -59,7 +59,7 @@ for cls, test in benchmark_classes.items():
     error_y = []
 
     # Add each benchmark in the class
-    for method, stats in test.items():
+    for method, stats in sorted(test.items(), key=lambda item: item[1]["score"]):
         print(".", end="")
         method = benchmark_categories.get(method, method)
         x.append(method)

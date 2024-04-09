@@ -8,15 +8,16 @@ Hardware and Software
 
 This analysis was performed with the following hardware:
 
-* 2021 Dell OptiPlex 5090 Small Form Factor
-* Intel(R) Core(TM) i7-10700 CPU @ 2.90GHz
-* 64 GB 3200 MHz DDR4 RAM
+* Dell Precision 7770
+* 12th Gen Intel i9-12950HX (24) @ 4.900GHz
+* 32 GB 4800 MT/s DDR5 RAM
 
 The following software components were used:
 
-* Ubuntu 22.04.3 LTS
-* OpenJDK Runtime Environment (build 11.0.21) with OpenJDK 64-Bit Server VM (build 11.0.21, mixed mode, sharing)
-* SciJava Incubator commit `57dbbd25 <https://github.com/scijava/incubator/commit/57dbbd253fe9d8947dd2e72ec05c8accff77a7dc>`_
+* Ubuntu 23.10
+* Kernel 6.5.0-26-generic
+* OpenJDK Runtime Environment AdoptOpenJDK (build 11.0.8+10) with OpenJDK 64-Bit Server VM AdoptOpenJDK (build 11.0.8+10, mixed mode)
+* SciJava Incubator commit `77006edc <https://github.com/scijava/incubator/commit/77006edc6a567a08ec5aba39e56fdfab8d79a0b9>`_
 * ImageJ Ops version ``2.0.0``
 
 All benchmarks are executed using the `Java Microbenchmark Harness <https://github.com/openjdk/jmh>`_, using the following parameters:
@@ -25,7 +26,7 @@ All benchmarks are executed using the `Java Microbenchmark Harness <https://gith
 * 2 warmup executions
 * 2 10-second iterations per warm-up execution
 * 1 measurement execution
-* 5 10-second iterations per measurement execution
+* 5 5-second iterations per measurement execution
 
 Op Matching
 -----------
@@ -55,7 +56,7 @@ We first benchmark the base penalty of executing this method using SciJava Ops, 
 * Output buffer creation + static method invocation
 * Output buffer creation + SciJava Ops invocation
 * SciJava Ops invocation using Op adaptation
-  
+
 The results are shown in **Figure 1**. We find Op execution through the SciJava Ops framework adds a few milliseconds of additional overhead. A few additional milliseconds of overhead are observed when SciJava Ops is additionally tasked with creating an output buffer.
 
 .. chart:: ../images/BenchmarkMatching.json

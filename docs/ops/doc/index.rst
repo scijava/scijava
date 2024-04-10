@@ -23,6 +23,7 @@ The combination of these libraries allows declarative image analysis workflows, 
    CallingOps
    SearchingForOps
    Benchmarks
+   ScriptingInFiji
 
 .. toctree::
    :maxdepth: 2

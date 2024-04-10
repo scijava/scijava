@@ -9,13 +9,13 @@ In this example we will use SciJava Ops within Fiji to perform `FLIM`_ analysis,
 .. image:: https://media.imagej.net/scijava-ops/1.0.0/flim_example_pseudocolored.png
     :width: 49%
 
-We use a sample of `FluoCells™ Prepared Slide #1`_, imaged by `Jenu Chacko <https://loci.wisc.edu/staff/chacko-jenu/>`_ using Openscan-LSM and SPwith multiphoton excitation and a 40x WI lens.
+We use a sample of `FluoCells™ Prepared Slide #1`_, imaged by `Jenu Chacko`_ using `Openscan-LSM`_ and SPC180 electronics with multiphoton excitation and a 40x WI lens.
 
   FluoCells™ Prepared Slide #1 contains bovine pulmonary artery endothelial cells (BPAEC). MitoTracker™ Red CMXRos was used to stain the mitochondria in the live cells, with accumulation dependent upon membrane potential. Following fixation and permeabilization, F-actin was stained with Alexa Fluor™ 488 phalloidin, and the nuclei were counterstained with the blue-fluorescent DNA stain DAPI.
 
 The sample data can be downloaded `here <https://media.imagej.net/scijava-ops/1.0.0/flim_example_data.sdt>`_ and can be loaded into Fiji with `Bio-Formats`_ using ``File → Open``. When presented with the ``Bio-Formats Import Options`` screen, it may be helpful to select ``Metadata viewing → Display metadata`` to determine values necessary for analysis. Then, select ``OK``. The data may take a minute to load.
 
-Within the script, the `Levenberg-Marquardt algorithm <https://en.wikipedia.org/wiki/Levenberg%E2%80%93Marquardt_algorithm>`_ fitting Op of SciJava Ops FLIM is used to fit the data.
+Within the script, the `Levenberg-Marquardt algorithm`_ fitting Op of SciJava Ops FLIM is used to fit the data.
 
 Basic analysis
 ---------------------
@@ -162,3 +162,6 @@ In the panels below, we show script execution with computation restricted to the
 .. _`FLIM` : https://en.wikipedia.org/wiki/Fluorescence-lifetime_imaging_microscopy
 .. _`FluoCells™ Prepared Slide #1` : https://www.thermofisher.com/order/catalog/product/F36924
 .. _`FRET` : https://en.wikipedia.org/wiki/F%C3%B6rster_resonance_energy_transfer
+.. _`Jenu Chacko` : https://loci.wisc.edu/staff/chacko-jenu/
+.. _`Levenberg-Marquardt algorithm` : https://en.wikipedia.org/wiki/Levenberg%E2%80%93Marquardt_algorithm
+.. _`Openscan-LSM` : https://github.com/openscan-lsm

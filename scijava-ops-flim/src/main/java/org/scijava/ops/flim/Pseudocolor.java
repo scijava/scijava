@@ -107,7 +107,7 @@ public class Pseudocolor implements
 		// min, max = 20%, 80%
 		IterableInterval<FloatType> hRawII = Views.iterable(hRaw);
 		if (cMin == null) {
-			cMin = meaner.apply(hRawII).getRealFloat() * 0.2f;
+			cMin = percentiler.apply(hRawII, 5.0f).getRealFloat();
 			System.out.println("color_min automatically set to " + cMin);
 		}
 		if (cMax == null) {

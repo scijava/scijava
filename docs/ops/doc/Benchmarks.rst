@@ -16,14 +16,14 @@ The following software components were used:
 
 * Ubuntu 23.10
 * Kernel 6.5.0-26-generic
-* OpenJDK Runtime Environment AdoptOpenJDK (build 11.0.8+10) with OpenJDK 64-Bit Server VM AdoptOpenJDK (build 11.0.8+10, mixed mode)
-* SciJava Incubator commit `77006edc <https://github.com/scijava/incubator/commit/77006edc6a567a08ec5aba39e56fdfab8d79a0b9>`_
+* OpenJDK 64-Bit Server VM GraalVM CE 21.0.2+13.1 (build 21.0.2+13-jvmci-23.1-b30, mixed mode, sharing)
+* SciJava Incubator commit `906b9d08 <https://github.com/scijava/incubator/commit/906b9d08301f4aafd7947f1fd08717f5351fd40b>`_
 * ImageJ Ops version ``2.0.0``
 
 All benchmarks are executed using the `Java Microbenchmark Harness <https://github.com/openjdk/jmh>`_, using the following parameters:
 
 * Forked JVM
-* 2 warmup executions
+* 1 warmup execution
 * 2 10-second iterations per warm-up execution
 * 1 measurement execution
 * 5 5-second iterations per measurement execution
@@ -36,26 +36,20 @@ We first analyze the performance of executing the following static method:
 ..  code-block:: java
 
 	/**
-	 * @param in the data to input to our function
-	 * @param d the value to add to each element in the input
-	 * @param out the preallocated storage buffer
-	 * @implNote op name="benchmark.match",type=Computer
+	 * Increments a byte value.
+	 *
+	 * @param data array containing the byte to increment
+	 * @implNote op name="benchmark.increment", type=Inplace1
 	 */
-	public static void op( //
-		final RandomAccessibleInterval<DoubleType> in, //
-		final Double d, //
-		final RandomAccessibleInterval<DoubleType> out //
-	) {
-		LoopBuilder.setImages(in, out)
-			.multiThreaded()
-			.forEachPixel((i, o) -> o.set(i.get() + d));
+	public static void incrementByte(final byte[] data) {
+		data[0]++;
 	}
 
-We first benchmark the base penalty of executing this method using SciJava Ops, compared to direct execution of the static method. Notably, as this method requires a preallocated output buffer, we must either create it ourselves, *or* allow SciJava Ops to create it for us using an Op adaptation. Thus, we test the benchmark the following three scenarios:
+We first benchmark the base penalty of executing this method using SciJava Ops, compared to direct execution of the static method. This method mutates a data structure in place, meaning the Ops engine can match it directly as an inplace Op, or adapt it to a function Op. Thus, we test the benchmark the following three scenarios:
 
-* Output buffer creation + static method invocation
-* Output buffer creation + SciJava Ops invocation
-* SciJava Ops invocation using Op adaptation
+* Direct static method invocation
+* SciJava Ops inplace invocation
+* SciJava Ops adapted function invocation
 
 The results are shown in **Figure 1**. We find Op execution through the SciJava Ops framework adds a few milliseconds of additional overhead. A few additional milliseconds of overhead are observed when SciJava Ops is additionally tasked with creating an output buffer.
 
@@ -63,13 +57,13 @@ The results are shown in **Figure 1**. We find Op execution through the SciJava 
 
 	**Figure 1:** Algorithm execution performance (lower is better)
 
-Note that the avove requests are benchmarked without assistance from the Op cache, i.e. they are designed to model the full matching process. As repeated Op requests will utilize the Op cache, we benchmark cached Op retrieval separately, with results shown in **Figure 2**. These benchmarks suggest Op caching helps avoid the additional overhead of Op adaptation as its performance approaches that of normal Op execution.
+Note that the above requests are benchmarked without assistance from the Op cache, i.e. they are designed to model the full matching process. As repeated Op requests will utilize the Op cache, we benchmark cached Op retrieval separately, with results shown in **Figure 2**. These benchmarks suggest Op caching helps avoid the additional overhead of Op adaptation as its performance approaches that of normal Op execution.
 
 .. chart:: ../images/BenchmarkCaching.json
 
 	**Figure 2:** Algorithm execution performance with Op caching (lower is better)
 
-Finally, we benchmark the overhead of SciJava Ops parameter conversion. Suppose we instead wish to operate upon a ``RandomAccessibleInterval<ByteType>`` - we must convert it to call our Op. We consider the following procedures:
+Finally, we benchmark the overhead of SciJava Ops parameter conversion. Suppose we instead wish to operate upon a ``double[]`` - we must convert it to ``byte[]`` to call our Op. We consider the following procedures:
 
 * Image conversion + output buffer creation + static method invocation
 * output buffer creation + SciJava Ops invocation using Op conversion

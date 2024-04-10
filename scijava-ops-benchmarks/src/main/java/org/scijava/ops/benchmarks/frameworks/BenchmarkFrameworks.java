@@ -91,9 +91,7 @@ public class BenchmarkFrameworks {
 	 */
 	public static void invertRaw(final byte[] data) {
 		for (int i = 0; i < data.length; i++) {
-			final int value = data[i] & 0xff;
-			final int result = 255 - value;
-			data[i] = (byte) result;
+			data[i] = (byte) ~data[i];
 		}
 	}
 

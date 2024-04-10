@@ -55,7 +55,7 @@ public class FrameworksState {
 	public void setUpInvocation() {
 		// Set up ImageJ Ops
 		ctx = new Context(OpService.class);
-		ops = ctx.getService(OpService.class);
+		ops = ctx.service(OpService.class);
 		// Set up SciJava Ops
 		env = OpEnvironment.build();
 		// Create input data

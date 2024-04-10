@@ -37,6 +37,7 @@ import net.imglib2.Dimensions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
+import net.imglib2.outofbounds.OutOfBoundsMirrorFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.ComplexType;
@@ -63,7 +64,7 @@ import org.scijava.ops.spi.OpDependency;
  */
 public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
 	implements
-	Functions.Arity10<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, O, C, Integer, Boolean, Boolean, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, RandomAccessibleInterval<O>>
+	Functions.Arity9<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, O, C, Integer, Boolean, Boolean, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<O>>
 {
 
 	private Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> computeEstimateOp =
@@ -77,9 +78,6 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 
 	@OpDependency(name = "math.multiply")
 	private Computers.Arity2<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> multiplyOp;
-
-	@OpDependency(name = "deconvolve.accelerate")
-	private Inplaces.Arity1<RandomAccessibleInterval<O>> accelerator;
 
 	// TODO: can this go in AbstractFFTFilterF?
 	@OpDependency(name = "create.img")
@@ -97,7 +95,7 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 	@OpDependency(name = "deconvolve.richardsonLucy")
 	private Computers.Arity12<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, //
 			RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, //
-			Boolean, C, Integer, Inplaces.Arity1<RandomAccessibleInterval<O>>, //
+			Boolean, C, Integer, Boolean, //
 			Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>>, //
 			List<Inplaces.Arity1<RandomAccessibleInterval<O>>>, //
 			RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> richardsonLucyOp;
@@ -135,17 +133,17 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 
 			return (input, kernel, out) -> {
 				richardsonLucyOp.compute(input, kernel, fftImg, fftKernel, true, true,
-					complexType, maxIterations, accelerate ? accelerator : null,
-					computeEstimateOp, list, firstGuess.apply(raiExtendedInput, Util
-						.getTypeFromInterval(out), out), out);
+					complexType, maxIterations, accelerate, computeEstimateOp, list,
+					firstGuess.apply(raiExtendedInput, Util.getTypeFromInterval(out),
+						out), out);
 			};
 		}
 
 		// return a richardson lucy computer
 		return (input, kernel, out) -> {
 			richardsonLucyOp.compute(input, kernel, fftImg, fftKernel, true, true,
-				complexType, maxIterations, accelerate ? accelerator : null,
-				computeEstimateOp, null, null, out);
+				complexType, maxIterations, accelerate, computeEstimateOp, null, null,
+				out);
 		};
 	}
 
@@ -207,7 +205,6 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 	 * @param accelerate indicates whether or not to use acceleration
 	 * @param borderSize
 	 * @param obfInput
-	 * @param obfKernel
 	 * @return the output
 	 */
 	@Override
@@ -215,22 +212,33 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 		RandomAccessibleInterval<K> kernel, O outType, C complexType,
 		Integer maxIterations, @Nullable Boolean nonCirculant,
 		@Nullable Boolean accelerate, @Nullable long[] borderSize,
-		@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,
-		@Nullable OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel)
+		@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput)
 	{
-		if (obfInput == null) obfInput = new OutOfBoundsConstantValueFactory<>(Util
-			.getTypeFromInterval(input).createVariable());
-
+		// default to circulant
 		if (nonCirculant == null) {
-			this.nonCirculant = false;
+			nonCirculant = false;
+			this.nonCirculant = nonCirculant;
 		}
 		else {
 			this.nonCirculant = nonCirculant;
 		}
 
-		if (accelerate == null) {
-			accelerate = false;
+		// out of bounds factory will be different depending on if circulant or
+		// non-circulant is used
+		if (obfInput == null) {
+			if (nonCirculant) {
+				obfInput = new OutOfBoundsConstantValueFactory<>(Util
+					.getTypeFromInterval(input).createVariable());
+			}
+			else {
+				obfInput = new OutOfBoundsMirrorFactory<>(
+					OutOfBoundsMirrorFactory.Boundary.SINGLE);
+			}
 		}
+
+		// default to no acceleration
+		if (accelerate == null) accelerate = false;
+
 		this.maxIterations = maxIterations;
 
 		RandomAccessibleInterval<O> output = outputCreator.apply(input, outType);

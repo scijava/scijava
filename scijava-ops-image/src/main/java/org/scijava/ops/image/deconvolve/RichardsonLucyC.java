@@ -61,7 +61,7 @@ import org.scijava.ops.spi.OpDependency;
 public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
 	implements
 	Computers.Arity12<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, //
-			RandomAccessibleInterval<C>, Boolean, Boolean, C, Integer, Inplaces.Arity1<RandomAccessibleInterval<O>>, //
+			RandomAccessibleInterval<C>, Boolean, Boolean, C, Integer, Boolean, //
 			Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>>, //
 			List<Inplaces.Arity1<RandomAccessibleInterval<O>>>, RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> {
 
@@ -76,6 +76,9 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 			RandomAccessibleInterval<C>, //
 			RandomAccessibleInterval<O> //
 	> rlCorrectionOp;
+
+	@OpDependency(name = "deconvolve.accelerate")
+	private Inplaces.Arity1<AccelerationState<O>> accelerator;
 
 	@OpDependency(name = "create.img")
 	private BiFunction<Interval, O, Img<O>> createOp;
@@ -107,8 +110,7 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 	 *          been calculated. If true, the FFT will be taken on the kernel.
 	 * @param complexType An instance of the type to be used in the Fourier space.
 	 * @param maxIterations Maximum number of iterations to perform.
-	 * @param accelerator An op which implements an acceleration strategy (takes a
-	 *          larger step at each iteration).
+	 * @param accelerate indicates whether or not to use acceleration
 	 * @param updateOp Op that computes Richardson Lucy update, can be overridden
 	 *          to implement variations of the algorithm (like RichardsonLucyTV).
 	 * @param iterativePostProcessingOps A list of optional constraints that are
@@ -129,17 +131,12 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 		Boolean performKernelFFT, //
 		C complexType, //
 		Integer maxIterations, //
-		@Nullable Inplaces.Arity1<RandomAccessibleInterval<O>> accelerator, //
+		@Nullable Boolean accelerate, //
 		@Nullable Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> updateOp, //
 		@Nullable List<Inplaces.Arity1<RandomAccessibleInterval<O>>> iterativePostProcessingOps, //
 		@Nullable RandomAccessibleInterval<O> raiExtendedEstimate, //
 		RandomAccessibleInterval<O> out //
 	) {
-
-		// If the accelerator is null, make a No-op placeholder
-		if (accelerator == null) {
-			accelerator = (t) -> {};
-		}
 		// If the update Op is null, use the default
 		if (updateOp == null) {
 			updateOp = this.updateOp;
@@ -163,6 +160,9 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 
 		// perform fft of psf
 		fftKernelOp.compute(kernel, fftKernel);
+
+		// create acceleration state
+		AccelerationState<O> state = new AccelerationState<>(raiExtendedEstimate);
 
 		// -- perform iterations --
 
@@ -188,7 +188,7 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 			}
 
 			// accelerate the algorithm by taking a larger step
-			accelerator.mutate(raiExtendedEstimate);
+			if (accelerate) accelerator.mutate(state);
 		}
 
 		// -- copy crop padded back to original size

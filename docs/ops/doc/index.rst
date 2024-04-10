@@ -28,6 +28,7 @@ The combination of these libraries allows declarative image analysis workflows, 
    :maxdepth: 2
    :caption: ⚙️ Examples
 
+   examples/deconvolution
    examples/example_gaussian_subtraction
    examples/opencv_denoise
 

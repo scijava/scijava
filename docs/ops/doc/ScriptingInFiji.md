@@ -12,10 +12,9 @@ To run Ops, scripts require an `OpEnvironment`. The easiest way to obtain an `Op
 
 ## Obtaining inputs
 
-Scripts using SciJava Ops obtain inputs like any other SciJava script, and the lines below will provide us with an `Img` input parameter and an `Img` output parameter, as well as a `ThreadService` which we will use later.
+Scripts using SciJava Ops obtain inputs like any other SciJava script, and the lines below will provide us with an `Img` input parameter and an `Img` output parameter.
 
 ```text
-#@ ThreadService ts
 #@ Img imgInput
 #@output Img out
 ```
@@ -35,10 +34,11 @@ The below script can be pasted into the Script Editor. **Ensure that the Script 
 
 ```text
 #@ OpEnvironment ops
-#@ ThreadService ts
 #@ Img imgInput
 #@output Img out
 
 // Call some Ops!
 out = ops.op("filter.gauss").arity2().input(imgInput, new Double(3.0)).apply()
 ```
+
+Scripting in Fiji is a convenient gateway to accessing SciJava Ops. To see more, check out some examples, such as [image deconvolution](examples/deconvolution.rst) or [FLIM analysis](examples/example_flim_analysis.rst)! 

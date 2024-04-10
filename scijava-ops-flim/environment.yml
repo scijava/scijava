@@ -1,0 +1,8 @@
+name: scijava-ops-flim
+channels:
+  - conda-forge
+dependencies:
+  - beakerx
+  - jupyter_contrib_nbextensions
+  - numpy
+  - openjdk=11

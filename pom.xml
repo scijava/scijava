@@ -54,6 +54,7 @@
 		<module>scijava-meta</module>
 		<module>scijava-ops-api</module>
 		<module>scijava-ops-engine</module>
+		<module>scijava-ops-flim</module>
 		<module>scijava-ops-image</module>
 		<module>scijava-ops-legacy</module>
 		<module>scijava-ops-indexer</module>

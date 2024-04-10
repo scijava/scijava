@@ -274,7 +274,7 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	 * @input dimension
 	 * @input position
 	 * @output result
-	 * @implNote op names='transform.hyperSliceView'
+	 * @implNote op names='transform.hyperSliceView', priority='-100.'
 	 */
 	public final Functions.Arity3<RandomAccessible<T>, Integer, Long, MixedTransformView<T>> hyperSliceRA =
 		Views::hyperSlice;

@@ -461,8 +461,9 @@ public class ConvertedOpInfo implements OpInfo {
 		List<Type> originalInputs = info.inputTypes();
 		List<Type> inputs = inputTypes();
 		for (int i = 0; i < inputs.size(); i++) {
-			penalty += determineLoss(env, Nil.of(inputs.get(i)), Nil.of(originalInputs
-				.get(i)));
+			var from = inputs.get(i);
+			var to = Types.mapVarToTypes(originalInputs.get(i), typeVarAssigns);
+			penalty += determineLoss(env, Nil.of(from), Nil.of(to));
 		}
 
 		Type opOutput = info.outputType();

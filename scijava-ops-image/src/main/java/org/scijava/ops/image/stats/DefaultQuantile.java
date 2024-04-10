@@ -29,15 +29,12 @@
 
 package org.scijava.ops.image.stats;
 
-import static java.util.Collections.swap;
+import net.imglib2.type.numeric.RealType;
+import org.scijava.function.Computers;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
-import net.imglib2.type.numeric.RealType;
-
-import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
+import static java.util.Collections.swap;
 
 /**
  * Op to calculate the n-th {@code stats.percentile}.
@@ -49,8 +46,8 @@ import org.scijava.ops.spi.Op;
  * @param <O> output type
  * @implNote op names='stats.quantile'
  */
-public class DefaultQuantile<I extends RealType<I>, O extends RealType<O>>
-	implements Computers.Arity2<Iterable<I>, Double, O>
+public class DefaultQuantile<I extends RealType<I>, N extends Number, O extends RealType<O>>
+	implements Computers.Arity2<Iterable<I>, N, O>
 {
 
 	/**
@@ -61,22 +58,22 @@ public class DefaultQuantile<I extends RealType<I>, O extends RealType<O>>
 	 * @param output
 	 */
 	@Override
-	public void compute(final Iterable<I> input, final Double quantile,
+	public void compute(final Iterable<I> input, final N quantile,
 		final O output)
 	{
-		if (quantile < 0 || quantile > 1) {
+		if (quantile.doubleValue() < 0 || quantile.doubleValue() > 1) {
 			throw new IllegalArgumentException(
 				"Quantile must be between 0 and 1 (inclusive) but is " + quantile);
 		}
 
 		final ArrayList<Double> statistics = new ArrayList<>();
 
-		final Iterator<I> it = input.iterator();
-		while (it.hasNext()) {
-			statistics.add(it.next().getRealDouble());
+		for (I i : input) {
+			statistics.add(i.getRealDouble());
 		}
 
-		output.setReal(select(statistics, (int) (statistics.size() * quantile)));
+		output.setReal(select(statistics, (int) (statistics.size() * quantile
+			.doubleValue())));
 	}
 
 	/**

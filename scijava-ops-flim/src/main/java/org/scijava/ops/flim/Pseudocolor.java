@@ -49,7 +49,12 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
- * Generates a pseudocolored image of FLIM fit results
+ * Generates an HSV pseudocolored image of FLIM fit results, where for each
+ * pixel:
+ * <ul>
+ * <li>The Hue is a function of the lifetime fit parameters</li>
+ * <li>The Value is a function of the initial intensity fit parameters</li>
+ * </ul>
  *
  * @implNote op names="flim.pseudocolor"
  * @author Dasong Gao
@@ -71,19 +76,23 @@ public class Pseudocolor implements
 	@OpDependency(name = "transform.permuteView")
 	Functions.Arity3<RandomAccessibleInterval<FloatType>, Integer, Integer, RandomAccessibleInterval<FloatType>> permuter;
 
-	@OpDependency(name = "stats.mean")
-	Function<IterableInterval<FloatType>, FloatType> meaner;
-
 	@OpDependency(name = "stats.percentile")
 	BiFunction<IterableInterval<FloatType>, Float, FloatType> percentiler;
 
 	/**
-	 * @param rslt
-	 * @param cMin
-	 * @param cMax
-	 * @param bMin
-	 * @param bMax
-	 * @param lut
+	 * @param rslt the results from the Fit
+	 * @param cMin The lower bound used for the hue map. Hue values below this
+	 *          bound will be mapped to black. Defaults to the fifth percentile
+	 *          value across all lifetime values.
+	 * @param cMax The upper bound used for the hue map. Hue values above this
+	 *          bound will be mapped to white. Defaults to the ninety-fifth
+	 *          percentile value across all lifetime values.
+	 * @param bMin The lower bound used for the value map. Defaults to the minimum
+	 *          of {@code rslt.intensityMap}
+	 * @param bMax The upper bound used for the value map. Defaults to the 99.5th
+	 *          percentile of {@code rslt.intensityMap}
+	 * @param lut the {@link ColorTable} function to map hues between {@code cMin}
+	 *          and {@code cMax}. Defaults to {@link Pseudocolor#tri2()}.
 	 * @return
 	 */
 	@Override

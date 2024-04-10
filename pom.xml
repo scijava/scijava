@@ -235,7 +235,7 @@
 									end
 
 									# Read in main and test scope plugin annotations.
-									['ops.yaml', 'META-INF/json/org.scijava.plugin.Plugin'].each do |pluginsPath|
+									['ops.yaml'].each do |pluginsPath|
 										mainPluginsPath = "#{basedir}/target/classes/#{pluginsPath}"
 										testPluginsPath = "#{basedir}/target/test-classes/#{pluginsPath}"
 										mainPlugins = read_plugins(mainPluginsPath)

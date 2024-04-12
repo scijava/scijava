@@ -103,13 +103,13 @@ org.bytedeco.opencv.global.opencv_photo:
     alias: "filter.denoise"
     type: "Computer2"
   fastNlMeansDenoisingColored:
-    alias: "filter.denoise"
+    alias: "filter.denoiseColor"
     type: "Computer2"
   fastNlMeansDenoisingMulti:
     alias: "filter.denoise"
     type: "Computer2"
   fastNlMeansDenoisingColoredMulti:
-    alias: "filter.denoise"
+    alias: "filter.denoiseColor"
     type: "Computer2"
 
 org.bytedeco.opencv.global.opencv_imgproc:

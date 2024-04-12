@@ -618,7 +618,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColored]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.GpuMat%2Corg.bytedeco.opencv.opencv_core.GpuMat%29
     priority: 0.0
@@ -629,7 +629,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColored]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.opencv.opencv_core.Mat%29
     priority: 0.0
@@ -640,7 +640,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColored]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.UMat%2Corg.bytedeco.opencv.opencv_core.UMat%29
     priority: 0.0
@@ -651,7 +651,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColored]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.GpuMat%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cfloat%2Cfloat%29
     priority: 0.0
@@ -664,7 +664,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColored]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.opencv.opencv_core.Mat%2Cfloat%2Cfloat%29
     priority: 0.0
@@ -677,7 +677,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColored]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.UMat%2Corg.bytedeco.opencv.opencv_core.UMat%2Cfloat%2Cfloat%29
     priority: 0.0
@@ -690,7 +690,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColored]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.GpuMat%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cfloat%2Cfloat%2Cint%2Cint%29
     priority: 0.0
@@ -705,7 +705,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColored]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.opencv.opencv_core.Mat%2Cfloat%2Cfloat%2Cint%2Cint%29
     priority: 0.0
@@ -720,7 +720,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColored]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.UMat%2Corg.bytedeco.opencv.opencv_core.UMat%2Cfloat%2Cfloat%2Cint%2Cint%29
     priority: 0.0
@@ -735,7 +735,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColored]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.GpuMat%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cfloat%2Cfloat%2Cint%2Cint%2Corg.bytedeco.opencv.opencv_core.Stream%29
     priority: 0.0
@@ -751,7 +751,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColored]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.Mat%2Corg.bytedeco.opencv.opencv_core.Mat%2Cfloat%2Cfloat%2Cint%2Cint%2Corg.bytedeco.opencv.opencv_core.Stream%29
     priority: 0.0
@@ -767,7 +767,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColored]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColored]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColored%28org.bytedeco.opencv.opencv_core.UMat%2Corg.bytedeco.opencv.opencv_core.UMat%2Cfloat%2Cfloat%2Cint%2Cint%2Corg.bytedeco.opencv.opencv_core.Stream%29
     priority: 0.0
@@ -1323,7 +1323,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColoredMulti]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%29
     priority: 0.0
@@ -1336,7 +1336,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColoredMulti]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%29
     priority: 0.0
@@ -1349,7 +1349,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColoredMulti]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%29
     priority: 0.0
@@ -1362,7 +1362,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColoredMulti]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%29
     priority: 0.0
@@ -1375,7 +1375,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColoredMulti]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%29
     priority: 0.0
@@ -1388,7 +1388,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColoredMulti]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%29
     priority: 0.0
@@ -1401,7 +1401,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColoredMulti]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%29
     priority: 0.0
@@ -1414,7 +1414,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColoredMulti]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%29
     priority: 0.0
@@ -1427,7 +1427,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColoredMulti]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%29
     priority: 0.0
@@ -1440,7 +1440,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColoredMulti]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%2Cfloat%2Cfloat%2Cint%2Cint%29
     priority: 0.0
@@ -1457,7 +1457,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColoredMulti]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%2Cfloat%2Cfloat%2Cint%2Cint%29
     priority: 0.0
@@ -1474,7 +1474,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColoredMulti]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.GpuMatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%2Cfloat%2Cfloat%2Cint%2Cint%29
     priority: 0.0
@@ -1491,7 +1491,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColoredMulti]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%2Cfloat%2Cfloat%2Cint%2Cint%29
     priority: 0.0
@@ -1508,7 +1508,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColoredMulti]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%2Cfloat%2Cfloat%2Cint%2Cint%29
     priority: 0.0
@@ -1525,7 +1525,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColoredMulti]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.MatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%2Cfloat%2Cfloat%2Cint%2Cint%29
     priority: 0.0
@@ -1542,7 +1542,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColoredMulti]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.GpuMat%2Cint%2Cint%2Cfloat%2Cfloat%2Cint%2Cint%29
     priority: 0.0
@@ -1559,7 +1559,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColoredMulti]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.Mat%2Cint%2Cint%2Cfloat%2Cfloat%2Cint%2Cint%29
     priority: 0.0
@@ -1576,7 +1576,7 @@
     authors: [OpenCV authors, bytedeco/JavaCV authors]
     tags: {type: Computer2}
 - op:
-    names: [filter.denoise, cv.fastNlMeansDenoisingColoredMulti]
+    names: [filter.denoiseColor, cv.fastNlMeansDenoisingColoredMulti]
     description: ''
     source: javaMethod:/org.bytedeco.opencv.global.opencv_photo.fastNlMeansDenoisingColoredMulti%28org.bytedeco.opencv.opencv_core.UMatVector%2Corg.bytedeco.opencv.opencv_core.UMat%2Cint%2Cint%2Cfloat%2Cfloat%2Cint%2Cint%29
     priority: 0.0

@@ -70,7 +70,7 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 		OpInfo opifyOpInfo = ops.opify(OpifyOp1.class, Priority.HIGH, opName);
 		ops.register(opifyOpInfo);
 
-		String actual = ops.op(opName).arity0().outType(String.class).create();
+		String actual = ops.op(opName).outType(String.class).create();
 
 		String expected = new OpifyOp1().getString();
 		Assertions.assertEquals(expected, actual);
@@ -121,7 +121,7 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 	public void testHelpVerboseNotFound() {
 		OpEnvironment helpEnv = makeHelpEnv("help.verbose1", "help.verbose2");
 		// Finally assert a message is thrown when no Ops match
-		String descriptions = helpEnv.unary("help.verbose1").helpVerbose();
+		String descriptions = helpEnv.op("help.verbose1").input(null).helpVerbose();
 		String expected = "No Ops found matching this request.";
 		Assertions.assertEquals(expected, descriptions);
 	}

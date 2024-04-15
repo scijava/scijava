@@ -93,8 +93,8 @@ public class ConversionTest extends AbstractTestEnvironment implements
 	public void testConversion() {
 		Integer number = 2;
 		Integer exponent = 2;
-		Double result = ops.op("test.math.powDouble").arity2().input(number,
-			exponent).outType(Double.class).apply();
+		Double result = ops.op("test.math.powDouble").input(number, exponent)
+			.outType(Double.class).apply();
 		assertEquals(4.0, result, 0);
 	}
 
@@ -102,8 +102,8 @@ public class ConversionTest extends AbstractTestEnvironment implements
 	public void testSomeConversion() {
 		Integer number = 2;
 		Double exponent = 2.;
-		Double result = ops.op("test.math.powDouble").arity2().input(number,
-			exponent).outType(Double.class).apply();
+		Double result = ops.op("test.math.powDouble").input(number, exponent)
+			.outType(Double.class).apply();
 		assertEquals(4.0, result, 0);
 	}
 
@@ -111,16 +111,15 @@ public class ConversionTest extends AbstractTestEnvironment implements
 	public void testArrayConversion() {
 		byte[] number = { 2 };
 		Double exponent = 3.;
-		Double result = ops.op("test.math.powDouble").arity2().input(number,
-			exponent).outType(Double.class).apply();
+		Double result = ops.op("test.math.powDouble").input(number, exponent)
+			.outType(Double.class).apply();
 		assertEquals(8.0, result, 0);
 	}
 
 	@Test
 	public void testConvertedOp() {
 		BiFunction<Number, Number, Double> numFunc = ops.op("test.math.powDouble")
-			.arity2().inType(Number.class, Number.class).outType(Double.class)
-			.function();
+			.inType(Number.class, Number.class).outType(Double.class).function();
 
 		Double result = numFunc.apply(3., 4.);
 		assertEquals(81., result, 0);
@@ -137,8 +136,7 @@ public class ConversionTest extends AbstractTestEnvironment implements
 	public void testConvertedOpInfo() {
 		Long[] i1 = { 1L };
 		Byte[] i2 = { 2 };
-		var op = ops.op("test.differentOrder").arity1().input(i1).output(i2)
-			.computer();
+		var op = ops.op("test.differentOrder").input(i1).output(i2).computer();
 		var info = Ops.rich(op).infoTree().info();
 		Assertions.assertInstanceOf(ConvertedOpInfo.class, info);
 		// Assert input types are expected
@@ -167,7 +165,7 @@ public class ConversionTest extends AbstractTestEnvironment implements
 	@Test
 	public void testConvertAnys() {
 		Double in = 2.0;
-		var out = ops.unary("test.anyConversion").input(in).apply();
+		var out = ops.op("test.anyConversion").input(in).apply();
 		Assertions.assertInstanceOf(Integer.class, out);
 	}
 
@@ -203,7 +201,7 @@ public class ConversionTest extends AbstractTestEnvironment implements
 		Integer i1 = 1;
 		Double i2 = 2.0;
 		var result = ops.op(name) //
-			.arity2().input(i1, i2).apply();
+			.input(i1, i2).apply();
 		// Assert the result is an Integer
 		Assertions.assertInstanceOf(Integer.class, result);
 		Integer intResult = (Integer) result;
@@ -230,7 +228,7 @@ public class ConversionTest extends AbstractTestEnvironment implements
 	public void testIdentityConversion() {
 		// Conversion is required for the second input.
 		// The first input, then, should be identity-converted
-		ops.binary("test.maxNumberIntegerNumber") //
+		ops.op("test.maxNumberIntegerNumber") //
 			.inType(Double.class, Double.class) //
 			.outType(Number.class) //
 			.function();

@@ -63,11 +63,11 @@ public class ASCIITest extends AbstractOpTest {
 		final Img<UnsignedByteType> img = ArrayImgs.unsignedBytes(array, width,
 			len);
 		final Pair<UnsignedByteType, UnsignedByteType> minMax = ops.op(
-			"stats.minMax").arity1().input(img).outType(
+			"stats.minMax").input(img).outType(
 				new Nil<Pair<UnsignedByteType, UnsignedByteType>>()
 				{}).apply();
-		final String ascii = ops.op("image.ascii").arity3().input(img, minMax
-			.getA(), minMax.getB()).outType(String.class).apply();
+		final String ascii = ops.op("image.ascii").input(img, minMax.getA(), minMax
+			.getB()).outType(String.class).apply();
 		for (int i = 0; i < len; i++) {
 			for (int j = 0; j < width; j++) {
 				assertTrue(ascii.charAt(i * (width + 1) + j) == CHARS.charAt(i));

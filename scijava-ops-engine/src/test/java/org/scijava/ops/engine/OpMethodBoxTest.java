@@ -53,7 +53,7 @@ public class OpMethodBoxTest extends AbstractTestEnvironment implements
 
 	@Test
 	public void testOpMethodBoxing() {
-		Integer result = ops.op("test.box").arity1().input(1) //
+		Integer result = ops.op("test.box").input(1) //
 			.outType(Integer.class).apply();
 		Assertions.assertEquals(2, result);
 	}

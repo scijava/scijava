@@ -25,7 +25,7 @@ For more information on SciJava scripting parameters, please visit [this page](h
 
 The OpBuilder syntax should be used to retrieve and execute Ops from the `OpEnvironment`. The following line executes a Gaussian Blur on an input image using a `filter.gauss` Op:
 ```text
-out = ops.op("filter.gauss").arity2().input(imgInput, new Double(3.0)).apply()
+out = ops.op("filter.gauss").input(imgInput, new Double(3.0)).apply()
 ```
 
 ## Putting it all together
@@ -38,7 +38,7 @@ The below script can be pasted into the Script Editor. **Ensure that the Script 
 #@output Img out
 
 // Call some Ops!
-out = ops.op("filter.gauss").arity2().input(imgInput, new Double(3.0)).apply()
+out = ops.op("filter.gauss").input(imgInput, new Double(3.0)).apply()
 ```
 
 Scripting in Fiji is a convenient gateway to accessing SciJava Ops. To see more, check out some examples, such as [image deconvolution](examples/deconvolution.rst) or [FLIM analysis](examples/example_flim_analysis.rst)! 

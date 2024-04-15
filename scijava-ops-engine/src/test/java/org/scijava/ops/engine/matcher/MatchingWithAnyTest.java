@@ -72,12 +72,11 @@ public class MatchingWithAnyTest extends AbstractTestEnvironment implements
 	public void testAny() {
 
 		NestedThing<String, Thing<String>> nthing = new NestedThing<>();
-		Double e = ops.op("test.nestedAny").arity1().input(nthing).outType(
-			Double.class).apply();
+		Double e = ops.op("test.nestedAny").input(nthing).outType(Double.class)
+			.apply();
 
 		Thing<Double> thing = new Thing<>();
-		Double d = ops.op("test.any").arity1().input(thing).outType(Double.class)
-			.apply();
+		Double d = ops.op("test.any").input(thing).outType(Double.class).apply();
 
 		assert d == 5.;
 		assert e == 5.;
@@ -94,7 +93,7 @@ public class MatchingWithAnyTest extends AbstractTestEnvironment implements
 
 		ExceptionalThing<Double> ething = new ExceptionalThing<>(0.5);
 		assertThrows(ClassCastException.class, () -> {
-			Double d = ops.op("test.exceptionalAny").arity1().input(ething).outType(
+			Double d = ops.op("test.exceptionalAny").input(ething).outType(
 				Double.class).apply();
 		});
 
@@ -109,14 +108,14 @@ public class MatchingWithAnyTest extends AbstractTestEnvironment implements
 		final int in1 = 11;
 		final long in2 = 31;
 		final StringContainer out = ops.op("test.integerAndLongAndNotAnyComputer")
-			.arity2().input(in1, in2).outType(StringContainer.class).apply();
+			.input(in1, in2).outType(StringContainer.class).apply();
 		assertEquals(Long.toString(in1 + in2), out.getValue());
 	}
 
 	@Test
 	public void testMatchingAnyWithDependencies() {
-		var op = ops.op("test.AnyWithDependencies").arity1().inType(Any.class)
-			.outType(Double.class).function();
+		var op = ops.op("test.AnyWithDependencies").inType(Any.class).outType(
+			Double.class).function();
 		var richOp = Ops.rich(op);
 		var info = Ops.info(op);
 		Assertions.assertTrue(info.toString().contains("dependentAnyOp"));

@@ -63,24 +63,24 @@ SciJava Ops via Fiji's scripting engine with `script parameters`_:
         import net.imglib2.type.numeric.integer.UnsignedByteType
 
         // Get the min and max values of our input image
-        oldMin = ops.unary("stats.min").input(img).apply()
-        oldMax = ops.unary("stats.max").input(img).apply()
+        oldMin = ops.op("stats.min").input(img).apply()
+        oldMax = ops.op("stats.max").input(img).apply()
 
         // We need to convert to 8-bit since not all data types are currently supported in OpenCV
         type = new UnsignedByteType()
-        img8bit = ops.binary("create.img").input(img, type).apply()
+        img8bit = ops.op("create.img").input(img, type).apply()
 
         // Normalize our input data to the 8-bit min/max
         newMin = new UnsignedByteType((int)type.getMinValue())
         newMax = new UnsignedByteType((int)type.getMaxValue())
 
-        ops.op("image.normalize").arity5().input(img, oldMin, oldMax, newMin, newMax).output(img8bit).compute()
+        ops.op("image.normalize").input(img, oldMin, oldMax, newMin, newMax).output(img8bit).compute()
 
         // Create a container for the denoise output
         output = img8bit.copy()
 
         // Run the denoise op
-        ops.quaternary("filter.denoise").input(img8bit, strength, patch, search).output(output).compute()
+        ops.op("filter.denoise").input(img8bit, strength, patch, search).output(output).compute()
 
         // Return the denoised image
         result = output
@@ -97,24 +97,24 @@ SciJava Ops via Fiji's scripting engine with `script parameters`_:
         from net.imglib2.type.numeric.integer import UnsignedByteType
 
         # Get the min and max values of our input image
-        old_min = ops.unary("stats.min").input(img).apply()
-        old_max = ops.unary("stats.max").input(img).apply()
+        old_min = ops.op("stats.min").input(img).apply()
+        old_max = ops.op("stats.max").input(img).apply()
 
         # We need to convert to 8-bit since not all data types are currently supported in OpenCV
         type = UnsignedByteType()
-        img8bit = ops.binary("create.img").input(img, type).apply()
+        img8bit = ops.op("create.img").input(img, type).apply()
 
         # Normalize our input data to the 8-bit min/max
         new_min = UnsignedByteType(int(type.getMinValue()))
         new_max = UnsignedByteType(int(type.getMaxValue()))
 
-        ops.op("image.normalize").arity5().input(img, old_min, old_max, new_min, new_max).output(img8bit).compute()
+        ops.op("image.normalize").input(img, old_min, old_max, new_min, new_max).output(img8bit).compute()
 
         # Create a container for the denoise output
         output = img8bit.copy()
 
         # Run the denoise op
-        ops.quaternary("filter.denoise").input(img8bit, strength, patch, search).output(output).compute()
+        ops.op("filter.denoise").input(img8bit, strength, patch, search).output(output).compute()
 
         # Return the denoised image
         result = output

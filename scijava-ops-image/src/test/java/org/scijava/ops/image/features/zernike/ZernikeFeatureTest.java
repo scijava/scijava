@@ -49,23 +49,23 @@ public class ZernikeFeatureTest extends AbstractFeatureTest {
 	@Test
 	public void testPhaseFeature() {
 
-		assertEquals(179.92297037263532, ops.op("features.zernike.phase").arity3()
-			.input(ellipse, 4, 2).outType(new Nil<DoubleType>()
-			{}).apply().get(), EPSILON, "features.zernike.phase");
-		assertEquals(0.0802239034925816, ops.op("features.zernike.phase").arity3()
-			.input(rotatedEllipse, 4, 2).outType(new Nil<DoubleType>()
-			{}).apply().get(), EPSILON, "features.zernike.phase");
+		assertEquals(179.92297037263532, ops.op("features.zernike.phase").input(
+			ellipse, 4, 2).outType(new Nil<DoubleType>()
+		{}).apply().get(), EPSILON, "features.zernike.phase");
+		assertEquals(0.0802239034925816, ops.op("features.zernike.phase").input(
+			rotatedEllipse, 4, 2).outType(new Nil<DoubleType>()
+		{}).apply().get(), EPSILON, "features.zernike.phase");
 	}
 
 	@Test
 	public void testMagnitudeFeature() {
 
-		double v1 = ops.op("features.zernike.magnitude").arity3().input(ellipse, 4,
-			2).outType(new Nil<DoubleType>()
-		{}).apply().get();
-		double v2 = ops.op("features.zernike.magnitude").arity3().input(
-			rotatedEllipse, 4, 2).outType(new Nil<DoubleType>()
-		{}).apply().get();
+		double v1 = ops.op("features.zernike.magnitude").input(ellipse, 4, 2)
+			.outType(new Nil<DoubleType>()
+			{}).apply().get();
+		double v2 = ops.op("features.zernike.magnitude").input(rotatedEllipse, 4, 2)
+			.outType(new Nil<DoubleType>()
+			{}).apply().get();
 
 		assertEquals(0.10985876611295191, v1, EPSILON,
 			"features.zernike.magnitude");

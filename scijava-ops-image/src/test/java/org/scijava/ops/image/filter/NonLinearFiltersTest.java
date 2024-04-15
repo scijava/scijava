@@ -83,8 +83,7 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testMaxFilter() {
-		ops.op("filter.max").arity3().input(in, shape, oobFactory).output(out)
-			.compute();
+		ops.op("filter.max").input(in, shape, oobFactory).output(out).compute();
 
 		byte max = Byte.MIN_VALUE;
 
@@ -101,7 +100,7 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testMaxFilterNullable() {
-		ops.op("filter.max").arity2().input(in, shape).output(out).compute();
+		ops.op("filter.max").input(in, shape).output(out).compute();
 	}
 
 	/**
@@ -110,8 +109,7 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testMeanFilter() {
-		ops.op("filter.mean").arity3().input(in, shape, oobFactory).output(out)
-			.compute();
+		ops.op("filter.mean").input(in, shape, oobFactory).output(out).compute();
 
 		double sum = 0.0;
 
@@ -130,7 +128,7 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testMeanFilterNullable() {
-		ops.op("filter.mean").arity2().input(in, shape).output(out).compute();
+		ops.op("filter.mean").input(in, shape).output(out).compute();
 	}
 
 	/**
@@ -139,8 +137,7 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testMedianFilter() {
-		ops.op("filter.median").arity3().input(in, shape, oobFactory).output(out)
-			.compute();
+		ops.op("filter.median").input(in, shape, oobFactory).output(out).compute();
 
 		ArrayList<ByteType> items = new ArrayList<>();
 		NeighborhoodsIterableInterval<ByteType> neighborhoods = shape.neighborhoods(
@@ -160,7 +157,7 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testMedianFilterNullable() {
-		ops.op("filter.median").arity2().input(in, shape).output(out).compute();
+		ops.op("filter.median").input(in, shape).output(out).compute();
 	}
 
 	/**
@@ -169,8 +166,7 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testMinFilter() {
-		ops.op("filter.min").arity3().input(in, shape, oobFactory).output(out)
-			.compute();
+		ops.op("filter.min").input(in, shape, oobFactory).output(out).compute();
 
 		byte min = Byte.MAX_VALUE;
 
@@ -188,7 +184,7 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testMinFilterNullable() {
-		ops.op("filter.min").arity2().input(in, shape).output(out).compute();
+		ops.op("filter.min").input(in, shape).output(out).compute();
 	}
 
 	/**
@@ -196,19 +192,18 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testSigmaFilter() {
-		ops.op("filter.sigma").arity5().input(in, shape, 1.0, 0.0, oobFactory)
-			.output(out).compute();
-	}
-
-	@Test
-	public void testSigmaFilterNullable() {
-		ops.op("filter.sigma").arity4().input(in, shape, 1.0, 0.0).output(out)
+		ops.op("filter.sigma").input(in, shape, 1.0, 0.0, oobFactory).output(out)
 			.compute();
 	}
 
 	@Test
+	public void testSigmaFilterNullable() {
+		ops.op("filter.sigma").input(in, shape, 1.0, 0.0).output(out).compute();
+	}
+
+	@Test
 	public void testVarianceFilter() {
-		ops.op("filter.variance").arity3().input(in, shape, oobFactory).output(out)
+		ops.op("filter.variance").input(in, shape, oobFactory).output(out)
 			.compute();
 
 		double sum = 0.0;
@@ -227,7 +222,7 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 
 	@Test
 	public void testVarianceFilterNullable() {
-		ops.op("filter.variance").arity2().input(in, shape).output(out).compute();
+		ops.op("filter.variance").input(in, shape).output(out).compute();
 	}
 
 }

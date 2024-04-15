@@ -62,7 +62,7 @@ public class RealTransformTest extends AbstractOpTest {
 		transform.translate(translation, translation);
 
 		var outType = new Nil<RandomAccessibleInterval<UnsignedByteType>>() {};
-		var actualOutput = ops.op("transform.realTransform").arity2() //
+		var actualOutput = ops.op("transform.realTransform") //
 			.input(image, transform) //
 			.outType(outType) //
 			.apply();

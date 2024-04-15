@@ -102,13 +102,13 @@ public class LocalThresholdTest extends AbstractOpTest {
 	@BeforeEach
 	public void before() throws Exception {
 		in = TestImgGeneration.byteArray(true, new long[] { 10, 10 });
-		Pair<ByteType, ByteType> minMax = ops.op("stats.minMax").arity1().input(in)
-			.outType(new Nil<Pair<ByteType, ByteType>>()
+		Pair<ByteType, ByteType> minMax = ops.op("stats.minMax").input(in).outType(
+			new Nil<Pair<ByteType, ByteType>>()
 			{}).apply();
-		normalizedIn = ops.op("create.img").arity2().input(in, new DoubleType())
-			.outType(new Nil<Img<DoubleType>>()
+		normalizedIn = ops.op("create.img").input(in, new DoubleType()).outType(
+			new Nil<Img<DoubleType>>()
 			{}).apply();
-		ops.op("image.normalize").arity5().input(in, minMax.getA(), minMax.getB(),
+		ops.op("image.normalize").input(in, minMax.getA(), minMax.getB(),
 			new DoubleType(0.0), new DoubleType(1.0)).output(normalizedIn).compute();
 
 		out = in.factory().imgFactory(new BitType()).create(in, new BitType());

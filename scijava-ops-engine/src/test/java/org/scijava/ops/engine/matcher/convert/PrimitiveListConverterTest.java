@@ -68,8 +68,7 @@ public class PrimitiveListConverterTest extends AbstractTestEnvironment
 	public void testLinkedListConverter() {
 		var outNil = new Nil<List<Integer>>() {};
 		var in = Arrays.asList(1.0, 2.0);
-		var out = ops.unary("test.listConversion").input(in).outType(outNil)
-			.apply();
+		var out = ops.op("test.listConversion").input(in).outType(outNil).apply();
 		for (int i = 0; i < in.size(); i++) {
 			Assertions.assertEquals(in.get(i) * 2 + 1, (double) out.get(i));
 		}

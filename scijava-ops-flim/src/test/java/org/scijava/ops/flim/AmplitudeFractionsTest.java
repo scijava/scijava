@@ -46,7 +46,7 @@ public class AmplitudeFractionsTest extends AbstractFlimTest {
 	@Test
 	public void testDefaultFractionalContribution() {
 		int i = 0;
-		final Img<FloatType> A1Perc = ops.binary("flim.amplitudeFraction") //
+		final Img<FloatType> A1Perc = ops.op("flim.amplitudeFraction") //
 			.input(rslt, 0) //
 			.outType(new Nil<Img<FloatType>>()
 			{}) //

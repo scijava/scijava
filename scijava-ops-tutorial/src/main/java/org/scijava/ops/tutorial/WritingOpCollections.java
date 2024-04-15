@@ -87,14 +87,14 @@ public class WritingOpCollections implements OpCollection {
 	public static void main(String... args) {
 		OpEnvironment ops = OpEnvironment.build();
 
-		Double result = ops.binary("test.opField.power") //
+		Double result = ops.op("test.opField.power") //
 			.input(2.0, 10.0) //
 			.outType(Double.class) //
 			.apply();
 
 		System.out.println("2.0 to the power of 10.0 is " + result);
 
-		result = ops.binary("test.opMethod.power") //
+		result = ops.op("test.opMethod.power") //
 			.input(2.0, 20.0) //
 			.outType(Double.class) //
 			.apply();

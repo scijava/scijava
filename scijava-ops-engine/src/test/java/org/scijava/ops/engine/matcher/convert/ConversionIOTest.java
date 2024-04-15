@@ -63,8 +63,8 @@ public class ConversionIOTest extends AbstractTestEnvironment implements
 	@Test
 	public void testFunctionOutputConversion() {
 		Integer in = 4;
-		Integer square = ops.op("test.math.square").arity1().input(in).outType(
-			Integer.class).apply();
+		Integer square = ops.op("test.math.square").input(in).outType(Integer.class)
+			.apply();
 
 		assertEquals(square, 16, 0.);
 	}
@@ -95,7 +95,7 @@ public class ConversionIOTest extends AbstractTestEnvironment implements
 		Integer[] in = new Integer[] { 1, 2, 3 };
 		Integer[] out = new Integer[] { 4, 5, 6 };
 
-		ops.op("test.math.square").arity1().input(in).output(out).compute();
+		ops.op("test.math.square").input(in).output(out).compute();
 		assertArrayEquals(out, new Integer[] { 1, 4, 9 });
 	}
 
@@ -105,7 +105,7 @@ public class ConversionIOTest extends AbstractTestEnvironment implements
 		Integer[] in1 = new Integer[] { 4, 5, 6 };
 		Integer[] expected = new Integer[] { 5, 7, 9 };
 
-		ops.op("test.math.add").arity2().input(io, in1).mutate1();
+		ops.op("test.math.add").input(io, in1).mutate1();
 		assertArrayEquals(io, expected);
 	}
 
@@ -115,7 +115,7 @@ public class ConversionIOTest extends AbstractTestEnvironment implements
 		Integer[] io = new Integer[] { 1, 2, 3 };
 		Integer[] expected = new Integer[] { 5, 7, 9 };
 
-		ops.op("test.math.add").arity2().input(in0, io).mutate2();
+		ops.op("test.math.add").input(in0, io).mutate2();
 		assertArrayEquals(io, expected);
 	}
 

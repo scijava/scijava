@@ -77,8 +77,8 @@ public class SobelFilterTest extends AbstractOpTest {
 				counterY = 0;
 			}
 		}
-		RandomAccessibleInterval<FloatType> out = ops.op("filter.sobel").arity1()
-			.input(img).outType(new Nil<RandomAccessibleInterval<FloatType>>()
+		RandomAccessibleInterval<FloatType> out = ops.op("filter.sobel").input(img)
+			.outType(new Nil<RandomAccessibleInterval<FloatType>>()
 			{}).apply();
 
 		RandomAccess<FloatType> outRA = out.randomAccess();

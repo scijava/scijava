@@ -79,7 +79,7 @@ public class ConversionPriorityTest extends AbstractTestEnvironment implements
 		FromThing thing1 = new FromThing();
 		FromThing thing2 = new FromThing();
 
-		Double output = ops.op("test.thing").arity2().input(thing1, thing2).outType(
+		Double output = ops.op("test.thing").input(thing1, thing2).outType(
 			Double.class).apply();
 		Assertions.assertEquals(1., output, 0.);
 	}
@@ -88,8 +88,8 @@ public class ConversionPriorityTest extends AbstractTestEnvironment implements
 	public void testMissingLossReporter() {
 		FromThing thing1 = new FromThing();
 
-		Double output = ops.op("test.thing").arity1().input(thing1).outType(
-			Double.class).apply();
+		Double output = ops.op("test.thing").input(thing1).outType(Double.class)
+			.apply();
 		Assertions.assertEquals(2., output, 0.);
 	}
 

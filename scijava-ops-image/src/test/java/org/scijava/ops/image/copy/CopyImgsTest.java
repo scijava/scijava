@@ -67,8 +67,8 @@ public class CopyImgsTest extends AbstractOpTest {
 		populateData(data);
 		@SuppressWarnings("unchecked")
 		final RandomAccessibleInterval<UnsignedByteType> output =
-			(RandomAccessibleInterval<UnsignedByteType>) ops.op("copy.img").arity1()
-				.input(data).apply();
+			(RandomAccessibleInterval<UnsignedByteType>) ops.op("copy.img").input(
+				data).apply();
 
 		final Cursor<UnsignedByteType> inc = data.localizingCursor();
 		final RandomAccess<UnsignedByteType> outRA = output.randomAccess();
@@ -87,7 +87,7 @@ public class CopyImgsTest extends AbstractOpTest {
 		final Img<UnsignedByteType> output = data.factory().create(data
 			.dimensionsAsLongArray());
 
-		ops.op("copy.img").arity1().input(data).output(output).compute();
+		ops.op("copy.img").input(data).output(output).compute();
 
 		final Cursor<UnsignedByteType> inc = data.cursor();
 		final Cursor<UnsignedByteType> outc = output.cursor();
@@ -103,8 +103,8 @@ public class CopyImgsTest extends AbstractOpTest {
 		populateData(data);
 		@SuppressWarnings("unchecked")
 		final RandomAccessibleInterval<UnsignedByteType> output =
-			(RandomAccessibleInterval<UnsignedByteType>) ops.op("copy.img").arity1()
-				.input(data).apply();
+			(RandomAccessibleInterval<UnsignedByteType>) ops.op("copy.img").input(
+				data).apply();
 
 		final Cursor<UnsignedByteType> inc = data.localizingCursor();
 		final RandomAccess<UnsignedByteType> outRA = output.randomAccess();
@@ -123,7 +123,7 @@ public class CopyImgsTest extends AbstractOpTest {
 		final Img<UnsignedByteType> output = data.factory().create(data
 			.dimensionsAsLongArray());
 
-		ops.op("copy.img").arity1().input(data).output(output).compute();
+		ops.op("copy.img").input(data).output(output).compute();
 
 		final Cursor<UnsignedByteType> inc = data.cursor();
 		final Cursor<UnsignedByteType> outc = output.cursor();
@@ -139,8 +139,8 @@ public class CopyImgsTest extends AbstractOpTest {
 		populateData(data);
 		@SuppressWarnings("unchecked")
 		final RandomAccessibleInterval<UnsignedByteType> output =
-			(RandomAccessibleInterval<UnsignedByteType>) ops.op("copy.img").arity1()
-				.input(data).apply();
+			(RandomAccessibleInterval<UnsignedByteType>) ops.op("copy.img").input(
+				data).apply();
 
 		final Cursor<UnsignedByteType> inc = data.localizingCursor();
 		final RandomAccess<UnsignedByteType> outRA = output.randomAccess();
@@ -159,7 +159,7 @@ public class CopyImgsTest extends AbstractOpTest {
 		final Img<UnsignedByteType> output = data.factory().create(data
 			.dimensionsAsLongArray());
 
-		ops.op("copy.img").arity1().input(data).output(output).compute();
+		ops.op("copy.img").input(data).output(output).compute();
 
 		final Cursor<UnsignedByteType> inc = data.cursor();
 		final Cursor<UnsignedByteType> outc = output.cursor();

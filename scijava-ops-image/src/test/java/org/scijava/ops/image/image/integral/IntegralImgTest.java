@@ -85,7 +85,7 @@ public class IntegralImgTest extends AbstractOpTest {
 		defaultOp.compute(in, out1);
 
 		// should match WrappedIntegralImg
-		out2 = ops.op("image.integral").arity1().input(in).outType(
+		out2 = ops.op("image.integral").input(in).outType(
 			new Nil<RandomAccessibleInterval<DoubleType>>()
 			{}).apply();
 

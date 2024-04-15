@@ -61,23 +61,23 @@ public class MaxValueRealTypesTest extends AbstractOpTest {
 
 	@Test
 	public void testMaxValueBitType() {
-		BitType maxValue = ops.op("types.maxValue").arity1().input(new BitType())
-			.outType(BitType.class).apply();
+		BitType maxValue = ops.op("types.maxValue").input(new BitType()).outType(
+			BitType.class).apply();
 		BitType expected = new BitType(true);
 		Assertions.assertTrue(maxValue.equals(expected));
 	}
 
 	@Test
 	public void testMaxValueBoolType() {
-		BoolType maxValue = ops.op("types.maxValue").arity1().input(new BoolType())
-			.outType(BoolType.class).apply();
+		BoolType maxValue = ops.op("types.maxValue").input(new BoolType()).outType(
+			BoolType.class).apply();
 		BoolType expected = new BoolType(true);
 		Assertions.assertTrue(maxValue.equals(expected));
 	}
 
 	@Test
 	public void testMaxValueNativeBoolType() {
-		NativeBoolType maxValue = ops.op("types.maxValue").arity1().input(
+		NativeBoolType maxValue = ops.op("types.maxValue").input(
 			new NativeBoolType()).outType(NativeBoolType.class).apply();
 		NativeBoolType expected = new NativeBoolType(true);
 		Assertions.assertTrue(maxValue.equals(expected));
@@ -85,15 +85,15 @@ public class MaxValueRealTypesTest extends AbstractOpTest {
 
 	@Test
 	public void testMaxValueByteType() {
-		ByteType maxValue = ops.op("types.maxValue").arity1().input(new ByteType())
-			.outType(ByteType.class).apply();
+		ByteType maxValue = ops.op("types.maxValue").input(new ByteType()).outType(
+			ByteType.class).apply();
 		ByteType expected = new ByteType(Byte.MAX_VALUE);
 		Assertions.assertTrue(maxValue.equals(expected));
 	}
 
 	@Test
 	public void testMaxValueUnsignedByteType() {
-		UnsignedByteType maxValue = ops.op("types.maxValue").arity1().input(
+		UnsignedByteType maxValue = ops.op("types.maxValue").input(
 			new UnsignedByteType()).outType(UnsignedByteType.class).apply();
 		UnsignedByteType expected = new UnsignedByteType(-Byte.MIN_VALUE +
 			Byte.MAX_VALUE);
@@ -102,15 +102,15 @@ public class MaxValueRealTypesTest extends AbstractOpTest {
 
 	@Test
 	public void testMaxValueIntType() {
-		IntType maxValue = ops.op("types.maxValue").arity1().input(new IntType())
-			.outType(IntType.class).apply();
+		IntType maxValue = ops.op("types.maxValue").input(new IntType()).outType(
+			IntType.class).apply();
 		IntType expected = new IntType(Integer.MAX_VALUE);
 		Assertions.assertTrue(maxValue.equals(expected));
 	}
 
 	@Test
 	public void testMaxValueUnsignedIntType() {
-		UnsignedIntType maxValue = ops.op("types.maxValue").arity1().input(
+		UnsignedIntType maxValue = ops.op("types.maxValue").input(
 			new UnsignedIntType()).outType(UnsignedIntType.class).apply();
 		UnsignedIntType expected = new UnsignedIntType(0xffffffffL);
 		Assertions.assertTrue(maxValue.equals(expected));
@@ -118,15 +118,15 @@ public class MaxValueRealTypesTest extends AbstractOpTest {
 
 	@Test
 	public void testMaxValueLongType() {
-		LongType maxValue = ops.op("types.maxValue").arity1().input(new LongType())
-			.outType(LongType.class).apply();
+		LongType maxValue = ops.op("types.maxValue").input(new LongType()).outType(
+			LongType.class).apply();
 		LongType expected = new LongType(Long.MAX_VALUE);
 		Assertions.assertTrue(maxValue.equals(expected));
 	}
 
 	@Test
 	public void testMaxValueUnsignedLongType() {
-		UnsignedLongType maxValue = ops.op("types.maxValue").arity1().input(
+		UnsignedLongType maxValue = ops.op("types.maxValue").input(
 			new UnsignedLongType()).outType(UnsignedLongType.class).apply();
 		UnsignedLongType expected = new UnsignedLongType(new UnsignedLongType()
 			.getMaxBigIntegerValue());
@@ -135,15 +135,15 @@ public class MaxValueRealTypesTest extends AbstractOpTest {
 
 	@Test
 	public void testMaxValueShortType() {
-		ShortType maxValue = ops.op("types.maxValue").arity1().input(
-			new ShortType()).outType(ShortType.class).apply();
+		ShortType maxValue = ops.op("types.maxValue").input(new ShortType())
+			.outType(ShortType.class).apply();
 		ShortType expected = new ShortType(Short.MAX_VALUE);
 		Assertions.assertTrue(maxValue.equals(expected));
 	}
 
 	@Test
 	public void testMaxValueUnsignedShortType() {
-		UnsignedShortType maxValue = ops.op("types.maxValue").arity1().input(
+		UnsignedShortType maxValue = ops.op("types.maxValue").input(
 			new UnsignedShortType()).outType(UnsignedShortType.class).apply();
 		UnsignedShortType expected = new UnsignedShortType(-Short.MIN_VALUE +
 			Short.MAX_VALUE);
@@ -152,7 +152,7 @@ public class MaxValueRealTypesTest extends AbstractOpTest {
 
 	@Test
 	public void testMaxValueUnsigned2BitType() {
-		Unsigned2BitType maxValue = ops.op("types.maxValue").arity1().input(
+		Unsigned2BitType maxValue = ops.op("types.maxValue").input(
 			new Unsigned2BitType()).outType(Unsigned2BitType.class).apply();
 		Unsigned2BitType expected = new Unsigned2BitType(3);
 		Assertions.assertTrue(maxValue.equals(expected));
@@ -160,7 +160,7 @@ public class MaxValueRealTypesTest extends AbstractOpTest {
 
 	@Test
 	public void testMaxValueUnsigned4BitType() {
-		Unsigned4BitType maxValue = ops.op("types.maxValue").arity1().input(
+		Unsigned4BitType maxValue = ops.op("types.maxValue").input(
 			new Unsigned4BitType()).outType(Unsigned4BitType.class).apply();
 		Unsigned4BitType expected = new Unsigned4BitType(15);
 		Assertions.assertTrue(maxValue.equals(expected));
@@ -168,7 +168,7 @@ public class MaxValueRealTypesTest extends AbstractOpTest {
 
 	@Test
 	public void testMaxValueUnsigned12BitType() {
-		Unsigned12BitType maxValue = ops.op("types.maxValue").arity1().input(
+		Unsigned12BitType maxValue = ops.op("types.maxValue").input(
 			new Unsigned12BitType()).outType(Unsigned12BitType.class).apply();
 		Unsigned12BitType expected = new Unsigned12BitType(4095);
 		Assertions.assertTrue(maxValue.equals(expected));
@@ -176,7 +176,7 @@ public class MaxValueRealTypesTest extends AbstractOpTest {
 
 	@Test
 	public void testMaxValueUnsigned128BitType() {
-		Unsigned128BitType maxValue = ops.op("types.maxValue").arity1().input(
+		Unsigned128BitType maxValue = ops.op("types.maxValue").input(
 			new Unsigned128BitType()).outType(Unsigned128BitType.class).apply();
 		Unsigned128BitType expected = new Unsigned128BitType(
 			new Unsigned128BitType().getMaxBigIntegerValue());
@@ -185,16 +185,16 @@ public class MaxValueRealTypesTest extends AbstractOpTest {
 
 	@Test
 	public void testMaxValueFloatType() {
-		FloatType maxValue = ops.op("types.maxValue").arity1().input(
-			new FloatType()).outType(FloatType.class).apply();
+		FloatType maxValue = ops.op("types.maxValue").input(new FloatType())
+			.outType(FloatType.class).apply();
 		FloatType expected = new FloatType(Float.MAX_VALUE);
 		Assertions.assertTrue(maxValue.equals(expected));
 	}
 
 	@Test
 	public void testMaxValueDoubleType() {
-		DoubleType maxValue = ops.op("types.maxValue").arity1().input(
-			new DoubleType()).outType(DoubleType.class).apply();
+		DoubleType maxValue = ops.op("types.maxValue").input(new DoubleType())
+			.outType(DoubleType.class).apply();
 		DoubleType expected = new DoubleType(Double.MAX_VALUE);
 		Assertions.assertTrue(maxValue.equals(expected));
 	}
@@ -202,8 +202,8 @@ public class MaxValueRealTypesTest extends AbstractOpTest {
 	@Test
 	public void testMaxValueUnsignedVariableBitLengthType() {
 		// bit length of 5
-		UnsignedVariableBitLengthType maxValue5 = ops.op("types.maxValue").arity1()
-			.input(new UnsignedVariableBitLengthType(5)).outType(
+		UnsignedVariableBitLengthType maxValue5 = ops.op("types.maxValue").input(
+			new UnsignedVariableBitLengthType(5)).outType(
 				UnsignedVariableBitLengthType.class).apply();
 		UnsignedVariableBitLengthType expected5 = new UnsignedVariableBitLengthType(
 			31, 5);
@@ -212,8 +212,8 @@ public class MaxValueRealTypesTest extends AbstractOpTest {
 		// - Ensure different bitlength results in different maximum value - //
 
 		// bit length of 17
-		UnsignedVariableBitLengthType maxValue17 = ops.op("types.maxValue").arity1()
-			.input(new UnsignedVariableBitLengthType(17)).outType(
+		UnsignedVariableBitLengthType maxValue17 = ops.op("types.maxValue").input(
+			new UnsignedVariableBitLengthType(17)).outType(
 				UnsignedVariableBitLengthType.class).apply();
 		UnsignedVariableBitLengthType expected17 =
 			new UnsignedVariableBitLengthType(131071, 17);

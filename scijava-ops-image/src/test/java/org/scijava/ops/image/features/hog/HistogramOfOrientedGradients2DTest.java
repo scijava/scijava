@@ -57,10 +57,9 @@ public class HistogramOfOrientedGradients2DTest extends AbstractOpTest {
 		Img<FloatType> hogInputImg = openFloatImg("HoG2DInput.png");
 
 		// use numOrientations = 9 and spanOfNeighborhood = 2 for test
-		RandomAccessibleInterval<FloatType> hogOp = ops.op("features.hog").arity3()
-			.input(hogInputImg, 9, 2).outType(
-				new Nil<RandomAccessibleInterval<FloatType>>()
-				{}).apply();
+		RandomAccessibleInterval<FloatType> hogOp = ops.op("features.hog").input(
+			hogInputImg, 9, 2).outType(new Nil<RandomAccessibleInterval<FloatType>>()
+		{}).apply();
 
 		RandomAccess<FloatType> raOp = hogOp.randomAccess();
 		RandomAccess<FloatType> raTest = hogTestImg.randomAccess();

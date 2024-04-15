@@ -81,8 +81,7 @@ public class OpDependencies implements OpCollection {
 
 		// Note that we call only deal with the "stats.mean" Op - the Engine takes
 		// care of matching the dependencies for us!
-		double mean = ops.unary("stats.mean").input(arr).outType(Double.class)
-			.apply();
+		double mean = ops.op("stats.mean").input(arr).outType(Double.class).apply();
 
 		System.out.println("The mean of array " + Arrays.toString(arr) + " is " +
 			mean);

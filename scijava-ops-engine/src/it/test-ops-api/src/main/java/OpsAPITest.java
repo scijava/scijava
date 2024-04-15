@@ -49,7 +49,7 @@ public class OpsAPITest {
 	 */
 	public static void testOpExecutions() {
 		OpEnvironment ops = OpEnvironment.build();
-		var sum = ops.op("math.add").arity2().input(5., 6.).apply();
+		var sum = ops.op("math.add").input(5., 6.).apply();
 		Assertions.assertEquals(sum, 11.);
 	}
 
@@ -78,10 +78,10 @@ public class OpsAPITest {
 		// Ensure an Op matches without conversion
 		// NB this call must come first, or the cache will be hit based on the previous call.
 		Hints h = new Hints("conversion.FORBIDDEN");
-		Assertions.assertThrows(OpMatchingException.class, () -> ops.op("math.pow", h).arity2().input(in, exponent).outType(Long.class).apply());
+		Assertions.assertThrows(OpMatchingException.class, () -> ops.op("math.pow", h).input(in, exponent).outType(Long.class).apply());
 
 		// Ensure an Op matches with conversion
-		var power = ops.op("math.pow").arity2().input(in, exponent).outType(Long.class).apply();
+		var power = ops.op("math.pow").input(in, exponent).outType(Long.class).apply();
 		Assertions.assertEquals((long) Math.pow(in, exponent), power);
 	}
 

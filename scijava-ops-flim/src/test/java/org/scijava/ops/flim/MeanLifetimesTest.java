@@ -40,7 +40,7 @@ public class MeanLifetimesTest extends AbstractFlimTest {
 	@Test
 	public void testCalcTauMean() {
 		int i = 0;
-		final Img<FloatType> tauM = ops.unary("flim.tauMean") //
+		final Img<FloatType> tauM = ops.op("flim.tauMean") //
 			.input(rslt) //
 			.outType(new Nil<Img<FloatType>>()
 			{}) //

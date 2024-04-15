@@ -88,7 +88,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
-			.arity1() //
+			//
 			.input(input) //
 			.outType(new Nil<NumericalThing[]>()
 			{}).apply();
@@ -108,7 +108,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
-			.arity2() //
+			//
 			.input(input, input) //
 			.outType(new Nil<NumericalThing[]>()
 			{}).apply();
@@ -129,7 +129,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
-			.arity3() //
+			//
 			.input(input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
 			{}).apply();
@@ -150,7 +150,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
-			.arity4() //
+			//
 			.input(input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
 			{}).apply();
@@ -171,7 +171,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
-			.arity5() //
+			//
 			.input(input, input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
 			{}).apply();
@@ -193,7 +193,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
-			.arity6() //
+			//
 			.input(input, input, input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
 			{}).apply();
@@ -215,7 +215,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
-			.arity7() //
+			//
 			.input(input, input, input, input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
 			{}).apply();
@@ -237,7 +237,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
-			.arity8() //
+			//
 			.input(input, input, input, input, input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
 			{}).apply();
@@ -260,7 +260,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
-			.arity9() //
+			//
 			.input(input, input, input, input, input, input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
 			{}).apply();
@@ -283,7 +283,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
-			.arity10() //
+			//
 			.input(input, input, input, input, input, input, input, input, input,
 				input) //
 			.outType(new Nil<NumericalThing[]>()
@@ -308,7 +308,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
-			.arity11() //
+			//
 			.input(input, input, input, input, input, input, input, input, input,
 				input, input) //
 			.outType(new Nil<NumericalThing[]>()
@@ -333,7 +333,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
-			.arity12() //
+			//
 			.input(input, input, input, input, input, input, input, input, input,
 				input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
@@ -358,7 +358,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
-			.arity13() //
+			//
 			.input(input, input, input, input, input, input, input, input, input,
 				input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
@@ -384,7 +384,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
-			.arity14() //
+			//
 			.input(input, input, input, input, input, input, input, input, input,
 				input, input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
@@ -410,7 +410,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
-			.arity15() //
+			//
 			.input(input, input, input, input, input, input, input, input, input,
 				input, input, input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
@@ -436,7 +436,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
-			.arity16() //
+			//
 			.input(input, input, input, input, input, input, input, input, input,
 				input, input, input, input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()

@@ -90,7 +90,7 @@ public class OpsIntro {
 		(For an explanation of the OpBuilder syntax, please see the OpBuilder
 		tutorial).
 		 */
-		Double result = ops.binary("math.add") //
+		Double result = ops.op("math.add") //
 			.input(1., 1.) //
 			.outType(Double.class) //
 			.apply();
@@ -100,10 +100,10 @@ public class OpsIntro {
 		var img = openLymp();
 		var shape = new RectangleShape(5, false);
 		var uByteType = new Nil<Img<UnsignedByteType>>() {};
-		var mean = ops.binary("filter.mean").input(img, shape).outType(uByteType)
+		var mean = ops.op("filter.mean").input(img, shape).outType(uByteType)
 			.apply();
-		var multResult = ops.binary("create.img").input(img, new IntType()).apply();
-		ops.binary("math.multiply").input(img, mean).output(multResult).compute();
+		var multResult = ops.op("create.img").input(img, new IntType()).apply();
+		ops.op("math.multiply").input(img, mean).output(multResult).compute();
 
 		// To see information about available ops, we use the
 		// OpEnvironment#descriptions method

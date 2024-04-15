@@ -57,7 +57,7 @@ public class CopyLabelingMappingTest extends AbstractOpTest {
 	@BeforeEach
 	public void createData() {
 		final ImgLabeling<String, IntType> imgL = ops.op("create.imgLabeling")
-			.arity2().input(new FinalDimensions(10, 10), new IntType()) //
+			.input(new FinalDimensions(10, 10), new IntType()) //
 			.outType(new Nil<ImgLabeling<String, IntType>>()
 			{}) //
 			.apply();
@@ -79,9 +79,9 @@ public class CopyLabelingMappingTest extends AbstractOpTest {
 	@Test
 	public void copyLabelingWithoutOutputTest() {
 
-		LabelingMapping<String> out = ops.op("copy.labelingMapping").arity1().input(
-			input).outType(new Nil<LabelingMapping<String>>()
-		{}).apply();
+		LabelingMapping<String> out = ops.op("copy.labelingMapping").input(input)
+			.outType(new Nil<LabelingMapping<String>>()
+			{}).apply();
 
 		Iterator<String> outIt = out.getLabels().iterator();
 
@@ -93,11 +93,11 @@ public class CopyLabelingMappingTest extends AbstractOpTest {
 	@Test
 	public void copyLabelingWithOutputTest() {
 
-		LabelingMapping<String> out = ops.op("create.labelingMapping").arity0()
-			.outType(new Nil<LabelingMapping<String>>()
+		LabelingMapping<String> out = ops.op("create.labelingMapping").outType(
+			new Nil<LabelingMapping<String>>()
 			{}).create();
 
-		ops.op("copy.labelingMapping").arity1().input(input).output(out).compute();
+		ops.op("copy.labelingMapping").input(input).output(out).compute();
 
 		Iterator<String> outIt = out.getLabels().iterator();
 

@@ -69,7 +69,7 @@ public class PrimitiveArrayConverterTest extends AbstractTestEnvironment
 	@Test
 	public void testByteArray() {
 		Byte[] original = new Byte[] { 1, 2 };
-		Byte[] actual = ops.unary("test.byteArray").input(original).outType(
+		Byte[] actual = ops.op("test.byteArray").input(original).outType(
 			Byte[].class).apply();
 		Byte[] expected = new Byte[] { 2, 3 };
 		Assertions.assertArrayEquals(expected, actual);
@@ -86,8 +86,8 @@ public class PrimitiveArrayConverterTest extends AbstractTestEnvironment
 	@Test
 	public void testBytePrimitiveArray() {
 		byte[] original = new byte[] { 1, 2 };
-		byte[] actual = ops.unary("test.bytePrimitiveArray").input(original)
-			.outType(byte[].class).apply();
+		byte[] actual = ops.op("test.bytePrimitiveArray").input(original).outType(
+			byte[].class).apply();
 		byte[] expected = new byte[] { 2, 3 };
 		Assertions.assertArrayEquals(expected, actual);
 	}
@@ -103,7 +103,7 @@ public class PrimitiveArrayConverterTest extends AbstractTestEnvironment
 	@Test
 	public void testShortArray() {
 		Short[] original = new Short[] { 1, 2 };
-		Short[] actual = ops.unary("test.shortArray").input(original).outType(
+		Short[] actual = ops.op("test.shortArray").input(original).outType(
 			Short[].class).apply();
 		Short[] expected = new Short[] { 2, 3 };
 		Assertions.assertArrayEquals(expected, actual);
@@ -120,8 +120,8 @@ public class PrimitiveArrayConverterTest extends AbstractTestEnvironment
 	@Test
 	public void testShortPrimitiveArray() {
 		short[] original = new short[] { 1, 2 };
-		short[] actual = ops.unary("test.shortPrimitiveArray").input(original)
-			.outType(short[].class).apply();
+		short[] actual = ops.op("test.shortPrimitiveArray").input(original).outType(
+			short[].class).apply();
 		short[] expected = new short[] { 2, 3 };
 		Assertions.assertArrayEquals(expected, actual);
 	}
@@ -137,7 +137,7 @@ public class PrimitiveArrayConverterTest extends AbstractTestEnvironment
 	@Test
 	public void testIntegerArray() {
 		Integer[] original = new Integer[] { 1, 2 };
-		Integer[] actual = ops.unary("test.intArray").input(original).outType(
+		Integer[] actual = ops.op("test.intArray").input(original).outType(
 			Integer[].class).apply();
 		Integer[] expected = new Integer[] { 2, 3 };
 		Assertions.assertArrayEquals(expected, actual);
@@ -154,7 +154,7 @@ public class PrimitiveArrayConverterTest extends AbstractTestEnvironment
 	@Test
 	public void testIntegerPrimitiveArray() {
 		int[] original = new int[] { 1, 2 };
-		int[] actual = ops.unary("test.intPrimitiveArray").input(original).outType(
+		int[] actual = ops.op("test.intPrimitiveArray").input(original).outType(
 			int[].class).apply();
 		int[] expected = new int[] { 2, 3 };
 		Assertions.assertArrayEquals(expected, actual);
@@ -171,7 +171,7 @@ public class PrimitiveArrayConverterTest extends AbstractTestEnvironment
 	@Test
 	public void testLongArray() {
 		Long[] original = new Long[] { 1L, 2L };
-		Long[] actual = ops.unary("test.longArray").input(original).outType(
+		Long[] actual = ops.op("test.longArray").input(original).outType(
 			Long[].class).apply();
 		Long[] expected = new Long[] { 2L, 3L };
 		Assertions.assertArrayEquals(expected, actual);
@@ -188,8 +188,8 @@ public class PrimitiveArrayConverterTest extends AbstractTestEnvironment
 	@Test
 	public void testLongPrimitiveArray() {
 		long[] original = new long[] { 1, 2 };
-		long[] actual = ops.unary("test.longPrimitiveArray").input(original)
-			.outType(long[].class).apply();
+		long[] actual = ops.op("test.longPrimitiveArray").input(original).outType(
+			long[].class).apply();
 		long[] expected = new long[] { 2, 3 };
 		Assertions.assertArrayEquals(expected, actual);
 	}
@@ -205,7 +205,7 @@ public class PrimitiveArrayConverterTest extends AbstractTestEnvironment
 	@Test
 	public void testFloatArray() {
 		Float[] original = new Float[] { 1f, 2f };
-		Float[] actual = ops.unary("test.floatArray").input(original).outType(
+		Float[] actual = ops.op("test.floatArray").input(original).outType(
 			Float[].class).apply();
 		Float[] expected = new Float[] { 2f, 3f };
 		Assertions.assertArrayEquals(expected, actual);
@@ -222,8 +222,8 @@ public class PrimitiveArrayConverterTest extends AbstractTestEnvironment
 	@Test
 	public void testFloatPrimitiveArray() {
 		float[] original = new float[] { 1, 2 };
-		float[] actual = ops.unary("test.floatPrimitiveArray").input(original)
-			.outType(float[].class).apply();
+		float[] actual = ops.op("test.floatPrimitiveArray").input(original).outType(
+			float[].class).apply();
 		float[] expected = new float[] { 2, 3 };
 		Assertions.assertArrayEquals(expected, actual);
 	}
@@ -239,7 +239,7 @@ public class PrimitiveArrayConverterTest extends AbstractTestEnvironment
 	@Test
 	public void testDoubleArray() {
 		Double[] original = new Double[] { 1d, 2d };
-		Double[] actual = ops.unary("test.doubleArray").input(original).outType(
+		Double[] actual = ops.op("test.doubleArray").input(original).outType(
 			Double[].class).apply();
 		Double[] expected = new Double[] { 2d, 3d };
 		Assertions.assertArrayEquals(expected, actual);
@@ -256,7 +256,7 @@ public class PrimitiveArrayConverterTest extends AbstractTestEnvironment
 	@Test
 	public void testDoublePrimitiveArray() {
 		double[] original = new double[] { 1, 2 };
-		double[] actual = ops.unary("test.doublePrimitiveArray").input(original)
+		double[] actual = ops.op("test.doublePrimitiveArray").input(original)
 			.outType(double[].class).apply();
 		double[] expected = new double[] { 2, 3 };
 		Assertions.assertArrayEquals(expected, actual);

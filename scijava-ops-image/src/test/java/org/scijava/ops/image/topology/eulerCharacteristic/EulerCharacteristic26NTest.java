@@ -55,8 +55,8 @@ public class EulerCharacteristic26NTest extends AbstractOpTest {
 
 		final DoubleType result = new DoubleType();
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			ops.op("topology.eulerCharacteristic26N").arity1().input(img).output(
-				result).compute();
+			ops.op("topology.eulerCharacteristic26N").input(img).output(result)
+				.compute();
 		});
 	}
 
@@ -97,7 +97,7 @@ public class EulerCharacteristic26NTest extends AbstractOpTest {
 		final Img<BitType> img = drawCube(1, 1, 1, 1);
 
 		final DoubleType result = new DoubleType();
-		ops.op("topology.eulerCharacteristic26N").arity1().input(img).output(result)
+		ops.op("topology.eulerCharacteristic26N").input(img).output(result)
 			.compute();
 
 		assertEquals(1.0, result.get(), 1e-12,
@@ -116,7 +116,7 @@ public class EulerCharacteristic26NTest extends AbstractOpTest {
 		final Img<BitType> img = drawCube(1, 1, 1, 0);
 
 		final DoubleType result = new DoubleType();
-		ops.op("topology.eulerCharacteristic26N").arity1().input(img).output(result)
+		ops.op("topology.eulerCharacteristic26N").input(img).output(result)
 			.compute();
 
 		assertEquals(0.0, result.get(), 1e-12,
@@ -139,7 +139,7 @@ public class EulerCharacteristic26NTest extends AbstractOpTest {
 		access.get().setZero();
 
 		final DoubleType result = new DoubleType();
-		ops.op("topology.eulerCharacteristic26N").arity1().input(img).output(result)
+		ops.op("topology.eulerCharacteristic26N").input(img).output(result)
 			.compute();
 
 		assertEquals(2.0, result.get(), 1e-12,
@@ -172,8 +172,8 @@ public class EulerCharacteristic26NTest extends AbstractOpTest {
 		access.get().setOne();
 
 		final DoubleType result = new DoubleType();
-		ops.op("topology.eulerCharacteristic26N").arity1().input(cube).output(
-			result).compute();
+		ops.op("topology.eulerCharacteristic26N").input(cube).output(result)
+			.compute();
 
 		assertEquals(0.0, result.get(), 1e-12,
 			"Euler characteristic (χ) is incorrect");

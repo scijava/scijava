@@ -70,7 +70,7 @@ public class OpAdaptation implements OpCollection {
 		Double[] firstArray = new Double[] { 1., 2., 3. };
 		Double[] secondArray = new Double[] { 1., 2., 3. };
 		// Ask for an Op of name "tutorial.adapt"
-		Double[] result = ops.binary("tutorial.adapt") //
+		Double[] result = ops.op("tutorial.adapt") //
 			// With our two ARRAY inputs
 			.input(firstArray, secondArray) //
 			// And get a Double[] out

@@ -45,7 +45,7 @@ public class CopyOpCollectionTest extends AbstractTestEnvironment {
 	public void testCopyOp() {
 		double[] input = { 1, 2, 3 };
 		double[] output = { 4, 5, 6 };
-		ops.op("copy.array").arity1().input(input).output(output).compute();
+		ops.op("copy.array").input(input).output(output).compute();
 
 		Assertions.assertArrayEquals(input, output, 0.);
 	}

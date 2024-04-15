@@ -57,16 +57,16 @@ public class DefaultDerivativeGaussTest extends AbstractOpTest {
 		final RandomAccessibleInterval<FloatType> input = TestImgGeneration
 			.floatArray(false, 30, 30, 30);
 
-		final Img<DoubleType> output = ops.op("create.img").arity1().input(input)
-			.outType(new Nil<Img<DoubleType>>()
+		final Img<DoubleType> output = ops.op("create.img").input(input).outType(
+			new Nil<Img<DoubleType>>()
 			{}).apply();
 
 		final int[] derivatives = new int[] { 1, 0 };
 		final double[] sigmas = new double[] { 1, 1 };
 		IllegalArgumentException e = Assertions.assertThrows(
 			IllegalArgumentException.class, () -> {
-				ops.op("filter.derivativeGauss").arity3().input(input, sigmas,
-					derivatives).output(output).compute();
+				ops.op("filter.derivativeGauss").input(input, sigmas, derivatives)
+					.output(output).compute();
 			});
 
 		Assertions.assertTrue(e.getMessage().equalsIgnoreCase(
@@ -76,12 +76,12 @@ public class DefaultDerivativeGaussTest extends AbstractOpTest {
 	@Test
 	public void regressionTest() {
 		final int width = 10;
-		final Img<DoubleType> input = ops.op("create.img").arity2().input(
+		final Img<DoubleType> input = ops.op("create.img").input(
 			new FinalDimensions(width, width), new DoubleType()).outType(
 				new Nil<Img<DoubleType>>()
 				{}).apply();
 
-		final Img<DoubleType> output = ops.op("create.img").arity2().input(input,
+		final Img<DoubleType> output = ops.op("create.img").input(input,
 			new DoubleType()).outType(new Nil<Img<DoubleType>>()
 		{}).apply();
 
@@ -96,8 +96,8 @@ public class DefaultDerivativeGaussTest extends AbstractOpTest {
 		// filter the image
 		final int[] derivatives = new int[] { 1, 0 };
 		final double[] sigmas = new double[] { 0.5, 0.5 };
-		ops.op("filter.derivativeGauss").arity3().input(input, sigmas, derivatives)
-			.output(output).compute();
+		ops.op("filter.derivativeGauss").input(input, sigmas, derivatives).output(
+			output).compute();
 
 		final Cursor<DoubleType> cursor = output.localizingCursor();
 		int currentPixel = 0;

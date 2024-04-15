@@ -60,7 +60,7 @@ public class BenchmarkCaching {
 	@BenchmarkMode(Mode.AverageTime)
 	public void runOp(final MatchingState state) {
 		var out = ArrayImgs.doubles(state.in.dimensionsAsLongArray());
-		state.env.binary("benchmark.match", CACHE_MISS_HINTS) //
+		state.env.op("benchmark.match", CACHE_MISS_HINTS) //
 			.input(state.in, 1.0) //
 			.output(out) //
 			.compute();
@@ -72,7 +72,7 @@ public class BenchmarkCaching {
 	@BenchmarkMode(Mode.AverageTime)
 	public void runOpCached(final MatchingState state) {
 		var out = ArrayImgs.doubles(state.in.dimensionsAsLongArray());
-		state.env.binary("benchmark.match", CACHE_HIT_HINTS) //
+		state.env.op("benchmark.match", CACHE_HIT_HINTS) //
 			.input(state.in, 1.0) //
 			.output(out) //
 			.compute();

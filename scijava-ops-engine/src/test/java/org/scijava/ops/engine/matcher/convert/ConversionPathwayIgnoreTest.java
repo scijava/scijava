@@ -73,7 +73,7 @@ public class ConversionPathwayIgnoreTest extends AbstractTestEnvironment
 	public void testPathwaysNotIgnored() {
 		FocusedA in = new FocusedA(0);
 		FocusedB out = new FocusedB(0);
-		ops.op("test.a").arity1().input(in).output(out).compute();
+		ops.op("test.a").input(in).output(out).compute();
 		Assertions.assertEquals(1, out.get());
 		Assertions.assertTrue(COPIED);
 	}
@@ -82,7 +82,7 @@ public class ConversionPathwayIgnoreTest extends AbstractTestEnvironment
 	public void testPathwaysIgnored() {
 		FocusedB in = new FocusedB(0);
 		FocusedA out = new FocusedA(0);
-		ops.op("test.a").arity1().input(in).output(out).compute();
+		ops.op("test.a").input(in).output(out).compute();
 		Assertions.assertEquals(1, out.get());
 		Assertions.assertFalse(COPIED);
 	}

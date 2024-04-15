@@ -94,11 +94,10 @@ public class OpParallelization implements OpCollection {
 		// Fill an input image with a value
 		var fillValue = new UnsignedByteType(5);
 		var inImg = ArrayImgs.unsignedBytes(10, 10);
-		ops.op("image.fill").arity1().input(fillValue).output(inImg).compute();
+		ops.op("image.fill").input(fillValue).output(inImg).compute();
 		// Run the Op
 		var outImg = ArrayImgs.unsignedBytes(10, 10);
-		ops.op("tutorial.invertPerPixel").arity1().input(inImg).output(outImg)
-			.compute();
+		ops.op("tutorial.invertPerPixel").input(inImg).output(outImg).compute();
 		// Get the original value, and the inverted value
 		var original = inImg.firstElement().get();
 		var inverted = outImg.firstElement().get();
@@ -112,8 +111,8 @@ public class OpParallelization implements OpCollection {
 		// for a given pixel includes all of its immediate neighbors (including
 		// diagonal)
 		var shape = new RectangleShape(1, false);
-		ops.op("tutorial.neighborhoodAverage").arity2().input(inImg, shape).output(
-			outImg).compute();
+		ops.op("tutorial.neighborhoodAverage").input(inImg, shape).output(outImg)
+			.compute();
 		// Get the original value, and the radius-1 neighborhood value
 		original = inImg.firstElement().get();
 		var mean = outImg.firstElement().get();

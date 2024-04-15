@@ -75,9 +75,9 @@ public class BoxCountTest extends AbstractOpTest {
 
 		// EXECUTE
 		final List<ValuePair<DoubleType, DoubleType>> points = ops.op(
-			"topology.boxCount").arity5().input(img, MAX_SIZE, MIN_SIZE, SCALING, 0l)
-			.outType(new Nil<List<ValuePair<DoubleType, DoubleType>>>()
-			{}).apply();
+			"topology.boxCount").input(img, MAX_SIZE, MIN_SIZE, SCALING, 0l).outType(
+				new Nil<List<ValuePair<DoubleType, DoubleType>>>()
+				{}).apply();
 
 		// VERIFY
 		assertNotNull(points);
@@ -100,9 +100,9 @@ public class BoxCountTest extends AbstractOpTest {
 
 		// EXECUTE
 		final List<ValuePair<DoubleType, DoubleType>> points = ops.op(
-			"topology.boxCount").arity5().input(img, MAX_SIZE, MIN_SIZE, SCALING, 0l)
-			.outType(new Nil<List<ValuePair<DoubleType, DoubleType>>>()
-			{}).apply();
+			"topology.boxCount").input(img, MAX_SIZE, MIN_SIZE, SCALING, 0l).outType(
+				new Nil<List<ValuePair<DoubleType, DoubleType>>>()
+				{}).apply();
 
 		// VERIFY
 		for (int i = 0; i < ITERATIONS; i++) {
@@ -125,7 +125,7 @@ public class BoxCountTest extends AbstractOpTest {
 
 		// EXECUTE
 		final List<ValuePair<DoubleType, DoubleType>> points = ops.op(
-			"topology.boxCount").arity5().input(img, 4L, 1L, 2.0, 0L).outType(
+			"topology.boxCount").input(img, 4L, 1L, 2.0, 0L).outType(
 				new Nil<List<ValuePair<DoubleType, DoubleType>>>()
 				{}).apply();
 
@@ -153,7 +153,7 @@ public class BoxCountTest extends AbstractOpTest {
 
 		// EXECUTE
 		final List<ValuePair<DoubleType, DoubleType>> points = ops.op(
-			"topology.boxCount").arity5().input(img, 4L, 1L, 2.0, 1L).outType(
+			"topology.boxCount").input(img, 4L, 1L, 2.0, 1L).outType(
 				new Nil<List<ValuePair<DoubleType, DoubleType>>>()
 				{}).apply();
 
@@ -178,7 +178,7 @@ public class BoxCountTest extends AbstractOpTest {
 
 		// EXECUTE
 		final List<ValuePair<DoubleType, DoubleType>> points = ops.op(
-			"topology.boxCount").arity5().input(img, 9L, 3L, 3.0, 0l).outType(
+			"topology.boxCount").input(img, 9L, 3L, 3.0, 0l).outType(
 				new Nil<List<ValuePair<DoubleType, DoubleType>>>()
 				{}).apply();
 
@@ -194,7 +194,7 @@ public class BoxCountTest extends AbstractOpTest {
 		final Img<BitType> img = ArrayImgs.bits(9, 9, 9);
 
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			ops.op("topology.boxCount").arity5().input(img, 8L, 2L, 1.0, 0L).outType(
+			ops.op("topology.boxCount").input(img, 8L, 2L, 1.0, 0L).outType(
 				new Nil<List<ValuePair<DoubleType, DoubleType>>>()
 				{}).apply();
 		});

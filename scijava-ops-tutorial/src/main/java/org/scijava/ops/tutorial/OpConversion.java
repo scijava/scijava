@@ -90,7 +90,7 @@ public class OpConversion implements OpCollection {
 		Integer first = 1;
 		Integer second = 2;
 		// Ask for an Op of name "tutorial.conversion"
-		Integer result = ops.binary("tutorial.conversion") //
+		Integer result = ops.op("tutorial.conversion") //
 			// With our two Integer inputs
 			.input(first, second) //
 			// And get an Integer out

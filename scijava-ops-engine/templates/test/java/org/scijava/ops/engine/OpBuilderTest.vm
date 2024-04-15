@@ -75,7 +75,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	/** Matches a nullary function in a vacuum. */
 	@Test
 	public void testArity0_OU_matchF() {
-		final Producer<?> op = name("test.addDoubles").arity0().producer();
+		final Producer<?> op = name("test.addDoubles").producer();
 		final Object result = op.create();
 		assertEquals(0., result);
 	}
@@ -83,7 +83,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	/** Runs a nullary function in a vacuum. */
 	@Test
 	public void testArity0_OU_runF() {
-		final Object result = name("test.addDoubles").arity0().create();
+		final Object result = name("test.addDoubles").create();
 		assertEquals(0., result);
 	}
 
@@ -92,7 +92,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	public void testArity0_OT_matchF() {
 		final Double expected = 0.;
 		final Producer<Double> op = //
-			name("test.addDoubles").arity0().outType(Double.class).producer();
+			name("test.addDoubles").outType(Double.class).producer();
 		final Object result = op.create();
 		assertEquals(result, expected);
 	}
@@ -103,7 +103,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] actual = { 1, 2, 3 };
 		final double[] expected = { 0, 0, 0 };
 		final Computers.Arity0<double[]> op = //
-			name("test.addArrays").arity0().outType(double[].class).computer();
+			name("test.addArrays").outType(double[].class).computer();
 		op.compute(actual);
 		assertTrue(Arrays.equals(expected, actual));
 	}
@@ -111,7 +111,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	/** Runs a nullary function with a given output type. */
 	@Test
 	public void testArity0_OT_runF() {
-		final Double result = name("test.addDoubles").arity0().outType(Double.class)
+		final Double result = name("test.addDoubles").outType(Double.class)
 			.create();
 		assert (0. == result);
 	}
@@ -122,7 +122,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] result = { 1, 2, 3 };
 		double[] expected = { 0, 0, 0 };
 		final Computers.Arity0<double[]> op = //
-			name("test.addArrays").arity0().output(result).computer();
+			name("test.addArrays").output(result).computer();
 		op.compute(result);
 		assertTrue(Arrays.equals(expected, result));
 	}
@@ -132,7 +132,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	public void testArity0_OV_runC() {
 		double[] result = { 1, 2, 3 };
 		double[] expected = { 0, 0, 0 };
-		name("test.addArrays").arity0().output(result).compute();
+		name("test.addArrays").output(result).compute();
 		assertTrue(Arrays.equals(expected, result));
 	}
 #foreach($arity in [1..$maxArity])

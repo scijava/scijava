@@ -71,13 +71,13 @@ public class ConversionHintTest extends AbstractTestEnvironment implements
 		ops.setDefaultHints(hints);
 		@SuppressWarnings("unused")
 		Function<Integer[], Integer[]> adaptable = ops.op("test.conversion.hints")
-			.arity1().inType(Integer[].class).outType(Integer[].class).function();
+			.inType(Integer[].class).outType(Integer[].class).function();
 		// make sure we cannot find the Op when adaptation is not allowed
 		hints = hints.plus(Conversion.FORBIDDEN);
 		ops.setDefaultHints(hints);
 		Assertions.assertThrows(OpMatchingException.class, () -> ops //
 			.op("test.conversion.hints") //
-			.arity1() //
+			//
 			.inType(Integer[].class) //
 			.outType(Integer[].class) //
 			.function(), //
@@ -91,13 +91,12 @@ public class ConversionHintTest extends AbstractTestEnvironment implements
 		Hints hints = new Hints();
 		@SuppressWarnings("unused")
 		Function<Integer[], Integer[]> adaptable = ops.op("test.conversion.hints",
-			hints).arity1().inType(Integer[].class).outType(Integer[].class)
-			.function();
+			hints).inType(Integer[].class).outType(Integer[].class).function();
 		// make sure we cannot find the Op when adaptation is not allowed
 		final Hints forbid = hints.plus(Conversion.FORBIDDEN);
 		Assertions.assertThrows(OpMatchingException.class, () -> ops //
 			.op("test.conversion.hints", forbid) //
-			.arity1() //
+			//
 			.inType(Integer[].class) //
 			.outType(Integer[].class) //
 			.function(), //
@@ -116,14 +115,14 @@ public class ConversionHintTest extends AbstractTestEnvironment implements
 		ops.setDefaultHints(hints);
 		@SuppressWarnings("unused")
 		Function<Double[], Double[]> adaptable = ops.op(
-			"test.conversion.nonconvertible").arity1().inType(Double[].class).outType(
+			"test.conversion.nonconvertible").inType(Double[].class).outType(
 				Double[].class).function();
 		// make sure that we cannot match the Op via adaptation even when
 		// conversion
 		// is allowed (since it declares itself to be nonconvertible)
 		Assertions.assertThrows(OpMatchingException.class, () -> ops //
 			.op("test.conversion.nonconvertible") //
-			.arity1() //
+			//
 			.inType(Integer[].class) //
 			.outType(Integer[].class) //
 			.function(), //
@@ -137,14 +136,14 @@ public class ConversionHintTest extends AbstractTestEnvironment implements
 		Hints hints = new Hints();
 		@SuppressWarnings("unused")
 		Function<Double[], Double[]> adaptable = ops.op(
-			"test.conversion.nonconvertible", hints).arity1().inType(Double[].class)
-			.outType(Double[].class).function();
+			"test.conversion.nonconvertible", hints).inType(Double[].class).outType(
+				Double[].class).function();
 		// make sure that we cannot match the Op via adaptation even when
 		// conversion
 		// is allowed (since it declares itself to be nonconvertible)
 		assertThrows(OpMatchingException.class, () -> ops //
 			.op("test.conversion.nonconvertible", hints) //
-			.arity1() //
+			//
 			.inType(Integer[].class) //
 			.outType(Integer[].class) //
 			.function(), //

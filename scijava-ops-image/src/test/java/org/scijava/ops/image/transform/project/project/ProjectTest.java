@@ -83,10 +83,10 @@ public class ProjectTest extends AbstractOpTest {
 		// ops.run(DefaultProjectParallel.class, out2, in, op, PROJECTION_DIM);
 		// testEquality(out1, out2);
 
-		ops.op("transform.project").arity3().input(in, op, PROJECTION_DIM).output(
-			out1).compute();
-		ops.op("transform.project").arity3().input(in, op, PROJECTION_DIM).output(
-			out2).compute();
+		ops.op("transform.project").input(in, op, PROJECTION_DIM).output(out1)
+			.compute();
+		ops.op("transform.project").input(in, op, PROJECTION_DIM).output(out2)
+			.compute();
 		testEquality(out1, out2);
 	}
 

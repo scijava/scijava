@@ -77,17 +77,16 @@ public class LiftComputersToRAITest<I extends RealType<I>, O extends RealType<O>
 
 	@Test
 	public void testLiftComputer1ToRAI() {
-		RandomAccessibleInterval<DoubleType> input = ops.op("create.img").arity2()
-			.input(new FinalDimensions(3, 3), new DoubleType()).outType(
+		RandomAccessibleInterval<DoubleType> input = ops.op("create.img").input(
+			new FinalDimensions(3, 3), new DoubleType()).outType(
 				new Nil<Img<DoubleType>>()
 				{}).apply();
-		RandomAccessibleInterval<DoubleType> output = ops.op("create.img").arity2()
-			.input(new FinalDimensions(3, 3), new DoubleType()).outType(
+		RandomAccessibleInterval<DoubleType> output = ops.op("create.img").input(
+			new FinalDimensions(3, 3), new DoubleType()).outType(
 				new Nil<Img<DoubleType>>()
 				{}).apply();
 
-		ops.op("test.computer.liftImg").arity1().input(input).output(output)
-			.compute();
+		ops.op("test.computer.liftImg").input(input).output(output).compute();
 
 		Cursor<DoubleType> cursor = Views.flatIterable(output).cursor();
 		while (cursor.hasNext()) {
@@ -98,16 +97,16 @@ public class LiftComputersToRAITest<I extends RealType<I>, O extends RealType<O>
 
 	@Test
 	public void testLiftComputer2ToRAI() {
-		RandomAccessibleInterval<DoubleType> input = ops.op("create.img").arity2()
-			.input(new FinalDimensions(3, 3), new DoubleType()).outType(
+		RandomAccessibleInterval<DoubleType> input = ops.op("create.img").input(
+			new FinalDimensions(3, 3), new DoubleType()).outType(
 				new Nil<Img<DoubleType>>()
 				{}).apply();
-		RandomAccessibleInterval<DoubleType> output = ops.op("create.img").arity2()
-			.input(new FinalDimensions(3, 3), new DoubleType()).outType(
+		RandomAccessibleInterval<DoubleType> output = ops.op("create.img").input(
+			new FinalDimensions(3, 3), new DoubleType()).outType(
 				new Nil<Img<DoubleType>>()
 				{}).apply();
 
-		ops.op("test.computer.liftImg").arity2().input(input, input).output(output)
+		ops.op("test.computer.liftImg").input(input, input).output(output)
 			.compute();
 
 		Cursor<DoubleType> cursor = Views.flatIterable(output).cursor();
@@ -119,17 +118,17 @@ public class LiftComputersToRAITest<I extends RealType<I>, O extends RealType<O>
 
 	@Test
 	public void testLiftComputer3ToRAI() {
-		RandomAccessibleInterval<DoubleType> input = ops.op("create.img").arity2()
-			.input(new FinalDimensions(3, 3), new DoubleType()).outType(
+		RandomAccessibleInterval<DoubleType> input = ops.op("create.img").input(
+			new FinalDimensions(3, 3), new DoubleType()).outType(
 				new Nil<Img<DoubleType>>()
 				{}).apply();
-		RandomAccessibleInterval<DoubleType> output = ops.op("create.img").arity2()
-			.input(new FinalDimensions(3, 3), new DoubleType()).outType(
+		RandomAccessibleInterval<DoubleType> output = ops.op("create.img").input(
+			new FinalDimensions(3, 3), new DoubleType()).outType(
 				new Nil<Img<DoubleType>>()
 				{}).apply();
 
-		ops.op("test.computer.liftImg").arity3().input(input, input, input).output(
-			output).compute();
+		ops.op("test.computer.liftImg").input(input, input, input).output(output)
+			.compute();
 
 		Cursor<DoubleType> cursor = Views.flatIterable(output).cursor();
 		while (cursor.hasNext()) {
@@ -140,17 +139,17 @@ public class LiftComputersToRAITest<I extends RealType<I>, O extends RealType<O>
 
 	@Test
 	public void testLiftComputer4ToRAI() {
-		RandomAccessibleInterval<DoubleType> input = ops.op("create.img").arity2()
-			.input(new FinalDimensions(3, 3), new DoubleType()).outType(
+		RandomAccessibleInterval<DoubleType> input = ops.op("create.img").input(
+			new FinalDimensions(3, 3), new DoubleType()).outType(
 				new Nil<Img<DoubleType>>()
 				{}).apply();
-		RandomAccessibleInterval<DoubleType> output = ops.op("create.img").arity2()
-			.input(new FinalDimensions(3, 3), new DoubleType()).outType(
+		RandomAccessibleInterval<DoubleType> output = ops.op("create.img").input(
+			new FinalDimensions(3, 3), new DoubleType()).outType(
 				new Nil<Img<DoubleType>>()
 				{}).apply();
 
-		ops.op("test.computer.liftImg").arity4().input(input, input, input, input)
-			.output(output).compute();
+		ops.op("test.computer.liftImg").input(input, input, input, input).output(
+			output).compute();
 
 		Cursor<DoubleType> cursor = Views.flatIterable(output).cursor();
 		while (cursor.hasNext()) {
@@ -161,17 +160,17 @@ public class LiftComputersToRAITest<I extends RealType<I>, O extends RealType<O>
 
 	@Test
 	public void testLiftComputer5ToRAI() {
-		RandomAccessibleInterval<DoubleType> input = ops.op("create.img").arity2()
-			.input(new FinalDimensions(3, 3), new DoubleType()).outType(
+		RandomAccessibleInterval<DoubleType> input = ops.op("create.img").input(
+			new FinalDimensions(3, 3), new DoubleType()).outType(
 				new Nil<Img<DoubleType>>()
 				{}).apply();
-		RandomAccessibleInterval<DoubleType> output = ops.op("create.img").arity2()
-			.input(new FinalDimensions(3, 3), new DoubleType()).outType(
+		RandomAccessibleInterval<DoubleType> output = ops.op("create.img").input(
+			new FinalDimensions(3, 3), new DoubleType()).outType(
 				new Nil<Img<DoubleType>>()
 				{}).apply();
 
-		ops.op("test.computer.liftImg").arity5().input(input, input, input, input,
-			input).output(output).compute();
+		ops.op("test.computer.liftImg").input(input, input, input, input, input)
+			.output(output).compute();
 
 		Cursor<DoubleType> cursor = Views.flatIterable(output).cursor();
 		while (cursor.hasNext()) {

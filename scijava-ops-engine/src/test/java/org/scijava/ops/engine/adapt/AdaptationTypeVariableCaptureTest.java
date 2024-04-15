@@ -112,7 +112,7 @@ public class AdaptationTypeVariableCaptureTest<N extends Number> extends
 	public void testCapture() {
 		List<Byte> in = Arrays.asList((byte) 0, (byte) 1);
 		Object out = ops.op("test.adaptedCapture") //
-			.arity1() //
+			//
 			.input(in) //
 			.apply();
 		Assertions.assertInstanceOf(List.class, out);

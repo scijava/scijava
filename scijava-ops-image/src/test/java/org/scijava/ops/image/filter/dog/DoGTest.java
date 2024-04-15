@@ -66,8 +66,8 @@ public class DoGTest extends AbstractOpTest {
 		final OutOfBoundsFactory<ByteType, Img<ByteType>> outOfBounds =
 			new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
 
-		ops.op("filter.DoG").arity4().input(in, sigmas1, sigmas2, outOfBounds)
-			.output(out1).compute();
+		ops.op("filter.DoG").input(in, sigmas1, sigmas2, outOfBounds).output(out1)
+			.compute();
 
 		// test against native imglib2 implementation
 		DifferenceOfGaussian.DoG(sigmas1, sigmas2, Views.extendMirrorSingle(in),
@@ -86,12 +86,12 @@ public class DoGTest extends AbstractOpTest {
 	public void dogRAISingleSigmasTest() {
 		final OutOfBoundsFactory<ByteType, Img<ByteType>> outOfBounds =
 			new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
-		final RandomAccessibleInterval<ByteType> res = ops.op("create.img").arity2()
-			.input(TestImgGeneration.byteArray(true, new long[] { 10, 10 }),
-				new ByteType()).outType(new Nil<RandomAccessibleInterval<ByteType>>()
+		final RandomAccessibleInterval<ByteType> res = ops.op("create.img").input(
+			TestImgGeneration.byteArray(true, new long[] { 10, 10 }), new ByteType())
+			.outType(new Nil<RandomAccessibleInterval<ByteType>>()
 			{}).apply();
-		ops.op("filter.DoG").arity4().input(TestImgGeneration.byteArray(true,
-			new long[] { 10, 10 }), 1., 2., outOfBounds).output(res).compute();
+		ops.op("filter.DoG").input(TestImgGeneration.byteArray(true, new long[] {
+			10, 10 }), 1., 2., outOfBounds).output(res).compute();
 
 		Assertions.assertNotNull(res);
 	}

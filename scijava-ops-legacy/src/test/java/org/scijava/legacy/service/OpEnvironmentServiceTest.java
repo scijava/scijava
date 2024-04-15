@@ -59,7 +59,7 @@ public class OpEnvironmentServiceTest {
 	public void testOpEnvironmentService() {
 		Context ctx = new Context(OpEnvironmentService.class);
 		OpEnvironmentService ops = ctx.getService(OpEnvironmentService.class);
-		Double result = ops.env().binary("math.add") //
+		Double result = ops.env().op("math.add") //
 			.input(2., 3.) //
 			.outType(Double.class) //
 			.apply();
@@ -127,7 +127,7 @@ public class OpEnvironmentServiceTest {
 		};
 		event.subscribe(e);
 		var hints = new Hints("progress.TRACK");
-		env.binary("math.div", hints).input(2, 3).apply();
+		env.op("math.div", hints).input(2, 3).apply();
 		Assertions.assertEquals(5, totalPings[0]);
 		event.unsubscribe(Collections.singletonList(e));
 	}

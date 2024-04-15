@@ -108,8 +108,8 @@ public class OpCachingTest implements OpCollection {
 	{
 		// put the Op in the cache
 		DefaultOpEnvironment defOpEnv = getDefaultOpEnv();
-		Producer<String> op = defOpEnv.op("test.basicOp").arity0().outType(
-			String.class).producer();
+		Producer<String> op = defOpEnv.op("test.basicOp").outType(String.class)
+			.producer();
 
 		Map<MatchingConditions, OpInstance<?>> opCache = getOpCache(defOpEnv);
 
@@ -130,7 +130,7 @@ public class OpCachingTest implements OpCollection {
 			}.getType());
 		opCache.replace(cachedConditions, invaderInstance);
 
-		Producer<String> invadedOp = defOpEnv.op("test.basicOp").arity0().outType(
+		Producer<String> invadedOp = defOpEnv.op("test.basicOp").outType(
 			String.class).producer();
 		Assertions.assertEquals(newProducer.create(), invadedOp.create(),
 			"Op returned did not match the Op inserted into the cache!");
@@ -142,7 +142,7 @@ public class OpCachingTest implements OpCollection {
 	{
 		// put the Op in the cache
 		DefaultOpEnvironment defOpEnv = getDefaultOpEnv();
-		Producer<String> op = defOpEnv.op("test.complicatedOp").arity0().outType(
+		Producer<String> op = defOpEnv.op("test.complicatedOp").outType(
 			String.class).producer();
 
 		Map<MatchingConditions, OpInstance<?>> opCache = getOpCache(defOpEnv);
@@ -181,7 +181,7 @@ public class OpCachingTest implements OpCollection {
 		// Match the Op with a cache-ignoring hint
 		Hints h = new Hints(BaseOpHints.Cache.IGNORE);
 		Producer<String> op = defOpEnv.op("test.complicatedOp", h) //
-			.arity0() //
+			//
 			.outType(String.class) //
 			.producer();
 		// Assert the cache is still empty
@@ -192,8 +192,8 @@ public class OpCachingTest implements OpCollection {
 	public void testHintOmitsCacheRetrieval() throws Exception {
 		// put the Op in the cache
 		DefaultOpEnvironment defOpEnv = getDefaultOpEnv();
-		Producer<String> op = defOpEnv.op("test.basicOp").arity0().outType(
-			String.class).producer();
+		Producer<String> op = defOpEnv.op("test.basicOp").outType(String.class)
+			.producer();
 
 		Map<MatchingConditions, OpInstance<?>> opCache = getOpCache(defOpEnv);
 
@@ -217,7 +217,7 @@ public class OpCachingTest implements OpCollection {
 		// ensure the cache-ignoring hint avoids the replacement
 		Hints h = new Hints(BaseOpHints.Cache.IGNORE);
 		op = defOpEnv.op("test.basicOp", h) //
-			.arity0() //
+			//
 			.outType(String.class) //
 			.producer();
 		Assertions.assertNotEquals(op, cachedInstance.op(),

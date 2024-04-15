@@ -60,7 +60,7 @@ public class InfoTreeGeneratorTest extends AbstractTestEnvironment implements
 	public void testMultipleValidInfoTreeGenerators() {
 		// Obtain a signature that can be reified by the DefaultInfoTreeGenerator
 		// and by our dummy generator
-		var op = ops.unary("test.infoTreeGeneration").inType(Double.class).outType(
+		var op = ops.op("test.infoTreeGeneration").inType(Double.class).outType(
 			Double.class).function();
 		String signature = Ops.signature(op);
 		// Run treeFromID to make sure our generator doesn't run

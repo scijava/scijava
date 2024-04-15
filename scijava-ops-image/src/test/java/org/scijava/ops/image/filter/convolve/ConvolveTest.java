@@ -46,7 +46,7 @@ public class ConvolveTest extends AbstractOpTest {
 	@Test
 	public void testConvolve() {
 		// Verify we can get a ConvolveFFTF op
-		var o = ops.op("filter.convolve").arity6().inType(
+		var o = ops.op("filter.convolve").inType(
 			new Nil<RandomAccessibleInterval<FloatType>>()
 			{}, new Nil<RandomAccessibleInterval<FloatType>>() {}, Nil.of(
 				FloatType.class), Nil.of(ComplexFloatType.class), new Nil<long[]>()

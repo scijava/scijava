@@ -107,9 +107,9 @@ public class BinaryNumericTypeMathTest extends AbstractOpTest {
 		for (String opName : opNames.split(", ")) {
 			for (String m : methods) {
 				IntType c = new IntType();
-				if (m.equals("function")) c = ops.binary(opName).input(A, B).outType(
+				if (m.equals("function")) c = ops.op(opName).input(A, B).outType(
 					IntType.class).apply();
-				else if (m.equals("computer")) ops.binary(opName).input(A, B).output(c)
+				else if (m.equals("computer")) ops.op(opName).input(A, B).output(c)
 					.compute();
 				assertEquals(expectedValue, c.get());
 			}

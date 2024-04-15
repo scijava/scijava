@@ -151,8 +151,8 @@ public class MTKTTest extends AbstractColocalisationTest {
 		}
 		Img<DoubleType> vImage1 = ArrayImgs.doubles(values1, values1.length);
 		Img<DoubleType> vImage2 = ArrayImgs.doubles(values2, values2.length);
-		double result = ops.op("coloc.maxTKendallTau").arity2().input(vImage1,
-			vImage2).outType(Double.class).apply();
+		double result = ops.op("coloc.maxTKendallTau").input(vImage1, vImage2)
+			.outType(Double.class).apply();
 		assertEquals(4.9E-324, result, 0.0);
 	}
 
@@ -168,8 +168,8 @@ public class MTKTTest extends AbstractColocalisationTest {
 		}
 		Img<DoubleType> vImage1 = ArrayImgs.doubles(values1, values1.length);
 		Img<DoubleType> vImage2 = ArrayImgs.doubles(values2, values2.length);
-		double result = (Double) ops.op("coloc.maxTKendallTau").arity2().input(
-			vImage1, vImage2).apply();
+		double result = (Double) ops.op("coloc.maxTKendallTau").input(vImage1,
+			vImage2).apply();
 		assertEquals(1.0, result, 0.0);
 	}
 
@@ -183,8 +183,8 @@ public class MTKTTest extends AbstractColocalisationTest {
 			new FloatType(), 24, 24, mean, spread, sigma, 0x01234567);
 		Img<FloatType> ch2 = AbstractColocalisationTest.produceMeanBasedNoiseImage(
 			new FloatType(), 24, 24, mean, spread, sigma, 0x98765432);
-		double result = (Double) ops.op("coloc.maxTKendallTau").arity2().input(ch1,
-			ch2).apply();
+		double result = (Double) ops.op("coloc.maxTKendallTau").input(ch1, ch2)
+			.apply();
 		assertEquals(2.710687382741972, result, 0.0);
 	}
 
@@ -197,8 +197,8 @@ public class MTKTTest extends AbstractColocalisationTest {
 		RandomAccessibleInterval<UnsignedByteType> cropCh2 = Views.interval(
 			getZeroCorrelationImageCh2(), new long[] { 0, 0, 0 }, new long[] { 20, 20,
 				0 });
-		double result = (Double) ops.op("coloc.maxTKendallTau").arity2().input(
-			cropCh1, cropCh2).apply();
+		double result = (Double) ops.op("coloc.maxTKendallTau").input(cropCh1,
+			cropCh2).apply();
 		assertEquals(2.562373279563565, result, 0.0);
 	}
 
@@ -224,7 +224,7 @@ public class MTKTTest extends AbstractColocalisationTest {
 				new Nil<Double>()
 				{});
 		PValueResult value = new PValueResult();
-		ops.op("coloc.pValue").arity4().input(vImage1, vImage2, op, 5).output(value)
+		ops.op("coloc.pValue").input(vImage1, vImage2, op, 5).output(value)
 			.compute();
 		assertEquals(0.0, value.getPValue(), 0.0);
 	}
@@ -248,7 +248,7 @@ public class MTKTTest extends AbstractColocalisationTest {
 				new Nil<Double>()
 				{});
 		PValueResult value = new PValueResult();
-		ops.op("coloc.pValue").arity4().input(vImage1, vImage2, op, 5).output(value)
+		ops.op("coloc.pValue").input(vImage1, vImage2, op, 5).output(value)
 			.compute();
 		assertEquals(0.0, value.getPValue(), 0.0);
 	}
@@ -270,8 +270,7 @@ public class MTKTTest extends AbstractColocalisationTest {
 				new Nil<Double>()
 				{});
 		PValueResult value = new PValueResult();
-		ops.op("coloc.pValue").arity4().input(ch1, ch2, op, 10).output(value)
-			.compute();
+		ops.op("coloc.pValue").input(ch1, ch2, op, 10).output(value).compute();
 		assertEquals(0.2, value.getPValue(), 0.0);
 	}
 
@@ -300,8 +299,7 @@ public class MTKTTest extends AbstractColocalisationTest {
 		RandomAccessibleInterval<UnsignedByteType> ch2 = ShuffledView.cropAtMin(
 			cropCh2, blockSize);
 		PValueResult value = new PValueResult();
-		ops.op("coloc.pValue").arity4().input(ch1, ch2, op, 5).output(value)
-			.compute();
+		ops.op("coloc.pValue").input(ch1, ch2, op, 5).output(value).compute();
 		assertEquals(0.2, value.getPValue(), 0.0);
 	}
 }

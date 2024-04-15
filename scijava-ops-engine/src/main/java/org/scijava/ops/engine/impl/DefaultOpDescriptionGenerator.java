@@ -170,7 +170,8 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 				.filter(m -> !ItemIO.CONTAINER.equals(m.getIOType())) //
 				.count();
 
-			if (req.getArgs() == null || req.getArgs().length == numPureInputs) {
+			Type[] args = req.getArgs();
+			if (args == null || args.length == numPureInputs) {
 				filtered.add(info);
 			}
 

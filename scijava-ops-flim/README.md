@@ -24,9 +24,9 @@ param.ltAxis = 2      // time bins lay along axis #2
 fittedImg = op.unary("flim.fitLMA").input(param).apply().paramMap
 
 // display each parameter
-zImg = op.ternary("transform.hyperSliceView").input(fittedImg, param.ltAxis, 0L).apply()
-AImg = op.ternary("transform.hyperSliceView").input(fittedImg, param.ltAxis, 1L).apply()
-tauImg = op.ternary("transform.hyperSliceView").input(fittedImg, param.ltAxis, 2L).apply()
+zImg = op.op("transform.hyperSliceView").input(fittedImg, param.ltAxis, 0L).apply()
+AImg = op.op("transform.hyperSliceView").input(fittedImg, param.ltAxis, 1L).apply()
+tauImg = op.op("transform.hyperSliceView").input(fittedImg, param.ltAxis, 2L).apply()
 
 ui.show("z", zImg)
 ui.show("A", AImg)

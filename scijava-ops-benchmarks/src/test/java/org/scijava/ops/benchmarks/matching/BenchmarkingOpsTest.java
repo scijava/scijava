@@ -45,7 +45,7 @@ public class BenchmarkingOpsTest {
 		OpEnvironment env = OpEnvironment.build();
 		var simpleIn = ArrayImgs.bytes(1000, 1000);
 		var out = ArrayImgs.bytes(simpleIn.dimensionsAsLongArray());
-		env.binary("benchmark.match") //
+		env.op("benchmark.match") //
 			.input(simpleIn, (byte) 1) //
 			.output(out) //
 			.compute();
@@ -55,7 +55,7 @@ public class BenchmarkingOpsTest {
 	public void testImageConversionAdaptation() {
 		OpEnvironment env = OpEnvironment.build();
 		var simpleIn = ArrayImgs.bytes(1000, 1000);
-		env.binary("benchmark.match") //
+		env.op("benchmark.match") //
 			.input(simpleIn, 1.0) //
 			.apply();
 	}

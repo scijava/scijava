@@ -200,7 +200,7 @@ public final class Conversions {
 		// for functions, we only need a postconverter
 		var fromOut = Nil.of(Types.mapVarToTypes(info.outputType(), vars));
 		var toOut = Nil.of(request.getOutType());
-		RichOp<Function<?, ?>> postConverter = Ops.rich(env.unary("engine.convert",
+		RichOp<Function<?, ?>> postConverter = Ops.rich(env.op("engine.convert",
 			hints).inType(fromOut).outType(toOut).function());
 		return Optional.of(new ConvertedOpInfo( //
 			info, //
@@ -295,13 +295,13 @@ public final class Conversions {
 			var toOut = Nil.of(request.getOutType());
 			// First, we convert the output to the type the user requested
 			RichOp<Function<?, ?>> postConverter = Ops.rich( //
-				env.unary("engine.convert", hints) //
+				env.op("engine.convert", hints) //
 					.inType(fromOut) //
 					.outType(toOut) //
 					.function() //
 			);
 			// Then, we copy the converted output back into the user's object.
-			RichOp<Computers.Arity1<?, ?>> copyOp = Ops.rich(env.unary("engine.copy",
+			RichOp<Computers.Arity1<?, ?>> copyOp = Ops.rich(env.op("engine.copy",
 				hints) //
 				.inType(toOut) //
 				.outType(toOut) //
@@ -358,7 +358,7 @@ public final class Conversions {
 			var toOut = Nil.of(request.getOutType());
 			// This is really just a placeholder.
 			RichOp<Function<?, ?>> postConverter = Ops.rich( //
-				env.unary("engine.identity", hints) //
+				env.op("engine.identity", hints) //
 					.inType(fromOut) //
 					.outType(fromOut) //
 					.function() //
@@ -366,7 +366,7 @@ public final class Conversions {
 			// We try to copy the output directly from the op output into the user's
 			// object
 			RichOp<Computers.Arity1<?, ?>> copyOp = Ops.rich( //
-				env.unary("engine.copy", hints) //
+				env.op("engine.copy", hints) //
 					.inType(fromOut) //
 					.outType(toOut) //
 					.computer() //
@@ -411,7 +411,7 @@ public final class Conversions {
 		// replace them with wildcards, bounded by the same bounds.
 		var dest = wildcardVacuousTypeVars(preDest);
 		// match the Op
-		var op = env.unary("engine.convert", hints) //
+		var op = env.op("engine.convert", hints) //
 			.inType(source) //
 			.outType(dest) //
 			.function();

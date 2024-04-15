@@ -63,7 +63,7 @@ public class FunctionToIterablesTest extends AbstractTestEnvironment {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(1., 2., 3.);
 		Iterable<Double> output = ops.op("test.addDoubles") //
-			.arity1() //
+			//
 			.input(in) //
 			.outType(new Nil<Iterable<Double>>()
 			{}).apply();
@@ -75,7 +75,7 @@ public class FunctionToIterablesTest extends AbstractTestEnvironment {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(2., 4., 6.);
 		Iterable<Double> output = ops.op("test.addDoubles") //
-			.arity2() //
+			//
 			.input(in, in) //
 			.outType(new Nil<Iterable<Double>>()
 			{}).apply();
@@ -87,7 +87,7 @@ public class FunctionToIterablesTest extends AbstractTestEnvironment {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(3., 6., 9.);
 		Iterable<Double> output = ops.op("test.addDoubles") //
-			.arity3() //
+			//
 			.input(in, in, in) //
 			.outType(new Nil<Iterable<Double>>()
 			{}).apply();
@@ -99,7 +99,7 @@ public class FunctionToIterablesTest extends AbstractTestEnvironment {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(4., 8., 12.);
 		Iterable<Double> output = ops.op("test.addDoubles") //
-			.arity4() //
+			//
 			.input(in, in, in, in) //
 			.outType(new Nil<Iterable<Double>>()
 			{}).apply();
@@ -111,7 +111,7 @@ public class FunctionToIterablesTest extends AbstractTestEnvironment {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(5., 10., 15.);
 		Iterable<Double> output = ops.op("test.addDoubles") //
-			.arity5() //
+			//
 			.input(in, in, in, in, in) //
 			.outType(new Nil<Iterable<Double>>()
 			{}).apply();
@@ -123,7 +123,7 @@ public class FunctionToIterablesTest extends AbstractTestEnvironment {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(6., 12., 18.);
 		Iterable<Double> output = ops.op("test.addDoubles") //
-			.arity6() //
+			//
 			.input(in, in, in, in, in, in) //
 			.outType(new Nil<Iterable<Double>>()
 			{}).apply();
@@ -135,7 +135,7 @@ public class FunctionToIterablesTest extends AbstractTestEnvironment {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(7., 14., 21.);
 		Iterable<Double> output = ops.op("test.addDoubles") //
-			.arity7() //
+			//
 			.input(in, in, in, in, in, in, in) //
 			.outType(new Nil<Iterable<Double>>()
 			{}).apply();
@@ -147,7 +147,7 @@ public class FunctionToIterablesTest extends AbstractTestEnvironment {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(8., 16., 24.);
 		Iterable<Double> output = ops.op("test.addDoubles") //
-			.arity8() //
+			//
 			.input(in, in, in, in, in, in, in, in) //
 			.outType(new Nil<Iterable<Double>>()
 			{}).apply();
@@ -159,7 +159,7 @@ public class FunctionToIterablesTest extends AbstractTestEnvironment {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(9., 18., 27.);
 		Iterable<Double> output = ops.op("test.addDoubles") //
-			.arity9() //
+			//
 			.input(in, in, in, in, in, in, in, in, in) //
 			.outType(new Nil<Iterable<Double>>()
 			{}).apply();
@@ -171,7 +171,7 @@ public class FunctionToIterablesTest extends AbstractTestEnvironment {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(10., 20., 30.);
 		Iterable<Double> output = ops.op("test.addDoubles") //
-			.arity10() //
+			//
 			.input(in, in, in, in, in, in, in, in, in, in) //
 			.outType(new Nil<Iterable<Double>>()
 			{}).apply();
@@ -183,7 +183,7 @@ public class FunctionToIterablesTest extends AbstractTestEnvironment {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(11., 22., 33.);
 		Iterable<Double> output = ops.op("test.addDoubles") //
-			.arity11() //
+			//
 			.input(in, in, in, in, in, in, in, in, in, in, in) //
 			.outType(new Nil<Iterable<Double>>()
 			{}).apply();
@@ -195,7 +195,7 @@ public class FunctionToIterablesTest extends AbstractTestEnvironment {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(12., 24., 36.);
 		Iterable<Double> output = ops.op("test.addDoubles") //
-			.arity12() //
+			//
 			.input(in, in, in, in, in, in, in, in, in, in, in, in) //
 			.outType(new Nil<Iterable<Double>>()
 			{}).apply();
@@ -207,7 +207,7 @@ public class FunctionToIterablesTest extends AbstractTestEnvironment {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(13., 26., 39.);
 		Iterable<Double> output = ops.op("test.addDoubles") //
-			.arity13() //
+			//
 			.input(in, in, in, in, in, in, in, in, in, in, in, in, in) //
 			.outType(new Nil<Iterable<Double>>()
 			{}).apply();
@@ -219,7 +219,7 @@ public class FunctionToIterablesTest extends AbstractTestEnvironment {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(14., 28., 42.);
 		Iterable<Double> output = ops.op("test.addDoubles") //
-			.arity14() //
+			//
 			.input(in, in, in, in, in, in, in, in, in, in, in, in, in, in) //
 			.outType(new Nil<Iterable<Double>>()
 			{}).apply();
@@ -231,7 +231,7 @@ public class FunctionToIterablesTest extends AbstractTestEnvironment {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(15., 30., 45.);
 		Iterable<Double> output = ops.op("test.addDoubles") //
-			.arity15() //
+			//
 			.input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in) //
 			.outType(new Nil<Iterable<Double>>()
 			{}).apply();
@@ -243,7 +243,7 @@ public class FunctionToIterablesTest extends AbstractTestEnvironment {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(16., 32., 48.);
 		Iterable<Double> output = ops.op("test.addDoubles") //
-			.arity16() //
+			//
 			.input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in, in) //
 			.outType(new Nil<Iterable<Double>>()
 			{}).apply();

@@ -55,8 +55,7 @@ public class RawTypeMatchingTest extends AbstractTestEnvironment implements
 	@Test
 	public void rawTypeAdaptationTest() {
 		Double d = 25.;
-		var list = ops.op("test.match.raw").arity1().input(d).outType(List.class)
-			.apply();
+		var list = ops.op("test.match.raw").input(d).outType(List.class).apply();
 		assertNotNull(list);
 	}
 }

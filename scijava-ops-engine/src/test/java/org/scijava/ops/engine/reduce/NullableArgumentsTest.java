@@ -57,15 +57,15 @@ public class NullableArgumentsTest extends AbstractTestEnvironment //
 
 	@Test
 	public void testClassWithTwoNullables() {
-		Double sum = ops.op("test.nullableAdd").arity3().input(2.0, 5.0, 7.0)
-			.outType(Double.class).apply();
+		Double sum = ops.op("test.nullableAdd").input(2.0, 5.0, 7.0).outType(
+			Double.class).apply();
 		Double expected = 14.0;
 		Assertions.assertEquals(expected, sum);
 	}
 
 	@Test
 	public void testClassWithOneNullable() {
-		Double sum = ops.op("test.nullableAdd").arity2().input(2.0, 5.0).outType(
+		Double sum = ops.op("test.nullableAdd").input(2.0, 5.0).outType(
 			Double.class).apply();
 		Double expected = 7.0;
 		Assertions.assertEquals(expected, sum);
@@ -73,8 +73,8 @@ public class NullableArgumentsTest extends AbstractTestEnvironment //
 
 	@Test
 	public void testClassWithoutNullables() {
-		Double sum = ops.op("test.nullableAdd").arity1().input(2.0).outType(
-			Double.class).apply();
+		Double sum = ops.op("test.nullableAdd").input(2.0).outType(Double.class)
+			.apply();
 		Double expected = 2.0;
 		Assertions.assertEquals(expected, sum);
 	}
@@ -108,8 +108,7 @@ public class NullableArgumentsTest extends AbstractTestEnvironment //
 		Double[] d2 = { 5.0 };
 		Double[] d3 = { 7.0 };
 		Double[] o = { 50.0 };
-		ops.op("test.nullableMultiply").arity3().input(d1, d2, d3).output(o)
-			.compute();
+		ops.op("test.nullableMultiply").input(d1, d2, d3).output(o).compute();
 		Double expected = 70.0;
 		Assertions.assertEquals(expected, o[0]);
 	}
@@ -119,7 +118,7 @@ public class NullableArgumentsTest extends AbstractTestEnvironment //
 		Double[] d1 = { 2.0 };
 		Double[] d2 = { 5.0 };
 		Double[] o = { 50.0 };
-		ops.op("test.nullableMultiply").arity2().input(d1, d2).output(o).compute();
+		ops.op("test.nullableMultiply").input(d1, d2).output(o).compute();
 		Double expected = 10.0;
 		Assertions.assertEquals(expected, o[0]);
 	}
@@ -128,7 +127,7 @@ public class NullableArgumentsTest extends AbstractTestEnvironment //
 	public void testFieldWithoutNullables() {
 		Double[] d1 = { 2.0 };
 		Double[] o = { 50.0 };
-		ops.op("test.nullableMultiply").arity1().input(d1).output(o).compute();
+		ops.op("test.nullableMultiply").input(d1).output(o).compute();
 		Double expected = 2.0;
 		Assertions.assertEquals(expected, o[0]);
 	}
@@ -144,23 +143,23 @@ public class NullableArgumentsTest extends AbstractTestEnvironment //
 
 	@Test
 	public void testMethodWithTwoNullables() {
-		String out = ops.op("test.nullableConcatenate").arity3().input("a", "b",
-			"c").outType(String.class).apply();
+		String out = ops.op("test.nullableConcatenate").input("a", "b", "c")
+			.outType(String.class).apply();
 		String expected = "abc";
 		Assertions.assertEquals(expected, out);
 	}
 
 	@Test
 	public void testMethodWithOneNullable() {
-		String out = ops.op("test.nullableConcatenate").arity2().input("a", "b")
-			.outType(String.class).apply();
+		String out = ops.op("test.nullableConcatenate").input("a", "b").outType(
+			String.class).apply();
 		String expected = "ab";
 		Assertions.assertEquals(expected, out);
 	}
 
 	@Test
 	public void testMethodWithoutNullables() {
-		String out = ops.op("test.nullableConcatenate").arity1().input("a").outType(
+		String out = ops.op("test.nullableConcatenate").input("a").outType(
 			String.class).apply();
 		String expected = "a";
 		Assertions.assertEquals(expected, out);
@@ -185,7 +184,7 @@ public class NullableArgumentsTest extends AbstractTestEnvironment //
 	@Test
 	public void testPermutedMethodWithTwoNullables() {
 		int[] out = new int[1];
-		ops.op(PERMUTED_NAME).arity3().input( //
+		ops.op(PERMUTED_NAME).input( //
 			new int[] { 1 }, //
 			new int[] { 2 }, //
 			new int[] { 4 } //
@@ -196,7 +195,7 @@ public class NullableArgumentsTest extends AbstractTestEnvironment //
 	@Test
 	public void testPermutedMethodWithOneNullable() {
 		int[] out = new int[1];
-		ops.op(PERMUTED_NAME).arity2().input( //
+		ops.op(PERMUTED_NAME).input( //
 			new int[] { 1 }, //
 			new int[] { 2 } //
 		).output(out).compute();
@@ -206,7 +205,7 @@ public class NullableArgumentsTest extends AbstractTestEnvironment //
 	@Test
 	public void testPermutedMethodWithoutNullables() {
 		int[] out = new int[1];
-		ops.op(PERMUTED_NAME).arity1().input( //
+		ops.op(PERMUTED_NAME).input( //
 			new int[] { 1 } //
 		).output(out).compute();
 		Assertions.assertEquals(1, out[0]);
@@ -217,6 +216,6 @@ public class NullableArgumentsTest extends AbstractTestEnvironment //
 		// Add in a couple Ops needed for conversion
 		var expected = PERMUTED_NAME +
 			":\n\t- (number[], number[] = null, @CONTAINER number[], number[] = null) -> None";
-		Assertions.assertEquals(ops.op("test.nullableOr").help(), expected);
+		Assertions.assertEquals(expected, ops.op("test.nullableOr").help());
 	}
 }

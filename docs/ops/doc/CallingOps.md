@@ -55,6 +55,18 @@ gaussOp.compute(inImage, 2.0, outImage)
 
 *Note that the default `OpEnvironment` implementations cache Op requests* - this means that repeated `OpBuilder` requests targeting the same action will be faster than the original matching call.
 
+## Additions: Matching with classes
+
+In addition to the `.input()` and `.output()` builder steps, there are parallel `.inType()` and `.outType()`
+methods. These accept either a `Class` or a `Nil` - the latter allowing retention of generic types. 
+
+```groovy
+var computer = ops.op("filter.gauss").inType(ImgPlus.class, Double.class).outType(ImgPlus.class).computer()
+```
+
+When using the `*Type` methods of the builder, the terminal steps will only allow *creation* of the Op, not
+direct execution, since the parameters have not been concretely specified yet.
+
 ## Common Pitfalls: Wildcards
 
 Using [wildcards](https://docs.oracle.com/javase/tutorial/extra/generics/wildcards.html), such as `Img<?> inImage`, can make Op reuse difficult. For example, the following code segment will not compile in a Java runtime:

@@ -506,7 +506,7 @@ public class OpBuilder {
 		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
-			return $matchName.call($arity, $a)(env, opName, $inputTypes.call($arity));
+			return $matchName.call($arity, $a)(env, opName, $inputTypes.call($arity), hints);
 		}
 
 #end
@@ -709,7 +709,7 @@ public class OpBuilder {
 		 */
 		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
 			checkInplaceRefs($a, $inputObjects.call($arity));
-			return $matchName.call($arity, $a)(env, opName, $inputTypesFromArgs.call($arity));
+			return $matchName.call($arity, $a)(env, opName, $inputTypesFromArgs.call($arity), hints);
 		}
 
 #end

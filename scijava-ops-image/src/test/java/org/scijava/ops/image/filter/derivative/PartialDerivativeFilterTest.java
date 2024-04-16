@@ -81,9 +81,8 @@ public class PartialDerivativeFilterTest extends AbstractOpTest {
 		}
 
 		RandomAccessibleInterval<FloatType> out = ops.op("filter.partialDerivative")
-			.arity2().input(img, 0).outType(
-				new Nil<RandomAccessibleInterval<FloatType>>()
-				{}).apply();
+			.input(img, 0).outType(new Nil<RandomAccessibleInterval<FloatType>>()
+			{}).apply();
 
 		FloatType type = Util.getTypeFromInterval(out).createVariable();
 		type.set(4.0f);
@@ -166,7 +165,7 @@ public class PartialDerivativeFilterTest extends AbstractOpTest {
 		}
 
 		CompositeIntervalView<FloatType, RealComposite<FloatType>> out = ops.op(
-			"filter.partialDerivative").arity1().input(img).outType(
+			"filter.partialDerivative").input(img).outType(
 				new Nil<CompositeIntervalView<FloatType, RealComposite<FloatType>>>()
 				{}).apply();
 

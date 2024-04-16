@@ -79,8 +79,7 @@ public class UsingNils implements OpCollection {
 		// the generic typing of the output. Note that the Nil allows us to
 		// differentiate between the two Ops above, one of which would instead
 		// return an ArrayImg of unsigned bytes.
-		Img<DoubleType> out = ops.nullary("tutorial.nils").outType(outType)
-			.create();
+		Img<DoubleType> out = ops.op("tutorial.nils").outType(outType).create();
 
 		System.out.println("Found an image " + out + " of doubles!");
 	}

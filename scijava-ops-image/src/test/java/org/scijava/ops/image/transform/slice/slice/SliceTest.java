@@ -97,8 +97,8 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends
 			ops.bakeLambdaType(test,
 				new Nil<Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>>>()
 				{}.getType());
-		ops.op("transform.slice").arity4().input(in, wrapped, xyAxis, true).output(
-			out).compute();
+		ops.op("transform.slice").input(in, wrapped, xyAxis, true).output(out)
+			.compute();
 
 		for (final Cursor<ByteType> cur = out.cursor(); cur.hasNext();) {
 			cur.fwd();
@@ -136,8 +136,8 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends
 			ops.bakeLambdaType(test,
 				new Nil<Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>>>()
 				{}.getType());
-		ops.op("transform.slice").arity4().input(inSequence, wrapped, xyAxis, true)
-			.output(outSequence).compute();
+		ops.op("transform.slice").input(inSequence, wrapped, xyAxis, true).output(
+			outSequence).compute();
 
 		for (final Cursor<ByteType> cur = outSequence.cursor(); cur.hasNext();) {
 			cur.fwd();

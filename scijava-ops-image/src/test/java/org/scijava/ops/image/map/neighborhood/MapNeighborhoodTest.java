@@ -68,7 +68,7 @@ public class MapNeighborhoodTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testMapNeighborhoodsAccess() {
-		ops.op("map.neighborhood").arity3().input(in, new RectangleShape(1, false),
+		ops.op("map.neighborhood").input(in, new RectangleShape(1, false),
 			new CountNeighbors()).output(out).compute();
 
 		for (final ByteType t : out) {

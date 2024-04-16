@@ -65,7 +65,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input = { 1, 2, 3 };
 		double[] expected = { 1.0, 2.0, 3.0 };
 		final double[] output = ops.op("test.mulArrays1_1") //
-			.arity1().input(input) //
+			.input(input) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -78,7 +78,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input2 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4.0, 9.0 };
 		final double[] output = ops.op("test.mulArrays2_1") //
-			.arity2().input(input1, input2) //
+			.input(input1, input2) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -91,7 +91,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input2 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4.0, 9.0 };
 		final double[] output = ops.op("test.mulArrays2_2") //
-			.arity2().input(input1, input2) //
+			.input(input1, input2) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -105,7 +105,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input3 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8.0, 27.0 };
 		final double[] output = ops.op("test.mulArrays3_1") //
-			.arity3().input(input1, input2, input3) //
+			.input(input1, input2, input3) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -119,7 +119,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input3 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8.0, 27.0 };
 		final double[] output = ops.op("test.mulArrays3_2") //
-			.arity3().input(input1, input2, input3) //
+			.input(input1, input2, input3) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -133,7 +133,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input3 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8.0, 27.0 };
 		final double[] output = ops.op("test.mulArrays3_3") //
-			.arity3().input(input1, input2, input3) //
+			.input(input1, input2, input3) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -148,7 +148,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input4 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16.0, 81.0 };
 		final double[] output = ops.op("test.mulArrays4_1") //
-			.arity4().input(input1, input2, input3, input4) //
+			.input(input1, input2, input3, input4) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -163,7 +163,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input4 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16.0, 81.0 };
 		final double[] output = ops.op("test.mulArrays4_2") //
-			.arity4().input(input1, input2, input3, input4) //
+			.input(input1, input2, input3, input4) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -178,7 +178,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input4 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16.0, 81.0 };
 		final double[] output = ops.op("test.mulArrays4_3") //
-			.arity4().input(input1, input2, input3, input4) //
+			.input(input1, input2, input3, input4) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -193,7 +193,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input4 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16.0, 81.0 };
 		final double[] output = ops.op("test.mulArrays4_4") //
-			.arity4().input(input1, input2, input3, input4) //
+			.input(input1, input2, input3, input4) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -209,7 +209,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32.0, 243.0 };
 		final double[] output = ops.op("test.mulArrays5_1") //
-			.arity5().input(input1, input2, input3, input4, input5) //
+			.input(input1, input2, input3, input4, input5) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -225,7 +225,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32.0, 243.0 };
 		final double[] output = ops.op("test.mulArrays5_2") //
-			.arity5().input(input1, input2, input3, input4, input5) //
+			.input(input1, input2, input3, input4, input5) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -241,7 +241,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32.0, 243.0 };
 		final double[] output = ops.op("test.mulArrays5_3") //
-			.arity5().input(input1, input2, input3, input4, input5) //
+			.input(input1, input2, input3, input4, input5) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -257,7 +257,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32.0, 243.0 };
 		final double[] output = ops.op("test.mulArrays5_4") //
-			.arity5().input(input1, input2, input3, input4, input5) //
+			.input(input1, input2, input3, input4, input5) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -273,7 +273,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32.0, 243.0 };
 		final double[] output = ops.op("test.mulArrays5_5") //
-			.arity5().input(input1, input2, input3, input4, input5) //
+			.input(input1, input2, input3, input4, input5) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -290,7 +290,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		double[] expected = { 1.0, 64.0, 729.0 };
 		final double[] output = ops.op("test.mulArrays6_1") //
-			.arity6().input(input1, input2, input3, input4, input5, input6) //
+			.input(input1, input2, input3, input4, input5, input6) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -307,7 +307,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		double[] expected = { 1.0, 64.0, 729.0 };
 		final double[] output = ops.op("test.mulArrays6_2") //
-			.arity6().input(input1, input2, input3, input4, input5, input6) //
+			.input(input1, input2, input3, input4, input5, input6) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -324,7 +324,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		double[] expected = { 1.0, 64.0, 729.0 };
 		final double[] output = ops.op("test.mulArrays6_3") //
-			.arity6().input(input1, input2, input3, input4, input5, input6) //
+			.input(input1, input2, input3, input4, input5, input6) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -341,7 +341,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		double[] expected = { 1.0, 64.0, 729.0 };
 		final double[] output = ops.op("test.mulArrays6_4") //
-			.arity6().input(input1, input2, input3, input4, input5, input6) //
+			.input(input1, input2, input3, input4, input5, input6) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -358,7 +358,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		double[] expected = { 1.0, 64.0, 729.0 };
 		final double[] output = ops.op("test.mulArrays6_5") //
-			.arity6().input(input1, input2, input3, input4, input5, input6) //
+			.input(input1, input2, input3, input4, input5, input6) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -375,7 +375,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		double[] expected = { 1.0, 64.0, 729.0 };
 		final double[] output = ops.op("test.mulArrays6_6") //
-			.arity6().input(input1, input2, input3, input4, input5, input6) //
+			.input(input1, input2, input3, input4, input5, input6) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -393,7 +393,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		double[] expected = { 1.0, 128.0, 2187.0 };
 		final double[] output = ops.op("test.mulArrays7_1") //
-			.arity7().input(input1, input2, input3, input4, input5, input6, input7) //
+			.input(input1, input2, input3, input4, input5, input6, input7) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -411,7 +411,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		double[] expected = { 1.0, 128.0, 2187.0 };
 		final double[] output = ops.op("test.mulArrays7_2") //
-			.arity7().input(input1, input2, input3, input4, input5, input6, input7) //
+			.input(input1, input2, input3, input4, input5, input6, input7) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -429,7 +429,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		double[] expected = { 1.0, 128.0, 2187.0 };
 		final double[] output = ops.op("test.mulArrays7_3") //
-			.arity7().input(input1, input2, input3, input4, input5, input6, input7) //
+			.input(input1, input2, input3, input4, input5, input6, input7) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -447,7 +447,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		double[] expected = { 1.0, 128.0, 2187.0 };
 		final double[] output = ops.op("test.mulArrays7_4") //
-			.arity7().input(input1, input2, input3, input4, input5, input6, input7) //
+			.input(input1, input2, input3, input4, input5, input6, input7) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -465,7 +465,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		double[] expected = { 1.0, 128.0, 2187.0 };
 		final double[] output = ops.op("test.mulArrays7_5") //
-			.arity7().input(input1, input2, input3, input4, input5, input6, input7) //
+			.input(input1, input2, input3, input4, input5, input6, input7) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -483,7 +483,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		double[] expected = { 1.0, 128.0, 2187.0 };
 		final double[] output = ops.op("test.mulArrays7_6") //
-			.arity7().input(input1, input2, input3, input4, input5, input6, input7) //
+			.input(input1, input2, input3, input4, input5, input6, input7) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -501,7 +501,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		double[] expected = { 1.0, 128.0, 2187.0 };
 		final double[] output = ops.op("test.mulArrays7_7") //
-			.arity7().input(input1, input2, input3, input4, input5, input6, input7) //
+			.input(input1, input2, input3, input4, input5, input6, input7) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -520,8 +520,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
 		final double[] output = ops.op("test.mulArrays8_1") //
-			.arity8().input(input1, input2, input3, input4, input5, input6, input7,
-				input8) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -540,8 +539,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
 		final double[] output = ops.op("test.mulArrays8_2") //
-			.arity8().input(input1, input2, input3, input4, input5, input6, input7,
-				input8) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -560,8 +558,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
 		final double[] output = ops.op("test.mulArrays8_3") //
-			.arity8().input(input1, input2, input3, input4, input5, input6, input7,
-				input8) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -580,8 +577,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
 		final double[] output = ops.op("test.mulArrays8_4") //
-			.arity8().input(input1, input2, input3, input4, input5, input6, input7,
-				input8) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -600,8 +596,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
 		final double[] output = ops.op("test.mulArrays8_5") //
-			.arity8().input(input1, input2, input3, input4, input5, input6, input7,
-				input8) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -620,8 +615,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
 		final double[] output = ops.op("test.mulArrays8_6") //
-			.arity8().input(input1, input2, input3, input4, input5, input6, input7,
-				input8) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -640,8 +634,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
 		final double[] output = ops.op("test.mulArrays8_7") //
-			.arity8().input(input1, input2, input3, input4, input5, input6, input7,
-				input8) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -660,8 +653,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
 		final double[] output = ops.op("test.mulArrays8_8") //
-			.arity8().input(input1, input2, input3, input4, input5, input6, input7,
-				input8) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -681,8 +673,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
 		final double[] output = ops.op("test.mulArrays9_1") //
-			.arity9().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -702,8 +694,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
 		final double[] output = ops.op("test.mulArrays9_2") //
-			.arity9().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -723,8 +715,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
 		final double[] output = ops.op("test.mulArrays9_3") //
-			.arity9().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -744,8 +736,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
 		final double[] output = ops.op("test.mulArrays9_4") //
-			.arity9().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -765,8 +757,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
 		final double[] output = ops.op("test.mulArrays9_5") //
-			.arity9().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -786,8 +778,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
 		final double[] output = ops.op("test.mulArrays9_6") //
-			.arity9().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -807,8 +799,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
 		final double[] output = ops.op("test.mulArrays9_7") //
-			.arity9().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -828,8 +820,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
 		final double[] output = ops.op("test.mulArrays9_8") //
-			.arity9().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -849,8 +841,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
 		final double[] output = ops.op("test.mulArrays9_9") //
-			.arity9().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -871,8 +863,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
 		final double[] output = ops.op("test.mulArrays10_1") //
-			.arity10().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -893,8 +885,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
 		final double[] output = ops.op("test.mulArrays10_2") //
-			.arity10().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -915,8 +907,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
 		final double[] output = ops.op("test.mulArrays10_3") //
-			.arity10().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -937,8 +929,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
 		final double[] output = ops.op("test.mulArrays10_4") //
-			.arity10().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -959,8 +951,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
 		final double[] output = ops.op("test.mulArrays10_5") //
-			.arity10().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -981,8 +973,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
 		final double[] output = ops.op("test.mulArrays10_6") //
-			.arity10().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1003,8 +995,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
 		final double[] output = ops.op("test.mulArrays10_7") //
-			.arity10().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1025,8 +1017,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
 		final double[] output = ops.op("test.mulArrays10_8") //
-			.arity10().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1047,8 +1039,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
 		final double[] output = ops.op("test.mulArrays10_9") //
-			.arity10().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1069,8 +1061,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
 		final double[] output = ops.op("test.mulArrays10_10") //
-			.arity10().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1092,8 +1084,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
 		final double[] output = ops.op("test.mulArrays11_1") //
-			.arity11().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1115,8 +1107,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
 		final double[] output = ops.op("test.mulArrays11_2") //
-			.arity11().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1138,8 +1130,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
 		final double[] output = ops.op("test.mulArrays11_3") //
-			.arity11().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1161,8 +1153,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
 		final double[] output = ops.op("test.mulArrays11_4") //
-			.arity11().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1184,8 +1176,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
 		final double[] output = ops.op("test.mulArrays11_5") //
-			.arity11().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1207,8 +1199,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
 		final double[] output = ops.op("test.mulArrays11_6") //
-			.arity11().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1230,8 +1222,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
 		final double[] output = ops.op("test.mulArrays11_7") //
-			.arity11().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1253,8 +1245,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
 		final double[] output = ops.op("test.mulArrays11_8") //
-			.arity11().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1276,8 +1268,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
 		final double[] output = ops.op("test.mulArrays11_9") //
-			.arity11().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1299,8 +1291,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
 		final double[] output = ops.op("test.mulArrays11_10") //
-			.arity11().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1322,8 +1314,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
 		final double[] output = ops.op("test.mulArrays11_11") //
-			.arity11().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1346,8 +1338,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final double[] output = ops.op("test.mulArrays12_1") //
-			.arity12().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1370,8 +1362,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final double[] output = ops.op("test.mulArrays12_2") //
-			.arity12().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1394,8 +1386,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final double[] output = ops.op("test.mulArrays12_3") //
-			.arity12().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1418,8 +1410,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final double[] output = ops.op("test.mulArrays12_4") //
-			.arity12().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1442,8 +1434,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final double[] output = ops.op("test.mulArrays12_5") //
-			.arity12().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1466,8 +1458,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final double[] output = ops.op("test.mulArrays12_6") //
-			.arity12().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1490,8 +1482,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final double[] output = ops.op("test.mulArrays12_7") //
-			.arity12().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1514,8 +1506,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final double[] output = ops.op("test.mulArrays12_8") //
-			.arity12().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1538,8 +1530,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final double[] output = ops.op("test.mulArrays12_9") //
-			.arity12().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1562,8 +1554,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final double[] output = ops.op("test.mulArrays12_10") //
-			.arity12().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1586,8 +1578,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final double[] output = ops.op("test.mulArrays12_11") //
-			.arity12().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1610,8 +1602,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final double[] output = ops.op("test.mulArrays12_12") //
-			.arity12().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1635,8 +1627,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final double[] output = ops.op("test.mulArrays13_1") //
-			.arity13().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1660,8 +1652,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final double[] output = ops.op("test.mulArrays13_2") //
-			.arity13().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1685,8 +1677,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final double[] output = ops.op("test.mulArrays13_3") //
-			.arity13().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1710,8 +1702,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final double[] output = ops.op("test.mulArrays13_4") //
-			.arity13().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1735,8 +1727,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final double[] output = ops.op("test.mulArrays13_5") //
-			.arity13().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1760,8 +1752,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final double[] output = ops.op("test.mulArrays13_6") //
-			.arity13().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1785,8 +1777,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final double[] output = ops.op("test.mulArrays13_7") //
-			.arity13().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1810,8 +1802,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final double[] output = ops.op("test.mulArrays13_8") //
-			.arity13().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1835,8 +1827,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final double[] output = ops.op("test.mulArrays13_9") //
-			.arity13().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1860,8 +1852,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final double[] output = ops.op("test.mulArrays13_10") //
-			.arity13().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1885,8 +1877,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final double[] output = ops.op("test.mulArrays13_11") //
-			.arity13().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1910,8 +1902,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final double[] output = ops.op("test.mulArrays13_12") //
-			.arity13().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1935,8 +1927,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final double[] output = ops.op("test.mulArrays13_13") //
-			.arity13().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1961,8 +1953,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final double[] output = ops.op("test.mulArrays14_1") //
-			.arity14().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -1987,8 +1979,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final double[] output = ops.op("test.mulArrays14_2") //
-			.arity14().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2013,8 +2005,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final double[] output = ops.op("test.mulArrays14_3") //
-			.arity14().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2039,8 +2031,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final double[] output = ops.op("test.mulArrays14_4") //
-			.arity14().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2065,8 +2057,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final double[] output = ops.op("test.mulArrays14_5") //
-			.arity14().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2091,8 +2083,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final double[] output = ops.op("test.mulArrays14_6") //
-			.arity14().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2117,8 +2109,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final double[] output = ops.op("test.mulArrays14_7") //
-			.arity14().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2143,8 +2135,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final double[] output = ops.op("test.mulArrays14_8") //
-			.arity14().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2169,8 +2161,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final double[] output = ops.op("test.mulArrays14_9") //
-			.arity14().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2195,8 +2187,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final double[] output = ops.op("test.mulArrays14_10") //
-			.arity14().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2221,8 +2213,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final double[] output = ops.op("test.mulArrays14_11") //
-			.arity14().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2247,8 +2239,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final double[] output = ops.op("test.mulArrays14_12") //
-			.arity14().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2273,8 +2265,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final double[] output = ops.op("test.mulArrays14_13") //
-			.arity14().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2299,8 +2291,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final double[] output = ops.op("test.mulArrays14_14") //
-			.arity14().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2326,8 +2318,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final double[] output = ops.op("test.mulArrays15_1") //
-			.arity15().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2353,8 +2345,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final double[] output = ops.op("test.mulArrays15_2") //
-			.arity15().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2380,8 +2372,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final double[] output = ops.op("test.mulArrays15_3") //
-			.arity15().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2407,8 +2399,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final double[] output = ops.op("test.mulArrays15_4") //
-			.arity15().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2434,8 +2426,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final double[] output = ops.op("test.mulArrays15_5") //
-			.arity15().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2461,8 +2453,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final double[] output = ops.op("test.mulArrays15_6") //
-			.arity15().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2488,8 +2480,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final double[] output = ops.op("test.mulArrays15_7") //
-			.arity15().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2515,8 +2507,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final double[] output = ops.op("test.mulArrays15_8") //
-			.arity15().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2542,8 +2534,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final double[] output = ops.op("test.mulArrays15_9") //
-			.arity15().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2569,8 +2561,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final double[] output = ops.op("test.mulArrays15_10") //
-			.arity15().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2596,8 +2588,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final double[] output = ops.op("test.mulArrays15_11") //
-			.arity15().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2623,8 +2615,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final double[] output = ops.op("test.mulArrays15_12") //
-			.arity15().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2650,8 +2642,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final double[] output = ops.op("test.mulArrays15_13") //
-			.arity15().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2677,8 +2669,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final double[] output = ops.op("test.mulArrays15_14") //
-			.arity15().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2704,8 +2696,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final double[] output = ops.op("test.mulArrays15_15") //
-			.arity15().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2732,9 +2724,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final double[] output = ops.op("test.mulArrays16_1") //
-			.arity16().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15,
-				input16) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2761,9 +2752,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final double[] output = ops.op("test.mulArrays16_2") //
-			.arity16().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15,
-				input16) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2790,9 +2780,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final double[] output = ops.op("test.mulArrays16_3") //
-			.arity16().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15,
-				input16) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2819,9 +2808,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final double[] output = ops.op("test.mulArrays16_4") //
-			.arity16().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15,
-				input16) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2848,9 +2836,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final double[] output = ops.op("test.mulArrays16_5") //
-			.arity16().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15,
-				input16) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2877,9 +2864,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final double[] output = ops.op("test.mulArrays16_6") //
-			.arity16().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15,
-				input16) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2906,9 +2892,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final double[] output = ops.op("test.mulArrays16_7") //
-			.arity16().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15,
-				input16) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2935,9 +2920,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final double[] output = ops.op("test.mulArrays16_8") //
-			.arity16().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15,
-				input16) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2964,9 +2948,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final double[] output = ops.op("test.mulArrays16_9") //
-			.arity16().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15,
-				input16) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -2993,9 +2976,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final double[] output = ops.op("test.mulArrays16_10") //
-			.arity16().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15,
-				input16) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -3022,9 +3004,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final double[] output = ops.op("test.mulArrays16_11") //
-			.arity16().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15,
-				input16) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -3051,9 +3032,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final double[] output = ops.op("test.mulArrays16_12") //
-			.arity16().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15,
-				input16) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -3080,9 +3060,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final double[] output = ops.op("test.mulArrays16_13") //
-			.arity16().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15,
-				input16) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -3109,9 +3088,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final double[] output = ops.op("test.mulArrays16_14") //
-			.arity16().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15,
-				input16) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -3138,9 +3116,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final double[] output = ops.op("test.mulArrays16_15") //
-			.arity16().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15,
-				input16) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
@@ -3167,9 +3144,8 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final double[] output = ops.op("test.mulArrays16_16") //
-			.arity16().input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15,
-				input16) //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8,
+				input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));

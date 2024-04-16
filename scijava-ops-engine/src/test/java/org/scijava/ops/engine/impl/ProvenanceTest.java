@@ -139,8 +139,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 
 	@Test
 	public void testProvenance() {
-		String s = ops.op("test.provenance").arity0().outType(String.class)
-			.create();
+		String s = ops.op("test.provenance").outType(String.class).create();
 		List<RichOp<?>> executionsUpon = ops.history().executionsUpon(s);
 		Assertions.assertEquals(1, executionsUpon.size());
 		// Assert only one info in the execution hierarchy
@@ -158,16 +157,16 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		l1.add(2.0);
 		l1.add(3.0);
 		l1.add(4.0);
-		Double out1 = ops.op("test.provenance").arity1().input(l1).outType(
-			Double.class).apply();
+		Double out1 = ops.op("test.provenance").input(l1).outType(Double.class)
+			.apply();
 
 		List<Long> l2 = new ArrayList<>();
 		l2.add(5L);
 		l2.add(6L);
 		l2.add(7L);
 		l2.add(8L);
-		Double out2 = ops.op("test.provenance").arity1().input(l2).outType(
-			Double.class).apply();
+		Double out2 = ops.op("test.provenance").input(l2).outType(Double.class)
+			.apply();
 
 		List<RichOp<?>> history1 = ops.history().executionsUpon(out1);
 		List<RichOp<?>> history2 = ops.history().executionsUpon(out2);
@@ -196,8 +195,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		Double[] array = new Double[length];
 		Arrays.fill(array, 1.);
 		var expectedName = "test.provenanceMapper";
-		Thing out = ops.op(expectedName).arity1().input(array).outType(Thing.class)
-			.apply();
+		Thing out = ops.op(expectedName).input(array).outType(Thing.class).apply();
 
 		// Assert two executions upon this Object, once from the mapped function,
 		// once from the mapper
@@ -213,8 +211,8 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		int length = 200;
 		Double[] array = new Double[length];
 		Arrays.fill(array, 1.);
-		Function<Double[], Thing> mapper = ops.op("test.provenanceMapper").arity1()
-			.input(array).outType(Thing.class).function();
+		Function<Double[], Thing> mapper = ops.op("test.provenanceMapper").input(
+			array).outType(Thing.class).function();
 
 		// Get the InfoTree associated with the above call
 		InfoTree tree = Ops.infoTree(mapper);
@@ -239,7 +237,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		int length = 200;
 		Double[] array = new Double[length];
 		Arrays.fill(array, 1.);
-		Thing out = ops.op("test.provenanceMapper").arity1().input(array).outType(
+		Thing out = ops.op("test.provenanceMapper").input(array).outType(
 			Thing.class).apply();
 
 		// Assert that two Ops operated on the return.
@@ -247,8 +245,8 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		Assertions.assertEquals(1, mutators.size());
 
 		// Run the mapped Op, assert still two runs on the mapper
-		Thing out1 = ops.op("test.provenanceMapped").arity1().input(2.).outType(
-			Thing.class).apply();
+		Thing out1 = ops.op("test.provenanceMapped").input(2.).outType(Thing.class)
+			.apply();
 		mutators = ops.history().executionsUpon(out);
 		Assertions.assertEquals(1, mutators.size());
 		// Assert one run on the mapped Op as well
@@ -266,7 +264,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		// Get the Op
 		Function<Double, Thing> mapper = ops //
 			.op("test.provenanceMapped") //
-			.arity1() //
+			//
 			.input(5.0) //
 			.outType(Thing.class) //
 			.function();
@@ -295,7 +293,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		// Get the Op
 		Function<Double[], Thing> mapper = ops //
 			.op("test.provenanceMapper") //
-			.arity1() //
+			//
 			.input(new Double[] { 5.0, 10.0, 15.0 }) //
 			.outType(Thing.class) //
 			.function();
@@ -324,7 +322,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		// Get the Op
 		Function<Double[], Thing[]> f = ops //
 			.op("test.provenanceMapped") //
-			.arity1() //
+			//
 			.inType(Double[].class) //
 			.outType(Thing[].class) //
 			.function();
@@ -353,7 +351,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		// Get the Op
 		Function<Double[][], Thing[]> f = ops //
 			.op("test.provenanceMapper") //
-			.arity1() //
+			//
 			.inType(Double[][].class) //
 			.outType(Thing[].class) //
 			.function();
@@ -382,7 +380,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		// Get the Op
 		Computers.Arity1<ObjectArray<Number>, ObjectArray<Number>> c = ops //
 			.op("test.provenanceComputer") //
-			.arity1() //
+			//
 			.inType(new Nil<ObjectArray<Number>>()
 			{}) //
 			.outType(new Nil<ObjectArray<Number>>()
@@ -424,7 +422,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		// Get the Op
 		Computers.Arity1<Integer[], Integer[]> c = ops //
 			.op("test.provenanceComputer") //
-			.arity1() //
+			//
 			.inType(Integer[].class) //
 			.outType(Integer[].class) //
 			.computer();
@@ -459,7 +457,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		// Get the Op
 		Function<Integer[], Integer[]> c = ops //
 			.op("test.provenanceComputer") //
-			.arity1() //
+			//
 			.inType(Integer[].class) //
 			.outType(Integer[].class) //
 			.function();
@@ -494,7 +492,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		// Get the Op
 		Function<Double[], Double[]> f = ops //
 			.op("test.provenanceComputer") //
-			.arity1() //
+			//
 			.inType(Double[].class) //
 			.outType(Double[].class) //
 			.function();

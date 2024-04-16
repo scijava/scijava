@@ -72,7 +72,7 @@ public class OpAdaptationInfoTest extends AbstractTestEnvironment implements
 	@Test
 	public void testAdaptedDescription() {
 		// Match the above Op as a Computer
-		var adapted = ops.binary("test.adaptationDescription") //
+		var adapted = ops.op("test.adaptationDescription") //
 			.inType(Double.class, Double.class) //
 			.outType(double[].class) //
 			.computer();

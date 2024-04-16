@@ -63,8 +63,8 @@ public class DefaultDetectRidgesTest extends AbstractOpTest {
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			@SuppressWarnings("unused")
 			List<DefaultWritablePolyline> polylines = ops.op("segment.detectRidges")
-				.arity5().input(input, width, lowerThreshold, higherThreshold,
-					ridgeLengthMin).outType(new Nil<List<DefaultWritablePolyline>>()
+				.input(input, width, lowerThreshold, higherThreshold, ridgeLengthMin)
+				.outType(new Nil<List<DefaultWritablePolyline>>()
 				{}).apply();
 		});
 	}
@@ -80,8 +80,8 @@ public class DefaultDetectRidgesTest extends AbstractOpTest {
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			@SuppressWarnings("unused")
 			List<DefaultWritablePolyline> polylines = ops.op("segment.detectRidges")
-				.arity5().input(input, width, lowerThreshold, higherThreshold,
-					ridgeLengthMin).outType(new Nil<List<DefaultWritablePolyline>>()
+				.input(input, width, lowerThreshold, higherThreshold, ridgeLengthMin)
+				.outType(new Nil<List<DefaultWritablePolyline>>()
 				{}).apply();
 		});
 	}
@@ -119,8 +119,8 @@ public class DefaultDetectRidgesTest extends AbstractOpTest {
 		double width = 1, lowerThreshold = 2, higherThreshold = 4;
 
 		List<DefaultWritablePolyline> polylines = ops.op("segment.detectRidges")
-			.arity5().input(input, width, lowerThreshold, higherThreshold,
-				ridgeLengthMin).outType(new Nil<List<DefaultWritablePolyline>>()
+			.input(input, width, lowerThreshold, higherThreshold, ridgeLengthMin)
+			.outType(new Nil<List<DefaultWritablePolyline>>()
 			{}).apply();
 
 		int vertexCount = 0;

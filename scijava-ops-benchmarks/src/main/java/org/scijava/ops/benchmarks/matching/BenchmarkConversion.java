@@ -87,7 +87,7 @@ public class BenchmarkConversion {
 	@BenchmarkMode(Mode.AverageTime)
 	public void runOpConverted(final MatchingState state) {
 		var out = ArrayImgs.bytes(state.simpleIn.dimensionsAsLongArray());
-		state.env.binary("benchmark.match", HINTS) //
+		state.env.op("benchmark.match", HINTS) //
 			.input(state.simpleIn, (byte) 1) //
 			.output(out) //
 			.compute();
@@ -98,7 +98,7 @@ public class BenchmarkConversion {
 	@Benchmark
 	@BenchmarkMode(Mode.AverageTime)
 	public void runOpConvertedAdapted(final MatchingState state) {
-		state.env.binary("benchmark.match", HINTS) //
+		state.env.op("benchmark.match", HINTS) //
 			.input(state.simpleIn, (byte) 1.0) //
 			.apply();
 	}

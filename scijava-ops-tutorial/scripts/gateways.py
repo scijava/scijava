@@ -51,7 +51,7 @@ def nary(env, fqop, arity):
         Returns:
             The appropriate OpBuilder.Arity instance for invoking the given op with the indicated number of parameters
     '''
-    arities=[env.nullary, env.unary, env.binary, env.ternary, env.quaternary, env.quinary, env.senary, env.septenary, env.octonary, env.nonary, env.decenary, env.arity11, env.arity12, env.arity13, env.arity14, env.arity15, env.arity16]
+    arities=[env.op, env.op, env.op, env.op, env.op, env.op, env.op, env.op, env.op, env.op, env.op, env.arity11, env.arity12, env.arity13, env.arity14, env.arity15, env.arity16]
     return arities[arity](fqop)
 
 def add_op(c, op_name):

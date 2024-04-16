@@ -76,7 +76,7 @@ public class OpBuilderNoOutputTest<T extends Number> extends
 
 	@Test
 	public void testNoParameterizedTypeOutputGiven() {
-		Object output = ops.op(opName).arity1().input(5.).apply();
+		Object output = ops.op(opName).input(5.).apply();
 		Type expectedOutputType = new Nil<WrappedList<Double>>() {}.getType();
 		Assertions.assertEquals(ops.genericType(output), expectedOutputType);
 	}

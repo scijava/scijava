@@ -48,29 +48,28 @@ public class Tamura2dFeatureTest extends AbstractFeatureTest {
 
 	@Test
 	public void testContrastFeature() {
-		assertEquals(63.7185, ops.op("features.tamura.contrast").arity1().input(
-			random).outType(DoubleType.class).apply().get(), 1e-3, "tamura.contrast");
+		assertEquals(63.7185, ops.op("features.tamura.contrast").input(random)
+			.outType(DoubleType.class).apply().get(), 1e-3, "tamura.contrast");
 	}
 
 	@Test
 	public void testDirectionalityFeature() {
-		assertEquals(0.007819, ops.op("features.tamura.directionality").arity2()
-			.input(random, 16).outType(DoubleType.class).apply().get(), 1e-3,
+		assertEquals(0.007819, ops.op("features.tamura.directionality").input(
+			random, 16).outType(DoubleType.class).apply().get(), 1e-3,
 			"tamura.directionality");
 	}
 
 	@Test
 	public void testCoarsenessFeature() {
-		assertEquals(43.614, ops.op("features.tamura.coarseness").arity1().input(
-			random).outType(DoubleType.class).apply().get(), 1e-3,
-			"tamura.coarseness");
+		assertEquals(43.614, ops.op("features.tamura.coarseness").input(random)
+			.outType(DoubleType.class).apply().get(), 1e-3, "tamura.coarseness");
 
 		// NB: according to the implementation, this 2x2 image should have exactly 0
 		// coarseness.
 		byte[] arr = new byte[] { 0, -1, 0, 0 };
 		Img<ByteType> in = ArrayImgs.bytes(arr, 2, 2);
-		assertEquals(0.0, ops.op("features.tamura.coarseness").arity1().input(in)
-			.outType(DoubleType.class).apply().get(), 0.0, "tamura.coarseness");
+		assertEquals(0.0, ops.op("features.tamura.coarseness").input(in).outType(
+			DoubleType.class).apply().get(), 0.0, "tamura.coarseness");
 	}
 
 }

@@ -70,7 +70,7 @@ public class LiftNeighborhoodComputersToRAITest extends AbstractOpTest {
 		var actual = ArrayImgs.unsignedBytes(10, 10);
 
 		// Call the above OpField through Ops, ensuring it is lifted
-		ops.op("test.liftImg").arity2() //
+		ops.op("test.liftImg") //
 			.input(inImg, shape) //
 			.output(actual) //
 			.compute();
@@ -107,7 +107,7 @@ public class LiftNeighborhoodComputersToRAITest extends AbstractOpTest {
 		var actual = ArrayImgs.unsignedBytes(10, 10);
 
 		// Call the above OpField through Ops, ensuring it is lifted
-		ops.op("test.liftImg").arity3() //
+		ops.op("test.liftImg") //
 			.input(inImg, shape, oobf) //
 			.output(actual) //
 			.compute();

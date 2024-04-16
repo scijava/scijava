@@ -48,7 +48,7 @@ public class OpMethodInParentTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testFMethodInSuperclass() {
-		String actual = ops.op("test.superMethod").arity1().input("Foo").outType(
+		String actual = ops.op("test.superMethod").input("Foo").outType(
 			String.class).apply();
 		String expected = "This string came from " +
 			SuperOpMethodHousingClass.class;
@@ -57,8 +57,8 @@ public class OpMethodInParentTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testFMethodInInterface() {
-		String actual = ops.op("test.superMethodIface").arity1().input("Foo")
-			.outType(String.class).apply();
+		String actual = ops.op("test.superMethodIface").input("Foo").outType(
+			String.class).apply();
 		String expected = "This string came from " +
 			SuperOpMethodHousingInterface.class;
 		Assertions.assertEquals(expected, actual);

@@ -131,7 +131,7 @@ public class ReportingProgress implements OpCollection {
 		// Progress.addListener(op, l);
 
 		// Get the function.
-		var op = ops.unary("tutorial.long.op") //
+		var op = ops.op("tutorial.long.op") //
 			.inType(Integer.class) //
 			.outType(new Nil<List<Long>>()
 			{}) //

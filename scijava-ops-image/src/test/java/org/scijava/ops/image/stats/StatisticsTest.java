@@ -95,7 +95,7 @@ public class StatisticsTest extends AbstractOpTest {
 			if (array[i] > max) max = array[i];
 		}
 
-		Pair<FloatType, FloatType> minMax = ops.op("stats.minMax").arity1().input(
+		Pair<FloatType, FloatType> minMax = ops.op("stats.minMax").input(
 			(Iterable<FloatType>) img).outType(new Nil<Pair<FloatType, FloatType>>()
 		{}).apply();
 
@@ -128,14 +128,14 @@ public class StatisticsTest extends AbstractOpTest {
 
 		// calculate mean using ops
 		final FloatType mean2 = new FloatType();
-		ops.op("stats.mean").arity1().input(img).output(mean2).compute();
+		ops.op("stats.mean").input(img).output(mean2).compute();
 
 		// check that the ratio between mean1 and mean2 is 1.0
 		Assertions.assertEquals(1.0, mean1 / mean2.getRealFloat(), delta);
 
 		// calculate standard deviation using ops
 		final DoubleType std2 = new DoubleType();
-		ops.op("stats.stdDev").arity1().input(img).output(std2).compute();
+		ops.op("stats.stdDev").input(img).output(std2).compute();
 
 		// check that the ratio between std1 and std2 is 1.0
 		Assertions.assertEquals(1.0, std1 / std2.getRealFloat(), delta);
@@ -144,42 +144,41 @@ public class StatisticsTest extends AbstractOpTest {
 	@Test
 	public void testMax() {
 		final UnsignedByteType max = new UnsignedByteType();
-		ops.op("stats.max").arity1().input(randomlyFilledImg).output(max).compute();
+		ops.op("stats.max").input(randomlyFilledImg).output(max).compute();
 		Assertions.assertEquals(254d, max.getRealDouble(), 0.00001d, "Max");
 
 		// NB: should work with negative numbers
 		final ByteType maxByte = new ByteType();
-		ops.op("stats.max").arity1().input(ArrayImgs.bytes(new byte[] { -1, -2, -4,
-			-3 }, 2, 2)).output(maxByte).compute();
+		ops.op("stats.max").input(ArrayImgs.bytes(new byte[] { -1, -2, -4, -3 }, 2,
+			2)).output(maxByte).compute();
 		Assertions.assertEquals(-1.0, maxByte.getRealDouble(), 0.0, "Max");
 	}
 
 	@Test
 	public void testMin() {
 		final UnsignedByteType min = new UnsignedByteType();
-		ops.op("stats.min").arity1().input(randomlyFilledImg).output(min).compute();
+		ops.op("stats.min").input(randomlyFilledImg).output(min).compute();
 		Assertions.assertEquals(0, min.getRealDouble(), 0.00001d, "Min");
 	}
 
 	@Test
 	public void testMinAdapted() {
-		final UnsignedByteType min = (UnsignedByteType) ops.op("stats.min").arity1()
-			.input(randomlyFilledImg).apply();
+		final UnsignedByteType min = (UnsignedByteType) ops.op("stats.min").input(
+			randomlyFilledImg).apply();
 		Assertions.assertEquals(0, min.getRealDouble(), 0.00001d, "Min");
 	}
 
 	@Test
 	public void testMaxAdapted() {
-		final UnsignedByteType min = (UnsignedByteType) ops.op("stats.max").arity1()
-			.input(randomlyFilledImg).apply();
+		final UnsignedByteType min = (UnsignedByteType) ops.op("stats.max").input(
+			randomlyFilledImg).apply();
 		Assertions.assertEquals(254d, min.getRealDouble(), 0.00001d, "Max");
 	}
 
 	@Test
 	public void testStdDev() {
 		final DoubleType stdDev = new DoubleType();
-		ops.op("stats.stdDev").arity1().input(randomlyFilledImg).output(stdDev)
-			.compute();
+		ops.op("stats.stdDev").input(randomlyFilledImg).output(stdDev).compute();
 		Assertions.assertEquals(73.7460374274008, stdDev.getRealDouble(), 0.00001d,
 			"StdDev");
 	}
@@ -187,14 +186,14 @@ public class StatisticsTest extends AbstractOpTest {
 	@Test
 	public void testSum() {
 		final FloatType sum = new FloatType();
-		ops.op("stats.sum").arity1().input(randomlyFilledImg).output(sum).compute();
+		ops.op("stats.sum").input(randomlyFilledImg).output(sum).compute();
 		Assertions.assertEquals(1277534.0, sum.getRealDouble(), 0.00001d, "Sum");
 	}
 
 	@Test
 	public void testVariance() {
 		final DoubleType variance = new DoubleType();
-		ops.op("stats.variance").arity1().input(randomlyFilledImg).output(variance)
+		ops.op("stats.variance").input(randomlyFilledImg).output(variance)
 			.compute();
 		Assertions.assertEquals(5438.4780362436, variance.getRealDouble(), 0.00001d,
 			"Variance");
@@ -203,8 +202,8 @@ public class StatisticsTest extends AbstractOpTest {
 	@Test
 	public void testGeometricMean() {
 		final DoubleType geoMetricMean = new DoubleType();
-		ops.op("stats.geometricMean").arity1().input(randomlyFilledImg).output(
-			geoMetricMean).compute();
+		ops.op("stats.geometricMean").input(randomlyFilledImg).output(geoMetricMean)
+			.compute();
 		Assertions.assertEquals(0, geoMetricMean.getRealDouble(), 0.00001d,
 			"Geometric Mean");
 	}
@@ -212,8 +211,8 @@ public class StatisticsTest extends AbstractOpTest {
 	@Test
 	public void testHarmonicMean() {
 		final DoubleType harmonicMean = new DoubleType();
-		ops.op("stats.harmonicMean").arity1().input(randomlyFilledImg).output(
-			harmonicMean).compute();
+		ops.op("stats.harmonicMean").input(randomlyFilledImg).output(harmonicMean)
+			.compute();
 		Assertions.assertEquals(0, harmonicMean.getRealDouble(), 0.00001d,
 			"Harmonic Mean");
 	}
@@ -221,7 +220,7 @@ public class StatisticsTest extends AbstractOpTest {
 	@Test
 	public void testKurtosis() {
 		final DoubleType kurtosis = new DoubleType();
-		ops.op("stats.kurtosis").arity1().input(randomlyFilledImg).output(kurtosis)
+		ops.op("stats.kurtosis").input(randomlyFilledImg).output(kurtosis)
 			.compute();
 		Assertions.assertEquals(1.794289587623922, kurtosis.getRealDouble(),
 			0.00001d, "Kurtosis");
@@ -230,8 +229,8 @@ public class StatisticsTest extends AbstractOpTest {
 	@Test
 	public void testMoment1AboutMean() {
 		final DoubleType moment1 = new DoubleType();
-		ops.op("stats.moment1AboutMean").arity1().input(randomlyFilledImg).output(
-			moment1).compute();
+		ops.op("stats.moment1AboutMean").input(randomlyFilledImg).output(moment1)
+			.compute();
 		Assertions.assertEquals(0, moment1.getRealDouble(), 0.00001d,
 			"Moment 1 About Mean");
 	}
@@ -239,8 +238,8 @@ public class StatisticsTest extends AbstractOpTest {
 	@Test
 	public void testMoment2AboutMean() {
 		final DoubleType moment2 = new DoubleType();
-		ops.op("stats.moment2AboutMean").arity1().input(randomlyFilledImg).output(
-			moment2).compute();
+		ops.op("stats.moment2AboutMean").input(randomlyFilledImg).output(moment2)
+			.compute();
 		Assertions.assertEquals(5437.93418843998, moment2.getRealDouble(), 0.00001d,
 			"Moment 2 About Mean");
 	}
@@ -248,8 +247,8 @@ public class StatisticsTest extends AbstractOpTest {
 	@Test
 	public void testMoment3AboutMean() {
 		final DoubleType moment3 = new DoubleType();
-		ops.op("stats.moment3AboutMean").arity1().input(randomlyFilledImg).output(
-			moment3).compute();
+		ops.op("stats.moment3AboutMean").input(randomlyFilledImg).output(moment3)
+			.compute();
 		Assertions.assertEquals(-507.810691261427, moment3.getRealDouble(),
 			0.00001d, "Moment 3 About Mean");
 	}
@@ -257,8 +256,8 @@ public class StatisticsTest extends AbstractOpTest {
 	@Test
 	public void testMoment4AboutMean() {
 		final DoubleType moment4 = new DoubleType();
-		ops.op("stats.moment4AboutMean").arity1().input(randomlyFilledImg).output(
-			moment4).compute();
+		ops.op("stats.moment4AboutMean").input(randomlyFilledImg).output(moment4)
+			.compute();
 		Assertions.assertEquals(53069780.9168701, moment4.getRealDouble(), 0.00001d,
 			"Moment 4 About Mean");
 	}
@@ -266,8 +265,8 @@ public class StatisticsTest extends AbstractOpTest {
 	@Test
 	public void testPercentile() {
 		final DoubleType percentile = new DoubleType();
-		ops.op("stats.percentile").arity2().input(randomlyFilledImg, 50d).output(
-			percentile).compute();
+		ops.op("stats.percentile").input(randomlyFilledImg, 50d).output(percentile)
+			.compute();
 		Assertions.assertEquals(128d, percentile.getRealDouble(), 0.00001d,
 			"50-th Percentile");
 	}
@@ -276,8 +275,8 @@ public class StatisticsTest extends AbstractOpTest {
 	public void testQuantile() {
 		final DoubleType quantile = new DoubleType();
 		UnsignedByteType test = new UnsignedByteType();
-		ops.op("stats.quantile").arity2().input(randomlyFilledImg, 0.5d).output(
-			quantile).compute();
+		ops.op("stats.quantile").input(randomlyFilledImg, 0.5d).output(quantile)
+			.compute();
 		Assertions.assertEquals(128d, quantile.getRealDouble(), 0.00001d,
 			"0.5-th Quantile");
 	}
@@ -285,7 +284,7 @@ public class StatisticsTest extends AbstractOpTest {
 	@Test
 	public void testSkewness() {
 		final DoubleType skewness = new DoubleType();
-		ops.op("stats.skewness").arity1().input(randomlyFilledImg).output(skewness)
+		ops.op("stats.skewness").input(randomlyFilledImg).output(skewness)
 			.compute();
 		Assertions.assertEquals(-0.0012661517853476312, skewness.getRealDouble(),
 			0.00001d, "Skewness");
@@ -294,8 +293,8 @@ public class StatisticsTest extends AbstractOpTest {
 	@Test
 	public void testSumOfInverses() {
 		final DoubleType sumOfInverses = new DoubleType();
-		ops.op("stats.sumOfInverses").arity2().input(randomlyFilledImg,
-			new DoubleType(0)).output(sumOfInverses).compute();
+		ops.op("stats.sumOfInverses").input(randomlyFilledImg, new DoubleType(0))
+			.output(sumOfInverses).compute();
 		Assertions.assertEquals(236.60641289378648, sumOfInverses.getRealDouble(),
 			0.00001d, "Sum Of Inverses");
 	}
@@ -303,8 +302,8 @@ public class StatisticsTest extends AbstractOpTest {
 	@Test
 	public void testSumOfLogs() {
 		final DoubleType sumOfLogs = new DoubleType();
-		ops.op("stats.sumOfLogs").arity1().input(randomlyFilledImg).output(
-			sumOfLogs).compute();
+		ops.op("stats.sumOfLogs").input(randomlyFilledImg).output(sumOfLogs)
+			.compute();
 		Assertions.assertEquals(Double.NEGATIVE_INFINITY, sumOfLogs.getRealDouble(),
 			0.00001d, "Sum Of Logs");
 	}
@@ -312,8 +311,8 @@ public class StatisticsTest extends AbstractOpTest {
 	@Test
 	public void testSumOfSquares() {
 		final DoubleType sumOfSquares = new DoubleType();
-		ops.op("stats.sumOfSquares").arity1().input(randomlyFilledImg).output(
-			sumOfSquares).compute();
+		ops.op("stats.sumOfSquares").input(randomlyFilledImg).output(sumOfSquares)
+			.compute();
 		Assertions.assertEquals(217588654, sumOfSquares.getRealDouble(), 0.00001d,
 			"Sum Of Squares");
 	}

@@ -78,7 +78,7 @@ public class CopyIITest extends AbstractOpTest {
 	@Test
 	public void copyIINoOutputTest() {
 		var nil = new Nil<IterableInterval<DoubleType>>() {};
-		var op = ops.op("copy.img").arity1().inType(nil).outType(nil).function();
+		var op = ops.op("copy.img").inType(nil).outType(nil).function();
 		IterableInterval<DoubleType> output = op.apply(input);
 
 		Cursor<DoubleType> inc = input.localizingCursor();
@@ -96,8 +96,8 @@ public class CopyIITest extends AbstractOpTest {
 		Img<FloatType> inputFloat = new ArrayImgFactory<>(new FloatType()).create(
 			new int[] { 120, 100 });
 
-		Img<FloatType> output = ops.op("copy.img").arity1().input(inputFloat)
-			.outType(new Nil<Img<FloatType>>()
+		Img<FloatType> output = ops.op("copy.img").input(inputFloat).outType(
+			new Nil<Img<FloatType>>()
 			{}).apply();
 
 		assertTrue(output.firstElement() instanceof FloatType,
@@ -109,7 +109,7 @@ public class CopyIITest extends AbstractOpTest {
 		Img<DoubleType> output = input.factory().create(input, input
 			.firstElement());
 
-		ops.op("copy.img").arity1().input(input).output(output).compute();
+		ops.op("copy.img").input(input).output(output).compute();
 
 		final Cursor<DoubleType> inc = input.cursor();
 		final Cursor<DoubleType> outc = output.cursor();

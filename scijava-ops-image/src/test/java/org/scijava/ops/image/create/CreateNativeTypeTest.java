@@ -54,11 +54,11 @@ public class CreateNativeTypeTest extends AbstractOpTest {
 	@Test
 	public <T extends NativeType<T>> void testCreateNativeType() {
 
-		Producer<NativeType> typeSource = ops.nullary("create.type") //
+		Producer<NativeType> typeSource = ops.op("create.type") //
 			.outType(NativeType.class) //
 			.producer();
 
-		Function<Class<T>, T> typeFunc = ops.unary("create.object") //
+		Function<Class<T>, T> typeFunc = ops.op("create.object") //
 			.inType(new Nil<Class<T>>()
 			{}) //
 			.outType(new Nil<T>()

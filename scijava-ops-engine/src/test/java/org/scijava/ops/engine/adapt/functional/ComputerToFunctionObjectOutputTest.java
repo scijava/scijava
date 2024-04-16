@@ -67,8 +67,8 @@ public class ComputerToFunctionObjectOutputTest extends AbstractTestEnvironment
 	@Test
 	public void testObjectOutput() {
 		double[] input = { 1.0, 2.0, 3.0, 4.0 };
-		double[] output = (double[]) ops.op("test.objectOutput").arity1().input(
-			input).apply();
+		double[] output = (double[]) ops.op("test.objectOutput").input(input)
+			.apply();
 		for (int i = 0; i < input.length; i++) {
 			Assertions.assertEquals(output[i], input[i] + 1);
 		}

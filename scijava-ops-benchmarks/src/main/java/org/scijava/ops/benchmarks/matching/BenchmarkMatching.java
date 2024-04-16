@@ -87,7 +87,7 @@ public class BenchmarkMatching {
 	@BenchmarkMode(Mode.AverageTime)
 	public void runOp(final MatchingState state) {
 		var out = ArrayImgs.doubles(state.in.dimensionsAsLongArray());
-		state.env.binary("benchmark.match", HINTS) //
+		state.env.op("benchmark.match", HINTS) //
 			.input(state.in, 1.0) //
 			.output(out) //
 			.compute();
@@ -98,7 +98,7 @@ public class BenchmarkMatching {
 	@Benchmark
 	@BenchmarkMode(Mode.AverageTime)
 	public void runOpAdapted(final MatchingState state) {
-		var tmp = state.env.binary("benchmark.match", HINTS) //
+		var tmp = state.env.op("benchmark.match", HINTS) //
 			.input(state.in, 1.0) //
 			.apply();
 	}

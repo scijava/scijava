@@ -122,7 +122,7 @@ In the panels below, we show script execution with computation restricted to the
             if (mask != null) {
                 img = Regions.sampleWithRealMask(mask, img)
             }
-            return ops.op("stats.percentile").arity2()
+            return ops.op("stats.percentile")
                 .input(img, percentile)
                 .outType(DoubleType.class)
                 .apply()
@@ -141,19 +141,19 @@ In the panels below, we show script execution with computation restricted to the
         param.xInc = timeBase / timeBins
 
         // Fit curves
-        kernel = ops.op("create.kernelSum").arity1().input(1 + 2 * kernelRad).apply()
-        lma = ops.op("flim.fitLMA").arity3().input(param, getMask(), kernel).apply()
+        kernel = ops.op("create.kernelSum").input(1 + 2 * kernelRad).apply()
+        lma = ops.op("flim.fitLMA").input(param, getMask(), kernel).apply()
 
         // The fit results paramMap is a XYC image, with result attributes along the Channel axis
         fittedImg = lma.paramMap
         // For LMA, we have Z, A1, and Tau1 as the three attributes
-        A1 = ops.op("transform.hyperSliceView").arity3().input(fittedImg, lifetimeAxis, 1).apply()
-        Tau1 = ops.op("transform.hyperSliceView").arity3().input(fittedImg, lifetimeAxis, 2).apply()
+        A1 = ops.op("transform.hyperSliceView").input(fittedImg, lifetimeAxis, 1).apply()
+        Tau1 = ops.op("transform.hyperSliceView").input(fittedImg, lifetimeAxis, 2).apply()
 
         // Finally, generate a pseudocolored result
         cMin = getPercentile(Tau1, mask, 5.0)
         cMax = getPercentile(Tau1, mask, 95.0)
-        pseudocolored = ops.op("flim.pseudocolor").arity3().input(lma, cMin, cMax).apply()
+        pseudocolored = ops.op("flim.pseudocolor").input(lma, cMin, cMax).apply()
 
         end = System.currentTimeMillis()
         println("Finished fitting in " + (end - start) + " milliseconds")

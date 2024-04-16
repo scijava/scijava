@@ -74,7 +74,7 @@ public class OpsAsParametersTest extends AbstractTestEnvironment implements
 		var list = Arrays.asList(40L, 20.5, 4.0d);
 		var actual = ops//
 			.op("test.parameter.op") //
-			.arity2().input(list, func) //
+			.input(list, func) //
 			.outType(List.class) //
 			.apply();
 		assertEquals(Arrays.asList(40.0, 20.5, 4.0), actual);
@@ -108,9 +108,9 @@ public class OpsAsParametersTest extends AbstractTestEnvironment implements
 			{}, new Nil<Double>() {});
 
 		@SuppressWarnings("unused")
-		List<Double> output = ops.op("test.parameter.op").arity2().input(list,
-			funcClass).outType(new Nil<List<Double>>()
-		{}).apply();
+		List<Double> output = ops.op("test.parameter.op").input(list, funcClass)
+			.outType(new Nil<List<Double>>()
+			{}).apply();
 	}
 
 }

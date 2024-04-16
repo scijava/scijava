@@ -93,7 +93,7 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
 			new NumericalThing() };
-		ops.op("test.liftArrayC").arity0().output(output).compute();
+		ops.op("test.liftArrayC").output(output).compute();
 
 		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(0 * i, output[i].getNumber());
@@ -112,7 +112,7 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
 			new NumericalThing() };
-		ops.op("test.liftArrayC").arity1().input(input).output(output).compute();
+		ops.op("test.liftArrayC").input(input).output(output).compute();
 
 		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(1 * i, output[i].getNumber());
@@ -131,8 +131,7 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
 			new NumericalThing() };
-		ops.op("test.liftArrayC").arity2().input(input, input).output(output)
-			.compute();
+		ops.op("test.liftArrayC").input(input, input).output(output).compute();
 
 		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(2 * i, output[i].getNumber());
@@ -151,7 +150,7 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
 			new NumericalThing() };
-		ops.op("test.liftArrayC").arity3().input(input, input, input).output(output)
+		ops.op("test.liftArrayC").input(input, input, input).output(output)
 			.compute();
 
 		for (int i = 0; i < output.length; i++) {
@@ -172,8 +171,8 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
 			new NumericalThing() };
-		ops.op("test.liftArrayC").arity4().input(input, input, input, input).output(
-			output).compute();
+		ops.op("test.liftArrayC").input(input, input, input, input).output(output)
+			.compute();
 
 		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(4 * i, output[i].getNumber());
@@ -193,8 +192,8 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
 			new NumericalThing() };
-		ops.op("test.liftArrayC").arity5().input(input, input, input, input, input)
-			.output(output).compute();
+		ops.op("test.liftArrayC").input(input, input, input, input, input).output(
+			output).compute();
 
 		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(5 * i, output[i].getNumber());
@@ -214,8 +213,8 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
 			new NumericalThing() };
-		ops.op("test.liftArrayC").arity6().input(input, input, input, input, input,
-			input).output(output).compute();
+		ops.op("test.liftArrayC").input(input, input, input, input, input, input)
+			.output(output).compute();
 
 		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(6 * i, output[i].getNumber());
@@ -235,8 +234,8 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
 			new NumericalThing() };
-		ops.op("test.liftArrayC").arity7().input(input, input, input, input, input,
-			input, input).output(output).compute();
+		ops.op("test.liftArrayC").input(input, input, input, input, input, input,
+			input).output(output).compute();
 
 		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(7 * i, output[i].getNumber());
@@ -257,8 +256,8 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
 			new NumericalThing() };
-		ops.op("test.liftArrayC").arity8().input(input, input, input, input, input,
-			input, input, input).output(output).compute();
+		ops.op("test.liftArrayC").input(input, input, input, input, input, input,
+			input, input).output(output).compute();
 
 		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(8 * i, output[i].getNumber());
@@ -279,8 +278,8 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
 			new NumericalThing() };
-		ops.op("test.liftArrayC").arity9().input(input, input, input, input, input,
-			input, input, input, input).output(output).compute();
+		ops.op("test.liftArrayC").input(input, input, input, input, input, input,
+			input, input, input).output(output).compute();
 
 		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(9 * i, output[i].getNumber());
@@ -301,8 +300,8 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
 			new NumericalThing() };
-		ops.op("test.liftArrayC").arity10().input(input, input, input, input, input,
-			input, input, input, input, input).output(output).compute();
+		ops.op("test.liftArrayC").input(input, input, input, input, input, input,
+			input, input, input, input).output(output).compute();
 
 		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(10 * i, output[i].getNumber());
@@ -323,8 +322,8 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
 			new NumericalThing() };
-		ops.op("test.liftArrayC").arity11().input(input, input, input, input, input,
-			input, input, input, input, input, input).output(output).compute();
+		ops.op("test.liftArrayC").input(input, input, input, input, input, input,
+			input, input, input, input, input).output(output).compute();
 
 		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(11 * i, output[i].getNumber());
@@ -346,8 +345,8 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
 			new NumericalThing() };
-		ops.op("test.liftArrayC").arity12().input(input, input, input, input, input,
-			input, input, input, input, input, input, input).output(output).compute();
+		ops.op("test.liftArrayC").input(input, input, input, input, input, input,
+			input, input, input, input, input, input).output(output).compute();
 
 		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(12 * i, output[i].getNumber());
@@ -370,9 +369,8 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
 			new NumericalThing() };
-		ops.op("test.liftArrayC").arity13().input(input, input, input, input, input,
-			input, input, input, input, input, input, input, input).output(output)
-			.compute();
+		ops.op("test.liftArrayC").input(input, input, input, input, input, input,
+			input, input, input, input, input, input, input).output(output).compute();
 
 		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(13 * i, output[i].getNumber());
@@ -395,9 +393,9 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
 			new NumericalThing() };
-		ops.op("test.liftArrayC").arity14().input(input, input, input, input, input,
-			input, input, input, input, input, input, input, input, input).output(
-				output).compute();
+		ops.op("test.liftArrayC").input(input, input, input, input, input, input,
+			input, input, input, input, input, input, input, input).output(output)
+			.compute();
 
 		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(14 * i, output[i].getNumber());
@@ -421,9 +419,9 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
 			new NumericalThing() };
-		ops.op("test.liftArrayC").arity15().input(input, input, input, input, input,
-			input, input, input, input, input, input, input, input, input, input)
-			.output(output).compute();
+		ops.op("test.liftArrayC").input(input, input, input, input, input, input,
+			input, input, input, input, input, input, input, input, input).output(
+				output).compute();
 
 		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(15 * i, output[i].getNumber());
@@ -447,9 +445,9 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements
 			new NumericalThing(2) };
 		NumericalThing[] output = { new NumericalThing(), new NumericalThing(),
 			new NumericalThing() };
-		ops.op("test.liftArrayC").arity16().input(input, input, input, input, input,
-			input, input, input, input, input, input, input, input, input, input,
-			input).output(output).compute();
+		ops.op("test.liftArrayC").input(input, input, input, input, input, input,
+			input, input, input, input, input, input, input, input, input, input)
+			.output(output).compute();
 
 		for (int i = 0; i < output.length; i++) {
 			Assertions.assertEquals(16 * i, output[i].getNumber());

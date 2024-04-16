@@ -67,7 +67,7 @@ public class BenchmarkFrameworks {
 	@Benchmark
 	@BenchmarkMode(Mode.AverageTime)
 	public void sciJavaOps(final FrameworksState state) {
-		state.env.unary("benchmark.invert", HINTS).input(state.in).mutate();
+		state.env.op("benchmark.invert", HINTS).input(state.in).mutate();
 	}
 
 	/**

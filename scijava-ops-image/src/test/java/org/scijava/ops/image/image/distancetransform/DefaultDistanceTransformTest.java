@@ -53,30 +53,29 @@ public class DefaultDistanceTransformTest extends AbstractOpTest {
 	@Test
 	public void test() {
 		// create 4D image
-		final RandomAccessibleInterval<BitType> in = ops.op("create.img").arity2()
-			.input(new FinalInterval(20, 20, 5, 3), new BitType()).outType(
+		final RandomAccessibleInterval<BitType> in = ops.op("create.img").input(
+			new FinalInterval(20, 20, 5, 3), new BitType()).outType(
 				new Nil<RandomAccessibleInterval<BitType>>()
 				{}).apply();
 		generate4DImg(in);
 
 		// create output image
-		RandomAccessibleInterval<FloatType> out = ops.op("create.img").arity2()
-			.input(in, new FloatType()).outType(
-				new Nil<RandomAccessibleInterval<FloatType>>()
-				{}).apply();
+		RandomAccessibleInterval<FloatType> out = ops.op("create.img").input(in,
+			new FloatType()).outType(new Nil<RandomAccessibleInterval<FloatType>>()
+		{}).apply();
 
 		/*
 		 * test normal DT
 		 */
-		ops.op("image.distanceTransform").arity1().input(in).output(out).compute();
+		ops.op("image.distanceTransform").input(in).output(out).compute();
 		compareResults(out, in, new double[] { 1, 1, 1, 1 });
 
 		/*
 		 * test calibrated DT
 		 */
 		final double[] calibration = new double[] { 3.74, 5.19, 1.21, 2.21 };
-		ops.op("image.distanceTransform").arity2().input(in, calibration).output(
-			out).compute();
+		ops.op("image.distanceTransform").input(in, calibration).output(out)
+			.compute();
 		compareResults(out, in, calibration);
 	}
 

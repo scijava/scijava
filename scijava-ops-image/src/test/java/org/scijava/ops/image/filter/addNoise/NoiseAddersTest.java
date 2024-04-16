@@ -43,13 +43,12 @@ public class NoiseAddersTest extends AbstractOpTest {
 	@Test
 	public void testAddUniformNoiseRegression() {
 		var input = ArrayImgs.bytes(2, 2);
-		ops.unary("image.fill").input(new ByteType((byte) 1)).output(input)
-			.compute();
+		ops.op("image.fill").input(new ByteType((byte) 1)).output(input).compute();
 		var output = ArrayImgs.bytes(2, 2);
 		var rangeMin = new ByteType((byte) -1);
 		var rangeMax = new ByteType((byte) 1);
-		ops.ternary("filter.addUniformNoise").input(input, rangeMin, rangeMax)
-			.output(output).compute();
+		ops.op("filter.addUniformNoise").input(input, rangeMin, rangeMax).output(
+			output).compute();
 		var cursor = output.cursor();
 		List<Byte> expected = Arrays.asList((byte) 0, (byte) 2, (byte) 1, (byte) 1);
 		for (var e : expected) {

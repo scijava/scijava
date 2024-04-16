@@ -62,15 +62,15 @@ public class NullableArgumentsFromIFaceTest extends AbstractTestEnvironment
 
 	@Test
 	public void testMethodWithOneNullable() {
-		Double o = ops.op("test.nullableSubtract").arity3().input(2., 5., 7.)
-			.outType(Double.class).apply();
+		Double o = ops.op("test.nullableSubtract").input(2., 5., 7.).outType(
+			Double.class).apply();
 		Double expected = -10.0;
 		Assertions.assertEquals(expected, o);
 	}
 
 	@Test
 	public void testMethodWithoutNullables() {
-		Double o = ops.op("test.nullableSubtract").arity2().input(2., 5.).outType(
+		Double o = ops.op("test.nullableSubtract").input(2., 5.).outType(
 			Double.class).apply();
 		Double expected = -3.0;
 		Assertions.assertEquals(expected, o);
@@ -88,8 +88,8 @@ public class NullableArgumentsFromIFaceTest extends AbstractTestEnvironment
 		Boolean in1 = true;
 		Boolean in2 = true;
 		Boolean in3 = false;
-		Boolean o = ops.op("test.nullableAnd").arity3().input(in1, in2, in3)
-			.outType(Boolean.class).apply();
+		Boolean o = ops.op("test.nullableAnd").input(in1, in2, in3).outType(
+			Boolean.class).apply();
 		Boolean expected = false;
 		Assertions.assertEquals(expected, o);
 	}
@@ -98,7 +98,7 @@ public class NullableArgumentsFromIFaceTest extends AbstractTestEnvironment
 	public void testFieldWithoutNullables() {
 		Boolean in1 = true;
 		Boolean in2 = true;
-		Boolean o = ops.op("test.nullableAnd").arity2().input(in1, in2).outType(
+		Boolean o = ops.op("test.nullableAnd").input(in1, in2).outType(
 			Boolean.class).apply();
 		Boolean expected = true;
 		Assertions.assertEquals(expected, o);
@@ -109,7 +109,7 @@ public class NullableArgumentsFromIFaceTest extends AbstractTestEnvironment
 		Boolean in1 = true;
 		Boolean in2 = false;
 		Boolean in3 = false;
-		Boolean o = ops.op("test.nullableOr").arity3().input(in1, in2, in3).outType(
+		Boolean o = ops.op("test.nullableOr").input(in1, in2, in3).outType(
 			Boolean.class).apply();
 		Boolean expected = true;
 		Assertions.assertEquals(expected, o);
@@ -119,8 +119,8 @@ public class NullableArgumentsFromIFaceTest extends AbstractTestEnvironment
 	public void testClassWithoutNullables() {
 		Boolean in1 = true;
 		Boolean in2 = false;
-		Boolean o = ops.op("test.nullableOr").arity2().input(in1, in2).outType(
-			Boolean.class).apply();
+		Boolean o = ops.op("test.nullableOr").input(in1, in2).outType(Boolean.class)
+			.apply();
 		Boolean expected = true;
 		Assertions.assertEquals(expected, o);
 	}

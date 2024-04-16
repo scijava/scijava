@@ -73,11 +73,11 @@ public class OpTypes {
 			}
 		}
 
-		ops.register(SampleFunction.class);
+		ops.register(new SampleFunction());
 
 		BiFunction<Double, Double, Double> sumOp = ops //
 			// Look for a "math.add" op
-			.binary("tutorial.add") //
+			.op("tutorial.add") //
 			// There should be two Double inputs
 			.inType(Double.class, Double.class) //
 			// And one Double output
@@ -103,8 +103,7 @@ public class OpTypes {
 		 */
 		Computers.Arity2<double[], Double, double[]> powerOp = ops //
 			// Look for a "math.power" Op
-			.binary("math.power") //
-			//
+			.op("math.power") //
 			.inType(double[].class, Double.class) //
 			.outType(double[].class) //
 			.computer();
@@ -124,7 +123,7 @@ public class OpTypes {
 		 */
 
 		Inplaces.Arity4_1<RandomAccessibleInterval<BitType>, Interval, Shape, Integer> openOp =
-			ops.quaternary("morphology.open") //
+			ops.op("morphology.open") //
 				.inType(new Nil<RandomAccessibleInterval<BitType>>()
 				{}, Nil.of(Interval.class), Nil.of(Shape.class), Nil.of(Integer.class))
 				.inplace1();

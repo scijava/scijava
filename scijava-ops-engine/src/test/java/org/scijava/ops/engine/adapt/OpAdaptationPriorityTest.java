@@ -122,7 +122,7 @@ public class OpAdaptationPriorityTest extends AbstractTestEnvironment implements
 
 	@Test
 	public void testPriority() {
-		PriorityThing pThing = ops.op("test.priorityOp").arity1() //
+		PriorityThing pThing = ops.op("test.priorityOp") //
 			.input(10.0) //
 			.outType(PriorityThing.class) //
 			.apply();

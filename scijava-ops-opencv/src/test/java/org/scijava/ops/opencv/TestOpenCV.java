@@ -150,8 +150,8 @@ public class TestOpenCV {
 		int stDev = 100;
 		Size size = new Size(5, 5);
 
-		OpBuilder.Arity3_IV_OV<Mat, Size, Integer, Mat> builder = ops.ternary(
-			TEST_OP).input(src, size, stDev).output(opsFish);
+		OpBuilder.Arity3_IV_OV<Mat, Size, Integer, Mat> builder = ops.op(TEST_OP)
+			.input(src, size, stDev).output(opsFish);
 
 		// Check help strings from the builder perspective
 		assertEquals(EXPECTED_USAGE, builder.help());
@@ -161,7 +161,7 @@ public class TestOpenCV {
 		builder.compute();
 		// NB: would be nice to be able to adapt to function but currently cannot
 		// because https://github.com/imagej/imagej-opencv/issues/2
-//		ops.ternary(TEST_OP).input(src, size, stDev).outType(Mat.class).apply();
+//		ops.op(TEST_OP).input(src, size, stDev).outType(Mat.class).apply();
 
 		// Blur directly with JavaCV
 		GaussianBlur(src, opencvFish, size, stDev);
@@ -171,8 +171,7 @@ public class TestOpenCV {
 
 		// Repeat with alias
 		opsFish = new Mat(src.rows(), src.cols(), src.type());
-		ops.ternary(TEST_OP_ALIAS).input(src, size, stDev).output(opsFish)
-			.compute();
+		ops.op(TEST_OP_ALIAS).input(src, size, stDev).output(opsFish).compute();
 
 		// Verify the images are the same once more
 		verifyMats(opencvFish, opsFish);
@@ -188,7 +187,7 @@ public class TestOpenCV {
 		Img<?> dest = src.copy();
 		int stDev = 100;
 		Size size = new Size(5, 5);
-		ops.ternary(TEST_OP).input(src, size, stDev).output(dest).compute();
+		ops.op(TEST_OP).input(src, size, stDev).output(dest).compute();
 	}
 
 	/**
@@ -199,7 +198,7 @@ public class TestOpenCV {
 		OpEnvironment ops = OpEnvironment.build();
 		Mat src = openFish();
 		Mat out = new Mat(src.rows(), src.cols(), src.type());
-		ops.binary("filter.gauss").input(src, 100.0).output(out).compute();
+		ops.op("filter.gauss").input(src, 100.0).output(out).compute();
 	}
 
 	/**

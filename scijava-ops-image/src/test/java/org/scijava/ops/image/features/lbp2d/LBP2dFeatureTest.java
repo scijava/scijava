@@ -48,8 +48,8 @@ public class LBP2dFeatureTest extends AbstractFeatureTest {
 
 	@Test
 	public void testLbp2d() {
-		final ArrayList<LongType> hist = ops.op("features.lbp2d").arity3().input(
-			random, 1, 4).outType(new Nil<ArrayList<LongType>>()
+		final ArrayList<LongType> hist = ops.op("features.lbp2d").input(random, 1,
+			4).outType(new Nil<ArrayList<LongType>>()
 		{}).apply();
 
 		// Test values proved by calculating small toy example by hand.

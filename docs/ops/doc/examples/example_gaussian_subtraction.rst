@@ -22,14 +22,14 @@ SciJava Ops via Fiji's sripting engine with `script parameters`_:
         ops = OpEnvironment.build();
 
         // convert input ImgPlus image to float32
-        img = ops.op("convert.float32").arity1().input(img).apply();
+        img = ops.op("convert.float32").input(img).apply();
 
         // create gaussian blurred image
-        img_gauss = ops.op("filter.gauss").arity2().input(img, sigma).apply();
+        img_gauss = ops.op("filter.gauss").input(img, sigma).apply();
 
         // subtract the input and blurred images
-        result = ops.op("create.img").arity2().input(img, new FloatType()).apply();
-        ops.op("math.sub").arity2().input(img, img_gauss).output(result).compute();
+        result = ops.op("create.img").input(img, new FloatType()).apply();
+        ops.op("math.sub").input(img, img_gauss).output(result).compute();
 
     .. code-tab:: python
 
@@ -44,13 +44,13 @@ SciJava Ops via Fiji's sripting engine with `script parameters`_:
         ops = OpEnvironment.build()
 
         # convert input ImgPlus image to float32
-        img = ops.op("convert.float32").arity1().input(img).apply()
+        img = ops.op("convert.float32").input(img).apply()
 
         # create gaussian blurred image
-        img_gauss = ops.op("filter.gauss").arity2().input(img, sigma).apply()
+        img_gauss = ops.op("filter.gauss").input(img, sigma).apply()
 
         # subtract the input and blurred images
-        result = ops.op("create.img").arity2().input(img, FloatType()).apply()
-        ops.op("math.sub").arity2().input(img, img_gauss).output(result).compute()
+        result = ops.op("create.img").input(img, FloatType()).apply()
+        ops.op("math.sub").input(img, img_gauss).output(result).compute()
 
 .. _`script parameters`: https://imagej.net/scripting/parameters 

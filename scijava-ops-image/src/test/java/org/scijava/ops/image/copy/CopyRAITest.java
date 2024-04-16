@@ -89,15 +89,15 @@ public class CopyRAITest extends AbstractOpTest {
 		final long[] start = new long[] { 16, 16, 16 };
 		final long[] end = new long[] { 47, 47, 47 };
 
-		input2 = ops.op("create.img").arity2().input(new FinalDimensions(size1),
+		input2 = ops.op("create.img").input(new FinalDimensions(size1),
 			new UnsignedByteType()).outType(new Nil<Img<UnsignedByteType>>()
 		{}).apply();
 
 		// create the same input but force it to be a planar image
-		inputPlanar = ops.op("create.img").arity3().input(new FinalDimensions(
-			size1), new UnsignedByteType(), new PlanarImgFactory<>(
-				new UnsignedByteType())).outType(new Nil<Img<UnsignedByteType>>()
-		{}).apply();
+		inputPlanar = ops.op("create.img").input(new FinalDimensions(size1),
+			new UnsignedByteType(), new PlanarImgFactory<>(new UnsignedByteType()))
+			.outType(new Nil<Img<UnsignedByteType>>()
+			{}).apply();
 
 		// get centered views
 		view = Views.interval(input2, new FinalInterval(start, end));
@@ -119,7 +119,7 @@ public class CopyRAITest extends AbstractOpTest {
 	@Test
 	public void copyRAINoOutputTest() {
 		final RandomAccessibleInterval<UnsignedByteType> output = ops.op("copy.rai")
-			.arity1().input(input).outType(
+			.input(input).outType(
 				new Nil<RandomAccessibleInterval<UnsignedByteType>>()
 				{}).apply();
 
@@ -138,7 +138,7 @@ public class CopyRAITest extends AbstractOpTest {
 		final Img<UnsignedByteType> output = input.factory().create(input, input
 			.firstElement());
 
-		ops.op("copy.rai").arity1().input(input).output(output).compute();
+		ops.op("copy.rai").input(input).output(output).compute();
 
 		final Cursor<UnsignedByteType> inc = input.cursor();
 		final Cursor<UnsignedByteType> outc = output.cursor();
@@ -159,7 +159,7 @@ public class CopyRAITest extends AbstractOpTest {
 
 		assertNotNull(copy);
 
-		final Img<UnsignedByteType> out = ops.op("create.img").arity2().input(
+		final Img<UnsignedByteType> out = ops.op("create.img").input(
 			new FinalDimensions(size2), new UnsignedByteType()) //
 			.outType(new Nil<Img<UnsignedByteType>>()
 			{}) //
@@ -168,19 +168,18 @@ public class CopyRAITest extends AbstractOpTest {
 		// copy view to output and assert that is equal to the mean of the view
 		copy.compute(view, out);
 		DoubleType sum = new DoubleType();
-		ops.op("stats.mean").arity1().input(out).output(sum).compute();
+		ops.op("stats.mean").input(out).output(sum).compute();
 		assertEquals(sum.getRealDouble(), 100.0, delta);
 
 		// also try with a planar image
-		final Img<UnsignedByteType> outFromPlanar = ops.op("create.img").arity2()
-			.input(new FinalDimensions(size2), new UnsignedByteType()).outType(
+		final Img<UnsignedByteType> outFromPlanar = ops.op("create.img").input(
+			new FinalDimensions(size2), new UnsignedByteType()).outType(
 				new Nil<Img<UnsignedByteType>>()
 				{}).apply();
 
 		copy.compute(viewPlanar, outFromPlanar);
 		DoubleType sumFromPlanar = new DoubleType();
-		ops.op("stats.mean").arity1().input(outFromPlanar).output(sumFromPlanar)
-			.compute();
+		ops.op("stats.mean").input(outFromPlanar).output(sumFromPlanar).compute();
 		assertEquals(sumFromPlanar.getRealDouble(), 100.0, delta);
 
 	}

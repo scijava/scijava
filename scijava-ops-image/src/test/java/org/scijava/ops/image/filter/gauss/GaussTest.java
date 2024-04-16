@@ -56,15 +56,15 @@ public class GaussTest extends AbstractOpTest {
 	public void gaussRegressionTest() {
 		final Img<ByteType> in = TestImgGeneration.byteArray(true, new long[] { 10,
 			10 });
-		final Img<ByteType> out1 = ops.op("create.img").arity2().input(in, Util
+		final Img<ByteType> out1 = ops.op("create.img").input(in, Util
 			.getTypeFromInterval(in)).outType(new Nil<Img<ByteType>>()
 		{}).apply();
 		final double sigma = 5;
-		final Img<ByteType> out2 = ops.op("create.img").arity2().input(in, Util
+		final Img<ByteType> out2 = ops.op("create.img").input(in, Util
 			.getTypeFromInterval(in)).outType(new Nil<Img<ByteType>>()
 		{}).apply();
 
-		ops.op("filter.gauss").arity2().input(in, sigma).output(out1).compute();
+		ops.op("filter.gauss").input(in, sigma).output(out1).compute();
 		try {
 			Gauss3.gauss(sigma, Views.extendMirrorSingle(in), out2);
 		}

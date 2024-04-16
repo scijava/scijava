@@ -61,7 +61,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	public void testConvertBitTypeImage() {
 		var out = ArrayImgs.doubles(1, 1);
 		out.firstElement().set(0.0);
-		ops.op("test.convert.image.BitType").arity0().output(out).compute();
+		ops.op("test.convert.image.BitType").output(out).compute();
 		double expected = 1.0;
 		double actual = out.firstElement().get();
 		Assertions.assertEquals(expected, actual);
@@ -81,8 +81,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	public void testConvertUnsigned2BitTypeImage() {
 		var out = ArrayImgs.doubles(1, 1);
 		out.firstElement().set(0.0);
-		ops.op("test.convert.image.Unsigned2BitType").arity0().output(out)
-			.compute();
+		ops.op("test.convert.image.Unsigned2BitType").output(out).compute();
 		double expected = 1.0;
 		double actual = out.firstElement().get();
 		Assertions.assertEquals(expected, actual);
@@ -102,8 +101,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	public void testConvertUnsigned4BitTypeImage() {
 		var out = ArrayImgs.doubles(1, 1);
 		out.firstElement().set(0.0);
-		ops.op("test.convert.image.Unsigned4BitType").arity0().output(out)
-			.compute();
+		ops.op("test.convert.image.Unsigned4BitType").output(out).compute();
 		double expected = 1.0;
 		double actual = out.firstElement().get();
 		Assertions.assertEquals(expected, actual);
@@ -123,8 +121,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	public void testConvertUnsignedByteTypeImage() {
 		var out = ArrayImgs.doubles(1, 1);
 		out.firstElement().set(0.0);
-		ops.op("test.convert.image.UnsignedByteType").arity0().output(out)
-			.compute();
+		ops.op("test.convert.image.UnsignedByteType").output(out).compute();
 		double expected = 1.0;
 		double actual = out.firstElement().get();
 		Assertions.assertEquals(expected, actual);
@@ -142,7 +139,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	public void testConvertByteTypeImage() {
 		var out = ArrayImgs.doubles(1, 1);
 		out.firstElement().set(0.0);
-		ops.op("test.convert.image.ByteType").arity0().output(out).compute();
+		ops.op("test.convert.image.ByteType").output(out).compute();
 		double expected = 1.0;
 		double actual = out.firstElement().get();
 		Assertions.assertEquals(expected, actual);
@@ -162,8 +159,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	public void testConvertUnsignedShortTypeImage() {
 		var out = ArrayImgs.doubles(1, 1);
 		out.firstElement().set(0.0);
-		ops.op("test.convert.image.UnsignedShortType").arity0().output(out)
-			.compute();
+		ops.op("test.convert.image.UnsignedShortType").output(out).compute();
 		double expected = 1.0;
 		double actual = out.firstElement().get();
 		Assertions.assertEquals(expected, actual);
@@ -181,7 +177,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	public void testConvertShortTypeImage() {
 		var out = ArrayImgs.doubles(1, 1);
 		out.firstElement().set(0.0);
-		ops.op("test.convert.image.ShortType").arity0().output(out).compute();
+		ops.op("test.convert.image.ShortType").output(out).compute();
 		double expected = 1.0;
 		double actual = out.firstElement().get();
 		Assertions.assertEquals(expected, actual);
@@ -201,8 +197,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	public void testConvertUnsigned12BitTypeImage() {
 		var out = ArrayImgs.doubles(1, 1);
 		out.firstElement().set(0.0);
-		ops.op("test.convert.image.Unsigned12BitType").arity0().output(out)
-			.compute();
+		ops.op("test.convert.image.Unsigned12BitType").output(out).compute();
 		double expected = 1.0;
 		double actual = out.firstElement().get();
 		Assertions.assertEquals(expected, actual);
@@ -222,7 +217,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	public void testConvertUnsignedIntTypeImage() {
 		var out = ArrayImgs.doubles(1, 1);
 		out.firstElement().set(0.0);
-		ops.op("test.convert.image.UnsignedIntType").arity0().output(out).compute();
+		ops.op("test.convert.image.UnsignedIntType").output(out).compute();
 		double expected = 1.0;
 		double actual = out.firstElement().get();
 		Assertions.assertEquals(expected, actual);
@@ -240,7 +235,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	public void testConvertIntTypeImage() {
 		var out = ArrayImgs.doubles(1, 1);
 		out.firstElement().set(0.0);
-		ops.op("test.convert.image.IntType").arity0().output(out).compute();
+		ops.op("test.convert.image.IntType").output(out).compute();
 		double expected = 1.0;
 		double actual = out.firstElement().get();
 		Assertions.assertEquals(expected, actual);
@@ -260,8 +255,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	public void testConvertUnsignedLongTypeImage() {
 		var out = ArrayImgs.doubles(1, 1);
 		out.firstElement().set(0.0);
-		ops.op("test.convert.image.UnsignedLongType").arity0().output(out)
-			.compute();
+		ops.op("test.convert.image.UnsignedLongType").output(out).compute();
 		double expected = 1.0;
 		double actual = out.firstElement().get();
 		Assertions.assertEquals(expected, actual);
@@ -279,7 +273,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	public void testConvertLongTypeImage() {
 		var out = ArrayImgs.doubles(1, 1);
 		out.firstElement().set(0.0);
-		ops.op("test.convert.image.LongType").arity0().output(out).compute();
+		ops.op("test.convert.image.LongType").output(out).compute();
 		double expected = 1.0;
 		double actual = out.firstElement().get();
 		Assertions.assertEquals(expected, actual);
@@ -299,8 +293,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	public void testConvertUnsigned128BitTypeImage() {
 		var out = ArrayImgs.doubles(1, 1);
 		out.firstElement().set(0.0);
-		ops.op("test.convert.image.Unsigned128BitType").arity0().output(out)
-			.compute();
+		ops.op("test.convert.image.Unsigned128BitType").output(out).compute();
 		double expected = 1.0;
 		double actual = out.firstElement().get();
 		Assertions.assertEquals(expected, actual);
@@ -318,7 +311,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	public void testConvertFloatTypeImage() {
 		var out = ArrayImgs.doubles(1, 1);
 		out.firstElement().set(0.0);
-		ops.op("test.convert.image.FloatType").arity0().output(out).compute();
+		ops.op("test.convert.image.FloatType").output(out).compute();
 		double expected = 1.0;
 		double actual = out.firstElement().get();
 		Assertions.assertEquals(expected, actual);
@@ -338,7 +331,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	public void testConvertDoubleTypeImage() {
 		var out = ArrayImgs.doubles(1, 1);
 		out.firstElement().set(0.0);
-		ops.op("test.convert.image.DoubleType").arity0().output(out).compute();
+		ops.op("test.convert.image.DoubleType").output(out).compute();
 		double expected = 1.0;
 		double actual = out.firstElement().get();
 		Assertions.assertEquals(expected, actual);

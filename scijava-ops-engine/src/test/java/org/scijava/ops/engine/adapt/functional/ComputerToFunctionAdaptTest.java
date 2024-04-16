@@ -54,8 +54,8 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputer1ToFunction1() {
 		double[] in = { 2, 4 };
-		double[] output = ops.op("test.CtF").arity1().input(in).outType(
-			double[].class).apply();
+		double[] output = ops.op("test.CtF").input(in).outType(double[].class)
+			.apply();
 		double[] expected = { 2, 4 };
 		Assertions.assertArrayEquals(expected, output, 0);
 	}
@@ -63,8 +63,8 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputer2ToFunction2() {
 		double[] in = { 2, 4 };
-		double[] output = ops.op("test.CtF").arity2().input(in, in).outType(
-			double[].class).apply();
+		double[] output = ops.op("test.CtF").input(in, in).outType(double[].class)
+			.apply();
 		double[] expected = { 4, 8 };
 		Assertions.assertArrayEquals(expected, output, 0);
 	}
@@ -72,7 +72,7 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputer3ToFunction3() {
 		double[] in = { 2, 4 };
-		double[] output = ops.op("test.CtF").arity3().input(in, in, in).outType(
+		double[] output = ops.op("test.CtF").input(in, in, in).outType(
 			double[].class).apply();
 		double[] expected = { 6, 12 };
 		Assertions.assertArrayEquals(expected, output, 0);
@@ -81,7 +81,7 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputer4ToFunction4() {
 		double[] in = { 2, 4 };
-		double[] output = ops.op("test.CtF").arity4().input(in, in, in, in).outType(
+		double[] output = ops.op("test.CtF").input(in, in, in, in).outType(
 			double[].class).apply();
 		double[] expected = { 8, 16 };
 		Assertions.assertArrayEquals(expected, output, 0);
@@ -90,8 +90,8 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputer5ToFunction5() {
 		double[] in = { 2, 4 };
-		double[] output = ops.op("test.CtF").arity5().input(in, in, in, in, in)
-			.outType(double[].class).apply();
+		double[] output = ops.op("test.CtF").input(in, in, in, in, in).outType(
+			double[].class).apply();
 		double[] expected = { 10, 20 };
 		Assertions.assertArrayEquals(expected, output, 0);
 	}
@@ -99,8 +99,8 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputer6ToFunction6() {
 		double[] in = { 2, 4 };
-		double[] output = ops.op("test.CtF").arity6().input(in, in, in, in, in, in)
-			.outType(double[].class).apply();
+		double[] output = ops.op("test.CtF").input(in, in, in, in, in, in).outType(
+			double[].class).apply();
 		double[] expected = { 12, 24 };
 		Assertions.assertArrayEquals(expected, output, 0);
 	}
@@ -108,8 +108,8 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputer7ToFunction7() {
 		double[] in = { 2, 4 };
-		double[] output = ops.op("test.CtF").arity7().input(in, in, in, in, in, in,
-			in).outType(double[].class).apply();
+		double[] output = ops.op("test.CtF").input(in, in, in, in, in, in, in)
+			.outType(double[].class).apply();
 		double[] expected = { 14, 28 };
 		Assertions.assertArrayEquals(expected, output, 0);
 	}
@@ -117,8 +117,8 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputer8ToFunction8() {
 		double[] in = { 2, 4 };
-		double[] output = ops.op("test.CtF").arity8().input(in, in, in, in, in, in,
-			in, in).outType(double[].class).apply();
+		double[] output = ops.op("test.CtF").input(in, in, in, in, in, in, in, in)
+			.outType(double[].class).apply();
 		double[] expected = { 16, 32 };
 		Assertions.assertArrayEquals(expected, output, 0);
 	}
@@ -126,8 +126,8 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputer9ToFunction9() {
 		double[] in = { 2, 4 };
-		double[] output = ops.op("test.CtF").arity9().input(in, in, in, in, in, in,
-			in, in, in).outType(double[].class).apply();
+		double[] output = ops.op("test.CtF").input(in, in, in, in, in, in, in, in,
+			in).outType(double[].class).apply();
 		double[] expected = { 18, 36 };
 		Assertions.assertArrayEquals(expected, output, 0);
 	}
@@ -135,8 +135,8 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputer10ToFunction10() {
 		double[] in = { 2, 4 };
-		double[] output = ops.op("test.CtF").arity10().input(in, in, in, in, in, in,
-			in, in, in, in).outType(double[].class).apply();
+		double[] output = ops.op("test.CtF").input(in, in, in, in, in, in, in, in,
+			in, in).outType(double[].class).apply();
 		double[] expected = { 20, 40 };
 		Assertions.assertArrayEquals(expected, output, 0);
 	}
@@ -144,8 +144,8 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputer11ToFunction11() {
 		double[] in = { 2, 4 };
-		double[] output = ops.op("test.CtF").arity11().input(in, in, in, in, in, in,
-			in, in, in, in, in).outType(double[].class).apply();
+		double[] output = ops.op("test.CtF").input(in, in, in, in, in, in, in, in,
+			in, in, in).outType(double[].class).apply();
 		double[] expected = { 22, 44 };
 		Assertions.assertArrayEquals(expected, output, 0);
 	}
@@ -153,8 +153,8 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputer12ToFunction12() {
 		double[] in = { 2, 4 };
-		double[] output = ops.op("test.CtF").arity12().input(in, in, in, in, in, in,
-			in, in, in, in, in, in).outType(double[].class).apply();
+		double[] output = ops.op("test.CtF").input(in, in, in, in, in, in, in, in,
+			in, in, in, in).outType(double[].class).apply();
 		double[] expected = { 24, 48 };
 		Assertions.assertArrayEquals(expected, output, 0);
 	}
@@ -162,8 +162,8 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputer13ToFunction13() {
 		double[] in = { 2, 4 };
-		double[] output = ops.op("test.CtF").arity13().input(in, in, in, in, in, in,
-			in, in, in, in, in, in, in).outType(double[].class).apply();
+		double[] output = ops.op("test.CtF").input(in, in, in, in, in, in, in, in,
+			in, in, in, in, in).outType(double[].class).apply();
 		double[] expected = { 26, 52 };
 		Assertions.assertArrayEquals(expected, output, 0);
 	}
@@ -171,8 +171,8 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputer14ToFunction14() {
 		double[] in = { 2, 4 };
-		double[] output = ops.op("test.CtF").arity14().input(in, in, in, in, in, in,
-			in, in, in, in, in, in, in, in).outType(double[].class).apply();
+		double[] output = ops.op("test.CtF").input(in, in, in, in, in, in, in, in,
+			in, in, in, in, in, in).outType(double[].class).apply();
 		double[] expected = { 28, 56 };
 		Assertions.assertArrayEquals(expected, output, 0);
 	}
@@ -180,8 +180,8 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputer15ToFunction15() {
 		double[] in = { 2, 4 };
-		double[] output = ops.op("test.CtF").arity15().input(in, in, in, in, in, in,
-			in, in, in, in, in, in, in, in, in).outType(double[].class).apply();
+		double[] output = ops.op("test.CtF").input(in, in, in, in, in, in, in, in,
+			in, in, in, in, in, in, in).outType(double[].class).apply();
 		double[] expected = { 30, 60 };
 		Assertions.assertArrayEquals(expected, output, 0);
 	}
@@ -189,8 +189,8 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputer16ToFunction16() {
 		double[] in = { 2, 4 };
-		double[] output = ops.op("test.CtF").arity16().input(in, in, in, in, in, in,
-			in, in, in, in, in, in, in, in, in, in).outType(double[].class).apply();
+		double[] output = ops.op("test.CtF").input(in, in, in, in, in, in, in, in,
+			in, in, in, in, in, in, in, in).outType(double[].class).apply();
 		double[] expected = { 32, 64 };
 		Assertions.assertArrayEquals(expected, output, 0);
 	}

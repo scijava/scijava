@@ -57,7 +57,7 @@ public class LiftFunctionsToImgTest extends AbstractOpTest implements
 		Img<UnsignedByteType> foo = TestImgGeneration.unsignedByteArray(true, 10,
 			10, 10);
 		Img<UnsignedByteType> result = ops.op("test.liftFunctionToImg") //
-			.arity1() //
+			//
 			.input(foo) //
 			.outType(new Nil<Img<UnsignedByteType>>()
 			{}) //

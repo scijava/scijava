@@ -66,16 +66,16 @@ public class ReductionWithDependenciesTest extends AbstractTestEnvironment
 	@Test
 	public void testDependencyFirstMethodWithNullable() {
 		Double opt = 7.;
-		Double o = ops.op("test.nullableWithDependency").arity1().input(opt)
-			.outType(Double.class).apply();
+		Double o = ops.op("test.nullableWithDependency").input(opt).outType(
+			Double.class).apply();
 		Double expected = 12.;
 		Assertions.assertEquals(expected, o);
 	}
 
 	@Test
 	public void testDependencyFirstMethodWithoutNullable() {
-		Double o = ops.op("test.nullableWithDependency").arity0().outType(
-			Double.class).create();
+		Double o = ops.op("test.nullableWithDependency").outType(Double.class)
+			.create();
 		Double expected = 5.;
 		Assertions.assertEquals(expected, o);
 	}

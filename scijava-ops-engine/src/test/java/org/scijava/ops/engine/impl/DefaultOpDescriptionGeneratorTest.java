@@ -84,7 +84,7 @@ public class DefaultOpDescriptionGeneratorTest extends AbstractTestEnvironment
 	 */
 	@Test
 	public void testCoalescedDescriptions() {
-		String actual = ops.unary("test.coalesceDescription").helpVerbose();
+		String actual = ops.op("test.coalesceDescription").helpVerbose();
 		String expected = "test.coalesceDescription:\n" +
 			"\t- org.scijava.ops.engine.impl.DefaultOpDescriptionGeneratorTest$comp1\n" +
 			"\t\t> input1 : java.util.List<java.lang.Long>\n" +
@@ -92,21 +92,27 @@ public class DefaultOpDescriptionGeneratorTest extends AbstractTestEnvironment
 			"\t- org.scijava.ops.engine.impl.DefaultOpDescriptionGeneratorTest$func1\n" +
 			"\t\t> input1 : java.lang.Double\n" + "\t\tReturns : java.lang.Double\n" +
 			"\t- org.scijava.ops.engine.impl.DefaultOpDescriptionGeneratorTest$func2\n" +
-			"\t\t> input1 : java.lang.Long\n" + "\t\tReturns : java.lang.Long";
-		// Assert that helpVerbose returns three entries
+			"\t\t> input1 : java.lang.Long\n" + "\t\tReturns : java.lang.Long\n" +
+			"\t- org.scijava.ops.engine.impl.DefaultOpDescriptionGeneratorTest$inplace1\n" +
+			"\t\t> mutable1 : @MUTABLE java.util.List<java.lang.Long>\n" +
+			"\t\t> input1 : java.lang.Long";
+		// Assert that helpVerbose returns four entries
 		Assertions.assertEquals(expected, actual);
-		// But assert that only two entries are seen for help
-		actual = ops.unary("test.coalesceDescription").help();
+		// But assert that only three are seen for help
+		actual = ops.op("test.coalesceDescription").help();
 		expected = //
-			"test.coalesceDescription:\n\t- (list<number>, @CONTAINER list<number>) -> None\n\t- (number) -> number";
+			"test.coalesceDescription:\n" +
+				"\t- (list<number>, @CONTAINER list<number>) -> None\n" +
+				"\t- (number) -> number\n" +
+				"\t- (@MUTABLE list<number>, number) -> None";
 		Assertions.assertEquals(expected, actual);
 		// Test that with 2 inputs we do get the binary inplace Op, but no others
-		actual = ops.binary("test.coalesceDescription").help();
+		actual = ops.op("test.coalesceDescription").input(null, null).help();
 		expected = //
 			"test.coalesceDescription:\n\t- (@MUTABLE list<number>, number) -> None";
 		Assertions.assertEquals(expected, actual);
 		// Finally test that with no inputs we don't get any of the Ops
-		actual = ops.nullary("test.coalesceDescription").help();
+		actual = ops.op("test.coalesceDescription").output(null).help();
 		expected = "No Ops found matching this request.";
 		Assertions.assertEquals(expected, actual);
 	}

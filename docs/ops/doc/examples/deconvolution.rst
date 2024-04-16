@@ -67,8 +67,8 @@ SciJava Ops via Fiji's scripting engine with `script parameters`_:
         import net.imglib2.type.numeric.complex.ComplexFloatType
 
         // convert input image to float
-        img_float = ops.op("create.img").arity2().input(img, new FloatType()).apply()
-        ops.op("convert.float32").arity1().input(img).output(img_float).compute()
+        img_float = ops.op("create.img").input(img, new FloatType()).apply()
+        ops.op("convert.float32").input(img).output(img_float).compute()
 
         // use image dimensions for PSF size
         psf_size = new FinalDimensions(img.dimensionsAsLongArray())
@@ -80,7 +80,7 @@ SciJava Ops via Fiji's scripting engine with `script parameters`_:
         pZ = pZ * 1E-6
 
         // create the synthetic PSF
-        psf = ops.op("create.kernelDiffraction").arity9().input(psf_size,
+        psf = ops.op("create.kernelDiffraction").input(psf_size,
                                                                 numericalAperture,
                                                                 wavelength,
                                                                 riSample,
@@ -91,7 +91,7 @@ SciJava Ops via Fiji's scripting engine with `script parameters`_:
                                                                 new FloatType()).apply()
 
         // deconvolve image
-        result = ops.op("deconvolve.richardsonLucyTV").arity8().input(img_float, psf, new FloatType(), new ComplexFloatType(), iterations, false, false, regularizationFactor).apply()
+        result = ops.op("deconvolve.richardsonLucyTV").input(img_float, psf, new FloatType(), new ComplexFloatType(), iterations, false, false, regularizationFactor).apply()
 
     .. code-tab:: python
 
@@ -114,8 +114,8 @@ SciJava Ops via Fiji's scripting engine with `script parameters`_:
         from net.imglib2.type.numeric.complex import ComplexFloatType
 
         # convert input image to float
-        img_float = ops.op("create.img").arity2().input(img, FloatType()).apply()
-        ops.op("convert.float32").arity1().input(img).output(img_float).compute()
+        img_float = ops.op("create.img").input(img, FloatType()).apply()
+        ops.op("convert.float32").input(img).output(img_float).compute()
 
         # use image dimensions for PSF size
         psf_size = FinalDimensions(img.dimensionsAsLongArray())
@@ -127,7 +127,7 @@ SciJava Ops via Fiji's scripting engine with `script parameters`_:
         pZ = pZ * 1E-6
 
         # create the synthetic PSF
-        psf = ops.op("create.kernelDiffraction").arity9().input(psf_size,
+        psf = ops.op("create.kernelDiffraction").input(psf_size,
                                                                 numericalAperture,
                                                                 wavelength,
                                                                 riSample,
@@ -138,7 +138,7 @@ SciJava Ops via Fiji's scripting engine with `script parameters`_:
                                                                 FloatType()).apply()
 
         # deconvolve image
-        result = ops.op("deconvolve.richardsonLucyTV").arity8().input(img_float, psf, FloatType(), ComplexFloatType(), iterations, False, False, regularizationFactor).apply()
+        result = ops.op("deconvolve.richardsonLucyTV").input(img_float, psf, FloatType(), ComplexFloatType(), iterations, False, False, regularizationFactor).apply()
 
 | :sup:`1`: `Dey et. al, Micros Res Tech 2006`_
 | :sup:`2`: `Gibson & Lanni, JOSA 1992`_

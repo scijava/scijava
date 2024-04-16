@@ -63,16 +63,15 @@ public class MeshFeatureTests extends AbstractFeatureTest {
 	@Test
 	public void boxivityMesh() {
 		// DefaultSmallestOrientedBoundingBox is not implemented.
-		assertThrows(OpMatchingException.class, () -> ops.op("geom.boxivity")
-			.arity1().input(mesh).outType(DoubleType.class).apply());
+		assertThrows(OpMatchingException.class, () -> ops.op("geom.boxivity").input(
+			mesh).outType(DoubleType.class).apply());
 	}
 
 	@Test
 	public void compactness() {
 		// formula verified and ground truth computed with matlab
-		assertEquals(0.572416357359835, ops.op("geom.compactness").arity1().input(
-			mesh).outType(DoubleType.class).apply().get(), EPSILON,
-			"geom.compactness");
+		assertEquals(0.572416357359835, ops.op("geom.compactness").input(mesh)
+			.outType(DoubleType.class).apply().get(), EPSILON, "geom.compactness");
 	}
 
 	@Test
@@ -85,22 +84,21 @@ public class MeshFeatureTests extends AbstractFeatureTest {
 	@Test
 	public void convexityMesh() {
 		// formula verified and ground truth computed with matlab
-		assertEquals(0.983930494866521, ops.op("geom.convexity").arity1().input(
-			mesh).outType(DoubleType.class).apply().get(), EPSILON, "geom.convexity");
+		assertEquals(0.983930494866521, ops.op("geom.convexity").input(mesh)
+			.outType(DoubleType.class).apply().get(), EPSILON, "geom.convexity");
 	}
 
 	@Test
 	public void mainElongation() {
 		// formula verified and ground truth computed with matlab
-		assertEquals(0.2079585956045953, (ops.op("geom.mainElongation").arity1()
-			.input(mesh).outType(DoubleType.class).apply()).get(), EPSILON,
+		assertEquals(0.2079585956045953, (ops.op("geom.mainElongation").input(mesh)
+			.outType(DoubleType.class).apply()).get(), EPSILON,
 			"geom.mainElongation");
 	}
 
 	@Test
 	public void marchingCubes() {
-		final Mesh result = (Mesh) ops.op("geom.marchingCubes").arity1().input(ROI)
-			.apply();
+		final Mesh result = (Mesh) ops.op("geom.marchingCubes").input(ROI).apply();
 		assertEquals(mesh.triangles().size(), result.triangles().size());
 		final Iterator<Triangle> expectedFacets = mesh.triangles().iterator();
 		final Iterator<Triangle> actualFacets = result.triangles().iterator();
@@ -123,82 +121,79 @@ public class MeshFeatureTests extends AbstractFeatureTest {
 	@Test
 	public void medianElongation() {
 		// formula verified and ground truth computed with matlab
-		assertEquals(0.30059118825775455, ops.op("geom.medianElongation").arity1()
-			.input(mesh).outType(DoubleType.class).apply().get(), EPSILON,
+		assertEquals(0.30059118825775455, ops.op("geom.medianElongation").input(
+			mesh).outType(DoubleType.class).apply().get(), EPSILON,
 			"geom.medianElongation");
 	}
 
 	@Test
 	public void sizeConvexHullMesh() {
 		// ground truth computed with matlab
-		assertEquals(304.5, ops.op("geom.sizeConvexHull").arity1().input(mesh)
-			.outType(DoubleType.class).apply().get(), EPSILON, "geom.sizeConvexHull");
+		assertEquals(304.5, ops.op("geom.sizeConvexHull").input(mesh).outType(
+			DoubleType.class).apply().get(), EPSILON, "geom.sizeConvexHull");
 	}
 
 	@Test
 	public void sizeMesh() {
 		// ground truth computed with matlab
-		assertEquals(257.5, ops.op("geom.size").arity1().input(mesh).outType(
+		assertEquals(257.5, ops.op("geom.size").input(mesh).outType(
 			DoubleType.class).apply().get(), EPSILON, "geom.size");
 	}
 
 	@Test
 	public void solidityMesh() {
 		// formula verified and ground truth computed with matlab
-		assertEquals(0.845648604269294, ops.op("geom.solidity").arity1().input(mesh)
-			.outType(DoubleType.class).apply().get(), EPSILON, "geom.solidity");
+		assertEquals(0.845648604269294, ops.op("geom.solidity").input(mesh).outType(
+			DoubleType.class).apply().get(), EPSILON, "geom.solidity");
 	}
 
 	@Test
 	public void spareness() {
 		// formula verified
-		assertEquals(0.7884710437076516, ops.op("geom.spareness").arity1().input(
-			mesh).outType(DoubleType.class).apply().get(), EPSILON, "geom.spareness");
+		assertEquals(0.7884710437076516, ops.op("geom.spareness").input(mesh)
+			.outType(DoubleType.class).apply().get(), EPSILON, "geom.spareness");
 	}
 
 	@Test
 	public void sphericity() {
 		// formula verified and ground truth computed with matlab
-		assertEquals(0.830304411183464, ops.op("geom.sphericity").arity1().input(
-			mesh).outType(DoubleType.class).apply().get(), EPSILON,
-			"geom.sphericity");
+		assertEquals(0.830304411183464, ops.op("geom.sphericity").input(mesh)
+			.outType(DoubleType.class).apply().get(), EPSILON, "geom.sphericity");
 	}
 
 	@Test
 	public void surfaceArea() {
 		// ground truth computed with matlab
-		assertEquals(235.7390893402464, ops.op("geom.boundarySize").arity1().input(
-			mesh).outType(DoubleType.class).apply().get(), EPSILON,
-			"geom.boundarySize");
+		assertEquals(235.7390893402464, ops.op("geom.boundarySize").input(mesh)
+			.outType(DoubleType.class).apply().get(), EPSILON, "geom.boundarySize");
 	}
 
 	@Test
 	public void surfaceAreaConvexHull() {
 		// ground truth computed with matlab
-		assertEquals(231.9508788339317, ops.op("geom.boundarySizeConvexHull")
-			.arity1().input(mesh).outType(DoubleType.class).apply().get(), EPSILON,
+		assertEquals(231.9508788339317, ops.op("geom.boundarySizeConvexHull").input(
+			mesh).outType(DoubleType.class).apply().get(), EPSILON,
 			"geom.boundarySizeConvexHull");
 	}
 
 	@Test
 	public void verticesCountConvexHullMesh() {
 		// verified with matlab
-		assertEquals(57, ops.op("geom.verticesCountConvexHull").arity1().input(mesh)
-			.outType(DoubleType.class).apply().get(), EPSILON,
-			"geom.verticesCountConvexHull");
+		assertEquals(57, ops.op("geom.verticesCountConvexHull").input(mesh).outType(
+			DoubleType.class).apply().get(), EPSILON, "geom.verticesCountConvexHull");
 	}
 
 	@Test
 	public void verticesCountMesh() {
 		// verified with matlab
-		assertEquals(184, ops.op("geom.verticesCount").arity1().input(mesh).outType(
+		assertEquals(184, ops.op("geom.verticesCount").input(mesh).outType(
 			DoubleType.class).apply().get(), EPSILON, "geom.verticesCount");
 
 	}
 
 	@Test
 	public void voxelization3D() {
-		ops.op("geom.voxelization").arity4().input(mesh, 10, 10, 10).outType(
+		ops.op("geom.voxelization").input(mesh, 10, 10, 10).outType(
 			new Nil<RandomAccessibleInterval<BitType>>()
 			{
 

@@ -72,8 +72,8 @@ public class ConversionAdaptationTest extends AbstractTestEnvironment implements
 		Double modulus = 3.;
 
 		Double[] expected = { 1., 1., 0. };
-		Double[] actual = ops.op("test.math.modulus").arity2().input(inArr, modulus)
-			.outType(Double[].class).apply();
+		Double[] actual = ops.op("test.math.modulus").input(inArr, modulus).outType(
+			Double[].class).apply();
 		Assertions.assertArrayEquals(expected, actual);
 	}
 

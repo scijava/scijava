@@ -53,11 +53,10 @@ public class TubenessTest extends AbstractOpTest {
 		final double scale = 5;
 		final double sigma = scale / Math.sqrt(2);
 
-		Img<DoubleType> actual = ops.op("create.img").arity2().input(input,
-			new DoubleType()).outType(new Nil<Img<DoubleType>>()
-		{}).apply();
-		ops.op("filter.tubeness").arity2().input(input, sigma).output(actual)
-			.compute();
+		Img<DoubleType> actual = ops.op("create.img").input(input, new DoubleType())
+			.outType(new Nil<Img<DoubleType>>()
+			{}).apply();
+		ops.op("filter.tubeness").input(input, sigma).output(actual).compute();
 
 		ImgLib2Assert.assertImageEquals(expected, actual);
 	}

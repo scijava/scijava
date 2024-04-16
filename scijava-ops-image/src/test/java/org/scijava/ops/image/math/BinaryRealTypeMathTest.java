@@ -137,9 +137,9 @@ public class BinaryRealTypeMathTest extends AbstractOpTest {
 			for (String m : methods) {
 				DoubleType c = new DoubleType();
 //				if (m.equals("function"))
-//					c = ops.binary(opName).input(A, B).outType(DoubleType.class).apply();
+//					c = ops.op(opName).input(A, B).outType(DoubleType.class).apply();
 //				else if (m.equals("computer"))
-				ops.binary(opName).input(A, B).output(c).compute();
+				ops.op(opName).input(A, B).output(c).compute();
 				assertEquals(expectedValue, c.get());
 			}
 		}

@@ -108,7 +108,7 @@ public class FitTest extends AbstractFlimTest {
 	@Test
 	public void testRLDFitImg() {
 		long ms = System.currentTimeMillis();
-		FitResults out = ops.unary("flim.fitRLD") //
+		FitResults out = ops.op("flim.fitRLD") //
 			.input(param) //
 			.outType(FitResults.class) //
 			.apply();
@@ -123,8 +123,8 @@ public class FitTest extends AbstractFlimTest {
 	@Test
 	public void testBinning() {
 		long ms = System.currentTimeMillis();
-		var kernel = ops.unary("create.kernelSum").input(3).apply();
-		FitResults out = ops.ternary("flim.fitRLD") //
+		var kernel = ops.op("create.kernelSum").input(3).apply();
+		FitResults out = ops.op("flim.fitRLD") //
 			.input(param, roi, kernel) //
 			.outType(FitResults.class) //
 			.apply();
@@ -139,12 +139,12 @@ public class FitTest extends AbstractFlimTest {
 	@Test
 	public void testLMAFitImg() {
 		// estimation using RLD
-		var rldResults = ops.binary("flim.fitRLD").input(param, roi).outType(
+		var rldResults = ops.op("flim.fitRLD").input(param, roi).outType(
 			FitResults.class).apply();
 		param.paramMap = rldResults.paramMap;
 
 		long ms = System.currentTimeMillis();
-		FitResults out = ops.binary("flim.fitLMA").input(param, roi).outType(
+		FitResults out = ops.op("flim.fitLMA").input(param, roi).outType(
 			FitResults.class).apply();
 		System.out.println("LMA finished in " + (System.currentTimeMillis() - ms) +
 			" ms");
@@ -159,7 +159,7 @@ public class FitTest extends AbstractFlimTest {
 		// estimation using RLD
 		param.getChisqMap = true;
 		long ms = System.currentTimeMillis();
-		FitResults out = ops.binary("flim.fitBayes").input(param, roi).outType(
+		FitResults out = ops.op("flim.fitBayes").input(param, roi).outType(
 			FitResults.class).apply();
 		System.out.println("Bayes finished in " + (System.currentTimeMillis() -
 			ms) + " ms");
@@ -171,7 +171,7 @@ public class FitTest extends AbstractFlimTest {
 	@Test
 	public void testInstr() {
 		// estimation using RLD
-		param.paramMap = ops.binary("flim.fitRLD").input(param, roi).outType(
+		param.paramMap = ops.op("flim.fitRLD").input(param, roi).outType(
 			FitResults.class).apply().paramMap;
 
 		// a trivial IRF
@@ -179,7 +179,7 @@ public class FitTest extends AbstractFlimTest {
 		param.instr[0] = 1;
 
 		long ms = System.currentTimeMillis();
-		FitResults out = ops.binary("flim.fitLMA").input(param, roi).outType(
+		FitResults out = ops.op("flim.fitLMA").input(param, roi).outType(
 			FitResults.class).apply();
 		System.out.println("LMA with instr finished in " + (System
 			.currentTimeMillis() - ms) + " ms");
@@ -192,7 +192,7 @@ public class FitTest extends AbstractFlimTest {
 	@Test
 	public void testPhasorFitImg() {
 		long ms = System.currentTimeMillis();
-		FitResults out = ops.binary("flim.fitPhasor").input(param, roi).outType(
+		FitResults out = ops.op("flim.fitPhasor").input(param, roi).outType(
 			FitResults.class).apply();
 		System.out.println("Phasor finished in " + (System.currentTimeMillis() -
 			ms) + " ms");
@@ -204,7 +204,7 @@ public class FitTest extends AbstractFlimTest {
 	@Test
 	public void testGlobalFitImg() {
 		long ms = System.currentTimeMillis();
-		FitResults out = ops.binary("flim.fitGlobal").input(param, roi).outType(
+		FitResults out = ops.op("flim.fitGlobal").input(param, roi).outType(
 			FitResults.class).apply();
 		System.out.println("Global fit finished in " + (System.currentTimeMillis() -
 			ms) + " ms");
@@ -219,7 +219,7 @@ public class FitTest extends AbstractFlimTest {
 		param.nComp = 2;
 		param.paramFree = new boolean[] { true, true, true, true, true };
 		long ms = System.currentTimeMillis();
-		FitResults out = ops.binary("flim.fitGlobal").input(param, roi).outType(
+		FitResults out = ops.op("flim.fitGlobal").input(param, roi).outType(
 			FitResults.class).apply();
 		System.out.println("Global fit (Multi) finished in " + (System
 			.currentTimeMillis() - ms) + " ms");

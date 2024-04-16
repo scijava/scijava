@@ -63,12 +63,12 @@ public class TestConvertImages extends AbstractOpTest{
 #if ($first.equals("true"))
 		final $imgLibType2 b = new $imgLibType2($value.v);
 		// Create the input image
-		final var img = ops.binary("create.img") //
+		final var img = ops.op("create.img") //
 				.input(new FinalDimensions(2, 2), b) //
 				.apply();
-		ops.unary("image.fill").input(b).output(img).compute();
+		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.unary("convert.$toType.built").input(img).apply();
+    var converted = ops.op("convert.$toType.built").input(img).apply();
 		var cursor = ((IterableInterval<$imgLibType>) converted).cursor();
 		while(cursor.hasNext()) {
 #if($toType.op.contains("C"))
@@ -85,8 +85,8 @@ public class TestConvertImages extends AbstractOpTest{
 #set ($first = "false")
 #else
     b.set($value.v);
-		ops.unary("image.fill").input(b).output(img).compute();
-		converted = ops.unary("convert.$toType.built").input(img).apply();
+		ops.op("image.fill").input(b).output(img).compute();
+		converted = ops.op("convert.$toType.built").input(img).apply();
 		cursor = ((IterableInterval<$imgLibType>) converted).cursor();
 		while(cursor.hasNext()) {
 #if($toType.op.contains("C"))

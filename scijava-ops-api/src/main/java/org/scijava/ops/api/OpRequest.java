@@ -135,31 +135,23 @@ class PartialOpRequest implements OpRequest {
 	private final Type outType;
 
 	PartialOpRequest() {
-		this.name = null;
-		this.args = null;
-		this.outType = null;
+		this(null);
 	}
 
 	PartialOpRequest(String name) {
-		this.name = name;
-		this.args = null;
-		this.outType = null;
+		this(name, null);
 	}
 
 	PartialOpRequest(String name, Nil<?>[] args) {
-		this.name = name;
-		this.args = Arrays.stream(args) //
-			.map(nil -> nil == null ? null : nil.getType()) //
-			.toArray(Type[]::new);
-		this.outType = null;
+		this(name, args, null);
 	}
 
 	PartialOpRequest(String name, Nil<?>[] args, Nil<?> outType) {
 		this.name = name;
-		this.args = Arrays.stream(args) //
+		this.args = args == null ? null : Arrays.stream(args) //
 			.map(nil -> nil == null ? null : nil.getType()) //
 			.toArray(Type[]::new);
-		this.outType = outType.getType();
+		this.outType = outType == null ? null : outType.getType();
 	}
 
 	@Override

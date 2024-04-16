@@ -102,7 +102,7 @@ public class OpReduction implements OpCollection {
 		// -- CALL WITH ALL THREE PARAMETERS -- //
 
 		// Ask for an Op of name "tutorial.reduce"
-		Double noNullable = ops.ternary("tutorial.reduce") //
+		Double noNullable = ops.op("tutorial.reduce") //
 			// With our two Double inputs
 			.input(first, second, third) //
 			// And get a Double out
@@ -113,7 +113,7 @@ public class OpReduction implements OpCollection {
 		// -- CALL WITH ONE OPTIONAL PARAMETER -- //
 
 		// Ask for an Op of name "tutorial.reduce"
-		Double oneNullable = ops.binary("tutorial.reduce") //
+		Double oneNullable = ops.op("tutorial.reduce") //
 			// With our two Double inputs
 			.input(first, second) //
 			// And get a Double out
@@ -124,7 +124,7 @@ public class OpReduction implements OpCollection {
 		// -- CALL WITH TWO OPTIONAL PARAMETERS -- //
 
 		// Ask for an Op of name "tutorial.reduce"
-		Double twoNullable = ops.unary("tutorial.reduce") //
+		Double twoNullable = ops.op("tutorial.reduce") //
 			// With our two Double inputs
 			.input(first) //
 			// And get a Double out

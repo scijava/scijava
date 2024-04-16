@@ -70,7 +70,7 @@ public class PermutedComputerToFunctionAdaptTest extends AbstractTestEnvironment
 
 	@Test
 	public void testAdaptingPermutedComputer() {
-		double[] result = ops.binary("adapt.permuted").input(new double[] { 1.5 },
+		double[] result = ops.op("adapt.permuted").input(new double[] { 1.5 },
 			new double[] { 2.0 }).outType(double[].class).apply();
 		Assertions.assertEquals(3.0, result[0]);
 	}

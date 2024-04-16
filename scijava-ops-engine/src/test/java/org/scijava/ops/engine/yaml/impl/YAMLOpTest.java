@@ -56,22 +56,22 @@ public class YAMLOpTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testYAMLClass() {
-		Double sum = ops.op("example.add").arity2().input(2., 3.).outType(
-			Double.class).apply();
+		Double sum = ops.op("example.add").input(2., 3.).outType(Double.class)
+			.apply();
 		Assertions.assertEquals(5., sum, 1e-6);
 	}
 
 	@Test
 	public void testYAMLInnerClass() {
-		Double quot = ops.op("example.div").arity2().input(24., 8.).outType(
-			Double.class).apply();
+		Double quot = ops.op("example.div").input(24., 8.).outType(Double.class)
+			.apply();
 		Assertions.assertEquals(3., quot, 1e-6);
 	}
 
 	@Test
 	public void testYAMLMethodFunction() {
-		Double sum = ops.op("example.sub").arity2().input(2., 3.).outType(
-			Double.class).apply();
+		Double sum = ops.op("example.sub").input(2., 3.).outType(Double.class)
+			.apply();
 		Assertions.assertEquals(-1., sum, 1e-6);
 	}
 
@@ -79,7 +79,7 @@ public class YAMLOpTest extends AbstractTestEnvironment {
 	public void testYAMLMethodInplaceShortType() {
 		List<Integer> l1 = Arrays.asList(1);
 		List<Integer> l2 = Arrays.asList(3);
-		ops.op("example.xor").arity2().input(l1, l2).mutate1();
+		ops.op("example.xor").input(l1, l2).mutate1();
 		Assertions.assertEquals(2, l1.get(0), 1e-6);
 	}
 
@@ -88,7 +88,7 @@ public class YAMLOpTest extends AbstractTestEnvironment {
 		List<Integer> l1 = Arrays.asList(1);
 		List<Integer> l2 = Arrays.asList(3);
 		List<Integer> out = new ArrayList<>();
-		ops.op("example.and").arity2().input(l1, l2).output(out).compute();
+		ops.op("example.and").input(l1, l2).output(out).compute();
 		Assertions.assertEquals(1, out.get(0), 1e-6);
 	}
 
@@ -97,14 +97,14 @@ public class YAMLOpTest extends AbstractTestEnvironment {
 		List<Integer> l1 = Arrays.asList(1);
 		List<Integer> l2 = Arrays.asList(2);
 		List<Integer> out = new ArrayList<>();
-		ops.op("example.or").arity2().input(l1, l2).output(out).compute();
+		ops.op("example.or").input(l1, l2).output(out).compute();
 		Assertions.assertEquals(3, out.get(0), 1e-6);
 	}
 
 	@Test
 	public void testYAMLField() {
-		Double sum = ops.op("example.mul").arity2().input(2., 3.).outType(
-			Double.class).apply();
+		Double sum = ops.op("example.mul").input(2., 3.).outType(Double.class)
+			.apply();
 		Assertions.assertEquals(6., sum, 1e-6);
 	}
 

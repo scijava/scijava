@@ -77,8 +77,8 @@ public class OpMatchingExceptionTest extends AbstractTestEnvironment implements
 	@Test
 	public void duplicateErrorRegressionTest() {
 		try {
-			ops.op("test.duplicateOp").arity1().inType(Double.class).outType(
-				Double.class).function();
+			ops.op("test.duplicateOp").inType(Double.class).outType(Double.class)
+				.function();
 			Assertions.fail();
 		}
 		catch (OpMatchingException e) {
@@ -96,8 +96,8 @@ public class OpMatchingExceptionTest extends AbstractTestEnvironment implements
 	@Test
 	public void missingDependencyRegressionTest() {
 		try {
-			ops.op("test.missingDependencyOp").arity1().input(1.).outType(
-				Double.class).apply();
+			ops.op("test.missingDependencyOp").input(1.).outType(Double.class)
+				.apply();
 			Assertions.fail("Expected DependencyMatchingException");
 		}
 		catch (DependencyMatchingException e) {
@@ -113,7 +113,7 @@ public class OpMatchingExceptionTest extends AbstractTestEnvironment implements
 	@Test
 	public void missingNestedDependencyRegressionTest() {
 		try {
-			ops.op("test.outsideOp").arity1().input(1.).outType(Double.class).apply();
+			ops.op("test.outsideOp").input(1.).outType(Double.class).apply();
 			Assertions.fail("Expected DependencyMatchingException");
 		}
 		catch (DependencyMatchingException e) {
@@ -132,8 +132,7 @@ public class OpMatchingExceptionTest extends AbstractTestEnvironment implements
 	public void missingDependencyViaAdaptationTest() {
 		Double[] d = new Double[0];
 		try {
-			ops.op("test.adaptMissingDep").arity1().input(d).outType(Double[].class)
-				.apply();
+			ops.op("test.adaptMissingDep").input(d).outType(Double[].class).apply();
 			Assertions.fail("Expected DependencyMatchingException");
 		}
 		catch (DependencyMatchingException e) {

@@ -63,8 +63,7 @@ public class ParallelComputation {
 		// - it's not terribly complex, but we could do much more
 		Function<Double, Img<UnsignedByteType>> fillImage = fillValue -> {
 			// create a new image of the same size as our data
-			var output = ops.op("create.img").arity1().input(data).outType(outNil)
-				.apply();
+			var output = ops.op("create.img").input(data).outType(outNil).apply();
 			// fill it with the fill value
 			LoopBuilder.setImages(output).forEachPixel(pixel -> pixel.setReal(
 				fillValue));

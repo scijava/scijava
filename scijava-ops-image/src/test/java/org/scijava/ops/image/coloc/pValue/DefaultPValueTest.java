@@ -101,8 +101,8 @@ public class DefaultPValueTest extends AbstractColocalisationTest {
 				{}.getType());
 
 		PValueResult output = new PValueResult();
-		ops.op("coloc.pValue").arity4().input(ch1, ch1, wrapped, result.length - 1)
-			.output(output).compute();
+		ops.op("coloc.pValue").input(ch1, ch1, wrapped, result.length - 1).output(
+			output).compute();
 		Double actualPValue = output.getPValue();
 		Double actualColocValue = output.getColocValue();
 		double[] actualColocValuesArray = output.getColocValuesArray();

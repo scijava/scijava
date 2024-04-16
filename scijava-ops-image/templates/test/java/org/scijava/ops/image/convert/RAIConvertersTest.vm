@@ -33,7 +33,7 @@ public class RAIConvertersTest extends AbstractOpTest {
 	public void testConvert${toType}Image() {
 		var out = ArrayImgs.doubles(1, 1);
 		out.firstElement().set(0.0);
-		ops.op("test.convert.image.${toType}").arity0().output(out).compute();
+		ops.op("test.convert.image.${toType}").output(out).compute();
 		double expected = 1.0;
 		double actual = out.firstElement().get();
 		Assertions.assertEquals(expected, actual);

@@ -29,7 +29,7 @@ public class OpMethodTest extends AbstractTestEnvironment implements OpCollectio
 
 	@Test
 	public void testOpMethodProducer() {
-		final Integer out = ops.op("test.multiplyNumericStrings").arity0()
+		final Integer out = ops.op("test.multiplyNumericStrings")
 			.outType(Integer.class).create();
 		final Integer expected = Integer.valueOf(1);
 		assertEquals(expected, out);

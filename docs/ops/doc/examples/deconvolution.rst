@@ -81,14 +81,14 @@ SciJava Ops via Fiji's scripting engine with `script parameters`_:
 
         // create the synthetic PSF
         psf = ops.op("create.kernelDiffraction").input(psf_size,
-                                                                numericalAperture,
-                                                                wavelength,
-                                                                riSample,
-                                                                riImmersion,
-                                                                lateral_res,
-                                                                axial_res,
-                                                                pZ,
-                                                                new FloatType()).apply()
+                                                       numericalAperture,
+                                                       wavelength,
+                                                       riSample,
+                                                       riImmersion,
+                                                       lateral_res,
+                                                       axial_res,
+                                                       pZ,
+                                                       new FloatType()).apply()
 
         // deconvolve image
         result = ops.op("deconvolve.richardsonLucyTV").input(img_float, psf, new FloatType(), new ComplexFloatType(), iterations, false, false, regularizationFactor).apply()

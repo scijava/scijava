@@ -63,10 +63,12 @@ public abstract class AbstractYAMLOpInfoCreator implements YAMLOpInfoCreator {
 		final String version = yaml.get("version").toString();
 		// Parse names
 		final String[] names = parseNames(yaml, identifier);
+		final String description = yaml.get("description").toString();
 		// Create the OpInfo
 		OpInfo info;
 		try {
-			info = create(srcString, names, parsePriority(yaml), version, yaml);
+			info = create(srcString, names, description, parsePriority(yaml), version,
+				yaml);
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
@@ -177,9 +179,14 @@ public abstract class AbstractYAMLOpInfoCreator implements YAMLOpInfoCreator {
 		return new RenamedMember<>(member, name, desc);
 	}
 
-	protected abstract OpInfo create(final String identifier,
-		final String[] names, final double priority, final String version,
-		Map<String, Object> yaml) throws Exception;
+	protected abstract OpInfo create( //
+		final String identifier, //
+		final String[] names, //
+		final String description, //
+		final double priority, //
+		final String version, //
+		Map<String, Object> yaml //
+	) throws Exception;
 
 	private static class RenamedMember<T> implements Member<T> {
 

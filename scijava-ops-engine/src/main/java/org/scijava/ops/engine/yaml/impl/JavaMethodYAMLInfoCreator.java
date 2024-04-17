@@ -58,8 +58,8 @@ public class JavaMethodYAMLInfoCreator extends AbstractYAMLOpInfoCreator {
 	}
 
 	@Override
-	protected OpInfo create(String identifier, String[] names, double priority,
-		String version, Map<String, Object> yaml) throws Exception
+	protected OpInfo create(String identifier, String[] names, String description,
+		double priority, String version, Map<String, Object> yaml) throws Exception
 	{
 		// first, remove generics
 		String rawIdentifier = sanitizeGenerics(identifier);
@@ -84,7 +84,15 @@ public class JavaMethodYAMLInfoCreator extends AbstractYAMLOpInfoCreator {
 		String typeString = (String) tags.getOrDefault("type", "");
 		opType = deriveOpType(identifier, typeString, method);
 
-		return new OpMethodInfo(method, opType, new Hints(), priority, names);
+		return new OpMethodInfo( //
+			method, //
+			opType, //
+			version, //
+			description, //
+			new Hints(), //
+			priority, //
+			names //
+		);
 	}
 
 	private Class<?> deriveOpType(String identifier, String typeString,

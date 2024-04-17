@@ -54,8 +54,14 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testOpClassDescription() {
-		OpClassInfo info = new OpClassInfo(ClassOp.class, new Hints(),
-			"test.classDescription");
+		OpClassInfo info = new OpClassInfo( //
+			ClassOp.class, //
+			"1.0", //
+			"", //
+			new Hints(), //
+			1.0, //
+			"test.classDescription" //
+		);
 
 		String expected =
 			"org.scijava.ops.engine.matcher.impl.OpDescriptionTest$ClassOp\n\t" //
@@ -74,8 +80,15 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 	public void testOpMethodDescription() throws NoSuchMethodException {
 		Method method = OpDescriptionTest.class.getMethod("methodOp", Double.class,
 			Double.class);
-		OpMethodInfo info = new OpMethodInfo(method, BiFunction.class, new Hints(),
-			"test.methodDescription");
+		OpMethodInfo info = new OpMethodInfo( //
+			method, //
+			BiFunction.class, //
+			"1.0", //
+			"", //
+			new Hints(), //
+			1.0, //
+			"test.methodDescription" //
+		);
 		String expected =
 			"org.scijava.ops.engine.matcher.impl.OpDescriptionTest.methodOp(java.lang.Double,java.lang.Double)\n\t" //
 				+ "> input1 : java.lang.Double\n\t" //
@@ -90,8 +103,15 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 	@Test
 	public void testOpFieldDescription() throws NoSuchFieldException {
 		Field field = OpDescriptionTest.class.getDeclaredField("fieldOp");
-		OpFieldInfo info = new OpFieldInfo(this, field, new Hints(),
-			"test.fieldDescription");
+		OpFieldInfo info = new OpFieldInfo( //
+			this, //
+			field, //
+			"", //
+			"", //
+			new Hints(), //
+			1.0, //
+			"test.fieldDescription" //
+		);
 		String expected =
 			"org.scijava.ops.engine.matcher.impl.OpDescriptionTest$fieldOp\n\t" //
 				+ "> input1 : java.lang.Double\n\t" //
@@ -103,8 +123,14 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testReducedDescription() {
-		OpClassInfo info = new OpClassInfo(ClassOp.class, new Hints(),
-			"test.reductionDescription");
+		OpClassInfo info = new OpClassInfo( //
+			ClassOp.class, //
+			"1.0", //
+			"", //
+			new Hints(), //
+			1.0, //
+			"test.reductionDescription" //
+		);
 
 		Type opType = Types.parameterize(Function.class, new Type[] { Double.class,
 			Double.class });

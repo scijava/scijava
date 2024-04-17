@@ -46,6 +46,13 @@ public @interface OpField {
 
 	String names();
 
+	/**
+	 * Returns a description of the Op's behavior.
+	 *
+	 * @return a description of the Op
+	 */
+	String description() default "";
+
 	// the names of the parameters (inputs and outputs) that will appear in a call
 	// to help().
 	// TODO: add default names support in OpFieldInfo

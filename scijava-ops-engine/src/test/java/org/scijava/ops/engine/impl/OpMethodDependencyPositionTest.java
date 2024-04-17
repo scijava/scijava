@@ -65,12 +65,15 @@ public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
 			List.class, //
 			List.class //
 		);
-		var info = new OpMethodInfo( //
+		// The below call should not throw an Exception
+		Assertions.assertDoesNotThrow(() -> new OpMethodInfo( //
 			m, //
 			Computers.Arity1.class, //
-			new Hints(), //
+			"1.0", //
+			"", new Hints(), //
+			1.0, //
 			"test.dependencyBeforeInput" //
-		);
+		));
 	}
 
 	public static void badDep( //
@@ -126,7 +129,10 @@ public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
 			() -> new OpMethodInfo( //
 				m, //
 				arity, //
+				"1.0", //
+				"", //
 				new Hints(), //
+				1.0, //
 				names));
 	}
 }

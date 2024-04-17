@@ -42,9 +42,7 @@ import org.scijava.ops.engine.conversionLoss.impl.PrimitiveLossReporters;
 import org.scijava.ops.engine.copy.CopyOpCollection;
 import org.scijava.ops.engine.create.CreateOpCollection;
 import org.scijava.ops.engine.matcher.impl.LossReporterWrapper;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
-import org.scijava.ops.spi.OpMethod;
+import org.scijava.ops.spi.*;
 
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -75,7 +73,8 @@ public class ConversionTest extends AbstractTestEnvironment implements
 			new PrimitiveConverters<>(), //
 			new PrimitiveLossReporters(), //
 			new ConversionTest(), //
-			new UtilityConverters() //
+			new UtilityConverters(), //
+			new DivOp() //
 		);
 	}
 
@@ -232,6 +231,32 @@ public class ConversionTest extends AbstractTestEnvironment implements
 			.inType(Double.class, Double.class) //
 			.outType(Number.class) //
 			.function();
+	}
+
+	private static final String TEST_DESC = "This Op will be converted";
+
+	@OpClass(names = "math.div", description = TEST_DESC)
+	private static class DivOp implements BiFunction<Integer, Integer, Integer>,
+		Op
+	{
+
+		@Override
+		public Integer apply(Integer i1, Integer i2) {
+			return i1 / i2;
+		}
+	}
+
+	/**
+	 * Tests that {@link ConvertedOpInfo#description()} returns the source
+	 * {@link OpInfo} description
+	 */
+	@Test
+	public void testConversionDescription() {
+		var op = ops.op("math.div").input(5.0, 2.0).function();
+		var info = Ops.info(op);
+		Assertions.assertInstanceOf(ConvertedOpInfo.class, info);
+		Assertions.assertEquals(TEST_DESC, info.description());
+		Assertions.assertTrue(info.toString().contains(TEST_DESC));
 	}
 
 }

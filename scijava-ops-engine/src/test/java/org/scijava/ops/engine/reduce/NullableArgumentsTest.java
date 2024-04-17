@@ -35,14 +35,17 @@ import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Container;
 import org.scijava.function.Functions;
+import org.scijava.ops.api.Ops;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.describe.BaseDescriptors;
+import org.scijava.ops.engine.matcher.reduce.ReducedOpInfo;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpMethod;
 
 import java.util.Arrays;
+import java.util.function.BiFunction;
 
 public class NullableArgumentsTest extends AbstractTestEnvironment //
 	implements OpCollection
@@ -217,5 +220,27 @@ public class NullableArgumentsTest extends AbstractTestEnvironment //
 		var expected = PERMUTED_NAME +
 			":\n\t- (number[], number[] = null, @CONTAINER number[], number[] = null) -> None";
 		Assertions.assertEquals(expected, ops.op("test.nullableOr").help());
+	}
+
+	private static final String TEST_DESC = "This Op should be reduced";
+
+	@OpMethod( //
+		names = "math.sub", //
+		type = BiFunction.class, //
+		description = TEST_DESC //
+	)
+	public static Double nullableFunction(Double in1, @Nullable Double in2) {
+		if (in2 == null) return in1;
+		return in1 - in2;
+	}
+
+	@Test
+	public void testToString() {
+		// Add in a couple Ops needed for conversion
+		var op = ops.op("math.sub").input(1.0).function();
+		var info = Ops.info(op);
+		Assertions.assertInstanceOf(ReducedOpInfo.class, info);
+		Assertions.assertEquals(TEST_DESC, info.description());
+		Assertions.assertTrue(info.toString().contains(TEST_DESC));
 	}
 }

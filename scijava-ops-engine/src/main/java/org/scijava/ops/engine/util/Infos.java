@@ -29,6 +29,15 @@
 
 package org.scijava.ops.engine.util;
 
+import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.engine.OpDependencyMember;
+import org.scijava.ops.engine.exceptions.impl.InvalidOpNameException;
+import org.scijava.ops.engine.exceptions.impl.MultipleOutputsOpException;
+import org.scijava.ops.engine.exceptions.impl.UnnamedOpException;
+import org.scijava.struct.ItemIO;
+import org.scijava.struct.Member;
+import org.scijava.types.Types;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -36,22 +45,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpMatchingException;
-import org.scijava.ops.engine.BaseOpHints;
-import org.scijava.ops.engine.OpDependencyMember;
-import org.scijava.ops.engine.exceptions.impl.InvalidOpNameException;
-import org.scijava.ops.engine.exceptions.impl.MultipleOutputsOpException;
-import org.scijava.ops.engine.exceptions.impl.UnnamedOpException;
-import org.scijava.struct.ItemIO;
-import org.scijava.struct.Member;
-import org.scijava.types.Nil;
-import org.scijava.types.Types;
 
 /**
  * Utility methods for working with {@link OpInfo}s.
@@ -151,7 +145,13 @@ public final class Infos {
 	 */
 	public static String describe(final OpInfo info) {
 		final StringBuilder sb = new StringBuilder(info.implementationName());
-		// Step 2: Inputs
+		// Step 2: Description (if present)
+		if (!info.description().isEmpty()) {
+			var desc = info.description().replaceAll("\n", "\n\t");
+			sb.append("\n\t").append(desc).append("\n");
+		}
+
+		// Step 3: Inputs
 		for (var member : info.inputs()) {
 			sb.append("\n\t");
 			sb.append("> ").append(member.getKey()) //
@@ -170,7 +170,7 @@ public final class Infos {
 					"\n\t\t"));
 			}
 		}
-		// Step 3: Output
+		// Step 4: Output
 		Member<?> output = info.output();
 		if (output.getIOType() == ItemIO.OUTPUT) {
 			sb.append("\n\tReturns : ").append(typeString(output.getType(), true));

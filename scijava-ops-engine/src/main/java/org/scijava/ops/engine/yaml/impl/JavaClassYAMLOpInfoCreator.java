@@ -53,12 +53,13 @@ public class JavaClassYAMLOpInfoCreator extends AbstractYAMLOpInfoCreator {
 
 	@Override
 	protected OpInfo create(final String identifier, final String[] names,
-		final double priority, String version, Map<String, Object> yaml)
-		throws Exception
+		final String description, final double priority, String version,
+		Map<String, Object> yaml) throws Exception
 	{
 		// parse class
 		Class<?> src = Classes.load(identifier);
 		// Create the OpInfo
-		return new OpClassInfo(src, version, new Hints(), priority, names);
+		return new OpClassInfo(src, version, description, new Hints(), priority,
+			names);
 	}
 }

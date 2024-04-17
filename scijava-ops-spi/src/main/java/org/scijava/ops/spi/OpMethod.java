@@ -43,6 +43,13 @@ public @interface OpMethod {
 
 	String names();
 
+	/**
+	 * Returns a description of the Op's behavior.
+	 *
+	 * @return a description of the Op
+	 */
+	String description() default "";
+
 	Class<?> type();
 
 	/**

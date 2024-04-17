@@ -86,6 +86,11 @@ public class OpAdaptationInfo implements OpInfo {
 	}
 
 	@Override
+	public String description() {
+		return srcInfo.description();
+	}
+
+	@Override
 	public List<String> names() {
 		return srcInfo.names();
 	}

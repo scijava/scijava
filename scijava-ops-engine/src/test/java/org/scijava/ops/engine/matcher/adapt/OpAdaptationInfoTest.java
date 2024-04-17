@@ -37,6 +37,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.Ops;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.adapt.functional.FunctionsToComputers;
 import org.scijava.ops.engine.copy.CopyOpCollection;
@@ -56,17 +57,15 @@ public class OpAdaptationInfoTest extends AbstractTestEnvironment implements
 		ops.register(new FunctionsToComputers.Function2ToComputer2<>());
 	}
 
-	@OpMethod(names = "test.adaptationDescription", type = BiFunction.class)
+	private static final String TEST_DESC = "This is an Op that is being adapted";
+
+	@OpMethod( //
+		names = "test.adaptationDescription", //
+		type = BiFunction.class, //
+		description = TEST_DESC //
+	)
 	public static double[] adaptableOp(final Double t, final Double u) {
 		return new double[] { t, u };
-	}
-
-	static class ClassOp implements BiFunction<Double, Double, Double> {
-
-		@Override
-		public Double apply(Double t, Double u) {
-			return t + u;
-		}
 	}
 
 	@Test
@@ -76,10 +75,14 @@ public class OpAdaptationInfoTest extends AbstractTestEnvironment implements
 			.inType(Double.class, Double.class) //
 			.outType(double[].class) //
 			.computer();
+		var info = Ops.info(adapted);
+		Assertions.assertInstanceOf(OpAdaptationInfo.class, info);
+		Assertions.assertEquals(TEST_DESC, info.description());
 		String expected =
 			"org.scijava.ops.engine.matcher.adapt.OpAdaptationInfoTest.adaptableOp(java.lang.Double,java.lang.Double)\n\t" +
 				"Adaptor: org.scijava.ops.engine.adapt.functional.FunctionsToComputers$Function2ToComputer2\n\t\t" +
 				"Depends upon: org.scijava.ops.engine.copy.CopyOpCollection$copyDoubleArray\n\t" //
+				+ TEST_DESC + "\n\n\t" //
 				+ "> input1 : java.lang.Double\n\t" //
 				+ "> input2 : java.lang.Double\n\t" //
 				+ "> output1 : @CONTAINER double[]";

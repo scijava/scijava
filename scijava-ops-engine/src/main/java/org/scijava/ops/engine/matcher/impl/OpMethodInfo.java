@@ -29,16 +29,6 @@
 
 package org.scijava.ops.engine.matcher.impl;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.List;
-
-import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.exceptions.impl.InstanceOpMethodException;
@@ -50,12 +40,20 @@ import org.scijava.ops.engine.util.Infos;
 import org.scijava.ops.engine.util.Lambdas;
 import org.scijava.ops.engine.util.internal.OpMethodUtils;
 import org.scijava.ops.spi.OpMethod;
-import org.scijava.priority.Priority;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
 import org.scijava.types.Types;
+
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Marcel Wiedenmann
@@ -63,6 +61,7 @@ import org.scijava.types.Types;
 public class OpMethodInfo implements OpInfo {
 
 	private final Method method;
+	private final String description;
 	private final String version;
 	private final List<String> names;
 	private final Type opType;
@@ -71,32 +70,18 @@ public class OpMethodInfo implements OpInfo {
 
 	private final Hints hints;
 
-	public OpMethodInfo(final Method method, final Class<?> opType,
-		final Hints hints, final String... names)
-	{
-		this(method, opType, Versions.getVersion(method.getDeclaringClass()), hints,
-			Priority.NORMAL, names);
-	}
-
-	public OpMethodInfo(final Method method, final Class<?> opType,
-		final Hints hints, final double priority, final String... names)
-	{
-		this(method, opType, Versions.getVersion(method.getDeclaringClass()), hints,
-			priority, names);
-	}
-
-	public OpMethodInfo(final Method method, final Class<?> opType,
-		final String version, final Hints hints, final String... names)
-	{
-		this(method, opType, version, hints, Priority.NORMAL, names);
-	}
-
-	public OpMethodInfo(final Method method, final Class<?> opType,
-		final String version, final Hints hints, final double priority,
-		final String... names)
-	{
+	public OpMethodInfo( //
+		final Method method, //
+		final Class<?> opType, //
+		final String version, //
+		final String description, //
+		final Hints hints, //
+		final double priority, //
+		final String... names //
+	) {
 		this.method = method;
 		this.version = version;
+		this.description = description;
 		this.names = Arrays.asList(names);
 		this.hints = hints;
 		this.priority = priority;
@@ -140,6 +125,11 @@ public class OpMethodInfo implements OpInfo {
 	@Override
 	public List<String> names() {
 		return names;
+	}
+
+	@Override
+	public String description() {
+		return description;
 	}
 
 	@Override

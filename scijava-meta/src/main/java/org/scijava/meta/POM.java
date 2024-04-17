@@ -33,10 +33,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -229,6 +226,11 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 	}
 
 	/**
+	 * internal cache used for calls to {@link #getPOM(Class, String, String)}
+	 */
+	private static final Map<URL, POM> POMS = new HashMap<>();
+
+	/**
 	 * Gets the Maven POM associated with the given class.
 	 *
 	 * @param c The class to use as a base when searching for a pom.xml.
@@ -240,8 +242,30 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 	public static POM getPOM(final Class<?> c, final String groupId,
 		final String artifactId)
 	{
+		final URL location = Classes.location(c);
+		return POMS.computeIfAbsent( //
+			location, //
+			l -> findPOM(l, groupId, artifactId) //
+		);
+	}
+
+	/**
+	 * Gets the Maven POM associated with the given class, always returning a new
+	 * {@link POM} object.
+	 *
+	 * @param location The {@link URL} to use as a base when searching for a
+	 *          pom.xml.
+	 * @param groupId The Maven groupId of the desired POM.
+	 * @param artifactId The Maven artifactId of the desired POM.
+	 * @return {@link POM} object representing the discovered POM, or null if no
+	 *         POM could be found.
+	 * @see #getPOM(Class, String, String), which does the same thing, but with an
+	 *      internal cache that makes repeated calls trivial
+	 */
+	private static POM findPOM(final URL location, final String groupId,
+		final String artifactId)
+	{
 		try {
-			final URL location = Classes.location(c);
 			if (!location.getProtocol().equals("file") || location.toString()
 				.endsWith(".jar"))
 			{
@@ -249,7 +273,7 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 				if (groupId == null || artifactId == null) {
 					// groupId and/or artifactId is unknown; scan for the POM
 					final URL pomBase = new URL("jar:" + //
-						location.toString() + "!/META-INF/maven");
+						location + "!/META-INF/maven");
 					for (final URL url : URLs.listContents(pomBase, true, true)) {
 						if (url.toExternalForm().endsWith("/pom.xml")) {
 							return new POM(url);

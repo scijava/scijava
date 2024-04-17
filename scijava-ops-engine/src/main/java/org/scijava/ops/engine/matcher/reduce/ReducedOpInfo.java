@@ -164,6 +164,11 @@ public class ReducedOpInfo implements OpInfo {
 	}
 
 	@Override
+	public String description() {
+		return srcInfo.description();
+	}
+
+	@Override
 	public double priority() {
 		return srcInfo.priority();
 	}

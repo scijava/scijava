@@ -29,14 +29,6 @@
 
 package org.scijava.ops.engine.matcher.impl;
 
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.List;
-
-import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.exceptions.impl.PrivateOpException;
@@ -44,11 +36,17 @@ import org.scijava.ops.engine.struct.FieldInstance;
 import org.scijava.ops.engine.struct.FieldParameterMemberParser;
 import org.scijava.ops.engine.util.Infos;
 import org.scijava.ops.spi.OpField;
-import org.scijava.priority.Priority;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
 import org.scijava.types.Types;
+
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Metadata about an Op implementation defined as a field.
@@ -60,38 +58,25 @@ public class OpFieldInfo implements OpInfo {
 	private final Object instance;
 	private final Field field;
 	private final String version;
+	private final String description;
 	private final List<String> names;
 	private final double priority;
 
-	private Struct struct;
+	private final Struct struct;
 	private final Hints hints;
 
-	public OpFieldInfo(final Object instance, final Field field,
-		final Hints hints, final String... names)
-	{
-		this(instance, field, Versions.getVersion(field.getDeclaringClass()), hints,
-			Priority.NORMAL, names);
-	}
-
-	public OpFieldInfo(final Object instance, final Field field,
-		final Hints hints, final double priority, final String... names)
-	{
-		this(instance, field, Versions.getVersion(field.getDeclaringClass()), hints,
-			priority, names);
-	}
-
-	public OpFieldInfo(final Object instance, final Field field,
-		final String version, final Hints hints, final String... names)
-	{
-		this(instance, field, version, hints, Priority.NORMAL, names);
-	}
-
-	public OpFieldInfo(final Object instance, final Field field,
-		final String version, final Hints hints, final double priority,
-		final String... names)
-	{
+	public OpFieldInfo( //
+		final Object instance, //
+		final Field field, //
+		final String version, //
+		final String description, //
+		final Hints hints, //
+		final double priority, //
+		final String... names //
+	) {
 		this.instance = instance;
 		this.version = version;
+		this.description = description;
 		this.field = field;
 		this.names = Arrays.asList(names);
 		this.priority = priority;
@@ -130,6 +115,11 @@ public class OpFieldInfo implements OpInfo {
 	@Override
 	public List<String> names() {
 		return names;
+	}
+
+	@Override
+	public String description() {
+		return description;
 	}
 
 	@Override

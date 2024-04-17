@@ -199,6 +199,11 @@ public class ConvertedOpInfo implements OpInfo {
 	}
 
 	@Override
+	public String description() {
+		return srcInfo().description();
+	}
+
+	@Override
 	public Type opType() {
 		return opType;
 	}

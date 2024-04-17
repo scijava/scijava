@@ -34,12 +34,14 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
+import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.describe.BaseDescriptors;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -114,6 +116,29 @@ public class DefaultOpDescriptionGeneratorTest extends AbstractTestEnvironment
 		// Finally test that with no inputs we don't get any of the Ops
 		actual = ops.op("test.coalesceDescription").output(null).help();
 		expected = "No Ops found matching this request.";
+		Assertions.assertEquals(expected, actual);
+	}
+
+	private static final String TEST_DESC = "Adds two integers";
+
+	@OpField(names = "math.add", description = TEST_DESC)
+	public final BiFunction<Integer, Integer, Integer> functionAdder = //
+		Integer::sum;
+
+	/**
+	 * Tests that, when an {@link OpInfo} provides a description, it is included
+	 * in the description. The double usage of descriptions is definitely
+	 * confusing!
+	 */
+	@Test
+	public void testDescriptionWithDescription() {
+		String actual = ops.op("math.add").helpVerbose();
+		String expected = "math.add:\n" +
+			"\t- org.scijava.ops.engine.impl.DefaultOpDescriptionGeneratorTest$functionAdder\n" +
+			"\t\t" + TEST_DESC + "\n" + "\t\n" +
+			"\t\t> input1 : java.lang.Integer\n" +
+			"\t\t> input2 : java.lang.Integer\n" + "\t\tReturns : java.lang.Integer";
+		// Assert that helpVerbose shows the description as a part of the result.
 		Assertions.assertEquals(expected, actual);
 	}
 

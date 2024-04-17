@@ -96,23 +96,28 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 	{
 		final boolean isStatic = Modifier.isStatic(field.getModifiers());
 		OpField annotation = field.getAnnotation(OpField.class);
-		String unparsedOpNames = annotation.names();
-		String[] parsedOpNames = Infos.parseNames(unparsedOpNames);
-		double priority = annotation.priority();
-		Hints hints = formHints(field.getAnnotation(OpHints.class));
-		return new OpFieldInfo(isStatic ? null : instance, field, version, hints,
-			priority, parsedOpNames);
+		return new OpFieldInfo( //
+			isStatic ? null : instance, //
+			field, //
+			version, //
+			annotation.description(), //
+			formHints(field.getAnnotation(OpHints.class)), //
+			annotation.priority(), //
+			Infos.parseNames(annotation.names()) //
+		);
 	}
 
 	private OpMethodInfo generateMethodInfo(Method method, String version) {
 		OpMethod annotation = method.getAnnotation(OpMethod.class);
-		Class<?> opType = annotation.type();
-		String unparsedOpNames = annotation.names();
-		String[] parsedOpNames = Infos.parseNames(unparsedOpNames);
-		Hints hints = formHints(method.getAnnotation(OpHints.class));
-		double priority = annotation.priority();
-		return new OpMethodInfo(method, opType, version, hints, priority,
-			parsedOpNames);
+		return new OpMethodInfo( //
+			method, //
+			annotation.type(), //
+			version, //
+			annotation.description(), //
+			formHints(method.getAnnotation(OpHints.class)), //
+			annotation.priority(), //
+			Infos.parseNames(annotation.names()) //
+		);
 	}
 
 	@Override

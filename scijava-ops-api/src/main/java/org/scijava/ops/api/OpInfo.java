@@ -29,14 +29,14 @@
 
 package org.scijava.ops.api;
 
+import org.scijava.struct.Member;
+import org.scijava.struct.Struct;
+import org.scijava.struct.StructInstance;
+
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.scijava.struct.Member;
-import org.scijava.struct.Struct;
-import org.scijava.struct.StructInstance;
 
 /**
  * Metadata about an Op implementation.
@@ -130,4 +130,9 @@ public interface OpInfo extends Comparable<OpInfo> {
 
 	/** A unique identifier for an Op */
 	String id();
+
+	/** A description of the Op's behavior */
+	default String description() {
+		return "";
+	}
 }

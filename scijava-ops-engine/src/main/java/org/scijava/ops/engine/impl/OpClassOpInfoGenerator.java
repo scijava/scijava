@@ -29,19 +29,18 @@
 
 package org.scijava.ops.engine.impl;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.Ops;
 import org.scijava.ops.engine.OpInfoGenerator;
 import org.scijava.ops.engine.matcher.impl.OpClassInfo;
 import org.scijava.ops.engine.util.Infos;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
 import org.scijava.ops.spi.OpHints;
+
+import java.util.Collections;
+import java.util.List;
 
 public class OpClassOpInfoGenerator implements OpInfoGenerator {
 
@@ -53,13 +52,14 @@ public class OpClassOpInfoGenerator implements OpInfoGenerator {
 	protected List<OpInfo> processClass(Class<?> c) {
 		OpClass p = c.getAnnotation(OpClass.class);
 		if (p == null) return Collections.emptyList();
-
-		String[] parsedOpNames = Infos.parseNames(p.names());
-		String version = Versions.getVersion(c);
-		Hints hints = formHints(c.getAnnotation(OpHints.class));
-		double priority = p.priority();
-		return Collections.singletonList(new OpClassInfo(c, version, hints,
-			priority, parsedOpNames));
+		return Collections.singletonList(new OpClassInfo( //
+			c, //
+			Versions.getVersion(c), //
+			p.description(), //
+			formHints(c.getAnnotation(OpHints.class)), //
+			p.priority(), //
+			Infos.parseNames(p.names()) //
+		));
 	}
 
 	@Override

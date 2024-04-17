@@ -262,8 +262,14 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	public OpInfo opify(final Class<?> opClass, final double priority,
 		String... names)
 	{
-		return new OpClassInfo(opClass, Versions.getVersion(opClass), new Hints(),
-			priority, names);
+		return new OpClassInfo( //
+			opClass, //
+			Versions.getVersion(opClass), //
+			"", //
+			new Hints(), //
+			priority, //
+			names //
+		);
 	}
 
 	@Override

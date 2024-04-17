@@ -52,7 +52,9 @@ public class OpFieldInfoTest implements OpCollection {
 				this, //
 				field, //
 				Versions.getVersion(this.getClass()), //
+				"", //
 				new Hints(), //
+				1.0, //
 				"foo" //
 			));
 	}
@@ -67,7 +69,9 @@ public class OpFieldInfoTest implements OpCollection {
 				this, //
 				field, //
 				Versions.getVersion(this.getClass()), //
+				"", //
 				new Hints(), //
+				1.0, //
 				"bar" //
 			));
 	}

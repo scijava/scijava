@@ -32,6 +32,7 @@ package org.scijava.ops.engine.reduce;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.exceptions.InvalidOpException;
@@ -148,7 +149,10 @@ public class NullableArgumentsFromIFaceTest extends AbstractTestEnvironment
 			() -> new OpMethodInfo(//
 				m, //
 				BiFunctionWithNullable.class, //
+				"1.0", //
+				"", //
 				new Hints(), //
+				1.0, //
 				"test.optionalOnIFaceAndOp" //
 			));
 	}
@@ -177,7 +181,10 @@ public class NullableArgumentsFromIFaceTest extends AbstractTestEnvironment
 			() -> new OpFieldInfo(//
 				this, //
 				f, //
+				Versions.getVersion(this.getClass()), //
+				"This is an invalid OpFieldInfo", //
 				new Hints(), //
+				1.0, //
 				"test.optionalOnIFaceAndOp" //
 			));
 	}

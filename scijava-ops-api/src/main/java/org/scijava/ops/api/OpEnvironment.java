@@ -161,41 +161,6 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	<T> T op(final String opName, final Nil<T> specialType,
 		final Nil<?>[] inTypes, final Nil<?> outType, Hints hints);
 
-	/**
-	 * Returns an {@link InfoTree} fitting the provided arguments. NB
-	 * implementations of this method likely depend on the {@link Hints} set by
-	 * {@link OpEnvironment#setDefaultHints(Hints)}, which provides no guarantee
-	 * of thread-safety. Users interested in parallel Op matching should consider
-	 * using {@link OpEnvironment#op(String, Nil, Nil[], Nil, Hints)} instead.
-	 *
-	 * @param opName the name of the Op
-	 * @param specialType the generic {@link Type} of the Op
-	 * @param inTypes the arguments (inputs) to the Op
-	 * @param outType the return of the Op (note that it may also be an argument)
-	 * @return an instance of an Op aligning with the search parameters
-	 */
-	default InfoTree infoTree( //
-		final String opName, //
-		final Nil<?> specialType, //
-		final Nil<?>[] inTypes, //
-		final Nil<?> outType //
-	) {
-		return infoTree(opName, specialType, inTypes, outType, getDefaultHints());
-	}
-
-	/**
-	 * Returns an {@link InfoTree} fitting the provided arguments.
-	 *
-	 * @param opName the name of the Op
-	 * @param specialType the generic {@link Type} of the Op
-	 * @param inTypes the arguments (inputs) to the Op
-	 * @param outType the return of the Op (note that it may also be an argument)
-	 * @param hints the {@link Hints} that should guide this matching call
-	 * @return an instance of an Op aligning with the search parameters
-	 */
-	InfoTree infoTree(final String opName, final Nil<?> specialType,
-		final Nil<?>[] inTypes, final Nil<?> outType, Hints hints);
-
 	default <T> T opFromInfoChain(InfoTree tree, Nil<T> specialType) {
 		return opFromInfoChain(tree, specialType, getDefaultHints());
 	}

@@ -42,14 +42,9 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.InfoTree;
-import org.scijava.ops.api.OpMatchingException;
+import org.scijava.ops.api.*;
 import org.scijava.ops.engine.*;
 import org.scijava.ops.engine.OpCandidate.StatusCode;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpRequest;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.engine.matcher.impl.DefaultOpRequest;
@@ -140,8 +135,12 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 						Nil<?>[] args = Arrays.stream(request.getArgs()).map(Nil::of)
 							.toArray(Nil[]::new);
 						Nil<?> outType = Nil.of(request.getOutType());
-						return env.infoTree(request.getName(), type, args, outType,
+						var op = env.op(request.getName(), type, args, outType,
 							adaptationHints);
+						// NB the dependency is interested in the INFOTREE of the match,
+						// not the Op itself. We want to instantiate the dependencies
+						// separately, so they can e.g. operate silently.
+						return Ops.infoTree(op);
 					}).collect(Collectors.toList());
 				// And return the Adaptor, wrapped up into an OpCandidate
 				Type adapterOpType = Types.substituteTypeVariables(adaptor.output()

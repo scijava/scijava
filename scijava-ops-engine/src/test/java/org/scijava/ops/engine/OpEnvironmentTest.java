@@ -122,7 +122,7 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 		OpEnvironment helpEnv = makeHelpEnv("help.verbose1", "help.verbose2");
 		// Finally assert a message is thrown when no Ops match
 		String descriptions = helpEnv.op("help.verbose1").input(null).helpVerbose();
-		String expected = "No Ops found matching this request.";
+		String expected = OpDescriptionGenerator.NO_OP_MATCHES;
 		Assertions.assertEquals(expected, descriptions);
 	}
 

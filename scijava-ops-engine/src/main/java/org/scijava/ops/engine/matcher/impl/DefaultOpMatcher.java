@@ -70,7 +70,8 @@ public class DefaultOpMatcher implements OpMatcher {
 			}
 		}
 
-		// in the case of no matches, throw an agglomerated exception
+		// in the case of no matches, throw an agglomerated exception to retain the
+		// full exception history
 		throw agglomeratedException(conditions.request(), exceptions, env);
 	}
 
@@ -79,10 +80,8 @@ public class DefaultOpMatcher implements OpMatcher {
 		final List<OpMatchingException> list, //
 		final OpEnvironment env //
 	) {
-		// Develop help message
-		var msg = "No match found! Perhaps you meant: \n" + env.helpVerbose(
-			request);
-		OpMatchingException agglomerated = new OpMatchingException(msg);
+		OpMatchingException agglomerated = new OpMatchingException(
+			"No match found");
 		list.forEach(agglomerated::addSuppressed);
 		return agglomerated;
 	}

@@ -378,9 +378,25 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	{
 		final OpRequest request = DefaultOpRequest.fromTypes(opName, specialType
 			.getType(), outType != null ? outType.getType() : null, toTypes(inTypes));
+
 		var conditions = MatchingConditions.from(request, hints);
-		OpInstance<T> instance = (OpInstance<T>) generateCacheHit(conditions);
-		return wrapOp(instance, conditions);
+		try {
+			OpInstance<T> instance = (OpInstance<T>) generateCacheHit(conditions);
+			return wrapOp(instance, conditions);
+		}
+		catch (OpMatchingException e) {
+			// Try and suggest close alternatives to the request
+			var msg = helpVerbose(request);
+			if (!msg.equals(OpDescriptionGenerator.NO_OP_MATCHES)) {
+				msg = "No matching Ops were found. Perhaps you meant one of these:\n" +
+					msg + "\n";
+			}
+			// Report the full exception trace for debugging purposes
+			log.debug("Op matching failed", e);
+			// Create a new exception with suggested Op text to avoid an overwhelming
+			// stack trace
+			throw new OpMatchingException(msg);
+		}
 	}
 
 	@SuppressWarnings("unchecked")

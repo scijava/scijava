@@ -39,6 +39,7 @@ import org.scijava.function.Computers;
 import org.scijava.ops.api.OpMatchingException;
 import org.scijava.ops.engine.DependencyMatchingException;
 import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.OpDescriptionGenerator;
 import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaFunction;
 import org.scijava.ops.engine.create.CreateOpCollection;
 import org.scijava.ops.spi.Op;
@@ -82,11 +83,9 @@ public class OpMatchingExceptionTest extends AbstractTestEnvironment implements
 			Assertions.fail();
 		}
 		catch (OpMatchingException e) {
-			Assertions.assertTrue(e.getMessage().startsWith("No match found!"));
-			Assertions.assertTrue(Arrays.stream(e.getSuppressed()).anyMatch(s -> s
-				.getMessage().startsWith("Multiple 'test.duplicateOp/" +
-					"java.util.function.Function<java.lang.Double, java.lang.Double>' " +
-					"ops of priority 0.0:")));
+			Assertions.assertTrue(e.getMessage().startsWith(
+				"Multiple ops of equal priority detected for request"));
+			Assertions.assertTrue(e.getMessage().contains("test.duplicateOp"));
 		}
 	}
 
@@ -102,7 +101,8 @@ public class OpMatchingExceptionTest extends AbstractTestEnvironment implements
 		}
 		catch (DependencyMatchingException e) {
 			String message = e.getMessage();
-			Assertions.assertTrue(message.contains("Name: \"test.nonexistingOp\""));
+			Assertions.assertTrue(message.contains(
+				"Name: \"test.missingDependencyOp\""));
 		}
 	}
 
@@ -118,9 +118,7 @@ public class OpMatchingExceptionTest extends AbstractTestEnvironment implements
 		}
 		catch (DependencyMatchingException e) {
 			String message = e.getMessage();
-			Assertions.assertTrue(message.contains(
-				"Name: \"test.missingDependencyOp\""));
-			Assertions.assertTrue(message.contains("Name: \"test.nonexistingOp\""));
+			Assertions.assertTrue(message.contains("Name: \"test.outsideOp\""));
 		}
 	}
 
@@ -137,8 +135,7 @@ public class OpMatchingExceptionTest extends AbstractTestEnvironment implements
 		}
 		catch (DependencyMatchingException e) {
 			String message = e.getMessage();
-			Assertions.assertTrue(message.contains("Adaptor:"));
-			Assertions.assertTrue(message.contains("Name: \"test.nonexistingOp\""));
+			Assertions.assertTrue(message.contains("Name: \"test.adaptMissingDep\""));
 
 		}
 	}

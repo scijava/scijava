@@ -136,8 +136,7 @@ public class DefaultOpDescriptionGeneratorTest extends AbstractTestEnvironment
 		String actual = ops.op("math.add").helpVerbose();
 		String expected = "math.add:\n" +
 			"\t- org.scijava.ops.engine.impl.DefaultOpDescriptionGeneratorTest$functionAdder\n" +
-			"\t\t" + TEST_DESC + "\n" + "\t\n" +
-			"\t\t> input1 : java.lang.Integer\n" +
+			"\t\t" + TEST_DESC + "\n" + "\t\t> input1 : java.lang.Integer\n" +
 			"\t\t> input2 : java.lang.Integer\n" + "\t\tReturns : java.lang.Integer";
 		// Assert that helpVerbose shows the description as a part of the result.
 		Assertions.assertEquals(expected, actual);

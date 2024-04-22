@@ -33,6 +33,7 @@ The combination of these libraries allows declarative image analysis workflows, 
    examples/example_gaussian_subtraction
    examples/opencv_denoise
    examples/example_flim_analysis
+   examples/scyjava
 
 .. toctree::
    :maxdepth: 2

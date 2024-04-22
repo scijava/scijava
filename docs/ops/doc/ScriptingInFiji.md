@@ -41,4 +41,4 @@ The below script can be pasted into the Script Editor. **Ensure that the Script 
 out = ops.op("filter.gauss").input(imgInput, new Double(3.0)).apply()
 ```
 
-Scripting in Fiji is a convenient gateway to accessing SciJava Ops. To see more, check out some examples, such as [image deconvolution](examples/deconvolution.rst) or [FLIM analysis](examples/example_flim_analysis.rst)! 
+Scripting in Fiji is a convenient gateway to accessing SciJava Ops. To see more, check out some examples, such as [image deconvolution](examples/deconvolution.rst) or [FLIM analysis](examples/flim_analysis.rst)! 

@@ -8,15 +8,19 @@ import plotly.io as io
 # It expects JMH benchmark results be dumped to a file "scijava-ops-benchmark_results.json", within its directory.
 
 # If you'd like to add a plotly chart, add an entry to the following list.
+
+A = "<b style=\"color:black\">[<b style=\"color:#009E73\">A</b>]</b>"
+C = "<b style=\"color:black\">[<b style=\"color:#E69F00\">C</b>]</b>"
+AC = "<b style=\"color:black\">[<b style=\"color:#CC79A7\">AC</b>]</b>"
 figures = [
     {
         "name": "BenchmarkMatching",
         "title": "Basic Op Matching Performance",
         "bars": {
             "noOps": "Static Method",
-            "noOpsAdapted": "Static Method [A]",
-            "sjOps": "Op Execution",
-            "sjOpsAdapted": "Op Execution [A]"
+            "noOpsAdapted": f"Static Method {A}",
+            "sjOps": "SciJava Ops",
+            "sjOpsAdapted": f"SciJava Ops {A}"
         }
     },
     {
@@ -24,18 +28,18 @@ figures = [
         "title": "Caching Effects on Op Matching Performance",
         "bars": {
             "noOps": "Static Method",
-            "sjOps": "Op Execution",
-            "sjOpsWithCache": "Op Execution (cached)"
+            "sjOps": "SciJava Ops",
+            "sjOpsWithCache": "SciJava Ops (cached)"
         }
     },
     {
         "name": "BenchmarkConversion",
         "title": "Parameter Conversion Performance",
         "bars": {
-            "noOpsConverted": "Static Method [C]",
-            "noOpsAdaptedAndConverted": "Static Method [A+C]",
-            "sjOpsConverted": "Op Execution [C]",
-            "sjOpsConvertedAndAdapted": "Op Execution [A+C]"
+            "noOpsConverted": f"Static Method {C}",
+            "noOpsAdaptedAndConverted": f"Static Method {AC}",
+            "sjOpsConverted": f"SciJava Ops {C}",
+            "sjOpsConvertedAndAdapted": f"SciJava Ops {AC}"
         }
     },
     {
@@ -52,14 +56,14 @@ figures = [
         "title": "Combined Performance Metrics",
         "bars": {
             "noOps": "Static Method",
-            "noOpsAdapted": "Static Method [A]",
-            "noOpsConverted": "Static Method [C]",
-            "noOpsAdaptedAndConverted": "Static Method [A+C]",
-            "sjOpsWithCache": "SciJava Ops (with caching)",
-            "sjOps": "SciJava Ops (no caching)",
-            "sjOpsAdapted": "SciJava Ops [A]",
-            "sjOpsConverted": "SciJava Ops [C]",
-            "sjOpsConvertedAndAdapted": "SciJava Ops [A+C]",
+            "noOpsAdapted": f"Static Method {A}",
+            "noOpsConverted": f"Static Method {C}",
+            "noOpsAdaptedAndConverted": f"Static Method {AC}",
+            "sjOpsWithCache": "SciJava Ops (cached)",
+            "sjOps": "SciJava Ops",
+            "sjOpsAdapted": f"SciJava Ops {A}",
+            "sjOpsConverted": f"SciJava Ops {C}",
+            "sjOpsConvertedAndAdapted": f"SciJava Ops {AC}",
             "ijOps": "ImageJ Ops",
         }
     }
@@ -74,8 +78,9 @@ results = {}
 for row in data:
     test = row["benchmark"].split(".")[-1]
     score = row["primaryMetric"]["score"]
-    error = row["primaryMetric"]["scoreError"]
-    results[test] = {"score": score, "error": error}
+    percentiles = row["primaryMetric"]["scorePercentiles"]
+    minmax = [percentiles["0.0"], percentiles["100.0"]]
+    results[test] = {"score": score, "minmax": minmax}
 
 # Build charts and dump them to JSON.
 for figure in figures:
@@ -85,6 +90,7 @@ for figure in figures:
     x = []
     y = []
     error_y = []
+    error_y_minus = []
 
     # Add each benchmark in the class
     for test, label in figure["bars"].items():
@@ -92,18 +98,19 @@ for figure in figures:
         result = results[test]
         x.append(label)
         y.append(result["score"])
-        error_y.append(result["error"])
+        error_y.append(result["minmax"][1] - result["score"])
+        error_y_minus.append(result["score"] - result["minmax"][0])
 
     # Create a bar chart
     fig = go.Figure()
     fig.add_bar(
         x=x,
         y=y,
-        error_y=dict(type='data', array=error_y),
+        error_y=dict(type='data', array=error_y, arrayminus=error_y_minus),
     )
     fig.update_layout(
-        title_text=figure["title"],
-        yaxis_title="Performance (us/op)"
+        title_text=figure["title"] + f"<br><sup style=\"color: gray\">{A}=Adaptation, {C}=Conversion, {AC}=Adaptation & Conversion</sup>",
+        yaxis_title="<b>Performance (&mu;s/execution)</b>"
     )
 
     # Convert to JSON and dump

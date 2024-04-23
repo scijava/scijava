@@ -10,6 +10,26 @@ the 3D volume of the nucleus by creating a mesh. Finally the input image, proces
 
 .. figure:: https://media.imagej.net/scijava-ops/1.0.0/scyjava_example_1.png
 
+
+To run this example, create a conda/mamba environment with the following ``environment.yml`` file:
+
+.. code-block:: yaml
+
+   name: scijava-ops
+   channels:
+        - conda-forge
+        - defaults
+   dependencies:
+        - scyjava
+        - imglyb
+        - tifffile
+        - matplotlib
+        - requests
+        - openjdk >= 17
+
+
+Activate the ``scijava-ops`` conda/mamba environment and run the following Python script:
+
 .. code-block:: python
 
     import io

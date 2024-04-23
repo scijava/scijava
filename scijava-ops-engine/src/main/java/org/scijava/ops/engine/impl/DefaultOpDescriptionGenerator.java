@@ -94,7 +94,7 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 			.map(s -> s.replaceAll("\n", "\n\t")) //
 			.distinct() //
 			.collect(Collectors.joining("\n\t- "));
-		if (opString.isEmpty()) return "No Ops found matching this request.";
+		if (opString.isEmpty()) return NO_OP_MATCHES;
 		return req.getName() + ":\n\t- " + opString;
 	}
 

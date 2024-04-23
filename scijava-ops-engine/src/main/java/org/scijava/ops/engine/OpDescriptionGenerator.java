@@ -44,6 +44,9 @@ public interface OpDescriptionGenerator extends
 	Prioritized<OpDescriptionGenerator>
 {
 
+	public static final String NO_OP_MATCHES =
+		"No Ops found matching this request.";
+
 	/**
 	 * Returns a {@link String} with a "simple" description for each Op in
 	 * {@code env} matching {@code request}.

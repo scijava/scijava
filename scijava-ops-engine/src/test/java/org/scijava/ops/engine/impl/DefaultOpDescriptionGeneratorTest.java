@@ -36,6 +36,7 @@ import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.OpDescriptionGenerator;
 import org.scijava.ops.engine.describe.BaseDescriptors;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
@@ -115,7 +116,7 @@ public class DefaultOpDescriptionGeneratorTest extends AbstractTestEnvironment
 		Assertions.assertEquals(expected, actual);
 		// Finally test that with no inputs we don't get any of the Ops
 		actual = ops.op("test.coalesceDescription").output(null).help();
-		expected = "No Ops found matching this request.";
+		expected = OpDescriptionGenerator.NO_OP_MATCHES;
 		Assertions.assertEquals(expected, actual);
 	}
 
@@ -135,8 +136,7 @@ public class DefaultOpDescriptionGeneratorTest extends AbstractTestEnvironment
 		String actual = ops.op("math.add").helpVerbose();
 		String expected = "math.add:\n" +
 			"\t- org.scijava.ops.engine.impl.DefaultOpDescriptionGeneratorTest$functionAdder\n" +
-			"\t\t" + TEST_DESC + "\n" + "\t\n" +
-			"\t\t> input1 : java.lang.Integer\n" +
+			"\t\t" + TEST_DESC + "\n" + "\t\t> input1 : java.lang.Integer\n" +
 			"\t\t> input2 : java.lang.Integer\n" + "\t\tReturns : java.lang.Integer";
 		// Assert that helpVerbose shows the description as a part of the result.
 		Assertions.assertEquals(expected, actual);

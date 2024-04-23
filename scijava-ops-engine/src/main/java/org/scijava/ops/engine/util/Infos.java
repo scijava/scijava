@@ -148,7 +148,11 @@ public final class Infos {
 		// Step 2: Description (if present)
 		if (!info.description().isEmpty()) {
 			var desc = info.description().replaceAll("\n", "\n\t");
-			sb.append("\n\t").append(desc).append("\n");
+			// Each input prepends \n\t so we don't want to end with newlines.
+			if (desc.endsWith("\n\t")) {
+				desc = desc.substring(0, desc.lastIndexOf("\n\t"));
+			}
+			sb.append("\n\t").append(desc);
 		}
 
 		// Step 3: Inputs

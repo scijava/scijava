@@ -378,9 +378,56 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	{
 		final OpRequest request = DefaultOpRequest.fromTypes(opName, specialType
 			.getType(), outType != null ? outType.getType() : null, toTypes(inTypes));
+
 		var conditions = MatchingConditions.from(request, hints);
-		OpInstance<T> instance = (OpInstance<T>) generateCacheHit(conditions);
-		return wrapOp(instance, conditions);
+		try {
+			OpInstance<T> instance = (OpInstance<T>) generateCacheHit(conditions);
+			return wrapOp(instance, conditions);
+		}
+		catch (OpMatchingException e) {
+			// Report the full exception trace for debugging purposes
+			log.debug("Op matching failed.", e);
+
+			var debugText = "See debugging output for full failure report.";
+
+			if (e instanceof DependencyMatchingException) {
+				// Preserve the specificity of the match but point to the original
+				// request instead of the dependency, and note the debug logging
+				throw new DependencyMatchingException(
+					"Error matching dependencies for request:\n\n" + request + "\n\n" +
+						debugText);
+			}
+
+			var failedRequest = "\n\n" + request + "\n\n";
+
+			// The directly suppressed exceptions will be from the individual matchers
+			// Check here for special cases of match failure
+			for (Throwable t : e.getSuppressed()) {
+				// Duplicate ops detected
+				if (t.getMessage().startsWith("Multiple") && t.getMessage().contains(
+					"ops of priority"))
+				{
+					throw new OpMatchingException(
+						"Multiple ops of equal priority detected for request:" +
+							failedRequest + "\n" + debugText);
+				}
+			}
+
+			var msg = helpVerbose(request);
+			// If we have some alternatives we can suggest them here
+			if (!msg.equals(OpDescriptionGenerator.NO_OP_MATCHES)) {
+				msg = OpDescriptionGenerator.NO_OP_MATCHES + failedRequest +
+					"Perhaps you meant one of these:\n" + msg + "\n\n";
+			}
+			else {
+				// Otherwise, not much to report
+				msg += failedRequest;
+			}
+
+			msg += debugText;
+
+			throw new OpMatchingException(msg);
+		}
 	}
 
 	@SuppressWarnings("unchecked")

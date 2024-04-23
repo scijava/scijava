@@ -86,8 +86,14 @@ public class ConversionMatchingRoutine extends RuntimeSafeMatchingRoutine {
 			});
 		}
 		final List<OpCandidate> matches = filterMatches(candidates);
-		return new MatchingResult(candidates, matches, Collections.singletonList(
-			request)).singleMatch();
+		try {
+			return new MatchingResult(candidates, matches, Collections.singletonList(
+				request)).singleMatch();
+		}
+		catch (OpMatchingException e) {
+			throw new OpMatchingException(
+				"Unable to find Op conversion pathway for " + convertConditions, e);
+		}
 	}
 
 	@Override

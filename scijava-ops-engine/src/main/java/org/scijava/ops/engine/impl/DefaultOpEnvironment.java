@@ -341,7 +341,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 */
 	@Override
 	public String help(final OpRequest request) {
-		Optional<OpDescriptionGenerator> opt = metaDiscoverer.discoverMin(
+		Optional<OpDescriptionGenerator> opt = metaDiscoverer.discoverMax(
 			OpDescriptionGenerator.class);
 		if (opt.isEmpty()) {
 			return "";
@@ -364,7 +364,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 */
 	@Override
 	public String helpVerbose(final OpRequest request) {
-		Optional<OpDescriptionGenerator> opt = metaDiscoverer.discoverMin(
+		Optional<OpDescriptionGenerator> opt = metaDiscoverer.discoverMax(
 			OpDescriptionGenerator.class);
 		if (opt.isEmpty()) {
 			return "";

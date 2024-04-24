@@ -117,8 +117,7 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 		if (Strings.isNullOrEmpty(name)) {
 			// Return all namespaces
 			nsStream = publicOpStream(env);
-			nsStream = nsStream.map(s -> s.substring(0, s.lastIndexOf('.')))
-				.distinct();
+			nsStream = nsStream.map(s -> s.substring(0, s.indexOf('.'))).distinct();
 			prefix = "Namespaces:\n\t> ";
 		}
 		else if (env.infos(name).isEmpty()) {

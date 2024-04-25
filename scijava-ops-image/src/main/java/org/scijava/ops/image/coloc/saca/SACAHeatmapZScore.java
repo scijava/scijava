@@ -94,6 +94,12 @@ public class SACAHeatmapZScore<I extends RealType<I>> implements
 				"Input image dimensions do not match.");
 		}
 
+		// ensure images are no more than 2 dimensional
+		if (image1.numDimensions() > 2 || image2.numDimensions() > 2) {
+			throw new IllegalArgumentException(
+				"Only 2D images are supported by SACA. See https://github.com/scijava/scijava/issues/212");
+		}
+
 		// set seed, compute thresholds and create empty result if necessary
 		if (seed == null) seed = 0xdeadbeefL;
 		if (thres1 == null) thres1 = otsuOp.apply(histOp.apply(Views.iterable(

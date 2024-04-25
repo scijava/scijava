@@ -50,8 +50,8 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 /**
  * Helper class for Spatially Adaptive Colocalization Analysis (SACA) framework.
- * This class is used by the "coloc.saca.heatmapZScore" Op to produce the Z-score
- * heatmap of pixel colocalization strength.
+ * This class is used by the "coloc.saca.heatmapZScore" Op to produce the
+ * Z-score heatmap of pixel colocalization strength.
  *
  * @author Shulei Wang
  * @author Ellen TA Dobson
@@ -131,8 +131,8 @@ public final class AdaptiveSmoothedKendallTau {
 
 		IntervalView<Localizable> positions = Views.interval(Localizables
 			.randomAccessible(result.numDimensions()), result);
-		LoopBuilder.setImages(positions, result, workingImage).multiThreaded()
-			.forEachChunk(chunk -> {
+		LoopBuilder.setImages(positions, result, workingImage).forEachChunk(
+			chunk -> {
 				final long[] rowrange = new long[4];
 				final long[] colrange = new long[4];
 				final int totnum = (2 * Bsize + 1) * (2 * Bsize + 1);

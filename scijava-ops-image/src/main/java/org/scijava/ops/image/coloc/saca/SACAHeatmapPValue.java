@@ -54,7 +54,8 @@ public class SACAHeatmapPValue implements
 	 * AdaptiveSmoothedKendallTau in his RKColocal package
 	 * (https://github.com/lakerwsl/RKColocal/blob/master/RKColocal_0.0.1.0000.tar.gz).
 	 *
-	 * @param heatmap input Z-score heatmap returned from 'coloc.saca.heatmapZScore'
+	 * @param heatmap input Z-score heatmap returned from
+	 *          'coloc.saca.heatmapZScore'
 	 * @param lowerTail lower tail (default=false)
 	 * @param result p value heatmap output
 	 */

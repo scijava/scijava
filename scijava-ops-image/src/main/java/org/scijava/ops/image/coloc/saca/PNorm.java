@@ -37,8 +37,8 @@ import org.apache.commons.math3.distribution.NormalDistribution;
 
 /**
  * Helper class for Spatially Adaptive Colocalization Analysis (SACA) framework.
- * This class is used by the "coloc.saca.heatmapPValue" Op to produce a heatmap of
- * pixelwise p-values. This class replicates R's pnorm function.
+ * This class is used by the "coloc.saca.heatmapPValue" Op to produce a heatmap
+ * of pixelwise p-values. This class replicates R's pnorm function.
  *
  * @author Edward Evans
  */

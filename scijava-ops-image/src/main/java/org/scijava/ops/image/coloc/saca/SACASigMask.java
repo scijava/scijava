@@ -61,7 +61,8 @@ public class SACASigMask implements
 	 * package
 	 * (https://github.com/lakerwsl/RKColocal/blob/master/RKColocal_0.0.1.0000.tar.gz).
 	 *
-	 * @param heatmap input Z-score heatmap returned from 'coloc.saca.heatmapZScore'
+	 * @param heatmap input Z-score heatmap returned from
+	 *          'coloc.saca.heatmapZScore'
 	 * @param alpha significance cuttoff, type 1 error (default=0.05)
 	 * @param mean mean value (default=0)
 	 * @param sd standard div (default=1)

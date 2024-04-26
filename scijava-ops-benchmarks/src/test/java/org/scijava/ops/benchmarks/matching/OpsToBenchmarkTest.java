@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -29,52 +29,55 @@
 
 package org.scijava.ops.benchmarks.matching;
 
-import net.imglib2.img.array.ArrayImgs;
-import org.openjdk.jmh.annotations.*;
-import org.scijava.ops.api.Hints;
+import net.imagej.ops.OpService;
+import org.junit.jupiter.api.Test;
+import org.scijava.Context;
+import org.scijava.ops.api.OpEnvironment;
 
-import static org.scijava.ops.benchmarks.matching.MatchingOpCollection.op;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Benchmark showcasing the effects of Op caching
+ * A simple test ensuring that the Ops used in benchmarks get matched.
  *
  * @author Gabriel Selzer
+ * @author Curtis Rueden
  */
-public class BenchmarkCaching {
+public class OpsToBenchmarkTest {
 
-	private static final Hints CACHE_HIT_HINTS = new Hints();
-	private static final Hints CACHE_MISS_HINTS = new Hints("cache.IGNORE");
-
-	@Fork(value = 1, warmups = 2)
-	@Warmup(iterations = 2)
-	@Benchmark
-	@BenchmarkMode(Mode.AverageTime)
-	public void runStatic(MatchingState state) {
-		var out = ArrayImgs.doubles(state.in.dimensionsAsLongArray());
-		op(state.in, 1.0, out);
+	@Test
+	public void testImageJOps() {
+		try (var ctx = new Context(OpService.class)) {
+			var ops = ctx.service(OpService.class);
+			byte[] b = { 77 };
+			ops.run("benchmark.increment", b);
+			assertEquals(78, b[0]);
+		}
 	}
 
-	@Fork(value = 1, warmups = 2)
-	@Warmup(iterations = 2)
-	@Benchmark
-	@BenchmarkMode(Mode.AverageTime)
-	public void runOp(final MatchingState state) {
-		var out = ArrayImgs.doubles(state.in.dimensionsAsLongArray());
-		state.env.op("benchmark.match", CACHE_MISS_HINTS) //
-			.input(state.in, 1.0) //
-			.output(out) //
-			.compute();
+	@Test
+	public void testConversion() {
+		OpEnvironment env = OpEnvironment.build();
+		byte[] b = { 26 };
+		env.op("benchmark.increment").input(b).mutate();
+		assertEquals(27, b[0]);
 	}
 
-	@Fork(value = 1, warmups = 2)
-	@Warmup(iterations = 2)
-	@Benchmark
-	@BenchmarkMode(Mode.AverageTime)
-	public void runOpCached(final MatchingState state) {
-		var out = ArrayImgs.doubles(state.in.dimensionsAsLongArray());
-		state.env.op("benchmark.match", CACHE_HIT_HINTS) //
-			.input(state.in, 1.0) //
-			.output(out) //
-			.compute();
+	@Test
+	public void testConversionAdaptation() {
+		OpEnvironment env = OpEnvironment.build();
+		double[] d = { 12.3 };
+		double[] result = env.op("benchmark.increment").input(d).outType(
+			double[].class).apply();
+		assertEquals(12.3, d[0]);
+		assertEquals(13, result[0]);
+	}
+
+	@Test
+	public void testByteCreation() {
+		OpEnvironment env = OpEnvironment.build();
+		byte[] b = env.op("engine.create").outType(byte[].class).create();
+		assertNotNull(b);
+		assertEquals(1, b.length);
 	}
 }

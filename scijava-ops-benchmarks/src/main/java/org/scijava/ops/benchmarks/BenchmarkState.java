@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,34 +27,56 @@
  * #L%
  */
 
-package org.scijava.ops.benchmarks.matching;
+package org.scijava.ops.benchmarks;
 
+import net.imagej.ops.OpService;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.type.numeric.integer.ByteType;
 import net.imglib2.type.numeric.real.DoubleType;
-import org.openjdk.jmh.annotations.Level;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.Setup;
-import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.*;
+import org.scijava.Context;
+import org.scijava.annotations.Index;
+import org.scijava.annotations.IndexItem;
 import org.scijava.ops.api.OpEnvironment;
+import org.scijava.plugin.Plugin;
 
 /**
- * {@link State} used in SciJava Ops benchmarks
+ * {@link State} used in SciJava Ops framework benchmarks
  *
  * @author Gabriel Selzer
+ * @author Curtis Rueden
  */
 @State(Scope.Benchmark)
-public class MatchingState {
+public class BenchmarkState {
 
+	// Ops framework constructs.
+	private Context ctx;
+	public OpService ops;
 	public OpEnvironment env;
-	public Img<DoubleType> in;
-	public Img<ByteType> simpleIn;
 
-	@Setup(Level.Invocation)
+	// Data containers for single numerical values.
+	public byte[] theByte;
+	public double[] theDouble;
+
+	// Receptacles for storing calculation results.
+	public byte[] byteResult;
+	public double[] doubleResult;
+
+	@Setup(Level.Trial)
 	public void setUpInvocation() {
+		// Set up ImageJ Ops.
+		ctx = new Context(OpService.class);
+		ops = ctx.service(OpService.class);
+		// Set up SciJava Ops.
 		env = OpEnvironment.build();
-		in = ArrayImgs.doubles(1000, 1000);
-		simpleIn = ArrayImgs.bytes(1000, 1000);
+		// Allocate input data.
+		theByte = new byte[1];
+		theDouble = new double[1];
+	}
+
+	@TearDown(Level.Invocation)
+	public void tearDownInvocation() {
+		ctx.dispose();
 	}
 }

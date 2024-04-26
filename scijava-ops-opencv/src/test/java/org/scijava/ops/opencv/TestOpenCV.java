@@ -29,9 +29,9 @@
 
 package org.scijava.ops.opencv;
 
-import io.scif.img.IO;
 import net.imagej.opencv.MatToImgConverter;
 import net.imglib2.img.Img;
+import net.imglib2.img.array.ArrayImgs;
 import org.bytedeco.opencv.opencv_core.Mat;
 import org.bytedeco.opencv.opencv_core.Size;
 import org.junit.jupiter.api.Test;
@@ -183,7 +183,8 @@ public class TestOpenCV {
 	@Test
 	public void testImgToMat() {
 		OpEnvironment ops = OpEnvironment.build();
-		Img<?> src = IO.open("https://imagej.net/images/lymp.tif");
+		int w = 130, h = 130;
+		Img<?> src = ArrayImgs.unsignedBytes(randomBytes(w * h), w, h);
 		Img<?> dest = src.copy();
 		int stDev = 100;
 		Size size = new Size(5, 5);
@@ -222,5 +223,18 @@ public class TestOpenCV {
 	private Mat openFish() {
 		return imread(new File(getClass().getResource("/HappyFish.jpg").getFile())
 			.getAbsolutePath());
+	}
+
+	private byte[] randomBytes(int length) {
+		byte[] data = new byte[length];
+		data[0] = 123;
+		for (int i = 1; i < data.length; i++) {
+			int d = data[i - 1];
+			d ^= d >> 12;
+			d ^= d << 25;
+			d ^= d >> 27;
+			data[i] = (byte) d;
+		}
+		return data;
 	}
 }

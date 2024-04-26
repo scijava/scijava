@@ -140,11 +140,37 @@
             <groupId>net.imagej</groupId>
             <artifactId>imagej-ops</artifactId>
         </dependency>
+
         <!-- SciJava dependencies -->
         <dependency>
             <groupId>org.scijava</groupId>
             <artifactId>scijava-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.scijava</groupId>
+            <artifactId>scijava-ops-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scijava</groupId>
+            <artifactId>scijava-ops-engine</artifactId>
+            <version>${project.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <!--
+        NB: scijava-ops-image is not used by the benchmarking code,
+        but is included here to make the size of the OpEnvironment
+        comparable to that of ImageJ Ops, in case the number of Ops
+        in the environment affects matching performance.
+        -->
+        <dependency>
+            <groupId>org.scijava</groupId>
+            <artifactId>scijava-ops-image</artifactId>
+            <version>${project.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- JMH dependencies -->
         <dependency>
             <groupId>org.openjdk.jmh</groupId>
             <artifactId>jmh-core</artifactId>
@@ -158,23 +184,7 @@
             <version>${jmh.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.scijava</groupId>
-            <artifactId>scijava-ops-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.scijava</groupId>
-            <artifactId>scijava-ops-engine</artifactId>
-            <version>${project.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.scijava</groupId>
-            <artifactId>scijava-ops-image</artifactId>
-            <version>${project.version}</version>
-            <scope>runtime</scope>
-        </dependency>
+
         <!-- Test scope dependencies -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

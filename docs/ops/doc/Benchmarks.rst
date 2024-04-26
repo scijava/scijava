@@ -1,29 +1,28 @@
 SciJava Ops Benchmarks
 ======================
 
-This page describes a quantitative analysis of the SciJava Ops framework, and is heavily inspired by a similar comparison of `ImgLib2 <https://imagej.net/libs/imglib2/benchmarks>`_.
+This page describes a quantitative analysis of the SciJava Ops framework, and is heavily inspired by a similar comparison of `ImgLib2 <https://imagej.net/libs/imglib2/benchmarks>`_. In all figures, benchmark times are displayed using bar charts (describing mean execution times, in microseconds) with error bars (used to denote the range of observed execution times).
 
 Hardware and Software
 ---------------------
 
 This analysis was performed with the following hardware:
 
-* Dell Precision 7770
-* 12th Gen Intel i9-12950HX (24) @ 4.900GHz
-* 32 GB 4800 MT/s DDR5 RAM
+* 2021 Dell OptiPlex 5090 Small Form Factor
+* Intel(R) Core(TM) i7-10700 CPU @ 2.90GHz
+* 64 GB 3200 MHz DDR4 RAM
 
 The following software components were used:
 
-* Ubuntu 23.10
-* Kernel 6.5.0-26-generic
-* OpenJDK Runtime Environment AdoptOpenJDK (build 11.0.8+10) with OpenJDK 64-Bit Server VM AdoptOpenJDK (build 11.0.8+10, mixed mode)
-* SciJava Incubator commit `77006edc <https://github.com/scijava/incubator/commit/77006edc6a567a08ec5aba39e56fdfab8d79a0b9>`_
+* Ubuntu 20.04.6 LTS
+* Java HotSpot(TM) 64-Bit Server VM Oracle GraalVM 20.0.1+9.1 (build 20.0.1+9-jvmci-23.0-b12, mixed mode, sharing)
+* SciJava Incubator commit `0b8012b2 <https://github.com/scijava/incubator/commit/0b8012b2b00ba84b0583ef7260fab1be8f251041>`_
 * ImageJ Ops version ``2.0.0``
 
 All benchmarks are executed using the `Java Microbenchmark Harness <https://github.com/openjdk/jmh>`_, using the following parameters:
 
 * Forked JVM
-* 2 warmup executions
+* 1 warmup execution
 * 2 10-second iterations per warm-up execution
 * 1 measurement execution
 * 5 5-second iterations per measurement execution
@@ -31,51 +30,47 @@ All benchmarks are executed using the `Java Microbenchmark Harness <https://gith
 Op Matching
 -----------
 
-We first analyze the performance of executing the following static method:
+We first analyze the performance of executing the following static method, written to contain the *fewest* instructions possible while also avoiding code removal by the Just In Time compiler:
 
 ..  code-block:: java
 
 	/**
-	 * @param in the data to input to our function
-	 * @param d the value to add to each element in the input
-	 * @param out the preallocated storage buffer
-	 * @implNote op name="benchmark.match",type=Computer
+	 * Increments a byte value.
+	 *
+	 * @param data array containing the byte to increment
+	 * @implNote op name="benchmark.increment", type=Inplace1
 	 */
-	public static void op( //
-		final RandomAccessibleInterval<DoubleType> in, //
-		final Double d, //
-		final RandomAccessibleInterval<DoubleType> out //
-	) {
-		LoopBuilder.setImages(in, out)
-			.multiThreaded()
-			.forEachPixel((i, o) -> o.set(i.get() + d));
+	public static void incrementByte(final byte[] data) {
+		data[0]++;
 	}
 
-We first benchmark the base penalty of executing this method using SciJava Ops, compared to direct execution of the static method. Notably, as this method requires a preallocated output buffer, we must either create it ourselves, *or* allow SciJava Ops to create it for us using an Op adaptation. Thus, we test the benchmark the following three scenarios:
+We first benchmark the overhead of executing this method through SciJava Ops, compared to direct execution of the static method. This method mutates a data structure in place, meaning the Ops engine can match it directly as an inplace Op, or **adapt** it to a function Op. Thus, we test the benchmark the following four scenarios:
 
-* Output buffer creation + static method invocation
-* Output buffer creation + SciJava Ops invocation
-* SciJava Ops invocation using Op adaptation
+* Static method invocation
+* Output Buffer creation + static method invocation **(A)**
+* SciJava Ops inplace invocation
+* SciJava Ops **function** invocation **(A)**
 
-The results are shown in **Figure 1**. We find Op execution through the SciJava Ops framework adds a few milliseconds of additional overhead. A few additional milliseconds of overhead are observed when SciJava Ops is additionally tasked with creating an output buffer.
+The results are shown in **Figure 1**. We find Op execution through the SciJava Ops framework adds approximately 100 microseconds of additional overhead. An additional millisecond of overhead is observed when SciJava Ops additionally creates an output buffer.
 
 .. chart:: ../images/BenchmarkMatching.json
 
 	**Figure 1:** Algorithm execution performance (lower is better)
 
-Note that the avove requests are benchmarked without assistance from the Op cache, i.e. they are designed to model the full matching process. As repeated Op requests will utilize the Op cache, we benchmark cached Op retrieval separately, with results shown in **Figure 2**. These benchmarks suggest Op caching helps avoid the additional overhead of Op adaptation as its performance approaches that of normal Op execution.
+Note that the above requests are benchmarked without assistance from the Op cache, measuring the overhead of full matching process. As repeated Op requests will utilize the Op cache, we benchmark cached Op execution separately, with results shown in **Figure 2**. From these results, we conlude that Op matching comprises the majority of SciJava Ops overhead, and repeated executions add only a few microseconds of overhead.
 
 .. chart:: ../images/BenchmarkCaching.json
 
 	**Figure 2:** Algorithm execution performance with Op caching (lower is better)
 
-Finally, we benchmark the overhead of SciJava Ops parameter conversion. Suppose we instead wish to operate upon a ``RandomAccessibleInterval<ByteType>`` - we must convert it to call our Op. We consider the following procedures:
+Finally, we benchmark the overhead of SciJava Ops parameter conversion. Suppose we instead wish to operate upon a ``double[]`` - we must convert it to ``byte[]`` to call our Op. We consider the following procedures:
 
-* Image conversion + output buffer creation + static method invocation
-* output buffer creation + SciJava Ops invocation using Op conversion
-* SciJava Ops invocation using Op conversion and Op adaptation
+* Array conversion + static method invocation **(C)**
+* Array buffer creation + array conversion + static method invocation **(A+C)**
+* SciJava Ops converted inplace invocation **(C)**
+* SciJava Ops converted **function** invocation **(A+C)**
 
-The results are shown in **Figure 3**; note the Op cache is **not** enabled. We observe overheads on the order of 10 milliseconds to perform Op conversion with and without Op adaptation.
+The results are shown in **Figure 3**; note the Op cache is **not** enabled. We find that parameter conversion imposes additional overhead of approximately 1 millisecond, and when both parameter conversion and Op adaptation are used the overhead (~2 milliseconds) is *additive*.
 
 .. chart:: ../images/BenchmarkConversion.json
 
@@ -84,35 +79,35 @@ The results are shown in **Figure 3**; note the Op cache is **not** enabled. We 
 Framework Comparison
 --------------------
 
-To validate our development efforts atop the original `ImageJ Ops <https://imagej.net/libs/imagej-ops/>`_ framework, we benchmark executions of the following method:
+To validate our development efforts atop the original `ImageJ Ops <https://imagej.net/libs/imagej-ops/>`_ framework, we additionally wrap the above static method within ImageJ Ops:
 
 .. code-block:: java
 
-	/**
-	 * @param data the data to invert
-	 * @implNote op name="benchmark.invert",type=Inplace1
-	 */
-	public static void invertRaw(final byte[] data) {
-		for (int i = 0; i < data.length; i++) {
-			final int value = data[i] & 0xff;
-			final int result = 255 - value;
-			data[i] = (byte) result;
+	/** Increment Op wrapper for ImageJ Ops. */
+	@Plugin(type = Op.class, name = "benchmark.increment")
+	public static class IncrementByteOp extends AbstractUnaryInplaceOp<byte[]>
+		implements Op
+	{
+
+		@Override
+		public void mutate(byte[] o) {
+			incrementByte(o);
 		}
 	}
 
-We then benchmark the performance of executing this code using the following pathways:
+We then benchmark the performance of executing the static method using the following pathways:
 
 * Static method invocation
 * SciJava Ops invocation
-* ImageJ Ops invocation (using a ``Class`` wrapper to make the method discoverable within ImageJ Ops)
+* ImageJ Ops invocation (using the above wrapper)
 
-The results are shown in **Figure 4**. When algorithm matching dominates execution time, the SciJava Ops matching framework provides significant improvement in matching performance in comparison with the original ImageJ Ops framework.
+The results are shown in **Figure 4**. From this figure we can see that the "Op overhead" from ImageJ Ops is approximately 70x the "Op overhead" from SciJava Ops.
 
 .. chart:: ../images/BenchmarkFrameworks.json
 
 	**Figure 4:** Algorithm execution performance by Framework (lower is better)
 
-Finally, here is a figure combining all the metrics above:
+We provide a final figure combining all the metrics above:
 
 .. chart:: ../images/BenchmarkCombined.json
 

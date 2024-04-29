@@ -59,7 +59,7 @@ This gives the following printout:
 
 ```
 Names:
-	> filter.DoG
+	> filter.dog
 	> filter.addNoise
 	> filter.addPoissonNoise
 	> filter.addUniformNoise

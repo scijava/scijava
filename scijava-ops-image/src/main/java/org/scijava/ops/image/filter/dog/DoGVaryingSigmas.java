@@ -45,7 +45,7 @@ import org.scijava.ops.spi.Nullable;
  *
  * @author Christian Dietz (University of Konstanz)
  * @param <T>
- * @implNote op names='filter.DoG'
+ * @implNote op names='filter.dog'
  */
 public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>>
 	implements
@@ -56,7 +56,7 @@ public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>>
 	public Computers.Arity3<RandomAccessibleInterval<T>, double[], //
 			OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> defaultGaussRA;
 
-	@OpDependency(name = "filter.DoG")
+	@OpDependency(name = "filter.dog")
 	private Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, //
 			Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> dogOp;
 
@@ -95,13 +95,13 @@ public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>>
 }
 
 /**
- * @implNote op names='filter.DoG'
+ * @implNote op names='filter.dog'
  */
 class DoGSingleSigma<T extends NumericType<T> & NativeType<T>> implements
 	Computers.Arity4<RandomAccessibleInterval<T>, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>>
 {
 
-	@OpDependency(name = "filter.DoG")
+	@OpDependency(name = "filter.dog")
 	private Computers.Arity4<RandomAccessibleInterval<T>, double[], double[], //
 			OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> dogOp;
 

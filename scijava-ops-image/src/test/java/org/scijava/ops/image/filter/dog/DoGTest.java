@@ -66,7 +66,7 @@ public class DoGTest extends AbstractOpTest {
 		final OutOfBoundsFactory<ByteType, Img<ByteType>> outOfBounds =
 			new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
 
-		ops.op("filter.DoG").input(in, sigmas1, sigmas2, outOfBounds).output(out1)
+		ops.op("filter.dog").input(in, sigmas1, sigmas2, outOfBounds).output(out1)
 			.compute();
 
 		// test against native imglib2 implementation
@@ -90,7 +90,7 @@ public class DoGTest extends AbstractOpTest {
 			TestImgGeneration.byteArray(true, new long[] { 10, 10 }), new ByteType())
 			.outType(new Nil<RandomAccessibleInterval<ByteType>>()
 			{}).apply();
-		ops.op("filter.DoG").input(TestImgGeneration.byteArray(true, new long[] {
+		ops.op("filter.dog").input(TestImgGeneration.byteArray(true, new long[] {
 			10, 10 }), 1., 2., outOfBounds).output(res).compute();
 
 		Assertions.assertNotNull(res);

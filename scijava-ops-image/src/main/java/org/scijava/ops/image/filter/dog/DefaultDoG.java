@@ -48,7 +48,7 @@ import org.scijava.ops.spi.OpDependency;
  * @author Christian Dietz (University of Konstanz)
  * @author Curtis Rueden
  * @param <T>
- * @implNote op names='filter.DoG'
+ * @implNote op names='filter.dog'
  */
 public class DefaultDoG<T extends NumericType<T> & NativeType<T>> implements
 	Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>>

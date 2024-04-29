@@ -80,7 +80,7 @@ html_theme = "sphinx_rtd_theme"
 html_static_path = []
 
 # Add the SciJava ops logo
-html_logo = "ops/images/scijava_logo.svg"
+html_logo = "ops/images/scijava-ops.svg"
 html_theme_options = {
     "logo_only": True,
     "display_version": False,

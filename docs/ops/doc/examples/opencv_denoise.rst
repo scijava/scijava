@@ -121,4 +121,4 @@ SciJava Ops via Fiji's scripting engine with `script parameters`_:
 
 .. _`script parameters`: https://imagej.net/scripting/parameters
 .. _`OpenCV libray`: https://docs.opencv.org/4.x/d5/d69/tutorial_py_non_local_means.html
-.. _`here`: https://media.imagej.net/scijava-ops/1.0.0/opencv_denoise_16bit.png
+.. _`here`: https://media.imagej.net/scijava-ops/1.0.0/opencv_denoise_16bit.tif

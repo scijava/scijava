@@ -6,10 +6,16 @@ This example demonstrates how to use SciJava Ops with Python. Using SciJava Ops 
 Java code access and ``imglyb`` to bridge the ImgLib2 and NumPy data structures. The Python script in this example downloads a `3D 3T3 cell`_
 nucleus dataset (with shape: ``37, 300, 300``), performes image processing with to improve the nucleus signal, segments the nucleus and measures
 the 3D volume of the nucleus by creating a mesh. Finally the input image, processed image and the segmented label images are displayed in
-``matplotlib``.
+``matplotlib``, and the volume (μm\ :sup:`3`) is printed to the console.
 
 .. figure:: https://media.imagej.net/scijava-ops/1.0.0/scyjava_example_1.png
 
+.. code-block:: bash
+
+    [INFO]: Adding SciJava repo...
+    [INFO]: Adding endpoints...
+    [INFO]: Adding classes...
+    [INFO]: volume = 456.0139675000041 μm^3
 
 To run this example, create a conda/mamba environment with the following ``environment.yml`` file:
 
@@ -94,23 +100,30 @@ Activate the ``scijava-ops`` conda/mamba environment and run the following Pytho
         ops.op("math.mul").input(rai, mean_blur).output(mul_result).compute()
         ops.op("threshold.huang").input(mul_result).output(thres_mask).compute()
         labeling = ops.op("labeling.cca").input(thres_mask, StructuringElement.EIGHT_CONNECTED).apply()
-        
+
         return [mul_result, thres_mask, labeling]
 
 
-    def measure_volume(rai: "net.imglib2.RandomAccessibleInterval") -> float:
+    def measure_volume(rai: "net.imglib2.RandomAccessibleInterval", cal: List[float]) -> float:
         """Create a mesh and measure its volume.
-        
+
         :param rai: Input RandomAccessibleInterval (RAI)
+        :param cal: imaging calibration, with one float per dimension in the input,
+            in microns
         :return: Volume of the 3D mesh
         """
         mesh = ops.op("geom.marchingCubes").input(rai).apply()
-        volume = ops.op("geom.size").input(mesh).apply()
-        
-        return float(volume.getRealDouble())
+        # Mesh volume returned in voxels
+        volume = ops.op("geom.size").input(mesh).apply().getRealDouble()
+
+        # Convert voxels to um^3
+        for c in cal:
+            volume *= c
+
+        return volume
 
 
-    # add SciJava repository 
+    # add SciJava repository
     print("[INFO]: Adding SciJava repo...")
     sj.config.add_repositories({'scijava.public': 'https://maven.scijava.org/content/groups/public'})
 
@@ -135,10 +148,11 @@ Activate the ``scijava-ops`` conda/mamba environment and run the following Pytho
     ops = OpEnvironment.build()
 
     # open image
-    narr = read_image_from_url("https://media.imagej.net/scijava-ops/1.0.0/hela_nucleus.tif")
+    narr = read_image_from_url("https://media.imagej.net/scijava-ops/1.0.0/3t3_nucleus.tif")
+    cal = [0.065, 0.065, 0.1] # microns, from imaging parameters
     rai = numpy_to_imglib(narr)
     results = segment_nuclei(rai)
-    print(f"[INFO]: volume = {measure_volume(results[1])}")
+    print(f"[INFO]: volume = {measure_volume(results[1], cal)} μm^3")
 
     # display results with matplotlib
     processed = imglib_to_numpy(results[0], "float32")

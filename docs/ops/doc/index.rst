@@ -42,6 +42,12 @@ The combination of these libraries allows declarative image analysis workflows, 
    WritingYourOwnOpPackage
    Migrating Ops Written for ImageJ Ops<MigratingFromImageJOps>
 
+.. toctree::
+   :maxdepth: 2
+   :caption: 📚 Papers
+
+   Paper2024
+
 Indices and tables
 ==================
 

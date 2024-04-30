@@ -1,8 +1,8 @@
 /*-
  * #%L
- * ImageJ software for multidimensional image processing and analysis.
+ * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2024 ImageJ developers.
+ * Copyright (C) 2014 - 2024 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,8 +27,11 @@
  * #L%
  */
 
-package org.scijava.ops.image.coloc.saca;
+package org.scijava.ops.image.stats;
 
+import org.apache.commons.math3.distribution.NormalDistribution;
+
+import net.imglib2.loops.LoopBuilder;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.real.DoubleType;
 
@@ -36,38 +39,41 @@ import org.scijava.function.Computers;
 import org.scijava.ops.spi.Nullable;
 
 /**
- * @author Shulei Wang
- * @author Curtis Rueden
- * @author Ellen TA Dobson
  * @author Edward Evans
- * @implNote op names='coloc.saca.heatmapPValue', priority='100.'
+ * @implNote op names='stats.pnorm', priority='100.'
  */
 
-public class SACAHeatmapPValue implements
+public final class DefaultPNorm implements
 	Computers.Arity2<RandomAccessibleInterval<DoubleType>, Boolean, RandomAccessibleInterval<DoubleType>>
 {
 
 	/**
-	 * Spatially Adaptive Colocalization Analysis (SACA) p-value heatmap. This Op
-	 * returns the pixelwise p-value of the input Z-score heatmap produced by the
-	 * SACA framework. SACA was adapted from Shulei's java code for
-	 * AdaptiveSmoothedKendallTau in his RKColocal package
-	 * (https://github.com/lakerwsl/RKColocal/blob/master/RKColocal_0.0.1.0000.tar.gz).
+	 * Op to calculate the pixel-wise cumulative probability of a normal
+	 * distribution over an image.
 	 *
-	 * @param heatmap input Z-score heatmap returned from
-	 *          'coloc.saca.heatmapZScore'
-	 * @param lowerTail lower tail (default=false)
-	 * @param result p value heatmap output
+	 * @param input input image
+	 * @param lowerTail indicates whether to compute the lower tail cumulative
+	 *          probability
+	 * @param result the pixel-wise normal distribution over the image
 	 */
-
 	@Override
-	public void compute(final RandomAccessibleInterval<DoubleType> heatmap,
+	public void compute(final RandomAccessibleInterval<DoubleType> input,
 		@Nullable Boolean lowerTail, RandomAccessibleInterval<DoubleType> result)
 	{
 		// set lowerTail if necessary
 		if (lowerTail == null) lowerTail = true;
+		final boolean finalLowerTail = lowerTail;
 
-		// compute the normal distribution
-		PNorm.compute(heatmap, lowerTail, result);
+		// compute normal distribution over the image
+		NormalDistribution normalDistribution = new NormalDistribution();
+
+		LoopBuilder.setImages(input, result).multiThreaded().forEachPixel((i,
+			r) -> {
+			double normDistValue = normalDistribution.cumulativeProbability(i.get());
+			if (!finalLowerTail) {
+				normDistValue = 1 - normDistValue;
+			}
+			r.set(normDistValue);
+		});
 	}
 }

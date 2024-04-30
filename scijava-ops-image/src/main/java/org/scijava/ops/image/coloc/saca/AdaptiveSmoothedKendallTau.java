@@ -61,7 +61,6 @@ public final class AdaptiveSmoothedKendallTau {
 
 	private AdaptiveSmoothedKendallTau() {}
 
-	// TODO: check that output float type is actually what we want here.
 	public static <I extends RealType<I>> void execute(
 		final RandomAccessibleInterval<I> image1,
 		final RandomAccessibleInterval<I> image2,
@@ -200,7 +199,6 @@ public final class AdaptiveSmoothedKendallTau {
 			});
 
 		// TODO: instead of copying pixels here, swap oldTau and newTau every time.
-		// :-)
 		LoopBuilder.setImages(oldtau, newtau, oldsqrtN, newsqrtN).multiThreaded()
 			.forEachPixel((tOldTau, tNewTau, tOldSqrtN, tNewSqrtN) -> {
 				tOldTau.set(tNewTau);
@@ -215,7 +213,6 @@ public final class AdaptiveSmoothedKendallTau {
 		final double[] sw, final long[] rowrange, final long[] colrange,
 		final int totnum)
 	{
-		// TODO: Decide if this cast is OK.
 		int kernelk = (int) (rowrange[0] - rowrange[2] + rowrange[3]);
 		int kernell;
 		int index = 0;
@@ -229,7 +226,6 @@ public final class AdaptiveSmoothedKendallTau {
 			i1RA.setPosition(k, 1);
 			i2RA.setPosition(k, 1);
 			sqrtN.setPosition(k, 1);
-			// TODO: Double check cast.
 			kernell = (int) (colrange[0] - colrange[2] + colrange[3]);
 			for (long l = colrange[0]; l <= colrange[1]; l++) {
 				i1RA.setPosition(l, 0);

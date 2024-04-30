@@ -27,25 +27,53 @@
  * #L%
  */
 
-package org.scijava.ops.image.coloc.saca;
+package org.scijava.ops.image.stats;
+
+import org.scijava.function.Computers;
+import org.scijava.function.Functions;
+import org.scijava.ops.spi.Nullable;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
 
 /**
- * Helper class for Spatially Adaptive Colocalization Analysis (SACA) framework.
- * This class is used by the "coloc.saca.sigMask" Op to produce a binary mask of
- * significantly colocalized pixels. This class replicates R's qnorm function.
- *
  * @author Shulei Wang
  * @author Ellen TA Dobson
  * @author Curtis Rueden
+ * @author Edward Evans
+ * @implNote op names='stats.qnorm', priority='100.'
  */
 
-public final class QNorm {
+public final class DefaultQNorm implements
+	Functions.Arity5<Double, Double, Double, Boolean, Boolean, Double>
+{
 
-	private QNorm() {}
+	/**
+	 * Op to calculate the quantile function for a normal distribution.
+	 *
+	 * @param p
+	 * @param mean
+	 * @param sd
+	 * @param lowerTail
+	 * @param logP
+	 * @return quantiles for input probaility
+	 */
+	@Override
+	public Double apply(Double p, @Nullable Double mean, @Nullable Double sd,
+		@Nullable Boolean lowerTail, @Nullable Boolean logP)
+	{
+		// set mean if necessary
+		if (mean == null) mean = 0.0;
 
-	public static double compute(final double p) {
+		// set sd if necessary
+		if (sd == null) sd = 1.0;
+
+		// set lowerTail if necessary
+		if (lowerTail == null) lowerTail = true;
+
+		// set logP if necessary
+		if (logP == null) logP = false;
+
+		// check the bounds of p
 		if (p < 0 || p > 1) {
 			return Double.NaN;
 		}
@@ -53,15 +81,11 @@ public final class QNorm {
 			return Double.POSITIVE_INFINITY;
 		}
 
-		return compute(p, 0, 1, true, false);
-	}
-
-	public static double compute(double p, final double mean, final double sd,
-		final boolean lowerTail, final boolean logP)
-	{
+		// compute QNorm
 		final NormalDistribution dist = new NormalDistribution(mean, sd);
 		if (logP) p = Math.exp(p);
 		final double q = dist.inverseCumulativeProbability(p);
 		return lowerTail ? q : -q;
+
 	}
 }

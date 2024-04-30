@@ -27,31 +27,31 @@
  * #L%
  */
 
-package org.scijava.ops.image;
+package org.scijava.ops.image.stats;
 
+import org.scijava.ops.image.AbstractOpTest;
+
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpInfo;
+/**
+ * Test {@code stats.qnorm} op.
+ *
+ * @author Edward Evans
+ */
 
-public class OpRegressionTest {
-
-	protected static final OpEnvironment ops = OpEnvironment.build();
-
-	@Test
-	public void opDiscoveryRegressionIT() {
-		long expected = 1942;
-		long actual = ops.infos().size();
-		assertEquals(expected, actual);
-	}
+public class DefaultQNormTest extends AbstractOpTest {
 
 	@Test
-	public void opDescriptionRegressionIT() {
-		// Ensure no ops have a null description
-		for (OpInfo info : ops.infos())
-			Assertions.assertNotNull(info.toString(), () -> "Info from " + info.id() +
-				" has a null description");
+	public void testCalculation() {
+		final double[] input = { 0.05, 0.001, 1e-7, 1, 0, 0.99, -0.99, 1.1 };
+		final double[] expected = { -1.644853626951473, -3.0902323061678136,
+			-5.199337582187473, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY,
+			2.326347874040841, Double.NaN, Double.NaN };
+
+		// assert calculations are equal
+		for (int i = 0; i < input.length; i++) {
+			assertEquals(expected[i], ops.op("stats.qnorm").input(input[i]).apply());
+		}
 	}
 }

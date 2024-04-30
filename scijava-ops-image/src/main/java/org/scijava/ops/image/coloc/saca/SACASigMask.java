@@ -35,6 +35,7 @@ import net.imglib2.type.logic.BitType;
 import net.imglib2.util.Intervals;
 
 import org.scijava.function.Computers;
+import org.scijava.function.Functions;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
@@ -52,6 +53,9 @@ public class SACASigMask implements
 
 	@OpDependency(name = "threshold.apply")
 	private Computers.Arity2<RandomAccessibleInterval<DoubleType>, DoubleType, RandomAccessibleInterval<BitType>> thresOp;
+
+	@OpDependency(name = "stats.qnorm")
+	private Functions.Arity5<Double, Double, Double, Boolean, Boolean, Double> qnormOp;
 
 	/**
 	 * Spatially Adaptive Colocalization Analysis (SACA) significant pixel mask.
@@ -85,7 +89,7 @@ public class SACASigMask implements
 		if (logP == null) logP = false;
 
 		// compute QNorm
-		double thres = QNorm.compute(alpha / Intervals.numElements(heatmap), mean,
+		double thres = qnormOp.apply(alpha / Intervals.numElements(heatmap), mean,
 			sd, lowerTail, logP);
 
 		// apply QNorm thres and create significant pixel mask

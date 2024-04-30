@@ -145,5 +145,5 @@ SciJava Ops via Fiji's scripting engine with `script parameters`_:
 
 .. _`Dey et. al, Micros Res Tech 2006`: https://pubmed.ncbi.nlm.nih.gov/16586486/
 .. _`Gibson & Lanni, JOSA 1992`: https://pubmed.ncbi.nlm.nih.gov/1738047/
-.. _`here`: https://media.imagej.net/sample_data/3d/hela_nucleus.tif
+.. _`here`: https://media.imagej.net/scijava-ops/1.0.0/hela_nucleus.tif
 .. _`script parameters`: https://imagej.net/scripting/parameters

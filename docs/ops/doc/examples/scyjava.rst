@@ -3,8 +3,8 @@ SciJava Ops from Python
 =======================
 
 This example demonstrates how to use SciJava Ops with Python. Using SciJava Ops framework with Python depends on ``scyjava`` to provide robust
-Java code access and ``imglyb`` to bridge the ImgLib2 and NumPy data structures. The Python script in this example downloads a `3D HeLa cell`_
-nucleus dataset (with shape: ``61, 200, 200``), performes image processing with to improve the nucleus signal, segments the nucleus and measures
+Java code access and ``imglyb`` to bridge the ImgLib2 and NumPy data structures. The Python script in this example downloads a `3D 3T3 cell`_
+nucleus dataset (with shape: ``37, 300, 300``), performes image processing with to improve the nucleus signal, segments the nucleus and measures
 the 3D volume of the nucleus by creating a mesh. Finally the input image, processed image and the segmented label images are displayed in
 ``matplotlib``.
 
@@ -144,13 +144,13 @@ Activate the ``scijava-ops`` conda/mamba environment and run the following Pytho
     processed = imglib_to_numpy(results[0], "float32")
     labels = imglib_to_numpy(results[2].getIndexImg(), "int32")
     fig, ax = plt.subplots(nrows=1, ncols=3, figsize=(10, 3), sharex=True, sharey=True)
-    ax[0].imshow(narr[30, :, :], cmap='gray')
+    ax[0].imshow(narr[20, :, :], cmap='gray')
     ax[0].set_title("input")
-    ax[1].imshow(processed[30, :, :], cmap='gray')
+    ax[1].imshow(processed[20, :, :], cmap='gray')
     ax[1].set_title("processed")
-    ax[2].imshow(labels[30, :, :])
+    ax[2].imshow(labels[20, :, :])
     ax[2].set_title("segmentation")
     plt.tight_layout()
     plt.show()
 
-.. _`3D HeLa cell`: https://media.imagej.net/scijava-ops/1.0.0/hela_nucleus.tif
+.. _`3D 3T3 cell`: https://media.imagej.net/scijava-ops/1.0.0/3t3_nucleus.tif

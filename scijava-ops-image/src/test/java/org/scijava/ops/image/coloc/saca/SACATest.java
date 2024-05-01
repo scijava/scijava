@@ -29,16 +29,18 @@
 
 package org.scijava.ops.image.coloc.saca;
 
+import io.scif.img.ImgOpener;
 import net.imglib2.RandomAccess;
 import net.imglib2.img.Img;
 import net.imglib2.type.logic.BitType;
+import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 
+import org.scijava.io.location.FileLocation;
 import org.scijava.types.Nil;
 import org.scijava.ops.image.AbstractColocalisationTest;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -57,45 +59,23 @@ public class SACATest extends AbstractColocalisationTest {
 		142, 118 };
 
 	// green and red colocalization images
-	private Img<UnsignedByteType> green;
-	private Img<UnsignedByteType> red;
-
-	// green and red data slices
-	private Img<UnsignedByteType> gs;
-	private Img<UnsignedByteType> rs;
-
-	// SACA heatmap z score and sig mask image containers
-	private Img<DoubleType> zscore;
-	private Img<BitType> sigMask;
-
-	@BeforeAll
-	public void setUpTest() {
-		// load colocalization data (3D)
-		green = getPositiveCorrelationImageCh1();
-		red = getPositiveCorrelationImageCh2();
-
-		// get slice 15 from colocalization data
-		gs = ops.op("transform.hyperSliceView").input(green, 2, 15).outType(
-			new Nil<Img<UnsignedByteType>>()
-			{}).apply();
-		rs = ops.op("transform.hyperSliceView").input(red, 2, 15).outType(
-			new Nil<Img<UnsignedByteType>>()
-			{}).apply();
-
-		// create image containers
-		zscore = ops.op("create.img").input(gs, new DoubleType()).outType(
-			new Nil<Img<DoubleType>>()
-			{}).apply();
-		sigMask = ops.op("create.img").input(gs, new BitType()).outType(
-			new Nil<Img<BitType>>()
-			{}).apply();
-	}
+	private Img<UnsignedByteType> green = getPositiveCorrelationImageCh1();
+	private Img<UnsignedByteType> red = getPositiveCorrelationImageCh2();
 
 	@Test
 	public void testSACAHeatmapZScore() {
 		final double[] zscoreExpected = { 0.0, 6.117364936585281, 0.0,
 			-1.282447034877343, 0.0, 6.642396454955293, 0.0, -1.6567255788972388, 0.0,
 			3.5385003044434877 };
+
+		// get slice 15 from colocalization data
+		var gs = ops.op("transform.hyperSliceView").input(green, 2, 15).apply();
+		var rs = ops.op("transform.hyperSliceView").input(red, 2, 15).apply();
+
+		// create image container
+		Img<DoubleType> zscore = ops.op("create.img").input(gs, new DoubleType())
+			.outType(new Nil<Img<DoubleType>>()
+			{}).apply();
 
 		// run SACA heatmap Z score op
 		ops.op("coloc.saca.heatmapZScore").input(gs, rs).output(zscore).compute();
@@ -112,10 +92,17 @@ public class SACATest extends AbstractColocalisationTest {
 	@Test
 	public void testSACASigMask() {
 		final double[] sigExpected = { 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
-			0.0 };
+			1.0 };
+
+		Img<FloatType> zscore_ref = openFloatImg("stats/zscore_test_data.tif");
+
+		// create image container
+		Img<BitType> sigMask = ops.op("create.img").input(zscore_ref, new BitType())
+			.outType(new Nil<Img<BitType>>()
+			{}).apply();
 
 		// run SACA significant pixel mask op
-		ops.op("coloc.saca.sigMask").input(zscore).output(sigMask).compute();
+		ops.op("coloc.saca.sigMask").input(zscore_ref).output(sigMask).compute();
 
 		// get random access and assert results are equal
 		final RandomAccess<BitType> sRA = sigMask.randomAccess();
@@ -123,8 +110,14 @@ public class SACATest extends AbstractColocalisationTest {
 			sRA.setPosition(xPositions[i], 0);
 			sRA.setPosition(yPositions[i], 1);
 			assertEquals(sigExpected[i], sRA.get().getRealDouble());
-
 		}
+	}
 
+	@SuppressWarnings("unchecked")
+	public Img<FloatType> openFloatImg(final String relPath) {
+		final ImgOpener opener = new ImgOpener();
+		String source = "src/test/resources/org/scijava/ops/image/" + relPath;
+		FileLocation loc = new FileLocation(source);
+		return (Img) opener.openImgs(loc).get(0);
 	}
 }

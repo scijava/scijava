@@ -8,7 +8,7 @@ nucleus dataset (with shape: ``37, 300, 300``), performes image processing with 
 the 3D volume of the nucleus by creating a mesh. Finally the input image, processed image and the segmented label images are displayed in
 ``matplotlib``, and the volume (μm\ :sup:`3`) is printed to the console.
 
-.. figure:: https://media.imagej.net/scijava-ops/1.0.0/scyjava_example_1.png
+.. figure:: https://media.scijava.org/scijava-ops/1.0.0/scyjava_example_1.png
 
 .. code-block:: bash
 
@@ -148,7 +148,7 @@ Activate the ``scijava-ops`` conda/mamba environment and run the following Pytho
     ops = OpEnvironment.build()
 
     # open image
-    narr = read_image_from_url("https://media.imagej.net/scijava-ops/1.0.0/3t3_nucleus.tif")
+    narr = read_image_from_url("https://media.scijava.org/scijava-ops/1.0.0/3t3_nucleus.tif")
     cal = [0.065, 0.065, 0.1] # microns, from imaging parameters
     rai = numpy_to_imglib(narr)
     results = segment_nuclei(rai)
@@ -167,4 +167,4 @@ Activate the ``scijava-ops`` conda/mamba environment and run the following Pytho
     plt.tight_layout()
     plt.show()
 
-.. _`3D 3T3 cell`: https://media.imagej.net/scijava-ops/1.0.0/3t3_nucleus.tif
+.. _`3D 3T3 cell`: https://media.scijava.org/scijava-ops/1.0.0/3t3_nucleus.tif

@@ -10,7 +10,7 @@ the RLTV algorithm returns improved axial and lateral resolution when compared t
 
 You can download the 3D HeLa cell nuclus dataset `here`_.
 
-.. figure:: https://media.imagej.net/scijava-ops/1.0.0/rltv_example_1.gif
+.. figure:: https://media.scijava.org/scijava-ops/1.0.0/rltv_example_1.gif
 
     Results of RLTV deconvolution on the sample data.
 
@@ -145,5 +145,5 @@ SciJava Ops via Fiji's scripting engine with `script parameters`_:
 
 .. _`Dey et. al, Micros Res Tech 2006`: https://pubmed.ncbi.nlm.nih.gov/16586486/
 .. _`Gibson & Lanni, JOSA 1992`: https://pubmed.ncbi.nlm.nih.gov/1738047/
-.. _`here`: https://media.imagej.net/scijava-ops/1.0.0/hela_nucleus.tif
+.. _`here`: https://media.scijava.org/scijava-ops/1.0.0/hela_nucleus.tif
 .. _`script parameters`: https://imagej.net/scripting/parameters

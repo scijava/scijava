@@ -4,16 +4,16 @@ FLIM Analysis
 
 In this example we will use SciJava Ops within Fiji to perform `FLIM`_ analysis, which is used in many situations including photosensitizer detection and `FRET`_ measurement.
 
-.. image:: https://media.imagej.net/scijava-ops/1.0.0/flim_example_input.gif
+.. image:: https://media.scijava.org/scijava-ops/1.0.0/flim_example_input.gif
     :width: 49%
-.. image:: https://media.imagej.net/scijava-ops/1.0.0/flim_example_pseudocolored_annotated.png
+.. image:: https://media.scijava.org/scijava-ops/1.0.0/flim_example_pseudocolored_annotated.png
     :width: 49%
 
 We use a sample of `FluoCells™ Prepared Slide #1`_, imaged by `Jenu Chacko`_ using `Openscan-LSM`_ and SPC180 electronics with multiphoton excitation and a 40x WI lens. **Notably, the full field for this image is 130 microns in each axial dimension**.
 
   FluoCells™ Prepared Slide #1 contains bovine pulmonary artery endothelial cells (BPAEC). MitoTracker™ Red CMXRos was used to stain the mitochondria in the live cells, with accumulation dependent upon membrane potential. Following fixation and permeabilization, F-actin was stained with Alexa Fluor™ 488 phalloidin, and the nuclei were counterstained with the blue-fluorescent DNA stain DAPI.
 
-The sample data can be downloaded `here <https://media.imagej.net/scijava-ops/1.0.0/flim_example_data.sdt>`_ and can be loaded into Fiji with `Bio-Formats`_ using ``File → Open``. When presented with the ``Bio-Formats Import Options`` screen, it may be helpful to select ``Metadata viewing → Display metadata`` to determine values necessary for analysis. Then, select ``OK``. The data may take a minute to load.
+The sample data can be downloaded `here <https://media.scijava.org/scijava-ops/1.0.0/flim_example_data.sdt>`_ and can be loaded into Fiji with `Bio-Formats`_ using ``File → Open``. When presented with the ``Bio-Formats Import Options`` screen, it may be helpful to select ``Metadata viewing → Display metadata`` to determine values necessary for analysis. Then, select ``OK``. The data may take a minute to load.
 
 Within the script, the `Levenberg-Marquardt algorithm`_ fitting Op of SciJava Ops FLIM is used to fit the data.
 
@@ -48,13 +48,13 @@ The script above will display the fit results, as well as a *pseudocolored* outp
 
   * Value is a function of A\ :subscript:`1`
 
-.. image:: https://media.imagej.net/scijava-ops/1.0.0/flim_example_a1.png
+.. image:: https://media.scijava.org/scijava-ops/1.0.0/flim_example_a1.png
     :width: 32%
 
-.. image:: https://media.imagej.net/scijava-ops/1.0.0/flim_example_tau1.png
+.. image:: https://media.scijava.org/scijava-ops/1.0.0/flim_example_tau1.png
     :width: 32%
 
-.. image:: https://media.imagej.net/scijava-ops/1.0.0/flim_example_pseudocolored.png
+.. image:: https://media.scijava.org/scijava-ops/1.0.0/flim_example_pseudocolored.png
     :width: 32%
 
 
@@ -168,10 +168,10 @@ With 130 microns across each direction in the dataset, we have 512/130~3.938 pix
 
 The results are shown in the panels below. The left panel shows panel 56 of the original image, contrasted using ImageJ's Brightness and Contrast tool, and the right panel shows the **annotated**, pseudocolored results.
 
-.. image:: https://media.imagej.net/scijava-ops/1.0.0/flim_example_input_56.png
+.. image:: https://media.scijava.org/scijava-ops/1.0.0/flim_example_input_56.png
     :width: 49%
 
-.. image:: https://media.imagej.net/scijava-ops/1.0.0/flim_example_pseudocolored_annotated.png
+.. image:: https://media.scijava.org/scijava-ops/1.0.0/flim_example_pseudocolored_annotated.png
     :width: 49%
 
 .. tabs::
@@ -215,10 +215,10 @@ The provided script allows users to specify ROIs by drawing selections using the
 
 In the panels below, we show the results of executing both scripts with computation restricted to the area around a single cell. The left panel shows slide 56 of the input data, annotated with an elliptical ROI drawn using ImageJ's elliptical selection tool and contrasted using ImageJ's Brightness and Contrast tool. The right panel shows the pseudocolored result, annotated with color and scale bars, with computation limited to the selected ellipse.
 
-.. image:: https://media.imagej.net/scijava-ops/1.0.0/flim_example_input_56_roi.png
+.. image:: https://media.scijava.org/scijava-ops/1.0.0/flim_example_input_56_roi.png
     :width: 49%
 
-.. image:: https://media.imagej.net/scijava-ops/1.0.0/flim_example_pseudocolored_annotated_roi.png
+.. image:: https://media.scijava.org/scijava-ops/1.0.0/flim_example_pseudocolored_annotated_roi.png
     :width: 49%
 
 

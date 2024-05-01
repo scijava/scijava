@@ -48,8 +48,8 @@ SciJava Ops via Fiji's scripting engine with `script parameters`_:
         // create SACA Z-score heatmap
         zscore = ops.op("coloc.saca.heatmapZScore").input(channels[0], channels[1]).apply()
         
-        // create SACA p-value heatmap
-        pvalue = ops.op("coloc.saca.heatmapPValue").input(zscore).apply()
+        // compute pixel-wise p-value
+        pvalue = ops.op("stats.pnorm").input(zscore).apply()
         
         // create SACA significant pixel mask
         sig_mask = ops.op("create.img").input(channels[0], new BitType()).apply()
@@ -89,8 +89,8 @@ SciJava Ops via Fiji's scripting engine with `script parameters`_:
         # create SACA Z-score heatmap
         zscore = ops.op("coloc.saca.heatmapZScore").input(channels[0], channels[1]).apply()
         
-        # create SACA p-value heatmap
-        pvalue = ops.op("coloc.saca.heatmapPValue").input(zscore).apply()
+        # compute pixel-wise p-value
+        pvalue = ops.op("stats.pnorm").input(zscore).apply()
         
         # create SACA significant pixel mask
         sig_mask = ops.op("create.img").input(channels[0], BitType()).apply()

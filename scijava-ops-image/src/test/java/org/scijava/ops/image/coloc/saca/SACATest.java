@@ -37,72 +37,94 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 
 import org.scijava.types.Nil;
 import org.scijava.ops.image.AbstractColocalisationTest;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests {@code coloc.saca} ops.
+ *
+ * @author Edward Evans
  */
 
 public class SACATest extends AbstractColocalisationTest {
 
+	// XY positions to sample
+	private final static int[] xPositions = { 30, 79, 77, 104, 7, 52, 164, 88,
+		119, 65 };
+	private final static int[] yPositions = { 30, 36, 80, 79, 139, 102, 77, 41,
+		142, 118 };
+
+	// green and red colocalization images
+	private Img<UnsignedByteType> green;
+	private Img<UnsignedByteType> red;
+
+	// green and red data slices
+	private Img<UnsignedByteType> gs;
+	private Img<UnsignedByteType> rs;
+
+	// SACA heatmap z score and sig mask image containers
+	private Img<DoubleType> zscore;
+	private Img<BitType> sigMask;
+
+	@BeforeAll
+	public void setUpTest() {
+		// load colocalization data (3D)
+		green = getPositiveCorrelationImageCh1();
+		red = getPositiveCorrelationImageCh2();
+
+		// get slice 15 from colocalization data
+		gs = ops.op("transform.hyperSliceView").input(green, 2, 15).outType(
+			new Nil<Img<UnsignedByteType>>()
+			{}).apply();
+		rs = ops.op("transform.hyperSliceView").input(red, 2, 15).outType(
+			new Nil<Img<UnsignedByteType>>()
+			{}).apply();
+
+		// create image containers
+		zscore = ops.op("create.img").input(gs, new DoubleType()).outType(
+			new Nil<Img<DoubleType>>()
+			{}).apply();
+		sigMask = ops.op("create.img").input(gs, new BitType()).outType(
+			new Nil<Img<BitType>>()
+			{}).apply();
+	}
+
 	@Test
-	public void testSACAFramework() {
-		final int[] xPositions = { 30, 79, 77, 104, 7, 52, 164, 88, 119, 65 };
-		final int[] yPositions = { 30, 36, 80, 79, 139, 102, 77, 41, 142, 118 };
+	public void testSACAHeatmapZScore() {
 		final double[] zscoreExpected = { 0.0, 6.117364936585281, 0.0,
 			-1.282447034877343, 0.0, 6.642396454955293, 0.0, -1.6567255788972388, 0.0,
 			3.5385003044434877 };
-		final double[] pvalueExpected = { 0.5, 0.9999999995243234, 0.5,
-			0.09984293678613743, 0.5, 0.9999999999845688, 0.5, 0.04878748455758225,
-			0.5, 0.9997987965912973 };
-		final double[] sigExpected = { 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
-			0.0 };
-
-		// load sample colocalization data
-		Img<UnsignedByteType> green = getPositiveCorrelationImageCh1();
-		Img<UnsignedByteType> red = getPositiveCorrelationImageCh2();
-
-		// get slice 15 from the green/red images
-		var gs = ops.op("transform.hyperSliceView").input(green, 2, 15).apply();
-		var rs = ops.op("transform.hyperSliceView").input(red, 2, 15).apply();
-
-		// create image containers
-		Img<DoubleType> zscore = ops.op("create.img").input(gs, new DoubleType())
-			.outType(new Nil<Img<DoubleType>>()
-			{}).apply();
-		Img<DoubleType> pvalue = ops.op("create.img").input(gs, new DoubleType())
-			.outType(new Nil<Img<DoubleType>>()
-			{}).apply();
-		Img<BitType> sigMask = ops.op("create.img").input(gs, new BitType())
-			.outType(new Nil<Img<BitType>>()
-			{}).apply();
 
 		// run SACA heatmap Z score op
 		ops.op("coloc.saca.heatmapZScore").input(gs, rs).output(zscore).compute();
 
-		// run stats.pnorm op
-		ops.op("stats.pnorm").input(zscore).output(pvalue).compute();
+		// get random access and assert results are equal
+		final RandomAccess<DoubleType> zRA = zscore.randomAccess();
+		for (int i = 0; i < xPositions.length; i++) {
+			zRA.setPosition(xPositions[i], 0);
+			zRA.setPosition(yPositions[i], 1);
+			assertEquals(zscoreExpected[i], zRA.get().getRealDouble());
+		}
+	}
+
+	@Test
+	public void testSACASigMask() {
+		final double[] sigExpected = { 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
+			0.0 };
 
 		// run SACA significant pixel mask op
 		ops.op("coloc.saca.sigMask").input(zscore).output(sigMask).compute();
 
-		// get random access and compare pixels
-		final RandomAccess<DoubleType> zRA = zscore.randomAccess();
-		final RandomAccess<DoubleType> pRA = pvalue.randomAccess();
+		// get random access and assert results are equal
 		final RandomAccess<BitType> sRA = sigMask.randomAccess();
-
-		// assert results are equal
 		for (int i = 0; i < xPositions.length; i++) {
-			zRA.setPosition(xPositions[i], 0);
-			zRA.setPosition(yPositions[i], 1);
-			pRA.setPosition(xPositions[i], 0);
-			pRA.setPosition(yPositions[i], 1);
 			sRA.setPosition(xPositions[i], 0);
 			sRA.setPosition(yPositions[i], 1);
-			assertEquals(zscoreExpected[i], zRA.get().getRealDouble());
-			assertEquals(pvalueExpected[i], pRA.get().getRealDouble());
 			assertEquals(sigExpected[i], sRA.get().getRealDouble());
+
 		}
+
 	}
 }

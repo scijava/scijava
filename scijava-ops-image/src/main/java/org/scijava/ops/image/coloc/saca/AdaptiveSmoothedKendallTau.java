@@ -48,6 +48,8 @@ import net.imglib2.view.composite.CompositeIntervalView;
 import net.imglib2.view.composite.GenericComposite;
 import net.imglib2.type.numeric.real.DoubleType;
 
+import org.scijava.progress.Progress;
+
 /**
  * Helper class for Spatially Adaptive Colocalization Analysis (SACA) framework.
  * This class is used by the "coloc.saca.heatmapZScore" Op to produce the
@@ -93,7 +95,7 @@ public final class AdaptiveSmoothedKendallTau {
 
 		LoopBuilder.setImages(oldsqrtN).multiThreaded().forEachPixel(t -> t
 			.setOne());
-
+		Progress.setStageMax(TU);
 		for (int s = 0; s < TU; s++) {
 			intSize = (int) Math.floor(size);
 			singleiteration(image1, image2, thres1, thres2, stop, oldtau, oldsqrtN,
@@ -107,6 +109,7 @@ public final class AdaptiveSmoothedKendallTau {
 						ts2.set(tSqrtN);
 					});
 			}
+			Progress.update();
 		}
 	}
 

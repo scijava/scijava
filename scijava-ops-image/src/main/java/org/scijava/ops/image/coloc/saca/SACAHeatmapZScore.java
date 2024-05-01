@@ -39,6 +39,7 @@ import net.imglib2.view.Views;
 
 import java.util.function.Function;
 
+import org.scijava.progress.Progress;
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
@@ -101,6 +102,7 @@ public class SACAHeatmapZScore<I extends RealType<I>> implements
 		}
 
 		// set seed, compute thresholds and create empty result if necessary
+		Progress.defineTotalProgress(1);
 		if (seed == null) seed = 0xdeadbeefL;
 		if (thres1 == null) thres1 = otsuOp.apply(histOp.apply(Views.iterable(
 			image1)));

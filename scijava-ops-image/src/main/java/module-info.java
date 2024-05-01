@@ -43,6 +43,7 @@ open module org.scijava.ops.image {
 	requires org.scijava.function;
 	requires org.scijava.meta;
 	requires org.scijava.ops.api;
+	requires org.scijava.progress;
 	requires org.scijava.ops.spi;
 	requires org.scijava.priority;
 	requires org.scijava.types;

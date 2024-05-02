@@ -19,7 +19,7 @@ Pearson's :sup:`4` and Li's :sup:`5` colocalization quotients.
 
 You can download the colocalization dataset `here`_.
 
-.. figure:: https://media.imagej.net/scijava-ops/1.0.0/saca_input.png
+.. figure:: https://media.scijava.org/scijava-ops/1.0.0/saca_input.png
 
 SciJava Ops via Fiji's scripting engine with `script parameters`_:
 
@@ -66,7 +66,7 @@ SciJava Ops via Fiji's scripting engine with `script parameters`_:
         li = ops.op("coloc.icq").input(subsample_1, subsample_2).apply()
         
         // print Pearson's and Li's results
-        print("pearsons: " + pearsons + "\nli: " + li)
+        print("Pearson's: " + pearsons + "\nLi's: " + li)
 
    .. code-tab:: python
         
@@ -107,13 +107,19 @@ SciJava Ops via Fiji's scripting engine with `script parameters`_:
         li = ops.op("coloc.icq").input(subsample_1, subsample_2).apply()
         
         # print Pearson's and Li's results
-        print("pearsons: " + str(pearsons))
-        print("li: " + str(li))
+        print("Pearson's: " + str(pearsons))
+        print("Li's: " + str(li))
 
-Once the script completes, three images will be displayed: ``zscore``, ``pvalue`` and ``sig_mask``.
-These images are in gray scale.
+Once the script completes, three gray scale images will be displayed: ``zscore``, ``pvalue`` and ``sig_mask``.
+Additionally the console will print the Pearson's and Li's colocalization coefficients using the significant pixel
+mask created from SACA.
 
-.. figure:: https://media.imagej.net/scijava-ops/1.0.0/saca_output_gray.png
+.. code-block:: text
+
+   Pearson's: 0.65593660643
+   Li's: 0.211457241276
+
+.. figure:: https://media.scijava.org/scijava-ops/1.0.0/saca_output_gray.png
 
 To apply the ``phase`` LUT and a colorbar use the following script and select the input images.
 
@@ -149,7 +155,7 @@ To apply the ``phase`` LUT and a colorbar use the following script and select th
         IJ.run(zscore_imp, "Calibration Bar...", "location=[Upper Right] fill=White label=Black number=5 decimal=2 font=12 zoom=1.3 overlay")
         IJ.run(pvalue_imp, "Calibration Bar...", "location=[Upper Right] fill=White label=Black number=5 decimal=2 font=12 zoom=1.3 overlay")
 
-.. figure:: https://media.imagej.net/scijava-ops/1.0.0/saca_output_color.png
+.. figure:: https://media.scijava.org/scijava-ops/1.0.0/saca_output_color.png
 
 
 | :sup:`1`: `Wang et. al, IEEE 2019`_

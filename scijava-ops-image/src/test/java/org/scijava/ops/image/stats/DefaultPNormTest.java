@@ -30,12 +30,10 @@
 package org.scijava.ops.image.stats;
 
 import net.imglib2.RandomAccess;
-import net.imglib2.img.Img;
+import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.type.numeric.real.DoubleType;
-import net.imglib2.type.numeric.real.FloatType;
 
 import org.scijava.ops.image.AbstractOpTest;
-import org.scijava.types.Nil;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,32 +47,25 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class DefaultPNormTest extends AbstractOpTest {
 
 	@Test
-	public void testImg() {
-		final int[] xPositions = { 30, 79, 77, 104, 7, 52, 164, 88, 119, 65 };
-		final int[] yPositions = { 30, 36, 80, 79, 139, 102, 77, 41, 142, 118 };
-		final double[] pvalueExpected = { 0.5, 0.9999998132675161, 0.5,
+	public void testPNorm() {
+		final double[] data = { 0.0, 5.082008361816406, 0.0, 1.206267237663269, 0.0,
+			6.626776218414307, 0.0, 2.6551482677459717, 0.0, 4.625161170959473 };
+		final double[] expected = { 0.5, 0.9999998132675161, 0.5,
 			0.8861427670894226, 0.5, 0.9999999999828452, 0.5, 0.9960363221624154, 0.5,
 			0.999998128463855 };
 
-		// load Z-score heatmap slice
-		Img<FloatType> zscore = openFloatImg("zscore_test_data.tif");
+		// create input for stats.pnorm Op
+		var input = ArrayImgs.doubles(data, 10);
+		var pvalue = ArrayImgs.doubles(10);
 
-		// create p-value image container
-		Img<DoubleType> pvalue = ops.op("create.img").input(zscore,
-			new DoubleType()).outType(new Nil<Img<DoubleType>>()
-		{}).apply();
+		// run stats.pnorm op on data
+		ops.op("stats.pnorm").input(input).output(pvalue).compute();
 
-		// run stats.pnorm op on Z-score data
-		ops.op("stats.pnorm").input(zscore).output(pvalue).compute();
-
-		// get random access and compare pixels
+		// get random access and results are equal
 		final RandomAccess<DoubleType> pRA = pvalue.randomAccess();
-
-		// assert results are equal
-		for (int i = 0; i < xPositions.length; i++) {
-			pRA.setPosition(xPositions[i], 0);
-			pRA.setPosition(yPositions[i], 1);
-			assertEquals(pvalueExpected[i], pRA.get().getRealDouble());
+		for (int i = 0; i < data.length; i++) {
+			pRA.setPosition(i, 0);
+			assertEquals(expected[i], pRA.get().getRealDouble());
 		}
 	}
 }

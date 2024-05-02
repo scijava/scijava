@@ -57,40 +57,40 @@ import net.imglib2.view.Views;
 public abstract class AbstractColocalisationTest extends AbstractOpTest {
 
 	// images and meta data for zero correlation
-	private Img<UnsignedByteType> zeroCorrelationImageCh1;
-	private Img<UnsignedByteType> zeroCorrelationImageCh2;
+	private static Img<UnsignedByteType> zeroCorrelationImageCh1;
+	private static Img<UnsignedByteType> zeroCorrelationImageCh2;
 
 	// images and meta data for positive correlation test
 	// and real noisy image Manders' coeff with mask test
-	private Img<UnsignedByteType> positiveCorrelationImageCh1;
-	private Img<UnsignedByteType> positiveCorrelationImageCh2;
+	private static Img<UnsignedByteType> positiveCorrelationImageCh1;
+	private static Img<UnsignedByteType> positiveCorrelationImageCh2;
 
 	protected static OpBuilder op(String name) {
 		return ops.op(name);
 	}
 
-	protected Img<UnsignedByteType> getZeroCorrelationImageCh1() {
+	protected static Img<UnsignedByteType> getZeroCorrelationImageCh1() {
 		if (zeroCorrelationImageCh1 == null) {
 			zeroCorrelationImageCh1 = loadTiffFromJar("greenZstack.tif");
 		}
 		return zeroCorrelationImageCh1;
 	}
 
-	protected Img<UnsignedByteType> getZeroCorrelationImageCh2() {
+	protected static Img<UnsignedByteType> getZeroCorrelationImageCh2() {
 		if (zeroCorrelationImageCh2 == null) {
 			zeroCorrelationImageCh2 = loadTiffFromJar("redZstack.tif");
 		}
 		return zeroCorrelationImageCh2;
 	}
 
-	protected Img<UnsignedByteType> getPositiveCorrelationImageCh1() {
+	protected static Img<UnsignedByteType> getPositiveCorrelationImageCh1() {
 		if (positiveCorrelationImageCh1 == null) {
 			positiveCorrelationImageCh1 = loadTiffFromJar("colocsample1b-green.tif");
 		}
 		return positiveCorrelationImageCh1;
 	}
 
-	protected Img<UnsignedByteType> getPositiveCorrelationImageCh2() {
+	protected static Img<UnsignedByteType> getPositiveCorrelationImageCh2() {
 		if (positiveCorrelationImageCh2 == null) {
 			positiveCorrelationImageCh2 = loadTiffFromJar("colocsample1b-red.tif");
 		}
@@ -107,7 +107,7 @@ public abstract class AbstractColocalisationTest extends AbstractOpTest {
 	 * @param relPath The relative path to the Tiff file.
 	 * @return The file as ImgLib image.
 	 */
-	private <T extends RealType<T> & NativeType<T>> Img<T> loadTiffFromJar(
+	private static <T extends RealType<T> & NativeType<T>> Img<T> loadTiffFromJar(
 		final String relPath)
 	{
 //		InputStream is = TestImageAccessor.class.getResourceAsStream(relPath);

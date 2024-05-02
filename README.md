@@ -1,4 +1,4 @@
-[![](https://github.com/scijava/incubator/actions/workflows/build-main.yml/badge.svg)](https://github.com/scijava/incubator/actions/workflows/build-main.yml)
+[![Build Status](https://github.com/scijava/incubator/actions/workflows/build.yml/badge.svg)](https://github.com/scijava/incubator/actions/workflows/build.yml)
 
 # SciJava Incubator: A staging ground for fledgling SciJava projects
 

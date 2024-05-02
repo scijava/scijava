@@ -141,9 +141,6 @@ public final class Progress {
 			t.complete();
 			// ping relevant listeners
 			pingListeners(t);
-			if (progressibleStack.get().peek() != null) {
-				pingListeners(progressibleStack.get().peek());
-			}
 		}
 	}
 
@@ -220,6 +217,10 @@ public final class Progress {
 		// Ping global listeners
 		synchronized (globalListeners) {
 			globalListeners.forEach(l -> l.acknowledgeUpdate(task));
+		}
+		// Ping parent
+		if (task.parent() != null) {
+			pingListeners(task.parent());
 		}
 	}
 
@@ -313,6 +314,8 @@ public final class Progress {
 	 */
 	private static final class NOPTask extends Task {
 
+		private static final double NOP_PROGRESS = 0.0;
+
 		private NOPTask() {
 			super(null, null, null);
 		}
@@ -330,6 +333,11 @@ public final class Progress {
 		@Override
 		public void update(long numElements) {
 			// NB: No-op
+		}
+
+		@Override
+		public double progress() {
+			return NOP_PROGRESS;
 		}
 
 	}

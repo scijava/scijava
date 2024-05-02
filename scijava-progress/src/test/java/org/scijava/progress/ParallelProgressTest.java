@@ -29,6 +29,8 @@
 
 package org.scijava.progress;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -159,16 +161,25 @@ public class ParallelProgressTest {
 		int iterationsPerThread = 1000;
 		Progress.addListener(task, new ProgressListener() {
 
-			double lastProgress = 0;
+			ThreadLocal<List<Double>> lastProgress = ThreadLocal.withInitial(() -> {
+				List<Double> a = new ArrayList<>();
+				a.add(0.0);
+				return a;
+			});
 
 			@Override
 			public void acknowledgeUpdate(Task t) {
 				// TODO: Can we do better? Is there a way to guarantee that the
 				// progress will not be updated again in between when we enter the
 				// method and when we ask for the progress?
+				List<Double> l = lastProgress.get();
 				double progress = t.progress();
-				Assertions.assertTrue(lastProgress <= progress);
-				lastProgress = progress;
+////				System.out.println(Thread.currentThread() + "\tprogress: " + progress);
+				if (l.get(l.size() - 1) > progress) {
+					t.progress();
+				}
+				Assertions.assertTrue(l.get(l.size() - 1) <= progress);
+				l.add(progress);
 			}
 
 		});

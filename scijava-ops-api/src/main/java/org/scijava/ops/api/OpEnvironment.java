@@ -63,6 +63,11 @@ import org.scijava.types.Nil;
  */
 public interface OpEnvironment extends Prioritized<OpEnvironment> {
 
+	/**
+	 * Generates an <b>empty</b> {@link OpEnvironment}, which can be populated with the Ops of the caller's choice.
+	 * @return an empty {@link OpEnvironment}
+	 * @see #build() for an {@link OpEnvironment} that is fully populated
+	 */
 	static OpEnvironment buildEmpty() {
 		Optional<OpEnvironment> opsOptional = Discoverer //
 			.using(ServiceLoader::load) //
@@ -72,6 +77,11 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 		);
 	}
 
+	/**
+	 * Generates an {@link OpEnvironment} with all available Ops.
+	 * @return an {@link OpEnvironment} with all available Ops.
+	 * @see #buildEmpty() for an {@link OpEnvironment} that is empty
+	 */
 	static OpEnvironment build() {
 		OpEnvironment ops = buildEmpty();
 		ops.discoverEverything();
@@ -79,15 +89,17 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	}
 
 	/**
-	 * Obtains all Ops in the {@link OpEnvironment}.
+	 * Obtains all Ops in the {@link OpEnvironment}, sorted by priority.
 	 *
 	 * @return a {@link SortedSet} containing all Ops contained in the
 	 *         {@link OpEnvironment}.
 	 */
-	SortedSet<OpInfo> infos();
+	default SortedSet<OpInfo> infos() {
+		return infos(null, getDefaultHints());
+	}
 
 	/**
-	 * Obtains all Ops in the {@link OpEnvironment} that are named {@code name}.
+	 * Obtains all Ops in the {@link OpEnvironment} that are named {@code name}, sorted by priority.
 	 *
 	 * @param name the {@link String} of all Ops to be returned.
 	 * @return a {@link SortedSet} containing all Ops in the {@link OpEnvironment}
@@ -96,7 +108,7 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	SortedSet<OpInfo> infos(String name);
 
 	/**
-	 * Obtains all Ops in the {@link OpEnvironment} that match {@code hints}
+	 * Obtains all Ops in the {@link OpEnvironment} that match {@code hints}, sorted by priority
 	 *
 	 * @param hints the {@link Hints} used to filter available Ops.
 	 * @return a {@link SortedSet} containing all Ops in the {@link OpEnvironment}
@@ -106,7 +118,7 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 
 	/**
 	 * Obtains all Ops in the {@link OpEnvironment} that are named {@code name}
-	 * and match {@code hints}
+	 * and match {@code hints}, sorted by priority
 	 *
 	 * @param name the {@link String} of all Ops to be returned.
 	 * @param hints the {@link Hints} used to filter available Ops.

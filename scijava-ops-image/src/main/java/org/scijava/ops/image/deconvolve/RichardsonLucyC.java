@@ -45,6 +45,7 @@ import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.progress.Progress;
 
 /**
  * Richardson Lucy algorithm for (@link RandomAccessibleInterval) (Lucy, L. B.
@@ -165,9 +166,9 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 		AccelerationState<O> state = new AccelerationState<>(raiExtendedEstimate);
 
 		// -- perform iterations --
-
+		Progress.defineTotalProgress(1);
+		Progress.setStageMax(maxIterations);
 		for (int i = 0; i < maxIterations; i++) {
-
 			// create reblurred by convolving kernel with estimate
 			// NOTE: the FFT of the PSF of the kernel has been passed in as a
 			// parameter. when the op was set up, and computed above, so we can use
@@ -189,6 +190,8 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 
 			// accelerate the algorithm by taking a larger step
 			if (accelerate) accelerator.mutate(state);
+
+			Progress.update();
 		}
 
 		// -- copy crop padded back to original size

@@ -29,6 +29,7 @@
 
 package org.scijava.legacy.service;
 
+import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.plugin.Attr;
 import org.scijava.plugin.Parameter;
@@ -86,6 +87,7 @@ public class DefaultOpEnvironmentService extends AbstractService implements
 
 		@Override
 		public void acknowledgeUpdate(Task task) {
+			if (task.parent() != null) return;
 			var sjTask = taskMap.computeIfAbsent( //
 				task, //
 				(t) -> { //
@@ -114,7 +116,9 @@ public class DefaultOpEnvironmentService extends AbstractService implements
 		public static final OpEnvironment env = OpEnvironment.build();
 
 		static {
-			env.setDefaultHints(new Hints("progress.TRACK"));
+			env.setDefaultHints(new Hints(
+					"progress.TRACK"
+			));
 		}
 	}
 

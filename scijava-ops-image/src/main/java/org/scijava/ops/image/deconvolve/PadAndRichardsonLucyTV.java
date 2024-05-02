@@ -96,7 +96,7 @@ public class PadAndRichardsonLucyTV<I extends RealType<I> & NativeType<I>, O ext
 	@OpDependency(name = "filter.createFFTOutput")
 	private Functions.Arity3<Dimensions, C, Boolean, RandomAccessibleInterval<C>> createOp;
 
-	@OpDependency(name = "deconvolve.richardsonLucy")
+	@OpDependency(name = "deconvolve.richardsonLucy", hints = {"progress.TRACK"})
 	private Computers.Arity12<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, //
 			RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, //
 			Boolean, C, Integer, Boolean, //

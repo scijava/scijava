@@ -29,10 +29,10 @@
 
 package org.scijava.progress;
 
-import java.util.function.Function;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.function.Function;
 
 /**
  * Tests progress reporting for Task with subtasks
@@ -69,35 +69,40 @@ public class SubtaskProgressTest {
 		Function<Integer, Integer> progressible = //
 			new DependentComplexProgressReportingTask(iterator);
 
-		int numIterations = 100;
+		int numIterations = 2;
 		String id = "Running a complex Task with subtasks";
 		Progress.addListener(progressible, new ProgressListener() {
 
-			int subtasksCompleted = 0;
-			double middleStageCurrent = 1;
-			final double middleStageMax = numIterations;
-			boolean started = false;
+			int itr = 0;
+			/* Expected list of progress pings */
+			final double[] expProgress = new double[] {
+					0.0, // Register - parent
+					0.0, // Register - child 1
+					1.0 / 6, // Update 1 - child 1
+					2.0 / 6, // Update 2 - child 1
+					2.0 / 6, // Complete - child 1
+					3.0 / 6, // Update 1 - parent
+					4.0 / 6, // Update 2 - parent
+					4.0 / 6, // Register - child 2
+					5.0 / 6, // Update 1 - child 1
+					1.0, // Update 2 - child 2
+					1.0, // Complete - child 2
+					1.0 // Complete - parent
+			};
 
 			@Override
 			public void acknowledgeUpdate(Task task) {
-				if (!started) {
-					started = true;
-					return;
-				}
-				if (subtasksCompleted == 0) {
-					Assertions.assertEquals(1. / 3, task.progress(), 1e-6);
-					subtasksCompleted++;
-				}
-				else if (middleStageCurrent <= middleStageMax) {
-					Assertions.assertEquals((1. + middleStageCurrent++ / middleStageMax) /
-						3, task.progress(), 1e-6);
-				}
-				else {
-					Assertions.assertEquals(1., task.progress(), 1e-6);
-				}
-
-				Assertions.assertEquals(id, task.description());
-
+				// Check that the progress is what we expect
+				Assertions.assertEquals( //
+						expProgress[itr++], //
+						task.progress(), //
+						1e-6 //
+				);
+				// Check that, once the parent is complete, the task is complete
+                Assertions.assertEquals( //
+						(itr == expProgress.length), //
+						task.isComplete() //
+				);
 			}
 
 		});
@@ -116,31 +121,49 @@ public class SubtaskProgressTest {
 		Function<Integer, Integer> progressible = //
 			new DependentProgressReportingTask(iterator);
 
-		int numIterations = 100;
+		int numIterations = 2;
 		String id = "Running a task with subtasks";
 		Progress.addListener(progressible, new ProgressListener() {
 
-			double currentIterations = 0;
-			final double maxIterations = 3;
+			int itr = 0;
+			/* Expected list of progress pings */
+			final double[] expProgress = new double[] {
+					0.0, // Register - parent
+					0.0, // Register - child 1
+					1.0 / 6, // Update 1 - child 1
+					2.0 / 6, // Update 2 - child 1
+					2.0 / 6, // Complete - child 1
+					2.0 / 6, // Register - child 2
+					3.0 / 6, // Update 1 - child 2
+					4.0 / 6, // Update 2 - child 2
+					4.0 / 6, // Complete - child 2
+					4.0 / 6, // Register - child 3
+					5.0 / 6, // Update 1 - child 3
+					1.0, // Update 2 - child 3
+					1.0, // Complete - child 3
+					1.0 // Complete - parent
+			};
+
 
 			@Override
 			public void acknowledgeUpdate(Task task) {
-				if (!task.isComplete()) {
-					Assertions.assertEquals( //
-						Math.min(currentIterations, maxIterations) / maxIterations, //
+				// Check that the progress is what we expect
+				Assertions.assertEquals( //
+						expProgress[itr++], //
 						task.progress(), //
 						1e-6 //
-					);
-					currentIterations++;
-				}
-				Assertions.assertEquals(id, task.description());
+				);
+				// Check that, once the parent is complete, the task is complete
+				Assertions.assertEquals( //
+						(itr == expProgress.length), //
+						task.isComplete() //
+				);
 			}
 
 		});
 		Progress.register(progressible, id);
 		progressible.apply(numIterations);
 		Progress.complete();
-
 	}
 
 }

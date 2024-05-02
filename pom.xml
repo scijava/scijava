@@ -62,7 +62,6 @@
 		<module>scijava-ops-ext-parser</module>
 		<module>scijava-ops-spi</module>
 		<module>scijava-ops-tutorial</module>
-		<module>scijava-persist</module>
 		<module>scijava-priority</module>
 		<module>scijava-progress</module>
 		<module>scijava-struct</module>

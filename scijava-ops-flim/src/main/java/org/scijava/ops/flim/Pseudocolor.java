@@ -41,7 +41,6 @@ import net.imglib2.view.Views;
 import org.scijava.function.Functions;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.util.ColorRGB;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -235,13 +234,80 @@ public class Pseudocolor implements
 	 */
 	public static ColorTable8 spci() {
 		final byte[] r = new byte[256], g = new byte[256], b = new byte[256];
+		final int[] rgb = new int[3];
 		for (int i = 0; i < 256; i++) {
-			final ColorRGB c = ColorRGB.fromHSVColor((i / 255d * 200d + 20) / 360d,
-				1d, 1d);
-			r[i] = (byte) c.getRed();
-			g[i] = (byte) c.getGreen();
-			b[i] = (byte) c.getBlue();
+			hsvToRgb((i / 255d * 200d + 20) / 360d, 1d, 1d, rgb);
+			r[i] = (byte) rgb[0];
+			g[i] = (byte) rgb[1];
+			b[i] = (byte) rgb[2];
 		}
 		return new ColorTable8(r, g, b);
+	}
+
+	/**
+	 * Converts an HSV color value to RGB.
+	 * <p>
+	 * Assumes {@code h}, {@code s}, and {@code v} are contained in the set [0, 1]
+	 * and returns {@code r}, {@code g}, and {@code b} in the set [0, 255].
+	 * </p>
+	 * <p>
+	 * Conversion formula adapted from Wikipedia's <a
+	 * href="https://en.wikipedia.org/wiki/HSL_and_HSV">HSL and HSV article</a> and
+	 * Michael Jackson's <a href="http://bit.ly/9L2qln">blog post on additive
+	 * color model conversion algorithms</a>.
+	 * </p>
+	 * 
+	 * @param h The hue
+	 * @param s The saturation
+	 * @param v The value
+	 * @return ColorRGB The RGB representation
+	 */
+	private static void hsvToRgb(final double h, final double s,
+		final double v, final int[] rgb)
+	{
+		double r01 = 0, g01 = 0, b01 = 0;
+
+		final int i = (int) Math.floor(h * 6);
+		final double f = h * 6 - i;
+		final double p = v * (1 - s);
+		final double q = v * (1 - f * s);
+		final double t = v * (1 - (1 - f) * s);
+
+		switch (i % 6) {
+			case 0:
+				r01 = v;
+				g01 = t;
+				b01 = p;
+				break;
+			case 1:
+				r01 = q;
+				g01 = v;
+				b01 = p;
+				break;
+			case 2:
+				r01 = p;
+				g01 = v;
+				b01 = t;
+				break;
+			case 3:
+				r01 = p;
+				g01 = q;
+				b01 = v;
+				break;
+			case 4:
+				r01 = t;
+				g01 = p;
+				b01 = v;
+				break;
+			case 5:
+				r01 = v;
+				g01 = p;
+				b01 = q;
+				break;
+		}
+
+		rgb[0] = (int) Math.round(r01 * 255);
+		rgb[1] = (int) Math.round(g01 * 255);
+		rgb[2] = (int) Math.round(b01 * 255);
 	}
 }

@@ -27,42 +27,45 @@
  * #L%
  */
 
-open module org.scijava.ops.image {
-	// Note that opening this module is necessary to provide runtime access
-	// from the SciJava Ops Engine module.
+package org.scijava.ops.image.stats;
 
-	requires java.scripting;
-	requires net.imglib2.mesh;
-	requires net.imglib2;
-	requires net.imglib2.algorithm;
-	requires net.imglib2.algorithm.fft2;
-	requires net.imglib2.roi;
-	requires org.joml;
-	requires org.scijava.collections;
-	requires org.scijava.concurrent;
-	requires org.scijava.function;
-	requires org.scijava.meta;
-	requires org.scijava.ops.api;
-	requires org.scijava.progress;
-	requires org.scijava.ops.spi;
-	requires org.scijava.priority;
-	requires org.scijava.types;
+import net.imglib2.RandomAccess;
+import net.imglib2.img.array.ArrayImgs;
+import net.imglib2.type.numeric.real.DoubleType;
 
-	// FIXME: these module names derive from filenames and are thus unstable
-	requires commons.math3;
-	requires ojalgo;
-	requires jama;
-	requires mines.jtk;
-	requires net.imglib2.realtransform;
+import org.scijava.ops.image.AbstractOpTest;
 
-	provides org.scijava.types.TypeExtractor with
-			org.scijava.ops.image.types.ImgFactoryTypeExtractor,
-			org.scijava.ops.image.types.ImgLabelingTypeExtractor,
-			org.scijava.ops.image.types.NativeImgTypeExtractor,
-			org.scijava.ops.image.types.LabelingMappingTypeExtractor,
-			org.scijava.ops.image.types.OutOfBoundsConstantValueFactoryTypeExtractor,
-			org.scijava.ops.image.types.OutOfBoundsFactoryTypeExtractor,
-			org.scijava.ops.image.types.OutOfBoundsRandomValueFactoryTypeExtractor,
-			org.scijava.ops.image.types.RAITypeExtractor;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Test {@code stats.pnorm} op.
+ *
+ * @author Edward Evans
+ */
+
+public class DefaultPNormTest extends AbstractOpTest {
+
+	@Test
+	public void testPNorm() {
+		final double[] data = { 0.0, 5.082008361816406, 0.0, 1.206267237663269, 0.0,
+			6.626776218414307, 0.0, 2.6551482677459717, 0.0, 4.625161170959473 };
+		final double[] expected = { 0.5, 0.9999998132675161, 0.5,
+			0.8861427670894226, 0.5, 0.9999999999828452, 0.5, 0.9960363221624154, 0.5,
+			0.999998128463855 };
+
+		// create input for stats.pnorm Op
+		var input = ArrayImgs.doubles(data, 10);
+		var pvalue = ArrayImgs.doubles(10);
+
+		// run stats.pnorm op on data
+		ops.op("stats.pnorm").input(input).output(pvalue).compute();
+
+		// get random access and results are equal
+		final RandomAccess<DoubleType> pRA = pvalue.randomAccess();
+		for (int i = 0; i < data.length; i++) {
+			pRA.setPosition(i, 0);
+			assertEquals(expected[i], pRA.get().getRealDouble());
+		}
+	}
 }

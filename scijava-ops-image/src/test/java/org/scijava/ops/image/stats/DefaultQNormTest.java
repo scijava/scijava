@@ -27,42 +27,31 @@
  * #L%
  */
 
-open module org.scijava.ops.image {
-	// Note that opening this module is necessary to provide runtime access
-	// from the SciJava Ops Engine module.
+package org.scijava.ops.image.stats;
 
-	requires java.scripting;
-	requires net.imglib2.mesh;
-	requires net.imglib2;
-	requires net.imglib2.algorithm;
-	requires net.imglib2.algorithm.fft2;
-	requires net.imglib2.roi;
-	requires org.joml;
-	requires org.scijava.collections;
-	requires org.scijava.concurrent;
-	requires org.scijava.function;
-	requires org.scijava.meta;
-	requires org.scijava.ops.api;
-	requires org.scijava.progress;
-	requires org.scijava.ops.spi;
-	requires org.scijava.priority;
-	requires org.scijava.types;
+import org.scijava.ops.image.AbstractOpTest;
 
-	// FIXME: these module names derive from filenames and are thus unstable
-	requires commons.math3;
-	requires ojalgo;
-	requires jama;
-	requires mines.jtk;
-	requires net.imglib2.realtransform;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-	provides org.scijava.types.TypeExtractor with
-			org.scijava.ops.image.types.ImgFactoryTypeExtractor,
-			org.scijava.ops.image.types.ImgLabelingTypeExtractor,
-			org.scijava.ops.image.types.NativeImgTypeExtractor,
-			org.scijava.ops.image.types.LabelingMappingTypeExtractor,
-			org.scijava.ops.image.types.OutOfBoundsConstantValueFactoryTypeExtractor,
-			org.scijava.ops.image.types.OutOfBoundsFactoryTypeExtractor,
-			org.scijava.ops.image.types.OutOfBoundsRandomValueFactoryTypeExtractor,
-			org.scijava.ops.image.types.RAITypeExtractor;
+/**
+ * Test {@code stats.qnorm} op.
+ *
+ * @author Edward Evans
+ */
 
+public class DefaultQNormTest extends AbstractOpTest {
+
+	@Test
+	public void testCalculation() {
+		final double[] input = { 0.05, 0.001, 1e-7, 1, 0, 0.99, -0.99, 1.1 };
+		final double[] expected = { -1.644853626951473, -3.0902323061678136,
+			-5.199337582187473, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY,
+			2.326347874040841, Double.NaN, Double.NaN };
+
+		// assert calculations are equal
+		for (int i = 0; i < input.length; i++) {
+			assertEquals(expected[i], ops.op("stats.qnorm").input(input[i]).apply());
+		}
+	}
 }

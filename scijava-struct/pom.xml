@@ -4,7 +4,7 @@
 
 	<parent>
 		<groupId>org.scijava</groupId>
-		<artifactId>scijava-incubator</artifactId>
+		<artifactId>scijava-parent</artifactId>
 		<version>0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
@@ -13,7 +13,7 @@
 
 	<name>SciJava Struct</name>
 	<description>A library for building and introspecting structs.</description>
-	<url>https://github.com/scijava/incubator</url>
+	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2021</inceptionYear>
 	<organization>
 		<name>SciJava</name>
@@ -69,10 +69,10 @@
 	</mailingLists>
 
 	<scm>
-		<connection>scm:git:git://github.com/scijava/incubator</connection>
-		<developerConnection>scm:git:git@github.com:scijava/incubator</developerConnection>
+		<connection>scm:git:git://github.com/scijava/scijava</connection>
+		<developerConnection>scm:git:git@github.com:scijava/scijava</developerConnection>
 		<tag>HEAD</tag>
-		<url>https://github.com/scijava/incubator</url>
+		<url>https://github.com/scijava/scijava</url>
 	</scm>
 	<issueManagement>
 		<system>GitHub Issues</system>
@@ -80,7 +80,7 @@
 	</issueManagement>
 	<ciManagement>
 		<system>GitHub Actions</system>
-		<url>https://github.com/scijava/incubator/actions</url>
+		<url>https://github.com/scijava/scijava/actions</url>
 	</ciManagement>
 
 	<properties>

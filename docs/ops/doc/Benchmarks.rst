@@ -16,7 +16,7 @@ The following software components were used:
 
 * Ubuntu 20.04.6 LTS
 * Java HotSpot(TM) 64-Bit Server VM Oracle GraalVM 20.0.1+9.1 (build 20.0.1+9-jvmci-23.0-b12, mixed mode, sharing)
-* SciJava Incubator commit `0b8012b2 <https://github.com/scijava/incubator/commit/0b8012b2b00ba84b0583ef7260fab1be8f251041>`_
+* SciJava core commit `0b8012b2 <https://github.com/scijava/scijava/commit/0b8012b2b00ba84b0583ef7260fab1be8f251041>`_
 * ImageJ Ops version ``2.0.0``
 
 All benchmarks are executed using the `Java Microbenchmark Harness <https://github.com/openjdk/jmh>`_, using the following parameters:
@@ -116,7 +116,7 @@ We provide a final figure combining all the metrics above:
 Reproducing these Results
 -------------------------
 
-1. Create a local copy of the SciJava Ops incubator from the `GitHub repository <https://github.com/scijava/incubator>`_
+1. Create a local copy of the SciJava core from the `GitHub repository <https://github.com/scijava/scijava>`_
 2. Ensure you have package manager `Mamba <https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html#fresh-install-recommended>`_ installed.
 3. Run the script `docs/ops/bin/benchmark.sh`, which will:
     * Create the mamba Environment

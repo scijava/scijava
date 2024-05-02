@@ -14,9 +14,9 @@ format_inner_class () {
 
 # Ensure running in basedir
 dir=${PWD##*/}          # Credit: https://stackoverflow.com/a/1371283
-if [[ "$dir" != "incubator" ]]
+if [[ "$dir" != "scijava" ]]
 then
-  echo "Please run this script from the incubator base directory."
+  echo "Please run this script from the scijava base directory."
   exit 0
 fi
 

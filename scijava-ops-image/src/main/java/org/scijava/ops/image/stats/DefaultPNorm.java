@@ -34,46 +34,43 @@ import org.apache.commons.math3.distribution.NormalDistribution;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.real.DoubleType;
-
+import net.imglib2.type.numeric.RealType;
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.Nullable;
 
 /**
  * @author Edward Evans
+ * @param <I> input type
+ * @param <O> output type
  * @implNote op names='stats.pnorm', priority='100.'
  */
 
-public final class DefaultPNorm implements
-	Computers.Arity2<RandomAccessibleInterval<DoubleType>, Boolean, RandomAccessibleInterval<DoubleType>>
+public final class DefaultPNorm<I extends RealType<I>, O extends RealType<O>>
+	implements Computers.Arity2<I, Boolean, O>
 {
 
+	private static final NormalDistribution NORMAL_DISTRIBUTION =
+		new NormalDistribution();
+
 	/**
-	 * Op to calculate the pixel-wise cumulative probability of a normal
-	 * distribution over an image.
+	 * Op to calculate the cumulative probability of a normal distribution.
 	 *
-	 * @param input input image
+	 * @param q
 	 * @param lowerTail indicates whether to compute the lower tail cumulative
 	 *          probability
-	 * @param result the pixel-wise normal distribution over the image
+	 * @param o probability
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<DoubleType> input,
-		@Nullable Boolean lowerTail, RandomAccessibleInterval<DoubleType> result)
-	{
+	public void compute(final I q, @Nullable Boolean lowerTail, O o) {
 		// set lowerTail if necessary
 		if (lowerTail == null) lowerTail = true;
-		final boolean finalLowerTail = lowerTail;
 
-		// compute normal distribution over the image
-		NormalDistribution normalDistribution = new NormalDistribution();
+		double normDistValue = NORMAL_DISTRIBUTION.cumulativeProbability(q
+			.getRealDouble());
+		if (!lowerTail) {
+			normDistValue = 1 - normDistValue;
+		}
+		o.setReal(normDistValue);
 
-		LoopBuilder.setImages(input, result).multiThreaded().forEachPixel((i,
-			r) -> {
-			double normDistValue = normalDistribution.cumulativeProbability(i.get());
-			if (!finalLowerTail) {
-				normDistValue = 1 - normDistValue;
-			}
-			r.set(normDistValue);
-		});
 	}
 }

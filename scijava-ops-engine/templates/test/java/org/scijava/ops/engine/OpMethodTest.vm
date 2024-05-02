@@ -1,0 +1,128 @@
+
+package org.scijava.ops.engine;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpMethod;
+
+/**
+ * Tests the construction of {@link OpMethod}s.
+ * 
+ * @author Gabriel Selzer
+ * @author Marcel Wiedenmann
+ */
+public class OpMethodTest extends AbstractTestEnvironment implements OpCollection {
+
+	@BeforeAll
+	public static void addNeededOps() {
+		ops.register(new OpMethodTestOps());
+	}
+
+	// -- Functions -- //
+
+	@Test
+	public void testOpMethodProducer() {
+		final Integer out = ops.op("test.multiplyNumericStrings")
+			.outType(Integer.class).create();
+		final Integer expected = Integer.valueOf(1);
+		assertEquals(expected, out);
+	}
+#foreach($arity in [1..$maxArity])
+
+	@Test
+	public void testOpMethodFunction$arity() {
+		final String in = "2";
+		final Integer out = ops.op("test.multiplyNumericStrings").arity$arity().input($computerInputs.call($arity))
+			.outType(Integer.class).apply();
+		assertEquals(Math.pow(2, $arity), out, 0);
+	}
+#end
+
+	// -- Computers -- //
+
+	public List<Double> expected(double expected, int size) {
+		List<Double> list = new ArrayList<>();
+		for (int i = 0; i < size; i++) {
+			list.add(expected);
+		}
+		return list;
+	}
+#foreach($arity in [0..$maxArity])
+
+	@Test
+	public void testOpMethodComputer$arity() {
+		String in = "$arity";
+		List<Double> out = new ArrayList<>();
+		ops.op("test.doubleList").arity$arity()#if ( $arity > 0 ).input($computerInputs.call($arity))#end
+			.output(out).compute();
+		assertEquals(expected($arity, $arity), out);
+	}
+#end
+
+	// -- Inplaces -- //
+
+	private boolean outputExpected(double[] array, int multiplier) {
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] != (i + 1) * multiplier) return false;
+		}
+		return true;
+	}
+#foreach($arity in [1..$maxArity])
+#foreach($a in [1..$arity])
+
+	@Test
+	public void testOpMethodInplace${inplaceSuffix.call($arity, $a)}() {
+		final double[] io = { 1., 2., 3. };
+		final double[] in = { 1., 2., 3. };
+		ops.op("test.addDoubles${inplaceSuffix.call($arity, $a)}").arity$arity().input($inplaceArgs.call($arity, $a)).mutate#if($arity == 1)#{else}$a#end();
+		assertTrue(outputExpected(io, $arity));
+	}
+#end
+#end
+
+	// -- Dependent Functions -- //
+#foreach($arity in [1..$maxArity])
+
+	@Test
+	public void testDependentMethodFunction$arity() {
+		final String in = "2";
+		final Integer out = ops.op("test.dependentMultiplyStrings").arity$arity().input($computerInputs.call($arity))
+			.outType(Integer.class).apply();
+		assertEquals(Math.pow(2, $arity), out, 0);
+	}
+#end
+
+	// -- Dependent Computers -- //
+#foreach($arity in [1..$maxArity])
+
+	@Test
+	public void testDependentMethodComputer$arity() {
+		String in = "$arity";
+		List<Double> out = new ArrayList<>();
+		ops.op("test.dependentDoubleList").arity$arity().input($computerInputs.call($arity))
+			.output(out).compute();
+		assertEquals(expected($arity, $arity), out);
+	}
+#end
+
+	// -- Dependent Inplaces -- //
+#foreach($arity in [1..$maxArity])
+#foreach($a in [1..$arity])
+
+	@Test
+	public void testDependentMethodInplace${inplaceSuffix.call($arity, $a)}() {
+		final double[] io = { 1., 2., 3. };
+		final double[] in = { 1., 2., 3. };
+		ops.op("test.dependentAddDoubles${inplaceSuffix.call($arity, $a)}").arity$arity().input($inplaceArgs.call($arity, $a)).mutate#if($arity == 1)#{else}$a#end();
+		assertTrue(outputExpected(io, $arity));
+	}
+#end
+#end
+}

@@ -1,0 +1,33 @@
+.include templates/main/java/org/scijava/ops/engine/util/Globals.list
+[module-info.java]
+findPackageNames = ```
+import java.io.File;
+import java.util.Set;
+{ set, dirName ->
+
+	File directory = new File(dirName);
+	// get all the files from a directory
+	File[] fList = directory.listFiles();
+	for (File file : fList) {
+		if (file.isFile()) {
+			String path = file.getPath();
+			int begin = path.indexOf("org");
+			int end = path.lastIndexOf(File.separator);
+			String packName = path.substring(begin, end);
+			set.add(packName.replace(File.separator, '.'));
+		}
+		else if (file.isDirectory()) {
+			findPackageNames(set, file.getAbsolutePath());
+		}
+	}
+}
+```
+
+modulePackages = ```
+import java.util.HashSet;
+{ path ->
+  set = new HashSet<>();
+  findPackageNames(set, path);
+  return set;
+}
+```

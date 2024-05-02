@@ -1,0 +1,44 @@
+.include OpBuilderTest.list
+
+argsList = ```
+{arity ->
+  arity == 0 ? [] :
+  arity == 1 ? ['input'] :
+  (1..arity).stream().map{a -> 'input' + a}.collect()
+}
+```
+
+[OpBuilderTestOps.java]
+
+addDoublesOutput = ```
+{ arity ->
+  arity == 0 ? '0.' :
+  String.join(" + ", argsList(arity))
+}
+```
+typeVarNums = ```
+{ arity, io ->
+  (1..arity).subList(0, io - 1) + 'O' + (1..arity).subList(io, arity)
+}
+```
+inplaceArgs=```
+{ arity, io ->
+  String.join(', ', typeVarNums(arity, io).stream().map{a -> a == 'O' ? 'io' : 'in'+a}.collect())
+}
+```
+inputOnlyInplaceArgs=```
+{ arity, io ->
+  typeVarNums(arity, io).stream().filter{a -> a != 'O'}.map{a -> 'in'+a}.collect()
+}
+```
+computerArgsList=```
+{ arity ->
+  arity == 0 ? ['output'] : 
+  argsList(arity) + 'output'
+}
+```
+computerArgs=```
+{ arity ->
+  String.join(', ', computerArgsList(arity))
+}
+```

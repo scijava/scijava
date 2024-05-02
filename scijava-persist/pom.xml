@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.scijava</groupId>
+		<artifactId>scijava-incubator</artifactId>
+		<version>0-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+
+	<artifactId>scijava-persist</artifactId>
+
+	<name>SciJava Persist</name>
+	<description>Extensible serialization mechanism for persisting objects.</description>
+	<url>None</url>
+	<inceptionYear>2021</inceptionYear>
+	<organization>
+		<name>SciJava</name>
+		<url>https://scijava.org/</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>Simplified BSD License</name>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<id>nicokiaru</id>
+			<name>Nicolas Chiaruttini</name>
+			<url>https://www.epfl.ch/research/facilities/ptbiop/staff/</url>
+			<roles>
+				<role>founder</role>
+				<role>lead</role>
+				<role>developer</role>
+				<role>debugger</role>
+				<role>reviewer</role>
+				<role>support</role>
+				<role>maintainer</role>
+			</roles>
+		</developer>
+	</developers>
+	<contributors>
+		<contributor>
+			<name>Nicolas Chiaruttini</name>
+			<url>http://biop.epfl.ch/INFO_Facility.html</url>
+			<roles><role>founder</role></roles>
+			<properties><id>NicoKiaru</id></properties>
+		</contributor>
+	</contributors>
+
+	<mailingLists>
+		<mailingList>
+			<name>Image.sc Forum</name>
+			<archive>https://forum.image.sc/tag/scijava</archive>
+		</mailingList>
+	</mailingLists>
+
+	<scm>
+		<connection>scm:git:git://github.com/scijava/incubator</connection>
+		<developerConnection>scm:git:git@github.com:scijava/incubator</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/scijava/incubator</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/scijava/scijava/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<system>GitHub Actions</system>
+		<url>https://github.com/scijava/incubator/actions</url>
+	</ciManagement>
+
+	<properties>
+		<main-class>org.scijava.persist.Main</main-class>
+		<package-name>org.scijava.persist</package-name>
+
+		<license.licenseName>bsd_2</license.licenseName>
+		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.9</version>
+		</dependency>
+
+		<!--- Test dependencies -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>scijava.public</id>
+			<url>https://maven.scijava.org/content/groups/public</url>
+		</repository>
+	</repositories>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>com.alexecollins.maven.plugin</groupId>
+					<artifactId>script-maven-plugin</artifactId>
+					<version>${script-maven-plugin.version}</version>
+					<executions>
+						<execution>
+							<id>union-metadata-indices</id>
+							<phase>process-test-classes</phase>
+							<goals>
+								<goal>execute</goal>
+							</goals>
+							<configuration>
+								<language>ruby</language>
+								<script>
+									# Append the source plugin annotations to the test plugin annotations
+									require 'set'
+
+									# Handle windows paths
+									basedir = '${project.basedir}'.gsub /\\+/, '\\\\'
+
+									# Reads plugin metadata into a set of strings, one per plugin declaration.
+									def read_plugins(path)
+									delim = 'UNIQUE-SEQUENCE-THAT-NO-PLUGIN-WILL-EVER-USE'
+									return File.exist?(path) ? File.read(path).sub('}{', '}' + delim + '{').split(delim).to_set : Set.new()
+									end
+
+									# Read in main and test scope plugin annotations.
+									['META-INF/json/org.scijava.plugin.Plugin'].each do |pluginsPath|
+									mainPluginsPath = "#{basedir}/target/classes/#{pluginsPath}"
+									testPluginsPath = "#{basedir}/target/test-classes/#{pluginsPath}"
+									mainPlugins = read_plugins(mainPluginsPath)
+									testPlugins = read_plugins(testPluginsPath)
+
+									# Write out unioned plugin annotations to test scope plugin annotations.
+									# Without this, the test scope code does not know of the main scope plugins.
+									allPlugins = mainPlugins.union(testPlugins)
+									unless allPlugins.empty?()
+									require 'fileutils'
+									FileUtils.mkdir_p File.dirname(testPluginsPath)
+									File.write(testPluginsPath, allPlugins.to_a.join(''))
+									end
+									end
+								</script>
+							</configuration>
+						</execution>
+					</executions>
+					<dependencies>
+						<dependency>
+							<groupId>org.jruby</groupId>
+							<artifactId>jruby-complete</artifactId>
+							<version>${jruby.version}</version>
+							<scope>runtime</scope>
+						</dependency>
+					</dependencies>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.scijava</groupId>
+							<artifactId>scijava-common</artifactId>
+							<version>${scijava-common.version}</version>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.alexecollins.maven.plugin</groupId>
+				<artifactId>script-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>

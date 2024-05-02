@@ -1,0 +1,17 @@
+# compiled python
+*__pycache__/
+
+# Maven #
+target/
+
+# Eclipse #
+.classpath
+.project
+.settings/
+
+# IntelliJ #
+.idea/
+*.iml
+
+# Jupyter #
+.ipynb_checkpoints

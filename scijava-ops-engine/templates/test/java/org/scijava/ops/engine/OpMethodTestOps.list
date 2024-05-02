@@ -1,0 +1,55 @@
+.include templates/main/java/org/scijava/ops/engine/util/Globals.list
+
+argsList = ```
+{arity ->
+  arity == 0 ? [] :
+  arity == 1 ? ['input'] :
+  (1..arity).stream().map{a -> 'input' + a}.collect()
+}
+```
+
+[OpMethodTestOps.java]
+
+opArgs = ```
+{ arity ->
+  names = genericsNamesList(arity)
+  names[0..names.size() - 2]
+}
+```
+stringInputs = ```
+{ arity ->
+  names = genericsNamesList(arity)
+  String.join(", ", names[0..names.size() - 2].stream().map{a -> 'String ' + a}.collect())
+}
+```
+addDoublesOutput = ```
+{ arity ->
+  arity == 0 ? '0.' :
+  String.join(" + ", argsList(arity))
+}
+```
+typeVarNums = ```
+{ arity, io ->
+  (1..arity).subList(0, io - 1) + 'O' + (1..arity).subList(io, arity)
+}
+```
+inplaceArgs=```
+{ arity, io ->
+   typeVarNums(arity, io).stream().map{a -> a == 'O' ? 'io' : 'in'+a}.collect()
+}
+```
+inputOnlyInplaceArgs=```
+{ arity, io ->
+  typeVarNums(arity, io).stream().filter{a -> a != 'O'}.map{a -> 'in'+a}.collect()
+}
+```
+doubleInputs=```
+{ arity, io ->
+  String.join(', ', inplaceArgs(arity, io).stream().map{a -> 'double[] ' + a}.collect())
+}
+```
+inplaceArgsString =```
+{ arity, io ->
+  String.join(', ', inplaceArgs(arity, io))
+}
+```

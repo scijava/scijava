@@ -1,0 +1,81 @@
+
+package org.scijava.ops.engine;
+
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import org.scijava.function.Computers;
+import org.scijava.function.Functions;
+import org.scijava.function.Inplaces;
+import org.scijava.function.Producer;
+import org.scijava.ops.spi.OpField;
+import org.scijava.ops.spi.OpCollection;
+
+/**
+ * Helper ops for {@link OpBuilderTest}.
+ *
+ * @author Curtis Rueden
+ */
+public class OpBuilderTestOps implements OpCollection {
+
+	/*
+	 * -- FUNCTIONS --
+	 * 
+	 * The general procedure for these Ops: Given a set of inputs in1, in2, ...,
+	 * inN, The output will be sum(in1, in2, ..., inN).
+	 */
+
+#foreach($arity in [0..$maxArity])
+	// ARITY $arity
+	@OpField(names = "test.addDoubles")
+	public final ${functionArity.call($arity)}${genericDoubles.call($arity)} addDoubles${arity} = //
+		($args.call($arity)) -> ${addDoublesOutput.call($arity)};
+
+#end
+
+	/*
+	 * -- INPLACES --
+	 * 
+	 * The general procedure for these Ops: Given a set of inputs in1, in2, ... ,
+	 * io, ..., inN, the output will be io = in1 * in2 * ... * io * ... * inN.
+	 * N.B. We do this in arrays since the doubles themselves are immutable. 
+	 */
+#foreach($arity in [1..$maxArity])
+#foreach($a in [1..$arity])
+	// ARITY $arity
+	@OpField(names = "test.mulArrays${arity}_${a}")
+	public final ${inplaceType.call($arity, $a)}${arrayGenerics.call($arity)} powDoubles${arity}_${a} = //
+		($inplaceArgs.call($arity, $a)) -> {
+			for (int i = 0; i < io.length; i++) { //
+#foreach($i in $inputOnlyInplaceArgs.call($arity, $a))
+				io[i] *= ${i}[i];
+#end
+			}
+		};
+
+#end
+#end
+
+	/*
+	 * -- COMPUTERS --
+	 * 
+	 * The general procedure: given a set of inputs in1, in2, ... , inN, the output
+	 * is given as in1 * in2 * ... * inN. N.B. we use arrays here since the doubles
+	 * themselves are immutable
+	 */
+
+#foreach($arity in [0..$maxArity])
+	// ARITY $arity
+	@OpField(names = "test.addArrays")
+	public final ${computerArity.call($arity)}${computerArrayGenerics.call($arity)} addArrays$arity = //
+		($computerArgs.call($arity)) -> {
+			for (int i = 0; i < output.length; i++) {
+				output[i] = 0;
+#foreach($i in $argsList.call($arity))
+				output[i] += ${i}[i];
+#end
+			}
+		};
+
+#end
+}

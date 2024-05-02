@@ -1,0 +1,2 @@
+maxArity = 5
+arities = (1..maxArity).collect()

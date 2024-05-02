@@ -1,0 +1,316 @@
+namespace: "cv"
+version: "1"
+authors:
+  - "OpenCV authors"
+  - "bytedeco/JavaCV authors"
+
+org.scijava.ops.opencv.MatCopier:
+  copy:
+    alias: "engine.copy"
+    type: "Computer2"
+    authors:
+      - "Gabriella Turek"
+      - "Mark Hiner"
+  copyU:
+    alias: "engine.copy"
+    type: "Computer2"
+    authors:
+      - "Gabriella Turek"
+      - "Mark Hiner"
+  copyGpu:
+    alias: "engine.copy"
+    type: "Computer2"
+    authors:
+      - "Gabriella Turek"
+      - "Mark Hiner"
+
+org.scijava.ops.opencv.OpenCVDescriptors:
+  matDescriptor:
+    alias: "engine.describe"
+    authors:
+      - "Gabriel Selzer"
+  gpuMatDescriptor:
+    alias: "engine.describe"
+    authors:
+      - "Gabriel Selzer"
+  uMatDescriptor:
+    alias: "engine.describe"
+    authors:
+      - "Gabriel Selzer"
+
+net.imagej.opencv.ImgToMatConverter:
+  getUnsignedByteMat:
+    alias: "engine.convert"
+    authors: "Gabriella Turek"
+    priority: "4.0"
+  getByteMat:
+    alias: "engine.convert"
+    authors: "Gabriella Turek"
+    priority: "3.0"
+  getIntMat:
+    alias: "engine.convert"
+    authors: "Gabriella Turek"
+    priority: "2.0"
+  getFloatMat:
+    alias: "engine.convert"
+    authors: "Gabriella Turek"
+    priority: "1.0"
+  getDoubleMat:
+    alias: "engine.convert"
+    authors: "Gabriella Turek"
+    priority: "0.0"
+
+net.imagej.opencv.MatToImgConverter:
+  toUnsignedByteImg:
+    alias: "engine.convert"
+    authors: "Gabriella Turek"
+    priority: "4.0"
+  toByteImg:
+    alias: "engine.convert"
+    authors: "Gabriella Turek"
+    priority: "3.0"
+  toIntImg:
+    alias: "engine.convert"
+    authors: "Gabriella Turek"
+    priority: "2.0"
+  toFloatImg:
+    alias: "engine.convert"
+    authors: "Gabriella Turek"
+    priority: "1.0"
+  toDoubleImg:
+    alias: "engine.convert"
+    authors: "Gabriella Turek"
+    priority: "0.0"
+  toByteArray:
+    alias: "engine.convert"
+    authors: "Gabriella Turek"
+    priority: "3.0"
+  toIntArray:
+    alias: "engine.convert"
+    authors: "Gabriella Turek"
+    priority: "2.0"
+  toFloatArray:
+    alias: "engine.convert"
+    authors: "Gabriella Turek"
+    priority: "1.0"
+  toDoubleArray:
+    alias: "engine.convert"
+    authors: "Gabriella Turek"
+    priority: "0.0"
+
+org.bytedeco.opencv.global.opencv_photo:
+  fastNlMeansDenoising:
+    alias: "filter.denoise"
+    type: "Computer2"
+  fastNlMeansDenoisingColored:
+    alias: "filter.denoiseColor"
+    type: "Computer2"
+  fastNlMeansDenoisingMulti:
+    alias: "filter.denoise"
+    type: "Computer2"
+  fastNlMeansDenoisingColoredMulti:
+    alias: "filter.denoiseColor"
+    type: "Computer2"
+
+org.bytedeco.opencv.global.opencv_imgproc:
+  medianBlur:
+    alias: "filter.median"
+    type: "Computer2"
+  GaussianBlur:
+    alias: "filter.gauss"
+    type: "Computer2"
+  bilateralFilter:
+    alias: "filter.bilateral"
+    type: "Computer2"
+  boxFilter:
+    alias: "filter.box"
+    type: "Computer2"
+  sqrBoxFilter:
+    alias: "filter.sqrbox"
+    type: "Computer2"
+  blur:
+    alias: "filter.blur"
+    type: "Computer2"
+  filter2D:
+    alias: "filter.convolve"
+    type: "Computer2"
+  Sobel:
+    alias: "filter.sobel"
+    type: "Computer2"
+  sepFilter2D:
+    alias: "filter.sep"
+    type: "Computer2"
+  spatialGradient:
+    alias: "filter.spgrad"
+    type: "Computer2"
+  Scharr:
+    alias: "filter.scharr"
+    type: "Computer2"
+  Laplacian:
+    alias: "filter.laplacian"
+    type: "Computer2"
+  Canny:
+    alias: "filter.Canny"
+    type: "Computer2"
+  erode:
+    alias: "morphology.erode"
+    type: "Computer2"
+  dilate:
+    alias: "morphology.dilate"
+    type: "Computer2"
+  resize:
+    alias: "transform.resize"
+    type: "Computer2"
+  warpAffine:
+    alias: "transform.affine"
+    type: "Computer2"
+  warpPerspective:
+    alias: "transform.perspective"
+    type: "Computer2"
+  remap:
+    alias: "transform.remap"
+    type: "Computer2"
+  invertAffineTransform:
+    alias: "transform.invaffine"
+    type: "Computer2"
+  logPolar:
+    alias: "transform.polarLog"
+    type: "Computer2"
+  linearPolar:
+    alias: "transform.polarLinear"
+    type: "Computer2"
+  warpPolar:
+    alias: "transform.polar"
+    type: "Computer2"
+  integral3:
+    alias: "stats.integral3"
+    type: "Computer2"
+  integral:
+    alias: "stats.integral"
+    type: "Computer2"
+  integral2:
+    alias: "stats.integral2"
+    type: "Computer2"
+  accumulate:
+    alias: "track.accumulate"
+    type: "Computer2"
+  accumulateSquare:
+    alias: "track.accumulateSquare"
+    type: "Computer2"
+  accumulateProduct:
+    alias: "track.accumulateProduct"
+    type: "Computer2"
+  accumulateWeighted:
+    alias: "track.accumulateWeighted"
+    type: "Computer2"
+  createHanningWindow:
+    alias: "track.hanningWindow"
+    type: "Computer2"
+  divSpectrums:
+    alias: "track.divSpectrums"
+    type: "Computer2"
+  adaptiveThreshold:
+    alias: "threshold.adaptive"
+    type: "Computer2"
+  pyrDown:
+    alias: "image.pyrdown"
+    type: "Computer2"
+  pyrUp:
+    alias: "image.pyrup"
+    type: "Computer2"
+  buildPyramid:
+    alias: "image.pyrbuild"
+    type: "Computer2"
+  calcHist:
+    alias: "image.histogram"
+    type: "Computer5"
+  calcBackProject:
+    alias: "image.backProject"
+    type: "Computer5"
+  equalizeHist:
+    alias: "image.equalize"
+    type: "Computer2"
+  watershed:
+    alias: "image.watershed"
+    type: "Computer2"
+  pyrMeanShiftFiltering:
+    alias: "image.pyrshift"
+    type: "Computer2"
+  grabCut:
+    alias: "image.grabCut"
+    type: "Computer2"
+  distanceTransform:
+    alias: "morphology.distanceTransform"
+    type: "Computer2"
+  distanceTransformWithLabels:
+    alias: "morphology.distanceTransformLabeled"
+    type: "Computer2"
+  floodFill:
+    alias: "morphology.floodFill"
+    type: "Computer2"
+  blendLinear:
+    alias: "image.blend"
+    type: "Computer2"
+  cvtColor:
+    alias: "image.colorConvert"
+    type: "Computer2"
+  cvtColorTwoPlane:
+    alias: "image.colorConvertTwoPlane"
+    type: "Computer2"
+  demosaicing:
+    alias: "image.demosaic"
+    type: "Computer2"
+  HuMoments:
+    alias: "imageMoments.huMoment"
+    type: "Computer2"
+  findContours:
+    alias: "geom.contour"
+    type: "Computer2"
+  boxPoints:
+    alias: "geom.boxPoints"
+    type: "Computer2"
+  minEnclosingCircle:
+    alias: "geom.enclosingCircle"
+    type: "Computer2"
+  convexHull:
+    alias: "geom.convexHull"
+    type: "Computer2"
+  applyColorMap:
+    alias: "image.applyColorMap"
+    type: "Computer2"
+  line:
+    alias: "geom.line"
+    type: "Computer2"
+  arrowedLine:
+    alias: "geom.arrowedLined"
+    type: "Computer2"
+  rectangle:
+    alias: "geom.rectangle"
+    type: "Computer2"
+  circle:
+    alias: "geom.circle"
+    type: "Computer2"
+  ellipse:
+    alias: "geom.ellipse"
+    type: "Computer2"
+  drawMarker:
+    alias: "geom.drawMarker"
+    type: "Computer2"
+  fillConvexPoly:
+    alias: "geom.fillConvexPoly"
+    type: "Computer2"
+  fillPoly:
+    alias: "geom.fillPoly"
+    type: "Computer2"
+  polylines:
+    alias: "geom.polylines"
+    type: "Computer2"
+  drawContours:
+    alias: "geom.drawContours"
+    type: "Computer2"
+  ellipse2Poly:
+    alias: "geom.ellipse2Poly"
+    type: "Computer2"
+  putText:
+    alias: "image.putText"
+    type: "Inplace1"

@@ -1,0 +1,352 @@
+
+package org.scijava.ops.engine;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Arrays;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.scijava.function.Computers;
+import org.scijava.function.Functions;
+import org.scijava.function.Inplaces;
+import org.scijava.function.Producer;
+import org.scijava.ops.api.OpBuilder;
+
+/**
+ * Tests {@link OpBuilder}. For each arity, we test the following matches and
+ * run the following commands based on the information scenarios.
+ * <p>
+ * Input TYPES are given (IT):
+ * <p>
+ * <ol>
+ * <li>The output is unspecified (OU):</li>
+ * <ol type="a">
+ * <li>match: Function, Inplace</li>
+ * <li>run: none</li>
+ * </ol>
+ * <li>The output type is given (OT):</li>
+ * <ol type="a">
+ * <li>match: Function, Computer</li>
+ * <li>run: none</li>
+ * </ol>
+ * </ol>
+ * Input VALUES are given (IV) (N.B. this case applies for Arity0):
+ * <p>
+ * <ol>
+ * <li>The output is unspecified (OU):</li>
+ * <ol type="a">
+ * <li>match: Function, Inplace</li>
+ * <li>run: apply, mutate</li>
+ * </ol>
+ * <li>The output type is given (OT):</li>
+ * <ol type="a">
+ * <li>match: Function, Computer</li>
+ * <li>run: apply</li>
+ * </ol>
+ * <li>The output value is given (OV):</li>
+ * <ol type="a">
+ * <li>match: Computer</li>
+ * <li>run: compute</li>
+ * </ol>
+ * </ol>
+ * 
+ * @author Curtis Rueden
+ * @author Gabriel Selzer
+ */
+public class OpBuilderTest extends AbstractTestEnvironment {
+
+	@BeforeAll
+	public static void AddNeededOps() {
+		ops.register(new OpBuilderTestOps());
+	}
+
+	final double[] halves = new double[10];
+	{
+		for (int i = 0; i < halves.length; i++)
+			halves[i] = i / 2.;
+	}
+
+	// -- 0-ary --
+
+	/** Matches a nullary function in a vacuum. */
+	@Test
+	public void testArity0_OU_matchF() {
+		final Producer<?> op = name("test.addDoubles").producer();
+		final Object result = op.create();
+		assertEquals(0., result);
+	}
+
+	/** Runs a nullary function in a vacuum. */
+	@Test
+	public void testArity0_OU_runF() {
+		final Object result = name("test.addDoubles").create();
+		assertEquals(0., result);
+	}
+
+	/** Matches a nullary function with a given output type. */
+	@Test
+	public void testArity0_OT_matchF() {
+		final Double expected = 0.;
+		final Producer<Double> op = //
+			name("test.addDoubles").outType(Double.class).producer();
+		final Object result = op.create();
+		assertEquals(result, expected);
+	}
+
+	/** Matches a nullary computer with a given output type. */
+	@Test
+	public void testArity0_OT_matchC() {
+		final double[] actual = { 1, 2, 3 };
+		final double[] expected = { 0, 0, 0 };
+		final Computers.Arity0<double[]> op = //
+			name("test.addArrays").outType(double[].class).computer();
+		op.compute(actual);
+		assertTrue(Arrays.equals(expected, actual));
+	}
+
+	/** Runs a nullary function with a given output type. */
+	@Test
+	public void testArity0_OT_runF() {
+		final Double result = name("test.addDoubles").outType(Double.class)
+			.create();
+		assert (0. == result);
+	}
+
+	/** Matches a nullary computer with a given output value. */
+	@Test
+	public void testArity0_OV_matchC() {
+		double[] result = { 1, 2, 3 };
+		double[] expected = { 0, 0, 0 };
+		final Computers.Arity0<double[]> op = //
+			name("test.addArrays").output(result).computer();
+		op.compute(result);
+		assertTrue(Arrays.equals(expected, result));
+	}
+
+	/** Runs a nullary computer with a given output value. */
+	@Test
+	public void testArity0_OV_runC() {
+		double[] result = { 1, 2, 3 };
+		double[] expected = { 0, 0, 0 };
+		name("test.addArrays").output(result).compute();
+		assertTrue(Arrays.equals(expected, result));
+	}
+#foreach($arity in [1..$maxArity])
+
+	// -- ${arity}-ary --
+
+	/** Matches a ${arity}-arity function using input types only. */
+	@Test
+	public void testArity${arity}_IT_OU_matchF() {
+#foreach($a in [1..$arity])
+		final Double ${functionInputName.call($arity, $a)} = 1.;
+#end
+		final Double expected = ${arity}.;
+		final ${functionArity.call($arity)}${wildcardOutputDoubles.call($arity)} op = //
+			name("test.addDoubles") //
+				.arity$arity() //
+				.inType($doubleClassString.call($arity)) //
+				.function();
+		final Object actual = op.apply($args.call($arity));
+		assertEquals(expected, actual);
+	}
+
+#foreach($i in [1..$arity])
+	/** Matches a ${arity}-arity inplace${i} with a given output type. */
+	@Test
+	public void testArity${arity}_IT_OU_matchI${i}() {
+#foreach($a in [1..$arity])
+		final double[] ${functionInputName.call($arity, $a)} = { 1, 2, 3 };
+#end
+		final double[] expected = $inplaceExpectedArray.call($arity);
+		final ${inplaceType.call($arity, $i)}${arrayGenerics.call($arity)} op = //
+			name("test.mulArrays${arity}_${i}") //
+				.arity$arity() //
+				.inType($arrayClassString.call($arity)) //
+				.${inplaceMethod.call($arity, $i)}();
+		op.mutate($args.call($arity));
+		assertTrue(Arrays.equals($inplaceActualArg.call($arity, $i), expected));
+	}
+
+#end
+	/** Matches a ${arity}-arity function using input types + output type. */
+	@Test
+	public void testArity${arity}_IT_OT_matchF() {
+#foreach($a in [1..$arity])
+		final Double ${functionInputName.call($arity, $a)} = 1.;
+#end
+		final Double expected = ${arity}.;
+		final ${functionArity.call($arity)}${genericDoubles.call($arity)} op = //
+			name("test.addDoubles").arity$arity().inType($doubleClassString.call($arity)) //
+				.outType(Double.class).function();
+		final double actual = op.apply($args.call($arity));
+		assertEquals(expected, actual, 0.);
+	}
+
+	/** Matches a ${arity}-arity computer using input types + output type. */
+	@Test
+	public void testArity${arity}_IT_OT_matchC() {
+#foreach($a in [1..$arity])
+		final double[] ${functionInputName.call($arity, $a)} = { 1, 2, 3 };
+#end
+		double[] actual = { 0, 0, 0 };
+		double[] expected = $computerExpectedArray.call($arity);
+		final ${computerArity.call($arity)}${computerArrayGenerics.call($arity)} op = //
+			name("test.addArrays") //
+				.arity$arity() //
+				.inType(${arrayClassString.call($arity)}) //
+				.outType(double[].class).computer();
+		op.compute($args.call($arity), actual);
+		assertTrue(Arrays.equals(expected, actual));
+	}
+
+	/** Matches a ${arity}-arity function using input value only. */
+	@Test
+	public void testArity${arity}_IV_OU_matchF() {
+#foreach($a in [1..$arity])
+		final Double ${functionInputName.call($arity, $a)} = 1.;
+#end
+		final Double expected = ${arity}.;
+		final ${functionArity.call($arity)}${wildcardOutputDoubles.call($arity)} op = //
+			name("test.addDoubles") //
+				.arity$arity() //
+				.input($args.call($arity)) //
+				.function();
+		final Object actual = op.apply($args.call($arity));
+		assertEquals(expected, actual);
+	}
+
+#foreach($i in [1..$arity])
+	/** Matches a ${arity}-arity inplace${i} with a given output value. */
+	@Test
+	public void testArity${arity}_IV_OU_matchI${i}() {
+#foreach($a in [1..$arity])
+		final double[] ${functionInputName.call($arity, $a)} = { 1, 2, 3 };
+#end
+		double[] expected = $inplaceExpectedArray.call($arity);
+		final ${inplaceType.call($arity, $i)}${arrayGenerics.call($arity)} op = //
+			name("test.mulArrays${arity}_${i}").arity$arity().input($args.call($arity)) //
+				.${inplaceMethod.call($arity, $i)}();
+		op.mutate($args.call($arity));
+		assertTrue(Arrays.equals(expected, $functionInputName.call($arity, $i)));
+	}
+
+#end
+	/** Runs a ${arity}-arity function using input value only. */
+	@Test
+	public void testArity${arity}_IV_OU_runF() {
+#foreach($a in [1..$arity])
+		final Double ${functionInputName.call($arity, $a)} = 1.;
+#end
+		final Double expected = ${arity}.;
+		final Object actual = name("test.addDoubles") //
+			.arity$arity() //
+			.input($args.call($arity)) //
+			.apply();
+		assertEquals(expected, actual);
+	}
+
+#foreach($i in [1..$arity])
+	/** Runs a ${arity}-arity inplace${i} with a given output value. */
+	@Test
+	public void testArity${arity}_IV_OU_runI${i}() {
+#foreach($a in [1..$arity])
+		final double[] $functionInputName.call($arity, $a) = { 1, 2, 3 };
+#end
+		final double[] expected = $inplaceExpectedArray.call($arity);
+		name("test.mulArrays${arity}_${i}") //
+			.arity$arity() //
+			.input($args.call($arity)) //
+			.${mutateMethod.call($arity, $i)}();
+		assertTrue(Arrays.equals($functionInputName.call($arity, $i), expected));
+	}
+
+#end
+	/** Matches a ${arity}-arity function using input value + output type. */
+	@Test
+	public void testArity${arity}_IV_OT_matchF() {
+#foreach($a in [1..$arity])
+		final Double $functionInputName.call($arity, $a) = 1.;
+#end
+		final Double expected = ${arity}.;
+		final ${functionArity.call($arity)}${genericDoubles.call($arity)} op = //
+			name("test.addDoubles").arity$arity().input($args.call($arity)) //
+				.outType(Double.class).function();
+		final double actual = op.apply($args.call($arity));
+		assertEquals(expected, actual, 0.);
+	}
+
+	/** Matches a unary computer using input types + output type. */
+	@Test
+	public void testArity${arity}_IV_OT_matchC() {
+#foreach($a in [1..$arity])
+		double[] $functionInputName.call($arity, $a) = { 1, 2, 3 };
+#end
+		double[] actual = { 0, 0, 0 };
+		double[] expected = ${computerExpectedArray.call($arity)};
+		final ${computerArity.call($arity)}${computerArrayGenerics.call($arity)} op = //
+			name("test.addArrays") //
+				.arity$arity() //
+				.input($args.call($arity)) //
+				.output(actual).computer();
+		op.compute($args.call($arity), actual);
+		assertTrue(Arrays.equals(expected, actual));
+	}
+
+	/** Runs a unary function using input value + output type. */
+	@Test
+	public void testArity${arity}_IV_OT_runF() {
+#foreach($a in [1..$arity])
+		final Double $functionInputName.call($arity, $a) = 1.;
+#end
+		final Double expected = ${arity}.;
+		final Object actual = name("test.addDoubles") //
+			.arity$arity() //
+			.input($args.call($arity)) //
+			.outType(Double.class).apply();
+		assertEquals(expected, actual);
+	}
+
+	/** Matches a unary computer using input value + output value. */
+	@Test
+	public void testArity${arity}_IV_OV_matchC() {
+#foreach($a in [1..$arity])
+		double[] $functionInputName.call($arity, $a) = { 1, 2, 3 };
+#end
+		double[] actual = { 0, 0, 0 };
+		double[] expected = $computerExpectedArray.call($arity);
+		final $computerArity.call($arity)${computerArrayGenerics.call($arity)} op = //
+			name("test.addArrays") //
+				.arity$arity() //
+				.input($args.call($arity)) //
+				.output(actual).computer();
+		op.compute($args.call($arity), actual);
+		assertTrue(Arrays.equals(expected, actual));
+	}
+
+	/** Runs a unary computer using input value + output value. */
+	@Test
+	public void testArity${arity}_IV_OV_runC() {
+#foreach($a in [1..$arity])
+		double[] $functionInputName.call($arity, $a) = { 1, 2, 3 };
+#end
+		double[] actual = { 0, 0, 0 };
+		double[] expected = $computerExpectedArray.call($arity);
+		name("test.addArrays") //
+			.arity$arity() //
+			.input($args.call($arity)) //
+			.output(actual).compute();
+		assertTrue(Arrays.equals(expected, actual));
+	}
+#end
+
+	// -- Helper methods --
+
+	private OpBuilder name(String opName) {
+		return ops.op(opName);
+	}
+}

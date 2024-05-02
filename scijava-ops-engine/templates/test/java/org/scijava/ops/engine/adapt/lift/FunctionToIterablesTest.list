@@ -1,0 +1,28 @@
+.include templates/main/java/org/scijava/ops/engine/util/Globals.list
+arities = (1..maxArity).collect()
+
+[FunctionToIterablesTest.java]
+
+functionInputName = ```
+{ arity, num ->
+  arity == 1 ? 'input' :
+  'input'+num
+}
+```
+inputList = ```
+{ arity ->
+  String.join(', ', (1..arity).stream().map{a -> 'in'}.collect())
+}
+```
+inplaceExpectedList = ```
+{ arity ->
+  'Arrays.asList(' + String.join(', ', (1..3).stream().map{a -> "" + a * arity + '.'}.collect()) + ");"
+}
+```
+args = ```
+{arity ->
+  arity == 0 ? '' :
+  arity == 1 ? 'input' :
+  String.join(', ',(1..arity).stream().map{a -> 'input' + a}.collect())
+}
+```

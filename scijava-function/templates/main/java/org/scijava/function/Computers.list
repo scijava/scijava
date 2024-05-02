@@ -1,0 +1,47 @@
+.include Globals.list
+arities = (0..maxArity).collect()
+
+[Computers.java]
+nilArgs = ```
+{ arity ->
+  names = nilNames(arity)
+  outType = names.remove(names.size() - 1)
+  names = [outType] + names
+  String.join(', ', names)
+}
+```
+matchParams = ```
+{ arity ->
+  // contains "I1, I2, ..., IN, O"
+  generics = genericParamTypes(arity)
+  // contains "in1, in2, ..., inN, out"
+  names = nilNames(arity)
+  // constructing strings of the term "final Nil<I1> in1"
+  nilArgs = (0..arity).stream().map{a -> "final Nil<${generics[a]}> ${names[a]}"}.collect()
+  String.join(', ', nilArgs)
+}
+```
+permutedGenerics = ```
+{ arity, a ->
+  generics = genericParamTypes(arity)
+  outVal = generics.removeAt(arity)
+  generics.add(a-1, outVal)
+  '<' + String.join(', ', generics) + '>'
+}
+```
+permutedComputeParams = ```
+{ arity, a->
+  typeParams = typeParamsList(arity)
+  outVal = "@Container " + typeParams.removeAt(arity)
+  typeParams.add(a-1, outVal)
+  String.join(', ', typeParams)
+}
+```
+permutedComputeArgs = ```
+{ arity, a->
+  names = genericsNamesList(arity)
+  outVal = names.removeAt(arity)
+  names.add(a-1, outVal)
+  String.join(', ', names)
+}
+```

@@ -1,0 +1,20 @@
+.include templates/main/java/org/scijava/ops/engine/util/Globals.list
+arities = (1..maxArity).collect()
+
+[ComputerToFunctionAdaptTestOps.java]
+
+doubleGenerics = ```
+{ arity -> 
+  '<' + String.join(', ', (1..arity + 1).stream().map{a -> 'double[]'}.collect()) + '>'
+}
+```
+genericsNamesListWithoutOutput = ```
+{ arity ->
+  genericsNamesList(arity)[(0..arity - 1)]
+}
+```
+expectedValue = ```
+{ arity -> 
+  '{' + (arity * 2) + ', ' + (arity * 4) + '}'
+}
+```

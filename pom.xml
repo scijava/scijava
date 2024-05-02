@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.scijava</groupId>
+		<artifactId>pom-scijava</artifactId>
+		<version>37.0.0</version>
+		<relativePath />
+	</parent>
+
+	<artifactId>scijava-incubator</artifactId>
+	<version>0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>SciJava Incubator</name>
+	<description>A wonderful bag of cats.</description>
+	<url>https://github.com/scijava/incubator</url>
+	<inceptionYear>2020</inceptionYear>
+	<organization>
+		<name>SciJava</name>
+		<url>https://scijava.org/</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>N/A - See individual modules</name>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>N/A - see individual modules</name>
+		</developer>
+	</developers>
+	<contributors>
+		<contributor>
+			<name>N/A - see individual modules</name>
+		</contributor>
+	</contributors>
+
+	<mailingLists>
+		<mailingList>
+			<name>N/A - see individual modules</name>
+		</mailingList>
+	</mailingLists>
+
+	<modules>
+		<module>scijava-collections</module>
+		<module>scijava-common3</module>
+		<module>scijava-concurrent</module>
+		<module>scijava-discovery</module>
+		<module>scijava-discovery-test</module>
+		<module>scijava-function</module>
+		<module>scijava-meta</module>
+		<module>scijava-ops-api</module>
+		<module>scijava-ops-engine</module>
+		<module>scijava-ops-flim</module>
+		<module>scijava-ops-image</module>
+		<module>scijava-ops-legacy</module>
+		<module>scijava-ops-indexer</module>
+		<module>scijava-ops-opencv</module>
+		<module>scijava-ops-ext-parser</module>
+		<module>scijava-ops-spi</module>
+		<module>scijava-ops-tutorial</module>
+		<module>scijava-persist</module>
+		<module>scijava-priority</module>
+		<module>scijava-progress</module>
+		<module>scijava-struct</module>
+		<module>scijava-taglets</module>
+		<module>scijava-testutil</module>
+		<module>scijava-types</module>
+	</modules>
+
+	<scm>
+		<connection>scm:git:git://github.com/scijava/incubator</connection>
+		<developerConnection>scm:git:git@github.com:scijava/incubator</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/scijava/incubator</url>
+	</scm>
+	<issueManagement>
+		<system>N/A - see individual modules</system>
+	</issueManagement>
+	<ciManagement>
+		<system>GitHub Actions</system>
+		<url>https://github.com/scijava/incubator/actions</url>
+	</ciManagement>
+
+	<properties>
+		<license.licenseName>N/A</license.licenseName>
+		<license.copyrightOwners>N/A</license.copyrightOwners>
+
+		<scijava.jvm.build.version>[11,)</scijava.jvm.build.version>
+		<scijava.jvm.version>11</scijava.jvm.version>
+		<scijava.javadoc.url.java>https://javadoc.scijava.org/Java11/</scijava.javadoc.url.java>
+		<scijava.javadoc.url.javafx>https://javadoc.scijava.org/JavaFX11/</scijava.javadoc.url.javafx>
+
+		<scijava-maven-plugin.version>2.2.0</scijava-maven-plugin.version>
+
+		<doclint>none</doclint>
+
+		<!-- NB: Deploy releases to the SciJava Maven repository. -->
+		<releaseProfiles>sign,deploy-to-scijava</releaseProfiles>
+
+		<guava.version>28.2-jre</guava.version>
+		<geantyref.version>1.3.6</geantyref.version>
+
+		<script-maven-plugin.version>1.0.0</script-maven-plugin.version>
+		<jruby.version>9.2.11.1</jruby.version>
+		<scijava.parse.ops>true</scijava.parse.ops>
+
+		<!-- No java source files for this project -->
+		<maven.javadoc.skip>true</maven.javadoc.skip>
+	</properties>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.scijava</groupId>
+							<artifactId>scijava-ops-indexer</artifactId>
+							<version>${project.version}</version>
+						</path>
+					</annotationProcessorPaths>
+					<fork>true</fork>
+					<showWarnings>true</showWarnings>
+					<compilerArgs>
+						<arg>-Aparse.ops="${scijava.parse.ops}"</arg>
+						<arg>-Aop.version="${project.version}"</arg>
+					</compilerArgs>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<tagletArtifacts>
+						<tagletArtifact>
+							<groupId>org.scijava</groupId>
+							<artifactId>scijava-taglets</artifactId>
+							<version>${project.version}</version>
+						</tagletArtifact>
+					</tagletArtifacts>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<dependencies>
+					<dependency>
+						<groupId>org.scijava</groupId>
+						<artifactId>scijava-maven-plugin</artifactId>
+						<version>2.2.0</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>enforce-no-package-cycles</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<phase>test</phase>
+						<configuration>
+							<rules>
+								<NoPackageCyclesRule
+										implementation="org.scijava.maven.plugin.enforcer.NoPackageCyclesRule" />
+							</rules>
+						</configuration>
+					</execution>
+					<execution>
+						<id>enforce-no-subpackage-dependence</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<phase>test</phase>
+						<configuration>
+							<rules>
+								<NoSubpackageDependenceRule
+										implementation="org.scijava.maven.plugin.enforcer.NoSubpackageDependenceRule" />
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.alexecollins.maven.plugin</groupId>
+				<artifactId>script-maven-plugin</artifactId>
+				<version>${script-maven-plugin.version}</version>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<configuration>
+						<links>
+							<!-- Core Java. -->
+							<link>${scijava.javadoc.url.java}</link>
+							<!-- SciJava and related projects and forks. -->
+							<link>https://javadoc.scijava.org/ImgLib2/</link>
+							<link>https://javadoc.scijava.org/SCIFIO/</link>
+							<!-- Third party projects. -->
+							<link>https://javadoc.scijava.org/Apache-Commons-Math/</link>
+							<link>https://javadoc.scijava.org/Guava/</link>
+							<link>https://javadoc.scijava.org/JAMA/</link>
+							<link>https://javadoc.scijava.org/JOML/</link>
+							<link>https://javadoc.scijava.org/Javassist/</link>
+							<link>https://javadoc.scijava.org/ojAlgo/</link>
+						</links>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>com.alexecollins.maven.plugin</groupId>
+					<artifactId>script-maven-plugin</artifactId>
+					<version>${script-maven-plugin.version}</version>
+					<executions>
+						<execution>
+							<id>union-metadata-indices</id>
+							<phase>process-test-classes</phase>
+							<goals>
+								<goal>execute</goal>
+							</goals>
+							<configuration>
+								<language>ruby</language>
+								<script>
+									# Append the source plugin annotations to the test plugin annotations
+									require 'set'
+
+									# Handle windows paths
+									basedir = '${project.basedir}'.gsub /\\+/, '\\\\'
+
+									# Reads plugin metadata into a set of strings, one per plugin declaration.
+									def read_plugins(path)
+										delim = 'UNIQUE-SEQUENCE-THAT-NO-PLUGIN-WILL-EVER-USE'
+										return File.exist?(path) ? File.read(path).sub('}{', '}' + delim + '{').split(delim).to_set : Set.new()
+									end
+
+									# Read in main and test scope plugin annotations.
+									['ops.yaml'].each do |pluginsPath|
+										mainPluginsPath = "#{basedir}/target/classes/#{pluginsPath}"
+										testPluginsPath = "#{basedir}/target/test-classes/#{pluginsPath}"
+										mainPlugins = read_plugins(mainPluginsPath)
+										testPlugins = read_plugins(testPluginsPath)
+
+										# Write out unioned plugin annotations to test scope plugin annotations.
+										# Without this, the test scope code does not know of the main scope plugins.
+										allPlugins = mainPlugins.union(testPlugins)
+										unless allPlugins.empty?()
+											require 'fileutils'
+											FileUtils.mkdir_p File.dirname(testPluginsPath)
+											File.write(testPluginsPath, allPlugins.to_a.join(''))
+										end
+									end
+								</script>
+							</configuration>
+						</execution>
+					</executions>
+					<dependencies>
+						<dependency>
+							<groupId>org.jruby</groupId>
+							<artifactId>jruby-complete</artifactId>
+							<version>${jruby.version}</version>
+							<scope>runtime</scope>
+						</dependency>
+					</dependencies>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+	<profiles>
+		<profile>
+			<id>benchmarks</id>
+			<modules>
+				<module>scijava-ops-benchmarks</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>only-eclipse-incubator</id>
+			<activation>
+				<property>
+					<name>m2e.version</name>
+				</property>
+			</activation>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<!--
+						Configure the Eclipse m2e plugin to support needed plugins.
+						-->
+						<plugin>
+							<groupId>org.eclipse.m2e</groupId>
+							<artifactId>lifecycle-mapping</artifactId>
+							<!--
+							NB: Eclipse cannot handle an overridden version property here!
+							The version needs to stay hardcoded at 1.0.0.
+							-->
+							<version>1.0.0</version>
+							<configuration>
+								<lifecycleMappingMetadata>
+									<pluginExecutions combine.children="append">
+										<!--
+										NB: Make Eclipse union the metadata indices on every build; see:
+										https://www.eclipse.org/m2e/documentation/m2e-execution-not-covered.html
+										-->
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>com.alexecollins.maven.plugin</groupId>
+												<artifactId>script-maven-plugin</artifactId>
+												<versionRange>${script-maven-plugin.version}</versionRange>
+												<goals>
+													<goal>execute</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<execute>
+													<runOnConfiguration>true</runOnConfiguration>
+													<!--
+													NB: You might think we could run the annotations
+													union script once only, at configuration time.
+													Unfortunately, when configuration happens in Eclipse,
+													the plugin annotations have not yet been generated.
+													So let's redo the union on every incremental build.
+													That'll show 'em!
+													-->
+													<runOnIncremental>true</runOnIncremental>
+												</execute>
+											</action>
+										</pluginExecution>
+									</pluginExecutions>
+								</lifecycleMappingMetadata>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+	</profiles>
+</project>

@@ -1,0 +1,56 @@
+.include Globals.list
+arities = (3..maxArity).collect()
+
+[Functions.java]
+genericsO2 = ```
+{ arity ->
+  arity == 0 ? '<O2>' :
+  '<' + String.join(', ', (1..arity).stream().map{a -> "I$a"}.collect()) + ', O2>'
+}
+```
+matchParams = ```
+{ arity ->
+  generics = genericParamTypes(arity)
+  names = genericsNamesList(arity)
+  String.join(', ', (0..arity).stream().map{a -> "final Nil<${generics[a]}> ${names[a]}Type"}.collect())
+}
+```
+nilArgs = ```
+{ arity ->
+  names = genericsNamesList(arity)
+  out = names.remove(names.size() - 1)
+  names.add(0, out)
+  String.join(', ', names.stream().map{a -> "${a}Type"}.collect())
+}
+```
+objectGenerics = ```
+{ arity -> 
+  arity == 0 ? '<O>' :
+  '<' + String.join(', ', (1..arity).stream().map{a -> "Object"}.collect()) + ', O>'
+}
+```
+insArgs = ```
+{ arity ->
+  arity == 0 ? "" :
+  String.join(', ', (0..(arity-1)).stream().map{a -> 'ins[' + a + ']'}.collect())
+}
+```
+javadocLink = ```
+{ arity ->
+  arity == 0 ? "org.scijava.function.Producer" :
+  arity == 1 ? "java.util.function.Function" :
+  arity == 2 ? "java.util.function.BiFunction" :
+  "Arity" + arity
+}
+```
+wildcardGenerics = ```
+{ arity -> 
+  arity == 0 ? '<O>' :
+  '<' + String.join(', ', (1..arity).stream().map{a -> "?"}.collect()) + ', O>'
+}
+```
+fMethod = ```
+{ arity -> 
+  arity == 0 ? "create" : "apply"
+}
+```

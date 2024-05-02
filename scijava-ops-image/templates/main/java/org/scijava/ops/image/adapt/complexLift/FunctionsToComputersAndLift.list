@@ -1,0 +1,4 @@
+.include templates/main/java/org/scijava/ops/image/adapt/complexLift/Globals.list
+
+[FunctionsToComputersAndLift.java]
+arities = (1..maxArity).collect()

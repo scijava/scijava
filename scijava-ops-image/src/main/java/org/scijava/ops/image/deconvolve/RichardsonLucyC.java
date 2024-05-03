@@ -166,8 +166,7 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 		AccelerationState<O> state = new AccelerationState<>(raiExtendedEstimate);
 
 		// -- perform iterations --
-		Progress.defineTotalProgress(1);
-		Progress.setStageMax(maxIterations);
+		Progress.defineTotal(maxIterations);
 		for (int i = 0; i < maxIterations; i++) {
 			// create reblurred by convolving kernel with estimate
 			// NOTE: the FFT of the PSF of the kernel has been passed in as a

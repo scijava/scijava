@@ -79,8 +79,7 @@ public class DefaultProgressTest {
 		// Define the task
 		Supplier<Long> progressible = () -> {
 			// set up progress reporter
-			Progress.defineTotalProgress(1);
-			Progress.setStageMax(NUM_ITERATIONS);
+			Progress.defineTotal(NUM_ITERATIONS);
 
 			for (int i = 0; i < NUM_ITERATIONS; i++) {
 				Progress.update();
@@ -109,8 +108,7 @@ public class DefaultProgressTest {
 		// Define the task
 		Supplier<Long> progressible = () -> {
 			// set up progress reporter
-			Progress.defineTotalProgress(1);
-			Progress.setStageMax(NUM_ITERATIONS);
+			Progress.defineTotal(NUM_ITERATIONS);
 
 			for (int i = 0; i < NUM_ITERATIONS; i++) {
 				Progress.update();
@@ -146,10 +144,8 @@ public class DefaultProgressTest {
 		// Define the task
 		Supplier<Long> progressible = () -> {
 			// set up progress reporter
-			Progress.defineTotalProgress(NUM_STAGES);
+			Progress.defineTotal(NUM_STAGES * NUM_ITERATIONS);
 			for (int j = 0; j < NUM_STAGES; j++) {
-				Progress.setStageMax(NUM_ITERATIONS);
-
 				for (int i = 0; i < NUM_ITERATIONS; i++) {
 					Progress.update();
 				}
@@ -179,9 +175,7 @@ public class DefaultProgressTest {
 		// Define the task
 		Supplier<Long> progressible = () -> {
 			// set up progress reporter
-			Progress.defineTotalProgress(1);
-			Progress.setStageMax(NUM_ITERATIONS);
-
+			Progress.defineTotal(NUM_ITERATIONS);
 			for (int i = 0; i < NUM_ITERATIONS; i++) {
 				Progress.update();
 			}
@@ -209,9 +203,7 @@ public class DefaultProgressTest {
 		// Define the task
 		Supplier<Long> progressible = () -> {
 			// set up progress reporter
-			Progress.defineTotalProgress(1);
-			Progress.setStageMax(NUM_ITERATIONS);
-
+			Progress.defineTotal(NUM_ITERATIONS);
 			for (int i = 0; i < NUM_ITERATIONS; i++) {
 				Progress.update();
 			}

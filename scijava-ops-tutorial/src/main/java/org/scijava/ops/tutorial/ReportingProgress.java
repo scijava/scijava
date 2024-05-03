@@ -79,18 +79,20 @@ public class ReportingProgress implements OpCollection {
 		long val = 1, sqrt;
 		boolean couldBePrime;
 
-		// Define the number of stages, and the number of subtasks
-		// One stage - finding the primes
-		// Zero subtasks - we call no other Ops
-		Progress.defineTotalProgress(1, 0);
+		// If you have N discrete packets of computation, you should call
+		// Progress.defineTotalProgress(N)
+		// If you have N discrete packets of computation and want to call Op
+		// dependencies M times, you should call
+		// Progress.defineTotalProgress(N, M)
+
+		// Here, we want to update the progress every time we find a new prime.
+		// We call no Op dependencies, thus the call looks like:
+		Progress.defineTotal(numPrimes, 0);
+
 		// Progress is defined within the range [0, 1],
 		// where 0 denotes an Op that has not yet started.
 		// and 1 denotes completion.
 
-		// setStageMax is used to define the denominator for the Progress fraction.
-		// If you have N discrete packets of computation, you should call
-		// Progress.setStageMax(N)
-		Progress.setStageMax(numPrimes);
 		// Find each of our primes
 		while (primes.size() < numPrimes) {
 			sqrt = (long) Math.sqrt(++val);

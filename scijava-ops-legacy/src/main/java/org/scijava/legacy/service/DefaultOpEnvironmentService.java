@@ -116,9 +116,7 @@ public class DefaultOpEnvironmentService extends AbstractService implements
 		public static final OpEnvironment env = OpEnvironment.build();
 
 		static {
-			env.setDefaultHints(new Hints(
-					"progress.TRACK"
-			));
+			env.setDefaultHints(new Hints("progress.TRACK"));
 		}
 	}
 

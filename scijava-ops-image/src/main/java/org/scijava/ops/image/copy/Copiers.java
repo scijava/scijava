@@ -89,7 +89,8 @@ public final class Copiers {
 		final RandomAccessibleInterval<T> copy //
 	) {
 		ensureEqualDimensions(input, copy);
-		LoopBuilder.setImages(input, copy).multiThreaded().forEachPixel(copier::compute);
+		LoopBuilder.setImages(input, copy).multiThreaded().forEachPixel(
+			copier::compute);
 	}
 
 	/**

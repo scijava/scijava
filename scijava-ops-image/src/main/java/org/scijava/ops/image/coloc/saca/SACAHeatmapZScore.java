@@ -102,7 +102,6 @@ public class SACAHeatmapZScore<I extends RealType<I>> implements
 		}
 
 		// set seed, compute thresholds and create empty result if necessary
-		Progress.defineTotalProgress(1);
 		if (seed == null) seed = 0xdeadbeefL;
 		if (thres1 == null) thres1 = otsuOp.apply(histOp.apply(Views.iterable(
 			image1)));

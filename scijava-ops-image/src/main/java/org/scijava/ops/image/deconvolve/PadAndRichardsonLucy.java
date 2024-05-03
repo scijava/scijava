@@ -93,7 +93,8 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 	@OpDependency(name = "filter.createFFTOutput")
 	private Functions.Arity3<Dimensions, C, Boolean, RandomAccessibleInterval<C>> createOp;
 
-	@OpDependency(name = "deconvolve.richardsonLucy")
+	@OpDependency(name = "deconvolve.richardsonLucy", hints = {
+		"progress.TRACK" })
 	private Computers.Arity12<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, //
 			RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, //
 			Boolean, C, Integer, Boolean, //
@@ -121,10 +122,10 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 	 */
 	@Override
 	public RandomAccessibleInterval<O> apply(RandomAccessibleInterval<I> input,
-											 RandomAccessibleInterval<K> kernel, O outType, C complexType,
-											 Integer maxIterations, @Nullable Boolean nonCirculant,
-											 @Nullable Boolean accelerate, @Nullable long[] borderSize,
-											 @Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput)
+		RandomAccessibleInterval<K> kernel, O outType, C complexType,
+		Integer maxIterations, @Nullable Boolean nonCirculant,
+		@Nullable Boolean accelerate, @Nullable long[] borderSize,
+		@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput)
 	{
 		// default to circulant
 		if (nonCirculant == null) {
@@ -140,11 +141,11 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 		if (obfInput == null) {
 			if (nonCirculant) {
 				obfInput = new OutOfBoundsConstantValueFactory<>(Util
-						.getTypeFromInterval(input).createVariable());
+					.getTypeFromInterval(input).createVariable());
 			}
 			else {
 				obfInput = new OutOfBoundsMirrorFactory<>(
-						OutOfBoundsMirrorFactory.Boundary.SINGLE);
+					OutOfBoundsMirrorFactory.Boundary.SINGLE);
 			}
 		}
 
@@ -165,7 +166,7 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 			// if no border size was passed in, then extend based on kernel size
 			for (int d = 0; d < numDimensions; ++d) {
 				paddedSize[d] = (int) input.dimension(d) + (int) kernel.dimension(d) -
-						1;
+					1;
 			}
 
 		}
@@ -174,23 +175,22 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 			for (int d = 0; d < numDimensions; ++d) {
 
 				paddedSize[d] = Math.max(kernel.dimension(d) + 2 * borderSize[d], input
-						.dimension(d) + 2 * borderSize[d]);
+					.dimension(d) + 2 * borderSize[d]);
 			}
 		}
 
-		Progress.defineTotalProgress(0, 3);
+		Progress.defineTotal(0, 1);
 		RandomAccessibleInterval<I> paddedInput = padOp.apply(input,
-				new FinalDimensions(paddedSize), true, obfInput);
+			new FinalDimensions(paddedSize), true, obfInput);
 
 		RandomAccessibleInterval<K> paddedKernel = padKernelOp.apply(kernel,
-				new FinalDimensions(paddedSize));
+			new FinalDimensions(paddedSize));
 
 		computeFilter(input, kernel, paddedInput, paddedKernel, output, paddedSize,
-				complexType, accelerate);
+			complexType, accelerate);
 
 		return output;
 	}
-
 
 	/**
 	 * create a richardson lucy filter

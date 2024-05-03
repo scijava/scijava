@@ -281,29 +281,24 @@ public final class Progress {
 	/**
 	 * Defines the total progress of the current {@link Task}
 	 *
-	 * @see Task#defineTotalProgress(long)
+	 * @param elements the number of discrete "elements" in the computation
+	 * @see Task#define(long)
 	 */
-	public static void defineTotalProgress(long numStages) {
-		currentTask().defineTotalProgress(numStages);
+	public static void defineTotal(long elements) {
+		currentTask().define(elements);
 	}
 
 	/**
 	 * Defines the total progress of the current {@link Task}
 	 *
-	 * @see Task#defineTotalProgress(long, long)
+	 * @param elements the number of discrete "elements" in the computation
+	 * @param subTasks the number <b>of times</b> subtasks are called upon within
+	 *          the task. This <b>is not</b> the same as the number of subtasks
+	 *          used (as one subtask may run multiple times).
+	 * @see Task#define(long, long)
 	 */
-	public static void defineTotalProgress(long numStages, long numSubTasks) {
-		currentTask().defineTotalProgress(numStages, numSubTasks);
-	}
-
-	/**
-	 * Defines the number of updates expected by the end of the current stage of
-	 * the current {@link Task}
-	 *
-	 * @see Task#setStageMax(long)
-	 */
-	public static void setStageMax(long max) {
-		currentTask().setStageMax(max);
+	public static void defineTotal(long elements, long subTasks) {
+		currentTask().define(elements, subTasks);
 	}
 
 	/**
@@ -322,7 +317,7 @@ public final class Progress {
 
 		@Override
 		public boolean isComplete() {
-			return true;
+			return false;
 		}
 
 		@Override
@@ -338,6 +333,11 @@ public final class Progress {
 		@Override
 		public double progress() {
 			return NOP_PROGRESS;
+		}
+
+		@Override
+		public void define(final long elements, final long subTasks) {
+			// NB: No-op
 		}
 
 	}

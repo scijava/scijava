@@ -53,8 +53,7 @@ public class ParallelProgressTest {
 	 */
 	public final Function<Integer, Integer> iterator = (iterations) -> {
 		// set up progress reporter
-		Progress.defineTotalProgress(1);
-		Progress.setStageMax(iterations);
+		Progress.defineTotal(iterations);
 
 		for (int i = 0; i < iterations; i++) {
 			Progress.update();
@@ -68,8 +67,7 @@ public class ParallelProgressTest {
 	public final BiFunction<Integer, Integer, Integer> parallelProgressTask = (
 		numThreads, iterationsPerThread) -> {
 
-		Progress.defineTotalProgress(1);
-		Progress.setStageMax(numThreads * iterationsPerThread);
+		Progress.defineTotal(numThreads * iterationsPerThread);
 		Thread[] threadArr = new Thread[numThreads];
 
 		for (int i = 0; i < numThreads; i++) {
@@ -85,7 +83,7 @@ public class ParallelProgressTest {
 				threadArr[i].join();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return null;
 	};
@@ -102,7 +100,7 @@ public class ParallelProgressTest {
 		Integer numThreads, Integer iterationsPerThread)
 	{
 
-		Progress.defineTotalProgress(0, numThreads);
+		Progress.defineTotal(0, numThreads);
 		Thread[] threadArr = new Thread[numThreads];
 
 		for (int i = 0; i < numThreads; i++) {
@@ -118,7 +116,7 @@ public class ParallelProgressTest {
 				threadArr[i].join();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return numThreads * iterationsPerThread;
 	}
@@ -158,14 +156,15 @@ public class ParallelProgressTest {
 		BiFunction<Integer, Integer, Integer> task = (in1, in2) -> parallelDepTask(
 			iterator, in1, in2);
 		int numThreads = 4;
-		int iterationsPerThread = 1000;
+		int iterationsPerThread = 1;
 		Progress.addListener(task, new ProgressListener() {
 
-			ThreadLocal<List<Double>> lastProgress = ThreadLocal.withInitial(() -> {
-				List<Double> a = new ArrayList<>();
-				a.add(0.0);
-				return a;
-			});
+			final ThreadLocal<List<Double>> lastProgress = ThreadLocal.withInitial(
+				() -> {
+					List<Double> a = new ArrayList<>();
+					a.add(0.0);
+					return a;
+				});
 
 			@Override
 			public void acknowledgeUpdate(Task t) {
@@ -174,11 +173,11 @@ public class ParallelProgressTest {
 				// method and when we ask for the progress?
 				List<Double> l = lastProgress.get();
 				double progress = t.progress();
-////				System.out.println(Thread.currentThread() + "\tprogress: " + progress);
-				if (l.get(l.size() - 1) > progress) {
+				double v = l.get(l.size() - 1) - progress;
+				if (v > 0) {
 					t.progress();
 				}
-				Assertions.assertTrue(l.get(l.size() - 1) <= progress);
+				Assertions.assertTrue(v <= 0);
 				l.add(progress);
 			}
 

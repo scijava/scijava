@@ -58,10 +58,6 @@ public class StatusBasedProgressTest {
 					registered = true;
 					return;
 				}
-				if (!registered) {
-					registered = true;
-					return;
-				}
 				if (numUpdates++ < numIterations) {
 					Assertions.assertEquals(task.status(), "Setting status: " +
 						(numUpdates));

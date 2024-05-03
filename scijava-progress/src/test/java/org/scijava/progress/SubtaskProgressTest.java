@@ -50,8 +50,7 @@ public class SubtaskProgressTest {
 	 */
 	public final Function<Integer, Integer> iterator = (iterations) -> {
 		// set up progress reporter
-		Progress.defineTotalProgress(1);
-		Progress.setStageMax(iterations);
+		Progress.defineTotal(iterations);
 
 		for (int i = 0; i < iterations; i++) {
 			Progress.update();
@@ -75,33 +74,32 @@ public class SubtaskProgressTest {
 
 			int itr = 0;
 			/* Expected list of progress pings */
-			final double[] expProgress = new double[] {
-					0.0, // Register - parent
-					0.0, // Register - child 1
-					1.0 / 6, // Update 1 - child 1
-					2.0 / 6, // Update 2 - child 1
-					2.0 / 6, // Complete - child 1
-					3.0 / 6, // Update 1 - parent
-					4.0 / 6, // Update 2 - parent
-					4.0 / 6, // Register - child 2
-					5.0 / 6, // Update 1 - child 1
-					1.0, // Update 2 - child 2
-					1.0, // Complete - child 2
-					1.0 // Complete - parent
+			final double[] expProgress = new double[] { 0.0, // Register - parent
+				0.0, // Register - child 1
+				1.0 / 6, // Update 1 - child 1
+				2.0 / 6, // Update 2 - child 1
+				2.0 / 6, // Complete - child 1
+				3.0 / 6, // Update 1 - parent
+				4.0 / 6, // Update 2 - parent
+				4.0 / 6, // Register - child 2
+				5.0 / 6, // Update 1 - child 1
+				1.0, // Update 2 - child 2
+				1.0, // Complete - child 2
+				1.0 // Complete - parent
 			};
 
 			@Override
 			public void acknowledgeUpdate(Task task) {
 				// Check that the progress is what we expect
 				Assertions.assertEquals( //
-						expProgress[itr++], //
-						task.progress(), //
-						1e-6 //
+					expProgress[itr++], //
+					task.progress(), //
+					1e-6 //
 				);
 				// Check that, once the parent is complete, the task is complete
-                Assertions.assertEquals( //
-						(itr == expProgress.length), //
-						task.isComplete() //
+				Assertions.assertEquals( //
+					(itr == expProgress.length), //
+					task.isComplete() //
 				);
 			}
 
@@ -127,36 +125,34 @@ public class SubtaskProgressTest {
 
 			int itr = 0;
 			/* Expected list of progress pings */
-			final double[] expProgress = new double[] {
-					0.0, // Register - parent
-					0.0, // Register - child 1
-					1.0 / 6, // Update 1 - child 1
-					2.0 / 6, // Update 2 - child 1
-					2.0 / 6, // Complete - child 1
-					2.0 / 6, // Register - child 2
-					3.0 / 6, // Update 1 - child 2
-					4.0 / 6, // Update 2 - child 2
-					4.0 / 6, // Complete - child 2
-					4.0 / 6, // Register - child 3
-					5.0 / 6, // Update 1 - child 3
-					1.0, // Update 2 - child 3
-					1.0, // Complete - child 3
-					1.0 // Complete - parent
+			final double[] expProgress = new double[] { 0.0, // Register - parent
+				0.0, // Register - child 1
+				1.0 / 6, // Update 1 - child 1
+				2.0 / 6, // Update 2 - child 1
+				2.0 / 6, // Complete - child 1
+				2.0 / 6, // Register - child 2
+				3.0 / 6, // Update 1 - child 2
+				4.0 / 6, // Update 2 - child 2
+				4.0 / 6, // Complete - child 2
+				4.0 / 6, // Register - child 3
+				5.0 / 6, // Update 1 - child 3
+				1.0, // Update 2 - child 3
+				1.0, // Complete - child 3
+				1.0 // Complete - parent
 			};
-
 
 			@Override
 			public void acknowledgeUpdate(Task task) {
 				// Check that the progress is what we expect
 				Assertions.assertEquals( //
-						expProgress[itr++], //
-						task.progress(), //
-						1e-6 //
+					expProgress[itr++], //
+					task.progress(), //
+					1e-6 //
 				);
 				// Check that, once the parent is complete, the task is complete
 				Assertions.assertEquals( //
-						(itr == expProgress.length), //
-						task.isComplete() //
+					(itr == expProgress.length), //
+					task.isComplete() //
 				);
 			}
 
@@ -178,7 +174,7 @@ class DependentComplexProgressReportingTask implements
 	Function<Integer, Integer>
 {
 
-	private Function<Integer, Integer> dependency;
+	private final Function<Integer, Integer> dependency;
 
 	public DependentComplexProgressReportingTask(
 		Function<Integer, Integer> dependency)
@@ -188,10 +184,9 @@ class DependentComplexProgressReportingTask implements
 
 	@Override
 	public Integer apply(Integer t) {
-		Progress.defineTotalProgress(1, 2);
+		Progress.defineTotal(t, 2);
 		callDep(t, 1);
 
-		Progress.setStageMax(t);
 		for (int i = 0; i < t; i++) {
 			Progress.update();
 		}
@@ -216,7 +211,7 @@ class DependentComplexProgressReportingTask implements
  */
 class DependentProgressReportingTask implements Function<Integer, Integer> {
 
-	private Function<Integer, Integer> dependency;
+	private final Function<Integer, Integer> dependency;
 
 	public DependentProgressReportingTask(Function<Integer, Integer> dependency) {
 		this.dependency = dependency;
@@ -224,7 +219,7 @@ class DependentProgressReportingTask implements Function<Integer, Integer> {
 
 	@Override
 	public Integer apply(Integer t) {
-		Progress.defineTotalProgress(0, 3);
+		Progress.defineTotal(0, 3);
 		for (int i = 0; i < 3; i++) {
 			Progress.register(dependency, "Pass " + i + " of dependency");
 			dependency.apply(t);

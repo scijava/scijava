@@ -95,7 +95,7 @@ public final class AdaptiveSmoothedKendallTau {
 
 		LoopBuilder.setImages(oldsqrtN).multiThreaded().forEachPixel(t -> t
 			.setOne());
-		Progress.setStageMax(TU);
+		Progress.defineTotal(TU);
 		for (int s = 0; s < TU; s++) {
 			intSize = (int) Math.floor(size);
 			singleiteration(image1, image2, thres1, thres2, stop, oldtau, oldsqrtN,

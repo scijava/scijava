@@ -75,18 +75,19 @@ public class RichardsonLucyCorrection<I extends RealType<I>, O extends RealType<
 //	@OpDependency(name = "math.divide") TODO: match an Op here?
 	private BiConsumer<RandomAccessibleInterval<O>, RandomAccessibleInterval<I>> divide =
 		(denomResult, numer) -> {
-			LoopBuilder.setImages(denomResult, numer).multiThreaded().forEachChunk(chunk -> {
-				final O tmp = Util.getTypeFromInterval(denomResult).createVariable();
-				chunk.forEachPixel((d, n) -> {
-					if (d.getRealFloat() > 0) {
-						tmp.setReal(n.getRealFloat());
-						tmp.div(d);
-						d.set(tmp);
-					}
-					else d.setZero();
+			LoopBuilder.setImages(denomResult, numer).multiThreaded().forEachChunk(
+				chunk -> {
+					final O tmp = Util.getTypeFromInterval(denomResult).createVariable();
+					chunk.forEachPixel((d, n) -> {
+						if (d.getRealFloat() > 0) {
+							tmp.setReal(n.getRealFloat());
+							tmp.div(d);
+							d.set(tmp);
+						}
+						else d.setZero();
+					});
+					return null;
 				});
-				return null;
-			});
 		};
 
 	@OpDependency(name = "filter.correlate")

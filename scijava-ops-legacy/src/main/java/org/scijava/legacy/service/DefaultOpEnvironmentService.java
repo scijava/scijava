@@ -41,7 +41,6 @@ import org.scijava.script.ScriptService;
 import org.scijava.service.AbstractService;
 import org.scijava.service.Service;
 import org.scijava.task.TaskService;
-import org.scijava.ops.api.Hints;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -113,16 +112,16 @@ public class DefaultOpEnvironmentService extends AbstractService implements
 	 */
 	private static class OpEnvironmentHolder {
 
-		public static final OpEnvironment env = OpEnvironment.build();
+		private static final OpEnvironment env = OpEnvironment.build();
 
 		static {
 			env.setDefaultHints(new Hints("progress.TRACK"));
 		}
+
 	}
 
 	@Override
 	public OpEnvironment env() {
 		return OpEnvironmentHolder.env;
 	}
-
 }

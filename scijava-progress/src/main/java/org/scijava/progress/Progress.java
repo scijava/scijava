@@ -30,11 +30,11 @@
 package org.scijava.progress;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * A static utility class serving as the interface between progress reporters
@@ -51,14 +51,16 @@ public final class Progress {
 
 	/**
 	 * A record of all listeners interested in the progress of all Object
-	 * executions
+	 * executions. We do not expect very many of these, so to provide high concurrency we use
+	 * {@link CopyOnWriteArrayList} as the backing implementation
 	 */
 	private static final List<ProgressListener> globalListeners =
-		new ArrayList<>();
+		new CopyOnWriteArrayList<>();
 
 	/**
 	 * A record of all listeners interested in the progress of a given Object's
-	 * executions
+	 * executions. We do not expect very many of these, so to provide high concurrency we use
+	 * {@link CopyOnWriteArrayList} as the backing implementation
 	 */
 	private static final Map<Object, List<ProgressListener>> progressibleListeners =
 		new WeakHashMap<>();
@@ -110,21 +112,12 @@ public final class Progress {
 		if (!progressibleListeners.containsKey(progressible)) {
 			createListenerList(progressible);
 		}
-		addListenerToList(progressible, l);
-	}
-
-	private static void addListenerToList(Object progressible,
-		ProgressListener l)
-	{
-		List<ProgressListener> list = progressibleListeners.get(progressible);
-		synchronized (list) {
-			list.add(l);
-		}
+		progressibleListeners.get(progressible).add(l);
 	}
 
 	private static synchronized void createListenerList(Object progressible) {
 		if (progressibleListeners.containsKey(progressible)) return;
-		progressibleListeners.put(progressible, new ArrayList<>());
+		progressibleListeners.put(progressible, new CopyOnWriteArrayList<>());
 	}
 
 	/**
@@ -215,9 +208,7 @@ public final class Progress {
 			list.forEach(l -> l.acknowledgeUpdate(task));
 		}
 		// Ping global listeners
-		synchronized (globalListeners) {
-			globalListeners.forEach(l -> l.acknowledgeUpdate(task));
-		}
+		for(var l : globalListeners) l.acknowledgeUpdate(task);
 		// Ping parent
 		if (task.parent() != null) {
 			pingListeners(task.parent());

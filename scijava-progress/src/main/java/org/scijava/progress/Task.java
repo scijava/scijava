@@ -171,6 +171,11 @@ public class Task {
 
 		if (elements == 0) {
 			this.hasElements = false;
+			if (this.tasks == 0) {
+				this.current.set(1);
+				this.max.set(1);
+				return;
+			}
 		}
 		else {
 			this.max.set(elements);

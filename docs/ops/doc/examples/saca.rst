@@ -1,5 +1,5 @@
 ==========================================
-Spatially Adpative Colocalization Analysis
+Spatially Adaptive Colocalization Analysis
 ==========================================
 
 In this example we will use SciJava Ops and the Spatially Adaptive Colocalization Analysis (SACA) :sup:`1` framework on
@@ -9,13 +9,13 @@ HIV-1 construct: Gag-mVenus and MS2-mCherry. The Gag-mVenus fusion protein track
 The MS2-mCherry fusion protein binds to 24 copies of the MS2 bacteriophage RNA stem-loop :sup:`2` inserted into the HIV-1 construct, enabling
 fixed and live-cell imaging of viral mRNA dynamics. Taken together, this system tracks both Gag and viral mRNAs from the cell's cytoplasm
 to sites of viral particle assembly at the plasma membrane where they colocalize :sup:`3`. This example uses fixed cell data
-collected with a laser-scanning confocal microscope at 60x magnification (oil immersion).
+collected with a laser-scanning confocal microscope at 1.4NA 60x magnification (oil immersion).
 
-The SACA framework produces three outputs: a *Z*-score heatmap, a p-valye heatmap and a significant pixel value mask. The *Z*-score heatmap
-indicates the relatively colocalization or anti-colocalization strength at a pixel-wise level. The p-value heatmap indicates the p-value
-of the colocalization strength at a pixel-wise level. Finally the significant pixel mask identifies which pixels are significantly colocalized. This
-example script takes advantage of this feature of the SACA framework and utilizes the significant pixel mask as a region of interest to compute
-Pearson's :sup:`4` and Li's :sup:`5` colocalization quotients.
+The SACA framework produces two outputs: a *Z*-score heatmap and a significant pixel mask. The *Z*-score heatmap
+indicates the colocalization or anti-colocalization strength at a pixel-wise level. A pixel-wise p-value of the colocalization strength
+can be computed easily by using the *Z*-score heatmap with the ``stats.pnorm`` Op. The significant pixel mask identifies which pixels are
+significantly colocalized. This example script takes advantage of this feature of the SACA framework and utilizes the significant pixel
+mask as a region of interest to compute Pearson's :sup:`4` and Li's :sup:`5` colocalization coefficients.
 
 You can download the colocalization dataset `here`_.
 

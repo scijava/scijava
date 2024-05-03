@@ -251,8 +251,9 @@ public class Task {
 	 * increment progress
 	 *
 	 * @param numElements the number of elements completed
+	 * @see Progress#update(long, Task) when a particular task must be updated
 	 */
-	public void update(final long numElements) {
+	protected void update(final long numElements) {
 		current.addAndGet(numElements);
 	}
 

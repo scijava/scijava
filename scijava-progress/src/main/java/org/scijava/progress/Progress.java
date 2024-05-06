@@ -184,7 +184,7 @@ public final class Progress {
 		}
 		else {
 			// part of an existing execution hierarchy
-			t = parent.createSubtask(progressible, description);
+			t = new Task(progressible, parent, description);
 		}
 		deque.push(t);
 		// Ping Listeners about the registration of progressible

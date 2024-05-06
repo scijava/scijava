@@ -57,10 +57,8 @@ public class Task {
 	/** Designates task completion */
 	private boolean completed = false;
 
-	private boolean hasElements = true;
-
-	/** Number of tasks utilized by the task */
-	private long tasks = 1;
+	/** Number of tasks (this task + any subtasks) contained within this task */
+	private long totalTasks = 1;
 
 	/** Progress in current stage */
 	private final AtomicLong current = new AtomicLong(0);
@@ -92,6 +90,9 @@ public class Task {
 	{
 		this.progressible = progressible;
 		this.parent = parent;
+		if (this.parent != null) {
+			this.parent.subTasks.add(this);
+		}
 		this.description = description;
 	}
 
@@ -109,24 +110,12 @@ public class Task {
 			}
 			throw new IllegalStateException(msg);
 		}
-		this.completed = true;
-		if (hasElements) {
+		else {
+			// For tasks with undefined progress, we simply update current to be max.
 			this.current.set(this.max.get());
+			this.totalTasks = subTasks.size() + 1;
 		}
-	}
-
-	/**
-	 * Creates a subtask, recording it to keep track of progress.
-	 *
-	 * @return the subtask.
-	 */
-	public synchronized Task createSubtask( //
-		Object progressible, //
-		String description //
-	) {
-		final Task sub = new Task(progressible, this, description);
-		subTasks.add(sub);
-		return sub;
+		this.completed = true;
 	}
 
 	/**
@@ -157,25 +146,24 @@ public class Task {
 	 *          used (as one subtask may run multiple times).
 	 */
 	public void defineTotal(final long elements, final long subTasks) {
-		if (tasksDefined) {
-			throw new IllegalStateException(
-				"Progress has already been defined for this task");
-		}
-		// Total tasks = all subtasks, plus one iff there are also progress elements
-		// in this stage
-		this.tasks = subTasks + (elements == 0 ? 0 : 1);
-
-		if (elements == 0) {
-			this.hasElements = false;
-			if (this.tasks == 0) {
-				this.tasks = 1;
-				this.current.set(1);
-				this.max.set(1);
-				return;
-			}
-		}
-		else {
+		// Nonzero number of elements
+		if (elements > 0L) {
+			this.totalTasks = subTasks + 1;
 			this.max.set(elements);
+		}
+		// Zero elements, nonzero subtasks
+		else if (subTasks > 0L) {
+			this.totalTasks = subTasks;
+			this.max.set(1);
+		}
+		// Zero elements & zero subtasks
+		// NB one common example of this situation occurs when you
+		// want to programmatically set the elements to the size of a list,
+		// but then you get passed an empty list. In this case, there is one task,
+		// which is already complete!.
+		else {
+			this.totalTasks = 1;
+			this.current.set(1);
 		}
 		this.tasksDefined = true;
 	}
@@ -202,9 +190,9 @@ public class Task {
 	public double progress() {
 		double totalCompletion = current.doubleValue() / max.doubleValue();
 		for (Task t : subTasks) {
-			totalCompletion += t.isComplete() ? 1.0 : t.progress();
+			totalCompletion += t.progress();
 		}
-		return totalCompletion / tasks;
+		return totalCompletion / totalTasks;
 	}
 
 	/**

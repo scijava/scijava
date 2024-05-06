@@ -29,11 +29,7 @@
 
 package org.scijava.progress;
 
-import java.util.ArrayDeque;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -67,6 +63,9 @@ public final class Progress {
 	private static final Map<Object, List<ProgressListener>> progressibleListeners =
 		new WeakHashMap<>();
 
+	/** Singleton NOP task */
+	private static final NOPTask IGNORED = new NOPTask();
+
 	/**
 	 * A record of the progressible {@link Object}s running on each
 	 * {@link Thread}.
@@ -74,6 +73,7 @@ public final class Progress {
 	private static final ThreadLocal<ArrayDeque<Task>> progressibleStack =
 		new InheritableThreadLocal<>()
 		{
+			private final Collection<Task> initialContents = Collections.singleton(IGNORED);
 
 			@Override
 			protected ArrayDeque<Task> childValue(ArrayDeque<Task> parentValue) {
@@ -85,7 +85,7 @@ public final class Progress {
 
 			@Override
 			protected ArrayDeque<Task> initialValue() {
-				return new ArrayDeque<>();
+				return new ArrayDeque<>(initialContents);
 			}
 		};
 
@@ -178,7 +178,7 @@ public final class Progress {
 		Task t;
 		var deque = progressibleStack.get();
 		var parent = deque.peek();
-		if (parent == null) {
+		if (parent == null || parent == IGNORED) {
 			// completely new execution hierarchy
 			t = new Task(progressible, description);
 		}
@@ -213,7 +213,7 @@ public final class Progress {
 		for (var l : globalListeners)
 			l.acknowledgeUpdate(task);
 		// Ping parent
-		if (task.parent() != null) {
+		if (task.isSubTask()) {
 			pingListeners(task.parent());
 		}
 	}
@@ -241,11 +241,11 @@ public final class Progress {
 	 * Updates the progress of the current {@link Task}, pinging any interested
 	 * {@link ProgressListener}s.
 	 *
-	 * @param numElements the number of elements completed in the current stage.
+	 * @param elements the number of elements completed in the current stage.
 	 * @see Task#update(long)
 	 */
-	public static void update(long numElements) {
-		update(numElements, currentTask());
+	public static void update(long elements) {
+		update(elements, currentTask());
 	}
 
 	/**
@@ -335,7 +335,5 @@ public final class Progress {
 		}
 
 	}
-
-	private static final NOPTask IGNORED = new NOPTask();
 
 }

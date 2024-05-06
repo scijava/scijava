@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
@@ -56,14 +57,13 @@ import org.scijava.types.Nil;
  * <p>
  * Ops tell the {@link Progress} a few things:
  * <ol>
- * <li>The number of "stages" of computation, including any "subtasks"</li>
- * <li>The number of tasks in each stage</li>
- * <li>When each task has been completed</li>
+ * <li>The number of "elements" in a computation, as well as "subtasks", i.e. dependent Ops</li>
+ * <li>When each "element" has been completed</li>
  * </ol>
  * <p>
- * Note the difference between a "stage" of computation, and a "subtask"
+ * Note the difference between an "element" of computation, and a "subtask"
  * <ul>
- * <li><em>stage</em>s are phases of computation done <b>by the Op</b></li>
+ * <li><em>elements</em>s are pieces of computation done <b>by the Op</b></li>
  * <li><em>subtask</em>s are phases of computation done <b>by other Ops</b></li>
  * </ul>
  * Users are then notified by the progress of Ops by installing
@@ -87,7 +87,7 @@ public class ReportingProgress implements OpCollection {
 
 		// Here, we want to update the progress every time we find a new prime.
 		// We call no Op dependencies, thus the call looks like:
-		Progress.defineTotal(numPrimes, 0);
+		Progress.defineTotal(numPrimes);
 
 		// Progress is defined within the range [0, 1],
 		// where 0 denotes an Op that has not yet started.
@@ -118,6 +118,8 @@ public class ReportingProgress implements OpCollection {
 
 	public static void main(String... args) {
 		OpEnvironment ops = OpEnvironment.build();
+		// To enable Progress Reporting, you must enable the progress tracking hint!
+		ops.setDefaultHints(new Hints("progress.TRACK"));
 
 		// ProgressListeners consume task updates.
 		// This ProgressListener simply logs to standard output, but we could print

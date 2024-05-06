@@ -276,6 +276,66 @@ class DoubleSizeOp implements Function<double[], Double> {
 
 ```
 
+### Defining Op Progress
+
+By adding the `scijava-progress` module, your Op can define and update its progress, providing user value for long-running Ops. To add progress to your Op, you must add the following steps to your Op:
+* Before any significant computation, add the line `Progress.defineTotal(long elements)` where `elements` is the number of "discrete packets" of computation.
+* At convenient spots within your Op, call `Progress.update()` to denote that one packet of computation has finished. 
+  * **Alternatively**, it may be more convenient or performant to call `Progress.update(long numElements)` to denote `numElements` packets have completed at once.
+
+```java
+/**
+ * A simple summer
+ *
+ * @implNote op names="stats.sum"
+ */
+class DoubleSumOp implements Function<double[], Double> {
+    public Double apply(final double[] inArray) {
+        Progress.defineTotal(inArray.length);
+        double sum = 0;
+        for (double v : inArray) {
+            sum += v;
+            Progress.update();
+        }
+        return i;
+    }
+}
+```
+
+If your Op defines Op dependencies whose progress you'd like to include in your total progress, you can make the following changes.
+* For each Op dependency that you want to track, pass the Hint `"progress.TRACK"` within the `@OpDependency` annotation.
+* Replace `Progress.defineTotal(long elements)` with `Progress.defineTotal(long elements, long subTasks)`, where `subTasks` is the **total** number of times you will invoke Op dependencies annotated with `"progress.TRACK"`.
+
+
+```java
+
+import org.scijava.ops.spi.OpDependency;
+
+/**
+ * A simple mean calculator
+ *
+ * @implNote op names="stats.mean"
+ */
+class DoubleMeanOp implements Function<double[], Double> {
+
+    // This Op will contribute to progress
+    @OpDependency(name="stats.sum", hints={"progress.TRACK"})
+    public Function<double[], Double> sumOp;
+    
+    // This Op will also contribute to progress
+    @OpDependency(name="stats.size", hints={"progress.TRACK"})
+    public Function<double[], Double> sizeOp;
+
+    public Double apply(final double[] inArray) {
+        // There's no significant work here, but we do have 2 subtasks.
+        Progress.defineTotal(0, 2);
+        final Double sum = sumOp.apply(inArray);
+        final Double size = sizeOp.apply(inArray);
+        return sum / size;
+    }
+}
+```
+
 ### Element-wise Ops
 
 Simple pixel-wise operations like addition, inversion, and more can be written on a single pixel (i.e. `RealType`) - therefore, SciJava Ops Image takes care to automagically adapt pixel-wise Ops across a wide variety of image types. If you would like to write a pixel-wise Op, we recommend the following structure.

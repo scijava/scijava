@@ -86,7 +86,7 @@ public class DefaultOpEnvironmentService extends AbstractService implements
 
 		@Override
 		public void acknowledgeUpdate(Task task) {
-			if (task.parent() != null) return;
+			if (task.isSubTask()) return;
 			var sjTask = taskMap.computeIfAbsent( //
 				task, //
 				(t) -> { //

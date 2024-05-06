@@ -250,7 +250,11 @@ public class Task {
 	 *
 	 * @return the parent {@link Task}, or {@code null} if this Task has no parent
 	 */
-	public Task parent() {
+	protected Task parent() {
 		return parent;
+	}
+
+	public boolean isSubTask() {
+		return parent != null;
 	}
 }

@@ -71,6 +71,27 @@ public class DefaultProgressTest {
 	}
 
 	/**
+	 * Tests "empty" {@link Task}s.
+	 */
+	@Test
+	public void testEmptyProgress() {
+		Supplier<Long> progressible = () -> {
+			Progress.defineTotal(0);
+			return 0L;
+		};
+		// Add the ProgressListener
+		var listener = new TestSuiteProgressListener(0);
+		Progress.addListener(progressible, listener);
+		// Register the Task
+		Progress.register(progressible);
+		// Run the Task
+		progressible.get();
+		// Complete the Task
+		Progress.complete();
+		Assertions.assertTrue(listener.isComplete());
+	}
+
+	/**
 	 * Tests progress listening on a simple task with only one processing stage
 	 * and no dependencies.
 	 */

@@ -69,7 +69,7 @@ public class Task {
 	private final AtomicLong max = new AtomicLong(1);
 
 	/**
-	 * True iff a call to {@link Task#define(long, long)} has been made
+	 * True iff a call to {@link Task#defineTotal(long, long)} has been made
 	 */
 	private boolean tasksDefined = false;
 
@@ -136,12 +136,12 @@ public class Task {
 	 * {@link Task#progress()} are called, as otherwise total progress cannot be
 	 * defined.
 	 * <p>
-	 * Under the hood, this method calls {@link #define(long, long)}
+	 * Under the hood, this method calls {@link #defineTotal(long, long)}
 	 *
-	 * @param elements the number of discrete "elements" in the computation
+	 * @param elements the number of discrete packets of computation.
 	 */
-	public void define(final long elements) {
-		define(elements, 0);
+	public void defineTotal(final long elements) {
+		defineTotal(elements, 0);
 	}
 
 	/**
@@ -151,12 +151,12 @@ public class Task {
 	 * {@link Task#progress()} are called, as otherwise total progress cannot be
 	 * defined.
 	 *
-	 * @param elements the number of discrete "elements" in the computation
+	 * @param elements the number of discrete packets of computation.
 	 * @param subTasks the number <b>of times</b> subtasks are called upon within
 	 *          the task. This <b>is not</b> the same as the number of subtasks
 	 *          used (as one subtask may run multiple times).
 	 */
-	public void define(final long elements, final long subTasks) {
+	public void defineTotal(final long elements, final long subTasks) {
 		if (tasksDefined) {
 			throw new IllegalStateException(
 				"Progress has already been defined for this task");
@@ -192,7 +192,7 @@ public class Task {
 	/**
 	 * Calculates and returns the progress of the associated progressible
 	 * {@link Object}. If the total progress is defined using
-	 * {@link Task#define(long, long)}, then this method will return a
+	 * {@link Task#defineTotal(long, long)}, then this method will return a
 	 * {@code double} within the range [0, 1]. If the progress is <b>not</b>
 	 * defined, then this task will return {@code 0} until {@link #complete()} is
 	 * called; after that call this method will return {@code 1.}.

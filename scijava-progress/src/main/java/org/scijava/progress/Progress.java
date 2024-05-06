@@ -51,16 +51,18 @@ public final class Progress {
 
 	/**
 	 * A record of all listeners interested in the progress of all Object
-	 * executions. We do not expect very many of these, so to provide high concurrency we use
-	 * {@link CopyOnWriteArrayList} as the backing implementation
+	 * executions. We do not expect very many of these, so to provide high
+	 * concurrency we use {@link CopyOnWriteArrayList} as the backing
+	 * implementation
 	 */
 	private static final List<ProgressListener> globalListeners =
 		new CopyOnWriteArrayList<>();
 
 	/**
 	 * A record of all listeners interested in the progress of a given Object's
-	 * executions. We do not expect very many of these, so to provide high concurrency we use
-	 * {@link CopyOnWriteArrayList} as the backing implementation
+	 * executions. We do not expect very many of these, so to provide high
+	 * concurrency we use {@link CopyOnWriteArrayList} as the backing
+	 * implementation
 	 */
 	private static final Map<Object, List<ProgressListener>> progressibleListeners =
 		new WeakHashMap<>();
@@ -208,7 +210,8 @@ public final class Progress {
 			list.forEach(l -> l.acknowledgeUpdate(task));
 		}
 		// Ping global listeners
-		for(var l : globalListeners) l.acknowledgeUpdate(task);
+		for (var l : globalListeners)
+			l.acknowledgeUpdate(task);
 		// Ping parent
 		if (task.parent() != null) {
 			pingListeners(task.parent());
@@ -272,24 +275,24 @@ public final class Progress {
 	/**
 	 * Defines the total progress of the current {@link Task}
 	 *
-	 * @param elements the number of discrete "elements" in the computation
-	 * @see Task#define(long)
+	 * @param elements the number of discrete packets of computation.
+	 * @see Task#defineTotal(long)
 	 */
 	public static void defineTotal(long elements) {
-		currentTask().define(elements);
+		currentTask().defineTotal(elements);
 	}
 
 	/**
 	 * Defines the total progress of the current {@link Task}
 	 *
-	 * @param elements the number of discrete "elements" in the computation
+	 * @param elements the number of discrete packets of computation.
 	 * @param subTasks the number <b>of times</b> subtasks are called upon within
 	 *          the task. This <b>is not</b> the same as the number of subtasks
 	 *          used (as one subtask may run multiple times).
-	 * @see Task#define(long, long)
+	 * @see Task#defineTotal(long, long)
 	 */
 	public static void defineTotal(long elements, long subTasks) {
-		currentTask().define(elements, subTasks);
+		currentTask().defineTotal(elements, subTasks);
 	}
 
 	/**
@@ -327,7 +330,7 @@ public final class Progress {
 		}
 
 		@Override
-		public void define(final long elements, final long subTasks) {
+		public void defineTotal(final long elements, final long subTasks) {
 			// NB: No-op
 		}
 

@@ -50,7 +50,6 @@ public class Task {
 	/** Parent of this task */
 	private final Task parent;
 
-	// NB this is a concurrent map being used as a concurrent set
 	/** Subtasks created by this task */
 	private final List<Task> subTasks = new CopyOnWriteArrayList<>();
 

@@ -73,7 +73,9 @@ public final class Progress {
 	private static final ThreadLocal<ArrayDeque<Task>> progressibleStack =
 		new InheritableThreadLocal<>()
 		{
-			private final Collection<Task> initialContents = Collections.singleton(IGNORED);
+
+			private final Collection<Task> initialContents = Collections.singleton(
+				IGNORED);
 
 			@Override
 			protected ArrayDeque<Task> childValue(ArrayDeque<Task> parentValue) {

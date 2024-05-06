@@ -57,7 +57,8 @@ import org.scijava.types.Nil;
  * <p>
  * Ops tell the {@link Progress} a few things:
  * <ol>
- * <li>The number of "elements" in a computation, as well as "subtasks", i.e. dependent Ops</li>
+ * <li>The number of "elements" in a computation, as well as "subtasks", i.e.
+ * dependent Ops</li>
  * <li>When each "element" has been completed</li>
  * </ol>
  * <p>

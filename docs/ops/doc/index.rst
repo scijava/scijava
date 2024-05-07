@@ -47,7 +47,7 @@ The combination of these libraries allows declarative image analysis workflows, 
    :maxdepth: 2
    :caption: 📚 Papers
 
-   paper-2024
+   paper-2024/index
 
 Indices and tables
 ==================

@@ -110,82 +110,8 @@
 		<!-- No java source files for this project -->
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 	</properties>
+
 	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>org.scijava</groupId>
-							<artifactId>scijava-ops-indexer</artifactId>
-							<version>${project.version}</version>
-						</path>
-					</annotationProcessorPaths>
-					<fork>true</fork>
-					<showWarnings>true</showWarnings>
-					<compilerArgs>
-						<arg>-Aparse.ops="${scijava.parse.ops}"</arg>
-						<arg>-Aop.version="${project.version}"</arg>
-					</compilerArgs>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<tagletArtifacts>
-						<tagletArtifact>
-							<groupId>org.scijava</groupId>
-							<artifactId>scijava-taglets</artifactId>
-							<version>${project.version}</version>
-						</tagletArtifact>
-					</tagletArtifacts>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-enforcer-plugin</artifactId>
-				<dependencies>
-					<dependency>
-						<groupId>org.scijava</groupId>
-						<artifactId>scijava-maven-plugin</artifactId>
-						<version>2.2.0</version>
-					</dependency>
-				</dependencies>
-				<executions>
-					<execution>
-						<id>enforce-no-package-cycles</id>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-						<phase>test</phase>
-						<configuration>
-							<rules>
-								<NoPackageCyclesRule
-										implementation="org.scijava.maven.plugin.enforcer.NoPackageCyclesRule" />
-							</rules>
-						</configuration>
-					</execution>
-					<execution>
-						<id>enforce-no-subpackage-dependence</id>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-						<phase>test</phase>
-						<configuration>
-							<rules>
-								<NoSubpackageDependenceRule
-										implementation="org.scijava.maven.plugin.enforcer.NoSubpackageDependenceRule" />
-							</rules>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>com.alexecollins.maven.plugin</groupId>
-				<artifactId>script-maven-plugin</artifactId>
-				<version>${script-maven-plugin.version}</version>
-			</plugin>
-		</plugins>
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -264,7 +190,83 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.scijava</groupId>
+							<artifactId>scijava-ops-indexer</artifactId>
+							<version>${project.version}</version>
+						</path>
+					</annotationProcessorPaths>
+					<fork>true</fork>
+					<showWarnings>true</showWarnings>
+					<compilerArgs>
+						<arg>-Aparse.ops="${scijava.parse.ops}"</arg>
+						<arg>-Aop.version="${project.version}"</arg>
+					</compilerArgs>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<tagletArtifacts>
+						<tagletArtifact>
+							<groupId>org.scijava</groupId>
+							<artifactId>scijava-taglets</artifactId>
+							<version>${project.version}</version>
+						</tagletArtifact>
+					</tagletArtifacts>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<dependencies>
+					<dependency>
+						<groupId>org.scijava</groupId>
+						<artifactId>scijava-maven-plugin</artifactId>
+						<version>2.2.0</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>enforce-no-package-cycles</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<phase>test</phase>
+						<configuration>
+							<rules>
+								<NoPackageCyclesRule
+										implementation="org.scijava.maven.plugin.enforcer.NoPackageCyclesRule" />
+							</rules>
+						</configuration>
+					</execution>
+					<execution>
+						<id>enforce-no-subpackage-dependence</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<phase>test</phase>
+						<configuration>
+							<rules>
+								<NoSubpackageDependenceRule
+										implementation="org.scijava.maven.plugin.enforcer.NoSubpackageDependenceRule" />
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.alexecollins.maven.plugin</groupId>
+				<artifactId>script-maven-plugin</artifactId>
+				<version>${script-maven-plugin.version}</version>
+			</plugin>
+		</plugins>
 	</build>
+
 	<profiles>
 		<profile>
 			<id>benchmarks</id>

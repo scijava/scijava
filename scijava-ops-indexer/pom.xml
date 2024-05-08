@@ -63,18 +63,6 @@
 			<archive>https://forum.image.sc/tag/scijava</archive>
 		</mailingList>
 	</mailingLists>
-	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<!-- Avoid annotation processing here-->
-				<!-- We don't want to error by running our own processor-->
-				<configuration combine.self="override">
-					<proc>none</proc>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 
 	<scm>
 		<connection>scm:git:git://github.com/scijava/scijava</connection>
@@ -98,6 +86,7 @@
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 		<scijava.jvm.build.version>[11,)</scijava.jvm.build.version>
 	</properties>
+
 	<dependencies>
 		<!-- Third party dependencies -->
 		<dependency>
@@ -105,4 +94,17 @@
 			<artifactId>snakeyaml</artifactId>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<!-- Avoid annotation processing here-->
+				<!-- We don't want to error by running our own processor-->
+				<configuration combine.self="override">
+					<proc>none</proc>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

@@ -280,10 +280,12 @@ class DoubleSizeOp implements Function<double[], Double> {
 
 The `scijava-progress` module provides a mechanism for long-running tasks to describe their progress through textual or graphical means. For example, `scijava-progress` enables [Fiji](https://fiji.sc/) users to observe the progress of every Op invoked within the application, as shown below.
 
-<figure>
-  <img src="https://media.scijava.org/scijava-ops/1.0.0/scijava_progress_example.png" alt="scijava-progress updates within Fiji"/>
-  <figcaption><em>scijava-progress provides updates from all Op executions within Fiji's `Tasks` pane. </em></figcaption>
-</figure>
+<center>
+    <figure>
+      <img src="https://media.scijava.org/scijava-ops/1.0.0/scijava_progress_example.png" alt="scijava-progress updates within Fiji" style="width:50%;"/>
+      <figcaption><em>scijava-progress provides updates from all Op executions within Fiji's `Tasks` pane. </em></figcaption>
+    </figure>
+</center>
 
 While all Ops emit "binary" progress (denoting each Op's beginning and end), your Op can provide richer updates by adding the `scijava-progress` module, providing user value for long-running Ops. To add progress to your Op, you must add the following steps to your Op:
 

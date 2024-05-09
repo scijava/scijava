@@ -1,10 +1,6 @@
-from scyjava import jimport
-import scyjava.config
 from types import MethodType
-jars=scyjava.config.find_jars("C:\\Users\\hiner\\code\\scijava\\incubator\\imagej\\imagej-ops2\\target\\dependency\\")
-scyjava.config.add_classpath(*jars)
-scyjava.config.add_classpath("C:\\Users\\hiner\\code\\scijava\\incubator\\imagej\\imagej-ops2\\target\\imagej-ops2-0-SNAPSHOT.jar")
-env=jimport('org.scijava.ops.engine.DefaultOpEnvironment')()
+
+env = ij.get("org.scijava.legacy.service.OpEnvironmentService").env()
 
 op_names={str(name) for info in env.infos() for name in info.names()}
 
@@ -19,10 +15,6 @@ class OpGateway(OpNamespace):
     def __init__(self, env):
         super().__init__(env, 'global')
 
-def nary(env, fqop, arity):
-    arities=[env.nullary, env.unary, env.binary, env.ternary, env.quaternary, env.quinary, env.senary, env.septenary, env.octonary, env.nonary, env.decenary, env.arity11, env.arity12, env.arity13, env.arity14, env.arity15, env.arity16]
-    return arities[arity](fqop)
-
 def add_op(c, op_name):
     if hasattr(c, op_name):
         return
@@ -31,7 +23,7 @@ def add_op(c, op_name):
         print(type(self))
         fqop = op_name if self.ns == 'global' else self.ns + "." + op_name
         run = kwargs.get('run', True)
-        b = nary(self.env, fqop, len(args)).input(*args)
+        b = self.env.op(fqop).input(*args)
         # inplace
         # ops.filter.gauss(image, 5, inplace=0)
         if (inplace:=kwargs.get('inplace', None)) is not None:
@@ -52,12 +44,18 @@ def add_op(c, op_name):
         # op_name is a global.
         setattr(c, op_name, f)
     else:
-#        if isinstance(c, MethodType):
-#            print("oh no! - race condition happened")
+        #if isinstance(c, MethodType):
+            #print("oh no! - race condition happened")
         m=MethodType(f, c)
         setattr(c, op_name, m)
 
-def add_namespace(c, ns, op_name):
+# ipython HACKS
+globals()['add_op'] = add_op
+globals()['OpNamespace'] = OpNamespace
+globals()['OpGateway'] = OpGateway
+globals()['MethodType'] = MethodType
+
+def add_namespace(c, ns, env, op_name):
     if not hasattr(c, ns):
         setattr(c, ns, OpNamespace(env, ns))
     add_op(getattr(c, ns), op_name)
@@ -68,8 +66,9 @@ for op in op_names:
     if dot >= 0:
         ns=op[:dot]
         op_name=op[dot+1:]
-        add_namespace(OpGateway, ns, op_name)
+        add_namespace(OpGateway, ns, env, op_name)
     else:
         print(f"registering global op: {op}")
         add_op(OpGateway, op)
 
+ops = OpGateway(env)

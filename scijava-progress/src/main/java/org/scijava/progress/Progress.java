@@ -209,7 +209,10 @@ public final class Progress {
 			task.progressible(), //
 			Collections.emptyList() //
 		);
-		list.forEach(l -> l.accept(task));
+		synchronized (list) {
+			for(var l: list)
+				l.accept(task);
+		}
 		// Ping global listeners
 		for (var l : globalListeners)
 			l.accept(task);

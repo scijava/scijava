@@ -29,6 +29,7 @@
 
 package org.scijava.progress;
 
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.junit.jupiter.api.Assertions;
@@ -58,8 +59,8 @@ public class DefaultProgressTest {
 			}
 			return NUM_ITERATIONS;
 		};
-		// Add the ProgressListener
-		var listener = new TestSuiteProgressListener(0);
+		// Add the TaskConsumer
+		var listener = new TestSuiteTaskConsumer(0);
 		Progress.addListener(progressible, listener);
 		// Register the Task
 		Progress.register(progressible);
@@ -79,8 +80,8 @@ public class DefaultProgressTest {
 			Progress.defineTotal(0);
 			return 0L;
 		};
-		// Add the ProgressListener
-		var listener = new TestSuiteProgressListener(0);
+		// Add the TaskConsumer
+		var listener = new TestSuiteTaskConsumer(0);
 		Progress.addListener(progressible, listener);
 		// Register the Task
 		Progress.register(progressible);
@@ -108,8 +109,8 @@ public class DefaultProgressTest {
 			return NUM_ITERATIONS;
 		};
 
-		// Add the ProgressListener
-		var listener = new TestSuiteProgressListener(NUM_ITERATIONS);
+		// Add the TaskConsumer
+		var listener = new TestSuiteTaskConsumer(NUM_ITERATIONS);
 		Progress.addListener(progressible, listener);
 		// Register the Task
 		Progress.register(progressible);
@@ -136,8 +137,8 @@ public class DefaultProgressTest {
 			}
 			return NUM_ITERATIONS;
 		};
-		// Add the ProgressListener
-		var listener = new TestSuiteProgressListener(NUM_ITERATIONS);
+		// Add the TaskConsumer
+		var listener = new TestSuiteTaskConsumer(NUM_ITERATIONS);
 		Progress.addListener(progressible, listener);
 		// Register the Task
 		Progress.register(progressible);
@@ -174,9 +175,9 @@ public class DefaultProgressTest {
 			return NUM_STAGES * NUM_ITERATIONS;
 		};
 
-		// Add the ProgressListener
+		// Add the TaskConsumer
 		var expected = NUM_ITERATIONS * NUM_STAGES;
-		var listener = new TestSuiteProgressListener(expected);
+		var listener = new TestSuiteTaskConsumer(expected);
 		Progress.addListener(progressible, listener);
 		// Register the Task
 		Progress.register(progressible);
@@ -188,11 +189,11 @@ public class DefaultProgressTest {
 	}
 
 	/**
-	 * Test that {@link ProgressListener}s added at a global level can listen to a
+	 * Test that {@link Consumer<Task>}s added at a global level can listen to a
 	 * progressible object without being explicitly linked
 	 */
 	@Test
-	public void testGlobalProgressListener() {
+	public void testGlobalTaskConsumer() {
 		// Define the task
 		Supplier<Long> progressible = () -> {
 			// set up progress reporter
@@ -202,9 +203,9 @@ public class DefaultProgressTest {
 			}
 			return NUM_ITERATIONS;
 		};
-		// Add the ProgressListener
+		// Add the TaskConsumer
 		var id = "This is a global listener";
-		var listener = new TestSuiteProgressListener(NUM_ITERATIONS, id);
+		var listener = new TestSuiteTaskConsumer(NUM_ITERATIONS, id);
 		Progress.addGlobalListener(listener);
 		// Register the Task
 		Progress.register(progressible, id);
@@ -216,11 +217,11 @@ public class DefaultProgressTest {
 	}
 
 	/**
-	 * Test that {@link ProgressListener}s added at a global level can determine
+	 * Test that {@link Consumer<Task>}s added at a global level can determine
 	 * whether to listen to a {@link Task} by looking at its description.
 	 */
 	@Test
-	public void testProgressListenerIdentifiers() {
+	public void testTaskConsumer() {
 		// Define the task
 		Supplier<Long> progressible = () -> {
 			// set up progress reporter
@@ -230,15 +231,15 @@ public class DefaultProgressTest {
 			}
 			return NUM_ITERATIONS;
 		};
-		// Add a ProgressListener that should acknowledge this task
+		// Add a TaskConsumer that should acknowledge this task
 		var goodId = "This one should be listened to";
-		var goodListener = new TestSuiteProgressListener(NUM_ITERATIONS, goodId);
+		var goodListener = new TestSuiteTaskConsumer(NUM_ITERATIONS, goodId);
 		Progress.addGlobalListener(goodListener);
 		// Register the Task with goodId
 		Progress.register(progressible, goodId);
 		// Create a second global listener that will not acknowledge this task
 		var badId = "This one should not be listened to";
-		var badListener = new TestSuiteProgressListener(NUM_ITERATIONS, badId);
+		var badListener = new TestSuiteTaskConsumer(NUM_ITERATIONS, badId);
 		Progress.addGlobalListener(badListener);
 		// Run the Task
 		progressible.get();

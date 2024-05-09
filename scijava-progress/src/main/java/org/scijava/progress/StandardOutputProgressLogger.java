@@ -29,15 +29,17 @@
 
 package org.scijava.progress;
 
+import java.util.function.Consumer;
+
 /**
- * Simple {@link ProgressListener} logging updates to standard output.
+ * Simple {@link Consumer<Task>} logging updates to standard output.
  *
  * @author Gabriel Selzer
  */
-public class StandardOutputProgressLogger implements ProgressListener {
+public class StandardOutputProgressLogger implements Consumer<Task> {
 
 	@Override
-	public void acknowledgeUpdate(Task task) {
+	public void accept(Task task) {
 		if (task.isComplete()) {
 			System.out.printf("Progress of %s: Complete\n", task.description());
 		}

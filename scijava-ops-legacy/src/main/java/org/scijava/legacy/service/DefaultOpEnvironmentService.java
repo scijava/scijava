@@ -35,7 +35,6 @@ import org.scijava.plugin.Attr;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.progress.Progress;
-import org.scijava.progress.ProgressListener;
 import org.scijava.progress.Task;
 import org.scijava.script.ScriptService;
 import org.scijava.service.AbstractService;
@@ -44,6 +43,7 @@ import org.scijava.task.TaskService;
 
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.function.Consumer;
 
 /**
  * Default implementation of {@link OpEnvironmentService}
@@ -70,22 +70,22 @@ public class DefaultOpEnvironmentService extends AbstractService implements
 
 		// Set up progress, if StatusService available
 		if (taskService != null) {
-			Progress.addGlobalListener(new SciJavaProgressListener(taskService));
+			Progress.addGlobalListener(new SciJavaTaskConsumer(taskService));
 		}
 	}
 
-	private static class SciJavaProgressListener implements ProgressListener {
+	private static class SciJavaTaskConsumer implements Consumer<Task> {
 
 		private final Map<Task, org.scijava.task.Task> taskMap;
 		private final TaskService tasks;
 
-		public SciJavaProgressListener(TaskService tasks) {
+		public SciJavaTaskConsumer(TaskService tasks) {
 			this.tasks = tasks;
 			this.taskMap = new WeakHashMap<>();
 		}
 
 		@Override
-		public void acknowledgeUpdate(Task task) {
+		public void accept(Task task) {
 			if (task.isSubTask()) return;
 			var sjTask = taskMap.computeIfAbsent( //
 				task, //

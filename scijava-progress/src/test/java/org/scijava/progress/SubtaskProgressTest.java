@@ -32,6 +32,7 @@ package org.scijava.progress;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -70,7 +71,7 @@ public class SubtaskProgressTest {
 
 		int numIterations = 2;
 		String id = "Running a complex Task with subtasks";
-		Progress.addListener(progressible, new ProgressListener() {
+		Progress.addListener(progressible, new Consumer<>() {
 
 			int itr = 0;
 			/* Expected list of progress pings */
@@ -89,7 +90,7 @@ public class SubtaskProgressTest {
 			};
 
 			@Override
-			public void acknowledgeUpdate(Task task) {
+			public void accept(Task task) {
 				// Check that the progress is what we expect
 				Assertions.assertEquals( //
 					expProgress[itr++], //
@@ -121,7 +122,7 @@ public class SubtaskProgressTest {
 
 		int numIterations = 2;
 		String id = "Running a task with subtasks";
-		Progress.addListener(progressible, new ProgressListener() {
+		Progress.addListener(progressible, new Consumer<>() {
 
 			int itr = 0;
 			/* Expected list of progress pings */
@@ -142,7 +143,7 @@ public class SubtaskProgressTest {
 			};
 
 			@Override
-			public void acknowledgeUpdate(Task task) {
+			public void accept(Task task) {
 				// Check that the progress is what we expect
 				Assertions.assertEquals( //
 					expProgress[itr++], //

@@ -31,6 +31,7 @@ package org.scijava.progress;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Consumer;
 
 /**
  * A static utility class serving as the interface between progress reporters
@@ -51,7 +52,7 @@ public final class Progress {
 	 * concurrency we use {@link CopyOnWriteArrayList} as the backing
 	 * implementation
 	 */
-	private static final List<ProgressListener> globalListeners =
+	private static final List<Consumer<Task>> globalListeners =
 		new CopyOnWriteArrayList<>();
 
 	/**
@@ -60,7 +61,7 @@ public final class Progress {
 	 * concurrency we use {@link CopyOnWriteArrayList} as the backing
 	 * implementation
 	 */
-	private static final Map<Object, List<ProgressListener>> progressibleListeners =
+	private static final Map<Object, List<Consumer<Task>>> progressibleListeners =
 		new WeakHashMap<>();
 
 	/** Singleton NOP task */
@@ -92,27 +93,27 @@ public final class Progress {
 		};
 
 	/**
-	 * Records {@link ProgressListener} {@code l} as a callback for all
-	 * progressible {@link Object}s
+	 * Records {@link Consumer<Task>} {@code l} as a callback for all progressible
+	 * {@link Object}s
 	 *
-	 * @param l a {@link ProgressListener} that would like to know about the
+	 * @param l a {@link Consumer<Task>} that would like to know about the
 	 *          progress of {@code progressible} {@link Object}s
 	 */
-	public static void addGlobalListener(ProgressListener l) {
+	public static void addGlobalListener(Consumer<Task> l) {
 		if (!globalListeners.contains(l)) {
 			globalListeners.add(l);
 		}
 	}
 
 	/**
-	 * Records {@link ProgressListener} {@code l} as a callback for progressible
+	 * Records {@link Consumer<Task>} {@code l} as a callback for progressible
 	 * {@link Object} {@code progressible}
 	 *
 	 * @param progressible an {@link Object} that reports its progress
-	 * @param l a {@link ProgressListener} that would like to know about the
+	 * @param l a {@link Consumer<Task>} that would like to know about the
 	 *          progress of {@code progressible}
 	 */
-	public static void addListener(Object progressible, ProgressListener l) {
+	public static void addListener(Object progressible, Consumer<Task> l) {
 		if (!progressibleListeners.containsKey(progressible)) {
 			createListenerList(progressible);
 		}
@@ -127,7 +128,7 @@ public final class Progress {
 	/**
 	 * Completes the current task on this {@link Thread}'s execution hierarchy,
 	 * removing it in the process. This method also takes care to ping relevant
-	 * {@link ProgressListener}s.
+	 * {@link Consumer<Task>}s.
 	 *
 	 * @see Task#complete()
 	 */
@@ -194,7 +195,7 @@ public final class Progress {
 	}
 
 	/**
-	 * Activates all callback {@link ProgressListener}s listening for progress
+	 * Activates all callback {@link Consumer <Task>}s listening for progress
 	 * updates on executions of {@code o}
 	 *
 	 * @param task an {@link Object} reporting its progress.
@@ -204,16 +205,14 @@ public final class Progress {
 			return;
 		}
 		// Ping object-specific listeners
-		List<ProgressListener> list = progressibleListeners.getOrDefault( //
+		List<Consumer<Task>> list = progressibleListeners.getOrDefault( //
 			task.progressible(), //
 			Collections.emptyList() //
 		);
-		synchronized (list) {
-			list.forEach(l -> l.acknowledgeUpdate(task));
-		}
+		list.forEach(l -> l.accept(task));
 		// Ping global listeners
 		for (var l : globalListeners)
-			l.acknowledgeUpdate(task);
+			l.accept(task);
 		// Ping parent
 		if (task.isSubTask()) {
 			pingListeners(task.parent());
@@ -231,7 +230,7 @@ public final class Progress {
 
 	/**
 	 * Updates the progress of the current {@link Task}, pinging any interested
-	 * {@link ProgressListener}s.
+	 * {@link Consumer<Task>}s.
 	 *
 	 * @see Task#update(long)
 	 */
@@ -241,7 +240,7 @@ public final class Progress {
 
 	/**
 	 * Updates the progress of the current {@link Task}, pinging any interested
-	 * {@link ProgressListener}s.
+	 * {@link Consumer<Task>}s.
 	 *
 	 * @param elements the number of elements completed in the current stage.
 	 * @see Task#update(long)
@@ -252,7 +251,7 @@ public final class Progress {
 
 	/**
 	 * Updates the progress of the provided {@link Task}, pinging any interested
-	 * {@link ProgressListener}s.
+	 * {@link Consumer<Task>}s.
 	 *
 	 * @param numElements the number of elements completed in the current stage.
 	 * @param task the {@link Task} to update
@@ -265,7 +264,7 @@ public final class Progress {
 
 	/**
 	 * Sets the status of the current {@link Task}, pinging any interested
-	 * {@link ProgressListener}s.
+	 * {@link Consumer<Task>}s.
 	 *
 	 * @see Task#setStatus(String)
 	 */

@@ -29,10 +29,11 @@
 
 package org.scijava.progress;
 
-import java.util.function.Function;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class StatusBasedProgressTest {
 
@@ -47,13 +48,13 @@ public class StatusBasedProgressTest {
 	public void testStatusUpdate() {
 		Function<Integer, Integer> progressible = statusSpinningTask;
 		int numIterations = 10;
-		Progress.addListener(progressible, new ProgressListener() {
+		Progress.addListener(progressible, new Consumer<Task>() {
 
 			boolean registered = false;
 			int numUpdates = 0;
 
 			@Override
-			public void acknowledgeUpdate(Task task) {
+			public void accept(Task task) {
 				if (!registered) {
 					registered = true;
 					return;

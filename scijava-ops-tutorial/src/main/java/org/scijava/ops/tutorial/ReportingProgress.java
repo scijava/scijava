@@ -31,6 +31,7 @@ package org.scijava.ops.tutorial;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.scijava.ops.api.Hints;
@@ -38,8 +39,8 @@ import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.progress.Progress;
-import org.scijava.progress.ProgressListener;
 import org.scijava.progress.StandardOutputProgressLogger;
+import org.scijava.progress.Task;
 import org.scijava.types.Nil;
 
 /**
@@ -68,7 +69,7 @@ import org.scijava.types.Nil;
  * <li><em>subtask</em>s are phases of computation done <b>by other Ops</b></li>
  * </ul>
  * Users are then notified by the progress of Ops by installing
- * {@link ProgressListener}s.
+ * {@link Consumer<Task>}s.
  *
  * @author Gabriel Selzer
  */
@@ -122,16 +123,16 @@ public class ReportingProgress implements OpCollection {
 		// To enable Progress Reporting, you must enable the progress tracking hint!
 		ops.setDefaultHints(new Hints("progress.TRACK"));
 
-		// ProgressListeners consume task updates.
-		// This ProgressListener simply logs to standard output, but we could print
+		// Consumer<Task>s consume task updates.
+		// This Consumer simply logs to standard output, but we could print
 		// out something else, or pass this information somewhere else.
-		ProgressListener l = new StandardOutputProgressLogger();
-		// To listen to Op progress updates, the ProgressListener must be registered
+		Consumer<Task> l = new StandardOutputProgressLogger();
+		// To listen to Op progress updates, the Consumer must be registered
 		// through the Progress API. To listen to all Op executions, use the
 		// following call:
 		Progress.addGlobalListener(l);
 		// If listening to every Op would be overwhelming, the Progress API also
-		// allows ProgressListeners to be registered for a specific Op, using the
+		// allows Consumers to be registered for a specific Op, using the
 		// following call:
 		// Progress.addListener(op, l);
 
@@ -143,7 +144,7 @@ public class ReportingProgress implements OpCollection {
 			.function();
 
 		// When we apply the Op, we will automatically print the progress out to
-		// the console, thanks to our ProgressListener above.
+		// the console, thanks to our Consumers above.
 		var numPrimes = 100;
 		var primes = op.apply(numPrimes);
 		System.out.println("First " + numPrimes + " primes: " + primes);

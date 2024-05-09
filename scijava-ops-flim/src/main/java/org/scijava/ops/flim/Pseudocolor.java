@@ -251,19 +251,19 @@ public class Pseudocolor implements
 	 * and returns {@code r}, {@code g}, and {@code b} in the set [0, 255].
 	 * </p>
 	 * <p>
-	 * Conversion formula adapted from Wikipedia's <a
-	 * href="https://en.wikipedia.org/wiki/HSL_and_HSV">HSL and HSV article</a> and
-	 * Michael Jackson's <a href="http://bit.ly/9L2qln">blog post on additive
+	 * Conversion formula adapted from Wikipedia's
+	 * <a href="https://en.wikipedia.org/wiki/HSL_and_HSV">HSL and HSV article</a>
+	 * and Michael Jackson's <a href="http://bit.ly/9L2qln">blog post on additive
 	 * color model conversion algorithms</a>.
 	 * </p>
-	 * 
+	 *
 	 * @param h The hue
 	 * @param s The saturation
 	 * @param v The value
 	 * @return ColorRGB The RGB representation
 	 */
-	private static void hsvToRgb(final double h, final double s,
-		final double v, final int[] rgb)
+	private static void hsvToRgb(final double h, final double s, final double v,
+		final int[] rgb)
 	{
 		double r01 = 0, g01 = 0, b01 = 0;
 

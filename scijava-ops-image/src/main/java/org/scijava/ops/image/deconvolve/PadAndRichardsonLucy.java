@@ -49,6 +49,7 @@ import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.progress.Progress;
 
 /**
  * Richardson Lucy function op that operates on (@link RandomAccessibleInterval)
@@ -92,7 +93,8 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 	@OpDependency(name = "filter.createFFTOutput")
 	private Functions.Arity3<Dimensions, C, Boolean, RandomAccessibleInterval<C>> createOp;
 
-	@OpDependency(name = "deconvolve.richardsonLucy")
+	@OpDependency(name = "deconvolve.richardsonLucy", hints = {
+		"progress.TRACK" })
 	private Computers.Arity12<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, //
 			RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, //
 			Boolean, C, Integer, Boolean, //
@@ -103,6 +105,92 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 	private Boolean nonCirculant;
 
 	private Integer maxIterations;
+
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param kernel
+	 * @param outType
+	 * @param complexType
+	 * @param maxIterations max number of iterations
+	 * @param nonCirculant indicates whether to use non-circulant edge handling
+	 * @param accelerate indicates whether or not to use acceleration
+	 * @param borderSize
+	 * @param obfInput
+	 * @return the output
+	 */
+	@Override
+	public RandomAccessibleInterval<O> apply(RandomAccessibleInterval<I> input,
+		RandomAccessibleInterval<K> kernel, O outType, C complexType,
+		Integer maxIterations, @Nullable Boolean nonCirculant,
+		@Nullable Boolean accelerate, @Nullable long[] borderSize,
+		@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput)
+	{
+		// default to circulant
+		if (nonCirculant == null) {
+			nonCirculant = false;
+			this.nonCirculant = nonCirculant;
+		}
+		else {
+			this.nonCirculant = nonCirculant;
+		}
+
+		// out of bounds factory will be different depending on if circulant or
+		// non-circulant is used
+		if (obfInput == null) {
+			if (nonCirculant) {
+				obfInput = new OutOfBoundsConstantValueFactory<>(Util
+					.getTypeFromInterval(input).createVariable());
+			}
+			else {
+				obfInput = new OutOfBoundsMirrorFactory<>(
+					OutOfBoundsMirrorFactory.Boundary.SINGLE);
+			}
+		}
+
+		// default to no acceleration
+		if (accelerate == null) accelerate = false;
+
+		this.maxIterations = maxIterations;
+
+		RandomAccessibleInterval<O> output = outputCreator.apply(input, outType);
+
+		final int numDimensions = input.numDimensions();
+
+		// 1. Calculate desired extended size of the image
+
+		final long[] paddedSize = new long[numDimensions];
+
+		if (borderSize == null) {
+			// if no border size was passed in, then extend based on kernel size
+			for (int d = 0; d < numDimensions; ++d) {
+				paddedSize[d] = (int) input.dimension(d) + (int) kernel.dimension(d) -
+					1;
+			}
+
+		}
+		else {
+			// if borderSize was passed in
+			for (int d = 0; d < numDimensions; ++d) {
+
+				paddedSize[d] = Math.max(kernel.dimension(d) + 2 * borderSize[d], input
+					.dimension(d) + 2 * borderSize[d]);
+			}
+		}
+
+		Progress.defineTotal(0, 1);
+		RandomAccessibleInterval<I> paddedInput = padOp.apply(input,
+			new FinalDimensions(paddedSize), true, obfInput);
+
+		RandomAccessibleInterval<K> paddedKernel = padKernelOp.apply(kernel,
+			new FinalDimensions(paddedSize));
+
+		computeFilter(input, kernel, paddedInput, paddedKernel, output, paddedSize,
+			complexType, accelerate);
+
+		return output;
+	}
 
 	/**
 	 * create a richardson lucy filter
@@ -191,91 +279,6 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 				fftKernel, accelerate, output);
 
 		filter.compute(paddedInput, paddedKernel, output);
-	}
-
-	/**
-	 * TODO
-	 *
-	 * @param input
-	 * @param kernel
-	 * @param outType
-	 * @param complexType
-	 * @param maxIterations max number of iterations
-	 * @param nonCirculant indicates whether to use non-circulant edge handling
-	 * @param accelerate indicates whether or not to use acceleration
-	 * @param borderSize
-	 * @param obfInput
-	 * @return the output
-	 */
-	@Override
-	public RandomAccessibleInterval<O> apply(RandomAccessibleInterval<I> input,
-		RandomAccessibleInterval<K> kernel, O outType, C complexType,
-		Integer maxIterations, @Nullable Boolean nonCirculant,
-		@Nullable Boolean accelerate, @Nullable long[] borderSize,
-		@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput)
-	{
-		// default to circulant
-		if (nonCirculant == null) {
-			nonCirculant = false;
-			this.nonCirculant = nonCirculant;
-		}
-		else {
-			this.nonCirculant = nonCirculant;
-		}
-
-		// out of bounds factory will be different depending on if circulant or
-		// non-circulant is used
-		if (obfInput == null) {
-			if (nonCirculant) {
-				obfInput = new OutOfBoundsConstantValueFactory<>(Util
-					.getTypeFromInterval(input).createVariable());
-			}
-			else {
-				obfInput = new OutOfBoundsMirrorFactory<>(
-					OutOfBoundsMirrorFactory.Boundary.SINGLE);
-			}
-		}
-
-		// default to no acceleration
-		if (accelerate == null) accelerate = false;
-
-		this.maxIterations = maxIterations;
-
-		RandomAccessibleInterval<O> output = outputCreator.apply(input, outType);
-
-		final int numDimensions = input.numDimensions();
-
-		// 1. Calculate desired extended size of the image
-
-		final long[] paddedSize = new long[numDimensions];
-
-		if (borderSize == null) {
-			// if no border size was passed in, then extend based on kernel size
-			for (int d = 0; d < numDimensions; ++d) {
-				paddedSize[d] = (int) input.dimension(d) + (int) kernel.dimension(d) -
-					1;
-			}
-
-		}
-		else {
-			// if borderSize was passed in
-			for (int d = 0; d < numDimensions; ++d) {
-
-				paddedSize[d] = Math.max(kernel.dimension(d) + 2 * borderSize[d], input
-					.dimension(d) + 2 * borderSize[d]);
-			}
-		}
-
-		RandomAccessibleInterval<I> paddedInput = padOp.apply(input,
-			new FinalDimensions(paddedSize), true, obfInput);
-
-		RandomAccessibleInterval<K> paddedKernel = padKernelOp.apply(kernel,
-			new FinalDimensions(paddedSize));
-
-		computeFilter(input, kernel, paddedInput, paddedKernel, output, paddedSize,
-			complexType, accelerate);
-
-		return output;
 	}
 
 }

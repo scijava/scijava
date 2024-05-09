@@ -32,7 +32,9 @@ package org.scijava.ops.image;
 import java.net.URL;
 import java.util.stream.StreamSupport;
 
+import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.spi.Op;
 
 import io.scif.img.IO;
@@ -63,6 +65,10 @@ import net.imglib2.view.Views;
 public abstract class AbstractOpTest {
 
 	protected static final OpEnvironment ops = OpEnvironment.build();
+
+	static {
+		ops.setDefaultHints(new Hints(BaseOpHints.Progress.TRACK));
+	}
 
 	private int seed;
 

@@ -29,11 +29,14 @@
 
 package org.scijava.progress;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Tests progress reporting in parallel situations
@@ -51,8 +54,7 @@ public class ParallelProgressTest {
 	 */
 	public final Function<Integer, Integer> iterator = (iterations) -> {
 		// set up progress reporter
-		Progress.defineTotalProgress(1);
-		Progress.setStageMax(iterations);
+		Progress.defineTotal(iterations);
 
 		for (int i = 0; i < iterations; i++) {
 			Progress.update();
@@ -66,8 +68,7 @@ public class ParallelProgressTest {
 	public final BiFunction<Integer, Integer, Integer> parallelProgressTask = (
 		numThreads, iterationsPerThread) -> {
 
-		Progress.defineTotalProgress(1);
-		Progress.setStageMax(numThreads * iterationsPerThread);
+		Progress.defineTotal(numThreads * iterationsPerThread);
 		Thread[] threadArr = new Thread[numThreads];
 
 		for (int i = 0; i < numThreads; i++) {
@@ -83,7 +84,7 @@ public class ParallelProgressTest {
 				threadArr[i].join();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return null;
 	};
@@ -100,7 +101,7 @@ public class ParallelProgressTest {
 		Integer numThreads, Integer iterationsPerThread)
 	{
 
-		Progress.defineTotalProgress(0, numThreads);
+		Progress.defineTotal(0, numThreads);
 		Thread[] threadArr = new Thread[numThreads];
 
 		for (int i = 0; i < numThreads; i++) {
@@ -116,7 +117,7 @@ public class ParallelProgressTest {
 				threadArr[i].join();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return numThreads * iterationsPerThread;
 	}
@@ -130,12 +131,12 @@ public class ParallelProgressTest {
 		BiFunction<Integer, Integer, Integer> task = parallelProgressTask;
 		int numThreads = 4;
 		int iterationsPerThread = 1000;
-		Progress.addListener(task, new ProgressListener() {
+		Progress.addListener(task, new Consumer<>() {
 
 			double lastProgress = 0;
 
 			@Override
-			public void acknowledgeUpdate(Task t) {
+			public void accept(Task t) {
 				double progress = t.progress();
 				Assertions.assertTrue(lastProgress <= progress);
 				lastProgress = progress;
@@ -156,19 +157,29 @@ public class ParallelProgressTest {
 		BiFunction<Integer, Integer, Integer> task = (in1, in2) -> parallelDepTask(
 			iterator, in1, in2);
 		int numThreads = 4;
-		int iterationsPerThread = 1000;
-		Progress.addListener(task, new ProgressListener() {
+		int iterationsPerThread = 1;
+		Progress.addListener(task, new Consumer<>() {
 
-			double lastProgress = 0;
+			final ThreadLocal<List<Double>> lastProgress = ThreadLocal.withInitial(
+				() -> {
+					List<Double> a = new ArrayList<>();
+					a.add(0.0);
+					return a;
+				});
 
 			@Override
-			public void acknowledgeUpdate(Task t) {
+			public void accept(Task t) {
 				// TODO: Can we do better? Is there a way to guarantee that the
 				// progress will not be updated again in between when we enter the
 				// method and when we ask for the progress?
+				List<Double> l = lastProgress.get();
 				double progress = t.progress();
-				Assertions.assertTrue(lastProgress <= progress);
-				lastProgress = progress;
+				double v = l.get(l.size() - 1) - progress;
+				if (v > 0) {
+					t.progress();
+				}
+				Assertions.assertTrue(v <= 0);
+				l.add(progress);
 			}
 
 		});

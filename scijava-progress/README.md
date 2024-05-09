@@ -65,9 +65,9 @@ Ops can also set their `status` through the `Progress` framework, using the meth
 
 ### Accessing `Progress` as a listener
 
-Progress is accessed by listeners using the `Progress.addListener(Object progressible, ProgressListener l)` method. This method must be called **before** `progressible`'s code is executed, and all executions of `progressible` will then be sent to `l`.
+Progress is accessed by listeners using the `Progress.addListener(Object progressible, Consumer<Task> l)` method. This method must be called **before** `progressible`'s code is executed, and all executions of `progressible` will then be sent to `l`.
 
-`ProgressListener` is, at its core, a `FunctionalInterface`, allowing `ProgressListener`s to be defined as lambdas. The functional method, `acknowledgeUpdate(Task t)`, is then called when **any execution** of `l` calls **either** `Progress.update()` or `Progress.setStatus()`. Below is an example of how one might write a `ProgressListener` for `HeavyCalculator`:
+`l` can be written as a lambda (shown below), or as an explicit implementation of the `Consumer` interface. The functional method, `accept(Task t)`, is then called when **any execution** of `progressible` calls `Progress.register`, `Progress.complete`, `Progress.update()`, or `Progress.setStatus()`. Below is an example of how one might write a `Consumer<Task>` for `HeavyCalculator`:
 
 ```java
 HeavyCalculator calc = new HeavyCalculator();

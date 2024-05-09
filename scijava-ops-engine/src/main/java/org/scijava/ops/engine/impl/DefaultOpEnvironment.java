@@ -48,6 +48,7 @@ import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.priority.Priority;
+import org.scijava.progress.Progress;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.types.*;
@@ -167,13 +168,16 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	@Override
 	public void discoverUsing(Discoverer... arr) {
+		Progress.register(this, "OpEnvironment: Discovering Ops");
+		Progress.defineTotal(arr.length);
 		for (Discoverer d : arr) {
 			discoverers.add(d);
-
 			d.discover(OpInfo.class).forEach(this::registerInfosFrom);
 			d.discover(Op.class).forEach(this::registerInfosFrom);
 			d.discover(OpCollection.class).forEach(this::registerInfosFrom);
+			Progress.update();
 		}
+		Progress.complete();
 	}
 
 	@Override

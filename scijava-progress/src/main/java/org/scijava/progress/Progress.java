@@ -29,12 +29,9 @@
 
 package org.scijava.progress;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Consumer;
 
 /**
  * A static utility class serving as the interface between progress reporters
@@ -51,17 +48,24 @@ public final class Progress {
 
 	/**
 	 * A record of all listeners interested in the progress of all Object
-	 * executions
+	 * executions. We do not expect very many of these, so to provide high
+	 * concurrency we use {@link CopyOnWriteArrayList} as the backing
+	 * implementation
 	 */
-	private static final List<ProgressListener> globalListeners =
-		new ArrayList<>();
+	private static final List<Consumer<Task>> globalListeners =
+		new CopyOnWriteArrayList<>();
 
 	/**
 	 * A record of all listeners interested in the progress of a given Object's
-	 * executions
+	 * executions. We do not expect very many of these, so to provide high
+	 * concurrency we use {@link CopyOnWriteArrayList} as the backing
+	 * implementation
 	 */
-	private static final Map<Object, List<ProgressListener>> progressibleListeners =
+	private static final Map<Object, List<Consumer<Task>>> progressibleListeners =
 		new WeakHashMap<>();
+
+	/** Singleton NOP task */
+	private static final NOPTask IGNORED = new NOPTask();
 
 	/**
 	 * A record of the progressible {@link Object}s running on each
@@ -70,6 +74,9 @@ public final class Progress {
 	private static final ThreadLocal<ArrayDeque<Task>> progressibleStack =
 		new InheritableThreadLocal<>()
 		{
+
+			private final Collection<Task> initialContents = Collections.singleton(
+				IGNORED);
 
 			@Override
 			protected ArrayDeque<Task> childValue(ArrayDeque<Task> parentValue) {
@@ -81,56 +88,47 @@ public final class Progress {
 
 			@Override
 			protected ArrayDeque<Task> initialValue() {
-				return new ArrayDeque<>();
+				return new ArrayDeque<>(initialContents);
 			}
 		};
 
 	/**
-	 * Records {@link ProgressListener} {@code l} as a callback for all
-	 * progressible {@link Object}s
+	 * Records {@link Consumer<Task>} {@code l} as a callback for all progressible
+	 * {@link Object}s
 	 *
-	 * @param l a {@link ProgressListener} that would like to know about the
+	 * @param l a {@link Consumer<Task>} that would like to know about the
 	 *          progress of {@code progressible} {@link Object}s
 	 */
-	public static void addGlobalListener(ProgressListener l) {
+	public static void addGlobalListener(Consumer<Task> l) {
 		if (!globalListeners.contains(l)) {
 			globalListeners.add(l);
 		}
 	}
 
 	/**
-	 * Records {@link ProgressListener} {@code l} as a callback for progressible
+	 * Records {@link Consumer<Task>} {@code l} as a callback for progressible
 	 * {@link Object} {@code progressible}
 	 *
 	 * @param progressible an {@link Object} that reports its progress
-	 * @param l a {@link ProgressListener} that would like to know about the
+	 * @param l a {@link Consumer<Task>} that would like to know about the
 	 *          progress of {@code progressible}
 	 */
-	public static void addListener(Object progressible, ProgressListener l) {
+	public static void addListener(Object progressible, Consumer<Task> l) {
 		if (!progressibleListeners.containsKey(progressible)) {
 			createListenerList(progressible);
 		}
-		addListenerToList(progressible, l);
-	}
-
-	private static void addListenerToList(Object progressible,
-		ProgressListener l)
-	{
-		List<ProgressListener> list = progressibleListeners.get(progressible);
-		synchronized (list) {
-			list.add(l);
-		}
+		progressibleListeners.get(progressible).add(l);
 	}
 
 	private static synchronized void createListenerList(Object progressible) {
 		if (progressibleListeners.containsKey(progressible)) return;
-		progressibleListeners.put(progressible, new ArrayList<>());
+		progressibleListeners.put(progressible, new CopyOnWriteArrayList<>());
 	}
 
 	/**
 	 * Completes the current task on this {@link Thread}'s execution hierarchy,
 	 * removing it in the process. This method also takes care to ping relevant
-	 * {@link ProgressListener}s.
+	 * {@link Consumer<Task>}s.
 	 *
 	 * @see Task#complete()
 	 */
@@ -141,9 +139,6 @@ public final class Progress {
 			t.complete();
 			// ping relevant listeners
 			pingListeners(t);
-			if (progressibleStack.get().peek() != null) {
-				pingListeners(progressibleStack.get().peek());
-			}
 		}
 	}
 
@@ -186,13 +181,13 @@ public final class Progress {
 		Task t;
 		var deque = progressibleStack.get();
 		var parent = deque.peek();
-		if (parent == null) {
+		if (parent == null || parent == IGNORED) {
 			// completely new execution hierarchy
 			t = new Task(progressible, description);
 		}
 		else {
 			// part of an existing execution hierarchy
-			t = parent.createSubtask(progressible, description);
+			t = new Task(progressible, parent, description);
 		}
 		deque.push(t);
 		// Ping Listeners about the registration of progressible
@@ -200,7 +195,7 @@ public final class Progress {
 	}
 
 	/**
-	 * Activates all callback {@link ProgressListener}s listening for progress
+	 * Activates all callback {@link Consumer <Task>}s listening for progress
 	 * updates on executions of {@code o}
 	 *
 	 * @param task an {@link Object} reporting its progress.
@@ -210,16 +205,17 @@ public final class Progress {
 			return;
 		}
 		// Ping object-specific listeners
-		List<ProgressListener> list = progressibleListeners.getOrDefault( //
+		List<Consumer<Task>> list = progressibleListeners.getOrDefault( //
 			task.progressible(), //
 			Collections.emptyList() //
 		);
-		synchronized (list) {
-			list.forEach(l -> l.acknowledgeUpdate(task));
-		}
+		list.forEach(l -> l.accept(task));
 		// Ping global listeners
-		synchronized (globalListeners) {
-			globalListeners.forEach(l -> l.acknowledgeUpdate(task));
+		for (var l : globalListeners)
+			l.accept(task);
+		// Ping parent
+		if (task.isSubTask()) {
+			pingListeners(task.parent());
 		}
 	}
 
@@ -234,7 +230,7 @@ public final class Progress {
 
 	/**
 	 * Updates the progress of the current {@link Task}, pinging any interested
-	 * {@link ProgressListener}s.
+	 * {@link Consumer<Task>}s.
 	 *
 	 * @see Task#update(long)
 	 */
@@ -244,18 +240,18 @@ public final class Progress {
 
 	/**
 	 * Updates the progress of the current {@link Task}, pinging any interested
-	 * {@link ProgressListener}s.
+	 * {@link Consumer<Task>}s.
 	 *
-	 * @param numElements the number of elements completed in the current stage.
+	 * @param elements the number of elements completed in the current stage.
 	 * @see Task#update(long)
 	 */
-	public static void update(long numElements) {
-		update(numElements, currentTask());
+	public static void update(long elements) {
+		update(elements, currentTask());
 	}
 
 	/**
 	 * Updates the progress of the provided {@link Task}, pinging any interested
-	 * {@link ProgressListener}s.
+	 * {@link Consumer<Task>}s.
 	 *
 	 * @param numElements the number of elements completed in the current stage.
 	 * @param task the {@link Task} to update
@@ -268,7 +264,7 @@ public final class Progress {
 
 	/**
 	 * Sets the status of the current {@link Task}, pinging any interested
-	 * {@link ProgressListener}s.
+	 * {@link Consumer<Task>}s.
 	 *
 	 * @see Task#setStatus(String)
 	 */
@@ -280,29 +276,24 @@ public final class Progress {
 	/**
 	 * Defines the total progress of the current {@link Task}
 	 *
-	 * @see Task#defineTotalProgress(long)
+	 * @param elements the number of discrete packets of computation.
+	 * @see Task#defineTotal(long)
 	 */
-	public static void defineTotalProgress(long numStages) {
-		currentTask().defineTotalProgress(numStages);
+	public static void defineTotal(long elements) {
+		currentTask().defineTotal(elements);
 	}
 
 	/**
 	 * Defines the total progress of the current {@link Task}
 	 *
-	 * @see Task#defineTotalProgress(long, long)
+	 * @param elements the number of discrete packets of computation.
+	 * @param subTasks the number <b>of times</b> subtasks are called upon within
+	 *          the task. This <b>is not</b> the same as the number of subtasks
+	 *          used (as one subtask may run multiple times).
+	 * @see Task#defineTotal(long, long)
 	 */
-	public static void defineTotalProgress(long numStages, long numSubTasks) {
-		currentTask().defineTotalProgress(numStages, numSubTasks);
-	}
-
-	/**
-	 * Defines the number of updates expected by the end of the current stage of
-	 * the current {@link Task}
-	 *
-	 * @see Task#setStageMax(long)
-	 */
-	public static void setStageMax(long max) {
-		currentTask().setStageMax(max);
+	public static void defineTotal(long elements, long subTasks) {
+		currentTask().defineTotal(elements, subTasks);
 	}
 
 	/**
@@ -313,13 +304,15 @@ public final class Progress {
 	 */
 	private static final class NOPTask extends Task {
 
+		private static final double NOP_PROGRESS = 0.0;
+
 		private NOPTask() {
 			super(null, null, null);
 		}
 
 		@Override
 		public boolean isComplete() {
-			return true;
+			return false;
 		}
 
 		@Override
@@ -332,8 +325,16 @@ public final class Progress {
 			// NB: No-op
 		}
 
-	}
+		@Override
+		public double progress() {
+			return NOP_PROGRESS;
+		}
 
-	private static final NOPTask IGNORED = new NOPTask();
+		@Override
+		public void defineTotal(final long elements, final long subTasks) {
+			// NB: No-op
+		}
+
+	}
 
 }

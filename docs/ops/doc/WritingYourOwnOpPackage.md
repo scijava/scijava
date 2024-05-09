@@ -276,6 +276,84 @@ class DoubleSizeOp implements Function<double[], Double> {
 
 ```
 
+### Defining Op Progress
+
+The `scijava-progress` module provides a mechanism for long-running tasks to describe their progress through textual or graphical means. For example, `scijava-progress` enables [Fiji](https://fiji.sc/) users to observe the progress of every Op invoked within the application, as shown below.
+
+<center>
+    <figure>
+      <img src="https://media.scijava.org/scijava-ops/1.0.0/scijava_progress_example.png" alt="scijava-progress updates within Fiji" style="width:50%;"/>
+      <figcaption><em>scijava-progress provides updates from all Op executions within Fiji's `Tasks` pane. </em></figcaption>
+    </figure>
+</center>
+
+While all Ops emit "binary" progress (denoting each Op's beginning and end), your Op can provide richer updates by adding the `scijava-progress` module, providing user value for long-running Ops. To add progress to your Op, you must add the following steps to your Op:
+
+* Before any significant computation, add the line `Progress.defineTotal(long elements)` where `elements` is the number of "discrete packets" of computation.
+* At convenient spots within your Op, call `Progress.update()` to denote that one packet of computation has finished. 
+  * **Alternatively**, it may be more convenient or performant to call `Progress.update(long numElements)` to denote `numElements` packets have completed at once.
+
+```java
+import java.util.function.Function;
+import org.scijava.progress.Progress;
+
+/**
+ * A simple summer
+ *
+ * @implNote op names="stats.sum"
+ */
+class DoubleSumOp implements Function<double[], Double> {
+    public Double apply(final double[] inArray) {
+        // define total progress size
+        Progress.defineTotal(inArray.length);
+        double sum = 0;
+        for (double v : inArray) {
+            sum += v;
+            // increment progress
+            Progress.update();
+        }
+        return i;
+    }
+}
+```
+
+If your want to include the progress of Op dependencies within your Op's total progress, you can make the following changes.
+* For each Op dependency that you want to track, pass the Hint `"progress.TRACK"` within the `@OpDependency` annotation. Note that it is **not** necessary for each Op to explicitly define its progress, but if it does so your Op will provide richer progress updates!
+* Replace `Progress.defineTotal(long elements)` with `Progress.defineTotal(long elements, long subTasks)`, where `subTasks` is the **total** number of times you will invoke Op dependencies annotated with `"progress.TRACK"`.
+
+
+```java
+import java.util.function.Function;
+import org.scijava.progress.Progress;
+import org.scijava.ops.spi.OpDependency;
+
+/**
+ * A simple mean calculator
+ *
+ * @implNote op names="stats.mean"
+ */
+class DoubleMeanOp implements Function<double[], Double> {
+
+    // This Op will contribute to progress
+    @OpDependency(name="stats.sum", hints={"progress.TRACK"})
+    public Function<double[], Double> sumOp;
+    
+    // This Op will also contribute to progress
+    @OpDependency(name="stats.size", hints={"progress.TRACK"})
+    public Function<double[], Double> sizeOp;
+
+    public Double apply(final double[] inArray) {
+        // There's no significant work here, but we do have 2 subtasks.
+        Progress.defineTotal(0, 2);
+        final Double sum = sumOp.apply(inArray);
+        final Double size = sizeOp.apply(inArray);
+        return sum / size;
+    }
+}
+```
+
+For best results, ensure your Op records Progress updates at a reasonable frequency. If too frequent, progress updates can detract from algorithm performance, and if too infrequent, they will be of little help to the user!
+
 ### Element-wise Ops
 
 Simple pixel-wise operations like addition, inversion, and more can be written on a single pixel (i.e. `RealType`) - therefore, SciJava Ops Image takes care to automagically adapt pixel-wise Ops across a wide variety of image types. If you would like to write a pixel-wise Op, we recommend the following structure.

@@ -50,6 +50,7 @@ import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.progress.Progress;
 
 /**
  * Richardson Lucy with total variation function op that operates on (@link
@@ -96,7 +97,8 @@ public class PadAndRichardsonLucyTV<I extends RealType<I> & NativeType<I>, O ext
 	@OpDependency(name = "filter.createFFTOutput")
 	private Functions.Arity3<Dimensions, C, Boolean, RandomAccessibleInterval<C>> createOp;
 
-	@OpDependency(name = "deconvolve.richardsonLucy")
+	@OpDependency(name = "deconvolve.richardsonLucy", hints = {
+		"progress.TRACK" })
 	private Computers.Arity12<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, //
 			RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, //
 			Boolean, C, Integer, Boolean, //
@@ -215,6 +217,8 @@ public class PadAndRichardsonLucyTV<I extends RealType<I> & NativeType<I>, O ext
 		else {
 			this.nonCirculant = nonCirculant;
 		}
+
+		Progress.defineTotal(0, 1);
 
 		// out of bounds factory will be different depending on if circulant or
 		// non-circulant is used

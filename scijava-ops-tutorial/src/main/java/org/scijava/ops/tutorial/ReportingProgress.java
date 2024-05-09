@@ -31,14 +31,16 @@ package org.scijava.ops.tutorial;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.progress.Progress;
-import org.scijava.progress.ProgressListener;
 import org.scijava.progress.StandardOutputProgressLogger;
+import org.scijava.progress.Task;
 import org.scijava.types.Nil;
 
 /**
@@ -56,18 +58,18 @@ import org.scijava.types.Nil;
  * <p>
  * Ops tell the {@link Progress} a few things:
  * <ol>
- * <li>The number of "stages" of computation, including any "subtasks"</li>
- * <li>The number of tasks in each stage</li>
- * <li>When each task has been completed</li>
+ * <li>The number of "elements" in a computation, as well as "subtasks", i.e.
+ * dependent Ops</li>
+ * <li>When each "element" has been completed</li>
  * </ol>
  * <p>
- * Note the difference between a "stage" of computation, and a "subtask"
+ * Note the difference between an "element" of computation, and a "subtask"
  * <ul>
- * <li><em>stage</em>s are phases of computation done <b>by the Op</b></li>
+ * <li><em>elements</em>s are pieces of computation done <b>by the Op</b></li>
  * <li><em>subtask</em>s are phases of computation done <b>by other Ops</b></li>
  * </ul>
  * Users are then notified by the progress of Ops by installing
- * {@link ProgressListener}s.
+ * {@link Consumer<Task>}s.
  *
  * @author Gabriel Selzer
  */
@@ -79,18 +81,20 @@ public class ReportingProgress implements OpCollection {
 		long val = 1, sqrt;
 		boolean couldBePrime;
 
-		// Define the number of stages, and the number of subtasks
-		// One stage - finding the primes
-		// Zero subtasks - we call no other Ops
-		Progress.defineTotalProgress(1, 0);
+		// If you have N discrete packets of computation, you should call
+		// Progress.defineTotalProgress(N)
+		// If you have N discrete packets of computation and want to call Op
+		// dependencies M times, you should call
+		// Progress.defineTotalProgress(N, M)
+
+		// Here, we want to update the progress every time we find a new prime.
+		// We call no Op dependencies, thus the call looks like:
+		Progress.defineTotal(numPrimes);
+
 		// Progress is defined within the range [0, 1],
 		// where 0 denotes an Op that has not yet started.
 		// and 1 denotes completion.
 
-		// setStageMax is used to define the denominator for the Progress fraction.
-		// If you have N discrete packets of computation, you should call
-		// Progress.setStageMax(N)
-		Progress.setStageMax(numPrimes);
 		// Find each of our primes
 		while (primes.size() < numPrimes) {
 			sqrt = (long) Math.sqrt(++val);
@@ -116,17 +120,19 @@ public class ReportingProgress implements OpCollection {
 
 	public static void main(String... args) {
 		OpEnvironment ops = OpEnvironment.build();
+		// To enable Progress Reporting, you must enable the progress tracking hint!
+		ops.setDefaultHints(new Hints("progress.TRACK"));
 
-		// ProgressListeners consume task updates.
-		// This ProgressListener simply logs to standard output, but we could print
+		// Consumer<Task>s consume task updates.
+		// This Consumer simply logs to standard output, but we could print
 		// out something else, or pass this information somewhere else.
-		ProgressListener l = new StandardOutputProgressLogger();
-		// To listen to Op progress updates, the ProgressListener must be registered
+		Consumer<Task> l = new StandardOutputProgressLogger();
+		// To listen to Op progress updates, the Consumer must be registered
 		// through the Progress API. To listen to all Op executions, use the
 		// following call:
 		Progress.addGlobalListener(l);
 		// If listening to every Op would be overwhelming, the Progress API also
-		// allows ProgressListeners to be registered for a specific Op, using the
+		// allows Consumers to be registered for a specific Op, using the
 		// following call:
 		// Progress.addListener(op, l);
 
@@ -138,7 +144,7 @@ public class ReportingProgress implements OpCollection {
 			.function();
 
 		// When we apply the Op, we will automatically print the progress out to
-		// the console, thanks to our ProgressListener above.
+		// the console, thanks to our Consumers above.
 		var numPrimes = 100;
 		var primes = op.apply(numPrimes);
 		System.out.println("First " + numPrimes + " primes: " + primes);

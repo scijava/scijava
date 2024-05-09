@@ -29,22 +29,60 @@
 
 package org.scijava.progress;
 
-/**
- * An object that can subscribe to {@link Task} updates through the
- * {@link Progress} class. Its singular method,
- * {@link ProgressListener#acknowledgeUpdate(Task)} is called when an
- * {@link Object} it is listening to:
- * <ul>
- * <li>is registered via {@link Progress#register(Object)}</li>
- * <li>Updates its progress using e.g. {@link Progress#update()}</li>
- * <li>is completed via {@link Progress#complete()}</li>
- * </ul>
- *
- * @author Gabriel Selzer
- */
-@FunctionalInterface
-public interface ProgressListener {
+import org.junit.jupiter.api.Assertions;
 
-	void acknowledgeUpdate(Task task);
+import java.util.function.Consumer;
 
+public class TestSuiteTaskConsumer implements Consumer<Task> {
+
+	private final String id;
+	private final long expectedIterations;
+	private double currentIterations = 0;
+
+	private boolean registered = false;
+	private boolean completed = false;
+
+	public TestSuiteTaskConsumer(final long expectedIterations) {
+		this(expectedIterations, null);
+	}
+
+	public TestSuiteTaskConsumer(final long expectedIterations, final String id) {
+		this.id = id;
+		this.expectedIterations = expectedIterations;
+	}
+
+	@Override
+	public void accept(Task task) {
+		if (id != null && !task.description().equals(id)) return;
+		// Registration ping
+		if (!registered) {
+			registered = true;
+			return;
+		}
+		// Progress pings
+		if (!task.isComplete()) {
+			Assertions.assertEquals(++currentIterations / expectedIterations, task
+				.progress(), 1e-6);
+		}
+		// Completion ping
+		else {
+			Assertions.assertFalse(completed);
+			Assertions.assertEquals(1., task.progress(), 1e-6);
+			completed = true;
+		}
+	}
+
+	public boolean isComplete() {
+		return this.completed;
+	}
+
+	public void reset() {
+		this.currentIterations = 0;
+		this.registered = false;
+		this.completed = false;
+	}
+
+	public double progress() {
+		return this.currentIterations / this.expectedIterations;
+	}
 }

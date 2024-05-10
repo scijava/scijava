@@ -52,6 +52,12 @@ public abstract class AbstractBoundarySizeConvexHull<I> implements
 	@OpDependency(name = "geom.boundarySize")
 	private Function<I, DoubleType> perimeterFunc;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	@Override
 	public void compute(I input, DoubleType output) {
 		output.set(perimeterFunc.apply(convexHullFunc.apply(input)));

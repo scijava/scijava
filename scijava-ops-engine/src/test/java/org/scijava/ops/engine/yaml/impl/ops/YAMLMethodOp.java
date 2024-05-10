@@ -42,13 +42,16 @@ public class YAMLMethodOp {
 	/**
 	 * An example Op, implemented by a {@link Method}
 	 *
-	 * @implNote op name=example.sub, type=Function
+	 * @implNote op name=example.sub
 	 * @param aDouble the first double
-	 * @param aDouble2 the second double
+	 * @param aDouble2 the second double (nullable)
 	 * @return the difference
 	 */
-	public static Double subtract(Double aDouble, Double aDouble2) {
-		return aDouble - aDouble2;
+	public static <N extends Number> Double subtract(N aDouble, N aDouble2) {
+		if (aDouble2 == null) {
+			return aDouble.doubleValue();
+		}
+		return aDouble.doubleValue() - aDouble2.doubleValue();
 	}
 
 	/**
@@ -57,7 +60,6 @@ public class YAMLMethodOp {
 	 * @implNote op name=example.xor, type=Inplace1
 	 * @param aList the first integer {@link List}
 	 * @param aList2 the second integer {@link List}
-	 * @return the xor
 	 */
 	public static void xor(List<Integer> aList, List<Integer> aList2) {
 		for (int i = 0; i < aList.size(); i++) {
@@ -87,7 +89,7 @@ public class YAMLMethodOp {
 	 *
 	 * @implNote op name=example.or, type=Computer2
 	 * @param aList the first integer {@link List}
-	 * @param out the logical and of the two integer {@link List}s
+	 * @param out the logical and of the two integer
 	 * @param aList2 the second integer {@link List}
 	 */
 	public static void or(List<Integer> aList, List<Integer> out,

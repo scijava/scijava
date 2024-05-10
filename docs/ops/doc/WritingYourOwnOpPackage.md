@@ -45,14 +45,13 @@ To declare a block of code as an Op, simply add the `@implNote` tag to that bloc
 
 ```java
 /**
- * @implNote op names='<names>' [priority='<priority>'] [type='<type>']
+ * @implNote op names='<names>' [priority='<priority>']
  */
 ```
 
 The arguments to the `@implNote op` syntax are described below:
 * `names='<names>'` provides the names that the Op will match. If you'd like this Op to be searchable under one name `foo.bar`, you can use the argument `names='foo.bar'`. If you'd like your Op to be searchable using multiple names, you can use a comma-delimited list. For example, if you want your Op to be searchable under the names `foo.bar` and `foo.baz`, then you can use the argument `names='foo.bar,foo.baz'`, you can use the argument `names='foo.bar'`. If you'd like your Op to be searchable using multiple names, you can use a comma-delimited list. For example, if you want your Op to be searchable under the names `foo.bar` and `foo.baz`, then you can use the argument `names='foo.bar,foo.baz'`.
 * `priority='<priority>'` provides a decimal-valued priority used to break ties when multiple Ops match a given Op request. *We advise against adding priorities unless you experience matching conflicts*. Op priorities should follow the SciJava Priority standards [insert link].
-* `type='<type>'` identifies the functional type of the Op **and is only required for Ops written as methods** - more information on that below [insert link].
 
 ### Declaring Ops as Methods
 
@@ -61,7 +60,7 @@ Any `static` method can be easily declared as an Op by simply appending the `@im
 ```java
 /**
  * My static method, which is also an Op
- * @implNote op names='my.op' type='java.util.function.BiFunction'
+ * @implNote op names='my.op'
  * @param arg1 the first argument to the method
  * @param arg2 the first argument to the method
  * @return the result of the method
@@ -70,7 +69,10 @@ public static Double myStaticMethodOp(Double arg1, Double arg2) {
     ...computation here...
 }
 ```
-Note that the `type` argument in the `@implNote` syntax is **required** for Ops written as methods (and only for Ops written as methods), as the Op must be registered to a functional type. The recommended functional types are housed in the SciJava Functions library [insert link].
+Additional Op characteristics are specified by placing parentheticals **at the end** of `@param` tags:
+* If an Op input is allowed to be `null`, you can add `(nullable)` to the end. This tells SciJava Ops that your Op will function with our without that parameter.
+* If an Op is written as a computer, you must add `(container)` to the end of the `@param` tag corresponding to the preallocated output buffer parameter.
+* If an Op is written as an inplace, you must add `(mutable)` to the end of the `@param` tag corresponding to the mutable input parameter.
 
 ### Declaring Ops as Classes
 
@@ -118,6 +120,9 @@ Any `Field` whose type is a `FunctionalInterface` (such as `java.util.function.F
 public class MyOpCollection {
 
 	/**
+     * @input arg1 the first {@link Double}
+     * @input arg2 the second {@link Double}
+     * @output arg2 the second {@link Double}
      * @implNote op names='my.op'
 	 */
     public final BiFunction<Double, Double, Double> myFieldOp =
@@ -125,6 +130,12 @@ public class MyOpCollection {
 	
 }
 ```
+To describe each Op parameter, add the following tags to its javadoc:
+
+* To describe a pure input, add the Javadoc tag `@input <parameter_name> <description>`
+* To describe a pure output (for a function Op), add the Javadoc tag `@output <description>`
+* To describe a conatiner (for a computer Op), add the Javadoc tag `@container <parameter_name> <description>`
+* To describe a mutable input (for an inplace Op), add the Javadoc tag `@mutable <parameter_name> <description>`
 
 Note again that the only supported functional interfaces that can be used without additional dependencies are `java.util.function.Function` and `java.util.function.BiFunction` - if you'd like to write an Op requiring more than two inputs, or to write an Op that takes a pre-allocated output buffer, you'll need to depend on the SciJava Function library:
 

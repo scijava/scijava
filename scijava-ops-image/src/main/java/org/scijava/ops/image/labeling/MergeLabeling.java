@@ -68,16 +68,17 @@ public class MergeLabeling<L, I extends IntegerType<I>, B extends BooleanType<B>
 	@OpDependency(name = "engine.adapt")
 	private Function<Computers.Arity2<LabelingType<L>, LabelingType<L>, LabelingType<L>>, Computers.Arity2<Iterable<LabelingType<L>>, Iterable<LabelingType<L>>, Iterable<LabelingType<L>>>> adaptor;
 
-	@SuppressWarnings({ "unchecked", "rawtypes", "hiding" })
 	/**
 	 * TODO
 	 *
-	 * @param labeling1
-	 * @param labeling2
+	 * @param input1
+	 * @param input1
 	 * @param mask
-	 * @param combinedLabeling
+	 * @return an {@link ImgLabeling} that combines the labels of {@code input1}
+	 *         and {@code input2}
 	 */
 	@Override
+	@SuppressWarnings({ "unchecked", "rawtypes", "hiding" })
 	public ImgLabeling<L, I> apply( //
 		final ImgLabeling<L, I> input1, //
 		final ImgLabeling<L, I> input2, //

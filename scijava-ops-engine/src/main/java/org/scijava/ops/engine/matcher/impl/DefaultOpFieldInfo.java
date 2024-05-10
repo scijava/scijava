@@ -53,7 +53,7 @@ import java.util.List;
  *
  * @author Curtis Rueden
  */
-public class OpFieldInfo implements OpInfo {
+public class DefaultOpFieldInfo implements OpInfo {
 
 	private final Object instance;
 	private final Field field;
@@ -65,7 +65,7 @@ public class OpFieldInfo implements OpInfo {
 	private final Struct struct;
 	private final Hints hints;
 
-	public OpFieldInfo( //
+	public DefaultOpFieldInfo( //
 		final Object instance, //
 		final Field field, //
 		final String version, //
@@ -217,7 +217,7 @@ public class OpFieldInfo implements OpInfo {
 
 	@Override
 	public boolean equals(final Object o) {
-		if (!(o instanceof OpFieldInfo)) return false;
+		if (!(o instanceof DefaultOpFieldInfo)) return false;
 		final OpInfo that = (OpInfo) o;
 		return struct().equals(that.struct());
 	}

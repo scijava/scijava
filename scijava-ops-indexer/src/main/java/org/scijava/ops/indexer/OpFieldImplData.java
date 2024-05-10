@@ -29,15 +29,18 @@
 
 package org.scijava.ops.indexer;
 
+import static org.scijava.ops.indexer.ProcessingUtils.isNullable;
 import static org.scijava.ops.indexer.ProcessingUtils.tagElementSeparator;
 
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Pattern;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.NoType;
@@ -50,6 +53,15 @@ import javax.tools.Diagnostic;
  * @author Gabriel Selzer
  */
 public class OpFieldImplData extends OpImplData {
+
+	// Regex to match Op types, coming from SciJava Function, who describe all
+	// of their parameters in order within their type parameters
+	private static final Pattern SJF_PATTERN = Pattern.compile(
+		"^org\\.scijava\\.function\\.(Computers|Functions|Inplaces|Producer).*");
+	// Regex to match Op types, coming from vanilla Java, who describe all of
+	// their parameters in order within their type parameters
+	private static final Pattern JAVA_PATTERN = Pattern.compile(
+		"^java\\.util\\.function\\.(Function|BiFunction).*");
 
 	public OpFieldImplData(Element source, String doc,
 		ProcessingEnvironment env)
@@ -65,29 +77,34 @@ public class OpFieldImplData extends OpImplData {
 	 */
 	@Override
 	void parseAdditionalTags(Element source, List<String[]> additionalTags) {
+		// Get the types of each Op parameter.
+		Iterator<String> itr = getParamTypes(source, additionalTags).iterator();
 		// Create the list of Op parameters by checking for @input, @container,
 		// @mutable, @output tags
 		for (String[] tag : additionalTags) {
+			// In the case where parameter types cannot be determined, describe the
+			// types as "UNKNOWN"
+			String pType = itr.hasNext() ? itr.next() : "UNKNOWN";
 			switch (tag[0]) {
 				case "@input":
 					String[] inData = tagElementSeparator.split(tag[1], 2);
-					params.add(new OpParameter(inData[0], null, OpParameter.IO_TYPE.INPUT,
-						inData[1]));
+					params.add(new OpParameter(inData[0], pType,
+						OpParameter.IO_TYPE.INPUT, inData[1], isNullable(inData[1])));
 					break;
 				case "@output":
 					// NB outputs generally don't have names
-					params.add(new OpParameter("output", null, OpParameter.IO_TYPE.OUTPUT,
-						tag[1]));
+					params.add(new OpParameter("output", pType,
+						OpParameter.IO_TYPE.OUTPUT, tag[1], false));
 					break;
 				case "@container":
 					String[] containerData = tagElementSeparator.split(tag[1], 2);
-					params.add(new OpParameter(containerData[0], null,
-						OpParameter.IO_TYPE.CONTAINER, containerData[1]));
+					params.add(new OpParameter(containerData[0], pType,
+						OpParameter.IO_TYPE.CONTAINER, containerData[1], false));
 					break;
 				case "@mutable":
 					String[] mutableData = tagElementSeparator.split(tag[1], 2);
-					params.add(new OpParameter(mutableData[0], null,
-						OpParameter.IO_TYPE.MUTABLE, mutableData[1]));
+					params.add(new OpParameter(mutableData[0], pType,
+						OpParameter.IO_TYPE.MUTABLE, mutableData[1], false));
 					break;
 			}
 
@@ -126,6 +143,101 @@ public class OpFieldImplData extends OpImplData {
 			}
 
 		}
+	}
+
+	/**
+	 * Helper method that provides a best attempt at finding the parameter types
+	 * of an Op written as a Java field. Because we haven't yet compiled the
+	 * field, we cannot introspect the class hierarchy to determine the parameter
+	 * types of the functional method. This function uses pre-existing knowledge
+	 * that a set of common functional interfaces describe all of their parameter
+	 * types via their type parameters, and parses out those type variables to
+	 * provide a list of Op parameter types. If the Op field does not conform to
+	 * one of those specified functional interfaces, this method returns an empty
+	 * list.
+	 *
+	 * @param source the Op field {@link Element}
+	 * @param additionalTags the Javadoc belonging to {@code source}, split by
+	 *          Javadoc tag. Used to ensure that the method returns the correct
+	 *          number of parameter types.
+	 * @return a {@link List} containing a string representing the type of each Op
+	 *         parameter, or an empty {@link List} if that cannot be done.
+	 */
+	private List<String> getParamTypes(Element source,
+		List<String[]> additionalTags)
+	{
+		var fieldStr = source.asType().toString();
+		if ( //
+		!SJF_PATTERN.matcher(fieldStr).find() && //
+			!JAVA_PATTERN.matcher(fieldStr).find() //
+		) {
+			env.getMessager().printMessage(Diagnostic.Kind.WARNING, "Op Field " +
+				source + " has type" + fieldStr +
+				" - we cannot infer parameter types from this type!");
+			return Collections.emptyList();
+		}
+
+		// Find the enclosing class, so we can grab all the type variables
+		Element enclosing = source.getEnclosingElement();
+		while (enclosing.getKind() != ElementKind.CLASS) {
+			enclosing = enclosing.getEnclosingElement();
+		}
+
+		// Replace all instances of each type variable in the field's type
+		// string.
+		for (var e : ((TypeElement) enclosing).getTypeParameters()) {
+			// Convert the type variable into a string representation
+			StringBuilder tpString = new StringBuilder(e.toString()).append(
+				" extends ");
+			var bounds = e.getBounds();
+			for (int i = 0; i < bounds.size(); i++) {
+				tpString.append(bounds.get(i).toString());
+				if (i < bounds.size() - 1) {
+					tpString.append(" & ");
+				}
+			}
+			// Replace each instance of the type variable with the stringification.
+			var regex = "(?<![a-zA-Z])" + e + "(?![a-zA-Z])";
+			fieldStr = fieldStr.replaceAll(regex, tpString.toString());
+		}
+
+		// Next, parse out the parameters from the field type e.g.
+		// "Function<T, U>" -> "T, U"
+		var ParamsStr = fieldStr.substring( //
+			fieldStr.indexOf('<') + 1, //
+			fieldStr.length() - 1 //
+		);
+		// Split the type parameters by comma, taking care to avoid nested commas
+		List<String> paramTypes = new ArrayList<>();
+		StringBuilder tmp = new StringBuilder();
+		int nestCount = 0;
+		for (int i = 0; i < ParamsStr.length(); i++) {
+			if (ParamsStr.charAt(i) == '<') {
+				tmp.append(ParamsStr.charAt(i));
+				nestCount++;
+			}
+			else if (ParamsStr.charAt(i) == '>') {
+				tmp.append(ParamsStr.charAt(i));
+				nestCount--;
+			}
+			else if (ParamsStr.charAt(i) == ',' && nestCount == 0) {
+				paramTypes.add(tmp.toString());
+				tmp = new StringBuilder();
+			}
+			else {
+				tmp.append(ParamsStr.charAt(i));
+			}
+		}
+		paramTypes.add(tmp.toString());
+
+		// Finally, a sanity check - ensure correct number of types.
+		if (paramTypes.size() != additionalTags.size()) {
+			env.getMessager().printMessage(Diagnostic.Kind.WARNING,
+				"Could not infer parameter types from Field type.");
+			return Collections.emptyList();
+		}
+
+		return paramTypes;
 	}
 
 	@Override

@@ -61,8 +61,6 @@ public class PadShiftKernel<T extends ComplexType<T>, I extends RandomAccessible
 	@OpDependency(name = "filter.padIntervalOrigin")
 	private BiFunction<I, Interval, Interval> paddingIntervalOrigin;
 
-	@Override
-	@SuppressWarnings("unchecked")
 	/**
 	 * TODO
 	 *
@@ -70,6 +68,8 @@ public class PadShiftKernel<T extends ComplexType<T>, I extends RandomAccessible
 	 * @param paddedDimensions
 	 * @return the output
 	 */
+	@Override
+	@SuppressWarnings("unchecked")
 	public O apply(final I kernel, final Dimensions paddedDimensions) {
 
 		Dimensions paddedFFTInputDimensions;

@@ -54,7 +54,7 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testOpClassDescription() {
-		OpClassInfo info = new OpClassInfo( //
+		DefaultOpClassInfo info = new DefaultOpClassInfo( //
 			ClassOp.class, //
 			"1.0", //
 			"", //
@@ -80,7 +80,7 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 	public void testOpMethodDescription() throws NoSuchMethodException {
 		Method method = OpDescriptionTest.class.getMethod("methodOp", Double.class,
 			Double.class);
-		OpMethodInfo info = new OpMethodInfo( //
+		DefaultOpMethodInfo info = new DefaultOpMethodInfo( //
 			method, //
 			BiFunction.class, //
 			"1.0", //
@@ -103,7 +103,7 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 	@Test
 	public void testOpFieldDescription() throws NoSuchFieldException {
 		Field field = OpDescriptionTest.class.getDeclaredField("fieldOp");
-		OpFieldInfo info = new OpFieldInfo( //
+		DefaultOpFieldInfo info = new DefaultOpFieldInfo( //
 			this, //
 			field, //
 			"", //
@@ -123,7 +123,7 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testReducedDescription() {
-		OpClassInfo info = new OpClassInfo( //
+		DefaultOpClassInfo info = new DefaultOpClassInfo( //
 			ClassOp.class, //
 			"1.0", //
 			"", //

@@ -33,7 +33,7 @@ import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.OpInfoGenerator;
-import org.scijava.ops.engine.matcher.impl.OpClassInfo;
+import org.scijava.ops.engine.matcher.impl.DefaultOpClassInfo;
 import org.scijava.ops.engine.util.Infos;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
@@ -52,7 +52,7 @@ public class OpClassOpInfoGenerator implements OpInfoGenerator {
 	protected List<OpInfo> processClass(Class<?> c) {
 		OpClass p = c.getAnnotation(OpClass.class);
 		if (p == null) return Collections.emptyList();
-		return Collections.singletonList(new OpClassInfo( //
+		return Collections.singletonList(new DefaultOpClassInfo( //
 			c, //
 			Versions.getVersion(c), //
 			p.description(), //

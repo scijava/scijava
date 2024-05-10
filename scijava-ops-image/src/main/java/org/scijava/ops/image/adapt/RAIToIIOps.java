@@ -38,6 +38,10 @@ import net.imglib2.view.Views;
 public class RAIToIIOps<T, U, V> {
 
 	/**
+	 * @input a {@link Function} that operates on an {@link Iterable}, producing
+	 *        some output value
+	 * @output a {@link Function} that operates on a
+	 *         {@link RandomAccessibleInterval}, producing some output value
 	 * @implNote op names='engine.adapt'
 	 */
 	public final Function<Function<Iterable<T>, U>, Function<RandomAccessibleInterval<T>, U>> func =
@@ -46,6 +50,10 @@ public class RAIToIIOps<T, U, V> {
 		};
 
 	/**
+	 * @input a {@link BiFunction} that operates on {@link Iterable}s, producing
+	 *        some output value
+	 * @output a {@link BiFunction} that operates on
+	 *         {@link RandomAccessibleInterval}s, producing some output value
 	 * @implNote op names='engine.adapt'
 	 */
 	public final Function<BiFunction<Iterable<T>, Iterable<U>, V>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, V>> biFunc =

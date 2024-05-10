@@ -41,7 +41,7 @@ import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.engine.matcher.impl.DefaultOpMatcher;
 import org.scijava.ops.engine.matcher.impl.DefaultOpRequest;
 import org.scijava.ops.engine.matcher.impl.InfoMatchingOpRequest;
-import org.scijava.ops.engine.matcher.impl.OpClassInfo;
+import org.scijava.ops.engine.matcher.impl.DefaultOpClassInfo;
 import org.scijava.ops.engine.struct.FunctionalParameters;
 import org.scijava.ops.engine.util.Infos;
 import org.scijava.ops.spi.Op;
@@ -259,7 +259,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	public OpInfo opify(final Class<?> opClass, final double priority,
 		String... names)
 	{
-		return new OpClassInfo( //
+		return new DefaultOpClassInfo( //
 			opClass, //
 			Versions.getVersion(opClass), //
 			"", //

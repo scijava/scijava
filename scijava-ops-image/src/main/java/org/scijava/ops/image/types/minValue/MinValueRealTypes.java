@@ -64,6 +64,8 @@ public class MinValueRealTypes {
 	final BitType minBit = new BitType(false);
 
 	/**
+	 * @input in some {@link BitType}
+	 * @output minValue a {@link BitType} containing the minimum value of a bit
 	 * @implNote op names='types.minValue'
 	 */
 	public final Function<BitType, BitType> minBitType = in -> {
@@ -73,6 +75,9 @@ public class MinValueRealTypes {
 	final BoolType minBool = new BoolType(false);
 
 	/**
+	 * @input in some {@link BoolType}
+	 * @output minValue a {@link BoolType} containing the minimum value of a
+	 *         boolean
 	 * @implNote op names='types.minValue'
 	 */
 	public final Function<BoolType, BoolType> minBoolType = in -> {
@@ -82,6 +87,9 @@ public class MinValueRealTypes {
 	final NativeBoolType minNativeBool = new NativeBoolType(false);
 
 	/**
+	 * @input in some {@link NativeBoolType}
+	 * @output minValue a {@link NativeBoolType} containing the minimum value of a
+	 *         boolean
 	 * @implNote op names='types.minValue'
 	 */
 	public final Function<NativeBoolType, NativeBoolType> minNativeBoolType =
@@ -92,6 +100,8 @@ public class MinValueRealTypes {
 	final ByteType minByte = new ByteType(Byte.MIN_VALUE);
 
 	/**
+	 * @input in some {@link ByteType}
+	 * @output minValue a {@link ByteType} containing the minimum value of a byte
 	 * @implNote op names='types.minValue'
 	 */
 	public final Function<ByteType, ByteType> minByteType = in -> {
@@ -101,6 +111,9 @@ public class MinValueRealTypes {
 	final UnsignedByteType minUnsignedByte = new UnsignedByteType(0);
 
 	/**
+	 * @input in some {@link UnsignedByteType}
+	 * @output minValue a {@link UnsignedByteType} containing the minimum value of
+	 *         an unsigned byte
 	 * @implNote op names='types.minValue'
 	 */
 	public final Function<UnsignedByteType, UnsignedByteType> minUnsignedByteType =
@@ -111,6 +124,8 @@ public class MinValueRealTypes {
 	final IntType minInt = new IntType(Integer.MIN_VALUE);
 
 	/**
+	 * @input in some {@link IntType}
+	 * @output minValue a {@link IntType} containing the minimum value of an int
 	 * @implNote op names='types.minValue'
 	 */
 	public final Function<IntType, IntType> minIntType = in -> {
@@ -120,6 +135,9 @@ public class MinValueRealTypes {
 	final UnsignedIntType minUnsignedInt = new UnsignedIntType(0);
 
 	/**
+	 * @input in some {@link UnsignedIntType}
+	 * @output minValue a {@link UnsignedIntType} containing the minimum value of
+	 *         an unsigned int
 	 * @implNote op names='types.minValue'
 	 */
 	public final Function<UnsignedIntType, UnsignedIntType> minUnsignedIntType =
@@ -130,6 +148,8 @@ public class MinValueRealTypes {
 	final LongType minLong = new LongType(Long.MIN_VALUE);
 
 	/**
+	 * @input in some {@link LongType}
+	 * @output minValue a {@link LongType} containing the minimum value of a long
 	 * @implNote op names='types.minValue'
 	 */
 	public final Function<LongType, LongType> minLongType = in -> {
@@ -139,6 +159,9 @@ public class MinValueRealTypes {
 	final UnsignedLongType minUnsignedLong = new UnsignedLongType(0);
 
 	/**
+	 * @input in some {@link UnsignedLongType}
+	 * @output minValue a {@link UnsignedLongType} containing the minimum value of
+	 *         an unsigned long
 	 * @implNote op names='types.minValue'
 	 */
 	public final Function<UnsignedLongType, UnsignedLongType> minUnsignedLongType =
@@ -149,6 +172,9 @@ public class MinValueRealTypes {
 	final ShortType minShort = new ShortType(Short.MIN_VALUE);
 
 	/**
+	 * @input in some {@link ShortType}
+	 * @output minValue a {@link ShortType} containing the minimum value of a
+	 *         short
 	 * @implNote op names='types.minValue'
 	 */
 	public final Function<ShortType, ShortType> minShortType = in -> {
@@ -158,6 +184,9 @@ public class MinValueRealTypes {
 	final UnsignedShortType minUnsignedShort = new UnsignedShortType(0);
 
 	/**
+	 * @input in some {@link UnsignedShortType}
+	 * @output minValue a {@link UnsignedShortType} containing the minimum value
+	 *         of an unsigned short
 	 * @implNote op names='types.minValue'
 	 */
 	public final Function<UnsignedShortType, UnsignedShortType> minUnsignedShortType =
@@ -168,6 +197,9 @@ public class MinValueRealTypes {
 	final FloatType minFloat = new FloatType(Float.MIN_VALUE);
 
 	/**
+	 * @input in some {@link FloatType}
+	 * @output minValue a {@link FloatType} containing the minimum value of a
+	 *         32-bit floating point value
 	 * @implNote op names='types.minValue'
 	 */
 	public final Function<FloatType, FloatType> minFloatType = in -> {
@@ -177,6 +209,9 @@ public class MinValueRealTypes {
 	final DoubleType minDouble = new DoubleType(Double.MIN_VALUE);
 
 	/**
+	 * @input in some {@link DoubleType}
+	 * @output minValue a {@link DoubleType} containing the minimum value of a
+	 *         64-bit floating point value
 	 * @implNote op names='types.minValue'
 	 */
 	public final Function<DoubleType, DoubleType> minDoubleType = in -> {
@@ -186,6 +221,9 @@ public class MinValueRealTypes {
 	final Unsigned2BitType min2Bit = new Unsigned2BitType(0);
 
 	/**
+	 * @input in some {@link Unsigned2BitType}
+	 * @output minValue a {@link Unsigned2BitType} containing the minimum value of
+	 *         a 2-bit data structure
 	 * @implNote op names='types.minValue'
 	 */
 	public final Function<Unsigned2BitType, Unsigned2BitType> min2BitType =
@@ -196,6 +234,9 @@ public class MinValueRealTypes {
 	final Unsigned4BitType min4Bit = new Unsigned4BitType(0);
 
 	/**
+	 * @input in some {@link Unsigned4BitType}
+	 * @output minValue a {@link Unsigned4BitType} containing the minimum value of
+	 *         a 4-bit data structure
 	 * @implNote op names='types.minValue'
 	 */
 	public final Function<Unsigned4BitType, Unsigned4BitType> min4BitType =
@@ -206,6 +247,9 @@ public class MinValueRealTypes {
 	final Unsigned12BitType min12Bit = new Unsigned12BitType(0);
 
 	/**
+	 * @input in some {@link Unsigned12BitType}
+	 * @output minValue a {@link Unsigned12BitType} containing the minimum value
+	 *         of a 12-bit data structure
 	 * @implNote op names='types.minValue'
 	 */
 	public final Function<Unsigned12BitType, Unsigned12BitType> min12BitType =
@@ -216,6 +260,9 @@ public class MinValueRealTypes {
 	final Unsigned128BitType min128Bit = new Unsigned128BitType(BigInteger.ZERO);
 
 	/**
+	 * @input in some {@link Unsigned128BitType}
+	 * @output minValue a {@link Unsigned128BitType} containing the minimum value
+	 *         of a 128-bit data structure
 	 * @implNote op names='types.minValue'
 	 */
 	public final Function<Unsigned128BitType, Unsigned128BitType> min128BitType =
@@ -230,6 +277,9 @@ public class MinValueRealTypes {
 	 * value. The best we can do is quickly compute the answer. TODO: Is there
 	 * some way we could cache the values? Is that worth it??
 	 *
+	 * @input in some {@link UnsignedVariableBitLengthType}
+	 * @output minValue a {@link UnsignedVariableBitLengthType} containing the
+	 *         minimum value that can be stored in {@code in}
 	 * @implNote op names='types.minValue'
 	 */
 	public final Function<UnsignedVariableBitLengthType, UnsignedVariableBitLengthType> minVarLengthType =

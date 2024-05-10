@@ -107,9 +107,7 @@ public abstract class OpImplData {
 			.map(section -> tagElementSeparator.split(section, 2)) //
 			.collect(Collectors.toList());
 		List<String[]> remaining = parseUniversalTags(tags);
-		if (!remaining.isEmpty()) {
-			parseAdditionalTags(source, remaining);
-		}
+		parseAdditionalTags(source, remaining);
 		validateOpImpl();
 	}
 

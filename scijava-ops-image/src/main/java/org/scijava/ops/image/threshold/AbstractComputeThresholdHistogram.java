@@ -43,6 +43,12 @@ public abstract class AbstractComputeThresholdHistogram<T extends RealType<T>>
 	implements Computers.Arity1<Histogram1d<T>, T>
 {
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	@Override
 	public void compute(final Histogram1d<T> input, final T output) {
 		final long binPos = computeBin(input);

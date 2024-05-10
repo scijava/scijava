@@ -52,8 +52,6 @@ public class PaddingIntervalCentered<T extends ComplexType<T>, I extends RandomA
 	implements BiFunction<I, Dimensions, O>
 {
 
-	@Override
-	@SuppressWarnings("unchecked")
 	/**
 	 * TODO
 	 *
@@ -61,6 +59,8 @@ public class PaddingIntervalCentered<T extends ComplexType<T>, I extends RandomA
 	 * @param paddedDimensions
 	 * @return the output
 	 */
+	@Override
+	@SuppressWarnings("unchecked")
 	public O apply(final I input, final Dimensions paddedDimensions) {
 
 		final long[] paddedSize = new long[paddedDimensions.numDimensions()];

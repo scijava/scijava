@@ -210,7 +210,7 @@ public final class Progress {
 			Collections.emptyList() //
 		);
 		synchronized (list) {
-			for(var l: list)
+			for (var l : list)
 				l.accept(task);
 		}
 		// Ping global listeners

@@ -54,6 +54,12 @@ public abstract class AbstractBoxivity<I> implements
 	@OpDependency(name = "geom.smallestEnclosingBoundingBox")
 	private Function<I, I> smallestEnclosingRectangleFunc;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	@Override
 	public void compute(I input, DoubleType output) {
 		output.set(areaFunc.apply(input).getRealDouble() / areaFunc.apply(

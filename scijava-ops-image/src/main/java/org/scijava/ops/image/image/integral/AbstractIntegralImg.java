@@ -49,6 +49,12 @@ public abstract class AbstractIntegralImg<I extends RealType<I>, O extends RealT
 	Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>>
 {
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<I> input,
 		final RandomAccessibleInterval<O> output)

@@ -94,6 +94,16 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>, U exten
 				". There is no op available to do that (available orders are: 1, 2).");
 	}
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param inputNeighborhoodShape
+	 * @param outOfBoundsFactory
+	 * @param integralImageOps
+	 * @param thresholdOp
+	 * @param output
+	 */
 	protected void compute(final RandomAccessibleInterval<T> input,
 		RectangleShape inputNeighborhoodShape,
 		OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,

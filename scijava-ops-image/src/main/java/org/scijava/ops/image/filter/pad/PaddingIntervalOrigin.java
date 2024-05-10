@@ -50,15 +50,15 @@ public class PaddingIntervalOrigin<T extends ComplexType<T>, I extends RandomAcc
 	implements BiFunction<I, Interval, O>
 {
 
-	@Override
-	@SuppressWarnings("unchecked")
 	/**
 	 * TODO
 	 *
 	 * @param input
-	 * @param interval
+	 * @param centeredInterval
 	 * @return the output
 	 */
+	@Override
+	@SuppressWarnings("unchecked")
 	public O apply(final I input, final Interval centeredInterval) {
 
 		int numDimensions = input.numDimensions();

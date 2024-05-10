@@ -29,22 +29,17 @@
 
 package org.scijava.ops.engine.matcher.adapt;
 
-import java.lang.reflect.Type;
 import java.util.function.BiFunction;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.scijava.function.Computers;
-import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.Ops;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.adapt.functional.FunctionsToComputers;
 import org.scijava.ops.engine.copy.CopyOpCollection;
-import org.scijava.ops.engine.matcher.impl.OpClassInfo;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpMethod;
-import org.scijava.types.Types;
 
 public class OpAdaptationInfoTest extends AbstractTestEnvironment implements
 	OpCollection

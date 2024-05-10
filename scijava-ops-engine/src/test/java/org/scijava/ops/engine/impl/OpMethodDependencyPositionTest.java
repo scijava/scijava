@@ -39,7 +39,7 @@ import org.scijava.function.Computers;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.exceptions.impl.OpDependencyPositionException;
-import org.scijava.ops.engine.matcher.impl.OpMethodInfo;
+import org.scijava.ops.engine.matcher.impl.DefaultOpMethodInfo;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
 
@@ -66,7 +66,7 @@ public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
 			List.class //
 		);
 		// The below call should not throw an Exception
-		Assertions.assertDoesNotThrow(() -> new OpMethodInfo( //
+		Assertions.assertDoesNotThrow(() -> new DefaultOpMethodInfo( //
 			m, //
 			Computers.Arity1.class, //
 			"1.0", //
@@ -126,7 +126,7 @@ public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
 	 */
 	private void createInvalidInfo(Method m, Class<?> arity, String... names) {
 		Assertions.assertThrows(OpDependencyPositionException.class,
-			() -> new OpMethodInfo( //
+			() -> new DefaultOpMethodInfo( //
 				m, //
 				arity, //
 				"1.0", //

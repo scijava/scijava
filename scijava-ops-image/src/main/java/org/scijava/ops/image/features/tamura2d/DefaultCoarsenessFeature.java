@@ -66,7 +66,6 @@ public class DefaultCoarsenessFeature<I extends RealType<I>, O extends RealType<
 	private Computers.Arity3<RandomAccessibleInterval<I>, Shape, //
 			OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<I>> meanOp;
 
-	@SuppressWarnings("unchecked")
 	/**
 	 * TODO
 	 *
@@ -74,6 +73,7 @@ public class DefaultCoarsenessFeature<I extends RealType<I>, O extends RealType<
 	 * @param output
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		if (input.numDimensions() != 2) throw new IllegalArgumentException(
 			"Only 2 dimensional images allowed!");

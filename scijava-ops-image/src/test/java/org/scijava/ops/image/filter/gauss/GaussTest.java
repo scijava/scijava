@@ -29,8 +29,6 @@
 
 package org.scijava.ops.image.filter.gauss;
 
-import org.scijava.ops.image.AbstractOpTest;
-import org.scijava.ops.image.util.TestImgGeneration;
 import net.imglib2.Cursor;
 import net.imglib2.algorithm.gauss3.Gauss3;
 import net.imglib2.exception.IncompatibleTypeException;
@@ -38,9 +36,10 @@ import net.imglib2.img.Img;
 import net.imglib2.type.numeric.integer.ByteType;
 import net.imglib2.util.Util;
 import net.imglib2.view.Views;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.scijava.ops.image.AbstractOpTest;
+import org.scijava.ops.image.util.TestImgGeneration;
 import org.scijava.types.Nil;
 
 /**

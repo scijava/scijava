@@ -42,6 +42,9 @@ public final class LiftFunctionsToRAI {
 #foreach($rais in [1..$arity])
 
 	/**
+	 * @param imgCreator an Op that can create the output {@link RandomAccessibleInterval}
+	 * @param func the original Op, operating on {@link RandomAccessibleInterval} elements
+	 * @return {@code op} lifted to operate on {@link RandomAccessibleInterval}s.
 	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	 public static <#foreach($a in [1..$arity])I$a, #{end}O extends Type<O>, #foreach($a in [1..$rais])RAII$a extends RandomAccessibleInterval<I$a>, #{end}RAIO extends RandomAccessibleInterval<O>> $functionNames.call($arity)<#foreach($a in [1..$arity])#if($a <= $rais)RAI#{end}I$a, #{end}RAIO> lift$arity$rais(

@@ -123,18 +123,18 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>>
 	/** Used by {@link WatershedSeeded.WatershedVoxel} */
 	private static final AtomicLong seq = new AtomicLong();
 
-	@SuppressWarnings("unchecked")
 	/**
 	 * TODO
 	 *
-	 * @param input
+	 * @param in
 	 * @param seeds
 	 * @param useEightConnectivity
 	 * @param drawWatersheds
-	 * @param mask
-	 * @param output
+	 * @param maskInput
+	 * @param out
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public void compute( //
 		final RandomAccessibleInterval<T> in, //
 		final ImgLabeling<Integer, IntType> seeds, //

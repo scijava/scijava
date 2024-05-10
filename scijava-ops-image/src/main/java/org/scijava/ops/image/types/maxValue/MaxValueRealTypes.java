@@ -64,6 +64,8 @@ public class MaxValueRealTypes {
 	final BitType maxBit = new BitType(true);
 
 	/**
+	 * @input in some {@link BitType}
+	 * @output maxValue a {@link BitType} containing the maximum value of a bit
 	 * @implNote op names='types.maxValue'
 	 */
 	public final Function<BitType, BitType> maxBitType = in -> {
@@ -73,6 +75,9 @@ public class MaxValueRealTypes {
 	final BoolType maxBool = new BoolType(true);
 
 	/**
+	 * @input in some {@link BoolType}
+	 * @output maxValue a {@link BoolType} containing the maximum value of a
+	 *         boolean
 	 * @implNote op names='types.maxValue'
 	 */
 	public final Function<BoolType, BoolType> maxBoolType = in -> {
@@ -82,6 +87,9 @@ public class MaxValueRealTypes {
 	final NativeBoolType maxNativeBool = new NativeBoolType(true);
 
 	/**
+	 * @input in some {@link NativeBoolType}
+	 * @output maxValue a {@link NativeBoolType} containing the maximum value of a
+	 *         boolean
 	 * @implNote op names='types.maxValue'
 	 */
 	public final Function<NativeBoolType, NativeBoolType> maxNativeBoolType =
@@ -92,6 +100,8 @@ public class MaxValueRealTypes {
 	final ByteType maxByte = new ByteType(Byte.MAX_VALUE);
 
 	/**
+	 * @input in some {@link ByteType}
+	 * @output maxValue a {@link ByteType} containing the maximum value of a byte
 	 * @implNote op names='types.maxValue'
 	 */
 	public final Function<ByteType, ByteType> maxByteType = in -> {
@@ -102,6 +112,9 @@ public class MaxValueRealTypes {
 		-Byte.MIN_VALUE + Byte.MAX_VALUE);
 
 	/**
+	 * @input in some {@link UnsignedByteType}
+	 * @output maxValue a {@link UnsignedByteType} containing the maximum value of
+	 *         an unsigned byte
 	 * @implNote op names='types.maxValue'
 	 */
 	public final Function<UnsignedByteType, UnsignedByteType> maxUnsignedByteType =
@@ -112,6 +125,8 @@ public class MaxValueRealTypes {
 	final IntType maxInt = new IntType(Integer.MAX_VALUE);
 
 	/**
+	 * @input in some {@link IntType}
+	 * @output maxValue a {@link IntType} containing the maximum value of an int
 	 * @implNote op names='types.maxValue'
 	 */
 	public final Function<IntType, IntType> maxIntType = in -> {
@@ -121,6 +136,9 @@ public class MaxValueRealTypes {
 	final UnsignedIntType maxUnsignedInt = new UnsignedIntType(0xffffffffL);
 
 	/**
+	 * @input in some {@link UnsignedIntType}
+	 * @output maxValue a {@link UnsignedIntType} containing the maximum value of
+	 *         an unsigned int
 	 * @implNote op names='types.maxValue'
 	 */
 	public final Function<UnsignedIntType, UnsignedIntType> maxUnsignedIntType =
@@ -131,6 +149,8 @@ public class MaxValueRealTypes {
 	final LongType maxLong = new LongType(Long.MAX_VALUE);
 
 	/**
+	 * @input in some {@link LongType}
+	 * @output maxValue a {@link LongType} containing the maximum value of a long
 	 * @implNote op names='types.maxValue'
 	 */
 	public final Function<LongType, LongType> maxLongType = in -> {
@@ -141,6 +161,9 @@ public class MaxValueRealTypes {
 		new UnsignedLongType().getMaxBigIntegerValue());
 
 	/**
+	 * @input in some {@link UnsignedLongType}
+	 * @output maxValue a {@link UnsignedLongType} containing the maximum value of
+	 *         an unsigned long
 	 * @implNote op names='types.maxValue'
 	 */
 	public final Function<UnsignedLongType, UnsignedLongType> maxUnsignedLongType =
@@ -151,6 +174,9 @@ public class MaxValueRealTypes {
 	final ShortType maxShort = new ShortType(Short.MAX_VALUE);
 
 	/**
+	 * @input in some {@link ShortType}
+	 * @output maxValue a {@link ShortType} containing the maximum value of a
+	 *         short
 	 * @implNote op names='types.maxValue'
 	 */
 	public final Function<ShortType, ShortType> maxShortType = in -> {
@@ -161,6 +187,9 @@ public class MaxValueRealTypes {
 		-Short.MIN_VALUE + Short.MAX_VALUE);
 
 	/**
+	 * @input in some {@link UnsignedShortType}
+	 * @output maxValue a {@link UnsignedShortType} containing the maximum value
+	 *         of an unsigned short
 	 * @implNote op names='types.maxValue'
 	 */
 	public final Function<UnsignedShortType, UnsignedShortType> maxUnsignedShortType =
@@ -171,6 +200,9 @@ public class MaxValueRealTypes {
 	final FloatType maxFloat = new FloatType(Float.MAX_VALUE);
 
 	/**
+	 * @input in some {@link FloatType}
+	 * @output maxValue a {@link FloatType} containing the maximum value of a
+	 *         32-bit floating point value
 	 * @implNote op names='types.maxValue'
 	 */
 	public final Function<FloatType, FloatType> maxFloatType = in -> {
@@ -180,6 +212,9 @@ public class MaxValueRealTypes {
 	final DoubleType maxDouble = new DoubleType(Double.MAX_VALUE);
 
 	/**
+	 * @input in some {@link DoubleType}
+	 * @output maxValue a {@link DoubleType} containing the maximum value of a
+	 *         64-bit floating point value
 	 * @implNote op names='types.maxValue'
 	 */
 	public final Function<DoubleType, DoubleType> maxDoubleType = in -> {
@@ -189,6 +224,9 @@ public class MaxValueRealTypes {
 	final Unsigned2BitType max2Bit = new Unsigned2BitType(3);
 
 	/**
+	 * @input in some {@link Unsigned2BitType}
+	 * @output maxValue a {@link Unsigned2BitType} containing the maximum value of
+	 *         a 2-bit data structure
 	 * @implNote op names='types.maxValue'
 	 */
 	public final Function<Unsigned2BitType, Unsigned2BitType> max2BitType =
@@ -199,6 +237,9 @@ public class MaxValueRealTypes {
 	final Unsigned4BitType max4Bit = new Unsigned4BitType(15);
 
 	/**
+	 * @input in some {@link Unsigned4BitType}
+	 * @output maxValue a {@link Unsigned4BitType} containing the maximum value of
+	 *         a 4-bit data structure
 	 * @implNote op names='types.maxValue'
 	 */
 	public final Function<Unsigned4BitType, Unsigned4BitType> max4BitType =
@@ -209,6 +250,9 @@ public class MaxValueRealTypes {
 	final Unsigned12BitType max12Bit = new Unsigned12BitType(4095);
 
 	/**
+	 * @input in some {@link Unsigned12BitType}
+	 * @output maxValue a {@link Unsigned12BitType} containing the maximum value
+	 *         of a 12-bit data structure
 	 * @implNote op names='types.maxValue'
 	 */
 	public final Function<Unsigned12BitType, Unsigned12BitType> max12BitType =
@@ -220,6 +264,9 @@ public class MaxValueRealTypes {
 		new Unsigned128BitType().getMaxBigIntegerValue());
 
 	/**
+	 * @input in some {@link Unsigned128BitType}
+	 * @output maxValue a {@link Unsigned128BitType} containing the maximum value
+	 *         of a 128-bit data structure
 	 * @implNote op names='types.maxValue'
 	 */
 	public final Function<Unsigned128BitType, Unsigned128BitType> max128BitType =
@@ -239,6 +286,9 @@ public class MaxValueRealTypes {
 	 * unsupported). TODO: Is there some way we could cache the values? Is that
 	 * worth it??
 	 *
+	 * @input in some {@link UnsignedVariableBitLengthType}
+	 * @output maxValue a {@link UnsignedVariableBitLengthType} containing the
+	 *         maximum value storable in {@code in}
 	 * @implNote op names='types.maxValue'
 	 */
 	public final Function<UnsignedVariableBitLengthType, UnsignedVariableBitLengthType> maxVarLengthType =

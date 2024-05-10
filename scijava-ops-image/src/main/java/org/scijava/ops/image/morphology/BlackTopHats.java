@@ -56,55 +56,127 @@ import org.scijava.function.Inplaces;
 public class BlackTopHats<T extends RealType<T> & Comparable<T>, R extends RealType<R>> {
 
 	/**
+	 * Iteratively performs Black Top Hats with each passed {@link Shape} in
+	 * order.
+	 *
+	 * @input img input data
+	 * @input shapes a {@link List<Shape>} containing the {@link Shape}s to use
+	 *        for each Black Top Hat neighborhood
+	 * @input numThreads the number of threads to use in the execution
+	 * @output img output data
 	 * @implNote op names='morphology.BlackTopHat'
 	 */
 	@SuppressWarnings("unchecked")
 	public final Functions.Arity3<Img<R>, List<? extends Shape>, Integer, Img<R>> BlackTopHatImgList =
-		(in1, in2, in3) -> BlackTopHat.blackTopHat(in1, (List<Shape>) in2, in3);
+		BlackTopHat::blackTopHat;
 
 	/**
+	 * Performs a Black Top Hat.
+	 *
+	 * @input img input data
+	 * @input shape a {@link Shape} to use for the neighborhood
+	 * @input numThreads the number of threads to use in the execution
+	 * @output img output data
 	 * @implNote op names='morphology.BlackTopHat'
 	 */
 	public final Functions.Arity3<Img<R>, Shape, Integer, Img<R>> BlackTopHatImgSingle =
 		BlackTopHat::blackTopHat;
 
 	/**
+	 * Iteratively performs Black Top Hats with each passed {@link Shape} in
+	 * order.
+	 *
+	 * @input img input data
+	 * @input shapes a {@link List<Shape>} containing the {@link Shape}s to use
+	 *        for each Black Top Hat neighborhood
+	 * @input numThreads the number of threads to use in the execution
+	 * @input minValue a {@link T} that is smaller than all values in the input
+	 *        image. Used to speed computation.
+	 * @input maxValue a {@link T} that is larger than all values in the input
+	 *        image. Used to speed computation.
+	 * @output img output data
 	 * @implNote op names='morphology.BlackTopHat'
 	 */
 	@SuppressWarnings("unchecked")
 	public final Functions.Arity5<Img<T>, List<? extends Shape>, T, T, Integer, Img<T>> BlackTopHatImgListMinMax =
-		(in1, in2, in3, in4, in5) -> BlackTopHat.blackTopHat(in1, (List<Shape>) in2,
-			in3, in4, in5);
+		BlackTopHat::blackTopHat;
 
 	/**
+	 * Performs a Black Top Hat.
+	 *
+	 * @input img input data
+	 * @input shape a {@link Shape} to use for the neighborhood
+	 * @input numThreads the number of threads to use in the execution
+	 * @input minValue a {@link T} that is smaller than all values in the input
+	 *        image. Used to speed computation.
+	 * @input maxValue a {@link T} that is larger than all values in the input
+	 *        image. Used to speed computation.
+	 * @output img output data
 	 * @implNote op names='morphology.BlackTopHat'
 	 */
 	public final Functions.Arity5<Img<T>, Shape, T, T, Integer, Img<T>> BlackTopHatImgSingleMinMax =
 		BlackTopHat::blackTopHat;
 
 	/**
+	 * Iteratively performs Black Top Hats with each passed {@link Shape} in
+	 * order, placing the result into the provided preallocated output buffer.
+	 *
+	 * @input img input data
+	 * @input shapes a {@link List<Shape>} containing the {@link Shape}s to use
+	 *        for each Black Top Hat neighborhood
+	 * @input numThreads the number of threads to use in the execution
+	 * @container img output data
 	 * @implNote op names='morphology.BlackTopHat'
 	 */
 	@SuppressWarnings("unchecked")
 	public final Computers.Arity3<RandomAccessible<R>, List<? extends Shape>, Integer, IterableInterval<R>> BlackTopHatImgListComputer =
-		(in1, in2, in3, out) -> BlackTopHat.blackTopHat(in1, out, (List<Shape>) in2,
-			in3);
+		(in1, in2, in3, out) -> BlackTopHat.blackTopHat(in1, out, in2, in3);
 
 	/**
+	 * Iteratively performs Black Top Hats with each passed {@link Shape} in
+	 * order, placing the result into the provided preallocated output buffer.
+	 *
+	 * @input img input data
+	 * @input shapes a {@link List<Shape>} containing the {@link Shape}s to use
+	 *        for each Black Top Hat neighborhood
+	 * @input numThreads the number of threads to use in the execution
+	 * @input minValue a {@link T} that is smaller than all values in the input
+	 *        image. Used to speed computation.
+	 * @input maxValue a {@link T} that is larger than all values in the input
+	 *        image. Used to speed computation.
+	 * @container img output data
 	 * @implNote op names='morphology.BlackTopHat'
 	 */
 	@SuppressWarnings("unchecked")
 	public final Computers.Arity5<RandomAccessible<T>, List<? extends Shape>, T, T, Integer, IterableInterval<T>> BlackTopHatImgListMinMaxComputer =
-		(in1, in2, in3, in4, in5, out) -> BlackTopHat.blackTopHat(in1, out,
-			(List<Shape>) in2, in3, in4, in5);
+		(in1, in2, in3, in4, in5, out) -> BlackTopHat.blackTopHat(in1, out, in2,
+			in3, in4, in5);
 
 	/**
+	 * Performs a Black Top Hat, placing the result into the provided preallocated
+	 * output buffer.
+	 *
+	 * @input img input data
+	 * @input shape a {@link Shape} to use for the neighborhood
+	 * @input numThreads the number of threads to use in the execution
+	 * @container img output data
 	 * @implNote op names='morphology.BlackTopHat'
 	 */
 	public final Computers.Arity3<RandomAccessible<R>, Shape, Integer, IterableInterval<R>> BlackTopHatImgComputer =
 		(in1, in2, in3, out) -> BlackTopHat.blackTopHat(in1, out, in2, in3);
 
 	/**
+	 * Performs a Black Top Hat, placing the result into the provided preallocated
+	 * output buffer.
+	 *
+	 * @input img input data
+	 * @input shape a {@link Shape} to use for the neighborhood
+	 * @input numThreads the number of threads to use in the execution
+	 * @input minValue a {@link T} that is smaller than all values in the input
+	 *        image. Used to speed computation.
+	 * @input maxValue a {@link T} that is larger than all values in the input
+	 *        image. Used to speed computation.
+	 * @container img output data
 	 * @implNote op names='morphology.BlackTopHat'
 	 */
 	public final Computers.Arity5<RandomAccessible<T>, Shape, T, T, Integer, IterableInterval<T>> BlackTopHatImgMinMaxComputer =
@@ -112,6 +184,15 @@ public class BlackTopHats<T extends RealType<T> & Comparable<T>, R extends RealT
 			in3, in4, in5);
 
 	/**
+	 * Iteratively performs Black Top Hats <em>within the provided
+	 * {@link Interval}</em> with each passed {@link Shape} in order, overwriting
+	 * the provided input buffer with the results
+	 *
+	 * @mutable img input data
+	 * @input interval the {@link Interval} restricting the bounds of computation.
+	 * @input shapes a {@link List<Shape>} containing the {@link Shape}s to use
+	 *        for each Black Top Hat neighborhood
+	 * @input numThreads the number of threads to use in the execution
 	 * @implNote op names='morphology.BlackTopHat'
 	 */
 	@SuppressWarnings("unchecked")
@@ -120,6 +201,19 @@ public class BlackTopHats<T extends RealType<T> & Comparable<T>, R extends RealT
 			(List<Shape>) in3, in4);
 
 	/**
+	 * Iteratively performs Black Top Hats <em>within the provided
+	 * {@link Interval}</em> with each passed {@link Shape} in order, overwriting
+	 * the provided input buffer with the results
+	 *
+	 * @mutable img input data
+	 * @input interval the {@link Interval} restricting the bounds of computation.
+	 * @input shapes a {@link List<Shape>} containing the {@link Shape}s to use
+	 *        for each Black Top Hat neighborhood
+	 * @input numThreads the number of threads to use in the execution
+	 * @input minValue a {@link T} that is smaller than all values in the input
+	 *        image. Used to speed computation.
+	 * @input maxValue a {@link T} that is larger than all values in the input
+	 *        image. Used to speed computation.
 	 * @implNote op names='morphology.BlackTopHat'
 	 */
 	@SuppressWarnings("unchecked")
@@ -128,12 +222,30 @@ public class BlackTopHats<T extends RealType<T> & Comparable<T>, R extends RealT
 			(List<Shape>) in3, in4, in5, in6);
 
 	/**
+	 * Performs a Black Top Hat <em>within the provided {@link Interval}</em>,
+	 * overwriting the provided input buffer with the results
+	 *
+	 * @mutable img input data
+	 * @input interval the {@link Interval} restricting the bounds of computation.
+	 * @input shape a {@link Shape} to use for the neighborhood
+	 * @input numThreads the number of threads to use in the execution
 	 * @implNote op names='morphology.BlackTopHat'
 	 */
 	public final Inplaces.Arity4_1<RandomAccessibleInterval<R>, Interval, Shape, Integer> BlackTopHatImgSingleInPlace =
 		BlackTopHat::blackTopHatInPlace;
 
 	/**
+	 * Performs a Black Top Hat <em>within the provided {@link Interval}</em>,
+	 * overwriting the provided input buffer with the results
+	 *
+	 * @mutable img input data
+	 * @input interval the {@link Interval} restricting the bounds of computation.
+	 * @input shape a {@link Shape} to use for the neighborhood
+	 * @input numThreads the number of threads to use in the execution
+	 * @input minValue a {@link T} that is smaller than all values in the input
+	 *        image. Used to speed computation.
+	 * @input maxValue a {@link T} that is larger than all values in the input
+	 *        image. Used to speed computation.
 	 * @implNote op names='morphology.BlackTopHat'
 	 */
 	public final Inplaces.Arity6_1<RandomAccessibleInterval<T>, Interval, Shape, T, T, Integer> BlackTopHatImgSingleMinMaxInplace =

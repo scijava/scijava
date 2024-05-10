@@ -27,84 +27,57 @@
  * #L%
  */
 
-package org.scijava.ops.engine.matcher.impl;
+package org.scijava.ops.engine.yaml.impl;
 
-import org.scijava.ops.api.Hints;
+import org.scijava.common3.Annotations;
+import org.scijava.common3.Classes;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.OpDependencyMember;
-import org.scijava.ops.engine.struct.ClassOpDependencyMemberParser;
-import org.scijava.ops.engine.struct.ClassParameterMemberParser;
+import org.scijava.ops.engine.exceptions.impl.FinalOpDependencyFieldException;
+import org.scijava.ops.engine.struct.FieldOpDependencyMember;
+import org.scijava.ops.engine.struct.FunctionalParameters;
+import org.scijava.ops.engine.struct.SynthesizedParameterMember;
 import org.scijava.ops.engine.util.Infos;
+import org.scijava.ops.spi.OpDependency;
+import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
-import org.scijava.struct.Structs;
 import org.scijava.types.Types;
 
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Type;
-import java.util.Arrays;
+import java.lang.reflect.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Metadata about an Op implementation defined as a class.
+ * An {@link OpInfo}, backed by some {@code public} {@link Class}, described via
+ * YAML that is stored within a {@link Map}.
  *
- * @author Curtis Rueden
- * @author David Kolb
+ * @author Gabriel Selzer
  */
-public class OpClassInfo implements OpInfo {
+public class YAMLOpClassInfo extends AbstractYAMLOpInfo {
 
-	private final List<String> names;
-	private final Class<?> opClass;
-	private final String version;
+	private final Class<?> cls;
 	private final Struct struct;
-	private final double priority;
-	private final String description;
-	private final Hints hints;
 
-	public OpClassInfo( //
-		final Class<?> opClass, //
-		final String version, //
-		final String description, //
-		final Hints hints, //
-		final double priority, //
-		final String... names //
-	) {
-		this.opClass = opClass;
-		this.version = version;
-		this.names = Arrays.asList(names);
-		this.description = description;
-		this.priority = priority;
-		this.hints = hints;
+	public YAMLOpClassInfo( //
+		final Map<String, Object> yaml, //
+		final String identifier)
+	{
+		super(yaml, identifier);
+		// parse class
+		this.cls = Classes.load(identifier);
+		this.struct = createStruct(yaml);
 
-		struct = Structs.from( //
-			opClass, //
-			opClass, //
-			new ClassParameterMemberParser(), //
-			new ClassOpDependencyMemberParser() //
-		);
-
+		// Validate general OpInfo features
 		Infos.validate(this);
 	}
 
 	// -- OpInfo methods --
 
 	@Override
-	public String description() {
-		return this.description;
-	}
-
-	@Override
-	public List<String> names() {
-		return names;
-	}
-
-	@Override
 	public Type opType() {
-		// TODO: Check whether this is correct!
-		return Types.parameterizeRaw(opClass);
-//		return opClass;
+		return Types.parameterizeRaw(cls);
 	}
 
 	@Override
@@ -113,28 +86,70 @@ public class OpClassInfo implements OpInfo {
 	}
 
 	@Override
-	public Hints declaredHints() {
-		return hints;
-	}
-
-	@Override
-	public double priority() {
-		return priority;
-	}
-
-	@Override
 	public String implementationName() {
-		return opClass.getName();
+		return cls.getName();
+	}
+
+	@Override
+	public AnnotatedElement getAnnotationBearer() {
+		return cls;
+	}
+
+	/**
+	 * For a {@link Class}, we define the implementation as the concatenation of:
+	 * <ol>
+	 * <li>The fully qualified name of the class</li>
+	 * <li>The version of the class containing the field, with a preceding
+	 * {@code @}</li>
+	 * </ol>
+	 * <p>
+	 * For example, for a field class {@code com.example.foo.Bar}, you might have
+	 * <p>
+	 * {@code com.example.foo.Bar@1.0.0}
+	 * <p>
+	 */
+	@Override
+	public String id() {
+		return OpInfo.IMPL_DECLARATION + implementationName() + "@" + version();
+	}
+
+	private Struct createStruct(Map<String, Object> yaml) {
+		List<Member<?>> members = new ArrayList<>();
+		List<Map<String, Object>> params = (List<Map<String, Object>>) yaml.get(
+			"parameters");
+		var fmts = FunctionalParameters.findFunctionalMethodTypes(cls);
+		for (int i = 0; i < params.size(); i++) {
+			var pMap = params.get(i);
+			var fmt = fmts.get(i);
+			String name = (String) pMap.get("name");
+			String description = (String) pMap.get("description");
+			boolean nullable = (boolean) pMap.getOrDefault("nullable", false);
+			members.add(new SynthesizedParameterMember<>(fmt, name, !nullable,
+				description));
+		}
+
+		// Add Op Dependencies
+		final List<Field> fields = Annotations.getAnnotatedFields(cls,
+			OpDependency.class);
+		for (final Field f : fields) {
+			f.setAccessible(true);
+			if (Modifier.isFinal(f.getModifiers())) {
+				// Final fields are bad because they cannot be modified.
+				throw new FinalOpDependencyFieldException(f);
+			}
+			final FieldOpDependencyMember<?> item = new FieldOpDependencyMember<>(f,
+				cls);
+			members.add(item);
+		}
+
+		return () -> members;
 	}
 
 	@Override
 	public StructInstance<?> createOpInstance(List<?> dependencies) {
 		final Object op;
 		try {
-			// TODO: Consider whether this is really the best way to
-			// instantiate the op class here. No framework usage?
-			// E.g., what about pluginService.createInstance?
-			Constructor<?> ctor = opClass.getDeclaredConstructor();
+			Constructor<?> ctor = cls.getDeclaredConstructor();
 			ctor.setAccessible(true);
 			op = ctor.newInstance();
 		}
@@ -142,9 +157,7 @@ public class OpClassInfo implements OpInfo {
 				| NoSuchMethodException | SecurityException | IllegalArgumentException
 				| InvocationTargetException e)
 		{
-			// TODO: Think about whether exception handling here should be
-			// different.
-			throw new IllegalStateException("Unable to instantiate op: '" + opClass
+			throw new IllegalStateException("Unable to instantiate op: '" + cls
 				.getName() + "' Ensure that the Op has a no-args constructor.", e);
 		}
 		final var dependencyMembers = Infos.dependencies(this);
@@ -166,54 +179,5 @@ public class OpClassInfo implements OpInfo {
 		}
 		return struct().createInstance(op);
 	}
-
-	@Override
-	public AnnotatedElement getAnnotationBearer() {
-		return opClass;
-	}
-
-	// -- Object methods --
-
-	@Override
-	public boolean equals(final Object o) {
-		if (!(o instanceof OpClassInfo)) return false;
-		final OpInfo that = (OpInfo) o;
-		return struct().equals(that.struct());
-	}
-
-	@Override
-	public int hashCode() {
-		return struct().hashCode();
-	}
-
-	@Override
-	public String toString() {
-		return Infos.describe(this);
-	}
-
-	@Override
-	public String version() {
-		return version;
-	}
-
-	/**
-	 * For a {@link Class}, we define the implementation as the concatenation of:
-	 * <ol>
-	 * <li>The fully qualified name of the class</li>
-	 * <li>The version of the class containing the field, with a preceding
-	 * {@code @}</li>
-	 * </ol>
-	 * <p>
-	 * For example, for a field class {@code com.example.foo.Bar}, you might have
-	 * <p>
-	 * {@code com.example.foo.Bar@1.0.0}
-	 * <p>
-	 */
-	@Override
-	public String id() {
-		return OpInfo.IMPL_DECLARATION + implementationName() + "@" + version();
-	}
-
-	// -- Helper methods
 
 }

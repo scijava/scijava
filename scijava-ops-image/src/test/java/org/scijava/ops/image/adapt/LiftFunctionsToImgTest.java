@@ -47,6 +47,8 @@ public class LiftFunctionsToImgTest extends AbstractOpTest implements
 {
 
 	/**
+	 * @input in
+	 * @output out
 	 * @implNote op names="test.liftFunctionToImg"
 	 */
 	public final Function<UnsignedByteType, UnsignedByteType> inc = //

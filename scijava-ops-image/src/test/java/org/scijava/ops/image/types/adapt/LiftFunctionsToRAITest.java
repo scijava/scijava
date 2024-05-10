@@ -50,29 +50,49 @@ public class LiftFunctionsToRAITest<I extends RealType<I>> extends
 {
 
 	/**
+	 * @input in
+	 * @output doubleType
 	 * @implNote op names='test.function.liftImg'
 	 */
 	public final Function<I, DoubleType> testOp = (in) -> new DoubleType(10d);
 
 	/**
+	 * @input in1
+	 * @input in2
+	 * @output doubleType
 	 * @implNote op names='test.function.liftImg'
 	 */
 	public final BiFunction<I, I, DoubleType> testOp2 = (in1,
 		in2) -> new DoubleType(20d);
 
 	/**
+	 * @input in1
+	 * @input in2
+	 * @input in3
+	 * @output doubleType
 	 * @implNote op names='test.function.liftImg'
 	 */
 	public final Functions.Arity3<I, I, I, DoubleType> testOp3 = (in1, in2,
 		in3) -> new DoubleType(30d);
 
 	/**
+	 * @input in1
+	 * @input in2
+	 * @input in3
+	 * @input in4
+	 * @output doubleType
 	 * @implNote op names='test.function.liftImg'
 	 */
 	public final Functions.Arity4<I, I, I, I, DoubleType> testOp4 = (in1, in2,
 		in3, in4) -> new DoubleType(40d);
 
 	/**
+	 * @input in1
+	 * @input in2
+	 * @input in3
+	 * @input in4
+	 * @input in5
+	 * @output doubleType
 	 * @implNote op names='test.function.liftImg'
 	 */
 	public final Functions.Arity5<I, I, I, I, I, DoubleType> testOp5 = (in1, in2,

@@ -76,6 +76,12 @@ public class YAMLOpTest extends AbstractTestEnvironment {
 	}
 
 	@Test
+	public void testYAMLMethodFunctionNullable() {
+		Double sum = ops.op("example.sub").input(2.).outType(Double.class).apply();
+		Assertions.assertEquals(2., sum, 1e-6);
+	}
+
+	@Test
 	public void testYAMLMethodInplaceShortType() {
 		List<Integer> l1 = Arrays.asList(1);
 		List<Integer> l2 = Arrays.asList(3);

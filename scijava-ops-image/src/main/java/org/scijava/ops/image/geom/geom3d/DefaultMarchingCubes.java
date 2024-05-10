@@ -58,7 +58,6 @@ public class DefaultMarchingCubes<T extends BooleanType<T>> implements
 	private double isolevel;
 	private VertexInterpolator interpolatorClass;
 
-	@SuppressWarnings({ "unchecked" })
 	/**
 	 * TODO
 	 *
@@ -68,6 +67,7 @@ public class DefaultMarchingCubes<T extends BooleanType<T>> implements
 	 * @return the output
 	 */
 	@Override
+	@SuppressWarnings({ "unchecked" })
 	public Mesh apply(final RandomAccessibleInterval<T> input,
 		@Nullable Double isolevel, @Nullable VertexInterpolator interpolatorClass)
 	{

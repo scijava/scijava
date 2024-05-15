@@ -52,6 +52,11 @@ import org.scijava.types.Types;
 import org.scijava.types.inference.FunctionalInterfaces;
 import org.scijava.types.inference.GenericAssignability;
 
+/**
+ * Common code used by Ops backed by {@link Method}s.
+ *
+ * @author Gabriel Selzer
+ */
 public final class OpMethodUtils {
 
 	private OpMethodUtils() {
@@ -116,6 +121,15 @@ public final class OpMethodUtils {
 			.toArray(Type[]::new);
 	}
 
+	/**
+	 * Converts an {@link OpInfo} backed by a {@link Method} reference into an Op,
+	 * given a list of its dependencies.
+	 *
+	 * @param info the {@link OpInfo}
+	 * @param method the {@link Method} containing the Op code
+	 * @param dependencies all Op dependencies required to execute the Op
+	 * @return a {@link StructInstance}
+	 */
 	public static StructInstance<?> createOpInstance(final OpInfo info,
 		final Method method, final List<?> dependencies)
 	{

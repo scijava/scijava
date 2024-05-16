@@ -45,11 +45,12 @@ public class OpParameter {
 			INPUT, OUTPUT, MUTABLE, CONTAINER
 	}
 
-	protected final IO_TYPE ioType;
+	protected IO_TYPE ioType;
 	protected final String name;
 	protected final String type;
 
 	protected final String desc;
+	protected final boolean nullable;
 
 	/**
 	 * Default constructor
@@ -63,13 +64,14 @@ public class OpParameter {
 	 * @param description a description of the parameter
 	 */
 	public OpParameter(String name, String type, IO_TYPE ioType,
-		String description)
+		String description, final boolean nullable)
 	{
 		// Assign io
 		this.name = name;
 		this.type = type;
 		this.ioType = ioType;
 		this.desc = description;
+		this.nullable = nullable;
 	}
 
 	/**
@@ -82,6 +84,7 @@ public class OpParameter {
 		map.put("name", name);
 		map.put("parameter type", ioType.toString());
 		map.put("description", desc);
+		map.put("nullable", nullable);
 		if (type != null) {
 			map.put("type", type);
 		}

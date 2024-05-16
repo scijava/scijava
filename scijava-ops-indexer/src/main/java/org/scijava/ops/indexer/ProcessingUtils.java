@@ -29,19 +29,15 @@
 
 package org.scijava.ops.indexer;
 
-import static javax.lang.model.element.ElementKind.METHOD;
-
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.*;
+import javax.lang.model.type.TypeMirror;
+import javax.tools.Diagnostic;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.regex.Pattern;
 
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.Modifier;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.TypeMirror;
-import javax.tools.Diagnostic;
+import static javax.lang.model.element.ElementKind.METHOD;
 
 /**
  * A set of static utilities useful for processing Ops
@@ -76,6 +72,54 @@ public final class ProcessingUtils {
 	}
 
 	/**
+	 * Determines the {@link OpParameter.IO_TYPE} from a parameter description
+	 *
+	 * @param paramDesc the {@link String} following a Javadoc tag (and optionally
+	 *          a parameter name)
+	 * @return the {@link OpParameter.IO_TYPE} from the description
+	 */
+	public static OpParameter.IO_TYPE ioType(final String paramDesc) {
+		if (paramDesc.trim().endsWith("(container)")) {
+			return OpParameter.IO_TYPE.CONTAINER;
+		}
+		if (paramDesc.trim().endsWith("(mutable)")) {
+			return OpParameter.IO_TYPE.MUTABLE;
+		}
+		return OpParameter.IO_TYPE.INPUT;
+	}
+
+	/**
+	 * Determines whether {@code element} is a nullable (i.e. {@code null} can be
+	 * given) parameter, with additional clues from {@code paramDesc}.
+	 *
+	 * @param element the {@link VariableElement} corresponding to the parameter
+	 *          of some method {@link ExecutableElement}.
+	 * @param paramDesc the description following the Javadoc tag associated with
+	 *          {@code element}
+	 * @return true iff {@code null} can be safely provided to {@code element}
+	 */
+	public static boolean isNullable(final VariableElement element,
+		final String paramDesc)
+	{
+		boolean elementIsNullable = element.getAnnotationMirrors().stream()
+			.anyMatch(a -> a.toString().contains("Nullable"));
+		boolean descIsNullable = isNullable(paramDesc);
+		return elementIsNullable || descIsNullable;
+	}
+
+	/**
+	 * Determines whether {@code paramDesc} is associated with a nullable (i.e.
+	 * {@code null} can be given) parameter
+	 *
+	 * @param paramDesc the description following some Javadoc tag
+	 * @return true iff {@code null} can be safely provided to the parameter
+	 *         associated with {@code paramDesc}
+	 */
+	public static boolean isNullable(final String paramDesc) {
+		return paramDesc.trim().endsWith("(nullable)");
+	}
+
+	/**
 	 * Logs a {@link Throwable} parsing an {@link Element}
 	 *
 	 * @param source the {@link Element} whose parsing was erroneous
@@ -90,7 +134,7 @@ public final class ProcessingUtils {
 		PrintWriter pw = new PrintWriter(sw);
 		t.printStackTrace(pw);
 		env.getMessager().printMessage(Diagnostic.Kind.ERROR,
-			"Exception parsing source + " + source + ": " + sw);
+			"Exception parsing source " + source + ": " + sw);
 	}
 
 	/**
@@ -114,8 +158,19 @@ public final class ProcessingUtils {
 		// method
 		if (fMethod != null) {
 			for (Element e : env.getElementUtils().getAllMembers(source)) {
-				if (e.getSimpleName().equals(fMethod.getSimpleName())) {
-					return (ExecutableElement) e;
+				if (e.getKind().equals(METHOD)) {
+					ExecutableElement ex = (ExecutableElement) e;
+					boolean isFIFace = source.getAnnotationsByType(
+						FunctionalInterface.class).length > 0;
+					if ( //
+					// The functional method will have an @Override
+					// annotation UNLESS source is a functional interface itself.
+					(isFIFace || (ex.getAnnotation(Override.class) != null)) && //
+						ex.getSimpleName().equals(fMethod.getSimpleName())) //
+					{
+						return (ExecutableElement) e;
+					}
+
 				}
 			}
 		}
@@ -128,37 +183,39 @@ public final class ProcessingUtils {
 		TypeElement source //
 	) {
 		// First check source itself for the abstract method
-		int abstractMethodCount = 0;
-		ExecutableElement firstAbstractMethod = null;
-		for (Element e : source.getEnclosedElements()) {
-			if (e.getKind() == METHOD && e.getModifiers().contains(
-				Modifier.ABSTRACT))
-			{
-				firstAbstractMethod = (ExecutableElement) e;
-				abstractMethodCount++;
+		if (source.getAnnotationMirrors().stream().anyMatch(a -> a.toString()
+			.contains("FunctionalInterface")))
+		{
+			int abstractMethodCount = 0;
+			ExecutableElement firstAbstractMethod = null;
+			for (Element e : source.getEnclosedElements()) {
+				if (e.getKind() == METHOD && e.getModifiers().contains(
+					Modifier.ABSTRACT))
+				{
+					firstAbstractMethod = (ExecutableElement) e;
+					abstractMethodCount++;
 
-			}
-		}
-		if (abstractMethodCount == 1) {
-			return firstAbstractMethod;
-		}
-		// Otherwise, check up the class hierarchy
-		else {
-			// First, check the interfaces
-			for (TypeMirror e : source.getInterfaces()) {
-				Element iFace = env.getTypeUtils().asElement(e);
-				if (iFace instanceof TypeElement) {
-					ExecutableElement fMethod = findAbstractFunctionalMethod(env,
-						(TypeElement) iFace);
-					if (fMethod != null) return fMethod;
 				}
 			}
-			// Then, check the superclass
-			Element superCls = env.getTypeUtils().asElement(source.getSuperclass());
-			if (superCls instanceof TypeElement) {
-				return findAbstractFunctionalMethod(env, (TypeElement) superCls);
+			if (abstractMethodCount == 1) {
+				return firstAbstractMethod;
 			}
-			return null;
 		}
+		// Otherwise, check up the class hierarchy
+		// First, check the interfaces
+		for (TypeMirror e : source.getInterfaces()) {
+			Element iFace = env.getTypeUtils().asElement(e);
+			if (iFace instanceof TypeElement) {
+				ExecutableElement fMethod = findAbstractFunctionalMethod(env,
+					(TypeElement) iFace);
+				if (fMethod != null) return fMethod;
+			}
+		}
+		// Then, check the superclass
+		Element superCls = env.getTypeUtils().asElement(source.getSuperclass());
+		if (superCls instanceof TypeElement) {
+			return findAbstractFunctionalMethod(env, (TypeElement) superCls);
+		}
+		return null;
 	}
 }

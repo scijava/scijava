@@ -50,7 +50,7 @@ public class OpMethodInfoTest {
 	public void testPrivateMethod() throws NoSuchMethodException {
 		var m = this.getClass().getDeclaredMethod("privateOp");
 		Assertions.assertThrows(PrivateOpException.class, //
-			() -> new OpMethodInfo( //
+			() -> new DefaultOpMethodInfo( //
 				m, //
 				Producer.class, //
 				"1.0", //
@@ -68,7 +68,7 @@ public class OpMethodInfoTest {
 	public void testInstanceMethod() throws NoSuchMethodException {
 		var m = this.getClass().getDeclaredMethod("instanceOp");
 		Assertions.assertThrows(InstanceOpMethodException.class, //
-			() -> new OpMethodInfo( //
+			() -> new DefaultOpMethodInfo( //
 				m, //
 				Producer.class, //
 				"1.0", //
@@ -86,7 +86,7 @@ public class OpMethodInfoTest {
 	public void testNonFuncIFace() throws NoSuchMethodException {
 		var m = this.getClass().getDeclaredMethod("staticOp");
 		Assertions.assertThrows(FunctionalTypeOpException.class,
-			() -> new OpMethodInfo( //
+			() -> new DefaultOpMethodInfo( //
 				m, //
 				getClass(), //
 				"1.0", //
@@ -100,7 +100,7 @@ public class OpMethodInfoTest {
 	public void testWrongOpType() throws NoSuchMethodException {
 		var m = this.getClass().getDeclaredMethod("staticOp");
 		Assertions.assertThrows(FunctionalTypeOpException.class,
-			() -> new OpMethodInfo( //
+			() -> new DefaultOpMethodInfo( //
 				m, //
 				Function.class, //
 				"1.0", //
@@ -117,7 +117,7 @@ public class OpMethodInfoTest {
 		var m = this.getClass().getDeclaredMethod("mutateDouble", Double.class,
 			Double.class);
 		Assertions.assertThrows(FunctionalTypeOpException.class,
-			() -> new OpMethodInfo( //
+			() -> new DefaultOpMethodInfo( //
 				m, //
 				Computers.Arity1.class, //
 				"1.0", //

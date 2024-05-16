@@ -61,17 +61,16 @@ public class DefaultCCA<T extends IntegerType<T>, L, I extends IntegerType<I>>
 	@OpDependency(name = "create.imgLabeling")
 	private BiFunction<Dimensions, IntType, ImgLabeling<L, IntType>> imgLabelingCreator;
 
-	@SuppressWarnings("unchecked")
 	/**
 	 * TODO
 	 *
 	 * @param input
-	 * @param executorService
-	 * @param structuringElement
+	 * @param se
 	 * @param labelGenerator
-	 * @param labeling
+	 * @return the {@link ImgLabeling}
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public ImgLabeling<Integer, IntType> apply( //
 		final RandomAccessibleInterval<T> input, //
 		final StructuringElement se, //

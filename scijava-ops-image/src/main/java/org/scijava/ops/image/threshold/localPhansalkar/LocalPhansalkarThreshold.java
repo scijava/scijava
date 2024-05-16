@@ -73,8 +73,8 @@ public class LocalPhansalkarThreshold<T extends RealType<T>> extends
 	 * @param input
 	 * @param inputNeighborhoodShape
 	 * @param k
-	 * @Param r
-	 * @Param outOfBoundsFactory
+	 * @param r
+	 * @param outOfBoundsFactory
 	 * @param output
 	 */
 	@Override

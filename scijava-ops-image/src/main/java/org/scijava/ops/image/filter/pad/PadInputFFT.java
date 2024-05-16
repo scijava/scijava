@@ -65,6 +65,15 @@ public abstract class PadInputFFT<T extends ComplexType<T>, I extends RandomAcce
 
 	private Function<Dimensions, long[][]> fftSizeOp;
 
+	/**
+	 * TODO
+	 *
+	 * @param input function argument 1
+	 * @param paddedDimensions function argument 2
+	 * @param fast function argument 3
+	 * @param obf function argument 4
+	 * @return
+	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public O apply( //

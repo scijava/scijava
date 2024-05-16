@@ -52,6 +52,12 @@ public abstract class AbstractSizeConvexHull<I> implements
 	@OpDependency(name = "geom.size")
 	private Function<I, DoubleType> sizeFunc;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	@Override
 	public void compute(final I input, final DoubleType output) {
 		output.set(sizeFunc.apply(convexHullFunc.apply(input)));

@@ -49,6 +49,12 @@ public interface AbstractImageMomentOp<I extends RealType<I>, O extends RealType
 
 	public void computeMoment(RandomAccessibleInterval<I> input, O output);
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	@Override
 	default void compute(RandomAccessibleInterval<I> input, O output) {
 		if (input.numDimensions() != 2) throw new IllegalArgumentException(

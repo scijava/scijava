@@ -37,17 +37,12 @@ import org.scijava.ops.engine.exceptions.impl.UnreadableOpException;
 import org.scijava.ops.engine.struct.MethodOpDependencyMemberParser;
 import org.scijava.ops.engine.struct.MethodParameterMemberParser;
 import org.scijava.ops.engine.util.Infos;
-import org.scijava.ops.engine.util.Lambdas;
 import org.scijava.ops.engine.util.internal.OpMethodUtils;
 import org.scijava.ops.spi.OpMethod;
-import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
-import org.scijava.types.Types;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -58,7 +53,7 @@ import java.util.List;
 /**
  * @author Marcel Wiedenmann
  */
-public class OpMethodInfo implements OpInfo {
+public class DefaultOpMethodInfo implements OpInfo {
 
 	private final Method method;
 	private final String description;
@@ -70,7 +65,7 @@ public class OpMethodInfo implements OpInfo {
 
 	private final Hints hints;
 
-	public OpMethodInfo( //
+	public DefaultOpMethodInfo( //
 		final Method method, //
 		final Class<?> opType, //
 		final String version, //
@@ -163,26 +158,7 @@ public class OpMethodInfo implements OpInfo {
 
 	@Override
 	public StructInstance<?> createOpInstance(final List<?> dependencies) {
-		// NB LambdaMetaFactory only works if this Module (org.scijava.ops.engine)
-		// can read the Module containing the Op. So we also have to check that.
-		Module methodModule = method.getDeclaringClass().getModule();
-		Module opsEngine = this.getClass().getModule();
-		opsEngine.addReads(methodModule);
-		try {
-			method.setAccessible(true);
-			MethodHandle handle = MethodHandles.lookup().unreflect(method);
-			Object op = Lambdas.lambdaize( //
-				Types.raw(opType), //
-				handle, //
-				Infos.dependencies(this).stream().map(Member::getRawType).toArray(
-					Class[]::new), dependencies.toArray() //
-			);
-			return struct().createInstance(op);
-		}
-		catch (Throwable exc) {
-			throw new IllegalStateException("Failed to invoke Op method: " + method,
-				exc);
-		}
+		return OpMethodUtils.createOpInstance(this, method, dependencies);
 	}
 
 	@Override
@@ -215,7 +191,7 @@ public class OpMethodInfo implements OpInfo {
 
 	@Override
 	public boolean equals(final Object o) {
-		if (!(o instanceof OpMethodInfo)) return false;
+		if (!(o instanceof DefaultOpMethodInfo)) return false;
 		final OpInfo that = (OpInfo) o;
 		return struct().equals(that.struct());
 	}

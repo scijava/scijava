@@ -47,29 +47,49 @@ public class LiftComputersToRAITest<I extends RealType<I>, O extends RealType<O>
 {
 
 	/**
+	 * @input in
+	 * @container out
 	 * @implNote op names='test.computer.liftImg'
 	 */
 	public final Computers.Arity1<I, O> testOp = (in, out) -> out.setReal(10.);
 
 	/**
+	 * @input in1
+	 * @input in2
+	 * @container out
 	 * @implNote op names='test.computer.liftImg'
 	 */
 	public final Computers.Arity2<I, I, O> testOp2 = (in1, in2, out) -> out
 		.setReal(20.);
 
 	/**
+	 * @input in1
+	 * @input in2
+	 * @input in3
+	 * @container out
 	 * @implNote op names='test.computer.liftImg'
 	 */
 	public final Computers.Arity3<I, I, I, O> testOp3 = (in1, in2, in3,
 		out) -> out.setReal(30.);
 
 	/**
+	 * @input in1
+	 * @input in2
+	 * @input in3
+	 * @input in4
+	 * @container out
 	 * @implNote op names='test.computer.liftImg'
 	 */
 	public final Computers.Arity4<I, I, I, I, O> testOp4 = (in1, in2, in3, in4,
 		out) -> out.setReal(40.);
 
 	/**
+	 * @input in1
+	 * @input in2
+	 * @input in3
+	 * @input in4
+	 * @input in5
+	 * @container out
 	 * @implNote op names='test.computer.liftImg'
 	 */
 	public final Computers.Arity5<I, I, I, I, I, O> testOp5 = (in1, in2, in3, in4,

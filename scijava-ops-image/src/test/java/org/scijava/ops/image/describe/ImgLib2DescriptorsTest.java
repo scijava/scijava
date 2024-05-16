@@ -54,7 +54,8 @@ import java.lang.reflect.ParameterizedType;
 public class ImgLib2DescriptorsTest extends AbstractOpTest {
 
 	/**
-	 * @implNote op name=test.describeRealType, type=Inplace
+	 * @param in
+	 * @implNote op name=test.describeRealType, type=Inplace1
 	 */
 	public static <T extends RealType<T>> void realType(T in) {
 		in.mul(in);
@@ -68,7 +69,8 @@ public class ImgLib2DescriptorsTest extends AbstractOpTest {
 	}
 
 	/**
-	 * @implNote op name=test.describeComplexType, type=Inplace
+	 * @param in
+	 * @implNote op name=test.describeComplexType, type=Inplace1
 	 */
 	public static <T extends ComplexType<T>> void complexType(T in) {
 		in.mul(in);
@@ -83,7 +85,8 @@ public class ImgLib2DescriptorsTest extends AbstractOpTest {
 	}
 
 	/**
-	 * @implNote op name=test.RAImutator, type=Inplace
+	 * @param in
+	 * @implNote op name=test.RAImutator, type=Inplace1
 	 */
 	public static <T extends RealType<T>> void randomAccessibleInterval(
 		RandomAccessibleInterval<T> in)
@@ -99,7 +102,8 @@ public class ImgLib2DescriptorsTest extends AbstractOpTest {
 	}
 
 	/**
-	 * @implNote op name=test.IIMutator, type=Inplace
+	 * @param in
+	 * @implNote op name=test.IIMutator, type=Inplace1
 	 */
 	public static <T extends RealType<T>> void iterableInterval(
 		IterableInterval<T> in)
@@ -119,7 +123,8 @@ public class ImgLib2DescriptorsTest extends AbstractOpTest {
 	}
 
 	/**
-	 * @implNote op name=test.ImgLabelingMutator, type=Inplace
+	 * @param in
+	 * @implNote op name=test.ImgLabelingMutator, type=Inplace1
 	 */
 	public static <T, I extends IntegerType<I>> void imgLabeling(
 		ImgLabeling<T, I> in)
@@ -134,7 +139,8 @@ public class ImgLib2DescriptorsTest extends AbstractOpTest {
 	}
 
 	/**
-	 * @implNote op name=test.ArrayImgMutator, type=Inplace
+	 * @param in
+	 * @implNote op name=test.ArrayImgMutator, type=Inplace1
 	 */
 	public static <T extends NativeType<T>, A extends DataAccess> void arrayImg(
 		ArrayImg<T, A> in)

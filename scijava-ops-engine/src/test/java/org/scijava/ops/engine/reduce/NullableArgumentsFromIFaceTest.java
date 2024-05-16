@@ -37,8 +37,8 @@ import org.scijava.ops.api.Hints;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.exceptions.InvalidOpException;
 import org.scijava.ops.engine.exceptions.impl.NullablesOnMultipleMethodsException;
-import org.scijava.ops.engine.matcher.impl.OpFieldInfo;
-import org.scijava.ops.engine.matcher.impl.OpMethodInfo;
+import org.scijava.ops.engine.matcher.impl.DefaultOpFieldInfo;
+import org.scijava.ops.engine.matcher.impl.DefaultOpMethodInfo;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
@@ -146,7 +146,7 @@ public class NullableArgumentsFromIFaceTest extends AbstractTestEnvironment
 		);
 		// Try to create an OpMethodInfo
 		Assertions.assertThrows(NullablesOnMultipleMethodsException.class,
-			() -> new OpMethodInfo(//
+			() -> new DefaultOpMethodInfo(//
 				m, //
 				BiFunctionWithNullable.class, //
 				"1.0", //
@@ -178,7 +178,7 @@ public class NullableArgumentsFromIFaceTest extends AbstractTestEnvironment
 		var f = this.getClass().getDeclaredField("foo");
 		// Try to create an OpMethodInfo
 		Assertions.assertThrows(NullablesOnMultipleMethodsException.class,
-			() -> new OpFieldInfo(//
+			() -> new DefaultOpFieldInfo(//
 				this, //
 				f, //
 				Versions.getVersion(this.getClass()), //

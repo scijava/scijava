@@ -37,7 +37,7 @@ import java.util.function.BiFunction;
  *
  * @author Gabriel Selzer
  */
-public class YAMLFieldOp {
+public class YAMLFieldOp<N extends Number & Comparable<N>> {
 
 	/**
 	 * A Field Op

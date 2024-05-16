@@ -258,7 +258,6 @@ public class DefaultDerivativeGauss<T extends RealType<T>> implements
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	/**
 	 * TODO
 	 *
@@ -269,6 +268,7 @@ public class DefaultDerivativeGauss<T extends RealType<T>> implements
 	 * @param output
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public void compute(final RandomAccessibleInterval<T> input,
 		final double[] sigma, final int[] derivatives,
 		final RandomAccessibleInterval<DoubleType> output)

@@ -52,6 +52,8 @@ import org.scijava.types.TypeExtractor;
 public class TypeExtractorTests extends AbstractOpTest {
 
 	/**
+	 * @input oobf the {@link OutOfBoundsConstantValueFactory}
+	 * @output some {@link String}
 	 * @implNote op names='test.oobcvfTypeExtractor'
 	 */
 	public final Function<OutOfBoundsConstantValueFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>>, String> func =
@@ -72,6 +74,9 @@ public class TypeExtractorTests extends AbstractOpTest {
 
 	// Test Op returns a string different from the one above
 	/**
+	 * @input oobf the {@link OutOfBoundsRandomValueFactory}
+	 * @input rai the {@link RandomAccessibleInterval}
+	 * @output some {@link String}
 	 * @implNote op names='test.oobrvfTypeExtractor'
 	 */
 	public final BiFunction<OutOfBoundsRandomValueFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>>, RandomAccessibleInterval<UnsignedByteType>, String> funcRandom =

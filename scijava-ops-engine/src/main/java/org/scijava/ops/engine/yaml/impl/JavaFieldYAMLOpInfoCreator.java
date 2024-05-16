@@ -33,11 +33,7 @@ import java.lang.reflect.Field;
 import java.net.URI;
 import java.util.Map;
 
-import org.scijava.common3.Classes;
-import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.engine.matcher.impl.OpFieldInfo;
-import org.scijava.ops.engine.yaml.AbstractYAMLOpInfoCreator;
 import org.scijava.ops.engine.yaml.YAMLOpInfoCreator;
 
 /**
@@ -45,7 +41,7 @@ import org.scijava.ops.engine.yaml.YAMLOpInfoCreator;
  *
  * @author Gabriel Selzer
  */
-public class JavaFieldYAMLOpInfoCreator extends AbstractYAMLOpInfoCreator {
+public class JavaFieldYAMLOpInfoCreator implements YAMLOpInfoCreator {
 
 	@Override
 	public boolean canCreateFrom(URI identifier) {
@@ -53,32 +49,10 @@ public class JavaFieldYAMLOpInfoCreator extends AbstractYAMLOpInfoCreator {
 	}
 
 	@Override
-	protected OpInfo create( //
-		final String identifier, //
-		final String[] names, //
-		final String description, //
-		final double priority, //
-		final String version, //
-		final Map<String, Object> yaml //
-	) throws Exception {
-		// parse class
-		int clsIndex = identifier.indexOf('$');
-		String clsString = identifier.substring(0, clsIndex);
-		Class<?> cls = Classes.load(clsString);
-		Object instance = cls.getConstructor().newInstance();
-		// parse Field
-		String fieldString = identifier.substring(clsIndex + 1);
-		Field field = cls.getDeclaredField(fieldString);
-
-		// Create the OpInfo
-		return new OpFieldInfo( //
-			instance, //
-			field, //
-			version, //
-			description, //
-			new Hints(), //
-			priority, //
-			names //
-		);
+	public OpInfo create(URI identifier, Map<String, Object> yaml)
+		throws Exception
+	{
+		final String srcString = identifier.getPath().substring(1);
+		return new YAMLOpFieldInfo(yaml, srcString);
 	}
 }

@@ -29,9 +29,6 @@
 
 package org.scijava.ops.indexer;
 
-import static org.scijava.ops.indexer.ProcessingUtils.blockSeparator;
-import static org.scijava.ops.indexer.ProcessingUtils.tagElementSeparator;
-
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -42,6 +39,9 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.NoType;
+import javax.tools.Diagnostic;
+
+import static org.scijava.ops.indexer.ProcessingUtils.*;
 
 /**
  * {@link OpImplData} implementation handling {@link Class}es annotated with
@@ -68,7 +68,11 @@ public class OpClassImplData extends OpImplData {
 	private void parseFunctionalMethod(ExecutableElement fMethod,
 		String fMethodDoc)
 	{
-		if (fMethodDoc == null || fMethodDoc.isEmpty()) return;
+		if (fMethodDoc == null || fMethodDoc.isEmpty()) {
+			printError(fMethod.getEnclosingElement(),
+				" has a functional method without javadoc!");
+			return;
+		}
 		String[] sections = blockSeparator.split(fMethodDoc);
 		var paramTypes = fMethod.getParameters().iterator();
 
@@ -85,9 +89,10 @@ public class OpClassImplData extends OpImplData {
 					String name = foo[0];
 					String description = foo[1];
 					if (paramTypes.hasNext()) {
-						String type = paramTypes.next().asType().toString();
-						params.add(new OpParameter(name, type, OpParameter.IO_TYPE.INPUT,
-							description));
+						var pType = paramTypes.next();
+						String type = pType.asType().toString();
+						params.add(new OpParameter(name, type, ProcessingUtils.ioType(
+							description), description, isNullable(pType, description)));
 					}
 					else {
 						throw new IllegalArgumentException("Op " + this.source + " has " +
@@ -102,7 +107,7 @@ public class OpClassImplData extends OpImplData {
 					String description = elements[1];
 					String type = fMethod.getReturnType().toString();
 					params.add(new OpParameter(name, type, OpParameter.IO_TYPE.OUTPUT,
-						description));
+						description, false));
 					break;
 				}
 				case "@author":
@@ -142,6 +147,10 @@ public class OpClassImplData extends OpImplData {
 			parent = parent.getEnclosingElement();
 		}
 		return "javaClass:/" + URLEncoder.encode(srcString, StandardCharsets.UTF_8);
+	}
+
+	private void printError(Element source, String msg) {
+		env.getMessager().printMessage(Diagnostic.Kind.ERROR, source + msg);
 	}
 
 }

@@ -67,7 +67,6 @@ public class DefaultDirectionalityFeature<I extends RealType<I>, O extends RealT
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, I, Img<I>> imgCreator;
 
-	@SuppressWarnings("unchecked")
 	/**
 	 * TODO
 	 *
@@ -76,6 +75,7 @@ public class DefaultDirectionalityFeature<I extends RealType<I>, O extends RealT
 	 * @param output
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public void compute(final RandomAccessibleInterval<I> input,
 		@Nullable Integer histogramSize, final O output)
 	{

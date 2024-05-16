@@ -53,6 +53,12 @@ public abstract class AbstractConvexity<I> implements
 	@OpDependency(name = "geom.boundarySizeConvexHull")
 	private Function<I, DoubleType> boundarySizeConvexHull;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	@Override
 	public void compute(final I input, final DoubleType output) {
 		output.set(boundarySizeConvexHull.apply(input).get() / boundarySize.apply(

@@ -58,6 +58,9 @@ public final class LiftNeighborhoodComputersToFunctionsOnImgs {
 	}
 
 	/**
+	 * @param creator an Op that can create the output image
+	 * @param op the original Op, operating on {@link Neighborhood}s
+	 * @return {@code op} lifted to operate on {@link RandomAccessibleInterval}s.
 	 * @implNote op names='engine.adapt', priority='100.',
 	 *           type='java.util.function.Function'
 	 */
@@ -80,6 +83,9 @@ public final class LiftNeighborhoodComputersToFunctionsOnImgs {
 	}
 
 	/**
+	 * @param creator an Op that can create the output image
+	 * @param op the original Op, operating on {@link Neighborhood}s
+	 * @return {@code op} lifted to operate on {@link RandomAccessibleInterval}s.
 	 * @implNote op names='engine.adapt', priority='100.',
 	 *           type='java.util.function.Function'
 	 */

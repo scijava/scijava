@@ -90,17 +90,16 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 
 	private Converter<GenericComposite<FloatType>, FloatType> converterGetMax;
 
-	@SuppressWarnings("unchecked")
 	/**
 	 * TODO
 	 *
-	 * @param input
+	 * @param in
 	 * @param numOrientations
 	 * @param spanOfNeighborhood
-	 * @param executorService
-	 * @param output
+	 * @param out
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public void compute(RandomAccessibleInterval<T> in, Integer numOrientations,
 		Integer spanOfNeighborhood, RandomAccessibleInterval<T> out)
 	{

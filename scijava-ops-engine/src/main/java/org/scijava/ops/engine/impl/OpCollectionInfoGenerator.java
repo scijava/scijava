@@ -42,8 +42,8 @@ import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.OpInfoGenerator;
-import org.scijava.ops.engine.matcher.impl.OpFieldInfo;
-import org.scijava.ops.engine.matcher.impl.OpMethodInfo;
+import org.scijava.ops.engine.matcher.impl.DefaultOpFieldInfo;
+import org.scijava.ops.engine.matcher.impl.DefaultOpMethodInfo;
 import org.scijava.ops.engine.util.Infos;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
@@ -66,7 +66,7 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 			OpField.class);
 		final Optional<Object> instance = getInstance(cls);
 		if (instance.isPresent()) {
-			final List<OpFieldInfo> fieldInfos = //
+			final List<DefaultOpFieldInfo> fieldInfos = //
 				fields.parallelStream() //
 					.map(f -> generateFieldInfo(f, instance.get(), version)) //
 					.collect(Collectors.toList());
@@ -74,7 +74,7 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 		}
 		// add OpMethodInfos
 		//
-		final List<OpMethodInfo> methodInfos = //
+		final List<DefaultOpMethodInfo> methodInfos = //
 			Annotations.getAnnotatedMethods(cls, OpMethod.class).parallelStream() //
 				.map(m -> generateMethodInfo(m, version)) //
 				.collect(Collectors.toList());
@@ -91,12 +91,12 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 		}
 	}
 
-	private OpFieldInfo generateFieldInfo(Field field, Object instance,
+	private DefaultOpFieldInfo generateFieldInfo(Field field, Object instance,
 		String version)
 	{
 		final boolean isStatic = Modifier.isStatic(field.getModifiers());
 		OpField annotation = field.getAnnotation(OpField.class);
-		return new OpFieldInfo( //
+		return new DefaultOpFieldInfo( //
 			isStatic ? null : instance, //
 			field, //
 			version, //
@@ -107,9 +107,11 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 		);
 	}
 
-	private OpMethodInfo generateMethodInfo(Method method, String version) {
+	private DefaultOpMethodInfo generateMethodInfo(Method method,
+		String version)
+	{
 		OpMethod annotation = method.getAnnotation(OpMethod.class);
-		return new OpMethodInfo( //
+		return new DefaultOpMethodInfo( //
 			method, //
 			annotation.type(), //
 			version, //

@@ -29,21 +29,34 @@
 
 package org.scijava.ops.engine.util.internal;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.scijava.common3.Classes;
+import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.exceptions.impl.FunctionalTypeOpException;
+import org.scijava.ops.engine.util.Infos;
+import org.scijava.ops.engine.util.Lambdas;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.struct.Member;
+import org.scijava.struct.StructInstance;
 import org.scijava.types.Types;
 import org.scijava.types.inference.FunctionalInterfaces;
 import org.scijava.types.inference.GenericAssignability;
 
+/**
+ * Common code used by Ops backed by {@link Method}s.
+ *
+ * @author Gabriel Selzer
+ */
 public final class OpMethodUtils {
 
 	private OpMethodUtils() {
@@ -106,6 +119,41 @@ public final class OpMethodUtils {
 			.map(param -> Types.raw(param).isPrimitive() ? Classes.box(Types.raw(
 				param)) : param) //
 			.toArray(Type[]::new);
+	}
+
+	/**
+	 * Converts an {@link OpInfo} backed by a {@link Method} reference into an Op,
+	 * given a list of its dependencies.
+	 *
+	 * @param info the {@link OpInfo}
+	 * @param method the {@link Method} containing the Op code
+	 * @param dependencies all Op dependencies required to execute the Op
+	 * @return a {@link StructInstance}
+	 */
+	public static StructInstance<?> createOpInstance(final OpInfo info,
+		final Method method, final List<?> dependencies)
+	{
+		// NB LambdaMetaFactory only works if this Module (org.scijava.ops.engine)
+		// can read the Module containing the Op. So we also have to check that.
+		Module methodModule = method.getDeclaringClass().getModule();
+		Module opsEngine = OpMethodUtils.class.getModule();
+
+		opsEngine.addReads(methodModule);
+		try {
+			method.setAccessible(true);
+			MethodHandle handle = MethodHandles.lookup().unreflect(method);
+			Object op = Lambdas.lambdaize( //
+				Types.raw(info.opType()), //
+				handle, //
+				Infos.dependencies(info).stream().map(Member::getRawType).toArray(
+					Class[]::new), dependencies.toArray() //
+			);
+			return info.struct().createInstance(op);
+		}
+		catch (Throwable exc) {
+			throw new IllegalStateException("Failed to invoke Op method: " + method,
+				exc);
+		}
 	}
 
 }

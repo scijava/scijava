@@ -53,6 +53,12 @@ public abstract class AbstractSolidity<I> implements
 	@OpDependency(name = "geom.sizeConvexHull")
 	private Function<I, DoubleType> convexHullVolume;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	@Override
 	public void compute(final I input, final DoubleType output) {
 		output.set(volume.apply(input).get() / convexHullVolume.apply(input).get());

@@ -1,4 +1,4 @@
-/*
+/*-
  * #%L
  * Image processing operations for SciJava Ops.
  * %%
@@ -65,6 +65,8 @@ public final class LiftComputersToRAI {
 	}
 
 	/**
+	 * @param originalOp the original Op
+	 * @return the adapted Op
 	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	public static <I1, O, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>>
@@ -77,6 +79,8 @@ public final class LiftComputersToRAI {
 	}
 
 	/**
+	 * @param originalOp the original Op
+	 * @return the adapted Op
 	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	public static <I1, I2, O, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>>
@@ -90,6 +94,8 @@ public final class LiftComputersToRAI {
 	}
 
 	/**
+	 * @param originalOp the original Op
+	 * @return the adapted Op
 	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	public static <I1, I2, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAIO extends RandomAccessibleInterval<O>>
@@ -103,6 +109,8 @@ public final class LiftComputersToRAI {
 	}
 
 	/**
+	 * @param originalOp the original Op
+	 * @return the adapted Op
 	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	public static <I1, I2, I3, O, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>>
@@ -116,6 +124,8 @@ public final class LiftComputersToRAI {
 	}
 
 	/**
+	 * @param originalOp the original Op
+	 * @return the adapted Op
 	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	public static <I1, I2, I3, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAIO extends RandomAccessibleInterval<O>>
@@ -129,6 +139,8 @@ public final class LiftComputersToRAI {
 	}
 
 	/**
+	 * @param originalOp the original Op
+	 * @return the adapted Op
 	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	public static <I1, I2, I3, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAIO extends RandomAccessibleInterval<O>>
@@ -143,6 +155,8 @@ public final class LiftComputersToRAI {
 	}
 
 	/**
+	 * @param originalOp the original Op
+	 * @return the adapted Op
 	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	public static <I1, I2, I3, I4, O, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>>
@@ -156,6 +170,8 @@ public final class LiftComputersToRAI {
 	}
 
 	/**
+	 * @param originalOp the original Op
+	 * @return the adapted Op
 	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	public static <I1, I2, I3, I4, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAIO extends RandomAccessibleInterval<O>>
@@ -169,6 +185,8 @@ public final class LiftComputersToRAI {
 	}
 
 	/**
+	 * @param originalOp the original Op
+	 * @return the adapted Op
 	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	public static <I1, I2, I3, I4, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAIO extends RandomAccessibleInterval<O>>
@@ -184,6 +202,8 @@ public final class LiftComputersToRAI {
 	}
 
 	/**
+	 * @param originalOp the original Op
+	 * @return the adapted Op
 	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	public static <I1, I2, I3, I4, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAIO extends RandomAccessibleInterval<O>>
@@ -199,6 +219,8 @@ public final class LiftComputersToRAI {
 	}
 
 	/**
+	 * @param originalOp the original Op
+	 * @return the adapted Op
 	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	public static <I1, I2, I3, I4, I5, O, RAII1 extends RandomAccessibleInterval<I1>, RAIO extends RandomAccessibleInterval<O>>
@@ -213,6 +235,8 @@ public final class LiftComputersToRAI {
 	}
 
 	/**
+	 * @param originalOp the original Op
+	 * @return the adapted Op
 	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	public static <I1, I2, I3, I4, I5, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAIO extends RandomAccessibleInterval<O>>
@@ -227,6 +251,8 @@ public final class LiftComputersToRAI {
 	}
 
 	/**
+	 * @param originalOp the original Op
+	 * @return the adapted Op
 	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	public static <I1, I2, I3, I4, I5, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAIO extends RandomAccessibleInterval<O>>
@@ -242,6 +268,8 @@ public final class LiftComputersToRAI {
 	}
 
 	/**
+	 * @param originalOp the original Op
+	 * @return the adapted Op
 	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	public static <I1, I2, I3, I4, I5, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAIO extends RandomAccessibleInterval<O>>
@@ -257,6 +285,8 @@ public final class LiftComputersToRAI {
 	}
 
 	/**
+	 * @param originalOp the original Op
+	 * @return the adapted Op
 	 * @implNote op names='engine.adapt', priority='100.'
 	 */
 	public static <I1, I2, I3, I4, I5, O, RAII1 extends RandomAccessibleInterval<I1>, RAII2 extends RandomAccessibleInterval<I2>, RAII3 extends RandomAccessibleInterval<I3>, RAII4 extends RandomAccessibleInterval<I4>, RAII5 extends RandomAccessibleInterval<I5>, RAIO extends RandomAccessibleInterval<O>>

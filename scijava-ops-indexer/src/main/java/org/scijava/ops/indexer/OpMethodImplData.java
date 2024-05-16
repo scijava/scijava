@@ -35,12 +35,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.VariableElement;
+import javax.lang.model.element.*;
 import javax.lang.model.type.NoType;
 import javax.tools.Diagnostic;
 
@@ -52,10 +51,58 @@ import javax.tools.Diagnostic;
  */
 public class OpMethodImplData extends OpImplData {
 
+	// Regex matching org.scijava.function.Computers type hints
+	private static final Pattern COMPUTER_TYPE = Pattern.compile(
+		"[cC]omputer(\\d*)$");
+	// Regex matching org.scijava.function.Inplaces type hints
+	private static final Pattern INPLACE_TYPE = Pattern.compile(
+		"[iI]nplace(\\d+)$");
+
 	public OpMethodImplData(ExecutableElement source, String doc,
 		ProcessingEnvironment env)
 	{
 		super(source, doc, env);
+		validateMethod(source);
+	}
+
+	/**
+	 * Catches some Op errors early, to prevent confusing errors at runtime.
+	 *
+	 * @param source the {@link ExecutableElement} referring to an Op described as
+	 *          a method.
+	 */
+	private void validateMethod(ExecutableElement source) {
+		// Allow only public methods
+		if (!source.getModifiers().contains(Modifier.PUBLIC)) {
+			printError(source, " should be a public method!");
+		}
+		// Allow only static methods
+		if (!source.getModifiers().contains(Modifier.STATIC)) {
+			printError(source, " should be a static method!");
+		}
+		// All Op dependencies must come before other parameters
+		int lastOpDependency = -1;
+		var params = source.getParameters();
+		for (int i = 0; i < params.size(); i++) {
+			if (isDependency(params.get(i))) {
+				if (i != lastOpDependency + 1) {
+					printError(source,
+						" declares Op dependencies after it declares parameters - all Op dependencies must come first!");
+					break;
+				}
+				lastOpDependency++;
+			}
+
+		}
+
+	}
+
+	private boolean isDependency(VariableElement e) {
+		// HACK A dependency on SciJava Ops SPI is really tricky - creates a
+		// circular dependency so this is the easiest way to check for an
+		// OpDependency
+		return e.getAnnotationMirrors().stream() //
+			.anyMatch(a -> a.toString().contains("OpDependency"));
 	}
 
 	/**
@@ -68,9 +115,10 @@ public class OpMethodImplData extends OpImplData {
 	@Override
 	void parseAdditionalTags(Element source, List<String[]> additionalTags) {
 		ExecutableElement exSource = (ExecutableElement) source;
-		// First, parse parameters
+		// First, parse @param tags
 		List<VariableElement> opDependencies = new ArrayList<>();
 		var paramItr = exSource.getParameters().iterator();
+
 		for (String[] tag : additionalTags) {
 			if (!"@param".equals(tag[0])) continue;
 			if (paramIsTypeVariable(tag[1])) {
@@ -78,12 +126,9 @@ public class OpMethodImplData extends OpImplData {
 				continue;
 			}
 			VariableElement param = paramItr.next();
-			// HACK A dependency on SciJava Ops SPI is really tricky - creates a
-			// circular dependency so this is the easiest way to check for an
-			// OpDependency
-			boolean isOpDep = param.getAnnotationMirrors().stream() //
-				.anyMatch(a -> a.toString().contains("OpDependency"));
-			if (isOpDep) opDependencies.add(param);
+			if (isDependency(param)) {
+				opDependencies.add(param);
+			}
 			else {
 				// Coerce @param tag + VariableElement into an OpParameter
 				String name = param.getSimpleName().toString();
@@ -96,21 +141,27 @@ public class OpMethodImplData extends OpImplData {
 				else {
 					description = "";
 				}
-				params.add(new OpParameter(name, type, OpParameter.IO_TYPE.INPUT,
-					description));
+				params.add(new OpParameter( //
+					name, //
+					type, //
+					ProcessingUtils.ioType(description), //
+					description, //
+					ProcessingUtils.isNullable(param, description) //
+				));
 			}
+		}
+
+		// We also leave the option to specify the Op type using the type tag -
+		// check for it, and apply it if available.
+		if (tags.containsKey("type")) {
+			editIOIndex((String) tags.get("type"), params);
 		}
 		// Validate number of inputs
 		if (opDependencies.size() + params.size() != exSource.getParameters()
 			.size())
 		{
-			var clsElement = exSource.getEnclosingElement();
-			while (clsElement.getKind() != ElementKind.CLASS) {
-				clsElement = clsElement.getEnclosingElement();
-			}
-			env.getMessager().printMessage(Diagnostic.Kind.ERROR, clsElement + " - " +
-				"The number of @param tags on " + exSource +
-				" does not match the number of parameters!");
+			printError(exSource,
+				" does not have a matching @param tag for each of its parameters!");
 		}
 
 		// Finally, parse the return
@@ -124,18 +175,72 @@ public class OpMethodImplData extends OpImplData {
 				"output", //
 				returnType, //
 				OpParameter.IO_TYPE.OUTPUT, //
-				totalTag //
+				totalTag, //
+				false //
 			));
 		}
+
+		// Validate 0 or 1 outputs
+		int totalOutputs = 0;
+		for (var p : params) {
+			if (p.ioType != OpParameter.IO_TYPE.INPUT) {
+				totalOutputs++;
+			}
+		}
+		if (totalOutputs > 1) {
+			printError(exSource,
+				" is only allowed to have 0 or 1 parameter outputs!");
+		}
+
 		// Validate number of outputs
 		if (!(exSource.getReturnType() instanceof NoType) && returnTag.isEmpty()) {
-			var clsElement = exSource.getEnclosingElement();
-			while (clsElement.getKind() != ElementKind.CLASS) {
-				clsElement = clsElement.getEnclosingElement();
-			}
-			env.getMessager().printMessage(Diagnostic.Kind.ERROR, clsElement + " - " +
-				exSource + " has a return, but no @return parameter");
+			printError(exSource, " has a return, but no @return parameter");
 		}
+	}
+
+	/**
+	 * Sometimes, Op developers will choose to specify the functional type of the
+	 * Op, instead of appending some tag to the I/O parameter. In this case, it's
+	 * easiest to edit the appropriate {@link OpParameter} <b>after</b> we've made
+	 * all of them.
+	 *
+	 * @param type the type hint specified in the {@code @implNote} Javadoc tag
+	 * @param params the list of {@link OpParameter}s.
+	 */
+	private void editIOIndex(String type, List<OpParameter> params) {
+		// NB the parameter index will be the discovered int, minus one.
+		// e.g. "Inplace1" means to edit the first parameter
+		Matcher m = COMPUTER_TYPE.matcher(type);
+		if (m.find()) {
+			var idx = m.group(1);
+			int ioIndex = idx.isEmpty() ? params.size() - 1 : Integer.parseInt(idx) -
+				1;
+			params.get(ioIndex).ioType = OpParameter.IO_TYPE.CONTAINER;
+			return;
+		}
+		m = INPLACE_TYPE.matcher(type);
+		if (m.find()) {
+			var idx = m.group(1);
+			// Unlike for computers, Inplaces MUST have a suffix
+			int ioIndex = Integer.parseInt(idx) - 1;
+			params.get(ioIndex).ioType = OpParameter.IO_TYPE.MUTABLE;
+		}
+	}
+
+	/**
+	 * Helper function to print issues with {@code exSource} in a uniform manner.
+	 *
+	 * @param exSource some {@link ExecutableElement} referring to an Op written
+	 *          as a method.
+	 * @param msg a {@link String} describing the issue with the Op method.
+	 */
+	private void printError(ExecutableElement exSource, String msg) {
+		var clsElement = exSource.getEnclosingElement();
+		while (clsElement.getKind() != ElementKind.CLASS) {
+			clsElement = clsElement.getEnclosingElement();
+		}
+		env.getMessager().printMessage(Diagnostic.Kind.ERROR, clsElement + " - " +
+			exSource + msg);
 	}
 
 	/**

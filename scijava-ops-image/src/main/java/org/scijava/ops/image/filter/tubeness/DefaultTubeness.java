@@ -101,6 +101,14 @@ public class DefaultTubeness<T extends RealType<T>> implements
 	@OpDependency(name = "transform.project")
 	private Computers.Arity3<RandomAccessibleInterval<DoubleType>, Computers.Arity1<Iterable<DoubleType>, DoubleType>, Integer, IterableInterval<DoubleType>> projector;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param sigma
+	 * @param calibration
+	 * @param tubeness
+	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
 		final Double sigma, final double[] calibration,
@@ -238,6 +246,13 @@ class DefaultTubenessWithoutCalibration<T extends RealType<T>> implements
 	@OpDependency(name = "filter.tubeness")
 	Computers.Arity3<RandomAccessibleInterval<T>, Double, double[], IterableInterval<DoubleType>> tubenessOp;
 
+	/**
+	 * TODO Can this be removed?
+	 *
+	 * @param in1
+	 * @param in3
+	 * @param out
+	 */
 	@Override
 	public void compute(RandomAccessibleInterval<T> in1, Double in3,
 		IterableInterval<DoubleType> out)

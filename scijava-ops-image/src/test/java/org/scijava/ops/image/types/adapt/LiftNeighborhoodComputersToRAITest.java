@@ -50,6 +50,8 @@ import net.imglib2.view.Views;
 public class LiftNeighborhoodComputersToRAITest extends AbstractOpTest {
 
 	/**
+	 * @input in
+	 * @container out
 	 * @implNote op names='test.liftImg'
 	 */
 	public final Computers.Arity1<Neighborhood<UnsignedByteType>, UnsignedByteType> testOp =

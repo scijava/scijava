@@ -321,11 +321,9 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	/**
 	 * @input sigmas
 	 * @output gaussKernelRAI
-	 */
-	// TODO do we want to support this and if so is this the right way to do it?
-	/**
 	 * @implNote op names='create.kernelGauss'
 	 */
+	// TODO do we want to support this and if so is this the right way to do it?
 	public final Function<double[], RandomAccessibleInterval<DoubleType>> kernelGaussDoubleType =
 		(sigmas) -> (RandomAccessibleInterval<DoubleType>) kernelGauss.apply(sigmas,
 			(C) new DoubleType());

@@ -43,6 +43,9 @@ public class BooleanTypeLogic<B extends BooleanType<B>, C extends Comparable<C>>
 	/**
 	 * Performs logical and ({@literal &&}) between two {@link BooleanType}s.
 	 *
+	 * @input in1 the first {@link BooleanType}
+	 * @input in2 the second {@link BooleanType}
+	 * @container out the preallocated result container
 	 * @implNote op names='logic.and'
 	 */
 	public final Computers.Arity2<B, B, B> ander = (in1, in2, out) -> {
@@ -51,30 +54,44 @@ public class BooleanTypeLogic<B extends BooleanType<B>, C extends Comparable<C>>
 	};
 
 	/**
+	 * @input in1 the first {@link Comparable<C>}
+	 * @input in2 the second {@link Comparable<C>}
+	 * @container out the preallocated result container
 	 * @implNote op names='logic.greaterThan'
 	 */
 	public final Computers.Arity2<C, C, B> greaterThan = (in1, in2, out) -> out
 		.set(in1.compareTo(in2) > 0);
 
 	/**
+	 * @input in1 the first {@link Comparable<C>}
+	 * @input in2 the second {@link Comparable<C>}
+	 * @container out the preallocated result container
 	 * @implNote op names='logic.greaterThanOrEqual'
 	 */
 	public final Computers.Arity2<C, C, B> greaterThanOrEqual = (in1, in2,
 		out) -> out.set(in1.compareTo(in2) >= 0);
 
 	/**
+	 * @input in1 the first {@link Comparable<C>}
+	 * @input in2 the second {@link Comparable<C>}
+	 * @container out the preallocated result container
 	 * @implNote op names='logic.lessThan'
 	 */
 	public final Computers.Arity2<C, C, B> lessThan = (in1, in2, out) -> out.set(
 		in1.compareTo(in2) < 0);
 
 	/**
+	 * @input in1 the first {@link Comparable<C>}
+	 * @input in2 the second {@link Comparable<C>}
+	 * @container out the preallocated result container
 	 * @implNote op names='logic.lessThanOrEqual'
 	 */
 	public final Computers.Arity2<C, C, B> lessThanOrEqual = (in1, in2,
 		out) -> out.set(in1.compareTo(in2) <= 0);
 
 	/**
+	 * @input in1 some {@link BooleanType}
+	 * @container out the preallocated result container
 	 * @implNote op names='logic.not'
 	 */
 	public final Computers.Arity1<B, B> not = (in, out) -> {
@@ -83,18 +100,29 @@ public class BooleanTypeLogic<B extends BooleanType<B>, C extends Comparable<C>>
 	};
 
 	/**
+	 * @input in1 the first {@link Comparable<C>}
+	 * @input in2 the second {@link Comparable<C>}
+	 * @container out the preallocated result container
 	 * @implNote op names='logic.equal'
 	 */
 	public final Computers.Arity2<C, C, B> equals = (in1, in2, out) -> out.set(in1
 		.equals(in2));
 
 	/**
+	 * @input in1 the first {@link Comparable<C>}
+	 * @input in2 the second {@link Comparable<C>}
+	 * @container out the preallocated result container
 	 * @implNote op names='logic.notEqual'
 	 */
 	public final Computers.Arity2<C, C, B> notEquals = (in1, in2, out) -> out.set(
 		!in1.equals(in2));
 
 	/**
+	 * Performs logical or ({@literal ||}) between two {@link BooleanType}s.
+	 *
+	 * @input in1 the first {@link BooleanType}
+	 * @input in2 the second {@link BooleanType}
+	 * @container out the preallocated result container
 	 * @implNote op names='logic.or'
 	 */
 	public final Computers.Arity2<B, B, B> or = (in1, in2, out) -> {
@@ -103,6 +131,11 @@ public class BooleanTypeLogic<B extends BooleanType<B>, C extends Comparable<C>>
 	};
 
 	/**
+	 * Performs logical xor ({@literal ^}) between two {@link BooleanType}s.
+	 *
+	 * @input in1 the first {@link BooleanType}
+	 * @input in2 the second {@link BooleanType}
+	 * @container out the preallocated result container
 	 * @implNote op names='logic.xor'
 	 */
 	public final Computers.Arity2<B, B, B> xor = (in1, in2, out) -> {

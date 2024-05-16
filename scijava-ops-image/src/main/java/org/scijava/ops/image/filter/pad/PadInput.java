@@ -61,16 +61,16 @@ public class PadInput<T extends ComplexType<T>, I extends RandomAccessibleInterv
 	@OpDependency(name = "filter.padIntervalCentered")
 	private BiFunction<I, Dimensions, O> paddingIntervalCentered;
 
-	@Override
-	@SuppressWarnings("unchecked")
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param paddedDimensions
-	 * @param outOfBoundsFactory The OutOfBoundsFactory used to extend the image
+	 * @param obf The OutOfBoundsFactory used to extend the image
 	 * @return the output
 	 */
+	@Override
+	@SuppressWarnings("unchecked")
 	public O apply(final I input, final Dimensions paddedDimensions,
 		@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> obf)
 	{

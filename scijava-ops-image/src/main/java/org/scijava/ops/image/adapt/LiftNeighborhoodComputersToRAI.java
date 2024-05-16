@@ -1,4 +1,4 @@
-/*-
+/*
  * #%L
  * Image processing operations for SciJava Ops.
  * %%
@@ -45,6 +45,8 @@ public final class LiftNeighborhoodComputersToRAI {
 	}
 
 	/**
+	 * @param op the original Op, operating on {@link Neighborhood}s
+	 * @return {@code op} lifted to operate on {@link RandomAccessibleInterval}s.
 	 * @implNote op names='engine.adapt', priority='100.', type=Function
 	 */
 	public static <T, U>
@@ -63,6 +65,8 @@ public final class LiftNeighborhoodComputersToRAI {
 	}
 
 	/**
+	 * @param op the original Op, operating on {@link Neighborhood}s
+	 * @return {@code op} lifted to operate on {@link RandomAccessibleInterval}s.
 	 * @implNote op names='engine.adapt', priority='100.', type=Function
 	 */
 	public static <T, U, F extends RandomAccessibleInterval<T>, G extends F>
@@ -78,6 +82,8 @@ public final class LiftNeighborhoodComputersToRAI {
 	}
 
 	/**
+	 * @param op the original Op, operating on {@link Neighborhood}s
+	 * @return {@code op} lifted to operate on {@link RandomAccessibleInterval}s.
 	 * @implNote op names='engine.adapt', priority='100.', type=Function
 	 */
 	public static <T, U, V>
@@ -97,6 +103,8 @@ public final class LiftNeighborhoodComputersToRAI {
 	}
 
 	/**
+	 * @param op the original Op, operating on {@link Neighborhood}s
+	 * @return {@code op} lifted to operate on {@link RandomAccessibleInterval}s.
 	 * @implNote op names='engine.adapt', priority='100.', type=Function
 	 */
 	public static <T, U, V, F extends RandomAccessibleInterval<T>>
@@ -113,6 +121,8 @@ public final class LiftNeighborhoodComputersToRAI {
 	}
 
 	/**
+	 * @param op the original Op, operating on {@link Neighborhood}s
+	 * @return {@code op} lifted to operate on {@link RandomAccessibleInterval}s.
 	 * @implNote op names='engine.adapt', priority='100.', type=Function
 	 */
 	public static <T, U, V, W>
@@ -132,6 +142,8 @@ public final class LiftNeighborhoodComputersToRAI {
 	}
 
 	/**
+	 * @param op the original Op, operating on {@link Neighborhood}s
+	 * @return {@code op} lifted to operate on {@link RandomAccessibleInterval}s.
 	 * @implNote op names='engine.adapt', priority='100.', type=Function
 	 */
 	public static <T, U, V, W, F extends RandomAccessibleInterval<T>>

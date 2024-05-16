@@ -40,7 +40,7 @@ import org.scijava.ops.engine.exceptions.impl.FunctionalTypeOpException;
 import org.scijava.ops.engine.exceptions.impl.PrivateOpException;
 import org.scijava.ops.spi.OpCollection;
 
-public class OpFieldInfoTest implements OpCollection {
+public class DefaultOpFieldInfoTest implements OpCollection {
 
 	private final BiFunction<Double, Double, Double> foo = Double::sum;
 
@@ -48,7 +48,7 @@ public class OpFieldInfoTest implements OpCollection {
 	public void testPrivateField() throws NoSuchFieldException {
 		var field = this.getClass().getDeclaredField("foo");
 		Assertions.assertThrows(PrivateOpException.class, //
-			() -> new OpFieldInfo(//
+			() -> new DefaultOpFieldInfo(//
 				this, //
 				field, //
 				Versions.getVersion(this.getClass()), //
@@ -65,7 +65,7 @@ public class OpFieldInfoTest implements OpCollection {
 	public void testImmutableOutput() throws NoSuchFieldException {
 		var field = this.getClass().getDeclaredField("bar");
 		Assertions.assertThrows(FunctionalTypeOpException.class, //
-			() -> new OpFieldInfo(//
+			() -> new DefaultOpFieldInfo(//
 				this, //
 				field, //
 				Versions.getVersion(this.getClass()), //

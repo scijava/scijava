@@ -72,13 +72,17 @@ import org.scijava.ops.spi.OpField;
  * Below, we can see how this works by calling the below Field Op, implemented
  * for {@link Double}s, with {@link Integer} arguments
  */
-public class OpConversion implements OpCollection {
+public class OpConversion {
 
 	/**
 	 * A simple Op, written as a {@link Field}, that performs a simple
 	 * calculation.
+	 *
+	 * @input a the first {@link Double}
+	 * @input b the second {@link Double}
+	 * @output a linear combination of {@code a} and {@code b}
+	 * @implNote op names="tutorial.conversion"
 	 */
-	@OpField(names = "tutorial.conversion")
 	public final BiFunction<Double, Double, Double> fieldOp = (a, b) -> {
 		return a * 2 + b;
 	};

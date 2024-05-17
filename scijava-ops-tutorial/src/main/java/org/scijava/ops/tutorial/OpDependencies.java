@@ -44,28 +44,39 @@ import org.scijava.ops.spi.OpMethod;
  *
  * @author Gabriel Selzer
  */
-public class OpDependencies implements OpCollection {
+public class OpDependencies {
 
 	/**
 	 * An Op that computes the size of a {@link double[]}
+	 *
+	 * @param inArray the input
+	 * @return the size of {@code inArray}
+	 * @implNote op names="stats.size"
 	 */
-	@OpMethod(names = "stats.size", type = Function.class)
 	public static double size(final double[] inArray) {
 		return inArray.length;
 	}
 
 	/**
 	 * An Op that computes the sum of a {@link double[]}
+	 *
+	 * @param inArray the input
+	 * @return the sum of {@code inArray}
+	 * @implNote op names="stats.sum"
 	 */
-	@OpMethod(names = "stats.sum", type = Function.class)
 	public static double sum(final double[] inArray) {
 		return Arrays.stream(inArray).sum();
 	}
 
 	/**
 	 * An Op that computes the mean of a {@link double[]}
+	 *
+	 * @param sumOp an Op that computes the sum of the a {@link double[]}
+	 * @param sizeOp an Op that computes the size of the a {@link double[]}
+	 * @param inArray the input
+	 * @return the mean of {@code inArray}
+	 * @implNote op names="stats.mean"
 	 */
-	@OpMethod(names = "stats.mean", type = Function.class)
 	public static double mean( //
 		@OpDependency(name = "stats.sum") Function<double[], Double> sumOp, //
 		@OpDependency(name = "stats.size") Function<double[], Double> sizeOp, //

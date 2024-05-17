@@ -51,19 +51,23 @@ import net.imglib2.type.numeric.real.DoubleType;
  *
  * @author Gabriel Selzer
  */
-public class UsingNils implements OpCollection {
+public class UsingNils {
 
 	/**
 	 * This Op returns a 10x10 image of unsigned bytes
+	 *
+	 * @output
+	 * @implNote op names="tutorial.nils"
 	 */
-	@OpField(names = "tutorial.nils")
 	public final Producer<Img<UnsignedByteType>> imgOfBytes = //
 		() -> ArrayImgs.unsignedBytes(10, 10);
 
 	/**
 	 * This Op returns a 10x10 image of doubles
+	 *
+	 * @output
+	 * @implNote op names="tutorial.nils"
 	 */
-	@OpField(names = "tutorial.nils")
 	public final Producer<Img<DoubleType>> imgOfDoubles = //
 		() -> ArrayImgs.doubles(10, 10);
 

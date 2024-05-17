@@ -57,9 +57,9 @@ public class OpParallelization implements OpCollection {
 	 * framework assume the burden of parallelization
 	 *
 	 * @param input the input pixel
-	 * @param output the preallocated output pixel
+	 * @param output the preallocated output pixel (container)
+	 * @implNote op names="tutorial.invertPerPixel"
 	 */
-	@OpMethod(names = "tutorial.invertPerPixel", type = Computers.Arity1.class)
 	public static void invertOp(UnsignedByteType input, UnsignedByteType output) {
 		output.set(255 - input.get());
 	}
@@ -69,10 +69,9 @@ public class OpParallelization implements OpCollection {
 	 * framework assume the burden of parallelization
 	 *
 	 * @param input the input pixel
-	 * @param output the preallocated output pixel
+	 * @param output the preallocated output pixel (container)
+	 * @implNote op names="tutorial.neighborhoodAverage"
 	 */
-	@OpMethod(names = "tutorial.neighborhoodAverage",
-		type = Computers.Arity1.class)
 	public static void averageNeighborhood(Neighborhood<UnsignedByteType> input,
 		UnsignedByteType output)
 	{

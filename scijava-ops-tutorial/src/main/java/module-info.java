@@ -59,14 +59,4 @@ module org.scijava.ops.tutorial{
 	requires jama;
 	requires mines.jtk;
 
-	provides org.scijava.ops.spi.OpCollection with
-		org.scijava.ops.tutorial.OpAdaptation,
-		org.scijava.ops.tutorial.OpConversion,
-		org.scijava.ops.tutorial.OpDependencies,
-		org.scijava.ops.tutorial.OpParallelization,
-		org.scijava.ops.tutorial.OpPriorities,
-		org.scijava.ops.tutorial.OpReduction,
-		org.scijava.ops.tutorial.ReportingProgress,
-		org.scijava.ops.tutorial.UsingNils,
-		org.scijava.ops.tutorial.WritingOpCollections;
 }

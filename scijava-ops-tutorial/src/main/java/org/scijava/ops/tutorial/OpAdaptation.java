@@ -52,13 +52,17 @@ import org.scijava.ops.spi.OpField;
  * Below, we can see how this works by calling the above Field Op, supposed to
  * work on Doubles, on an array of Doubles[]
  */
-public class OpAdaptation implements OpCollection {
+public class OpAdaptation {
 
 	/**
 	 * A simple Op, written as a {@link Field}, that performs a simple
 	 * calculation.
+	 *
+	 * @input a the first {@code Double}
+	 * @input b the second {@code Double}
+	 * @output a linear combination of {@code a} and {@code b}
+	 * @implNote op names="tutorial.adapt"
 	 */
-	@OpField(names = "tutorial.adapt")
 	public final BiFunction<Double, Double, Double> fieldOp = (a, b) -> {
 		return a * 2 + b;
 	};

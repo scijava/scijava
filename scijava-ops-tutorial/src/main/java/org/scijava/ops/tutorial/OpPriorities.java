@@ -47,9 +47,15 @@ import org.scijava.priority.Priority;
  *
  * @author Gabriel Selzer
  */
-public class OpPriorities implements OpCollection {
+public class OpPriorities {
 
-	@OpField(names = "tutorial.priority")
+	/**
+	 * An Op with default priority.
+	 *
+	 * @input n
+	 * @output
+	 * @implNote op names="tutorial.priority"
+	 */
 	public final Function<Iterable<Integer>, String> iterableFunc = //
 		n -> {
 			int max = Integer.MIN_VALUE;
@@ -59,7 +65,13 @@ public class OpPriorities implements OpCollection {
 			return "This maximum (Iterable Op): " + max;
 		};
 
-	@OpField(names = "tutorial.priority", priority = Priority.HIGH)
+	/**
+	 * An Op with high priority.
+	 *
+	 * @input n
+	 * @output
+	 * @implNote op names="tutorial.priority", priority="100.0"
+	 */
 	public final Function<SortedSet<Integer>, String> listFunc = //
 		n -> "This maximum (SortedSet Op): " + n.last();
 

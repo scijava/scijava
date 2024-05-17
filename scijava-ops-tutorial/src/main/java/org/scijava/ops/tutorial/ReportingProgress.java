@@ -73,9 +73,15 @@ import org.scijava.types.Nil;
  *
  * @author Gabriel Selzer
  */
-public class ReportingProgress implements OpCollection {
+public class ReportingProgress {
 
-	@OpField(names = "tutorial.long.op")
+	/**
+	 * An Op that reports its progress while finding prime numbers.
+	 *
+	 * @input numPrimes the quantity of unique prime numbers to find
+	 * @output a {@link List} of prime numbers
+	 * @implNote op names="tutorial.long.op"
+	 */
 	public final Function<Integer, List<Long>> primes = numPrimes -> {
 		var primes = new ArrayList<Long>();
 		long val = 1, sqrt;

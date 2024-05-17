@@ -13,10 +13,10 @@
 	<version>0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>SciJava Parent</name>
-	<description>The parent module of the core SciJava suite.</description>
+	<name>SciJava</name>
+	<description>Core libraries of the SciJava platform.</description>
 	<url>https://github.com/scijava/scijava</url>
-	<inceptionYear>2020</inceptionYear>
+	<inceptionYear>2017</inceptionYear>
 	<organization>
 		<name>SciJava</name>
 		<url>https://scijava.org/</url>

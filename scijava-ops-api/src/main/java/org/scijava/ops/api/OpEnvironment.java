@@ -29,6 +29,7 @@
 
 package org.scijava.ops.api;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.ServiceLoader;
@@ -361,8 +362,14 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	OpInfo opify(Class<?> opClass, double priority, String... names);
 
 	/**
-	 * Registers all elements within a {@code Object[]} to this
-	 * {@link OpEnvironment}
+	 * Registers all {@link OpInfo} derived from {@link Object}s within the passed
+	 * array. Elements within this {@link Object[]} might be:
+	 * <ul>
+	 * <li>{@link OpInfo}s</li>
+	 * <li>{@link java.util.Collection}s or arrays of the above</li>
+	 * <li>{@link Object}s (such as, but not limited to, {@link Class}es,
+	 * {@link Method}s, etc.) from which {@link OpInfo}s could be derived
+	 * </ul>
 	 *
 	 * @param objects the {@link Object}s that should be made discoverable to this
 	 *          {@link OpEnvironment}

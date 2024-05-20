@@ -57,7 +57,7 @@ import org.scijava.ops.spi.OpMethod;
  * Below, we can see how this works by calling the above Method Op, normally
  * requiring three parameters, with only two parameters.
  */
-public class OpReduction implements OpCollection {
+public class OpReduction {
 
 	/**
 	 * An {@link Method} annotated to be an Op.
@@ -66,8 +66,8 @@ public class OpReduction implements OpCollection {
 	 * @param in2 the second input. OPTIONAL.
 	 * @param in3 the third input. OPTIONAL.
 	 * @return the sum of the passed numbers.
+	 * @implNote op names="tutorial.reduce"
 	 */
-	@OpMethod(names = "tutorial.reduce", type = Functions.Arity3.class)
 	public static Double nullableMethod(Double in1, @Nullable Double in2,
 		@Nullable Double in3)
 	{

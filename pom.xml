@@ -13,8 +13,8 @@
 	<version>0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>SciJava Incubator</name>
-	<description>A wonderful bag of cats.</description>
+	<name>SciJava Parent</name>
+	<description>The parent module of the core SciJava suite.</description>
 	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2020</inceptionYear>
 	<organization>
@@ -45,6 +45,10 @@
 	</mailingLists>
 
 	<modules>
+		<!--Some modules are implicit dependencies of later modules; they should build first-->
+		<module>scijava-ops-indexer</module>
+		<module>scijava-taglets</module>
+		<!-- End implicit dependencies -->
 		<module>scijava-collections</module>
 		<module>scijava-common3</module>
 		<module>scijava-concurrent</module>
@@ -57,7 +61,6 @@
 		<module>scijava-ops-flim</module>
 		<module>scijava-ops-image</module>
 		<module>scijava-ops-legacy</module>
-		<module>scijava-ops-indexer</module>
 		<module>scijava-ops-opencv</module>
 		<module>scijava-ops-ext-parser</module>
 		<module>scijava-ops-spi</module>
@@ -65,7 +68,6 @@
 		<module>scijava-priority</module>
 		<module>scijava-progress</module>
 		<module>scijava-struct</module>
-		<module>scijava-taglets</module>
 		<module>scijava-testutil</module>
 		<module>scijava-types</module>
 	</modules>

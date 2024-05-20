@@ -13,8 +13,8 @@
 	<version>0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>SciJava Incubator</name>
-	<description>A wonderful bag of cats.</description>
+	<name>SciJava Parent</name>
+	<description>The parent module of the core SciJava suite.</description>
 	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2020</inceptionYear>
 	<organization>

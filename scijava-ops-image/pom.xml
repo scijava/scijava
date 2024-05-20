@@ -265,18 +265,11 @@
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 
-		<scijava-ops-image.allowedDuplicateClasses>${scijava.allowedDuplicateClasses},com.github.therapi.runtimejavadoc.repack.com.eclipsesource.json.*</scijava-ops-image.allowedDuplicateClasses>
-		<allowedDuplicateClasses>${scijava-ops-image.allowedDuplicateClasses}</allowedDuplicateClasses>
-
-		<therapi.packages />
+		<imglib2.version>7.0.1</imglib2.version>
+		<imglib2-roi.version>0.15.0</imglib2-roi.version>
+		<imglib2-algorithm.version>0.15.1</imglib2-algorithm.version>
+		<imglib2-realtransform.version>4.0.3</imglib2-realtransform.version>
 	</properties>
-
-	<repositories>
-		<repository>
-			<id>scijava.public</id>
-			<url>https://maven.scijava.org/content/groups/public</url>
-		</repository>
-	</repositories>
 
 	<dependencies>
 
@@ -393,4 +386,11 @@
 			<scope>test</scope>
 		</dependency>
     </dependencies>
+
+	<repositories>
+		<repository>
+			<id>scijava.public</id>
+			<url>https://maven.scijava.org/content/groups/public</url>
+		</repository>
+	</repositories>
 </project>

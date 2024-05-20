@@ -207,7 +207,7 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>>
 		// Only iterate seeds that are not excluded by the mask
 		final IterableRegion<B> maskRegions = Regions.iterable(mask);
 		final IterableInterval<LabelingType<Integer>> seedsMasked = Regions.sample(
-			(IterableInterval<Void>) maskRegions, seeds);
+			maskRegions.inside(), seeds);
 		final Cursor<LabelingType<Integer>> cursorSeeds = seedsMasked
 			.localizingCursor();
 

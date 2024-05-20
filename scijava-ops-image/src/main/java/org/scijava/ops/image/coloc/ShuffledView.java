@@ -126,6 +126,11 @@ public class ShuffledView<T> extends AbstractInterval implements
 	}
 
 	@Override
+	public T getType() {
+		return image.getType();
+	}
+
+	@Override
 	public RandomAccess<T> randomAccess() {
 		return new ShuffledRandomAccess();
 	}

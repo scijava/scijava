@@ -84,13 +84,8 @@
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
-		<!--
-		<scijava-common3.allowedDuplicateClasses>
-			${scijava.allowedDuplicateClasses}
-		</scijava-common3.allowedDuplicateClasses>
-		<allowedDuplicateClasses>${scijava-common3.allowedDuplicateClasses}</allowedDuplicateClasses>
-		-->
 	</properties>
+
 	<dependencies>
 		<!-- No dependencies allowed! -->
 

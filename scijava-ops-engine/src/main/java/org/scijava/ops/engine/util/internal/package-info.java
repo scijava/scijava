@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 /**
  * This package is designed to house utility methods intended for use <b>only
  * within SciJava Ops</b>.

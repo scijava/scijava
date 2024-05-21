@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 /**
  * This package is intended to contain general-purpose classes that <b>do
  * not</b> belong within SciJava Ops API. Usually, this implies that it is an

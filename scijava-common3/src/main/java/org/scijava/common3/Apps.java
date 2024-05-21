@@ -236,7 +236,7 @@ public final class Apps {
 		final String baseSubdirectory)
 	{
 		if (classLocation == null) return null;
-		String path = Files.absolutePath(classLocation).replace('\\', '/');
+		String path = classLocation.getAbsolutePath().replace('\\', '/');
 
 		if (path.contains("/.m2/repository/")) {
 			// NB: The class is in a JAR in the Maven repository cache.

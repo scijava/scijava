@@ -161,8 +161,7 @@ public class ClassesTest {
 	public void testLocationUnpackedClass() throws IOException,
 		URISyntaxException
 	{
-		final File tmpDir = java.nio.file.Files.createTempDirectory(
-			"class-utils-test").toFile();
+		final File tmpDir = Files.createTempDirectory("class-utils-test").toFile();
 		final String path = getClass().getName().replace('.', '/') + ".class";
 		final File classFile = new File(tmpDir, path);
 		assertTrue(classFile.getParentFile().exists() || classFile.getParentFile()

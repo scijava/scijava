@@ -31,7 +31,6 @@ package org.scijava.ops.engine.struct;
 
 import java.util.List;
 
-import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.Struct;
 
 public class RetypingRequest {

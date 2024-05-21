@@ -27,9 +27,12 @@
  * #L%
  */
 
-package org.scijava.struct;
+package org.scijava.ops.engine.struct;
 
 import java.lang.reflect.Type;
+
+import org.scijava.struct.ItemIO;
+import org.scijava.struct.Member;
 
 /**
  * Wrapper to pair a type of a method signature with its {@link ItemIO}.

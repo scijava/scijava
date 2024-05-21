@@ -40,7 +40,6 @@ import org.scijava.function.Container;
 import org.scijava.function.Mutable;
 import org.scijava.ops.engine.util.internal.AnnotationUtils;
 import org.scijava.ops.spi.Nullable;
-import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Structs;
 import org.scijava.types.Types;

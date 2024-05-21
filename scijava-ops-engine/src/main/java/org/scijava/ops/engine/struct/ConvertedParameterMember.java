@@ -31,7 +31,6 @@ package org.scijava.ops.engine.struct;
 
 import java.lang.reflect.Type;
 
-import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 

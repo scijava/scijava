@@ -55,7 +55,6 @@ public interface Member<T> {
 	 *
 	 * @see Field#getGenericType()
 	 */
-	// TODO: Use Type<T> or Nil<T> from new scijava-types.
 	Type getType();
 
 	/**
@@ -68,7 +67,6 @@ public interface Member<T> {
 	}
 
 	/** Gets the input/output type of the member. */
-	// TODO: fork ItemIO and rename to MemberIO (?)
 	ItemIO getIOType();
 
 	/** Gets whether the member is an input. */

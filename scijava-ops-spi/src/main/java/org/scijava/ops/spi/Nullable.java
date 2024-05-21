@@ -64,18 +64,19 @@ import java.lang.annotation.Target;
  * is confusing and hard to read. Which parameters are nullable in this case? Is
  * it obvious that {@code in3} is nullable just by looking at {@code Impl}? For
  * this reason, it should be enforced that the annotation is only on one of the
- * method signatures. <br/>
- * <br/>
+ * method signatures.
+ * <p>
  * Note also that annotations are currently (as of Java 11) not supported on
  * lambdas. Nullable parameters are supported on interfaces and class
  * implementations (including anonymous classes) but the following will not
  * recognize the nullability of {@code in}:
+ * </p>
  *
  * <pre>
  *
  * &#64;OpField(names = "nullableLambda")
- * public final Function<Integer, Float> nullableLambda = (
- * 	&#64;Nullable Integer in) -> {
+ * public final Function&lt;Integer, Float&gt; nullableLambda = (
+ * 	&#64;Nullable Integer in) -&gt; {
  * 	Integer nonNullIn = in == null ? 0 : in;
  * 	return nonNullIn + 0.5f;
  * };

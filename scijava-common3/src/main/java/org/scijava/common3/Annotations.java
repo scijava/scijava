@@ -444,7 +444,7 @@ public final class Annotations {
 	}
 
 	/** A map of annotations to annotated elements. */
-	public static class Query extends
+	private static class Query extends
 		HashMap<Class<? extends Annotation>, Class<? extends AnnotatedElement>>
 	{
 

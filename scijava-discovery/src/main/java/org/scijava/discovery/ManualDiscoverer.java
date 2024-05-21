@@ -42,10 +42,7 @@ import java.util.stream.Collectors;
  */
 public class ManualDiscoverer implements Discoverer {
 
-	/**
-	 * The implementations
-	 */
-	Set<Object> set;
+	private Set<Object> set;
 
 	public ManualDiscoverer() {
 		set = new HashSet<>();

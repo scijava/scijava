@@ -44,25 +44,27 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import static org.scijava.concurrent.TaskExecutors.DefaultTaskExecutor;
+
 /**
  * Tests {@link DefaultTaskExecutor}.
  */
 public class DefaultTaskExecutorTest {
 
 	private final DefaultTaskExecutor sequential = new DefaultTaskExecutor(
-		new SequentialExecutorService());
+		new TaskExecutors.SequentialExecutorService());
 
 	private final DefaultTaskExecutor twoThreads = new DefaultTaskExecutor(
 		new ForkJoinPool(2));
 
 	@Test
 	public void testGetParallelism() {
-		testGetParallelism(1, new SequentialExecutorService());
+		testGetParallelism(1, new TaskExecutors.SequentialExecutorService());
 		testGetParallelism(2, Executors.newFixedThreadPool(2));
 		testGetParallelism(3, new ForkJoinPool(3));
 		testGetParallelism(1, Executors.newCachedThreadPool());
 		testGetParallelism(ForkJoinPool.commonPool().getParallelism(),
-			new ForkJoinExecutorService());
+			new TaskExecutors.ForkJoinExecutorService());
 	}
 
 	private void testGetParallelism(int expectedParallelism,

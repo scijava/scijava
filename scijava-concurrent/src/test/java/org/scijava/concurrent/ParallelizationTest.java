@@ -83,7 +83,7 @@ public class ParallelizationTest {
 	public void testSetExecutorService() {
 		TaskExecutor outside = Parallelization.getTaskExecutor();
 		TaskExecutor inside = TaskExecutors.forExecutorService(
-			new SequentialExecutorService());
+			new TaskExecutors.SequentialExecutorService());
 		try (Parallelization.Frame frame = Parallelization.setExecutorRequiresReset(
 			inside))
 		{

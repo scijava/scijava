@@ -47,14 +47,14 @@ public class TaskExecutorsTest {
 	@Test
 	public void testSingleThreaded() {
 		TaskExecutor executor = TaskExecutors.singleThreaded();
-		assertTrue(executor instanceof SequentialTaskExecutor);
+		assertTrue(executor instanceof TaskExecutors.SequentialTaskExecutor);
 	}
 
 	@Test
 	public void testMultiThreaded() {
 		TaskExecutor executor = TaskExecutors.multiThreaded();
 		assertTrue(executor
-			.getExecutorService() instanceof ForkJoinExecutorService);
+			.getExecutorService() instanceof TaskExecutors.ForkJoinExecutorService);
 	}
 
 	@Test

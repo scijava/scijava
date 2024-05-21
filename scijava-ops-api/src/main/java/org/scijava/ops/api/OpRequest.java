@@ -44,29 +44,47 @@ import org.scijava.types.Types;
  *
  * @author Christian Dietz (University of Konstanz)
  * @author Curtis Rueden
+ * @author Gabriel Selzer
  */
 public interface OpRequest {
 
 	// -- OpRef methods --
 
-	/** Gets the name of the op. */
-	String getName();
-
-	/** Gets the type which the op must match. */
-	Type getType();
+	/**
+	 * Gets the name of the requested Op.
+	 *
+	 * @return the name of the requested Op
+	 */
+	String name();
 
 	/**
-	 * Gets the op's output type constraint, or null for no constraint.
+	 * Gets the <b>functional</b> Op {@link Type} requested.
+	 *
+	 * @return the functional Op type requested
 	 */
-	Type getOutType();
-
-	/** Gets the op's arguments. */
-	Type[] getArgs();
+	Type type();
 
 	/**
-	 * Gets a label identifying the op's scope (i.e., its name and/or types).
+	 * Gets the request's expected output {@link Type}.
+	 *
+	 * @return the desired {@link Type} of output objects.
 	 */
-	String getLabel();
+	Type outType();
+
+	/**
+	 * Gets the request's argument types.
+	 *
+	 * @return the {@link Type}s of the arguments that the user wishes to pass to
+	 *         the Op
+	 */
+	Type[] argTypes();
+
+	/**
+	 * Gets a label identifying the Op's scope (i.e., its name and/or types).
+	 *
+	 * @return a label identifying the Op's scope
+	 */
+	String label();
 
 	/**
 	 * Determines whether the specified type satisfies the op's required types
@@ -78,18 +96,18 @@ public interface OpRequest {
 	// -- Object methods --
 
 	default String requestString() {
-		StringBuilder n = new StringBuilder(getName() == null ? "" : "Name: \"" +
-			getName() + "\", Types: ");
-		n.append(getType()).append("\n");
+		StringBuilder n = new StringBuilder(name() == null ? "" : "Name: \"" +
+			name() + "\", Types: ");
+		n.append(type()).append("\n");
 		n.append("Input Types: \n");
-		for (Type arg : getArgs()) {
+		for (Type arg : argTypes()) {
 			n.append("\t\t* ");
 			n.append(arg == null ? "" : arg.getTypeName());
 			n.append("\n");
 		}
 		n.append("Output Type: \n");
 		n.append("\t\t* ");
-		n.append(getOutType() == null ? "" : getOutType().getTypeName());
+		n.append(outType() == null ? "" : outType().getTypeName());
 		n.append("\n");
 		return n.substring(0, n.length() - 1);
 	}
@@ -99,15 +117,15 @@ public interface OpRequest {
 		if (obj == null) return false;
 		if (getClass() != obj.getClass()) return false;
 		final OpRequest other = (OpRequest) obj;
-		if (!Objects.equals(getName(), other.getName())) return false;
-		if (!Objects.equals(getType(), other.getType())) return false;
-		if (!Objects.equals(getOutType(), other.getOutType())) return false;
-		return Arrays.equals(getArgs(), other.getArgs());
+		if (!Objects.equals(name(), other.name())) return false;
+		if (!Objects.equals(type(), other.type())) return false;
+		if (!Objects.equals(outType(), other.outType())) return false;
+		return Arrays.equals(argTypes(), other.argTypes());
 	}
 
 	default int requestHashCode() {
-		return Arrays.deepHashCode(new Object[] { getName(), getType(),
-			getOutType(), getArgs() });
+		return Arrays.deepHashCode(new Object[] { name(), type(), outType(),
+			argTypes() });
 	}
 
 	// -- Utility methods --
@@ -155,28 +173,28 @@ class PartialOpRequest implements OpRequest {
 	}
 
 	@Override
-	public String getName() {
+	public String name() {
 		return name;
 	}
 
 	@Override
-	public Type getType() {
+	public Type type() {
 		throw new UnsupportedOperationException(
 			"PartialOpRequests do not have a Type!");
 	}
 
 	@Override
-	public Type getOutType() {
+	public Type outType() {
 		return outType;
 	}
 
 	@Override
-	public Type[] getArgs() {
+	public Type[] argTypes() {
 		return args;
 	}
 
 	@Override
-	public String getLabel() {
+	public String label() {
 		throw new UnsupportedOperationException(
 			"PartialOpRequests do not have a Label!");
 	}

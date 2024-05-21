@@ -80,7 +80,7 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 		Function<OpInfo, String> descriptionFunction)
 	{
 		// handle namespaces queries
-		String name = req.getName();
+		String name = req.name();
 		Optional<String> nsString = getNonOpString(env, name);
 		if (nsString.isPresent()) {
 			return nsString.get();
@@ -95,7 +95,7 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 			.distinct() //
 			.collect(Collectors.joining("\n\t- "));
 		if (opString.isEmpty()) return NO_OP_MATCHES;
-		return req.getName() + ":\n\t- " + opString;
+		return req.name() + ":\n\t- " + opString;
 	}
 
 	/**
@@ -169,7 +169,7 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 				.filter(m -> !ItemIO.CONTAINER.equals(m.getIOType())) //
 				.count();
 
-			Type[] args = req.getArgs();
+			Type[] args = req.argTypes();
 			if (args == null || args.length == numPureInputs) {
 				filtered.add(info);
 			}

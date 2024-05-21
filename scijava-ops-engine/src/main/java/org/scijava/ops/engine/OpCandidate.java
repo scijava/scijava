@@ -89,7 +89,7 @@ public class OpCandidate {
 		this.info = info;
 		this.typeVarAssigns = typeVarAssigns;
 
-		this.paddedArgs = padTypes(this, getRequest().getArgs());
+		this.paddedArgs = padTypes(this, getRequest().argTypes());
 		this.reifiedType = getReifiedType(request, info, typeVarAssigns);
 	}
 
@@ -103,7 +103,7 @@ public class OpCandidate {
 		Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
 		Type exactSuperType = Types.getExactSuperType(info.opType(), Types.raw(
-			request.getType()));
+			request.type()));
 		return Types.mapVarToTypes(exactSuperType, typeVarAssigns);
 	}
 

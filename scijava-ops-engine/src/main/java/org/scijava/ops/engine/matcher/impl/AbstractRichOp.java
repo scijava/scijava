@@ -77,7 +77,7 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 
 	@Override
 	public String name() {
-		return conditions.request().getName();
+		return conditions.request().name();
 	}
 
 	@Override
@@ -88,7 +88,7 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 	@Override
 	public void preprocess(Object... inputs) {
 		if (hints().contains(BaseOpHints.Progress.TRACK)) {
-			Progress.register(this, conditions.request().getName());
+			Progress.register(this, conditions.request().name());
 		}
 		else {
 			Progress.ignore();

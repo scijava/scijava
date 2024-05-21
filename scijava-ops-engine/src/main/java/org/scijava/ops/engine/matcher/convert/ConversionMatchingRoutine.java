@@ -39,12 +39,8 @@ import org.scijava.ops.engine.OpCandidate;
 import org.scijava.ops.engine.matcher.MatchingResult;
 import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.engine.matcher.impl.RuntimeSafeMatchingRoutine;
-import org.scijava.ops.spi.Op;
 import org.scijava.priority.Priority;
-import org.scijava.types.inference.GenericAssignability;
 
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 import java.util.*;
 
 public class ConversionMatchingRoutine extends RuntimeSafeMatchingRoutine {
@@ -56,7 +52,7 @@ public class ConversionMatchingRoutine extends RuntimeSafeMatchingRoutine {
 		if (conditions.hints().containsAny(BaseOpHints.Conversion.IN_PROGRESS,
 			BaseOpHints.Conversion.FORBIDDEN)) //
 			throw new OpMatchingException("Conversion is disabled");
-		if (conditions.request().getName().startsWith("engine.")) {
+		if (conditions.request().name().startsWith("engine.")) {
 			throw new OpMatchingException( //
 				"Conversion is unsuitable for internal engine Ops" //
 			);
@@ -73,7 +69,7 @@ public class ConversionMatchingRoutine extends RuntimeSafeMatchingRoutine {
 		);
 		OpRequest request = conditions.request();
 		final ArrayList<OpCandidate> candidates = new ArrayList<>();
-		for (final OpInfo info : env.infos(request.getName(), convertConditions
+		for (final OpInfo info : env.infos(request.name(), convertConditions
 			.hints()))
 		{
 			Conversions.tryConvert(env, info, request).ifPresent(converted -> {

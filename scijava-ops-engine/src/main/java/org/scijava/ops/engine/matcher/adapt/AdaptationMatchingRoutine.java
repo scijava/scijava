@@ -121,7 +121,7 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 				Type adaptFrom = adaptor.inputTypes().get(0);
 				Type srcOpType = Types.substituteTypeVariables(adaptFrom, map);
 				final OpRequest srcOpRequest = inferOpRequest(srcOpType, conditions
-					.request().getName(), map);
+					.request().name(), map);
 				final OpCandidate srcCandidate = matcher.match(MatchingConditions.from(
 					srcOpRequest, adaptationHints), env);
 				// Then, once we've matched an Op, use the bounds of that match
@@ -131,11 +131,11 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 				List<InfoTree> depTrees = Infos.dependencies(adaptor).stream() //
 					.map(d -> {
 						OpRequest request = inferOpRequest(d, map);
-						Nil<?> type = Nil.of(request.getType());
-						Nil<?>[] args = Arrays.stream(request.getArgs()).map(Nil::of)
+						Nil<?> type = Nil.of(request.type());
+						Nil<?>[] args = Arrays.stream(request.argTypes()).map(Nil::of)
 							.toArray(Nil[]::new);
-						Nil<?> outType = Nil.of(request.getOutType());
-						var op = env.op(request.getName(), type, args, outType,
+						Nil<?> outType = Nil.of(request.outType());
+						var op = env.op(request.name(), type, args, outType,
 							adaptationHints);
 						// NB the dependency is interested in the INFOTREE of the match,
 						// not the Op itself. We want to instantiate the dependencies
@@ -218,7 +218,7 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 	private boolean adaptOpOutputSatisfiesReqTypes(Type adaptTo,
 		Map<TypeVariable<?>, Type> map, OpRequest request)
 	{
-		Type opType = request.getType();
+		Type opType = request.type();
 		// TODO: clean this logic -- can this just be request.typesMatch() ?
 		if (opType instanceof ParameterizedType) {
 			if (!GenericAssignability.checkGenericAssignability(adaptTo,

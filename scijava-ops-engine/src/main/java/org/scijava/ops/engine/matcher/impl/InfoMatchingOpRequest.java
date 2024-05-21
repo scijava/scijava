@@ -90,27 +90,27 @@ public class InfoMatchingOpRequest implements OpRequest {
 	}
 
 	@Override
-	public String getName() {
+	public String name() {
 		return this.name;
 	}
 
 	@Override
-	public Type getType() {
+	public Type type() {
 		return this.type;
 	}
 
 	@Override
-	public Type getOutType() {
+	public Type outType() {
 		return this.outType;
 	}
 
 	@Override
-	public Type[] getArgs() {
+	public Type[] argTypes() {
 		return this.args;
 	}
 
 	@Override
-	public String getLabel() {
+	public String label() {
 		final StringBuilder sb = new StringBuilder();
 		OpRequest.append(sb, name);
 		if (type != null) {

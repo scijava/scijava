@@ -654,7 +654,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 				dependencyChains.add(wrapOp(instance, conditions));
 				// refine current type variable knowledge
 				GenericAssignability //
-					.inferTypeVariables(request.getType(), instance.getType()) //
+					.inferTypeVariables(request.type(), instance.getType()) //
 					.forEach(dependencyTypeVarAssigns::putIfAbsent);
 
 			}

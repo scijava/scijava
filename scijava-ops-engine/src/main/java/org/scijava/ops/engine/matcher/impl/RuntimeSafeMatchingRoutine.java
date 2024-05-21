@@ -74,7 +74,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 
 		for (final OpInfo info : getInfos(env, conditions)) {
 			Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
-			if (typesMatch(info.opType(), conditions.request().getType(),
+			if (typesMatch(info.opType(), conditions.request().type(),
 				typeVarAssigns))
 			{
 				OpCandidate candidate = new OpCandidate(env, conditions.request(), info,
@@ -169,7 +169,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	private Iterable<OpInfo> getInfos(OpEnvironment env,
 		MatchingConditions conditions)
 	{
-		return env.infos(conditions.request().getName(), conditions.hints());
+		return env.infos(conditions.request().name(), conditions.hints());
 	}
 
 	/**
@@ -187,7 +187,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 		if (checkCandidates(Collections.singletonList(candidate)).isEmpty())
 			return false;
 		final Type[] reqArgTypes = candidate.paddedArgs();
-		final Type reqType = candidate.getRequest().getType();
+		final Type reqType = candidate.getRequest().type();
 		final Type infoType = candidate.opInfo().opType();
 		Type implementedInfoType = Types.getExactSuperType(infoType, Types.raw(
 			reqType));
@@ -259,7 +259,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	private boolean outputsMatch(final OpCandidate candidate,
 		HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
 	{
-		final Type reqOutType = candidate.getRequest().getOutType();
+		final Type reqOutType = candidate.getRequest().outType();
 		if (reqOutType == null) return true; // no constraints on output types
 
 		if (candidate.opInfo().output().isInput()) return true;
@@ -337,7 +337,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 			i++;
 		}
 
-		final Type outputType = candidate.getRequest().getOutType();
+		final Type outputType = candidate.getRequest().outType();
 		if (!Objects.equals(outputType, candidate.opInfo().outputType()))
 			return false;
 

@@ -96,13 +96,13 @@ public class DefaultOpRequest implements OpRequest {
 
 	/** Gets the name of the op. */
 	@Override
-	public String getName() {
+	public String name() {
 		return name;
 	}
 
 	/** Gets the type which the op must match. */
 	@Override
-	public Type getType() {
+	public Type type() {
 		return type;
 	}
 
@@ -110,13 +110,13 @@ public class DefaultOpRequest implements OpRequest {
 	 * Gets the op's output type constraint, or null for no constraint.
 	 */
 	@Override
-	public Type getOutType() {
+	public Type outType() {
 		return outType;
 	}
 
 	/** Gets the op's arguments. */
 	@Override
-	public Type[] getArgs() {
+	public Type[] argTypes() {
 		return args.clone();
 	}
 
@@ -124,7 +124,7 @@ public class DefaultOpRequest implements OpRequest {
 	 * Gets a label identifying the op's scope (i.e., its name and/or types).
 	 */
 	@Override
-	public String getLabel() {
+	public String label() {
 		final StringBuilder sb = new StringBuilder();
 		OpRequest.append(sb, name);
 		if (type != null) {

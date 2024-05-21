@@ -36,7 +36,7 @@ import java.io.Serializable;
 import java.util.Random;
 
 /**
- * <h3>MersenneTwister and MersenneTwisterFast</h3>
+ * <h2>MersenneTwister and MersenneTwisterFast</h2>
  * <p>
  * <b>Version 17</b>, based on version MT199937(99/10/29) of the Mersenne
  * Twister algorithm found at
@@ -497,8 +497,8 @@ public strictfp class MersenneTwisterFast implements Serializable, Cloneable {
 	}
 
 	/**
-	 * This generates a coin flip with a probability <tt>probability</tt> of
-	 * returning true, else returning false. <tt>probability</tt> must be between
+	 * This generates a coin flip with a probability {@code probability} of
+	 * returning true, else returning false. {@code probability} must be between
 	 * 0.0 and 1.0, inclusive. Not as precise a random real event as
 	 * nextBoolean(double), but twice as fast. To explicitly use this, remember
 	 * you may need to cast to float first.
@@ -542,8 +542,8 @@ public strictfp class MersenneTwisterFast implements Serializable, Cloneable {
 	}
 
 	/**
-	 * This generates a coin flip with a probability <tt>probability</tt> of
-	 * returning true, else returning false. <tt>probability</tt> must be between
+	 * This generates a coin flip with a probability {@code probability} of
+	 * returning true, else returning false. {@code probability} must be between
 	 * 0.0 and 1.0, inclusive.
 	 */
 
@@ -877,7 +877,8 @@ public strictfp class MersenneTwisterFast implements Serializable, Cloneable {
 	/**
 	 * Returns a double in the range from 0.0 to 1.0, possibly inclusive of 0.0
 	 * and 1.0 themselves. Thus:
-	 * <table border=0 summary="Table">
+	 * <table border="">
+	 * <caption>Table</caption>
 	 * <tr>
 	 * <th>Expression</th>
 	 * <th>Interval</th>
@@ -1087,7 +1088,8 @@ public strictfp class MersenneTwisterFast implements Serializable, Cloneable {
 	/**
 	 * Returns a float in the range from 0.0f to 1.0f, possibly inclusive of 0.0f
 	 * and 1.0f themselves. Thus:
-	 * <table border=0 summary="Table">
+	 * <table border="">
+	 * <caption>Table</caption>
 	 * <tr>
 	 * <th>Expression</th>
 	 * <th>Interval</th>

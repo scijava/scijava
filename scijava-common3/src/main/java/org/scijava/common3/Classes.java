@@ -338,7 +338,6 @@ public final class Classes {
 	 * <li>void.class becomes Void.class</li>
 	 * </ul>
 	 * All other types are unchanged.
-	 * </p>
 	 */
 	public static <T> Class<T> box(final Class<T> type) {
 		final Class<?> destType;
@@ -373,7 +372,6 @@ public final class Classes {
 	 * <li>Void.class becomes void.class</li>
 	 * </ul>
 	 * All other types are unchanged.
-	 * </p>
 	 */
 	public static <T> Class<T> unbox(final Class<T> type) {
 		final Class<?> destType;

@@ -147,6 +147,7 @@ public class XML {
 				}
 				catch (Error e) {
 					if (debug) e.printStackTrace();
+					if (loader == null) throw e;
 					loader = loader.getParent();
 					if (loader == null) throw e;
 					thread.setContextClassLoader(loader);
@@ -155,7 +156,9 @@ public class XML {
 			xpath = xp;
 		}
 		finally {
-			thread.setContextClassLoader(contextClassLoader);
+			if (contextClassLoader != null) {
+				thread.setContextClassLoader(contextClassLoader);
+			}
 		}
 	}
 

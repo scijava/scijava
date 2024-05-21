@@ -36,10 +36,10 @@ import org.scijava.concurrent.Parallelization;
 import org.scijava.function.Inplaces;
 
 /**
- * Implementation of a {@link ChunkerOp} that interleaves the chunks. In a
- * element enumeration from 1..n with <b>k</b> {@link Chunk}s the first one will
- * process the elements 1, k+1, 2k+1, ... the second chunk executable 2, k+2,
- * 2k+2 and so on.
+ * Implementation of a {@code thread.chunker} Op that interleaves the chunks. In
+ * a element enumeration from 1..n with <b>k</b> {@link Chunk}s the first one
+ * will process the elements 1, k+1, 2k+1, ... the second chunk executable 2,
+ * k+2, 2k+2 and so on.
  *
  * @author Michael Zinsmaier (University of Konstanz)
  * @implNote op names='thread.chunker', priority='-10000.'

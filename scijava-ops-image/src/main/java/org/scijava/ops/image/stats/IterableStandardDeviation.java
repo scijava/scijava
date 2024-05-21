@@ -50,11 +50,11 @@ public class IterableStandardDeviation<I extends RealType<I>, O extends RealType
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
+	 * @param input
 	 * @param stdDev
 	 */
 	@Override
-	public void compute(final Iterable<I> input, final O output) {
+	public void compute(final Iterable<I> input, final O stdDev) {
 		double sum = 0;
 		double sumSqr = 0;
 		int n = 0;
@@ -66,7 +66,7 @@ public class IterableStandardDeviation<I extends RealType<I>, O extends RealType
 			sumSqr += px * px;
 		}
 
-		output.setReal(Math.sqrt((sumSqr - sum * sum / n) / (n - 1)));
+		stdDev.setReal(Math.sqrt((sumSqr - sum * sum / n) / (n - 1)));
 	}
 
 }

@@ -53,15 +53,15 @@ public class WritingConciseOps {
 	 * {@code public} <b>and</b> {@code final}, and should define Op parameters
 	 * using the following tags:
 	 * <ul>
-	 * <li>{@code @input <name> <description>}</li> to describe a parameter named
-	 * {@code <name>} with purpose {@code <description>}
-	 * <li>{@code @container <name> <description>}</li> to describe a preallocated
-	 * output <b>container</b> parameter named {@code <name>} with purpose
-	 * {@code <description>}
-	 * <li>{@code @mutable <name> <description>}</li> to describe a <b>mutable</b>
-	 * input parameter named {@code <name>} with purpose {@code <description>}
-	 * <li>{@code @output <description}</li> to describe a lambda return with
-	 * purpose {@code <description>}
+	 * <li>{@code @input <name> <description>} to describe a parameter named
+	 * {@code <name>} with purpose {@code <description>}</li>
+	 * <li>{@code @container <name> <description>} to describe a <b>preallocated
+	 * output container</b> parameter named {@code <name>} with purpose
+	 * {@code <description>}</li>
+	 * <li>{@code @mutable <name> <description>} to describe a <b>mutable input
+	 * parameter</b> named {@code <name>} with purpose {@code <description>}</li>
+	 * <li>{@code @output <description} to describe a lambda return with purpose
+	 * {@code <description>}</li>
 	 * </ul>
 	 *
 	 * @input b the base
@@ -77,16 +77,16 @@ public class WritingConciseOps {
 	 * {@code public} <b>and</b> {@code static}, and should declare their
 	 * parameters using the following tags:
 	 * <ul>
-	 * <li>{@code @param <name> <description>}</li> to describe a parameter named
-	 * {@code <name>} with purpose {@code <description>}
-	 * <li>{@code @param <name> <description> (container)}</li> to describe a
-	 * preallocated output <b>container</b> parameter named {@code <name>} with
-	 * purpose {@code <description>}
-	 * <li>{@code @param <name> <description> (mutable)}</li> to describe a
-	 * <b>mutable</b> input parameter named {@code <name>} with purpose
-	 * {@code <description>}
-	 * <li>{@code @return <description}</li> to describe a method return with
-	 * purpose {@code <description>}
+	 * <li>{@code @param <name> <description>} to describe a parameter named
+	 * {@code <name>} with purpose {@code <description>}</li>
+	 * <li>{@code @param <name> <description> (container)} to describe a
+	 * <b>preallocated output container</b> parameter named {@code <name>} with
+	 * purpose {@code <description>}</li>
+	 * <li>{@code @param <name> <description> (mutable)} to describe a <b>mutable
+	 * input parameter</b> named {@code <name>} with purpose
+	 * {@code <description>}</li>
+	 * <li>{@code @return <description} to describe a method return with purpose
+	 * {@code <description>}</li>
 	 * </ul>
 	 *
 	 * @param b the base

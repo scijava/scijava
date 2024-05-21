@@ -42,7 +42,6 @@ import org.scijava.ops.spi.OpDependency;
  *
  * @author Andreas Graumann (University of Konstanz)
  * @param <T> Input Type
- * @param <O> Output Type
  * @implNote op names='features.zernike.phase'
  */
 public class DefaultPhaseFeature<T extends RealType<T>> implements

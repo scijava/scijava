@@ -50,16 +50,16 @@ public class IterableSum<I extends RealType<I>, O extends RealType<O>>
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
+	 * @param input
 	 * @param sum
 	 */
 	@Override
-	public void compute(final Iterable<I> input, final O output) {
-		double sum = 0;
+	public void compute(final Iterable<I> input, final O sum) {
+		double s = 0;
 		for (final I in : input) {
-			sum += in.getRealDouble();
+			s += in.getRealDouble();
 		}
 
-		output.setReal(sum);
+		sum.setReal(s);
 	}
 }

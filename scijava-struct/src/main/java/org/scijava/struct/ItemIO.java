@@ -48,18 +48,12 @@ public enum ItemIO {
 		 * The item is a hybrid input/output for the operation, whose structure is
 		 * fixed but whose content will be populated during execution of the
 		 * operation.
-		 *
-		 * @see org.scijava.param.Container
-		 * @see org.scijava.ops.function.Computers
 		 */
 		CONTAINER,
 		/**
 		 * The item is a hybrid input/output for the operation, whose current value
 		 * will be used as input to the computation, but subsequently overwritten
 		 * with a result.
-		 *
-		 * @see org.scijava.param.Mutable
-		 * @see org.scijava.ops.function.Inplaces
 		 */
 		MUTABLE,
 		/**

@@ -50,11 +50,11 @@ public class IterableGeometricMean<I extends RealType<I>, O extends RealType<O>>
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
+	 * @param input
 	 * @param geometricMean
 	 */
 	@Override
-	public void compute(final Iterable<I> input, final O output) {
+	public void compute(final Iterable<I> input, final O geometricMean) {
 		double size = 0;
 		double sumOfLogs = 0;
 		for (final I in : input) {
@@ -63,10 +63,10 @@ public class IterableGeometricMean<I extends RealType<I>, O extends RealType<O>>
 		}
 
 		if (size != 0) {
-			output.setReal(Math.exp(sumOfLogs / size));
+			geometricMean.setReal(Math.exp(sumOfLogs / size));
 		}
 		else {
-			output.setReal(0);
+			geometricMean.setReal(0);
 		}
 
 	}

@@ -85,7 +85,6 @@ public interface TypeReifier {
 	 * For such types, we try to fill the type parameters recursively, using
 	 * {@link TypeExtractor} plugins that know how to glean types at runtime from
 	 * specific sorts of objects.
-	 * </p>
 	 * <p>
 	 * For example, {@link IterableTypeExtractor} knows how to guess a {@code T}
 	 * for any {@code Iterable<T>} by examining the type of the elements in its

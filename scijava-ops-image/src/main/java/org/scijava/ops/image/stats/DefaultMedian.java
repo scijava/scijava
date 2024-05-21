@@ -58,11 +58,11 @@ public class DefaultMedian<I extends RealType<I>, O extends RealType<O>>
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
+	 * @param input
 	 * @param median
 	 */
 	@Override
-	public void compute(final Iterable<I> input, final O output) {
+	public void compute(final Iterable<I> input, final O median) {
 		final ArrayList<Double> statistics = new ArrayList<>();
 
 		input.forEach(i -> statistics.add(i.getRealDouble()));
@@ -74,7 +74,7 @@ public class DefaultMedian<I extends RealType<I>, O extends RealType<O>>
 			result *= 0.5;
 		}
 
-		output.setReal(result);
+		median.setReal(result);
 	}
 
 }

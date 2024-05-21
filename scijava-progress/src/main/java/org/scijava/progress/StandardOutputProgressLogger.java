@@ -32,7 +32,7 @@ package org.scijava.progress;
 import java.util.function.Consumer;
 
 /**
- * Simple {@link Consumer<Task>} logging updates to standard output.
+ * Simple {@link Consumer} that logs updates to standard output.
  *
  * @author Gabriel Selzer
  */

@@ -56,12 +56,12 @@ public class IntegralVariance<I extends RealType<I>> implements
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
+	 * @param input
 	 * @param integralVariance
 	 */
 	@Override
 	public void compute(final RectangleNeighborhood<? extends Composite<I>> input,
-		final DoubleType output)
+		final DoubleType integralVariance)
 	{
 		// computation according to
 		// https://en.wikipedia.org/wiki/Summed_area_table
@@ -118,7 +118,7 @@ public class IntegralVariance<I extends RealType<I>> implements
 		valueAsDoubleType.sub(new DoubleType(1)); // NB
 		sum2.div(valueAsDoubleType); // NB
 
-		output.set(sum2);
+		integralVariance.set(sum2);
 	}
 
 }

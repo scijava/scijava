@@ -58,8 +58,8 @@ public class DefaultMinorAxis implements
 	 * @param minorAxis
 	 */
 	@Override
-	public void compute(final Polygon2D input, final DoubleType output) {
-		output.set(minorMajorAxisFunc.apply(input).getA());
+	public void compute(final Polygon2D input, final DoubleType minorAxis) {
+		minorAxis.set(minorMajorAxisFunc.apply(input).getA());
 	}
 
 }

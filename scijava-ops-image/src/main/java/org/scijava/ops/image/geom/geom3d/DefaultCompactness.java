@@ -38,8 +38,7 @@ import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * Generic implementation of
- * {@link org.scijava.ops.image.Ops.Geometric.Compactness}. Based on
+ * Generic implementation of {@code geom.compactness}. Based on
  * http://www.sciencedirect.com/science/article/pii/S003132030700324X. In the
  * paper compactness is defined as area^3/volume^2. For a sphere this is
  * minimized and results in 36*PI. To get values between (0,1] we use
@@ -64,11 +63,11 @@ public class DefaultCompactness implements Computers.Arity1<Mesh, DoubleType> {
 	 * @param compactness
 	 */
 	@Override
-	public void compute(final Mesh input, final DoubleType output) {
+	public void compute(final Mesh input, final DoubleType compactness) {
 		final double s3 = Math.pow(surfaceArea.apply(input).get(), 3);
 		final double v2 = Math.pow(volume.apply(input).get(), 2);
 		final double c = s3 / v2;
-		output.set((36.0 * Math.PI) / c);
+		compactness.set((36.0 * Math.PI) / c);
 	}
 
 }

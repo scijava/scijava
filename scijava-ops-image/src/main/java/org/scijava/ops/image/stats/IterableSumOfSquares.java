@@ -50,16 +50,16 @@ public class IterableSumOfSquares<I extends RealType<I>, O extends RealType<O>>
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
+	 * @param input
 	 * @param sumOfSquares
 	 */
 	@Override
-	public void compute(final Iterable<I> input, final O output) {
+	public void compute(final Iterable<I> input, final O sumOfSquares) {
 		double res = 0.0;
 		for (final I in : input) {
 			final double tmp = in.getRealDouble();
 			res += tmp * tmp;
 		}
-		output.setReal(res);
+		sumOfSquares.setReal(res);
 	}
 }

@@ -77,9 +77,7 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<!-- Avoid additional taglets here-->
 				<!-- We don't want to error by running taglet artifacts within the monorepo-->
-				<configuration>
-					<tagletArtifacts combine.self="override">
-					</tagletArtifacts>
+				<configuration combine.self="override">
 				</configuration>
 			</plugin>
 		</plugins>

@@ -54,8 +54,8 @@ public class BooleanTypeLogic<B extends BooleanType<B>, C extends Comparable<C>>
 	};
 
 	/**
-	 * @input in1 the first {@link Comparable<C>}
-	 * @input in2 the second {@link Comparable<C>}
+	 * @input in1 the first {@link Comparable}{@code <C>}
+	 * @input in2 the second {@link Comparable}{@code <C>}
 	 * @container out the preallocated result container
 	 * @implNote op names='logic.greaterThan'
 	 */
@@ -63,8 +63,8 @@ public class BooleanTypeLogic<B extends BooleanType<B>, C extends Comparable<C>>
 		.set(in1.compareTo(in2) > 0);
 
 	/**
-	 * @input in1 the first {@link Comparable<C>}
-	 * @input in2 the second {@link Comparable<C>}
+	 * @input in1 the first {@link Comparable}{@code <C>}
+	 * @input in2 the second {@link Comparable}{@code <C>}
 	 * @container out the preallocated result container
 	 * @implNote op names='logic.greaterThanOrEqual'
 	 */
@@ -72,8 +72,8 @@ public class BooleanTypeLogic<B extends BooleanType<B>, C extends Comparable<C>>
 		out) -> out.set(in1.compareTo(in2) >= 0);
 
 	/**
-	 * @input in1 the first {@link Comparable<C>}
-	 * @input in2 the second {@link Comparable<C>}
+	 * @input in1 the first {@link Comparable}{@code <C>}
+	 * @input in2 the second {@link Comparable}{@code <C>}
 	 * @container out the preallocated result container
 	 * @implNote op names='logic.lessThan'
 	 */
@@ -81,8 +81,8 @@ public class BooleanTypeLogic<B extends BooleanType<B>, C extends Comparable<C>>
 		in1.compareTo(in2) < 0);
 
 	/**
-	 * @input in1 the first {@link Comparable<C>}
-	 * @input in2 the second {@link Comparable<C>}
+	 * @input in1 the first {@link Comparable}{@code <C>}
+	 * @input in2 the second {@link Comparable}{@code <C>}
 	 * @container out the preallocated result container
 	 * @implNote op names='logic.lessThanOrEqual'
 	 */
@@ -100,8 +100,8 @@ public class BooleanTypeLogic<B extends BooleanType<B>, C extends Comparable<C>>
 	};
 
 	/**
-	 * @input in1 the first {@link Comparable<C>}
-	 * @input in2 the second {@link Comparable<C>}
+	 * @input in1 the first {@link Comparable}{@code <C>}
+	 * @input in2 the second {@link Comparable}{@code <C>}
 	 * @container out the preallocated result container
 	 * @implNote op names='logic.equal'
 	 */
@@ -109,8 +109,8 @@ public class BooleanTypeLogic<B extends BooleanType<B>, C extends Comparable<C>>
 		.equals(in2));
 
 	/**
-	 * @input in1 the first {@link Comparable<C>}
-	 * @input in2 the second {@link Comparable<C>}
+	 * @input in1 the first {@link Comparable}{@code <C>}
+	 * @input in2 the second {@link Comparable}{@code <C>}
 	 * @container out the preallocated result container
 	 * @implNote op names='logic.notEqual'
 	 */

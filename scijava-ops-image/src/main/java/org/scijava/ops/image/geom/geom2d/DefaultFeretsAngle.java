@@ -52,18 +52,18 @@ public class DefaultFeretsAngle implements
 	 * @param feretsAngle
 	 */
 	@Override
-	public void compute(final Pair<RealLocalizable, RealLocalizable> input,
-		final DoubleType output)
+	public void compute(final Pair<RealLocalizable, RealLocalizable> points,
+		final DoubleType feretsAngle)
 	{
 
-		final RealLocalizable p1 = input.getA();
-		final RealLocalizable p2 = input.getB();
+		final RealLocalizable p1 = points.getA();
+		final RealLocalizable p2 = points.getB();
 
 		final double degree = Math.atan2(p2.getDoublePosition(1) - p1
 			.getDoublePosition(1), p2.getDoublePosition(0) - p1.getDoublePosition(
 				0)) * (180.0 / Math.PI);
 
-		output.set(degree % 180);
+		feretsAngle.set(degree % 180);
 	}
 
 }

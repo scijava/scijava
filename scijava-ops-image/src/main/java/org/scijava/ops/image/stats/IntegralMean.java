@@ -56,12 +56,12 @@ public class IntegralMean<I extends RealType<I>> implements
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
+	 * @param input
 	 * @param integralMean
 	 */
 	@Override
 	public void compute(final RectangleNeighborhood<? extends Composite<I>> input,
-		final DoubleType output)
+		final DoubleType integralMean)
 	{
 		// computation according to
 		// https://en.wikipedia.org/wiki/Summed_area_table
@@ -99,7 +99,7 @@ public class IntegralMean<I extends RealType<I>> implements
 		valueAsDoubleType.set(area); // NB: Reuse DoubleType
 		sum.div(valueAsDoubleType);
 
-		output.set(sum);
+		integralMean.set(sum);
 	}
 
 	/**

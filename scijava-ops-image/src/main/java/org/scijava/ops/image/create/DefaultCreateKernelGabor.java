@@ -57,7 +57,6 @@ import net.imglib2.view.Views;
  * length.
  *
  * @author Vladimír Ulman
- * @param <T>
  */
 public final class DefaultCreateKernelGabor {
 

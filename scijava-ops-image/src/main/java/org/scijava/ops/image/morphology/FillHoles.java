@@ -64,14 +64,14 @@ public class FillHoles<T extends BooleanType<T>> implements
 	 * @param output
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<T> op,
-		final Shape structElement, final RandomAccessibleInterval<T> r)
+	public void compute(final RandomAccessibleInterval<T> input,
+		final Shape structElement, final RandomAccessibleInterval<T> output)
 	{
-		final IterableInterval<T> iterOp = Views.flatIterable(op);
-		final IterableInterval<T> iterR = Views.flatIterable(r);
+		final IterableInterval<T> iterOp = Views.flatIterable(input);
+		final IterableInterval<T> iterR = Views.flatIterable(output);
 
-		long[] dim = new long[r.numDimensions()];
-		r.dimensions(dim);
+		long[] dim = new long[output.numDimensions()];
+		output.dimensions(dim);
 		Cursor<T> rc = iterR.cursor();
 		Cursor<T> opc = iterOp.localizingCursor();
 		// Fill with non background marker
@@ -87,7 +87,7 @@ public class FillHoles<T extends BooleanType<T>> implements
 			opc.next();
 			if (rc.get().get() && !opc.get().get()) {
 				border = false;
-				for (int i = 0; i < r.numDimensions(); i++) {
+				for (int i = 0; i < output.numDimensions(); i++) {
 					if (rc.getLongPosition(i) == 0 || rc.getLongPosition(i) == dim[i] -
 						1)
 					{
@@ -96,7 +96,7 @@ public class FillHoles<T extends BooleanType<T>> implements
 					}
 				}
 				if (border) {
-					floodFillComp.compute(op, rc, structElement, r);
+					floodFillComp.compute(input, rc, structElement, output);
 				}
 			}
 		}

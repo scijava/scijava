@@ -82,10 +82,10 @@ public class EulerCorrection<B extends BooleanType<B>> implements
 	 * @param output
 	 */
 	@Override
-	public void compute(RandomAccessibleInterval<B> interval, DoubleType output) {
-		if (interval.numDimensions() != 3) throw new IllegalArgumentException(
+	public void compute(RandomAccessibleInterval<B> input, DoubleType output) {
+		if (input.numDimensions() != 3) throw new IllegalArgumentException(
 			"Input must have 3 dimensions!");
-		final Traverser<B> traverser = new Traverser<>(interval);
+		final Traverser<B> traverser = new Traverser<>(input);
 		final long chiZero = stackCorners(traverser);
 		final long e = stackEdges(traverser) + 3 * chiZero;
 		final long d = voxelEdgeIntersections(traverser) + chiZero;

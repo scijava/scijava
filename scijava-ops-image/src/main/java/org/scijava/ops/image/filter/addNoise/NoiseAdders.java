@@ -52,14 +52,14 @@ public class NoiseAdders {
 	 * <p>
 	 * Note that this Op has changed relative to the older implementations; before
 	 * it operated on RealTypes, we now only provide the operation on
-	 * Iterable<RealType>s. This is due to the nature of {@link Random}: The old
-	 * implementation saved a {@link Random} and used it on each {@link RealType}
-	 * passed to the Op. This provided no deterministic output, as the same input
-	 * would yield two different outputs if called in succession. Thus in this
-	 * iteration of the Op we make it a requirement that the input must be an
-	 * {@link Iterable}. Since the {@link Random} is created upon every call of
-	 * the Op it ensures that given the same seed and input data the output will
-	 * always be the same.
+	 * {@code Iterable<RealType>}s. This is due to the nature of {@link Random}:
+	 * The old implementation saved a {@link Random} and used it on each
+	 * {@link RealType} passed to the Op. This provided no deterministic output,
+	 * as the same input would yield two different outputs if called in
+	 * succession. Thus in this iteration of the Op we make it a requirement that
+	 * the input must be an {@link Iterable}. Since the {@link Random} is created
+	 * upon every call of the Op it ensures that given the same seed and input
+	 * data the output will always be the same.
 	 *
 	 * @param input
 	 * @param rangeMin
@@ -126,8 +126,8 @@ public class NoiseAdders {
 	 *         <p>
 	 *         Note that this Op has changed relative to the older
 	 *         implementations; before it operated on RealTypes, we now only
-	 *         provide the operation on Iterable<RealType>s. This is due to the
-	 *         nature of {@link Random}: The old implementation saved a
+	 *         provide the operation on {@code Iterable<RealType>}s. This is due
+	 *         to the nature of {@link Random}: The old implementation saved a
 	 *         {@link Random} and used it on each {@link RealType} passed to the
 	 *         Op. This provided no deterministic output, as the same input would
 	 *         yield two different outputs if called in succession. Thus in this

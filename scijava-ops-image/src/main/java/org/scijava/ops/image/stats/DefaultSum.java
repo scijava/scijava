@@ -53,15 +53,15 @@ public class DefaultSum<I extends RealType<I>, O extends RealType<O>> implements
 	/**
 	 * TODO
 	 *
-	 * @param raiInput
+	 * @param input
 	 * @param sum
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<I> input, final O output) {
-		output.setZero();
+	public void compute(final RandomAccessibleInterval<I> input, final O sum) {
+		sum.setZero();
 		List<O> chunkSums = LoopBuilder.setImages(input).multiThreaded()
 			.forEachChunk(chunk -> {
-				O chunkSum = output.createVariable();
+				O chunkSum = sum.createVariable();
 				chunkSum.setZero();
 				chunk.forEachPixel(pixel -> chunkSum.setReal(chunkSum.getRealDouble() +
 					pixel.getRealDouble()));
@@ -69,6 +69,6 @@ public class DefaultSum<I extends RealType<I>, O extends RealType<O>> implements
 			});
 
 		for (O chunkSum : chunkSums)
-			output.add(chunkSum);
+			sum.add(chunkSum);
 	}
 }

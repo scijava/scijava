@@ -53,8 +53,8 @@ public class Default<I extends BooleanType<I>, O extends Type<O>> implements
 	 * @param output
 	 */
 	@Override
-	public void compute(final I input, final O defaultVal, final O output) {
-		if (!input.get()) output.set(defaultVal);
+	public void compute(final I input, final O defaultValue, final O output) {
+		if (!input.get()) output.set(defaultValue);
 	}
 
 }

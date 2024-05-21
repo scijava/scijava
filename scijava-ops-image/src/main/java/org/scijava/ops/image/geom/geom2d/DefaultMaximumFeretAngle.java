@@ -58,8 +58,8 @@ public class DefaultMaximumFeretAngle implements
 	 * @param maxFeretsAngle
 	 */
 	@Override
-	public void compute(Polygon2D input, DoubleType output) {
-		output.set(feretAngle.apply(maxFeret.apply(input)).get());
+	public void compute(Polygon2D input, DoubleType maxFeretsAngle) {
+		maxFeretsAngle.set(feretAngle.apply(maxFeret.apply(input)).get());
 	}
 
 }

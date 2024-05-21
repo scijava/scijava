@@ -50,7 +50,6 @@ import net.imglib2.view.Views;
  * @author Stephan Sellien (University of Konstanz)
  * @author Brian Northan
  * @author Gabe Selzer
- * @param <T>
  */
 public final class DefaultCreateKernelGauss {
 

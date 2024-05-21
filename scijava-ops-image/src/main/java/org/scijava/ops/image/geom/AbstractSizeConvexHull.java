@@ -37,8 +37,7 @@ import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * Generic implementation of
- * {@link org.scijava.ops.image.Ops.Geometric.SizeConvexHull} .
+ * Abstract base for {@code geom.sizeConvexHull} implementations.
  *
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */

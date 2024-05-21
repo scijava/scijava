@@ -93,11 +93,11 @@ public final class Progress {
 		};
 
 	/**
-	 * Records {@link Consumer<Task>} {@code l} as a callback for all progressible
-	 * {@link Object}s
+	 * Invokes the given {@link Consumer} as a callback for all progressible
+	 * {@link Object}s.
 	 *
-	 * @param l a {@link Consumer<Task>} that would like to know about the
-	 *          progress of {@code progressible} {@link Object}s
+	 * @param l a {@link Consumer} that would like to know about the progress of
+	 *          {@code progressible} {@link Object}s
 	 */
 	public static void addGlobalListener(Consumer<Task> l) {
 		if (!globalListeners.contains(l)) {
@@ -106,12 +106,12 @@ public final class Progress {
 	}
 
 	/**
-	 * Records {@link Consumer<Task>} {@code l} as a callback for progressible
-	 * {@link Object} {@code progressible}
+	 * Invokes the given {@link Consumer} as a callback for the specified
+	 * progressible {@link Object}.
 	 *
 	 * @param progressible an {@link Object} that reports its progress
-	 * @param l a {@link Consumer<Task>} that would like to know about the
-	 *          progress of {@code progressible}
+	 * @param l a {@link Consumer} that would like to know about the progress of
+	 *          {@code progressible}
 	 */
 	public static void addListener(Object progressible, Consumer<Task> l) {
 		if (!progressibleListeners.containsKey(progressible)) {
@@ -128,7 +128,7 @@ public final class Progress {
 	/**
 	 * Completes the current task on this {@link Thread}'s execution hierarchy,
 	 * removing it in the process. This method also takes care to ping relevant
-	 * {@link Consumer<Task>}s.
+	 * {@link Consumer}s.
 	 *
 	 * @see Task#complete()
 	 */
@@ -195,8 +195,8 @@ public final class Progress {
 	}
 
 	/**
-	 * Activates all callback {@link Consumer <Task>}s listening for progress
-	 * updates on executions of {@code o}
+	 * Activates all callback {@link Consumer}s listening for progress updates on
+	 * executions of {@code o}
 	 *
 	 * @param task an {@link Object} reporting its progress.
 	 */
@@ -233,7 +233,7 @@ public final class Progress {
 
 	/**
 	 * Updates the progress of the current {@link Task}, pinging any interested
-	 * {@link Consumer<Task>}s.
+	 * {@link Consumer}s.
 	 *
 	 * @see Task#update(long)
 	 */
@@ -243,7 +243,7 @@ public final class Progress {
 
 	/**
 	 * Updates the progress of the current {@link Task}, pinging any interested
-	 * {@link Consumer<Task>}s.
+	 * {@link Consumer}s.
 	 *
 	 * @param elements the number of elements completed in the current stage.
 	 * @see Task#update(long)
@@ -254,7 +254,7 @@ public final class Progress {
 
 	/**
 	 * Updates the progress of the provided {@link Task}, pinging any interested
-	 * {@link Consumer<Task>}s.
+	 * {@link Consumer}s.
 	 *
 	 * @param numElements the number of elements completed in the current stage.
 	 * @param task the {@link Task} to update
@@ -267,7 +267,7 @@ public final class Progress {
 
 	/**
 	 * Sets the status of the current {@link Task}, pinging any interested
-	 * {@link Consumer<Task>}s.
+	 * {@link Consumer}s.
 	 *
 	 * @see Task#setStatus(String)
 	 */

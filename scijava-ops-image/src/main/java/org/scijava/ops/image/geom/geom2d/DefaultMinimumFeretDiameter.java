@@ -58,8 +58,8 @@ public class DefaultMinimumFeretDiameter implements
 	 * @param minFeretDiameter
 	 */
 	@Override
-	public void compute(Polygon2D input, DoubleType output) {
-		output.set(feretDiameter.apply(minFeret.apply(input)).get());
+	public void compute(Polygon2D input, DoubleType minFeretDiameter) {
+		minFeretDiameter.set(feretDiameter.apply(minFeret.apply(input)).get());
 	}
 
 }

@@ -60,9 +60,9 @@ public class DefaultCircularity implements
 	 * @param circularity
 	 */
 	@Override
-	public void compute(Polygon2D input, DoubleType output) {
-		output.set(4 * Math.PI * (areaFunc.apply(input).getRealDouble() / Math.pow(
-			perimeterFunc.apply(input).getRealDouble(), 2)));
+	public void compute(Polygon2D input, DoubleType circularity) {
+		circularity.set(4 * Math.PI * (areaFunc.apply(input).getRealDouble() / Math
+			.pow(perimeterFunc.apply(input).getRealDouble(), 2)));
 	}
 
 }

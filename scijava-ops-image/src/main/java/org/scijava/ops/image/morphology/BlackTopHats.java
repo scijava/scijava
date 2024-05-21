@@ -60,7 +60,7 @@ public class BlackTopHats<T extends RealType<T> & Comparable<T>, R extends RealT
 	 * order.
 	 *
 	 * @input img input data
-	 * @input shapes a {@link List<Shape>} containing the {@link Shape}s to use
+	 * @input shapes a {@code List<Shape>} containing the {@link Shape}s to use
 	 *        for each Black Top Hat neighborhood
 	 * @input numThreads the number of threads to use in the execution
 	 * @output img output data
@@ -87,7 +87,7 @@ public class BlackTopHats<T extends RealType<T> & Comparable<T>, R extends RealT
 	 * order.
 	 *
 	 * @input img input data
-	 * @input shapes a {@link List<Shape>} containing the {@link Shape}s to use
+	 * @input shapes a {@code List<Shape>} containing the {@link Shape}s to use
 	 *        for each Black Top Hat neighborhood
 	 * @input numThreads the number of threads to use in the execution
 	 * @input minValue a {@link T} that is smaller than all values in the input
@@ -122,7 +122,7 @@ public class BlackTopHats<T extends RealType<T> & Comparable<T>, R extends RealT
 	 * order, placing the result into the provided preallocated output buffer.
 	 *
 	 * @input img input data
-	 * @input shapes a {@link List<Shape>} containing the {@link Shape}s to use
+	 * @input shapes a {@code List<Shape>} containing the {@link Shape}s to use
 	 *        for each Black Top Hat neighborhood
 	 * @input numThreads the number of threads to use in the execution
 	 * @container img output data
@@ -137,7 +137,7 @@ public class BlackTopHats<T extends RealType<T> & Comparable<T>, R extends RealT
 	 * order, placing the result into the provided preallocated output buffer.
 	 *
 	 * @input img input data
-	 * @input shapes a {@link List<Shape>} containing the {@link Shape}s to use
+	 * @input shapes a {@code List<Shape>} containing the {@link Shape}s to use
 	 *        for each Black Top Hat neighborhood
 	 * @input numThreads the number of threads to use in the execution
 	 * @input minValue a {@link T} that is smaller than all values in the input
@@ -190,7 +190,7 @@ public class BlackTopHats<T extends RealType<T> & Comparable<T>, R extends RealT
 	 *
 	 * @mutable img input data
 	 * @input interval the {@link Interval} restricting the bounds of computation.
-	 * @input shapes a {@link List<Shape>} containing the {@link Shape}s to use
+	 * @input shapes a {@code List<Shape>} containing the {@link Shape}s to use
 	 *        for each Black Top Hat neighborhood
 	 * @input numThreads the number of threads to use in the execution
 	 * @implNote op names='morphology.BlackTopHat'
@@ -207,7 +207,7 @@ public class BlackTopHats<T extends RealType<T> & Comparable<T>, R extends RealT
 	 *
 	 * @mutable img input data
 	 * @input interval the {@link Interval} restricting the bounds of computation.
-	 * @input shapes a {@link List<Shape>} containing the {@link Shape}s to use
+	 * @input shapes a {@code List<Shape>} containing the {@link Shape}s to use
 	 *        for each Black Top Hat neighborhood
 	 * @input numThreads the number of threads to use in the execution
 	 * @input minValue a {@link T} that is smaller than all values in the input

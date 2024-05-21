@@ -57,15 +57,15 @@ public class IterableMoment4AboutMean<I extends RealType<I>, O extends RealType<
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
+	 * @param input
 	 * @param moment4AboutMean
 	 */
 	@Override
-	public void compute(final Iterable<I> input, final O output) {
+	public void compute(final Iterable<I> input, final O moment4AboutMean) {
 
-		final O mean = output.createVariable();
+		final O mean = moment4AboutMean.createVariable();
 		meanComputer.compute(input, mean);
-		final O size = output.createVariable();
+		final O size = moment4AboutMean.createVariable();
 		sizeComputer.compute(input, size);
 
 		double res = 0;
@@ -75,6 +75,6 @@ public class IterableMoment4AboutMean<I extends RealType<I>, O extends RealType<
 			res += val * val * val * val;
 		}
 
-		output.setReal(res / size.getRealDouble());
+		moment4AboutMean.setReal(res / size.getRealDouble());
 	}
 }

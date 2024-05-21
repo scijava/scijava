@@ -40,10 +40,8 @@ import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * Generic implementation of
- * {@link org.scijava.ops.image.Ops.Geometric.MedianElongation}. Adapted to 3D
- * from http://www.math.uci.edu/icamp/summer/research_11/park/
- * shape_descriptors_survey.pdf
+ * Generic implementation of {@code geom.medianElongation}. Adapted to 3D from
+ * http://www.math.uci.edu/icamp/summer/research_11/park/shape_descriptors_survey.pdf
  *
  * @author Tim-Oliver Buchholz (University of Konstanz)
  * @implNote op names='geom.medianElongation', label='Geometric (3D): Median
@@ -63,7 +61,7 @@ public class DefaultMedianElongation implements
 	 * @param medianElongation
 	 */
 	@Override
-	public void compute(final Mesh input, final DoubleType output) {
+	public void compute(final Mesh input, final DoubleType medianElongation) {
 		final RealMatrix it = inertiaTensor.apply(input);
 		final EigenDecomposition ed = new EigenDecomposition(it);
 
@@ -78,7 +76,7 @@ public class DefaultMedianElongation implements
 
 		final double b = Math.pow(g * l2 * l2 / Math.sqrt(l1 * l3), 1 / 5d);
 		final double c = Math.pow(g * l3 * l3 / Math.sqrt(l1 * l2), 1 / 5d);
-		output.set(1 - (c / b));
+		medianElongation.set(1 - (c / b));
 	}
 
 }

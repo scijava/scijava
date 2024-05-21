@@ -50,14 +50,14 @@ public class IterableMax<T extends RealType<T>> implements
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
+	 * @param input
 	 * @param max
 	 */
 	@Override
-	public void compute(final Iterable<T> input, final T output) {
+	public void compute(final Iterable<T> input, final T max) {
 		// Re-use output to compare against
-		output.setReal(output.getMinValue());
+		max.setReal(max.getMinValue());
 		for (final T in : input)
-			if (output.compareTo(in) < 0) output.set(in);
+			if (max.compareTo(in) < 0) max.set(in);
 	}
 }

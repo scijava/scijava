@@ -59,22 +59,24 @@ public class DefaultHarmonicMean<I extends RealType<I>, O extends RealType<O>>
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
+	 * @param input
 	 * @param harmonicMean
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<I> input, final O output) {
-		final O area = output.createVariable();
+	public void compute(final RandomAccessibleInterval<I> input,
+		final O harmonicMean)
+	{
+		final O area = harmonicMean.createVariable();
 		sizeComputer.compute(input, area);
-		final O sumOfInverses = output.createVariable();
+		final O sumOfInverses = harmonicMean.createVariable();
 		sumOfInversesComputer.compute(input, sumOfInverses);
 
 		if (sumOfInverses.getRealDouble() != 0) {
-			output.set(area);
-			output.div(sumOfInverses);
+			harmonicMean.set(area);
+			harmonicMean.div(sumOfInverses);
 		}
 		else {
-			output.setReal(0);
+			harmonicMean.setReal(0);
 		}
 	}
 }

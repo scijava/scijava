@@ -35,7 +35,7 @@ package org.scijava.common3.validity;
  * <p>
  * Unlike most exceptions, {@code ValidityException} is typically not thrown,
  * but rather only recorded for future reference.
- * <p>
+ * </p>
  *
  * @author Curtis Rueden
  */

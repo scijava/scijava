@@ -42,9 +42,9 @@
  * create mock objects.</li>
  * <li>Recover erased generic type information from object instances at runtime,
  * in an extensible way, via {@link org.scijava.types.TypeExtractor} plugins and
- * the {@link TypeService#reify} method. E.g., you can learn that an object of
- * class {@link java.util.HashMap} is actually (or at least functionally) a
- * {@code HashMap<String, Integer>}.</li>
+ * the {@link org.scijava.types.TypeReifier#reify} method. E.g., you can learn
+ * that an object of class {@link java.util.HashMap} is actually (or at least
+ * functionally) a {@code HashMap<String, Integer>}.</li>
  * </ul>
  */
 

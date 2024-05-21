@@ -30,6 +30,8 @@
 package org.scijava.ops.flim;
 
 import net.imglib2.type.numeric.RealType;
+import org.scijava.ops.flim.impl.LMAFit;
+import org.scijava.ops.flim.impl.PhasorFit;
 
 import java.util.List;
 
@@ -64,7 +66,8 @@ public interface FitWorker<I extends RealType<I>> {
 
 	/**
 	 * How many parameters should there be in {@code results.param}? E.g. 3 for
-	 * one-component {@link LMAFitWorker} and 5 for {@link PhasorFitWorker}.
+	 * one-component {@link LMAFit.LMAFitWorker} and 5 for
+	 * {@link PhasorFit.PhasorFitWorker}.
 	 *
 	 * @return The number of output parameters in the parameter array.
 	 */

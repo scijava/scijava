@@ -69,7 +69,7 @@ import org.scijava.types.Nil;
  * <li><em>subtask</em>s are phases of computation done <b>by other Ops</b></li>
  * </ul>
  * Users are then notified by the progress of Ops by installing
- * {@link Consumer<Task>}s.
+ * {@link Consumer}{@code <Task>}s.
  *
  * @author Gabriel Selzer
  */

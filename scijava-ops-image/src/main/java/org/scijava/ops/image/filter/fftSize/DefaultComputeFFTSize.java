@@ -53,21 +53,19 @@ public class DefaultComputeFFTSize implements
 	 * @return the outputSizes
 	 */
 	@Override
-	public long[][] apply(Dimensions inputDimensions, Boolean powerOfTwo) {
+	public long[][] apply(Dimensions dimensions, Boolean powerOfTwo) {
 
 		long[][] size = new long[2][];
-		size[0] = new long[inputDimensions.numDimensions()];
-		size[1] = new long[inputDimensions.numDimensions()];
+		size[0] = new long[dimensions.numDimensions()];
+		size[1] = new long[dimensions.numDimensions()];
 
-		for (int i = 0; i < inputDimensions.numDimensions(); i++) {
+		for (int i = 0; i < dimensions.numDimensions(); i++) {
 			// real size
 			if (powerOfTwo) {
-				size[0][i] = NextPowerOfTwo.nextPowerOfTwo(inputDimensions.dimension(
-					i));
+				size[0][i] = NextPowerOfTwo.nextPowerOfTwo(dimensions.dimension(i));
 			}
 			else {
-				size[0][i] = NextSmoothNumber.nextSmooth((int) inputDimensions
-					.dimension(i));
+				size[0][i] = NextSmoothNumber.nextSmooth((int) dimensions.dimension(i));
 			}
 			// complex size
 			if (i == 0) {

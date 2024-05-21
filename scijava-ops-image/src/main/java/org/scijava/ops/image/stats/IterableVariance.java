@@ -54,11 +54,11 @@ public class IterableVariance<I extends RealType<I>, O extends RealType<O>>
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
+	 * @param input
 	 * @param variance
 	 */
 	@Override
-	public void compute(final Iterable<I> input, final O output) {
+	public void compute(final Iterable<I> input, final O variance) {
 		int n = 0;
 		double mean = 0.0;
 		double M2 = 0.0;
@@ -73,10 +73,10 @@ public class IterableVariance<I extends RealType<I>, O extends RealType<O>>
 		}
 
 		if (n < 2) {
-			output.setReal(Double.NaN);
+			variance.setReal(Double.NaN);
 		}
 		else {
-			output.setReal(M2 / (n - 1));
+			variance.setReal(M2 / (n - 1));
 		}
 	}
 

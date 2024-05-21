@@ -35,8 +35,7 @@ import net.imglib2.type.numeric.RealType;
 import org.scijava.function.Computers;
 
 /**
- * Abstract {@code ImageMomentOp}. Provides {@link OpService} and create the
- * output.
+ * Abstract Op for computing image moments.
  *
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)

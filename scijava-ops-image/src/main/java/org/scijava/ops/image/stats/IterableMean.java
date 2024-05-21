@@ -50,11 +50,11 @@ public class IterableMean<I extends RealType<I>, O extends RealType<O>>
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
+	 * @param input
 	 * @param mean
 	 */
 	@Override
-	public void compute(final Iterable<I> input, final O output) {
+	public void compute(final Iterable<I> input, final O mean) {
 
 		double sum = 0;
 		double size = 0;
@@ -64,7 +64,7 @@ public class IterableMean<I extends RealType<I>, O extends RealType<O>>
 			size++;
 		}
 
-		output.setReal(sum / size);
+		mean.setReal(sum / size);
 	}
 
 }

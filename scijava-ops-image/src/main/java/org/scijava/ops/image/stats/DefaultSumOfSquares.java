@@ -63,13 +63,15 @@ public class DefaultSumOfSquares<I extends RealType<I>, O extends RealType<O>>
 	/**
 	 * TODO
 	 *
-	 * @param raiInput
+	 * @param input
 	 * @param sumOfSquares
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<I> input, final O output) {
-		RandomAccessibleInterval<O> tmpImg = imgCreator.apply(input, output);
+	public void compute(final RandomAccessibleInterval<I> input,
+		final O sumOfSquares)
+	{
+		RandomAccessibleInterval<O> tmpImg = imgCreator.apply(input, sumOfSquares);
 		sqrOp.compute(input, tmpImg);
-		sumOp.compute(tmpImg, output);
+		sumOp.compute(tmpImg, sumOfSquares);
 	}
 }

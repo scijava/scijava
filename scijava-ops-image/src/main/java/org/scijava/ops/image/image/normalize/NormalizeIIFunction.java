@@ -45,7 +45,8 @@ import org.scijava.ops.spi.OpDependency;
  *
  * @author Christian Dietz (University of Konstanz)
  * @author Leon Yang
- * @param <T>
+ * @param <I> the element type of the input
+ * @param <O> the element type of the output
  * @implNote op names='image.normalize'
  */
 public class NormalizeIIFunction<I extends RealType<I>, O extends RealType<O>>

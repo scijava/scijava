@@ -50,8 +50,8 @@ public class DefaultVerticesCountPolygon implements
 	 * @param verticesCount
 	 */
 	@Override
-	public void compute(Polygon2D input, DoubleType output) {
-		output.set(input.numVertices());
+	public void compute(Polygon2D input, DoubleType verticesCount) {
+		verticesCount.set(input.numVertices());
 	}
 
 }

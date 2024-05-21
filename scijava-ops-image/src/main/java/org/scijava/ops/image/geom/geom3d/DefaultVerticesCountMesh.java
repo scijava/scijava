@@ -52,8 +52,8 @@ public class DefaultVerticesCountMesh implements
 	 * @param verticesCountMesh
 	 */
 	@Override
-	public void compute(final Mesh input, final DoubleType output) {
-		output.set(input.vertices().size());
+	public void compute(final Mesh input, final DoubleType verticesCountMesh) {
+		verticesCountMesh.set(input.vertices().size());
 	}
 
 }

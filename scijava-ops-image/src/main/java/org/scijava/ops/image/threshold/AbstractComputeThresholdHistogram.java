@@ -35,7 +35,7 @@ import net.imglib2.type.numeric.RealType;
 import org.scijava.function.Computers;
 
 /**
- * Abstract superclass of {@link ComputeThresholdHistogram} implementations.
+ * Abstract superclass for histogram threshold computations.
  *
  * @author Curtis Rueden
  */

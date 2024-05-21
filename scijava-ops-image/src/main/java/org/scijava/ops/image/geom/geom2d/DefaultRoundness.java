@@ -60,9 +60,9 @@ public class DefaultRoundness implements
 	 * @param roundness
 	 */
 	@Override
-	public void compute(final Polygon2D input, final DoubleType output) {
-		output.set(4 * (areaFunc.apply(input).getRealDouble() / (Math.PI * Math.pow(
-			majorAxisFunc.apply(input).getRealDouble(), 2))));
+	public void compute(final Polygon2D input, final DoubleType roundness) {
+		roundness.set(4 * (areaFunc.apply(input).getRealDouble() / (Math.PI * Math
+			.pow(majorAxisFunc.apply(input).getRealDouble(), 2))));
 	}
 
 }

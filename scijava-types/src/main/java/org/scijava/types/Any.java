@@ -83,7 +83,7 @@ public final class Any implements Type {
 	 * (disregarding the order of each array)</li>
 	 * <li>{@code obj.getLowerBounds} is equal to {@code lowerBounds}
 	 * (disregarding the order of each array)</li>
-	 * <p>
+	 * </ul>
 	 * This is a rather strict definition of equality, however it is necessary to
 	 * preserve transitivity.
 	 */

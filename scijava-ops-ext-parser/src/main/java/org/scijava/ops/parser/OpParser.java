@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
- * Entry point for parsing external libraries to ops (via {@link #main}). <br/>
+ * Entry point for parsing external libraries to ops (via {@link #main}). <br>
  * Expected YAML structure is:
  * <ul>
  * <li>namespace:String # Optional string for aliasing methods to

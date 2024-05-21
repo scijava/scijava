@@ -122,7 +122,7 @@ public abstract class AbstractSingleFitWorker<I extends RealType<I>> extends
 	 * Called on the worker thread after worker duplication. Can be used to
 	 * initialize thread-local globals such as Bayesian search grid parameters.
 	 *
-	 * @see BayesFitWorker#onThreadInit()
+	 * @see BayesFit.BayesFitWorker#onThreadInit()
 	 */
 	protected void onThreadInit() {}
 

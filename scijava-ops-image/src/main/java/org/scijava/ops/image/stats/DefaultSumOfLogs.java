@@ -64,14 +64,16 @@ public class DefaultSumOfLogs<I extends RealType<I>, O extends RealType<O>>
 	/**
 	 * TODO
 	 *
-	 * @param raiInput
+	 * @param input
 	 * @param sumOfLogs
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<I> input, final O output) {
+	public void compute(final RandomAccessibleInterval<I> input,
+		final O sumOfLogs)
+	{
 		RandomAccessibleInterval<DoubleType> logImg = imgCreator.apply(input,
 			new DoubleType());
 		logOp.compute(input, logImg);
-		sumOp.compute(logImg, output);
+		sumOp.compute(logImg, sumOfLogs);
 	}
 }

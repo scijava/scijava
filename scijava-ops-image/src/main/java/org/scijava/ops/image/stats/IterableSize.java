@@ -50,18 +50,18 @@ public class IterableSize<I extends RealType<I>, O extends RealType<O>>
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
+	 * @param input
 	 * @param size
 	 */
 	@Override
-	public void compute(final Iterable<I> input, final O output) {
-		double size = 0;
+	public void compute(final Iterable<I> input, final O size) {
+		double s = 0;
 
 		for (@SuppressWarnings("unused")
 		final I i : input) {
-			size++;
+			s++;
 		}
 
-		output.setReal(size);
+		size.setReal(s);
 	}
 }

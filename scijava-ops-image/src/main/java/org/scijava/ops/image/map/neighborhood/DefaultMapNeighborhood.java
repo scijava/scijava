@@ -29,9 +29,6 @@
 
 package org.scijava.ops.image.map.neighborhood;
 
-import org.scijava.function.Computers;
-import org.scijava.ops.api.Ops;
-
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessibleInterval;
@@ -39,6 +36,7 @@ import net.imglib2.algorithm.neighborhood.Neighborhood;
 import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.view.Views;
+import org.scijava.function.Computers;
 
 /**
  * Evaluates a {@link Computers.Arity1} for each {@link Neighborhood} on the
@@ -63,17 +61,17 @@ public class DefaultMapNeighborhood<I, O> implements
 	 * @param output
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<I> in1, final Shape in2,
-		final Computers.Arity1<Iterable<I>, O> computer,
-		final IterableInterval<O> out)
+	public void compute(final RandomAccessibleInterval<I> input,
+		final Shape shape, final Computers.Arity1<Iterable<I>, O> op,
+		final IterableInterval<O> output)
 	{
 		// TODO can we do this through a mapper?
-		Cursor<Neighborhood<I>> inCursor = in2.neighborhoodsSafe(in1).cursor();
-		Cursor<O> outCursor = out.cursor();
+		Cursor<Neighborhood<I>> inCursor = shape.neighborhoodsSafe(input).cursor();
+		Cursor<O> outCursor = output.cursor();
 		while (outCursor.hasNext()) {
 			outCursor.fwd();
 			inCursor.fwd();
-			computer.accept(inCursor.get(), outCursor.get());
+			op.accept(inCursor.get(), outCursor.get());
 		}
 	}
 
@@ -106,16 +104,16 @@ class MapNeighborhoodAllRAI<I, O> implements
 	 * @param output
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<I> in1, final Shape in2,
-		final Computers.Arity1<Iterable<I>, O> op,
-		final RandomAccessibleInterval<O> out)
+	public void compute(final RandomAccessibleInterval<I> input,
+		final Shape shape, final Computers.Arity1<Iterable<I>, O> op,
+		final RandomAccessibleInterval<O> output)
 	{
 		// generate a neighborhood image with the bounds of the input
 		RandomAccessibleInterval<Neighborhood<I>> neighborhoodInput = Views
-			.interval(in2.neighborhoodsRandomAccessibleSafe(in1), in1);
+			.interval(shape.neighborhoodsRandomAccessibleSafe(input), input);
 
-		LoopBuilder.setImages(neighborhoodInput, out).multiThreaded().forEachPixel(
-			op::compute);
+		LoopBuilder.setImages(neighborhoodInput, output).multiThreaded()
+			.forEachPixel(op::compute);
 	}
 
 }

@@ -50,11 +50,11 @@ public class IterableHarmonicMean<I extends RealType<I>, O extends RealType<O>>
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
+	 * @param input
 	 * @param harmonicMean
 	 */
 	@Override
-	public void compute(final Iterable<I> input, final O output) {
+	public void compute(final Iterable<I> input, final O harmonicMean) {
 		double size = 0;
 		double sumOfInverses = 0;
 		for (final I in : input) {
@@ -63,10 +63,10 @@ public class IterableHarmonicMean<I extends RealType<I>, O extends RealType<O>>
 		}
 
 		if (sumOfInverses != 0) {
-			output.setReal(size / sumOfInverses);
+			harmonicMean.setReal(size / sumOfInverses);
 		}
 		else {
-			output.setReal(0);
+			harmonicMean.setReal(0);
 		}
 	}
 }

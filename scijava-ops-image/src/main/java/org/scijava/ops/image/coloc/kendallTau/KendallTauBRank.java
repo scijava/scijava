@@ -45,8 +45,8 @@ import net.imglib2.util.Pair;
  * According to <a href=
  * "http://en.wikipedia.org/wiki/Kendall_tau_rank_correlation_coefficient">this
  * article</a>, Tau-b (appropriate if multiple pairs share the same first, or
- * second, value), the rank correlation of a set of pairs <tt>(x_1, y_1), ...,
- * (x_n, y_n)</tt>:
+ * second, value), the rank correlation of a set of pairs
+ * {@code (x_1, y_1), ..., (x_n, y_n)}:
  * </p>
  *
  * <pre>

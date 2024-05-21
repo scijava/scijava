@@ -53,15 +53,16 @@ public class DefaultFeretsDiameter implements
 	 * @param feretsDiameter
 	 */
 	@Override
-	public void compute(final Pair<RealLocalizable, RealLocalizable> input,
-		final DoubleType output)
+	public void compute(final Pair<RealLocalizable, RealLocalizable> points,
+		final DoubleType feretsDiameter)
 	{
 
-		final RealLocalizable p1 = input.getA();
-		final RealLocalizable p2 = input.getB();
+		final RealLocalizable p1 = points.getA();
+		final RealLocalizable p2 = points.getB();
 
-		output.set(Math.hypot(p1.getDoublePosition(0) - p2.getDoublePosition(0), p1
-			.getDoublePosition(1) - p2.getDoublePosition(1)));
+		feretsDiameter.set(Math.hypot(p1.getDoublePosition(0) - p2
+			.getDoublePosition(0), p1.getDoublePosition(1) - p2.getDoublePosition(
+				1)));
 	}
 
 }

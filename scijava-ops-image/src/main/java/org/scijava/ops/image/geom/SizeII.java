@@ -35,7 +35,7 @@ import net.imglib2.IterableInterval;
 import net.imglib2.type.numeric.real.DoubleType;
 
 /**
- * Generic implementation of {@link org.scijava.ops.image.Ops.Geometric.Size}.
+ * Generic implementation of {@code geom.size}.
  *
  * @author Tim-Oliver Buchholz (University of Konstanz)
  * @implNote op names='geom.size', label='Geometric: Size', priority='10000.'

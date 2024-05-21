@@ -37,8 +37,7 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.scijava.function.Computers;
 
 /**
- * Generic implementation of
- * {@link org.scijava.ops.image.Ops.Geometric.BoundarySize}.
+ * Generic implementation of {@code geom.boundarySize}.
  *
  * @author Tim-Oliver Buchholz (University of Konstanz)
  * @implNote op names='geom.boundarySize', label='Geometric (3D): Surface Area',
@@ -53,7 +52,7 @@ public class DefaultSurfaceArea implements Computers.Arity1<Mesh, DoubleType> {
 	 * @param boundarySize
 	 */
 	@Override
-	public void compute(final Mesh input, final DoubleType output) {
+	public void compute(final Mesh input, final DoubleType boundarySize) {
 		double total = 0;
 		for (final Triangle tri : input.triangles()) {
 			final Vector3D v0 = new Vector3D(tri.v0x(), tri.v0y(), tri.v0z());
@@ -64,7 +63,7 @@ public class DefaultSurfaceArea implements Computers.Arity1<Mesh, DoubleType> {
 			final double norm = cross.getNorm();
 			if (norm > 0) total += norm * 0.5;
 		}
-		output.set(total);
+		boundarySize.set(total);
 	}
 
 }

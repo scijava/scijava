@@ -56,8 +56,8 @@ public class DefaultVerticesCountConvexHullPolygon implements
 	 * @param verticesCountConvexHull
 	 */
 	@Override
-	public void compute(Polygon2D input, DoubleType output) {
-		output.set(convexHullFunc.apply(input).numVertices());
+	public void compute(Polygon2D input, DoubleType verticesCountConvexHull) {
+		verticesCountConvexHull.set(convexHullFunc.apply(input).numVertices());
 	}
 
 }

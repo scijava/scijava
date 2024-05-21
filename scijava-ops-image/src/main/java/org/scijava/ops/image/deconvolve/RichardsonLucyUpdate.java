@@ -55,8 +55,8 @@ public class RichardsonLucyUpdate<T extends RealType<T>> implements
 	/**
 	 * performs update step of the Richardson Lucy Algorithm
 	 *
-	 * @param input
-	 * @param output
+	 * @param correction
+	 * @param estimate
 	 */
 	@Override
 	public void compute(RandomAccessibleInterval<T> correction,

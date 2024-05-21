@@ -55,7 +55,7 @@ public class DefaultPerimeterLength implements
 	 * @param boundarySize
 	 */
 	@Override
-	public void compute(final Polygon2D input, final DoubleType output) {
+	public void compute(final Polygon2D input, final DoubleType boundarySize) {
 		double perimeter = 0;
 		final List<? extends RealLocalizable> vertices = GeomUtils.vertices(input);
 		final int size = vertices.size();
@@ -70,7 +70,7 @@ public class DefaultPerimeterLength implements
 			perimeter += Math.sqrt(dx2 * dx2 + dy2 * dy2);
 		}
 
-		output.set(perimeter);
+		boundarySize.set(perimeter);
 	}
 
 }

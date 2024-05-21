@@ -97,17 +97,12 @@
 
 		<scijava-maven-plugin.version>2.2.0</scijava-maven-plugin.version>
 
-		<doclint>none</doclint>
-
 		<guava.version>28.2-jre</guava.version>
 		<geantyref.version>1.3.6</geantyref.version>
 
 		<script-maven-plugin.version>1.0.0</script-maven-plugin.version>
 		<jruby.version>9.2.11.1</jruby.version>
 		<scijava.parse.ops>true</scijava.parse.ops>
-
-		<!-- No java source files for this project -->
-		<maven.javadoc.skip>true</maven.javadoc.skip>
 	</properties>
 	<build>
 		<plugins>
@@ -132,6 +127,20 @@
 			<plugin>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>
+					<taglets>
+						<taglet>
+							<tagletClass>org.scijava.taglets.InputTaglet</tagletClass>
+						</taglet>
+						<taglet>
+							<tagletClass>org.scijava.taglets.MutableTaglet</tagletClass>
+						</taglet>
+						<taglet>
+							<tagletClass>org.scijava.taglets.ContainerTaglet</tagletClass>
+						</taglet>
+						<taglet>
+							<tagletClass>org.scijava.taglets.OutputTaglet</tagletClass>
+						</taglet>
+					</taglets>
 					<tagletArtifacts>
 						<tagletArtifact>
 							<groupId>org.scijava</groupId>
@@ -139,6 +148,13 @@
 							<version>${project.version}</version>
 						</tagletArtifact>
 					</tagletArtifacts>
+					<tags>
+						<tag>
+							<name>implNote</name>
+							<placement>a</placement>
+							<head>Implementation Note:</head>
+						</tag>
+					</tags>
 				</configuration>
 			</plugin>
 			<plugin>

@@ -51,7 +51,7 @@ public class DefaultASM<T extends RealType<T>> extends
 	 * @param input
 	 * @param numGreyLevels
 	 * @param distance
-	 * @param matrixOrientation
+	 * @param orientation
 	 * @return the output
 	 */
 	@Override

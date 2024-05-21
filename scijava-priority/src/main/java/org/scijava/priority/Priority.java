@@ -98,7 +98,6 @@ public final class Priority {
 	 * @return -1 if {@code p1}'s priority is higher than {@code p2}'s, 1 if
 	 *         {@code p2}'s priority is higher than {@code p1}'s, or 0 if they
 	 *         have the same priority.
-	 * @see org.scijava.util.ClassUtils#compare(Class, Class)
 	 */
 	public static <T extends Prioritized<T>> int compare(final Prioritized<T> p1,
 		final Prioritized<T> p2)

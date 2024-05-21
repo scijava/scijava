@@ -79,6 +79,8 @@ html_theme = "sphinx_rtd_theme"
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = []
 
+html_extra_path = ["ops/doc/404.html"]
+
 # Add the SciJava ops logo
 html_logo = "ops/images/scijava-ops.svg"
 html_theme_options = {

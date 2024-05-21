@@ -82,7 +82,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	private final OpMatcher matcher;
 
-	private final TypeReifier typeService;
+	private final TypeReifier typeReifier;
 
 	private final OpHistory history;
 
@@ -130,7 +130,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	public DefaultOpEnvironment(final Discoverer... discoverers) {
-		typeService = new DefaultTypeReifier(metaDiscoverer);
+		typeReifier = new DefaultTypeReifier(metaDiscoverer);
 		history = OpHistory.getOpHistory();
 		matcher = new DefaultOpMatcher( //
 			metaDiscoverer.discover(MatchingRoutine.class) //
@@ -252,7 +252,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	@Override
 	public Type genericType(Object obj) {
-		return typeService.reify(obj);
+		return typeReifier.reify(obj);
 	}
 
 	@Override

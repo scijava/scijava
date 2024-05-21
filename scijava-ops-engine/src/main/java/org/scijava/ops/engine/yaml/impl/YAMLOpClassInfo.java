@@ -129,7 +129,7 @@ public class YAMLOpClassInfo extends AbstractYAMLOpInfo {
 		}
 
 		// Add Op Dependencies
-		final List<Field> fields = Annotations.getAnnotatedFields(cls,
+		final List<Field> fields = Annotations.annotatedFields(cls,
 			OpDependency.class);
 		for (final Field f : fields) {
 			f.setAccessible(true);

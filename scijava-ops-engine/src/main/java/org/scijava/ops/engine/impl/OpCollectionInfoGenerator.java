@@ -62,8 +62,7 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 		List<OpInfo> collectionInfos = new ArrayList<>();
 
 		// add OpFieldInfos
-		final List<Field> fields = Annotations.getAnnotatedFields(cls,
-			OpField.class);
+		final List<Field> fields = Annotations.annotatedFields(cls, OpField.class);
 		final Optional<Object> instance = getInstance(cls);
 		if (instance.isPresent()) {
 			final List<DefaultOpFieldInfo> fieldInfos = //
@@ -75,7 +74,7 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 		// add OpMethodInfos
 		//
 		final List<DefaultOpMethodInfo> methodInfos = //
-			Annotations.getAnnotatedMethods(cls, OpMethod.class).parallelStream() //
+			Annotations.annotatedMethods(cls, OpMethod.class).parallelStream() //
 				.map(m -> generateMethodInfo(m, version)) //
 				.collect(Collectors.toList());
 		collectionInfos.addAll(methodInfos);

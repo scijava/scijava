@@ -65,7 +65,7 @@ public class ClassOpDependencyMemberParser implements
 	private static void parseFieldOpDependencies(
 		final List<FieldOpDependencyMember<?>> items, Class<?> annotatedClass)
 	{
-		final List<Field> fields = Annotations.getAnnotatedFields(annotatedClass,
+		final List<Field> fields = Annotations.annotatedFields(annotatedClass,
 			OpDependency.class);
 		for (final Field f : fields) {
 			f.setAccessible(true);

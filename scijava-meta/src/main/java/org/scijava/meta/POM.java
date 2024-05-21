@@ -291,7 +291,7 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 			}
 			// look for the POM in the class's base directory
 			final File file = URLs.toFile(location);
-			final File baseDir = Apps.getBaseDirectory(file, null);
+			final File baseDir = Apps.baseDirectory(file, null);
 			final File pomFile = new File(baseDir, "pom.xml");
 			return new POM(pomFile);
 		}

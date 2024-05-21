@@ -79,7 +79,7 @@ public final class Apps {
 	 * @return The launching class, or null if the main method terminated before
 	 *         the {@code AppUtils} class was loaded.
 	 */
-	public static Class<?> getMainClass() {
+	public static Class<?> mainClass() {
 		return mainClass;
 	}
 
@@ -95,9 +95,9 @@ public final class Apps {
 	 *          beneath the application base directory. If this value is null
 	 *          (i.e., no hint is given), the heuristic scans up the directory
 	 *          tree looking for the topmost pom.xml file.
-	 * @see Apps#getBaseDirectory(File, String)
+	 * @see Apps#baseDirectory(File, String)
 	 */
-	public static File getBaseDirectory(final String sysProp, final Class<?> c,
+	public static File baseDirectory(final String sysProp, final Class<?> c,
 		final String baseSubdirectory)
 	{
 		final String property = System.getProperty(sysProp);
@@ -107,7 +107,7 @@ public final class Apps {
 		}
 
 		// look for valid base directory relative to this class
-		final File basePath = Apps.getBaseDirectory(c, baseSubdirectory);
+		final File basePath = Apps.baseDirectory(c, baseSubdirectory);
 		if (basePath != null) return basePath;
 
 		// NB: Look for valid base directory relative to the main class which
@@ -117,8 +117,8 @@ public final class Apps {
 		// repository cache (~/.m2/repository), so the corePath will be null.
 		// However, the classes of the launching project will be located in
 		// target/classes, so we search up the tree from one of those.
-		final Class<?> mc = Apps.getMainClass();
-		final File appPath = mc == null ? null : Apps.getBaseDirectory(mc);
+		final Class<?> mc = Apps.mainClass();
+		final File appPath = mc == null ? null : Apps.baseDirectory(mc);
 		if (appPath != null) return appPath;
 
 		// last resort: use current working directory
@@ -129,10 +129,10 @@ public final class Apps {
 	 * Gets the base file system directory containing the given class file.
 	 *
 	 * @param c The class from which the base directory should be derived.
-	 * @see #getBaseDirectory(File, String)
+	 * @see #baseDirectory(File, String)
 	 */
-	public static File getBaseDirectory(final Class<?> c) {
-		return getBaseDirectory(c, null);
+	public static File baseDirectory(final Class<?> c) {
+		return baseDirectory(c, null);
 	}
 
 	/**
@@ -141,9 +141,9 @@ public final class Apps {
 	 * @param c The class from which the base directory should be derived.
 	 * @param baseSubdirectory A hint for what to expect for a directory structure
 	 *          beneath the application base directory.
-	 * @see #getBaseDirectory(File, String)
+	 * @see #baseDirectory(File, String)
 	 */
-	public static File getBaseDirectory(final Class<?> c,
+	public static File baseDirectory(final Class<?> c,
 		final String baseSubdirectory)
 	{
 		// see: http://stackoverflow.com/a/12733172/1207769
@@ -162,7 +162,7 @@ public final class Apps {
 		}
 
 		// step 3: get the file's base directory
-		return getBaseDirectory(baseFile, baseSubdirectory);
+		return baseDirectory(baseFile, baseSubdirectory);
 	}
 
 	/**
@@ -232,7 +232,7 @@ public final class Apps {
 	 *          (i.e., no hint is given), the heuristic scans up the directory
 	 *          tree looking for the topmost pom.xml file.
 	 */
-	public static File getBaseDirectory(final File classLocation,
+	public static File baseDirectory(final File classLocation,
 		final String baseSubdirectory)
 	{
 		if (classLocation == null) return null;

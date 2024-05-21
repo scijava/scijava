@@ -68,7 +68,7 @@
 	</mailingLists>
 
 	<scm>
-		<connection>scm:git:git://github.com/scijava/scijava</connection>
+		<connection>scm:git:https://github.com/scijava/scijava</connection>
 		<developerConnection>scm:git:git@github.com:scijava/scijava</developerConnection>
 		<tag>HEAD</tag>
 		<url>https://github.com/scijava/scijava</url>

@@ -43,6 +43,10 @@ exclude_patterns = [
 myst_heading_anchors = 4
 nb_execution_mode = "off"
 
+# -- Sphinx Copy Button ------------------------------------------------------
+
+copybutton_selector = "div:not(.no-copybutton) > div.highlight > pre"
+
 # -- Options for HTML output -------------------------------------------------
 # Add the SciJava logo
 # html_logo = "doc-images/logo.svg"

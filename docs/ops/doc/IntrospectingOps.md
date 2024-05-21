@@ -46,7 +46,8 @@ System.out.println(Ops.info(op).implementationName());
 
 might print out (if you're using `scijava-ops-image` version `1.0.0`):
 
-```
+```{code-block}
+:class: no-copybutton
 org.scijava.ops.image.filter.gauss.Gaussians.gaussRAISingleSigma(net.imglib2.RandomAccessibleInterval<I>,double,net.imglib2.outofbounds.OutOfBoundsFactory<I, net.imglib2.RandomAccessibleInterval<I>>,net.imglib2.RandomAccessibleInterval<O>)Reduction1
 ```
 
@@ -73,7 +74,8 @@ System.out.println(Ops.signature(op));
 
 might print out (again using `scijava-ops-image` version `1.0.0`):
 
-```
+```{code-block}
+:class: no-copybutton
 |Reduction:|ParamsReduced:1|OriginalInfo:|Info:org.scijava.ops.image.filter.gauss.Gaussians.gaussRAISingleSigma(net.imglib2.RandomAccessibleInterval<I>,double,net.imglib2.outofbounds.OutOfBoundsFactory<I, net.imglib2.RandomAccessibleInterval<I>>,net.imglib2.RandomAccessibleInterval<O>)@1.0.0{}
 ```
 

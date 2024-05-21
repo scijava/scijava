@@ -58,20 +58,22 @@ public class DefaultSkewness<I extends RealType<I>, O extends RealType<O>>
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
+	 * @param input
 	 * @param skewness
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<I> input, final O output) {
-		final O moment3 = output.createVariable();
+	public void compute(final RandomAccessibleInterval<I> input,
+		final O skewness)
+	{
+		final O moment3 = skewness.createVariable();
 		moment3AboutMeanComputer.compute(input, moment3);
-		final O stdDev = output.createVariable();
+		final O stdDev = skewness.createVariable();
 		stdDevComputer.compute(input, stdDev);
 
-		output.setReal(Double.NaN);
+		skewness.setReal(Double.NaN);
 		double std = stdDev.getRealDouble();
 		if (std != 0) {
-			output.setReal(moment3.getRealDouble() / (std * std * std));
+			skewness.setReal(moment3.getRealDouble() / (std * std * std));
 		}
 	}
 }

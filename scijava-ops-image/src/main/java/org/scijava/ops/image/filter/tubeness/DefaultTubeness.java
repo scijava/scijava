@@ -68,7 +68,7 @@ import net.imglib2.view.Views;
  * scale.</li>
  * <li>The the Hessian matrix is calculated for each pixel.</li>
  * <li>We yield the eigenvalues of the Hessian matrix. The output of the
- * tubeness filter is a combination of these eigenvalues:</li>
+ * tubeness filter is a combination of these eigenvalues:
  * <ul>
  * <li>in 2D where {@code λ₂} is the largest eigenvalue:
  * {@code out = 𝜎 × 𝜎 × |λ₂|} if {@code λ₂} is negative, 0 otherwise.</li>
@@ -76,6 +76,7 @@ import net.imglib2.view.Views;
  * {@code out = 𝜎 × 𝜎 × sqrt( λ₂ * λ₃ )} if {@code λ₂} and {@code λ₃} are
  * negative, 0 otherwise.</li>
  * </ul>
+ * </li>
  * </ul>
  * This results in enhancing filaments of roughly {@code 𝜎 / sqrt(d)}
  * thickness.

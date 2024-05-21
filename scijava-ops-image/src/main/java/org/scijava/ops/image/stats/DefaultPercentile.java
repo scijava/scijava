@@ -55,18 +55,18 @@ public class DefaultPercentile<I extends RealType<I>, N extends Number, O extend
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
+	 * @param input
 	 * @param percent
 	 * @param percentile
 	 */
 	@Override
 	public void compute(final Iterable<I> input, final N percent,
-		final O output)
+		final O percentile)
 	{
 		if (percent.doubleValue() < 0 || percent.doubleValue() > 100) {
 			throw new IllegalArgumentException(
 				"Percent must be between 0 and 100 (inclusive) but was " + percent);
 		}
-		op.compute(input, percent.doubleValue() / 100, output);
+		op.compute(input, percent.doubleValue() / 100, percentile);
 	}
 }

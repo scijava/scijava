@@ -40,8 +40,7 @@ import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * Generic implementation of
- * {@link org.scijava.ops.image.Ops.Geometric.Spareness}. Based on ImageJ.
+ * Generic implementation of {@code geom.spareness}. Based on ImageJ.
  *
  * @author Tim-Oliver Buchholz (University of Konstanz)
  * @implNote op names='geom.spareness', label='Geometric (3D): Spareness',
@@ -64,7 +63,7 @@ public class DefaultSparenessMesh implements
 	 * @param spareness
 	 */
 	@Override
-	public void compute(final Mesh input, final DoubleType output) {
+	public void compute(final Mesh input, final DoubleType spareness) {
 
 		final RealMatrix it = inertiaTensor.apply(input);
 		final EigenDecomposition ed = new EigenDecomposition(it);
@@ -84,7 +83,7 @@ public class DefaultSparenessMesh implements
 
 		double volumeEllipsoid = (4 / 3d * Math.PI * a * b * c);
 
-		output.set(volume.apply(input).get() / volumeEllipsoid);
+		spareness.set(volume.apply(input).get() / volumeEllipsoid);
 	}
 
 }

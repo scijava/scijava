@@ -50,14 +50,14 @@ public class DefaultSize<I extends RealType<I>, O extends RealType<O>>
 	/**
 	 * TODO
 	 *
-	 * @param interval
+	 * @param input
 	 * @param size
 	 */
 	@Override
-	public void compute(final Interval input, final O output) {
-		output.setOne();
+	public void compute(final Interval input, final O size) {
+		size.setOne();
 		for (int i = 0; i < input.numDimensions(); i++) {
-			output.mul(input.dimension(i));
+			size.mul(input.dimension(i));
 		}
 	}
 }

@@ -59,20 +59,22 @@ public class DefaultKurtosis<I extends RealType<I>, O extends RealType<O>>
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
+	 * @param input
 	 * @param kurtosis
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<I> input, final O output) {
-		output.setReal(Double.NaN);
+	public void compute(final RandomAccessibleInterval<I> input,
+		final O kurtosis)
+	{
+		kurtosis.setReal(Double.NaN);
 
-		final O std = output.createVariable();
+		final O std = kurtosis.createVariable();
 		stdDevComputer.compute(input, std);
-		final O moment4 = output.createVariable();
+		final O moment4 = kurtosis.createVariable();
 		moment4AboutMeanComputer.compute(input, moment4);
 
 		if (std.getRealDouble() != 0) {
-			output.setReal(moment4.getRealDouble() / Math.pow(std.getRealDouble(),
+			kurtosis.setReal(moment4.getRealDouble() / Math.pow(std.getRealDouble(),
 				4));
 		}
 	}

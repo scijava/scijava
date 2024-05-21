@@ -50,14 +50,14 @@ public class IterableMin<T extends RealType<T>> implements
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
+	 * @param input
 	 * @param min
 	 */
 	@Override
-	public void compute(final Iterable<T> input, final T output) {
+	public void compute(final Iterable<T> input, final T min) {
 		// Re-use output to compare against
-		output.setReal(output.getMaxValue());
+		min.setReal(min.getMaxValue());
 		for (final T in : input)
-			if (output.compareTo(in) > 0) output.set(in);
+			if (min.compareTo(in) > 0) min.set(in);
 	}
 }

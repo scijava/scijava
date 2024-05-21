@@ -45,7 +45,6 @@ import org.scijava.ops.spi.OpDependency;
  * @author Christian Dietz (University of Konstanz)
  * @author Leon Yang
  * @param <I> - the type of the input image
- * @param <O> - the type of the output image
  * @implNote op names='image.normalize'
  */
 public class NormalizeIILazyFunction<I extends RealType<I>> implements
@@ -65,9 +64,9 @@ public class NormalizeIILazyFunction<I extends RealType<I>> implements
 	 * @return the output
 	 */
 	@Override
-	public RandomAccessibleInterval<I> apply(RandomAccessibleInterval<I> img) {
-		RandomAccessibleInterval<I> output = createFunc.apply(img);
-		normalizer.compute(img, output);
+	public RandomAccessibleInterval<I> apply(RandomAccessibleInterval<I> input) {
+		RandomAccessibleInterval<I> output = createFunc.apply(input);
+		normalizer.compute(input, output);
 		return output;
 	}
 

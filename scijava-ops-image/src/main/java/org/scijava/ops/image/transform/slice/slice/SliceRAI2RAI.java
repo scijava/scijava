@@ -36,8 +36,8 @@ import org.scijava.function.Computers;
 import org.scijava.ops.spi.Nullable;
 
 /**
- * {@link SliceOp} implementation for {@link RandomAccessibleInterval} input and
- * {@link RandomAccessibleInterval} output.
+ * {@code transform.slice} implementation for {@link RandomAccessibleInterval}
+ * input and {@link RandomAccessibleInterval} output.
  * <p>
  * The input {@link RandomAccessibleInterval} will be wrapped into a
  * {@link SlicesII}, so that the given Op can compute on a per-slice base.
@@ -55,7 +55,7 @@ public class SliceRAI2RAI<I, O> implements
 	 * TODO
 	 *
 	 * @param input
-	 * @param Op
+	 * @param op
 	 * @param axisIndices
 	 * @param dropSingleDimensions
 	 * @param output

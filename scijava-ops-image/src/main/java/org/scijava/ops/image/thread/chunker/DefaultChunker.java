@@ -36,10 +36,10 @@ import org.scijava.concurrent.Parallelization;
 import org.scijava.function.Inplaces;
 
 /**
- * Simple default implementation of a {@link ChunkerOp}. The list of elements is
- * chunked into equally sized (besides the last one), disjoint chunks, which are
- * processed in parallel. The stepSize is set to one, i.e. each chunk consists
- * of consecutive elements.
+ * Simple default implementation of a {@code thread.chunker} Op. The list of
+ * elements is chunked into equally sized (besides the last one), disjoint
+ * chunks, which are processed in parallel. The stepSize is set to one, i.e.
+ * each chunk consists of consecutive elements.
  *
  * @author Christian Dietz (University of Konstanz)
  * @implNote op names='thread.chunker'

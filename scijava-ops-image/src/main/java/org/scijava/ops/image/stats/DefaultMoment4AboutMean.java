@@ -55,11 +55,13 @@ public class DefaultMoment4AboutMean<I extends RealType<I>, O extends RealType<O
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
+	 * @param input
 	 * @param moment4AboutMean
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<I> input, final O output) {
-		momentComputer.compute(input, 4, output);
+	public void compute(final RandomAccessibleInterval<I> input,
+		final O moment4AboutMean)
+	{
+		momentComputer.compute(input, 4, moment4AboutMean);
 	}
 }

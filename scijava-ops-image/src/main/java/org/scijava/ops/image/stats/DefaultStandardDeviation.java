@@ -57,14 +57,14 @@ public class DefaultStandardDeviation<I extends RealType<I>, O extends RealType<
 	/**
 	 * TODO
 	 *
-	 * @param raiInput
+	 * @param input
 	 * @param stdDev
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<I> input, final O output) {
-		O variance = output.createVariable();
+	public void compute(final RandomAccessibleInterval<I> input, final O stdDev) {
+		O variance = stdDev.createVariable();
 		varianceComputer.compute(input, variance);
-		sqrtComputer.compute(variance, output);
+		sqrtComputer.compute(variance, stdDev);
 	}
 
 }

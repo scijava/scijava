@@ -42,7 +42,7 @@ import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.Nullable;
 
 /**
- * Default implementation of {@link SigmaFilterOp}.
+ * Default implementation of {@code filter.sigma}.
  *
  * @author Jonathan Hale (University of Konstanz)
  * @param <T> type

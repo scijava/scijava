@@ -57,7 +57,7 @@ public class DefaultProjectParallel<T, V> implements
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
-		Computers.Arity1<Iterable<T>, V> method, Integer dim,
+		Computers.Arity1<Iterable<T>, V> op, Integer dim,
 		final RandomAccessibleInterval<V> output)
 	{
 		// TODO this first check is too simple, but for now ok
@@ -79,8 +79,8 @@ public class DefaultProjectParallel<T, V> implements
 						}
 					}
 
-					method.compute(new DimensionIterable(input.dimension(dim), dim,
-						chunkRA), pixel);
+					op.compute(new DimensionIterable(input.dimension(dim), dim, chunkRA),
+						pixel);
 
 				});
 

@@ -43,17 +43,14 @@ import net.imglib2.loops.LoopBuilder;
 import net.imglib2.view.Views;
 
 /**
- * Evaluates a {@link CenterAwareComputerOp} for each {@link Neighborhood} on
- * the input {@link RandomAccessibleInterval} and sets the value of the
- * corresponding pixel on the output {@link IterableInterval}. Similar to
+ * Evaluates a computer Op for each {@link Neighborhood} on the input
+ * {@link RandomAccessibleInterval} and sets the value of the corresponding
+ * pixel on the output {@link IterableInterval}. Similar to
  * {@link DefaultMapNeighborhood}, but passes the center pixel to the op as
  * well.
  *
  * @author Jonathan Hale (University of Konstanz)
  * @author Stefan Helfrich (University of Konstanz)
- * @see OpEnvironment#map(IterableInterval, RandomAccessibleInterval, Shape,
- *      CenterAwareComputerOp)
- * @see CenterAwareComputerOp
  * @implNote op names='map.neighborhood'
  */
 public class MapNeighborhoodWithCenter<I, O> implements
@@ -65,19 +62,19 @@ public class MapNeighborhoodWithCenter<I, O> implements
 	 *
 	 * @param input
 	 * @param shape
-	 * @param op
+	 * @param centerAwareOp
 	 * @param output
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<I> in1, final Shape in2,
-		final Computers.Arity2<Iterable<I>, I, O> centerAwareOp,
-		final IterableInterval<O> out)
+	public void compute(final RandomAccessibleInterval<I> input,
+		final Shape shape, final Computers.Arity2<Iterable<I>, I, O> centerAwareOp,
+		final IterableInterval<O> output)
 	{
-		// TODO can we do this through a mapper?
-		RandomAccess<I> inRA = in1.randomAccess();
-		Cursor<Neighborhood<I>> neighborhoodsCursor = in2.neighborhoodsSafe(in1)
+		// TODO can we do this through a mapper/LoopBuilder?
+		RandomAccess<I> inRA = input.randomAccess();
+		Cursor<Neighborhood<I>> neighborhoodsCursor = shape.neighborhoodsSafe(input)
 			.cursor();
-		Cursor<O> outCursor = out.cursor();
+		Cursor<O> outCursor = output.cursor();
 		while (outCursor.hasNext()) {
 			outCursor.fwd();
 			inRA.setPosition(outCursor);
@@ -112,19 +109,19 @@ class MapNeighborhoodWithCenterAllRAI<I, O> implements
 	 *
 	 * @param input
 	 * @param shape
-	 * @param op
+	 * @param centerAwareOp
 	 * @param output
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<I> in1, final Shape in2,
-		final Computers.Arity2<Iterable<I>, I, O> centerAwareOp,
-		final RandomAccessibleInterval<O> out)
+	public void compute(final RandomAccessibleInterval<I> input,
+		final Shape shape, final Computers.Arity2<Iterable<I>, I, O> centerAwareOp,
+		final RandomAccessibleInterval<O> output)
 	{
 		// generate a neighborhood image with the bounds of the input
 		RandomAccessibleInterval<Neighborhood<I>> neighborhoodInput = Views
-			.interval(in2.neighborhoodsRandomAccessibleSafe(in1), in1);
+			.interval(shape.neighborhoodsRandomAccessibleSafe(input), input);
 
-		LoopBuilder.setImages(neighborhoodInput, in1, out).multiThreaded()
+		LoopBuilder.setImages(neighborhoodInput, input, output).multiThreaded()
 			.forEachPixel(centerAwareOp::compute);
 	}
 

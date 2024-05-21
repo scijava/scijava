@@ -75,16 +75,16 @@ public class WatershedSeededFunction<T extends RealType<T>, B extends BooleanTyp
 	 */
 	@Override
 	public ImgLabeling<Integer, IntType> apply( //
-		RandomAccessibleInterval<T> in, //
+		RandomAccessibleInterval<T> input, //
 		ImgLabeling<Integer, IntType> seeds, //
 		Boolean useEightConnectivity, //
 		Boolean drawWatersheds, //
 		@Nullable RandomAccessibleInterval<B> mask //
 	) {
-		ImgLabeling<Integer, IntType> outputLabeling = labelingCreator.apply(in,
+		ImgLabeling<Integer, IntType> outputLabeling = labelingCreator.apply(input,
 			new IntType());
-		watershedOp.compute(in, seeds, useEightConnectivity, drawWatersheds, mask,
-			outputLabeling);
+		watershedOp.compute(input, seeds, useEightConnectivity, drawWatersheds,
+			mask, outputLabeling);
 		return outputLabeling;
 
 	}

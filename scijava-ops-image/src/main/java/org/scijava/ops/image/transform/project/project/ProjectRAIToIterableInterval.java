@@ -55,7 +55,7 @@ public class ProjectRAIToIterableInterval<T, V> implements
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
-		final Computers.Arity1<Iterable<T>, V> method, final Integer dim,
+		final Computers.Arity1<Iterable<T>, V> op, final Integer dim,
 		final IterableInterval<V> output)
 	{
 		if (input.numDimensions() != output.numDimensions() + 1)
@@ -75,7 +75,7 @@ public class ProjectRAIToIterableInterval<T, V> implements
 				}
 			}
 
-			method.compute(new DimensionIterable(input.dimension(dim), access, dim),
+			op.compute(new DimensionIterable(input.dimension(dim), access, dim),
 				cursor.get());
 		}
 	}

@@ -63,7 +63,6 @@ import net.imglib2.view.Views;
  * with Application to Vasculature Images. IEEE TMI, vol. 22, no. 1, 2013.
  *
  * @author Vladimír Ulman
- * @param <T>
  */
 public final class DefaultCreateKernelBiGauss {
 

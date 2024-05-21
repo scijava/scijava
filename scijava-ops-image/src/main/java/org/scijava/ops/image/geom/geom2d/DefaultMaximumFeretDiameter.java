@@ -58,8 +58,8 @@ public class DefaultMaximumFeretDiameter implements
 	 * @param maxFeretsDiameter
 	 */
 	@Override
-	public void compute(Polygon2D input, DoubleType output) {
-		output.set(feretDiameter.apply(maxFeret.apply(input)).get());
+	public void compute(Polygon2D input, DoubleType maxFeretsDiameter) {
+		maxFeretsDiameter.set(feretDiameter.apply(maxFeret.apply(input)).get());
 	}
 
 }

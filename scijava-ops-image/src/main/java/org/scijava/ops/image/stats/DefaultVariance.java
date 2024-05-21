@@ -67,11 +67,13 @@ public class DefaultVariance<I extends RealType<I>, O extends RealType<O>>
 	/**
 	 * TODO
 	 *
-	 * @param raiInput
+	 * @param input
 	 * @param variance
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<I> input, final O output) {
+	public void compute(final RandomAccessibleInterval<I> input,
+		final O variance)
+	{
 
 		final DoubleType mean = new DoubleType();
 		meanOp.compute(input, mean);
@@ -90,9 +92,8 @@ public class DefaultVariance<I extends RealType<I>, O extends RealType<O>>
 				return chunkSum;
 			});
 
-		double sum = chunkSums.parallelStream().mapToDouble(chunkSum -> chunkSum
-			.get()).sum();
+		double sum = chunkSums.parallelStream().mapToDouble(DoubleType::get).sum();
 
-		output.setReal(sum / (size.get() - 1));
+		variance.setReal(sum / (size.get() - 1));
 	}
 }

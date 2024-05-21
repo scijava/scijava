@@ -62,7 +62,7 @@ public class DefaultElongation implements
 	 * @param elongation
 	 */
 	@Override
-	public void compute(final Polygon2D input, final DoubleType output) {
+	public void compute(final Polygon2D input, final DoubleType elongation) {
 		final List<? extends RealLocalizable> minBB = GeomUtils.vertices(
 			minimumBoundingBoxFunc.apply(input));
 
@@ -82,7 +82,7 @@ public class DefaultElongation implements
 			width = length;
 			length = tmp;
 		}
-		output.set(1d - (width / length));
+		elongation.set(1d - (width / length));
 	}
 
 }

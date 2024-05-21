@@ -55,7 +55,7 @@ import org.scijava.ops.spi.Nullable;
  * <p>
  * The algorithm repeatedly lays a fixed grid on the interval, and counts the
  * number of sections that contain foreground. After each step the grid is made
- * finer by a factor of {@link #scaling}. If the objects in the interval are
+ * finer by a factor of {@code scaling}. If the objects in the interval are
  * fractal, the proportion of foreground sections should increase as the grid
  * gets finer.
  * </p>

@@ -53,33 +53,29 @@ public class ComputeFFTMethodsSize implements
 	 * @return the output
 	 */
 	@Override
-	public long[][] apply(Dimensions inputDimensions, Boolean forward,
-		Boolean fast)
-	{
+	public long[][] apply(Dimensions dimensions, Boolean forward, Boolean fast) {
 
 		long[][] size = new long[2][];
-		size[0] = new long[inputDimensions.numDimensions()];
-		size[1] = new long[inputDimensions.numDimensions()];
+		size[0] = new long[dimensions.numDimensions()];
+		size[1] = new long[dimensions.numDimensions()];
 
 		if (fast && forward) {
 
-			FFTMethods.dimensionsRealToComplexFast(inputDimensions, size[0], size[1]);
+			FFTMethods.dimensionsRealToComplexFast(dimensions, size[0], size[1]);
 
 		}
 		else if (!fast && forward) {
-			FFTMethods.dimensionsRealToComplexSmall(inputDimensions, size[0],
-				size[1]);
+			FFTMethods.dimensionsRealToComplexSmall(dimensions, size[0], size[1]);
 
 		}
 		if (fast && !forward) {
 
-			FFTMethods.dimensionsComplexToRealFast(inputDimensions, size[0], size[1]);
+			FFTMethods.dimensionsComplexToRealFast(dimensions, size[0], size[1]);
 
 		}
 		else if (!fast && !forward) {
 
-			FFTMethods.dimensionsComplexToRealSmall(inputDimensions, size[0],
-				size[1]);
+			FFTMethods.dimensionsComplexToRealSmall(dimensions, size[0], size[1]);
 		}
 
 		return size;

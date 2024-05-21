@@ -53,7 +53,7 @@ public class DefaultSizePolygon implements
 	 * @param size
 	 */
 	@Override
-	public void compute(Polygon2D input, DoubleType output) {
+	public void compute(Polygon2D input, DoubleType size) {
 		double sum = 0;
 		final int numVertices = input.numVertices();
 		for (int i = 0; i < numVertices; i++) {
@@ -68,7 +68,7 @@ public class DefaultSizePolygon implements
 
 			sum += p0_x * p1_y - p0_y * p1_x;
 		}
-		output.set(Math.abs(sum) / 2d);
+		size.set(Math.abs(sum) / 2d);
 	}
 
 }

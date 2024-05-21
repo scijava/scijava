@@ -58,8 +58,8 @@ public class DefaultMinimumFeretAngle implements
 	 * @param minFeretAngle
 	 */
 	@Override
-	public void compute(Polygon2D input, DoubleType output) {
-		output.set(feretAngle.apply(minFeret.apply(input)).get());
+	public void compute(Polygon2D input, DoubleType minFeretAngle) {
+		minFeretAngle.set(feretAngle.apply(minFeret.apply(input)).get());
 	}
 
 }

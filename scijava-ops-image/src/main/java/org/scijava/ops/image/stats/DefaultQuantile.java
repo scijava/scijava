@@ -53,7 +53,7 @@ public class DefaultQuantile<I extends RealType<I>, N extends Number, O extends 
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
+	 * @param input
 	 * @param quantile
 	 * @param output
 	 */

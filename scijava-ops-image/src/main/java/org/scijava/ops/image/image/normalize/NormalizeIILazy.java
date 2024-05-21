@@ -68,16 +68,16 @@ public class NormalizeIILazy<I extends RealType<I>, O extends RealType<O>>
 	 * @param output
 	 */
 	@Override
-	public void compute(RandomAccessibleInterval<I> img,
+	public void compute(RandomAccessibleInterval<I> input,
 		RandomAccessibleInterval<O> output)
 	{
-		Pair<I, I> sourceMinMax = minMaxFunc.apply(img);
+		Pair<I, I> sourceMinMax = minMaxFunc.apply(input);
 		O min = Util.getTypeFromInterval(output).createVariable();
 		min.setReal(min.getMinValue());
 		O max = Util.getTypeFromInterval(output).createVariable();
 		max.setReal(max.getMaxValue());
 
-		normalizerFunc.accept(img, sourceMinMax.getA(), sourceMinMax.getB(), min,
+		normalizerFunc.accept(input, sourceMinMax.getA(), sourceMinMax.getB(), min,
 			max, output);
 	}
 

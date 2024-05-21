@@ -38,8 +38,7 @@ import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * Generic implementation of
- * {@link org.scijava.ops.image.Ops.Geometric.Sphericity}. Based on
+ * Generic implementation of {@code geom.sphericity}. Based on
  * https://en.wikipedia.org/wiki/Sphericity.
  *
  * @author Tim-Oliver Buchholz (University of Konstanz)
@@ -60,10 +59,10 @@ public class DefaultSphericity implements Computers.Arity1<Mesh, DoubleType> {
 	 * @param sphericity
 	 */
 	@Override
-	public void compute(final Mesh input, final DoubleType output) {
+	public void compute(final Mesh input, final DoubleType sphericity) {
 		final double sphereArea = Math.pow(Math.PI, 1 / 3d) * Math.pow(6 *
 			volumeFunc.apply(input).get(), 2 / 3d);
-		output.set(sphereArea / areaFunc.apply(input).get());
+		sphericity.set(sphereArea / areaFunc.apply(input).get());
 	}
 
 }

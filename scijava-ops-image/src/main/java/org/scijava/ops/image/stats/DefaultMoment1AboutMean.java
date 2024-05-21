@@ -55,11 +55,13 @@ public class DefaultMoment1AboutMean<I extends RealType<I>, O extends RealType<O
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
+	 * @param input
 	 * @param moment1AboutMean
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<I> input, final O output) {
-		output.setZero();
+	public void compute(final RandomAccessibleInterval<I> input,
+		final O moment1AboutMean)
+	{
+		moment1AboutMean.setZero();
 	}
 }

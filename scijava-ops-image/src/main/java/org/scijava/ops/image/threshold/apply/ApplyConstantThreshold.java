@@ -66,14 +66,14 @@ public class ApplyConstantThreshold<T extends RealType<T>> implements
 	 * @param output
 	 */
 	@Override
-	public void compute(final Iterable<T> input1, final T input2,
+	public void compute(final Iterable<T> input, final T threshold,
 		final Comparator<T> comparator, final Iterable<BitType> output)
 	{
 		Computers.Arity1<T, BitType> thresholdComputer = (in, out) -> applyThreshold
-			.compute(in, input2, comparator, out);
+			.compute(in, threshold, comparator, out);
 		Computers.Arity1<Iterable<T>, Iterable<BitType>> liftedThreshold = lifter
 			.apply(thresholdComputer);
-		liftedThreshold.accept(input1, output);
+		liftedThreshold.accept(input, output);
 	}
 
 }
@@ -84,6 +84,8 @@ public class ApplyConstantThreshold<T extends RealType<T>> implements
 // use this Op. The default comparator just returns true if the input is greater
 // than the threshold.
 /**
+ * TODO: Remove in favor of a nullable parameter on the Op above
+ *
  * @implNote op names='threshold.apply'
  */
 class ApplyConstantThresholdSimple<T extends RealType<T>> implements
@@ -102,11 +104,11 @@ class ApplyConstantThresholdSimple<T extends RealType<T>> implements
 	 * @param output
 	 */
 	@Override
-	public void compute(final Iterable<T> input1, final T input2,
+	public void compute(final Iterable<T> input, final T threshold,
 		final Iterable<BitType> output)
 	{
 
-		applyThreshold.compute(input1, input2, Comparable::compareTo, output);
+		applyThreshold.compute(input, threshold, Comparable::compareTo, output);
 	}
 
 }

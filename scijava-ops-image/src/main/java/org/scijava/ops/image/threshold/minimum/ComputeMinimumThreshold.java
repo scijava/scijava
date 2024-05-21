@@ -76,7 +76,7 @@ public class ComputeMinimumThreshold<T extends RealType<T>> extends
 	 * running average of size 3, iteratively) until there are only two<br>
 	 * local<br>
 	 * maxima.<br>
-	 * Threshold t is such that ytâˆ’1 > yt â‰¤ yt+1.<br>
+	 * Threshold t is such that ytâˆ’1 {@literal >} yt â‰¤ yt+1.<br>
 	 * Images with histograms having extremely unequal peaks or a broad and<br>
 	 * ??at valley are unsuitable for this method. <br>
 	 */

@@ -74,7 +74,7 @@ import org.scijava.ops.spi.OpCollection;
  * @param <N> - a {@link TypeVariable} extending {@link NumericType}
  * @param <Y> - a {@link TypeVariable} extending {@link Type}
  * @param <F> - a {@link TypeVariable} extending
- *          {@link RandomAccessibleInterval} of type <T>
+ *          {@link RandomAccessibleInterval} of type {@code T}
  * @param <E> - a {@link TypeVariable} extending {@link EuclideanSpace}
  */
 public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y extends Type<Y>, F extends RandomAccessibleInterval<T>, E extends EuclideanSpace> {

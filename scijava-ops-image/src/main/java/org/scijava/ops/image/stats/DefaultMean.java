@@ -59,15 +59,15 @@ public class DefaultMean<I extends RealType<I>, O extends RealType<O>>
 	/**
 	 * TODO
 	 *
-	 * @param rai
+	 * @param input
 	 * @param mean
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<I> input, final O output) {
+	public void compute(final RandomAccessibleInterval<I> input, final O mean) {
 
-		sumComputer.compute(input, output);
-		final O size = output.createVariable();
+		sumComputer.compute(input, mean);
+		final O size = mean.createVariable();
 		areaComputer.compute(input, size);
-		output.div(size);
+		mean.div(size);
 	}
 }

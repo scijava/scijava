@@ -32,7 +32,7 @@ package org.scijava.ops.image.thread.chunker;
 import edu.mines.jtk.util.Parallel;
 
 /**
- * A {@link Chunk} of code which can be executed by a {@link ChunkerOp}.
+ * A {@link Chunk} of code which can be executed by a {@code thread.chunker} Op.
  * <p>
  * A {@link Chunk} processes a subset of a bigger problem and can be executed in
  * parallel with other {@link Chunk}s. The elements of the subproblem are
@@ -40,7 +40,6 @@ import edu.mines.jtk.util.Parallel;
  * </p>
  *
  * @author Christian Dietz (University of Konstanz)
- * @see ChunkerOp
  * @see Parallel
  */
 public interface Chunk {

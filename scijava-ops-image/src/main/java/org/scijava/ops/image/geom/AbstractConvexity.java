@@ -37,8 +37,7 @@ import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * Generic implementation of
- * {@link org.scijava.ops.image.Ops.Geometric.Convexity}. Based on
+ * Abstract base of {@code geom.convexity} implementations. Based on
  * http://www.math.uci.edu/icamp/summer/research_11/park/shape_descriptors_survey.pdf.
  *
  * @author Tim-Oliver Buchholz (University of Konstanz)

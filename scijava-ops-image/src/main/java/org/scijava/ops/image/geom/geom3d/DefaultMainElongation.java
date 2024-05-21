@@ -40,10 +40,8 @@ import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * Generic implementation of
- * {@link org.scijava.ops.image.Ops.Geometric.MainElongation} Adapted to 3D from
- * http://www.math.uci.edu/icamp/summer/research_11/park/
- * shape_descriptors_survey.pdf
+ * Generic implementation of {@code geom.mainElongation}. Adapted to 3D from
+ * http://www.math.uci.edu/icamp/summer/research_11/park/shape_descriptors_survey.pdf
  *
  * @author Tim-Oliver Buchholz (University of Konstanz)
  * @implNote op names='geom.mainElongation', label='Geometric (3D): Main
@@ -59,11 +57,11 @@ public class DefaultMainElongation implements
 	/**
 	 * TODO
 	 *
-	 * @param inputMesh
-	 * @param output
+	 * @param input
+	 * @param mainElongation
 	 */
 	@Override
-	public void compute(final Mesh input, final DoubleType output) {
+	public void compute(final Mesh input, final DoubleType mainElongation) {
 		final RealMatrix it = inertiaTensor.apply(input);
 		final EigenDecomposition ed = new EigenDecomposition(it);
 
@@ -78,7 +76,7 @@ public class DefaultMainElongation implements
 
 		final double a = Math.pow(g * l1 * l1 / Math.sqrt(l2 * l3), 1 / 5d);
 		final double b = Math.pow(g * l2 * l2 / Math.sqrt(l1 * l3), 1 / 5d);
-		output.set(1 - (b / a));
+		mainElongation.set(1 - (b / a));
 	}
 
 }

@@ -52,8 +52,8 @@ import org.scijava.ops.spi.OpDependency;
  * {@link RandomAccessibleInterval}s of those types. An output
  * {@link RandomAccessibleInterval} is created based off of the dimensions of
  * the first input image and using the output type of the passed
- * {@link Function}. The {@Function}{@code <I, O>} is then applied iteratively
- * over each pixel of the input image(s). NOTE: It is assumed that the input
+ * {@link Function}. The {@code Function<I, O>} is then applied iteratively over
+ * each pixel of the input image(s). NOTE: It is assumed that the input
  * {@code RAI}s are the same size. If they are not, the lifted {@link Function}
  * will only iteratively process the images until one image runs out of pixels
  * to iterate over.

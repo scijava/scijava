@@ -59,22 +59,24 @@ public class DefaultGeometricMean<I extends RealType<I>, O extends RealType<O>>
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
+	 * @param input
 	 * @param geometricMean
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<I> input, final O output) {
-		final O size = output.createVariable();
+	public void compute(final RandomAccessibleInterval<I> input,
+		final O geometricMean)
+	{
+		final O size = geometricMean.createVariable();
 		sizeComputer.compute(input, size);
-		final O sumOfLogs = output.createVariable();
+		final O sumOfLogs = geometricMean.createVariable();
 		sumOfLogsComputer.compute(input, sumOfLogs);
 
 		if (size.getRealDouble() != 0) {
-			output.setReal(Math.exp(sumOfLogs.getRealDouble() / size
+			geometricMean.setReal(Math.exp(sumOfLogs.getRealDouble() / size
 				.getRealDouble()));
 		}
 		else {
-			output.setReal(0);
+			geometricMean.setReal(0);
 		}
 
 	}

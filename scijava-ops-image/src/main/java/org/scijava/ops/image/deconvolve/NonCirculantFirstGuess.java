@@ -80,17 +80,17 @@ public class NonCirculantFirstGuess<I extends RealType<I>, O extends RealType<O>
 	 * @return the output
 	 */
 	@Override
-	public RandomAccessibleInterval<O> apply(RandomAccessibleInterval<I> in,
+	public RandomAccessibleInterval<O> apply(RandomAccessibleInterval<I> input,
 		final O outType, final Dimensions k)
 	{
 
-		final Img<O> firstGuess = create.apply(in, outType);
+		final Img<O> firstGuess = create.apply(input, outType);
 
 		// set first guess to be a constant = to the average value
 
 		// so first compute the sum...
 		final DoubleType s = new DoubleType();
-		sum.compute(Views.iterable(in), s);
+		sum.compute(Views.iterable(input), s);
 
 		// then the number of pixels
 		long numPixels = 1;

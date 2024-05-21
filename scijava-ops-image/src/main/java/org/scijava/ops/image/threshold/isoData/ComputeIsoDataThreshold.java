@@ -89,11 +89,11 @@ public class ComputeIsoDataThreshold<T extends RealType<T>> extends
 	 * the<br>
 	 * lowest sensible value and iterating:<br>
 	 * <br>
-	 * L = the average grey value of pixels with intensities < G<br>
-	 * H = the average grey value of pixels with intensities > G<br>
+	 * L = the average grey value of pixels with intensities {@literal <} G<br>
+	 * H = the average grey value of pixels with intensities {@literal >} G<br>
 	 * is G = (L + H)/2?<br>
-	 * yes => exit<br>
-	 * no => increment G and repeat<br>
+	 * yes ={@literal >} exit<br>
+	 * no ={@literal >} increment G and repeat<br>
 	 * <br>
 	 * There is a discrepancy with IJ because of slightly different methods
 	 */

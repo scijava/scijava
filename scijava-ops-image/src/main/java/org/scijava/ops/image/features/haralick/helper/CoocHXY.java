@@ -53,7 +53,7 @@ public class CoocHXY implements Function<double[][], double[]> {
 	/**
 	 * TODO
 	 *
-	 * @param matix
+	 * @param matrix
 	 * @return the output
 	 */
 	@Override

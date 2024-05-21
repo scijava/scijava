@@ -43,7 +43,6 @@ import net.imglib2.view.Views;
  * Creates a separated sobel kernel.
  *
  * @author Eike Heinz, University of Konstanz
- * @param <T> type of input
  */
 
 public final class DefaultCreateKernelSobel {

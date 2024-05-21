@@ -56,10 +56,10 @@ public class ApplyThresholdComparator<T> implements
 	 * @param output
 	 */
 	@Override
-	public void compute(T input1, T input2, Comparator<? super T> comparator,
-		BitType out)
+	public void compute(T input, T threshold, Comparator<? super T> comparator,
+		BitType output)
 	{
-		out.set(comparator.compare(input1, input2) > 0);
+		output.set(comparator.compare(input, threshold) > 0);
 	}
 
 }

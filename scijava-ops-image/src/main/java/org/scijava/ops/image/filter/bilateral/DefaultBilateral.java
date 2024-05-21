@@ -82,13 +82,13 @@ public class DefaultBilateral<I extends RealType<I>, O extends RealType<O>>
 	/**
 	 * TODO
 	 *
-	 * @param inputRAI the input data
+	 * @param input the input data
 	 * @param sigmaR range smoothing param, larger sigma means larger effect of
 	 *          intensity differences.
 	 * @param sigmaS spatial smoothing param, larger sigma means smoother image.
 	 * @param radius defines size of the square of pixels considered at each
 	 *          iteration.
-	 * @param outputRAI
+	 * @param output
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<I> input,

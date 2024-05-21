@@ -61,7 +61,9 @@ public class DefaultFeretsDiameterForAngle implements
 	 * @param feretsDiameter
 	 */
 	@Override
-	public void compute(Polygon2D input, final Double angle, DoubleType output) {
+	public void compute(Polygon2D input, final Double angle,
+		DoubleType feretsDiameter)
+	{
 		final List<? extends RealLocalizable> points = GeomUtils.vertices(function
 			.apply(input));
 
@@ -77,7 +79,7 @@ public class DefaultFeretsDiameterForAngle implements
 			maxX = tmpX > maxX ? tmpX : maxX;
 		}
 
-		output.set(Math.abs(maxX - minX));
+		feretsDiameter.set(Math.abs(maxX - minX));
 	}
 
 }

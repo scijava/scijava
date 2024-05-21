@@ -56,11 +56,11 @@ public class DefaultMin<T extends RealType<T>> implements
 	/**
 	 * TODO
 	 *
-	 * @param iterableInput
+	 * @param input
 	 * @param max
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<T> input, final T output) {
-		output.set(minMaxOp.apply(input).getA());
+	public void compute(final RandomAccessibleInterval<T> input, final T max) {
+		max.set(minMaxOp.apply(input).getA());
 	}
 }

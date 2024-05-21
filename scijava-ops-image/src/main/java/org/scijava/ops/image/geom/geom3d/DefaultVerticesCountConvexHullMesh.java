@@ -56,8 +56,10 @@ public class DefaultVerticesCountConvexHullMesh implements
 	 * @param verticesCountConvexHull
 	 */
 	@Override
-	public void compute(final Mesh input, final DoubleType output) {
-		output.set(convexHullFunc.apply(input).vertices().size());
+	public void compute(final Mesh input,
+		final DoubleType verticesCountConvexHull)
+	{
+		verticesCountConvexHull.set(convexHullFunc.apply(input).vertices().size());
 	}
 
 }

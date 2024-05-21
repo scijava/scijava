@@ -54,7 +54,7 @@ public final class GenericAssignability {
 	 * @param dest the parameterized type for which assignment should be checked
 	 *          to
 	 * @param safeAssignability used to determine if we want to check if the
-	 *          src->dest assignment would be safely assignable even though it
+	 *          src&rarr;dest assignment would be safely assignable even though it
 	 *          would cause a compiler error if we explicitly tried to do this
 	 *          (useful pretty much only for Op matching)
 	 * @return whether and assignment of source to destination would be a legal
@@ -143,7 +143,7 @@ public final class GenericAssignability {
 	 *          populate with what would occur in this scenario; must be empty or
 	 *          null
 	 * @param safeAssignability used to determine if we want to check if the
-	 *          src->dest assignment would be safely assignable even though it
+	 *          src&rarr;dest assignment would be safely assignable even though it
 	 *          would cause a compiler error if we explicitly tried to do this
 	 *          (useful pretty much only for Op matching)
 	 * @return whether and assignment of source to destination would be a legal

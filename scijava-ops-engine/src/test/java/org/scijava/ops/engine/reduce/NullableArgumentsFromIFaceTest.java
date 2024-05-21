@@ -181,7 +181,7 @@ public class NullableArgumentsFromIFaceTest extends AbstractTestEnvironment
 			() -> new DefaultOpFieldInfo(//
 				this, //
 				f, //
-				Versions.getVersion(this.getClass()), //
+				Versions.classVersion(this.getClass()), //
 				"This is an invalid OpFieldInfo", //
 				new Hints(), //
 				1.0, //

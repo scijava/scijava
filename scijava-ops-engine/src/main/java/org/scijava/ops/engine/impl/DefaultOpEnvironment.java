@@ -261,7 +261,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	{
 		return new DefaultOpClassInfo( //
 			opClass, //
-			Versions.getVersion(opClass), //
+			Versions.classVersion(opClass), //
 			"", //
 			new Hints(), //
 			priority, //

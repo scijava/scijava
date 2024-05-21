@@ -54,7 +54,7 @@ public class OpClassOpInfoGenerator implements OpInfoGenerator {
 		if (p == null) return Collections.emptyList();
 		return Collections.singletonList(new DefaultOpClassInfo( //
 			c, //
-			Versions.getVersion(c), //
+			Versions.classVersion(c), //
 			p.description(), //
 			formHints(c.getAnnotation(OpHints.class)), //
 			p.priority(), //

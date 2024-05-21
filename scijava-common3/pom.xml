@@ -91,6 +91,7 @@
 		<allowedDuplicateClasses>${scijava-common3.allowedDuplicateClasses}</allowedDuplicateClasses>
 		-->
 	</properties>
+
 	<dependencies>
 		<!-- No dependencies allowed! -->
 

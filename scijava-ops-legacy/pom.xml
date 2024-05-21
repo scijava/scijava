@@ -90,40 +90,6 @@
 
 		<scijava-common.version>2.98.0</scijava-common.version>
 	</properties>
-	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>org.scijava</groupId>
-							<artifactId>scijava-ops-indexer</artifactId>
-							<version>${project.version}</version>
-						</path>
-						<path>
-							<groupId>org.scijava</groupId>
-							<artifactId>scijava-common</artifactId>
-							<version>${scijava-common.version}</version>
-						</path>
-					</annotationProcessorPaths>
-					<fork>true</fork>
-					<showWarnings>true</showWarnings>
-					<compilerArgs>
-						<arg>-Aparse.ops="${scijava.parse.ops}"</arg>
-						<arg>-Aop.version="${project.version}"</arg>
-					</compilerArgs>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-
-	<repositories>
-		<repository>
-			<id>scijava.public</id>
-			<url>https://maven.scijava.org/content/groups/public</url>
-		</repository>
-	</repositories>
 
 	<dependencies>
 		<!-- ImageJ2 dependencies -->
@@ -206,4 +172,39 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
+
+	<repositories>
+		<repository>
+			<id>scijava.public</id>
+			<url>https://maven.scijava.org/content/groups/public</url>
+		</repository>
+	</repositories>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.scijava</groupId>
+							<artifactId>scijava-ops-indexer</artifactId>
+							<version>${project.version}</version>
+						</path>
+						<path>
+							<groupId>org.scijava</groupId>
+							<artifactId>scijava-common</artifactId>
+							<version>${scijava-common.version}</version>
+						</path>
+					</annotationProcessorPaths>
+					<fork>true</fork>
+					<showWarnings>true</showWarnings>
+					<compilerArgs>
+						<arg>-Aparse.ops="${scijava.parse.ops}"</arg>
+						<arg>-Aop.version="${project.version}"</arg>
+					</compilerArgs>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

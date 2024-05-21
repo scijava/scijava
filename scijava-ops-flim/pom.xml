@@ -90,13 +90,6 @@
 		<flimlib.version>2.1.1</flimlib.version>
 	</properties>
 
-	<repositories>
-		<repository>
-			<id>scijava.public</id>
-			<url>https://maven.scijava.org/content/groups/public</url>
-		</repository>
-	</repositories>
-
 	<dependencies>
 		<!-- FLIMLib dependencies -->
 		<dependency>
@@ -199,4 +192,11 @@
 			<scope>test</scope>
 		</dependency>
     </dependencies>
+
+	<repositories>
+		<repository>
+			<id>scijava.public</id>
+			<url>https://maven.scijava.org/content/groups/public</url>
+		</repository>
+	</repositories>
 </project>

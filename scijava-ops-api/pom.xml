@@ -104,6 +104,7 @@
 		<scijava-ops-api.allowedDuplicateClasses>${scijava.allowedDuplicateClasses},com.github.therapi.runtimejavadoc.repack.com.eclipsesource.json.*</scijava-ops-api.allowedDuplicateClasses>
 		<allowedDuplicateClasses>${scijava-ops-api.allowedDuplicateClasses}</allowedDuplicateClasses>
 	</properties>
+
 	<dependencies>
 		<!-- SciJava dependencies -->
 		<dependency>

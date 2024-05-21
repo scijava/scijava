@@ -104,6 +104,7 @@
 		<scijava-discovery.allowedDuplicateClasses>${scijava.allowedDuplicateClasses}</scijava-discovery.allowedDuplicateClasses>
 		<allowedDuplicateClasses>${scijava-discovery.allowedDuplicateClasses}</allowedDuplicateClasses>
 	</properties>
+
 	<dependencies>
 	</dependencies>
 </project>

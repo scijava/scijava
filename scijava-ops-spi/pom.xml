@@ -104,6 +104,7 @@
 		<scijava-ops-spi.allowedDuplicateClasses>${scijava.allowedDuplicateClasses}</scijava-ops-spi.allowedDuplicateClasses>
 		<allowedDuplicateClasses>${scijava-ops-spi.allowedDuplicateClasses}</allowedDuplicateClasses>
 	</properties>
+
 	<dependencies>
 		<!-- SciJava dependencies -->
 

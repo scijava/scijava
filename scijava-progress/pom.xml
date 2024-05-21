@@ -104,6 +104,7 @@
 		<scijava-progress.allowedDuplicateClasses>${scijava.allowedDuplicateClasses},com.github.therapi.runtimejavadoc.repack.com.eclipsesource.json.*</scijava-progress.allowedDuplicateClasses>
 		<allowedDuplicateClasses>${scijava-progress.allowedDuplicateClasses}</allowedDuplicateClasses>
 	</properties>
+
 	<dependencies>
 		<!-- Test scope dependencies -->
 		<dependency>

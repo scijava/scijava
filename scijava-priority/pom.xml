@@ -89,6 +89,7 @@
 		</scijava-priority.allowedDuplicateClasses>
 		<allowedDuplicateClasses>${scijava-priority.allowedDuplicateClasses}</allowedDuplicateClasses>
 	</properties>
+
 	<dependencies>
 		<!-- No dependencies allowed! -->
 

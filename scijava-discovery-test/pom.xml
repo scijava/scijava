@@ -104,6 +104,7 @@
 		<scijava-discovery-test.allowedDuplicateClasses>${scijava.allowedDuplicateClasses}</scijava-discovery-test.allowedDuplicateClasses>
 		<allowedDuplicateClasses>${scijava-discovery-test.allowedDuplicateClasses}</allowedDuplicateClasses>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.scijava</groupId>

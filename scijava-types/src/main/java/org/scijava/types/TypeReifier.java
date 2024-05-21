@@ -45,8 +45,6 @@ import com.google.common.reflect.TypeToken;
 
 public interface TypeReifier {
 
-	Logger log = LoggerFactory.getLogger(TypeReifier.class);
-
 	/**
 	 * Gets the type extractor which handles the given class, or null if none.
 	 */

@@ -84,63 +84,57 @@ public final class GenericAssignability {
 	 * {@link TypeVariable} in the source to the corresponding type in the
 	 * parameters of the destination. If an {@link TypeVariable} is encountered
 	 * more than once, the corresponding type in the destination needs to
-	 * perfectly match. Else, false will be returned.</br>
-	 * </br>
+	 * perfectly match. Else, false will be returned.
+	 * <p>
 	 * Examples:
-	 * <ul>
+	 * </p>
 	 * If we have a class:
-	 * <li>
 	 *
 	 * <pre>
 	 * class NumberSupplier&lt;M extends Number&gt; implements Supplier&lt;M&gt;
-	 * </li>
-	 * </ul>
-	 * <ul>
+	 * </pre>
+	 *
 	 * The following check will return true:
-	 * <li>
 	 *
 	 * <pre>
-	 * checkGenericAssignability(NumberSupplier.class, new
-	 * Nil&lt;Supplier&lt;Double&gt;&gt;() {}.getType())</li>
-	 * </ul>
-	 * </ul>
-	 * <ul>
+	 * checkGenericAssignability(NumberSupplier.class,
+	 * 	new Nil&lt;Supplier&lt;Double&gt;&gt;()
+	 * 	{}.getType())
+	 * </pre>
+	 *
 	 * Which will check if the following assignment would be legal:
-	 * <li>
 	 *
 	 * <pre>
-	 * Supplier&lt;Double&gt; list = new NumberSupplier&lt;&gt;()</li>
-	 * </ul>
-	 * </ul>
-	 * <ul>
+	 * Supplier&lt;Double&gt; list = new NumberSupplier&lt;&gt;()
+	 * </pre>
+	 *
 	 * Here, the parameter {@code <M extends Number>} can be inferred to be of
 	 * type {@code Double} from the type {@code Supplier<Double>}
-	 * </ul>
-	 * <ul>
+	 * <p>
 	 * Consequently the following will return false:
-	 * <li>
+	 * </p>
 	 *
 	 * <pre>
-	 * checkGenericAssignability(NumberSupplier.class, new
-	 * Nil&lt;Supplier&lt;String&gt;&gt;() {}.getType())</li>
-	 * </ul>
-	 * <ul>
+	 * checkGenericAssignability(NumberSupplier.class,
+	 * 	new Nil&lt;Supplier&lt;String&gt;&gt;()
+	 * 	{}.getType())
+	 * </pre>
+	 *
 	 * {@code <M extends Number>} can't be inferred, as type {@code String} is not
 	 * within the bounds of {@code M}.
-	 * </ul>
-	 * <ul>
+	 * <p>
 	 * Furthermore, the following will return false for:
 	 * {@code class NumberFunc<M extends Number> implements Function<M, M>}:
-	 * <li>
+	 * </p>
 	 *
 	 * <pre>
-	 * checkGenericAssignability(NumberSupplier.class, new
-	 * Nil&lt;Function&lt;Double, Integer&gt;&gt;() {}.getType())</li>
-	 * </ul>
-	 * <ul>
+	 * checkGenericAssignability(NumberSupplier.class,
+	 * 	new Nil&lt;Function&lt;Double, Integer&gt;&gt;()
+	 * 	{}.getType())
+	 * </pre>
+	 *
 	 * {@code <M extends Number>} can't be inferred, as types {@code Double} and
 	 * {@code Integer} are ambiguous for {@code M}.
-	 * </ul>
 	 *
 	 * @param src the type for which assignment should be checked from
 	 * @param dest the parameterized type for which assignment should be checked

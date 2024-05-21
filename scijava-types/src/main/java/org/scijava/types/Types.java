@@ -81,7 +81,6 @@ import org.scijava.common3.Classes;
  * <li><a href="https://github.com/coekarts/gentyref">GenTyRef</a> (Generic Type
  * Reflector), a library for runtime generic type introspection.</li>
  * </ul>
- * </p>
  *
  * @author Curtis Rueden
  */
@@ -1259,8 +1258,10 @@ public final class Types {
 		 * {@link TypeVarInfo#fixBounds} should be used instead. Furthermore, it can
 		 * be specified if wildcards should be refused, which means that the method
 		 * will return false if:
+		 * <ul>
 		 * <li>a wildcard is already allowed for this type var</li>
 		 * <li>{@code bound} is a wildcard and other types are already allowed</li>
+		 * </ul>
 		 * This is useful if the type variable was contained in a parameterized
 		 * type, hence it only allows wildcards if it was not bound to a type yet.
 		 *
@@ -1290,8 +1291,10 @@ public final class Types {
 		 * parameterizing that {@link ParameterizedType}. Furthermore, it can be
 		 * specified if wildcards should be refused, which means that the method
 		 * will return false if:
+		 * <ul>
 		 * <li>a wildcard is already allowed for this type var</li>
 		 * <li>{@code bound} is a wildcard and other types are already allowed</li>
+		 * </ul>
 		 * This is useful if the type variable was contained in a parameterized
 		 * type, hence it only allows wildcards if it was not bound to a type yet.
 		 *

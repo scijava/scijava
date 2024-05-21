@@ -70,9 +70,11 @@ public final class Infos {
 	 *  'prefix1'.'prefix2' , 'prefix1'.'prefix3'
 	 * </pre>
 	 *
-	 * E.g. "math.add, math.pow". </br>
+	 * E.g. "math.add, math.pow".
+	 * <p>
 	 * The name delimiter is a comma (,). Furthermore, names without prefixes are
 	 * added. The above example will result in the following output:
+	 * </p>
 	 *
 	 * <pre>
 	 *  [math.add, add, math.pow, pow]

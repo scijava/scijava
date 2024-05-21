@@ -53,9 +53,7 @@ import org.scijava.common3.Classes;
  *
  * @author Curtis Rueden
  */
-public abstract class Nil<T> implements GenericTyped, Proxyable<T>,
-	InvocationHandler
-{
+public abstract class Nil<T> implements GenericTyped, Proxyable<T> {
 
 	/** Generic type of the object. */
 	private final TypeToken<?> typeToken;
@@ -192,26 +190,27 @@ public abstract class Nil<T> implements GenericTyped, Proxyable<T>,
 		// NB: Technically, this cast is not safe, because T might not be
 		// an interface, and thus might not be one of the proxy's types.
 		@SuppressWarnings("unchecked")
-		final T proxy = (T) Proxy.newProxyInstance(loader, interfaces, this);
+		final T proxy = (T) Proxy.newProxyInstance(loader, interfaces,
+			new InvocationHandler() {
+				@Override
+				public Object invoke(final Object proxy, final Method method,
+					final Object[] args) throws Throwable
+				{
+					try {
+						// Look for a Nil subclass method of the same signature.
+						final Method m = callbacks.getClass().getMethod(method.getName(), //
+							method.getParameterTypes());
+						return m.invoke(callbacks, args);
+					}
+					catch (final NoSuchMethodException exc) {
+						// NB: Default behavior is to do nothing and return null.
+						return Classes.nullValue(method.getReturnType());
+					}
+				}
+			}
+		);
+
 		return proxy;
-	}
-
-	// -- InvocationHandler methods --
-
-	@Override
-	public Object invoke(final Object proxy, final Method method,
-		final Object[] args) throws Throwable
-	{
-		try {
-			// Look for a Nil subclass method of the same signature.
-			final Method m = callbacks.getClass().getMethod(method.getName(), //
-				method.getParameterTypes());
-			return m.invoke(callbacks, args);
-		}
-		catch (final NoSuchMethodException exc) {
-			// NB: Default behavior is to do nothing and return null.
-			return Classes.nullValue(method.getReturnType());
-		}
 	}
 
 	// -- Helper methods --

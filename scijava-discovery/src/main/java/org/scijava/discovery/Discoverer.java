@@ -62,12 +62,15 @@ public interface Discoverer {
 	<U> List<U> discover(Class<U> c);
 
 	/**
-	 * Creates a {@link Discoverer} operating via {@link ServiceLoader}. NB: This
-	 * the {@link Function} input is <b>extremely</b> important. This puts the
-	 * code loading the services into the user's module, allowing access to all of
-	 * the services exposed to (and {@code use}d by) the calling module.
-	 * Otherwise, all service interfaces would have to be {@code use}d by
-	 * <b>this</b> module, which is not extensible.
+	 * Creates a {@link Discoverer} operating via {@link ServiceLoader}.
+	 * <p>
+	 * NB: The {@link Function} input is extremely important for JPMS
+	 * compatibility. This puts the code loading the services into the user's
+	 * module, allowing access to all of the services exposed to (and
+	 * {@code use}d by) the calling module. Otherwise, all service interfaces
+	 * would have to be {@code use}d by <b>this</b> module, which is not
+	 * extensible.
+	 * </p>
 	 *
 	 * @param func the {@link Function} generating a {@link ServiceLoader}
 	 * @param <T> the {@link Class} we attempt to discover, and consequently the

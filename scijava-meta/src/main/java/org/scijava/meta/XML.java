@@ -81,30 +81,22 @@ public class XML {
 		"scijava.log.level"));
 
 	/** Parses XML from the given file. */
-	public XML(final File file) throws ParserConfigurationException, SAXException,
-		IOException
-	{
+	public XML(final File file) throws IOException {
 		this(file.getAbsolutePath(), loadXML(file));
 	}
 
 	/** Parses XML from the given URL. */
-	public XML(final URL url) throws ParserConfigurationException, SAXException,
-		IOException
-	{
+	public XML(final URL url) throws IOException {
 		this(url.getPath(), loadXML(url));
 	}
 
 	/** Parses XML from the given input stream. */
-	public XML(final InputStream in) throws ParserConfigurationException,
-		SAXException, IOException
-	{
+	public XML(final InputStream in) throws IOException {
 		this(null, loadXML(in));
 	}
 
 	/** Parses XML from the given string. */
-	public XML(final String s) throws ParserConfigurationException, SAXException,
-		IOException
-	{
+	public XML(final String s) throws IOException {
 		this(null, loadXML(s));
 	}
 
@@ -262,16 +254,17 @@ public class XML {
 	// -- Helper methods --
 
 	/** Loads an XML document from the given file. */
-	private static Document loadXML(final File file)
-		throws ParserConfigurationException, SAXException, IOException
-	{
-		return createBuilder().parse(file.getAbsolutePath());
+	private static Document loadXML(final File file) throws IOException {
+		try {
+			return createBuilder().parse(file.getAbsolutePath());
+		}
+		catch (ParserConfigurationException | SAXException exc) {
+			throw new IOException(exc);
+		}
 	}
 
 	/** Loads an XML document from the given URL. */
-	private static Document loadXML(final URL url)
-		throws ParserConfigurationException, SAXException, IOException
-	{
+	private static Document loadXML(final URL url) throws IOException {
 		try (final InputStream in = url.openStream()) {
 			final Document document = loadXML(in);
 			return document;
@@ -279,17 +272,23 @@ public class XML {
 	}
 
 	/** Loads an XML document from the given input stream. */
-	protected static Document loadXML(final InputStream in)
-		throws ParserConfigurationException, SAXException, IOException
-	{
-		return createBuilder().parse(in);
+	protected static Document loadXML(final InputStream in) throws IOException {
+		try {
+			return createBuilder().parse(in);
+		}
+		catch (ParserConfigurationException | SAXException exc) {
+			throw new IOException(exc);
+		}
 	}
 
 	/** Loads an XML document from the given input stream. */
-	protected static Document loadXML(final String s)
-		throws ParserConfigurationException, SAXException, IOException
-	{
-		return createBuilder().parse(new ByteArrayInputStream(s.getBytes()));
+	protected static Document loadXML(final String s) throws IOException {
+		try {
+			return createBuilder().parse(new ByteArrayInputStream(s.getBytes()));
+		}
+		catch (ParserConfigurationException | SAXException exc) {
+			throw new IOException(exc);
+		}
 	}
 
 	/** Creates an XML document builder. */

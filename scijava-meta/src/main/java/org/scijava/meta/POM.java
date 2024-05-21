@@ -35,13 +35,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.scijava.common3.Apps;
 import org.scijava.common3.Classes;
 import org.scijava.common3.URLs;
 import org.scijava.common3.Versioned;
-import org.xml.sax.SAXException;
 
 /**
  * Helper class for working with Maven POMs.
@@ -53,30 +50,22 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 	private String version;
 
 	/** Parses a POM from the given file. */
-	public POM(final File file) throws ParserConfigurationException, SAXException,
-		IOException
-	{
+	public POM(final File file) throws IOException {
 		super(file);
 	}
 
 	/** Parses a POM from the given URL. */
-	public POM(final URL url) throws ParserConfigurationException, SAXException,
-		IOException
-	{
+	public POM(final URL url) throws IOException {
 		super(url);
 	}
 
 	/** Parses a POM from the given input stream. */
-	public POM(final InputStream in) throws ParserConfigurationException,
-		SAXException, IOException
-	{
+	public POM(final InputStream in) throws IOException {
 		super(in);
 	}
 
 	/** Parses a POM from the given string. */
-	public POM(final String s) throws ParserConfigurationException, SAXException,
-		IOException
-	{
+	public POM(final String s) throws IOException {
 		super(s);
 	}
 
@@ -295,7 +284,7 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 			final File pomFile = new File(baseDir, "pom.xml");
 			return new POM(pomFile);
 		}
-		catch (final IOException | ParserConfigurationException | SAXException e) {
+		catch (final IOException e) {
 			return null;
 		}
 	}
@@ -324,9 +313,7 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 					try {
 						poms.add(new POM(url));
 					}
-					catch (final IOException | ParserConfigurationException
-							| SAXException exc)
-					{
+					catch (final IOException exc) {
 						// NB: empty catch block
 						// ignore and continue
 					}

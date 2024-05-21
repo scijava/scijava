@@ -979,7 +979,7 @@ public final class Functions {
 
 		O apply(Object... ins);
 
-		Object getOp();
+		Object op();
 	}
 
 	/**
@@ -1002,7 +1002,7 @@ public final class Functions {
 			}
 
 			@Override
-			public Producer<O> getOp() {
+			public Producer<O> op() {
 				return f;
 			}
 		};
@@ -1032,7 +1032,7 @@ public final class Functions {
 			}
 
 			@Override
-			public Function<?, O> getOp() {
+			public Function<?, O> op() {
 				return f;
 			}
 		};
@@ -1062,7 +1062,7 @@ public final class Functions {
 			}
 
 			@Override
-			public BiFunction<?, ?, O> getOp() {
+			public BiFunction<?, ?, O> op() {
 				return f;
 			}
 		};
@@ -1090,7 +1090,7 @@ public final class Functions {
 			}
 
 			@Override
-			public Functions.Arity3<?, ?, ?, O> getOp() {
+			public Functions.Arity3<?, ?, ?, O> op() {
 				return f;
 			}
 		};
@@ -1120,7 +1120,7 @@ public final class Functions {
 			}
 
 			@Override
-			public Functions.Arity4<?, ?, ?, ?, O> getOp() {
+			public Functions.Arity4<?, ?, ?, ?, O> op() {
 				return f;
 			}
 		};
@@ -1150,7 +1150,7 @@ public final class Functions {
 			}
 
 			@Override
-			public Functions.Arity5<?, ?, ?, ?, ?, O> getOp() {
+			public Functions.Arity5<?, ?, ?, ?, ?, O> op() {
 				return f;
 			}
 		};
@@ -1180,7 +1180,7 @@ public final class Functions {
 			}
 
 			@Override
-			public Functions.Arity6<?, ?, ?, ?, ?, ?, O> getOp() {
+			public Functions.Arity6<?, ?, ?, ?, ?, ?, O> op() {
 				return f;
 			}
 		};
@@ -1211,7 +1211,7 @@ public final class Functions {
 			}
 
 			@Override
-			public Functions.Arity7<?, ?, ?, ?, ?, ?, ?, O> getOp() {
+			public Functions.Arity7<?, ?, ?, ?, ?, ?, ?, O> op() {
 				return f;
 			}
 		};
@@ -1242,7 +1242,7 @@ public final class Functions {
 			}
 
 			@Override
-			public Functions.Arity8<?, ?, ?, ?, ?, ?, ?, ?, O> getOp() {
+			public Functions.Arity8<?, ?, ?, ?, ?, ?, ?, ?, O> op() {
 				return f;
 			}
 		};
@@ -1273,7 +1273,7 @@ public final class Functions {
 			}
 
 			@Override
-			public Functions.Arity9<?, ?, ?, ?, ?, ?, ?, ?, ?, O> getOp() {
+			public Functions.Arity9<?, ?, ?, ?, ?, ?, ?, ?, ?, O> op() {
 				return f;
 			}
 		};
@@ -1304,7 +1304,7 @@ public final class Functions {
 			}
 
 			@Override
-			public Functions.Arity10<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> getOp() {
+			public Functions.Arity10<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> op() {
 				return f;
 			}
 		};
@@ -1335,7 +1335,7 @@ public final class Functions {
 			}
 
 			@Override
-			public Functions.Arity11<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> getOp() {
+			public Functions.Arity11<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> op() {
 				return f;
 			}
 		};
@@ -1366,7 +1366,7 @@ public final class Functions {
 			}
 
 			@Override
-			public Functions.Arity12<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> getOp() {
+			public Functions.Arity12<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> op() {
 				return f;
 			}
 		};
@@ -1397,9 +1397,7 @@ public final class Functions {
 			}
 
 			@Override
-			public Functions.Arity13<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O>
-				getOp()
-			{
+			public Functions.Arity13<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> op() {
 				return f;
 			}
 		};
@@ -1431,7 +1429,7 @@ public final class Functions {
 
 			@Override
 			public Functions.Arity14<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O>
-				getOp()
+				op()
 			{
 				return f;
 			}
@@ -1465,7 +1463,7 @@ public final class Functions {
 
 			@Override
 			public Functions.Arity15<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O>
-				getOp()
+				op()
 			{
 				return f;
 			}
@@ -1500,7 +1498,7 @@ public final class Functions {
 			@Override
 			public
 				Functions.Arity16<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O>
-				getOp()
+				op()
 			{
 				return f;
 			}

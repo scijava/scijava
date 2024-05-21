@@ -61,10 +61,11 @@ public final class Platforms {
 		return isMac() || isLinux();
 	}
 
-	/** Gets the name of the operating system. */
-	public static String osName() {
+	// -- Helper methods --
+
+	private static String osName() {
 		final String osName = System.getProperty("os.name");
-		return osName == null ? "Unknown" : osName;
+		return osName == null ? "" : osName;
 	}
 
 }

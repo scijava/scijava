@@ -214,8 +214,9 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 * Entry point for convenient Op calls, providing a builder-style interface to
 	 * walk through the process step-by-step.
 	 * </p>
-	 * <br/>
+	 * <p>
 	 * The general order of specification:
+	 * </p>
 	 * <ol>
 	 * <li>The op name (and {@link Hints}, if desired)</li>
 	 * <li>The number of input(s)</li>
@@ -237,9 +238,9 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 * <li>Inputs with no output &rarr; <code>Inplace</code> or
 	 * <code>Function</code> with unknown (<code>Object</code>) return</li>
 	 * </ul>
-	 * <br/>
 	 * <p>
 	 * Examples: {@code OpEnvironment env = new DefaultOpEnvironment();}
+	 * </p>
 	 * <ul>
 	 * <li>{@code env.op("create").outType(DoubleType.class).create();} &#8212;
 	 * run an Op creating an instance of the ImgLib2 {@code DoubleType}</li>
@@ -266,16 +267,11 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 * <li>{@code env.op("filter.addPoissonNoise").input(img1).mutate();} &#8212;
 	 * run an Op adding poisson noise to an input image.</li>
 	 * </ul>
-	 * </p>
 	 *
 	 * @param opName The name of the Op to run
 	 * @return The {@link OpBuilder} instance for builder chaining.
-	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be
-	 *           satisfied
-	 * @see <a href="#op-java.lang.String-org.scijava.ops.api.Hints-"
-	 *      title="To specify a Hints instance to use">op(String, Hints)</a>
-	 * @see <a href="#nullary-java.lang.String-"
-	 *      title="For a series of convenience builds with arity pre-selected">nullary(String)</a>
+	 * @throws OpMatchingException if the Op request cannot be satisfied
+	 * @see #op(String, Hints) To specify a Hints instance to use
 	 * @see OpBuilder
 	 */
 	default OpBuilder op(final String opName) {
@@ -288,13 +284,8 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 * @param opName The name of the Op to run
 	 * @param hints The {@code Hints} instance to use for Op matching
 	 * @return The {@link OpBuilder} instance for builder chaining.
-	 * @throws org.scijava.ops.api.OpMatchingException if the Op request cannot be
-	 *           satisfied
-	 * @see <a href="#op-java.lang.String-"
-	 *      title="To use the default Hints for this OpEnvironment">op(String)</a>
-	 * @see <a href="#nullary-java.lang.String-org.scijava.ops.api.Hints-"
-	 *      title="For a series of convenience builds with arity pre-selected">nullary(String,
-	 *      Hints)</a>
+	 * @throws OpMatchingException if the Op request cannot be satisfied
+	 * @see #op(String) To use the default Hints for this OpEnvironment
 	 */
 	default OpBuilder op(final String opName, final Hints hints) {
 		return new OpBuilder(this, opName, hints);

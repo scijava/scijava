@@ -179,7 +179,7 @@ public abstract class Nil<T> implements GenericTyped, Proxyable<T>,
 	 */
 	@Override
 	public T proxy() {
-		final ClassLoader loader = Thread.currentThread().getContextClassLoader();
+		final ClassLoader loader = Classes.classLoader();
 
 		// extract the generic type's interfaces
 		final Set<?> ifaceSet = typeToken.getTypes().interfaces().rawTypes();

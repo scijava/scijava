@@ -42,8 +42,6 @@ package org.scijava.types;
 //
 // See NOTICE.txt for further details on third-party licenses.
 
-import static org.scijava.common3.Exceptions.iae;
-
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericArrayType;
@@ -966,7 +964,9 @@ public final class Types {
 	 *           has no such constant.
 	 */
 	public static <T> T enumValue(final String name, final Class<T> dest) {
-		if (!dest.isEnum()) throw iae("Not an enum type: " + name(dest));
+		if (!dest.isEnum()) {
+			throw new IllegalArgumentException("Not an enum type: " + name(dest));
+		}
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		final Enum result = Enum.valueOf((Class) dest, name);
 		@SuppressWarnings("unchecked")

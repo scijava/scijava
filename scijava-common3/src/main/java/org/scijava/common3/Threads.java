@@ -37,38 +37,17 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
- * Utility class for working with {@link Exception}s.
+ * Utility class for working with {@link Thread}s.
  *
  * @author Curtis Rueden
  * @author Gabriel Selzer
  */
-public final class Exceptions {
+public final class Threads {
 
 	private static final String NL = System.getProperty("line.separator");
 
-	private Exceptions() {
+	private Threads() {
 		// prevent instantiation of utility class
-	}
-
-	/**
-	 * Creates a new {@link IllegalArgumentException} with the given message
-	 * strings joined by commas.
-	 */
-	public static IllegalArgumentException iae(final String... notes) {
-		return iae(null, notes);
-	}
-
-	/**
-	 * Creates a new {@link IllegalArgumentException} with the given cause and
-	 * message strings joined by commas.
-	 */
-	public static IllegalArgumentException iae(final Throwable cause,
-		final String... notes)
-	{
-		final String s = String.join(", ", notes);
-		final IllegalArgumentException exc = new IllegalArgumentException(s);
-		if (cause != null) exc.initCause(cause);
-		return exc;
 	}
 
 	/** Extracts the given exception's corresponding stack trace to a string. */

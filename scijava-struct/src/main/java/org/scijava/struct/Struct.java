@@ -30,7 +30,9 @@
 package org.scijava.struct;
 
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A structure consisting of typed fields called {@link Member}s.
@@ -48,6 +50,32 @@ public interface Struct extends Iterable<Member<?>> {
 	}
 
 	default <C> StructInstance<C> createInstance(final C object) {
-		return new DefaultStructInstance<>(this, object);
+		final LinkedHashMap<String, MemberInstance<?>> memberMap;
+		memberMap = new LinkedHashMap<>();
+		for (final Member<?> member : members()) {
+			memberMap.put(member.getKey(), member.createInstance(object));
+		}
+
+		return new StructInstance<>() {
+			@Override
+			public List<MemberInstance<?>> members() {
+				return memberMap.values().stream().collect(Collectors.toList());
+			}
+
+			@Override
+			public Struct struct() {
+				return Struct.this;
+			}
+
+			@Override
+			public C object() {
+				return object;
+			}
+
+			@Override
+			public MemberInstance<?> member(final String key) {
+				return memberMap.get(key);
+			}
+		};
 	}
 }

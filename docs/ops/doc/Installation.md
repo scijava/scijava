@@ -33,15 +33,15 @@ Double-check the `Fiji.app/config/jaunch` directory [Windows/Linux] or `Fiji.app
 
 #### I did the new Java update but after restarting Fiji is not using Java 21
 
-The new java should have been downloaded to `Fiji.app/java/[platform/` and will likely have a directory name along the lines of `zulu21[...]jdk21[...]`.
+In your `Fiji.app/config/jaunch` directory you should have a file named `fiji.cfg`. If this file is not present but you instead have an `ImageJ.cfg`, first try renaming `ImageJ.cfg → fiji.cfg` and launch Fiji again. This is a potential bug that can arise due to the switching of the launchers.
 
-In your `Fiji.app/config/jaunch` directory you should have a file named `fiji.cfg` containing the line:
+If Java 21 is still not being used, look at the actual contents of the `fiji.cfg` file. This is a plain text file and can be edited in any text editor. It should be along the lines of:
 
 ```
 jvm.app-configured=/path/to/downloaded/java
 ```
 
-Ensure that the right hand side of this assignment matches the Java download location.
+The right-hand side of this assignment should be a path to the location where Java 21 was downloaded. It will be in the form of `Fiji.app/java/[platform/zulu21[...]jdk21[...]`. Ensure that this path is valid and correct.
 
 #### Other failures
 

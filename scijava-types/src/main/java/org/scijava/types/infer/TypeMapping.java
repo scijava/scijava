@@ -45,7 +45,7 @@ import org.scijava.types.Types;
  *
  * @author Gabriel Selzer
  */
-public class TypeMapping {
+class TypeMapping {
 
 	protected final TypeVariable<?> typeVar;
 	protected Type mappedType;
@@ -62,9 +62,7 @@ public class TypeMapping {
 	 */
 	boolean malleable;
 
-	public TypeMapping(TypeVariable<?> typeVar, Type mappedType,
-		boolean malleable)
-	{
+	TypeMapping(TypeVariable<?> typeVar, Type mappedType, boolean malleable) {
 		this.typeVar = typeVar;
 		this.mappedType = mappedType;
 		this.malleable = malleable;

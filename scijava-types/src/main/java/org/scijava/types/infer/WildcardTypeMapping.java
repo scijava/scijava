@@ -45,7 +45,7 @@ import org.scijava.types.Types;
  *
  * @author Gabriel Selzer
  */
-public class WildcardTypeMapping extends TypeMapping {
+class WildcardTypeMapping extends TypeMapping {
 
 	/**
 	 * Current Java Language Specifications allow only one lower bound on any
@@ -97,7 +97,7 @@ public class WildcardTypeMapping extends TypeMapping {
 
 	private List<Type> lowerBoundList;
 
-	public WildcardTypeMapping(TypeVariable<?> typeVar, WildcardType mappedType,
+	WildcardTypeMapping(TypeVariable<?> typeVar, WildcardType mappedType,
 		boolean malleable)
 	{
 		super(typeVar, getUpperBound(mappedType), malleable);

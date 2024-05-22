@@ -43,7 +43,7 @@ import org.scijava.types.Types;
  * Adapter class wrapping a {@code Map<TypeVariable, TypeMapping>} into a
  * {@code Map<TypeVariable, Type>} for use with {@link Types} API.
  */
-public class TypeVarAssigns implements Map<TypeVariable<?>, Type> {
+class TypeVarAssigns implements Map<TypeVariable<?>, Type> {
 
 	private static TypeMapping suitableTypeMapping(TypeVariable<?> typeVar,
 		Type newType, boolean malleability)
@@ -57,7 +57,7 @@ public class TypeVarAssigns implements Map<TypeVariable<?>, Type> {
 
 	private Map<TypeVariable<?>, TypeMapping> map;
 
-	public TypeVarAssigns(Map<TypeVariable<?>, TypeMapping> map) {
+	TypeVarAssigns(Map<TypeVariable<?>, TypeMapping> map) {
 		this.map = map;
 	}
 

@@ -34,11 +34,6 @@ package org.scijava.types.infer;
  */
 public class TypeInferenceException extends RuntimeException {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 7147530827546663700L;
-
 	public TypeInferenceException() {
 		super();
 	}

@@ -1,18 +1,21 @@
-/*-
+/*
  * #%L
- * A library for building and introspecting structs.
+ * SciJava Common shared library for SciJava software.
  * %%
- * Copyright (C) 2021 - 2024 SciJava developers.
+ * Copyright (C) 2009 - 2017 Board of Regents of the University of
+ * Wisconsin-Madison, Broad Institute of MIT and Harvard, Max Planck
+ * Institute of Molecular Cell Biology and Genetics, University of
+ * Konstanz, and KNIME GmbH.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ * 
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -29,41 +32,38 @@
 
 package org.scijava.struct;
 
-import java.util.function.Supplier;
-
-public interface MemberInstance<T> extends Supplier<T> {
-
-	Member<T> member();
-
-	default boolean isReadable() {
-		return false;
-	}
-
-	default boolean isWritable() {
-		return false;
-	}
+/**
+ * Defines the "visibility" of a parameter.
+ * 
+ * @author Curtis Rueden
+ */
+public enum ItemVisibility {
 
 	/**
-	 * Gets the value of the member.
-	 *
-	 * @return The value of the {@link Member} with the given key.
-	 * @throws UnsupportedOperationException if the member is not readable (see
-	 *           {@link #isReadable()}).
+	 * Item is included in the history for purposes of data provenance, and
+	 * included as a parameter when recording scripts.
 	 */
-	@Override
-	default T get() {
-		throw new UnsupportedOperationException();
-	}
+	NORMAL,
 
 	/**
-	 * Sets the value of the member.
-	 *
-	 * @param value The value to set.
-	 * @throws UnsupportedOperationException if the member is not writable (see
-	 *           {@link #isWritable()}).
+	 * Item is excluded from the history for the purposes of data provenance, but
+	 * still included as a parameter when recording scripts.
 	 */
-	default void set(Object value) {
-		throw new UnsupportedOperationException();
-	}
+	TRANSIENT,
+
+	/**
+	 * Item is excluded from the history for the purposes of data provenance, and
+	 * also excluded as a parameter when recording scripts. This option should
+	 * only be used for items with no effect on the final output, such as a
+	 * "verbose" flag.
+	 */
+	INVISIBLE,
+
+	/**
+	 * As {@link #INVISIBLE}, and further indicating that the item's value is
+	 * intended as a message to the user (e.g., in the input harvester panel)
+	 * rather than an actual parameter to the module execution.
+	 */
+	MESSAGE
 
 }

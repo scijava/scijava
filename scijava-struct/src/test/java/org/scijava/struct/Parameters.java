@@ -1,18 +1,20 @@
-/*-
+/*
  * #%L
- * A library for building and introspecting structs.
+ * SciJava Common shared library for SciJava software.
  * %%
- * Copyright (C) 2021 - 2024 SciJava developers.
+ * Copyright (C) 2009 - 2017 Board of Regents of the University of
+ * Wisconsin-Madison, Broad Institute of MIT and Harvard, and Max Planck
+ * Institute of Molecular Cell Biology and Genetics.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ * 
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -29,41 +31,18 @@
 
 package org.scijava.struct;
 
-import java.util.function.Supplier;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public interface MemberInstance<T> extends Supplier<T> {
-
-	Member<T> member();
-
-	default boolean isReadable() {
-		return false;
-	}
-
-	default boolean isWritable() {
-		return false;
-	}
-
-	/**
-	 * Gets the value of the member.
-	 *
-	 * @return The value of the {@link Member} with the given key.
-	 * @throws UnsupportedOperationException if the member is not readable (see
-	 *           {@link #isReadable()}).
-	 */
-	@Override
-	default T get() {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * Sets the value of the member.
-	 *
-	 * @param value The value to set.
-	 * @throws UnsupportedOperationException if the member is not writable (see
-	 *           {@link #isWritable()}).
-	 */
-	default void set(Object value) {
-		throw new UnsupportedOperationException();
-	}
-
+/**
+ * Container annotation type for repeated @{@link Parameter} annotations.
+ * 
+ * @author Curtis Rueden
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ ElementType.FIELD, ElementType.TYPE })
+public @interface Parameters {
+	Parameter[] value();
 }

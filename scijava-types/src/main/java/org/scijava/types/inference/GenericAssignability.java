@@ -30,18 +30,13 @@
 package org.scijava.types.inference;
 
 import com.google.common.base.Objects;
+import org.scijava.types.Any;
+import org.scijava.types.Types;
 
 import java.lang.reflect.*;
-import java.net.InterfaceAddress;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-
-import org.scijava.types.Any;
-import org.scijava.types.Nil;
-import org.scijava.types.Types;
 
 /**
  * Bigger-picture, method-level static methods.
@@ -187,65 +182,6 @@ public final class GenericAssignability {
 		boolean result = checkGenericAssignability(srcTypes, destTypes, src, dest,
 			typeVarAssigns, safeAssignability);
 		return result;
-	}
-
-	/**
-	 * Finds the levels of casting between {@code origin} and {@code dest}.
-	 * Returns 0 if dest and origin are the same. Returns -1 if dest is not
-	 * assignable from origin.
-	 */
-	public static int findCastLevels(final Class<?> dest, final Class<?> origin) {
-		if (dest.equals(origin)) return 0;
-
-		int level = 1;
-		Class<?> currType = origin;
-		// BFS if dest is an interface
-		if (dest.isInterface()) {
-			final HashSet<String> seen = new HashSet<>();
-			final ArrayList<Type> currIfaces = new ArrayList<>(Arrays.asList(currType
-				.getGenericInterfaces()));
-			do {
-				final ArrayList<Type> nextIfaces = new ArrayList<>();
-				for (final Type iface : currIfaces) {
-					if (seen.contains(iface.getTypeName())) continue;
-
-					final Class<?> cls = getClass(iface);
-					if (cls.equals(dest)) return level;
-					seen.add(iface.getTypeName());
-					nextIfaces.addAll(Arrays.asList(cls.getGenericInterfaces()));
-				}
-				currIfaces.clear();
-				currIfaces.addAll(nextIfaces);
-				if (currType.getSuperclass() != null) {
-					currType = currType.getSuperclass();
-					currIfaces.addAll(Arrays.asList(currType.getGenericInterfaces()));
-				}
-				level++;
-			}
-			while (!currIfaces.isEmpty() || currType.getSuperclass() != null);
-		}
-		// otherwise dest is a class, so search the list of ancestors
-		else {
-			while (currType.getSuperclass() != null) {
-				currType = currType.getSuperclass();
-				if (currType.equals(dest)) return level;
-				level++;
-			}
-		}
-		return -1;
-	}
-
-	/**
-	 * Gets the "useful" class information carries on the given object, which
-	 * depends on the actual type of the object.
-	 */
-	public static Class<?> getClass(final Object obj) {
-		if (obj == null) return null;
-		if (obj instanceof Nil) return getClass(((Nil<?>) obj).getType());
-		if (obj instanceof Class) return (Class<?>) obj;
-		if (obj instanceof ParameterizedType)
-			return (Class<?>) ((ParameterizedType) obj).getRawType();
-		return obj.getClass();
 	}
 
 	/**

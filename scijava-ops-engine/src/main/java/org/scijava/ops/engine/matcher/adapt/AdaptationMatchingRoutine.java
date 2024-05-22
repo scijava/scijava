@@ -44,7 +44,8 @@ import java.util.stream.Collectors;
 
 import org.scijava.ops.api.*;
 import org.scijava.ops.engine.*;
-import org.scijava.ops.engine.OpCandidate.StatusCode;
+import org.scijava.ops.engine.matcher.OpCandidate;
+import org.scijava.ops.engine.matcher.OpCandidate.StatusCode;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.engine.matcher.impl.DefaultOpRequest;

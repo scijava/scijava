@@ -2,7 +2,7 @@
 
 ## Fiji
 
-One easy way to use SciJava Ops is within [Fiji](https://fiji.sc), using SciJava's Script Editor. **Note that to use Fiji, you must use Java 11+. Instructions on using Java 11+ for Fiji can be found [here](https://imagej.net/learn/faq#how-do-i-launch-imagej-with-a-different-version-of-java)**.
+One easy way to use SciJava Ops is within [Fiji](https://fiji.sc), using SciJava's Script Editor. **Note that to use Fiji, you must use Java 11+. Please follow the instructions below carefully to ensure you receive the needed Java update.**
 
 ### Installing SciJava Ops
 

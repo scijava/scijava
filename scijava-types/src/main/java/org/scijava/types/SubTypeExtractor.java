@@ -31,6 +31,10 @@ package org.scijava.types;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A partial {@link TypeExtractor} implementation that specializes in recovering
@@ -65,8 +69,38 @@ public abstract class SubTypeExtractor<T> implements TypeExtractor {
 				"!");
 		@SuppressWarnings("unchecked")
 		final Type[] typeVars = getTypeParameters(r, (T) object);
-		return TypeTools.parameterizeViaSuperType(object.getClass(), baseClass(),
-			typeVars);
+
+		// TODO: Check whether Types already has a method with this functionality.
+		return parameterizeViaSuperType(object.getClass(), baseClass(), typeVars);
 	}
 
+	/**
+	 * Returns {@code cls}, parameterized with {@link TypeVariable} bounds defined
+	 * by a set of type parameters <b>on some superclass </b> of {@code cls}
+	 *
+	 * @param cls the {@link Class} to be parameterized
+	 * @param superCls a super{@link Class} of {@code cls}
+	 * @param superClsTypeVars the type parameters of {@code supercls}, to be
+	 *          raised to the {@link Class} {@code cls}
+	 * @return {@code cls}, but parameterized with the type variables in
+	 *         {@code superClsTypeVars} against superclass {@code superCls}
+	 */
+	private static Type parameterizeViaSuperType(Class<?> cls,
+		final Class<?> superCls, final Type... superClsTypeVars)
+	{
+		Type t = Types.parameterizeRaw(cls);
+		Type[] typeVars = Types.typeParamsAgainstClass(t, superCls);
+		if (typeVars.length != superClsTypeVars.length) {
+			throw new IllegalArgumentException("Type variables " + Arrays.toString(
+				typeVars) + " of class " + cls +
+				" did not match the expected type variables " + Arrays.toString(
+					superClsTypeVars) + " of superclass " + superCls);
+		}
+		Map<TypeVariable<?>, Type> map = new HashMap<>();
+		for (int i = 0; i < typeVars.length; i++) {
+			if (typeVars[i] instanceof TypeVariable) map.put(
+				(TypeVariable<?>) typeVars[i], superClsTypeVars[i]);
+		}
+		return Types.mapVarToTypes(t, map);
+	}
 }

@@ -34,8 +34,7 @@
  * <ul>
  * <li>Reason about whether a collection of arguments (object instances, generic
  * types, or a mixture thereof) satisfy a given list of generic types, such as
- * those of a particular method signature. See
- * {@link org.scijava.types.TypeTools#satisfies} for details.</li>
+ * those of a particular method signature.</li>
  * <li>Create {@link org.scijava.types.Nil} objects, which act as "typed null"
  * placeholders, and support generation of proxy instances of their associated
  * generic type, similar to (but less featureful than) how mocking frameworks

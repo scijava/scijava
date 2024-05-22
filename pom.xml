@@ -90,7 +90,19 @@
 		<license.licenseName>N/A</license.licenseName>
 		<license.copyrightOwners>N/A</license.copyrightOwners>
 
-		<scijava.jvm.build.version>[11,)</scijava.jvm.build.version>
+		<!--
+		NB: Older versions of OpenJDK 11 have a bug in the javadoc tool,
+		which causes errors like:
+
+		[ERROR] javadoc: error - The code being documented uses packages
+		in the unnamed module, but the packages defined in
+		https://github.com/scijava/scijava/apidocs/ are in named modules.
+
+		The most recent version of OpenJDK 11 known to have this problem
+		is 11.0.8; the oldest version known to have fixed it is 11.0.17.
+		Therefore, we set the minimum build JDK version to 11.0.17 here.
+		-->
+		<scijava.jvm.build.version>[11.0.17,)</scijava.jvm.build.version>
 		<scijava.jvm.version>11</scijava.jvm.version>
 		<scijava.javadoc.url.java>https://javadoc.scijava.org/Java11/</scijava.javadoc.url.java>
 		<scijava.javadoc.url.javafx>https://javadoc.scijava.org/JavaFX11/</scijava.javadoc.url.javafx>

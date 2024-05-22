@@ -127,7 +127,7 @@ public final class Types {
 		if (type == null) return null;
 		if (type instanceof Class) return (Class<?>) type;
 		final List<Class<?>> c = raws(type);
-		if (c == null || c.size() == 0) return null;
+		if (c.isEmpty()) return null;
 		return c.get(0);
 	}
 
@@ -223,28 +223,6 @@ public final class Types {
 	public static Type fieldType(final Field field, final Class<?> type) {
 		final Type pType = parameterizeRaw(type);
 		return GenericTypeReflector.getExactFieldType(field, pType);
-	}
-
-	/**
-	 * As {@link #fieldType(Field, Class)}, but with respect to the return type of
-	 * the given {@link Method} rather than a {@link Field}.
-	 */
-	public static Type methodReturnType(final Method method,
-		final Class<?> type)
-	{
-		final Type pType = parameterizeRaw(type);
-		return GenericTypeReflector.getExactReturnType(method, pType);
-	}
-
-	/**
-	 * As {@link #fieldType(Field, Class)}, but with respect to the parameter
-	 * types of the given {@link Method} rather than a {@link Field}.
-	 */
-	public static Type[] methodParamTypes(final Method method,
-		final Class<?> type)
-	{
-		final Type pType = parameterizeRaw(type);
-		return GenericTypeReflector.getExactParameterTypes(method, pType);
 	}
 
 	/**
@@ -358,9 +336,8 @@ public final class Types {
 		List<Type> sharedInterfaces = new ArrayList<>();
 		Queue<Type> superInterfaces = new LinkedList<>();
 		if (Types.raw(types[0]).isInterface()) superInterfaces.add(types[0]);
-		else for (Type superT1 : Types.raw(types[0]).getGenericInterfaces())
-			superInterfaces.add(superT1);
-		while (superInterfaces.size() > 0) {
+		else Collections.addAll(superInterfaces, Types.raw(types[0]).getGenericInterfaces());
+		while (!superInterfaces.isEmpty()) {
 			Type type = superInterfaces.remove();
 			Type pType = Types.getExactSuperType(types[0], Types.raw(type));
 			if (Types.isAssignable(types, pType) == -1) {
@@ -410,14 +387,15 @@ public final class Types {
 			// satisfying interface. Do note, however, that this does not prevent
 			// multiple
 			// satisfying interfaces at the same depth from being found.
-			if (sharedInterfaces.size() == 0) for (Type superT1 : Types.raw(type)
-				.getGenericInterfaces())
-				superInterfaces.add(superT1);
+			if (sharedInterfaces.isEmpty()){
+				Collections.addAll(superInterfaces, Types.raw(type)
+						.getGenericInterfaces());
+			}
 		}
 		if (sharedInterfaces.size() == 1 && !wildcardSingleIface) {
 			return sharedInterfaces.get(0);
 		}
-		else if (sharedInterfaces.size() > 0) {
+		else if (!sharedInterfaces.isEmpty()) {
 			// TODO: such a wildcard is technically illegal as a result of current
 			// Java language specifications. See
 			// https://stackoverflow.com/questions/6643241/why-cant-you-have-multiple-interfaces-in-a-bounded-wildcard-generic
@@ -471,7 +449,7 @@ public final class Types {
 	public static Type[] getParams(Class<?> subType, Class<?> superErasure) {
 		Type pt = parameterizeRaw(subType);
 		Type superType = getExactSuperType(pt, superErasure);
-		if (superType != null && superType instanceof ParameterizedType) {
+		if (superType instanceof ParameterizedType) {
 			return ((ParameterizedType) superType).getActualTypeArguments();
 		}
 		return new Type[0];
@@ -681,7 +659,7 @@ public final class Types {
 		for (final Class<?> destClass : destClasses) {
 			final Optional<Class<?>> first = srcClasses.stream().filter(
 				srcClass -> Types.isAssignable(srcClass, destClass)).findFirst();
-			if (!first.isPresent()) {
+			if (first.isEmpty()) {
 				return false;
 			}
 		}
@@ -702,8 +680,7 @@ public final class Types {
 		Type[] srcTypes = new Type[destTypes.length];
 
 		// get an array of the source argument types
-		Type argType = arg;
-		Type superType = Types.getExactSuperType(argType, Types.raw(param));
+        Type superType = Types.getExactSuperType(arg, Types.raw(param));
 		if (!(superType instanceof ParameterizedType)) return false;
 		srcTypes = ((ParameterizedType) superType).getActualTypeArguments();
 
@@ -757,9 +734,8 @@ public final class Types {
 	{
 		// add the type variable to the HashMap if it does not yet exist.
 		if (!typeBounds.containsKey(param)) {
-			final TypeVariable<?> newTypeVar = param;
-			typeBounds.put(newTypeVar, new TypeVarFromParameterizedTypeInfo(
-				newTypeVar));
+            typeBounds.put(param, new TypeVarFromParameterizedTypeInfo(
+                    param));
 		}
 		// attempt to restrict the bounds of the type variable to the argument.
 		// We call the fixBounds method the refuseWildcards flag to be true,
@@ -1010,7 +986,7 @@ public final class Types {
 	 * @return The newly created {@link WildcardType}.
 	 */
 	public static WildcardType wildcard() {
-		return wildcard((Type) null, (Type) null);
+		return wildcard(null, (Type) null);
 	}
 
 	/**
@@ -1134,21 +1110,10 @@ public final class Types {
 	 * @param typeArgMappings the mapping used for parameterization
 	 * @return {@link ParameterizedType}
 	 */
-	public static final ParameterizedType parameterize(final Class<?> raw,
+	public static ParameterizedType parameterize(final Class<?> raw,
 		final Map<TypeVariable<?>, Type> typeArgMappings)
 	{
 		return TypeUtils.parameterize(raw, typeArgMappings);
-	}
-
-	/**
-	 * Returns the erasure of the given type as specified by
-	 * {@link GenericTypeReflector#erase(Type)}.
-	 *
-	 * @param type the type to erase
-	 * @return the erased type
-	 */
-	public static Class<?> erase(final Type type) {
-		return GenericTypeReflector.erase(type);
 	}
 
 	/**

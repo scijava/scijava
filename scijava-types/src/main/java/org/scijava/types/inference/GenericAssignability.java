@@ -43,6 +43,17 @@ import org.scijava.types.Any;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 
+/**
+ * Bigger-picture, method-level static methods.
+ * <p>
+ * Whereas the methods of {@link Types} answer questions like "does this type
+ * assign to that type", whereas this class's methods address questions like
+ * "does this set of method arguments assign to this set of method parameters
+ * given shared type variables?"
+ * </p>
+ *
+ * @author Gabriel Selzer
+ */
 public final class GenericAssignability {
 
 	private GenericAssignability() {

@@ -130,6 +130,20 @@ public class StructTest {
         assertEquals("asdf", nestedMembers.get("vp.d"));
         assertEquals(5.4, nestedMembers.get("vp.o"));
         assertEquals("fdsa", nestedMembers.get("vp.p"));
+
+        var expectedString =
+          "np: org.scijava.struct.StructTest$NestedParameters [INPUT]\n" +
+            "  stuff: java.lang.String [INPUT]\n" +
+            "  vp: org.scijava.struct.StructTest$VariousParameters [INPUT]\n" +
+            "    a: int [INPUT]\n" +
+            "    b: java.lang.Double [INPUT]\n" +
+            "    c: byte [INPUT]\n" +
+            "    d: java.lang.Object [INPUT]\n" +
+            "    o: double [OUTPUT]\n" +
+            "    p: java.lang.String [OUTPUT]\n" +
+            "  things: java.lang.String [OUTPUT]\n" +
+            "junk: java.lang.String [INPUT]";
+        assertEquals(expectedString, Structs.toString(hlpStruct));
     }
 
     // -- Helper methods --

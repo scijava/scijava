@@ -33,8 +33,10 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.scijava.common3.Classes;
+import org.scijava.types.Types;
 
 public final class Structs {
 
@@ -97,4 +99,33 @@ public final class Structs {
 			Classes.isBoolean(type);
 	}
 
+	public static String toString(Struct struct) {
+		return toString(struct, 0);
+	}
+
+	public static String toString(Member<?> member) {
+		return toString(member, 0);
+	}
+
+	private static String toString(Struct struct, int level) {
+		String indent = " ".repeat(2 * level);
+		return indent + String.join("\n" + indent,
+			struct.members().stream()
+				.map(m -> toString(m, level))
+				.collect(Collectors.toList())
+		);
+	}
+
+	private static String toString(Member<?> member, int level) {
+		String desc = member.description();
+		String descriptionSuffix = desc == null ? "" : " {" + desc.trim() + "}";
+		return String.format("%s: %s%s [%s]%s%s",
+				member.key(),
+				Types.name(member.type()),
+				member.isRequired() ? "" : "?",
+				member.getIOType(),
+				descriptionSuffix,
+				member.isStruct() ? "\n" + toString(member.childStruct(), level + 1) : ""
+		);
+	}
 }

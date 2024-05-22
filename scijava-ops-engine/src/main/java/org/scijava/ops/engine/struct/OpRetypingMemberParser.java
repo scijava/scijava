@@ -39,6 +39,7 @@ import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 import org.scijava.struct.MemberParser;
 import org.scijava.struct.Struct;
+import org.scijava.struct.Structs;
 
 public class OpRetypingMemberParser implements
 	MemberParser<RetypingRequest, Member<?>>
@@ -111,6 +112,11 @@ public class OpRetypingMemberParser implements
 			@Override
 			public ItemIO getIOType() {
 				return fmt.itemIO();
+			}
+
+			@Override
+			public String toString() {
+				return Structs.toString(this);
 			}
 		};
 	}

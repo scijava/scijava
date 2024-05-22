@@ -33,6 +33,7 @@ import org.scijava.ops.api.Hints;
 import org.scijava.ops.engine.OpDependencyMember;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.Member;
+import org.scijava.struct.Structs;
 
 import java.lang.reflect.Type;
 import java.util.function.Supplier;
@@ -143,5 +144,10 @@ public abstract class AnnotatedOpDependencyMember<T> implements
 	@Override
 	public Type type() {
 		return type;
+	}
+
+	@Override
+	public String toString() {
+		return Structs.toString(this);
 	}
 }

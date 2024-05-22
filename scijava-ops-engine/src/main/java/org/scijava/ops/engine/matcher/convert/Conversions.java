@@ -37,8 +37,8 @@ import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.types.Any;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
-import org.scijava.types.inference.FunctionalInterfaces;
-import org.scijava.types.inference.GenericAssignability;
+import org.scijava.types.infer.FunctionalInterfaces;
+import org.scijava.types.infer.GenericAssignability;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;

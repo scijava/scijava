@@ -55,7 +55,7 @@ import org.scijava.priority.Priority;
 import org.scijava.struct.Member;
 import org.scijava.types.Types;
 import org.scijava.types.Types.TypeVarInfo;
-import org.scijava.types.inference.GenericAssignability;
+import org.scijava.types.infer.GenericAssignability;
 
 public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 

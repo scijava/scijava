@@ -37,7 +37,7 @@ import java.util.Map;
 import org.scijava.ops.api.OpRequest;
 import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.types.Types;
-import org.scijava.types.inference.GenericAssignability;
+import org.scijava.types.infer.GenericAssignability;
 
 /**
  * Data structure which identifies an Op by name and/or type(s) and/or argument

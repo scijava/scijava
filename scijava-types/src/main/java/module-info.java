@@ -30,11 +30,11 @@
 module org.scijava.types {
 
 	exports org.scijava.types;
-	exports org.scijava.types.inference;
+	exports org.scijava.types.infer;
 
-	opens org.scijava.types.extractors;
 	opens org.scijava.types;
-	exports org.scijava.types.extractors;
+	opens org.scijava.types.extract;
+	exports org.scijava.types.extract;
 
 	requires transitive com.google.common;
 	requires transitive org.scijava.common3;
@@ -43,10 +43,10 @@ module org.scijava.types {
 
 	requires org.slf4j;
 
-	uses org.scijava.types.TypeExtractor;
+	uses org.scijava.types.extract.TypeExtractor;
 
-	provides org.scijava.types.TypeExtractor with //
-			org.scijava.types.extractors.IterableTypeExtractor,
-			org.scijava.types.extractors.MapTypeExtractor;
+	provides org.scijava.types.extract.TypeExtractor with //
+			org.scijava.types.extract.IterableTypeExtractor,
+			org.scijava.types.extract.MapTypeExtractor;
 
 }

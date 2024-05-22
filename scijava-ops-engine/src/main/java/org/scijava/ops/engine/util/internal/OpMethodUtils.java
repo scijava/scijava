@@ -49,8 +49,8 @@ import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.Member;
 import org.scijava.struct.StructInstance;
 import org.scijava.types.Types;
-import org.scijava.types.inference.FunctionalInterfaces;
-import org.scijava.types.inference.GenericAssignability;
+import org.scijava.types.infer.FunctionalInterfaces;
+import org.scijava.types.infer.GenericAssignability;
 
 /**
  * Common code used by Ops backed by {@link Method}s.

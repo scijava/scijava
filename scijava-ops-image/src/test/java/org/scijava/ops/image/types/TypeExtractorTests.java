@@ -42,7 +42,7 @@ import net.imglib2.outofbounds.OutOfBoundsRandomValueFactory;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.types.TypeExtractor;
+import org.scijava.types.extract.TypeExtractor;
 
 /**
  * Tests various {@link TypeExtractor}s.

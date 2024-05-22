@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.types.inference;
+package org.scijava.types.infer;
 
 import com.google.common.base.Objects;
 

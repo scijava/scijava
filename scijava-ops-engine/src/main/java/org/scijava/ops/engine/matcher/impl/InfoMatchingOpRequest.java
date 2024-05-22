@@ -33,7 +33,7 @@ import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRequest;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
-import org.scijava.types.inference.GenericAssignability;
+import org.scijava.types.infer.GenericAssignability;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

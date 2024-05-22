@@ -40,10 +40,10 @@
  * generic type, similar to (but less featureful than) how mocking frameworks
  * create mock objects.</li>
  * <li>Recover erased generic type information from object instances at runtime,
- * in an extensible way, via {@link org.scijava.types.TypeExtractor} plugins and
- * the {@link org.scijava.types.TypeReifier#reify} method. E.g., you can learn
- * that an object of class {@link java.util.HashMap} is actually (or at least
- * functionally) a {@code HashMap<String, Integer>}.</li>
+ * in an extensible way, via {@link org.scijava.types.extract.TypeExtractor}
+ * plugins and the {@link org.scijava.types.extract.TypeReifier#reify} method.
+ * E.g., you can learn that an object of class {@link java.util.HashMap} is
+ * actually (or at least functionally) a {@code HashMap<String, Integer>}.</li>
  * </ul>
  */
 

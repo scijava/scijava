@@ -27,31 +27,49 @@
  * #L%
  */
 
-package org.scijava.types;
+package org.scijava.types.extract;
 
 import java.lang.reflect.Type;
+import java.util.Map;
 
-import org.scijava.priority.Prioritized;
 import org.scijava.priority.Priority;
+import org.scijava.types.Any;
+import org.scijava.types.extract.SubTypeExtractor;
+import org.scijava.types.extract.TypeExtractor;
+import org.scijava.types.extract.TypeReifier;
 
 /**
- * A plugin for extracting generic {@link Type} from instances at runtime.
+ * {@link TypeExtractor} plugin which operates on {@link Map} objects.
  * <p>
- * This is an extensible way to achieve quasi-preservation of generic types at
- * runtime, for types which do not normally support it.
+ * For performance reasons, we examine only one entry of the map, which may be
+ * more specifically typed than later entries. Hence the generic types given by
+ * this extraction may be overly constrained.
  * </p>
- * <p>
  *
  * @author Curtis Rueden
  */
-public interface TypeExtractor extends Prioritized<TypeExtractor> {
-
-	Type reify(final TypeReifier r, final Object object);
-
-	Class<?> baseClass();
+public class MapTypeExtractor extends SubTypeExtractor<Map<?, ?>> {
 
 	@Override
-	default double getPriority() {
-		return Priority.NORMAL;
+	public double getPriority() {
+		return Priority.VERY_LOW;
 	}
+
+	@Override
+	public Class<?> baseClass() {
+		return Map.class;
+	}
+
+	@Override
+	protected Type[] getTypeParameters(TypeReifier r, Map<?, ?> object) {
+		// Fast case - empty map
+		if (object.isEmpty()) {
+			return new Type[] { new Any(), new Any() };
+		}
+		Map.Entry<?, ?> e = object.entrySet().iterator().next();
+		Type keyType = r.reify(e.getKey());
+		Type valueType = r.reify(e.getValue());
+		return new Type[] { keyType, valueType };
+	}
+
 }

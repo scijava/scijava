@@ -41,8 +41,8 @@ import org.junit.jupiter.api.Test;
 import org.scijava.discovery.Discoverer;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.types.Any;
-import org.scijava.types.DefaultTypeReifier;
 import org.scijava.types.Types;
+import org.scijava.types.extract.DefaultTypeReifier;
 
 /**
  * Tests {@link DatasetTypeExtractor}

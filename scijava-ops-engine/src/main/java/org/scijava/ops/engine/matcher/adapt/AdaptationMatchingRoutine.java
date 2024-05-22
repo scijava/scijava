@@ -57,7 +57,7 @@ import org.scijava.struct.ItemIO;
 import org.scijava.types.Any;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
-import org.scijava.types.inference.GenericAssignability;
+import org.scijava.types.infer.GenericAssignability;
 
 public class AdaptationMatchingRoutine implements MatchingRoutine {
 

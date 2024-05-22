@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.types;
+package org.scijava.types.extract;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -35,6 +35,8 @@ import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.scijava.types.Types;
 
 /**
  * A partial {@link TypeExtractor} implementation that specializes in recovering

@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.types;
+package org.scijava.types.extract;
 
 import org.scijava.discovery.Discoverer;
 import org.slf4j.Logger;

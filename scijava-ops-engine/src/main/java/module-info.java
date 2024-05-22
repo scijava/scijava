@@ -70,7 +70,7 @@ module org.scijava.ops.engine {
 	uses org.scijava.ops.engine.yaml.YAMLOpInfoCreator;
 	uses org.scijava.ops.spi.Op;
 	uses org.scijava.ops.spi.OpCollection;
-	uses org.scijava.types.TypeExtractor;
+	uses org.scijava.types.extract.TypeExtractor;
 
 	provides org.scijava.discovery.Discoverer with
 		org.scijava.ops.engine.yaml.impl.YAMLOpInfoDiscoverer;

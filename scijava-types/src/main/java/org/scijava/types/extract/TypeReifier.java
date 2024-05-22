@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.types;
+package org.scijava.types.extract;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -37,9 +37,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.scijava.types.extractors.IterableTypeExtractor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.scijava.types.Any;
+import org.scijava.types.GenericTyped;
+import org.scijava.types.Types;
 
 import com.google.common.reflect.TypeToken;
 

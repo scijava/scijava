@@ -36,5 +36,5 @@ open module org.scijava.legacy {
 	requires org.scijava.ops.api;
 	requires org.scijava.progress;
 
-	provides org.scijava.types.TypeExtractor with org.scijava.legacy.types.DatasetTypeExtractor;
+	provides org.scijava.types.extract.TypeExtractor with org.scijava.legacy.types.DatasetTypeExtractor;
 }

@@ -33,9 +33,9 @@ import java.lang.reflect.Type;
 
 import org.scijava.priority.Priority;
 import org.scijava.types.Any;
-import org.scijava.types.SubTypeExtractor;
-import org.scijava.types.TypeExtractor;
-import org.scijava.types.TypeReifier;
+import org.scijava.types.extract.SubTypeExtractor;
+import org.scijava.types.extract.TypeExtractor;
+import org.scijava.types.extract.TypeReifier;
 
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 

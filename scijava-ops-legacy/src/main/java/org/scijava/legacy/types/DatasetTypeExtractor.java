@@ -31,8 +31,8 @@ package org.scijava.legacy.types;
 
 import net.imagej.Dataset;
 import org.scijava.priority.Priority;
-import org.scijava.types.TypeExtractor;
-import org.scijava.types.TypeReifier;
+import org.scijava.types.extract.TypeExtractor;
+import org.scijava.types.extract.TypeReifier;
 
 import java.lang.reflect.Type;
 

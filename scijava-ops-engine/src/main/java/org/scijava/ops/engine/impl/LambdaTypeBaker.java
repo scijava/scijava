@@ -46,7 +46,7 @@ import javassist.CtMethod;
 import javassist.CtNewConstructor;
 import javassist.CtNewMethod;
 import javassist.NotFoundException;
-import org.scijava.types.inference.FunctionalInterfaces;
+import org.scijava.types.infer.FunctionalInterfaces;
 
 public final class LambdaTypeBaker {
 

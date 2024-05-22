@@ -53,7 +53,9 @@ import org.scijava.priority.Priority;
 import org.scijava.progress.Progress;
 import org.scijava.struct.ItemIO;
 import org.scijava.types.*;
-import org.scijava.types.inference.GenericAssignability;
+import org.scijava.types.extract.DefaultTypeReifier;
+import org.scijava.types.extract.TypeReifier;
+import org.scijava.types.infer.GenericAssignability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

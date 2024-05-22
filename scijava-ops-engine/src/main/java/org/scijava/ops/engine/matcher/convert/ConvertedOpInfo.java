@@ -56,8 +56,8 @@ import org.scijava.struct.Structs;
 import org.scijava.types.Any;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
-import org.scijava.types.inference.FunctionalInterfaces;
-import org.scijava.types.inference.GenericAssignability;
+import org.scijava.types.infer.FunctionalInterfaces;
+import org.scijava.types.infer.GenericAssignability;
 
 /**
  * An {@link OpInfo} whose input and output types are transformed through the

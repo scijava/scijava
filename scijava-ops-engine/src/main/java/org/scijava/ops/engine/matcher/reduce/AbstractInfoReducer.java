@@ -32,10 +32,9 @@ package org.scijava.ops.engine.matcher.reduce;
 import java.lang.reflect.Type;
 
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.Ops;
 import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.types.Types;
-import org.scijava.types.inference.FunctionalInterfaces;
+import org.scijava.types.infer.FunctionalInterfaces;
 
 public abstract class AbstractInfoReducer implements InfoReducer {
 

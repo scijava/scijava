@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.types.inference;
+package org.scijava.types.infer;
 
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;

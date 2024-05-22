@@ -1,4 +1,4 @@
-/*-
+/*
  * #%L
  * SciJava library for generic type reasoning.
  * %%
@@ -27,23 +27,31 @@
  * #L%
  */
 
-package org.scijava.types.inference;
+package org.scijava.types.extract;
+
+import java.lang.reflect.Type;
+
+import org.scijava.priority.Prioritized;
+import org.scijava.priority.Priority;
 
 /**
- * Exception indicating that type vars could not be inferred.
+ * A plugin for extracting generic {@link Type} from instances at runtime.
+ * <p>
+ * This is an extensible way to achieve quasi-preservation of generic types at
+ * runtime, for types which do not normally support it.
+ * </p>
+ * <p>
+ *
+ * @author Curtis Rueden
  */
-public class TypeInferenceException extends RuntimeException {
+public interface TypeExtractor extends Prioritized<TypeExtractor> {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 7147530827546663700L;
+	Type reify(final TypeReifier r, final Object object);
 
-	public TypeInferenceException() {
-		super();
-	}
+	Class<?> baseClass();
 
-	public TypeInferenceException(String message) {
-		super(message);
+	@Override
+	default double getPriority() {
+		return Priority.NORMAL;
 	}
 }

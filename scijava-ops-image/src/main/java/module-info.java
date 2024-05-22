@@ -55,7 +55,7 @@ open module org.scijava.ops.image {
 	requires mines.jtk;
 	requires net.imglib2.realtransform;
 
-	provides org.scijava.types.TypeExtractor with
+	provides org.scijava.types.extract.TypeExtractor with
 			org.scijava.ops.image.types.ImgFactoryTypeExtractor,
 			org.scijava.ops.image.types.ImgLabelingTypeExtractor,
 			org.scijava.ops.image.types.NativeImgTypeExtractor,

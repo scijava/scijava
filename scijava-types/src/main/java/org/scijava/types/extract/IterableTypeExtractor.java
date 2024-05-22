@@ -27,28 +27,29 @@
  * #L%
  */
 
-package org.scijava.types.extractors;
+package org.scijava.types.extract;
 
 import java.lang.reflect.Type;
-import java.util.Map;
+import java.util.stream.StreamSupport;
 
 import org.scijava.priority.Priority;
 import org.scijava.types.Any;
-import org.scijava.types.SubTypeExtractor;
-import org.scijava.types.TypeExtractor;
-import org.scijava.types.TypeReifier;
+import org.scijava.types.Types;
+import org.scijava.types.extract.SubTypeExtractor;
+import org.scijava.types.extract.TypeExtractor;
+import org.scijava.types.extract.TypeReifier;
 
 /**
- * {@link TypeExtractor} plugin which operates on {@link Map} objects.
+ * {@link TypeExtractor} plugin which operates on {@link Iterable} objects.
  * <p>
- * For performance reasons, we examine only one entry of the map, which may be
- * more specifically typed than later entries. Hence the generic types given by
- * this extraction may be overly constrained.
+ * In an attempt to balance performance and correctness, we examine the first
+ * 100 elements of the iteration and obtain the greatest common supertype of
+ * each.
  * </p>
  *
  * @author Curtis Rueden
  */
-public class MapTypeExtractor extends SubTypeExtractor<Map<?, ?>> {
+public class IterableTypeExtractor extends SubTypeExtractor<Iterable<?>> {
 
 	@Override
 	public double getPriority() {
@@ -57,19 +58,24 @@ public class MapTypeExtractor extends SubTypeExtractor<Map<?, ?>> {
 
 	@Override
 	public Class<?> baseClass() {
-		return Map.class;
+		return Iterable.class;
 	}
 
 	@Override
-	protected Type[] getTypeParameters(TypeReifier r, Map<?, ?> object) {
-		// Fast case - empty map
-		if (object.isEmpty()) {
-			return new Type[] { new Any(), new Any() };
+	protected Type[] getTypeParameters(TypeReifier r, Iterable<?> object) {
+		// Obtain the element type using the TypeService.
+		int typesToCheck = 100;
+		// can we make this more efficient (possibly a parallel stream)?
+		Type[] types = StreamSupport.stream(object.spliterator(), false) //
+			.limit(typesToCheck) //
+			.map(r::reify) //
+			.toArray(Type[]::new);
+
+		Type actual = Types.greatestCommonSuperType(types, true);
+		if (actual == null) {
+			actual = new Any();
 		}
-		Map.Entry<?, ?> e = object.entrySet().iterator().next();
-		Type keyType = r.reify(e.getKey());
-		Type valueType = r.reify(e.getValue());
-		return new Type[] { keyType, valueType };
+		return new Type[] { actual };
 	}
 
 }

@@ -1,4 +1,4 @@
-/*
+/*-
  * #%L
  * SciJava library for generic type reasoning.
  * %%
@@ -27,55 +27,23 @@
  * #L%
  */
 
-package org.scijava.types.extractors;
-
-import java.lang.reflect.Type;
-import java.util.stream.StreamSupport;
-
-import org.scijava.priority.Priority;
-import org.scijava.types.Any;
-import org.scijava.types.SubTypeExtractor;
-import org.scijava.types.TypeExtractor;
-import org.scijava.types.TypeReifier;
-import org.scijava.types.Types;
+package org.scijava.types.infer;
 
 /**
- * {@link TypeExtractor} plugin which operates on {@link Iterable} objects.
- * <p>
- * In an attempt to balance performance and correctness, we examine the first
- * 100 elements of the iteration and obtain the greatest common supertype of
- * each.
- * </p>
- *
- * @author Curtis Rueden
+ * Exception indicating that type vars could not be inferred.
  */
-public class IterableTypeExtractor extends SubTypeExtractor<Iterable<?>> {
+public class TypeInferenceException extends RuntimeException {
 
-	@Override
-	public double getPriority() {
-		return Priority.VERY_LOW;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 7147530827546663700L;
+
+	public TypeInferenceException() {
+		super();
 	}
 
-	@Override
-	public Class<?> baseClass() {
-		return Iterable.class;
+	public TypeInferenceException(String message) {
+		super(message);
 	}
-
-	@Override
-	protected Type[] getTypeParameters(TypeReifier r, Iterable<?> object) {
-		// Obtain the element type using the TypeService.
-		int typesToCheck = 100;
-		// can we make this more efficient (possibly a parallel stream)?
-		Type[] types = StreamSupport.stream(object.spliterator(), false) //
-			.limit(typesToCheck) //
-			.map(r::reify) //
-			.toArray(Type[]::new);
-
-		Type actual = Types.greatestCommonSuperType(types, true);
-		if (actual == null) {
-			actual = new Any();
-		}
-		return new Type[] { actual };
-	}
-
 }

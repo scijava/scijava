@@ -30,18 +30,9 @@
 package org.scijava.discovery;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.ServiceConfigurationError;
-import java.util.ServiceLoader;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
@@ -62,72 +53,65 @@ public interface Discoverer {
 	<U> List<U> discover(Class<U> c);
 
 	/**
-	 * Creates a {@link Discoverer} operating via {@link ServiceLoader}.
+	 * Creates a {@link Discoverer} operating via {@link Function}.
 	 * <p>
-	 * NB: The {@link Function} input is extremely important for JPMS
+	 * NB: The {@link Function} input is extremely important for e.g. JPMS
 	 * compatibility. This puts the code loading the services into the user's
-	 * module, allowing access to all of the services exposed to (and
-	 * {@code use}d by) the calling module. Otherwise, all service interfaces
-	 * would have to be {@code use}d by <b>this</b> module, which is not
-	 * extensible.
+	 * module, allowing access to all of the services exposed to (and {@code use}d
+	 * by) the calling module. Otherwise, all service interfaces would have to be
+	 * {@code use}d by <b>this</b> module, which is not extensible.
 	 * </p>
 	 *
-	 * @param func the {@link Function} generating a {@link ServiceLoader}
+	 * @param func the {@link Function} generating a {@link Iterable} of
+	 *          implementations provided a {@link Class}
 	 * @param <T> the {@link Class} we attempt to discover, and consequently the
-	 *          supertype of all implementations returned by {@link ServiceLoader}
-	 * @return A {@link Discoverer} backed by {@link ServiceLoader}
+	 *          supertype of all implementations contained in the {@link Iterable}
+	 * @return A {@link Discoverer} backed by {@code func}
 	 */
-	static <T> Discoverer using(
-		Function<Class<T>, ? extends ServiceLoader<T>> func)
-	{
+	static <T> Discoverer using(Function<Class<T>, ? extends Iterable<T>> func) {
 		return new Discoverer() {
 
 			@Override
 			public <U> List<U> discover(Class<U> c) {
 				// If we can use c, look up the implementations
 				try {
-					Iterable<U> itr = (ServiceLoader<U>) func.apply((Class<T>) c);
+					Iterable<U> itr = (Iterable<U>) func.apply((Class<T>) c);
 					return StreamSupport.stream(itr.spliterator(), false).collect(
 						Collectors.toList());
 				}
-				catch (ClassCastException e) {
-					return Collections.emptyList();
-				}
-				catch (ServiceConfigurationError e) {
+				catch (ClassCastException | ServiceConfigurationError e) {
 					return Collections.emptyList();
 				}
 			}
 		};
 	}
 
-	static Iterable<Discoverer> allProvided() {
-		return ServiceLoader.load(Discoverer.class);
-	}
-
 	/**
-	 * Gets all {@link Discoverer}s made available through {@link ServiceLoader},
-	 * as well as a {@link Discoverer} that is itself backed by
-	 * {@link ServiceLoader}.
+	 * Gets all {@link Discoverer}s made available through {@link Iterable}, as
+	 * well as a {@link Discoverer} that is itself backed by the {@link Iterable}.
 	 * <p>
 	 * It is <b>highly</b> recommended to call this method using {@code
 	 *   List<Discoverer> discoverers = Discoverers.all(ServiceLoader::load);
 	 * }
 	 *
-	 * @param func A callbacks used to get the module scope of the caller. Through
-	 *          {@code func}, the {@link ServiceLoader}-based {@link Discoverer}
-	 *          is capable of discovering all interfaces {@code use}d by the
-	 *          caller module. If we instead called
-	 *          {@link ServiceLoader#load(Class)} directly, we'd only be able to
-	 *          discover implementations whose interface was {@code use}d by
-	 *          {@code module org.scijava.discovery}.
+	 * @param func the {@link Function} generating a {@link Iterable} of
+	 *          implementations provided a {@link Class}. Notably, this callback
+	 *          has the module scope of the caller, which is useful for
+	 *          circumnavigating module permissions when using e.g. JPMS. If we
+	 *          instead used {@link ServiceLoader#load(Class)} directly, we'd only
+	 *          be able to discover implementations whose interface was
+	 *          {@code use}d by {@code module org.scijava.discovery}.
 	 *          <p>
 	 *          It is in the user's best interest to make this {@link Function} as
 	 *          general as possible.
-	 * @param <T>
-	 * @return
+	 * @param <T> the {@link Class} we attempt to discover, and consequently the
+	 *          supertype of all implementations contained in the {@link Iterable}
+	 * @return A {@link List} of {@link Discoverer}s, including a
+	 *         {@code Discoverer} backed by {@code func}, and all
+	 *         {@link Discoverer}s found by {@code func}
 	 */
 	static <T> List<Discoverer> all(
-		Function<Class<T>, ? extends ServiceLoader<T>> func)
+		Function<Class<T>, ? extends Iterable<T>> func)
 	{
 		// First, create the general-purpose Discoverer using the
 		// using(Function<...>)
@@ -151,7 +135,7 @@ public interface Discoverer {
 	 * @param discoverers the {@link Discoverer}s to be wrapped
 	 * @return the mega-{@link Discoverer}
 	 */
-	public static Discoverer union(Iterable<Discoverer> discoverers) {
+	static Discoverer union(Iterable<Discoverer> discoverers) {
 
 		return new Discoverer() {
 

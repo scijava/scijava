@@ -177,4 +177,9 @@ public class Hints {
 		Hints thatHints = (Hints) that;
 		return hints.equals(thatHints.hints);
 	}
+
+	@Override
+	public String toString() {
+		return hints.toString();
+	}
 }

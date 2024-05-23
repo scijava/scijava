@@ -203,7 +203,7 @@ public final class LambdaTypeBaker {
 	}
 
 	private static String createGenericTypedMethod() {
-		return "public java.lang.reflect.Type getType() {return type;}";
+		return "public java.lang.reflect.Type type() {return type;}";
 	}
 
 	private static CtField createTypeField(ClassPool pool, CtClass cc,

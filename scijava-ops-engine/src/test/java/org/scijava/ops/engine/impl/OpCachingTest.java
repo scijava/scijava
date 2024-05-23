@@ -127,7 +127,7 @@ public class OpCachingTest implements OpCollection {
 			.infoTree(), new Nil<Producer<String>>()
 		{
 
-			}.getType());
+			}.type());
 		opCache.replace(cachedConditions, invaderInstance);
 
 		Producer<String> invadedOp = defOpEnv.op("test.basicOp").outType(
@@ -211,7 +211,7 @@ public class OpCachingTest implements OpCollection {
 			.infoTree(), new Nil<Producer<String>>()
 		{
 
-			}.getType());
+			}.type());
 		opCache.replace(cachedConditions, invaderInstance);
 
 		// ensure the cache-ignoring hint avoids the replacement

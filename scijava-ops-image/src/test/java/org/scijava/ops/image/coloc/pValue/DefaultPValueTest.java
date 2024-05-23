@@ -98,7 +98,7 @@ public class DefaultPValueTest extends AbstractColocalisationTest {
 		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> wrapped =
 			ops.bakeLambdaType(op,
 				new Nil<BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double>>()
-				{}.getType());
+				{}.type());
 
 		PValueResult output = new PValueResult();
 		ops.op("coloc.pValue").input(ch1, ch1, wrapped, result.length - 1).output(

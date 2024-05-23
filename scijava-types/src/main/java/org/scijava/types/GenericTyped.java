@@ -38,5 +38,5 @@ import java.lang.reflect.Type;
  */
 public interface GenericTyped {
 
-	Type getType();
+	Type type();
 }

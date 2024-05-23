@@ -167,9 +167,9 @@ class PartialOpRequest implements OpRequest {
 	PartialOpRequest(String name, Nil<?>[] args, Nil<?> outType) {
 		this.name = name;
 		this.args = args == null ? null : Arrays.stream(args) //
-			.map(nil -> nil == null ? null : nil.getType()) //
+			.map(nil -> nil == null ? null : nil.type()) //
 			.toArray(Type[]::new);
-		this.outType = outType == null ? null : outType.getType();
+		this.outType = outType == null ? null : outType.type();
 	}
 
 	@Override

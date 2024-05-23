@@ -105,7 +105,7 @@ public interface TypeReifier {
 		if (o instanceof GenericTyped) {
 			// Object implements the GenericTyped interface; it explicitly declares
 			// the generic type by which it wants to be known. This makes life easy!
-			return ((GenericTyped) o).getType();
+			return ((GenericTyped) o).type();
 		}
 
 		// Otherwise, we'll need to look at the class

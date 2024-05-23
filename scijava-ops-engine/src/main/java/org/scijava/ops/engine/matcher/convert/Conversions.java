@@ -427,7 +427,7 @@ public final class Conversions {
 	{
 		Type reqType = Types.parameterize(Function.class, new Type[] { source,
 			dest });
-		Type infoType = rich.instance().getType();
+		Type infoType = rich.instance().type();
 		GenericAssignability.inferTypeVariables(new Type[] { reqType }, new Type[] {
 			infoType }, vars);
 	}

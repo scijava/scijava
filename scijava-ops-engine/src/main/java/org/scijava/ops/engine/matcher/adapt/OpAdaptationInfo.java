@@ -130,7 +130,7 @@ public class OpAdaptationInfo implements OpInfo {
 		OpInstance<Function<Object, Object>> adaptorInstance =
 			(OpInstance<Function<Object, Object>>) adaptorChain.newInstance(
 				new Nil<Function<Object, Object>>()
-				{}.getType());
+				{}.type());
 		final Object op = srcInfo.createOpInstance(dependencies).object();
 		final Object adaptedOp = adaptorInstance.op().apply(op);
 		return struct().createInstance(adaptedOp);

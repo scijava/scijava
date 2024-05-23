@@ -96,7 +96,7 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends
 		Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>> wrapped =
 			ops.bakeLambdaType(test,
 				new Nil<Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>>>()
-				{}.getType());
+				{}.type());
 		ops.op("transform.slice").input(in, wrapped, xyAxis, true).output(out)
 			.compute();
 
@@ -135,7 +135,7 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends
 		Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>> wrapped =
 			ops.bakeLambdaType(test,
 				new Nil<Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>>>()
-				{}.getType());
+				{}.type());
 		ops.op("transform.slice").input(inSequence, wrapped, xyAxis, true).output(
 			outSequence).compute();
 

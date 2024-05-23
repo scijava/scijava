@@ -70,8 +70,8 @@ public interface RichOp<T> extends GenericTyped {
 	 */
 
 	@Override
-	default Type getType() {
-		return instance().getType();
+	default Type type() {
+		return instance().type();
 	}
 
 	/**

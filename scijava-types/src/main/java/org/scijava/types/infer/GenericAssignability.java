@@ -105,7 +105,7 @@ public final class GenericAssignability {
 	 * <pre>
 	 * checkGenericAssignability(NumberSupplier.class,
 	 * 	new Nil&lt;Supplier&lt;Double&gt;&gt;()
-	 * 	{}.getType())
+	 * 	{}.type())
 	 * </pre>
 	 *
 	 * Which will check if the following assignment would be legal:
@@ -122,8 +122,7 @@ public final class GenericAssignability {
 	 *
 	 * <pre>
 	 * checkGenericAssignability(NumberSupplier.class,
-	 * 	new Nil&lt;Supplier&lt;String&gt;&gt;()
-	 * 	{}.getType())
+	 * 	new Nil&lt;Supplier&lt;String&gt;&gt;() {}.type())
 	 * </pre>
 	 *
 	 * {@code <M extends Number>} can't be inferred, as type {@code String} is not
@@ -135,8 +134,7 @@ public final class GenericAssignability {
 	 *
 	 * <pre>
 	 * checkGenericAssignability(NumberSupplier.class,
-	 * 	new Nil&lt;Function&lt;Double, Integer&gt;&gt;()
-	 * 	{}.getType())
+	 * 	new Nil&lt;Function&lt;Double, Integer&gt;&gt;() {}.type())
 	 * </pre>
 	 *
 	 * {@code <M extends Number>} can't be inferred, as types {@code Double} and

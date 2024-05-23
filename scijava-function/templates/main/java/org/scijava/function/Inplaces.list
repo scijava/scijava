@@ -63,7 +63,7 @@ matchParams = ```
 ```
 typeArgs = ```
 { arity, io ->
-  String.join(', ', basicParamsList(arity, io).stream().map{a -> "${a}.getType()"}.collect())
+  String.join(', ', basicParamsList(arity, io).stream().map{a -> "${a}.type()"}.collect())
 }
 ```
 allMutableMutateParams = ```

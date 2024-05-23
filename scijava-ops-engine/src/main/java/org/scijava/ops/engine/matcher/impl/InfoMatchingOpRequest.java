@@ -63,7 +63,7 @@ public class InfoMatchingOpRequest implements OpRequest {
 
 	public InfoMatchingOpRequest(OpInfo info, Nil<?> specialType) {
 		this.name = info.names().get(0);
-		Type from = specialType.getType();
+		Type from = specialType.type();
 		Type to = info.opType();
 		this.type = Types.getExactSuperType(to, Types.raw(from));
 		if (this.type instanceof ParameterizedType) {

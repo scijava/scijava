@@ -350,7 +350,7 @@ public class ConvertedOpInfo implements OpInfo {
 		for (int i = 0; i < originalInputs.size(); i++) {
 			typeAssigns.clear();
 			// Start by looking at the input type T of the preconverter
-			var type = preconverters.get(i).instance().getType();
+			var type = preconverters.get(i).instance().type();
 			var pType = (ParameterizedType) type;
 			inTypes[i] = pType.getActualTypeArguments()[0];
 			// Sometimes, the type of the Op instance can contain wildcards.
@@ -380,7 +380,7 @@ public class ConvertedOpInfo implements OpInfo {
 			return originalOutput;
 		}
 		// Start by looking at the output type T of the postconverter
-		var type = postconverter.instance().getType();
+		var type = postconverter.instance().type();
 		var pType = (ParameterizedType) type;
 		Type outType = pType.getActualTypeArguments()[1];
 		// Sometimes, the type of the Op instance can contain wildcards.
@@ -495,15 +495,15 @@ public class ConvertedOpInfo implements OpInfo {
 		Nil<R> to)
 	{
 		Type specialType = Types.parameterize(LossReporter.class, new Type[] { from
-			.getType(), to.getType() });
+			.type(), to.type() });
 		@SuppressWarnings("unchecked")
 		Nil<LossReporter<T, R>> specialTypeNil = (Nil<LossReporter<T, R>>) Nil.of(
 			specialType);
 		try {
 			Type nilFromType = Types.parameterize(Nil.class, new Type[] { from
-				.getType() });
+				.type() });
 			Type nilToType = Types.parameterize(Nil.class, new Type[] { to
-				.getType() });
+				.type() });
 			Hints h = new Hints( //
 				BaseOpHints.Adaptation.FORBIDDEN, //
 				BaseOpHints.Conversion.FORBIDDEN, //

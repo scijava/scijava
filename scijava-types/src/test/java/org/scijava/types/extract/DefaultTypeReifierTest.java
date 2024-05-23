@@ -90,7 +90,7 @@ public class DefaultTypeReifierTest {
 	public void testNil() {
 		final Nil<List<Float>> nilFloatList = new Nil<List<Float>>() {};
 		final Type nilFloatListType = types.reify(nilFloatList);
-		Assertions.assertEquals(nilFloatList.getType(), nilFloatListType);
+		Assertions.assertEquals(nilFloatList.type(), nilFloatListType);
 	}
 
 	/** Tests type extraction for {@link GenericTyped} objects. */
@@ -99,7 +99,7 @@ public class DefaultTypeReifierTest {
 		final Object numberThing = new GenericTyped() {
 
 			@Override
-			public Type getType() {
+			public Type type() {
 				return Number.class;
 			}
 		};
@@ -112,7 +112,7 @@ public class DefaultTypeReifierTest {
 		final List<String> stringList = //
 			new ArrayList<>(Collections.singletonList("Hi"));
 		final Type stringListType = types.reify(stringList);
-		Assertions.assertEquals(new Nil<ArrayList<String>>() {}.getType(),
+		Assertions.assertEquals(new Nil<ArrayList<String>>() {}.type(),
 			stringListType);
 	}
 
@@ -122,7 +122,7 @@ public class DefaultTypeReifierTest {
 		final Map<String, Integer> mapSI = //
 			new HashMap<>(Collections.singletonMap("Curtis", 37));
 		final Type mapSIType = types.reify(mapSI);
-		Assertions.assertEquals(new Nil<HashMap<String, Integer>>() {}.getType(),
+		Assertions.assertEquals(new Nil<HashMap<String, Integer>>() {}.type(),
 			mapSIType);
 	}
 
@@ -146,7 +146,7 @@ public class DefaultTypeReifierTest {
 		final Type testScoresType = types.reify(testScores);
 		Assertions.assertEquals(
 			new Nil<ArrayList<HashMap<String, ArrayList<Integer>>>>()
-			{}.getType(), testScoresType);
+			{}.type(), testScoresType);
 	}
 
 	/**
@@ -159,13 +159,13 @@ public class DefaultTypeReifierTest {
 		blueBag.add(new BlueThing());
 
 		final Type blueBagType = types.reify(blueBag);
-		Assertions.assertEquals(new Nil<Bag<BlueThing>>() {}.getType(),
+		Assertions.assertEquals(new Nil<Bag<BlueThing>>() {}.type(),
 			blueBagType);
 
 		final Bag<RedThing> redBag = new Bag<>();
 		redBag.add(new RedThing());
 
 		final Type redBagType = types.reify(redBag);
-		Assertions.assertEquals(new Nil<Bag<RedThing>>() {}.getType(), redBagType);
+		Assertions.assertEquals(new Nil<Bag<RedThing>>() {}.type(), redBagType);
 	}
 }

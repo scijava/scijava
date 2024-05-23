@@ -50,7 +50,6 @@ import static org.scijava.testutil.ExampleTypes.Words;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -223,15 +222,15 @@ public class TypesTest {
 	/** Tests {@link Types#isAssignable(Type, Type)} with type variable. */
 	@Test
 	public <T extends Number> void testIsAssignableT() {
-		final Type t = new Nil<T>() {}.getType();
+		final Type t = new Nil<T>() {}.type();
 		final Type listRaw = List.class;
-		final Type listT = new Nil<List<T>>() {}.getType();
-		final Type listNumber = new Nil<List<Number>>() {}.getType();
-		final Type listInteger = new Nil<List<Integer>>() {}.getType();
+		final Type listT = new Nil<List<T>>() {}.type();
+		final Type listNumber = new Nil<List<Number>>() {}.type();
+		final Type listInteger = new Nil<List<Integer>>() {}.type();
 		final Type listExtendsNumber = new Nil<List<? extends Number>>() {}
-			.getType();
-		final Type listListRaw = new Nil<List<List>>() {}.getType();
-		final Type listListInteger = new Nil<List<List<Integer>>>() {}.getType();
+			.type();
+		final Type listListRaw = new Nil<List<List>>() {}.type();
+		final Type listListInteger = new Nil<List<List<Integer>>>() {}.type();
 
 		assertTrue(Types.isAssignable(t, t));
 		assertTrue(Types.isAssignable(listRaw, listRaw));
@@ -273,13 +272,13 @@ public class TypesTest {
 	public <N extends Number, S extends String, T extends List<N>> void
 		testIsAssignableParameterizedT()
 	{
-		final Type t = new Nil<T>() {}.getType();
-		final Type listN = new Nil<List<N>>() {}.getType();
-		final Type listS = new Nil<List<S>>() {}.getType();
-		final Type listNumber = new Nil<List<Number>>() {}.getType();
-		final Type listInteger = new Nil<List<Integer>>() {}.getType();
+		final Type t = new Nil<T>() {}.type();
+		final Type listN = new Nil<List<N>>() {}.type();
+		final Type listS = new Nil<List<S>>() {}.type();
+		final Type listNumber = new Nil<List<Number>>() {}.type();
+		final Type listInteger = new Nil<List<Integer>>() {}.type();
 		final Type listExtendsNumber = new Nil<List<? extends Number>>() {}
-			.getType();
+			.type();
 //		T list = (T) new ArrayList<N>();
 		assertTrue(Types.isAssignable(listN, t));
 //		T list = (T) new ArrayList<Number>();
@@ -297,7 +296,7 @@ public class TypesTest {
 	/** Tests {@link Types#isAssignable(Type, Type)} against {@link Object} */
 	@Test
 	public <T extends Number> void testIsAssignableObject() {
-		final Type iterableT = new Nil<Iterable<T>>() {}.getType();
+		final Type iterableT = new Nil<Iterable<T>>() {}.type();
 		assertTrue(Types.isAssignable(iterableT, Object.class));
 	}
 
@@ -349,8 +348,8 @@ public class TypesTest {
 	@Test
 	public <T extends Number, U extends BigInteger> void testSatisfiesSingle() {
 		// <T extends Number> f(T)
-		final Type t = new Nil<T>() {}.getType();
-		final Type u = new Nil<U>() {}.getType();
+		final Type t = new Nil<T>() {}.type();
+		final Type u = new Nil<U>() {}.type();
 		final Type[] tDest = { t };
 
 		assertEquals(Types.isApplicable(new Type[] { Double.class }, tDest), -1);
@@ -363,20 +362,20 @@ public class TypesTest {
 		// -SINGLY RECURSIVE CALLS-
 
 		// <T extends Number> f(List<T>)
-		final Type listT = new Nil<List<T>>() {}.getType();
+		final Type listT = new Nil<List<T>>() {}.type();
 		final Type[] listTDest = { listT };
 		// <U extends BigInteger> f(List<U>)
-		final Type listU = new Nil<List<U>>() {}.getType();
+		final Type listU = new Nil<List<U>>() {}.type();
 		final Type[] listUDest = { listU };
 		// f(List<Double>)
-		final Type listDouble = new Nil<List<Double>>() {}.getType();
+		final Type listDouble = new Nil<List<Double>>() {}.type();
 		final Type[] listDoubleDest = { listDouble };
 		// f(List<? super Number>)
-		final Type listSuperNumber = new Nil<List<? super Number>>() {}.getType();
+		final Type listSuperNumber = new Nil<List<? super Number>>() {}.type();
 		final Type[] listSuperNumberDest = { listSuperNumber };
 		// f(List<? extends Number>)
 		final Type listExtendsNumber = new Nil<List<? extends Number>>() {}
-			.getType();
+			.type();
 		final Type[] listExtendsNumberDest = { listExtendsNumber };
 
 		assertEquals(Types.isApplicable(new Type[] { listT }, listTDest), -1);
@@ -395,18 +394,18 @@ public class TypesTest {
 
 		// -MULTIPLY RECURSIVE CALLS-
 
-		final Type MapListTT = new Nil<Map<List<T>, T>>() {}.getType();
-		final Type MapListTU = new Nil<Map<List<T>, U>>() {}.getType();
-		final Type MapListUU = new Nil<Map<List<U>, U>>() {}.getType();
-		final Type MapListTDouble = new Nil<Map<List<T>, Double>>() {}.getType();
+		final Type MapListTT = new Nil<Map<List<T>, T>>() {}.type();
+		final Type MapListTU = new Nil<Map<List<T>, U>>() {}.type();
+		final Type MapListUU = new Nil<Map<List<U>, U>>() {}.type();
+		final Type MapListTDouble = new Nil<Map<List<T>, Double>>() {}.type();
 		final Type MapListDoubleDouble = new Nil<Map<List<Double>, Double>>() {}
-			.getType();
+			.type();
 		final Type MapListDoubleString = new Nil<Map<List<Double>, String>>() {}
-			.getType();
+			.type();
 		final Type MapListDoubleNumber = new Nil<Map<List<Double>, Number>>() {}
-			.getType();
+			.type();
 		final Type MapListNumberDouble = new Nil<Map<List<Number>, Double>>() {}
-			.getType();
+			.type();
 
 		// T might not always extend BigInteger(U)
 		assertNotEquals(Types.isApplicable(new Type[] { MapListTT }, new Type[] {
@@ -442,10 +441,10 @@ public class TypesTest {
 		testSatisfiesGenericArrays()
 	{
 		// generic arrays
-		final Type arrayT = new Nil<T[]>() {}.getType();
-		final Type arrayU = new Nil<U[]>() {}.getType();
-		final Type arrayV = new Nil<V[]>() {}.getType();
-		final Type arrayDouble = new Nil<Double[]>() {}.getType();
+		final Type arrayT = new Nil<T[]>() {}.type();
+		final Type arrayU = new Nil<U[]>() {}.type();
+		final Type arrayV = new Nil<V[]>() {}.type();
+		final Type arrayDouble = new Nil<Double[]>() {}.type();
 
 		assertEquals(Types.isApplicable(new Type[] { arrayDouble }, new Type[] {
 			arrayT }), -1);
@@ -461,9 +460,9 @@ public class TypesTest {
 			arrayV }), -1);
 
 		// generic multi-dimensional arrays
-		final Type arrayT2D = new Nil<T[][]>() {}.getType();
-		final Type arrayV2D = new Nil<V[][]>() {}.getType();
-		final Type arrayDouble2D = new Nil<Double[][]>() {}.getType();
+		final Type arrayT2D = new Nil<T[][]>() {}.type();
+		final Type arrayV2D = new Nil<V[][]>() {}.type();
+		final Type arrayDouble2D = new Nil<Double[][]>() {}.type();
 
 		assertEquals(Types.isApplicable(new Type[] { arrayDouble2D }, new Type[] {
 			arrayT2D }), -1);
@@ -477,9 +476,9 @@ public class TypesTest {
 			arrayT2D }), -1);
 
 		// generic parameterized type arrays
-		final Type arrayListT = new Nil<List<T>[]>() {}.getType();
-		final Type arrayListDouble = new Nil<List<Double>[]>() {}.getType();
-		final Type arrayListString = new Nil<List<String>[]>() {}.getType();
+		final Type arrayListT = new Nil<List<T>[]>() {}.type();
+		final Type arrayListDouble = new Nil<List<Double>[]>() {}.type();
+		final Type arrayListString = new Nil<List<String>[]>() {}.type();
 
 		assertEquals(Types.isApplicable(new Type[] { arrayListDouble }, new Type[] {
 			arrayListT }), -1);
@@ -496,16 +495,16 @@ public class TypesTest {
 	public <S, T extends Thing<S>, U extends IntegerThing, V extends RecursiveThing<V>, W extends RecursiveThing<W> & Loop, X extends Thing<S> & Loop>
 		void testSatisfiesTypeVariables()
 	{
-		final Type t = new Nil<T>() {}.getType();
-		final Type u = new Nil<U>() {}.getType();
-		final Type thingInt = new Nil<Thing<Integer>>() {}.getType();
-		final Type numberThingInt = new Nil<NumberThing<Integer>>() {}.getType();
-		final Type numberThingDouble = new Nil<NumberThing<Double>>() {}.getType();
+		final Type t = new Nil<T>() {}.type();
+		final Type u = new Nil<U>() {}.type();
+		final Type thingInt = new Nil<Thing<Integer>>() {}.type();
+		final Type numberThingInt = new Nil<NumberThing<Integer>>() {}.type();
+		final Type numberThingDouble = new Nil<NumberThing<Double>>() {}.type();
 		final Type strangeThingDouble = new Nil<StrangeThing<Double>>() {}
-			.getType();
+			.type();
 		final Type strangerThingString = new Nil<StrangerThing<String>>() {}
-			.getType();
-		final Type integerThing = new Nil<IntegerThing>() {}.getType();
+			.type();
+		final Type integerThing = new Nil<IntegerThing>() {}.type();
 
 		assertEquals(Types.isApplicable(new Type[] { thingInt, thingInt,
 			numberThingInt, integerThing }, new Type[] { t, t, t, t }), -1);
@@ -522,14 +521,14 @@ public class TypesTest {
 		assertEquals(Types.isApplicable(new Type[] { u }, new Type[] { t }), -1);
 
 		// recursive Type Variables
-		final Type circularThing = new Nil<CircularThing>() {}.getType();
-		final Type loopingThing = new Nil<LoopingThing>() {}.getType();
+		final Type circularThing = new Nil<CircularThing>() {}.type();
+		final Type loopingThing = new Nil<LoopingThing>() {}.type();
 		final Type recursiveThingCircular =
 			new Nil<RecursiveThing<CircularThing>>()
-			{}.getType();
-		final Type v = new Nil<V>() {}.getType();
-		final Type w = new Nil<W>() {}.getType();
-		final Type x = new Nil<X>() {}.getType();
+			{}.type();
+		final Type v = new Nil<V>() {}.type();
+		final Type w = new Nil<W>() {}.type();
+		final Type x = new Nil<X>() {}.type();
 
 		assertEquals(Types.isApplicable(new Type[] { circularThing, circularThing,
 			loopingThing }, new Type[] { t, t, t }), -1);
@@ -570,27 +569,27 @@ public class TypesTest {
 		// <T> f(List<T>, List<T>)
 		final Type[] params = { //
 			new Nil<List<T>>()
-			{}.getType(), //
+			{}.type(), //
 			new Nil<List<T>>()
-			{}.getType(), //
+			{}.type(), //
 		};
 
 		// f(List<Integer>, List<Integer>)
 		// [OK] T -> Integer
 		final Type[] argsOK = { //
 			new Nil<List<Integer>>()
-			{}.getType(), //
+			{}.type(), //
 			new Nil<List<Integer>>()
-			{}.getType() };
+			{}.type() };
 		assertEquals(Types.isApplicable(argsOK, params), -1);
 
 		// f(List<String>, List<Number>)
 		// [MISS] T cannot be both String and Number
 		final Type[] argsMiss = { //
 			new Nil<List<Double>>()
-			{}.getType(), //
+			{}.type(), //
 			new Nil<List<Number>>()
-			{}.getType() //
+			{}.type() //
 		};
 		assertNotEquals(Types.isApplicable(argsMiss, params), -1);
 	}
@@ -603,16 +602,16 @@ public class TypesTest {
 			new Nil<List<? extends Number>>()
 			{};
 
-		Type[] params = new Type[] { n.getType() };
-		Type[] argsOk = new Type[] { nWildcard.getType() };
+		Type[] params = new Type[] { n.type() };
+		Type[] argsOk = new Type[] { nWildcard.type() };
 		assertEquals(-1, Types.isApplicable(argsOk, params));
 
-		params = new Type[] { n.getType(), c.getType() };
-		argsOk = new Type[] { nWildcard.getType(), nWildcard.getType() };
+		params = new Type[] { n.type(), c.type() };
+		argsOk = new Type[] { nWildcard.type(), nWildcard.type() };
 		assertEquals(-1, Types.isApplicable(argsOk, params));
 
-		params = new Type[] { n.getType(), n.getType() };
-		Type[] argsNotOk = new Type[] { nWildcard.getType(), nWildcard.getType() };
+		params = new Type[] { n.type(), n.type() };
+		Type[] argsNotOk = new Type[] { nWildcard.type(), nWildcard.type() };
 		assertNotEquals(-1, Types.isApplicable(argsNotOk, params));
 	}
 
@@ -622,12 +621,12 @@ public class TypesTest {
 		Nil<List<N>> ln = new Nil<List<N>>() {};
 		Nil<List<? extends Number>> lw = new Nil<List<? extends Number>>() {};
 
-		Type[] params = new Type[] { n.getType(), ln.getType() };
-		Type[] argsNotOk = new Type[] { Integer.class, lw.getType() };
+		Type[] params = new Type[] { n.type(), ln.type() };
+		Type[] argsNotOk = new Type[] { Integer.class, lw.type() };
 		assertNotEquals(-1, Types.isApplicable(argsNotOk, params));
 
-		params = new Type[] { ln.getType(), n.getType() };
-		argsNotOk = new Type[] { lw.getType(), Integer.class };
+		params = new Type[] { ln.type(), n.type() };
+		argsNotOk = new Type[] { lw.type(), Integer.class };
 		assertNotEquals(-1, Types.isApplicable(argsNotOk, params));
 	}
 
@@ -644,22 +643,22 @@ public class TypesTest {
 			new Nil<List<? extends List<String>>>()
 			{};
 
-		Type[] params = new Type[] { n.getType() };
-		Type[] argsOk = new Type[] { nNumberWildcard.getType() };
+		Type[] params = new Type[] { n.type() };
+		Type[] argsOk = new Type[] { nNumberWildcard.type() };
 		assertEquals(-1, Types.isApplicable(argsOk, params));
 
-		params = new Type[] { n.getType(), c.getType() };
-		argsOk = new Type[] { nNumberWildcard.getType(), nListWildcard.getType() };
+		params = new Type[] { n.type(), c.type() };
+		argsOk = new Type[] { nNumberWildcard.type(), nListWildcard.type() };
 		assertEquals(-1, Types.isApplicable(argsOk, params));
 
-		params = new Type[] { n.getType(), c.getType() };
-		Type[] argsNotOk = new Type[] { nNumberWildcard.getType(), nNumberWildcard
-			.getType() };
+		params = new Type[] { n.type(), c.type() };
+		Type[] argsNotOk = new Type[] { nNumberWildcard.type(), nNumberWildcard
+			.type() };
 		assertNotEquals(-1, Types.isApplicable(argsNotOk, params));
 
-		params = new Type[] { n.getType(), n.getType() };
-		argsNotOk = new Type[] { nNumberWildcard.getType(), nNumberWildcard
-			.getType() };
+		params = new Type[] { n.type(), n.type() };
+		argsNotOk = new Type[] { nNumberWildcard.type(), nNumberWildcard
+			.type() };
 		assertNotEquals(-1, Types.isApplicable(argsNotOk, params));
 	}
 
@@ -673,7 +672,7 @@ public class TypesTest {
 		abstract class NestedThingImplOK1 implements NestedThing<Double, Double> {}
 
 		final Type[] param = new Type[] { new Nil<Function<I1, I2>>() {}
-			.getType() };
+			.type() };
 		Type[] argOK = new Type[] { NestedThingImplOK1.class };
 		assertEquals(-1, Types.isApplicable(argOK, param));
 	}
@@ -698,7 +697,7 @@ public class TypesTest {
 		{}
 
 		final Type[] param = new Type[] { new Nil<Function<I1, I2>>() {}
-			.getType() };
+			.type() };
 		Type[] argOK = new Type[] { NestedThingImplOK1.class };
 		assertEquals(-1, Types.isApplicable(argOK, param));
 

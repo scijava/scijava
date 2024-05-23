@@ -63,18 +63,17 @@ public abstract class Nil<T> implements GenericTyped, Proxyable<T> {
 
 	/**
 	 * Creates a new {@code Nil} whose generic type (returned by
-	 * {@link #getType()}) is the one specified by the generic parameters used at
+	 * {@link #type()}) is the one specified by the generic parameters used at
 	 * construction.
 	 * <p>
 	 * For example:
 	 * </p>
 	 *
 	 * <pre>
-	 *
 	 * Nil&lt;List&lt;Map&lt;K, V&gt;&gt;&gt; nil = new Nil&lt;List&lt;Map&lt;K, V&gt;&gt;&gt;() {};
 	 * </pre>
 	 * <p>
-	 * Subsequent calls to {@code nil.getType()} will return the proper
+	 * Subsequent calls to {@code nil.type()} will return the proper
 	 * generically typed result&mdash;in the above example, a
 	 * {@link ParameterizedType} whose raw type is {@code List}, and whose single
 	 * type parameter is a {@link ParameterizedType} with raw type of {@code Map}
@@ -162,7 +161,7 @@ public abstract class Nil<T> implements GenericTyped, Proxyable<T> {
 	// -- GenericTyped methods --
 
 	@Override
-	public Type getType() {
+	public Type type() {
 		return typeToken.getType();
 	}
 
@@ -172,6 +171,7 @@ public abstract class Nil<T> implements GenericTyped, Proxyable<T> {
 	 * Create a proxy which implements all the same interfaces as this object's
 	 * generic type.
 	 * <p>
+	 * Optionally,
 	 * CTR FIXME - write up how method delegation works.
 	 * </p>
 	 */

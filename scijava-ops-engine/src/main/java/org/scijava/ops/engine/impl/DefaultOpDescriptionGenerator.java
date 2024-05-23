@@ -220,13 +220,13 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 
 	private static <T> String describeType(OpEnvironment env, Nil<T> from) {
 		Type specialType = Types.parameterize(Function.class, new Type[] { Types
-			.parameterize(Nil.class, new Type[] { from.getType() }), String.class });
+			.parameterize(Nil.class, new Type[] { from.type() }), String.class });
 		@SuppressWarnings("unchecked")
 		Nil<Function<Nil<T>, String>> specialTypeNil =
 			(Nil<Function<Nil<T>, String>>) Nil.of(specialType);
 		try {
 			Type nilFromType = Types.parameterize(Nil.class, new Type[] { from
-				.getType() });
+				.type() });
 			Hints h = new Hints( //
 				BaseOpHints.Adaptation.FORBIDDEN, //
 				BaseOpHints.Conversion.FORBIDDEN, //
@@ -237,7 +237,7 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 			return op.apply(from);
 		}
 		catch (OpMatchingException e) {
-			return Types.raw(from.getType()).getSimpleName();
+			return Types.raw(from.type()).getSimpleName();
 		}
 	}
 

@@ -228,11 +228,11 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	public <T> T opFromInfoChain(final InfoTree tree, final Nil<T> specialType,
 		Hints hints)
 	{
-		if (!(specialType.getType() instanceof ParameterizedType))
+		if (!(specialType.type() instanceof ParameterizedType))
 			throw new IllegalArgumentException("TODO");
 		@SuppressWarnings("unchecked")
 		OpInstance<T> instance = (OpInstance<T>) tree.newInstance(specialType
-			.getType());
+			.type());
 		var conditions = MatchingConditions.from( //
 			new InfoMatchingOpRequest(tree.info(), Nil.of(tree.info().opType())), //
 			hints //
@@ -384,7 +384,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		final Nil<?>[] inTypes, final Nil<?> outType, Hints hints)
 	{
 		final OpRequest request = DefaultOpRequest.fromTypes(opName, specialType
-			.getType(), outType != null ? outType.getType() : null, toTypes(inTypes));
+			.type(), outType != null ? outType.type() : null, toTypes(inTypes));
 
 		var conditions = MatchingConditions.from(request, hints);
 		try {
@@ -457,7 +457,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	private Type[] toTypes(Nil<?>... nils) {
 		return Arrays.stream(nils) //
 			.filter(Objects::nonNull) //
-			.map(Nil::getType) //
+			.map(Nil::type) //
 			.toArray(Type[]::new);
 	}
 
@@ -554,7 +554,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 					", then you must define a new OpWrapper for that class!");
 			}
 			// obtain the generic type of the Op w.r.t. the Wrapper class
-			Type reifiedSuperType = Types.getExactSuperType(instance.getType(),
+			Type reifiedSuperType = Types.getExactSuperType(instance.type(),
 				wrapper);
 			// wrap the Op
 			final OpWrapper<T> opWrapper = (OpWrapper<T>) wrappers.get(Types.raw(
@@ -567,7 +567,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		}
 		catch (NullPointerException e) {
 			throw new IllegalArgumentException("No wrapper exists for " + Types.raw(
-				instance.getType()).toString() + ".");
+				instance.type()).toString() + ".");
 		}
 	}
 
@@ -657,7 +657,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 				dependencyChains.add(wrapOp(instance, conditions));
 				// refine current type variable knowledge
 				GenericAssignability //
-					.inferTypeVariables(request.type(), instance.getType()) //
+					.inferTypeVariables(request.type(), instance.type()) //
 					.forEach(dependencyTypeVarAssigns::putIfAbsent);
 
 			}

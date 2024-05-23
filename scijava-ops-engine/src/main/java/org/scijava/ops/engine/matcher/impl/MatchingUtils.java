@@ -78,9 +78,9 @@ public final class MatchingUtils {
 	 * Nil&lt;List&lt;Number&gt;&gt; nilNumber = new Nil&lt;List&lt;Number&gt;&gt;(){}
 	 * Nil&lt;List&lt;? extends Number&gt;&gt; nilWildcardNumber = new Nil&lt;List&lt;? extends Number&gt;&gt;(){}
 	 *
-	 * checkGenericOutputsAssignability(nilN.getType(), nilInteger.getType, ...)
-	 * checkGenericOutputsAssignability(nilN.getType(), nilNumber.getType, ...)
-	 * checkGenericOutputsAssignability(nilN.getType(), nilWildcardNumber.getType, ...)
+	 * checkGenericOutputsAssignability(nilN.type(), nilInteger.type(), ...)
+	 * checkGenericOutputsAssignability(nilN.type(), nilNumber.type(), ...)
+	 * checkGenericOutputsAssignability(nilN.type(), nilWildcardNumber.type(), ...)
 	 * </pre>
 	 *
 	 * Using a map where N was already bound to Integer (N -> Integer.class). This
@@ -168,7 +168,7 @@ public final class MatchingUtils {
 	 */
 	public static Class<?> getClass(final Object obj) {
 		if (obj == null) return null;
-		if (obj instanceof Nil) return getClass(((Nil<?>) obj).getType());
+		if (obj instanceof Nil) return getClass(((Nil<?>) obj).type());
 		if (obj instanceof Class) return (Class<?>) obj;
 		if (obj instanceof ParameterizedType)
 			return (Class<?>) ((ParameterizedType) obj).getRawType();

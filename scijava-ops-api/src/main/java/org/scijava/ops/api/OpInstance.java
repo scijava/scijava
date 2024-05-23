@@ -77,17 +77,17 @@ public class OpInstance<T> implements GenericTyped {
 		OpInstance<?> thatInstance = (OpInstance<?>) that;
 		boolean infosEqual = infoTree().equals(thatInstance.infoTree());
 		boolean objectsEqual = op().equals(thatInstance.op());
-		boolean typesEqual = getType().equals(thatInstance.getType());
+		boolean typesEqual = type().equals(thatInstance.type());
 		return infosEqual && objectsEqual && typesEqual;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(infoTree(), op(), getType());
+		return Objects.hash(infoTree(), op(), type());
 	}
 
 	@Override
-	public Type getType() {
+	public Type type() {
 		return reifiedType;
 	}
 

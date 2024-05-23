@@ -83,8 +83,8 @@ public class GreatestCommonSupertypeTest {
 
 	@Test
 	public void DoubleTest() {
-		Type t1 = new Nil<Double>() {}.getType();
-		Type t2 = new Nil<Double>() {}.getType();
+		Type t1 = new Nil<Double>() {}.type();
+		Type t2 = new Nil<Double>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
 			false);
 		assertTrue(superType.equals(Double.class));
@@ -92,8 +92,8 @@ public class GreatestCommonSupertypeTest {
 
 	@Test
 	public void NumberTest() {
-		Type t1 = new Nil<Double>() {}.getType();
-		Type t2 = new Nil<Long>() {}.getType();
+		Type t1 = new Nil<Double>() {}.type();
+		Type t2 = new Nil<Long>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
 			false);
 		assertTrue(superType.equals(Number.class));
@@ -101,39 +101,39 @@ public class GreatestCommonSupertypeTest {
 
 	@Test
 	public void ObjectTest() {
-		Type t1 = new Nil<Double>() {}.getType();
-		Type t2 = new Nil<String>() {}.getType();
+		Type t1 = new Nil<Double>() {}.type();
+		Type t2 = new Nil<String>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
 			false);
-		Type expected = new Nil<Comparable<?>>() {}.getType();
+		Type expected = new Nil<Comparable<?>>() {}.type();
 		assertTrue(superType.equals(expected));
 	}
 
 	@SuppressWarnings("rawtypes")
 	@Test
 	public void ListOfSameTest() {
-		Type t1 = new Nil<List<Double>>() {}.getType();
-		Type t2 = new Nil<List<Double>>() {}.getType();
+		Type t1 = new Nil<List<Double>>() {}.type();
+		Type t2 = new Nil<List<Double>>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
 			false);
-		assertTrue(superType.equals(new Nil<List<Double>>() {}.getType()));
-		assertFalse(superType.equals(new Nil<List<Object>>() {}.getType()),
+		assertTrue(superType.equals(new Nil<List<Double>>() {}.type()));
+		assertFalse(superType.equals(new Nil<List<Object>>() {}.type()),
 			"Class Double should take precedence over Object");
-		assertFalse(superType.equals(new Nil<List<?>>() {}.getType()),
+		assertFalse(superType.equals(new Nil<List<?>>() {}.type()),
 			"Class Double should be discernable over wildcard");
-		assertFalse(superType.equals(new Nil<List>() {}.getType()),
+		assertFalse(superType.equals(new Nil<List>() {}.type()),
 			"Class Double should be discernable, rawtype should not be returned");
 	}
 
 	@Test
 	public void ListOfDifferentTest() {
-		Type t1 = new Nil<List<Double>>() {}.getType();
-		Type t2 = new Nil<List<String>>() {}.getType();
+		Type t1 = new Nil<List<Double>>() {}.type();
+		Type t2 = new Nil<List<String>>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
 			false);
 		Type expectedListType = Types.wildcard(new Type[] {
 			new Nil<Comparable<?>>()
-			{}.getType() }, new Type[] {});
+			{}.type() }, new Type[] {});
 		Type expected = Types.parameterize(List.class, new Type[] {
 			expectedListType });
 		assertTrue(superType.equals(expected));
@@ -141,12 +141,12 @@ public class GreatestCommonSupertypeTest {
 
 	@Test
 	public void ListOfListOfDifferentTest() {
-		Type t1 = new Nil<List<List<Double>>>() {}.getType();
-		Type t2 = new Nil<List<List<String>>>() {}.getType();
+		Type t1 = new Nil<List<List<Double>>>() {}.type();
+		Type t2 = new Nil<List<List<String>>>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
 			false);
 		Type expectedType = Types.wildcard(new Type[] { new Nil<Comparable<?>>() {}
-			.getType() }, new Type[] {});
+			.type() }, new Type[] {});
 		Type expectedList = Types.parameterize(List.class, new Type[] {
 			expectedType });
 		Type expectedListType = Types.wildcard(new Type[] { expectedList },
@@ -158,83 +158,83 @@ public class GreatestCommonSupertypeTest {
 
 	@Test
 	public void ArrayListAndListTest() {
-		Type t1 = new Nil<List<Double>>() {}.getType();
-		Type t2 = new Nil<ArrayList<Double>>() {}.getType();
+		Type t1 = new Nil<List<Double>>() {}.type();
+		Type t2 = new Nil<ArrayList<Double>>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
 			false);
-		assertTrue(superType.equals(new Nil<List<Double>>() {}.getType()));
-		Type t3 = new Nil<ArrayList<Double>>() {}.getType();
-		Type t4 = new Nil<List<Double>>() {}.getType();
+		assertTrue(superType.equals(new Nil<List<Double>>() {}.type()));
+		Type t3 = new Nil<ArrayList<Double>>() {}.type();
+		Type t4 = new Nil<List<Double>>() {}.type();
 		Type superType2 = Types.greatestCommonSuperType(new Type[] { t3, t4 },
 			false);
-		assertTrue(superType2.equals(new Nil<List<Double>>() {}.getType()));
+		assertTrue(superType2.equals(new Nil<List<Double>>() {}.type()));
 	}
 
 	@Test
 	public void NThingQThingTest() {
-		Type t3 = new Nil<NThing>() {}.getType();
-		Type t4 = new Nil<QThing>() {}.getType();
+		Type t3 = new Nil<NThing>() {}.type();
+		Type t4 = new Nil<QThing>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t3, t4 },
 			false);
-		Type expected = Types.wildcard(new Type[] { new Nil<Thing>() {}.getType(),
+		Type expected = Types.wildcard(new Type[] { new Nil<Thing>() {}.type(),
 			new Nil<Stuff>()
-			{}.getType() }, new Type[] {});
+			{}.type() }, new Type[] {});
 		assertTrue(superType.equals(expected));
 	}
 
 	@Test
 	public void NThingYThingTest() {
-		Type t3 = new Nil<NThing>() {}.getType();
-		Type t4 = new Nil<YThing>() {}.getType();
+		Type t3 = new Nil<NThing>() {}.type();
+		Type t4 = new Nil<YThing>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t3, t4 },
 			false);
-		Type expected = Types.wildcard(new Type[] { new Nil<Thing>() {}.getType() },
+		Type expected = Types.wildcard(new Type[] { new Nil<Thing>() {}.type() },
 			new Type[] {});
 		assertFalse(superType.equals(expected),
 			"Greatest common type should not be a wildcard");
-		assertTrue(superType.equals(new Nil<Thing>() {}.getType()));
+		assertTrue(superType.equals(new Nil<Thing>() {}.type()));
 	}
 
 	@Test
 	public void NThingXThingTest() {
-		Type t3 = new Nil<NThing>() {}.getType();
-		Type t4 = new Nil<XThing>() {}.getType();
+		Type t3 = new Nil<NThing>() {}.type();
+		Type t4 = new Nil<XThing>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t3, t4 },
 			false);
-		assertTrue(superType.equals(new Nil<Base>() {}.getType()));
-		assertFalse(superType.equals(new Nil<Thing>() {}.getType()),
+		assertTrue(superType.equals(new Nil<Base>() {}.type()));
+		assertFalse(superType.equals(new Nil<Thing>() {}.type()),
 			"Non-Object classes should take precedence over interfaces");
 	}
 
 	@Test
 	public void RecursiveClassTest() {
-		Type t1 = new Nil<StrangeThing>() {}.getType();
-		Type t2 = new Nil<WeirdThing>() {}.getType();
+		Type t1 = new Nil<StrangeThing>() {}.type();
+		Type t2 = new Nil<WeirdThing>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
 			false);
 		Nil<RecursiveThing<?>> expected = new Nil<>() {};
-		assertTrue(superType.equals(expected.getType()));
+		assertTrue(superType.equals(expected.type()));
 	}
 
 	@Test
 	public <T extends Base> void typeVarTest() {
-		Type t1 = new Nil<T>() {}.getType();
-		Type t2 = new Nil<NThing>() {}.getType();
+		Type t1 = new Nil<T>() {}.type();
+		Type t2 = new Nil<NThing>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
 			false);
 		Nil<Base> expected = new Nil<>() {};
-		assertTrue(superType.equals(expected.getType()));
+		assertTrue(superType.equals(expected.type()));
 	}
 
 	@Test
 	public void wildcardTypeTest() {
-		Type typeWithWildcard = new Nil<List<? extends NThing>>() {}.getType();
+		Type typeWithWildcard = new Nil<List<? extends NThing>>() {}.type();
 		Type t1 = ((ParameterizedType) typeWithWildcard)
 			.getActualTypeArguments()[0];
-		Type t2 = new Nil<XThing>() {}.getType();
+		Type t2 = new Nil<XThing>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
 			false);
 		Nil<Base> expected = new Nil<>() {};
-		assertTrue(superType.equals(expected.getType()));
+		assertTrue(superType.equals(expected.type()));
 	}
 }

@@ -13,11 +13,11 @@ Also of note is the interface `GenericTyped`, which can be implemented to quickl
 `Nil`s can best be described as a "typed `null`", able to generate a generic type defined by the `Nil`'s type parameter. Given a generic type `X`, we can create a `Type` instance of `X` using the code
 
 ```java
-Type x = new Nil<X>() {}.getType();
+Type x = new Nil<X>() {}.type();
 ```
 
 For example, if we wanted to specify the type `Function<Double, Double>`, we could write
 
 ```java
-Type functionType = new Nil<Function<Double, Double>>() {}.getType();
+Type functionType = new Nil<Function<Double, Double>>() {}.type();
 ```

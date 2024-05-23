@@ -53,7 +53,7 @@ public class MatchingUtilsTest {
 
 	private void assertAll(Class<?> from, boolean condition, Nil<?>... tos) {
 		for (Nil<?> to : tos) {
-			assertAll(from, condition, to.getType());
+			assertAll(from, condition, to.type());
 		}
 	}
 
@@ -467,7 +467,7 @@ public class MatchingUtilsTest {
 		// unfortunately we cannot use assertAll since it is impossible to create a
 		// Class implementing List<? super T>
 		boolean success = GenericAssignability.checkGenericAssignability(listT
-			.getType(), (ParameterizedType) listWildcard.getType(), false);
+			.type(), (ParameterizedType) listWildcard.type(), false);
 		Assertions.assertTrue(success);
 	}
 
@@ -478,10 +478,10 @@ public class MatchingUtilsTest {
 		final Nil<Function<Integer[], Integer[]>> integerFunc = new Nil<>() {};
 
 		boolean successDouble = GenericAssignability.checkGenericAssignability(
-			fooFunc.getClass(), (ParameterizedType) doubleFunc.getType(), false);
+			fooFunc.getClass(), (ParameterizedType) doubleFunc.type(), false);
 		Assertions.assertTrue(successDouble);
 		boolean successInteger = GenericAssignability.checkGenericAssignability(
-			fooFunc.getClass(), (ParameterizedType) integerFunc.getType(), false);
+			fooFunc.getClass(), (ParameterizedType) integerFunc.type(), false);
 		Assertions.assertTrue(successInteger);
 	}
 
@@ -512,8 +512,8 @@ public class MatchingUtilsTest {
 
 	@Test
 	public <T extends Number> void testIsAssignableOutputToObject() {
-		final Type fooSource = new Nil<Function<T, List<T>>>() {}.getType();
-		final Type fooFunc = new Nil<Function<Double, Object>>() {}.getType();
+		final Type fooSource = new Nil<Function<T, List<T>>>() {}.type();
+		final Type fooFunc = new Nil<Function<Double, Object>>() {}.type();
 
 		Assertions.assertFalse(GenericAssignability.checkGenericAssignability(
 			fooSource, (ParameterizedType) fooFunc, false));
@@ -540,21 +540,21 @@ public class MatchingUtilsTest {
 //		Nil<List<?>> lwild = new Nil<List<?>>() {};
 //
 //		HashMap<TypeVariable<?>, TypeVarInfo> typeBounds = new HashMap<>();
-//		assertTrue(-1 == Types.isApplicable(new Type[]{Integer.class}, new Type[]{n.getType()}, typeBounds));
-//		Type[] toOuts = new Type[]{lWildNum.getType()};
-//		Type[] fromOuts = new Type[]{ln.getType()};
+//		assertTrue(-1 == Types.isApplicable(new Type[]{Integer.class}, new Type[]{n.type()}, typeBounds));
+//		Type[] toOuts = new Type[]{lWildNum.type()};
+//		Type[] fromOuts = new Type[]{ln.type()};
 //		assertTrue(-1 == MatchingUtils.checkGenericOutputsAssignability(fromOuts, toOuts, typeBounds));
 //
-//		toOuts = new Type[]{lNum.getType()};
+//		toOuts = new Type[]{lNum.type()};
 //		assertTrue(-1 == MatchingUtils.checkGenericOutputsAssignability(fromOuts, toOuts, typeBounds));
 //
-//		toOuts = new Type[]{lwild.getType()};
+//		toOuts = new Type[]{lwild.type()};
 //		assertTrue(-1 == MatchingUtils.checkGenericOutputsAssignability(fromOuts, toOuts, typeBounds));
 //
 //		typeBounds = new HashMap<>();
-//		assertTrue(-1 == Types.isApplicable(new Type[]{String.class}, new Type[]{n.getType()}, typeBounds));
-//		toOuts = new Type[]{lWildNum.getType()};
-//		fromOuts = new Type[]{ln.getType()};
+//		assertTrue(-1 == Types.isApplicable(new Type[]{String.class}, new Type[]{n.type()}, typeBounds));
+//		toOuts = new Type[]{lWildNum.type()};
+//		fromOuts = new Type[]{ln.type()};
 //		assertFalse(-1 == MatchingUtils.checkGenericOutputsAssignability(fromOuts, toOuts, typeBounds));
 	}
 }

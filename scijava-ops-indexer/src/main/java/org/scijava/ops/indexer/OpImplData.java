@@ -44,7 +44,7 @@ import javax.lang.model.element.Element;
  *
  * @author Gabriel Selzer
  */
-public abstract class OpImplData {
+abstract class OpImplData {
 
 	/**
 	 * A {@link Map} used to store any implementation-specific and/or nullable

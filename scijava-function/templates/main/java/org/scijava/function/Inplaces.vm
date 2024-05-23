@@ -82,13 +82,6 @@ public final class Inplaces {
 		return ALL_ARITIES.containsKey(c);
 	}
 
-	public static List<Class<?>> getInplacesOfArity(final int arity) {
-		return ALL_INPLACES.entrySet().stream() //
-			.filter(e -> e.getKey().arity() == arity) //
-			.map(Entry::getValue) //
-			.collect(Collectors.toList());
-	}
-
 	/**
 	 * @param arity an {@code int} corresponding to a {@code Inplace} of that
 	 *          arity.

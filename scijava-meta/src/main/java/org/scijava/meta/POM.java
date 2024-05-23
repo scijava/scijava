@@ -178,7 +178,7 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 		// sort by artifactId second
 		.thenComparing(POM::getArtifactId, STRING_COMPARATOR)//
 		// finally, sort by version
-		.thenComparing(POM::getVersion, POM::compareVersions);
+		.thenComparing(POM::version, POM::compareVersions);
 
 	@Override
 	public int compareTo(final POM pom) {
@@ -189,7 +189,7 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 
 	/** Gets the POM's version. */
 	@Override
-	public String getVersion() {
+	public String version() {
 		if (version == null) {
 			synchronized (this) {
 				if (version == null) {

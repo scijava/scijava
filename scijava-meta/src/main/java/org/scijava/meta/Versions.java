@@ -80,7 +80,7 @@ public final class Versions {
 	 */
 	public static String fromManifest(final Class<?> c) {
 		final Manifest m = Manifest.getManifest(c);
-		return m == null ? null : m.getVersion();
+		return m == null ? null : m.version();
 	}
 
 	/**
@@ -95,7 +95,7 @@ public final class Versions {
 	 */
 	public static String fromPOM(final Class<?> c, final String groupId, final String artifactId) {
 		final POM pom = POM.getPOM(c, groupId, artifactId);
-		return pom == null ? null : pom.getVersion();
+		return pom == null ? null : pom.version();
 	}
 
 	/**

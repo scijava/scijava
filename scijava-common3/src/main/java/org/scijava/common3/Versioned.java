@@ -37,5 +37,5 @@ package org.scijava.common3;
 public interface Versioned {
 
 	/** Gets the version of the object. */
-	String getVersion();
+	String version();
 }

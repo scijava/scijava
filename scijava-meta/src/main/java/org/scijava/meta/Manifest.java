@@ -169,7 +169,7 @@ public class Manifest implements Versioned {
 	// -- Versioned methods --
 
 	@Override
-	public String getVersion() {
+	public String version() {
 		final String v = getBaseVersion();
 		if (v == null || !v.endsWith("-SNAPSHOT")) return v;
 

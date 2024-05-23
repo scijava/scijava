@@ -28,8 +28,6 @@
  */
 
 module org.scijava.ops.tutorial{
-	exports org.scijava.ops.tutorial;
-
 	// -- Open plugins to scijava-ops
 	opens org.scijava.ops.tutorial to org.scijava.ops.engine;
 

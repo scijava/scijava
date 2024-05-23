@@ -37,11 +37,11 @@ package org.scijava.priority;
 public interface Prioritized<T extends Prioritized<T>> extends Comparable<T> {
 
 	/**
-	 * Gets the sort priority of the object.
+	 * The sort priority of the object.
 	 *
 	 * @see Priority
 	 */
-	double getPriority();
+	double priority();
 
 	// -- Comparable methods --
 

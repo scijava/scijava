@@ -129,7 +129,7 @@ public interface InfoTreeGenerator extends Prioritized<InfoTreeGenerator> {
 	boolean canGenerate(String signature);
 
 	@Override
-	default double getPriority() {
+	default double priority() {
 		return Priority.NORMAL;
 	}
 }

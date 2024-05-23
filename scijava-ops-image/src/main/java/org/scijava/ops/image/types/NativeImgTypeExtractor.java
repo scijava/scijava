@@ -53,7 +53,7 @@ import net.imglib2.img.NativeImg;
 public class NativeImgTypeExtractor extends SubTypeExtractor<NativeImg<?, ?>> {
 
 	@Override
-	public double getPriority() {
+	public double priority() {
 		return Priority.VERY_HIGH;
 	}
 

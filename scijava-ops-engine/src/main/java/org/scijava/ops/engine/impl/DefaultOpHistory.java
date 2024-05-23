@@ -109,7 +109,7 @@ public class DefaultOpHistory implements OpHistory {
 	}
 
 	@Override
-	public double getPriority() {
+	public double priority() {
 		return Priority.VERY_LOW;
 	}
 }

@@ -62,7 +62,7 @@ import static org.scijava.struct.ItemIO.MUTABLE;
 public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 
 	@Override
-	public double getPriority() {
+	public double priority() {
 		return Priority.VERY_HIGH;
 	}
 

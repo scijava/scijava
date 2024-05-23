@@ -55,7 +55,7 @@ public class OutOfBoundsFactoryTypeExtractor extends
 {
 
 	@Override
-	public double getPriority() {
+	public double priority() {
 		return Priority.LOW;
 	}
 

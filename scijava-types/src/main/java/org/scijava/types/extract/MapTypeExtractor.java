@@ -51,7 +51,7 @@ import org.scijava.types.extract.TypeReifier;
 public class MapTypeExtractor extends SubTypeExtractor<Map<?, ?>> {
 
 	@Override
-	public double getPriority() {
+	public double priority() {
 		return Priority.VERY_LOW;
 	}
 

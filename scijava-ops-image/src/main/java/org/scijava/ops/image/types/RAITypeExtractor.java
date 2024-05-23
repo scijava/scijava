@@ -54,7 +54,7 @@ public class RAITypeExtractor extends
 {
 
 	@Override
-	public double getPriority() {
+	public double priority() {
 		return Priority.LOW;
 	}
 

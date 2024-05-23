@@ -792,7 +792,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@Override
-	public double getPriority() {
+	public double priority() {
 		return Priority.VERY_LOW;
 	}
 }

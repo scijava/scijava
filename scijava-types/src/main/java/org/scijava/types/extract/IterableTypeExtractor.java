@@ -52,7 +52,7 @@ import org.scijava.types.extract.TypeReifier;
 public class IterableTypeExtractor extends SubTypeExtractor<Iterable<?>> {
 
 	@Override
-	public double getPriority() {
+	public double priority() {
 		return Priority.VERY_LOW;
 	}
 

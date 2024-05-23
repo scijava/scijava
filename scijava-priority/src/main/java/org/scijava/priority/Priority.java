@@ -34,7 +34,7 @@ package org.scijava.priority;
  *
  * @author Johannes Schindelin
  * @author Curtis Rueden
- * @see org.scijava.priority.Prioritized#getPriority()
+ * @see org.scijava.priority.Prioritized#priority()
  */
 public final class Priority {
 
@@ -103,9 +103,9 @@ public final class Priority {
 		final Prioritized<T> p2)
 	{
 		final double priority1 = p1 == null ? Double.NEGATIVE_INFINITY : p1
-			.getPriority();
+			.priority();
 		final double priority2 = p2 == null ? Double.NEGATIVE_INFINITY : p2
-			.getPriority();
+			.priority();
 		if (priority1 == priority2) return 0;
 		// NB: We invert the ordering here, so that large values come first,
 		// rather than the typical natural ordering of smaller values first.

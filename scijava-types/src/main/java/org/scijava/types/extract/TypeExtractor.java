@@ -51,7 +51,7 @@ public interface TypeExtractor extends Prioritized<TypeExtractor> {
 	Class<?> baseClass();
 
 	@Override
-	default double getPriority() {
+	default double priority() {
 		return Priority.NORMAL;
 	}
 }

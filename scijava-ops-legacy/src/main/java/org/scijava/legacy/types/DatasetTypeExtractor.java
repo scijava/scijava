@@ -39,7 +39,7 @@ import java.lang.reflect.Type;
 public class DatasetTypeExtractor implements TypeExtractor {
 
 	@Override
-	public double getPriority() {
+	public double priority() {
 		return Priority.HIGH;
 	}
 

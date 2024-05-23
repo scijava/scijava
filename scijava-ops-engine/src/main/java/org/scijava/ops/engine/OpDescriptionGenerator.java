@@ -71,7 +71,7 @@ public interface OpDescriptionGenerator extends
 	 */
 	String verboseDescriptions(OpEnvironment env, OpRequest request);
 
-	default double getPriority() {
+	default double priority() {
 		return Priority.NORMAL;
 	}
 

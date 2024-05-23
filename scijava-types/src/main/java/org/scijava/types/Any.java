@@ -48,9 +48,9 @@ public final class Any implements Type {
 	}
 
 	// the superclasses of this Any
-	Type[] upperBounds;
+	private Type[] upperBounds;
 	// the subclasses of this Any
-	Type[] lowerBounds;
+	private Type[] lowerBounds;
 
 	public Any() {
 		this.upperBounds = new Type[] {};
@@ -79,9 +79,9 @@ public final class Any implements Type {
 	 * This method returns true iff:
 	 * <ul>
 	 * <li>{@code obj} is an {@link Any}</li>
-	 * <li>{@code obj.getUpperBounds} is equal to {@code upperBounds}
+	 * <li>{@code obj.getUpperBounds} is equal to {@code this.getUpperBounds}
 	 * (disregarding the order of each array)</li>
-	 * <li>{@code obj.getLowerBounds} is equal to {@code lowerBounds}
+	 * <li>{@code obj.getLowerBounds} is equal to {@code this.getLowerBounds}
 	 * (disregarding the order of each array)</li>
 	 * </ul>
 	 * This is a rather strict definition of equality, however it is necessary to
@@ -92,16 +92,16 @@ public final class Any implements Type {
 		if (!(obj instanceof Any) || obj == null) return false;
 		Any other = (Any) obj;
 
-		return equalBounds(upperBounds, other.getUpperBounds()) && equalBounds(
-			lowerBounds, other.getLowerBounds());
+		return equalBounds(getUpperBounds(), other.getUpperBounds()) &&
+			equalBounds(getLowerBounds(), other.getLowerBounds());
 	}
 
 	@Override
 	public int hashCode() {
 		int hash = 0;
-		for (Type t : upperBounds)
+		for (Type t : getUpperBounds())
 			hash ^= t.hashCode();
-		for (Type t : lowerBounds)
+		for (Type t : getLowerBounds())
 			hash ^= t.hashCode();
 		return hash;
 	}

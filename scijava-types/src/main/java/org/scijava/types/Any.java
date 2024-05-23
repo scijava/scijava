@@ -67,6 +67,9 @@ public final class Any implements Type {
 		this.lowerBounds = lowerBounds;
 	}
 
+	// NB: These bounds accessor methods are named to be
+	// consistent with those of java.lang.reflect.WildcardType.
+
 	public Type[] getUpperBounds() {
 		return upperBounds;
 	}

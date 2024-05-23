@@ -65,7 +65,7 @@ public final class Annotations {
 	 * @see <a href="https://github.com/scijava/scijava-common/issues/142">issue
 	 *      #142</a>
 	 */
-	private static final FieldCache fieldCache = new FieldCache();
+	private static final CacheMap<Field> fieldCache = new CacheMap<>();
 
 	/**
 	 * This maps a base class (key1) to a map of annotation classes (key2), which
@@ -79,7 +79,7 @@ public final class Annotations {
 	 * @see <a href="https://github.com/scijava/scijava-common/issues/142">issue
 	 *      #142</a>
 	 */
-	private static final MethodCache methodCache = new MethodCache();
+	private static final CacheMap<Method> methodCache = new CacheMap<>();
 
 	// -- Class loading, querying and reflection --
 
@@ -347,22 +347,6 @@ public final class Annotations {
 	}
 
 	// -- Helper classes --
-
-	/**
-	 * Convenience class for a {@link CacheMap} that stores annotated
-	 * {@link Field}s.
-	 */
-	private static class FieldCache extends CacheMap<Field> {
-		// Trivial subclass to narrow generic params
-	}
-
-	/**
-	 * Convenience class for a {@link CacheMap} that stores annotated
-	 * {@link Method}s.
-	 */
-	private static class MethodCache extends CacheMap<Method> {
-		// Trivial subclass to narrow generic params
-	}
 
 	/**
 	 * Convenience class for {@code Map > Map > List} hierarchy. Cleans up

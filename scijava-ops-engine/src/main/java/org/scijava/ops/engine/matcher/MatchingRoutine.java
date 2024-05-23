@@ -61,7 +61,7 @@ public interface MatchingRoutine extends Comparable<MatchingRoutine> {
 	 *          conform to
 	 * @param matcher the {@link OpMatcher} responsible for matching
 	 * @param env the {@link OpEnvironment} containing the Ops able to be matched
-	 * @return an {@OpCandidate}
+	 * @return an {@link OpCandidate}
 	 */
 	default OpCandidate match(MatchingConditions conditions, OpMatcher matcher,
 		OpEnvironment env)

@@ -32,10 +32,9 @@
  * within SciJava Ops</b>.
  * <p>
  * Utilities intended for use outside of this library sould be housed within
- * {@link org.scijava.ops.engine.util}
+ * the {@code org.scijava.ops.engine.util} package.
  *
  * @author Gabriel Selzer
- * @see org.scijava.ops.engine.util
  */
 
 package org.scijava.ops.engine.util.internal;

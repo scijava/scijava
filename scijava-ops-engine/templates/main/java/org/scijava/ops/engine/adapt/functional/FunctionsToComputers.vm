@@ -18,8 +18,8 @@ import org.scijava.ops.spi.OpClass;
 
 /**
  * Collection of adaptation Ops to convert {@link Computers} into
- * {@link Functions} with the use of a {@link Computer} that copies the output
- * of the function into the preallocated argument.
+ * {@link Functions} with the use of a computer Op that copies the
+ * output of the function into the preallocated argument.
  * 
  * @author Gabriel Selzer
  */

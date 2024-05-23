@@ -64,17 +64,17 @@ public class SynthesizedParameterMember<T> implements Member<T> {
 	// -- Member methods --
 
 	@Override
-	public String getKey() {
+	public String key() {
 		return name;
 	}
 
 	@Override
-	public String getDescription() {
+	public String description() {
 		return description;
 	}
 
 	@Override
-	public Type getType() {
+	public Type type() {
 		return fmt.type();
 	}
 

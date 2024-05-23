@@ -54,7 +54,7 @@ public abstract class AbstractInfoReducer implements InfoReducer {
 		int reducedArity = originalArity - numReductions;
 		Class<?> reducedRawType = ofArity(reducedArity);
 		Type[] inputTypes = info.inputTypes().toArray(Type[]::new);
-		Type outputType = info.output().getType();
+		Type outputType = info.output().type();
 		Type[] newTypes = new Type[reducedArity + 1];
 		if (reducedArity >= 0) System.arraycopy(inputTypes, 0, newTypes, 0,
 			reducedArity);

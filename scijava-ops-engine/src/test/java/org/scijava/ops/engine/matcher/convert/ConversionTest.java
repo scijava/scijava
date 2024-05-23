@@ -146,8 +146,8 @@ public class ConversionTest extends AbstractTestEnvironment implements
 
 		// Assert the struct types are correct
 		var members = info.struct().members();
-		assertEquals(Long[].class, members.get(0).getType());
-		assertEquals(Byte[].class, members.get(1).getType());
+		assertEquals(Long[].class, members.get(0).type());
+		assertEquals(Byte[].class, members.get(1).type());
 
 		// Assert the implementation name reflects the new parameter types
 		var expImplName = "org.scijava.ops.engine.matcher.convert.ConversionTest" +

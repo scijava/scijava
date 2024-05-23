@@ -38,8 +38,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.scijava.struct.ItemIO;
-
 /**
  * Default {@link MutableParameterMember} implementation.
  * 
@@ -94,13 +92,13 @@ public class DefaultMutableParameterMember<T> implements
 		final List<Object> superChoices = MutableParameterMember.super.getChoices();
 		if (superChoices != null) choices.addAll(superChoices);
 		label = MutableParameterMember.super.getLabel();
-		description = MutableParameterMember.super.getDescription();
+		description = MutableParameterMember.super.description();
 	}
 
 	/** Creates a new parameter with the same values as the given one. */
 	public DefaultMutableParameterMember(final ParameterMember<T> member) {
-		key = member.getKey();
-		type = member.getType();
+		key = member.key();
+		type = member.type();
 		ioType = member.getIOType();
 		visibility = member.getVisibility();
 		required = member.isRequired();
@@ -117,7 +115,7 @@ public class DefaultMutableParameterMember<T> implements
 		final List<Object> memberChoices = member.getChoices();
 		if (memberChoices != null) choices.addAll(memberChoices);
 		label = member.getLabel();
-		description = member.getDescription();
+		description = member.description();
 	}
 
 	// -- MutableParameterMember methods --
@@ -300,19 +298,19 @@ public class DefaultMutableParameterMember<T> implements
 	}
 
 	@Override
-	public String getDescription() {
+	public String description() {
 		return description;
 	}
 
 	// -- Member methods --
 
 	@Override
-	public String getKey() {
+	public String key() {
 		return key;
 	}
 
 	@Override
-	public Type getType() {
+	public Type type() {
 		return type;
 	}
 

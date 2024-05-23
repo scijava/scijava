@@ -50,7 +50,7 @@ public class FunctionalMethodType {
 	}
 
 	public FunctionalMethodType(final Member<?> member) {
-		this(member.getType(), member.getIOType());
+		this(member.type(), member.getIOType());
 	}
 
 	public Type type() {

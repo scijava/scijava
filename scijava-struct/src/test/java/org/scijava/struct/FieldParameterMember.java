@@ -26,7 +26,7 @@ public class FieldParameterMember<T> extends AnnotatedParameterMember<T>
 			field.getAnnotation(Parameter.class));
 		this.field = field;
 		this.structType = structType;
-		struct = isStruct() ? ParameterStructs.structOf(getRawType()) : null;
+		struct = isStruct() ? ParameterStructs.structOf(rawType()) : null;
 	}
 
 	// -- FieldParameterItem methods --
@@ -94,7 +94,7 @@ public class FieldParameterMember<T> extends AnnotatedParameterMember<T>
 	// -- Member methods --
 
 	@Override
-	public String getKey() {
+	public String key() {
 		final String key = getAnnotation().key();
 		return key == null || key.isEmpty() ? field.getName() : key;
 	}

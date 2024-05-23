@@ -104,7 +104,7 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 		List<Exception> matchingExceptions = new ArrayList<>();
 		List<DependencyMatchingException> depExceptions = new ArrayList<>();
 		for (final OpInfo adaptor : env.infos("engine.adapt")) {
-			Type adaptTo = adaptor.output().getType();
+			Type adaptTo = adaptor.output().type();
 			Map<TypeVariable<?>, Type> map = new HashMap<>();
 			// make sure that the adaptor outputs the correct type
 			if (!adaptOpOutputSatisfiesReqTypes(adaptTo, map, conditions.request()))
@@ -145,7 +145,7 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 					}).collect(Collectors.toList());
 				// And return the Adaptor, wrapped up into an OpCandidate
 				Type adapterOpType = Types.substituteTypeVariables(adaptor.output()
-					.getType(), map);
+					.type(), map);
 				InfoTree adaptorChain = new InfoTree(adaptor, depTrees);
 				OpAdaptationInfo adaptedInfo = new OpAdaptationInfo(srcCandidate
 					.opInfo(), adapterOpType, adaptorChain);
@@ -206,14 +206,14 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 		Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
 		final Type mappedDependencyType = Types.mapVarToTypes(new Type[] {
-			dependency.getType() }, typeVarAssigns)[0];
+			dependency.type() }, typeVarAssigns)[0];
 		final String dependencyName = dependency.getDependencyName();
 		final OpRequest inferred = inferOpRequest(mappedDependencyType,
 			dependencyName, typeVarAssigns);
 		if (inferred != null) return inferred;
 		throw new OpMatchingException("Could not infer functional " +
 			"method inputs and outputs of Op dependency field: " + dependency
-				.getKey());
+				.key());
 	}
 
 	private boolean adaptOpOutputSatisfiesReqTypes(Type adaptTo,

@@ -94,7 +94,7 @@ public class OpRetypingMemberParser implements
 		return new Member<>() {
 
 			@Override
-			public String getKey() {
+			public String key() {
 				ItemIO ioType = fmt.itemIO();
 				if (ioType == ItemIO.INPUT) return "in" + i + 1;
 				else if (ioType == ItemIO.CONTAINER) return "container";
@@ -104,7 +104,7 @@ public class OpRetypingMemberParser implements
 			}
 
 			@Override
-			public Type getType() {
+			public Type type() {
 				return fmt.type();
 			}
 

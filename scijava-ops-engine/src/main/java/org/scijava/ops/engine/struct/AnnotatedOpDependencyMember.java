@@ -117,7 +117,7 @@ public abstract class AnnotatedOpDependencyMember<T> implements
 	// -- Member methods --
 
 	@Override
-	public String getKey() {
+	public String key() {
 		if (!keyGenerated) generateKey();
 		return key;
 	}
@@ -129,7 +129,7 @@ public abstract class AnnotatedOpDependencyMember<T> implements
 	}
 
 	@Override
-	public String getDescription() {
+	public String description() {
 		if (!descriptionGenerated) generateDescription();
 		return description;
 	}
@@ -141,7 +141,7 @@ public abstract class AnnotatedOpDependencyMember<T> implements
 	}
 
 	@Override
-	public Type getType() {
+	public Type type() {
 		return type;
 	}
 }

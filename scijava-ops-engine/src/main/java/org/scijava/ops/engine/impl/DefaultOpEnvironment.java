@@ -663,7 +663,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			}
 			catch (final OpMatchingException e) {
 				String message = DependencyMatchingException.message(info
-					.implementationName(), dependency.getKey(), request);
+					.implementationName(), dependency.key(), request);
 				if (e instanceof DependencyMatchingException) {
 					throw new DependencyMatchingException(message,
 						(DependencyMatchingException) e);
@@ -678,7 +678,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
 		final Type mappedDependencyType = Types.mapVarToTypes(new Type[] {
-			dependency.getType() }, typeVarAssigns)[0];
+			dependency.type() }, typeVarAssigns)[0];
 		final String dependencyName = dependency.getDependencyName();
 		return inferOpRequest(mappedDependencyType, dependencyName, typeVarAssigns);
 	}

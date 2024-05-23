@@ -145,7 +145,7 @@ public final class OpMethodUtils {
 			Object op = Lambdas.lambdaize( //
 				Types.raw(info.opType()), //
 				handle, //
-				Infos.dependencies(info).stream().map(Member::getRawType).toArray(
+				Infos.dependencies(info).stream().map(Member::rawType).toArray(
 					Class[]::new), dependencies.toArray() //
 			);
 			return info.struct().createInstance(op);

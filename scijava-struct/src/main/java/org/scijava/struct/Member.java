@@ -43,10 +43,10 @@ import org.scijava.types.Types;
 public interface Member<T> {
 
 	/** Unique name of the member. */
-	String getKey();
+	String key();
 
 	/** Non-null description. The default description is an empty string */
-	default String getDescription() {
+	default String description() {
 		return "";
 	}
 
@@ -55,15 +55,15 @@ public interface Member<T> {
 	 *
 	 * @see Field#getGenericType()
 	 */
-	Type getType();
+	Type type();
 
 	/**
-	 * Gets the {@link Class} of the member's type, or null if {@link #getType()}
+	 * Gets the {@link Class} of the member's type, or null if {@link #type()}
 	 * does not return a raw class.
 	 */
 	@SuppressWarnings("unchecked")
-	default Class<T> getRawType() {
-		return (Class<T>) Types.raw(getType());
+	default Class<T> rawType() {
+		return (Class<T>) Types.raw(type());
 	}
 
 	/** Gets the input/output type of the member. */

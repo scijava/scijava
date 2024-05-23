@@ -158,10 +158,10 @@ public class DefaultOpClassInfo implements OpInfo {
 				// dependency.
 				throw new IllegalStateException(
 					"Exception trying to inject Op dependency field.\n" +
-						"\tOp dependency field to resolve: " + dependencyMember.getKey() +
+						"\tOp dependency field to resolve: " + dependencyMember.key() +
 						"\n" + "\tFound Op to inject: " + dependencies.get(i).getClass()
 							.getName() + //
-						"\n" + "\tField signature: " + dependencyMember.getType(), ex);
+						"\n" + "\tField signature: " + dependencyMember.type(), ex);
 			}
 		}
 		return struct().createInstance(op);

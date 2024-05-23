@@ -225,7 +225,7 @@ public class ConvertedOpInfo implements OpInfo {
 		for (Member<?> m : struct()) {
 			if (m.isInput() || m.isOutput()) {
 				sb.append("_");
-				sb.append(Conversions.getClassName(m.getType()));
+				sb.append(Conversions.getClassName(m.type()));
 			}
 		}
 		return sb.toString();

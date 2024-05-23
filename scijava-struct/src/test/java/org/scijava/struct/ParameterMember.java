@@ -3,8 +3,6 @@ package org.scijava.struct;
 import java.util.Arrays;
 import java.util.List;
 
-import org.scijava.struct.Member;
-
 /**
  * A {@link Member} with extra commonly useful metadata.
  * <p>
@@ -128,7 +126,7 @@ public interface ParameterMember<T> extends Member<T> {
 
 	/** Gets the list of possible values. */
 	default List<Object> getChoices() {
-		final Class<T> rawType = getRawType();
+		final Class<T> rawType = rawType();
 		final T[] choices = rawType.getEnumConstants();
 		return choices == null ? null : Arrays.asList(choices);
 	}
@@ -141,11 +139,11 @@ public interface ParameterMember<T> extends Member<T> {
 
 	/** Gets a human-readable label. */
 	default String getLabel() {
-		return getKey();
+		return key();
 	}
 
 	/** Gets a string describing the object. */
-	default String getDescription() {
+	default String description() {
 		return null;
 	}
 

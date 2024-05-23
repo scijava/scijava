@@ -198,7 +198,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 		Type[] implTypeParams = ((ParameterizedType) implementedInfoType)
 			.getActualTypeArguments();
 		Type[] candidateArgTypes = candidate.opInfo().struct().members().stream()//
-			.map(member -> member.isInput() ? member.getType() : null) //
+			.map(member -> member.isInput() ? member.type() : null) //
 			.toArray(Type[]::new);
 		for (int i = 0; i < implTypeParams.length; i++) {
 			if (candidateArgTypes[i] == null) implTypeParams[i] = null;

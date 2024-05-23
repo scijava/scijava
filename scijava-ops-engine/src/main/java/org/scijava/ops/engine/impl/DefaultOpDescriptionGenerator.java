@@ -195,7 +195,7 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 				sb.append("@CONTAINER ");
 			}
 			// describe member type
-			sb.append(describeType(env, Nil.of(m.getType())));
+			sb.append(describeType(env, Nil.of(m.type())));
 			if (!m.isRequired()) {
 				sb.append(" = null");
 			}
@@ -212,7 +212,7 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 			sb.append("None");
 		}
 		else {
-			sb.append(describeType(env, Nil.of(output.getType())));
+			sb.append(describeType(env, Nil.of(output.type())));
 		}
 		// return concatenation
 		return sb.toString();

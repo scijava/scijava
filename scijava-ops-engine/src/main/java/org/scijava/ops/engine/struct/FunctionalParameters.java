@@ -65,7 +65,7 @@ public final class FunctionalParameters {
 			fmts);
 
 		for (SynthesizedParameterMember<?> m : fmtMembers) {
-			final Class<?> itemType = Types.raw(m.getType());
+			final Class<?> itemType = Types.raw(m.type());
 			if ((m.getIOType() == ItemIO.MUTABLE || m
 				.getIOType() == ItemIO.CONTAINER) && Structs.isImmutable(itemType))
 			{
@@ -73,7 +73,7 @@ public final class FunctionalParameters {
 				// will be written to, but immutable parameters cannot be changed in
 				// such a manner, so it makes no sense to label them as such.
 				throw new IllegalArgumentException("Immutable " + m.getIOType() +
-					" parameter: " + m.getKey() + " (" + itemType.getName() +
+					" parameter: " + m.key() + " (" + itemType.getName() +
 					" is immutable)");
 			}
 			items.add(m);

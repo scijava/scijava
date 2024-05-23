@@ -119,8 +119,8 @@ public class StructTest {
             if (!memberInstance.member().isStruct()) continue;
             final StructInstance<?> nestedInstance = Structs.expand(memberInstance);
             for (final Member<?> nestedMember : nestedInstance.struct()) {
-                final String key = memberInstance.member().getKey() + "." + nestedMember.getKey();
-                nestedMembers.put(key, nestedInstance.member(nestedMember.getKey()).get());
+                final String key = memberInstance.member().key() + "." + nestedMember.key();
+                nestedMembers.put(key, nestedInstance.member(nestedMember.key()).get());
             }
         }
         assertEquals(6, nestedMembers.size());
@@ -137,8 +137,8 @@ public class StructTest {
     private void assertParam(final String key, final Type type,
                              final ItemIO ioType, final Member<?> pMember)
     {
-        assertEquals(key, pMember.getKey());
-        assertEquals(type, pMember.getType());
+        assertEquals(key, pMember.key());
+        assertEquals(type, pMember.type());
         assertSame(ioType, pMember.getIOType());
     }
 

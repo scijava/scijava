@@ -108,12 +108,12 @@ public abstract class AnnotatedParameterMember<T> implements ParameterMember<T> 
 	// -- Member methods --
 
 	@Override
-	public String getKey() {
+	public String key() {
 		return getAnnotation().key();
 	}
 
 	@Override
-	public Type getType() {
+	public Type type() {
 		return itemType;
 	}
 

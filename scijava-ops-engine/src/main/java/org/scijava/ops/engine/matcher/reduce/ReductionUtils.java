@@ -158,7 +158,7 @@ public final class ReductionUtils {
 	private static String memberNames(ReducedOpInfo reducedInfo) {
 		Stream<String> memberNames = //
 			Streams.concat(reducedInfo.inputTypes().stream(), //
-				Stream.of(reducedInfo.output().getType())) //
+				Stream.of(reducedInfo.output().type())) //
 				.map(type -> getClassName(Types.raw(type)));
 		Iterable<String> iterableNames = (Iterable<String>) memberNames::iterator;
 		return String.join("_", iterableNames);

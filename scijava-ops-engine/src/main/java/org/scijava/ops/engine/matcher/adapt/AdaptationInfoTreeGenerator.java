@@ -77,10 +77,10 @@ public class AdaptationInfoTreeGenerator implements InfoTreeGenerator {
 		// TODO: The op type is wrong!
 		Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
 		if (!Types.isAssignable(originalInfo.opType(), adaptorTree.info().inputs()
-			.get(0).getType(), typeVarAssigns)) throw new IllegalArgumentException(
+			.get(0).type(), typeVarAssigns)) throw new IllegalArgumentException(
 				"The adaptor cannot be used on Op " + originalInfo);
 		Type adaptedOpType = Types.substituteTypeVariables(adaptorTree.info()
-			.output().getType(), typeVarAssigns);
+			.output().type(), typeVarAssigns);
 		OpInfo adaptedInfo = new OpAdaptationInfo(originalInfo, adaptedOpType,
 			adaptorTree);
 		return new InfoTree(adaptedInfo, originalTree.dependencies());

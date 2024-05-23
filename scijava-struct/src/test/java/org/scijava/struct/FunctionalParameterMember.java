@@ -3,9 +3,6 @@ package org.scijava.struct;
 
 import java.lang.reflect.Type;
 
-import org.scijava.struct.Member;
-import org.scijava.struct.Struct;
-
 /**
  * {@link Member} backed by a generic parameter of a
  * {@link FunctionalInterface}-annotated interface.
@@ -25,11 +22,11 @@ public class FunctionalParameterMember<T> extends AnnotatedParameterMember<T> {
 		final Parameter annotation) throws ValidityException
 	{
 		super(itemType, annotation);
-		final String key = getKey();
+		final String key = key();
 		if (key == null || key.isEmpty()) {
 			throw new ValidityException("Functional parameter must specify key");
 		}
-		struct = isStruct() ? ParameterStructs.structOf(getRawType()) : null;
+		struct = isStruct() ? ParameterStructs.structOf(rawType()) : null;
 	}
 
 	@Override

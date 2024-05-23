@@ -67,7 +67,7 @@ public class ValueAccessibleMemberInstance<T> implements MemberInstance<T> {
 
 	@Override
 	public void set(Object value) {
-		final Class<?> type = member().getRawType();
+		final Class<?> type = member().rawType();
 		if (!Types.isAssignable(value != null ? value.getClass() : null, type)) {
 			throw new IllegalArgumentException("value of type " + //
 				Types.name(value.getClass()) + " is not assignable to " + //

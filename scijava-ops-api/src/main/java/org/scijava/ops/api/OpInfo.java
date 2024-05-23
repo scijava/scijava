@@ -75,7 +75,7 @@ public interface OpInfo extends Comparable<OpInfo> {
 	/** Gets the types of the op's input parameters. */
 	default List<Type> inputTypes() {
 		return inputs().stream() //
-			.map(Member::getType) //
+			.map(Member::type) //
 			.collect(Collectors.toList());
 	}
 
@@ -98,7 +98,7 @@ public interface OpInfo extends Comparable<OpInfo> {
 
 	/** Gets the op's output parameter, if there is <b>exactly</b> one. */
 	default Type outputType() {
-		return output().getType();
+		return output().type();
 	}
 
 	/** The op's priority. */

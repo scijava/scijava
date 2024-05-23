@@ -62,17 +62,17 @@ public class ConvertedParameterMember<T> implements Member<T> {
 	}
 
 	@Override
-	public String getKey() {
-		return original.getKey();
+	public String key() {
+		return original.key();
 	}
 
 	@Override
-	public String getDescription() {
-		return original.getDescription();
+	public String description() {
+		return original.description();
 	}
 
 	@Override
-	public Type getType() {
+	public Type type() {
 		return newType;
 	}
 

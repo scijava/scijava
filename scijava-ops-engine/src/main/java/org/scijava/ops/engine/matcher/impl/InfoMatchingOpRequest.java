@@ -75,7 +75,7 @@ public class InfoMatchingOpRequest implements OpRequest {
 			if (!Types.isAssignable(from, this.type, this.map))
 				throw new IllegalArgumentException();
 		}
-		args = info.inputs().stream().map(m -> mappedType(m.getType(), this.map))
+		args = info.inputs().stream().map(m -> mappedType(m.type(), this.map))
 			.toArray(Type[]::new);
 		outType = mappedType(info.outputType(), this.map);
 	}

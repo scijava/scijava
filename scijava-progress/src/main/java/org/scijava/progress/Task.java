@@ -34,9 +34,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * Keeps track of progress associated with an execution of progressable code.
- * {@link Task}s should <b>not</b> be updated by the code itself; it should be
- * update via {@link Progress#update()}.
+ * Keeps track of progress associated with an execution of progressible code.
+ * {@link Task}s should <b>not</b> be updated by the code itself, but rather
+ * updated via {@link Progress#update()}.
  *
  * @author Gabriel Selzer
  */
@@ -255,5 +255,17 @@ public class Task {
 
 	public boolean isSubTask() {
 		return parent != null;
+	}
+
+	@Override
+	public String toString() {
+		if (isComplete()) {
+			return String.format("Progress of %s: Complete\n", description());
+		}
+		return String.format( //
+			"Progress of %s: %.2f\n", //
+			description(), //
+			progress() //
+		);
 	}
 }

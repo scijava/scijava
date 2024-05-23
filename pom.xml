@@ -218,20 +218,6 @@
 			<plugin>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>
-					<taglets>
-						<taglet>
-							<tagletClass>org.scijava.taglets.InputTaglet</tagletClass>
-						</taglet>
-						<taglet>
-							<tagletClass>org.scijava.taglets.MutableTaglet</tagletClass>
-						</taglet>
-						<taglet>
-							<tagletClass>org.scijava.taglets.ContainerTaglet</tagletClass>
-						</taglet>
-						<taglet>
-							<tagletClass>org.scijava.taglets.OutputTaglet</tagletClass>
-						</taglet>
-					</taglets>
 					<tagletArtifacts>
 						<tagletArtifact>
 							<groupId>org.scijava</groupId>

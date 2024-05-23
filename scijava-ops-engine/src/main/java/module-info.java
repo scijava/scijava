@@ -33,11 +33,6 @@
  */
 
 module org.scijava.ops.engine {
-
-	exports org.scijava.ops.engine;
-	exports org.scijava.ops.engine.conversionLoss;
-	exports org.scijava.ops.engine.util;
-
 	requires java.compiler;
 
 	requires org.scijava.common3;
@@ -56,7 +51,6 @@ module org.scijava.ops.engine {
 	requires org.javassist;
 	requires org.slf4j;
 	requires org.yaml.snakeyaml;
-
 
 	uses javax.annotation.processing.Processor;
 	uses org.scijava.discovery.Discoverer;

@@ -33,7 +33,6 @@ import org.scijava.ops.image.AbstractOpTest;
 import net.imglib2.type.numeric.integer.IntType;
 import net.imglib2.type.numeric.real.DoubleType;
 import org.junit.jupiter.api.Test;
-import org.scijava.ops.engine.math.MathOps;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -55,7 +54,7 @@ public class BinaryRealTypeMathTest extends AbstractOpTest {
 	public void testAdd() {
 		DoubleType e = A.copy();
 		e.set(e.get() + B.get());
-		test(MathOps.ADD, e.get());
+		test("math.add", e.get());
 	}
 
 	// SUB
@@ -64,7 +63,7 @@ public class BinaryRealTypeMathTest extends AbstractOpTest {
 	public void testSub() {
 		DoubleType e = A.copy();
 		e.set(e.get() - B.get());
-		test(MathOps.SUB, e.get());
+		test("math.sub", e.get());
 	}
 
 	// DIV
@@ -73,7 +72,7 @@ public class BinaryRealTypeMathTest extends AbstractOpTest {
 	public void testDiv() {
 		DoubleType e = A.copy();
 		e.set(e.get() / B.get());
-		test(MathOps.DIV, e.get());
+		test("math.div", e.get());
 	}
 
 	// MUL
@@ -82,7 +81,7 @@ public class BinaryRealTypeMathTest extends AbstractOpTest {
 	public void testMul() {
 		DoubleType e = A.copy();
 		e.set(e.get() * B.get());
-		test(MathOps.MUL, e.get());
+		test("math.mul", e.get());
 	}
 
 	// POW
@@ -91,14 +90,14 @@ public class BinaryRealTypeMathTest extends AbstractOpTest {
 	public void testPow() {
 		DoubleType e = A.copy();
 		e.set(Math.pow(e.get(), B.get()));
-		test(MathOps.POW, e.get());
+		test("math.pow", e.get());
 	}
 
 	// MOD
 
 	@Test
 	public void testMod() {
-		test(MathOps.MOD, A.get() % B.get());
+		test("math.mod", A.get() % B.get());
 	}
 
 	// OR

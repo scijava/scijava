@@ -34,7 +34,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.scijava.ops.image.AbstractOpTest;
 import net.imglib2.type.numeric.integer.IntType;
 import org.junit.jupiter.api.Test;
-import org.scijava.ops.engine.math.MathOps;
 
 /**
  * Tests {@link BinaryNumericTypeMath}.
@@ -54,7 +53,7 @@ public class BinaryNumericTypeMathTest extends AbstractOpTest {
 	public void testAdd() {
 		IntType e = A.copy();
 		e.add(B);
-		test(MathOps.ADD, e.get());
+		test("math.add", e.get());
 	}
 
 	// SUB
@@ -63,7 +62,7 @@ public class BinaryNumericTypeMathTest extends AbstractOpTest {
 	public void testSub() {
 		IntType e = A.copy();
 		e.sub(B);
-		test(MathOps.SUB, e.get());
+		test("math.sub", e.get());
 	}
 
 	// DIV
@@ -72,7 +71,7 @@ public class BinaryNumericTypeMathTest extends AbstractOpTest {
 	public void testDiv() {
 		IntType e = A.copy();
 		e.div(B);
-		test(MathOps.DIV, e.get());
+		test("math.div", e.get());
 	}
 
 	// MUL
@@ -81,7 +80,7 @@ public class BinaryNumericTypeMathTest extends AbstractOpTest {
 	public void testMul() {
 		IntType e = A.copy();
 		e.mul(B);
-		test(MathOps.MUL, e.get());
+		test("math.mul", e.get());
 	}
 
 	// POW
@@ -90,7 +89,7 @@ public class BinaryNumericTypeMathTest extends AbstractOpTest {
 	public void testPow() {
 		IntType e = A.copy();
 		e.pow(B);
-		test(MathOps.POW, e.get());
+		test("math.pow", e.get());
 	}
 
 	// -- Helpers --

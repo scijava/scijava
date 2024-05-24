@@ -1124,7 +1124,28 @@ public final class Types {
 	}
 
 	/**
-	 * See {@link GenericTypeReflector#getExactSuperType(Type, Class)}
+	 * Finds the most specific supertype of {@code type} whose erasure is
+	 * {@code searchClass}. In other words, returns a type representing the
+	 * class {@code searchClass} plus its exact type parameters in
+	 * {@code type}.
+	 * <ul>
+	 * <li>Returns an instance of {@link ParameterizedType} if
+	 * {@code searchClass} is a real class or interface and {@code type} has
+	 * parameters for it</li>
+	 * <li>Returns an instance of {@link GenericArrayType} if
+	 * {@code searchClass} is an array type, and {@code type} has type
+	 * parameters for it</li>
+	 * <li>Returns an instance of {@link Class} if {@code type} is a raw type,
+	 * or has no type parameters for {@code searchClass}</li>
+	 * <li>Returns null if {@code searchClass} is not a superclass of type.
+	 * </li>
+	 * </ul>
+	 * <p>
+	 * For example, with
+	 * {@code class StringList implements List<String>},
+	 * {@code getExactSuperType(StringList.class, Collection.class)} returns a
+	 * {@link ParameterizedType} representing {@code Collection<String>}.
+	 * </p>
 	 *
 	 * @param type
 	 * @param searchClass
@@ -1136,11 +1157,15 @@ public final class Types {
 	}
 
 	/**
-	 * See {@link TypeUtils#unrollVariables(Map, Type, boolean)}
+	 * Get a type representing {@code type} with variable assignments
+	 * "unrolled."
 	 *
-	 * @param typeArguments
-	 * @param type
-	 * @param followTypeVars
+	 * @param typeArguments as from {@link #args(Type, Class)}
+	 * @param type the type to unroll variable assignments for
+	 * @param followTypeVars whether a {@link TypeVariable} should be
+	 *          recursively followed if it maps to another {@link TypeVariable},
+	 *          or if it should be just replaced by the mapping
+	 * @return Type
 	 */
 	public static Type unrollVariables(Map<TypeVariable<?>, Type> typeArguments,
 		final Type type, boolean followTypeVars)
@@ -1165,7 +1190,11 @@ public final class Types {
 	}
 
 	/**
-	 * See {@link GenericTypeReflector#getExactParameterTypes(Method, Type)}
+	 * Returns the exact parameter types of the given method in the given type.
+	 * This may be different from {@code m.getGenericParameterTypes()} when the
+	 * method was declared in a superclass, or {@code type} has a type
+	 * parameter that is used in one of the parameters, or {@code type} is a
+	 * raw type.
 	 *
 	 * @param m
 	 * @param type
@@ -1175,7 +1204,10 @@ public final class Types {
 	}
 
 	/**
-	 * See {@link GenericTypeReflector#getExactReturnType(Method, Type)}
+	 * Returns the exact return type of the given method in the given type. This
+	 * may be different from {@code m.getGenericReturnType()} when the method
+	 * was declared in a superclass, or {@code type} has a type parameter that
+	 * is used in the return type, or {@code type} is a raw type.
 	 *
 	 * @param m
 	 * @param type

@@ -72,99 +72,99 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 	// -- POM methods --
 
 	/** Gets the POM's parent groupId. */
-	public String getParentGroupId() {
+	public String parentGroupId() {
 		return cdata("//project/parent/groupId");
 	}
 
 	/** Gets the POM's parent artifactId. */
-	public String getParentArtifactId() {
+	public String parentArtifactId() {
 		return cdata("//project/parent/artifactId");
 	}
 
 	/** Gets the POM's parent artifactId. */
-	public String getParentVersion() {
+	public String parentVersion() {
 		return cdata("//project/parent/version");
 	}
 
 	/** Gets the POM's groupId. */
-	public String getGroupId() {
+	public String groupId() {
 		final String groupId = cdata("//project/groupId");
 		if (groupId != null) return groupId;
-		return getParentGroupId();
+		return parentGroupId();
 	}
 
 	/** Gets the POM's artifactId. */
-	public String getArtifactId() {
+	public String artifactId() {
 		return cdata("//project/artifactId");
 	}
 
 	/** Gets the project name. */
-	public String getProjectName() {
+	public String projectName() {
 		return cdata("//project/name");
 	}
 
 	/** Gets the project description. */
-	public String getProjectDescription() {
+	public String projectDescription() {
 		return cdata("//project/description");
 	}
 
 	/** Gets the project URL. */
-	public String getProjectURL() {
+	public String projectURL() {
 		return cdata("//project/url");
 	}
 
 	/** Gets the project inception year. */
-	public String getProjectInceptionYear() {
+	public String projectInceptionYear() {
 		return cdata("//project/inceptionYear");
 	}
 
 	/** Gets the organization name. */
-	public String getOrganizationName() {
+	public String organizationName() {
 		return cdata("//project/organization/name");
 	}
 
 	/** Gets the organization URL. */
-	public String getOrganizationURL() {
+	public String organizationURL() {
 		return cdata("//project/organization/url");
 	}
 
 	/** Gets the SCM connection string. */
-	public String getSCMConnection() {
+	public String scmConnection() {
 		return cdata("//project/scm/connection");
 	}
 
 	/** Gets the SCM developerConnection string. */
-	public String getSCMDeveloperConnection() {
+	public String scmDeveloperConnection() {
 		return cdata("//project/scm/developerConnection");
 	}
 
 	/** Gets the SCM tag. */
-	public String getSCMTag() {
+	public String scmTag() {
 		return cdata("//project/scm/tag");
 	}
 
 	/** Gets the SCM URL. */
-	public String getSCMURL() {
+	public String scmURL() {
 		return cdata("//project/scm/url");
 	}
 
 	/** Gets the issue management system. */
-	public String getIssueManagementSystem() {
+	public String issueManagementSystem() {
 		return cdata("//project/issueManagement/system");
 	}
 
 	/** Gets the issue management URL. */
-	public String getIssueManagementURL() {
+	public String issueManagementURL() {
 		return cdata("//project/issueManagement/url");
 	}
 
 	/** Gets the CI management system. */
-	public String getCIManagementSystem() {
+	public String ciManagementSystem() {
 		return cdata("//project/ciManagement/system");
 	}
 
 	/** Gets the CI management URL. */
-	public String getCIManagementURL() {
+	public String ciManagementURL() {
 		return cdata("//project/ciManagement/url");
 	}
 
@@ -174,9 +174,9 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 		Comparator.nullsFirst(String::compareTo);
 	private static final Comparator<POM> POM_COMPARATOR = Comparator//
 		// sort by groupId first
-		.comparing(POM::getGroupId, STRING_COMPARATOR)
+		.comparing(POM::groupId, STRING_COMPARATOR)
 		// sort by artifactId second
-		.thenComparing(POM::getArtifactId, STRING_COMPARATOR)//
+		.thenComparing(POM::artifactId, STRING_COMPARATOR)//
 		// finally, sort by version
 		.thenComparing(POM::version, POM::compareVersions);
 
@@ -194,7 +194,7 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 			synchronized (this) {
 				if (version == null) {
 					version = cdata("//project/version");
-					if (version == null) version = getParentVersion();
+					if (version == null) version = parentVersion();
 				}
 			}
 		}
@@ -210,12 +210,12 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 	 * @return {@link POM} object representing the discovered POM, or null if no
 	 *         POM could be found.
 	 */
-	public static POM getPOM(final Class<?> c) {
-		return getPOM(c, null, null);
+	public static POM pom(final Class<?> c) {
+		return pom(c, null, null);
 	}
 
 	/**
-	 * internal cache used for calls to {@link #getPOM(Class, String, String)}
+	 * internal cache used for calls to {@link #pom(Class, String, String)}
 	 */
 	private static final Map<URL, POM> POMS = new HashMap<>();
 
@@ -228,8 +228,8 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 	 * @return {@link POM} object representing the discovered POM, or null if no
 	 *         POM could be found.
 	 */
-	public static POM getPOM(final Class<?> c, final String groupId,
-		final String artifactId)
+	public static POM pom(final Class<?> c, final String groupId,
+												final String artifactId)
 	{
 		final URL location = Classes.location(c);
 		return POMS.computeIfAbsent( //
@@ -248,7 +248,7 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 	 * @param artifactId The Maven artifactId of the desired POM.
 	 * @return {@link POM} object representing the discovered POM, or null if no
 	 *         POM could be found.
-	 * @see #getPOM(Class, String, String), which does the same thing, but with an
+	 * @see #pom(Class, String, String), which does the same thing, but with an
 	 *      internal cache that makes repeated calls trivial
 	 */
 	private static POM findPOM(final URL location, final String groupId,
@@ -290,7 +290,7 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 	}
 
 	/** Gets all available Maven POMs on the class path. */
-	public static List<POM> getAllPOMs() {
+	public static List<POM> allPOMs() {
 		// find all META-INF/maven/ folders on the classpath
 		final String pomPrefix = "META-INF/maven/";
 		final ClassLoader classLoader = Classes.classLoader();

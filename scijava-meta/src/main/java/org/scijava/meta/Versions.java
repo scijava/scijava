@@ -94,7 +94,7 @@ public final class Versions {
 	 * @return Version of specified {@link Class} or null if not found.
 	 */
 	public static String fromPOM(final Class<?> c, final String groupId, final String artifactId) {
-		final POM pom = POM.getPOM(c, groupId, artifactId);
+		final POM pom = POM.pom(c, groupId, artifactId);
 		return pom == null ? null : pom.version();
 	}
 

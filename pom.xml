@@ -109,11 +109,9 @@
 
 		<scijava-maven-plugin.version>2.2.0</scijava-maven-plugin.version>
 
-		<guava.version>28.2-jre</guava.version>
-		<geantyref.version>1.3.6</geantyref.version>
-
 		<script-maven-plugin.version>1.0.0</script-maven-plugin.version>
 		<jruby.version>9.2.11.1</jruby.version>
+
 		<scijava.parse.ops>true</scijava.parse.ops>
 	</properties>
 

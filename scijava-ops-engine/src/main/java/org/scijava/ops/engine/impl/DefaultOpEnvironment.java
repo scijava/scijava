@@ -554,7 +554,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 					", then you must define a new OpWrapper for that class!");
 			}
 			// obtain the generic type of the Op w.r.t. the Wrapper class
-			Type reifiedSuperType = Types.getExactSuperType(instance.type(),
+			Type reifiedSuperType = Types.exactSuperType(instance.type(),
 				wrapper);
 			// wrap the Op
 			final OpWrapper<T> opWrapper = (OpWrapper<T>) wrappers.get(Types.raw(

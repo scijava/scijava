@@ -255,8 +255,8 @@ public final class GenericAssignability {
 			throw new IllegalArgumentException(src +
 				" does not have an abstract method!");
 		}
-		Type[] params = Types.getExactParameterTypes(destMethods[0], src);
-		Type returnType = Types.getExactReturnType(destMethods[0], src);
+		Type[] params = Types.exactParamTypes(destMethods[0], src);
+		Type returnType = Types.exactReturnType(destMethods[0], src);
 		for (int i = 0; i < params.length; i++) {
 			if (!Types.isAssignable(destTypes[i], params[i], typeVarAssigns))
 				return false;
@@ -438,7 +438,7 @@ public final class GenericAssignability {
 		// inferring from a StrangeThing<Long> extends Thing<Double> and our
 		// Op requires a Thing<T>. We need to ensure that T gets
 		// resolved to a Double and NOT a Long.
-		Type superInferFrom = Types.getExactSuperType(inferFrom, Types.raw(type));
+		Type superInferFrom = Types.exactSuperType(inferFrom, Types.raw(type));
 		if (superInferFrom instanceof ParameterizedType) {
 			ParameterizedType paramInferFrom = (ParameterizedType) superInferFrom;
 			if (!Types.isRecursive(paramInferFrom)) {
@@ -479,7 +479,7 @@ public final class GenericAssignability {
 			// edge case 2: if inferFrom is a superType of type, we can get (some of)
 			// the types of type by finding the exact superType of type w.r.t.
 			// inferFrom.
-			Type superTypeOfType = Types.getExactSuperType(type, Types.raw(
+			Type superTypeOfType = Types.exactSuperType(type, Types.raw(
 				inferFrom));
 			if (superTypeOfType == null) {
 				throw new TypeInferenceException(inferFrom +

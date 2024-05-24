@@ -585,7 +585,7 @@ public class ConvertedOpInfo implements OpInfo {
 		Class<?> declaringClass = fMethod.getDeclaringClass();
 		Type genericDeclaringClass = Types.parameterizeRaw(declaringClass);
 		Type genericClass = Types.parameterizeRaw(opType);
-		Type superGenericClass = Types.getExactSuperType(genericClass,
+		Type superGenericClass = Types.exactSuperType(genericClass,
 			declaringClass);
 		GenericAssignability.inferTypeVariables(new Type[] {
 			genericDeclaringClass }, new Type[] { superGenericClass }, map);

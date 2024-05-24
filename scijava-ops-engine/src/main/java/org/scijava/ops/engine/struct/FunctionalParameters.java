@@ -112,7 +112,7 @@ public final class FunctionalParameters {
 
 		List<FunctionalMethodType> out = new ArrayList<>();
 		int i = 0;
-		for (Type t : Types.getExactParameterTypes(functionalMethod,
+		for (Type t : Types.exactParamTypes(functionalMethod,
 			paramfunctionalType))
 		{
 			final ItemIO ioType;
@@ -125,7 +125,7 @@ public final class FunctionalParameters {
 			i++;
 		}
 
-		Type returnType = Types.getExactReturnType(functionalMethod,
+		Type returnType = Types.exactReturnType(functionalMethod,
 			paramfunctionalType);
 		if (!returnType.equals(void.class)) {
 			out.add(new FunctionalMethodType(returnType, ItemIO.OUTPUT));

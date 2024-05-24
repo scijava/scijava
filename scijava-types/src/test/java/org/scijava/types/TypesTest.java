@@ -206,31 +206,28 @@ public class TypesTest {
 	/** Tests {@link Types#isAssignable(Type, Type)} from null to null. */
 	@Test
 	public void testIsAssignableNullToNull() {
-		Assertions.assertThrows(NullPointerException.class, () -> {
-			Types.isAssignable(null, null);
-		});
+		Assertions.assertThrows(NullPointerException.class,
+			() -> Types.isAssignable(null, null));
 	}
 
 	/** Tests {@link Types#isAssignable(Type, Type)} from Class to null. */
 	@Test
 	public void testIsAssignableClassToNull() {
-		Assertions.assertThrows(NullPointerException.class, () -> {
-			Types.isAssignable(Object.class, null);
-		});
+		Assertions.assertThrows(NullPointerException.class,
+			() -> Types.isAssignable(Object.class, null));
 	}
 
 	/** Tests {@link Types#isAssignable(Type, Type)} with type variable. */
 	@Test
 	public <T extends Number> void testIsAssignableT() {
-		final Type t = new Nil<T>() {}.type();
-		final Type listRaw = List.class;
-		final Type listT = new Nil<List<T>>() {}.type();
-		final Type listNumber = new Nil<List<Number>>() {}.type();
-		final Type listInteger = new Nil<List<Integer>>() {}.type();
-		final Type listExtendsNumber = new Nil<List<? extends Number>>() {}
-			.type();
-		final Type listListRaw = new Nil<List<List>>() {}.type();
-		final Type listListInteger = new Nil<List<List<Integer>>>() {}.type();
+		var t = new Nil<T>() {}.type();
+		var listRaw = List.class;
+		var listT = new Nil<List<T>>() {}.type();
+		var listNumber = new Nil<List<Number>>() {}.type();
+		var listInteger = new Nil<List<Integer>>() {}.type();
+		var listExtendsNumber = new Nil<List<? extends Number>>() {}.type();
+		var listListRaw = new Nil<List<List>>() {}.type();
+		var listListInteger = new Nil<List<List<Integer>>>() {}.type();
 
 		assertTrue(Types.isAssignable(t, t));
 		assertTrue(Types.isAssignable(listRaw, listRaw));
@@ -320,10 +317,8 @@ public class TypesTest {
 	/** Tests {@link Types#isRecursive(Type)} */
 	@Test
 	public void testIsRecursive() {
-		assertFalse(Types.isRecursive(Types.parameterizeRaw(new ArrayList<Number>()
-			.getClass())));
-		assertTrue(Types.isRecursive(Types.parameterizeRaw(new RecursiveClass<>()
-			.getClass())));
+		assertFalse(Types.isRecursive(Types.parameterizeRaw(ArrayList.class)));
+		assertTrue(Types.isRecursive(Types.parameterizeRaw(RecursiveClass.class)));
 	}
 
 	/** Tests {@link Types#isApplicable(Type[], Type[])} for raw classes. */
@@ -596,14 +591,12 @@ public class TypesTest {
 
 	@Test
 	public <N, C> void testSatisfiesWildcards() {
-		Nil<List<N>> n = new Nil<List<N>>() {};
-		Nil<List<C>> c = new Nil<List<C>>() {};
-		Nil<List<? extends Number>> nWildcard =
-			new Nil<List<? extends Number>>()
-			{};
+		var n = new Nil<List<N>>() {};
+		var c = new Nil<List<C>>() {};
+		var nWildcard = new Nil<List<? extends Number>>() {};
 
-		Type[] params = new Type[] { n.type() };
-		Type[] argsOk = new Type[] { nWildcard.type() };
+		Type[] params = { n.type() };
+		Type[] argsOk = { nWildcard.type() };
 		assertEquals(-1, Types.isApplicable(argsOk, params));
 
 		params = new Type[] { n.type(), c.type() };
@@ -611,18 +604,18 @@ public class TypesTest {
 		assertEquals(-1, Types.isApplicable(argsOk, params));
 
 		params = new Type[] { n.type(), n.type() };
-		Type[] argsNotOk = new Type[] { nWildcard.type(), nWildcard.type() };
+		Type[] argsNotOk = { nWildcard.type(), nWildcard.type() };
 		assertNotEquals(-1, Types.isApplicable(argsNotOk, params));
 	}
 
 	@Test
 	public <N> void testSatisfiesWildcardsInParameterizedType() {
-		Nil<N> n = new Nil<N>() {};
-		Nil<List<N>> ln = new Nil<List<N>>() {};
-		Nil<List<? extends Number>> lw = new Nil<List<? extends Number>>() {};
+		var n = new Nil<N>() {};
+		var ln = new Nil<List<N>>() {};
+		var lw = new Nil<List<? extends Number>>() {};
 
-		Type[] params = new Type[] { n.type(), ln.type() };
-		Type[] argsNotOk = new Type[] { Integer.class, lw.type() };
+		Type[] params = { n.type(), ln.type() };
+		Type[] argsNotOk = { Integer.class, lw.type() };
 		assertNotEquals(-1, Types.isApplicable(argsNotOk, params));
 
 		params = new Type[] { ln.type(), n.type() };
@@ -634,17 +627,13 @@ public class TypesTest {
 	public <N extends Number, C extends List<String>> void
 		testSatisfiesBoundedWildcards()
 	{
-		Nil<List<N>> n = new Nil<List<N>>() {};
-		Nil<List<C>> c = new Nil<List<C>>() {};
-		Nil<List<? extends Number>> nNumberWildcard =
-			new Nil<List<? extends Number>>()
-			{};
-		Nil<List<? extends List<String>>> nListWildcard =
-			new Nil<List<? extends List<String>>>()
-			{};
+		var n = new Nil<List<N>>() {};
+		var c = new Nil<List<C>>() {};
+		var nNumberWildcard = new Nil<List<? extends Number>>() {};
+		var nListWildcard = new Nil<List<? extends List<String>>>() {};
 
-		Type[] params = new Type[] { n.type() };
-		Type[] argsOk = new Type[] { nNumberWildcard.type() };
+		Type[] params = { n.type() };
+		Type[] argsOk = { nNumberWildcard.type() };
 		assertEquals(-1, Types.isApplicable(argsOk, params));
 
 		params = new Type[] { n.type(), c.type() };
@@ -652,13 +641,11 @@ public class TypesTest {
 		assertEquals(-1, Types.isApplicable(argsOk, params));
 
 		params = new Type[] { n.type(), c.type() };
-		Type[] argsNotOk = new Type[] { nNumberWildcard.type(), nNumberWildcard
-			.type() };
+		Type[] argsNotOk = { nNumberWildcard.type(), nNumberWildcard.type() };
 		assertNotEquals(-1, Types.isApplicable(argsNotOk, params));
 
 		params = new Type[] { n.type(), n.type() };
-		argsNotOk = new Type[] { nNumberWildcard.type(), nNumberWildcard
-			.type() };
+		argsNotOk = new Type[] { nNumberWildcard.type(), nNumberWildcard.type() };
 		assertNotEquals(-1, Types.isApplicable(argsNotOk, params));
 	}
 
@@ -748,38 +735,16 @@ public class TypesTest {
 	/** Tests {@link Types#enumValue(String, Class)} for invalid value. */
 	@Test
 	public void testEnumValueNoConstant() {
-		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			Types.enumValue("NONE", Words.class);
-		});
+		Assertions.assertThrows(IllegalArgumentException.class,
+			() -> Types.enumValue("NONE", Words.class));
 	}
 
 	/** Tests {@link Types#enumValue(String, Class)} for non-enum class. */
 	@Test
 	public void testEnumValueNonEnum() {
-		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			Types.enumValue("HOOYAH", String.class);
-		});
+		Assertions.assertThrows(IllegalArgumentException.class,
+			() -> Types.enumValue("HOOYAH", String.class));
 	}
-
-	/** Tests {@link Types#parameterize(Class, Map)}. */
-	@Test
-	public void testParameterizeMap() {
-		// TODO
-	}
-
-	/** Tests {@link Types#parameterize(Class, Type...)}. */
-	@Test
-	public void testParameterizeTypes() {
-		// TODO
-	}
-
-	/** Tests {@link Types#parameterizeWithOwner()}. */
-	@Test
-	public void testParameterizeWithOwner() {
-		// TODO
-	}
-
-	// -- Helper classes --
 
 	// -- Helper methods --
 
@@ -804,5 +769,4 @@ public class TypesTest {
 			assertSame(list.get(i), values[i]);
 		}
 	}
-
 }

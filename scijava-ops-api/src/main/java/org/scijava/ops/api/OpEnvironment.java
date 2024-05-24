@@ -332,10 +332,10 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	<T> T bakeLambdaType(T op, Type type);
 
 	/**
-	 * Creates an {@link OpInfo} from an {@link Class}.
+	 * Creates an {@link OpInfo} from a {@link Class}.
 	 *
-	 * @param opClass the {@link Class} to derive the Op from
-	 * @param names - the name(s) of the Op
+	 * @param opClass the {@link Class} from which to derive the Op
+	 * @param names the name(s) of the Op
 	 * @return an {@link OpInfo} which can make instances of {@code opClass}
 	 */
 	default OpInfo opify(Class<?> opClass, String... names) {
@@ -343,11 +343,11 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	}
 
 	/**
-	 * Creates an {@link OpInfo} from an {@link Class} with the given priority.
+	 * Creates an {@link OpInfo} from a {@link Class} with the given priority.
 	 *
-	 * @param opClass the {@link Class} to derive the Op from
-	 * @param priority - the assigned priority of the Op.
-	 * @param names - the name(s) of the Op
+	 * @param opClass the {@link Class} from which to derive the Op
+	 * @param priority the assigned priority of the Op.
+	 * @param names the name(s) of the Op
 	 * @return an {@link OpInfo} which can make instances of {@code opClass}
 	 */
 	OpInfo opify(Class<?> opClass, double priority, String... names);

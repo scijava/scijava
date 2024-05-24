@@ -122,15 +122,6 @@ public class ImageBinaryMathTest extends AbstractOpTest {
 		validateResult(out, originalVal);
 	}
 
-//	@Test
-//	public void addRealTypeI() {
-//		final Img<IntType> imgIntType = TestImgGeneration.intArray(true, 10, 10);
-//		int originalVal = imgIntType.cursor().next().get();
-//
-//		ops.op("math.add").input(imgIntType, I).mutate1();
-//		validateResult(imgIntType, originalVal);
-//	}
-
 	private void validateResult(Img<IntType> result, int originalVal) {
 		assertEquals(result.cursor().next().get(), originalVal + I.get());
 	}

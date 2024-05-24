@@ -80,29 +80,4 @@ public class GaussTest extends AbstractOpTest {
 				.getRealDouble(), 0);
 		}
 	}
-
-	//
-	// /** Tests the Gaussian matching. */
-	// @Test
-	// public void gaussMatchingTest() {
-	//
-	// Gauss defaultGaussRAI = ops.op(Ops.Filter.Gauss.class, ArrayImgs.bytes(1,
-	// 2),
-	// new double[] {1, 2});
-	// assertTrue(defaultGaussRAI instanceof DefaultGaussRAI);
-	//
-	// defaultGaussRAI = ops.op(
-	// Ops.Filter.Gauss.class,
-	// ArrayImgs.bytes(1, 2),
-	// ArrayImgs.bytes(1, 2),
-	// new double[] {1, 2});
-	// assertTrue(defaultGaussRAI instanceof DefaultGaussRAI);
-	//
-	// Gauss defaultGaussRA = ops.op(
-	// Ops.Filter.Gauss.class,
-	// ArrayImgs.bytes(1, 2),
-	// Views.extendMirrorSingle(ArrayImgs.bytes(1, 2)),
-	// new double[] {1, 2});
-	// assertTrue(defaultGaussRA instanceof DefaultGaussRA);
-	// }
 }

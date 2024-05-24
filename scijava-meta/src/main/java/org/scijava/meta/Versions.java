@@ -79,7 +79,7 @@ public final class Versions {
 	 * @return Version of specified {@link Class} or null if not found.
 	 */
 	public static String fromManifest(final Class<?> c) {
-		final Manifest m = Manifest.getManifest(c);
+		final Manifest m = Manifest.manifest(c);
 		return m == null ? null : m.version();
 	}
 
@@ -107,8 +107,8 @@ public final class Versions {
 	 * @return Build number of specified {@link Class} or null if not found.
 	 */
 	public static String buildNumber(final Class<?> c) {
-		final Manifest m = Manifest.getManifest(c);
-		return m == null ? null : m.getImplementationBuild();
+		final Manifest m = Manifest.manifest(c);
+		return m == null ? null : m.implementationBuild();
 	}
 
 	/**

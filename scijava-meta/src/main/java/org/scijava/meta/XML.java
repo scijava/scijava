@@ -165,12 +165,12 @@ public class XML {
 	// -- XML methods --
 
 	/** Gets the path to the XML document, or null if none. */
-	public String getPath() {
+	public String path() {
 		return path;
 	}
 
 	/** Gets the XML's DOM representation. */
-	public Document getDocument() {
+	public Document document() {
 		return doc;
 	}
 

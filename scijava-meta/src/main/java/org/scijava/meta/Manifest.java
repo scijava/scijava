@@ -149,7 +149,7 @@ public class Manifest implements Versioned {
 	 * XML document was loaded as a resource from inside a JAR.
 	 */
 	public static Manifest getManifest(final XML xml) throws IOException {
-		final String path = xml.getPath();
+		final String path = xml.path();
 		if (path == null || !path.startsWith("file:")) return null;
 		final int dotJAR = path.indexOf(".jar!/");
 		return getManifest(new File(path.substring(5, dotJAR + 4)));

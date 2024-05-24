@@ -75,15 +75,15 @@ import org.scijava.common3.Classes;
 public class TypesTest {
 
 	/** Tests {@link Types#name}. */
+	@Test
 	public void testName() {
 		@SuppressWarnings("unused")
 		class Struct {
-
 			private List<String> list;
 		}
 		assertEquals("boolean", Types.name(boolean.class));
 		assertEquals("java.lang.String", Types.name(String.class));
-		assertEquals("List<String>[]", Types.name(type(Struct.class, "list")));
+		assertEquals("java.util.List<java.lang.String>", Types.name(type(Struct.class, "list")));
 	}
 
 	/** Tests {@link Types#raw(Type)}. */

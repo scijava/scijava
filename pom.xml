@@ -107,7 +107,8 @@
 		<scijava.javadoc.url.java>https://javadoc.scijava.org/Java11/</scijava.javadoc.url.java>
 		<scijava.javadoc.url.javafx>https://javadoc.scijava.org/JavaFX11/</scijava.javadoc.url.javafx>
 
-		<scijava-maven-plugin.version>2.2.0</scijava-maven-plugin.version>
+		<!-- TEMP: Until pom-scijava 38.0.0 is released. -->
+		<scijava-maven-plugin.version>3.0.0</scijava-maven-plugin.version>
 
 		<script-maven-plugin.version>1.0.0</script-maven-plugin.version>
 		<jruby.version>9.2.11.1</jruby.version>

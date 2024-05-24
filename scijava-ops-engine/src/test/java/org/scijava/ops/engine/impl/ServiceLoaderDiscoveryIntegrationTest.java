@@ -44,7 +44,7 @@ import org.scijava.ops.spi.OpCollection;
 public class ServiceLoaderDiscoveryIntegrationTest {
 
 	@Test
-	public void opDiscoveryRegressionIT() {
+	public void testOpDiscoveryRegressionIT() {
 		final Discoverer d = Discoverer.using(ServiceLoader::load);
 		final List<Op> discoveries = d.discover(Op.class);
 		Assertions.assertEquals(237, discoveries.size());
@@ -58,7 +58,7 @@ public class ServiceLoaderDiscoveryIntegrationTest {
 	}
 
 	@Test
-	public void opCollectionDiscoveryRegressionIT() {
+	public void testOpCollectionDiscoveryRegressionIT() {
 		final Discoverer d = Discoverer.using(ServiceLoader::load);
 		final List<OpCollection> discoveries = d.discover(OpCollection.class);
 		Assertions.assertEquals(22, discoveries.size());

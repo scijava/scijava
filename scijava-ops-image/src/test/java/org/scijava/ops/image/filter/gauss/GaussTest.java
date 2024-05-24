@@ -50,9 +50,8 @@ import org.scijava.types.Nil;
  */
 public class GaussTest extends AbstractOpTest {
 
-	/** Tests the Gaussian. */
 	@Test
-	public void gaussRegressionTest() {
+	public void testGauss() {
 		final Img<ByteType> in = TestImgGeneration.byteArray(true, new long[] { 10,
 			10 });
 		final Img<ByteType> out1 = ops.op("create.img").input(in, Util

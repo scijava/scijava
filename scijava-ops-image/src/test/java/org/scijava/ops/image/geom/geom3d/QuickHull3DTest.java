@@ -55,7 +55,7 @@ import org.junit.jupiter.api.Test;
 public class QuickHull3DTest extends AbstractOpTest {
 
 	@Test
-	public void quickhull_100_000_Test() {
+	public void testQuickhull_100_000() {
 		Mesh df = randomPoints(100000, 20150818);
 
 		final Mesh convexHull = ops.op("geom.convexHull").input(df).outType(
@@ -67,7 +67,7 @@ public class QuickHull3DTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void quickhull_4_Test() {
+	public void testQuickhull_4() {
 		final Mesh df = new NaiveDoubleMesh();
 		df.vertices().add(0, 0, 0);
 		df.vertices().add(1, 0, 0);
@@ -83,7 +83,7 @@ public class QuickHull3DTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void quickhull_6_Test() {
+	public void testQuickhull_6() {
 		final Mesh df = new NaiveDoubleMesh();
 		df.vertices().add(3.2, 4.8, 4.4);
 		df.vertices().add(0, -4.9, 1.1);
@@ -101,7 +101,7 @@ public class QuickHull3DTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void quickhull_12_Test() {
+	public void testQuickhull_12() {
 		final Mesh df = new NaiveDoubleMesh();
 		final Vertices v = df.vertices();
 
@@ -128,7 +128,7 @@ public class QuickHull3DTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void quickhull_40_Test() {
+	public void testQuickhull_40() {
 		// 20 result points
 		final Mesh df = new NaiveDoubleMesh();
 		final Vertices v = df.vertices();

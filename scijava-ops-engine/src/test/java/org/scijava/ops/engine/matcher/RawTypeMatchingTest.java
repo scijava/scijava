@@ -53,7 +53,7 @@ public class RawTypeMatchingTest extends AbstractTestEnvironment implements
 	public final Function<Number, List<Number>> func = (x) -> List.of(x);
 
 	@Test
-	public void rawTypeAdaptationTest() {
+	public void testRawTypeAdaptation() {
 		Double d = 25.;
 		var list = ops.op("test.match.raw").input(d).outType(List.class).apply();
 		assertNotNull(list);

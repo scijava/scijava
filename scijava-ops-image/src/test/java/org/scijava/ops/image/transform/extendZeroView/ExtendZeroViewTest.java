@@ -63,7 +63,7 @@ public class ExtendZeroViewTest extends AbstractOpTest {
 		{};
 
 	@Test
-	public void extendZeroTest() {
+	public void testExtendZero() {
 		Function<RandomAccessibleInterval<DoubleType>, RandomAccessible<DoubleType>> extendFunc =
 			OpBuilder.matchFunction(ops, "transform.extendZeroView", raiNil,
 				new Nil<RandomAccessible<DoubleType>>()
@@ -85,5 +85,4 @@ public class ExtendZeroViewTest extends AbstractOpTest {
 
 		assertEquals(il2.get().get(), opr.get().get(), 1e-10);
 	}
-
 }

@@ -62,8 +62,7 @@ import org.scijava.types.Nil;
 public class UnshearViewTest extends AbstractOpTest {
 
 	@Test
-	public void defaultUnshearTest() {
-
+	public void testDefaultUnshear() {
 		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Integer, TransformView<DoubleType>> unshearFunc =
 			OpBuilder.matchFunction(ops, "transform.unshearView",
 				new Nil<RandomAccessible<DoubleType>>()
@@ -95,8 +94,7 @@ public class UnshearViewTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void UnshearIntervalTest() {
-
+	public void testUnshearInterval() {
 		Functions.Arity4<RandomAccessible<DoubleType>, Interval, Integer, Integer, IntervalView<DoubleType>> unshearFunc =
 			OpBuilder.matchFunction(ops, "transform.unshearView",
 				new Nil<RandomAccessible<DoubleType>>()

@@ -74,7 +74,7 @@ public class DefaultDerivativeGaussTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void regressionTest() {
+	public void testDerivativeGauss() {
 		final int width = 10;
 		final Img<DoubleType> input = ops.op("create.img").input(
 			new FinalDimensions(width, width), new DoubleType()).outType(

@@ -52,7 +52,7 @@ public class CopyTypeTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void copyTypeNoOutputTest() {
+	public void testCopyTypeNoOutput() {
 		DoubleType out = ops.op("copy.type").input(dt).outType(DoubleType.class)
 			.apply();
 
@@ -60,7 +60,7 @@ public class CopyTypeTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void copyTypeWithOutputTest() {
+	public void testCopyTypeWithOutput() {
 		DoubleType out = new DoubleType();
 		ops.op("copy.type").input(out).output(dt).compute();
 

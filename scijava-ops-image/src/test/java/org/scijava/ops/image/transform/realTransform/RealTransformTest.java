@@ -46,8 +46,7 @@ import net.imglib2.view.Views;
 public class RealTransformTest extends AbstractOpTest {
 
 	@Test
-	public void regressionTest() {
-
+	public void testRealTransform() {
 		final Img<UnsignedByteType> image = openRelativeUnsignedByteImg(getClass(),
 			"lowresbridge.tif");
 		final Img<UnsignedByteType> expectedOutput = openRelativeUnsignedByteImg(
@@ -80,7 +79,5 @@ public class RealTransformTest extends AbstractOpTest {
 			expectedRA.setPosition(cursor);
 			assertEquals(expectedRA.get().get(), actualRA.get().get(), 0);
 		}
-
 	}
-
 }

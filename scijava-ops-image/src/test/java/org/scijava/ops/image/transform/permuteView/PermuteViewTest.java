@@ -76,8 +76,7 @@ public class PermuteViewTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void defaultPermuteTest() {
-
+	public void testDefaultPermute() {
 		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Integer, MixedTransformView<DoubleType>> permuteFunc =
 			OpBuilder.matchFunction(ops, "transform.permuteView",
 				new Nil<RandomAccessible<DoubleType>>()
@@ -104,8 +103,7 @@ public class PermuteViewTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void defaultPermuteCoordinatesTest() {
-
+	public void testDefaultPermuteCoordinates() {
 		BiFunction<RandomAccessibleInterval<DoubleType>, int[], IntervalView<DoubleType>> permuteFunc =
 			OpBuilder.matchFunction(ops, "transform.permuteCoordinatesView",
 				new Nil<RandomAccessibleInterval<DoubleType>>()
@@ -128,12 +126,10 @@ public class PermuteViewTest extends AbstractOpTest {
 			opr.setPosition(il2);
 			assertEquals(il2.get().get(), opr.get().get(), 1e-10);
 		}
-
 	}
 
 	@Test
-	public void permuteCoordinatesOfDimensionTest() {
-
+	public void testPermuteCoordinatesOfDimension() {
 		Functions.Arity3<RandomAccessibleInterval<DoubleType>, int[], Integer, IntervalView<DoubleType>> permuteFunc =
 			OpBuilder.matchFunction(ops, "transform.permuteCoordinatesView",
 				new Nil<RandomAccessibleInterval<DoubleType>>()
@@ -158,12 +154,10 @@ public class PermuteViewTest extends AbstractOpTest {
 			opr.setPosition(il2);
 			assertEquals(il2.get().get(), opr.get().get(), 1e-10);
 		}
-
 	}
 
 	@Test
-	public void defaultPermuteCoordinatesInverseTest() {
-
+	public void testDefaultPermuteCoordinatesInverse() {
 		BiFunction<RandomAccessibleInterval<DoubleType>, int[], IntervalView<DoubleType>> permuteFunc =
 			OpBuilder.matchFunction(ops, "transform.permuteCoordinatesInverseView",
 				new Nil<RandomAccessibleInterval<DoubleType>>()
@@ -189,8 +183,7 @@ public class PermuteViewTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void permuteCoordinatesInverseOfDimensionTest() {
-
+	public void testPermuteCoordinatesInverseOfDimension() {
 		Functions.Arity3<RandomAccessibleInterval<DoubleType>, int[], Integer, IntervalView<DoubleType>> permuteFunc =
 			OpBuilder.matchFunction(ops, "transform.permuteCoordinatesInverseView",
 				new Nil<RandomAccessibleInterval<DoubleType>>()
@@ -222,7 +215,6 @@ public class PermuteViewTest extends AbstractOpTest {
 
 	@Test
 	public void testIntervalPermute() {
-
 		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Integer, Integer, IntervalView<DoubleType>> permuteFunc =
 			OpBuilder.matchFunction(ops, "transform.permuteView",
 				new Nil<RandomAccessibleInterval<DoubleType>>()
@@ -253,7 +245,6 @@ public class PermuteViewTest extends AbstractOpTest {
 
 	@Test
 	public void testIntervalPermuteCoordinates() {
-
 		BiFunction<RandomAccessibleInterval<DoubleType>, int[], IntervalView<DoubleType>> permuteFunc =
 			OpBuilder.matchFunction(ops, "transform.permuteCoordinatesView",
 				new Nil<RandomAccessibleInterval<DoubleType>>()
@@ -279,12 +270,10 @@ public class PermuteViewTest extends AbstractOpTest {
 		}
 
 		assertTrue(Intervals.equals(expected, actual));
-
 	}
 
 	@Test
 	public void testIntervalPermuteDimensionCoordinates() {
-
 		Functions.Arity3<RandomAccessibleInterval<DoubleType>, int[], Integer, IntervalView<DoubleType>> permuteFunc =
 			OpBuilder.matchFunction(ops, "transform.permuteCoordinatesInverseView",
 				new Nil<RandomAccessibleInterval<DoubleType>>()
@@ -312,12 +301,10 @@ public class PermuteViewTest extends AbstractOpTest {
 		}
 
 		assertTrue(Intervals.equals(expected, actual));
-
 	}
 
 	@Test
 	public void testIntervalPermuteInverseCoordinates() {
-
 		BiFunction<RandomAccessibleInterval<DoubleType>, int[], IntervalView<DoubleType>> permuteFunc =
 			OpBuilder.matchFunction(ops, "transform.permuteCoordinatesInverseView",
 				new Nil<RandomAccessibleInterval<DoubleType>>()
@@ -343,7 +330,6 @@ public class PermuteViewTest extends AbstractOpTest {
 		}
 
 		assertTrue(Intervals.equals(expected, actual));
-
 	}
 
 	@Test
@@ -376,6 +362,5 @@ public class PermuteViewTest extends AbstractOpTest {
 		}
 
 		assertTrue(Intervals.equals(expected, actual));
-
 	}
 }

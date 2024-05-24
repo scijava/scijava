@@ -71,7 +71,7 @@ public class MatchingUtilsTest {
 	}
 
 	@Test
-	public <E, N extends Number> void genericAssignabilityVarToVar() {
+	public <E, N extends Number> void testGenericAssignabilityVarToVar() {
 		abstract class Single<I> implements Supplier<I> {}
 		abstract class SingleBounded<I extends Number> implements Supplier<I> {}
 		Nil<Supplier<E>> y1 = new Nil<>() {};
@@ -86,7 +86,7 @@ public class MatchingUtilsTest {
 	}
 
 	@Test
-	public void genericAssignabilitySingleVar() {
+	public void testGenericAssignabilitySingleVar() {
 		abstract class Single<I> implements Supplier<I> {}
 		Nil<Supplier<Double>> y1 = new Nil<>() {};
 		Nil<Supplier<Number>> y2 = new Nil<>() {};
@@ -97,7 +97,7 @@ public class MatchingUtilsTest {
 	}
 
 	@Test
-	public void genericAssignabilitySingleVarBounded() {
+	public void testGenericAssignabilitySingleVarBounded() {
 		abstract class SingleBounded<I extends Number> implements Supplier<I> {}
 
 		Nil<Supplier<Double>> y1 = new Nil<>() {};
@@ -109,7 +109,7 @@ public class MatchingUtilsTest {
 	}
 
 	@Test
-	public void genericAssignabilitySingleVarBoundedUsedNested() {
+	public void testGenericAssignabilitySingleVarBoundedUsedNested() {
 		abstract class SingleVarBoundedUsedNested<I extends Number> implements
 			Supplier<List<I>>
 		{}
@@ -125,7 +125,7 @@ public class MatchingUtilsTest {
 	}
 
 	@Test
-	public void genericAssignabilitySingleVarBoundedUsedNestedAndOther() {
+	public void testGenericAssignabilitySingleVarBoundedUsedNestedAndOther() {
 		abstract class SingleVarBoundedUsedNestedAndOther<I extends Number>
 			implements Function<List<I>, Double>
 		{}
@@ -166,7 +166,7 @@ public class MatchingUtilsTest {
 	}
 
 	@Test
-	public void genericAssignabilitySingleVarNestedBoundNestedAndOther() {
+	public void testGenericAssignabilitySingleVarNestedBoundNestedAndOther() {
 		abstract class SingleVarBoundedNestedAndOther<I extends Iterable<String>>
 			implements Function<I, Double>
 		{}
@@ -198,7 +198,7 @@ public class MatchingUtilsTest {
 	}
 
 	@Test
-	public void genericAssignabilitySingleVarMultipleOccurrence() {
+	public void testGenericAssignabilitySingleVarMultipleOccurrence() {
 		abstract class SingleVarBoundedNestedMultipleOccurrence<I extends Iterable<String>>
 			implements Function<I, I>
 		{}
@@ -246,7 +246,7 @@ public class MatchingUtilsTest {
 	}
 
 	@Test
-	public void genericAssignabilityDoubleVar() {
+	public void testGenericAssignabilityDoubleVar() {
 		abstract class DoubleVar<I, B> implements Function<I, B> {}
 
 		abstract class DoubleVarBounded<I extends List<String>, B extends Number>
@@ -271,7 +271,7 @@ public class MatchingUtilsTest {
 	}
 
 	@Test
-	public void genericAssignabilityDoubleVarDepending() {
+	public void testGenericAssignabilityDoubleVarDepending() {
 		abstract class BExtendsI<I extends Iterable<? extends Number>, B extends I>
 			implements Function<I, B>
 		{}
@@ -310,7 +310,7 @@ public class MatchingUtilsTest {
 	}
 
 	@Test
-	public void genericAssignabilityDoubleVarDependingImplicitlyBounded() {
+	public void testGenericAssignabilityDoubleVarDependingImplicitlyBounded() {
 		abstract class IBoundedByNImplicitly<N extends Number, I extends Iterable<N>>
 			implements BiFunction<I, I, List<String>>
 		{}
@@ -323,7 +323,7 @@ public class MatchingUtilsTest {
 	}
 
 	@Test
-	public void genericAssignabilityDoubleVarBoundedAndWildcard() {
+	public void testGenericAssignabilityDoubleVarBoundedAndWildcard() {
 		abstract class DoubleVarBoundedAndWildcard<M extends Number, I extends Iterable<? extends Number>>
 			implements BiFunction<I, I, Iterable<M>>
 		{}
@@ -358,7 +358,7 @@ public class MatchingUtilsTest {
 	}
 
 	@Test
-	public void genericAssignabilityWildcards() {
+	public void testGenericAssignabilityWildcards() {
 		abstract class Wildcards implements
 			Function<List<? extends Number>, List<? extends Number>>
 		{}
@@ -376,7 +376,7 @@ public class MatchingUtilsTest {
 	}
 
 	@Test
-	public void genericAssignabilityWildcardExtendingTypeVar() {
+	public void testGenericAssignabilityWildcardExtendingTypeVar() {
 		abstract class StrangeConsumer<T extends Number> implements
 			BiConsumer<List<? extends T>, T>
 		{}

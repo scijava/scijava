@@ -91,7 +91,7 @@ public class ConversionIOTest extends AbstractTestEnvironment implements
 	};
 
 	@Test
-	public void basicComputerTest() {
+	public void testBasicComputer() {
 		Integer[] in = new Integer[] { 1, 2, 3 };
 		Integer[] out = new Integer[] { 4, 5, 6 };
 
@@ -100,7 +100,7 @@ public class ConversionIOTest extends AbstractTestEnvironment implements
 	}
 
 	@Test
-	public void basicInplace2_1Test() {
+	public void testBasicInplace2_1() {
 		Integer[] io = new Integer[] { 1, 2, 3 };
 		Integer[] in1 = new Integer[] { 4, 5, 6 };
 		Integer[] expected = new Integer[] { 5, 7, 9 };
@@ -110,7 +110,7 @@ public class ConversionIOTest extends AbstractTestEnvironment implements
 	}
 
 	@Test
-	public void basicInplace2_2Test() {
+	public void testBasicInplace2_2() {
 		Integer[] in0 = new Integer[] { 4, 5, 6 };
 		Integer[] io = new Integer[] { 1, 2, 3 };
 		Integer[] expected = new Integer[] { 5, 7, 9 };

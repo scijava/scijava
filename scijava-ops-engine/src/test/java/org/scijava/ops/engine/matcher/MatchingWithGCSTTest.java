@@ -95,7 +95,7 @@ public class MatchingWithGCSTTest extends AbstractTestEnvironment implements
 	};
 
 	@Test
-	public void OpMatchingIntegrationTest() {
+	public void testAddOpMatchingIntegration() {
 		List<Thing> things = new ArrayList<>();
 		things.add(new NThing());
 		things.add(new XThing());

@@ -103,7 +103,7 @@ public class OpCachingTest implements OpCollection {
 	}
 
 	@Test
-	public void cacheOp() throws SecurityException, IllegalArgumentException,
+	public void testCacheOp() throws SecurityException, IllegalArgumentException,
 		NoSuchFieldException, IllegalAccessException
 	{
 		// put the Op in the cache

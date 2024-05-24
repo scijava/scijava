@@ -39,50 +39,31 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+/** Tests {@link Types#greatestCommonSuperType}. */
 public class GreatestCommonSupertypeTest {
 
-	interface Thing {
+	interface Thing { }
 
-	}
+	interface Stuff { }
 
-	interface Stuff {
+	static class XThing extends Base implements Thing { }
 
-	}
+	static class Base { }
 
-	static class XThing extends Base implements Thing {
+	static class NThing extends Base implements Thing, Stuff { }
 
-	}
+	static class QThing extends YThing implements Stuff { }
 
-	static class Base {
+	static class YThing implements Thing { }
 
-	}
+	static abstract class RecursiveThing<T extends RecursiveThing<T>> { }
 
-	static class NThing extends Base implements Thing, Stuff {
+	static class StrangeThing extends RecursiveThing<StrangeThing> { }
 
-	}
-
-	static class QThing extends YThing implements Stuff {
-
-	}
-
-	static class YThing implements Thing {
-
-	}
-
-	static abstract class RecursiveThing<T extends RecursiveThing<T>> {
-
-	}
-
-	static class StrangeThing extends RecursiveThing<StrangeThing> {
-
-	}
-
-	static class WeirdThing extends RecursiveThing<WeirdThing> {
-
-	}
+	static class WeirdThing extends RecursiveThing<WeirdThing> { }
 
 	@Test
-	public void DoubleTest() {
+	public void testDouble() {
 		Type t1 = new Nil<Double>() {}.type();
 		Type t2 = new Nil<Double>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
@@ -91,7 +72,7 @@ public class GreatestCommonSupertypeTest {
 	}
 
 	@Test
-	public void NumberTest() {
+	public void testNumber() {
 		Type t1 = new Nil<Double>() {}.type();
 		Type t2 = new Nil<Long>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
@@ -100,7 +81,7 @@ public class GreatestCommonSupertypeTest {
 	}
 
 	@Test
-	public void ObjectTest() {
+	public void testObject() {
 		Type t1 = new Nil<Double>() {}.type();
 		Type t2 = new Nil<String>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
@@ -111,7 +92,7 @@ public class GreatestCommonSupertypeTest {
 
 	@SuppressWarnings("rawtypes")
 	@Test
-	public void ListOfSameTest() {
+	public void testListOfSame() {
 		Type t1 = new Nil<List<Double>>() {}.type();
 		Type t2 = new Nil<List<Double>>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
@@ -126,7 +107,7 @@ public class GreatestCommonSupertypeTest {
 	}
 
 	@Test
-	public void ListOfDifferentTest() {
+	public void testListOfDifferent() {
 		Type t1 = new Nil<List<Double>>() {}.type();
 		Type t2 = new Nil<List<String>>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
@@ -140,7 +121,7 @@ public class GreatestCommonSupertypeTest {
 	}
 
 	@Test
-	public void ListOfListOfDifferentTest() {
+	public void testListOfListOfDifferent() {
 		Type t1 = new Nil<List<List<Double>>>() {}.type();
 		Type t2 = new Nil<List<List<String>>>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
@@ -157,7 +138,7 @@ public class GreatestCommonSupertypeTest {
 	}
 
 	@Test
-	public void ArrayListAndListTest() {
+	public void testArrayListAndList() {
 		Type t1 = new Nil<List<Double>>() {}.type();
 		Type t2 = new Nil<ArrayList<Double>>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
@@ -171,7 +152,7 @@ public class GreatestCommonSupertypeTest {
 	}
 
 	@Test
-	public void NThingQThingTest() {
+	public void testNThingQThing() {
 		Type t3 = new Nil<NThing>() {}.type();
 		Type t4 = new Nil<QThing>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t3, t4 },
@@ -183,7 +164,7 @@ public class GreatestCommonSupertypeTest {
 	}
 
 	@Test
-	public void NThingYThingTest() {
+	public void testNThingYThing() {
 		Type t3 = new Nil<NThing>() {}.type();
 		Type t4 = new Nil<YThing>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t3, t4 },
@@ -196,7 +177,7 @@ public class GreatestCommonSupertypeTest {
 	}
 
 	@Test
-	public void NThingXThingTest() {
+	public void testNThingXThing() {
 		Type t3 = new Nil<NThing>() {}.type();
 		Type t4 = new Nil<XThing>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t3, t4 },
@@ -207,7 +188,7 @@ public class GreatestCommonSupertypeTest {
 	}
 
 	@Test
-	public void RecursiveClassTest() {
+	public void testRecursiveClass() {
 		Type t1 = new Nil<StrangeThing>() {}.type();
 		Type t2 = new Nil<WeirdThing>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
@@ -217,7 +198,7 @@ public class GreatestCommonSupertypeTest {
 	}
 
 	@Test
-	public <T extends Base> void typeVarTest() {
+	public <T extends Base> void testTypeVar() {
 		Type t1 = new Nil<T>() {}.type();
 		Type t2 = new Nil<NThing>() {}.type();
 		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
@@ -227,7 +208,7 @@ public class GreatestCommonSupertypeTest {
 	}
 
 	@Test
-	public void wildcardTypeTest() {
+	public void testWildcardType() {
 		Type typeWithWildcard = new Nil<List<? extends NThing>>() {}.type();
 		Type t1 = ((ParameterizedType) typeWithWildcard)
 			.getActualTypeArguments()[0];

@@ -64,8 +64,7 @@ public class RasterViewTest extends AbstractOpTest {
 	private static final long SEED = 0x12345678;
 
 	@Test
-	public void defaultRasterTest() {
-
+	public void testDefaultRaster() {
 		Function<RealRandomAccessible<DoubleType>, RandomAccessibleOnRealRandomAccessible<DoubleType>> rasterFunc =
 			OpBuilder.matchFunction(ops, "transform.rasterView",
 				new Nil<RealRandomAccessible<DoubleType>>()

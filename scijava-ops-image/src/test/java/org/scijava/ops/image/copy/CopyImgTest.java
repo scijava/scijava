@@ -69,7 +69,7 @@ public class CopyImgTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void copyImgNoOutputTest() {
+	public void testCopyImgNoOutput() {
 		final Img<DoubleType> inputCopy = input.factory().create(input, input
 			.firstElement());
 		copy(input, inputCopy);
@@ -92,7 +92,7 @@ public class CopyImgTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void copyImgWithOutputTest() {
+	public void testCopyImgWithOutput() {
 		final Img<DoubleType> inputCopy = input.factory().create(input, input
 			.firstElement());
 		copy(input, inputCopy);

@@ -70,7 +70,7 @@ public class OpsAsParametersTest extends AbstractTestEnvironment implements
 		};
 
 	@Test
-	public void TestOpWithNonReifiableFunction() {
+	public void testOpWithNonReifiableFunction() {
 		var list = Arrays.asList(40L, 20.5, 4.0d);
 		var actual = ops//
 			.op("test.parameter.op") //
@@ -81,8 +81,7 @@ public class OpsAsParametersTest extends AbstractTestEnvironment implements
 	}
 
 	@Test
-	public void TestOpWithOpFieldWithoutRun() {
-
+	public void testOpWithOpFieldWithoutRun() {
 		List<Number> list = new ArrayList<>();
 		list.add(40l);
 		list.add(20.5);
@@ -96,8 +95,7 @@ public class OpsAsParametersTest extends AbstractTestEnvironment implements
 	}
 
 	@Test
-	public void TestOpWithOpClass() {
-
+	public void testOpWithOpClass() {
 		List<Number> list = new ArrayList<>();
 		list.add(40l);
 		list.add(20.5);

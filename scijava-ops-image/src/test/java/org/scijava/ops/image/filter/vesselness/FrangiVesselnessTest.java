@@ -54,11 +54,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class FrangiVesselnessTest extends AbstractOpTest {
 
 	@Test
-	public void regressionTest() {
+	public void testFrangiVesselness() {
+		// create input image
+		final Img<DoubleType> inputImg = ArrayImgs.doubles(8, 8);
+		setVesselPosValues(inputImg, new DoubleType(1.), new DoubleType(0.));
 
-		// load in input image and expected output image.
-		Img<DoubleType> inputImg = regressionInput();
-		Img<FloatType> expectedOutput = regressionOutput();
+		// create expected output image
+		final Img<FloatType> expectedOutput = ArrayImgs.floats(8, 8);
+		setVesselPosValues(expectedOutput, new FloatType(0.0031375182f),
+			new FloatType(0));
 
 		// create output image
 		final long[] dims = new long[inputImg.numDimensions()];
@@ -90,20 +94,6 @@ public class FrangiVesselnessTest extends AbstractOpTest {
 		}
 	}
 
-	private Img<DoubleType> regressionInput() {
-		// create img
-		Img<DoubleType> inputImg = ArrayImgs.doubles(8, 8);
-		setVesselPosValues(inputImg, new DoubleType(1.), new DoubleType(0.));
-		return inputImg;
-	}
-
-	private Img<FloatType> regressionOutput() {
-		Img<FloatType> expectedOutput = ArrayImgs.floats(8, 8);
-		setVesselPosValues(expectedOutput, new FloatType(0.0031375182f),
-			new FloatType(0));
-		return expectedOutput;
-	}
-
 	private <T extends RealType<T>> void setVesselPosValues(Img<T> img,
 		T vesselVal, T otherVal)
 	{
@@ -115,7 +105,5 @@ public class FrangiVesselnessTest extends AbstractOpTest {
 			double[] pos = inputCursor.positionAsDoubleArray();
 			inputCursor.get().set(pos[1] == vesselPos ? vesselVal : otherVal);
 		}
-
 	}
-
 }

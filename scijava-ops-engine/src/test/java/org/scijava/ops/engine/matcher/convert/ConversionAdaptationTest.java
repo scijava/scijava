@@ -67,7 +67,7 @@ public class ConversionAdaptationTest extends AbstractTestEnvironment implements
 	};
 
 	@Test
-	public void adaptAndConvertTest() {
+	public void testAdaptAndConvert() {
 		Double[] inArr = { 1., 4., 6. };
 		Double modulus = 3.;
 

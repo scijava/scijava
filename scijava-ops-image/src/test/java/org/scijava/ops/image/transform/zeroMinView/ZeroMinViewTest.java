@@ -58,8 +58,7 @@ import org.scijava.types.Nil;
 public class ZeroMinViewTest extends AbstractOpTest {
 
 	@Test
-	public void defaultZeroMinTest() {
-
+	public void testDefaultZeroMin() {
 		Function<IntervalView<DoubleType>, IntervalView<DoubleType>> zeroMinFunc =
 			OpBuilder.matchFunction(ops, "transform.zeroMinView",
 				new Nil<IntervalView<DoubleType>>()

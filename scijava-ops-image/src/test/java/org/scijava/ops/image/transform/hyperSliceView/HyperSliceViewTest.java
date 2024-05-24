@@ -75,7 +75,7 @@ public class HyperSliceViewTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void defaultHyperSliceTest() {
+	public void testDefaultHyperSlice() {
 		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Long, MixedTransformView<DoubleType>> hyperSliceFunc =
 			OpBuilder.matchFunction(ops, "transform.hyperSliceView", raNil,
 				integerNil, longNil, new Nil<MixedTransformView<DoubleType>>()
@@ -100,8 +100,7 @@ public class HyperSliceViewTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void IntervalHyperSliceTest() {
-
+	public void testIntervalHyperSlice() {
 		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Integer, Long, IntervalView<DoubleType>> hyperSliceFunc =
 			OpBuilder.matchFunction(ops, "transform.hyperSliceView", raiNil,
 				integerNil, longNil, new Nil<IntervalView<DoubleType>>()

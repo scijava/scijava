@@ -76,7 +76,7 @@ public class OpMatchingExceptionTest extends AbstractTestEnvironment implements
 	 * conflict for a given OpRef.
 	 */
 	@Test
-	public void duplicateErrorRegressionTest() {
+	public void testDuplicateErrorRegression() {
 		try {
 			ops.op("test.duplicateOp").inType(Double.class).outType(Double.class)
 				.function();
@@ -93,7 +93,7 @@ public class OpMatchingExceptionTest extends AbstractTestEnvironment implements
 	 * Assert that a relevant error is thrown when a dependency is missing
 	 */
 	@Test
-	public void missingDependencyRegressionTest() {
+	public void testMissingDependencyRegression() {
 		try {
 			ops.op("test.missingDependencyOp").input(1.).outType(Double.class)
 				.apply();
@@ -111,7 +111,7 @@ public class OpMatchingExceptionTest extends AbstractTestEnvironment implements
 	 * chain
 	 */
 	@Test
-	public void missingNestedDependencyRegressionTest() {
+	public void testMissingNestedDependencyRegression() {
 		try {
 			ops.op("test.outsideOp").input(1.).outType(Double.class).apply();
 			Assertions.fail("Expected DependencyMatchingException");
@@ -127,7 +127,7 @@ public class OpMatchingExceptionTest extends AbstractTestEnvironment implements
 	 * when an adaptation is involved.
 	 */
 	@Test
-	public void missingDependencyViaAdaptationTest() {
+	public void testMissingDependencyViaAdaptation() {
 		Double[] d = new Double[0];
 		try {
 			ops.op("test.adaptMissingDep").input(d).outType(Double[].class).apply();

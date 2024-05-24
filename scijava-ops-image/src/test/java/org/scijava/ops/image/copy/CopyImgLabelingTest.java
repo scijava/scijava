@@ -82,7 +82,7 @@ public class CopyImgLabelingTest<T extends Type<T>, L extends Type<L>, I extends
 	}
 
 	@Test
-	public void copyImgLabeling() {
+	public void testCopyImgLabeling() {
 		ops.op("copy.imgLabeling").input(input).output(copy).compute();
 		assertNotNull(copy);
 
@@ -91,5 +91,4 @@ public class CopyImgLabelingTest<T extends Type<T>, L extends Type<L>, I extends
 			assertEquals(inCursor.next(), type);
 		}
 	}
-
 }

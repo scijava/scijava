@@ -68,7 +68,7 @@ public class LiICQTest extends AbstractColocalisationTest {
 	 * Checks Li's ICQ value for positive correlated images.
 	 */
 	@Test
-	public void liPositiveCorrTest() {
+	public void testLiPositiveCorr() {
 		final Double icqValue = ops.op("coloc.icq").input(
 			getPositiveCorrelationImageCh1(), getPositiveCorrelationImageCh2())
 			.outType(Double.class).apply();
@@ -80,7 +80,7 @@ public class LiICQTest extends AbstractColocalisationTest {
 	 * about zero.
 	 */
 	@Test
-	public void liZeroCorrTest() {
+	public void testLiZeroCorr() {
 		final Object icqValue = ops.op("coloc.icq").input(
 			getZeroCorrelationImageCh1(), getZeroCorrelationImageCh2()).apply();
 

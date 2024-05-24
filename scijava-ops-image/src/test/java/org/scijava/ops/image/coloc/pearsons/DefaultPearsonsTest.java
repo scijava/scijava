@@ -55,7 +55,7 @@ public class DefaultPearsonsTest extends AbstractColocalisationTest {
 	 * correlated images produce a Pearson's R value of about zero.
 	 */
 	@Test
-	public void fastPearsonsZeroCorrTest() {
+	public void testFastPearsonsZeroCorr() {
 		double result = ops.op("coloc.pearsons").input(getZeroCorrelationImageCh1(),
 			getZeroCorrelationImageCh2()).outType(Double.class).apply();
 		assertEquals(0.0, result, 0.05);
@@ -66,7 +66,7 @@ public class DefaultPearsonsTest extends AbstractColocalisationTest {
 	 * correlated images produce a Pearson's R value of about 0.75.
 	 */
 	@Test
-	public void fastPearsonsPositiveCorrTest() {
+	public void testFastPearsonsPositiveCorr() {
 		double result = ops.op("coloc.pearsons").input(
 			getPositiveCorrelationImageCh1(), getPositiveCorrelationImageCh2())
 			.outType(Double.class).apply();
@@ -78,7 +78,7 @@ public class DefaultPearsonsTest extends AbstractColocalisationTest {
 	 * same mean and spread of randomized pixel values around that mean.
 	 */
 	@Test
-	public void differentMeansTest() {
+	public void testDifferentMeans() {
 		final double initialMean = 0.2;
 		final double spread = 0.1;
 		final double[] sigma = new double[] { 3.0, 3.0 };

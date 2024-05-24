@@ -68,8 +68,7 @@ public class SubsampleViewTest extends AbstractOpTest {
 	private static final long SEED = 0x12345678;
 
 	@Test
-	public void defaultSubsampleTest() {
-
+	public void testDefaultSubsample() {
 		BiFunction<Img<DoubleType>, Long, SubsampleView<DoubleType>> subsampleFunc =
 			OpBuilder.matchFunction(ops, "transform.subsampleView",
 				new Nil<Img<DoubleType>>()
@@ -98,8 +97,7 @@ public class SubsampleViewTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void defaultSubsampleStepsTest() {
-
+	public void testDefaultSubsampleSteps() {
 		BiFunction<Img<DoubleType>, long[], SubsampleView<DoubleType>> subsampleFunc =
 			OpBuilder.matchFunction(ops, "transform.subsampleView",
 				new Nil<Img<DoubleType>>()
@@ -130,7 +128,6 @@ public class SubsampleViewTest extends AbstractOpTest {
 
 	@Test
 	public void testIntervalSubsample() {
-
 		BiFunction<Img<DoubleType>, Long, SubsampleIntervalView<DoubleType>> subsampleFunc =
 			OpBuilder.matchFunction(ops, "transform.subsampleView",
 				new Nil<Img<DoubleType>>()
@@ -163,7 +160,6 @@ public class SubsampleViewTest extends AbstractOpTest {
 
 	@Test
 	public void testIntervalSubsampleSteps() {
-
 		BiFunction<Img<DoubleType>, long[], SubsampleIntervalView<DoubleType>> subsampleFunc =
 			OpBuilder.matchFunction(ops, "transform.subsampleView",
 				new Nil<Img<DoubleType>>()

@@ -114,7 +114,7 @@ public class ConcatenateViewTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void defaultConcatenateTest() {
+	public void testDefaultConcatenate() {
 		BiFunction<Integer, List<RandomAccessibleInterval<ByteType>>, RandomAccessibleInterval<ByteType>> concatFunc =
 			OpBuilder.matchFunction(ops, "transform.concatenateView",
 				new Nil<Integer>()
@@ -129,11 +129,10 @@ public class ConcatenateViewTest extends AbstractOpTest {
 		final RandomAccessibleInterval<ByteType> cat2 = concatFunc.apply(axis,
 			intervals);
 		testEqual(cat1, cat2);
-
 	}
 
 	@Test
-	public void concatenateWithAccessModeTest() {
+	public void testConcatenateWithAccessMode() {
 		Functions.Arity3<Integer, StackAccessMode, List<RandomAccessibleInterval<ByteType>>, RandomAccessibleInterval<ByteType>> concatFunc =
 			OpBuilder.matchFunction(ops, "transform.concatenateView",
 				new Nil<Integer>()
@@ -151,5 +150,4 @@ public class ConcatenateViewTest extends AbstractOpTest {
 			testEqual(cat1, cat2);
 		}
 	}
-
 }

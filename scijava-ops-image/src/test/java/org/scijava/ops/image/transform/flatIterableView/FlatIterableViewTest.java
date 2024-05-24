@@ -66,7 +66,7 @@ public class FlatIterableViewTest extends AbstractOpTest {
 		{};
 
 	@Test
-	public void defaultFlatIterableTest() {
+	public void testDefaultFlatIterable() {
 		Function<RandomAccessibleInterval<DoubleType>, IterableInterval<DoubleType>> flatIterableFunc =
 			OpBuilder.matchFunction(ops, "transform.flatIterableView", raiNil, iiNil);
 

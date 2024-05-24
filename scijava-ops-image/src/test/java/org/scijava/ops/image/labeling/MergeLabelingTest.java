@@ -56,7 +56,7 @@ public class MergeLabelingTest extends AbstractOpTest {
 	private ImgLabeling<Integer, ByteType> out;
 
 	@BeforeEach
-	public void setUpTest() {
+	public void setUp() {
 		in1 = ops.op("create.imgLabeling").input(new FinalInterval(2, 2),
 			new ByteType()).outType(new Nil<ImgLabeling<Integer, ByteType>>()
 		{}).apply();

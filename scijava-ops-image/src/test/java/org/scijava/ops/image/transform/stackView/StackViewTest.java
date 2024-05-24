@@ -61,7 +61,7 @@ import org.scijava.types.Nil;
 public class StackViewTest extends AbstractOpTest {
 
 	@Test
-	public void defaultStackTest() {
+	public void testDefaultStack() {
 		Function<List<Img<DoubleType>>, RandomAccessibleInterval<DoubleType>> stackFunc =
 			OpBuilder.matchFunction(ops, "transform.stackView",
 				new Nil<List<Img<DoubleType>>>()
@@ -81,8 +81,7 @@ public class StackViewTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void stackWithAccessModeTest() {
-
+	public void testStackWithAccessMode() {
 		BiFunction<StackAccessMode, List<Img<DoubleType>>, RandomAccessibleInterval<DoubleType>> stackFunc =
 			OpBuilder.matchFunction(ops, "transform.stackView",
 				new Nil<StackAccessMode>()
@@ -104,5 +103,4 @@ public class StackViewTest extends AbstractOpTest {
 
 		assertEquals(il2.dimension(2), opr.dimension(2));
 	}
-
 }

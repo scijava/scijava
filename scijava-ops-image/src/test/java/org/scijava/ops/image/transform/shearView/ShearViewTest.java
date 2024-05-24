@@ -63,8 +63,7 @@ public class ShearViewTest extends AbstractOpTest {
 
 	/** Tests {@link DefaultShearView}. */
 	@Test
-	public void defaultShearTest() {
-
+	public void testDefaultShear() {
 		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Integer, TransformView<DoubleType>> shearFunc =
 			OpBuilder.matchFunction(ops, "transform.shearView",
 				new Nil<RandomAccessible<DoubleType>>()
@@ -96,8 +95,7 @@ public class ShearViewTest extends AbstractOpTest {
 
 	/** Tests {@link ShearViewInterval}. */
 	@Test
-	public void ShearIntervalTest() {
-
+	public void testShearInterval() {
 		Functions.Arity4<RandomAccessible<DoubleType>, Interval, Integer, Integer, IntervalView<DoubleType>> shearFunc =
 			OpBuilder.matchFunction(ops, "transform.shearView",
 				new Nil<RandomAccessible<DoubleType>>()

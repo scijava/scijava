@@ -76,7 +76,7 @@ public class CopyIITest extends AbstractOpTest {
 	}
 
 	@Test
-	public void copyIINoOutputTest() {
+	public void testCopyIINoOutput() {
 		var nil = new Nil<IterableInterval<DoubleType>>() {};
 		var op = ops.op("copy.img").inType(nil).outType(nil).function();
 		IterableInterval<DoubleType> output = op.apply(input);
@@ -92,7 +92,7 @@ public class CopyIITest extends AbstractOpTest {
 	}
 
 	@Test
-	public void copyTypeTest() {
+	public void testCopyType() {
 		Img<FloatType> inputFloat = new ArrayImgFactory<>(new FloatType()).create(
 			new int[] { 120, 100 });
 
@@ -105,7 +105,7 @@ public class CopyIITest extends AbstractOpTest {
 	}
 
 	@Test
-	public void copyIIWithOutputTest() {
+	public void testCopyIIWithOutput() {
 		Img<DoubleType> output = input.factory().create(input, input
 			.firstElement());
 

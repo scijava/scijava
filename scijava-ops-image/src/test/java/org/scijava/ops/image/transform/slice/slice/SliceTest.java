@@ -68,7 +68,7 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends
 	private ArrayImg<ByteType, ByteArray> out;
 
 	@BeforeEach
-	public void setUpTest() {
+	public void setUp() {
 		in = ArrayImgs.bytes(20, 20, 21);
 		out = ArrayImgs.bytes(20, 20, 21);
 
@@ -82,7 +82,6 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends
 
 	@Test
 	public void testXYCropping() {
-
 		// fill array img with values (plane position = value in px);
 
 		for (final Cursor<ByteType> cur = in.cursor(); cur.hasNext();) {
@@ -119,7 +118,6 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends
 	}
 
 	private void testXYZCropping(int t) {
-
 		Img<ByteType> inSequence = ArrayImgs.bytes(20, 20, 21, t);
 		ArrayImg<ByteType, ByteArray> outSequence = ArrayImgs.bytes(20, 20, 21, t);
 
@@ -147,7 +145,6 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends
 
 	@Test
 	public void testNonZeroMinimumInterval() {
-
 		Img<ByteType> img3D = ArrayImgs.bytes(50, 50, 3);
 		IntervalView<ByteType> interval2D = Views.interval(img3D, new FinalInterval(
 			new long[] { 25, 25, 2 }, new long[] { 35, 35, 2 }));
@@ -169,7 +166,7 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends
 	}
 
 	@Test
-	public void LoopThroughHyperSlicesTest() {
+	public void testLoopThroughHyperSlices() {
 		final int xSize = 40;
 		final int ySize = 50;
 		final int numChannels = 3;
@@ -205,7 +202,6 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends
 		}
 
 		assertEquals(numChannels * numTimePoints, numHyperSlices);
-
 	}
 
 	public Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>> test =
@@ -217,5 +213,4 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends
 				itB.next().setReal(itA.next().getRealDouble());
 			}
 		};
-
 }

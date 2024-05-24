@@ -63,7 +63,7 @@ public class ExtendMirrorDoubleViewTest extends AbstractOpTest {
 		{};
 
 	@Test
-	public void extendMirrorDoubleTest() {
+	public void testExtendMirrorDouble() {
 		Function<RandomAccessibleInterval<DoubleType>, RandomAccessible<DoubleType>> extendFunc =
 			OpBuilder.matchFunction(ops, "transform.extendMirrorDoubleView", raiNil,
 				new Nil<RandomAccessible<DoubleType>>()
@@ -86,5 +86,4 @@ public class ExtendMirrorDoubleViewTest extends AbstractOpTest {
 
 		assertEquals(il2.get().get(), opr.get().get(), 1e-10);
 	}
-
 }

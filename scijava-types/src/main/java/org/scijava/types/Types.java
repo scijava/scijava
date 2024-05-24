@@ -734,8 +734,15 @@ public final class Types {
 	{
 		// add the type variable to the HashMap if it does not yet exist.
 		if (!typeBounds.containsKey(param)) {
-            typeBounds.put(param, new TypeVarFromParameterizedTypeInfo(
-                    param));
+			typeBounds.put(param, new TypeVarInfo(param) {
+				@Override
+				public boolean allowType(Type type, boolean refuseWildcards) {
+					// NB: Hardcode refuseWildcards to true. Necessary for TypeVariables
+					// which were contained in ParameterizedTypes. Behavior tested by
+					// TypesTest#testSatisfiesWildcardsInParameterizedType().
+					return super.allowType(type, true);
+				}
+			});
 		}
 		// attempt to restrict the bounds of the type variable to the argument.
 		// We call the fixBounds method the refuseWildcards flag to be true,
@@ -1309,27 +1316,6 @@ public final class Types {
 			s.delete(s.length() - 3, s.length());
 			s.append("\n");
 			return s.toString();
-		}
-	}
-
-	/**
-	 * Class for {@link TypeVariable} which were contained in
-	 * {@link ParameterizedType}s. The only difference to {@link TypeVarInfo} is
-	 * that {@link TypeVarInfo#allowType(Type, boolean)} will be always called
-	 * with refuseWildcards flag to be true.
-	 */
-	public static class TypeVarFromParameterizedTypeInfo extends TypeVarInfo {
-
-		public TypeVarFromParameterizedTypeInfo(TypeVariable<?> var) {
-			super(var);
-		}
-
-		/**
-		 * @param refuseWildcards hardcoded to true
-		 */
-		@Override
-		public boolean allowType(Type type, boolean refuseWildcards) {
-			return super.allowType(type, true);
 		}
 	}
 

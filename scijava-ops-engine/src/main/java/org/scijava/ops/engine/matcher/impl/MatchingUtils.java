@@ -41,7 +41,6 @@ import java.util.Map;
 import org.scijava.types.Any;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
-import org.scijava.types.Types.TypeVarFromParameterizedTypeInfo;
 import org.scijava.types.Types.TypeVarInfo;
 
 public final class MatchingUtils {
@@ -125,8 +124,7 @@ public final class MatchingUtils {
 				// has one bound, being to.
 				if (typeVarInfo == null) {
 					TypeVariable<?> fromTypeVar = (TypeVariable<?>) from;
-					TypeVarFromParameterizedTypeInfo fromInfo =
-						new TypeVarFromParameterizedTypeInfo(fromTypeVar);
+					TypeVarInfo fromInfo = new TypeVarInfo(fromTypeVar);
 					fromInfo.fixBounds(to, true);
 					typeBounds.put(fromTypeVar, fromInfo);
 					from = to;

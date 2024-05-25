@@ -50,7 +50,7 @@ public class FieldOpDependencyMember<T> extends AnnotatedOpDependencyMember<T>
 		super( //
 			field.getName(), //
 			"", //
-			Types.fieldType(field, structType), //
+			Types.typeOf(field, structType), //
 			field.getAnnotation(OpDependency.class) //
 		);
 		this.field = field;

@@ -65,7 +65,7 @@ public class InfoMatchingOpRequest implements OpRequest {
 		this.name = info.names().get(0);
 		Type from = specialType.type();
 		Type to = info.opType();
-		this.type = Types.exactSuperType(to, Types.raw(from));
+		this.type = Types.superTypeOf(to, Types.raw(from));
 		if (this.type instanceof ParameterizedType) {
 			if (!GenericAssignability.checkGenericAssignability(from,
 				(ParameterizedType) this.type, this.map, true))
@@ -82,7 +82,7 @@ public class InfoMatchingOpRequest implements OpRequest {
 
 	private Type mappedType(Type t, Map<TypeVariable<?>, Type> map) {
 		try {
-			return Types.substituteTypeVariables(t, map);
+			return Types.substituteTypeVars(t, map);
 		}
 		catch (Exception e) {
 			return t;

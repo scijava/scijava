@@ -170,7 +170,7 @@ public final class GenericAssignability {
 		if (!Types.isAssignable(Types.raw(src), Types.raw(dest))) return false;
 
 		// when raw types are assignable, check the type variables of src and dest
-		Type[] srcTypes = Types.typeParamsAgainstClass(src, Types.raw(dest));
+		Type[] srcTypes = Types.typeParamsOf(src, Types.raw(dest));
 		Type[] destTypes = dest.getActualTypeArguments();
 
 		// if there are no type parameters in src (w.r.t. dest), do a basic
@@ -255,8 +255,8 @@ public final class GenericAssignability {
 			throw new IllegalArgumentException(src +
 				" does not have an abstract method!");
 		}
-		Type[] params = Types.exactParamTypes(destMethods[0], src);
-		Type returnType = Types.exactReturnType(destMethods[0], src);
+		Type[] params = Types.paramTypesOf(destMethods[0], src);
+		Type returnType = Types.returnTypeOf(destMethods[0], src);
 		for (int i = 0; i < params.length; i++) {
 			if (!Types.isAssignable(destTypes[i], params[i], typeVarAssigns))
 				return false;
@@ -288,7 +288,7 @@ public final class GenericAssignability {
 	public static Type[] mapVarToTypes(Type[] typesToMap,
 		Map<TypeVariable<?>, Type> typeAssigns)
 	{
-		return Arrays.stream(typesToMap).map(type -> Types.unrollVariables(
+		return Arrays.stream(typesToMap).map(type -> Types.unroll(
 			typeAssigns, type, false)).toArray(Type[]::new);
 	}
 
@@ -438,7 +438,7 @@ public final class GenericAssignability {
 		// inferring from a StrangeThing<Long> extends Thing<Double> and our
 		// Op requires a Thing<T>. We need to ensure that T gets
 		// resolved to a Double and NOT a Long.
-		Type superInferFrom = Types.exactSuperType(inferFrom, Types.raw(type));
+		Type superInferFrom = Types.superTypeOf(inferFrom, Types.raw(type));
 		if (superInferFrom instanceof ParameterizedType) {
 			ParameterizedType paramInferFrom = (ParameterizedType) superInferFrom;
 			if (!Types.isRecursive(paramInferFrom)) {
@@ -479,7 +479,7 @@ public final class GenericAssignability {
 			// edge case 2: if inferFrom is a superType of type, we can get (some of)
 			// the types of type by finding the exact superType of type w.r.t.
 			// inferFrom.
-			Type superTypeOfType = Types.exactSuperType(type, Types.raw(
+			Type superTypeOfType = Types.superTypeOf(type, Types.raw(
 				inferFrom));
 			if (superTypeOfType == null) {
 				throw new TypeInferenceException(inferFrom +
@@ -534,9 +534,8 @@ public final class GenericAssignability {
 			inferTypeVariables(types[i], inferFroms[i], typeMappings, malleable);
 		}
 		// Check if the inferred types satisfy their bounds
-		// TODO: can we do this in an efficient manner?
 		TypeVarAssigns typeVarAssigns = new TypeVarAssigns(typeMappings);
-		if (!Types.typesSatisfyVariables(typeVarAssigns)) {
+		if (!Types.varsSatisfied(typeVarAssigns)) {
 			throw new TypeInferenceException();
 		}
 	}

@@ -190,7 +190,7 @@ public final class Types {
 	}
 
 	/**
-	 * Returns the "safe" generic type of the given field, as viewed from the
+	 * Returns the exact generic type of the given field, as viewed from the
 	 * given type. This may be narrower than what {@link Field#getGenericType()}
 	 * returns, if the field is declared in a superclass, or {@code type} has a
 	 * type parameter that is used in the type of the field.
@@ -216,12 +216,12 @@ public final class Types {
 	 * field.getType(); // Object
 	 * field.getGenericType(); // T
 	 *
-	 * Types.fieldType(field, Thing.class); // T
-	 * Types.fieldType(field, NumberThing.class); // N extends Number
-	 * Types.fieldType(field, IntegerThing.class); // Integer
+	 * Types.typeOf(field, Thing.class); // T
+	 * Types.typeOf(field, NumberThing.class); // N extends Number
+	 * Types.typeOf(field, IntegerThing.class); // Integer
 	 * </pre>
 	 */
-	public static Type fieldType(final Field field, final Class<?> type) {
+	public static Type typeOf(final Field field, final Class<?> type) {
 		final Type pType = parameterizeRaw(type);
 		return GenericTypeReflector.getExactFieldType(field, pType);
 	}
@@ -252,10 +252,9 @@ public final class Types {
 	 * @return a {@link Type} that is a supertype of all {@link Type}s in the
 	 *         types array.
 	 */
-	public static Type greatestCommonSuperType(Type[] types,
+	public static Type superTypeOf(Type[] types,
 		final boolean wildcardSingleIface)
 	{
-
 		types = Arrays.stream(types).filter(t -> !(Any.is(t))).toArray(Type[]::new);
 
 		// return answer quick if the answer is trivial
@@ -267,13 +266,13 @@ public final class Types {
 		for (int i = 0; i < types.length; i++) {
 			if (types[i] instanceof TypeVariable<?>) {
 				TypeVariable<?> typeVar = (TypeVariable<?>) types[i];
-				types[i] = greatestCommonSuperType(typeVar.getBounds(), false);
+				types[i] = superTypeOf(typeVar.getBounds(), false);
 			}
 			// wildcards themselves are not supported, however we know that the
 			// greatest superType of any wildcard is its upper bound
 			if (types[i] instanceof WildcardType) {
 				WildcardType wildcard = (WildcardType) types[i];
-				types[i] = greatestCommonSuperType(wildcard.getUpperBounds(), false);
+				types[i] = superTypeOf(wildcard.getUpperBounds(), false);
 			}
 		}
 
@@ -289,22 +288,22 @@ public final class Types {
 
 		// 1)
 		// prefer any non-Object superClass over implemented interfaces.
-		while (Types.raw(superType) != Object.class) {
+		while (raw(superType) != Object.class) {
 			// check assignability of superclass with type params
-			Type pType = Types.exactSuperType(types[0], Types.raw(superType));
-			if (Types.isAssignable(types, pType) == -1) return superType;
+			Type pType = superTypeOf(types[0], raw(superType));
+			if (isAssignable(types, pType) == -1) return superType;
 
 			// if we have a parameterizedtype whose rawtype is assignable to all of
 			// types,
 			// we just have to resolve each of pType's type variables.
 			if (pType instanceof ParameterizedType && //
-				Types.isAssignable(types, Types.raw(superType)) == -1)
+				isAssignable(types, raw(superType)) == -1)
 			{
 				ParameterizedType[] castedTypes = new ParameterizedType[types.length];
 				castedTypes[0] = (ParameterizedType) pType;
 				// generate parameterizedTypes of each type in types w.r.t. supertype
 				for (int i = 1; i < castedTypes.length; i++) {
-					Type t = Types.exactSuperType(types[i], Types.raw(superType));
+					Type t = superTypeOf(types[i], raw(superType));
 					if (!(t instanceof ParameterizedType)) continue;
 					castedTypes[i] = (ParameterizedType) t;
 				}
@@ -318,30 +317,31 @@ public final class Types {
 						typeVarsI[j] = castedTypes[j].getActualTypeArguments()[i];
 					}
 					// If each of these types implements some recursive interface, e.g.
-					// Comparable,
-					// the best we can do is return an unbounded wildcard.
+					// Comparable, the best we can do is return an unbounded wildcard.
 					if (Arrays.equals(types, typeVarsI)) resolvedTypeArgs[i] = wildcard();
-					else resolvedTypeArgs[i] = wildcard(new Type[] {
-						greatestCommonSuperType(typeVarsI, true) }, new Type[] {});
+					else {
+						final Type[] upper = { superTypeOf(typeVarsI, true) };
+						final Type[] lower = new Type[0];
+						resolvedTypeArgs[i] = wildcard(upper, lower);
+					}
 				}
 
 				// return supertype parameterized with the resolved type args
-				return Types.parameterize(Types.raw(superType), resolvedTypeArgs);
+				return parameterize(raw(superType), resolvedTypeArgs);
 			}
-			if (Types.raw(superType).isInterface()) break;
-			superType = Types.exactSuperType(superType, Types.raw(superType)
-				.getSuperclass());
+			if (raw(superType).isInterface()) break;
+			superType = superTypeOf(superType, raw(superType).getSuperclass());
 		}
 
 		// 2)
 		List<Type> sharedInterfaces = new ArrayList<>();
 		Queue<Type> superInterfaces = new LinkedList<>();
-		if (Types.raw(types[0]).isInterface()) superInterfaces.add(types[0]);
-		else Collections.addAll(superInterfaces, Types.raw(types[0]).getGenericInterfaces());
+		if (raw(types[0]).isInterface()) superInterfaces.add(types[0]);
+		else Collections.addAll(superInterfaces, raw(types[0]).getGenericInterfaces());
 		while (!superInterfaces.isEmpty()) {
 			Type type = superInterfaces.remove();
-			Type pType = Types.exactSuperType(types[0], Types.raw(type));
-			if (Types.isAssignable(types, pType) == -1) {
+			Type pType = superTypeOf(types[0], raw(type));
+			if (isAssignable(types, pType) == -1) {
 				sharedInterfaces.add(pType);
 				continue;
 			}
@@ -349,13 +349,13 @@ public final class Types {
 			// types,
 			// we just have to resolve each of pType's type variables.
 			if (pType instanceof ParameterizedType && //
-				Types.isAssignable(types, Types.raw(pType)) == -1)
+				isAssignable(types, raw(pType)) == -1)
 			{
 				ParameterizedType[] castedTypes = new ParameterizedType[types.length];
 				castedTypes[0] = (ParameterizedType) pType;
 				// generate parameterizedTypes of each type in types w.r.t. supertype
 				for (int i = 1; i < castedTypes.length; i++) {
-					Type t = Types.exactSuperType(types[i], Types.raw(pType));
+					Type t = superTypeOf(types[i], raw(pType));
 					if (!(t instanceof ParameterizedType)) continue;
 					castedTypes[i] = (ParameterizedType) t;
 				}
@@ -372,11 +372,11 @@ public final class Types {
 					// Comparable,
 					// the best we can do is return an unbounded wildcard.
 					if (Arrays.equals(types, typeVarsI)) resolvedTypeArgs[i] = wildcard();
-					else resolvedTypeArgs[i] = greatestCommonSuperType(typeVarsI, true);
+					else resolvedTypeArgs[i] = superTypeOf(typeVarsI, true);
 				}
 
 				// return supertype parameterized with the resolved type args
-				return Types.parameterize(Types.raw(pType), resolvedTypeArgs);
+				return parameterize(raw(pType), resolvedTypeArgs);
 			}
 
 			// If this interface is not a supertype of all of types, maybe one of its
@@ -386,8 +386,7 @@ public final class Types {
 			// least one satisfying interface. Note that this does not prevent
 			// multiple satisfying interfaces at the same depth from being found.
 			if (sharedInterfaces.isEmpty()){
-				Collections.addAll(superInterfaces,
-					Types.raw(type).getGenericInterfaces());
+				Collections.addAll(superInterfaces, raw(type).getGenericInterfaces());
 			}
 		}
 		if (sharedInterfaces.size() == 1 && !wildcardSingleIface) {
@@ -415,15 +414,15 @@ public final class Types {
 	 *          parameters of {@code src}
 	 * @return an array of {@code Type}s denoting the type
 	 */
-	public static Type[] typeParamsAgainstClass(Type src, Class<?> superclass) {
+	public static Type[] typeParamsOf(Type src, Class<?> superclass) {
 		// only classes and ParameterizedTypes can have type parameters
 		if (!(src instanceof Class || src instanceof ParameterizedType))
 			return new Type[0];
 		try {
-			Type superSrc = Types.exactSuperType(src, superclass);
+			Type superSrc = superTypeOf(src, superclass);
 			if (superSrc instanceof ParameterizedType)
 				return ((ParameterizedType) superSrc).getActualTypeArguments();
-			return getParams(Types.raw(src), superclass);
+			return typeParamsOf(raw(src), superclass);
 		}
 		catch (AssertionError e) {
 			return new Type[0];
@@ -444,9 +443,9 @@ public final class Types {
 	 *         {@code subType}, or empty type array if no exists or
 	 *         {@code superErasure} is not a super type of subtype
 	 */
-	public static Type[] getParams(Class<?> subType, Class<?> superErasure) {
+	public static Type[] typeParamsOf(Class<?> subType, Class<?> superErasure) {
 		Type pt = parameterizeRaw(subType);
-		Type superType = exactSuperType(pt, superErasure);
+		Type superType = superTypeOf(pt, superErasure);
 		if (superType instanceof ParameterizedType) {
 			return ((ParameterizedType) superType).getActualTypeArguments();
 		}
@@ -600,7 +599,7 @@ public final class Types {
 			Type param = params[i];
 
 			// if arg is an Any, it must be applicable to param.
-			if (Types.isApplicableToRawTypes(arg, Any.class)) continue;
+			if (isApplicableToRawTypes(arg, Any.class)) continue;
 
 			// First, check raw type assignability.
 			if (!isApplicableToRawTypes(arg, param)) return i;
@@ -624,7 +623,20 @@ public final class Types {
 		return -1;
 	}
 
-	public static boolean typesSatisfyVariables(
+	/**
+	 * Determines whether or not specified types satisfy the bounds of their
+	 * mapped type variables. When a type parameter extends another (such as
+	 * {@code <T, S extends T>}), uses another as a type parameter (such as
+	 * {@code <T, S extends Comparable>>}), or otherwise depends on another type
+	 * variable to be specified, the dependencies must be included in
+	 * {@code typeVarAssigns}.
+	 *
+	 * @param typeVarAssigns specifies the potential types to be assigned to the
+	 *          type variables, not {@code null}.
+	 * @return whether the types can be assigned to their respective type
+	 *         variables.
+	 */
+	public static boolean varsSatisfied(
 		final Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
 		return TypeUtils.typesSatisfyVariables(typeVarAssigns);
@@ -641,7 +653,7 @@ public final class Types {
 		return result;
 	}
 
-	public static Type substituteTypeVariables(Type type,
+	public static Type substituteTypeVars(Type type,
 		Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
 		if (type == null || type instanceof Class) {
@@ -649,13 +661,13 @@ public final class Types {
 		}
 
 		if (type instanceof ParameterizedType) {
-			Class<?> raw = Types.raw(type);
+			Class<?> raw = raw(type);
 			Type[] typeParams = ((ParameterizedType) type).getActualTypeArguments();
 			for (int i = 0; i < typeParams.length; i++) {
 				typeParams[i] = TypeUtils.substituteTypeVariables(typeParams[i],
 					typeVarAssigns);
 			}
-			return Types.parameterize(raw, typeParams);
+			return parameterize(raw, typeParams);
 		}
 
 		if (type instanceof GenericArrayType) {}
@@ -689,7 +701,7 @@ public final class Types {
 	public static Type mapVarToTypes(Type typeToMap,
 		Map<TypeVariable<?>, Type> typeAssigns)
 	{
-		return Types.unrollVariables(typeAssigns, typeToMap, false);
+		return unroll(typeAssigns, typeToMap, false);
 	}
 
 	/**
@@ -899,14 +911,14 @@ public final class Types {
 	 * <p>
 	 * For example, with
 	 * {@code class StringList implements List<String>},
-	 * {@code exactSuperType(StringList.class, Collection.class)} returns a
+	 * {@code superTypeOf(StringList.class, Collection.class)} returns a
 	 * {@link ParameterizedType} representing {@code Collection<String>}.
 	 * </p>
 	 *
 	 * @param type
 	 * @param searchClass
 	 */
-	public static Type exactSuperType(final Type type, final Class<?> searchClass) {
+	public static Type superTypeOf(final Type type, final Class<?> searchClass) {
 		return GenericTypeReflector.getExactSuperType(type, searchClass);
 	}
 
@@ -921,9 +933,10 @@ public final class Types {
 	 *          or if it should be just replaced by the mapping
 	 * @return Type
 	 */
-	public static Type unrollVariables(Map<TypeVariable<?>, Type> typeArguments,
-		final Type type, boolean followTypeVars)
-	{
+	public static Type unroll(
+		Map<TypeVariable<?>, Type> typeArguments,
+		final Type type, boolean followTypeVars
+	) {
 		return TypeUtils.unrollVariables(typeArguments, type, followTypeVars);
 	}
 
@@ -938,7 +951,7 @@ public final class Types {
 	public static Type parameterizeRaw(Class<?> rawType) {
 		TypeVariable<?>[] typeParams = rawType.getTypeParameters();
 		if (typeParams.length == 0) return rawType;
-		return Types.parameterize(rawType, typeParams);
+		return parameterize(rawType, typeParams);
 	}
 
 	/**
@@ -951,9 +964,13 @@ public final class Types {
 	 * @param m
 	 * @param type
 	 */
-	public static Type[] exactParamTypes(final Method m, final Type type) {
+	public static Type[] paramTypesOf(final Method m, final Type type) {
 		return GenericTypeReflector.getExactParameterTypes(m, type);
 	}
+	// START HERE: fieldType is not named exactFieldType, even though it uses that method.
+	// So these exact*Type* methods should be named consistently with fieldType somehow.
+	// Also consider how to rename areVarsSatisfied, which is a mouthful.
+	// Then, I want to group the Types methods by area of functionality somehow.
 
 	/**
 	 * Returns the exact return type of the given method in the given type. This
@@ -964,7 +981,7 @@ public final class Types {
 	 * @param m
 	 * @param type
 	 */
-	public static Type exactReturnType(final Method m, final Type type) {
+	public static Type returnTypeOf(final Method m, final Type type) {
 		return GenericTypeReflector.getExactReturnType(m, type);
 	}
 
@@ -983,7 +1000,7 @@ public final class Types {
 	 */
 	private static int isAssignable(final Type[] sources, final Type target) {
 		for (int i = 0; i < sources.length; i++) {
-			if (!Types.isAssignable(sources[i], target)) return i;
+			if (!isAssignable(sources[i], target)) return i;
 		}
 		return -1;
 	}
@@ -992,11 +1009,11 @@ public final class Types {
 		final Type arg, final Type param)
 	{
 		if (Any.is(arg)) return true;
-		final List<Class<?>> srcClasses = Types.raws(arg);
-		final List<Class<?>> destClasses = Types.raws(param);
+		final List<Class<?>> srcClasses = raws(arg);
+		final List<Class<?>> destClasses = raws(param);
 		for (final Class<?> destClass : destClasses) {
 			final Optional<Class<?>> first = srcClasses.stream()
-				.filter(srcClass -> Types.isAssignable(srcClass, destClass))
+				.filter(srcClass -> isAssignable(srcClass, destClass))
 				.findFirst();
 			if (first.isEmpty()) {
 				return false;
@@ -1011,8 +1028,8 @@ public final class Types {
 		final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds
 	) {
 		if (arg instanceof Class) {
-			Class<?> paramRaw = Types.raw(param);
-			return Types.isAssignable(arg, paramRaw);
+			Class<?> paramRaw = raw(param);
+			return isAssignable(arg, paramRaw);
 		}
 
 		// get an array of the destination parameter types
@@ -1020,7 +1037,7 @@ public final class Types {
 		Type[] srcTypes = new Type[destTypes.length];
 
 		// get an array of the source argument types
-		Type superType = Types.exactSuperType(arg, Types.raw(param));
+		Type superType = superTypeOf(arg, raw(param));
 		if (!(superType instanceof ParameterizedType)) return false;
 		srcTypes = ((ParameterizedType) superType).getActualTypeArguments();
 
@@ -1146,7 +1163,7 @@ public final class Types {
 				for (int i = 0; i < paramBoundTypes.length; i++) {
 					// Get the type parameter of arg from the bound type which we know
 					// is parameterized.
-					final Type argType = Types.param(arg, Types.raw(paramBoundType), i);
+					final Type argType = param(arg, raw(paramBoundType), i);
 					if (argType == null) {
 						return false;
 					}
@@ -1166,16 +1183,16 @@ public final class Types {
 	{
 		final Type[] upperBounds = param.getUpperBounds();
 		final Type[] lowerBounds = param.getLowerBounds();
-		final Class<?> argType = Types.raw(arg);
+		final Class<?> argType = raw(arg);
 		for (final Type upperBound : upperBounds) {
 			// check that the argument can satisfy the parameter
-			final Class<?> upperType = Types.raw(upperBound);
-			if (!Types.isAssignable(argType, upperType)) return false;
+			final Class<?> upperType = raw(upperBound);
+			if (!isAssignable(argType, upperType)) return false;
 		}
 		for (final Type lowerBound : lowerBounds) {
-			final Class<?> lowerType = Types.raw(lowerBound);
+			final Class<?> lowerType = raw(lowerBound);
 			// check that the argument can satisfy the parameter
-			if (!Types.isAssignable(lowerType, argType)) return false;
+			if (!isAssignable(lowerType, argType)) return false;
 		}
 
 		return true;
@@ -1187,8 +1204,8 @@ public final class Types {
 		final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds
 	) {
 		// get a class object of the component type of each array
-		final Type argComponent = Types.component(arg);
-		final Type paramComponent = Types.component(param);
+		final Type argComponent = component(arg);
+		final Type paramComponent = component(param);
 
 		if (paramComponent instanceof ParameterizedType) {
 			// TODO are these casts safe?
@@ -1210,9 +1227,9 @@ public final class Types {
 		// TODO is this necessary? It is only necessary if the component is allowed
 		// to be
 		// something other than a ParameterizedType or a TypeVariable.
-		final Class<?> argClass = Types.raw(argComponent);
-		final Class<?> paramClass = Types.raw(paramComponent);
-		return Types.isAssignable(argClass, paramClass);
+		final Class<?> argClass = raw(argComponent);
+		final Class<?> paramClass = raw(paramComponent);
+		return isAssignable(argClass, paramClass);
 	}
 
 	private static Type[] filterIndices(Type[] types, List<Integer> indices) {
@@ -1278,10 +1295,10 @@ public final class Types {
 				return false;
 			}
 
-			final Class<?> typeClass = Types.raw(type);
+			final Class<?> typeClass = raw(type);
 			// make sure that type extends all of the bounds of the type variable
 			for (final Type upperBound : upperBounds) {
-				if (!Types.raw(upperBound).isAssignableFrom(typeClass)) return false;
+				if (!raw(upperBound).isAssignableFrom(typeClass)) return false;
 			}
 
 			types.add(type);
@@ -1310,7 +1327,7 @@ public final class Types {
 			}
 
 			for (int i = 0; i < upperBounds.length; i++) {
-				if (Types.raw(upperBounds[i]).isAssignableFrom(Types.raw(bound)))
+				if (raw(upperBounds[i]).isAssignableFrom(raw(bound)))
 					upperBounds[i] = bound;
 				else return false;
 			}
@@ -1807,7 +1824,7 @@ public final class Types {
 			}
 
 			// if type is an Any, do some Any resolution
-			if (Types.isApplicableToRawTypes(type, Any.class)) {
+			if (isApplicableToRawTypes(type, Any.class)) {
 				for (Type typeParameter : toParameterizedType
 					.getActualTypeArguments())
 				{
@@ -1929,7 +1946,7 @@ public final class Types {
 					if (fromResolved instanceof ParameterizedType &&
 						toResolved instanceof ParameterizedType)
 					{
-						if (Types.raw(fromResolved) != Types.raw(toResolved)) {
+						if (raw(fromResolved) != raw(toResolved)) {
 							return false;
 						}
 						Type[] fromTypes = ((ParameterizedType) fromResolved)
@@ -1938,7 +1955,7 @@ public final class Types {
 							.getActualTypeArguments();
 						for (int i = 0; i < fromTypes.length; i++) {
 							if (toTypes[i] instanceof TypeVariable<?> &&
-								Types.isAssignable(fromTypes[i], toTypes[i], typeVarAssigns))
+								isAssignable(fromTypes[i], toTypes[i], typeVarAssigns))
 							{
 								typeVarAssigns.put((TypeVariable<?>) toTypes[i], fromTypes[i]);
 								continue;
@@ -2035,7 +2052,7 @@ public final class Types {
 			Map<TypeVariable<?>, Type> typeVarAssigns)
 		{
 			Type toTypeArg;
-			if (!(Types.containsTypeVars(type))) return type;
+			if (!(containsTypeVars(type))) return type;
 			if (!(type instanceof ParameterizedType)) return type;
 			Type[] toParameters = ((ParameterizedType) type).getActualTypeArguments();
 			Type[] toParamsResolved = Arrays.stream(toParameters).map(param -> {
@@ -2047,7 +2064,7 @@ public final class Types {
 				}
 				return resolved;
 			}).toArray(Type[]::new);
-			toTypeArg = Types.parameterize(Types.raw(type), toParamsResolved);
+			toTypeArg = parameterize(raw(type), toParamsResolved);
 			return toTypeArg;
 		}
 
@@ -2358,7 +2375,7 @@ public final class Types {
 			final Map<TypeVariable<?>, Type> typeVarAssigns)
 		{
 			if (type instanceof ParameterizedType) {
-				return Types.substituteTypeVariables(type, typeVarAssigns);
+				return substituteTypeVars(type, typeVarAssigns);
 			}
 			if (type instanceof TypeVariable && typeVarAssigns != null) {
 				final Type replacementType = typeVarAssigns.get(type);
@@ -2371,8 +2388,8 @@ public final class Types {
 			}
 			if (type instanceof GenericArrayType && typeVarAssigns != null) {
 				final GenericArrayType genArrType = (GenericArrayType) type;
-				final Type replacementType = Types.substituteTypeVariables(genArrType
-					.getGenericComponentType(), typeVarAssigns);
+				final Type replacementType = substituteTypeVars(
+					genArrType.getGenericComponentType(), typeVarAssigns);
 				return new GenericArrayTypeImpl(replacementType);
 			}
 			return type;

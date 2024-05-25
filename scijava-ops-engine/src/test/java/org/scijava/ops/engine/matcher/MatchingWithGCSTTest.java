@@ -45,7 +45,7 @@ import org.scijava.types.Types;
 
 /**
  * Tests op matcher functionality relating to
- * {@link Types#greatestCommonSuperType}.
+ * {@link Types#superTypeOf}.
  *
  * @author Gabriel Selzer
  */

@@ -447,7 +447,7 @@ public final class Conversions {
 	 *         with wildcards
 	 */
 	private static Nil<?> wildcardVacuousTypeVars(final Type t) {
-		Type[] typeParams = Types.typeParamsAgainstClass(t, Types.raw(t));
+		Type[] typeParams = Types.typeParamsOf(t, Types.raw(t));
 		if (t instanceof TypeVariable<?>) {
 			TypeVariable<?> tv = (TypeVariable<?>) t;
 			// Create an Any with the type variable bounds

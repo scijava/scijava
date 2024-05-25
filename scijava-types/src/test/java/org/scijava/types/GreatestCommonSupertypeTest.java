@@ -39,7 +39,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-/** Tests {@link Types#greatestCommonSuperType}. */
+/** Tests {@link Types#superTypeOf}. */
 public class GreatestCommonSupertypeTest {
 
 	interface Thing { }
@@ -66,7 +66,7 @@ public class GreatestCommonSupertypeTest {
 	public void testDouble() {
 		Type t1 = new Nil<Double>() {}.type();
 		Type t2 = new Nil<Double>() {}.type();
-		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
+		Type superType = Types.superTypeOf(new Type[] { t1, t2 },
 			false);
 		assertTrue(superType.equals(Double.class));
 	}
@@ -75,7 +75,7 @@ public class GreatestCommonSupertypeTest {
 	public void testNumber() {
 		Type t1 = new Nil<Double>() {}.type();
 		Type t2 = new Nil<Long>() {}.type();
-		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
+		Type superType = Types.superTypeOf(new Type[] { t1, t2 },
 			false);
 		assertTrue(superType.equals(Number.class));
 	}
@@ -84,7 +84,7 @@ public class GreatestCommonSupertypeTest {
 	public void testObject() {
 		Type t1 = new Nil<Double>() {}.type();
 		Type t2 = new Nil<String>() {}.type();
-		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
+		Type superType = Types.superTypeOf(new Type[] { t1, t2 },
 			false);
 		Type expected = new Nil<Comparable<?>>() {}.type();
 		assertTrue(superType.equals(expected));
@@ -95,7 +95,7 @@ public class GreatestCommonSupertypeTest {
 	public void testListOfSame() {
 		Type t1 = new Nil<List<Double>>() {}.type();
 		Type t2 = new Nil<List<Double>>() {}.type();
-		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
+		Type superType = Types.superTypeOf(new Type[] { t1, t2 },
 			false);
 		assertTrue(superType.equals(new Nil<List<Double>>() {}.type()));
 		assertFalse(superType.equals(new Nil<List<Object>>() {}.type()),
@@ -110,7 +110,7 @@ public class GreatestCommonSupertypeTest {
 	public void testListOfDifferent() {
 		Type t1 = new Nil<List<Double>>() {}.type();
 		Type t2 = new Nil<List<String>>() {}.type();
-		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
+		Type superType = Types.superTypeOf(new Type[] { t1, t2 },
 			false);
 		Type expectedListType = Types.wildcard(new Type[] {
 			new Nil<Comparable<?>>()
@@ -124,7 +124,7 @@ public class GreatestCommonSupertypeTest {
 	public void testListOfListOfDifferent() {
 		Type t1 = new Nil<List<List<Double>>>() {}.type();
 		Type t2 = new Nil<List<List<String>>>() {}.type();
-		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
+		Type superType = Types.superTypeOf(new Type[] { t1, t2 },
 			false);
 		Type expectedType = Types.wildcard(new Type[] { new Nil<Comparable<?>>() {}
 			.type() }, new Type[] {});
@@ -141,12 +141,12 @@ public class GreatestCommonSupertypeTest {
 	public void testArrayListAndList() {
 		Type t1 = new Nil<List<Double>>() {}.type();
 		Type t2 = new Nil<ArrayList<Double>>() {}.type();
-		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
+		Type superType = Types.superTypeOf(new Type[] { t1, t2 },
 			false);
 		assertTrue(superType.equals(new Nil<List<Double>>() {}.type()));
 		Type t3 = new Nil<ArrayList<Double>>() {}.type();
 		Type t4 = new Nil<List<Double>>() {}.type();
-		Type superType2 = Types.greatestCommonSuperType(new Type[] { t3, t4 },
+		Type superType2 = Types.superTypeOf(new Type[] { t3, t4 },
 			false);
 		assertTrue(superType2.equals(new Nil<List<Double>>() {}.type()));
 	}
@@ -155,7 +155,7 @@ public class GreatestCommonSupertypeTest {
 	public void testNThingQThing() {
 		Type t3 = new Nil<NThing>() {}.type();
 		Type t4 = new Nil<QThing>() {}.type();
-		Type superType = Types.greatestCommonSuperType(new Type[] { t3, t4 },
+		Type superType = Types.superTypeOf(new Type[] { t3, t4 },
 			false);
 		Type expected = Types.wildcard(new Type[] { new Nil<Thing>() {}.type(),
 			new Nil<Stuff>()
@@ -167,7 +167,7 @@ public class GreatestCommonSupertypeTest {
 	public void testNThingYThing() {
 		Type t3 = new Nil<NThing>() {}.type();
 		Type t4 = new Nil<YThing>() {}.type();
-		Type superType = Types.greatestCommonSuperType(new Type[] { t3, t4 },
+		Type superType = Types.superTypeOf(new Type[] { t3, t4 },
 			false);
 		Type expected = Types.wildcard(new Type[] { new Nil<Thing>() {}.type() },
 			new Type[] {});
@@ -180,7 +180,7 @@ public class GreatestCommonSupertypeTest {
 	public void testNThingXThing() {
 		Type t3 = new Nil<NThing>() {}.type();
 		Type t4 = new Nil<XThing>() {}.type();
-		Type superType = Types.greatestCommonSuperType(new Type[] { t3, t4 },
+		Type superType = Types.superTypeOf(new Type[] { t3, t4 },
 			false);
 		assertTrue(superType.equals(new Nil<Base>() {}.type()));
 		assertFalse(superType.equals(new Nil<Thing>() {}.type()),
@@ -191,7 +191,7 @@ public class GreatestCommonSupertypeTest {
 	public void testRecursiveClass() {
 		Type t1 = new Nil<StrangeThing>() {}.type();
 		Type t2 = new Nil<WeirdThing>() {}.type();
-		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
+		Type superType = Types.superTypeOf(new Type[] { t1, t2 },
 			false);
 		Nil<RecursiveThing<?>> expected = new Nil<>() {};
 		assertTrue(superType.equals(expected.type()));
@@ -201,7 +201,7 @@ public class GreatestCommonSupertypeTest {
 	public <T extends Base> void testTypeVar() {
 		Type t1 = new Nil<T>() {}.type();
 		Type t2 = new Nil<NThing>() {}.type();
-		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
+		Type superType = Types.superTypeOf(new Type[] { t1, t2 },
 			false);
 		Nil<Base> expected = new Nil<>() {};
 		assertTrue(superType.equals(expected.type()));
@@ -213,7 +213,7 @@ public class GreatestCommonSupertypeTest {
 		Type t1 = ((ParameterizedType) typeWithWildcard)
 			.getActualTypeArguments()[0];
 		Type t2 = new Nil<XThing>() {}.type();
-		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
+		Type superType = Types.superTypeOf(new Type[] { t1, t2 },
 			false);
 		Nil<Base> expected = new Nil<>() {};
 		assertTrue(superType.equals(expected.type()));

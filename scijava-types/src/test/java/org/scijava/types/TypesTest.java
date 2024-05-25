@@ -113,19 +113,19 @@ public class TypesTest {
 		final Field field = Classes.field(Thing.class, "thing");
 
 		// Object
-		assertAllTheSame(Types.raws(Types.fieldType(field, Thing.class)),
+		assertAllTheSame(Types.raws(Types.typeOf(field, Thing.class)),
 			Object.class);
 
 		// N extends Number
-		assertAllTheSame(Types.raws(Types.fieldType(field, NumberThing.class)),
+		assertAllTheSame(Types.raws(Types.typeOf(field, NumberThing.class)),
 			Number.class);
 
 		// Integer
-		assertAllTheSame(Types.raws(Types.fieldType(field, IntegerThing.class)),
+		assertAllTheSame(Types.raws(Types.typeOf(field, IntegerThing.class)),
 			Integer.class);
 
 		// Serializable & Cloneable
-		assertAllTheSame(Types.raws(Types.fieldType(field, ComplexThing.class)),
+		assertAllTheSame(Types.raws(Types.typeOf(field, ComplexThing.class)),
 			Serializable.class, Cloneable.class);
 	}
 
@@ -150,21 +150,21 @@ public class TypesTest {
 		assertSame(null, componentType(Struct.class, "map"));
 	}
 
-	/** Tests {@link Types#fieldType(Field, Class)}. */
+	/** Tests {@link Types#typeOf(Field, Class)}. */
 	@Test
 	public void testFieldType() {
 		final Field field = Classes.field(Thing.class, "thing");
 
 		// T
-		final Type tType = Types.fieldType(field, Thing.class);
+		final Type tType = Types.typeOf(field, Thing.class);
 		assertEquals("T", tType.toString());
 
 		// N extends Number
-		final Type nType = Types.fieldType(field, NumberThing.class);
+		final Type nType = Types.typeOf(field, NumberThing.class);
 		assertEquals("N", nType.toString());
 
 		// Integer
-		final Type iType = Types.fieldType(field, IntegerThing.class);
+		final Type iType = Types.typeOf(field, IntegerThing.class);
 		assertSame(Integer.class, iType);
 	}
 

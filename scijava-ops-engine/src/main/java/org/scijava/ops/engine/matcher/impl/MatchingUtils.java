@@ -156,7 +156,7 @@ public final class MatchingUtils {
 	public static Type[] mapVarToTypes(Type[] typesToMap,
 		Map<TypeVariable<?>, Type> typeAssigns)
 	{
-		return Arrays.stream(typesToMap).map(type -> Types.unrollVariables(
+		return Arrays.stream(typesToMap).map(type -> Types.unroll(
 			typeAssigns, type, false)).toArray(Type[]::new);
 	}
 

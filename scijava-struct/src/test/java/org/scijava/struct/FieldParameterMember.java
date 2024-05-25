@@ -22,7 +22,7 @@ public class FieldParameterMember<T> extends AnnotatedParameterMember<T>
 	public FieldParameterMember(final Field field, final Class<?> structType)
 		throws ValidityException
 	{
-		super(Types.fieldType(field, structType), //
+		super(Types.typeOf(field, structType), //
 			field.getAnnotation(Parameter.class));
 		this.field = field;
 		this.structType = structType;

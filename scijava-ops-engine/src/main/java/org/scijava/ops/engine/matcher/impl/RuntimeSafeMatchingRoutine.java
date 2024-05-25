@@ -189,7 +189,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 		final Type[] reqArgTypes = candidate.paddedArgs();
 		final Type reqType = candidate.getRequest().type();
 		final Type infoType = candidate.opInfo().opType();
-		Type implementedInfoType = Types.exactSuperType(infoType, Types.raw(
+		Type implementedInfoType = Types.superTypeOf(infoType, Types.raw(
 			reqType));
 		if (!(implementedInfoType instanceof ParameterizedType)) {
 			throw new UnsupportedOperationException(

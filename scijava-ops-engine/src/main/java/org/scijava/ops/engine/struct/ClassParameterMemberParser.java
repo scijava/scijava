@@ -97,7 +97,7 @@ public class ClassParameterMemberParser implements
 	private Method getDeclaredOpMethod(Class<?> c) throws NoSuchMethodException {
 		// NB this is the functional method w.r.t. the interface, not w.r.t. the Op
 		Method fMethod = FunctionalInterfaces.functionalMethodOf(c);
-		Type[] paramTypes = Types.exactParamTypes(fMethod, c);
+		Type[] paramTypes = Types.paramTypesOf(fMethod, c);
 		Class<?>[] rawParamTypes = Arrays.stream(paramTypes).map(t -> Types.raw(t))
 			.toArray(Class[]::new);
 		try {

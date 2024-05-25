@@ -35,9 +35,6 @@ import java.util.stream.StreamSupport;
 import org.scijava.priority.Priority;
 import org.scijava.types.Any;
 import org.scijava.types.Types;
-import org.scijava.types.extract.SubTypeExtractor;
-import org.scijava.types.extract.TypeExtractor;
-import org.scijava.types.extract.TypeReifier;
 
 /**
  * {@link TypeExtractor} plugin which operates on {@link Iterable} objects.
@@ -71,7 +68,7 @@ public class IterableTypeExtractor extends SubTypeExtractor<Iterable<?>> {
 			.map(r::reify) //
 			.toArray(Type[]::new);
 
-		Type actual = Types.greatestCommonSuperType(types, true);
+		Type actual = Types.superTypeOf(types, true);
 		if (actual == null) {
 			actual = new Any();
 		}

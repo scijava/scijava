@@ -102,7 +102,7 @@ public class OpCandidate {
 	public static Type getReifiedType(OpRequest request, OpInfo info,
 		Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
-		Type exactSuperType = Types.exactSuperType(info.opType(), Types.raw(
+		Type exactSuperType = Types.superTypeOf(info.opType(), Types.raw(
 			request.type()));
 		return Types.mapVarToTypes(exactSuperType, typeVarAssigns);
 	}

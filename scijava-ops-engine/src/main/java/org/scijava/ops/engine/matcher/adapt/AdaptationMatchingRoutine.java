@@ -120,7 +120,7 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 				// an Op that will then be adapted (this will be the only input of the
 				// adaptor since we know it is a Function)
 				Type adaptFrom = adaptor.inputTypes().get(0);
-				Type srcOpType = Types.substituteTypeVariables(adaptFrom, map);
+				Type srcOpType = Types.substituteTypeVars(adaptFrom, map);
 				final OpRequest srcOpRequest = inferOpRequest(srcOpType, conditions
 					.request().name(), map);
 				final OpCandidate srcCandidate = matcher.match(MatchingConditions.from(
@@ -144,7 +144,7 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 						return Ops.infoTree(op);
 					}).collect(Collectors.toList());
 				// And return the Adaptor, wrapped up into an OpCandidate
-				Type adapterOpType = Types.substituteTypeVariables(adaptor.output()
+				Type adapterOpType = Types.substituteTypeVars(adaptor.output()
 					.type(), map);
 				InfoTree adaptorChain = new InfoTree(adaptor, depTrees);
 				OpAdaptationInfo adaptedInfo = new OpAdaptationInfo(srcCandidate

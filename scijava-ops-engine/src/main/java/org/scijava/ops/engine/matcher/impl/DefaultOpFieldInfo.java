@@ -103,7 +103,7 @@ public class DefaultOpFieldInfo implements OpInfo {
 
 		// NB: Subclassing a collection and inheriting its fields is NOT
 		// ALLOWED!
-		Type structType = Types.fieldType(field, field.getDeclaringClass());
+		Type structType = Types.typeOf(field, field.getDeclaringClass());
 		FieldInstance fieldInstance = new FieldInstance(field, instance);
 		struct = Structs.from(fieldInstance, structType,
 			new FieldParameterMemberParser());

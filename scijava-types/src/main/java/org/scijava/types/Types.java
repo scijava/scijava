@@ -234,7 +234,7 @@ public final class Types {
 	 * {@code String}.
 	 * </p>
 	 */
-	public static Type param(final Type type, final Class<?> c, final int no) {
+	public static Type typeParamOf(final Type type, final Class<?> c, final int no) {
 		return GenericTypeReflector.getTypeParameter(type, //
 			c.getTypeParameters()[no]);
 	}
@@ -1163,10 +1163,8 @@ public final class Types {
 				for (int i = 0; i < paramBoundTypes.length; i++) {
 					// Get the type parameter of arg from the bound type which we know
 					// is parameterized.
-					final Type argType = param(arg, raw(paramBoundType), i);
-					if (argType == null) {
-						return false;
-					}
+					final Type argType = typeParamOf(arg, raw(paramBoundType), i);
+					if (argType == null) return false;
 					if (paramBoundTypes[i] instanceof TypeVariable<?> &&
 						!isApplicableToTypeParameter(argType,
 							(TypeVariable<?>) paramBoundTypes[i], typeBounds)) return false;

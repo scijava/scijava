@@ -168,16 +168,16 @@ public class TypesTest {
 		assertSame(Integer.class, iType);
 	}
 
-	/** Tests {@link Types#param}. */
+	/** Tests {@link Types#typeParamOf}. */
 	@Test
-	public void testParam() {
+	public void testTypeParamOf() {
 		class Struct {
 
 			@SuppressWarnings("unused")
 			private List<int[]> list;
 		}
 		final Type listType = type(Struct.class, "list");
-		final Type paramType = Types.param(listType, List.class, 0);
+		final Type paramType = Types.typeParamOf(listType, List.class, 0);
 		final Class<?> paramClass = Types.raw(paramType);
 		assertSame(int[].class, paramClass);
 	}

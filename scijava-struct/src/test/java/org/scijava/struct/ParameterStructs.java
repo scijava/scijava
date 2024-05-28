@@ -63,7 +63,7 @@ public final class ParameterStructs {
 			if (p.length == paramCount) {
 				for (int i=0; i<p.length; i++) {
 					String key = p[i].key();
-					final Type itemType = Types.param(type, functionalType, i);
+					final Type itemType = Types.typeParamOf(type, functionalType, i);
 					final Class<?> rawItemType = Types.raw(itemType);
 					final boolean valid = checkValidity(p[i], key, rawItemType, false,
 						names, problems);

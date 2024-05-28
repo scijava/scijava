@@ -691,19 +691,19 @@ public final class Types {
 	 * just replaced.
 	 *
 	 * @param typesToMap
-	 * @param typeAssigns
+	 * @param typeVarAssigns
 	 */
 	public static Type[] mapVarToTypes(Type[] typesToMap,
-		Map<TypeVariable<?>, Type> typeAssigns)
+		Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
 		return Arrays.stream(typesToMap).map(type -> mapVarToTypes(type,
-			typeAssigns)).toArray(Type[]::new);
+			typeVarAssigns)).toArray(Type[]::new);
 	}
 
 	public static Type mapVarToTypes(Type typeToMap,
-		Map<TypeVariable<?>, Type> typeAssigns)
+		Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
-		return unroll(typeAssigns, typeToMap, false);
+		return unroll(typeVarAssigns, typeToMap, false);
 	}
 
 	/**
@@ -884,13 +884,13 @@ public final class Types {
 	 * Create a parameterized type instance.
 	 *
 	 * @param raw the raw class to create a parameterized type instance for
-	 * @param typeArgMappings the mapping used for parameterization
+	 * @param typeVarAssigns the mapping used for parameterization
 	 * @return {@link ParameterizedType}
 	 */
 	public static ParameterizedType parameterize(final Class<?> raw,
-		final Map<TypeVariable<?>, Type> typeArgMappings)
+		final Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
-		return TypeUtils.parameterize(raw, typeArgMappings);
+		return TypeUtils.parameterize(raw, typeVarAssigns);
 	}
 
 	/**

@@ -197,12 +197,8 @@ public class TypesTest {
 		final Type arg = new Nil<U>() {}.type();
 		final Type[] argTypes = Types.typeParamsOf(arg, Thing.class);
 		assertNotNull(argTypes);
-		// FIXME: argTypes should return {Integer.class}, not {}.
-		//  In contrast, the correct result is returned by:
-		//  - Types.typeParamOf(arg, Thing.class, 0)
-		//  - Types.typeParamsOf(IntegerThing.class, Thing.class)
-//		assertEquals(1, argTypes.length);
-//		assertSame(Integer.class, argTypes[0]);
+		assertEquals(1, argTypes.length);
+		assertSame(Integer.class, argTypes[0]);
 	}
 
 	/** Tests {@link Types#isAssignable(Type, Type)}. */

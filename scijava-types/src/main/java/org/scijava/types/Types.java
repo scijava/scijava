@@ -418,7 +418,7 @@ public final class Types {
 	 */
 	public static Type[] typeParamsOf(Type src, Class<?> superclass) {
 		// only classes and ParameterizedTypes can have type parameters
-		if (!(src instanceof Class || src instanceof ParameterizedType))
+		if (!(src instanceof Class || src instanceof ParameterizedType || src instanceof TypeVariable))
 			return new Type[0];
 		try {
 			Type superSrc = superTypeOf(src, superclass);

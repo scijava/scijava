@@ -81,6 +81,8 @@ import org.scijava.common3.Classes;
  * </ul>
  *
  * @author Curtis Rueden
+ * @author Gabriel Selzer
+ * @author David Kolb
  */
 public final class Types {
 

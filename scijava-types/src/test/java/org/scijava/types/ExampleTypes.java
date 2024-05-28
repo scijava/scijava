@@ -71,13 +71,4 @@ public final class ExampleTypes {
 	}
 
 	public static class Bag<T extends Thing<T>> extends ArrayList<T> {}
-
-	public interface Data<K, V> {
-
-		Map<K, V> map();
-
-		Set<K> keySet();
-
-		List<V> values();
-	}
 }

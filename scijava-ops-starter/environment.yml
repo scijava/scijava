@@ -1,0 +1,7 @@
+name: scijava
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - maven
+  - openjdk>11

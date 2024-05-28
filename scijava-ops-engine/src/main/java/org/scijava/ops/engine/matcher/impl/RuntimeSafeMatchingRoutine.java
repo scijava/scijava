@@ -99,7 +99,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	 * * has a matching number of args</br>
 	 * * {@link #missArgs(OpCandidate, Type[])}</br>
 	 * </br>
-	 * then returns the candidates which fulfill this criteria.
+	 * then returns the candidates which fulfill these criteria.
 	 *
 	 * @param candidates the candidates to check
 	 * @return candidates passing checks
@@ -129,10 +129,10 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 			.priority()));
 
 		List<OpCandidate> matches;
-		matches = filterMatches(validCandidates, (cand) -> typesPerfectMatch(cand));
+		matches = filterMatches(validCandidates, this::typesPerfectMatch);
 		if (!matches.isEmpty()) return matches;
 
-		matches = filterMatches(validCandidates, (cand) -> typesMatch(cand));
+		matches = filterMatches(validCandidates, this::typesMatch);
 		return matches;
 	}
 
@@ -175,7 +175,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	/**
 	 * Checks whether the output types of the candidate are applicable to the
 	 * input types of the {@link OpRequest}. Sets candidate status code if there
-	 * are too many, to few, or not matching types.
+	 * are too many, too few, or not matching types.
 	 *
 	 * @param candidate the candidate to check inputs for
 	 * @param typeBounds possibly predetermined type bounds for type variables
@@ -204,7 +204,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 			if (candidateArgTypes[i] == null) implTypeParams[i] = null;
 		}
 		candidateArgTypes = Arrays.stream(implTypeParams) //
-			.filter(t -> t != null).toArray(Type[]::new);
+			.filter(Objects::nonNull).toArray(Type[]::new);
 
 		if (reqArgTypes == null) return true; // no constraints on output types
 
@@ -277,8 +277,8 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 
 	/**
 	 * Checks whether the arg types of the candidate satisfy the padded arg types
-	 * of the candidate. Sets candidate status code if there are too many, to
-	 * few,not matching arg types or if a match was found.
+	 * of the candidate. Sets candidate status code if there are too many, too
+	 * few, not matching arg types or if a match was found.
 	 *
 	 * @param candidate the candidate to check args for
 	 * @return whether the arg types are satisfied

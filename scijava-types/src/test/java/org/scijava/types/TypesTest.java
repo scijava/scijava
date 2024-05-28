@@ -152,7 +152,7 @@ public class TypesTest {
 
 	/** Tests {@link Types#typeOf(Field, Class)}. */
 	@Test
-	public void testFieldType() {
+	public void testTypeOf() {
 		final Field field = Classes.field(Thing.class, "thing");
 
 		// T
@@ -245,8 +245,8 @@ public class TypesTest {
 		assertTrue(Types.isAssignable(listNumber, listT));
 		assertTrue(Types.isAssignable(listInteger, listT));
 		assertTrue(Types.isAssignable(listExtendsNumber, listT));
-//		List<? extends Number> l = new ArrayList<>();
-//		List<Number> l2 = (List<Number>) l;
+		// List<? extends Number> l = new ArrayList<>();
+		// List<Number> l2 = (List<Number>) l;
 		assertTrue(Types.isAssignable(listExtendsNumber, listNumber));
 
 		assertTrue(Types.isAssignable(listT, listRaw));
@@ -276,18 +276,17 @@ public class TypesTest {
 		final Type listInteger = new Nil<List<Integer>>() {}.type();
 		final Type listExtendsNumber = new Nil<List<? extends Number>>() {}
 			.type();
-//		T list = (T) new ArrayList<N>();
+		// T list = (T) new ArrayList<N>();
 		assertTrue(Types.isAssignable(listN, t));
-//		T list = (T) new ArrayList<Number>();
+		// T list = (T) new ArrayList<Number>();
 		assertTrue(Types.isAssignable(listNumber, t));
-//		T list = (T) new ArrayList<Integer>();
+		// T list = (T) new ArrayList<Integer>();
 		assertTrue(Types.isAssignable(listInteger, t));
-//		List<? extends Number> l = new ArrayList<Number>();
-//		T list = (T) l;
+		// List<? extends Number> l = new ArrayList<Number>();
+		// T list = (T) l;
 		assertTrue(Types.isAssignable(listExtendsNumber, t));
-//		T list = (T) new ArrayList<S>();
+		// T list = (T) new ArrayList<S>();
 		assertFalse(Types.isAssignable(listS, t));
-
 	}
 
 	/** Tests {@link Types#isAssignable(Type, Type)} against {@link Object} */
@@ -323,7 +322,7 @@ public class TypesTest {
 
 	/** Tests {@link Types#isApplicable(Type[], Type[])} for raw classes. */
 	@Test
-	public void testSatisfiesRaw() {
+	public void testIsApplicableRaw() {
 		// f(Number, Integer)
 		final Type[] dest = { Number.class, Integer.class };
 
@@ -341,7 +340,7 @@ public class TypesTest {
 
 	/** Tests {@link Types#isApplicable(Type[], Type[])} for single arguments. */
 	@Test
-	public <T extends Number, U extends BigInteger> void testSatisfiesSingle() {
+	public <T extends Number, U extends BigInteger> void testIsApplicableSingle() {
 		// <T extends Number> f(T)
 		final Type t = new Nil<T>() {}.type();
 		final Type u = new Nil<U>() {}.type();
@@ -433,7 +432,7 @@ public class TypesTest {
 
 	@Test
 	public <T extends Number, U extends String, V extends BigInteger> void
-		testSatisfiesGenericArrays()
+		testIsApplicableGenericArrays()
 	{
 		// generic arrays
 		final Type arrayT = new Nil<T[]>() {}.type();
@@ -488,7 +487,7 @@ public class TypesTest {
 
 	@Test
 	public <S, T extends Thing<S>, U extends IntegerThing, V extends RecursiveThing<V>, W extends RecursiveThing<W> & Loop, X extends Thing<S> & Loop>
-		void testSatisfiesTypeVariables()
+		void testIsApplicableTypeVariables()
 	{
 		final Type t = new Nil<T>() {}.type();
 		final Type u = new Nil<U>() {}.type();
@@ -560,7 +559,7 @@ public class TypesTest {
 	 * parameter appears across multiple destination types.
 	 */
 	@Test
-	public <T> void testSatisfiesMatchingT() {
+	public <T> void testIsApplicableMatchingT() {
 		// <T> f(List<T>, List<T>)
 		final Type[] params = { //
 			new Nil<List<T>>()
@@ -590,7 +589,7 @@ public class TypesTest {
 	}
 
 	@Test
-	public <N, C> void testSatisfiesWildcards() {
+	public <N, C> void testIsApplicableWildcards() {
 		var n = new Nil<List<N>>() {};
 		var c = new Nil<List<C>>() {};
 		var nWildcard = new Nil<List<? extends Number>>() {};
@@ -609,7 +608,7 @@ public class TypesTest {
 	}
 
 	@Test
-	public <N> void testSatisfiesWildcardsInParameterizedType() {
+	public <N> void testIsApplicableWildcardsInParameterizedType() {
 		var n = new Nil<N>() {};
 		var ln = new Nil<List<N>>() {};
 		var lw = new Nil<List<? extends Number>>() {};
@@ -625,7 +624,7 @@ public class TypesTest {
 
 	@Test
 	public <N extends Number, C extends List<String>> void
-		testSatisfiesBoundedWildcards()
+		testIsApplicableBoundedWildcards()
 	{
 		var n = new Nil<List<N>>() {};
 		var c = new Nil<List<C>>() {};
@@ -654,7 +653,7 @@ public class TypesTest {
 	 * indirectly parameterized by implementing an parameterized interface.
 	 */
 	@Test
-	public <I1, I2> void testSatisfiesIndirectTypeVariables() {
+	public <I1, I2> void testIsApplicableIndirectTypeVariables() {
 
 		abstract class NestedThingImplOK1 implements NestedThing<Double, Double> {}
 
@@ -669,7 +668,7 @@ public class TypesTest {
 	 * variables are expected but the given ones are nested and bounded.
 	 */
 	@Test
-	public <I1, I2> void testSatisfiesUnboundedTypeVariables() {
+	public <I1, I2> void testIsApplicableUnboundedTypeVariables() {
 
 		abstract class NestedThingImplOK1 implements
 			Function<Iterable<Double>, Consumer<Double>>

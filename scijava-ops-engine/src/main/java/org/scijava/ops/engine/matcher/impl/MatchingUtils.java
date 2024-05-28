@@ -29,17 +29,11 @@
 
 package org.scijava.ops.engine.matcher.impl;
 
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 
 import org.scijava.types.Any;
-import org.scijava.types.Nil;
 import org.scijava.types.Types;
 import org.scijava.types.Types.TypeVarInfo;
 
@@ -134,83 +128,6 @@ public final class MatchingUtils {
 			}
 
 			if (!Types.isAssignable(Types.raw(from), Types.raw(to))) return i;
-		}
-		return -1;
-	}
-
-	/**
-	 * Map type vars in specified type list to types using the specified map. In
-	 * doing so, type vars mapping to other type vars will not be followed but
-	 * just replaced.
-	 *
-	 * @param typesToMap
-	 * @param typeAssigns
-	 * @return a copy of {@code typesToMap} in which the {@link TypeVariable}s
-	 *         (that are present in {@code typeAssigns}) are mapped to the
-	 *         associated values within the {@code Map}.
-	 */
-	public static Type[] mapVarToTypes(Type[] typesToMap,
-		Map<TypeVariable<?>, Type> typeAssigns)
-	{
-		return Arrays.stream(typesToMap).map(type -> Types.unroll(
-			typeAssigns, type, false)).toArray(Type[]::new);
-	}
-
-	/**
-	 * Gets the "useful" class information carries on the given object, which
-	 * depends on the actual type of the object.
-	 */
-	public static Class<?> getClass(final Object obj) {
-		if (obj == null) return null;
-		if (obj instanceof Nil) return getClass(((Nil<?>) obj).type());
-		if (obj instanceof Class) return (Class<?>) obj;
-		if (obj instanceof ParameterizedType)
-			return (Class<?>) ((ParameterizedType) obj).getRawType();
-		return obj.getClass();
-	}
-
-	/**
-	 * Finds the levels of casting between {@code origin} and {@code dest}.
-	 * Returns 0 if dest and origin are the same. Returns -1 if dest is not
-	 * assignable from origin.
-	 */
-	public static int findCastLevels(final Class<?> dest, final Class<?> origin) {
-		if (dest.equals(origin)) return 0;
-
-		int level = 1;
-		Class<?> currType = origin;
-		// BFS if dest is an interface
-		if (dest.isInterface()) {
-			final HashSet<String> seen = new HashSet<>();
-			final ArrayList<Type> currIfaces = new ArrayList<>(Arrays.asList(currType
-				.getGenericInterfaces()));
-			do {
-				final ArrayList<Type> nextIfaces = new ArrayList<>();
-				for (final Type iface : currIfaces) {
-					if (seen.contains(iface.getTypeName())) continue;
-
-					final Class<?> cls = getClass(iface);
-					if (cls.equals(dest)) return level;
-					seen.add(iface.getTypeName());
-					nextIfaces.addAll(Arrays.asList(cls.getGenericInterfaces()));
-				}
-				currIfaces.clear();
-				currIfaces.addAll(nextIfaces);
-				if (currType.getSuperclass() != null) {
-					currType = currType.getSuperclass();
-					currIfaces.addAll(Arrays.asList(currType.getGenericInterfaces()));
-				}
-				level++;
-			}
-			while (!currIfaces.isEmpty() || currType.getSuperclass() != null);
-		}
-		// otherwise dest is a class, so search the list of ancestors
-		else {
-			while (currType.getSuperclass() != null) {
-				currType = currType.getSuperclass();
-				if (currType.equals(dest)) return level;
-				level++;
-			}
 		}
 		return -1;
 	}

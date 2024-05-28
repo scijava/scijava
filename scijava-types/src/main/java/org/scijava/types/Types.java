@@ -590,7 +590,7 @@ public final class Types {
 	}
 
 	public static int isApplicable(final Type[] args, final Type[] params,
-		final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
+		final Map<TypeVariable<?>, TypeVarInfo> typeBounds)
 	{
 		if (args.length != params.length) {
 			throw new IllegalArgumentException("src and dest lengths differ");
@@ -1027,7 +1027,7 @@ public final class Types {
 	private static boolean isApplicableToParameterizedTypes(
 		final Type arg,
 		final ParameterizedType param,
-		final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds
+		final Map<TypeVariable<?>, TypeVarInfo> typeBounds
 	) {
 		if (arg instanceof Class) {
 			Class<?> paramRaw = raw(param);
@@ -1087,7 +1087,7 @@ public final class Types {
 	private static boolean isApplicableToTypeParameter(
 		final Type arg,
 		final TypeVariable<?> param,
-		final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds
+		final Map<TypeVariable<?>, TypeVarInfo> typeBounds
 	) {
 		// add the type variable to the HashMap if it does not yet exist.
 		if (!typeBounds.containsKey(param)) {
@@ -1118,7 +1118,7 @@ public final class Types {
 	private static boolean isApplicableToTypeVariable(
 		final Type arg,
 		final TypeVariable<?> param,
-		final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds
+		final Map<TypeVariable<?>, TypeVarInfo> typeBounds
 	) {
 		// if the TypeVariable is not already in the hashMap add it.
 		if (!typeBounds.containsKey(param)) typeBounds.put(param,
@@ -1153,7 +1153,7 @@ public final class Types {
 	private static boolean isApplicableToTypeVariableBounds(
 		final Type arg,
 		final TypeVariable<?> param,
-		final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds
+		final Map<TypeVariable<?>, TypeVarInfo> typeBounds
 	) {
 		final Type[] paramBounds = typeBounds.get(param).upperBounds;
 		for (final Type paramBound : paramBounds) {
@@ -1201,7 +1201,7 @@ public final class Types {
 	private static boolean isApplicableToGenericArrayType(
 		final Type arg,
 		final GenericArrayType param,
-		final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds
+		final Map<TypeVariable<?>, TypeVarInfo> typeBounds
 	) {
 		// get a class object of the component type of each array
 		final Type argComponent = component(arg);

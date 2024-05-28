@@ -54,6 +54,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class ProvenanceTest extends AbstractTestEnvironment implements
@@ -115,6 +116,11 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 				null);
 
 		}
+	}
+
+	@OpMethod(names = "test.create.thing", type = BiFunction.class)
+	public static Thing createThingWithNullable(Double d1, @Nullable Double d2) {
+		return new Thing(d2 == null ? d1 : d1 + d2);
 	}
 
 	static class Thing {
@@ -516,6 +522,34 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		expected = new Double[] { 2.0, 3.0, 4.0 };
 		Assertions.assertArrayEquals(expected, actual);
 		Assertions.assertEquals(1, ops.history().executionsUpon(actual).size());
+	}
+
+	@Test
+	public void testReducedOpRecovery() {
+		// Get the Op
+		Function<Double, Thing> f = ops //
+			.op("test.create.thing") //
+			.inType(Double.class) //
+			.outType(Thing.class) //
+			.function();
+		// Assert only one execution
+		Thing actual = f.apply(4.0);
+		Thing expected = new Thing(4.0);
+		Assertions.assertEquals(expected.d, actual.d);
+		Assertions.assertEquals(1, ops.history().executionsUpon(actual).size());
+		// Get the signature from the Op
+		String signature = Ops.signature(f);
+		// Generate the Op from the signature and the Op type
+		Nil<Function<Thing, Thing>> special = new Nil<>() {};
+		Function<Thing, Thing> fromString = ops //
+			.opFromSignature(signature, special);
+		// Assert Op similarity
+		Assertions.assertTrue(wrappedOpEquality(f, fromString));
+		// Assert only one execution
+		actual = f.apply(4.0);
+		Assertions.assertEquals(expected.d, actual.d);
+		Assertions.assertEquals(1, ops.history().executionsUpon(actual).size());
+
 	}
 
 	// -- Helper Methods -- //

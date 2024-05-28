@@ -1111,8 +1111,7 @@ public final class Types {
 		// if the type variable refers to some parameterized type
 		// (e.g. T extends List<?>), recurse on the bounds of param
 		// that are ParameterizedTypes.
-		if (!isApplicableToTypeVariableBounds(arg, param, typeBounds)) return false;
-		return true;
+		return isApplicableToTypeVariableBounds(arg, param, typeBounds);
 	}
 
 	private static boolean isApplicableToTypeVariable(
@@ -1133,8 +1132,7 @@ public final class Types {
 		// if the type variable refers to some parameterized type
 		// (e.g. T extends List<?>), recurse on the bounds of param
 		// that are ParameterizedTypes.
-		if (!isApplicableToTypeVariableBounds(arg, param, typeBounds)) return false;
-		return true;
+		return isApplicableToTypeVariableBounds(arg, param, typeBounds);
 	}
 
 	/**

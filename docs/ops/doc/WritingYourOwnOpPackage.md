@@ -8,12 +8,10 @@ We assume that you have successfully setup a Java development environment for Sc
 
 ### Create a SciJava Ops development environment
 
-While there are multiple ways to setup a development environment for SciJava Ops, we recommend creating your environment with `conda` or `mamba`.
-We strongly recommend using [Mamba](https://mamba.readthedocs.io/en/latest/user_guide/mamba.html) instead of Conda, because Conda is unfortunately
-terribly slow at configuring environments.
+While there are multiple ways to setup a development environment for SciJava Ops, we recommend creating your environment with `mamba`.
 
 1. [Install Miniforge3](https://github.com/conda-forge/miniforge#miniforge3)
-2. Create your the development environment with the following `.yml` file:
+2. Create a development environment with the following `environment.yml` file:
     
     ```yaml
     name: scijava
@@ -24,6 +22,10 @@ terribly slow at configuring environments.
         - maven
         - openjdk>11
     ```
+   Create the above environment locally by running the following command:
+   ```bash
+   mamba env create -f environment.yml
+   ```
 3. Add the Scijava Ops Indexer to your POM:
 
     ```xml

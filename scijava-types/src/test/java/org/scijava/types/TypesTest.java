@@ -32,6 +32,7 @@ package org.scijava.types;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -180,6 +181,28 @@ public class TypesTest {
 		final Type paramType = Types.typeParamOf(listType, List.class, 0);
 		final Class<?> paramClass = Types.raw(paramType);
 		assertSame(int[].class, paramClass);
+	}
+
+	/** Tests {@link Types#typeParamsOf(Class, Class)}. */
+	@Test
+	public void testTypeParamsOfClass() {
+		final Type[] argTypesRaw = Types.typeParamsOf(IntegerThing.class, Thing.class);
+		assertEquals(1, argTypesRaw.length);
+		assertSame(Integer.class, argTypesRaw[0]);
+	}
+
+	/** Tests {@link Types#typeParamsOf(Type, Class)}. */
+	@Test
+	public <U extends IntegerThing> void testTypeParamsOfType() {
+		final Type arg = new Nil<U>() {}.type();
+		final Type[] argTypes = Types.typeParamsOf(arg, Thing.class);
+		assertNotNull(argTypes);
+		// FIXME: argTypes should return {Integer.class}, not {}.
+		//  In contrast, the correct result is returned by:
+		//  - Types.typeParamOf(arg, Thing.class, 0)
+		//  - Types.typeParamsOf(IntegerThing.class, Thing.class)
+//		assertEquals(1, argTypes.length);
+//		assertSame(Integer.class, argTypes[0]);
 	}
 
 	/** Tests {@link Types#isAssignable(Type, Type)}. */

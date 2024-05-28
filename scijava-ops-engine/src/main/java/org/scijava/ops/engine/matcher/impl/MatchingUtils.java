@@ -50,23 +50,26 @@ public final class MatchingUtils {
 	}
 
 	/**
-	 * Checks for raw assignability. TODO This method is not yet fully
-	 * implemented. The correct behavior should be as follows. Suppose we have a
-	 * generic typed method like:
+	 * Checks for raw assignability.
+	 * <p>
+	 * TODO: This method is not yet fully implemented.
+	 *  The correct behavior should be as follows.
+	 *  Suppose we have a generic typed method like:
+	 * </p>
 	 *
 	 * <pre>
-	 *public static &lt;N&gt; List&lt;N&gt; foo(N in) {
-	 *	...
-	 *}
+	 * public static &lt;N&gt; List&lt;N&gt; foo(N in) {
+	 *   ...
+	 * }
 	 * </pre>
 	 *
 	 * This method should discern if the following assignments would be legal,
 	 * possibly using predetermined {@link TypeVariable} assignments:
 	 *
 	 * <pre>
-	 *List&lt;Integer&gt; listOfInts = foo(new Integer(0)) //legal
-	 *List&lt;Number&gt; listOfNumbers = foo(new Integer(0)) //legal
-	 *List&lt;? extends Number&gt; listOfBoundedWildcards = foo(new Integer(0)) //legal
+	 * List&lt;Integer&gt; listOfInts = foo(new Integer(0)) //legal
+	 * List&lt;Number&gt; listOfNumbers = foo(new Integer(0)) //legal
+	 * List&lt;? extends Number&gt; listOfBoundedWildcards = foo(new Integer(0)) //legal
 	 * </pre>
 	 *
 	 * The corresponding calls to this method would be:
@@ -109,19 +112,13 @@ public final class MatchingUtils {
 			if (from instanceof TypeVariable) {
 				TypeVarInfo typeVarInfo = typeBounds.get(from);
 				// HACK: we CAN assign, for example, a Function<Iterable<N>, O> to a
-				// Function<Iterable<Integer>, Double>,
-				// because in this situation O is not bounded to any other types.
-				// However
-				// isAssignable will fail,
-				// since we cannot just cast Double to O without that required knowledge
-				// that O
-				// can be fixed to Double.
-				// We get around this by recording in typeBounds that our previously
-				// unbounded
-				// TypeVariable (from) \
-				// is now fixed to (to), then simply assigning (from) to (to), since
-				// from only
-				// has one bound, being to.
+				// Function<Iterable<Integer>, Double>, because in this situation O is
+				// not bounded to any other types. However isAssignable will fail,
+				// since we cannot just cast Double to O without that required
+				// knowledge that O can be fixed to Double. We get around this by
+				// recording in `typeBounds` that our previously unbounded TypeVariable
+				// `from` is now fixed to `to`, then simply assigning `from` to `to`,
+				// since `from` only has one bound, being `to`.
 				if (typeVarInfo == null) {
 					TypeVariable<?> fromTypeVar = (TypeVariable<?>) from;
 					TypeVarInfo fromInfo = new TypeVarInfo(fromTypeVar);
@@ -130,8 +127,7 @@ public final class MatchingUtils {
 					from = to;
 				}
 				// similar to the above, if we know that O is already bound to a Type,
-				// and that
-				// Type is to, then we can assign this without any issues.
+				// and that Type is to, then we can assign this without any issues.
 				else {
 					if (typeVarInfo.allowType(to, true)) from = to;
 				}

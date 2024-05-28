@@ -47,7 +47,7 @@ To depend on SciJava Ops FLIM, copy the following to your `pom.xml`:
 
 ```xml
   <properties>
-    <scijava-ops-flim.version>0-SNAPSHOT</scijava-ops-flim.version>
+    <scijava-ops-flim.version>1.0.0</scijava-ops-flim.version>
   </properties>
 
   <dependencies>

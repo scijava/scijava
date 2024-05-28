@@ -11,12 +11,12 @@ Suppose your module `com.example.foo` contains an implementation `com.example.fo
 
 * Declare SciJava Ops Service Loader as a dependency; if using Maven, it looks like this:
 
-```java
+```xml
 <dependency>
 	<groupId>org.scijava</groupId>
 	<artifactId>scijava-ops-serviceLoader</artifactId>
-	<version>0-SNAPSHOT</version>
-</dependency
+	<version>1.0.0</version>
+</dependency>
 ```
 * Make sure that the interface being implemented is `use`d in SciJava Ops Service Loader's `module-info.java`
 * Declare in your project's `module-info.java`:

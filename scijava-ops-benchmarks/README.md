@@ -16,7 +16,7 @@ cd scijava-ops-benchmarks
 mvn dependency:copy-dependencies
 
 # Execute the benchmarks
-java -cp "target/scijava-ops-benchmarks-0-SNAPSHOT.jar:target/dependency/*" org.openjdk.jmh.Main
+java -cp "target/scijava-ops-benchmarks-1.0.0.jar:target/dependency/*" org.openjdk.jmh.Main
 ```
 
 # Adding a new benchmark

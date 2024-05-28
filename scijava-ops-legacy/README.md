@@ -7,6 +7,6 @@ For Maven projects, this library can be used by adding to your `pom.xml`:
 <dependency>
 	<groupId>org.scijava</groupId>
 	<artifactId>scijava-ops-legacy</artifactId>
-	<version>0-SNAPSHOT</version>
+	<version>1.0.0</version>
 </dependency>
 ```

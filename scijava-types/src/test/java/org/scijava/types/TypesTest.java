@@ -512,24 +512,32 @@ public class TypesTest {
 		final Type thingInt = new Nil<Thing<Integer>>() {}.type();
 		final Type numberThingInt = new Nil<NumberThing<Integer>>() {}.type();
 		final Type numberThingDouble = new Nil<NumberThing<Double>>() {}.type();
-		final Type strangeThingDouble = new Nil<StrangeThing<Double>>() {}
-			.type();
-		final Type strangerThingString = new Nil<StrangerThing<String>>() {}
-			.type();
+		final Type strangeThingDouble = new Nil<StrangeThing<Double>>() {}.type();
+		final Type strangerThingString = new Nil<StrangerThing<String>>() {}.type();
 		final Type integerThing = new Nil<IntegerThing>() {}.type();
 
-		assertEquals(-1, Types.isApplicable(new Type[] { thingInt, thingInt,
-			numberThingInt, integerThing }, new Type[] { t, t, t, t }));
-		assertEquals(-1, Types.isApplicable(new Type[] { thingInt, numberThingInt,
-			strangerThingString }, new Type[] { t, t, t }));
-		assertEquals(-1, Types.isApplicable(new Type[] { thingInt, numberThingInt,
-			integerThing }, new Type[] { t, t, t }));
-		assertEquals(-1, Types.isApplicable(new Type[] { numberThingInt,
-			strangeThingDouble }, new Type[] { t, t }));
+		assertEquals(-1, Types.isApplicable(
+			new Type[] { thingInt, thingInt, numberThingInt, integerThing },
+			new Type[] { t, t, t, t }
+		));
+		assertEquals(-1, Types.isApplicable(
+			new Type[] { thingInt, numberThingInt, strangerThingString },
+			new Type[] { t, t, t }
+		));
+		assertEquals(-1, Types.isApplicable(
+			new Type[] { thingInt, numberThingInt, integerThing },
+			new Type[] { t, t, t }
+		));
+		assertEquals(-1, Types.isApplicable(
+			new Type[] { numberThingInt, strangeThingDouble },
+			new Type[] { t, t }
+		));
 		// S cannot accommodate a Double since S is already locked to Integer from
 		// the first argument.
-		assertNotEquals(-1, Types.isApplicable(new Type[] { thingInt, numberThingInt,
-			numberThingDouble }, new Type[] { t, t, t }));
+		assertNotEquals(-1, Types.isApplicable(
+			new Type[] { thingInt, numberThingInt, numberThingDouble },
+			new Type[] { t, t, t }
+		));
 		assertEquals(-1, Types.isApplicable(new Type[] { u }, new Type[] { t }));
 
 		// recursive Type Variables

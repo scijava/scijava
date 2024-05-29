@@ -553,9 +553,9 @@ public class MatchingUtilsTest {
 		//  such that the following test can pass.
 //
 //		typeBounds = new HashMap<>();
-//		assertTrue(-1 == Types.isApplicable(new Type[]{String.class}, new Type[]{n.type()}, typeBounds));
+//		assertEquals(-1, Types.isApplicable(new Type[]{String.class}, new Type[]{n.type()}, typeBounds));
 //		toOuts = new Type[]{lWildNum.type()};
 //		fromOuts = new Type[]{ln.type()};
-//		assertFalse(-1 == MatchingUtils.checkGenericOutputsAssignability(fromOuts, toOuts, typeBounds));
+//		assertNotEquals(-1, MatchingUtils.checkGenericOutputsAssignability(fromOuts, toOuts, typeBounds));
 	}
 }

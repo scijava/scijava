@@ -29,8 +29,8 @@
 
 package org.scijava.common3;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -68,7 +68,7 @@ public class GreatestCommonSupertypeTest {
 		Type t2 = Double.class;
 		Type superType = Types.superTypeOf(new Type[] { t1, t2 },
 			false);
-		assertTrue(superType.equals(Double.class));
+		assertEquals(Double.class, superType);
 	}
 
 	@Test
@@ -77,7 +77,7 @@ public class GreatestCommonSupertypeTest {
 		Type t2 = Long.class;
 		Type superType = Types.superTypeOf(new Type[] { t1, t2 },
 			false);
-		assertTrue(superType.equals(Number.class));
+		assertEquals(Number.class, superType);
 	}
 
 	@Test
@@ -87,7 +87,7 @@ public class GreatestCommonSupertypeTest {
 		Type superType = Types.superTypeOf(new Type[] { t1, t2 },
 			false);
 		Type expected = Types.parameterize(Comparable.class, new Type[] { Types.wildcard() });
-		assertTrue(superType.equals(expected));
+		assertEquals(expected, superType);
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -96,15 +96,12 @@ public class GreatestCommonSupertypeTest {
 		Type listOfDouble = Types.parameterize(List.class, new Type[] { Double.class });
 		Type superType = Types.superTypeOf(new Type[] { listOfDouble, listOfDouble },
 			false);
-		assertTrue(superType.equals(listOfDouble));
+		assertEquals(listOfDouble, superType);
 		Type listOfObject = Types.parameterize(List.class, new Type[] { Object.class });
-		assertFalse(superType.equals(listOfObject),
-			"Class Double should take precedence over Object");
+		assertNotEquals(listOfObject, superType, "Class Double should take precedence over Object");
 		Type listOfQ = Types.parameterize(List.class, new Type[] { Types.wildcard() });
-		assertFalse(superType.equals(listOfQ),
-			"Class Double should be discernable over wildcard");
-		assertFalse(superType.equals(List.class),
-			"Class Double should be discernable, rawtype should not be returned");
+		assertNotEquals(listOfQ, superType, "Class Double should be discernable over wildcard");
+		assertNotEquals(List.class, superType, "Class Double should be discernable, rawtype should not be returned");
 	}
 
 	@Test
@@ -116,7 +113,7 @@ public class GreatestCommonSupertypeTest {
 		Type comparableQ = Types.parameterize(Comparable.class, new Type[] { Types.wildcard() });
 		Type expectedListType = Types.wildcard(new Type[] { comparableQ }, new Type[] {});
 		Type expected = Types.parameterize(List.class, new Type[] { expectedListType });
-		assertTrue(superType.equals(expected));
+		assertEquals(expected, superType);
 	}
 
 	@Test
@@ -131,7 +128,7 @@ public class GreatestCommonSupertypeTest {
 		Type expectedList = Types.parameterize(List.class, new Type[] { expectedType });
 		Type expectedListType = Types.wildcard(new Type[] { expectedList }, new Type[] {});
 		Type expected = Types.parameterize(List.class, new Type[] { expectedListType });
-		assertTrue(superType.equals(expected));
+		assertEquals(expected, superType);
 	}
 
 	@Test
@@ -139,9 +136,9 @@ public class GreatestCommonSupertypeTest {
 		Type t1 = Types.parameterize(List.class, new Type[] { Double.class });
 		Type t2 = Types.parameterize(ArrayList.class, new Type[] { Double.class });
 		Type superType = Types.superTypeOf(new Type[] { t1, t2 }, false);
-		assertTrue(superType.equals(t1));
+		assertEquals(t1, superType);
 		Type superType2 = Types.superTypeOf(new Type[] { t2, t1 }, false);
-		assertTrue(superType2.equals(t1));
+		assertEquals(t1, superType2);
 	}
 
 	@Test
@@ -150,7 +147,7 @@ public class GreatestCommonSupertypeTest {
 		Type t4 = QThing.class;
 		Type superType = Types.superTypeOf(new Type[] { t3, t4 }, false);
 		Type expected = Types.wildcard(new Type[] { Thing.class, Stuff.class }, new Type[] {});
-		assertTrue(superType.equals(expected));
+		assertEquals(expected, superType);
 	}
 
 	@Test
@@ -159,9 +156,8 @@ public class GreatestCommonSupertypeTest {
 		Type t4 = YThing.class;
 		Type superType = Types.superTypeOf(new Type[] { t3, t4 }, false);
 		Type expected = Types.wildcard(new Type[] { Thing.class }, new Type[] {});
-		assertFalse(superType.equals(expected),
-			"Greatest common type should not be a wildcard");
-		assertTrue(superType.equals(Thing.class));
+		assertNotEquals(expected, superType, "Greatest common type should not be a wildcard");
+		assertEquals(Thing.class, superType);
 	}
 
 	@Test
@@ -169,9 +165,8 @@ public class GreatestCommonSupertypeTest {
 		Type t3 = NThing.class;
 		Type t4 = XThing.class;
 		Type superType = Types.superTypeOf(new Type[] { t3, t4 }, false);
-		assertTrue(superType.equals(Base.class));
-		assertFalse(superType.equals(Thing.class),
-			"Non-Object classes should take precedence over interfaces");
+		assertEquals(Base.class, superType);
+		assertNotEquals(Thing.class, superType, "Non-Object classes should take precedence over interfaces");
 	}
 
 	@Test
@@ -181,7 +176,7 @@ public class GreatestCommonSupertypeTest {
 		Type superType = Types.superTypeOf(new Type[] { t1, t2 },
 			false);
 		Type expected = Types.parameterize(RecursiveThing.class, new Type[] { Types.wildcard() });
-		assertTrue(superType.equals(expected));
+		assertEquals(expected, superType);
 	}
 
 	@Test
@@ -190,16 +185,16 @@ public class GreatestCommonSupertypeTest {
 		Type t1 = C.class.getTypeParameters()[0];
 		Type t2 = NThing.class;
 		Type superType = Types.superTypeOf(new Type[] { t1, t2 }, false);
-		assertTrue(superType.equals(Base.class));
+		assertEquals(Base.class, superType);
 	}
 
 	@Test
 	public void testWildcardType() {
 		Type qNThing = Types.wildcard(NThing.class);
-		Type typeWithWildcard = Types.parameterize(List.class, new Type[] { qNThing });
-		Type t1 = ((ParameterizedType) typeWithWildcard).getActualTypeArguments()[0];
+		ParameterizedType typeWithWildcard = Types.parameterize(List.class, new Type[] { qNThing });
+		Type t1 = typeWithWildcard.getActualTypeArguments()[0];
 		Type t2 = XThing.class;
 		Type superType = Types.superTypeOf(new Type[] { t1, t2 }, false);
-		assertTrue(superType.equals(Base.class));
+		assertEquals(Base.class, superType);
 	}
 }

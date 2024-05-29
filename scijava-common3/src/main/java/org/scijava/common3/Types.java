@@ -264,13 +264,11 @@ public final class Types {
 			}
 		}
 
-		// We can effectively find the greatest common super type by assuming that
-		// either:
+		// We find the greatest common super type by assuming that either:
 		// 1) superType extends a superclass of all types in types (this check is
 		// symmetric)
-		// 2) superType implements an interface implemented by all types in typws
-		// (this
-		// check is symmetric)
+		// 2) superType implements an interface implemented by all types in types
+		// (this check is symmetric)
 
 		Type superType = types[0];
 

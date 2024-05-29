@@ -677,8 +677,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	private OpRequest inferOpRequest(OpDependencyMember<?> dependency,
 		Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
-		final Type mappedDependencyType = Types.mapVarToTypes(new Type[] {
-			dependency.type() }, typeVarAssigns)[0];
+		final Type mappedDependencyType = Types.unroll(
+			new Type[] { dependency.type() }, typeVarAssigns)[0];
 		final String dependencyName = dependency.getDependencyName();
 		return inferOpRequest(mappedDependencyType, dependencyName, typeVarAssigns);
 	}
@@ -731,8 +731,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			.map(FunctionalMethodType::type) //
 			.toArray(Type[]::new);
 
-		Type[] mappedInputs = Types.mapVarToTypes(inputs, typeVarAssigns);
-		Type[] mappedOutputs = Types.mapVarToTypes(outputs, typeVarAssigns);
+		Type[] mappedInputs = Types.unroll(inputs, typeVarAssigns);
+		Type[] mappedOutputs = Types.unroll(outputs, typeVarAssigns);
 
 		final int numOutputs = mappedOutputs.length;
 		if (numOutputs != 1) {

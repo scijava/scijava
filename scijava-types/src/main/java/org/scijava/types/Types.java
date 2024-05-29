@@ -642,57 +642,6 @@ public final class Types {
 		return result;
 	}
 
-	public static Type substituteTypeVars(Type type,
-		Map<TypeVariable<?>, Type> typeVarAssigns)
-	{
-		if (type == null || type instanceof Class) {
-			return type;
-		}
-
-		if (type instanceof ParameterizedType) {
-			Class<?> raw = raw(type);
-			Type[] typeParams = ((ParameterizedType) type).getActualTypeArguments();
-			for (int i = 0; i < typeParams.length; i++) {
-				typeParams[i] = TypeUtils.substituteTypeVariables(typeParams[i],
-					typeVarAssigns);
-			}
-			return parameterize(raw, typeParams);
-		}
-
-		if (type instanceof GenericArrayType) {}
-
-		if (type instanceof WildcardType) {
-			return type;
-		}
-
-		if (type instanceof TypeVariable) {
-			return TypeUtils.substituteTypeVariables(type, typeVarAssigns);
-		}
-
-		throw new IllegalStateException("found an unhandled type: " + type);
-	}
-
-	/**
-	 * Map type vars in specified type list to types using the specified map. In
-	 * doing so, type vars mapping to other type vars will not be followed but
-	 * just replaced.
-	 *
-	 * @param typesToMap
-	 * @param typeVarAssigns
-	 */
-	public static Type[] mapVarToTypes(Type[] typesToMap,
-		Map<TypeVariable<?>, Type> typeVarAssigns)
-	{
-		return Arrays.stream(typesToMap).map(type -> mapVarToTypes(type,
-			typeVarAssigns)).toArray(Type[]::new);
-	}
-
-	public static Type mapVarToTypes(Type typeToMap,
-		Map<TypeVariable<?>, Type> typeVarAssigns)
-	{
-		return unroll(typeVarAssigns, typeToMap, false);
-	}
-
 	/**
 	 * Converts the given string value to an enumeration constant of the specified
 	 * type.
@@ -909,6 +858,36 @@ public final class Types {
 	 */
 	public static Type superTypeOf(final Type type, final Class<?> searchClass) {
 		return GenericTypeReflector.getExactSuperType(type, searchClass);
+	}
+
+	/**
+	 * Map type vars in specified type list to types using the specified map. In
+	 * doing so, type vars mapping to other type vars will not be followed but
+	 * just replaced.
+	 *
+	 * @param typesToMap
+	 * @param typeVarAssigns
+	 */
+	public static Type[] unroll(Type[] typesToMap,
+		Map<TypeVariable<?>, Type> typeVarAssigns)
+	{
+		return Arrays.stream(typesToMap)
+			.map(type -> unroll(type, typeVarAssigns))
+			.toArray(Type[]::new);
+	}
+
+	/**
+	 * Map type vars in the specified type to a type using the specified map. In
+	 * doing so, type vars mapping to other type vars will not be followed but
+	 * just replaced.
+	 *
+	 * @param typeToMap
+	 * @param typeVarAssigns
+	 */
+	public static Type unroll(Type typeToMap,
+		Map<TypeVariable<?>, Type> typeVarAssigns)
+	{
+		return unroll(typeVarAssigns, typeToMap, false);
 	}
 
 	/**
@@ -2361,7 +2340,7 @@ public final class Types {
 			final Map<TypeVariable<?>, Type> typeVarAssigns)
 		{
 			if (type instanceof ParameterizedType) {
-				return substituteTypeVars(type, typeVarAssigns);
+				return unroll(type, typeVarAssigns);
 			}
 			if (type instanceof TypeVariable && typeVarAssigns != null) {
 				final Type replacementType = typeVarAssigns.get(type);
@@ -2374,7 +2353,7 @@ public final class Types {
 			}
 			if (type instanceof GenericArrayType && typeVarAssigns != null) {
 				final GenericArrayType genArrType = (GenericArrayType) type;
-				final Type replacementType = substituteTypeVars(
+				final Type replacementType = unroll(
 					genArrType.getGenericComponentType(), typeVarAssigns);
 				return new GenericArrayTypeImpl(replacementType);
 			}

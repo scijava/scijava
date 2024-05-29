@@ -198,7 +198,7 @@ public final class Conversions {
 			return Optional.empty();
 		}
 		// for functions, we only need a postconverter
-		var fromOut = Nil.of(Types.mapVarToTypes(info.outputType(), vars));
+		var fromOut = Nil.of(Types.unroll(info.outputType(), vars));
 		var toOut = Nil.of(request.outType());
 		RichOp<Function<?, ?>> postConverter = Ops.rich(env.op("engine.convert",
 			hints).inType(fromOut).outType(toOut).function());
@@ -291,7 +291,7 @@ public final class Conversions {
 			return Optional.empty();
 		}
 		try {
-			var fromOut = Nil.of(Types.mapVarToTypes(info.outputType(), vars));
+			var fromOut = Nil.of(Types.unroll(info.outputType(), vars));
 			var toOut = Nil.of(request.outType());
 			// First, we convert the output to the type the user requested
 			RichOp<Function<?, ?>> postConverter = Ops.rich( //
@@ -354,7 +354,7 @@ public final class Conversions {
 			return Optional.empty();
 		}
 		try {
-			var fromOut = Nil.of(Types.mapVarToTypes(info.outputType(), vars));
+			var fromOut = Nil.of(Types.unroll(info.outputType(), vars));
 			var toOut = Nil.of(request.outType());
 			// This is really just a placeholder.
 			RichOp<Function<?, ?>> postConverter = Ops.rich( //
@@ -406,7 +406,7 @@ public final class Conversions {
 		var source = Nil.of(from);
 		// If the op parameter type has type variables that have been mapped
 		// already, substitute those mappings in.
-		var preDest = Types.mapVarToTypes(to, vars);
+		var preDest = Types.unroll(to, vars);
 		// Remaining type variables are unlikely to be matched directly. We thus
 		// replace them with wildcards, bounded by the same bounds.
 		var dest = wildcardVacuousTypeVars(preDest);
@@ -463,7 +463,7 @@ public final class Conversions {
 				vars.put(from, to);
 			}
 		}
-		return Nil.of(Types.mapVarToTypes(t, vars));
+		return Nil.of(Types.unroll(t, vars));
 	}
 
 	/**

@@ -120,7 +120,7 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 				// an Op that will then be adapted (this will be the only input of the
 				// adaptor since we know it is a Function)
 				Type adaptFrom = adaptor.inputTypes().get(0);
-				Type srcOpType = Types.substituteTypeVars(adaptFrom, map);
+				Type srcOpType = Types.unroll(adaptFrom, map);
 				final OpRequest srcOpRequest = inferOpRequest(srcOpType, conditions
 					.request().name(), map);
 				final OpCandidate srcCandidate = matcher.match(MatchingConditions.from(
@@ -144,7 +144,7 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 						return Ops.infoTree(op);
 					}).collect(Collectors.toList());
 				// And return the Adaptor, wrapped up into an OpCandidate
-				Type adapterOpType = Types.substituteTypeVars(adaptor.output()
+				Type adapterOpType = Types.unroll(adaptor.output()
 					.type(), map);
 				InfoTree adaptorChain = new InfoTree(adaptor, depTrees);
 				OpAdaptationInfo adaptedInfo = new OpAdaptationInfo(srcCandidate
@@ -205,7 +205,7 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 	private OpRequest inferOpRequest(OpDependencyMember<?> dependency,
 		Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
-		final Type mappedDependencyType = Types.mapVarToTypes(new Type[] {
+		final Type mappedDependencyType = Types.unroll(new Type[] {
 			dependency.type() }, typeVarAssigns)[0];
 		final String dependencyName = dependency.getDependencyName();
 		final OpRequest inferred = inferOpRequest(mappedDependencyType,
@@ -277,8 +277,8 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 		Type[] outputs = fmts.stream().filter(fmt -> outIos.contains(fmt.itemIO()))
 			.map(fmt -> fmt.type()).toArray(Type[]::new);
 
-		Type[] mappedInputs = Types.mapVarToTypes(inputs, typeVarAssigns);
-		Type[] mappedOutputs = Types.mapVarToTypes(outputs, typeVarAssigns);
+		Type[] mappedInputs = Types.unroll(inputs, typeVarAssigns);
+		Type[] mappedOutputs = Types.unroll(outputs, typeVarAssigns);
 
 		final int numOutputs = mappedOutputs.length;
 		if (numOutputs != 1) {

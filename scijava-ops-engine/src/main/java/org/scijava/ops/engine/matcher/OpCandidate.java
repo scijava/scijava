@@ -104,7 +104,7 @@ public class OpCandidate {
 	{
 		Type exactSuperType = Types.superTypeOf(info.opType(), Types.raw(
 			request.type()));
-		return Types.mapVarToTypes(exactSuperType, typeVarAssigns);
+		return Types.unroll(exactSuperType, typeVarAssigns);
 	}
 
 	/** Gets the op execution environment of the desired match. */

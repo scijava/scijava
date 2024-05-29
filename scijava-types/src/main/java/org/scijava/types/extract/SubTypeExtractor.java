@@ -103,6 +103,6 @@ public abstract class SubTypeExtractor<T> implements TypeExtractor {
 			if (typeVars[i] instanceof TypeVariable) map.put(
 				(TypeVariable<?>) typeVars[i], superClsTypeVars[i]);
 		}
-		return Types.mapVarToTypes(t, map);
+		return Types.unroll(t, map);
 	}
 }

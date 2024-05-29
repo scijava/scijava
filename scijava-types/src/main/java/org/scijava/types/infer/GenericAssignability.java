@@ -455,7 +455,7 @@ public final class GenericAssignability {
 		}
 		else if (superInferFrom instanceof Class) {
 			TypeVarAssigns typeVarAssigns = new TypeVarAssigns(typeMappings);
-			Type mappedType = Types.mapVarToTypes(type, typeVarAssigns);
+			Type mappedType = Types.unroll(type, typeVarAssigns);
 			// Use isAssignable to attempt to infer the type variables present in type
 			if (!Types.isAssignable(superInferFrom, mappedType, typeVarAssigns)) {
 				throw new TypeInferenceException(inferFrom +

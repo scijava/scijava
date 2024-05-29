@@ -367,7 +367,7 @@ public class ConvertedOpInfo implements OpInfo {
 				typeAssigns //
 			);
 			// Map type variables in T to Types inferred above
-			inTypes[i] = Types.mapVarToTypes(inTypes[i], typeAssigns);
+			inTypes[i] = Types.unroll(inTypes[i], typeAssigns);
 		}
 		return inTypes;
 	}
@@ -398,7 +398,7 @@ public class ConvertedOpInfo implements OpInfo {
 			vars //
 		);
 		// map type variables in T to Types inferred in Step 2a
-		return Types.mapVarToTypes(outType, vars);
+		return Types.unroll(outType, vars);
 	}
 
 	@Override
@@ -431,7 +431,7 @@ public class ConvertedOpInfo implements OpInfo {
 				reqMap.put(key, infoMap.get(key));
 			}
 		}
-		return Types.mapVarToTypes(raw, reqMap);
+		return Types.unroll(raw, reqMap);
 	}
 
 	/**
@@ -467,7 +467,7 @@ public class ConvertedOpInfo implements OpInfo {
 		List<Type> inputs = inputTypes();
 		for (int i = 0; i < inputs.size(); i++) {
 			var from = inputs.get(i);
-			var to = Types.mapVarToTypes(originalInputs.get(i), typeVarAssigns);
+			var to = Types.unroll(originalInputs.get(i), typeVarAssigns);
 			penalty += determineLoss(env, Nil.of(from), Nil.of(to));
 		}
 
@@ -590,7 +590,7 @@ public class ConvertedOpInfo implements OpInfo {
 		GenericAssignability.inferTypeVariables(new Type[] {
 			genericDeclaringClass }, new Type[] { superGenericClass }, map);
 
-		return Types.mapVarToTypes(types, map);
+		return Types.unroll(types, map);
 	}
 
 	/**

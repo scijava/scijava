@@ -82,7 +82,7 @@ public class InfoMatchingOpRequest implements OpRequest {
 
 	private Type mappedType(Type t, Map<TypeVariable<?>, Type> map) {
 		try {
-			return Types.substituteTypeVars(t, map);
+			return Types.unroll(t, map);
 		}
 		catch (Exception e) {
 			return t;

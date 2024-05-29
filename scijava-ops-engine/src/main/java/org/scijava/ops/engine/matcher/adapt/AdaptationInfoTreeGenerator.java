@@ -79,7 +79,7 @@ public class AdaptationInfoTreeGenerator implements InfoTreeGenerator {
 		if (!Types.isAssignable(originalInfo.opType(), adaptorTree.info().inputs()
 			.get(0).type(), typeVarAssigns)) throw new IllegalArgumentException(
 				"The adaptor cannot be used on Op " + originalInfo);
-		Type adaptedOpType = Types.substituteTypeVars(adaptorTree.info()
+		Type adaptedOpType = Types.unroll(adaptorTree.info()
 			.output().type(), typeVarAssigns);
 		OpInfo adaptedInfo = new OpAdaptationInfo(originalInfo, adaptedOpType,
 			adaptorTree);

@@ -229,19 +229,6 @@ public final class Types {
 	}
 
 	/**
-	 * Gets the given type's {@code n}th type parameter of the specified class.
-	 * <p>
-	 * For example, with class {@code StringList implements List<String>},
-	 * {@code Types.param(StringList.class, Collection.class, 0)} returns
-	 * {@code String}.
-	 * </p>
-	 */
-	public static Type typeParamOf(final Type type, final Class<?> c, final int no) {
-		return GenericTypeReflector.getTypeParameter(type, //
-			c.getTypeParameters()[no]);
-	}
-
-	/**
 	 * Determines the greatest common supertype of all types in the input array.
 	 *
 	 * @param types The array of subtypes, for which the supertype is found.
@@ -1160,10 +1147,11 @@ public final class Types {
 
 				final ParameterizedType paramBoundType = (ParameterizedType) paramBound;
 				final Type[] paramBoundTypes = paramBoundType.getActualTypeArguments();
+				final Type[] argTypes = typeParamsOf(arg, raw(paramBoundType));
 				for (int i = 0; i < paramBoundTypes.length; i++) {
 					// Get the type parameter of arg from the bound type which we know
 					// is parameterized.
-					final Type argType = typeParamOf(arg, raw(paramBoundType), i);
+					final Type argType = i < argTypes.length ? argTypes[i] : null;
 					if (argType == null) return false;
 					if (paramBoundTypes[i] instanceof TypeVariable<?> &&
 						!isApplicableToTypeParameter(argType,

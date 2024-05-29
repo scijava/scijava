@@ -59,11 +59,12 @@ public final class ParameterStructs {
 			final Class<?> functionalType = findFunctionalInterface(paramsClass);
 			final Parameter[] p = params.value();
 			final int paramCount = functionalType.getTypeParameters().length;
+			final Type[] itemTypes = Types.typeParamsOf(type, functionalType);
 			// TODO: Consider allowing partial override of class @Parameters.
 			if (p.length == paramCount) {
 				for (int i=0; i<p.length; i++) {
 					String key = p[i].key();
-					final Type itemType = Types.typeParamOf(type, functionalType, i);
+					final Type itemType = i < itemTypes.length ? itemTypes[i] : null;
 					final Class<?> rawItemType = Types.raw(itemType);
 					final boolean valid = checkValidity(p[i], key, rawItemType, false,
 						names, problems);

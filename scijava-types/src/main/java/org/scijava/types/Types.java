@@ -410,7 +410,7 @@ public final class Types {
 			Type superSrc = superTypeOf(src, superclass);
 			if (superSrc instanceof ParameterizedType)
 				return ((ParameterizedType) superSrc).getActualTypeArguments();
-			return typeParamsOf(raw(src), superclass);
+			return typeParamsOfClass(raw(src), superclass);
 		}
 		catch (AssertionError e) {
 			return new Type[0];
@@ -431,7 +431,7 @@ public final class Types {
 	 *         {@code subType}, or empty type array if no exists or
 	 *         {@code superErasure} is not a super type of subtype
 	 */
-	public static Type[] typeParamsOf(Class<?> subType, Class<?> superErasure) {
+	private static Type[] typeParamsOfClass(Class<?> subType, Class<?> superErasure) {
 		Type pt = parameterize(subType);
 		Type superType = superTypeOf(pt, superErasure);
 		if (superType instanceof ParameterizedType) {

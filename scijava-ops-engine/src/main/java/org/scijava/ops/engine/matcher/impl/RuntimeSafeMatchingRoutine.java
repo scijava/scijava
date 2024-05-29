@@ -51,10 +51,10 @@ import org.scijava.ops.engine.matcher.OpCandidate.StatusCode;
 import org.scijava.ops.engine.matcher.MatchingResult;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.engine.matcher.OpMatcher;
+import org.scijava.ops.engine.matcher.impl.MatchingUtils.TypeVarInfo;
 import org.scijava.priority.Priority;
 import org.scijava.struct.Member;
 import org.scijava.types.Types;
-import org.scijava.types.Types.TypeVarInfo;
 import org.scijava.types.infer.GenericAssignability;
 
 public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
@@ -189,8 +189,8 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 		final Type[] reqArgTypes = candidate.paddedArgs();
 		final Type reqType = candidate.getRequest().type();
 		final Type infoType = candidate.opInfo().opType();
-		Type implementedInfoType = Types.superTypeOf(infoType, Types.raw(
-			reqType));
+		Type implementedInfoType = Types.superTypeOf(infoType,
+			Types.raw(reqType));
 		if (!(implementedInfoType instanceof ParameterizedType)) {
 			throw new UnsupportedOperationException(
 				"Op type is not a ParameterizedType; we don't know how to deal with these yet.");
@@ -217,8 +217,8 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 			return false;
 		}
 
-		int conflictingIndex = Types.isApplicable(reqArgTypes, candidateArgTypes,
-			typeBounds);
+		int conflictingIndex = MatchingUtils.isApplicable(reqArgTypes,
+			candidateArgTypes, typeBounds);
 		if (conflictingIndex != -1) {
 			final Type to = reqArgTypes[conflictingIndex];
 			final Type from = candidateArgTypes[conflictingIndex];
@@ -295,10 +295,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 		return true;
 	}
 
-	/**
-	 * Determines whether the specified type satisfies the op's required types
-	 * using {@link Types#isApplicable(Type[], Type[])}.
-	 */
+	/** Determines whether the specified type satisfies the op's required types. */
 	protected boolean typesMatch(final Type opType, final Type reqType,
 		final Map<TypeVariable<?>, Type> typeVarAssigns)
 	{

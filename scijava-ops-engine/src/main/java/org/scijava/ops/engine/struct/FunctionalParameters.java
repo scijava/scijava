@@ -107,7 +107,7 @@ public final class FunctionalParameters {
 
 		Type paramfunctionalType = functionalType;
 		if (functionalType instanceof Class) {
-			paramfunctionalType = Types.parameterizeRaw((Class<?>) functionalType);
+			paramfunctionalType = Types.parameterize((Class<?>) functionalType);
 		}
 
 		List<FunctionalMethodType> out = new ArrayList<>();

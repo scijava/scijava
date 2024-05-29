@@ -90,7 +90,7 @@ public abstract class SubTypeExtractor<T> implements TypeExtractor {
 	private static Type parameterizeViaSuperType(Class<?> cls,
 		final Class<?> superCls, final Type... superClsTypeVars)
 	{
-		Type t = Types.parameterizeRaw(cls);
+		Type t = Types.parameterize(cls);
 		Type[] typeVars = Types.typeParamsOf(t, superCls);
 		if (typeVars.length != superClsTypeVars.length) {
 			throw new IllegalArgumentException("Type variables " + Arrays.toString(

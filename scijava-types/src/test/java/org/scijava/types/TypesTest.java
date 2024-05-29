@@ -321,8 +321,8 @@ public class TypesTest {
 	/** Tests {@link Types#isRecursive(Type)} */
 	@Test
 	public void testIsRecursive() {
-		assertFalse(Types.isRecursive(Types.parameterizeRaw(ArrayList.class)));
-		assertTrue(Types.isRecursive(Types.parameterizeRaw(RecursiveClass.class)));
+		assertFalse(Types.isRecursive(Types.parameterize(ArrayList.class)));
+		assertTrue(Types.isRecursive(Types.parameterize(RecursiveClass.class)));
 	}
 
 	/** Tests {@link Types#isApplicable(Type[], Type[])} for raw classes. */

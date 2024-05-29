@@ -103,7 +103,7 @@ public class DefaultOpClassInfo implements OpInfo {
 	@Override
 	public Type opType() {
 		// TODO: Check whether this is correct!
-		return Types.parameterizeRaw(opClass);
+		return Types.parameterize(opClass);
 //		return opClass;
 	}
 

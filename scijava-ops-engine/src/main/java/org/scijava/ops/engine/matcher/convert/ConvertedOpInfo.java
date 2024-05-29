@@ -418,7 +418,7 @@ public class ConvertedOpInfo implements OpInfo {
 	 * @return {@code opType}, without any {@link Any}s.
 	 */
 	private static Type mapAnys(Type opType, OpInfo info) {
-		var raw = Types.parameterizeRaw(Types.raw(opType));
+		var raw = Types.parameterize(Types.raw(opType));
 		Map<TypeVariable<?>, Type> reqMap = new HashMap<>();
 		GenericAssignability.inferTypeVariables(new Type[] { raw }, new Type[] {
 			opType }, reqMap);
@@ -583,8 +583,8 @@ public class ConvertedOpInfo implements OpInfo {
 	{
 		Map<TypeVariable<?>, Type> map = new HashMap<>();
 		Class<?> declaringClass = fMethod.getDeclaringClass();
-		Type genericDeclaringClass = Types.parameterizeRaw(declaringClass);
-		Type genericClass = Types.parameterizeRaw(opType);
+		Type genericDeclaringClass = Types.parameterize(declaringClass);
+		Type genericClass = Types.parameterize(opType);
 		Type superGenericClass = Types.superTypeOf(genericClass,
 			declaringClass);
 		GenericAssignability.inferTypeVariables(new Type[] {

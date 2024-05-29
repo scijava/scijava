@@ -77,7 +77,7 @@ public class YAMLOpClassInfo extends AbstractYAMLOpInfo {
 
 	@Override
 	public Type opType() {
-		return Types.parameterizeRaw(cls);
+		return Types.parameterize(cls);
 	}
 
 	@Override

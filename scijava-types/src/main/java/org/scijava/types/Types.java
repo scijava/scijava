@@ -224,7 +224,7 @@ public final class Types {
 	 * </pre>
 	 */
 	public static Type typeOf(final Field field, final Class<?> type) {
-		final Type pType = parameterizeRaw(type);
+		final Type pType = parameterize(type);
 		return GenericTypeReflector.getExactFieldType(field, pType);
 	}
 
@@ -433,7 +433,7 @@ public final class Types {
 	 *         {@code superErasure} is not a super type of subtype
 	 */
 	public static Type[] typeParamsOf(Class<?> subType, Class<?> superErasure) {
-		Type pt = parameterizeRaw(subType);
+		Type pt = parameterize(subType);
 		Type superType = superTypeOf(pt, superErasure);
 		if (superType instanceof ParameterizedType) {
 			return ((ParameterizedType) superType).getActualTypeArguments();
@@ -672,7 +672,7 @@ public final class Types {
 	 * @return The newly created {@link ParameterizedType}.
 	 */
 	public static ParameterizedType parameterize(final Class<?> rawType,
-		final Type... typeArgs)
+		final Type[] typeArgs)
 	{
 		return parameterize(rawType, rawType.getDeclaringClass(), typeArgs);
 	}
@@ -687,7 +687,7 @@ public final class Types {
 	 * @return The newly created {@link ParameterizedType}.
 	 */
 	public static ParameterizedType parameterize(final Class<?> rawType,
-		final Type ownerType, final Type... typeArgs)
+		final Type ownerType, final Type[] typeArgs)
 	{
 		return new TypeUtils.ParameterizedTypeImpl(rawType, ownerType, typeArgs);
 	}
@@ -914,9 +914,9 @@ public final class Types {
 	 * the type variables of the specified is returned.
 	 *
 	 * @param rawType the raw type to parameterize
-	 * @return either the input of not raw, or a parameterized type
+	 * @return a parameterized type, or the class itself if not a parameterizable class
 	 */
-	public static Type parameterizeRaw(Class<?> rawType) {
+	public static Type parameterize(Class<?> rawType) {
 		TypeVariable<?>[] typeParams = rawType.getTypeParameters();
 		if (typeParams.length == 0) return rawType;
 		return parameterize(rawType, typeParams);

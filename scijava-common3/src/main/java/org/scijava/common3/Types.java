@@ -819,7 +819,9 @@ public final class Types {
 	 * Get a type representing {@code type} with variable assignments
 	 * "unrolled."
 	 *
-	 * @param typeArguments as from {@link #args(Type, Class)}
+	 * @param typeVarAssigns a {@code Map} of the type assignments for the
+	 *         type variables in each type in the inheritance hierarchy
+	 *         of {@code type}.
 	 * @param type the type to unroll variable assignments for
 	 * @param followTypeVars whether a {@link TypeVariable} should be
 	 *          recursively followed if it maps to another {@link TypeVariable},
@@ -827,10 +829,11 @@ public final class Types {
 	 * @return Type
 	 */
 	public static Type unroll(
-		Map<TypeVariable<?>, Type> typeArguments,
-		final Type type, boolean followTypeVars
+		Map<TypeVariable<?>, Type> typeVarAssigns,
+		final Type type,
+		boolean followTypeVars
 	) {
-		return TypeUtils.unrollVariables(typeArguments, type, followTypeVars);
+		return TypeUtils.unrollVariables(typeVarAssigns, type, followTypeVars);
 	}
 
 	/**

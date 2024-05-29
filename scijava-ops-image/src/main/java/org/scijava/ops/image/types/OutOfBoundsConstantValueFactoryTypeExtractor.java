@@ -31,7 +31,7 @@ package org.scijava.ops.image.types;
 
 import java.lang.reflect.Type;
 
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 import org.scijava.types.extract.SubTypeExtractor;
 import org.scijava.types.extract.TypeExtractor;
 import org.scijava.types.extract.TypeReifier;

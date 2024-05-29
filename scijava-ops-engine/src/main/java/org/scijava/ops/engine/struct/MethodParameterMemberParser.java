@@ -37,7 +37,7 @@ import java.util.List;
 import org.scijava.ops.engine.exceptions.impl.FunctionalTypeOpException;
 import org.scijava.ops.engine.util.internal.OpMethodUtils;
 import org.scijava.struct.MemberParser;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 public class MethodParameterMemberParser implements
 	MemberParser<Method, SynthesizedParameterMember<?>>

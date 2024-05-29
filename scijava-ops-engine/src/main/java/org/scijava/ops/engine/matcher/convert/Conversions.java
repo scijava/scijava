@@ -34,9 +34,9 @@ import org.scijava.function.Container;
 import org.scijava.function.Mutable;
 import org.scijava.ops.api.*;
 import org.scijava.ops.engine.BaseOpHints;
-import org.scijava.types.Any;
+import org.scijava.common3.Any;
 import org.scijava.types.Nil;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 import org.scijava.types.infer.FunctionalInterfaces;
 import org.scijava.types.infer.GenericAssignability;
 

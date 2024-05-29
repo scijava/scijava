@@ -36,7 +36,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 /**
  * A partial {@link TypeExtractor} implementation that specializes in recovering

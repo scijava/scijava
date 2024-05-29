@@ -34,7 +34,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 public final class FunctionalInterfaces {
 

@@ -33,7 +33,7 @@ import java.lang.reflect.Type;
 
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.BaseOpHints;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 import org.scijava.types.infer.FunctionalInterfaces;
 
 public abstract class AbstractInfoReducer implements InfoReducer {

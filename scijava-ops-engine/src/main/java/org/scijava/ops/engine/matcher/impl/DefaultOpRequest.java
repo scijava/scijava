@@ -36,7 +36,7 @@ import java.util.Map;
 
 import org.scijava.ops.api.OpRequest;
 import org.scijava.ops.engine.matcher.OpMatcher;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 import org.scijava.types.infer.GenericAssignability;
 
 /**

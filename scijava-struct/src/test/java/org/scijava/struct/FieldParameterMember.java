@@ -3,7 +3,7 @@ package org.scijava.struct;
 
 import java.lang.reflect.Field;
 
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 /**
  * {@link Member} backed by a {@link Field} annotated by {@link Parameter}.

@@ -42,7 +42,7 @@ import net.imglib2.type.numeric.RealType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.image.AbstractOpTest;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 import java.lang.reflect.ParameterizedType;
 

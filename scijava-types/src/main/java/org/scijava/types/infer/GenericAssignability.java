@@ -30,8 +30,8 @@
 package org.scijava.types.infer;
 
 import com.google.common.base.Objects;
-import org.scijava.types.Any;
-import org.scijava.types.Types;
+import org.scijava.common3.Any;
+import org.scijava.common3.Types;
 
 import java.lang.reflect.*;
 import java.util.Arrays;

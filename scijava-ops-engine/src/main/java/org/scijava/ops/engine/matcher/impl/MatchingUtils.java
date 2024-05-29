@@ -43,8 +43,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.IntStream;
 
-import org.scijava.types.Any;
-import org.scijava.types.Types;
+import org.scijava.common3.Any;
+import org.scijava.common3.Types;
 
 public final class MatchingUtils {
 

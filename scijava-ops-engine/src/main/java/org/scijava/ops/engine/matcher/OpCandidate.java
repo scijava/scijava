@@ -42,7 +42,7 @@ import org.scijava.ops.api.OpRequest;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 /**
  * Container class for a possible operation match between an {@link OpRequest}

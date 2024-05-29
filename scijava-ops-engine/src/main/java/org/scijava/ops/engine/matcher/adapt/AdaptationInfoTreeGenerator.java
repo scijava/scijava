@@ -39,7 +39,7 @@ import org.scijava.ops.api.InfoTree;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.InfoTreeGenerator;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 public class AdaptationInfoTreeGenerator implements InfoTreeGenerator {
 

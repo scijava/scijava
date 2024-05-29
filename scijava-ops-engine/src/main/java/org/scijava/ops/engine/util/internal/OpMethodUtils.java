@@ -48,7 +48,7 @@ import org.scijava.ops.engine.util.Lambdas;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.Member;
 import org.scijava.struct.StructInstance;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 import org.scijava.types.infer.FunctionalInterfaces;
 import org.scijava.types.infer.GenericAssignability;
 

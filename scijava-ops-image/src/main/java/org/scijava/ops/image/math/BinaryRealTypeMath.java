@@ -35,7 +35,7 @@ import net.imglib2.type.numeric.RealType;
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpCollection;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 import java.util.Objects;
 

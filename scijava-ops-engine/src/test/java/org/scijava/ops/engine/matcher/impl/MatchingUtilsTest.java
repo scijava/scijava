@@ -58,7 +58,7 @@ import java.util.function.Supplier;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.scijava.types.Nil;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 import org.scijava.types.infer.GenericAssignability;
 
 public class MatchingUtilsTest {

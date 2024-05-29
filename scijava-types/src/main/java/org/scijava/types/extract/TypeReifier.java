@@ -37,9 +37,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.scijava.types.Any;
-import org.scijava.types.GenericTyped;
-import org.scijava.types.Types;
+import org.scijava.common3.Any;
+import org.scijava.common3.GenericTyped;
+import org.scijava.common3.Types;
 
 import com.google.common.reflect.TypeToken;
 

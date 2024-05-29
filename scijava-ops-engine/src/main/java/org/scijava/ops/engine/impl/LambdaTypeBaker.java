@@ -34,8 +34,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 
-import org.scijava.types.GenericTyped;
-import org.scijava.types.Types;
+import org.scijava.common3.GenericTyped;
+import org.scijava.common3.Types;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;

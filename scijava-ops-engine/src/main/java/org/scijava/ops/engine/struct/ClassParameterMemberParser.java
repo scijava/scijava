@@ -39,7 +39,7 @@ import java.util.List;
 import org.scijava.ops.engine.exceptions.impl.FunctionalTypeOpException;
 import org.scijava.struct.MemberParser;
 import org.scijava.struct.Structs;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 import org.scijava.types.infer.FunctionalInterfaces;
 
 public class ClassParameterMemberParser implements

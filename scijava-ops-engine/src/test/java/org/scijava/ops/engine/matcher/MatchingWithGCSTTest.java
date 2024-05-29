@@ -41,7 +41,7 @@ import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.types.Nil;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 /**
  * Tests op matcher functionality relating to

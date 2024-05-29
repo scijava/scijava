@@ -32,7 +32,7 @@ package org.scijava.struct;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 /**
  * One element (i.e. item/field/member) of a {@link Struct}.

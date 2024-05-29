@@ -37,7 +37,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 /**
  * Adapter class wrapping a {@code Map<TypeVariable, TypeMapping>} into a

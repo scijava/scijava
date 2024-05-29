@@ -43,12 +43,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.scijava.discovery.Discoverer;
-import org.scijava.types.Any;
+import org.scijava.common3.Any;
 import org.scijava.types.ExampleTypes.Bag;
 import org.scijava.types.ExampleTypes.BlueThing;
 import org.scijava.types.ExampleTypes.RedThing;
 import org.scijava.types.Nil;
-import org.scijava.types.GenericTyped;
+import org.scijava.common3.GenericTyped;
 
 /**
  * Tests {@link DefaultTypeReifier}, including core {@link TypeExtractor}

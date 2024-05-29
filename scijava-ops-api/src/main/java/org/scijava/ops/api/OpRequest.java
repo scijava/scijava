@@ -36,7 +36,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.scijava.types.Nil;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 /**
  * Data structure which identifies an Op by name and/or type(s) and/or argument

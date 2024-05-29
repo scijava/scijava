@@ -28,8 +28,8 @@
  */
 
 /**
- * This package org.scijava.types; runtime, beyond what is offered by SciJava
- * Common's {@link org.scijava.types.Types} class. This package offers the
+ * This package offers type reasoning beyond only what is offered by SciJava
+ * Common's {@link org.scijava.common3.Types} class. This package offers the
  * following additional features:
  * <ul>
  * <li>Reason about whether a collection of arguments (object instances, generic

@@ -42,7 +42,7 @@ import org.scijava.function.Functions;
 import org.scijava.function.Producer;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.types.Nil;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 /**
  * Utility class designed to match {@code Function}s of various arities.

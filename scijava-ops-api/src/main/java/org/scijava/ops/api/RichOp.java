@@ -31,7 +31,7 @@ package org.scijava.ops.api;
 
 import java.lang.reflect.Type;
 
-import org.scijava.types.GenericTyped;
+import org.scijava.common3.GenericTyped;
 
 /**
  * An {@link OpInstance} with state

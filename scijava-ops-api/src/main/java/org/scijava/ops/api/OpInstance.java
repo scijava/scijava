@@ -32,7 +32,7 @@ package org.scijava.ops.api;
 import java.lang.reflect.Type;
 import java.util.Objects;
 
-import org.scijava.types.GenericTyped;
+import org.scijava.common3.GenericTyped;
 
 /**
  * An instance of an {@link OpInfo}. They can be constructed directly, but are

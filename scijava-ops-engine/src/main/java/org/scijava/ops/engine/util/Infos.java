@@ -36,7 +36,7 @@ import org.scijava.ops.engine.exceptions.impl.MultipleOutputsOpException;
 import org.scijava.ops.engine.exceptions.impl.UnnamedOpException;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

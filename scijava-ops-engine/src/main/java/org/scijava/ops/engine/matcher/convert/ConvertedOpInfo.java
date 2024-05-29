@@ -53,9 +53,9 @@ import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
-import org.scijava.types.Any;
+import org.scijava.common3.Any;
 import org.scijava.types.Nil;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 import org.scijava.types.infer.FunctionalInterfaces;
 import org.scijava.types.infer.GenericAssignability;
 

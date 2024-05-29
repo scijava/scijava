@@ -1,8 +1,8 @@
 /*
  * #%L
- * SciJava library for generic type reasoning.
+ * Common functionality widely used across SciJava modules.
  * %%
- * Copyright (C) 2016 - 2024 SciJava developers.
+ * Copyright (C) 2021 - 2024 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.types;
+package org.scijava.common3;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -51,7 +51,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.scijava.common3.Classes;
 
 /**
  * Tests {@link Types}.
@@ -157,18 +156,16 @@ public class TypesTest {
 		assertSame(Integer.class, iType);
 	}
 
-	/** Tests {@link Types#typeParamsOf(Class, Class)}. */
+	/** Tests {@link Types#typeParamsOf(Type, Class)}. */
 	@Test
-	public void testTypeParamsOfClass() {
+	public void testTypeParams() {
 		final Type[] argTypesRaw = Types.typeParamsOf(IntegerThing.class, Thing.class);
 		assertEquals(1, argTypesRaw.length);
 		assertSame(Integer.class, argTypesRaw[0]);
-	}
 
-	/** Tests {@link Types#typeParamsOf(Type, Class)}. */
-	@Test
-	public <U extends IntegerThing> void testTypeParamsOfType() {
-		final Type arg = new Nil<U>() {}.type();
+		class C<U extends IntegerThing> { }
+		Type arg = C.class.getTypeParameters()[0];
+		assertEquals("U", arg.getTypeName());
 		final Type[] argTypes = Types.typeParamsOf(arg, Thing.class);
 		assertNotNull(argTypes);
 		assertEquals(1, argTypes.length);
@@ -212,15 +209,16 @@ public class TypesTest {
 
 	/** Tests {@link Types#isAssignable(Type, Type)} with type variable. */
 	@Test
-	public <T extends Number> void testIsAssignableT() {
-		var t = new Nil<T>() {}.type();
+	public void testIsAssignableT() {
+		class C<T extends Number> {}
+		Type t = C.class.getTypeParameters()[0];
 		var listRaw = List.class;
-		var listT = new Nil<List<T>>() {}.type();
-		var listNumber = new Nil<List<Number>>() {}.type();
-		var listInteger = new Nil<List<Integer>>() {}.type();
-		var listExtendsNumber = new Nil<List<? extends Number>>() {}.type();
-		var listListRaw = new Nil<List<List>>() {}.type();
-		var listListInteger = new Nil<List<List<Integer>>>() {}.type();
+		var listT = Types.parameterize(List.class, new Type[] { t });
+		var listNumber = Types.parameterize(List.class, new Type[] { Number.class });
+		var listInteger = Types.parameterize(List.class, new Type[] { Integer.class });
+		var listExtendsNumber = Types.parameterize(List.class, new Type[] { Types.wildcard(Number.class, null) });
+		var listListRaw = Types.parameterize(List.class, new Type[] { List.class });
+		var listListInteger = Types.parameterize(List.class, new Type[] { listInteger });
 
 		assertTrue(Types.isAssignable(t, t));
 		assertTrue(Types.isAssignable(listRaw, listRaw));
@@ -259,16 +257,18 @@ public class TypesTest {
 	 * parameterized with type variables.
 	 */
 	@Test
-	public <N extends Number, S extends String, T extends List<N>> void
+	public void
 		testIsAssignableParameterizedT()
 	{
-		final Type t = new Nil<T>() {}.type();
-		final Type listN = new Nil<List<N>>() {}.type();
-		final Type listS = new Nil<List<S>>() {}.type();
-		final Type listNumber = new Nil<List<Number>>() {}.type();
-		final Type listInteger = new Nil<List<Integer>>() {}.type();
-		final Type listExtendsNumber = new Nil<List<? extends Number>>() {}
-			.type();
+		class C<N extends Number, S extends String, T extends List<N>> {}
+		final Type n = C.class.getTypeParameters()[0];
+		final Type s = C.class.getTypeParameters()[1];
+		final Type t = C.class.getTypeParameters()[2];
+		final Type listN = Types.parameterize(List.class, new Type[] { n });
+		final Type listS = Types.parameterize(List.class, new Type[] { s });
+		final Type listNumber = Types.parameterize(List.class, new Type[] { Number.class });
+		final Type listInteger = Types.parameterize(List.class, new Type[] { Integer.class });
+		final Type listExtendsNumber = Types.parameterize(List.class, new Type[] { Types.wildcard(Number.class, null) });
 		// T list = (T) new ArrayList<N>();
 		assertTrue(Types.isAssignable(listN, t));
 		// T list = (T) new ArrayList<Number>();
@@ -284,8 +284,10 @@ public class TypesTest {
 
 	/** Tests {@link Types#isAssignable(Type, Type)} against {@link Object} */
 	@Test
-	public <T extends Number> void testIsAssignableObject() {
-		final Type iterableT = new Nil<Iterable<T>>() {}.type();
+	public void testIsAssignableObject() {
+		class C<T extends Number> {}
+		final Type t = C.class.getTypeParameters()[0];
+		final Type iterableT = Types.parameterize(Iterable.class, new Type[] { t });
 		assertTrue(Types.isAssignable(iterableT, Object.class));
 	}
 

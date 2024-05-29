@@ -40,6 +40,7 @@ import java.lang.reflect.TypeVariable;
 import java.util.Set;
 
 import org.scijava.common3.Classes;
+import org.scijava.common3.GenericTyped;
 
 /**
  * A "typed null" which knows its generic type, and can generate proxy objects

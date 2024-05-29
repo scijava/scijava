@@ -39,7 +39,7 @@ import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.util.Infos;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.struct.Member;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 import org.scijava.types.infer.FunctionalInterfaces;
 
 import com.google.common.collect.Streams;

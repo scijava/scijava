@@ -54,9 +54,9 @@ import org.scijava.ops.engine.struct.FunctionalParameters;
 import org.scijava.ops.engine.util.Infos;
 import org.scijava.priority.Priority;
 import org.scijava.struct.ItemIO;
-import org.scijava.types.Any;
+import org.scijava.common3.Any;
 import org.scijava.types.Nil;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 import org.scijava.types.infer.GenericAssignability;
 
 public class AdaptationMatchingRoutine implements MatchingRoutine {

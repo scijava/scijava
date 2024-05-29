@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.scijava.common3.Classes;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 public final class Structs {
 

@@ -40,8 +40,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.scijava.discovery.Discoverer;
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.types.Any;
-import org.scijava.types.Types;
+import org.scijava.common3.Any;
+import org.scijava.common3.Types;
 import org.scijava.types.extract.DefaultTypeReifier;
 
 /**

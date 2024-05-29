@@ -38,7 +38,7 @@ import org.scijava.ops.engine.util.Infos;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;

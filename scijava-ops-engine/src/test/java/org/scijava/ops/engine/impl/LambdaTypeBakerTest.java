@@ -34,7 +34,7 @@ import java.util.function.Function;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.scijava.types.GenericTyped;
+import org.scijava.common3.GenericTyped;
 import org.scijava.types.Nil;
 
 public class LambdaTypeBakerTest {

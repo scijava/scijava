@@ -35,7 +35,7 @@ import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.MemberInstance;
 import org.scijava.struct.ValueAccessible;
 import org.scijava.struct.ValueAccessibleMemberInstance;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 /**
  * @author Marcel Wiedenmann

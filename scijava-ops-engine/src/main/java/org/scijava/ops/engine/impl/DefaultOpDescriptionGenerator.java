@@ -39,7 +39,7 @@ import org.scijava.ops.engine.util.Infos;
 import org.scijava.priority.Priority;
 import org.scijava.struct.ItemIO;
 import org.scijava.types.Nil;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

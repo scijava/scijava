@@ -41,6 +41,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.scijava.common3.GenericTyped;
 import org.scijava.types.ExampleTypes.Bag;
 import org.scijava.types.ExampleTypes.Thing;
 

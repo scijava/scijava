@@ -36,8 +36,8 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 
-import org.scijava.types.Any;
-import org.scijava.types.Types;
+import org.scijava.common3.Any;
+import org.scijava.common3.Types;
 
 /**
  * A data structure retaining information about the mapping of a

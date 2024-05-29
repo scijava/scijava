@@ -29,7 +29,7 @@
 
 package org.scijava.struct;
 
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 public class ValueAccessibleMemberInstance<T> implements MemberInstance<T> {
 

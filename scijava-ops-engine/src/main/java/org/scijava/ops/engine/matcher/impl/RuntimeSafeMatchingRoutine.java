@@ -54,7 +54,7 @@ import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.engine.matcher.impl.MatchingUtils.TypeVarInfo;
 import org.scijava.priority.Priority;
 import org.scijava.struct.Member;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 import org.scijava.types.infer.GenericAssignability;
 
 public class RuntimeSafeMatchingRoutine implements MatchingRoutine {

@@ -50,7 +50,7 @@ import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpMethod;
 import org.scijava.priority.Priority;
-import org.scijava.types.Any;
+import org.scijava.common3.Any;
 
 /**
  * Tests op matcher functionality with {@link Any} types.

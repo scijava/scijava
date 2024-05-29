@@ -14,7 +14,7 @@ import java.util.Set;
 
 import org.scijava.common3.Annotations;
 import org.scijava.common3.Classes;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 /**
  * Utility functions for working with {@link Parameter}-based structs.

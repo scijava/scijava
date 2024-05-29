@@ -30,6 +30,8 @@
 package org.scijava.ops.engine.impl;
 
 import com.google.common.collect.TreeMultimap;
+import org.scijava.common3.Any;
+import org.scijava.common3.Types;
 import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.ManualDiscoverer;
 import org.scijava.meta.Versions;

@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 /**
  * A data structure retaining information about the mapping of a

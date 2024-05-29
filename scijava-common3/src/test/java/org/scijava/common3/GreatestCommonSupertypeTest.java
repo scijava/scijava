@@ -195,7 +195,7 @@ public class GreatestCommonSupertypeTest {
 
 	@Test
 	public void testWildcardType() {
-		Type qNThing = Types.wildcard(NThing.class, null);
+		Type qNThing = Types.wildcard(NThing.class);
 		Type typeWithWildcard = Types.parameterize(List.class, new Type[] { qNThing });
 		Type t1 = ((ParameterizedType) typeWithWildcard).getActualTypeArguments()[0];
 		Type t2 = XThing.class;

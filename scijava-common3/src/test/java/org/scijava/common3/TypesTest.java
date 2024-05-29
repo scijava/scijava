@@ -216,7 +216,7 @@ public class TypesTest {
 		var listT = Types.parameterize(List.class, new Type[] { t });
 		var listNumber = Types.parameterize(List.class, new Type[] { Number.class });
 		var listInteger = Types.parameterize(List.class, new Type[] { Integer.class });
-		var listExtendsNumber = Types.parameterize(List.class, new Type[] { Types.wildcard(Number.class, null) });
+		var listExtendsNumber = Types.parameterize(List.class, new Type[] { Types.wildcard(Number.class) });
 		var listListRaw = Types.parameterize(List.class, new Type[] { List.class });
 		var listListInteger = Types.parameterize(List.class, new Type[] { listInteger });
 
@@ -268,7 +268,7 @@ public class TypesTest {
 		final Type listS = Types.parameterize(List.class, new Type[] { s });
 		final Type listNumber = Types.parameterize(List.class, new Type[] { Number.class });
 		final Type listInteger = Types.parameterize(List.class, new Type[] { Integer.class });
-		final Type listExtendsNumber = Types.parameterize(List.class, new Type[] { Types.wildcard(Number.class, null) });
+		final Type listExtendsNumber = Types.parameterize(List.class, new Type[] { Types.wildcard(Number.class) });
 		// T list = (T) new ArrayList<N>();
 		assertTrue(Types.isAssignable(listN, t));
 		// T list = (T) new ArrayList<Number>();

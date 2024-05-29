@@ -632,26 +632,12 @@ public final class Types {
 	}
 
 	/**
-	 * Creates a new {@link WildcardType} with no upper or lower bounds (i.e.,
-	 * {@code ?}).
+	 * Creates a new {@link WildcardType} with the given upper bound(s).
 	 *
 	 * @return The newly created {@link WildcardType}.
 	 */
-	public static WildcardType wildcard() {
-		return wildcard(null, (Type) null);
-	}
-
-	/**
-	 * Creates a new {@link WildcardType} with the given upper and/or lower bound.
-	 *
-	 * @param upperBound Upper bound of the wildcard, or null for none.
-	 * @param lowerBound Lower bound of the wildcard, or null for none.
-	 * @return The newly created {@link WildcardType}.
-	 */
-	public static WildcardType wildcard(final Type upperBound,
-		final Type lowerBound)
-	{
-		return new TypeUtils.WildcardTypeImpl(upperBound, lowerBound);
+	public static WildcardType wildcard(Type... upperBounds) {
+		return wildcard(upperBounds, null);
 	}
 
 	/**

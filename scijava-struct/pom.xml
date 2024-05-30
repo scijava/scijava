@@ -97,11 +97,6 @@
 			<artifactId>scijava-common3</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-types</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 
 		<!-- Test scope dependencies -->
 		<dependency>

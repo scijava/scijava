@@ -32,7 +32,7 @@ module org.scijava.ops.api {
 
 	requires org.scijava.common3;
 	requires org.scijava.function;
-	requires org.scijava.priority;
+	requires transitive org.scijava.priority;
 	requires transitive org.scijava.struct;
 	requires org.scijava.types;
 

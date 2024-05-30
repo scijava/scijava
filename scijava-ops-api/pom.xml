@@ -107,6 +107,16 @@
 		<!-- SciJava dependencies -->
 		<dependency>
 			<groupId>org.scijava</groupId>
+			<artifactId>scijava-common3</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-discovery</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
 			<artifactId>scijava-function</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -125,7 +135,5 @@
 			<artifactId>scijava-types</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
-		<!-- Test scope dependencies -->
 	</dependencies>
 </project>

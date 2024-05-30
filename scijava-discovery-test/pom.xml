@@ -104,22 +104,23 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-discovery</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+		<!-- SciJava dependencies -->
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-spi</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
-		<!-- Test Scope Dependencies -->
+		<!-- Test scope dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-discovery</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

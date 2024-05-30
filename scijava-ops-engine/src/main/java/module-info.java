@@ -44,7 +44,7 @@ module org.scijava.ops.engine {
 	requires org.scijava.priority;
 	requires org.scijava.progress;
 	requires org.scijava.struct;
-	requires transitive org.scijava.ops.api;
+	requires org.scijava.ops.api;
 	requires org.scijava.ops.spi;
 	requires org.scijava.types;
 

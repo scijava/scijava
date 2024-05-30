@@ -96,6 +96,7 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
+			<!-- NB: Override inherited test scope. -->
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>

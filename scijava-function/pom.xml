@@ -90,7 +90,4 @@
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 	</properties>
-
-	<dependencies>
-	</dependencies>
 </project>

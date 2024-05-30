@@ -107,6 +107,10 @@
 		<!-- SciJava dependencies -->
 		<dependency>
 			<groupId>org.scijava</groupId>
+			<artifactId>parsington</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
 			<artifactId>scijava-collections</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -136,8 +140,9 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>parsington</artifactId>
+			<groupId> org.scijava</groupId>
+			<artifactId>scijava-function</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
@@ -159,11 +164,7 @@
 			<artifactId>scijava-types</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId> org.scijava</groupId>
-			<artifactId>scijava-function</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+
 		<!-- Third-party dependencies -->
 		<dependency>
 			<groupId>com.google.guava</groupId>

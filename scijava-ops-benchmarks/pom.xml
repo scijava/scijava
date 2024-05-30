@@ -133,11 +133,6 @@
 	</build>
 
 	<dependencies>
-		<dependency>
-			<groupId>net.imagej</groupId>
-			<artifactId>imagej-ops</artifactId>
-		</dependency>
-
 		<!-- SciJava dependencies -->
 		<dependency>
 			<groupId>org.scijava</groupId>
@@ -167,12 +162,18 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- Legacy ImageJ2 dependencies -->
+		<dependency>
+			<groupId>net.imagej</groupId>
+			<artifactId>imagej-ops</artifactId>
+		</dependency>
+
 		<!-- JMH dependencies -->
 		<dependency>
 			<groupId>org.openjdk.jmh</groupId>
 			<artifactId>jmh-core</artifactId>
 			<version>${jmh.version}</version>
-			<!--NB: Must override inherited test scope-->
+			<!-- NB: Override inherited test scope. -->
 			<scope>compile</scope>
 		</dependency>
 		<dependency>

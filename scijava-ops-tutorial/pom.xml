@@ -210,16 +210,11 @@
 	</properties>
 
 	<dependencies>
+		<!-- SciJava dependencies -->
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-ops-image</artifactId>
+			<artifactId>scijava-function</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-
-		<!-- Incubator dependencies -->
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>parsington</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
@@ -233,16 +228,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-ops-engine</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-function</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
 			<artifactId>scijava-progress</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -252,10 +237,14 @@
 			<version>${project.version}</version>
 		</dependency>
 
-		<!-- SciJava dependencies -->
+		<!-- ImgLib2 dependencies -->
 		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-io-http</artifactId>
+			<groupId>net.imglib2</groupId>
+			<artifactId>imglib2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.imglib2</groupId>
+			<artifactId>imglib2-algorithm</artifactId>
 		</dependency>
 
 		<!-- SCIFIO dependencies -->
@@ -264,23 +253,23 @@
 			<artifactId>scifio</artifactId>
 		</dependency>
 
-		<!-- Test scope dependencies -->
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<scope>test</scope>
-		</dependency>
+		<!-- Runtime dependencies -->
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-testutil</artifactId>
+			<artifactId>scijava-ops-engine</artifactId>
 			<version>${project.version}</version>
-			<scope>test</scope>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<!-- Do not remove - Maven incorrectly identifies it as an unused dependency! -->
 			<groupId>org.scijava</groupId>
-			<artifactId>scripting-jython</artifactId>
-			<scope>test</scope>
+			<artifactId>scijava-ops-image</artifactId>
+			<version>${project.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-io-http</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
 

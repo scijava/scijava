@@ -91,6 +91,28 @@
 	</properties>
 
 	<dependencies>
+		<!-- SciJava dependencies -->
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-concurrent</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-function</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-ops-spi</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-types</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 		<!-- FLIMLib dependencies -->
 		<dependency>
 			<groupId>flimlib</groupId>
@@ -108,30 +130,6 @@
 			<artifactId>imglib2-roi</artifactId>
 		</dependency>
 
-		<!-- SciJava dependencies -->
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-concurrent</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-function</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-ops-spi</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-types</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>
-
 		<!-- Third-party dependencies -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -144,18 +142,6 @@
 			<artifactId>flimlib</artifactId>
 			<version>${flimlib.version}</version>
 			<classifier>${scijava.natives.classifier}</classifier>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-ops-engine</artifactId>
-			<version>${project.version}</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-ops-image</artifactId>
-			<version>${project.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 
@@ -173,6 +159,18 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-api</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-ops-engine</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-ops-image</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

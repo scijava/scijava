@@ -103,6 +103,8 @@
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
+
+		<scijava.surefire.args>--add-reads org.scijava.ops.opencv=org.scijava.ops.api,net.imglib2</scijava.surefire.args>
 	</properties>
 
 	<dependencies>
@@ -171,16 +173,4 @@
 			<url>https://maven.scijava.org/content/groups/public</url>
 		</repository>
 	</repositories>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<argLine>--add-reads org.scijava.ops.opencv=org.scijava.ops.api,net.imglib2</argLine>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 </project>

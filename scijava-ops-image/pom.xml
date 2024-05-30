@@ -264,38 +264,22 @@
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
+
+		<!-- TEMP: until added to pom-scijava -->
+		<imglib2-mesh.version>1.0.0</imglib2-mesh.version>
+		<net.imglib2.imglib2-mesh.version>${imglib2-mesh.version}</net.imglib2.imglib2-mesh.version>
 	</properties>
 
 	<dependencies>
-
-		<!-- ImgLib2 dependencies -->
-		<dependency>
-			<groupId>net.imglib2</groupId>
-			<artifactId>imglib2</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.imglib2</groupId>
-			<artifactId>imglib2-algorithm</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.imglib2</groupId>
-			<artifactId>imglib2-algorithm-fft</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.imglib2</groupId>
-			<artifactId>imglib2-mesh</artifactId>
-			<!-- TODO Remove once added to pom-scijava -->
-			<version>1.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>net.imglib2</groupId>
-			<artifactId>imglib2-roi</artifactId>
-		</dependency>
-
 		<!-- SciJava dependencies -->
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-collections</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-common3</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -315,12 +299,17 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-progress</artifactId>
+			<artifactId>scijava-ops-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-ops-api</artifactId>
+			<artifactId>scijava-priority</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-progress</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -332,6 +321,34 @@
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-types</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+
+		<!-- ImgLib2 dependencies -->
+		<dependency>
+			<groupId>net.imglib2</groupId>
+			<artifactId>imglib2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.imglib2</groupId>
+			<artifactId>imglib2-algorithm</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.imglib2</groupId>
+			<artifactId>imglib2-algorithm-fft</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.imglib2</groupId>
+			<artifactId>imglib2-mesh</artifactId>
+			<!-- TEMP: until added to pom-scijava -->
+			<version>${net.imglib2.imglib2-mesh.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.imglib2</groupId>
+			<artifactId>imglib2-realtransform</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.imglib2</groupId>
+			<artifactId>imglib2-roi</artifactId>
 		</dependency>
 
 		<!-- Third party dependencies -->
@@ -368,6 +385,11 @@
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-testutil</artifactId>
 			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-common</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

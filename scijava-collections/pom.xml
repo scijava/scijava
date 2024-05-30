@@ -87,13 +87,6 @@
 	</properties>
 
 	<dependencies>
-		<!-- SciJava dependencies -->
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-common3</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
 		<!-- Test scope dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>

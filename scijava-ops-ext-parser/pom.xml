@@ -100,7 +100,6 @@
 	</properties>
 
 	<dependencies>
-
 		<!-- Third party dependencies -->
 		<dependency>
 			<groupId>org.yaml</groupId>

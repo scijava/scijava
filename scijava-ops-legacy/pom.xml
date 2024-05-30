@@ -88,6 +88,8 @@
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 
+		<scijava.surefire.args>--add-reads org.scijava.legacy=org.scijava.common3</scijava.surefire.args>
+
 		<scijava-common.version>2.98.0</scijava-common.version>
 	</properties>
 
@@ -95,7 +97,7 @@
 		<!-- SciJava dependencies -->
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-collections</artifactId>
+			<artifactId>scijava-discovery</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -135,12 +137,6 @@
 			<artifactId>imagej-common</artifactId>
 		</dependency>
 
-		<!-- Other dependencies -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-math3</artifactId>
-		</dependency>
-
 		<!-- Test scope dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -148,13 +144,8 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.imglib2</groupId>
-			<artifactId>imglib2-roi</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-testutil</artifactId>
+			<artifactId>scijava-common3</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

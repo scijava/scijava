@@ -39,13 +39,14 @@ open module org.scijava.ops.image {
 	requires net.imglib2.roi;
 	requires org.joml;
 	requires org.scijava.collections;
+	requires org.scijava.common3;
 	requires org.scijava.concurrent;
 	requires org.scijava.function;
 	requires org.scijava.meta;
-	requires org.scijava.progress;
 	requires org.scijava.ops.api;
 	requires org.scijava.ops.spi;
 	requires org.scijava.priority;
+	requires org.scijava.progress;
 	requires org.scijava.types;
 
 	// FIXME: these module names derive from filenames and are thus unstable

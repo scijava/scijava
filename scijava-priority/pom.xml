@@ -84,10 +84,6 @@
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
-		<scijava-priority.allowedDuplicateClasses>
-			${scijava.allowedDuplicateClasses}
-		</scijava-priority.allowedDuplicateClasses>
-		<allowedDuplicateClasses>${scijava-priority.allowedDuplicateClasses}</allowedDuplicateClasses>
 	</properties>
 
 	<dependencies>

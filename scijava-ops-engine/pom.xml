@@ -101,8 +101,6 @@
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
-		<scijava-ops-engine.allowedDuplicateClasses>${scijava.allowedDuplicateClasses}</scijava-ops-engine.allowedDuplicateClasses>
-		<allowedDuplicateClasses>${scijava-ops-engine.allowedDuplicateClasses}</allowedDuplicateClasses>
 	</properties>
 
 	<dependencies>

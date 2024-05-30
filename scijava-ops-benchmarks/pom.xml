@@ -90,9 +90,6 @@
 
         <license.licenseName>bsd_2</license.licenseName>
         <license.copyrightOwners>SciJava developers.</license.copyrightOwners>
-
-        <scijava-ops-benchmarks.allowedDuplicateClasses>${scijava.allowedDuplicateClasses}</scijava-ops-benchmarks.allowedDuplicateClasses>
-        <allowedDuplicateClasses>${scijava-ops-benchmarks.allowedDuplicateClasses}</allowedDuplicateClasses>
     </properties>
 
     <repositories>

@@ -196,11 +196,11 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	default <T> T opFromSignature(final String signature,
 		final Nil<T> specialType)
 	{
-		InfoTree info = treeFromID(signature);
+		InfoTree info = treeFromSignature(signature);
 		return opFromInfoTree(info, specialType);
 	}
 
-	InfoTree treeFromID(final String signature);
+	InfoTree treeFromSignature(final String signature);
 
 	default InfoTree treeFromInfo(final OpInfo info, final Nil<?> specialType) {
 		return treeFromInfo(info, specialType, getDefaultHints());

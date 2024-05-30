@@ -63,8 +63,8 @@ public class InfoTreeGeneratorTest extends AbstractTestEnvironment implements
 		var op = ops.op("test.infoTreeGeneration").inType(Double.class).outType(
 			Double.class).function();
 		String signature = Ops.signature(op);
-		// Run treeFromID to make sure our generator doesn't run
-		var infoTree = ops.treeFromID(signature);
+		// Run treeFromSignature to make sure our generator doesn't run
+		var infoTree = ops.treeFromSignature(signature);
 		// Assert non-null output
 		Assertions.assertNotNull(infoTree);
 	}

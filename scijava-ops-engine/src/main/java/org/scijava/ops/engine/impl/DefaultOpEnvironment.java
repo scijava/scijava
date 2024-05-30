@@ -238,7 +238,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@Override
-	public InfoTree treeFromID(String signature) {
+	public InfoTree treeFromSignature(String signature) {
 		if (idDirectory == null) initIdDirectory();
 		List<InfoTreeGenerator> infoTreeGenerators = discoverers.stream() //
 			.flatMap(d -> d.discover(InfoTreeGenerator.class).stream()) //

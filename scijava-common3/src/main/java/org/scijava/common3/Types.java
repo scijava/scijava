@@ -86,6 +86,12 @@ public final class Types {
 		// NB: Prevent instantiation of utility class.
 	}
 
+	// ==========================================================================
+	// ============================= TYPE REASONING =============================
+	// ==========================================================================
+
+	// ---------------------------- Stringification -----------------------------
+
 	/**
 	 * Gets a string representation of the given type.
 	 *
@@ -99,6 +105,55 @@ public final class Types {
 		}
 		return t.toString();
 	}
+
+	// ---------------------------- Object instances ----------------------------
+
+	/**
+	 * Checks whether the given object can be cast to the specified type.
+	 *
+	 * @return true If the destination class is assignable from the source
+	 *         object's class, or if the source object is null and destination
+	 *         class is non-null.
+	 * @see #cast(Object, Class)
+	 */
+	public static boolean isInstance(final Object obj, final Class<?> dest) {
+		if (dest == null) return false;
+		return obj == null || dest.isInstance(obj);
+	}
+
+	/**
+	 * Casts the given object to the specified type, or null if the types are
+	 * incompatible.
+	 */
+	public static <T> T cast(final Object src, final Class<T> dest) {
+		if (!isInstance(src, dest)) return null;
+		@SuppressWarnings("unchecked")
+		final T result = (T) src;
+		return result;
+	}
+
+	/**
+	 * Converts the given string value to an enumeration constant of the specified
+	 * type.
+	 *
+	 * @param name The value to convert.
+	 * @param dest The type of the enumeration constant.
+	 * @return The converted enumeration constant.
+	 * @throws IllegalArgumentException if the type is not an enumeration type, or
+	 *           has no such constant.
+	 */
+	public static <T> T enumValue(final String name, final Class<T> dest) {
+		if (!dest.isEnum()) {
+			throw new IllegalArgumentException("Not an enum type: " + name(dest));
+		}
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		final Enum result = Enum.valueOf((Class) dest, name);
+		@SuppressWarnings("unchecked")
+		final T typedResult = (T) result;
+		return typedResult;
+	}
+
+	// ----------------------- Erasure: Type to Class(es) -----------------------
 
 	/**
 	 * Gets the (first) raw class of the given type.
@@ -145,47 +200,7 @@ public final class Types {
 		return GenericTypeReflector.getUpperBoundClassAndInterfaces(type);
 	}
 
-	/**
-	 * Gets the array type&mdash;which might be a {@link Class} or a
-	 * {@link GenericArrayType} depending on the argument&mdash;corresponding to
-	 * the given element type.
-	 * <p>
-	 * For example, {@code arrayType(double.class)} returns {@code double[].class}.
-	 * </p>
-	 * <p>
-	 * This is the opposite of {@link #component(Type)}.
-	 * </p>
-	 *
-	 * @param componentType The type of elements which the array possesses
-	 * @see #component
-	 */
-	public static Type array(final Type componentType) {
-		if (componentType == null) return null;
-		if (componentType instanceof Class) {
-			return Classes.array((Class<?>) componentType);
-		}
-		return new TypeUtils.GenericArrayTypeImpl(componentType);
-	}
-
-	/**
-	 * Gets the component type of the given array type, or null if not an array.
-	 * <p>
-	 * If you have a {@link Class}, you can call {@link Class#getComponentType()}
-	 * for a narrower return type.
-	 * </p>
-	 * <p>
-	 * This is the opposite of {@link #array(Type)}.
-	 * </p>
-	 */
-	public static Type component(final Type type) {
-		if (type instanceof Class) {
-			return ((Class<?>) type).getComponentType();
-		}
-		if (type instanceof GenericArrayType) {
-			return ((GenericArrayType) type).getGenericComponentType();
-		}
-		return null;
-	}
+	// --------------------------- Methods and Fields ---------------------------
 
 	/**
 	 * Returns the exact generic type of the given field, as viewed from the
@@ -222,6 +237,114 @@ public final class Types {
 	public static Type typeOf(final Field field, final Class<?> type) {
 		final Type pType = parameterize(type);
 		return GenericTypeReflector.getExactFieldType(field, pType);
+	}
+
+	/**
+	 * Returns the exact parameter types of the given method in the given type.
+	 * This may be different from {@code m.getGenericParameterTypes()} when the
+	 * method was declared in a superclass, or {@code type} has a type
+	 * parameter that is used in one of the parameters, or {@code type} is a
+	 * raw type.
+	 *
+	 * @param m
+	 * @param type
+	 */
+	public static Type[] paramTypesOf(final Method m, final Type type) {
+		return GenericTypeReflector.getExactParameterTypes(m, type);
+	}
+
+	/**
+	 * Returns the exact return type of the given method in the given type. This
+	 * may be different from {@code m.getGenericReturnType()} when the method
+	 * was declared in a superclass, or {@code type} has a type parameter that
+	 * is used in the return type, or {@code type} is a raw type.
+	 *
+	 * @param m
+	 * @param type
+	 */
+	public static Type returnTypeOf(final Method m, final Type type) {
+		return GenericTypeReflector.getExactReturnType(m, type);
+	}
+
+	// ----------------------------- Assignability ------------------------------
+
+	/**
+	 * Discerns whether it would be legal to assign a reference of type
+	 * {@code source} to a reference of type {@code target}.
+	 *
+	 * @param source The type from which assignment is desired.
+	 * @param target The type to which assignment is desired.
+	 * @return True if the source is assignable to the target.
+	 * @throws NullPointerException if {@code target} is null.
+	 * @see Class#isAssignableFrom(Class)
+	 */
+	public static boolean isAssignable(final Type source, final Type target) {
+		// HACK: Workaround for possible bug in TypeUtils.isAssignable, which
+		// returns false if one wants to assign primitives to their wrappers and
+		// the other way around
+		if (source instanceof Class && target instanceof Class) {
+			final Class<?> boxedSource = Classes.box((Class<?>) source);
+			final Class<?> boxedTarget = Classes.box((Class<?>) target);
+			return TypeUtils.isAssignable(boxedSource, boxedTarget);
+		}
+		return TypeUtils.isAssignable(source, target);
+	}
+
+	/**
+	 * <p>
+	 * Checks if the subject type may be implicitly cast to the target type
+	 * following the Java generics rules.
+	 * </p>
+	 *
+	 * @param type the subject type to be assigned to the target type
+	 * @param toType the target type
+	 * @param typeVarAssigns optional map of type variable assignments
+	 * @return {@code true} if {@code type} is assignable to {@code toType}.
+	 */
+	public static boolean isAssignable(final Type type, final Type toType,
+		final Map<TypeVariable<?>, Type> typeVarAssigns)
+	{
+		// Workaround for possible bug in TypeUtils.isAssignable, which returns
+		// false if one wants to assign primitives to their wrappers and the other
+		// way around
+		if (type instanceof Class && toType instanceof Class) {
+			return TypeUtils.isAssignable(Classes.box((Class<?>) type),
+				Classes.box((Class<?>) toType));
+		}
+		return TypeUtils.isAssignable(type, toType, typeVarAssigns);
+	}
+
+	// ---------------------------- Type hierarchies ----------------------------
+
+	/**
+	 * Finds the most specific supertype of {@code type} whose erasure is
+	 * {@code searchClass}. In other words, returns a type representing the
+	 * class {@code searchClass} plus its exact type parameters in
+	 * {@code type}.
+	 * <ul>
+	 * <li>Returns an instance of {@link ParameterizedType} if
+	 * {@code searchClass} is a real class or interface and {@code type} has
+	 * parameters for it</li>
+	 * <li>Returns an instance of {@link GenericArrayType} if
+	 * {@code searchClass} is an array type, and {@code type} has type
+	 * parameters for it</li>
+	 * <li>Returns an instance of {@link Class} if {@code type} is a raw type,
+	 * or has no type parameters for {@code searchClass}</li>
+	 * <li>Returns null if {@code searchClass} is not a superclass of type.
+	 * </li>
+	 * </ul>
+	 * <p>
+	 * For example, with
+	 * {@code class StringList implements List<String>},
+	 * {@code superTypeOf(StringList.class, Collection.class)} returns a
+	 * {@link ParameterizedType} representing {@code Collection<String>}.
+	 * </p>
+	 *
+	 * @param type
+	 * @param searchClass
+	 */
+	public static Type superTypeOf(final Type type, final Class<?> searchClass) {
+		return GenericTypeReflector.getExactSuperType(type, searchClass);
 	}
 
 	/**
@@ -373,6 +496,30 @@ public final class Types {
 		return Object.class;
 	}
 
+	// ------------------------------ Array types -------------------------------
+
+	/**
+	 * Gets the component type of the given array type, or null if not an array.
+	 * <p>
+	 * If you have a {@link Class}, you can call {@link Class#getComponentType()}
+	 * for a narrower return type.
+	 * </p>
+	 * <p>
+	 * This is the opposite of {@link #array(Type)}.
+	 * </p>
+	 */
+	public static Type component(final Type type) {
+		if (type instanceof Class) {
+			return ((Class<?>) type).getComponentType();
+		}
+		if (type instanceof GenericArrayType) {
+			return ((GenericArrayType) type).getGenericComponentType();
+		}
+		return null;
+	}
+
+	// ----------------- Parameterized types and type variables -----------------
+
 	/**
 	 * Obtains the type parameters of {@link Type} {@code src} <b>with respect
 	 * to</b> the {@link Class} {@code dest}. When {@code src} has no type
@@ -400,85 +547,14 @@ public final class Types {
 	}
 
 	/**
-	 * Finds the type parameters of the most specific super type of the specified
-	 * {@code subType} whose erasure is the specified {@code superErasure}. Hence,
-	 * will return the type parameters of {@code superErasure} possibly narrowed
-	 * down by {@code subType}. If {@code superErasure} is not a super type of
-	 * {@code subType}, an empty array will be returned.
+	 * Learn, recursively, whether any of the type parameters associated with
+	 * {@code type} are bound to variables.
 	 *
-	 * @param subType the type to narrow down type parameters
-	 * @param superErasure the erasure of a super type of {@code subType} from
-	 *          which to get the parameters
-	 * @return type parameters of {@code superErasure} possibly narrowed down by
-	 *         {@code subType}, or empty type array if no exists or
-	 *         {@code superErasure} is not a super type of subtype
+	 * @param type the type to check for type variables
+	 * @return boolean
 	 */
-	private static Type[] typeParamsOfClass(Class<?> subType, Class<?> superErasure) {
-		Type pt = parameterize(subType);
-		Type superType = superTypeOf(pt, superErasure);
-		if (superType instanceof ParameterizedType) {
-			return ((ParameterizedType) superType).getActualTypeArguments();
-		}
-		return new Type[0];
-	}
-
-	/**
-	 * Discerns whether it would be legal to assign a reference of type
-	 * {@code source} to a reference of type {@code target}.
-	 *
-	 * @param source The type from which assignment is desired.
-	 * @param target The type to which assignment is desired.
-	 * @return True if the source is assignable to the target.
-	 * @throws NullPointerException if {@code target} is null.
-	 * @see Class#isAssignableFrom(Class)
-	 */
-	public static boolean isAssignable(final Type source, final Type target) {
-		// HACK: Workaround for possible bug in TypeUtils.isAssignable, which
-		// returns false if one wants to assign primitives to their wrappers and
-		// the other way around
-		if (source instanceof Class && target instanceof Class) {
-			final Class<?> boxedSource = Classes.box((Class<?>) source);
-			final Class<?> boxedTarget = Classes.box((Class<?>) target);
-			return TypeUtils.isAssignable(boxedSource, boxedTarget);
-		}
-		return TypeUtils.isAssignable(source, target);
-	}
-
-	/**
-	 * <p>
-	 * Checks if the subject type may be implicitly cast to the target type
-	 * following the Java generics rules.
-	 * </p>
-	 *
-	 * @param type the subject type to be assigned to the target type
-	 * @param toType the target type
-	 * @param typeVarAssigns optional map of type variable assignments
-	 * @return {@code true} if {@code type} is assignable to {@code toType}.
-	 */
-	public static boolean isAssignable(final Type type, final Type toType,
-		final Map<TypeVariable<?>, Type> typeVarAssigns)
-	{
-		// Workaround for possible bug in TypeUtils.isAssignable, which returns
-		// false if one wants to assign primitives to their wrappers and the other
-		// way around
-		if (type instanceof Class && toType instanceof Class) {
-			return TypeUtils.isAssignable(Classes.box((Class<?>) type),
-				Classes.box((Class<?>) toType));
-		}
-		return TypeUtils.isAssignable(type, toType, typeVarAssigns);
-	}
-
-	/**
-	 * Checks whether the given object can be cast to the specified type.
-	 *
-	 * @return true If the destination class is assignable from the source
-	 *         object's class, or if the source object is null and destination
-	 *         class is non-null.
-	 * @see #cast(Object, Class)
-	 */
-	public static boolean isInstance(final Object obj, final Class<?> dest) {
-		if (dest == null) return false;
-		return obj == null || dest.isInstance(obj);
+	public static boolean containsTypeVars(final Type type) {
+		return TypeUtils.containsTypeVariables(type);
 	}
 
 	/**
@@ -546,43 +622,86 @@ public final class Types {
 	 * @return whether the types can be assigned to their respective type
 	 *         variables.
 	 */
-	public static boolean varsSatisfied(
-		final Map<TypeVariable<?>, Type> typeVarAssigns)
-	{
+	public static boolean varsSatisfied(final Map<TypeVariable<?>, Type> typeVarAssigns) {
 		return TypeUtils.typesSatisfyVariables(typeVarAssigns);
 	}
 
 	/**
-	 * Casts the given object to the specified type, or null if the types are
-	 * incompatible.
+	 * Map type vars in specified type list to types using the specified map. In
+	 * doing so, type vars mapping to other type vars will not be followed but
+	 * just replaced.
+	 *
+	 * @param typesToMap
+	 * @param typeVarAssigns
 	 */
-	public static <T> T cast(final Object src, final Class<T> dest) {
-		if (!isInstance(src, dest)) return null;
-		@SuppressWarnings("unchecked")
-		final T result = (T) src;
-		return result;
+	public static Type[] unroll(Type[] typesToMap, Map<TypeVariable<?>, Type> typeVarAssigns) {
+		return Arrays.stream(typesToMap)
+			.map(type -> unroll(type, typeVarAssigns))
+			.toArray(Type[]::new);
 	}
 
 	/**
-	 * Converts the given string value to an enumeration constant of the specified
-	 * type.
+	 * Map type vars in the specified type to a type using the specified map. In
+	 * doing so, type vars mapping to other type vars will not be followed but
+	 * just replaced.
 	 *
-	 * @param name The value to convert.
-	 * @param dest The type of the enumeration constant.
-	 * @return The converted enumeration constant.
-	 * @throws IllegalArgumentException if the type is not an enumeration type, or
-	 *           has no such constant.
+	 * @param typeToMap
+	 * @param typeVarAssigns
 	 */
-	public static <T> T enumValue(final String name, final Class<T> dest) {
-		if (!dest.isEnum()) {
-			throw new IllegalArgumentException("Not an enum type: " + name(dest));
-		}
-		@SuppressWarnings({ "rawtypes", "unchecked" })
-		final Enum result = Enum.valueOf((Class) dest, name);
-		@SuppressWarnings("unchecked")
-		final T typedResult = (T) result;
-		return typedResult;
+	public static Type unroll(Type typeToMap, Map<TypeVariable<?>, Type> typeVarAssigns) {
+		return unroll(typeVarAssigns, typeToMap, false);
 	}
+
+	/**
+	 * Get a type representing {@code type} with variable assignments
+	 * "unrolled."
+	 *
+	 * @param typeVarAssigns a {@code Map} of the type assignments for the
+	 *         type variables in each type in the inheritance hierarchy
+	 *         of {@code type}.
+	 * @param type the type to unroll variable assignments for
+	 * @param followTypeVars whether a {@link TypeVariable} should be
+	 *          recursively followed if it maps to another {@link TypeVariable},
+	 *          or if it should be just replaced by the mapping
+	 * @return Type
+	 */
+	public static Type unroll(
+		Map<TypeVariable<?>, Type> typeVarAssigns,
+		final Type type,
+		boolean followTypeVars
+	) {
+		return TypeUtils.unrollVariables(typeVarAssigns, type, followTypeVars);
+	}
+
+	// ==========================================================================
+	// =========================== TYPE CONSTRUCTION ============================
+	// ==========================================================================
+
+	// ------------------------------ Array types -------------------------------
+
+	/**
+	 * Gets the array type&mdash;which might be a {@link Class} or a
+	 * {@link GenericArrayType} depending on the argument&mdash;corresponding to
+	 * the given element type.
+	 * <p>
+	 * For example, {@code arrayType(double.class)} returns {@code double[].class}.
+	 * </p>
+	 * <p>
+	 * This is the opposite of {@link #component(Type)}.
+	 * </p>
+	 *
+	 * @param componentType The type of elements which the array possesses
+	 * @see #component
+	 */
+	public static Type array(final Type componentType) {
+		if (componentType == null) return null;
+		if (componentType instanceof Class) {
+			return Classes.array((Class<?>) componentType);
+		}
+		return new TypeUtils.GenericArrayTypeImpl(componentType);
+	}
+
+	// -------------------------- Parameterized types ---------------------------
 
 	/**
 	 * Creates a new {@link ParameterizedType} of the given class together with
@@ -613,6 +732,8 @@ public final class Types {
 		return TypeUtils.parameterize(raw, typeVarAssigns);
 	}
 
+	// ------------------------------- Wildcards --------------------------------
+
 	/**
 	 * Creates a new {@link WildcardType} with the given upper bound(s).
 	 *
@@ -636,130 +757,6 @@ public final class Types {
 		return new TypeUtils.WildcardTypeImpl(upperBounds, lowerBounds);
 	}
 
-	/**
-	 * Learn, recursively, whether any of the type parameters associated with
-	 * {@code type} are bound to variables.
-	 *
-	 * @param type the type to check for type variables
-	 * @return boolean
-	 */
-	public static boolean containsTypeVars(final Type type) {
-		return TypeUtils.containsTypeVariables(type);
-	}
-
-	/**
-	 * Finds the most specific supertype of {@code type} whose erasure is
-	 * {@code searchClass}. In other words, returns a type representing the
-	 * class {@code searchClass} plus its exact type parameters in
-	 * {@code type}.
-	 * <ul>
-	 * <li>Returns an instance of {@link ParameterizedType} if
-	 * {@code searchClass} is a real class or interface and {@code type} has
-	 * parameters for it</li>
-	 * <li>Returns an instance of {@link GenericArrayType} if
-	 * {@code searchClass} is an array type, and {@code type} has type
-	 * parameters for it</li>
-	 * <li>Returns an instance of {@link Class} if {@code type} is a raw type,
-	 * or has no type parameters for {@code searchClass}</li>
-	 * <li>Returns null if {@code searchClass} is not a superclass of type.
-	 * </li>
-	 * </ul>
-	 * <p>
-	 * For example, with
-	 * {@code class StringList implements List<String>},
-	 * {@code superTypeOf(StringList.class, Collection.class)} returns a
-	 * {@link ParameterizedType} representing {@code Collection<String>}.
-	 * </p>
-	 *
-	 * @param type
-	 * @param searchClass
-	 */
-	public static Type superTypeOf(final Type type, final Class<?> searchClass) {
-		return GenericTypeReflector.getExactSuperType(type, searchClass);
-	}
-
-	/**
-	 * Map type vars in specified type list to types using the specified map. In
-	 * doing so, type vars mapping to other type vars will not be followed but
-	 * just replaced.
-	 *
-	 * @param typesToMap
-	 * @param typeVarAssigns
-	 */
-	public static Type[] unroll(Type[] typesToMap,
-		Map<TypeVariable<?>, Type> typeVarAssigns)
-	{
-		return Arrays.stream(typesToMap)
-			.map(type -> unroll(type, typeVarAssigns))
-			.toArray(Type[]::new);
-	}
-
-	/**
-	 * Map type vars in the specified type to a type using the specified map. In
-	 * doing so, type vars mapping to other type vars will not be followed but
-	 * just replaced.
-	 *
-	 * @param typeToMap
-	 * @param typeVarAssigns
-	 */
-	public static Type unroll(Type typeToMap,
-		Map<TypeVariable<?>, Type> typeVarAssigns)
-	{
-		return unroll(typeVarAssigns, typeToMap, false);
-	}
-
-	/**
-	 * Get a type representing {@code type} with variable assignments
-	 * "unrolled."
-	 *
-	 * @param typeVarAssigns a {@code Map} of the type assignments for the
-	 *         type variables in each type in the inheritance hierarchy
-	 *         of {@code type}.
-	 * @param type the type to unroll variable assignments for
-	 * @param followTypeVars whether a {@link TypeVariable} should be
-	 *          recursively followed if it maps to another {@link TypeVariable},
-	 *          or if it should be just replaced by the mapping
-	 * @return Type
-	 */
-	public static Type unroll(
-		Map<TypeVariable<?>, Type> typeVarAssigns,
-		final Type type,
-		boolean followTypeVars
-	) {
-		return TypeUtils.unrollVariables(typeVarAssigns, type, followTypeVars);
-	}
-
-	/**
-	 * Returns the exact parameter types of the given method in the given type.
-	 * This may be different from {@code m.getGenericParameterTypes()} when the
-	 * method was declared in a superclass, or {@code type} has a type
-	 * parameter that is used in one of the parameters, or {@code type} is a
-	 * raw type.
-	 *
-	 * @param m
-	 * @param type
-	 */
-	public static Type[] paramTypesOf(final Method m, final Type type) {
-		return GenericTypeReflector.getExactParameterTypes(m, type);
-	}
-	// START HERE: fieldType is not named exactFieldType, even though it uses that method.
-	// So these exact*Type* methods should be named consistently with fieldType somehow.
-	// Also consider how to rename areVarsSatisfied, which is a mouthful.
-	// Then, I want to group the Types methods by area of functionality somehow.
-
-	/**
-	 * Returns the exact return type of the given method in the given type. This
-	 * may be different from {@code m.getGenericReturnType()} when the method
-	 * was declared in a superclass, or {@code type} has a type parameter that
-	 * is used in the return type, or {@code type} is a raw type.
-	 *
-	 * @param m
-	 * @param type
-	 */
-	public static Type returnTypeOf(final Method m, final Type type) {
-		return GenericTypeReflector.getExactReturnType(m, type);
-	}
-
 	// -- Helper methods --
 
 	/**
@@ -778,6 +775,29 @@ public final class Types {
 			if (!isAssignable(sources[i], target)) return i;
 		}
 		return -1;
+	}
+
+	/**
+	 * Finds the type parameters of the most specific super type of the specified
+	 * {@code subType} whose erasure is the specified {@code superErasure}. Hence,
+	 * will return the type parameters of {@code superErasure} possibly narrowed
+	 * down by {@code subType}. If {@code superErasure} is not a super type of
+	 * {@code subType}, an empty array will be returned.
+	 *
+	 * @param subType the type to narrow down type parameters
+	 * @param superErasure the erasure of a super type of {@code subType} from
+	 *          which to get the parameters
+	 * @return type parameters of {@code superErasure} possibly narrowed down by
+	 *         {@code subType}, or empty type array if no exists or
+	 *         {@code superErasure} is not a super type of subtype
+	 */
+	private static Type[] typeParamsOfClass(Class<?> subType, Class<?> superErasure) {
+		Type pt = parameterize(subType);
+		Type superType = superTypeOf(pt, superErasure);
+		if (superType instanceof ParameterizedType) {
+			return ((ParameterizedType) superType).getActualTypeArguments();
+		}
+		return new Type[0];
 	}
 
 	private static ParameterizedType parameterizeClass(final Class<?> raw,

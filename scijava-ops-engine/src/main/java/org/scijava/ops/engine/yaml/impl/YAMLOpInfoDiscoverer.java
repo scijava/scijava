@@ -101,7 +101,13 @@ public class YAMLOpInfoDiscoverer implements Discoverer {
 	}
 
 	private void parse(List<OpInfo> infos, final URL url) throws IOException {
-		List<Map<String, Object>> yamlData = yaml.load(url.openStream());
+		List<Map<String, Object>> yamlData;
+		try {
+			yamlData = yaml.load(url.openStream());
+		}
+		catch (final RuntimeException exc) {
+			throw new IOException("Failed to parse Op YAML: " + url.getPath(), exc);
+		}
 
 		for (Map<String, Object> op : yamlData) {
 			Map<String, Object> opData = subMap(op, "op");

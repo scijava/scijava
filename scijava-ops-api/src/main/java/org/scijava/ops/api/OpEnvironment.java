@@ -295,41 +295,54 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	Type genericType(Object obj);
 
 	/**
-	 * Used to enrich a lambda expression with its generic type. Its usage is
-	 * necessary in order to find Ops that could take this lamdba expression as an
-	 * argument.
+	 * Enriches a lambda expression with its generic type. Its usage is necessary
+	 * in order to find Ops that could take this lamdba expression as an argument.
 	 * <p>
-	 * Suppose, for example, that a user has written a lambda
-	 * {@code Computers.Arity1<Double, Double> computer}, but a user wishes to
-	 * have a {@code Computers.Arity1<Iterable<Double>, Iterable<Double>>}. They
-	 * know of an Op in the {@code OpEnvironment} that is able to adapt
-	 * {@code computer} so that it is run in a parallel fashion. They cannot
-	 * simply call
-	 * <p>
-	 *
+	 * Suppose, for example, that a user has a lambda expression of type
+	 * {@code Function<Double, Double>}, and they wish to use the
+	 * {@code engine.adapt} Op to transform it into a
+	 * {@code Function<Iterable<Double>, Iterable<Double>>}.
+	 * Naively, they write:
 	 * <pre>{@code
-	 * op("engine.adapt")
-	 *  input(computer)
-	 *   .outType(new Nil<Computers.Arity1<Iterable<Double>, Iterable<Double>>>() {})
-	 *   .apply()
+	 * Function<Double, Double> doubler = x -> 2*x;
+	 * Function<Iterable<Double>, Iterable<Double>> iterableDoubler =
+	 *   ops.op("engine.adapt").input(doubler).outType(new Nil<>() {}).apply();
 	 * }</pre>
-	 *
-	 * since the type parameters of {@code computer} are not retained at runtime.
+	 * but it does not work, because the Ops engine cannot know the generic type
+	 * of the {@code doubler} object. One workaround is to specify the input
+	 * generic type explicitly:
+	 * <pre>{@code
+	 * Function<Double, Double> doubler = x -> 2*x;
+	 * Function<Iterable<Double>, Iterable<Double>> iterableDoubler =
+	 *   ops.op("engine.adapt")
+	 *     .inType(new Nil<Function<Double, Double>() {})
+	 *     .outType(new Nil<>() {}).function().apply(doubler);
+	 * }</pre>
+	 * Another approach is to use this {@code typeLambda} method as follows:
+	 * <pre>{@code
+	 * Function<Double, Double> doubler = ops.typeLambda(new Nil<>() {}, x -> 2*x);
+	 * Function<Iterable<Double>, Iterable<Double>> iterableDoubler =
+	 *   ops.op("engine.adapt").input(doubler).outType(new Nil<>() {}).apply();
+	 * }</pre>
+	 * In the above example, the {@code doubler} object returned by
+	 * {@code typeLambda} has its generic type information embedded, rather than
+	 * being a raw lambda where the generic type information is erased at runtime.
 	 * <p>
-	 * {@code bakeLambdaType} should be used as a method of retaining that fully
-	 * reified lambda type so that the lambda can be used
-	 * <p>
-	 * Note: {@code bakeLambdaType} <b>does not</b> need to be used with anonymous
-	 * subclasses; these retain their type parameters at runtime. It is only
-	 * lambda expressions that need to be passed to this method.
+	 * Note: {@code typeLambda} <b>does not</b> need to be used with anonymous
+	 * subclasses; these already retain their type parameters at runtime. It is
+	 * only lambda expressions that need to be passed to this method.
 	 *
-	 * @param <T> The type of the op instance to enrich.
-	 * @param op The op instance to enrich.
-	 * @param type The intended generic type of the object to be known at runtime.
-	 * @return An enriched version of the object with full knowledge of its
-	 *         generic type.
+	 * @param <T> The lambda's functional type
+	 *        (e.g. {@link java.util.function.BiFunction}{@code <String, Double>})
+	 * @param opType The generic type of the lambda expression to be embedded.
+	 *        (e.g. {@code new Nil<BiFunction<String, Double>>() {}})
+	 * @param lambda A lambda expression fulfilling the functional interface
+	 *               contract of the stated {@code opType}.
+	 * @return An enriched version of the lambda object that embeds knowledge of
+	 *         its generic type by implementing the
+	 *         {@link org.scijava.common3.GenericTyped} interface.
 	 */
-	<T> T bakeLambdaType(T op, Type type);
+	<T> T typeLambda(Nil<T> opType, T lambda);
 
 	/**
 	 * Creates an {@link OpInfo} from a {@link Class}.

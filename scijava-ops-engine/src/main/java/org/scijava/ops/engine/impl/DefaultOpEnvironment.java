@@ -269,8 +269,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@Override
-	public <T> T bakeLambdaType(T op, Type type) {
-		return LambdaTypeBaker.bakeLambdaType(op, type);
+	public <T> T typeLambda(Nil<T> opType, T lambda) {
+		return LambdaTypeBaker.bakeLambdaType(lambda, opType.type());
 	}
 
 	@Override

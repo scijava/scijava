@@ -92,12 +92,9 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends
 		// selected interval XY
 		final int[] xyAxis = new int[] { 0, 1 };
 
-		Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>> wrapped =
-			ops.bakeLambdaType(test,
-				new Nil<Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>>>()
-				{}.type());
-		ops.op("transform.slice").input(in, wrapped, xyAxis, true).output(out)
-			.compute();
+		Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>> op =
+			ops.typeLambda(new Nil<>() {}, test);
+		ops.op("transform.slice").input(in, op, xyAxis, true).output(out).compute();
 
 		for (final Cursor<ByteType> cur = out.cursor(); cur.hasNext();) {
 			cur.fwd();
@@ -130,12 +127,12 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends
 		// selected interval XYZ
 		final int[] xyAxis = new int[] { 0, 1, 2 };
 
-		Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>> wrapped =
-			ops.bakeLambdaType(test,
-				new Nil<Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>>>()
-				{}.type());
-		ops.op("transform.slice").input(inSequence, wrapped, xyAxis, true).output(
-			outSequence).compute();
+		Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>> op =
+			ops.typeLambda(new Nil<>() {}, test);
+		ops.op("transform.slice")
+			.input(inSequence, op, xyAxis, true)
+			.output(outSequence)
+			.compute();
 
 		for (final Cursor<ByteType> cur = outSequence.cursor(); cur.hasNext();) {
 			cur.fwd();

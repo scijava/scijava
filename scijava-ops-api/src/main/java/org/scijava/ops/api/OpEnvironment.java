@@ -358,8 +358,8 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 * <ul>
 	 * <li>{@link OpInfo}s</li>
 	 * <li>{@link java.util.Collection}s or arrays of the above</li>
-	 * <li>{@link Object}s (such as, but not limited to, {@link Class}es,
-	 * {@link Method}s, etc.) from which {@link OpInfo}s could be derived
+	 * <li>{@link Object}s (such as, but not limited to, {@link Class}es
+	 * or {@link Method}s) from which {@link OpInfo}s could be derived
 	 * </ul>
 	 *
 	 * @param objects the {@link Object}s that should be made discoverable to this

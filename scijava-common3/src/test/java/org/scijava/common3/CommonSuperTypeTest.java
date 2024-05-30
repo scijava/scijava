@@ -83,52 +83,52 @@ public class CommonSuperTypeTest {
 		Type t1 = Double.class;
 		Type t2 = String.class;
 		Type superType = Types.commonSuperTypeOf(t1, t2);
-		Type expected = Types.parameterize(Comparable.class, new Type[] { Types.wildcard() });
+		Type expected = Types.parameterize(Comparable.class, Types.wildcard());
 		assertEquals(expected, superType);
 	}
 
 	@Test
 	public void testListOfSame() {
-		Type listOfDouble = Types.parameterize(List.class, new Type[] { Double.class });
+		Type listOfDouble = Types.parameterize(List.class, Double.class);
 		Type superType = Types.commonSuperTypeOf(listOfDouble, listOfDouble);
 		assertEquals(listOfDouble, superType);
-		Type listOfObject = Types.parameterize(List.class, new Type[] { Object.class });
+		Type listOfObject = Types.parameterize(List.class, Object.class);
 		assertNotEquals(listOfObject, superType, "Class Double should take precedence over Object");
-		Type listOfQ = Types.parameterize(List.class, new Type[] { Types.wildcard() });
+		Type listOfQ = Types.parameterize(List.class, Types.wildcard());
 		assertNotEquals(listOfQ, superType, "Class Double should be discernable over wildcard");
 		assertNotEquals(List.class, superType, "Class Double should be discernable, rawtype should not be returned");
 	}
 
 	@Test
 	public void testListOfDifferent() {
-		Type t1 = Types.parameterize(List.class, new Type[] { Double.class });
-		Type t2 = Types.parameterize(List.class, new Type[] { String.class });
+		Type t1 = Types.parameterize(List.class, Double.class);
+		Type t2 = Types.parameterize(List.class, String.class);
 		Type superType = Types.commonSuperTypeOf(t1, t2);
-		Type comparableQ = Types.parameterize(Comparable.class, new Type[] { Types.wildcard() });
-		Type expectedListType = Types.wildcard(new Type[] { comparableQ }, new Type[] {});
-		Type expected = Types.parameterize(List.class, new Type[] { expectedListType });
+		Type comparableQ = Types.parameterize(Comparable.class, Types.wildcard());
+		Type expectedListType = Types.wildcard(comparableQ);
+		Type expected = Types.parameterize(List.class, expectedListType);
 		assertEquals(expected, superType);
 	}
 
 	@Test
 	public void testListOfListOfDifferent() {
-		Type listDouble = Types.parameterize(List.class, new Type[] { Double.class });
-		Type listString = Types.parameterize(List.class, new Type[] { String.class });
-		Type t1 = Types.parameterize(List.class, new Type[] { listDouble });
-		Type t2 = Types.parameterize(List.class, new Type[] { listString });
+		Type listDouble = Types.parameterize(List.class, Double.class);
+		Type listString = Types.parameterize(List.class, String.class);
+		Type t1 = Types.parameterize(List.class, listDouble);
+		Type t2 = Types.parameterize(List.class, listString);
 		Type superType = Types.commonSuperTypeOf(t1, t2);
-		Type comparableQ = Types.parameterize(Comparable.class, new Type[] { Types.wildcard() });
-		Type expectedType = Types.wildcard(new Type[] { comparableQ }, new Type[] {});
-		Type expectedList = Types.parameterize(List.class, new Type[] { expectedType });
-		Type expectedListType = Types.wildcard(new Type[] { expectedList }, new Type[] {});
-		Type expected = Types.parameterize(List.class, new Type[] { expectedListType });
+		Type comparableQ = Types.parameterize(Comparable.class, Types.wildcard());
+		Type expectedType = Types.wildcard(comparableQ);
+		Type expectedList = Types.parameterize(List.class, expectedType);
+		Type expectedListType = Types.wildcard(expectedList);
+		Type expected = Types.parameterize(List.class, expectedListType);
 		assertEquals(expected, superType);
 	}
 
 	@Test
 	public void testArrayListAndList() {
-		Type t1 = Types.parameterize(List.class, new Type[] { Double.class });
-		Type t2 = Types.parameterize(ArrayList.class, new Type[] { Double.class });
+		Type t1 = Types.parameterize(List.class, Double.class);
+		Type t2 = Types.parameterize(ArrayList.class, Double.class);
 		Type superType = Types.commonSuperTypeOf(t1, t2);
 		assertEquals(t1, superType);
 		Type superType2 = Types.commonSuperTypeOf(t2, t1);
@@ -140,7 +140,7 @@ public class CommonSuperTypeTest {
 		Type t3 = NThing.class;
 		Type t4 = QThing.class;
 		Type superType = Types.commonSuperTypeOf(t3, t4);
-		Type expected = Types.wildcard(new Type[] { Thing.class, Stuff.class }, new Type[] {});
+		Type expected = Types.wildcard(Thing.class, Stuff.class);
 		assertEquals(expected, superType);
 	}
 
@@ -149,7 +149,7 @@ public class CommonSuperTypeTest {
 		Type t3 = NThing.class;
 		Type t4 = YThing.class;
 		Type superType = Types.commonSuperTypeOf(t3, t4);
-		Type expected = Types.wildcard(new Type[] { Thing.class }, new Type[] {});
+		Type expected = Types.wildcard(Thing.class);
 		assertNotEquals(expected, superType, "Greatest common type should not be a wildcard");
 		assertEquals(Thing.class, superType);
 	}
@@ -168,7 +168,7 @@ public class CommonSuperTypeTest {
 		Type t1 = StrangeThing.class;
 		Type t2 = WeirdThing.class;
 		Type superType = Types.commonSuperTypeOf(t1, t2);
-		Type expected = Types.parameterize(RecursiveThing.class, new Type[] { Types.wildcard() });
+		Type expected = Types.parameterize(RecursiveThing.class, Types.wildcard());
 		assertEquals(expected, superType);
 	}
 
@@ -184,7 +184,7 @@ public class CommonSuperTypeTest {
 	@Test
 	public void testWildcardType() {
 		Type qNThing = Types.wildcard(NThing.class);
-		ParameterizedType typeWithWildcard = Types.parameterize(List.class, new Type[] { qNThing });
+		ParameterizedType typeWithWildcard = Types.parameterize(List.class, qNThing);
 		Type t1 = typeWithWildcard.getActualTypeArguments()[0];
 		Type t2 = XThing.class;
 		Type superType = Types.commonSuperTypeOf(t1, t2);

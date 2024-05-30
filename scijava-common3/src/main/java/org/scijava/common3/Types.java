@@ -588,29 +588,29 @@ public final class Types {
 	 * Creates a new {@link ParameterizedType} of the given class together with
 	 * the specified type arguments.
 	 *
-	 * @param rawType The class of the {@link ParameterizedType}.
-	 * @param typeArgs The type arguments to use in parameterizing it.
+	 * @param raw The class of the {@link ParameterizedType}.
+	 * @param typeArgs The type arguments to use in parameterizing it, or an
+	 *   empty array to use the class's type variables with default bounds.
 	 * @return The newly created {@link ParameterizedType}.
 	 */
-	public static ParameterizedType parameterize(final Class<?> rawType,
-		final Type[] typeArgs)
+	public static ParameterizedType parameterize(final Class<?> raw,
+		final Type... typeArgs)
 	{
-		return parameterize(rawType, rawType.getDeclaringClass(), typeArgs);
+		return parameterizeClass(raw, raw.getDeclaringClass(),
+			typeArgs.length == 0 ? raw.getTypeParameters() : typeArgs);
 	}
 
 	/**
-	 * Creates a new {@link ParameterizedType} of the given class together with
-	 * the specified type arguments.
+	 * Create a parameterized type instance.
 	 *
-	 * @param rawType The class of the {@link ParameterizedType}.
-	 * @param ownerType The owner type of the parameterized class.
-	 * @param typeArgs The type arguments to use in parameterizing it.
-	 * @return The newly created {@link ParameterizedType}.
+	 * @param raw the raw class to create a parameterized type instance for
+	 * @param typeVarAssigns the mapping used for parameterization
+	 * @return {@link ParameterizedType}
 	 */
-	public static ParameterizedType parameterize(final Class<?> rawType,
-		final Type ownerType, final Type[] typeArgs)
+	public static ParameterizedType parameterize(final Class<?> raw,
+		final Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
-		return new TypeUtils.ParameterizedTypeImpl(rawType, ownerType, typeArgs);
+		return TypeUtils.parameterize(raw, typeVarAssigns);
 	}
 
 	/**
@@ -645,19 +645,6 @@ public final class Types {
 	 */
 	public static boolean containsTypeVars(final Type type) {
 		return TypeUtils.containsTypeVariables(type);
-	}
-
-	/**
-	 * Create a parameterized type instance.
-	 *
-	 * @param raw the raw class to create a parameterized type instance for
-	 * @param typeVarAssigns the mapping used for parameterization
-	 * @return {@link ParameterizedType}
-	 */
-	public static ParameterizedType parameterize(final Class<?> raw,
-		final Map<TypeVariable<?>, Type> typeVarAssigns)
-	{
-		return TypeUtils.parameterize(raw, typeVarAssigns);
 	}
 
 	/**
@@ -743,20 +730,6 @@ public final class Types {
 	}
 
 	/**
-	 * Tries to parameterize the given raw type with its type parameters. If type
-	 * is not raw, it will be returned. Otherwise, a parameterized type containing
-	 * the type variables of the specified is returned.
-	 *
-	 * @param rawType the raw type to parameterize
-	 * @return a parameterized type, or the class itself if not a parameterizable class
-	 */
-	public static Type parameterize(Class<?> rawType) {
-		TypeVariable<?>[] typeParams = rawType.getTypeParameters();
-		if (typeParams.length == 0) return rawType;
-		return parameterize(rawType, typeParams);
-	}
-
-	/**
 	 * Returns the exact parameter types of the given method in the given type.
 	 * This may be different from {@code m.getGenericParameterTypes()} when the
 	 * method was declared in a superclass, or {@code type} has a type
@@ -805,6 +778,12 @@ public final class Types {
 			if (!isAssignable(sources[i], target)) return i;
 		}
 		return -1;
+	}
+
+	private static ParameterizedType parameterizeClass(final Class<?> raw,
+		final Type ownerType, final Type[] typeArgs)
+	{
+		return new TypeUtils.ParameterizedTypeImpl(raw, ownerType, typeArgs);
 	}
 
 	// -- BEGIN FORK OF APACHE COMMONS LANG 3.4 CODE --
@@ -3351,7 +3330,7 @@ public final class Types {
 				Arrays.fill(arguments, UNBOUND_WILDCARD);
 				final Type owner = clazz.getDeclaringClass() == null ? null
 					: addWildcardParameters(clazz.getDeclaringClass());
-				return parameterize(clazz, owner, arguments);
+				return parameterizeClass(clazz, owner, arguments);
 			}
 			else {
 				return clazz;
@@ -3739,7 +3718,7 @@ public final class Types {
 				}
 				final Type ownerType = pType.getOwnerType() == null ? null : capture(
 					pType.getOwnerType());
-				return parameterize(clazz, ownerType, capturedArguments);
+				return parameterizeClass(clazz, ownerType, capturedArguments);
 			}
 			return type;
 		}
@@ -3916,7 +3895,7 @@ public final class Types {
 			}
 			else if (type instanceof ParameterizedType) {
 				final ParameterizedType pType = (ParameterizedType) type;
-				return parameterize((Class<?>) pType.getRawType(), pType
+				return parameterizeClass((Class<?>) pType.getRawType(), pType
 					.getOwnerType() == null ? pType.getOwnerType() : map(pType
 						.getOwnerType()), map(pType.getActualTypeArguments()));
 			}

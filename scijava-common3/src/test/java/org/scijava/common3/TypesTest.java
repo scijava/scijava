@@ -213,12 +213,12 @@ public class TypesTest {
 		class C<T extends Number> {}
 		Type t = C.class.getTypeParameters()[0];
 		var listRaw = List.class;
-		var listT = Types.parameterize(List.class, new Type[] { t });
-		var listNumber = Types.parameterize(List.class, new Type[] { Number.class });
-		var listInteger = Types.parameterize(List.class, new Type[] { Integer.class });
-		var listExtendsNumber = Types.parameterize(List.class, new Type[] { Types.wildcard(Number.class) });
-		var listListRaw = Types.parameterize(List.class, new Type[] { List.class });
-		var listListInteger = Types.parameterize(List.class, new Type[] { listInteger });
+		var listT = Types.parameterize(List.class, t);
+		var listNumber = Types.parameterize(List.class, Number.class);
+		var listInteger = Types.parameterize(List.class, Integer.class);
+		var listExtendsNumber = Types.parameterize(List.class, Types.wildcard(Number.class));
+		var listListRaw = Types.parameterize(List.class, List.class);
+		var listListInteger = Types.parameterize(List.class, listInteger);
 
 		assertTrue(Types.isAssignable(t, t));
 		assertTrue(Types.isAssignable(listRaw, listRaw));
@@ -264,11 +264,11 @@ public class TypesTest {
 		final Type n = C.class.getTypeParameters()[0];
 		final Type s = C.class.getTypeParameters()[1];
 		final Type t = C.class.getTypeParameters()[2];
-		final Type listN = Types.parameterize(List.class, new Type[] { n });
-		final Type listS = Types.parameterize(List.class, new Type[] { s });
-		final Type listNumber = Types.parameterize(List.class, new Type[] { Number.class });
-		final Type listInteger = Types.parameterize(List.class, new Type[] { Integer.class });
-		final Type listExtendsNumber = Types.parameterize(List.class, new Type[] { Types.wildcard(Number.class) });
+		final Type listN = Types.parameterize(List.class, n);
+		final Type listS = Types.parameterize(List.class, s);
+		final Type listNumber = Types.parameterize(List.class, Number.class);
+		final Type listInteger = Types.parameterize(List.class, Integer.class);
+		final Type listExtendsNumber = Types.parameterize(List.class, Types.wildcard(Number.class));
 		// T list = (T) new ArrayList<N>();
 		assertTrue(Types.isAssignable(listN, t));
 		// T list = (T) new ArrayList<Number>();
@@ -287,7 +287,7 @@ public class TypesTest {
 	public void testIsAssignableObject() {
 		class C<T extends Number> {}
 		final Type t = C.class.getTypeParameters()[0];
-		final Type iterableT = Types.parameterize(Iterable.class, new Type[] { t });
+		final Type iterableT = Types.parameterize(Iterable.class, t);
 		assertTrue(Types.isAssignable(iterableT, Object.class));
 	}
 

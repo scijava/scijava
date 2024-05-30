@@ -48,6 +48,7 @@ module org.scijava.ops.engine {
 	requires org.scijava.ops.spi;
 	requires org.scijava.types;
 
+	requires com.google.common;
 	requires org.javassist;
 	requires org.slf4j;
 	requires org.yaml.snakeyaml;

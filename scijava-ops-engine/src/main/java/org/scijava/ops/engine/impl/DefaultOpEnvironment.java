@@ -95,8 +95,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * search size for any Op request to the number of known Ops with the name
 	 * given in the request.
 	 */
-	private final TreeMultimap<String, OpInfo> opDirectory = TreeMultimap
-		.create();
+	private final TreeMultimap<String, OpInfo> opDirectory = TreeMultimap.create();
 
 	/**
 	 * Data structure storing all known Ops, discoverable using their id.

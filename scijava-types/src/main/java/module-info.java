@@ -36,11 +36,11 @@ module org.scijava.types {
 	opens org.scijava.types.extract;
 	exports org.scijava.types.extract;
 
-	requires transitive com.google.common;
 	requires transitive org.scijava.common3;
 	requires transitive org.scijava.discovery;
 	requires org.scijava.priority;
 
+	requires com.google.common;
 	requires org.slf4j;
 
 	uses org.scijava.types.extract.TypeExtractor;

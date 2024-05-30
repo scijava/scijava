@@ -183,7 +183,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<argLine>--add-reads org.scijava.ops.opencv=org.scijava.ops.api</argLine>
+					<argLine>--add-reads org.scijava.ops.opencv=org.scijava.ops.api,net.imglib2</argLine>
 				</configuration>
 			</plugin>
 		</plugins>

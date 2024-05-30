@@ -29,6 +29,6 @@
 
 module org.scijava.ops.parser {
 	requires java.compiler;
-	requires org.yaml.snakeyaml;
 	requires com.google.common;
+	requires org.yaml.snakeyaml;
 }

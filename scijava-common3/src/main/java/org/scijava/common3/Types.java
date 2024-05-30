@@ -61,11 +61,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
-
-import org.scijava.common3.Classes;
 
 /**
  * Utility class for working with generic types, fields and methods.
@@ -229,21 +226,17 @@ public final class Types {
 
 	/**
 	 * Determines the greatest common supertype of all types in the input array.
-	 *
+	 * <p>
+	 * When multiple suitable interfaces are found, a wildcard with all such
+	 * interfaces as upper bounds is returned. If only one suitable interface is
+	 * found, the return will be the interface itself (i.e. not a wildcard).
+	 * </p>
 	 * @param types The array of subtypes, for which the supertype is found.
-	 * @param wildcardSingleIface The default behavior, when the method finds
-	 *          multiple suitable interfaces, is to create a wildcard with all
-	 *          suitable interfaces as upper bounds. If this {@code boolean} is
-	 *          set to true, a wildcard will also be created if only one suitable
-	 *          interface is found. If false, the return will be the interface
-	 *          itself (i.e. not a wildcard).
 	 * @return a {@link Type} that is a supertype of all {@link Type}s in the
 	 *         types array.
 	 */
-	public static Type superTypeOf(Type[] types,
-		final boolean wildcardSingleIface)
-	{
-		types = Arrays.stream(types).filter(t -> !(Any.is(t))).toArray(Type[]::new);
+	public static Type commonSuperTypeOf(Type... types) {
+		types = Arrays.stream(types).filter(t -> !Any.is(t)).toArray(Type[]::new);
 
 		// return answer quick if the answer is trivial
 		if (types.length == 0) return null;
@@ -254,13 +247,13 @@ public final class Types {
 		for (int i = 0; i < types.length; i++) {
 			if (types[i] instanceof TypeVariable<?>) {
 				TypeVariable<?> typeVar = (TypeVariable<?>) types[i];
-				types[i] = superTypeOf(typeVar.getBounds(), false);
+				types[i] = commonSuperTypeOf(typeVar.getBounds());
 			}
 			// wildcards themselves are not supported, however we know that the
 			// greatest superType of any wildcard is its upper bound
 			if (types[i] instanceof WildcardType) {
 				WildcardType wildcard = (WildcardType) types[i];
-				types[i] = superTypeOf(wildcard.getUpperBounds(), false);
+				types[i] = commonSuperTypeOf(wildcard.getUpperBounds());
 			}
 		}
 
@@ -295,8 +288,7 @@ public final class Types {
 				}
 				// resolve each of the i type variables of superType using
 				// greatestCommonSupertype
-				Type[] resolvedTypeArgs = new Type[castedTypes[0]
-					.getActualTypeArguments().length];
+				Type[] resolvedTypeArgs = new Type[castedTypes[0].getActualTypeArguments().length];
 				for (int i = 0; i < resolvedTypeArgs.length; i++) {
 					Type[] typeVarsI = new Type[types.length];
 					for (int j = 0; j < typeVarsI.length; j++) {
@@ -306,9 +298,7 @@ public final class Types {
 					// Comparable, the best we can do is return an unbounded wildcard.
 					if (Arrays.equals(types, typeVarsI)) resolvedTypeArgs[i] = wildcard();
 					else {
-						final Type[] upper = { superTypeOf(typeVarsI, true) };
-						final Type[] lower = new Type[0];
-						resolvedTypeArgs[i] = wildcard(upper, lower);
+						resolvedTypeArgs[i] = wildcard(commonSuperTypeOf(typeVarsI));
 					}
 				}
 
@@ -347,18 +337,16 @@ public final class Types {
 				}
 				// resolve each of the i type variables of pType using
 				// greatestCommonSupertype
-				Type[] resolvedTypeArgs = new Type[castedTypes[0]
-					.getActualTypeArguments().length];
+				Type[] resolvedTypeArgs = new Type[castedTypes[0].getActualTypeArguments().length];
 				for (int i = 0; i < resolvedTypeArgs.length; i++) {
 					Type[] typeVarsI = new Type[types.length];
 					for (int j = 0; j < typeVarsI.length; j++) {
 						typeVarsI[j] = castedTypes[j].getActualTypeArguments()[i];
 					}
 					// If each of these types implements some recursive interface, e.g.
-					// Comparable,
-					// the best we can do is return an unbounded wildcard.
+					// Comparable, the best we can do is return an unbounded wildcard.
 					if (Arrays.equals(types, typeVarsI)) resolvedTypeArgs[i] = wildcard();
-					else resolvedTypeArgs[i] = superTypeOf(typeVarsI, true);
+					else resolvedTypeArgs[i] = commonSuperTypeOf(typeVarsI);
 				}
 
 				// return supertype parameterized with the resolved type args
@@ -375,16 +363,12 @@ public final class Types {
 				Collections.addAll(superInterfaces, raw(type).getGenericInterfaces());
 			}
 		}
-		if (sharedInterfaces.size() == 1 && !wildcardSingleIface) {
-			return sharedInterfaces.get(0);
-		}
-		else if (!sharedInterfaces.isEmpty()) {
-			// TODO: such a wildcard is technically illegal as a result of current
-			// Java language specifications. See
-			// https://stackoverflow.com/questions/6643241/why-cant-you-have-multiple-interfaces-in-a-bounded-wildcard-generic
-			// Consider a wildcard extending a typeVar that extends multiple
-			// interfaces?
-			return wildcard(sharedInterfaces.toArray(new Type[] {}), new Type[] {});
+		if (sharedInterfaces.size() == 1) return sharedInterfaces.get(0);
+		if (!sharedInterfaces.isEmpty()) {
+			// NB: such a wildcard is technically illegal as a result of current
+			// Java language specifications. See https://stackoverflow.com/q/6643241
+			// Consider a wildcard extending a typeVar that extends multiple interfaces?
+			return wildcard(sharedInterfaces.toArray(new Type[0]));
 		}
 		return Object.class;
 	}

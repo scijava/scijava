@@ -68,10 +68,8 @@ public class IterableTypeExtractor extends SubTypeExtractor<Iterable<?>> {
 			.map(r::reify) //
 			.toArray(Type[]::new);
 
-		Type actual = Types.superTypeOf(types, true);
-		if (actual == null) {
-			actual = new Any();
-		}
+		Type actual = Types.commonSuperTypeOf(types);
+		if (actual == null) actual = new Any();
 		return new Type[] { actual };
 	}
 

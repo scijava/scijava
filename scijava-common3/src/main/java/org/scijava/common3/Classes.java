@@ -557,7 +557,7 @@ public final class Classes {
 	private static IllegalArgumentException iae(final Throwable cause,
 		final String formattedMessage, final String... values)
 	{
-		final String s = String.format(formattedMessage, values);
+		final String s = String.format(formattedMessage, (Object[]) values);
 		final IllegalArgumentException exc = new IllegalArgumentException(s);
 		if (cause != null) exc.initCause(cause);
 		return exc;

@@ -29,13 +29,13 @@
 
 package org.scijava.concurrent;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 /**
  * Tests {@link TaskExecutors}.
@@ -47,14 +47,14 @@ public class TaskExecutorsTest {
 	@Test
 	public void testSingleThreaded() {
 		TaskExecutor executor = TaskExecutors.singleThreaded();
-		assertTrue(executor instanceof TaskExecutors.SequentialTaskExecutor);
+		assertInstanceOf(TaskExecutors.SequentialTaskExecutor.class, executor);
 	}
 
 	@Test
 	public void testMultiThreaded() {
 		TaskExecutor executor = TaskExecutors.multiThreaded();
-		assertTrue(executor
-			.getExecutorService() instanceof TaskExecutors.ForkJoinExecutorService);
+		assertInstanceOf(TaskExecutors.ForkJoinExecutorService.class,
+			executor.getExecutorService());
 	}
 
 	@Test

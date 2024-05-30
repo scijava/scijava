@@ -216,11 +216,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@Override
-	public InfoTree treeFromInfo(OpInfo info, Nil<?> specialType, Hints hints) {
-		return findOp(info, specialType, hints).infoTree();
-	}
-
-	@Override
 	public <T> T opFromInfoTree(final InfoTree tree, final Nil<T> specialType,
 		Hints hints)
 	{

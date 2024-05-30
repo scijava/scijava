@@ -81,10 +81,10 @@ public class ConvertedInfoTreeGenerator implements InfoTreeGenerator {
 					ConvertedOpInfo.PRECONVERTER_DELIMITER + ")");
 			String preconverterSignature = preconverterComp.substring(
 				ConvertedOpInfo.PRECONVERTER_DELIMITER.length());
-			InfoTree preconverterChain = InfoTreeGenerator.generateDependencyTree(env,
+			InfoTree preconverterTree = InfoTreeGenerator.generateDependencyTree(env,
 				preconverterSignature, idMap, generators);
 
-			preconverters.add(Ops.rich(env.opFromInfoChain(preconverterChain,
+			preconverters.add(Ops.rich(env.opFromInfoTree(preconverterTree,
 				FUNCTION_NIL, dependencyHints)));
 		}
 
@@ -96,10 +96,10 @@ public class ConvertedInfoTreeGenerator implements InfoTreeGenerator {
 				ConvertedOpInfo.POSTCONVERTER_DELIMITER + ")");
 		String postconverterSignature = postconverterComp.substring(
 			ConvertedOpInfo.POSTCONVERTER_DELIMITER.length());
-		InfoTree postconverterChain = InfoTreeGenerator.generateDependencyTree(env,
+		InfoTree postconverterTree = InfoTreeGenerator.generateDependencyTree(env,
 			postconverterSignature, idMap, generators);
-		RichOp<Function<?, ?>> postconverter = Ops.rich(env.opFromInfoChain(
-			postconverterChain, FUNCTION_NIL, dependencyHints));
+		RichOp<Function<?, ?>> postconverter = Ops.rich(env.opFromInfoTree(
+			postconverterTree, FUNCTION_NIL, dependencyHints));
 
 		// output copier
 		RichOp<Computers.Arity1<?, ?>> copier = null;
@@ -113,7 +113,7 @@ public class ConvertedInfoTreeGenerator implements InfoTreeGenerator {
 		if (!outCopySignature.isEmpty()) {
 			InfoTree copierTree = InfoTreeGenerator.generateDependencyTree(env,
 				outCopySignature, idMap, generators);
-			copier = Ops.rich(env.opFromInfoChain(copierTree, COMPUTER_NIL,
+			copier = Ops.rich(env.opFromInfoTree(copierTree, COMPUTER_NIL,
 				dependencyHints));
 		}
 
@@ -125,12 +125,12 @@ public class ConvertedInfoTreeGenerator implements InfoTreeGenerator {
 				ConvertedOpInfo.ORIGINAL_INFO + ")");
 		String originalSignature = originalComponent.substring(
 			ConvertedOpInfo.ORIGINAL_INFO.length());
-		InfoTree originalChain = InfoTreeGenerator.generateDependencyTree(env,
+		InfoTree originalTree = InfoTreeGenerator.generateDependencyTree(env,
 			originalSignature, idMap, generators);
 
-		OpInfo baseInfo = new ConvertedOpInfo(originalChain.info(), preconverters,
+		OpInfo baseInfo = new ConvertedOpInfo(originalTree.info(), preconverters,
 			postconverter, copier, env);
-		return new InfoTree(baseInfo, originalChain.dependencies());
+		return new InfoTree(baseInfo, originalTree.dependencies());
 	}
 
 	private List<String> parseComponents(String signature) {

@@ -63,15 +63,15 @@ public class OpAdaptationInfo implements OpInfo {
 	protected static final String ORIGINAL = "|OriginalOp:";
 
 	private final OpInfo srcInfo;
-	private final InfoTree adaptorChain;
+	private final InfoTree adaptorTree;
 	private final Type type;
 	private final Hints hints;
 
 	private Struct struct;
 
-	public OpAdaptationInfo(OpInfo srcInfo, Type type, InfoTree adaptorChain) {
+	public OpAdaptationInfo(OpInfo srcInfo, Type type, InfoTree adaptorTree) {
 		this.srcInfo = srcInfo;
-		this.adaptorChain = adaptorChain;
+		this.adaptorTree = adaptorTree;
 		this.type = type;
 		this.hints = srcInfo.declaredHints().plus(Adaptation.FORBIDDEN);
 
@@ -118,7 +118,7 @@ public class OpAdaptationInfo implements OpInfo {
 
 	@Override
 	public String implementationName() {
-		return srcInfo.implementationName() + ADAPTOR + adaptorChain.signature();
+		return srcInfo.implementationName() + ADAPTOR + adaptorTree.signature();
 	}
 
 	/**
@@ -128,7 +128,7 @@ public class OpAdaptationInfo implements OpInfo {
 	public StructInstance<?> createOpInstance(List<?> dependencies) {
 		@SuppressWarnings("unchecked")
 		OpInstance<Function<Object, Object>> adaptorInstance =
-			(OpInstance<Function<Object, Object>>) adaptorChain.newInstance(
+			(OpInstance<Function<Object, Object>>) adaptorTree.newInstance(
 				new Nil<Function<Object, Object>>()
 				{}.type());
 		final Object op = srcInfo.createOpInstance(dependencies).object();
@@ -150,7 +150,7 @@ public class OpAdaptationInfo implements OpInfo {
 	 */
 	@Override
 	public String version() {
-		return adaptorChain.info().version();
+		return adaptorTree.info().version();
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class OpAdaptationInfo implements OpInfo {
 	 */
 	@Override
 	public String id() {
-		return IMPL_DECLARATION + ADAPTOR + adaptorChain.signature() + ORIGINAL +
+		return IMPL_DECLARATION + ADAPTOR + adaptorTree.signature() + ORIGINAL +
 			srcInfo.id();
 	}
 
@@ -183,7 +183,7 @@ public class OpAdaptationInfo implements OpInfo {
 		StringBuilder sb = new StringBuilder();
 		sb.append(srcInfo.implementationName());
 		sb.append("\n\tAdaptor: ");
-		sb.append(adaptorChain.toString().replace("\n", "\n\t"));
+		sb.append(adaptorTree.toString().replace("\n", "\n\t"));
 
 		int nameBreak = description.indexOf('\n');
 		sb.append(description.substring(nameBreak));

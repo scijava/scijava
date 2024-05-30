@@ -172,19 +172,19 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		List<RichOp<?>> history2 = ops.history().executionsUpon(out2);
 
 		Assertions.assertEquals(1, history1.size());
-		InfoTree opExecutionChain = Ops.infoTree(history1.get(0));
-		Assertions.assertEquals(0, opExecutionChain.dependencies().size());
+		InfoTree opExecutionTree = Ops.infoTree(history1.get(0));
+		Assertions.assertEquals(0, opExecutionTree.dependencies().size());
 		String expected =
 			"public final java.util.function.Function org.scijava.ops.engine.impl.ProvenanceTest.baz";
-		Assertions.assertEquals(expected, opExecutionChain.info()
+		Assertions.assertEquals(expected, opExecutionTree.info()
 			.getAnnotationBearer().toString());
 
 		Assertions.assertEquals(1, history2.size());
-		opExecutionChain = Ops.infoTree(history2.get(0));
-		Assertions.assertEquals(0, opExecutionChain.dependencies().size());
+		opExecutionTree = Ops.infoTree(history2.get(0));
+		Assertions.assertEquals(0, opExecutionTree.dependencies().size());
 		expected =
 			"public final java.util.function.Function org.scijava.ops.engine.impl.ProvenanceTest.bar";
-		Assertions.assertEquals(expected, opExecutionChain.info()
+		Assertions.assertEquals(expected, opExecutionTree.info()
 			.getAnnotationBearer().toString());
 	}
 

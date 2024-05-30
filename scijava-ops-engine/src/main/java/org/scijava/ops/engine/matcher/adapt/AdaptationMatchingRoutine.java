@@ -146,9 +146,9 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 				// And return the Adaptor, wrapped up into an OpCandidate
 				Type adapterOpType = Types.unroll(adaptor.output()
 					.type(), map);
-				InfoTree adaptorChain = new InfoTree(adaptor, depTrees);
+				InfoTree adaptorTree = new InfoTree(adaptor, depTrees);
 				OpAdaptationInfo adaptedInfo = new OpAdaptationInfo(srcCandidate
-					.opInfo(), adapterOpType, adaptorChain);
+					.opInfo(), adapterOpType, adaptorTree);
 				OpCandidate adaptedCandidate = new OpCandidate(env, conditions
 					.request(), adaptedInfo, map);
 				adaptedCandidate.setStatus(StatusCode.MATCH);

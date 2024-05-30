@@ -54,12 +54,12 @@ public class DefaultInfoTreeGenerator implements InfoTreeGenerator {
 		String dependencySignature = signature.substring(dependencyStart + 1,
 			dependencyEnd);
 		List<String> dependencies = getDependencies(dependencySignature);
-		List<InfoTree> dependencyChains = new ArrayList<>();
+		List<InfoTree> dependencyTrees = new ArrayList<>();
 		for (String dep : dependencies) {
-			dependencyChains.add(InfoTreeGenerator.generateDependencyTree(env, dep,
+			dependencyTrees.add(InfoTreeGenerator.generateDependencyTree(env, dep,
 				idMap, generators));
 		}
-		return new InfoTree(info, dependencyChains);
+		return new InfoTree(info, dependencyTrees);
 	}
 
 	private List<String> getDependencies(String signature) {

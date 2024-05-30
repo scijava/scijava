@@ -179,11 +179,11 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	<T> T op(final String opName, final Nil<T> specialType,
 		final Nil<?>[] inTypes, final Nil<?> outType, Hints hints);
 
-	default <T> T opFromInfoChain(InfoTree tree, Nil<T> specialType) {
-		return opFromInfoChain(tree, specialType, getDefaultHints());
+	default <T> T opFromInfoTree(InfoTree tree, Nil<T> specialType) {
+		return opFromInfoTree(tree, specialType, getDefaultHints());
 	}
 
-	<T> T opFromInfoChain(InfoTree tree, Nil<T> specialType, Hints hints);
+	<T> T opFromInfoTree(InfoTree tree, Nil<T> specialType, Hints hints);
 
 	/**
 	 * Returns an Op fitting the provided arguments.
@@ -197,7 +197,7 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 		final Nil<T> specialType)
 	{
 		InfoTree info = treeFromID(signature);
-		return opFromInfoChain(info, specialType);
+		return opFromInfoTree(info, specialType);
 	}
 
 	InfoTree treeFromID(final String signature);

@@ -221,7 +221,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@Override
-	public <T> T opFromInfoChain(final InfoTree tree, final Nil<T> specialType,
+	public <T> T opFromInfoTree(final InfoTree tree, final Nil<T> specialType,
 		Hints hints)
 	{
 		if (!(specialType.type() instanceof ParameterizedType))
@@ -514,9 +514,9 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		Hints hints)
 	{
 		final List<RichOp<?>> conditions = resolveOpDependencies(candidate, hints);
-		InfoTree adaptorChain = new DependencyRichOpInfoTree(candidate.opInfo(),
+		InfoTree adaptorTree = new DependencyRichOpInfoTree(candidate.opInfo(),
 			conditions);
-		return adaptorChain.newInstance(candidate.getType());
+		return adaptorTree.newInstance(candidate.getType());
 	}
 
 	/**
@@ -639,7 +639,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 				BaseOpHints.History.IGNORE //
 			).minus(BaseOpHints.Progress.TRACK);
 		// Then, match dependencies
-		final List<RichOp<?>> dependencyChains = new ArrayList<>();
+		final List<RichOp<?>> dependencies = new ArrayList<>();
 		for (final OpDependencyMember<?> dependency : Infos.dependencies(info)) {
 			final OpRequest request = inferOpRequest(dependency,
 				dependencyTypeVarAssigns);
@@ -649,7 +649,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 				var conditions = MatchingConditions.from(request, depHints);
 				OpInstance<?> instance = generateCacheHit(conditions);
 				// add Op to dependencies
-				dependencyChains.add(wrapOp(instance, conditions));
+				dependencies.add(wrapOp(instance, conditions));
 				// refine current type variable knowledge
 				GenericAssignability //
 					.inferTypeVariables(request.type(), instance.type()) //
@@ -666,7 +666,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 				throw new DependencyMatchingException(message);
 			}
 		}
-		return dependencyChains;
+		return dependencies;
 	}
 
 	private OpRequest inferOpRequest(OpDependencyMember<?> dependency,

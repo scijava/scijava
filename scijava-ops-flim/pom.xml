@@ -191,7 +191,7 @@
 			<artifactId>scijava-common</artifactId>
 			<scope>test</scope>
 		</dependency>
-    </dependencies>
+	</dependencies>
 
 	<repositories>
 		<repository>

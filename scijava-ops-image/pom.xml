@@ -380,7 +380,7 @@
 			<artifactId>scifio</artifactId>
 			<scope>test</scope>
 		</dependency>
-    </dependencies>
+	</dependencies>
 
 	<repositories>
 		<repository>

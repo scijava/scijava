@@ -114,6 +114,7 @@
 			<artifactId>scijava-ops-spi</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
 		<!-- Test Scope Dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>

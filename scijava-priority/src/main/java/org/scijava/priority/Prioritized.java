@@ -61,7 +61,15 @@ public interface Prioritized<T extends Prioritized<T>> extends Comparable<T> {
 
 
 	/**
-	 * Compares two {@link Prioritized} objects.
+	 * Compares two {@link Prioritized} objects, based on their
+	 * {@link Prioritized#priority()} value. Higher priorities (e.g.
+	 * {@link Priority#HIGH}) compare <em>less than</em> lower ones (e.g.
+	 * {@link Priority#LOW}, so that a natural sort of {@link Prioritized} objects
+	 * will result in the higher priority items earlier in the sorted list.
+	 * If {@code null} is passed as an argument, that argument's priority is
+	 * considered to be negative infinity&mdash;i.e., lower priority than all
+	 * non-{@code null} objects, resulting in all {@code null} values being
+	 * sorted to the end of the list.
 	 * <p>
 	 * Note: this method provides a natural ordering that may be inconsistent with
 	 * equals. That is, two unequal objects may often have the same priority, and
@@ -72,6 +80,8 @@ public interface Prioritized<T extends Prioritized<T>> extends Comparable<T> {
 	 * ordering consistent with equals is always required.
 	 * </p>
 	 *
+	 * @param p1 The first prioritized object to compare.
+	 * @param p2 The second prioritized object to compare.
 	 * @return -1 if {@code p1}'s priority is higher than {@code p2}'s, 1 if
 	 *         {@code p2}'s priority is higher than {@code p1}'s, or 0 if they
 	 *         have the same priority.

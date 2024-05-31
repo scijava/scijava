@@ -77,8 +77,8 @@ public class XML {
 	/** XPath evaluation mechanism. */
 	private final XPath xpath;
 
-	private final boolean debug = "debug".equals(System.getProperty(
-		"scijava.log.level"));
+	private final boolean debug =
+		"debug".equals(System.getProperty("scijava.log.level"));
 
 	/** Parses XML from the given file. */
 	public XML(final File file) throws IOException {
@@ -122,7 +122,7 @@ public class XML {
 			System.err.println(Classes.location(XPathFactory.class));
 		}
 
-		XPath xp = null;
+		XPath xp;
 		final Thread thread = Thread.currentThread();
 		final ClassLoader contextClassLoader = thread.getContextClassLoader();
 		try {
@@ -219,7 +219,7 @@ public class XML {
 	/** Gets the CData beneath the given node. */
 	public static String cdata(final Node item) {
 		final NodeList children = item.getChildNodes();
-		if (children == null || children.getLength() == 0) return null;
+		if (children.getLength() == 0) return null;
 		for (int i = 0; i < children.getLength(); i++) {
 			final Node child = children.item(i);
 			if (child.getNodeType() != Node.TEXT_NODE) continue;
@@ -231,7 +231,7 @@ public class XML {
 	/** Gets the CData beneath the given element's specified child. */
 	public static String cdata(final Element el, final String child) {
 		NodeList children = el.getElementsByTagName(child);
-		if (children == null || children.getLength() == 0) return null;
+		if (children.getLength() == 0) return null;
 		return cdata(children.item(0));
 	}
 
@@ -269,8 +269,7 @@ public class XML {
 	/** Loads an XML document from the given URL. */
 	private static Document loadXML(final URL url) throws IOException {
 		try (final InputStream in = url.openStream()) {
-			final Document document = loadXML(in);
-			return document;
+			return loadXML(in);
 		}
 	}
 

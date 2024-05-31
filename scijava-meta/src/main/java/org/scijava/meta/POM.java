@@ -47,7 +47,7 @@ import org.scijava.common3.Versioned;
  */
 public class POM extends XML implements Comparable<POM>, Versioned {
 
-	private String version;
+	private volatile String version;
 
 	/** Parses a POM from the given file. */
 	public POM(final File file) throws IOException {
@@ -273,8 +273,7 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 					// known groupId and artifactId; grab it directly
 					final String pomPath = "META-INF/maven/" + groupId + "/" +
 						artifactId + "/pom.xml";
-					final URL pomURL = new URL("jar:" + location.toString() + "!/" +
-						pomPath);
+					final URL pomURL = new URL("jar:" + location + "!/" + pomPath);
 					return new POM(pomURL);
 				}
 			}
@@ -347,7 +346,7 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 	 * suffix will be considered <em>less than</em> the one without a suffix. The
 	 * reason for this is to accommodate the
 	 * <a href="http://semver.org/">SemVer</a> versioning scheme's usage of
-	 * "prerelease" version suffixes. For example, {@code 2.0.0} will compare
+	 * "pre-release" version suffixes. For example, {@code 2.0.0} will compare
 	 * greater than {@code 2.0.0-beta-1}, whereas {@code 2.0.0} will compare less
 	 * than {@code 2.0.0.1}.</li>
 	 * </ul>

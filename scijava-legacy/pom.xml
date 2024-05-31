@@ -88,8 +88,6 @@
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 
-		<scijava.surefire.args>--add-reads org.scijava.legacy=org.scijava.common3</scijava.surefire.args>
-
 		<scijava-common.version>2.98.0</scijava-common.version>
 	</properties>
 
@@ -147,7 +145,11 @@
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-common3</artifactId>
 			<version>${project.version}</version>
-			<scope>test</scope>
+			<!--
+				NB: Scope is compile because it is a transitive compile-time dependency,
+				and overriding it to test scope here would cause the main build to fail
+				due to the dependency no longer being on the compile-time module-path.
+			-->
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>

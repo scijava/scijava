@@ -63,12 +63,12 @@
 		<module>scijava-discovery</module>
 		<module>scijava-discovery-test</module>
 		<module>scijava-function</module>
+		<module>scijava-legacy</module>
 		<module>scijava-meta</module>
 		<module>scijava-ops-api</module>
 		<module>scijava-ops-engine</module>
 		<module>scijava-ops-flim</module>
 		<module>scijava-ops-image</module>
-		<module>scijava-ops-legacy</module>
 		<module>scijava-ops-opencv</module>
 		<module>scijava-ops-ext-parser</module>
 		<module>scijava-ops-spi</module>

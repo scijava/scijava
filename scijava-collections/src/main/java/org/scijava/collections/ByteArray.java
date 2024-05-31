@@ -196,7 +196,7 @@ public class ByteArray extends AbstractPrimitiveArray<byte[], Byte> {
 	// NB: Overridden for performance.
 	@Override
 	public boolean addAll(final int index, final Collection<? extends Byte> c) {
-		if (c.size() == 0) return false;
+		if (c.isEmpty()) return false;
 		insert(index, c.size());
 		int i = index;
 		for (final byte e : c) {

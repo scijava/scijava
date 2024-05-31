@@ -50,17 +50,40 @@ public interface Prioritized<T extends Prioritized<T>> extends Comparable<T> {
 		if (that == null) return 1;
 
 		// compare priorities
-		final int priorityCompare = Priority.compare(this, that);
+		final int priorityCompare = compare(this, that);
 		if (priorityCompare != 0) return priorityCompare;
 
-		// compare classes
-		// TODO: This functionality is copied from ClassUtils.compare(Class<?> c1,
-		// Class<?> c2). We should use this method again when it is migrated to
-		// SciJava
-		// 3
+		// compare class names as a tiebreaker
 		String thisName = getClass().getName();
 		String thatName = that.getClass().getName();
 		return thisName.compareTo(thatName);
 	}
 
+
+	/**
+	 * Compares two {@link Prioritized} objects.
+	 * <p>
+	 * Note: this method provides a natural ordering that may be inconsistent with
+	 * equals. That is, two unequal objects may often have the same priority, and
+	 * thus return 0 when compared in this fashion. Hence, if this method is used
+	 * as a basis for implementing {@link Comparable#compareTo} or
+	 * {@link java.util.Comparator#compare}, that implementation may want to
+	 * impose logic beyond that of this method, for breaking ties, if a total
+	 * ordering consistent with equals is always required.
+	 * </p>
+	 *
+	 * @return -1 if {@code p1}'s priority is higher than {@code p2}'s, 1 if
+	 *         {@code p2}'s priority is higher than {@code p1}'s, or 0 if they
+	 *         have the same priority.
+	 */
+	static <T extends Prioritized<T>> int compare(
+		final Prioritized<T> p1, final Prioritized<T> p2)
+	{
+		final double priority1 = p1 == null ? Double.NEGATIVE_INFINITY : p1.priority();
+		final double priority2 = p2 == null ? Double.NEGATIVE_INFINITY : p2.priority();
+		if (priority1 == priority2) return 0;
+		// NB: We invert the ordering here, so that large values come first,
+		// rather than the typical natural ordering of smaller values first.
+		return priority1 > priority2 ? -1 : 1;
+	}
 }

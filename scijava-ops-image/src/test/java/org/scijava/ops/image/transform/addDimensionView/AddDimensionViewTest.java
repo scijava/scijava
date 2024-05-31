@@ -60,7 +60,7 @@ import org.scijava.types.Nil;
 public class AddDimensionViewTest extends AbstractOpTest {
 
 	@Test
-	public void addDimensionTest() {
+	public void testAddDimension() {
 		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
 			new int[] { 10, 10 });
 
@@ -86,7 +86,7 @@ public class AddDimensionViewTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void addDimensionMinMaxTest() {
+	public void testAddDimensionMinMax() {
 		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
 			new int[] { 10, 10 });
 		long max = 20;

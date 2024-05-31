@@ -63,8 +63,7 @@ import org.scijava.types.Nil;
 public class OffsetViewTest extends AbstractOpTest {
 
 	@Test
-	public void defaultOffsetTest() {
-
+	public void testDefaultOffset() {
 		BiFunction<RandomAccessible<DoubleType>, long[], MixedTransformView<DoubleType>> offsetFunc =
 			OpBuilder.matchFunction(ops, "transform.offsetView",
 				new Nil<RandomAccessible<DoubleType>>()
@@ -89,8 +88,7 @@ public class OffsetViewTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void defaultOffsetIntervalTest() {
-
+	public void testDefaultOffsetInterval() {
 		BiFunction<RandomAccessibleInterval<DoubleType>, Interval, IntervalView<DoubleType>> offsetFunc =
 			OpBuilder.matchFunction(ops, "transform.offsetView",
 				new Nil<RandomAccessibleInterval<DoubleType>>()
@@ -111,8 +109,7 @@ public class OffsetViewTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void defaultOffsetStartEndTest() {
-
+	public void testDefaultOffsetStartEnd() {
 		Functions.Arity3<RandomAccessibleInterval<DoubleType>, long[], long[], IntervalView<DoubleType>> offsetFunc =
 			OpBuilder.matchFunction(ops, "transform.offsetView",
 				new Nil<RandomAccessibleInterval<DoubleType>>()

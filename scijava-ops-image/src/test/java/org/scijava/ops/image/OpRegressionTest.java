@@ -41,14 +41,14 @@ public class OpRegressionTest {
 	protected static final OpEnvironment ops = OpEnvironment.build();
 
 	@Test
-	public void opDiscoveryRegressionIT() {
+	public void testOpDiscoveryRegression() {
 		long expected = 1942;
 		long actual = ops.infos().size();
 		assertEquals(expected, actual);
 	}
 
 	@Test
-	public void opDescriptionRegressionIT() {
+	public void testOpDescriptionRegression() {
 		// Ensure no ops have a null description
 		for (OpInfo info : ops.infos())
 			Assertions.assertNotNull(info.toString(), () -> "Info from " + info.id() +

@@ -44,8 +44,7 @@ import org.scijava.types.Nil;
 public class MeanFilterTest extends AbstractOpTest {
 
 	@Test
-	public void meanFilterTest() {
-
+	public void testMeanFilter() {
 		Img<ByteType> img = ops.op("create.img").input(new FinalInterval(5, 5),
 			new ByteType()).outType(new Nil<Img<ByteType>>()
 		{}).apply();
@@ -62,8 +61,7 @@ public class MeanFilterTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void rawTypeAdaptationTest() {
-
+	public void testRawTypeAdaptation() {
 		Img<ByteType> img = ops.op("create.img").input(new FinalInterval(5, 5),
 			new ByteType()).outType(new Nil<Img<ByteType>>()
 		{}).apply();
@@ -72,6 +70,5 @@ public class MeanFilterTest extends AbstractOpTest {
 			new OutOfBoundsBorderFactory<>();
 		var result = ops.op("filter.mean").input(img, shape, oobf).outType(
 			Img.class).apply();
-
 	}
 }

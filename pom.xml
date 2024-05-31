@@ -13,10 +13,10 @@
 	<version>0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>SciJava Parent</name>
-	<description>The parent module of the core SciJava suite.</description>
+	<name>SciJava</name>
+	<description>Core libraries of the SciJava platform.</description>
 	<url>https://github.com/scijava/scijava</url>
-	<inceptionYear>2020</inceptionYear>
+	<inceptionYear>2017</inceptionYear>
 	<organization>
 		<name>SciJava</name>
 		<url>https://scijava.org/</url>
@@ -45,22 +45,30 @@
 	</mailingLists>
 
 	<modules>
-		<!--Some modules are implicit dependencies of later modules; they should build first-->
+		<!--
+		The following modules must be built first, before the others,
+		because they are implicit dependencies of the build process:
+		- scijava-ops-indexer is used as an annotation processor during compilation
+		  of other modules relying on the `@implNote op` declaration mechanism.
+		- scijava-taglets is a javadoc taglet processor used at javadoc
+		  generation time to handle Ops's custom tags (@container, @mutable, etc.).
+		-->
 		<module>scijava-ops-indexer</module>
 		<module>scijava-taglets</module>
 		<!-- End implicit dependencies -->
+
 		<module>scijava-collections</module>
 		<module>scijava-common3</module>
 		<module>scijava-concurrent</module>
 		<module>scijava-discovery</module>
 		<module>scijava-discovery-test</module>
 		<module>scijava-function</module>
+		<module>scijava-legacy</module>
 		<module>scijava-meta</module>
 		<module>scijava-ops-api</module>
 		<module>scijava-ops-engine</module>
 		<module>scijava-ops-flim</module>
 		<module>scijava-ops-image</module>
-		<module>scijava-ops-legacy</module>
 		<module>scijava-ops-opencv</module>
 		<module>scijava-ops-ext-parser</module>
 		<module>scijava-ops-spi</module>
@@ -73,7 +81,7 @@
 	</modules>
 
 	<scm>
-		<connection>scm:git:git://github.com/scijava/scijava</connection>
+		<connection>scm:git:https://github.com/scijava/scijava</connection>
 		<developerConnection>scm:git:git@github.com:scijava/scijava</developerConnection>
 		<tag>HEAD</tag>
 		<url>https://github.com/scijava/scijava</url>
@@ -90,117 +98,33 @@
 		<license.licenseName>N/A</license.licenseName>
 		<license.copyrightOwners>N/A</license.copyrightOwners>
 
-		<scijava.jvm.build.version>[11,)</scijava.jvm.build.version>
+		<!--
+		NB: Older versions of OpenJDK 11 have a bug in the javadoc tool,
+		which causes errors like:
+
+		[ERROR] javadoc: error - The code being documented uses packages
+		in the unnamed module, but the packages defined in
+		https://github.com/scijava/scijava/apidocs/ are in named modules.
+
+		The most recent version of OpenJDK 11 known to have this problem
+		is 11.0.8; the oldest version known to have fixed it is 11.0.17.
+		Therefore, we set the minimum build JDK version to 11.0.17 here.
+		-->
+		<scijava.jvm.build.version>[11.0.17,)</scijava.jvm.build.version>
 		<scijava.jvm.version>11</scijava.jvm.version>
 		<scijava.javadoc.url.java>https://javadoc.scijava.org/Java11/</scijava.javadoc.url.java>
 		<scijava.javadoc.url.javafx>https://javadoc.scijava.org/JavaFX11/</scijava.javadoc.url.javafx>
 
-		<scijava-maven-plugin.version>2.2.0</scijava-maven-plugin.version>
-
-		<guava.version>28.2-jre</guava.version>
-		<geantyref.version>1.3.6</geantyref.version>
+		<!-- TEMP: Until pom-scijava 38.0.0 is released. -->
+		<scijava-maven-plugin.version>3.0.0</scijava-maven-plugin.version>
 
 		<script-maven-plugin.version>1.0.0</script-maven-plugin.version>
 		<jruby.version>9.2.11.1</jruby.version>
+
 		<scijava.parse.ops>true</scijava.parse.ops>
 	</properties>
+
 	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>org.scijava</groupId>
-							<artifactId>scijava-ops-indexer</artifactId>
-							<version>${project.version}</version>
-						</path>
-					</annotationProcessorPaths>
-					<fork>true</fork>
-					<showWarnings>true</showWarnings>
-					<compilerArgs>
-						<arg>-Aparse.ops="${scijava.parse.ops}"</arg>
-						<arg>-Aop.version="${project.version}"</arg>
-					</compilerArgs>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<taglets>
-						<taglet>
-							<tagletClass>org.scijava.taglets.InputTaglet</tagletClass>
-						</taglet>
-						<taglet>
-							<tagletClass>org.scijava.taglets.MutableTaglet</tagletClass>
-						</taglet>
-						<taglet>
-							<tagletClass>org.scijava.taglets.ContainerTaglet</tagletClass>
-						</taglet>
-						<taglet>
-							<tagletClass>org.scijava.taglets.OutputTaglet</tagletClass>
-						</taglet>
-					</taglets>
-					<tagletArtifacts>
-						<tagletArtifact>
-							<groupId>org.scijava</groupId>
-							<artifactId>scijava-taglets</artifactId>
-							<version>${project.version}</version>
-						</tagletArtifact>
-					</tagletArtifacts>
-					<tags>
-						<tag>
-							<name>implNote</name>
-							<placement>a</placement>
-							<head>Implementation Note:</head>
-						</tag>
-					</tags>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-enforcer-plugin</artifactId>
-				<dependencies>
-					<dependency>
-						<groupId>org.scijava</groupId>
-						<artifactId>scijava-maven-plugin</artifactId>
-						<version>2.2.0</version>
-					</dependency>
-				</dependencies>
-				<executions>
-					<execution>
-						<id>enforce-no-package-cycles</id>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-						<phase>test</phase>
-						<configuration>
-							<rules>
-								<NoPackageCyclesRule
-										implementation="org.scijava.maven.plugin.enforcer.NoPackageCyclesRule" />
-							</rules>
-						</configuration>
-					</execution>
-					<execution>
-						<id>enforce-no-subpackage-dependence</id>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-						<phase>test</phase>
-						<configuration>
-							<rules>
-								<NoSubpackageDependenceRule
-										implementation="org.scijava.maven.plugin.enforcer.NoSubpackageDependenceRule" />
-							</rules>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>com.alexecollins.maven.plugin</groupId>
-				<artifactId>script-maven-plugin</artifactId>
-				<version>${script-maven-plugin.version}</version>
-			</plugin>
-		</plugins>
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -279,7 +203,90 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.scijava</groupId>
+							<artifactId>scijava-ops-indexer</artifactId>
+							<version>${project.version}</version>
+						</path>
+					</annotationProcessorPaths>
+					<fork>true</fork>
+					<showWarnings>true</showWarnings>
+					<compilerArgs>
+						<arg>-Aparse.ops="${scijava.parse.ops}"</arg>
+						<arg>-Aop.version="${project.version}"</arg>
+					</compilerArgs>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<tagletArtifacts>
+						<tagletArtifact>
+							<groupId>org.scijava</groupId>
+							<artifactId>scijava-taglets</artifactId>
+							<version>${project.version}</version>
+						</tagletArtifact>
+					</tagletArtifacts>
+					<tags>
+						<tag>
+							<name>implNote</name>
+							<placement>a</placement>
+							<head>Implementation Note:</head>
+						</tag>
+					</tags>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<dependencies>
+					<dependency>
+						<groupId>org.scijava</groupId>
+						<artifactId>scijava-maven-plugin</artifactId>
+						<version>2.2.0</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>enforce-no-package-cycles</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<phase>test</phase>
+						<configuration>
+							<rules>
+								<NoPackageCyclesRule
+										implementation="org.scijava.maven.plugin.enforcer.NoPackageCyclesRule" />
+							</rules>
+						</configuration>
+					</execution>
+					<execution>
+						<id>enforce-no-subpackage-dependence</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<phase>test</phase>
+						<configuration>
+							<rules>
+								<NoSubpackageDependenceRule
+										implementation="org.scijava.maven.plugin.enforcer.NoSubpackageDependenceRule" />
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.alexecollins.maven.plugin</groupId>
+				<artifactId>script-maven-plugin</artifactId>
+				<version>${script-maven-plugin.version}</version>
+			</plugin>
+		</plugins>
 	</build>
+
 	<profiles>
 		<profile>
 			<id>benchmarks</id>

@@ -54,7 +54,7 @@ public class ObjectArray<E> extends AbstractPrimitiveArray<E[], E> {
 	/** The backing array. */
 	private E[] array;
 
-	private Class<E> objectClass;
+	private final Class<E> objectClass;
 
 	/**
 	 * Constructs an extensible array of objects, backed by a fixed-size array.

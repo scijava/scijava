@@ -36,10 +36,7 @@ import java.util.function.Function;
 
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
 import org.scijava.progress.Progress;
-import org.scijava.progress.StandardOutputProgressLogger;
 import org.scijava.progress.Task;
 import org.scijava.types.Nil;
 
@@ -132,7 +129,7 @@ public class ReportingProgress {
 		// Consumer<Task>s consume task updates.
 		// This Consumer simply logs to standard output, but we could print
 		// out something else, or pass this information somewhere else.
-		Consumer<Task> l = new StandardOutputProgressLogger();
+		Consumer<Task> l = System.out::println;
 		// To listen to Op progress updates, the Consumer must be registered
 		// through the Progress API. To listen to all Op executions, use the
 		// following call:

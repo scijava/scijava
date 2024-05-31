@@ -50,7 +50,7 @@ public interface OpInfo extends Comparable<OpInfo> {
 	/** Identifier for an unaltered OpInfo in an Op signature **/
 	String IMPL_DECLARATION = "|Info:";
 
-	/** name(s) of the op. */
+	/** Name(s) of the op. */
 	List<String> names();
 
 	/**
@@ -59,34 +59,34 @@ public interface OpInfo extends Comparable<OpInfo> {
 	 */
 	Type opType();
 
-	/** Gets the associated {@link Struct} metadata. */
+	/** The associated {@link Struct} metadata. */
 	Struct struct();
 
-	/** Gets the hints declared by the Op */
+	/** The hints declared by the Op */
 	Hints declaredHints();
 
-	/** Gets the op's input parameters. */
+	/** The op's input parameters. */
 	default List<Member<?>> inputs() {
 		return struct().members().stream() //
 			.filter(Member::isInput) //
 			.collect(Collectors.toList());
 	}
 
-	/** Gets the types of the op's input parameters. */
+	/** The types of the op's input parameters. */
 	default List<Type> inputTypes() {
 		return inputs().stream() //
-			.map(Member::getType) //
+			.map(Member::type) //
 			.collect(Collectors.toList());
 	}
 
-	/** Gets the op's output parameters. */
+	/** The op's output parameters. */
 	default List<Member<?>> outputs() {
 		return struct().members().stream() //
 			.filter(Member::isOutput) //
 			.collect(Collectors.toList());
 	}
 
-	/** Gets the op's output parameter, if there is <b>exactly</b> one. */
+	/** The op's output parameter, if there is <b>exactly</b> one. */
 	default Member<?> output() {
 		List<Member<?>> outputs = outputs();
 
@@ -96,23 +96,18 @@ public interface OpInfo extends Comparable<OpInfo> {
 		throw new IllegalStateException("Multiple outputs in Struct " + struct());
 	}
 
-	/** Gets the op's output parameter, if there is <b>exactly</b> one. */
+	/** The type of the op's output parameter, if there is <b>exactly</b> one. */
 	default Type outputType() {
-		return output().getType();
+		return output().type();
 	}
 
 	/** The op's priority. */
 	double priority();
 
-	/**
-	 * A fully qualified, unambiguous name for this specific op implementation.
-	 */
+	/** A fully qualified, unambiguous name for this specific op implementation. */
 	String implementationName();
 
-	/**
-	 * Create a StructInstance using the Struct metadata backed by an object of
-	 * the op itself.
-	 */
+	/** Creates an instance of the op's associated {@link Struct} metadata. */
 	StructInstance<?> createOpInstance(List<?> dependencies);
 
 	AnnotatedElement getAnnotationBearer();
@@ -125,13 +120,13 @@ public interface OpInfo extends Comparable<OpInfo> {
 		return this.implementationName().compareTo(that.implementationName());
 	}
 
-	/** The version of the Op */
+	/** The version of the Op. */
 	String version();
 
-	/** A unique identifier for an Op */
+	/** A unique identifier for an Op. */
 	String id();
 
-	/** A description of the Op's behavior */
+	/** A description of the Op's behavior. */
 	default String description() {
 		return "";
 	}

@@ -31,9 +31,9 @@ package org.scijava.ops.engine.struct;
 
 import java.lang.reflect.Type;
 
-import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
+import org.scijava.struct.Structs;
 
 /**
  * {@link Member} synthesized using constructor arguments
@@ -65,17 +65,17 @@ public class SynthesizedParameterMember<T> implements Member<T> {
 	// -- Member methods --
 
 	@Override
-	public String getKey() {
+	public String key() {
 		return name;
 	}
 
 	@Override
-	public String getDescription() {
+	public String description() {
 		return description;
 	}
 
 	@Override
-	public Type getType() {
+	public Type type() {
 		return fmt.type();
 	}
 
@@ -87,5 +87,10 @@ public class SynthesizedParameterMember<T> implements Member<T> {
 	@Override
 	public boolean isRequired() {
 		return isRequired;
+	}
+
+	@Override
+	public String toString() {
+		return Structs.toString(this);
 	}
 }

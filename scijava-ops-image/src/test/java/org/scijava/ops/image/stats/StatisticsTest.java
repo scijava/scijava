@@ -69,7 +69,7 @@ public class StatisticsTest extends AbstractOpTest {
 	private Img<UnsignedByteType> randomlyFilledImg;
 
 	@BeforeEach
-	public void setUpTest() {
+	public void setUp() {
 		// make a random float array image
 		img = TestImgGeneration.floatArray(true, 100, 100);
 
@@ -85,7 +85,7 @@ public class StatisticsTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void MinMaxTest() {
+	public void testMinMax() {
 		float min = Float.MAX_VALUE;
 		float max = Float.MIN_VALUE;
 
@@ -105,7 +105,7 @@ public class StatisticsTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void MeanStdTest() {
+	public void testMeanStd() {
 		float sum = 0.0f;
 
 		for (int i = 0; i < arraySize; i++) {

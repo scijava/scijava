@@ -46,16 +46,16 @@ import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpMatchingException;
 import org.scijava.ops.api.OpRequest;
 import org.scijava.ops.engine.MatchingConditions;
-import org.scijava.ops.engine.OpCandidate;
-import org.scijava.ops.engine.OpCandidate.StatusCode;
+import org.scijava.ops.engine.matcher.OpCandidate;
+import org.scijava.ops.engine.matcher.OpCandidate.StatusCode;
 import org.scijava.ops.engine.matcher.MatchingResult;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.engine.matcher.OpMatcher;
+import org.scijava.ops.engine.matcher.impl.MatchingUtils.TypeVarInfo;
 import org.scijava.priority.Priority;
 import org.scijava.struct.Member;
-import org.scijava.types.Types;
-import org.scijava.types.Types.TypeVarInfo;
-import org.scijava.types.inference.GenericAssignability;
+import org.scijava.common3.Types;
+import org.scijava.types.infer.GenericAssignability;
 
 public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 
@@ -74,7 +74,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 
 		for (final OpInfo info : getInfos(env, conditions)) {
 			Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
-			if (typesMatch(info.opType(), conditions.request().getType(),
+			if (typesMatch(info.opType(), conditions.request().type(),
 				typeVarAssigns))
 			{
 				OpCandidate candidate = new OpCandidate(env, conditions.request(), info,
@@ -99,7 +99,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	 * * has a matching number of args</br>
 	 * * {@link #missArgs(OpCandidate, Type[])}</br>
 	 * </br>
-	 * then returns the candidates which fulfill this criteria.
+	 * then returns the candidates which fulfill these criteria.
 	 *
 	 * @param candidates the candidates to check
 	 * @return candidates passing checks
@@ -129,10 +129,10 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 			.priority()));
 
 		List<OpCandidate> matches;
-		matches = filterMatches(validCandidates, (cand) -> typesPerfectMatch(cand));
+		matches = filterMatches(validCandidates, this::typesPerfectMatch);
 		if (!matches.isEmpty()) return matches;
 
-		matches = filterMatches(validCandidates, (cand) -> typesMatch(cand));
+		matches = filterMatches(validCandidates, this::typesMatch);
 		return matches;
 	}
 
@@ -169,13 +169,13 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	private Iterable<OpInfo> getInfos(OpEnvironment env,
 		MatchingConditions conditions)
 	{
-		return env.infos(conditions.request().getName(), conditions.hints());
+		return env.infos(conditions.request().name(), conditions.hints());
 	}
 
 	/**
 	 * Checks whether the output types of the candidate are applicable to the
 	 * input types of the {@link OpRequest}. Sets candidate status code if there
-	 * are too many, to few, or not matching types.
+	 * are too many, too few, or not matching types.
 	 *
 	 * @param candidate the candidate to check inputs for
 	 * @param typeBounds possibly predetermined type bounds for type variables
@@ -187,10 +187,10 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 		if (checkCandidates(Collections.singletonList(candidate)).isEmpty())
 			return false;
 		final Type[] reqArgTypes = candidate.paddedArgs();
-		final Type reqType = candidate.getRequest().getType();
+		final Type reqType = candidate.getRequest().type();
 		final Type infoType = candidate.opInfo().opType();
-		Type implementedInfoType = Types.getExactSuperType(infoType, Types.raw(
-			reqType));
+		Type implementedInfoType = Types.superTypeOf(infoType,
+			Types.raw(reqType));
 		if (!(implementedInfoType instanceof ParameterizedType)) {
 			throw new UnsupportedOperationException(
 				"Op type is not a ParameterizedType; we don't know how to deal with these yet.");
@@ -198,13 +198,13 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 		Type[] implTypeParams = ((ParameterizedType) implementedInfoType)
 			.getActualTypeArguments();
 		Type[] candidateArgTypes = candidate.opInfo().struct().members().stream()//
-			.map(member -> member.isInput() ? member.getType() : null) //
+			.map(member -> member.isInput() ? member.type() : null) //
 			.toArray(Type[]::new);
 		for (int i = 0; i < implTypeParams.length; i++) {
 			if (candidateArgTypes[i] == null) implTypeParams[i] = null;
 		}
 		candidateArgTypes = Arrays.stream(implTypeParams) //
-			.filter(t -> t != null).toArray(Type[]::new);
+			.filter(Objects::nonNull).toArray(Type[]::new);
 
 		if (reqArgTypes == null) return true; // no constraints on output types
 
@@ -217,8 +217,8 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 			return false;
 		}
 
-		int conflictingIndex = Types.isApplicable(reqArgTypes, candidateArgTypes,
-			typeBounds);
+		int conflictingIndex = MatchingUtils.isApplicable(reqArgTypes,
+			candidateArgTypes, typeBounds);
 		if (conflictingIndex != -1) {
 			final Type to = reqArgTypes[conflictingIndex];
 			final Type from = candidateArgTypes[conflictingIndex];
@@ -259,7 +259,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	private boolean outputsMatch(final OpCandidate candidate,
 		HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
 	{
-		final Type reqOutType = candidate.getRequest().getOutType();
+		final Type reqOutType = candidate.getRequest().outType();
 		if (reqOutType == null) return true; // no constraints on output types
 
 		if (candidate.opInfo().output().isInput()) return true;
@@ -277,8 +277,8 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 
 	/**
 	 * Checks whether the arg types of the candidate satisfy the padded arg types
-	 * of the candidate. Sets candidate status code if there are too many, to
-	 * few,not matching arg types or if a match was found.
+	 * of the candidate. Sets candidate status code if there are too many, too
+	 * few, not matching arg types or if a match was found.
 	 *
 	 * @param candidate the candidate to check args for
 	 * @return whether the arg types are satisfied
@@ -295,10 +295,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 		return true;
 	}
 
-	/**
-	 * Determines whether the specified type satisfies the op's required types
-	 * using {@link Types#isApplicable(Type[], Type[])}.
-	 */
+	/** Determines whether the specified type satisfies the op's required types. */
 	protected boolean typesMatch(final Type opType, final Type reqType,
 		final Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
@@ -337,7 +334,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 			i++;
 		}
 
-		final Type outputType = candidate.getRequest().getOutType();
+		final Type outputType = candidate.getRequest().outType();
 		if (!Objects.equals(outputType, candidate.opInfo().outputType()))
 			return false;
 

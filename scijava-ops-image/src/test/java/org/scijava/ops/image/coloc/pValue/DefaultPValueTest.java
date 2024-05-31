@@ -86,22 +86,18 @@ public class DefaultPValueTest extends AbstractColocalisationTest {
 
 		// Mock the underlying op.
 		final int[] count = { 0 };
-		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op = //
-			(input1, input2) -> {
+
+		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op =
+			ops.typeLambda(new Nil<>() {}, (input1, input2) -> {
 				double r;
 				synchronized (this) {
 					r = result[count[0]++];
 				}
 				return r;
-			};
-
-		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> wrapped =
-			ops.bakeLambdaType(op,
-				new Nil<BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double>>()
-				{}.getType());
+			});
 
 		PValueResult output = new PValueResult();
-		ops.op("coloc.pValue").input(ch1, ch1, wrapped, result.length - 1).output(
+		ops.op("coloc.pValue").input(ch1, ch1, op, result.length - 1).output(
 			output).compute();
 		Double actualPValue = output.getPValue();
 		Double actualColocValue = output.getColocValue();

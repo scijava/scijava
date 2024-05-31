@@ -42,11 +42,11 @@ public class About {
 	private static String about(final Class<?> c, final String groupId,
 		final String artifactId)
 	{
-		final POM pom = POM.getPOM(c, groupId, artifactId);
-		final String version = Versions.getVersion(c, groupId, artifactId);
+		final POM pom = POM.pom(c, groupId, artifactId);
+		final String version = Versions.of(c, groupId, artifactId);
 		final StringBuilder sb = new StringBuilder();
 
-		final String projectName = pom.getProjectName();
+		final String projectName = pom.projectName();
 		if (projectName != null && !projectName.isEmpty()) sb.append(projectName);
 		else sb.append(groupId + ":" + artifactId);
 		if (version != null && !version.isEmpty()) sb.append(" v" + version);
@@ -57,7 +57,7 @@ public class About {
 			sb.append("Project license: " + licenseName + "\n");
 		}
 
-		final String projectURL = pom.getProjectURL();
+		final String projectURL = pom.projectURL();
 		if (projectURL != null && !projectURL.isEmpty()) {
 			sb.append("Project website: " + projectURL);
 		}

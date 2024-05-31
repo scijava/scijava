@@ -47,7 +47,7 @@ import org.scijava.function.Producer;
 import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.OpBuilderTestOps;
-import org.scijava.types.GenericTyped;
+import org.scijava.common3.GenericTyped;
 import org.scijava.types.Nil;
 
 /**

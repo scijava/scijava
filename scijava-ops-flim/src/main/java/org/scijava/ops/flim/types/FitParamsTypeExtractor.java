@@ -31,13 +31,13 @@ package org.scijava.ops.flim.types;
 
 import net.imglib2.util.Util;
 import org.scijava.ops.flim.FitParams;
-import org.scijava.types.SubTypeExtractor;
-import org.scijava.types.TypeReifier;
+import org.scijava.types.extract.SubTypeExtractor;
+import org.scijava.types.extract.TypeReifier;
 
 import java.lang.reflect.Type;
 
 /**
- * A {@link org.scijava.types.TypeExtractor} that reifies {@link FitParams}.
+ * A {@link org.scijava.types.extract.TypeExtractor} that reifies {@link FitParams}.
  * Useful for directly passing {@code FitParams} objects directly to Op calls.
  *
  * @author Gabriel Selzer

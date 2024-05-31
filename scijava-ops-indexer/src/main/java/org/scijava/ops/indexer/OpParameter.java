@@ -38,7 +38,7 @@ import java.util.Map;
  *
  * @author Gabriel Selzer
  */
-public class OpParameter {
+class OpParameter {
 
 	/** Op parameters must be one of the following types */
 	public enum IO_TYPE {

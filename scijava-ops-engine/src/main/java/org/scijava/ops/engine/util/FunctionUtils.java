@@ -41,9 +41,8 @@ import java.util.function.Function;
 import org.scijava.function.Functions;
 import org.scijava.function.Producer;
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.Hints;
 import org.scijava.types.Nil;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 /**
  * Utility class designed to match {@code Function}s of various arities.
@@ -136,8 +135,8 @@ public final class FunctionUtils {
 	{
 		final Type[] types = new Type[inTypes.length + 1];
 		for (int i = 0; i < inTypes.length; i++)
-			types[i] = inTypes[i].getType();
-		types[types.length - 1] = outType.getType();
+			types[i] = inTypes[i].type();
+		types[types.length - 1] = outType.type();
 		final Type specialType = Types.parameterize(opClass, types);
 		return (T) env.op(opName, Nil.of(specialType), inTypes, outType);
 	}

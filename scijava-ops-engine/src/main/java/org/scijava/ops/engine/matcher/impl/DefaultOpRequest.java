@@ -36,8 +36,8 @@ import java.util.Map;
 
 import org.scijava.ops.api.OpRequest;
 import org.scijava.ops.engine.matcher.OpMatcher;
-import org.scijava.types.Types;
-import org.scijava.types.inference.GenericAssignability;
+import org.scijava.common3.Types;
+import org.scijava.types.infer.GenericAssignability;
 
 /**
  * Data structure which identifies an Op by name and/or type(s) and/or argument
@@ -96,13 +96,13 @@ public class DefaultOpRequest implements OpRequest {
 
 	/** Gets the name of the op. */
 	@Override
-	public String getName() {
+	public String name() {
 		return name;
 	}
 
 	/** Gets the type which the op must match. */
 	@Override
-	public Type getType() {
+	public Type type() {
 		return type;
 	}
 
@@ -110,13 +110,13 @@ public class DefaultOpRequest implements OpRequest {
 	 * Gets the op's output type constraint, or null for no constraint.
 	 */
 	@Override
-	public Type getOutType() {
+	public Type outType() {
 		return outType;
 	}
 
 	/** Gets the op's arguments. */
 	@Override
-	public Type[] getArgs() {
+	public Type[] argTypes() {
 		return args.clone();
 	}
 
@@ -124,7 +124,7 @@ public class DefaultOpRequest implements OpRequest {
 	 * Gets a label identifying the op's scope (i.e., its name and/or types).
 	 */
 	@Override
-	public String getLabel() {
+	public String label() {
 		final StringBuilder sb = new StringBuilder();
 		OpRequest.append(sb, name);
 		if (type != null) {
@@ -133,10 +133,6 @@ public class DefaultOpRequest implements OpRequest {
 		return sb.toString();
 	}
 
-	/**
-	 * Determines whether the specified type satisfies the op's required types
-	 * using {@link Types#isApplicable(Type[], Type[])}.
-	 */
 	@Override
 	public boolean typesMatch(final Type opType,
 		final Map<TypeVariable<?>, Type> typeVarAssigns)

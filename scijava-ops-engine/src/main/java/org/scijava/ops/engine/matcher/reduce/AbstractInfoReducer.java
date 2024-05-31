@@ -32,10 +32,9 @@ package org.scijava.ops.engine.matcher.reduce;
 import java.lang.reflect.Type;
 
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.Ops;
 import org.scijava.ops.engine.BaseOpHints;
-import org.scijava.types.Types;
-import org.scijava.types.inference.FunctionalInterfaces;
+import org.scijava.common3.Types;
+import org.scijava.types.infer.FunctionalInterfaces;
 
 public abstract class AbstractInfoReducer implements InfoReducer {
 
@@ -55,7 +54,7 @@ public abstract class AbstractInfoReducer implements InfoReducer {
 		int reducedArity = originalArity - numReductions;
 		Class<?> reducedRawType = ofArity(reducedArity);
 		Type[] inputTypes = info.inputTypes().toArray(Type[]::new);
-		Type outputType = info.output().getType();
+		Type outputType = info.output().type();
 		Type[] newTypes = new Type[reducedArity + 1];
 		if (reducedArity >= 0) System.arraycopy(inputTypes, 0, newTypes, 0,
 			reducedArity);

@@ -42,7 +42,7 @@ import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 import java.lang.reflect.*;
 import java.util.ArrayList;
@@ -77,7 +77,7 @@ public class YAMLOpClassInfo extends AbstractYAMLOpInfo {
 
 	@Override
 	public Type opType() {
-		return Types.parameterizeRaw(cls);
+		return Types.parameterize(cls);
 	}
 
 	@Override
@@ -129,7 +129,7 @@ public class YAMLOpClassInfo extends AbstractYAMLOpInfo {
 		}
 
 		// Add Op Dependencies
-		final List<Field> fields = Annotations.getAnnotatedFields(cls,
+		final List<Field> fields = Annotations.annotatedFields(cls,
 			OpDependency.class);
 		for (final Field f : fields) {
 			f.setAccessible(true);
@@ -171,10 +171,10 @@ public class YAMLOpClassInfo extends AbstractYAMLOpInfo {
 				// dependency.
 				throw new IllegalStateException(
 					"Exception trying to inject Op dependency field.\n" +
-						"\tOp dependency field to resolve: " + dependencyMember.getKey() +
+						"\tOp dependency field to resolve: " + dependencyMember.key() +
 						"\n" + "\tFound Op to inject: " + dependencies.get(i).getClass()
 							.getName() + //
-						"\n" + "\tField signature: " + dependencyMember.getType(), ex);
+						"\n" + "\tField signature: " + dependencyMember.type(), ex);
 			}
 		}
 		return struct().createInstance(op);

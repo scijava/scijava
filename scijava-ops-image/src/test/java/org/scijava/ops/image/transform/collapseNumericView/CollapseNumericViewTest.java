@@ -69,8 +69,7 @@ public class CollapseNumericViewTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void defaultCollapseNumericTest() {
-
+	public void testDefaultCollapseNumeric() {
 		Img<NativeARGBDoubleType> img = new ArrayImgFactory<>(
 			new NativeARGBDoubleType()).create(new int[] { 10, 10 });
 
@@ -101,5 +100,4 @@ public class CollapseNumericViewTest extends AbstractOpTest {
 
 		assertEquals(il2_2.numDimensions(), opr_2.numDimensions());
 	}
-
 }

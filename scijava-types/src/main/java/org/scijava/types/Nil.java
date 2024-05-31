@@ -40,6 +40,7 @@ import java.lang.reflect.TypeVariable;
 import java.util.Set;
 
 import org.scijava.common3.Classes;
+import org.scijava.common3.GenericTyped;
 
 /**
  * A "typed null" which knows its generic type, and can generate proxy objects
@@ -53,9 +54,7 @@ import org.scijava.common3.Classes;
  *
  * @author Curtis Rueden
  */
-public abstract class Nil<T> implements GenericTyped, Proxyable<T>,
-	InvocationHandler
-{
+public abstract class Nil<T> implements GenericTyped, Proxyable<T> {
 
 	/** Generic type of the object. */
 	private final TypeToken<?> typeToken;
@@ -65,18 +64,17 @@ public abstract class Nil<T> implements GenericTyped, Proxyable<T>,
 
 	/**
 	 * Creates a new {@code Nil} whose generic type (returned by
-	 * {@link #getType()}) is the one specified by the generic parameters used at
+	 * {@link #type()}) is the one specified by the generic parameters used at
 	 * construction.
 	 * <p>
 	 * For example:
 	 * </p>
 	 *
 	 * <pre>
-	 *
 	 * Nil&lt;List&lt;Map&lt;K, V&gt;&gt;&gt; nil = new Nil&lt;List&lt;Map&lt;K, V&gt;&gt;&gt;() {};
 	 * </pre>
 	 * <p>
-	 * Subsequent calls to {@code nil.getType()} will return the proper
+	 * Subsequent calls to {@code nil.type()} will return the proper
 	 * generically typed result&mdash;in the above example, a
 	 * {@link ParameterizedType} whose raw type is {@code List}, and whose single
 	 * type parameter is a {@link ParameterizedType} with raw type of {@code Map}
@@ -164,7 +162,7 @@ public abstract class Nil<T> implements GenericTyped, Proxyable<T>,
 	// -- GenericTyped methods --
 
 	@Override
-	public Type getType() {
+	public Type type() {
 		return typeToken.getType();
 	}
 
@@ -174,12 +172,13 @@ public abstract class Nil<T> implements GenericTyped, Proxyable<T>,
 	 * Create a proxy which implements all the same interfaces as this object's
 	 * generic type.
 	 * <p>
+	 * Optionally,
 	 * CTR FIXME - write up how method delegation works.
 	 * </p>
 	 */
 	@Override
 	public T proxy() {
-		final ClassLoader loader = Thread.currentThread().getContextClassLoader();
+		final ClassLoader loader = Classes.classLoader();
 
 		// extract the generic type's interfaces
 		final Set<?> ifaceSet = typeToken.getTypes().interfaces().rawTypes();
@@ -192,26 +191,27 @@ public abstract class Nil<T> implements GenericTyped, Proxyable<T>,
 		// NB: Technically, this cast is not safe, because T might not be
 		// an interface, and thus might not be one of the proxy's types.
 		@SuppressWarnings("unchecked")
-		final T proxy = (T) Proxy.newProxyInstance(loader, interfaces, this);
+		final T proxy = (T) Proxy.newProxyInstance(loader, interfaces,
+			new InvocationHandler() {
+				@Override
+				public Object invoke(final Object proxy, final Method method,
+					final Object[] args) throws Throwable
+				{
+					try {
+						// Look for a Nil subclass method of the same signature.
+						final Method m = callbacks.getClass().getMethod(method.getName(), //
+							method.getParameterTypes());
+						return m.invoke(callbacks, args);
+					}
+					catch (final NoSuchMethodException exc) {
+						// NB: Default behavior is to do nothing and return null.
+						return Classes.nullValue(method.getReturnType());
+					}
+				}
+			}
+		);
+
 		return proxy;
-	}
-
-	// -- InvocationHandler methods --
-
-	@Override
-	public Object invoke(final Object proxy, final Method method,
-		final Object[] args) throws Throwable
-	{
-		try {
-			// Look for a Nil subclass method of the same signature.
-			final Method m = callbacks.getClass().getMethod(method.getName(), //
-				method.getParameterTypes());
-			return m.invoke(callbacks, args);
-		}
-		catch (final NoSuchMethodException exc) {
-			// NB: Default behavior is to do nothing and return null.
-			return Classes.nullValue(method.getReturnType());
-		}
 	}
 
 	// -- Helper methods --

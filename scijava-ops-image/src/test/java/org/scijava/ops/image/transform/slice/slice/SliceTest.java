@@ -68,7 +68,7 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends
 	private ArrayImg<ByteType, ByteArray> out;
 
 	@BeforeEach
-	public void setUpTest() {
+	public void setUp() {
 		in = ArrayImgs.bytes(20, 20, 21);
 		out = ArrayImgs.bytes(20, 20, 21);
 
@@ -82,7 +82,6 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends
 
 	@Test
 	public void testXYCropping() {
-
 		// fill array img with values (plane position = value in px);
 
 		for (final Cursor<ByteType> cur = in.cursor(); cur.hasNext();) {
@@ -93,12 +92,9 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends
 		// selected interval XY
 		final int[] xyAxis = new int[] { 0, 1 };
 
-		Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>> wrapped =
-			ops.bakeLambdaType(test,
-				new Nil<Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>>>()
-				{}.getType());
-		ops.op("transform.slice").input(in, wrapped, xyAxis, true).output(out)
-			.compute();
+		Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>> op =
+			ops.typeLambda(new Nil<>() {}, test);
+		ops.op("transform.slice").input(in, op, xyAxis, true).output(out).compute();
 
 		for (final Cursor<ByteType> cur = out.cursor(); cur.hasNext();) {
 			cur.fwd();
@@ -119,7 +115,6 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends
 	}
 
 	private void testXYZCropping(int t) {
-
 		Img<ByteType> inSequence = ArrayImgs.bytes(20, 20, 21, t);
 		ArrayImg<ByteType, ByteArray> outSequence = ArrayImgs.bytes(20, 20, 21, t);
 
@@ -132,12 +127,12 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends
 		// selected interval XYZ
 		final int[] xyAxis = new int[] { 0, 1, 2 };
 
-		Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>> wrapped =
-			ops.bakeLambdaType(test,
-				new Nil<Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>>>()
-				{}.getType());
-		ops.op("transform.slice").input(inSequence, wrapped, xyAxis, true).output(
-			outSequence).compute();
+		Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>> op =
+			ops.typeLambda(new Nil<>() {}, test);
+		ops.op("transform.slice")
+			.input(inSequence, op, xyAxis, true)
+			.output(outSequence)
+			.compute();
 
 		for (final Cursor<ByteType> cur = outSequence.cursor(); cur.hasNext();) {
 			cur.fwd();
@@ -147,7 +142,6 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends
 
 	@Test
 	public void testNonZeroMinimumInterval() {
-
 		Img<ByteType> img3D = ArrayImgs.bytes(50, 50, 3);
 		IntervalView<ByteType> interval2D = Views.interval(img3D, new FinalInterval(
 			new long[] { 25, 25, 2 }, new long[] { 35, 35, 2 }));
@@ -169,7 +163,7 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends
 	}
 
 	@Test
-	public void LoopThroughHyperSlicesTest() {
+	public void testLoopThroughHyperSlices() {
 		final int xSize = 40;
 		final int ySize = 50;
 		final int numChannels = 3;
@@ -205,7 +199,6 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends
 		}
 
 		assertEquals(numChannels * numTimePoints, numHyperSlices);
-
 	}
 
 	public Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>> test =
@@ -217,5 +210,4 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends
 				itB.next().setReal(itA.next().getRealDouble());
 			}
 		};
-
 }

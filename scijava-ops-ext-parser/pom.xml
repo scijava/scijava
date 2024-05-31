@@ -76,7 +76,7 @@
 	</mailingLists>
 
 	<scm>
-		<connection>scm:git:git://github.com/scijava/scijava</connection>
+		<connection>scm:git:https://github.com/scijava/scijava</connection>
 		<developerConnection>scm:git:git@github.com:scijava/scijava</developerConnection>
 		<tag>HEAD</tag>
 		<url>https://github.com/scijava/scijava</url>
@@ -99,15 +99,7 @@
 		<scijava.jvm.build.version>[11,)</scijava.jvm.build.version>
 	</properties>
 
-	<repositories>
-		<repository>
-			<id>scijava.public</id>
-			<url>https://maven.scijava.org/content/groups/public</url>
-		</repository>
-	</repositories>
-
 	<dependencies>
-
 		<!-- Third party dependencies -->
 		<dependency>
 			<groupId>org.yaml</groupId>
@@ -122,11 +114,6 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
 			<scope>test</scope>
 		</dependency>
 
@@ -172,4 +159,11 @@
 		</dependency>
 		end of opencv dependencies -->
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>scijava.public</id>
+			<url>https://maven.scijava.org/content/groups/public</url>
+		</repository>
+	</repositories>
 </project>

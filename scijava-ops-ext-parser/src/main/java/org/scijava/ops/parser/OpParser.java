@@ -328,4 +328,116 @@ public final class OpParser {
 			os.write(opYaml.getBytes(UTF_8));
 		}
 	}
+
+	/**
+	 * A data structure containing all the metadata needed to define an Op
+	 *
+	 * @author Gabriel Selzer
+	 * @author Mark Hiner
+	 */
+	private static class OpData {
+
+		/**
+		 * A {@link Map} used to store any implementation-specific and/or nullable
+		 * tags.
+		 */
+		private final Map<String, Object> tags;
+
+		/**
+		 * A {@link List} of {@link String}s describing the name(s) of the Op. There
+		 * must be at least one.
+		 */
+		private final List<String> names;
+
+		/**
+		 * A {@link List} of {@link OpParameter}, describing the input and output
+		 * parameters of this Op.
+		 */
+		private final List<OpParameter> params;
+
+		/**
+		 * A {@link String} identifying the code providing an Op's functionality.
+		 */
+		private final String source;
+
+		/**
+		 * The version of this Op.
+		 */
+		private final String version;
+
+		/**
+		 * The priority of this Op.
+		 */
+		private final double priority;
+
+		/**
+		 * A description of the functionality provided by this Op.
+		 */
+		private final String description;
+
+		/**
+		 * A {@link List} of the authors of this Op
+		 */
+		private final List<String> authors;
+
+		public OpData(final String source, final String version,
+					  final List<String> names, final List<OpParameter> params,
+					  final Map<String, Object> tags, List<String> authors, double priority,
+					  String description)
+		{
+			this.source = source;
+			this.version = version;
+			this.names = names;
+			this.params = params;
+			this.tags = tags;
+			this.authors = authors;
+			this.priority = priority;
+			this.description = description;
+
+			validateOpData();
+		}
+
+		/**
+		 * Helper method to ensure this OpImpl is valid. Throws
+		 * {@link InvalidOpException} if problems are detected. Parallel
+		 * implementation of org.scijava.ops.engine.util.Infos#validate in
+		 * scijava-ops-engine
+		 */
+		private void validateOpData() {
+			if (Objects.isNull(names) || names.isEmpty()) {
+				throw new InvalidOpException("Invalid Op defined in : " + source +
+						". Op names cannot be empty!");
+			}
+
+			int outputs = 0;
+			for (OpParameter p : params) {
+				if (p.ioType.equals(OpParameter.IO_TYPE.OUTPUT)) outputs++;
+			}
+			if (outputs > 1) {
+				throw new InvalidOpException("Invalid Op defined in : " + source +
+						". Ops cannot have more than one output!");
+			}
+		}
+
+		/**
+		 * Returns a {@link Map} storing the needed Op data hierarchically.
+		 *
+		 * @return the {@link Map} of data.
+		 */
+		public Map<String, Object> dumpData() {
+			Map<String, Object> map = new HashMap<>();
+			map.put("source", source);
+			map.put("version", version);
+			map.put("names", names.toArray(String[]::new));
+			map.put("description", description);
+			map.put("priority", priority);
+			map.put("authors", authors.toArray(String[]::new));
+			List<Map<String, Object>> foo = params.stream() //
+					.map(OpParameter::data) //
+					.collect(Collectors.toList());
+			map.put("parameters", foo.toArray(Map[]::new));
+			map.put("tags", tags);
+			return Collections.singletonMap("op", map);
+		}
+	}
 }

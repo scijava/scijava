@@ -43,7 +43,7 @@ public class TestOpParser {
 	 * Trivial test that we get the expected yaml back for our test file
 	 */
 	@Test
-	public void validateParsing() throws ClassNotFoundException {
+	public void testValidateParsing() throws ClassNotFoundException {
 		File f = new File(getClass().getResource("/test-ops.yaml").getFile());
 		String actual = OpParser.parseOpDocument(f.getAbsolutePath());
 

@@ -76,42 +76,6 @@ public class MapNeighborhoodTest extends AbstractOpTest {
 		}
 	}
 
-	// TODO: implement
-//
-//	@Test
-//	@Ignore("There is no way to throw an error for invalid typed computers at the moment.")
-//	public
-//		void testMapNeighborhoodsWrongArgs() {
-//		final Op mapOp =
-//			ops.op(DefaultMapNeighborhood.class, out, in,
-//				new RectangleShape(1, false), new Increment());
-//
-//		// ClassCastException will be thrown
-//		mapOp.run();
-//	}
-//
-//	/**
-//	 * Test if every neighborhood pixel of the image was really accessed during
-//	 * the map operation.
-//	 *
-//	 * @see MapNeighborhoodWithCenter
-//	 */
-//	@Test
-//	public void testMapNeighborhoodsWithCenterAccess() {
-//		final Op mapOp =
-//			ops.op(MapNeighborhoodWithCenter.class, out, in,
-//				new RectangleShape(1, false), new CountNeighborsWithCenter());
-//		mapOp.run();
-//
-//		for (final ByteType t : out) {
-//			assertEquals(9, t.get());
-//		}
-//
-//		for (final ByteType t : in) {
-//			assertEquals(9, t.get());
-//		}
-//	}
-
 	/**
 	 * Function which increments the output value for every pixel in the
 	 * neighborhood.

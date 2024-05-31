@@ -85,23 +85,12 @@
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 	</properties>
-	<dependencies>
-		<!-- SciJava dependencies -->
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-common3</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 
+	<dependencies>
 		<!-- Test scope dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

@@ -28,23 +28,22 @@
  */
 
 /**
- * This package org.scijava.types; runtime, beyond what is offered by SciJava
- * Common's {@link org.scijava.types.Types} class. This package offers the
+ * This package offers type reasoning beyond only what is offered by SciJava
+ * Common's {@link org.scijava.common3.Types} class. This package offers the
  * following additional features:
  * <ul>
  * <li>Reason about whether a collection of arguments (object instances, generic
  * types, or a mixture thereof) satisfy a given list of generic types, such as
- * those of a particular method signature. See
- * {@link org.scijava.types.TypeTools#satisfies} for details.</li>
+ * those of a particular method signature.</li>
  * <li>Create {@link org.scijava.types.Nil} objects, which act as "typed null"
  * placeholders, and support generation of proxy instances of their associated
  * generic type, similar to (but less featureful than) how mocking frameworks
  * create mock objects.</li>
  * <li>Recover erased generic type information from object instances at runtime,
- * in an extensible way, via {@link org.scijava.types.TypeExtractor} plugins and
- * the {@link org.scijava.types.TypeReifier#reify} method. E.g., you can learn
- * that an object of class {@link java.util.HashMap} is actually (or at least
- * functionally) a {@code HashMap<String, Integer>}.</li>
+ * in an extensible way, via {@link org.scijava.types.extract.TypeExtractor}
+ * plugins and the {@link org.scijava.types.extract.TypeReifier#reify} method.
+ * E.g., you can learn that an object of class {@link java.util.HashMap} is
+ * actually (or at least functionally) a {@code HashMap<String, Integer>}.</li>
  * </ul>
  */
 

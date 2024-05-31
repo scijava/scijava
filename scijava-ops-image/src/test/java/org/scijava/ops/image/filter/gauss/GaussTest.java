@@ -50,9 +50,8 @@ import org.scijava.types.Nil;
  */
 public class GaussTest extends AbstractOpTest {
 
-	/** Tests the Gaussian. */
 	@Test
-	public void gaussRegressionTest() {
+	public void testGauss() {
 		final Img<ByteType> in = TestImgGeneration.byteArray(true, new long[] { 10,
 			10 });
 		final Img<ByteType> out1 = ops.op("create.img").input(in, Util
@@ -80,29 +79,4 @@ public class GaussTest extends AbstractOpTest {
 				.getRealDouble(), 0);
 		}
 	}
-
-	//
-	// /** Tests the Gaussian matching. */
-	// @Test
-	// public void gaussMatchingTest() {
-	//
-	// Gauss defaultGaussRAI = ops.op(Ops.Filter.Gauss.class, ArrayImgs.bytes(1,
-	// 2),
-	// new double[] {1, 2});
-	// assertTrue(defaultGaussRAI instanceof DefaultGaussRAI);
-	//
-	// defaultGaussRAI = ops.op(
-	// Ops.Filter.Gauss.class,
-	// ArrayImgs.bytes(1, 2),
-	// ArrayImgs.bytes(1, 2),
-	// new double[] {1, 2});
-	// assertTrue(defaultGaussRAI instanceof DefaultGaussRAI);
-	//
-	// Gauss defaultGaussRA = ops.op(
-	// Ops.Filter.Gauss.class,
-	// ArrayImgs.bytes(1, 2),
-	// Views.extendMirrorSingle(ArrayImgs.bytes(1, 2)),
-	// new double[] {1, 2});
-	// assertTrue(defaultGaussRA instanceof DefaultGaussRA);
-	// }
 }

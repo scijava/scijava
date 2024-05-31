@@ -34,8 +34,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 
-import org.scijava.types.GenericTyped;
-import org.scijava.types.Types;
+import org.scijava.common3.GenericTyped;
+import org.scijava.common3.Types;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -46,7 +46,7 @@ import javassist.CtMethod;
 import javassist.CtNewConstructor;
 import javassist.CtNewMethod;
 import javassist.NotFoundException;
-import org.scijava.types.inference.FunctionalInterfaces;
+import org.scijava.types.infer.FunctionalInterfaces;
 
 public final class LambdaTypeBaker {
 
@@ -203,7 +203,7 @@ public final class LambdaTypeBaker {
 	}
 
 	private static String createGenericTypedMethod() {
-		return "public java.lang.reflect.Type getType() {return type;}";
+		return "public java.lang.reflect.Type type() {return type;}";
 	}
 
 	private static CtField createTypeField(ClassPool pool, CtClass cc,

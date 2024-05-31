@@ -41,11 +41,11 @@ import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.types.Nil;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 /**
  * Tests op matcher functionality relating to
- * {@link Types#greatestCommonSuperType}.
+ * {@link Types#superTypeOf}.
  *
  * @author Gabriel Selzer
  */
@@ -95,7 +95,7 @@ public class MatchingWithGCSTTest extends AbstractTestEnvironment implements
 	};
 
 	@Test
-	public void OpMatchingIntegrationTest() {
+	public void testAddOpMatchingIntegration() {
 		List<Thing> things = new ArrayList<>();
 		things.add(new NThing());
 		things.add(new XThing());

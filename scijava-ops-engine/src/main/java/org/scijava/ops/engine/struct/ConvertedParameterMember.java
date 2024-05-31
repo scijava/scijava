@@ -31,9 +31,9 @@ package org.scijava.ops.engine.struct;
 
 import java.lang.reflect.Type;
 
-import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
+import org.scijava.struct.Structs;
 
 /**
  * {@link Member} whose {@link Type} has been converted into another
@@ -63,17 +63,17 @@ public class ConvertedParameterMember<T> implements Member<T> {
 	}
 
 	@Override
-	public String getKey() {
-		return original.getKey();
+	public String key() {
+		return original.key();
 	}
 
 	@Override
-	public String getDescription() {
-		return original.getDescription();
+	public String description() {
+		return original.description();
 	}
 
 	@Override
-	public Type getType() {
+	public Type type() {
 		return newType;
 	}
 
@@ -85,5 +85,10 @@ public class ConvertedParameterMember<T> implements Member<T> {
 	@Override
 	public boolean isRequired() {
 		return original.isRequired();
+	}
+
+	@Override
+	public String toString() {
+		return Structs.toString(this);
 	}
 }

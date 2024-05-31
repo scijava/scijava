@@ -58,8 +58,7 @@ import org.scijava.types.Nil;
 public class DropSingletonDimensionsViewTest extends AbstractOpTest {
 
 	@Test
-	public void dropSingletonDimensionsTest() {
-
+	public void testDropSingletonDimensions() {
 		Function<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>> dropFunc =
 			OpBuilder.matchFunction(ops, "transform.dropSingletonDimensionsView",
 				new Nil<RandomAccessibleInterval<DoubleType>>()

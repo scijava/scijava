@@ -29,8 +29,6 @@
 
 package org.scijava.common3;
 
-import static org.scijava.common3.Exceptions.iae;
-
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -183,7 +181,7 @@ public final class Classes {
 			// Not NoClassDefFoundError.
 			// Not UnsupportedClassVersionError!
 			if (quietly) return null;
-			throw iae(t, "Cannot load class: " + className);
+			throw iae(t, "Cannot load class: %s", className);
 		}
 	}
 
@@ -250,7 +248,7 @@ public final class Classes {
 		if (classResource == null) {
 			// cannot find class resource
 			if (quietly) return null;
-			throw iae(cause, "No class resource for class: " + c.getName(), why);
+			throw iae(cause, "No class resource for class: %s (%s)", c.getName(), why);
 		}
 
 		final String url = classResource.toString();
@@ -258,7 +256,7 @@ public final class Classes {
 		if (!url.endsWith(suffix)) {
 			// weird URL
 			if (quietly) return null;
-			throw iae(cause, "Unsupported URL format: " + url, why);
+			throw iae(cause, "Unsupported URL format: %s (%s)", url, why);
 		}
 
 		// strip the class's path from the URL string
@@ -274,7 +272,7 @@ public final class Classes {
 		}
 		catch (final MalformedURLException e) {
 			if (quietly) return null;
-			throw iae(e, "Malformed URL", why);
+			throw iae(e, "Malformed URL: %s (%s)", path, why);
 		}
 	}
 
@@ -436,7 +434,7 @@ public final class Classes {
 	 *           field with the given name
 	 */
 	public static Field field(final Class<?> c, final String name) {
-		if (c == null) throw iae("No such field: " + name);
+		if (c == null) throw iae(null, "No such field: %s", name);
 		try {
 			return c.getDeclaredField(name);
 		}
@@ -473,7 +471,7 @@ public final class Classes {
 	public static Method method(final Class<?> c, final String name,
 		final Class<?>... parameterTypes)
 	{
-		if (c == null) throw iae("No such field: " + name);
+		if (c == null) throw iae(null, "No such field: %s", name);
 		try {
 			return c.getDeclaredMethod(name, parameterTypes);
 		}
@@ -514,7 +512,7 @@ public final class Classes {
 	 * @param dim The dimensionality of the array
 	 */
 	public static Class<?> array(final Class<?> componentType, final int dim) {
-		if (dim < 0) throw iae("Negative dimension");
+		if (dim < 0) throw iae(null, "Negative dimension");
 		if (dim == 0) return componentType;
 		return array(array(componentType), dim - 1);
 	}
@@ -550,5 +548,18 @@ public final class Classes {
 		catch (final IllegalArgumentException exc) {
 			return null;
 		}
+	}
+
+	/**
+	 * Creates a new {@link IllegalArgumentException} with the given cause and
+	 * formatted message string.
+	 */
+	private static IllegalArgumentException iae(final Throwable cause,
+		final String formattedMessage, final String... values)
+	{
+		final String s = String.format(formattedMessage, (Object[]) values);
+		final IllegalArgumentException exc = new IllegalArgumentException(s);
+		if (cause != null) exc.initCause(cause);
+		return exc;
 	}
 }

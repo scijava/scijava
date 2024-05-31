@@ -6,7 +6,7 @@ This library provides a suite of algorithms to aid in image processing using Sci
 <dependency>
 	<groupId>org.scijava</groupId>
 	<artifactId>scijava-ops-image</artifactId>
-	<version>0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<scope>test</scope>
 </dependency>
 ```

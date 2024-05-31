@@ -61,7 +61,7 @@ import org.scijava.types.Nil;
 public class CollapseViewTest extends AbstractOpTest {
 
 	@Test
-	public void defaultCollapseTest() {
+	public void testDefaultCollapse() {
 		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
 			new int[] { 10, 10 });
 
@@ -81,8 +81,7 @@ public class CollapseViewTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void collapseRATest() {
-
+	public void testCollapseRA() {
 		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
 			new int[] { 10, 10, 10 });
 
@@ -101,5 +100,4 @@ public class CollapseViewTest extends AbstractOpTest {
 
 		assertEquals(il2.numDimensions(), opr.numDimensions());
 	}
-
 }

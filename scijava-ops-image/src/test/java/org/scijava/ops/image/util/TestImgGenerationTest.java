@@ -43,7 +43,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestImgGenerationTest {
 
 	@Test
-	public void verifyImages() {
+	public void testVerifyImages() {
 		ensureNotEmpty(TestImgGeneration.byteArray(true, 10, 10), new ByteType());
 		ensureNotEmpty(TestImgGeneration.unsignedByteArray(true, 10, 10),
 			new UnsignedByteType());

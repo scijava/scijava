@@ -35,11 +35,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 import org.scijava.struct.MemberParser;
 import org.scijava.struct.Struct;
+import org.scijava.struct.Structs;
 
 public class OpRetypingMemberParser implements
 	MemberParser<RetypingRequest, Member<?>>
@@ -95,7 +95,7 @@ public class OpRetypingMemberParser implements
 		return new Member<>() {
 
 			@Override
-			public String getKey() {
+			public String key() {
 				ItemIO ioType = fmt.itemIO();
 				if (ioType == ItemIO.INPUT) return "in" + i + 1;
 				else if (ioType == ItemIO.CONTAINER) return "container";
@@ -105,13 +105,18 @@ public class OpRetypingMemberParser implements
 			}
 
 			@Override
-			public Type getType() {
+			public Type type() {
 				return fmt.type();
 			}
 
 			@Override
 			public ItemIO getIOType() {
 				return fmt.itemIO();
+			}
+
+			@Override
+			public String toString() {
+				return Structs.toString(this);
 			}
 		};
 	}

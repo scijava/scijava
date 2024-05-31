@@ -49,7 +49,7 @@ import javax.tools.Diagnostic;
  *
  * @author Gabriel Selzer
  */
-public class OpMethodImplData extends OpImplData {
+class OpMethodImplData extends OpImplData {
 
 	// Regex matching org.scijava.function.Computers type hints
 	private static final Pattern COMPUTER_TYPE = Pattern.compile(

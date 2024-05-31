@@ -39,7 +39,7 @@ import org.scijava.ops.spi.OpField;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
@@ -103,7 +103,7 @@ public class DefaultOpFieldInfo implements OpInfo {
 
 		// NB: Subclassing a collection and inheriting its fields is NOT
 		// ALLOWED!
-		Type structType = Types.fieldType(field, field.getDeclaringClass());
+		Type structType = Types.typeOf(field, field.getDeclaringClass());
 		FieldInstance fieldInstance = new FieldInstance(field, instance);
 		struct = Structs.from(fieldInstance, structType,
 			new FieldParameterMemberParser());

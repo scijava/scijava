@@ -32,9 +32,6 @@ package org.scijava.ops.image.copy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.util.HashMap;
-
-import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.Type;
 import net.imglib2.type.numeric.IntegerType;
 import org.scijava.ops.image.AbstractOpTest;
@@ -48,7 +45,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.types.Nil;
-import org.scijava.types.inference.GenericAssignability;
 
 /**
  * Test
@@ -86,7 +82,7 @@ public class CopyImgLabelingTest<T extends Type<T>, L extends Type<L>, I extends
 	}
 
 	@Test
-	public void copyImgLabeling() {
+	public void testCopyImgLabeling() {
 		ops.op("copy.imgLabeling").input(input).output(copy).compute();
 		assertNotNull(copy);
 
@@ -95,5 +91,4 @@ public class CopyImgLabelingTest<T extends Type<T>, L extends Type<L>, I extends
 			assertEquals(inCursor.next(), type);
 		}
 	}
-
 }

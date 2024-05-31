@@ -132,8 +132,8 @@ Activate the ``scijava-ops`` conda/mamba environment and run the following Pytho
     sj.config.endpoints = ['net.imglib2:imglib2',
             'net.imglib2:imglib2-imglyb',
             'io.scif:scifio',
-            'org.scijava:scijava-ops-engine:0-SNAPSHOT',
-            'org.scijava:scijava-ops-image:0-SNAPSHOT']
+            'org.scijava:scijava-ops-engine:1.0.0',
+            'org.scijava:scijava-ops-image:1.0.0']
 
     # import Java classes
     print("[INFO]: Adding classes...")

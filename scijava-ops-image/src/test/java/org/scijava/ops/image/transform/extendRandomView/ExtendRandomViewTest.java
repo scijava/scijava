@@ -63,7 +63,7 @@ public class ExtendRandomViewTest extends AbstractOpTest {
 	Nil<Double> doubleNil = new Nil<Double>() {};
 
 	@Test
-	public void extendRandomTest() {
+	public void testExtendRandom() {
 		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Double, Double, RandomAccessible<DoubleType>> extendFunc =
 			OpBuilder.matchFunction(ops, "transform.extendRandomView", raiNil,
 				doubleNil, doubleNil, new Nil<RandomAccessible<DoubleType>>()
@@ -87,5 +87,4 @@ public class ExtendRandomViewTest extends AbstractOpTest {
 
 		assertEquals(il2.get().get(), opr.get().get(), 1e-10);
 	}
-
 }

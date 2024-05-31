@@ -87,7 +87,7 @@ public class DefaultDetectRidgesTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void RegressionTest() {
+	public void testRegression() {
 		Img<FloatType> input = TestImgGeneration.floatArray(false, 30, 30);
 		RandomAccess<FloatType> linePainter = input.randomAccess();
 

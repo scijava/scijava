@@ -93,7 +93,7 @@ public class KendallTauBRankTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void exhaustiveKendallTauBRankTesting() {
+	public void testKendallTauBRankExhaustive() {
 		assumeTrue(exhaustive);
 		final int n = 5, m = 10;
 		final int[] values1 = new int[n], values2 = new int[n];

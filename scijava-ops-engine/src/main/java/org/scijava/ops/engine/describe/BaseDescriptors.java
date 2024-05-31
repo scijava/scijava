@@ -35,7 +35,7 @@ import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpMethod;
 import org.scijava.priority.Priority;
 import org.scijava.types.Nil;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 import java.util.List;
 import java.util.function.Function;

@@ -77,7 +77,7 @@ public class CopyLabelingMappingTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void copyLabelingWithoutOutputTest() {
+	public void testCopyLabelingWithoutOutput() {
 
 		LabelingMapping<String> out = ops.op("copy.labelingMapping").input(input)
 			.outType(new Nil<LabelingMapping<String>>()
@@ -91,7 +91,7 @@ public class CopyLabelingMappingTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void copyLabelingWithOutputTest() {
+	public void testCopyLabelingWithOutput() {
 
 		LabelingMapping<String> out = ops.op("create.labelingMapping").outType(
 			new Nil<LabelingMapping<String>>()

@@ -49,7 +49,7 @@ import static org.scijava.ops.indexer.ProcessingUtils.*;
  *
  * @author Gabriel Selzer
  */
-public class OpClassImplData extends OpImplData {
+class OpClassImplData extends OpImplData {
 
 	/**
 	 * @param source the {@link TypeElement} that is an "implNote op"

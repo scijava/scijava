@@ -37,7 +37,7 @@ import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.spi.*;
 import org.scijava.priority.Priority;
-import org.scijava.types.Any;
+import org.scijava.common3.Any;
 
 import java.util.ArrayList;
 import java.util.Arrays;

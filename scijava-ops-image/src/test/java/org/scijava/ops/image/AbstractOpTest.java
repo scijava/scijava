@@ -34,7 +34,6 @@ import java.util.stream.StreamSupport;
 
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.spi.Op;
 
 import io.scif.img.IO;
@@ -67,7 +66,7 @@ public abstract class AbstractOpTest {
 	protected static final OpEnvironment ops = OpEnvironment.build();
 
 	static {
-		ops.setDefaultHints(new Hints(BaseOpHints.Progress.TRACK));
+		ops.setDefaultHints(new Hints("progress.TRACK"));
 	}
 
 	private int seed;

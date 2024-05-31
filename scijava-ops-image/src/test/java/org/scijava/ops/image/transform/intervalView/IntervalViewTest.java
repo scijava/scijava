@@ -65,8 +65,7 @@ public class IntervalViewTest extends AbstractOpTest {
 	private static final long SEED = 0x12345678;
 
 	@Test
-	public void defaultIntervalTest() {
-
+	public void testDefaultInterval() {
 		BiFunction<RandomAccessible<DoubleType>, Interval, IntervalView<DoubleType>> intervalFunc =
 			OpBuilder.matchFunction(ops, "transform.intervalView",
 				new Nil<RandomAccessible<DoubleType>>()
@@ -92,8 +91,7 @@ public class IntervalViewTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void intervalMinMaxTest() {
-
+	public void testIntervalMinMax() {
 		Functions.Arity3<RandomAccessible<DoubleType>, long[], long[], IntervalView<DoubleType>> intervalFunc =
 			OpBuilder.matchFunction(ops, "transform.intervalView",
 				new Nil<RandomAccessible<DoubleType>>()

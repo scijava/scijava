@@ -63,7 +63,7 @@ public class ExtendValueViewTest extends AbstractOpTest {
 		{};
 
 	@Test
-	public void extendValueTest() {
+	public void testExtendValue() {
 		BiFunction<RandomAccessibleInterval<DoubleType>, DoubleType, RandomAccessible<DoubleType>> extendFunc =
 			OpBuilder.matchFunction(ops, "transform.extendValueView", raiNil,
 				new Nil<DoubleType>()
@@ -88,5 +88,4 @@ public class ExtendValueViewTest extends AbstractOpTest {
 
 		assertEquals(il2.get().get(), opr.get().get(), 1e-10);
 	}
-
 }

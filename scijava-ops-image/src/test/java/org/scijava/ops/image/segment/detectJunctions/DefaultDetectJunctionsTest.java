@@ -49,7 +49,7 @@ import org.scijava.types.Nil;
 public class DefaultDetectJunctionsTest extends AbstractOpTest {
 
 	@Test
-	public void TestRegression() {
+	public void testDefaultJunctions() {
 		List<DefaultWritablePolyline> lines = new ArrayList<>();
 
 		double threshold = Math.sqrt(2);
@@ -109,7 +109,5 @@ public class DefaultDetectJunctionsTest extends AbstractOpTest {
 			assertEquals(results.get(i).getDoublePosition(1), expected.get(i)
 				.getDoublePosition(1), 0);
 		}
-
 	}
-
 }

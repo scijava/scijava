@@ -44,7 +44,7 @@ public interface MemberInstance<T> extends Supplier<T> {
 	}
 
 	/**
-	 * Get's the value of the member.
+	 * Gets the value of the member.
 	 *
 	 * @return The value of the {@link Member} with the given key.
 	 * @throws UnsupportedOperationException if the member is not readable (see

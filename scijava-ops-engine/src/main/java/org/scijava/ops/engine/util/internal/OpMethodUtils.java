@@ -48,9 +48,9 @@ import org.scijava.ops.engine.util.Lambdas;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.Member;
 import org.scijava.struct.StructInstance;
-import org.scijava.types.Types;
-import org.scijava.types.inference.FunctionalInterfaces;
-import org.scijava.types.inference.GenericAssignability;
+import org.scijava.common3.Types;
+import org.scijava.types.infer.FunctionalInterfaces;
+import org.scijava.types.infer.GenericAssignability;
 
 /**
  * Common code used by Ops backed by {@link Method}s.
@@ -145,7 +145,7 @@ public final class OpMethodUtils {
 			Object op = Lambdas.lambdaize( //
 				Types.raw(info.opType()), //
 				handle, //
-				Infos.dependencies(info).stream().map(Member::getRawType).toArray(
+				Infos.dependencies(info).stream().map(Member::rawType).toArray(
 					Class[]::new), dependencies.toArray() //
 			);
 			return info.struct().createInstance(op);

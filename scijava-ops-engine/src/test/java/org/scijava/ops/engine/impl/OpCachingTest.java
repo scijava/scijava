@@ -103,7 +103,7 @@ public class OpCachingTest implements OpCollection {
 	}
 
 	@Test
-	public void cacheOp() throws SecurityException, IllegalArgumentException,
+	public void testCacheOp() throws SecurityException, IllegalArgumentException,
 		NoSuchFieldException, IllegalAccessException
 	{
 		// put the Op in the cache
@@ -127,7 +127,7 @@ public class OpCachingTest implements OpCollection {
 			.infoTree(), new Nil<Producer<String>>()
 		{
 
-			}.getType());
+			}.type());
 		opCache.replace(cachedConditions, invaderInstance);
 
 		Producer<String> invadedOp = defOpEnv.op("test.basicOp").outType(
@@ -152,7 +152,7 @@ public class OpCachingTest implements OpCollection {
 
 		// assert that complicatedOp is in the cache (
 		Optional<MatchingConditions> complicatedOptional = opCache.keySet().stream()
-			.filter(condition -> condition.request().getName().equals(
+			.filter(condition -> condition.request().name().equals(
 				"test.complicatedOp")).findFirst();
 		Assertions.assertFalse(complicatedOptional.isEmpty(),
 			"test.complicatedOp not in cache!");
@@ -162,7 +162,7 @@ public class OpCachingTest implements OpCollection {
 
 		// assert that basic Op is also in the cache
 		Optional<MatchingConditions> basicOptional = opCache.keySet().stream()
-			.filter(condition -> condition.request().getName().equals("test.basicOp"))
+			.filter(condition -> condition.request().name().equals("test.basicOp"))
 			.findFirst();
 		Assertions.assertFalse(basicOptional.isEmpty(),
 			"test.basicOp not in cache despite being an OpDependency of test.complicatedOp");
@@ -211,7 +211,7 @@ public class OpCachingTest implements OpCollection {
 			.infoTree(), new Nil<Producer<String>>()
 		{
 
-			}.getType());
+			}.type());
 		opCache.replace(cachedConditions, invaderInstance);
 
 		// ensure the cache-ignoring hint avoids the replacement

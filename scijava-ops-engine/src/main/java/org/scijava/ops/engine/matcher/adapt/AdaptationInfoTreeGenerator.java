@@ -39,7 +39,7 @@ import org.scijava.ops.api.InfoTree;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.InfoTreeGenerator;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 public class AdaptationInfoTreeGenerator implements InfoTreeGenerator {
 
@@ -77,10 +77,10 @@ public class AdaptationInfoTreeGenerator implements InfoTreeGenerator {
 		// TODO: The op type is wrong!
 		Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
 		if (!Types.isAssignable(originalInfo.opType(), adaptorTree.info().inputs()
-			.get(0).getType(), typeVarAssigns)) throw new IllegalArgumentException(
+			.get(0).type(), typeVarAssigns)) throw new IllegalArgumentException(
 				"The adaptor cannot be used on Op " + originalInfo);
-		Type adaptedOpType = Types.substituteTypeVariables(adaptorTree.info()
-			.output().getType(), typeVarAssigns);
+		Type adaptedOpType = Types.unroll(adaptorTree.info()
+			.output().type(), typeVarAssigns);
 		OpInfo adaptedInfo = new OpAdaptationInfo(originalInfo, adaptedOpType,
 			adaptorTree);
 		return new InfoTree(adaptedInfo, originalTree.dependencies());

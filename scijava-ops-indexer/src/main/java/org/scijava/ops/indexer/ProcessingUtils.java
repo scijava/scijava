@@ -44,7 +44,7 @@ import static javax.lang.model.element.ElementKind.METHOD;
  *
  * @author Gabriel Selzer
  */
-public final class ProcessingUtils {
+final class ProcessingUtils {
 
 	/**
 	 * Given a Javadoc comment, separates the comment by the Javadoc tags

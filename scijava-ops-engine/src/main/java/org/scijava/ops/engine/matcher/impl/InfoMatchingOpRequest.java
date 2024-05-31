@@ -32,8 +32,8 @@ package org.scijava.ops.engine.matcher.impl;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRequest;
 import org.scijava.types.Nil;
-import org.scijava.types.Types;
-import org.scijava.types.inference.GenericAssignability;
+import org.scijava.common3.Types;
+import org.scijava.types.infer.GenericAssignability;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -63,9 +63,9 @@ public class InfoMatchingOpRequest implements OpRequest {
 
 	public InfoMatchingOpRequest(OpInfo info, Nil<?> specialType) {
 		this.name = info.names().get(0);
-		Type from = specialType.getType();
+		Type from = specialType.type();
 		Type to = info.opType();
-		this.type = Types.getExactSuperType(to, Types.raw(from));
+		this.type = Types.superTypeOf(to, Types.raw(from));
 		if (this.type instanceof ParameterizedType) {
 			if (!GenericAssignability.checkGenericAssignability(from,
 				(ParameterizedType) this.type, this.map, true))
@@ -75,14 +75,14 @@ public class InfoMatchingOpRequest implements OpRequest {
 			if (!Types.isAssignable(from, this.type, this.map))
 				throw new IllegalArgumentException();
 		}
-		args = info.inputs().stream().map(m -> mappedType(m.getType(), this.map))
+		args = info.inputs().stream().map(m -> mappedType(m.type(), this.map))
 			.toArray(Type[]::new);
 		outType = mappedType(info.outputType(), this.map);
 	}
 
 	private Type mappedType(Type t, Map<TypeVariable<?>, Type> map) {
 		try {
-			return Types.substituteTypeVariables(t, map);
+			return Types.unroll(t, map);
 		}
 		catch (Exception e) {
 			return t;
@@ -90,27 +90,27 @@ public class InfoMatchingOpRequest implements OpRequest {
 	}
 
 	@Override
-	public String getName() {
+	public String name() {
 		return this.name;
 	}
 
 	@Override
-	public Type getType() {
+	public Type type() {
 		return this.type;
 	}
 
 	@Override
-	public Type getOutType() {
+	public Type outType() {
 		return this.outType;
 	}
 
 	@Override
-	public Type[] getArgs() {
+	public Type[] argTypes() {
 		return this.args;
 	}
 
 	@Override
-	public String getLabel() {
+	public String label() {
 		final StringBuilder sb = new StringBuilder();
 		OpRequest.append(sb, name);
 		if (type != null) {

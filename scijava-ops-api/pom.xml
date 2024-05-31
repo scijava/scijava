@@ -81,7 +81,7 @@
 	</mailingLists>
 
 	<scm>
-		<connection>scm:git:git://github.com/scijava/scijava</connection>
+		<connection>scm:git:https://github.com/scijava/scijava</connection>
 		<developerConnection>scm:git:git@github.com:scijava/scijava</developerConnection>
 		<tag>HEAD</tag>
 		<url>https://github.com/scijava/scijava</url>
@@ -101,11 +101,20 @@
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
-		<scijava-ops-api.allowedDuplicateClasses>${scijava.allowedDuplicateClasses},com.github.therapi.runtimejavadoc.repack.com.eclipsesource.json.*</scijava-ops-api.allowedDuplicateClasses>
-		<allowedDuplicateClasses>${scijava-ops-api.allowedDuplicateClasses}</allowedDuplicateClasses>
 	</properties>
+
 	<dependencies>
 		<!-- SciJava dependencies -->
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-common3</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-discovery</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-function</artifactId>
@@ -126,7 +135,5 @@
 			<artifactId>scijava-types</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
-		<!-- Test scope dependencies -->
 	</dependencies>
 </project>

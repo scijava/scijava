@@ -199,7 +199,7 @@ public class CharArray extends AbstractPrimitiveArray<char[], Character> {
 	public boolean addAll(final int index,
 		final Collection<? extends Character> c)
 	{
-		if (c.size() == 0) return false;
+		if (c.isEmpty()) return false;
 		insert(index, c.size());
 		int i = index;
 		for (final char e : c) {

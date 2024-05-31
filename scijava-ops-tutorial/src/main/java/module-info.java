@@ -28,8 +28,6 @@
  */
 
 module org.scijava.ops.tutorial{
-	exports org.scijava.ops.tutorial;
-
 	// -- Open plugins to scijava-ops
 	opens org.scijava.ops.tutorial to org.scijava.ops.engine;
 
@@ -37,15 +35,9 @@ module org.scijava.ops.tutorial{
 	requires java.scripting;
 	requires net.imglib2;
 	requires net.imglib2.algorithm;
-	requires net.imglib2.algorithm.fft2;
 	requires net.imglib2.roi;
-	requires org.joml;
-	requires org.scijava.collections;
 	requires org.scijava.function;
-	requires org.scijava.meta;
 	requires org.scijava.ops.api;
-	requires org.scijava.ops.engine;
-	requires org.scijava.ops.image;
 	requires org.scijava.ops.spi;
 	requires org.scijava.parsington;
 	requires org.scijava.priority;
@@ -54,9 +46,6 @@ module org.scijava.ops.tutorial{
 	requires org.scijava;
 
 	// FIXME: these module names derive from filenames and are thus unstable
-	requires commons.math3;
 	requires ojalgo;
 	requires jama;
-	requires mines.jtk;
-
 }

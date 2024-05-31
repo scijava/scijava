@@ -117,7 +117,7 @@ public class CopyRAITest extends AbstractOpTest {
 	}
 
 	@Test
-	public void copyRAINoOutputTest() {
+	public void testCopyRAINoOutput() {
 		final RandomAccessibleInterval<UnsignedByteType> output = ops.op("copy.rai")
 			.input(input).outType(
 				new Nil<RandomAccessibleInterval<UnsignedByteType>>()
@@ -134,7 +134,7 @@ public class CopyRAITest extends AbstractOpTest {
 	}
 
 	@Test
-	public void copyRAIWithOutputTest() {
+	public void testCopyRAIWithOutput() {
 		final Img<UnsignedByteType> output = input.factory().create(input, input
 			.firstElement());
 
@@ -149,7 +149,7 @@ public class CopyRAITest extends AbstractOpTest {
 	}
 
 	@Test
-	public void copyRAIDifferentSizeTest() {
+	public void testCopyRAIDifferentSize() {
 
 		// create a copy op
 		final Computers.Arity1<IntervalView<UnsignedByteType>, RandomAccessibleInterval<UnsignedByteType>> copy =

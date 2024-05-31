@@ -199,7 +199,7 @@ public class BoolArray extends AbstractPrimitiveArray<boolean[], Boolean> {
 	public boolean addAll(final int index,
 		final Collection<? extends Boolean> c)
 	{
-		if (c.size() == 0) return false;
+		if (c.isEmpty()) return false;
 		insert(index, c.size());
 		int i = index;
 		for (final boolean e : c) {

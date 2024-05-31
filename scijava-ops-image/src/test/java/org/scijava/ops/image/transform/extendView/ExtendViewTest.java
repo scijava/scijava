@@ -65,7 +65,7 @@ public class ExtendViewTest extends AbstractOpTest {
 		{};
 
 	@Test
-	public void defaultExtendTest() {
+	public void testDefaultExtend() {
 		BiFunction<RandomAccessibleInterval<DoubleType>, OutOfBoundsFactory<DoubleType, ? super RandomAccessibleInterval<DoubleType>>, RandomAccessible<DoubleType>> extendFunc =
 			OpBuilder.matchFunction(ops, "transform.extendView", raiNil,
 				new Nil<OutOfBoundsFactory<DoubleType, ? super RandomAccessibleInterval<DoubleType>>>()
@@ -92,5 +92,4 @@ public class ExtendViewTest extends AbstractOpTest {
 
 		assertEquals(il2.get().get(), opr.get().get(), 1e-10);
 	}
-
 }

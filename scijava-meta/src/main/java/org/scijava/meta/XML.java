@@ -37,7 +37,6 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.StringWriter;
 import java.net.URL;
-import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -56,7 +55,6 @@ import javax.xml.xpath.XPathFactory;
 
 import org.scijava.common3.Classes;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -77,44 +75,31 @@ public class XML {
 	/** XPath evaluation mechanism. */
 	private final XPath xpath;
 
-	private final boolean debug = "debug".equals(System.getProperty(
-		"scijava.log.level"));
+	private final boolean debug =
+		"debug".equals(System.getProperty("scijava.log.level"));
 
 	/** Parses XML from the given file. */
-	public XML(final File file) throws ParserConfigurationException, SAXException,
-		IOException
-	{
+	public XML(final File file) throws IOException {
 		this(file.getAbsolutePath(), loadXML(file));
 	}
 
 	/** Parses XML from the given URL. */
-	public XML(final URL url) throws ParserConfigurationException, SAXException,
-		IOException
-	{
+	public XML(final URL url) throws IOException {
 		this(url.getPath(), loadXML(url));
 	}
 
 	/** Parses XML from the given input stream. */
-	public XML(final InputStream in) throws ParserConfigurationException,
-		SAXException, IOException
-	{
+	public XML(final InputStream in) throws IOException {
 		this(null, loadXML(in));
 	}
 
 	/** Parses XML from the given string. */
-	public XML(final String s) throws ParserConfigurationException, SAXException,
-		IOException
-	{
+	public XML(final String s) throws IOException {
 		this(null, loadXML(s));
 	}
 
 	/** Creates an XML object for an existing document. */
-	public XML(final Document doc) {
-		this(null, doc);
-	}
-
-	/** Creates an XML object for an existing document. */
-	public XML(final String path, final Document doc) {
+	private XML(final String path, final Document doc) {
 		this.path = path;
 		this.doc = doc;
 
@@ -130,7 +115,7 @@ public class XML {
 			System.err.println(Classes.location(XPathFactory.class));
 		}
 
-		XPath xp = null;
+		XPath xp;
 		final Thread thread = Thread.currentThread();
 		final ClassLoader contextClassLoader = thread.getContextClassLoader();
 		try {
@@ -155,6 +140,7 @@ public class XML {
 				}
 				catch (Error e) {
 					if (debug) e.printStackTrace();
+					if (loader == null) throw e;
 					loader = loader.getParent();
 					if (loader == null) throw e;
 					thread.setContextClassLoader(loader);
@@ -163,20 +149,17 @@ public class XML {
 			xpath = xp;
 		}
 		finally {
-			thread.setContextClassLoader(contextClassLoader);
+			if (contextClassLoader != null) {
+				thread.setContextClassLoader(contextClassLoader);
+			}
 		}
 	}
 
 	// -- XML methods --
 
 	/** Gets the path to the XML document, or null if none. */
-	public String getPath() {
+	public String path() {
 		return path;
-	}
-
-	/** Gets the XML's DOM representation. */
-	public Document getDocument() {
-		return doc;
 	}
 
 	/** Obtains the CDATA identified by the given XPath expression. */
@@ -184,23 +167,6 @@ public class XML {
 		final NodeList nodes = xpath(expression);
 		if (nodes == null || nodes.getLength() == 0) return null;
 		return cdata(nodes.item(0));
-	}
-
-	/** Obtains the elements identified by the given XPath expression. */
-	public ArrayList<Element> elements(final String expression) {
-		return elements(xpath(expression));
-	}
-
-	/** Obtains the nodes identified by the given XPath expression. */
-	public NodeList xpath(final String expression) {
-		final Object result;
-		try {
-			result = xpath.evaluate(expression, doc, XPathConstants.NODESET);
-		}
-		catch (final XPathExpressionException e) {
-			return null;
-		}
-		return (NodeList) result;
 	}
 
 	// -- Object methods --
@@ -222,9 +188,9 @@ public class XML {
 	// -- Utility methods --
 
 	/** Gets the CData beneath the given node. */
-	public static String cdata(final Node item) {
+	private static String cdata(final Node item) {
 		final NodeList children = item.getChildNodes();
-		if (children == null || children.getLength() == 0) return null;
+		if (children.getLength() == 0) return null;
 		for (int i = 0; i < children.getLength(); i++) {
 			final Node child = children.item(i);
 			if (child.getNodeType() != Node.TEXT_NODE) continue;
@@ -233,63 +199,43 @@ public class XML {
 		return null;
 	}
 
-	/** Gets the CData beneath the given element's specified child. */
-	public static String cdata(final Element el, final String child) {
-		NodeList children = el.getElementsByTagName(child);
-		if (children == null || children.getLength() == 0) return null;
-		return cdata(children.item(0));
-	}
-
-	/** Gets the element nodes from the given node list. */
-	public static ArrayList<Element> elements(final NodeList nodes) {
-		final ArrayList<Element> elements = new ArrayList<>();
-		if (nodes != null) {
-			for (int i = 0; i < nodes.getLength(); i++) {
-				final Node node = nodes.item(i);
-				if (node instanceof Element) elements.add((Element) node);
-			}
-		}
-		return elements;
-	}
-
-	/** Gets the given element's specified child elements. */
-	public static ArrayList<Element> elements(final Element el,
-		final String child)
-	{
-		return elements(el.getElementsByTagName(child));
-	}
-
 	// -- Helper methods --
 
 	/** Loads an XML document from the given file. */
-	private static Document loadXML(final File file)
-		throws ParserConfigurationException, SAXException, IOException
-	{
-		return createBuilder().parse(file.getAbsolutePath());
+	private static Document loadXML(final File file) throws IOException {
+		try {
+			return createBuilder().parse(file.getAbsolutePath());
+		}
+		catch (ParserConfigurationException | SAXException exc) {
+			throw new IOException(exc);
+		}
 	}
 
 	/** Loads an XML document from the given URL. */
-	private static Document loadXML(final URL url)
-		throws ParserConfigurationException, SAXException, IOException
-	{
+	private static Document loadXML(final URL url) throws IOException {
 		try (final InputStream in = url.openStream()) {
-			final Document document = loadXML(in);
-			return document;
+			return loadXML(in);
 		}
 	}
 
 	/** Loads an XML document from the given input stream. */
-	protected static Document loadXML(final InputStream in)
-		throws ParserConfigurationException, SAXException, IOException
-	{
-		return createBuilder().parse(in);
+	private static Document loadXML(final InputStream in) throws IOException {
+		try {
+			return createBuilder().parse(in);
+		}
+		catch (ParserConfigurationException | SAXException exc) {
+			throw new IOException(exc);
+		}
 	}
 
 	/** Loads an XML document from the given input stream. */
-	protected static Document loadXML(final String s)
-		throws ParserConfigurationException, SAXException, IOException
-	{
-		return createBuilder().parse(new ByteArrayInputStream(s.getBytes()));
+	private static Document loadXML(final String s) throws IOException {
+		try {
+			return createBuilder().parse(new ByteArrayInputStream(s.getBytes()));
+		}
+		catch (ParserConfigurationException | SAXException exc) {
+			throw new IOException(exc);
+		}
 	}
 
 	/** Creates an XML document builder. */
@@ -312,4 +258,15 @@ public class XML {
 		return stringWriter.getBuffer().toString();
 	}
 
+	/** Obtains the nodes identified by the given XPath expression. */
+	private NodeList xpath(final String expression) {
+		final Object result;
+		try {
+			result = xpath.evaluate(expression, doc, XPathConstants.NODESET);
+		}
+		catch (final XPathExpressionException e) {
+			return null;
+		}
+		return (NodeList) result;
+	}
 }

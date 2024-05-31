@@ -13,9 +13,9 @@ import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
-import org.scijava.types.Any;
+import org.scijava.common3.Any;
 import org.scijava.types.Nil;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 /**
  * Convenience class for looking up and/or executing ops using a builder
@@ -129,7 +129,7 @@ public class OpBuilder {
 		final Nil<Producer<Object>> specialType = new Nil<>() {
 
 			@Override
-			public Type getType() {
+			public Type type() {
 				return Types.parameterize(Producer.class, new Type[] { Object.class });
 			}
 		};
@@ -798,9 +798,9 @@ public class OpBuilder {
 			final Nil<Producer<O>> specialType = new Nil<>() {
 
 				@Override
-				public Type getType() {
+				public Type type() {
 					return Types.parameterize(Producer.class, new Type[] { outType
-						.getType() });
+						.type() });
 				}
 			};
 			return env.op(opName, specialType, new Nil<?>[0], outType,
@@ -20928,8 +20928,8 @@ public class OpBuilder {
 	{
 		final Type[] types = new Type[inTypes.length + 1];
 		for (int i = 0; i < inTypes.length; i++)
-			types[i] = inTypes[i].getType();
-		types[types.length - 1] = outType.getType();
+			types[i] = inTypes[i].type();
+		types[types.length - 1] = outType.type();
 		final Type specialType = Types.parameterize(opClass, types);
 		return (T) env.op(opName, Nil.of(specialType), inTypes, outType);
 	}
@@ -20941,8 +20941,8 @@ public class OpBuilder {
 	{
 		final Type[] types = new Type[inTypes.length + 1];
 		for (int i = 0; i < inTypes.length; i++)
-			types[i] = inTypes[i].getType();
-		types[types.length - 1] = outType.getType();
+			types[i] = inTypes[i].type();
+		types[types.length - 1] = outType.type();
 		final Type specialType = Types.parameterize(opClass, types);
 		return (T) env.op(opName, Nil.of(specialType), inTypes, outType, hints);
 	}
@@ -21653,8 +21653,8 @@ public class OpBuilder {
 	{
 		final Type[] types = new Type[inTypes.length + 1];
 		for (int i = 0; i < inTypes.length; i++)
-			types[i] = inTypes[i].getType();
-		types[types.length - 1] = outType.getType();
+			types[i] = inTypes[i].type();
+		types[types.length - 1] = outType.type();
 		final Type specialType = Types.parameterize(opClass, types);
 		final Nil<?>[] nils = new Nil[inTypes.length + 1];
 		System.arraycopy(inTypes, 0, nils, 0, inTypes.length);
@@ -21669,8 +21669,8 @@ public class OpBuilder {
 	{
 		final Type[] types = new Type[inTypes.length + 1];
 		for (int i = 0; i < inTypes.length; i++)
-			types[i] = inTypes[i].getType();
-		types[types.length - 1] = outType.getType();
+			types[i] = inTypes[i].type();
+		types[types.length - 1] = outType.type();
 		final Type specialType = Types.parameterize(opClass, types);
 		final Nil<?>[] nils = new Nil[inTypes.length + 1];
 		System.arraycopy(inTypes, 0, nils, 0, inTypes.length);
@@ -27812,7 +27812,7 @@ public class OpBuilder {
 	{
 		final Type[] types = new Type[inTypes.length];
 		for (int i = 0; i < inTypes.length; i++)
-			types[i] = inTypes[i].getType();
+			types[i] = inTypes[i].type();
 		final Type specialType = Types.parameterize(opClass, types);
 		return (T) env.op(opName, Nil.of(specialType), inTypes, outType);
 	}
@@ -27824,7 +27824,7 @@ public class OpBuilder {
 	{
 		final Type[] types = new Type[inTypes.length];
 		for (int i = 0; i < inTypes.length; i++)
-			types[i] = inTypes[i].getType();
+			types[i] = inTypes[i].type();
 		final Type specialType = Types.parameterize(opClass, types);
 		return (T) env.op(opName, Nil.of(specialType), inTypes, outType, hints);
 	}

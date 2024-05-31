@@ -41,6 +41,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.scijava.common3.GenericTyped;
 import org.scijava.types.ExampleTypes.Bag;
 import org.scijava.types.ExampleTypes.Thing;
 
@@ -56,7 +57,7 @@ public class NilTest {
 		final Nil<Bag<Q>> nilBag = new Nil<Bag<Q>>() {};
 
 		// Bag<Q>
-		final ParameterizedType pType = (ParameterizedType) nilBag.getType();
+		final ParameterizedType pType = (ParameterizedType) nilBag.type();
 		assertSame(Bag.class, pType.getRawType());
 		final Type pBound = extractSingleBound(pType);
 
@@ -77,7 +78,7 @@ public class NilTest {
 		final GenericTyped genericTyped = (GenericTyped) listProxy;
 
 		// List<N>
-		final ParameterizedType pType = (ParameterizedType) genericTyped.getType();
+		final ParameterizedType pType = (ParameterizedType) genericTyped.type();
 		assertSame(List.class, pType.getRawType());
 		final Type pBound = extractSingleBound(pType);
 

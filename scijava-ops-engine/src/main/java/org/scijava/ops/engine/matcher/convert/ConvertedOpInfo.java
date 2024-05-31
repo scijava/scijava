@@ -43,21 +43,21 @@ import org.scijava.meta.Versions;
 import org.scijava.ops.api.*;
 import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.engine.conversionLoss.LossReporter;
+import org.scijava.ops.engine.struct.FunctionalMethodType;
 import org.scijava.ops.engine.struct.OpRetypingMemberParser;
 import org.scijava.ops.engine.struct.RetypingRequest;
 import org.scijava.ops.engine.util.Infos;
 import org.scijava.priority.Priority;
-import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
-import org.scijava.types.Any;
+import org.scijava.common3.Any;
 import org.scijava.types.Nil;
-import org.scijava.types.Types;
-import org.scijava.types.inference.FunctionalInterfaces;
-import org.scijava.types.inference.GenericAssignability;
+import org.scijava.common3.Types;
+import org.scijava.types.infer.FunctionalInterfaces;
+import org.scijava.types.infer.GenericAssignability;
 
 /**
  * An {@link OpInfo} whose input and output types are transformed through the
@@ -225,7 +225,7 @@ public class ConvertedOpInfo implements OpInfo {
 		for (Member<?> m : struct()) {
 			if (m.isInput() || m.isOutput()) {
 				sb.append("_");
-				sb.append(Conversions.getClassName(m.getType()));
+				sb.append(Conversions.getClassName(m.type()));
 			}
 		}
 		return sb.toString();
@@ -306,7 +306,7 @@ public class ConvertedOpInfo implements OpInfo {
 
 	@Override
 	public String version() {
-		return Versions.getVersion(this.getClass());
+		return Versions.of(this.getClass());
 	}
 
 	/**
@@ -350,7 +350,7 @@ public class ConvertedOpInfo implements OpInfo {
 		for (int i = 0; i < originalInputs.size(); i++) {
 			typeAssigns.clear();
 			// Start by looking at the input type T of the preconverter
-			var type = preconverters.get(i).instance().getType();
+			var type = preconverters.get(i).instance().type();
 			var pType = (ParameterizedType) type;
 			inTypes[i] = pType.getActualTypeArguments()[0];
 			// Sometimes, the type of the Op instance can contain wildcards.
@@ -367,7 +367,7 @@ public class ConvertedOpInfo implements OpInfo {
 				typeAssigns //
 			);
 			// Map type variables in T to Types inferred above
-			inTypes[i] = Types.mapVarToTypes(inTypes[i], typeAssigns);
+			inTypes[i] = Types.unroll(inTypes[i], typeAssigns);
 		}
 		return inTypes;
 	}
@@ -380,7 +380,7 @@ public class ConvertedOpInfo implements OpInfo {
 			return originalOutput;
 		}
 		// Start by looking at the output type T of the postconverter
-		var type = postconverter.instance().getType();
+		var type = postconverter.instance().type();
 		var pType = (ParameterizedType) type;
 		Type outType = pType.getActualTypeArguments()[1];
 		// Sometimes, the type of the Op instance can contain wildcards.
@@ -398,7 +398,7 @@ public class ConvertedOpInfo implements OpInfo {
 			vars //
 		);
 		// map type variables in T to Types inferred in Step 2a
-		return Types.mapVarToTypes(outType, vars);
+		return Types.unroll(outType, vars);
 	}
 
 	@Override
@@ -418,7 +418,7 @@ public class ConvertedOpInfo implements OpInfo {
 	 * @return {@code opType}, without any {@link Any}s.
 	 */
 	private static Type mapAnys(Type opType, OpInfo info) {
-		var raw = Types.parameterizeRaw(Types.raw(opType));
+		var raw = Types.parameterize(Types.raw(opType));
 		Map<TypeVariable<?>, Type> reqMap = new HashMap<>();
 		GenericAssignability.inferTypeVariables(new Type[] { raw }, new Type[] {
 			opType }, reqMap);
@@ -431,7 +431,7 @@ public class ConvertedOpInfo implements OpInfo {
 				reqMap.put(key, infoMap.get(key));
 			}
 		}
-		return Types.mapVarToTypes(raw, reqMap);
+		return Types.unroll(raw, reqMap);
 	}
 
 	/**
@@ -467,7 +467,7 @@ public class ConvertedOpInfo implements OpInfo {
 		List<Type> inputs = inputTypes();
 		for (int i = 0; i < inputs.size(); i++) {
 			var from = inputs.get(i);
-			var to = Types.mapVarToTypes(originalInputs.get(i), typeVarAssigns);
+			var to = Types.unroll(originalInputs.get(i), typeVarAssigns);
 			penalty += determineLoss(env, Nil.of(from), Nil.of(to));
 		}
 
@@ -495,15 +495,15 @@ public class ConvertedOpInfo implements OpInfo {
 		Nil<R> to)
 	{
 		Type specialType = Types.parameterize(LossReporter.class, new Type[] { from
-			.getType(), to.getType() });
+			.type(), to.type() });
 		@SuppressWarnings("unchecked")
 		Nil<LossReporter<T, R>> specialTypeNil = (Nil<LossReporter<T, R>>) Nil.of(
 			specialType);
 		try {
 			Type nilFromType = Types.parameterize(Nil.class, new Type[] { from
-				.getType() });
+				.type() });
 			Type nilToType = Types.parameterize(Nil.class, new Type[] { to
-				.getType() });
+				.type() });
 			Hints h = new Hints( //
 				BaseOpHints.Adaptation.FORBIDDEN, //
 				BaseOpHints.Conversion.FORBIDDEN, //
@@ -583,14 +583,14 @@ public class ConvertedOpInfo implements OpInfo {
 	{
 		Map<TypeVariable<?>, Type> map = new HashMap<>();
 		Class<?> declaringClass = fMethod.getDeclaringClass();
-		Type genericDeclaringClass = Types.parameterizeRaw(declaringClass);
-		Type genericClass = Types.parameterizeRaw(opType);
-		Type superGenericClass = Types.getExactSuperType(genericClass,
+		Type genericDeclaringClass = Types.parameterize(declaringClass);
+		Type genericClass = Types.parameterize(opType);
+		Type superGenericClass = Types.superTypeOf(genericClass,
 			declaringClass);
 		GenericAssignability.inferTypeVariables(new Type[] {
 			genericDeclaringClass }, new Type[] { superGenericClass }, map);
 
-		return Types.mapVarToTypes(types, map);
+		return Types.unroll(types, map);
 	}
 
 	/**

@@ -35,7 +35,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.scijava.ops.api.OpMatchingException;
-import org.scijava.ops.engine.OpCandidate;
+import org.scijava.ops.engine.matcher.OpCandidate;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpRequest;
 import org.scijava.ops.engine.MatchingConditions;

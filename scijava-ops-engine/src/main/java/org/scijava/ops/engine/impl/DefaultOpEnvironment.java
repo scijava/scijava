@@ -30,6 +30,8 @@
 package org.scijava.ops.engine.impl;
 
 import com.google.common.collect.TreeMultimap;
+import org.scijava.common3.Any;
+import org.scijava.common3.Types;
 import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.ManualDiscoverer;
 import org.scijava.meta.Versions;
@@ -37,22 +39,24 @@ import org.scijava.ops.api.*;
 import org.scijava.ops.engine.*;
 import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
+import org.scijava.ops.engine.matcher.OpCandidate;
 import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.engine.matcher.impl.DefaultOpMatcher;
 import org.scijava.ops.engine.matcher.impl.DefaultOpRequest;
 import org.scijava.ops.engine.matcher.impl.InfoMatchingOpRequest;
 import org.scijava.ops.engine.matcher.impl.DefaultOpClassInfo;
+import org.scijava.ops.engine.struct.FunctionalMethodType;
 import org.scijava.ops.engine.struct.FunctionalParameters;
 import org.scijava.ops.engine.util.Infos;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.priority.Priority;
-import org.scijava.progress.Progress;
-import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.types.*;
-import org.scijava.types.inference.GenericAssignability;
+import org.scijava.types.extract.DefaultTypeReifier;
+import org.scijava.types.extract.TypeReifier;
+import org.scijava.types.infer.GenericAssignability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,7 +86,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	private final OpMatcher matcher;
 
-	private final TypeReifier typeService;
+	private final TypeReifier typeReifier;
 
 	private final OpHistory history;
 
@@ -91,8 +95,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * search size for any Op request to the number of known Ops with the name
 	 * given in the request.
 	 */
-	private final TreeMultimap<String, OpInfo> opDirectory = TreeMultimap
-		.create();
+	private final TreeMultimap<String, OpInfo> opDirectory = TreeMultimap.create();
 
 	/**
 	 * Data structure storing all known Ops, discoverable using their id.
@@ -130,7 +133,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	public DefaultOpEnvironment(final Discoverer... discoverers) {
-		typeService = new DefaultTypeReifier(metaDiscoverer);
+		typeReifier = new DefaultTypeReifier(metaDiscoverer);
 		history = OpHistory.getOpHistory();
 		matcher = new DefaultOpMatcher( //
 			metaDiscoverer.discover(MatchingRoutine.class) //
@@ -168,16 +171,12 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	@Override
 	public void discoverUsing(Discoverer... arr) {
-		Progress.register(this, "OpEnvironment: Discovering Ops");
-		Progress.defineTotal(arr.length);
 		for (Discoverer d : arr) {
 			discoverers.add(d);
 			d.discover(OpInfo.class).forEach(this::registerInfosFrom);
 			d.discover(Op.class).forEach(this::registerInfosFrom);
 			d.discover(OpCollection.class).forEach(this::registerInfosFrom);
-			Progress.update();
 		}
-		Progress.complete();
 	}
 
 	@Override
@@ -217,19 +216,14 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@Override
-	public InfoTree treeFromInfo(OpInfo info, Nil<?> specialType, Hints hints) {
-		return findOp(info, specialType, hints).infoTree();
-	}
-
-	@Override
-	public <T> T opFromInfoChain(final InfoTree tree, final Nil<T> specialType,
+	public <T> T opFromInfoTree(final InfoTree tree, final Nil<T> specialType,
 		Hints hints)
 	{
-		if (!(specialType.getType() instanceof ParameterizedType))
+		if (!(specialType.type() instanceof ParameterizedType))
 			throw new IllegalArgumentException("TODO");
 		@SuppressWarnings("unchecked")
 		OpInstance<T> instance = (OpInstance<T>) tree.newInstance(specialType
-			.getType());
+			.type());
 		var conditions = MatchingConditions.from( //
 			new InfoMatchingOpRequest(tree.info(), Nil.of(tree.info().opType())), //
 			hints //
@@ -239,7 +233,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@Override
-	public InfoTree treeFromID(String signature) {
+	public InfoTree treeFromSignature(String signature) {
 		if (idDirectory == null) initIdDirectory();
 		List<InfoTreeGenerator> infoTreeGenerators = discoverers.stream() //
 			.flatMap(d -> d.discover(InfoTreeGenerator.class).stream()) //
@@ -252,7 +246,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	@Override
 	public Type genericType(Object obj) {
-		return typeService.reify(obj);
+		return typeReifier.reify(obj);
 	}
 
 	@Override
@@ -261,7 +255,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	{
 		return new DefaultOpClassInfo( //
 			opClass, //
-			Versions.getVersion(opClass), //
+			Versions.of(opClass), //
 			"", //
 			new Hints(), //
 			priority, //
@@ -270,8 +264,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@Override
-	public <T> T bakeLambdaType(T op, Type type) {
-		return LambdaTypeBaker.bakeLambdaType(op, type);
+	public <T> T typeLambda(Nil<T> opType, T lambda) {
+		return LambdaTypeBaker.bakeLambdaType(lambda, opType.type());
 	}
 
 	@Override
@@ -381,7 +375,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		final Nil<?>[] inTypes, final Nil<?> outType, Hints hints)
 	{
 		final OpRequest request = DefaultOpRequest.fromTypes(opName, specialType
-			.getType(), outType != null ? outType.getType() : null, toTypes(inTypes));
+			.type(), outType != null ? outType.type() : null, toTypes(inTypes));
 
 		var conditions = MatchingConditions.from(request, hints);
 		try {
@@ -454,7 +448,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	private Type[] toTypes(Nil<?>... nils) {
 		return Arrays.stream(nils) //
 			.filter(Objects::nonNull) //
-			.map(Nil::getType) //
+			.map(Nil::type) //
 			.toArray(Type[]::new);
 	}
 
@@ -515,9 +509,9 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		Hints hints)
 	{
 		final List<RichOp<?>> conditions = resolveOpDependencies(candidate, hints);
-		InfoTree adaptorChain = new DependencyRichOpInfoTree(candidate.opInfo(),
+		InfoTree adaptorTree = new DependencyRichOpInfoTree(candidate.opInfo(),
 			conditions);
-		return adaptorChain.newInstance(candidate.getType());
+		return adaptorTree.newInstance(candidate.getType());
 	}
 
 	/**
@@ -551,8 +545,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 					", then you must define a new OpWrapper for that class!");
 			}
 			// obtain the generic type of the Op w.r.t. the Wrapper class
-			Type reifiedSuperType = Types.getExactSuperType(instance.getType(),
-				wrapper);
+			Type reifiedSuperType = Types.superTypeOf(instance.type(), wrapper);
 			// wrap the Op
 			final OpWrapper<T> opWrapper = (OpWrapper<T>) wrappers.get(Types.raw(
 				reifiedSuperType));
@@ -564,7 +557,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		}
 		catch (NullPointerException e) {
 			throw new IllegalArgumentException("No wrapper exists for " + Types.raw(
-				instance.getType()).toString() + ".");
+				instance.type()).toString() + ".");
 		}
 	}
 
@@ -641,7 +634,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 				BaseOpHints.History.IGNORE //
 			).minus(BaseOpHints.Progress.TRACK);
 		// Then, match dependencies
-		final List<RichOp<?>> dependencyChains = new ArrayList<>();
+		final List<RichOp<?>> dependencies = new ArrayList<>();
 		for (final OpDependencyMember<?> dependency : Infos.dependencies(info)) {
 			final OpRequest request = inferOpRequest(dependency,
 				dependencyTypeVarAssigns);
@@ -651,16 +644,16 @@ public class DefaultOpEnvironment implements OpEnvironment {
 				var conditions = MatchingConditions.from(request, depHints);
 				OpInstance<?> instance = generateCacheHit(conditions);
 				// add Op to dependencies
-				dependencyChains.add(wrapOp(instance, conditions));
+				dependencies.add(wrapOp(instance, conditions));
 				// refine current type variable knowledge
 				GenericAssignability //
-					.inferTypeVariables(request.getType(), instance.getType()) //
+					.inferTypeVariables(request.type(), instance.type()) //
 					.forEach(dependencyTypeVarAssigns::putIfAbsent);
 
 			}
 			catch (final OpMatchingException e) {
 				String message = DependencyMatchingException.message(info
-					.implementationName(), dependency.getKey(), request);
+					.implementationName(), dependency.key(), request);
 				if (e instanceof DependencyMatchingException) {
 					throw new DependencyMatchingException(message,
 						(DependencyMatchingException) e);
@@ -668,14 +661,14 @@ public class DefaultOpEnvironment implements OpEnvironment {
 				throw new DependencyMatchingException(message);
 			}
 		}
-		return dependencyChains;
+		return dependencies;
 	}
 
 	private OpRequest inferOpRequest(OpDependencyMember<?> dependency,
 		Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
-		final Type mappedDependencyType = Types.mapVarToTypes(new Type[] {
-			dependency.getType() }, typeVarAssigns)[0];
+		final Type mappedDependencyType = Types.unroll(
+			new Type[] { dependency.type() }, typeVarAssigns)[0];
 		final String dependencyName = dependency.getDependencyName();
 		return inferOpRequest(mappedDependencyType, dependencyName, typeVarAssigns);
 	}
@@ -728,8 +721,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			.map(FunctionalMethodType::type) //
 			.toArray(Type[]::new);
 
-		Type[] mappedInputs = Types.mapVarToTypes(inputs, typeVarAssigns);
-		Type[] mappedOutputs = Types.mapVarToTypes(outputs, typeVarAssigns);
+		Type[] mappedInputs = Types.unroll(inputs, typeVarAssigns);
+		Type[] mappedOutputs = Types.unroll(outputs, typeVarAssigns);
 
 		final int numOutputs = mappedOutputs.length;
 		if (numOutputs != 1) {
@@ -789,7 +782,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@Override
-	public double getPriority() {
+	public double priority() {
 		return Priority.VERY_LOW;
 	}
 }

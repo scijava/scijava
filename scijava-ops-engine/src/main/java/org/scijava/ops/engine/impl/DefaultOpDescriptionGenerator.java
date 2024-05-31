@@ -39,7 +39,7 @@ import org.scijava.ops.engine.util.Infos;
 import org.scijava.priority.Priority;
 import org.scijava.struct.ItemIO;
 import org.scijava.types.Nil;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ import static org.scijava.struct.ItemIO.MUTABLE;
 public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 
 	@Override
-	public double getPriority() {
+	public double priority() {
 		return Priority.VERY_HIGH;
 	}
 
@@ -80,7 +80,7 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 		Function<OpInfo, String> descriptionFunction)
 	{
 		// handle namespaces queries
-		String name = req.getName();
+		String name = req.name();
 		Optional<String> nsString = getNonOpString(env, name);
 		if (nsString.isPresent()) {
 			return nsString.get();
@@ -95,7 +95,7 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 			.distinct() //
 			.collect(Collectors.joining("\n\t- "));
 		if (opString.isEmpty()) return NO_OP_MATCHES;
-		return req.getName() + ":\n\t- " + opString;
+		return req.name() + ":\n\t- " + opString;
 	}
 
 	/**
@@ -169,7 +169,7 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 				.filter(m -> !ItemIO.CONTAINER.equals(m.getIOType())) //
 				.count();
 
-			Type[] args = req.getArgs();
+			Type[] args = req.argTypes();
 			if (args == null || args.length == numPureInputs) {
 				filtered.add(info);
 			}
@@ -195,7 +195,7 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 				sb.append("@CONTAINER ");
 			}
 			// describe member type
-			sb.append(describeType(env, Nil.of(m.getType())));
+			sb.append(describeType(env, Nil.of(m.type())));
 			if (!m.isRequired()) {
 				sb.append(" = null");
 			}
@@ -212,7 +212,7 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 			sb.append("None");
 		}
 		else {
-			sb.append(describeType(env, Nil.of(output.getType())));
+			sb.append(describeType(env, Nil.of(output.type())));
 		}
 		// return concatenation
 		return sb.toString();
@@ -220,13 +220,13 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 
 	private static <T> String describeType(OpEnvironment env, Nil<T> from) {
 		Type specialType = Types.parameterize(Function.class, new Type[] { Types
-			.parameterize(Nil.class, new Type[] { from.getType() }), String.class });
+			.parameterize(Nil.class, new Type[] { from.type() }), String.class });
 		@SuppressWarnings("unchecked")
 		Nil<Function<Nil<T>, String>> specialTypeNil =
 			(Nil<Function<Nil<T>, String>>) Nil.of(specialType);
 		try {
 			Type nilFromType = Types.parameterize(Nil.class, new Type[] { from
-				.getType() });
+				.type() });
 			Hints h = new Hints( //
 				BaseOpHints.Adaptation.FORBIDDEN, //
 				BaseOpHints.Conversion.FORBIDDEN, //
@@ -237,7 +237,7 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 			return op.apply(from);
 		}
 		catch (OpMatchingException e) {
-			return Types.raw(from.getType()).getSimpleName();
+			return Types.raw(from.type()).getSimpleName();
 		}
 	}
 

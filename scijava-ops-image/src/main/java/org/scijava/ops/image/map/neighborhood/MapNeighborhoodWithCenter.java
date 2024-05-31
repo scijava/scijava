@@ -30,8 +30,6 @@
 package org.scijava.ops.image.map.neighborhood;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.Ops;
 
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;

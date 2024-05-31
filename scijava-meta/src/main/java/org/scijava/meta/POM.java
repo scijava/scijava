@@ -35,13 +35,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.scijava.common3.Apps;
 import org.scijava.common3.Classes;
 import org.scijava.common3.URLs;
 import org.scijava.common3.Versioned;
-import org.xml.sax.SAXException;
 
 /**
  * Helper class for working with Maven POMs.
@@ -50,132 +47,124 @@ import org.xml.sax.SAXException;
  */
 public class POM extends XML implements Comparable<POM>, Versioned {
 
-	private String version;
+	private volatile String version;
 
 	/** Parses a POM from the given file. */
-	public POM(final File file) throws ParserConfigurationException, SAXException,
-		IOException
-	{
+	public POM(final File file) throws IOException {
 		super(file);
 	}
 
 	/** Parses a POM from the given URL. */
-	public POM(final URL url) throws ParserConfigurationException, SAXException,
-		IOException
-	{
+	public POM(final URL url) throws IOException {
 		super(url);
 	}
 
 	/** Parses a POM from the given input stream. */
-	public POM(final InputStream in) throws ParserConfigurationException,
-		SAXException, IOException
-	{
+	public POM(final InputStream in) throws IOException {
 		super(in);
 	}
 
 	/** Parses a POM from the given string. */
-	public POM(final String s) throws ParserConfigurationException, SAXException,
-		IOException
-	{
+	public POM(final String s) throws IOException {
 		super(s);
 	}
 
 	// -- POM methods --
 
 	/** Gets the POM's parent groupId. */
-	public String getParentGroupId() {
+	public String parentGroupId() {
 		return cdata("//project/parent/groupId");
 	}
 
 	/** Gets the POM's parent artifactId. */
-	public String getParentArtifactId() {
+	public String parentArtifactId() {
 		return cdata("//project/parent/artifactId");
 	}
 
 	/** Gets the POM's parent artifactId. */
-	public String getParentVersion() {
+	public String parentVersion() {
 		return cdata("//project/parent/version");
 	}
 
 	/** Gets the POM's groupId. */
-	public String getGroupId() {
+	public String groupId() {
 		final String groupId = cdata("//project/groupId");
 		if (groupId != null) return groupId;
-		return getParentGroupId();
+		return parentGroupId();
 	}
 
 	/** Gets the POM's artifactId. */
-	public String getArtifactId() {
+	public String artifactId() {
 		return cdata("//project/artifactId");
 	}
 
 	/** Gets the project name. */
-	public String getProjectName() {
+	public String projectName() {
 		return cdata("//project/name");
 	}
 
 	/** Gets the project description. */
-	public String getProjectDescription() {
+	public String projectDescription() {
 		return cdata("//project/description");
 	}
 
 	/** Gets the project URL. */
-	public String getProjectURL() {
+	public String projectURL() {
 		return cdata("//project/url");
 	}
 
 	/** Gets the project inception year. */
-	public String getProjectInceptionYear() {
+	public String projectInceptionYear() {
 		return cdata("//project/inceptionYear");
 	}
 
 	/** Gets the organization name. */
-	public String getOrganizationName() {
+	public String organizationName() {
 		return cdata("//project/organization/name");
 	}
 
 	/** Gets the organization URL. */
-	public String getOrganizationURL() {
+	public String organizationURL() {
 		return cdata("//project/organization/url");
 	}
 
 	/** Gets the SCM connection string. */
-	public String getSCMConnection() {
+	public String scmConnection() {
 		return cdata("//project/scm/connection");
 	}
 
 	/** Gets the SCM developerConnection string. */
-	public String getSCMDeveloperConnection() {
+	public String scmDeveloperConnection() {
 		return cdata("//project/scm/developerConnection");
 	}
 
 	/** Gets the SCM tag. */
-	public String getSCMTag() {
+	public String scmTag() {
 		return cdata("//project/scm/tag");
 	}
 
 	/** Gets the SCM URL. */
-	public String getSCMURL() {
+	public String scmURL() {
 		return cdata("//project/scm/url");
 	}
 
 	/** Gets the issue management system. */
-	public String getIssueManagementSystem() {
+	public String issueManagementSystem() {
 		return cdata("//project/issueManagement/system");
 	}
 
 	/** Gets the issue management URL. */
-	public String getIssueManagementURL() {
+	public String issueManagementURL() {
 		return cdata("//project/issueManagement/url");
 	}
 
 	/** Gets the CI management system. */
-	public String getCIManagementSystem() {
+	public String ciManagementSystem() {
 		return cdata("//project/ciManagement/system");
 	}
 
 	/** Gets the CI management URL. */
-	public String getCIManagementURL() {
+	public String ciManagementURL() {
 		return cdata("//project/ciManagement/url");
 	}
 
@@ -185,11 +174,11 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 		Comparator.nullsFirst(String::compareTo);
 	private static final Comparator<POM> POM_COMPARATOR = Comparator//
 		// sort by groupId first
-		.comparing(POM::getGroupId, STRING_COMPARATOR)
+		.comparing(POM::groupId, STRING_COMPARATOR)
 		// sort by artifactId second
-		.thenComparing(POM::getArtifactId, STRING_COMPARATOR)//
+		.thenComparing(POM::artifactId, STRING_COMPARATOR)//
 		// finally, sort by version
-		.thenComparing(POM::getVersion, POM::compareVersions);
+		.thenComparing(POM::version, POM::compareVersions);
 
 	@Override
 	public int compareTo(final POM pom) {
@@ -200,12 +189,12 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 
 	/** Gets the POM's version. */
 	@Override
-	public String getVersion() {
+	public String version() {
 		if (version == null) {
 			synchronized (this) {
 				if (version == null) {
 					version = cdata("//project/version");
-					if (version == null) version = getParentVersion();
+					if (version == null) version = parentVersion();
 				}
 			}
 		}
@@ -221,12 +210,12 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 	 * @return {@link POM} object representing the discovered POM, or null if no
 	 *         POM could be found.
 	 */
-	public static POM getPOM(final Class<?> c) {
-		return getPOM(c, null, null);
+	public static POM pom(final Class<?> c) {
+		return pom(c, null, null);
 	}
 
 	/**
-	 * internal cache used for calls to {@link #getPOM(Class, String, String)}
+	 * internal cache used for calls to {@link #pom(Class, String, String)}
 	 */
 	private static final Map<URL, POM> POMS = new HashMap<>();
 
@@ -239,8 +228,8 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 	 * @return {@link POM} object representing the discovered POM, or null if no
 	 *         POM could be found.
 	 */
-	public static POM getPOM(final Class<?> c, final String groupId,
-		final String artifactId)
+	public static POM pom(final Class<?> c, final String groupId,
+												final String artifactId)
 	{
 		final URL location = Classes.location(c);
 		return POMS.computeIfAbsent( //
@@ -259,7 +248,7 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 	 * @param artifactId The Maven artifactId of the desired POM.
 	 * @return {@link POM} object representing the discovered POM, or null if no
 	 *         POM could be found.
-	 * @see #getPOM(Class, String, String), which does the same thing, but with an
+	 * @see #pom(Class, String, String), which does the same thing, but with an
 	 *      internal cache that makes repeated calls trivial
 	 */
 	private static POM findPOM(final URL location, final String groupId,
@@ -284,24 +273,23 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 					// known groupId and artifactId; grab it directly
 					final String pomPath = "META-INF/maven/" + groupId + "/" +
 						artifactId + "/pom.xml";
-					final URL pomURL = new URL("jar:" + location.toString() + "!/" +
-						pomPath);
+					final URL pomURL = new URL("jar:" + location + "!/" + pomPath);
 					return new POM(pomURL);
 				}
 			}
 			// look for the POM in the class's base directory
 			final File file = URLs.toFile(location);
-			final File baseDir = Apps.getBaseDirectory(file, null);
+			final File baseDir = Apps.baseDirectory(file, null);
 			final File pomFile = new File(baseDir, "pom.xml");
 			return new POM(pomFile);
 		}
-		catch (final IOException | ParserConfigurationException | SAXException e) {
+		catch (final IOException e) {
 			return null;
 		}
 	}
 
 	/** Gets all available Maven POMs on the class path. */
-	public static List<POM> getAllPOMs() {
+	public static List<POM> allPOMs() {
 		// find all META-INF/maven/ folders on the classpath
 		final String pomPrefix = "META-INF/maven/";
 		final ClassLoader classLoader = Classes.classLoader();
@@ -324,9 +312,7 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 					try {
 						poms.add(new POM(url));
 					}
-					catch (final IOException | ParserConfigurationException
-							| SAXException exc)
-					{
+					catch (final IOException exc) {
 						// NB: empty catch block
 						// ignore and continue
 					}
@@ -360,7 +346,7 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 	 * suffix will be considered <em>less than</em> the one without a suffix. The
 	 * reason for this is to accommodate the
 	 * <a href="http://semver.org/">SemVer</a> versioning scheme's usage of
-	 * "prerelease" version suffixes. For example, {@code 2.0.0} will compare
+	 * "pre-release" version suffixes. For example, {@code 2.0.0} will compare
 	 * greater than {@code 2.0.0-beta-1}, whereas {@code 2.0.0} will compare less
 	 * than {@code 2.0.0.1}.</li>
 	 * </ul>

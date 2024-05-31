@@ -34,11 +34,11 @@ import org.scijava.function.Container;
 import org.scijava.function.Mutable;
 import org.scijava.ops.api.*;
 import org.scijava.ops.engine.BaseOpHints;
-import org.scijava.types.Any;
+import org.scijava.common3.Any;
 import org.scijava.types.Nil;
-import org.scijava.types.Types;
-import org.scijava.types.inference.FunctionalInterfaces;
-import org.scijava.types.inference.GenericAssignability;
+import org.scijava.common3.Types;
+import org.scijava.types.infer.FunctionalInterfaces;
+import org.scijava.types.infer.GenericAssignability;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -109,7 +109,7 @@ public final class Conversions {
 	{
 		// fail fast if clearly inconvertible
 		Type opType = info.opType();
-		Type reqType = request.getType();
+		Type reqType = request.type();
 		if (!Types.isAssignable(Types.raw(opType), Types.raw(reqType))) {
 			return null;
 		}
@@ -121,7 +121,7 @@ public final class Conversions {
 		);
 		final Map<TypeVariable<?>, Type> vars = new HashMap<>();
 		// Find input converters
-		Type[] fromArgs = request.getArgs();
+		Type[] fromArgs = request.argTypes();
 		List<Type> toArgs = inputTypesAgainst(info, Types.raw(reqType));
 		List<RichOp<Function<?, ?>>> preConverters = new ArrayList<>();
 		for (int i = 0; i < fromArgs.length; i++) {
@@ -193,22 +193,22 @@ public final class Conversions {
 		Map<TypeVariable<?>, Type> vars, OpEnvironment env, Hints hints)
 	{
 		// This procedure only applies to functions
-		int ioIndex = mutableIndexOf(request.getType());
+		int ioIndex = mutableIndexOf(request.type());
 		if (ioIndex > -1) {
 			return Optional.empty();
 		}
 		// for functions, we only need a postconverter
-		var fromOut = Nil.of(Types.mapVarToTypes(info.outputType(), vars));
-		var toOut = Nil.of(request.getOutType());
+		var fromOut = Nil.of(Types.unroll(info.outputType(), vars));
+		var toOut = Nil.of(request.outType());
 		RichOp<Function<?, ?>> postConverter = Ops.rich(env.op("engine.convert",
 			hints).inType(fromOut).outType(toOut).function());
 		return Optional.of(new ConvertedOpInfo( //
 			info, //
-			request.getType(), //
+			request.type(), //
 			preConverters, //
-			Arrays.asList(request.getArgs()), //
+			Arrays.asList(request.argTypes()), //
 			postConverter, //
-			request.getOutType(), //
+			request.outType(), //
 			null, //
 			env, //
 			vars //
@@ -236,7 +236,7 @@ public final class Conversions {
 		Map<TypeVariable<?>, Type> vars, OpEnvironment env)
 	{
 		// This procedure only applies to Ops with mutable outputs
-		int ioIndex = mutableIndexOf(request.getType());
+		int ioIndex = mutableIndexOf(request.type());
 		if (ioIndex == -1) {
 			return Optional.empty();
 		}
@@ -248,11 +248,11 @@ public final class Conversions {
 			// because the mutable output was directly edited.
 			return Optional.of(new ConvertedOpInfo( //
 				info, //
-				request.getType(), //
+				request.type(), //
 				preConverters, //
-				Arrays.asList(request.getArgs()), //
+				Arrays.asList(request.argTypes()), //
 				null, //
-				request.getOutType(), //
+				request.outType(), //
 				null, //
 				env, //
 				vars //
@@ -286,13 +286,13 @@ public final class Conversions {
 		Map<TypeVariable<?>, Type> vars, OpEnvironment env, Hints hints)
 	{
 		// This procedure only applies to Ops with mutable outputs
-		int ioIndex = mutableIndexOf(request.getType());
+		int ioIndex = mutableIndexOf(request.type());
 		if (ioIndex == -1) {
 			return Optional.empty();
 		}
 		try {
-			var fromOut = Nil.of(Types.mapVarToTypes(info.outputType(), vars));
-			var toOut = Nil.of(request.getOutType());
+			var fromOut = Nil.of(Types.unroll(info.outputType(), vars));
+			var toOut = Nil.of(request.outType());
 			// First, we convert the output to the type the user requested
 			RichOp<Function<?, ?>> postConverter = Ops.rich( //
 				env.op("engine.convert", hints) //
@@ -309,11 +309,11 @@ public final class Conversions {
 			);
 			return Optional.of(new ConvertedOpInfo( //
 				info, //
-				request.getType(), //
+				request.type(), //
 				preConverters, //
-				Arrays.asList(request.getArgs()), //
+				Arrays.asList(request.argTypes()), //
 				postConverter, //
-				request.getOutType(), //
+				request.outType(), //
 				copyOp, //
 				env, //
 				vars //
@@ -349,13 +349,13 @@ public final class Conversions {
 		Map<TypeVariable<?>, Type> vars, OpEnvironment env, Hints hints)
 	{
 		// This procedure only applies to Ops with mutable outputs
-		int ioIndex = mutableIndexOf(request.getType());
+		int ioIndex = mutableIndexOf(request.type());
 		if (ioIndex == -1) {
 			return Optional.empty();
 		}
 		try {
-			var fromOut = Nil.of(Types.mapVarToTypes(info.outputType(), vars));
-			var toOut = Nil.of(request.getOutType());
+			var fromOut = Nil.of(Types.unroll(info.outputType(), vars));
+			var toOut = Nil.of(request.outType());
 			// This is really just a placeholder.
 			RichOp<Function<?, ?>> postConverter = Ops.rich( //
 				env.op("engine.identity", hints) //
@@ -373,11 +373,11 @@ public final class Conversions {
 			);
 			return Optional.of(new ConvertedOpInfo( //
 				info, //
-				request.getType(), //
+				request.type(), //
 				preConverters, //
-				Arrays.asList(request.getArgs()), //
+				Arrays.asList(request.argTypes()), //
 				postConverter, //
-				request.getOutType(), //
+				request.outType(), //
 				copyOp, //
 				env, //
 				vars //
@@ -406,7 +406,7 @@ public final class Conversions {
 		var source = Nil.of(from);
 		// If the op parameter type has type variables that have been mapped
 		// already, substitute those mappings in.
-		var preDest = Types.mapVarToTypes(to, vars);
+		var preDest = Types.unroll(to, vars);
 		// Remaining type variables are unlikely to be matched directly. We thus
 		// replace them with wildcards, bounded by the same bounds.
 		var dest = wildcardVacuousTypeVars(preDest);
@@ -427,7 +427,7 @@ public final class Conversions {
 	{
 		Type reqType = Types.parameterize(Function.class, new Type[] { source,
 			dest });
-		Type infoType = rich.instance().getType();
+		Type infoType = rich.instance().type();
 		GenericAssignability.inferTypeVariables(new Type[] { reqType }, new Type[] {
 			infoType }, vars);
 	}
@@ -447,7 +447,7 @@ public final class Conversions {
 	 *         with wildcards
 	 */
 	private static Nil<?> wildcardVacuousTypeVars(final Type t) {
-		Type[] typeParams = Types.typeParamsAgainstClass(t, Types.raw(t));
+		Type[] typeParams = Types.typeParamsOf(t, Types.raw(t));
 		if (t instanceof TypeVariable<?>) {
 			TypeVariable<?> tv = (TypeVariable<?>) t;
 			// Create an Any with the type variable bounds
@@ -463,7 +463,7 @@ public final class Conversions {
 				vars.put(from, to);
 			}
 		}
-		return Nil.of(Types.mapVarToTypes(t, vars));
+		return Nil.of(Types.unroll(t, vars));
 	}
 
 	/**

@@ -50,8 +50,8 @@ public final class Versions {
 	 * @param c - Look up this class's version
 	 * @return Version of specified {@link Class} or null if not found.
 	 */
-	public static String getVersion(final Class<?> c) {
-		return getVersion(c, null, null);
+	public static String of(final Class<?> c) {
+		return of(c, null, null);
 	}
 
 	/**
@@ -65,12 +65,10 @@ public final class Versions {
 	 * @param artifactId - Maven artifact ID containing class
 	 * @return Version of specified {@link Class} or null if not found.
 	 */
-	public static String getVersion(final Class<?> c, final String groupId,
-		final String artifactId)
-	{
-		final String version = getVersionFromManifest(c);
+	public static String of(final Class<?> c, final String groupId, final String artifactId) {
+		final String version = fromManifest(c);
 		if (version != null) return version;
-		return getVersionFromPOM(c, groupId, artifactId);
+		return fromPOM(c, groupId, artifactId);
 	}
 
 	/**
@@ -80,9 +78,9 @@ public final class Versions {
 	 * @param c - Look up this class's version
 	 * @return Version of specified {@link Class} or null if not found.
 	 */
-	public static String getVersionFromManifest(final Class<?> c) {
-		final Manifest m = Manifest.getManifest(c);
-		return m == null ? null : m.getVersion();
+	public static String fromManifest(final Class<?> c) {
+		final Manifest m = Manifest.manifest(c);
+		return m == null ? null : m.version();
 	}
 
 	/**
@@ -95,11 +93,9 @@ public final class Versions {
 	 * @param artifactId - Maven artifact ID containing class
 	 * @return Version of specified {@link Class} or null if not found.
 	 */
-	public static String getVersionFromPOM(final Class<?> c, final String groupId,
-		final String artifactId)
-	{
-		final POM pom = POM.getPOM(c, groupId, artifactId);
-		return pom == null ? null : pom.getVersion();
+	public static String fromPOM(final Class<?> c, final String groupId, final String artifactId) {
+		final POM pom = POM.pom(c, groupId, artifactId);
+		return pom == null ? null : pom.version();
 	}
 
 	/**
@@ -110,9 +106,9 @@ public final class Versions {
 	 * @param c - Look up this class's build number
 	 * @return Build number of specified {@link Class} or null if not found.
 	 */
-	public static String getBuildNumber(final Class<?> c) {
-		final Manifest m = Manifest.getManifest(c);
-		return m == null ? null : m.getImplementationBuild();
+	public static String buildNumber(final Class<?> c) {
+		final Manifest m = Manifest.manifest(c);
+		return m == null ? null : m.implementationBuild();
 	}
 
 	/**

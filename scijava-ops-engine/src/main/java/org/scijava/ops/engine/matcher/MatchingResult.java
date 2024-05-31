@@ -35,8 +35,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.scijava.ops.api.OpMatchingException;
-import org.scijava.ops.engine.OpCandidate;
-import org.scijava.ops.engine.OpCandidate.StatusCode;
+import org.scijava.ops.engine.matcher.OpCandidate.StatusCode;
 import org.scijava.ops.api.OpRequest;
 import org.scijava.ops.engine.util.Infos;
 
@@ -122,12 +121,12 @@ public class MatchingResult {
 		final OpRequest request = res.getOriginalQueries().get(0);
 		if (matches.isEmpty()) {
 			// no matches
-			sb.append("No matching '" + request.getLabel() + "' op\n");
+			sb.append("No matching '" + request.label() + "' op\n");
 		}
 		else {
 			// multiple matches
 			final double priority = matches.get(0).priority();
-			sb.append("Multiple '" + request.getLabel() + "' ops of priority " +
+			sb.append("Multiple '" + request.label() + "' ops of priority " +
 				priority + ":\n");
 			if (typeCheckingIncomplete(matches)) {
 				sb.append("Incomplete output type checking may have occurred!\n");

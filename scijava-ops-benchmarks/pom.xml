@@ -1,201 +1,193 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.scijava</groupId>
-        <artifactId>scijava-parent</artifactId>
-        <version>0-SNAPSHOT</version>
-        <relativePath>..</relativePath>
-    </parent>
+	<parent>
+		<groupId>org.scijava</groupId>
+		<artifactId>scijava-parent</artifactId>
+		<version>0-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
 
-    <artifactId>scijava-ops-benchmarks</artifactId>
+	<artifactId>scijava-ops-benchmarks</artifactId>
 
-    <name>SciJava Ops Benchmarks</name>
-    <description>Benchmarks for the SciJava Ops framework.</description>
-    <url>https://github.com/scijava/scijava-ops-benchmarks</url>
-    <inceptionYear>2023</inceptionYear>
-    <organization>
-        <name>SciJava</name>
-        <url>https://scijava.org/</url>
-    </organization>
-    <licenses>
-        <license>
-            <name>Simplified BSD License</name>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
+	<name>SciJava Ops Benchmarks</name>
+	<description>Benchmarks for the SciJava Ops framework.</description>
+	<url>https://github.com/scijava/scijava-ops-benchmarks</url>
+	<inceptionYear>2023</inceptionYear>
+	<organization>
+		<name>SciJava</name>
+		<url>https://scijava.org/</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>Simplified BSD License</name>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 
-    <developers>
-        <developer>
-            <id>ctrueden</id>
-            <name>Curtis Rueden</name>
-            <url>https://imagej.net/people/ctrueden</url>
-            <roles>
-                <role>founder</role>
-                <role>lead</role>
-                <role>reviewer</role>
-                <role>support</role>
-                <role>maintainer</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>gselzer</id>
-            <name>Gabriel Selzer</name>
-            <roles>
-                <role>founder</role>
-                <role>developer</role>
-                <role>debugger</role>
-                <role>reviewer</role>
-                <role>support</role>
-            </roles>
-        </developer>
-    </developers>
-    <contributors>
-        <contributor>
-            <name>David Kolb</name>
-            <roles>
-                <role>founder</role>
-            </roles>
-            <properties>
-                <id>Treiblesschorle</id>
-            </properties>
-        </contributor>
-    </contributors>
+	<developers>
+		<developer>
+			<id>ctrueden</id>
+			<name>Curtis Rueden</name>
+			<url>https://imagej.net/people/ctrueden</url>
+			<roles>
+				<role>founder</role>
+				<role>lead</role>
+				<role>reviewer</role>
+				<role>support</role>
+				<role>maintainer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>gselzer</id>
+			<name>Gabriel Selzer</name>
+			<roles>
+				<role>founder</role>
+				<role>developer</role>
+				<role>debugger</role>
+				<role>reviewer</role>
+				<role>support</role>
+			</roles>
+		</developer>
+	</developers>
+	<contributors>
+		<contributor>
+			<name>David Kolb</name>
+			<roles>
+				<role>founder</role>
+			</roles>
+			<properties>
+				<id>Treiblesschorle</id>
+			</properties>
+		</contributor>
+	</contributors>
 
-    <mailingLists>
-        <mailingList>
-            <name>Image.sc Forum</name>
-            <archive>https://forum.image.sc/tag/scijava</archive>
-        </mailingList>
-    </mailingLists>
+	<mailingLists>
+		<mailingList>
+			<name>Image.sc Forum</name>
+			<archive>https://forum.image.sc/tag/scijava</archive>
+		</mailingList>
+	</mailingLists>
 
-    <scm>
-        <connection>scm:git:git://github.com/scijava/scijava</connection>
-        <developerConnection>scm:git:git@github.com:scijava/scijava</developerConnection>
-        <tag>HEAD</tag>
-        <url>https://github.com/scijava/scijava</url>
-    </scm>
-    <issueManagement>
-        <system>GitHub Issues</system>
-        <url>https://github.com/scijava/scijava/issues</url>
-    </issueManagement>
-    <ciManagement>
-        <system>GitHub Actions</system>
-        <url>https://github.com/scijava/scijava/actions</url>
-    </ciManagement>
+	<scm>
+		<connection>scm:git:https://github.com/scijava/scijava</connection>
+		<developerConnection>scm:git:git@github.com:scijava/scijava</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/scijava/scijava</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/scijava/scijava/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<system>GitHub Actions</system>
+		<url>https://github.com/scijava/scijava/actions</url>
+	</ciManagement>
 
-    <properties>
-        <package-name>org.scijava.ops.benchmarks.jmh</package-name>
+	<properties>
+		<package-name>org.scijava.ops.benchmarks.jmh</package-name>
 
-        <license.licenseName>bsd_2</license.licenseName>
-        <license.copyrightOwners>SciJava developers.</license.copyrightOwners>
+		<license.licenseName>bsd_2</license.licenseName>
+		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
+	</properties>
 
-        <scijava-ops-benchmarks.allowedDuplicateClasses>${scijava.allowedDuplicateClasses}</scijava-ops-benchmarks.allowedDuplicateClasses>
-        <allowedDuplicateClasses>${scijava-ops-benchmarks.allowedDuplicateClasses}</allowedDuplicateClasses>
-    </properties>
+	<repositories>
+		<repository>
+			<id>scijava.public</id>
+			<url>https://maven.scijava.org/content/groups/public</url>
+		</repository>
+	</repositories>
 
-    <repositories>
-        <repository>
-            <id>scijava.public</id>
-            <url>https://maven.scijava.org/content/groups/public</url>
-        </repository>
-    </repositories>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.scijava</groupId>
+							<artifactId>scijava-ops-indexer</artifactId>
+							<version>${project.version}</version>
+						</path>
+						<path>
+							<groupId>org.scijava</groupId>
+							<artifactId>scijava-common</artifactId>
+							<version>${scijava-common.version}</version>
+						</path>
+						<path>
+							<groupId>org.openjdk.jmh</groupId>
+							<artifactId>jmh-generator-annprocess</artifactId>
+							<version>${jmh.version}</version>
+						</path>
+					</annotationProcessorPaths>
+					<fork>true</fork>
+					<showWarnings>true</showWarnings>
+					<compilerArgs>
+						<arg>-Aparse.ops="${scijava.parse.ops}"</arg>
+						<arg>-Aop.version="${project.version}"</arg>
+					</compilerArgs>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.scijava</groupId>
-                            <artifactId>scijava-ops-indexer</artifactId>
-                            <version>${project.version}</version>
-                        </path>
-                        <path>
-                            <groupId>org.scijava</groupId>
-                            <artifactId>scijava-common</artifactId>
-                            <version>${scijava-common.version}</version>
-                        </path>
-                        <path>
-                            <groupId>org.openjdk.jmh</groupId>
-                            <artifactId>jmh-generator-annprocess</artifactId>
-                            <version>${jmh.version}</version>
-                        </path>
-                    </annotationProcessorPaths>
-                    <fork>true</fork>
-                    <showWarnings>true</showWarnings>
-                    <compilerArgs>
-                        <arg>-Aparse.ops="${scijava.parse.ops}"</arg>
-                        <arg>-Aop.version="${project.version}"</arg>
-                    </compilerArgs>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+	<dependencies>
+		<!-- SciJava dependencies -->
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-ops-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-ops-engine</artifactId>
+			<version>${project.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<!--
+			NB: scijava-ops-image is not used by the benchmarking code,
+			but is included here to make the size of the OpEnvironment
+			comparable to that of ImageJ Ops, in case the number of Ops
+			in the environment affects matching performance.
+		-->
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-ops-image</artifactId>
+			<version>${project.version}</version>
+			<scope>runtime</scope>
+		</dependency>
 
-    <dependencies>
-        <dependency>
-            <groupId>net.imagej</groupId>
-            <artifactId>imagej-ops</artifactId>
-        </dependency>
+		<!-- Legacy ImageJ2 dependencies -->
+		<dependency>
+			<groupId>net.imagej</groupId>
+			<artifactId>imagej-ops</artifactId>
+		</dependency>
 
-        <!-- SciJava dependencies -->
-        <dependency>
-            <groupId>org.scijava</groupId>
-            <artifactId>scijava-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.scijava</groupId>
-            <artifactId>scijava-ops-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.scijava</groupId>
-            <artifactId>scijava-ops-engine</artifactId>
-            <version>${project.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <!--
-        NB: scijava-ops-image is not used by the benchmarking code,
-        but is included here to make the size of the OpEnvironment
-        comparable to that of ImageJ Ops, in case the number of Ops
-        in the environment affects matching performance.
-        -->
-        <dependency>
-            <groupId>org.scijava</groupId>
-            <artifactId>scijava-ops-image</artifactId>
-            <version>${project.version}</version>
-            <scope>runtime</scope>
-        </dependency>
+		<!-- JMH dependencies -->
+		<dependency>
+			<groupId>org.openjdk.jmh</groupId>
+			<artifactId>jmh-core</artifactId>
+			<version>${jmh.version}</version>
+			<!-- NB: Override inherited test scope. -->
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openjdk.jmh</groupId>
+			<artifactId>jmh-generator-annprocess</artifactId>
+			<version>${jmh.version}</version>
+			<scope>provided</scope>
+		</dependency>
 
-        <!-- JMH dependencies -->
-        <dependency>
-            <groupId>org.openjdk.jmh</groupId>
-            <artifactId>jmh-core</artifactId>
-            <version>${jmh.version}</version>
-            <!--NB: Must override inherited test scope-->
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.openjdk.jmh</groupId>
-            <artifactId>jmh-generator-annprocess</artifactId>
-            <version>${jmh.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Test scope dependencies -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
+		<!-- Test scope dependencies -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 </project>

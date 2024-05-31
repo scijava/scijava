@@ -10,7 +10,7 @@ The no-argument method `OpEnvironment.help()` is designed to give you a broad ov
 
 ```groovy
 import org.scijava.ops.api.OpEnvironment
-ops = OpEnvironment.getEnvironment()
+ops = OpEnvironment.build()
 
 print(ops.help())
 ```
@@ -50,7 +50,7 @@ Namespaces:
 You can choose one of the above namespaces, and `ops.help()` will give you information about the algorithms contained within:
 ```groovy
 import org.scijava.ops.api.OpEnvironment
-ops = OpEnvironment.getEnvironment()
+ops = OpEnvironment.build()
 
 print(ops.help("filter"))
 ```
@@ -102,7 +102,7 @@ Finally, you can use `OpEnvironment.help()` on any Op name to see the list of si
 
 ```groovy
 import org.scijava.ops.api.OpEnvironment
-ops = OpEnvironment.getEnvironment()
+ops = OpEnvironment.build()
 
 print(ops.help("filter.gauss"))
 ```
@@ -119,7 +119,7 @@ Note that these descriptions are simple, and you can obtain more verbose descrip
 
 ```groovy
 import org.scijava.ops.api.OpEnvironment
-ops = OpEnvironment.getEnvironment()
+ops = OpEnvironment.build()
 
 print(ops.helpVerbose("filter.gauss"))
 ```

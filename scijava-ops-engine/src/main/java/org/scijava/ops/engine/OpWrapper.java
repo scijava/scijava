@@ -32,7 +32,7 @@ package org.scijava.ops.engine;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.api.RichOp;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

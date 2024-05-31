@@ -36,7 +36,7 @@ import org.scijava.ops.engine.exceptions.impl.MultipleOutputsOpException;
 import org.scijava.ops.engine.exceptions.impl.UnnamedOpException;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -160,7 +160,7 @@ public final class Infos {
 		// Step 3: Inputs
 		for (var member : info.inputs()) {
 			sb.append("\n\t");
-			sb.append("> ").append(member.getKey()) //
+			sb.append("> ").append(member.key()) //
 				.append(member.isRequired() ? "" : " (optional)") //
 				.append(" : ");
 			if (member.getIOType() == ItemIO.CONTAINER) {
@@ -170,16 +170,16 @@ public final class Infos {
 				sb.append("@MUTABLE ");
 			}
 
-			sb.append(typeString(member.getType(), true)); //
-			if (!member.getDescription().isBlank()) {
-				sb.append("\n\t\t").append(member.getDescription().replaceAll("\n\\s*",
+			sb.append(typeString(member.type(), true)); //
+			if (!member.description().isBlank()) {
+				sb.append("\n\t\t").append(member.description().replaceAll("\n\\s*",
 					"\n\t\t"));
 			}
 		}
 		// Step 4: Output
 		Member<?> output = info.output();
 		if (output.getIOType() == ItemIO.OUTPUT) {
-			sb.append("\n\tReturns : ").append(typeString(output.getType(), true));
+			sb.append("\n\tReturns : ").append(typeString(output.type(), true));
 		}
 		return sb.toString();
 	}

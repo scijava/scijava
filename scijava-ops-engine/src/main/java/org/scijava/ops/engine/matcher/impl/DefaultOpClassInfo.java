@@ -38,7 +38,7 @@ import org.scijava.ops.engine.util.Infos;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
@@ -103,7 +103,7 @@ public class DefaultOpClassInfo implements OpInfo {
 	@Override
 	public Type opType() {
 		// TODO: Check whether this is correct!
-		return Types.parameterizeRaw(opClass);
+		return Types.parameterize(opClass);
 //		return opClass;
 	}
 
@@ -158,10 +158,10 @@ public class DefaultOpClassInfo implements OpInfo {
 				// dependency.
 				throw new IllegalStateException(
 					"Exception trying to inject Op dependency field.\n" +
-						"\tOp dependency field to resolve: " + dependencyMember.getKey() +
+						"\tOp dependency field to resolve: " + dependencyMember.key() +
 						"\n" + "\tFound Op to inject: " + dependencies.get(i).getClass()
 							.getName() + //
-						"\n" + "\tField signature: " + dependencyMember.getType(), ex);
+						"\n" + "\tField signature: " + dependencyMember.type(), ex);
 			}
 		}
 		return struct().createInstance(op);

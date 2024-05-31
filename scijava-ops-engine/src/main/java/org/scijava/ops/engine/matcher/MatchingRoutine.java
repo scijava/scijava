@@ -32,7 +32,6 @@ package org.scijava.ops.engine.matcher;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpMatchingException;
 import org.scijava.ops.engine.MatchingConditions;
-import org.scijava.ops.engine.OpCandidate;
 
 /**
  * A plugin type employing a particular strategy to generate an
@@ -62,7 +61,7 @@ public interface MatchingRoutine extends Comparable<MatchingRoutine> {
 	 *          conform to
 	 * @param matcher the {@link OpMatcher} responsible for matching
 	 * @param env the {@link OpEnvironment} containing the Ops able to be matched
-	 * @return an {@OpCandidate}
+	 * @return an {@link OpCandidate}
 	 */
 	default OpCandidate match(MatchingConditions conditions, OpMatcher matcher,
 		OpEnvironment env)

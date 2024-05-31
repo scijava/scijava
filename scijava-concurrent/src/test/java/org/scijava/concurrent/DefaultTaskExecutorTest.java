@@ -29,7 +29,7 @@
 
 package org.scijava.concurrent;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -40,9 +40,10 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.scijava.concurrent.TaskExecutors.DefaultTaskExecutor;
 
 /**
  * Tests {@link DefaultTaskExecutor}.
@@ -50,19 +51,19 @@ import static org.junit.Assert.fail;
 public class DefaultTaskExecutorTest {
 
 	private final DefaultTaskExecutor sequential = new DefaultTaskExecutor(
-		new SequentialExecutorService());
+		new TaskExecutors.SequentialExecutorService());
 
 	private final DefaultTaskExecutor twoThreads = new DefaultTaskExecutor(
 		new ForkJoinPool(2));
 
 	@Test
 	public void testGetParallelism() {
-		testGetParallelism(1, new SequentialExecutorService());
+		testGetParallelism(1, new TaskExecutors.SequentialExecutorService());
 		testGetParallelism(2, Executors.newFixedThreadPool(2));
 		testGetParallelism(3, new ForkJoinPool(3));
 		testGetParallelism(1, Executors.newCachedThreadPool());
 		testGetParallelism(ForkJoinPool.commonPool().getParallelism(),
-			new ForkJoinExecutorService());
+			new TaskExecutors.ForkJoinExecutorService());
 	}
 
 	private void testGetParallelism(int expectedParallelism,
@@ -105,7 +106,7 @@ public class DefaultTaskExecutorTest {
 	@Test
 	public void testExceptionHandling() {
 		try {
-			twoThreads.runAll(Collections.singletonList(() -> throwDummyException()));
+			twoThreads.runAll(Collections.singletonList(this::throwDummyException));
 			fail(
 				"DefaultTaskExecutor.runAll() failed to rethrow the DummyException.");
 		}

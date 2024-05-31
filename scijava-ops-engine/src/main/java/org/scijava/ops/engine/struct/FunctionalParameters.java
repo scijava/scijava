@@ -40,11 +40,10 @@ import org.scijava.function.Container;
 import org.scijava.function.Mutable;
 import org.scijava.ops.engine.util.internal.AnnotationUtils;
 import org.scijava.ops.spi.Nullable;
-import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Structs;
-import org.scijava.types.Types;
-import org.scijava.types.inference.FunctionalInterfaces;
+import org.scijava.common3.Types;
+import org.scijava.types.infer.FunctionalInterfaces;
 
 public final class FunctionalParameters {
 
@@ -66,7 +65,7 @@ public final class FunctionalParameters {
 			fmts);
 
 		for (SynthesizedParameterMember<?> m : fmtMembers) {
-			final Class<?> itemType = Types.raw(m.getType());
+			final Class<?> itemType = Types.raw(m.type());
 			if ((m.getIOType() == ItemIO.MUTABLE || m
 				.getIOType() == ItemIO.CONTAINER) && Structs.isImmutable(itemType))
 			{
@@ -74,7 +73,7 @@ public final class FunctionalParameters {
 				// will be written to, but immutable parameters cannot be changed in
 				// such a manner, so it makes no sense to label them as such.
 				throw new IllegalArgumentException("Immutable " + m.getIOType() +
-					" parameter: " + m.getKey() + " (" + itemType.getName() +
+					" parameter: " + m.key() + " (" + itemType.getName() +
 					" is immutable)");
 			}
 			items.add(m);
@@ -108,12 +107,12 @@ public final class FunctionalParameters {
 
 		Type paramfunctionalType = functionalType;
 		if (functionalType instanceof Class) {
-			paramfunctionalType = Types.parameterizeRaw((Class<?>) functionalType);
+			paramfunctionalType = Types.parameterize((Class<?>) functionalType);
 		}
 
 		List<FunctionalMethodType> out = new ArrayList<>();
 		int i = 0;
-		for (Type t : Types.getExactParameterTypes(functionalMethod,
+		for (Type t : Types.paramTypesOf(functionalMethod,
 			paramfunctionalType))
 		{
 			final ItemIO ioType;
@@ -126,7 +125,7 @@ public final class FunctionalParameters {
 			i++;
 		}
 
-		Type returnType = Types.getExactReturnType(functionalMethod,
+		Type returnType = Types.returnTypeOf(functionalMethod,
 			paramfunctionalType);
 		if (!returnType.equals(void.class)) {
 			out.add(new FunctionalMethodType(returnType, ItemIO.OUTPUT));

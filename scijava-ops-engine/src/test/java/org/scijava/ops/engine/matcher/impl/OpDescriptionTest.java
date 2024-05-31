@@ -40,7 +40,7 @@ import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.matcher.reduce.ReducedOpInfo;
-import org.scijava.types.Types;
+import org.scijava.common3.Types;
 
 public class OpDescriptionTest extends AbstractTestEnvironment {
 

@@ -198,7 +198,7 @@ public class IntArray extends AbstractPrimitiveArray<int[], Integer> {
 	public boolean addAll(final int index,
 		final Collection<? extends Integer> c)
 	{
-		if (c.size() == 0) return false;
+		if (c.isEmpty()) return false;
 		insert(index, c.size());
 		int i = index;
 		for (final int e : c) {

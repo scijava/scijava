@@ -95,13 +95,4 @@ public final class NextSmoothNumber {
 			if (k >= x) return j;
 		}
 	}
-
-	public static void main(String... args) {
-		int x = args.length == 0 ? 32769 : Integer.parseInt(args[0]);
-		System.err.println(log2(x));
-
-		int result = nextSmooth(7, x, 4 * log2(x));
-
-		System.out.println(result);
-	}
 }

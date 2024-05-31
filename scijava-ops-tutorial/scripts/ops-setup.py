@@ -12,7 +12,7 @@ Variables:
 '''
 
 from scyjava import config, jimport
-config.endpoints.append('org.scijava:scijava-ops-tutorial:0-SNAPSHOT')
+config.endpoints.append('org.scijava:scijava-ops-tutorial:1.0.0')
 
 import gateways as g
 

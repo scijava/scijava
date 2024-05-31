@@ -67,7 +67,7 @@
 	</mailingLists>
 
 	<scm>
-		<connection>scm:git:git://github.com/scijava/scijava</connection>
+		<connection>scm:git:https://github.com/scijava/scijava</connection>
 		<developerConnection>scm:git:git@github.com:scijava/scijava</developerConnection>
 		<tag>HEAD</tag>
 		<url>https://github.com/scijava/scijava</url>
@@ -90,14 +90,29 @@
 		<flimlib.version>2.1.1</flimlib.version>
 	</properties>
 
-	<repositories>
-		<repository>
-			<id>scijava.public</id>
-			<url>https://maven.scijava.org/content/groups/public</url>
-		</repository>
-	</repositories>
-
 	<dependencies>
+		<!-- SciJava dependencies -->
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-concurrent</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-function</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-ops-spi</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-types</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 		<!-- FLIMLib dependencies -->
 		<dependency>
 			<groupId>flimlib</groupId>
@@ -115,30 +130,6 @@
 			<artifactId>imglib2-roi</artifactId>
 		</dependency>
 
-		<!-- SciJava dependencies -->
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-concurrent</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-function</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-ops-spi</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-types</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>
-
 		<!-- Third-party dependencies -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -151,18 +142,6 @@
 			<artifactId>flimlib</artifactId>
 			<version>${flimlib.version}</version>
 			<classifier>${scijava.natives.classifier}</classifier>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-ops-engine</artifactId>
-			<version>${project.version}</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-ops-image</artifactId>
-			<version>${project.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 
@@ -184,13 +163,20 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-ops-engine</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-ops-image</artifactId>
+			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
+			<artifactId>junit-jupiter-api</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -198,5 +184,12 @@
 			<artifactId>scijava-common</artifactId>
 			<scope>test</scope>
 		</dependency>
-    </dependencies>
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>scijava.public</id>
+			<url>https://maven.scijava.org/content/groups/public</url>
+		</repository>
+	</repositories>
 </project>

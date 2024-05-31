@@ -1,38 +1,80 @@
 # Reasoning about Ops
 
-The declarative nature of Ops is convenient for matching and execution, but sometimes it is necessary to know where an Op comes from. This page describes the tools provided by SciJava Ops to understand the code underneath.
+The declarative nature of Ops is convenient for matching and execution, but sometimes it is necessary to introspect an Op to learn about its structure (e.g. its input and output types) and provenance (i.e. where it comes from). This page describes the tools provided by SciJava Ops to perform such queries.
 
-Naturally, to understand where an Op came from, you first need an Op:
+## Obtaining an Op reference
+
+First, let's find an Op to work with. We'll look up a `filter.gauss` Op that blurs an image using a provided sigma, and writes the result into an existing output container. The following code should accomplish this, assuming the SciJava Ops Image library is part of our environment:
 
 ```java
-var img = ...;
-var out = ...;
+import org.scijava.ops.api.OpEnvironment;
+import net.imglib2.img.array.ArrayImgs;
+
+var ops = OpEnvironment.build();
+
+var img = ArrayImgs.unsignedBytes(256, 256);
+var out = img.copy();
 var sigma = 5.0;
 
-// This Op call finds a "filter.gauss Op" that blurs an image using a provided
-// sigma, placing the result in the output container "out".
-//
-// NB the Op is saved within the variable "op"
+// By calling the computer() method, we save a reference
+// to the matched Op itself, rather than executing it.
 var op = ops.op("filter.gauss").input(img, sigma).output(out).computer();
 ```
 
-## Introduction
+## Op Infos
 
-Each Op is generated from an `OpInfo` object, describing an Op's source code, version, and other associated metadata. If you've matched an Op `op`, you can obtain its `OpInfo` using the method `Ops.info(op)`:
+Each Op is generated from an `OpInfo` object, describing an Op's source, version, and other associated metadata. If you've matched an Op `op` as above, you can obtain its `OpInfo` using the method `Ops.info(op)`:
 
 ```java
 import org.scijava.ops.api.Ops;
-
 var info = Ops.info(op);
 ```
 
-The `OpInfo` often provides all needed information, but if `op` utilizes dependencies or other framework features, you may wish to introspect the "rich" Op instead, using the method `Ops.rich(op)`. This method returns a `RichOp` object which wraps the Op up with its `OpInfo` and the `OpInfo`s of its dependencies, along with other metadata.
+This `OpInfo` object contains several useful accessor methods. Here is a demonstration using [JShell](https://docs.oracle.com/en/java/javase/21/jshell/):
 
 ```java
-var richOp = Ops.rich(op);
+jshell> info.names()
+$3 ==> [filter.gauss]
+
+jshell> System.out.println(info.description())
+ Gaussian filter which can be called with single sigma, i.e. the sigma is
+ the same in each dimension.
+
+jshell> info.priority()
+$5 ==> 0.0
+
+jshell> info.version()
+$6 ==> "1.0.0"
+
+jshell> info.opType()
+$7 ==> org.scijava.function.Computers.Arity2<net.imglib2.RandomAccessibleInterval<I extends net.imglib2.type.numeric.NumericType<I>>, java.lang.Double, net.imglib2.RandomAccessibleInterval<O extends net.imglib2.type.numeric.NumericType<O>>>
+
+jshell> info.inputs()
+$8 ==> [input: net.imglib2.RandomAccessibleInterval<I> [INPUT] {the input image}, sigma: java.lang.Double [INPUT] {the sigmas for the Gaussian}, output: net.imglib2.RandomAccessibleInterval<O> [CONTAINER] {the preallocated output image}]
+
+jshell> info.inputTypes()
+$9 ==> [net.imglib2.RandomAccessibleInterval<I>, class java.lang.Double, net.imglib2.RandomAccessibleInterval<O>]
+
+jshell> info.output()
+$10 ==> output: net.imglib2.RandomAccessibleInterval<O> [CONTAINER] {the preallocated output image}
+
+jshell> info.outputType()
+$11 ==> net.imglib2.RandomAccessibleInterval<O>
+
+jshell> import org.scijava.struct.Structs
+
+jshell> System.out.println(Structs.toString(info.struct()))
+input: net.imglib2.RandomAccessibleInterval<I> [INPUT] {the input image}
+sigma: java.lang.Double [INPUT] {the sigmas for the Gaussian}
+output: net.imglib2.RandomAccessibleInterval<O> [CONTAINER] {the preallocated output image}
+
+jshell> info.declaredHints()
+$14 ==> [reduction.FORBIDDEN]
 ```
 
-These two methods provide gateways into learning more about where your Op came from!
+See the javadoc of these various methods for further details.
+
+If `op` utilizes dependencies or other framework features, there is also a `RichOp` wrapper providing access to additional metadata, with methods including `.env()`, `.name()`, `.hints()`, and `.infoTree()`.
 
 ## Implementations and Versions
 

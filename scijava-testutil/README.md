@@ -6,7 +6,7 @@ This library provides a suite of utilities commonly used in SciJava projects. Fo
 <dependency>
 	<groupId>org.scijava</groupId>
 	<artifactId>scijava-test-utils</artifactId>
-	<version>0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<scope>test</scope>
 </dependency>
 ```

@@ -35,9 +35,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.scijava.ops.engine.exceptions.impl.NullablesOnMultipleMethodsException;
-import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
-import org.scijava.types.inference.FunctionalInterfaces;
+import org.scijava.types.infer.FunctionalInterfaces;
 
 /**
  * Lazily generates the parameter data for a {@link List} of

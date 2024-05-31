@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.scijava.ops.engine.matcher.convert.ConvertedOpInfo;
-import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 import org.scijava.struct.MemberParser;

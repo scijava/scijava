@@ -81,7 +81,7 @@
 	</mailingLists>
 
 	<scm>
-		<connection>scm:git:git://github.com/scijava/scijava</connection>
+		<connection>scm:git:https://github.com/scijava/scijava</connection>
 		<developerConnection>scm:git:git@github.com:scijava/scijava</developerConnection>
 		<tag>HEAD</tag>
 		<url>https://github.com/scijava/scijava</url>
@@ -101,30 +101,26 @@
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
-		<scijava-discovery-test.allowedDuplicateClasses>${scijava.allowedDuplicateClasses}</scijava-discovery-test.allowedDuplicateClasses>
-		<allowedDuplicateClasses>${scijava-discovery-test.allowedDuplicateClasses}</allowedDuplicateClasses>
 	</properties>
+
 	<dependencies>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-discovery</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+		<!-- SciJava dependencies -->
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-spi</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- Test Scope Dependencies -->
+
+		<!-- Test scope dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<scope>test</scope>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-discovery</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

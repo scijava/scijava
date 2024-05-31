@@ -65,7 +65,7 @@ public final class Annotations {
 	 * @see <a href="https://github.com/scijava/scijava-common/issues/142">issue
 	 *      #142</a>
 	 */
-	private static final FieldCache fieldCache = new FieldCache();
+	private static final CacheMap<Field> fieldCache = new CacheMap<>();
 
 	/**
 	 * This maps a base class (key1) to a map of annotation classes (key2), which
@@ -79,7 +79,7 @@ public final class Annotations {
 	 * @see <a href="https://github.com/scijava/scijava-common/issues/142">issue
 	 *      #142</a>
 	 */
-	private static final MethodCache methodCache = new MethodCache();
+	private static final CacheMap<Method> methodCache = new CacheMap<>();
 
 	// -- Class loading, querying and reflection --
 
@@ -97,14 +97,14 @@ public final class Annotations {
 	 *         that for performance reasons, lists may be cached and reused, so it
 	 *         is best to make a copy of the result if you need to modify it.
 	 */
-	public static <A extends Annotation> List<Method> getAnnotatedMethods(
+	public static <A extends Annotation> List<Method> annotatedMethods(
 		final Class<?> c, final Class<A> annotationClass)
 	{
 		List<Method> methods = methodCache.getList(c, annotationClass);
 
 		if (methods == null) {
 			methods = new ArrayList<>();
-			getAnnotatedMethods(c, annotationClass, methods);
+			annotatedMethods(c, annotationClass, methods);
 		}
 
 		return methods;
@@ -122,9 +122,8 @@ public final class Annotations {
 	 * @param annotationClass The type of annotation for which to scan.
 	 * @param methods The list to which matching methods will be added.
 	 */
-	public static <A extends Annotation> void getAnnotatedMethods(
-		final Class<?> c, final Class<A> annotationClass,
-		final List<Method> methods)
+	public static <A extends Annotation> void annotatedMethods(final Class<?> c,
+		final Class<A> annotationClass, final List<Method> methods)
 	{
 		List<Method> cachedMethods = methodCache.getList(c, annotationClass);
 
@@ -152,14 +151,14 @@ public final class Annotations {
 	 *         that for performance reasons, lists may be cached and reused, so it
 	 *         is best to make a copy of the result if you need to modify it.
 	 */
-	public static <A extends Annotation> List<Field> getAnnotatedFields(
+	public static <A extends Annotation> List<Field> annotatedFields(
 		final Class<?> c, final Class<A> annotationClass)
 	{
 		List<Field> fields = fieldCache.getList(c, annotationClass);
 
 		if (fields == null) {
 			fields = new ArrayList<>();
-			getAnnotatedFields(c, annotationClass, fields);
+			annotatedFields(c, annotationClass, fields);
 		}
 
 		return fields;
@@ -177,7 +176,7 @@ public final class Annotations {
 	 * @param annotationClass The type of annotation for which to scan.
 	 * @param fields The list to which matching fields will be added.
 	 */
-	public static <A extends Annotation> void getAnnotatedFields(final Class<?> c,
+	public static <A extends Annotation> void annotatedFields(final Class<?> c,
 		final Class<A> annotationClass, final List<Field> fields)
 	{
 		List<Field> cachedFields = fieldCache.getList(c, annotationClass);
@@ -224,7 +223,7 @@ public final class Annotations {
 		// can be safely performed on a separate thread, but the later query must
 		// still wait for the earlier query to complete.
 		//
-		// NB: an alternative would be to update the getAnnotatedxxx methods to
+		// NB: an alternative would be to update the annotatedxxx methods to
 		// return Sets instead of Lists. Then threads can pretty much go nuts
 		// as long as you double lock the Set creation in a synchronized block.
 		//
@@ -350,22 +349,6 @@ public final class Annotations {
 	// -- Helper classes --
 
 	/**
-	 * Convenience class for a {@link CacheMap} that stores annotated
-	 * {@link Field}s.
-	 */
-	private static class FieldCache extends CacheMap<Field> {
-		// Trivial subclass to narrow generic params
-	}
-
-	/**
-	 * Convenience class for a {@link CacheMap} that stores annotated
-	 * {@link Method}s.
-	 */
-	private static class MethodCache extends CacheMap<Method> {
-		// Trivial subclass to narrow generic params
-	}
-
-	/**
 	 * Convenience class for {@code Map > Map > List} hierarchy. Cleans up
 	 * generics and contains helper methods for traversing the two map levels.
 	 * <p>
@@ -444,7 +427,7 @@ public final class Annotations {
 	}
 
 	/** A map of annotations to annotated elements. */
-	public static class Query extends
+	private static class Query extends
 		HashMap<Class<? extends Annotation>, Class<? extends AnnotatedElement>>
 	{
 

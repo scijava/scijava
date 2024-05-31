@@ -62,7 +62,7 @@ public class CopyImgsTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void copyArrayImgNoOutputTest() {
+	public void testCopyArrayImgNoOutput() {
 		var data = new ArrayImgFactory<>(new UnsignedByteType()).create(10, 10);
 		populateData(data);
 		@SuppressWarnings("unchecked")
@@ -81,7 +81,7 @@ public class CopyImgsTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void copyArrayImgWithOutputTest() {
+	public void testCopyArrayImgWithOutput() {
 		var data = new ArrayImgFactory<>(new UnsignedByteType()).create(10, 10);
 		populateData(data);
 		final Img<UnsignedByteType> output = data.factory().create(data
@@ -98,7 +98,7 @@ public class CopyImgsTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void copyPlanarImgNoOutputTest() {
+	public void testCopyPlanarImgNoOutput() {
 		var data = new PlanarImgFactory<>(new UnsignedByteType()).create(10, 10);
 		populateData(data);
 		@SuppressWarnings("unchecked")
@@ -117,7 +117,7 @@ public class CopyImgsTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void copyPlanarImgWithOutputTest() {
+	public void testCopyPlanarImgWithOutput() {
 		var data = new PlanarImgFactory<>(new UnsignedByteType()).create(10, 10);
 		populateData(data);
 		final Img<UnsignedByteType> output = data.factory().create(data
@@ -134,7 +134,7 @@ public class CopyImgsTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void copyCellImgNoOutputTest() {
+	public void testCopyCellImgNoOutput() {
 		var data = new CellImgFactory<>(new UnsignedByteType()).create(10, 10);
 		populateData(data);
 		@SuppressWarnings("unchecked")
@@ -153,7 +153,7 @@ public class CopyImgsTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void copyCellImgWithOutputTest() {
+	public void testCopyCellImgWithOutput() {
 		var data = new CellImgFactory<>(new UnsignedByteType()).create(10, 10);
 		populateData(data);
 		final Img<UnsignedByteType> output = data.factory().create(data

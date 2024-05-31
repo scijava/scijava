@@ -36,8 +36,6 @@ package org.scijava.ops.api;
  */
 public class OpMatchingException extends RuntimeException {
 
-	private static final long serialVersionUID = 2334342967056340218L;
-
 	public OpMatchingException(String message) {
 		super(message);
 	}

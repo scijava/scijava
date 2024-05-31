@@ -39,8 +39,8 @@ import java.util.List;
 import org.scijava.ops.engine.exceptions.impl.FunctionalTypeOpException;
 import org.scijava.struct.MemberParser;
 import org.scijava.struct.Structs;
-import org.scijava.types.Types;
-import org.scijava.types.inference.FunctionalInterfaces;
+import org.scijava.common3.Types;
+import org.scijava.types.infer.FunctionalInterfaces;
 
 public class ClassParameterMemberParser implements
 	MemberParser<Class<?>, SynthesizedParameterMember<?>>
@@ -97,7 +97,7 @@ public class ClassParameterMemberParser implements
 	private Method getDeclaredOpMethod(Class<?> c) throws NoSuchMethodException {
 		// NB this is the functional method w.r.t. the interface, not w.r.t. the Op
 		Method fMethod = FunctionalInterfaces.functionalMethodOf(c);
-		Type[] paramTypes = Types.getExactParameterTypes(fMethod, c);
+		Type[] paramTypes = Types.paramTypesOf(fMethod, c);
 		Class<?>[] rawParamTypes = Arrays.stream(paramTypes).map(t -> Types.raw(t))
 			.toArray(Class[]::new);
 		try {

@@ -45,11 +45,6 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
  */
 public class Vertex extends Vector3D implements RealLocalizable {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
-
 	private double distanceToFaceInFront = 0;
 
 	private List<TriangularFacet> facesInFront = new ArrayList<>();

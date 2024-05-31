@@ -54,8 +54,7 @@ public class MeanTest<N extends Number> extends AbstractTestEnvironment {
 	}
 
 	@Test
-	public void regressionTest() {
-
+	public void testMean() {
 		Function<Iterable<Integer>, Double> goodFunc = OpBuilder.matchFunction(ops,
 			"stats.mean", new Nil<Iterable<Integer>>()
 			{}, new Nil<Double>() {});

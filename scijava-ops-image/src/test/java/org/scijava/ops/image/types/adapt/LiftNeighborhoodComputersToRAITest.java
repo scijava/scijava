@@ -65,7 +65,7 @@ public class LiftNeighborhoodComputersToRAITest extends AbstractOpTest {
 		};
 
 	@Test
-	public void liftArity1() {
+	public void testLiftArity1() {
 		// Define parameters
 		var shape = new RectangleShape(1, false);
 		var inImg = TestImgGeneration.unsignedByteArray(true, 10, 10);
@@ -97,11 +97,10 @@ public class LiftNeighborhoodComputersToRAITest extends AbstractOpTest {
 			testOp.compute(neighborhoodRA.get(), expectedRA.get());
 			Assertions.assertEquals(actualRA.get().get(), expectedRA.get().get());
 		}
-
 	}
 
 	@Test
-	public void liftArity1WithOOBF() {
+	public void testLiftArity1WithOOBF() {
 		// Define parameters
 		var shape = new RectangleShape(1, false);
 		var oobf = new OutOfBoundsConstantValueFactory<>(new UnsignedByteType(0));
@@ -133,7 +132,5 @@ public class LiftNeighborhoodComputersToRAITest extends AbstractOpTest {
 			testOp.compute(neighborhoodRA.get(), expectedRA.get());
 			Assertions.assertEquals(actualRA.get().get(), expectedRA.get().get());
 		}
-
 	}
-
 }

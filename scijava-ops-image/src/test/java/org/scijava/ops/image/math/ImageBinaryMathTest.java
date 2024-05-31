@@ -49,7 +49,7 @@ public class ImageBinaryMathTest extends AbstractOpTest {
 	private static final IntType I = new IntType(25);
 
 	@Test
-	public void addImageC() {
+	public void testAddImageC() {
 		final Img<IntType> imgA = TestImgGeneration.intArray(true, 10, 10);
 		final Img<IntType> imgB = TestImgGeneration.intArray(true, 10, 10);
 		final Img<IntType> imgC = TestImgGeneration.intArray(true, 10, 10);
@@ -61,7 +61,7 @@ public class ImageBinaryMathTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void addImageF() {
+	public void testAddImageF() {
 		final Img<IntType> imgA = TestImgGeneration.intArray(true, 10, 10);
 		final Img<IntType> imgB = TestImgGeneration.intArray(true, 10, 10);
 
@@ -73,7 +73,7 @@ public class ImageBinaryMathTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void subImageFNoOutType() {
+	public void testSubImageFNoOutType() {
 		final Img<IntType> imgA = TestImgGeneration.intArray(true, 10, 10);
 
 		int originalVal = imgA.cursor().next().get();
@@ -84,7 +84,7 @@ public class ImageBinaryMathTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void addRAIRealTypeC() {
+	public void testAddRAIRealTypeC() {
 		final Img<IntType> imgIntType = TestImgGeneration.intArray(true, 10, 10);
 		int originalVal = imgIntType.cursor().next().get();
 		var inType = new Nil<RandomAccessibleInterval<IntType>>() {};
@@ -102,7 +102,7 @@ public class ImageBinaryMathTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void addRealTypeF() {
+	public void testAddRealTypeF() {
 		final Img<IntType> imgIntType = TestImgGeneration.intArray(true, 10, 10);
 		int originalVal = imgIntType.cursor().next().get();
 
@@ -113,7 +113,7 @@ public class ImageBinaryMathTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void addRealTypeC() {
+	public void testAddRealTypeC() {
 		final Img<IntType> imgIntType = TestImgGeneration.intArray(true, 10, 10);
 		int originalVal = imgIntType.cursor().next().get();
 
@@ -121,15 +121,6 @@ public class ImageBinaryMathTest extends AbstractOpTest {
 		ops.op("math.add").input(imgIntType, I).output(out).compute();
 		validateResult(out, originalVal);
 	}
-
-//	@Test
-//	public void addRealTypeI() {
-//		final Img<IntType> imgIntType = TestImgGeneration.intArray(true, 10, 10);
-//		int originalVal = imgIntType.cursor().next().get();
-//
-//		ops.op("math.add").input(imgIntType, I).mutate1();
-//		validateResult(imgIntType, originalVal);
-//	}
 
 	private void validateResult(Img<IntType> result, int originalVal) {
 		assertEquals(result.cursor().next().get(), originalVal + I.get());

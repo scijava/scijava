@@ -82,19 +82,19 @@ public class InfoTreeTest extends AbstractTestEnvironment implements
 	public final Producer<String> foo = () -> S;
 
 	@Test
-	public void testInfoChainInstantiation() {
+	public void testInfoTreeInstantiation() {
 		Nil<Producer<String>> nil = new Nil<>() {};
-		Producer<String> op = ops.opFromInfoChain(simpleTree, nil);
+		Producer<String> op = ops.opFromInfoTree(simpleTree, nil);
 		Assertions.assertEquals(S, op.create());
 
 		// Find dependency
 		nil = new Nil<>() {};
-		op = ops.opFromInfoChain(complexTree, nil);
+		op = ops.opFromInfoTree(complexTree, nil);
 		Assertions.assertEquals(S, op.create());
 	}
 
 	@Test
-	public void testInfoChainToString() {
+	public void testInfoTreeToString() {
 		Assertions.assertEquals( //
 			simpleTree.info().implementationName(), //
 			simpleTree.toString() //

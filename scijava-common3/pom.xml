@@ -84,13 +84,8 @@
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
-		<!--
-		<scijava-common3.allowedDuplicateClasses>
-			${scijava.allowedDuplicateClasses}
-		</scijava-common3.allowedDuplicateClasses>
-		<allowedDuplicateClasses>${scijava-common3.allowedDuplicateClasses}</allowedDuplicateClasses>
-		-->
 	</properties>
+
 	<dependencies>
 		<!-- No dependencies allowed! -->
 
@@ -101,15 +96,10 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-testutil</artifactId>
+			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
-        <dependency>
-            <groupId>org.scijava</groupId>
-            <artifactId>scijava-testutil</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+	</dependencies>
 </project>

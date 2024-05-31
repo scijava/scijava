@@ -84,7 +84,7 @@
 	</mailingLists>
 
 	<scm>
-		<connection>scm:git:git://github.com/scijava/scijava</connection>
+		<connection>scm:git:https://github.com/scijava/scijava</connection>
 		<developerConnection>scm:git:git@github.com:scijava/scijava</developerConnection>
 		<tag>HEAD</tag>
 		<url>https://github.com/scijava/scijava</url>
@@ -104,30 +104,8 @@
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 
-		<scijava-ops-image.allowedDuplicateClasses>${scijava.allowedDuplicateClasses},com.github.therapi.runtimejavadoc.repack.com.eclipsesource.json.*</scijava-ops-image.allowedDuplicateClasses>
-		<allowedDuplicateClasses>${scijava-ops-image.allowedDuplicateClasses}</allowedDuplicateClasses>
-
-		<therapi.packages />
+		<scijava.surefire.args>--add-reads org.scijava.ops.opencv=org.scijava.ops.api,net.imglib2</scijava.surefire.args>
 	</properties>
-
-	<repositories>
-		<repository>
-			<id>scijava.public</id>
-			<url>https://maven.scijava.org/content/groups/public</url>
-		</repository>
-	</repositories>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<argLine>--add-reads org.scijava.ops.opencv=org.scijava.ops.api</argLine>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 
 	<dependencies>
 		<!-- SciJava dependencies -->
@@ -188,4 +166,11 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>scijava.public</id>
+			<url>https://maven.scijava.org/content/groups/public</url>
+		</repository>
+	</repositories>
 </project>

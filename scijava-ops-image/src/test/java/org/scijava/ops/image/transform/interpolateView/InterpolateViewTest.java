@@ -63,8 +63,7 @@ public class InterpolateViewTest extends AbstractOpTest {
 	private static final long SEED = 0x12345678;
 
 	@Test
-	public void defaultInterpolateTest() {
-
+	public void testDefaultInterpolate() {
 		BiFunction<RandomAccessible<DoubleType>, FloorInterpolatorFactory<DoubleType>, RealRandomAccessible<DoubleType>> interpolateFunc =
 			OpBuilder.matchFunction(ops, "transform.interpolateView",
 				new Nil<RandomAccessible<DoubleType>>()

@@ -52,7 +52,7 @@ import javax.tools.Diagnostic;
  *
  * @author Gabriel Selzer
  */
-public class OpFieldImplData extends OpImplData {
+class OpFieldImplData extends OpImplData {
 
 	// Regex to match Op types, coming from SciJava Function, who describe all
 	// of their parameters in order within their type parameters

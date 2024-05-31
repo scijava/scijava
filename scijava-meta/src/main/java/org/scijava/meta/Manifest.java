@@ -58,63 +58,63 @@ public class Manifest implements Versioned {
 
 	// -- Manifest methods --
 
-	public String getArchiverVersion() {
+	public String archiverVersion() {
 		return get("Archiver-Version");
 	}
 
-	public String getBuildJdk() {
+	public String buildJdk() {
 		return get("Build-Jdk");
 	}
 
-	public String getBuiltBy() {
+	public String builtBy() {
 		return get("Built-By");
 	}
 
-	public String getCreatedBy() {
+	public String createdBy() {
 		return get("Created-By");
 	}
 
-	public String getImplementationBuild() {
+	public String implementationBuild() {
 		return get("Implementation-Build");
 	}
 
-	public String getImplementationDate() {
+	public String implementationDate() {
 		return get("Implementation-Date");
 	}
 
-	public String getImplementationTitle() {
+	public String implementationTitle() {
 		return get("Implementation-Title");
 	}
 
-	public String getImplementationVendor() {
+	public String implementationVendor() {
 		return get("Implementation-Vendor");
 	}
 
-	public String getImplementationVendorId() {
+	public String implementationVendorId() {
 		return get("Implementation-Vendor-Id");
 	}
 
-	public String getImplementationVersion() {
+	public String implementationVersion() {
 		return get("Implementation-Version");
 	}
 
-	public String getManifestVersion() {
+	public String manifestVersion() {
 		return get("Manifest-Version");
 	}
 
-	public String getPackage() {
+	public String package_() {
 		return get("Package");
 	}
 
-	public String getSpecificationTitle() {
+	public String specificationTitle() {
 		return get("Specification-Title");
 	}
 
-	public String getSpecificationVendor() {
+	public String specificationVendor() {
 		return get("Specification-Vendor");
 	}
 
-	public String getSpecificationVersion() {
+	public String specificationVersion() {
 		return get("Specification-Version");
 	}
 
@@ -135,9 +135,9 @@ public class Manifest implements Versioned {
 	// -- Utility methods --
 
 	/** Gets the JAR manifest associated with the given class. */
-	public static Manifest getManifest(final Class<?> c) {
+	public static Manifest manifest(final Class<?> c) {
 		try {
-			return getManifest(new URL("jar:" + Classes.location(c) + "!/"));
+			return manifest(new URL("jar:" + Classes.location(c) + "!/"));
 		}
 		catch (final IOException e) {
 			return null;
@@ -148,20 +148,20 @@ public class Manifest implements Versioned {
 	 * Gets the JAR manifest associated with the given XML document. Assumes the
 	 * XML document was loaded as a resource from inside a JAR.
 	 */
-	public static Manifest getManifest(final XML xml) throws IOException {
-		final String path = xml.getPath();
+	public static Manifest manifest(final XML xml) throws IOException {
+		final String path = xml.path();
 		if (path == null || !path.startsWith("file:")) return null;
 		final int dotJAR = path.indexOf(".jar!/");
-		return getManifest(new File(path.substring(5, dotJAR + 4)));
+		return manifest(new File(path.substring(5, dotJAR + 4)));
 	}
 
 	/** Gets the JAR manifest associated with the given JAR file. */
-	public static Manifest getManifest(final File jarFile) throws IOException {
+	public static Manifest manifest(final File jarFile) throws IOException {
 		if (!jarFile.exists()) throw new FileNotFoundException();
-		return getManifest(new URL("jar:file:" + jarFile.getAbsolutePath() + "!/"));
+		return manifest(new URL("jar:file:" + jarFile.getAbsolutePath() + "!/"));
 	}
 
-	private static Manifest getManifest(final URL jarURL) throws IOException {
+	private static Manifest manifest(final URL jarURL) throws IOException {
 		final JarURLConnection conn = (JarURLConnection) jarURL.openConnection();
 		return new Manifest(conn.getManifest());
 	}
@@ -169,21 +169,20 @@ public class Manifest implements Versioned {
 	// -- Versioned methods --
 
 	@Override
-	public String getVersion() {
-		final String v = getBaseVersion();
+	public String version() {
+		final String v = baseVersion();
 		if (v == null || !v.endsWith("-SNAPSHOT")) return v;
 
 		// append commit hash to differentiate between development versions
-		final String buildNumber = getImplementationBuild();
+		final String buildNumber = implementationBuild();
 		return buildNumber == null ? v : v + "-" + buildNumber;
 	}
 
 	// -- Helper methods --
 
-	private String getBaseVersion() {
-		final String manifestVersion = getImplementationVersion();
+	private String baseVersion() {
+		final String manifestVersion = implementationVersion();
 		if (manifestVersion != null) return manifestVersion;
-		return getSpecificationVersion();
+		return specificationVersion();
 	}
-
 }

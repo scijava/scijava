@@ -55,7 +55,7 @@ import net.imglib2.view.Views;
 public class DoGTest extends AbstractOpTest {
 
 	@Test
-	public void dogRAITest() {
+	public void testDogRAI() {
 		final double[] sigmas1 = new double[] { 1, 1 };
 		final double[] sigmas2 = new double[] { 2, 2 };
 		final long[] dims = new long[] { 10, 10 };
@@ -83,7 +83,7 @@ public class DoGTest extends AbstractOpTest {
 	}
 
 	@Test
-	public void dogRAISingleSigmasTest() {
+	public void testDogRAISingleSigmas() {
 		final OutOfBoundsFactory<ByteType, Img<ByteType>> outOfBounds =
 			new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
 		final RandomAccessibleInterval<ByteType> res = ops.op("create.img").input(

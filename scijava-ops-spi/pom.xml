@@ -81,7 +81,7 @@
 	</mailingLists>
 
 	<scm>
-		<connection>scm:git:git://github.com/scijava/scijava</connection>
+		<connection>scm:git:https://github.com/scijava/scijava</connection>
 		<developerConnection>scm:git:git@github.com:scijava/scijava</developerConnection>
 		<tag>HEAD</tag>
 		<url>https://github.com/scijava/scijava</url>
@@ -101,12 +101,5 @@
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
-		<scijava-ops-spi.allowedDuplicateClasses>${scijava.allowedDuplicateClasses}</scijava-ops-spi.allowedDuplicateClasses>
-		<allowedDuplicateClasses>${scijava-ops-spi.allowedDuplicateClasses}</allowedDuplicateClasses>
 	</properties>
-	<dependencies>
-		<!-- SciJava dependencies -->
-
-		<!-- Test scope dependencies -->
-	</dependencies>
 </project>

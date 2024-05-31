@@ -33,13 +33,13 @@ import flimlib.FitFunc;
 import flimlib.NoiseType;
 import flimlib.RestrainType;
 import net.imglib2.type.numeric.real.FloatType;
-import org.junit.Test;
-import org.scijava.ops.flim.FitParams;
+import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Regression tests for miscellaneous components.
@@ -89,7 +89,7 @@ public class MiscTest {
 
 		final FitParams<FloatType> actual = FitParams.fromJSON(expected.toJSON());
 		assertEquals(expected.xInc, actual.xInc, TOLERANCE);
-		assertEquals(null, actual.trans);
+		assertNull(actual.trans);
 		assertEquals(expected.ltAxis, actual.ltAxis);
 		assertEquals(expected.fitStart, actual.fitStart);
 		assertEquals(expected.fitEnd, actual.fitEnd);

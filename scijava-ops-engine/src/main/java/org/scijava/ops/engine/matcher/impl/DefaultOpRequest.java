@@ -133,10 +133,6 @@ public class DefaultOpRequest implements OpRequest {
 		return sb.toString();
 	}
 
-	/**
-	 * Determines whether the specified type satisfies the op's required types
-	 * using {@link Types#isApplicable(Type[], Type[])}.
-	 */
 	@Override
 	public boolean typesMatch(final Type opType,
 		final Map<TypeVariable<?>, Type> typeVarAssigns)

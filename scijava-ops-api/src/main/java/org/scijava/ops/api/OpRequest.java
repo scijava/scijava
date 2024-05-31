@@ -86,10 +86,7 @@ public interface OpRequest {
 	 */
 	String label();
 
-	/**
-	 * Determines whether the specified type satisfies the op's required types
-	 * using {@link Types#isApplicable(Type[], Type[])}.
-	 */
+	/** Determines whether the specified type satisfies the op's required types. */
 	boolean typesMatch(final Type opType,
 		final Map<TypeVariable<?>, Type> typeVarAssigns);
 

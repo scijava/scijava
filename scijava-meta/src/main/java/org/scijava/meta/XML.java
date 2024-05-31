@@ -37,7 +37,6 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.StringWriter;
 import java.net.URL;
-import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -56,7 +55,6 @@ import javax.xml.xpath.XPathFactory;
 
 import org.scijava.common3.Classes;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -101,12 +99,7 @@ public class XML {
 	}
 
 	/** Creates an XML object for an existing document. */
-	public XML(final Document doc) {
-		this(null, doc);
-	}
-
-	/** Creates an XML object for an existing document. */
-	public XML(final String path, final Document doc) {
+	private XML(final String path, final Document doc) {
 		this.path = path;
 		this.doc = doc;
 
@@ -169,33 +162,11 @@ public class XML {
 		return path;
 	}
 
-	/** Gets the XML's DOM representation. */
-	public Document document() {
-		return doc;
-	}
-
 	/** Obtains the CDATA identified by the given XPath expression. */
 	public String cdata(final String expression) {
 		final NodeList nodes = xpath(expression);
 		if (nodes == null || nodes.getLength() == 0) return null;
 		return cdata(nodes.item(0));
-	}
-
-	/** Obtains the elements identified by the given XPath expression. */
-	public ArrayList<Element> elements(final String expression) {
-		return elements(xpath(expression));
-	}
-
-	/** Obtains the nodes identified by the given XPath expression. */
-	public NodeList xpath(final String expression) {
-		final Object result;
-		try {
-			result = xpath.evaluate(expression, doc, XPathConstants.NODESET);
-		}
-		catch (final XPathExpressionException e) {
-			return null;
-		}
-		return (NodeList) result;
 	}
 
 	// -- Object methods --
@@ -217,7 +188,7 @@ public class XML {
 	// -- Utility methods --
 
 	/** Gets the CData beneath the given node. */
-	public static String cdata(final Node item) {
+	private static String cdata(final Node item) {
 		final NodeList children = item.getChildNodes();
 		if (children.getLength() == 0) return null;
 		for (int i = 0; i < children.getLength(); i++) {
@@ -226,32 +197,6 @@ public class XML {
 			return child.getNodeValue();
 		}
 		return null;
-	}
-
-	/** Gets the CData beneath the given element's specified child. */
-	public static String cdata(final Element el, final String child) {
-		NodeList children = el.getElementsByTagName(child);
-		if (children.getLength() == 0) return null;
-		return cdata(children.item(0));
-	}
-
-	/** Gets the element nodes from the given node list. */
-	public static ArrayList<Element> elements(final NodeList nodes) {
-		final ArrayList<Element> elements = new ArrayList<>();
-		if (nodes != null) {
-			for (int i = 0; i < nodes.getLength(); i++) {
-				final Node node = nodes.item(i);
-				if (node instanceof Element) elements.add((Element) node);
-			}
-		}
-		return elements;
-	}
-
-	/** Gets the given element's specified child elements. */
-	public static ArrayList<Element> elements(final Element el,
-		final String child)
-	{
-		return elements(el.getElementsByTagName(child));
 	}
 
 	// -- Helper methods --
@@ -274,7 +219,7 @@ public class XML {
 	}
 
 	/** Loads an XML document from the given input stream. */
-	protected static Document loadXML(final InputStream in) throws IOException {
+	private static Document loadXML(final InputStream in) throws IOException {
 		try {
 			return createBuilder().parse(in);
 		}
@@ -284,7 +229,7 @@ public class XML {
 	}
 
 	/** Loads an XML document from the given input stream. */
-	protected static Document loadXML(final String s) throws IOException {
+	private static Document loadXML(final String s) throws IOException {
 		try {
 			return createBuilder().parse(new ByteArrayInputStream(s.getBytes()));
 		}
@@ -313,4 +258,15 @@ public class XML {
 		return stringWriter.getBuffer().toString();
 	}
 
+	/** Obtains the nodes identified by the given XPath expression. */
+	private NodeList xpath(final String expression) {
+		final Object result;
+		try {
+			result = xpath.evaluate(expression, doc, XPathConstants.NODESET);
+		}
+		catch (final XPathExpressionException e) {
+			return null;
+		}
+		return (NodeList) result;
+	}
 }

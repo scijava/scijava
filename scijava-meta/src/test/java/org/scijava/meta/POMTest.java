@@ -31,10 +31,8 @@ package org.scijava.meta;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
-import org.w3c.dom.Element;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -122,15 +120,4 @@ public class POMTest {
 		assertEquals("https://github.com/scijava/scijava", //
 			pom.cdata("//project/url"));
 	}
-
-	@Test
-	public void testElements() throws IOException {
-		final POM pom = new POM(new File("pom.xml"));
-		final ArrayList<Element> developers =
-			pom.elements("//project/developers/developer");
-		assertEquals(2, developers.size());
-		assertEquals("ctrueden", XML.cdata(developers.get(0), "id"));
-		assertEquals("gselzer", XML.cdata(developers.get(1), "id"));
-	}
-
 }

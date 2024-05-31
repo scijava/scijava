@@ -51,7 +51,7 @@ public class DefaultOpFieldInfoTest implements OpCollection {
 			() -> new DefaultOpFieldInfo(//
 				this, //
 				field, //
-				Versions.classVersion(this.getClass()), //
+				Versions.of(this.getClass()), //
 				"", //
 				new Hints(), //
 				1.0, //
@@ -68,7 +68,7 @@ public class DefaultOpFieldInfoTest implements OpCollection {
 			() -> new DefaultOpFieldInfo(//
 				this, //
 				field, //
-				Versions.classVersion(this.getClass()), //
+				Versions.of(this.getClass()), //
 				"", //
 				new Hints(), //
 				1.0, //

@@ -50,8 +50,8 @@ public final class Versions {
 	 * @param c - Look up this class's version
 	 * @return Version of specified {@link Class} or null if not found.
 	 */
-	public static String classVersion(final Class<?> c) {
-		return classVersion(c, null, null);
+	public static String of(final Class<?> c) {
+		return of(c, null, null);
 	}
 
 	/**
@@ -65,7 +65,7 @@ public final class Versions {
 	 * @param artifactId - Maven artifact ID containing class
 	 * @return Version of specified {@link Class} or null if not found.
 	 */
-	public static String classVersion(final Class<?> c, final String groupId, final String artifactId) {
+	public static String of(final Class<?> c, final String groupId, final String artifactId) {
 		final String version = fromManifest(c);
 		if (version != null) return version;
 		return fromPOM(c, groupId, artifactId);

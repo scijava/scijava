@@ -43,7 +43,7 @@ public class About {
 		final String artifactId)
 	{
 		final POM pom = POM.pom(c, groupId, artifactId);
-		final String version = Versions.classVersion(c, groupId, artifactId);
+		final String version = Versions.of(c, groupId, artifactId);
 		final StringBuilder sb = new StringBuilder();
 
 		final String projectName = pom.projectName();

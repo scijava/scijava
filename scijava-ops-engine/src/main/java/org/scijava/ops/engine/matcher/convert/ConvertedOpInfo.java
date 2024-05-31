@@ -306,7 +306,7 @@ public class ConvertedOpInfo implements OpInfo {
 
 	@Override
 	public String version() {
-		return Versions.classVersion(this.getClass());
+		return Versions.of(this.getClass());
 	}
 
 	/**

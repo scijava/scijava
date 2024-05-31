@@ -58,7 +58,7 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 	}
 
 	protected List<OpInfo> processClass(Class<?> cls) {
-		String version = Versions.classVersion(cls);
+		String version = Versions.of(cls);
 		List<OpInfo> collectionInfos = new ArrayList<>();
 
 		// add OpFieldInfos

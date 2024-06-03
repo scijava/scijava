@@ -203,8 +203,8 @@
 					</annotationProcessorPaths>
 					<fork>true</fork>
 					<compilerArgs>
-						<arg>-Aparse.ops="${scijava.parse.ops}"</arg>
-						<arg>-Aop.version="${project.version}"</arg>
+						<arg>-Ascijava.ops.parse="${scijava.ops.parse}"</arg>
+						<arg>-Ascijava.ops.opVersion="${project.version}"</arg>
 					</compilerArgs>
 				</configuration>
 			</plugin>

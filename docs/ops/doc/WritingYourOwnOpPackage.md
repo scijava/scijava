@@ -30,8 +30,8 @@ TODO: Replace the SciJava Ops Indexer version with the correct initial version
                 <fork>true</fork>
                 <showWarnings>true</showWarnings>
                 <compilerArgs>
-                    <arg>-Aparse.ops=true</arg>
-                    <arg>-Aop.version="${project.version}"</arg>
+                    <arg>-Ascijava.ops.parse=true</arg>
+                    <arg>-Ascijava.ops.opVersion="${project.version}"</arg>
                 </compilerArgs>
             </configuration>
         </plugin>

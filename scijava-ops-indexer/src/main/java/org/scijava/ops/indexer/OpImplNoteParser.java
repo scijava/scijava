@@ -68,8 +68,8 @@ import static javax.lang.model.element.ElementKind.*;
  */
 public class OpImplNoteParser extends AbstractProcessor {
 
-	public static final String OP_VERSION = "op.version";
-	private static final String PARSE_OPS = "parse.ops";
+	public static final String OP_VERSION = "scijava.ops.opVersion";
+	private static final String PARSE_OPS = "scijava.ops.parse";
 
 	private final Yaml yaml = new Yaml();
 

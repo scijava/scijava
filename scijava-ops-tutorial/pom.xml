@@ -227,7 +227,7 @@
 		<scijava.jvm.build.version>[11.0.17,)</scijava.jvm.build.version>
 		<scijava.jvm.version>11</scijava.jvm.version>
 
-		<scijava.parse.ops>true</scijava.parse.ops>
+		<scijava.ops.parse>true</scijava.ops.parse>
 
 		<!-- TEMP: Until pom-scijava 38.0.0 is released. -->
 		<scijava-maven-plugin.version>3.0.0</scijava-maven-plugin.version>
@@ -318,8 +318,8 @@
 					</annotationProcessorPaths>
 					<fork>true</fork>
 					<compilerArgs>
-						<arg>-Aparse.ops="${scijava.parse.ops}"</arg>
-						<arg>-Aop.version="${project.version}"</arg>
+						<arg>-Ascijava.ops.parse="${scijava.ops.parse}"</arg>
+						<arg>-Ascijava.ops.opVersion="${project.version}"</arg>
 					</compilerArgs>
 				</configuration>
 			</plugin>

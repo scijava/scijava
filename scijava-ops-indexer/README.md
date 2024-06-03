@@ -8,7 +8,7 @@ To enable Op YAML generation in your build process, add the following to your `p
 
 ```xml
 <properties>
-    <scijava.parse.ops>true</scijava.parse.ops>
+    <scijava.ops.parse>true</scijava.ops.parse>
 </properties>
 ```
 
@@ -30,8 +30,8 @@ To enable Op YAML generation in your build process, add the following to your `p
                 <fork>true</fork>
                 <showWarnings>true</showWarnings>
                 <compilerArgs>
-                    <arg>-Aparse.ops="${scijava.parse.ops}"</arg>
-                    <arg>-Aop.version="${project.version}"</arg>
+                    <arg>-Ascijava.ops.parse="${scijava.ops.parse}"</arg>
+                    <arg>-Ascijava.ops.opVersion="${project.version}"</arg>
                 </compilerArgs>
             </configuration>
         </plugin>

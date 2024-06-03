@@ -101,6 +101,15 @@
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
+
+		<!--
+			HACK: Allow individual tests to run successfully in IntelliJ. Avoids exception:
+			java.lang.reflect.InaccessibleObjectException: Unable to make public
+			static void org.scijava.ops.engine.AbstractTestEnvironment.setUp()
+			accessible: module org.scijava.ops.engine does not "exports
+			org.scijava.ops.engine" to unnamed module @402e37bc
+		-->
+		<scijava.surefire.args>--add-exports org.scijava.ops.engine/org.scijava.ops.engine=ALL-UNNAMED</scijava.surefire.args>
 	</properties>
 
 	<dependencies>

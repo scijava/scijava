@@ -27,8 +27,7 @@
  * #L%
  */
 
-module org.scijava.ops.tutorial{
-	// -- Open plugins to scijava-ops
+module org.scijava.ops.tutorial {
 	opens org.scijava.ops.tutorial to org.scijava.ops.engine;
 
 	requires io.scif;

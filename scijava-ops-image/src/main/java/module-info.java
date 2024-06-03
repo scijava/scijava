@@ -57,6 +57,7 @@ open module org.scijava.ops.image {
 	requires net.imglib2.realtransform;
 
 	provides org.scijava.types.extract.TypeExtractor with
+			org.scijava.ops.image.types.Histogram1dTypeExtractor,
 			org.scijava.ops.image.types.ImgFactoryTypeExtractor,
 			org.scijava.ops.image.types.ImgLabelingTypeExtractor,
 			org.scijava.ops.image.types.NativeImgTypeExtractor,

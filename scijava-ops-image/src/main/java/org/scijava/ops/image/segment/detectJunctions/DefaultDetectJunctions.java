@@ -54,7 +54,7 @@ import org.scijava.ops.spi.Nullable;
  * {@link WritablePolyline}
  * </p>
  *
- * @author Gabe Selzer
+ * @author Gabriel Selzer
  * @implNote op names='segment.detectJunctions'
  */
 public class DefaultDetectJunctions implements

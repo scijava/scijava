@@ -58,7 +58,7 @@ import org.scijava.priority.Priority;
  * matching calls here, but with some effort the user or other applications
  * could also contribute their algorithms to the history.
  *
- * @author Gabe Selzer
+ * @author Gabriel Selzer
  */
 public class DefaultOpHistory implements OpHistory {
 

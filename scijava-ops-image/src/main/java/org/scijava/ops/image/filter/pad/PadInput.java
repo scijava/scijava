@@ -47,7 +47,7 @@ import org.scijava.ops.spi.Nullable;
 /**
  * Op used to pad the image by extending the borders
  *
- * @author bnorthan
+ * @author Brian Northan
  * @param <T>
  * @param <I>
  * @param <O>

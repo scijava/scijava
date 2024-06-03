@@ -42,7 +42,7 @@ import org.scijava.types.Nil;
 /**
  * Tests {@link HistogramCreate}
  *
- * @author Gabe Selzer
+ * @author Gabriel Selzer
  */
 public class DefaultHistogramTest extends AbstractOpTest {
 

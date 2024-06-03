@@ -48,7 +48,7 @@ import org.scijava.types.Nil;
 /**
  * Contains tests for {@link DefaultDerivativeGauss}.
  *
- * @author Gabe Selzer
+ * @author Gabriel Selzer
  */
 public class DefaultDerivativeGaussTest extends AbstractOpTest {
 

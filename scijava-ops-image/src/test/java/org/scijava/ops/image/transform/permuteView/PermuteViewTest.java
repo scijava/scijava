@@ -63,7 +63,7 @@ import org.scijava.util.MersenneTwisterFast;
  * </p>
  *
  * @author Tim-Oliver Buchholz (University of Konstanz)
- * @author Gabe Selzer
+ * @author Gabriel Selzer
  */
 public class PermuteViewTest extends AbstractOpTest {
 

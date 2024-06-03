@@ -68,7 +68,7 @@ import org.scijava.ops.spi.OpCollection;
  * {@link OpCollection} containing all of the transform Ops. TODO move these
  * type variables into each Op?
  *
- * @author Gabe Selzer
+ * @author Gabriel Selzer
  * @param <T> - a {@link TypeVariable} with no bounds.
  * @param <R> - a {@link TypeVariable} extending {@link RealType}
  * @param <N> - a {@link TypeVariable} extending {@link NumericType}

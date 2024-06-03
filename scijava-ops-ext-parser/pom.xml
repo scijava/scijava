@@ -31,12 +31,23 @@
 		<developer>
 			<id>ctrueden</id>
 			<name>Curtis Rueden</name>
-			<url>https://imagej.net/people/ctrueden</url>
 			<roles>
 				<role>founder</role>
+				<role>lead</role>
 				<role>reviewer</role>
 				<role>support</role>
 				<role>maintainer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>hinerm</id>
+			<name>Mark Hiner</name>
+			<roles>
+				<role>founder</role>
+				<role>lead</role>
+				<role>debugger</role>
+				<role>reviewer</role>
+				<role>support</role>
 			</roles>
 		</developer>
 		<developer>
@@ -44,19 +55,6 @@
 			<name>Gabriel Selzer</name>
 			<roles>
 				<role>founder</role>
-				<role>lead</role>
-				<role>developer</role>
-				<role>debugger</role>
-				<role>reviewer</role>
-				<role>support</role>
-			</roles>
-		</developer>
-		<developer>
-			<id>hinerm</id>
-			<name>Mark Hiner</name>
-			<roles>
-				<role>lead</role>
-				<role>developer</role>
 				<role>debugger</role>
 				<role>reviewer</role>
 				<role>support</role>

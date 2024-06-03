@@ -55,7 +55,7 @@ import org.scijava.types.Nil;
  * </p>
  *
  * @author Tim-Oliver Buchholz (University of Konstanz)
- * @author Gabe Selzer
+ * @author Gabriel Selzer
  */
 public class HyperSliceViewTest extends AbstractOpTest {
 

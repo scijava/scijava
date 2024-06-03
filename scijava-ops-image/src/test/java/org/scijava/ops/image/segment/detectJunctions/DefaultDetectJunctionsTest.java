@@ -44,7 +44,7 @@ import org.scijava.types.Nil;
 /**
  * Tests {@link DefaultDetectJunctions}
  *
- * @author Gabe Selzer
+ * @author Gabriel Selzer
  */
 public class DefaultDetectJunctionsTest extends AbstractOpTest {
 

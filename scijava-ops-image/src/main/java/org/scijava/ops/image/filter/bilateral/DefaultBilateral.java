@@ -45,7 +45,7 @@ import org.scijava.function.Computers;
 /**
  * Performs a bilateral filter on an image.
  *
- * @author Gabe Selzer
+ * @author Gabriel Selzer
  * @param <I>
  * @param <O>
  * @implNote op names='filter.bilateral'

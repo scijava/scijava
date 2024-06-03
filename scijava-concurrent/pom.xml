@@ -31,7 +31,6 @@
 		<developer>
 			<id>ctrueden</id>
 			<name>Curtis Rueden</name>
-			<url>https://imagej.net/User:Rueden</url>
 			<roles>
 				<role>founder</role>
 				<role>lead</role>
@@ -45,7 +44,6 @@
 			<name>Gabriel Selzer</name>
 			<roles>
 				<role>founder</role>
-				<role>developer</role>
 				<role>debugger</role>
 				<role>reviewer</role>
 				<role>support</role>
@@ -55,8 +53,7 @@
 	<contributors>
 		<contributor>
 			<name>Matthias Arzt</name>
-			<url>https://imagej.net/people/maarzt</url>
-			<roles><role>developer</role></roles>
+			<roles><role>founder</role></roles>
 			<properties><id>maarzt</id></properties>
 		</contributor>
 	</contributors>

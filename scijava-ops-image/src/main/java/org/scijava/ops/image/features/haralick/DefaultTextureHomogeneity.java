@@ -37,7 +37,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 /**
  * Implementation of Texture Homogeneity Haralick Feature
  *
- * @author Andreas Grauman (University of Konstanz)
+ * @author Andreas Graumann (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
  * @implNote op names='features.haralick.textureHomogeneity'
  */

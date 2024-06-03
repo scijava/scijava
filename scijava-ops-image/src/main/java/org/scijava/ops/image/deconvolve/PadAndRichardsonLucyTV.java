@@ -58,7 +58,7 @@ import org.scijava.progress.Progress;
  * regularization for 3D confocal microscope deconvolution Microsc Res Rech 2006
  * Apr; 69(4)- 260-6)
  *
- * @author bnorthan
+ * @author Brian Northan
  * @param <I>
  * @param <O>
  * @param <K>

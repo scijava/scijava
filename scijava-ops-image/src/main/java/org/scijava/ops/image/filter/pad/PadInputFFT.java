@@ -50,7 +50,7 @@ import org.scijava.ops.spi.OpDependency;
  * Abstract Op used to pad the image by extending the borders optionally using
  * an "fftSize" op to make the final image size compatible with an FFT library.
  *
- * @author bnorthan
+ * @author Brian Northan
  * @param <T>
  * @param <I>
  * @param <O>

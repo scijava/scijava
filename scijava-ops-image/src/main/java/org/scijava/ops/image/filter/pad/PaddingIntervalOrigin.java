@@ -40,7 +40,7 @@ import net.imglib2.type.numeric.ComplexType;
  * Op used to translate the center of an interval the origin. This is needed for
  * FFT operations
  *
- * @author bnorthan
+ * @author Brian Northan
  * @param <T>
  * @param <I>
  * @param <O>

@@ -31,26 +31,9 @@
 		<developer>
 			<id>ctrueden</id>
 			<name>Curtis Rueden</name>
-			<url>https://imagej.net/people/ctrueden</url>
 			<roles>
 				<role>founder</role>
 				<role>lead</role>
-				<role>developer</role>
-				<role>debugger</role>
-				<role>reviewer</role>
-				<role>support</role>
-				<role>maintainer</role>
-			</roles>
-		</developer>
-		<developer>
-			<id>gselzer</id>
-			<name>Gabriel Selzer</name>
-			<url>https://github.com/gselzer</url>
-			<roles>
-				<role>founder</role>
-				<role>lead</role>
-				<role>developer</role>
-				<role>debugger</role>
 				<role>reviewer</role>
 				<role>support</role>
 				<role>maintainer</role>
@@ -59,20 +42,29 @@
 		<developer>
 			<id>hinerm</id>
 			<name>Mark Hiner</name>
-			<url>https://imagej.net/people/hinerm</url>
 			<roles>
-				<role>developer</role>
+				<role>founder</role>
+				<role>lead</role>
 				<role>debugger</role>
 				<role>reviewer</role>
 				<role>support</role>
-				<role>maintainer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>gselzer</id>
+			<name>Gabriel Selzer</name>
+			<url>https://github.com/gselzer</url>
+			<roles>
+				<role>founder</role>
+				<role>debugger</role>
+				<role>reviewer</role>
+				<role>support</role>
 			</roles>
 		</developer>
 	</developers>
 	<contributors>
 		<contributor>
 			<name>Gabriella Turek</name>
-			<url>https://imagej.net/people/turekg</url>
 			<properties><id>turekg</id></properties>
 		</contributor>
 	</contributors>

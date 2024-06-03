@@ -72,7 +72,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Curtis Rueden
  * @author Mark Hiner
  * @author Johannes Schindelin
- * @author Gabe Selzer
+ * @author Gabriel Selzer
  */
 public class ClassesTest {
 

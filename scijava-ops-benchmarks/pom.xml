@@ -31,7 +31,6 @@
 		<developer>
 			<id>ctrueden</id>
 			<name>Curtis Rueden</name>
-			<url>https://imagej.net/people/ctrueden</url>
 			<roles>
 				<role>founder</role>
 				<role>lead</role>
@@ -45,7 +44,15 @@
 			<name>Gabriel Selzer</name>
 			<roles>
 				<role>founder</role>
-				<role>developer</role>
+				<role>debugger</role>
+				<role>reviewer</role>
+				<role>support</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>hinerm</id>
+			<name>Mark Hiner</name>
+			<roles>
 				<role>debugger</role>
 				<role>reviewer</role>
 				<role>support</role>
@@ -54,13 +61,7 @@
 	</developers>
 	<contributors>
 		<contributor>
-			<name>David Kolb</name>
-			<roles>
-				<role>founder</role>
-			</roles>
-			<properties>
-				<id>Treiblesschorle</id>
-			</properties>
+			<name>None</name>
 		</contributor>
 	</contributors>
 

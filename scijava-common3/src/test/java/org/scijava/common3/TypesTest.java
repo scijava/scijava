@@ -58,7 +58,7 @@ import org.junit.jupiter.api.Test;
  * @author Curtis Rueden
  * @author Mark Hiner
  * @author Johannes Schindelin
- * @author Gabe Selzer
+ * @author Gabriel Selzer
  */
 public class TypesTest {
 

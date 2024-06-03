@@ -49,7 +49,7 @@ import org.scijava.ops.spi.OpDependency;
  * of iterative image restoration algorithms David S.C. Biggs and Mark Andrews
  * Applied Optics, Vol. 36, Issue 8, pp. 1766-1775 (1997)
  *
- * @author bnorthan
+ * @author Brian Northan
  * @param <T>
  * @implNote op names='deconvolve.accelerate', priority='0.'
  */

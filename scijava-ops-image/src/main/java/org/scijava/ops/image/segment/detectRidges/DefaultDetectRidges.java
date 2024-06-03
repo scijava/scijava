@@ -54,7 +54,7 @@ import org.scijava.ops.spi.OpDependency;
 /**
  * Performs the Ridge Detection algorithm on a 2-Dimensional, gray-scale image.
  *
- * @author Gabe Selzer
+ * @author Gabriel Selzer
  * @implNote op names='segment.detectRidges'
  */
 public class DefaultDetectRidges<T extends RealType<T>> implements

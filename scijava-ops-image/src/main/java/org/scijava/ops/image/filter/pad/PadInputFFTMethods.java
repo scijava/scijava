@@ -41,7 +41,7 @@ import net.imglib2.type.numeric.ComplexType;
 /**
  * Op used to pad the image to a size that is compatible with FFTMethods
  *
- * @author bnorthan
+ * @author Brian Northan
  * @param <T>
  * @param <I>
  * @param <O>

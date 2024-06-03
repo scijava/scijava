@@ -40,7 +40,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 /**
  * Tests {@link DefaultTubeness}.
  *
- * @author Gabe Selzer
+ * @author Gabriel Selzer
  */
 public class TubenessTest extends AbstractOpTest {
 

@@ -50,7 +50,7 @@ import Jama.Matrix;
 /**
  * Helper Method to generate the meta image used for {@link DefaultDetectRidges}
  *
- * @author Gabe Selzer
+ * @author Gabriel Selzer
  */
 public class RidgeDetectionMetadata {
 

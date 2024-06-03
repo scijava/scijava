@@ -46,7 +46,7 @@
 //import org.scijava.functions.Computers;
 //
 ///**
-// * @author Gabe Selzer
+// * @author Gabriel Selzer
 // * @implNote op names='image.invert', priority='100.'
 // */
 //public class InvertIIInteger<T extends IntegerType<T>> implements

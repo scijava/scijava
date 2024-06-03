@@ -48,7 +48,7 @@ import org.scijava.ops.spi.OpDependency;
  * Performs the 2-D partial derivative Gaussian kernel convolutions on an image,
  * at a particular point.
  *
- * @author Gabe Selzer
+ * @author Gabriel Selzer
  * @implNote op names='filter.derivativeGauss'
  */
 public class DefaultDerivativeGauss<T extends RealType<T>> implements

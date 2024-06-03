@@ -36,7 +36,7 @@ import net.imglib2.algorithm.fft2.FFTMethods;
 /**
  * Utility class that interacts with FFTMethods
  *
- * @author bnorthan
+ * @author Brian Northan
  */
 public final class FFTMethodsUtility {
 

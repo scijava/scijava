@@ -42,7 +42,7 @@ import net.imglib2.type.numeric.ComplexType;
  * Op used to pad a kernel to a size that is compatible with FFTMethods and
  * shift the center of the kernel to the origin
  *
- * @author bnorthan
+ * @author Brian Northan
  * @param <T>
  * @param <I>
  * @param <O>

@@ -42,7 +42,7 @@ import net.imglib2.type.numeric.ComplexType;
  * Op used to calculate and return a centered padding interval given an input
  * RAI and the desired padded dimensions
  *
- * @author bnorthan
+ * @author Brian Northan
  * @param <T>
  * @param <I>
  * @param <O>

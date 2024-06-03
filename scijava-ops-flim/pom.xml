@@ -31,7 +31,6 @@
 		<developer>
 			<id>ctrueden</id>
 			<name>Curtis Rueden</name>
-			<url>https://imagej.net/people/ctrueden</url>
 			<roles>
 				<role>founder</role>
 				<role>debugger</role>
@@ -42,19 +41,27 @@
 		<developer>
 			<id>gselzer</id>
 			<name>Gabriel Selzer</name>
-			<url>https://imagej.net/people/gselzer</url>
 			<roles>
 				<role>founder</role>
 				<role>debugger</role>
 				<role>reviewer</role>
-				<role>maintainer</role>
+				<role>support</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>hinerm</id>
+			<name>Mark Hiner</name>
+			<roles>
+				<role>founder</role>
+				<role>debugger</role>
+				<role>reviewer</role>
+				<role>support</role>
 			</roles>
 		</developer>
 	</developers>
 	<contributors>
 		<contributor>
 			<name>Dasong Gao</name>
-			<url>https://imagej.net/people/Xanthorapedia</url>
 			<roles><role>founder</role></roles>
 			<properties><id>Xanthorapedia</id></properties>
 		</contributor>

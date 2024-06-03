@@ -49,7 +49,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Tests the Frangi Vesselness operation.
  *
- * @author Gabe Selzer
+ * @author Gabriel Selzer
  */
 public class FrangiVesselnessTest extends AbstractOpTest {
 

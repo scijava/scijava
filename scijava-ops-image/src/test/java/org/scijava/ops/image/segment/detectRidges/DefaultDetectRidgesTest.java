@@ -48,7 +48,7 @@ import org.scijava.types.Nil;
 /**
  * Tests for {@link DefaultDetectRidges}
  *
- * @author Gabe Selzer
+ * @author Gabriel Selzer
  */
 public class DefaultDetectRidgesTest extends AbstractOpTest {
 

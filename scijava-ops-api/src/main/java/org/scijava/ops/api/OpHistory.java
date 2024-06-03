@@ -52,7 +52,7 @@ import org.scijava.priority.Prioritized;
  * matching calls here, but with some effort the user or other applications
  * could also contribute their algorithms to the history.
  *
- * @author Gabe Selzer
+ * @author Gabriel Selzer
  */
 public interface OpHistory extends Prioritized<OpHistory> {
 

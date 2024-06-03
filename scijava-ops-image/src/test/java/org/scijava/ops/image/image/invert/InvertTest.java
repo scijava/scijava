@@ -65,7 +65,7 @@ import org.scijava.ops.image.util.UnboundedIntegerType;
  * Tests {@link InvertII} and {@link InvertIIInteger}.
  *
  * @author Martin Horn (University of Konstanz)
- * @author Gabe Selzer
+ * @author Gabriel Selzer
  */
 public class InvertTest extends AbstractOpTest {
 

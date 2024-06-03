@@ -50,7 +50,7 @@ import org.scijava.ops.spi.Nullable;
  * spacing parameter refers to the physical distance between data points in the
  * RandomAccessibleInterval, and can vary for each dimension of the image.
  *
- * @author Gabe Selzer
+ * @author Gabriel Selzer
  * @implNote op names='filter.frangiVesselness'
  */
 public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>

@@ -41,7 +41,7 @@ import org.scijava.ops.api.RichOp;
  * already instantiated. With a normal {@link InfoTree}, we'd have to get the
  * {@link InfoTree}s of all dependencies, then reinstantiate them.
  *
- * @author Gabe Selzer
+ * @author Gabriel Selzer
  */
 public class DependencyRichOpInfoTree extends InfoTree {
 

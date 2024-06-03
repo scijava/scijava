@@ -38,7 +38,7 @@ import java.util.List;
  * Note that this Type is different from a TypeVariable in that it is
  * conceptually a concrete type, not a stand-in for a type.
  *
- * @author Gabe Selzer
+ * @author Gabriel Selzer
  */
 public final class Any implements Type {
 

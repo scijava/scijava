@@ -45,7 +45,7 @@
 //
 ///**
 // * @author Martin Horn (University of Konstanz)
-// * @author Gabe Selzer
+// * @author Gabriel Selzer
 // * @implNote op names='image.invert'
 // */
 //public class InvertII<T extends RealType<T>> implements

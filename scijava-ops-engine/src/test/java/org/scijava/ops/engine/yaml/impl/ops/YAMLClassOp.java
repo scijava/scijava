@@ -57,7 +57,6 @@ public class YAMLClassOp implements BiFunction<Double, Double, Double> {
 	 *
 	 * @implNote op names=example.div
 	 * @author Gabriel Selzer
-	 * @author Daffy Duck
 	 */
 	public static class YAMLInnerClassOp implements
 		BiFunction<Double, Double, Double>

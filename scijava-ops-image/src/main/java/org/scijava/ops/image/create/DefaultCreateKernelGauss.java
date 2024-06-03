@@ -49,7 +49,7 @@ import net.imglib2.view.Views;
  * @author Michael Zinsmaier (University of Konstanz)
  * @author Stephan Sellien (University of Konstanz)
  * @author Brian Northan
- * @author Gabe Selzer
+ * @author Gabriel Selzer
  */
 public final class DefaultCreateKernelGauss {
 

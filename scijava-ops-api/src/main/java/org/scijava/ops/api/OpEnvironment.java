@@ -326,9 +326,9 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 * only lambda expressions that need to be passed to this method.
 	 *
 	 * @param <T> The lambda's functional type
-	 *        (e.g. {@link java.util.function.BiFunction}{@code <String, Double>})
+	 *        (e.g. {@link java.util.function.Function}{@code <String, Double>})
 	 * @param opType The generic type of the lambda expression to be embedded.
-	 *        (e.g. {@code new Nil<BiFunction<String, Double>>() {}})
+	 *        (e.g. {@code new Nil<Function<String, Double>>() {}})
 	 * @param lambda A lambda expression fulfilling the functional interface
 	 *               contract of the stated {@code opType}.
 	 * @return An enriched version of the lambda object that embeds knowledge of

@@ -1,4 +1,4 @@
-/*-
+/*
  * #%L
  * Image processing operations for SciJava Ops.
  * %%
@@ -27,31 +27,45 @@
  * #L%
  */
 
-package org.scijava.ops.image;
+package org.scijava.ops.image.types;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import net.imglib2.histogram.Histogram1d;
+import org.scijava.priority.Priority;
+import org.scijava.types.extract.SubTypeExtractor;
+import org.scijava.types.extract.TypeExtractor;
+import org.scijava.types.extract.TypeReifier;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpInfo;
+import java.lang.reflect.Type;
 
-public class OpRegressionTest {
+/**
+ * {@link TypeExtractor} plugin which operates on
+ * {@link Histogram1d} objects.
+ * <p>
+ * Note that this {@link TypeExtractor} is high priority.
+ * </p>
+ *
+ * @author Gabriel Selzer
+ * @author Edward Evans
+ */
+public class Histogram1dTypeExtractor extends
+		SubTypeExtractor<Histogram1d<?>>
+{
 
-	protected static final OpEnvironment ops = OpEnvironment.build();
-
-	@Test
-	public void testOpDiscoveryRegression() {
-		long expected = 1940;
-		long actual = ops.infos().size();
-		assertEquals(expected, actual);
+	@Override
+	public double priority() {
+		return Priority.HIGH;
 	}
 
-	@Test
-	public void testOpDescriptionRegression() {
-		// Ensure no ops have a null description
-		for (OpInfo info : ops.infos())
-			Assertions.assertNotNull(info.toString(), () -> "Info from " + info.id() +
-				" has a null description");
+	@Override
+	public Class<?> baseClass() {
+		return Histogram1d.class;
 	}
+
+	@Override
+	protected Type[] getTypeParameters(TypeReifier r,
+			Histogram1d<?> object)
+	{
+		return new Type[] { r.reify(object.firstDataValue()) };
+	}
+
 }

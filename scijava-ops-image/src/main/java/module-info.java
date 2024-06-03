@@ -27,18 +27,8 @@
  * #L%
  */
 
-// HACK: Open the scijava-ops-image module completely.
-//
-// What's supposed to be needed is:
-//   opens org.scijava.ops.tutorial to org.scijava.ops.engine;
-//
-// Unfortunately, doing that results in the following error at test time:
-//
-//   Error occurred during initialization of boot layer
-//   java.lang.module.FindException: Error reading module:
-//   .../scijava/scijava-ops-image/target/classes
-//
-// Whereas fully opening the module works for some reason.
+// This module is open so that scijava-ops-engine can access
+// all of its many Op implementations via reflection.
 open module org.scijava.ops.image {
 
 	requires java.scripting;

@@ -29,20 +29,25 @@
 
 package org.scijava.ops.image.types;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
-import org.scijava.ops.image.AbstractOpTest;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.histogram.Histogram1d;
 import net.imglib2.img.Img;
+import net.imglib2.img.array.ArrayImg;
 import net.imglib2.img.array.ArrayImgs;
+import net.imglib2.img.basictypeaccess.array.DoubleArray;
 import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.outofbounds.OutOfBoundsRandomValueFactory;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
-
+import net.imglib2.type.numeric.real.DoubleType;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.scijava.ops.image.AbstractOpTest;
+import org.scijava.types.Nil;
 import org.scijava.types.extract.TypeExtractor;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 /**
  * Tests various {@link TypeExtractor}s.
@@ -51,46 +56,73 @@ import org.scijava.types.extract.TypeExtractor;
  */
 public class TypeExtractorTests extends AbstractOpTest {
 
-	/**
-	 * @input oobf the {@link OutOfBoundsConstantValueFactory}
-	 * @output some {@link String}
-	 * @implNote op names='test.oobcvfTypeExtractor'
-	 */
-	public final Function<OutOfBoundsConstantValueFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>>, String> func =
-		(oobf) -> "oobcvf";
-
 	@Test
 	public void testOutOfBoundsConstantValueFactoryTypeExtractors() {
 		OutOfBoundsFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>> oobf =
 			new OutOfBoundsConstantValueFactory<>(new UnsignedByteType(5));
-
-		String output = (String) ops.op("test.oobcvfTypeExtractor").input(oobf)
-			.apply();
-		// make sure that output matches the return from the Op above, specific to
-		// the
-		// type of OOBF we passed through.
-		assert output.equals("oobcvf");
+		// Get the generic type (indirectly using the Type reification system through ops)
+		Type objType = ops.genericType(oobf);
+		Assertions.assertInstanceOf(ParameterizedType.class, objType);
+		ParameterizedType pType = (ParameterizedType) objType;
+		// Assert raw type
+		Assertions.assertEquals(OutOfBoundsConstantValueFactory.class, pType.getRawType());
+		// Assert first type parameter
+		Assertions.assertEquals(UnsignedByteType.class, pType.getActualTypeArguments()[0]);
+		// Assert second type parameter
+		ParameterizedType secondArgType = (ParameterizedType) pType.getActualTypeArguments()[1];
+		Assertions.assertEquals(RandomAccessibleInterval.class, secondArgType.getRawType());
+		Assertions.assertEquals(UnsignedByteType.class, secondArgType.getActualTypeArguments()[0]);
 	}
-
-	// Test Op returns a string different from the one above
-	/**
-	 * @input oobf the {@link OutOfBoundsRandomValueFactory}
-	 * @input rai the {@link RandomAccessibleInterval}
-	 * @output some {@link String}
-	 * @implNote op names='test.oobrvfTypeExtractor'
-	 */
-	public final BiFunction<OutOfBoundsRandomValueFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>>, RandomAccessibleInterval<UnsignedByteType>, String> funcRandom =
-		(oobf, rai) -> "oobrvf";
 
 	@Test
 	public void testOutOfBoundsRandomValueFactoryTypeExtractors() {
 		OutOfBoundsFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>> oobf =
 			new OutOfBoundsRandomValueFactory<>(new UnsignedByteType(7), 7, 7);
-		Img<UnsignedByteType> img = ArrayImgs.unsignedBytes(new long[] { 10, 10 });
-		String output = (String) ops.op("test.oobrvfTypeExtractor").input(oobf, img)
-			.apply(); // make sure that output matches the return from the
-								// Op above, specific to the // type of OOBF we passed
-								// through.
-		assert output.equals("oobrvf");
+		// Get the generic type (indirectly using the Type reification system through ops)
+		Type objType = ops.genericType(oobf);
+		Assertions.assertInstanceOf(ParameterizedType.class, objType);
+		ParameterizedType pType = (ParameterizedType) objType;
+		// Assert raw type
+		Assertions.assertEquals(OutOfBoundsRandomValueFactory.class, pType.getRawType());
+		// Assert first type parameter
+		Assertions.assertEquals(UnsignedByteType.class, pType.getActualTypeArguments()[0]);
+		// Assert second type parameter
+		ParameterizedType secondArgType = (ParameterizedType) pType.getActualTypeArguments()[1];
+		Assertions.assertEquals(RandomAccessibleInterval.class, secondArgType.getRawType());
+		Assertions.assertEquals(UnsignedByteType.class, secondArgType.getActualTypeArguments()[0]);
+	}
+
+	@Test
+	public void testRAITypeExtractor() {
+		Img<DoubleType> data = ArrayImgs.doubles(20, 20);
+		// Get the generic type (indirectly using the Type reification system through ops)
+		Type objType = ops.genericType(data);
+		Assertions.assertInstanceOf(ParameterizedType.class, objType);
+		ParameterizedType pType = (ParameterizedType) objType;
+		// Assert raw type
+		Assertions.assertEquals(ArrayImg.class, pType.getRawType());
+		// Assert type parameters
+		Assertions.assertArrayEquals( //
+			new Type[] {DoubleType.class, DoubleArray.class}, //
+			pType.getActualTypeArguments() //
+		);
+	}
+
+	@Test
+	public void testHistogram1dTypeExtractor() {
+		Img<DoubleType> data = ArrayImgs.doubles(20, 20);
+		// Use an Op to get a histogram
+		Histogram1d<DoubleType> doubles = ops.op("image.histogram") //
+				.input(data) //
+				.outType(new Nil<Histogram1d<DoubleType>>() {}) //
+				.apply();
+		// Get the generic type (indirectly using the Type reification system through ops)
+		Type objType = ops.genericType(doubles);
+		Assertions.assertInstanceOf(ParameterizedType.class, objType);
+		ParameterizedType pType = (ParameterizedType) objType;
+		// Assert raw type
+		Assertions.assertEquals(Histogram1d.class, pType.getRawType());
+		// Assert first type parameter
+		Assertions.assertArrayEquals(new Type[] {DoubleType.class}, pType.getActualTypeArguments());
 	}
 }

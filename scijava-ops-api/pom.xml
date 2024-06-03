@@ -159,43 +159,12 @@
 	<build>
 		<plugins>
 			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>org.scijava</groupId>
-							<artifactId>scijava-ops-indexer</artifactId>
-							<version>${project.version}</version>
-						</path>
-					</annotationProcessorPaths>
-					<fork>true</fork>
-					<compilerArgs>
-						<arg>-Ascijava.ops.parse="${scijava.ops.parse}"</arg>
-						<arg>-Ascijava.ops.opVersion="${project.version}"</arg>
-					</compilerArgs>
-				</configuration>
-			</plugin>
-			<plugin>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>
 					<links>
 						<link>https://javadoc.scijava.org/Java11/</link>
 						<link>https://javadoc.scijava.org/Guava/</link>
 					</links>
-					<tagletArtifacts>
-						<tagletArtifact>
-							<groupId>org.scijava</groupId>
-							<artifactId>scijava-taglets</artifactId>
-							<version>${project.version}</version>
-						</tagletArtifact>
-					</tagletArtifacts>
-					<tags>
-						<tag>
-							<name>implNote</name>
-							<placement>a</placement>
-							<head>Implementation Note:</head>
-						</tag>
-					</tags>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -218,123 +187,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>com.alexecollins.maven.plugin</groupId>
-				<artifactId>script-maven-plugin</artifactId>
-				<version>1.0.0</version>
-				<executions>
-					<execution>
-						<id>union-metadata-indices</id>
-						<phase>process-test-classes</phase>
-						<goals>
-							<goal>execute</goal>
-						</goals>
-						<configuration>
-							<language>ruby</language>
-							<script>
-								# Append the source plugin annotations to the test plugin annotations
-								require 'set'
-
-								# Handle windows paths
-								basedir = '${project.basedir}'.gsub /\\+/, '\\\\'
-
-								# Reads plugin metadata into a set of strings, one per plugin declaration.
-								def read_plugins(path)
-								delim = 'UNIQUE-SEQUENCE-THAT-NO-PLUGIN-WILL-EVER-USE'
-								return File.exist?(path) ? File.read(path).sub('}{', '}' + delim + '{').split(delim).to_set : Set.new()
-								end
-
-								# Read in main and test scope plugin annotations.
-								['ops.yaml'].each do |pluginsPath|
-								mainPluginsPath = "#{basedir}/target/classes/#{pluginsPath}"
-								testPluginsPath = "#{basedir}/target/test-classes/#{pluginsPath}"
-								mainPlugins = read_plugins(mainPluginsPath)
-								testPlugins = read_plugins(testPluginsPath)
-
-								# Write out unioned plugin annotations to test scope plugin annotations.
-								# Without this, the test scope code does not know of the main scope plugins.
-								allPlugins = mainPlugins.union(testPlugins)
-								unless allPlugins.empty?()
-								require 'fileutils'
-								FileUtils.mkdir_p File.dirname(testPluginsPath)
-								File.write(testPluginsPath, allPlugins.to_a.join(''))
-								end
-								end
-							</script>
-						</configuration>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>org.jruby</groupId>
-						<artifactId>jruby-complete</artifactId>
-						<version>9.2.11.1</version>
-						<scope>runtime</scope>
-					</dependency>
-				</dependencies>
-			</plugin>
 		</plugins>
 	</build>
-	<profiles>
-		<profile>
-			<id>only-eclipse-scijava</id>
-			<activation>
-				<property>
-					<name>m2e.version</name>
-				</property>
-			</activation>
-			<build>
-				<pluginManagement>
-					<plugins>
-						<!--
-						Configure the Eclipse m2e plugin to support needed plugins.
-						-->
-						<plugin>
-							<groupId>org.eclipse.m2e</groupId>
-							<artifactId>lifecycle-mapping</artifactId>
-							<!--
-							NB: Eclipse cannot handle an overridden version property here!
-							The version needs to stay hardcoded at 1.0.0.
-							-->
-							<version>1.0.0</version>
-							<configuration>
-								<lifecycleMappingMetadata>
-									<pluginExecutions combine.children="append">
-										<!--
-										NB: Make Eclipse union the metadata indices on every build; see:
-										https://www.eclipse.org/m2e/documentation/m2e-execution-not-covered.html
-										-->
-										<pluginExecution>
-											<pluginExecutionFilter>
-												<groupId>com.alexecollins.maven.plugin</groupId>
-												<artifactId>script-maven-plugin</artifactId>
-												<versionRange>${script-maven-plugin.version}</versionRange>
-												<goals>
-													<goal>execute</goal>
-												</goals>
-											</pluginExecutionFilter>
-											<action>
-												<execute>
-													<runOnConfiguration>true</runOnConfiguration>
-													<!--
-													NB: You might think we could run the annotations
-													union script once only, at configuration time.
-													Unfortunately, when configuration happens in Eclipse,
-													the plugin annotations have not yet been generated.
-													So let's redo the union on every incremental build.
-													That'll show 'em!
-													-->
-													<runOnIncremental>true</runOnIncremental>
-												</execute>
-											</action>
-										</pluginExecution>
-									</pluginExecutions>
-								</lifecycleMappingMetadata>
-							</configuration>
-						</plugin>
-					</plugins>
-				</pluginManagement>
-			</build>
-		</profile>
-	</profiles>
 </project>

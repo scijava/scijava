@@ -38,7 +38,7 @@ import java.io.Serializable;
  * A faster version of {@link java.util.Random} functionality,
  * built on the Mersenne Twister algorithm.
  *
- * <h3>MersenneTwister and MersenneTwisterFast</h3>
+ * <h2>MersenneTwister and MersenneTwisterFast</h2>
  * <p>
  * <b>Version 17</b>, based on version MT199937(99/10/29) of the Mersenne
  * Twister algorithm found at

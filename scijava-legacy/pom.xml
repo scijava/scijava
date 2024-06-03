@@ -4,12 +4,13 @@
 
 	<parent>
 		<groupId>org.scijava</groupId>
-		<artifactId>scijava-parent</artifactId>
-		<version>0-SNAPSHOT</version>
-		<relativePath>..</relativePath>
+		<artifactId>pom-scijava</artifactId>
+		<version>37.0.0</version>
+		<relativePath />
 	</parent>
 
 	<artifactId>scijava-legacy</artifactId>
+	<version>0-SNAPSHOT</version>
 
 	<name>SciJava Legacy</name>
 	<description>Interoperability with legacy SciJava libraries.</description>
@@ -88,6 +89,23 @@
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 
+		<!--
+		NB: Older versions of OpenJDK 11 have a bug in the javadoc tool,
+		which causes errors like:
+
+		[ERROR] javadoc: error - The code being documented uses packages
+		in the unnamed module, but the packages defined in
+		https://github.com/scijava/scijava/apidocs/ are in named modules.
+
+		The most recent version of OpenJDK 11 known to have this problem
+		is 11.0.8; the oldest version known to have fixed it is 11.0.17.
+		Therefore, we set the minimum build JDK version to 11.0.17 here.
+		-->
+		<scijava.jvm.build.version>[11.0.17,)</scijava.jvm.build.version>
+		<scijava.jvm.version>11</scijava.jvm.version>
+
+		<!-- TEMP: Until pom-scijava 38.0.0 is released. -->
+		<scijava-maven-plugin.version>3.0.0</scijava-maven-plugin.version>
 		<scijava-common.version>2.98.0</scijava-common.version>
 	</properties>
 
@@ -184,13 +202,176 @@
 						</path>
 					</annotationProcessorPaths>
 					<fork>true</fork>
-					<showWarnings>true</showWarnings>
 					<compilerArgs>
 						<arg>-Aparse.ops="${scijava.parse.ops}"</arg>
 						<arg>-Aop.version="${project.version}"</arg>
 					</compilerArgs>
 				</configuration>
 			</plugin>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<links>
+						<link>https://javadoc.scijava.org/Java11/</link>
+						<link>https://javadoc.scijava.org/ImageJ2/</link>
+						<link>https://javadoc.scijava.org/ImgLib2/</link>
+						<link>https://javadoc.scijava.org/SciJava/</link>
+						<link>https://javadoc.scijava.org/Guava/</link>
+						<link>https://javadoc.scijava.org/JAMA/</link>
+					</links>
+					<tagletArtifacts>
+						<tagletArtifact>
+							<groupId>org.scijava</groupId>
+							<artifactId>scijava-taglets</artifactId>
+							<version>${project.version}</version>
+						</tagletArtifact>
+					</tagletArtifacts>
+					<tags>
+						<tag>
+							<name>implNote</name>
+							<placement>a</placement>
+							<head>Implementation Note:</head>
+						</tag>
+					</tags>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>enforce-package-rules</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<phase>test</phase>
+						<configuration>
+							<rules>
+								<NoPackageCyclesRule
+										implementation="org.scijava.maven.plugin.enforcer.NoPackageCyclesRule" />
+								<NoSubpackageDependenceRule
+										implementation="org.scijava.maven.plugin.enforcer.NoSubpackageDependenceRule" />
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.alexecollins.maven.plugin</groupId>
+				<artifactId>script-maven-plugin</artifactId>
+				<version>1.0.0</version>
+				<executions>
+					<execution>
+						<id>union-metadata-indices</id>
+						<phase>process-test-classes</phase>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+						<configuration>
+							<language>ruby</language>
+							<script>
+								# Append the source plugin annotations to the test plugin annotations
+								require 'set'
+
+								# Handle windows paths
+								basedir = '${project.basedir}'.gsub /\\+/, '\\\\'
+
+								# Reads plugin metadata into a set of strings, one per plugin declaration.
+								def read_plugins(path)
+								delim = 'UNIQUE-SEQUENCE-THAT-NO-PLUGIN-WILL-EVER-USE'
+								return File.exist?(path) ? File.read(path).sub('}{', '}' + delim + '{').split(delim).to_set : Set.new()
+								end
+
+								# Read in main and test scope plugin annotations.
+								['ops.yaml'].each do |pluginsPath|
+								mainPluginsPath = "#{basedir}/target/classes/#{pluginsPath}"
+								testPluginsPath = "#{basedir}/target/test-classes/#{pluginsPath}"
+								mainPlugins = read_plugins(mainPluginsPath)
+								testPlugins = read_plugins(testPluginsPath)
+
+								# Write out unioned plugin annotations to test scope plugin annotations.
+								# Without this, the test scope code does not know of the main scope plugins.
+								allPlugins = mainPlugins.union(testPlugins)
+								unless allPlugins.empty?()
+								require 'fileutils'
+								FileUtils.mkdir_p File.dirname(testPluginsPath)
+								File.write(testPluginsPath, allPlugins.to_a.join(''))
+								end
+								end
+							</script>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.jruby</groupId>
+						<artifactId>jruby-complete</artifactId>
+						<version>9.2.11.1</version>
+						<scope>runtime</scope>
+					</dependency>
+				</dependencies>
+			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>only-eclipse-scijava</id>
+			<activation>
+				<property>
+					<name>m2e.version</name>
+				</property>
+			</activation>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<!--
+						Configure the Eclipse m2e plugin to support needed plugins.
+						-->
+						<plugin>
+							<groupId>org.eclipse.m2e</groupId>
+							<artifactId>lifecycle-mapping</artifactId>
+							<!--
+							NB: Eclipse cannot handle an overridden version property here!
+							The version needs to stay hardcoded at 1.0.0.
+							-->
+							<version>1.0.0</version>
+							<configuration>
+								<lifecycleMappingMetadata>
+									<pluginExecutions combine.children="append">
+										<!--
+										NB: Make Eclipse union the metadata indices on every build; see:
+										https://www.eclipse.org/m2e/documentation/m2e-execution-not-covered.html
+										-->
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>com.alexecollins.maven.plugin</groupId>
+												<artifactId>script-maven-plugin</artifactId>
+												<versionRange>${script-maven-plugin.version}</versionRange>
+												<goals>
+													<goal>execute</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<execute>
+													<runOnConfiguration>true</runOnConfiguration>
+													<!--
+													NB: You might think we could run the annotations
+													union script once only, at configuration time.
+													Unfortunately, when configuration happens in Eclipse,
+													the plugin annotations have not yet been generated.
+													So let's redo the union on every incremental build.
+													That'll show 'em!
+													-->
+													<runOnIncremental>true</runOnIncremental>
+												</execute>
+											</action>
+										</pluginExecution>
+									</pluginExecutions>
+								</lifecycleMappingMetadata>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+	</profiles>
 </project>

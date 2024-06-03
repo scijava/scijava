@@ -14,7 +14,7 @@
 	<packaging>pom</packaging>
 
 	<name>SciJava</name>
-	<description>Core libraries of the SciJava platform.</description>
+	<description>Core components of the SciJava platform.</description>
 	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2017</inceptionYear>
 	<organization>

@@ -103,6 +103,10 @@
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 
+		<!-- NB: Do not install/deploy this non-library component. -->
+		<maven.deploy.skip>true</maven.deploy.skip>
+		<maven.install.skip>true</maven.install.skip>
+
 		<!--
 		NB: Older versions of OpenJDK 11 have a bug in the javadoc tool,
 		which causes errors like:

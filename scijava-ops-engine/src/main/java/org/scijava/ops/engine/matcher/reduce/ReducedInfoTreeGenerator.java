@@ -10,10 +10,11 @@ import org.scijava.ops.engine.impl.DefaultInfoTreeGenerator;
  * This implementation is based on the fact that {@link ReducedOpInfo}s are
  * treated like other "default" {@link org.scijava.ops.api.OpInfo}s, such that
  * they will be in the {@code idMap} passed to {@link #generate}. Using that
- * idea, we simply extend {@link DefaultInfoTreeGenerator}, with a slighly
- * different {@link #canGenerate(String)}. If {@code idMap} is rewritten to no
- * longer contain all {@link ReducedOpInfo}s, this implementation should change
- * as well.
+ * idea, we simply copy the code from {@link DefaultInfoTreeGenerator} (since a
+ * direct extension would violate package cycles), with a slightly different
+ * {@link #canGenerate(String)}. If {@code idMap} is rewritten to no longer
+ * contain all {@link ReducedOpInfo}s, this implementation should change as
+ * well.
  * </p>
  *
  * @author Gabriel Selzer

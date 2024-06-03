@@ -99,6 +99,7 @@
 		<main-class>org.scijava.ops.engine.Main</main-class>
 		<package-name>org.scijava.ops.engine</package-name>
 
+		<scijava.surefire.args>--add-exports org.scijava.ops.engine/org.scijava.ops.engine=ALL-UNNAMED</scijava.surefire.args>
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 	</properties>

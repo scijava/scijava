@@ -129,7 +129,7 @@ Activate the ``scijava-ops`` conda/mamba environment and run the following Pytho
 
     # add endpoints
     print("[INFO]: Adding endpoints...")
-    sj.config.endpoints = ['net.imglib2:imglib2',
+    sj.config.endpoints = ['net.imglib2:imglib2:6.4.0',
             'net.imglib2:imglib2-imglyb',
             'io.scif:scifio',
             'org.scijava:scijava-ops-engine:1.0.0',

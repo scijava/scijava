@@ -78,7 +78,7 @@ The pseudocolored result shows a clear separation of fluorophores, which could b
         #@ ROIService roiService
         #@ Img input
         #@ Float (description="The total time (ns) (timeBase in metadata)", label = "Time Base", value=12.5) timeBase
-        #@ Integer (description="The number of time bins (timeBins in metadata)", label = "Time Bins", value=512) timeBins
+        #@ Integer (description="The number of time bins (timeBins in metadata)", label = "Time Bins", value=256) timeBins
         #@ Integer (description="The index of the lifetime axis (from metadata)", label = "Lifetime Axis", value=2) lifetimeAxis
         #@ Float (description="The minimal pixel intensity (across all time bins) threshold for fitting", label = "Intensity Threshold", value = 18) iThresh
         #@ Integer (description="The radius of the binning kernel", label = "Bin Kernel Radius", value=1, min=0) kernelRad

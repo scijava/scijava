@@ -13,7 +13,7 @@ We use a sample of `FluoCells™ Prepared Slide #1`_, imaged by `Jenu Chacko`_ u
 
   FluoCells™ Prepared Slide #1 contains bovine pulmonary artery endothelial cells (BPAEC). MitoTracker™ Red CMXRos was used to stain the mitochondria in the live cells, with accumulation dependent upon membrane potential. Following fixation and permeabilization, F-actin was stained with Alexa Fluor™ 488 phalloidin, and the nuclei were counterstained with the blue-fluorescent DNA stain DAPI.
 
-The sample data can be downloaded `here <https://media.scijava.org/scijava-ops/1.0.0/flim_example_data.sdt>`_ and can be loaded into Fiji with `Bio-Formats`_ using ``File → Open``. When presented with the ``Bio-Formats Import Options`` screen, it may be helpful to select ``Metadata viewing → Display metadata`` to determine values necessary for analysis. Then, select ``OK``. The data may take a minute to load.
+The sample data can be downloaded `here <https://media.scijava.org/scijava-ops/1.0.0/flim_example_data.sdt>`_ and can be loaded into Fiji with `SCIFIO`_ using ``File → Open...`` or ``File → Import → Image...``. The data may take a minute to load.
 
 Within the script, the `Levenberg-Marquardt algorithm`_ fitting Op of SciJava Ops FLIM is used to fit the data.
 
@@ -222,7 +222,7 @@ In the panels below, we show the results of executing both scripts with computat
     :width: 49%
 
 
-.. _`Bio-Formats` : https://www.openmicroscopy.org/bio-formats/
+.. _`SCIFIO` : https://scif.io
 .. _`FLIM` : https://en.wikipedia.org/wiki/Fluorescence-lifetime_imaging_microscopy
 .. _`FluoCells™ Prepared Slide #1` : https://www.thermofisher.com/order/catalog/product/F36924
 .. _`FRET` : https://en.wikipedia.org/wiki/F%C3%B6rster_resonance_energy_transfer

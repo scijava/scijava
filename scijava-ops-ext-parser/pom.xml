@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>scijava-ops-ext-parser</artifactId>
-	<version>0-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 
 	<name>SciJava Ops External Parser</name>
 	<description>A tool for wrapping external libraries as SciJava Ops.</description>
@@ -200,10 +200,8 @@
 						<phase>test</phase>
 						<configuration>
 							<rules>
-								<NoPackageCyclesRule
-									implementation="org.scijava.maven.plugin.enforcer.NoPackageCyclesRule" />
-								<NoSubpackageDependenceRule
-									implementation="org.scijava.maven.plugin.enforcer.NoSubpackageDependenceRule" />
+								<NoPackageCyclesRule implementation="org.scijava.maven.plugin.enforcer.NoPackageCyclesRule" />
+								<NoSubpackageDependenceRule implementation="org.scijava.maven.plugin.enforcer.NoSubpackageDependenceRule" />
 							</rules>
 						</configuration>
 					</execution>

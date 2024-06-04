@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>scijava-discovery</artifactId>
-	<version>0-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 
 	<name>SciJava Discovery</name>
 	<description>Plugin discovery subsystem for SciJava libraries.</description>
@@ -117,10 +117,8 @@
 						<phase>test</phase>
 						<configuration>
 							<rules>
-								<NoPackageCyclesRule
-									implementation="org.scijava.maven.plugin.enforcer.NoPackageCyclesRule" />
-								<NoSubpackageDependenceRule
-									implementation="org.scijava.maven.plugin.enforcer.NoSubpackageDependenceRule" />
+								<NoPackageCyclesRule implementation="org.scijava.maven.plugin.enforcer.NoPackageCyclesRule" />
+								<NoSubpackageDependenceRule implementation="org.scijava.maven.plugin.enforcer.NoSubpackageDependenceRule" />
 							</rules>
 						</configuration>
 					</execution>

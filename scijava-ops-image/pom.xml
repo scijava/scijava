@@ -262,8 +262,6 @@
 
 		<scijava.ops.parse>true</scijava.ops.parse>
 
-		<!-- TEMP: Until #267 is merged. -->
-		<imglib2-mesh.version>1.0.0</imglib2-mesh.version>
 	</properties>
 
 	<dependencies>

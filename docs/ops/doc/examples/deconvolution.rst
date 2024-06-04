@@ -50,9 +50,9 @@ SciJava Ops via Fiji's scripting engine with `script parameters`_:
 
         #@ OpEnvironment ops
         #@ ImgPlus img
-        #@ Integer iterations(label="Iterations", value=30)
+        #@ Integer iterations(label="Iterations", value=15)
         #@ Float numericalAperture(label="Numerical Aperture", style="format:0.00", min=0.00, value=1.45)
-        #@ Integer wavelength(label="Emission Wavelength (nm)", value=550)
+        #@ Integer wavelength(label="Emission Wavelength (nm)", value=457)
         #@ Float riImmersion(label="Refractive Index (immersion)", style="format:0.00", min=0.00, value=1.5)
         #@ Float riSample(label="Refractive Index (sample)", style="format:0.00", min=0.00, value=1.4)
         #@ Float lateral_res(label="Lateral resolution (μm/pixel)", style="format:0.0000", min=0.0000, value=0.065)
@@ -97,9 +97,9 @@ SciJava Ops via Fiji's scripting engine with `script parameters`_:
 
         #@ OpEnvironment ops
         #@ ImgPlus img
-        #@ Integer iterations(label="Iterations", value=30)
+        #@ Integer iterations(label="Iterations", value=15)
         #@ Float numericalAperture(label="Numerical Aperture", style="format:0.00", min=0.00, value=1.45)
-        #@ Integer wavelength(label="Emission Wavelength (nm)", value=550)
+        #@ Integer wavelength(label="Emission Wavelength (nm)", value=457)
         #@ Float riImmersion(label="Refractive Index (immersion)", style="format:0.00", min=0.00, value=1.5)
         #@ Float riSample(label="Refractive Index (sample)", style="format:0.00", min=0.00, value=1.4)
         #@ Float lateral_res(label="Lateral resolution (μm/pixel)", style="format:0.0000", min=0.0000, value=0.065)

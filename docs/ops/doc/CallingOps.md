@@ -72,15 +72,31 @@ direct execution, since the parameters have not been concretely specified yet.
 Using [wildcards](https://docs.oracle.com/javase/tutorial/extra/generics/wildcards.html), such as `Img<?> inImage`, can make Op reuse difficult. For example, the following code segment will not compile in a Java runtime:
 
 ```java
-Img<?> inImage = ...;
+Img<?> inImage = ArrayImgs.unsignedBytes(128, 128);
 var gaussOp = ops.op("filter.gauss").input(inImage, 2.0).output(outImage).computer();
 gaussOp.compute(inImage, 2.0, outImage);
 ```
 
 ### Solution 1: Use `compute` instead of `computer`
 
-If you don't need to save the Op to a variable, *just call it directly* as shown [here](#computing-with-compute). Generally speaking, op requests are **cached**, meaning repeated OpBuilder calls that directly execute Ops will **not** significantly increase performance.
+If you don't need to save the Op to a variable, *just [call it directly](#computing-with-compute)*:
 
-### Solution 2: Use Type Parameters on your functions
+```java
+ops.op("filter.gauss").input(inImage, 2.0).output(outImage).compute();
+```
 
-If you *know* that your `Img` will always contain bytes, define your variable as an `Img<ByteType>`
+Generally speaking, op requests are **cached**, meaning repeated OpBuilder calls that directly execute Ops will **not** significantly decrease performance.
+
+### Solution 2: Avoid using wildcards
+
+If you *know* that your `Img` will always contain unsigned byte values, for example, define your variable as an `Img<UnsignedByteType>` rather than using `Img<?>`.
+
+### Solution 3: Use raw casts (not type-safe!)
+
+```java
+Img<?> inImage = ArrayImgs.unsignedBytes(128, 128);
+var gaussOp = ops.op("filter.gauss").input(inImage, 2.0).output(outImage).computer();
+gaussOp.compute((Img) inImage, 2.0, outImage);
+```
+
+This method should only be used as a last resort.

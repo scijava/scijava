@@ -169,5 +169,5 @@ To apply the ``phase`` LUT and a colorbar use the following script and select th
 .. _`Becker and Sherer, JVI 2017`: https://pubmed.ncbi.nlm.nih.gov/28053097/
 .. _`Wang et. al, IEEE 2019`: https://ieeexplore.ieee.org/abstract/document/8681436
 .. _`Stockley et. al, Bacteriophage 2016`: https://pubmed.ncbi.nlm.nih.gov/27144089/
-.. _`here`: https://media.imagej.net/scijava-ops/1.0.0/hela_hiv_gag_ms2_mcherry.tif
+.. _`here`: https://media.scijava.org/scijava-ops/1.0.0/hela_hiv_gag_ms2_mcherry.tif
 .. _`script parameters`: https://imagej.net/scripting/parameters

@@ -1,11 +1,11 @@
 =========================
-Gaussian blur subtraction
+Gaussian Blur Subtraction
 =========================
 
-In this example we will use SciJava Ops to open an image, apply a guassian blur and subract the blurred image from the input image.
+In this example we will use SciJava Ops to open an image, apply a gaussian blur and subtract the blurred image from the input image.
 This technique can be used to extract features, such as puncta, from a noisy background.
 
-SciJava Ops via Fiji's sripting engine with `script parameters`_:
+Here is a script using `script parameters`_, runnable in Fiji's `Script Editor`_:
 
 .. tabs::
 
@@ -53,4 +53,5 @@ SciJava Ops via Fiji's sripting engine with `script parameters`_:
         result = ops.op("create.img").input(img, FloatType()).apply()
         ops.op("math.sub").input(img, img_gauss).output(result).compute()
 
-.. _`script parameters`: https://imagej.net/scripting/parameters 
+.. _`script parameters`: https://imagej.net/scripting/parameters
+.. _`Script Editor`: https://imagej.net/scripting/script-editor

@@ -4,12 +4,13 @@
 
 	<parent>
 		<groupId>org.scijava</groupId>
-		<artifactId>scijava-parent</artifactId>
-		<version>0-SNAPSHOT</version>
-		<relativePath>..</relativePath>
+		<artifactId>pom-scijava</artifactId>
+		<version>37.0.0</version>
+		<relativePath />
 	</parent>
 
 	<artifactId>scijava-common3</artifactId>
+	<version>0-SNAPSHOT</version>
 
 	<name>SciJava Common</name>
 	<description>Common functionality widely used across SciJava modules.</description>
@@ -30,7 +31,6 @@
 		<developer>
 			<id>ctrueden</id>
 			<name>Curtis Rueden</name>
-			<url>https://imagej.net/people/ctrueden</url>
 			<roles>
 				<role>founder</role>
 				<role>lead</role>
@@ -44,7 +44,15 @@
 			<name>Gabriel Selzer</name>
 			<roles>
 				<role>founder</role>
-				<role>developer</role>
+				<role>debugger</role>
+				<role>reviewer</role>
+				<role>support</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>hinerm</id>
+			<name>Mark Hiner</name>
+			<roles>
 				<role>debugger</role>
 				<role>reviewer</role>
 				<role>support</role>
@@ -53,7 +61,8 @@
 	</developers>
 	<contributors>
 		<contributor>
-			<name>None</name>
+			<name>David Kolb</name>
+			<properties><id>Treiblesschorle</id></properties>
 		</contributor>
 	</contributors>
 
@@ -84,6 +93,24 @@
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
+
+		<!--
+		NB: Older versions of OpenJDK 11 have a bug in the javadoc tool,
+		which causes errors like:
+
+		[ERROR] javadoc: error - The code being documented uses packages
+		in the unnamed module, but the packages defined in
+		https://github.com/scijava/scijava/apidocs/ are in named modules.
+
+		The most recent version of OpenJDK 11 known to have this problem
+		is 11.0.8; the oldest version known to have fixed it is 11.0.17.
+		Therefore, we set the minimum build JDK version to 11.0.17 here.
+		-->
+		<scijava.jvm.build.version>[11.0.17,)</scijava.jvm.build.version>
+		<scijava.jvm.version>11</scijava.jvm.version>
+
+		<!-- TEMP: Until pom-scijava 38.0.0 is released. -->
+		<scijava-maven-plugin.version>3.0.0</scijava-maven-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -102,4 +129,37 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>enforce-package-rules</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<phase>test</phase>
+						<configuration>
+							<rules>
+								<NoPackageCyclesRule
+									implementation="org.scijava.maven.plugin.enforcer.NoPackageCyclesRule" />
+								<NoSubpackageDependenceRule
+									implementation="org.scijava.maven.plugin.enforcer.NoSubpackageDependenceRule" />
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<links>
+						<link>https://javadoc.scijava.org/Java11/</link>
+					</links>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

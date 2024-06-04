@@ -4,12 +4,13 @@
 
 	<parent>
 		<groupId>org.scijava</groupId>
-		<artifactId>scijava-parent</artifactId>
-		<version>0-SNAPSHOT</version>
-		<relativePath>..</relativePath>
+		<artifactId>pom-scijava</artifactId>
+		<version>37.0.0</version>
+		<relativePath />
 	</parent>
 
 	<artifactId>scijava-ops-image</artifactId>
+	<version>0-SNAPSHOT</version>
 
 	<name>SciJava Ops Image</name>
 	<description>Image processing operations for SciJava Ops.</description>
@@ -30,11 +31,9 @@
 		<developer>
 			<id>ctrueden</id>
 			<name>Curtis Rueden</name>
-			<url>https://imagej.net/people/ctrueden</url>
 			<roles>
 				<role>founder</role>
 				<role>lead</role>
-				<role>developer</role>
 				<role>debugger</role>
 				<role>reviewer</role>
 				<role>support</role>
@@ -44,23 +43,17 @@
 		<developer>
 			<id>gselzer</id>
 			<name>Gabriel Selzer</name>
-			<url>https://github.com/gselzer</url>
 			<roles>
 				<role>founder</role>
-				<role>lead</role>
-				<role>developer</role>
 				<role>debugger</role>
 				<role>reviewer</role>
 				<role>support</role>
-				<role>maintainer</role>
 			</roles>
 		</developer>
 		<developer>
 			<id>bnorthan</id>
 			<name>Brian Northan</name>
-			<url>https://imagej.net/people/bnorthan</url>
 			<roles>
-				<role>developer</role>
 				<role>debugger</role>
 				<role>reviewer</role>
 				<role>support</role>
@@ -71,7 +64,6 @@
 		<!-- Co-founders -->
 		<contributor>
 			<name>Christian Birkhold</name>
-			<url>https://imagej.net/people/dietzc</url>
 			<roles><role>founder</role></roles>
 			<properties><id>dietzc</id></properties>
 		</contributor>
@@ -82,19 +74,16 @@
 		</contributor>
 		<contributor>
 			<name>Johannes Schindelin</name>
-			<url>https://imagej.net/people/dscho</url>
 			<roles><role>founder</role></roles>
 			<properties><id>dscho</id></properties>
 		</contributor>
 		<!-- Contributors, in alphabetical order by surname. -->
 		<contributor>
 			<name>Matthias Arzt</name>
-			<url>https://imagej.net/people/maarzt</url>
 			<properties><id>maarzt</id></properties>
 		</contributor>
 		<contributor>
 			<name>Tim-Oliver Buchholz</name>
-			<url>https://imagej.net/people/tibuch</url>
 			<properties><id>tibuch</id></properties>
 		</contributor>
 		<contributor>
@@ -102,34 +91,36 @@
 			<properties><id>eric-czech</id></properties>
 		</contributor>
 		<contributor>
+			<name>Barry DeZonia</name>
+			<properties><id>bdezonia</id></properties>
+		</contributor>
+		<contributor>
 			<name>Ellen Dobson</name>
-			<url>https://imagej.net/people/etadobson</url>
 			<properties><id>etadobson</id></properties>
 		</contributor>
 		<contributor>
 			<name>Richard Domander</name>
-			<url>https://imagej.net/people/rimadoma</url>
 			<properties><id>rimadoma</id></properties>
 		</contributor>
 		<contributor>
 			<name>Michael Doube</name>
-			<url>https://imagej.net/people/mdoube</url>
 			<properties><id>mdoube</id></properties>
 		</contributor>
 		<contributor>
 			<name>Karl Duderstadt</name>
-			<url>https://imagej.net/people/karlduderstadt</url>
 			<properties><id>karlduderstadt</id></properties>
 		</contributor>
 		<contributor>
 			<name>Jan Eglinger</name>
-			<url>https://imagej.net/people/imagejan</url>
 			<properties><id>imagejan</id></properties>
 		</contributor>
 		<contributor>
 			<name>Gabriel Einsdorf</name>
-			<url>https://imagej.net/people/gab1one</url>
 			<properties><id>gab1one</id></properties>
+		</contributor>
+		<contributor>
+			<name>Edward Evans</name>
+			<properties><id>elevans</id></properties>
 		</contributor>
 		<contributor>
 			<name>Andreas Graumann</name>
@@ -137,7 +128,6 @@
 		</contributor>
 		<contributor>
 			<name>Robert Haase</name>
-			<url>https://imagej.net/people/haesleinhuepf</url>
 			<properties><id>haesleinhuepf</id></properties>
 		</contributor>
 		<contributor>
@@ -146,12 +136,10 @@
 		</contributor>
 		<contributor>
 			<name>Philipp Hanslovsky</name>
-			<url>https://imagej.net/people/hanslovsky</url>
 			<properties><id>hanslovsky</id></properties>
 		</contributor>
 		<contributor>
 			<name>Kyle Harrington</name>
-			<url>https://imagej.net/people/kephale</url>
 			<properties><id>kephale</id></properties>
 		</contributor>
 		<contributor>
@@ -160,17 +148,14 @@
 		</contributor>
 		<contributor>
 			<name>Stefan Helfrich</name>
-			<url>https://imagej.net/people/stelfrich</url>
 			<properties><id>stelfrich</id></properties>
 		</contributor>
 		<contributor>
 			<name>Mark Hiner</name>
-			<url>https://imagej.net/people/hinerm</url>
 			<properties><id>hinerm</id></properties>
 		</contributor>
 		<contributor>
 			<name>Hadrien Mary</name>
-			<url>https://imagej.net/people/hadim</url>
 			<properties><id>hadim</id></properties>
 		</contributor>
 		<contributor>
@@ -179,12 +164,10 @@
 		</contributor>
 		<contributor>
 			<name>Aparna Pal</name>
-			<url>https://imagej.net/people/apal4</url>
 			<properties><id>apal4</id></properties>
 		</contributor>
 		<contributor>
 			<name>Tobias Pietzsch</name>
-			<url>https://imagej.net/people/tpietzsch</url>
 			<properties><id>tpietzsch</id></properties>
 		</contributor>
 		<contributor>
@@ -193,7 +176,6 @@
 		</contributor>
 		<contributor>
 			<name>Stephan Saalfeld</name>
-			<url>https://imagej.net/people/axtimwalde</url>
 			<properties><id>axtimwalde</id></properties>
 		</contributor>
 		<contributor>
@@ -202,7 +184,6 @@
 		</contributor>
 		<contributor>
 			<name>Deborah Schmidt</name>
-			<url>https://imagej.net/people/frauzufall</url>
 			<properties><id>frauzufall</id></properties>
 		</contributor>
 		<contributor>
@@ -211,27 +192,26 @@
 		</contributor>
 		<contributor>
 			<name>Jean-Yves Tinevez</name>
-			<url>https://imagej.net/people/tinevez</url>
 			<properties><id>tinevez</id></properties>
 		</contributor>
 		<contributor>
 			<name>Vladimir Ulman</name>
-			<url>https://imagej.net/people/xulman</url>
 			<properties><id>xulman</id></properties>
 		</contributor>
 		<contributor>
 			<name>Alison Walter</name>
-			<url>https://imagej.net/people/awalter17</url>
 			<properties><id>awalter17</id></properties>
 		</contributor>
 		<contributor>
+			<name>Shulei Wang</name>
+			<properties><id>lakerwsl</id></properties>
+		</contributor>
+		<contributor>
 			<name>Leon Yang</name>
-			<url>https://imagej.net/people/lnyng</url>
 			<properties><id>lnyng</id></properties>
 		</contributor>
 		<contributor>
 			<name>Michael Zinsmaier</name>
-			<url>https://imagej.net/people/MichaelZinsmaier</url>
 			<properties><id>MichaelZinsmaier</id></properties>
 		</contributor>
 	</contributors>
@@ -265,7 +245,25 @@
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 
-		<!-- TEMP: until added to pom-scijava -->
+		<!--
+		NB: Older versions of OpenJDK 11 have a bug in the javadoc tool,
+		which causes errors like:
+
+		[ERROR] javadoc: error - The code being documented uses packages
+		in the unnamed module, but the packages defined in
+		https://github.com/scijava/scijava/apidocs/ are in named modules.
+
+		The most recent version of OpenJDK 11 known to have this problem
+		is 11.0.8; the oldest version known to have fixed it is 11.0.17.
+		Therefore, we set the minimum build JDK version to 11.0.17 here.
+		-->
+		<scijava.jvm.build.version>[11.0.17,)</scijava.jvm.build.version>
+		<scijava.jvm.version>11</scijava.jvm.version>
+
+		<scijava.ops.parse>true</scijava.ops.parse>
+
+		<!-- TEMP: Until pom-scijava 38.0.0 is released. -->
+		<scijava-maven-plugin.version>3.0.0</scijava-maven-plugin.version>
 		<imglib2-mesh.version>1.0.0</imglib2-mesh.version>
 		<net.imglib2.imglib2-mesh.version>${imglib2-mesh.version}</net.imglib2.imglib2-mesh.version>
 	</properties>
@@ -405,4 +403,191 @@
 			<url>https://maven.scijava.org/content/groups/public</url>
 		</repository>
 	</repositories>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.scijava</groupId>
+							<artifactId>scijava-ops-indexer</artifactId>
+							<version>${project.version}</version>
+						</path>
+					</annotationProcessorPaths>
+					<fork>true</fork>
+					<compilerArgs>
+						<arg>-Ascijava.ops.parse="${scijava.ops.parse}"</arg>
+						<arg>-Ascijava.ops.opVersion="${project.version}"</arg>
+					</compilerArgs>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<links>
+						<link>https://javadoc.scijava.org/Java11/</link>
+						<link>https://javadoc.scijava.org/ImgLib2/</link>
+						<link>https://javadoc.scijava.org/Apache-Commons-Math/</link>
+						<link>https://javadoc.scijava.org/JAMA/</link>
+						<link>https://javadoc.scijava.org/JOML/</link>
+						<link>https://javadoc.scijava.org/Javassist/</link>
+						<link>https://javadoc.scijava.org/ojAlgo/</link>
+					</links>
+					<tagletArtifacts>
+						<tagletArtifact>
+							<groupId>org.scijava</groupId>
+							<artifactId>scijava-taglets</artifactId>
+							<version>${project.version}</version>
+						</tagletArtifact>
+					</tagletArtifacts>
+					<tags>
+						<tag>
+							<name>implNote</name>
+							<placement>a</placement>
+							<head>Implementation Note:</head>
+						</tag>
+					</tags>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>enforce-package-rules</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<phase>test</phase>
+						<configuration>
+							<rules>
+								<NoPackageCyclesRule
+										implementation="org.scijava.maven.plugin.enforcer.NoPackageCyclesRule" />
+								<NoSubpackageDependenceRule
+										implementation="org.scijava.maven.plugin.enforcer.NoSubpackageDependenceRule" />
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.alexecollins.maven.plugin</groupId>
+				<artifactId>script-maven-plugin</artifactId>
+				<version>1.0.0</version>
+				<executions>
+					<execution>
+						<id>union-metadata-indices</id>
+						<phase>process-test-classes</phase>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+						<configuration>
+							<language>ruby</language>
+							<script>
+								# Append the source plugin annotations to the test plugin annotations
+								require 'set'
+
+								# Handle windows paths
+								basedir = '${project.basedir}'.gsub /\\+/, '\\\\'
+
+								# Reads plugin metadata into a set of strings, one per plugin declaration.
+								def read_plugins(path)
+								delim = 'UNIQUE-SEQUENCE-THAT-NO-PLUGIN-WILL-EVER-USE'
+								return File.exist?(path) ? File.read(path).sub('}{', '}' + delim + '{').split(delim).to_set : Set.new()
+								end
+
+								# Read in main and test scope plugin annotations.
+								['ops.yaml'].each do |pluginsPath|
+								mainPluginsPath = "#{basedir}/target/classes/#{pluginsPath}"
+								testPluginsPath = "#{basedir}/target/test-classes/#{pluginsPath}"
+								mainPlugins = read_plugins(mainPluginsPath)
+								testPlugins = read_plugins(testPluginsPath)
+
+								# Write out unioned plugin annotations to test scope plugin annotations.
+								# Without this, the test scope code does not know of the main scope plugins.
+								allPlugins = mainPlugins.union(testPlugins)
+								unless allPlugins.empty?()
+								require 'fileutils'
+								FileUtils.mkdir_p File.dirname(testPluginsPath)
+								File.write(testPluginsPath, allPlugins.to_a.join(''))
+								end
+								end
+							</script>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.jruby</groupId>
+						<artifactId>jruby-complete</artifactId>
+						<version>9.2.11.1</version>
+						<scope>runtime</scope>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<id>only-eclipse-scijava</id>
+			<activation>
+				<property>
+					<name>m2e.version</name>
+				</property>
+			</activation>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<!--
+						Configure the Eclipse m2e plugin to support needed plugins.
+						-->
+						<plugin>
+							<groupId>org.eclipse.m2e</groupId>
+							<artifactId>lifecycle-mapping</artifactId>
+							<!--
+							NB: Eclipse cannot handle an overridden version property here!
+							The version needs to stay hardcoded at 1.0.0.
+							-->
+							<version>1.0.0</version>
+							<configuration>
+								<lifecycleMappingMetadata>
+									<pluginExecutions combine.children="append">
+										<!--
+										NB: Make Eclipse union the metadata indices on every build; see:
+										https://www.eclipse.org/m2e/documentation/m2e-execution-not-covered.html
+										-->
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>com.alexecollins.maven.plugin</groupId>
+												<artifactId>script-maven-plugin</artifactId>
+												<versionRange>${script-maven-plugin.version}</versionRange>
+												<goals>
+													<goal>execute</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<execute>
+													<runOnConfiguration>true</runOnConfiguration>
+													<!--
+													NB: You might think we could run the annotations
+													union script once only, at configuration time.
+													Unfortunately, when configuration happens in Eclipse,
+													the plugin annotations have not yet been generated.
+													So let's redo the union on every incremental build.
+													That'll show 'em!
+													-->
+													<runOnIncremental>true</runOnIncremental>
+												</execute>
+											</action>
+										</pluginExecution>
+									</pluginExecutions>
+								</lifecycleMappingMetadata>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+	</profiles>
 </project>

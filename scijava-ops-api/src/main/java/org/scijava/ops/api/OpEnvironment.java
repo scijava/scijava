@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ * 
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -326,9 +326,9 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 * only lambda expressions that need to be passed to this method.
 	 *
 	 * @param <T> The lambda's functional type
-	 *        (e.g. {@link java.util.function.BiFunction}{@code <String, Double>})
+	 *        (e.g. {@link java.util.function.Function}{@code <String, Double>})
 	 * @param opType The generic type of the lambda expression to be embedded.
-	 *        (e.g. {@code new Nil<BiFunction<String, Double>>() {}})
+	 *        (e.g. {@code new Nil<Function<String, Double>>() {}})
 	 * @param lambda A lambda expression fulfilling the functional interface
 	 *               contract of the stated {@code opType}.
 	 * @return An enriched version of the lambda object that embeds knowledge of

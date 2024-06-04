@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ * 
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -323,20 +323,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		}
 	}
 
-	/**
-	 * Helper method to get the descriptions for each {@link OpInfo} in
-	 * {@code infos}
-	 * <p>
-	 * NB we return a {@link List} here to preserve multiple instances of the same
-	 * {@link OpInfo}. This is consistent with {@link DefaultOpEnvironment#infos}
-	 * returning multiple instances of the same {@link OpInfo}. The duplicate
-	 * {@link OpInfo}s are created when Ops have multiple names.
-	 * </p>
-	 *
-	 * @param request an {@link OpRequest}
-	 * @return a {@link Set} of {@link String}s, one describing each
-	 *         {@link OpInfo} in {@code infos}.
-	 */
 	@Override
 	public String help(final OpRequest request) {
 		Optional<OpDescriptionGenerator> opt = metaDiscoverer.discoverMax(
@@ -347,19 +333,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		return opt.get().simpleDescriptions(this, request);
 	}
 
-	/**
-	 * Helper method to get the descriptions for each {@link OpInfo} in
-	 * {@code infos}
-	 * <p>
-	 * NB we return a {@link List} here to preserve multiple instances of the same
-	 * {@link OpInfo}. This is consistent with {@link DefaultOpEnvironment#infos}
-	 * returning multiple instances of the same {@link OpInfo}. The duplicate
-	 * {@link OpInfo}s are created when Ops have multiple names.
-	 *
-	 * @param request an {@link OpRequest}
-	 * @return a {@link Set} of {@link String}s, one describing each
-	 *         {@link OpInfo} in {@code infos}.
-	 */
 	@Override
 	public String helpVerbose(final OpRequest request) {
 		Optional<OpDescriptionGenerator> opt = metaDiscoverer.discoverMax(

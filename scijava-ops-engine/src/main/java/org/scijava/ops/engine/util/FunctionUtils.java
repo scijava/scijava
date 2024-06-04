@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ * 
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -41,6 +41,7 @@ import java.util.function.Function;
 import org.scijava.function.Functions;
 import org.scijava.function.Producer;
 import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.Hints;
 import org.scijava.types.Nil;
 import org.scijava.common3.Types;
 
@@ -78,55 +79,42 @@ public final class FunctionUtils {
 			return Functions.nary((Functions.Arity3<Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity4) {
-			return Functions.nary(
-				(Functions.Arity4<Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity4<Object, Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity5) {
-			return Functions.nary(
-				(Functions.Arity5<Object, Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity5<Object, Object, Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity6) {
-			return Functions.nary(
-				(Functions.Arity6<Object, Object, Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity6<Object, Object, Object, Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity7) {
-			return Functions.nary(
-				(Functions.Arity7<Object, Object, Object, Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity7<Object, Object, Object, Object, Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity8) {
-			return Functions.nary(
-				(Functions.Arity8<Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity8<Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity9) {
-			return Functions.nary(
-				(Functions.Arity9<Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity9<Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity10) {
-			return Functions.nary(
-				(Functions.Arity10<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity10<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity11) {
-			return Functions.nary(
-				(Functions.Arity11<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity11<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity12) {
-			return Functions.nary(
-				(Functions.Arity12<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity12<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity13) {
-			return Functions.nary(
-				(Functions.Arity13<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity13<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity14) {
-			return Functions.nary(
-				(Functions.Arity14<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity14<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity15) {
-			return Functions.nary(
-				(Functions.Arity15<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity15<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
 		}
-		return Functions.nary(
-			(Functions.Arity16<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
+		return Functions.nary((Functions.Arity16<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
 	}
 
 	@SuppressWarnings({ "unchecked" })

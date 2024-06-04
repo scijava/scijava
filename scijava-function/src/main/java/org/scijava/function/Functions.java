@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ * 
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+
 
 /**
  * Container class for
@@ -108,8 +109,8 @@ public final class Functions {
 	}
 
 	/**
-	 * @return {@code true} if the given type is a known function type,
-	 *         {@code false} otherwise.<br>
+	 * @return {@code true} if the given type is a known
+	 *         function type, {@code false} otherwise.<br>
 	 *         Note that only the type itself and not its type hierarchy is
 	 *         considered.
 	 * @throws NullPointerException If {@code c} is {@code null}.
@@ -118,19 +119,17 @@ public final class Functions {
 		try {
 			Class<?> superType = superType(c);
 			return true;
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			return false;
 		}
 	}
 
 	public static Class<?> superType(Class<?> c) {
 		if (ALL_FUNCTIONS.containsValue(c)) return c;
-		for (Class<?> func : ALL_ARITIES.keySet()) {
+		for(Class<?> func : ALL_ARITIES.keySet()) {
 			if (func.isAssignableFrom(c)) return func;
 		}
-		throw new IllegalArgumentException(c +
-			" is not a subclass of any known Functions!");
+		throw new IllegalArgumentException(c + " is not a subclass of any known Functions!");
 	}
 
 	/**
@@ -189,8 +188,7 @@ public final class Functions {
 		 *         applies the {@code after} function
 		 * @throws NullPointerException if after is null
 		 */
-		default <O2> Arity3<I1, I2, I3, O2> andThen(
-			Function<? super O, ? extends O2> after)
+		default <O2> Arity3<I1, I2, I3, O2> andThen(Function<? super O, ? extends O2> after)
 		{
 			Objects.requireNonNull(after);
 			return (I1 in1, I2 in2, I3 in3) -> after.apply(apply(in1, in2, in3));
@@ -234,12 +232,10 @@ public final class Functions {
 		 *         applies the {@code after} function
 		 * @throws NullPointerException if after is null
 		 */
-		default <O2> Arity4<I1, I2, I3, I4, O2> andThen(
-			Function<? super O, ? extends O2> after)
+		default <O2> Arity4<I1, I2, I3, I4, O2> andThen(Function<? super O, ? extends O2> after)
 		{
 			Objects.requireNonNull(after);
-			return (I1 in1, I2 in2, I3 in3, I4 in4) -> after.apply(apply(in1, in2,
-				in3, in4));
+			return (I1 in1, I2 in2, I3 in3, I4 in4) -> after.apply(apply(in1, in2, in3, in4));
 		}
 	}
 
@@ -282,12 +278,10 @@ public final class Functions {
 		 *         applies the {@code after} function
 		 * @throws NullPointerException if after is null
 		 */
-		default <O2> Arity5<I1, I2, I3, I4, I5, O2> andThen(
-			Function<? super O, ? extends O2> after)
+		default <O2> Arity5<I1, I2, I3, I4, I5, O2> andThen(Function<? super O, ? extends O2> after)
 		{
 			Objects.requireNonNull(after);
-			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5) -> after.apply(apply(in1,
-				in2, in3, in4, in5));
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5) -> after.apply(apply(in1, in2, in3, in4, in5));
 		}
 	}
 
@@ -332,12 +326,10 @@ public final class Functions {
 		 *         applies the {@code after} function
 		 * @throws NullPointerException if after is null
 		 */
-		default <O2> Arity6<I1, I2, I3, I4, I5, I6, O2> andThen(
-			Function<? super O, ? extends O2> after)
+		default <O2> Arity6<I1, I2, I3, I4, I5, I6, O2> andThen(Function<? super O, ? extends O2> after)
 		{
 			Objects.requireNonNull(after);
-			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6) -> after.apply(
-				apply(in1, in2, in3, in4, in5, in6));
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6) -> after.apply(apply(in1, in2, in3, in4, in5, in6));
 		}
 	}
 
@@ -384,12 +376,10 @@ public final class Functions {
 		 *         applies the {@code after} function
 		 * @throws NullPointerException if after is null
 		 */
-		default <O2> Arity7<I1, I2, I3, I4, I5, I6, I7, O2> andThen(
-			Function<? super O, ? extends O2> after)
+		default <O2> Arity7<I1, I2, I3, I4, I5, I6, I7, O2> andThen(Function<? super O, ? extends O2> after)
 		{
 			Objects.requireNonNull(after);
-			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7) -> after
-				.apply(apply(in1, in2, in3, in4, in5, in6, in7));
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7));
 		}
 	}
 
@@ -438,12 +428,10 @@ public final class Functions {
 		 *         applies the {@code after} function
 		 * @throws NullPointerException if after is null
 		 */
-		default <O2> Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O2> andThen(
-			Function<? super O, ? extends O2> after)
+		default <O2> Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O2> andThen(Function<? super O, ? extends O2> after)
 		{
 			Objects.requireNonNull(after);
-			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7,
-				I8 in8) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8));
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8));
 		}
 	}
 
@@ -479,8 +467,7 @@ public final class Functions {
 		 * @param in9 function argument 9
 		 * @return the function output
 		 */
-		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
-			I9 in9);
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9);
 
 		/**
 		 * Returns a composed function that first applies this function to its
@@ -495,13 +482,10 @@ public final class Functions {
 		 *         applies the {@code after} function
 		 * @throws NullPointerException if after is null
 		 */
-		default <O2> Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O2> andThen(
-			Function<? super O, ? extends O2> after)
+		default <O2> Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O2> andThen(Function<? super O, ? extends O2> after)
 		{
 			Objects.requireNonNull(after);
-			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
-				I9 in9) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8,
-					in9));
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9));
 		}
 	}
 
@@ -539,8 +523,7 @@ public final class Functions {
 		 * @param in10 function argument 10
 		 * @return the function output
 		 */
-		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
-			I9 in9, I10 in10);
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10);
 
 		/**
 		 * Returns a composed function that first applies this function to its
@@ -555,13 +538,10 @@ public final class Functions {
 		 *         applies the {@code after} function
 		 * @throws NullPointerException if after is null
 		 */
-		default <O2> Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O2> andThen(
-			Function<? super O, ? extends O2> after)
+		default <O2> Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O2> andThen(Function<? super O, ? extends O2> after)
 		{
 			Objects.requireNonNull(after);
-			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
-				I9 in9, I10 in10) -> after.apply(apply(in1, in2, in3, in4, in5, in6,
-					in7, in8, in9, in10));
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10));
 		}
 	}
 
@@ -601,8 +581,7 @@ public final class Functions {
 		 * @param in11 function argument 11
 		 * @return the function output
 		 */
-		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
-			I9 in9, I10 in10, I11 in11);
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11);
 
 		/**
 		 * Returns a composed function that first applies this function to its
@@ -617,13 +596,10 @@ public final class Functions {
 		 *         applies the {@code after} function
 		 * @throws NullPointerException if after is null
 		 */
-		default <O2> Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O2>
-			andThen(Function<? super O, ? extends O2> after)
+		default <O2> Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O2> andThen(Function<? super O, ? extends O2> after)
 		{
 			Objects.requireNonNull(after);
-			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
-				I9 in9, I10 in10, I11 in11) -> after.apply(apply(in1, in2, in3, in4,
-					in5, in6, in7, in8, in9, in10, in11));
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11));
 		}
 	}
 
@@ -665,8 +641,7 @@ public final class Functions {
 		 * @param in12 function argument 12
 		 * @return the function output
 		 */
-		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
-			I9 in9, I10 in10, I11 in11, I12 in12);
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12);
 
 		/**
 		 * Returns a composed function that first applies this function to its
@@ -681,13 +656,10 @@ public final class Functions {
 		 *         applies the {@code after} function
 		 * @throws NullPointerException if after is null
 		 */
-		default <O2> Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O2>
-			andThen(Function<? super O, ? extends O2> after)
+		default <O2> Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O2> andThen(Function<? super O, ? extends O2> after)
 		{
 			Objects.requireNonNull(after);
-			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
-				I9 in9, I10 in10, I11 in11, I12 in12) -> after.apply(apply(in1, in2,
-					in3, in4, in5, in6, in7, in8, in9, in10, in11, in12));
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12));
 		}
 	}
 
@@ -731,8 +703,7 @@ public final class Functions {
 		 * @param in13 function argument 13
 		 * @return the function output
 		 */
-		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
-			I9 in9, I10 in10, I11 in11, I12 in12, I13 in13);
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13);
 
 		/**
 		 * Returns a composed function that first applies this function to its
@@ -747,14 +718,10 @@ public final class Functions {
 		 *         applies the {@code after} function
 		 * @throws NullPointerException if after is null
 		 */
-		default <O2>
-			Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O2>
-			andThen(Function<? super O, ? extends O2> after)
+		default <O2> Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O2> andThen(Function<? super O, ? extends O2> after)
 		{
 			Objects.requireNonNull(after);
-			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
-				I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> after.apply(apply(
-					in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13));
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13));
 		}
 	}
 
@@ -800,8 +767,7 @@ public final class Functions {
 		 * @param in14 function argument 14
 		 * @return the function output
 		 */
-		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
-			I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14);
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14);
 
 		/**
 		 * Returns a composed function that first applies this function to its
@@ -816,15 +782,10 @@ public final class Functions {
 		 *         applies the {@code after} function
 		 * @throws NullPointerException if after is null
 		 */
-		default <O2>
-			Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O2>
-			andThen(Function<? super O, ? extends O2> after)
+		default <O2> Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O2> andThen(Function<? super O, ? extends O2> after)
 		{
 			Objects.requireNonNull(after);
-			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
-				I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> after
-					.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11,
-						in12, in13, in14));
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14));
 		}
 	}
 
@@ -872,8 +833,7 @@ public final class Functions {
 		 * @param in15 function argument 15
 		 * @return the function output
 		 */
-		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
-			I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15);
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15);
 
 		/**
 		 * Returns a composed function that first applies this function to its
@@ -888,15 +848,10 @@ public final class Functions {
 		 *         applies the {@code after} function
 		 * @throws NullPointerException if after is null
 		 */
-		default <O2>
-			Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O2>
-			andThen(Function<? super O, ? extends O2> after)
+		default <O2> Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O2> andThen(Function<? super O, ? extends O2> after)
 		{
 			Objects.requireNonNull(after);
-			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
-				I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14,
-				I15 in15) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8,
-					in9, in10, in11, in12, in13, in14, in15));
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15));
 		}
 	}
 
@@ -946,9 +901,7 @@ public final class Functions {
 		 * @param in16 function argument 16
 		 * @return the function output
 		 */
-		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
-			I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15,
-			I16 in16);
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16);
 
 		/**
 		 * Returns a composed function that first applies this function to its
@@ -963,15 +916,10 @@ public final class Functions {
 		 *         applies the {@code after} function
 		 * @throws NullPointerException if after is null
 		 */
-		default <O2>
-			Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O2>
-			andThen(Function<? super O, ? extends O2> after)
+		default <O2> Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O2> andThen(Function<? super O, ? extends O2> after)
 		{
 			Objects.requireNonNull(after);
-			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8,
-				I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15,
-				I16 in16) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8,
-					in9, in10, in11, in12, in13, in14, in15, in16));
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16));
 		}
 	}
 
@@ -984,13 +932,10 @@ public final class Functions {
 
 	/**
 	 * Converts a {@link org.scijava.function.Producer} to a {@link ArityN}.
-	 *
-	 * @param <O> the type variable linked the output of the
-	 *          {@link org.scijava.function.Producer}
-	 * @param f the {@link org.scijava.function.Producer} to be converted into a
-	 *          {@link ArityN}
-	 * @return a {@link ArityN} created from the
-	 *         {@link org.scijava.function.Producer}
+	 * 
+	 * @param <O> the type variable linked the output of the {@link org.scijava.function.Producer}
+	 * @param f the {@link org.scijava.function.Producer} to be converted into a {@link ArityN}
+	 * @return a {@link ArityN} created from the {@link org.scijava.function.Producer}
 	 */
 	public static <O> Functions.ArityN<O> nary(Producer<O> f) {
 
@@ -1010,19 +955,17 @@ public final class Functions {
 
 	/**
 	 * Converts a {@link java.util.function.Function} to a {@link ArityN}.
-	 *
-	 * @param <O> the type variable linked the output of the
-	 *          {@link java.util.function.Function}
-	 * @param f the {@link java.util.function.Function} to be converted into a
-	 *          {@link ArityN}
-	 * @return a {@link ArityN} created from the
-	 *         {@link java.util.function.Function}
+	 * 
+	 * @param <O> the type variable linked the output of the {@link java.util.function.Function}
+	 * @param f the {@link java.util.function.Function} to be converted into a {@link ArityN}
+	 * @return a {@link ArityN} created from the {@link java.util.function.Function}
 	 */
 	public static <O> Functions.ArityN<O> nary(Function<?, O> f) {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
-		Function<Object, O> func = (Function<Object, O>) f;
+		Function<Object, O> func =
+			(Function<Object, O>) f;
 
 		return new ArityN<>() {
 
@@ -1040,19 +983,17 @@ public final class Functions {
 
 	/**
 	 * Converts a {@link java.util.function.BiFunction} to a {@link ArityN}.
-	 *
-	 * @param <O> the type variable linked the output of the
-	 *          {@link java.util.function.BiFunction}
-	 * @param f the {@link java.util.function.BiFunction} to be converted into a
-	 *          {@link ArityN}
-	 * @return a {@link ArityN} created from the
-	 *         {@link java.util.function.BiFunction}
+	 * 
+	 * @param <O> the type variable linked the output of the {@link java.util.function.BiFunction}
+	 * @param f the {@link java.util.function.BiFunction} to be converted into a {@link ArityN}
+	 * @return a {@link ArityN} created from the {@link java.util.function.BiFunction}
 	 */
 	public static <O> Functions.ArityN<O> nary(BiFunction<?, ?, O> f) {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
-		BiFunction<Object, Object, O> func = (BiFunction<Object, Object, O>) f;
+		BiFunction<Object, Object, O> func =
+			(BiFunction<Object, Object, O>) f;
 
 		return new ArityN<>() {
 
@@ -1070,7 +1011,7 @@ public final class Functions {
 
 	/**
 	 * Converts a {@link Arity3} to a {@link ArityN}.
-	 *
+	 * 
 	 * @param <O> the type variable linked the output of the {@link Arity3}
 	 * @param f the {@link Arity3} to be converted into a {@link ArityN}
 	 * @return a {@link ArityN} created from the {@link Arity3}
@@ -1098,14 +1039,12 @@ public final class Functions {
 
 	/**
 	 * Converts a {@link Arity4} to a {@link ArityN}.
-	 *
+	 * 
 	 * @param <O> the type variable linked the output of the {@link Arity4}
 	 * @param f the {@link Arity4} to be converted into a {@link ArityN}
 	 * @return a {@link ArityN} created from the {@link Arity4}
 	 */
-	public static <O> Functions.ArityN<O> nary(
-		Functions.Arity4<?, ?, ?, ?, O> f)
-	{
+	public static <O> Functions.ArityN<O> nary(Functions.Arity4<?, ?, ?, ?, O> f) {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
@@ -1128,14 +1067,12 @@ public final class Functions {
 
 	/**
 	 * Converts a {@link Arity5} to a {@link ArityN}.
-	 *
+	 * 
 	 * @param <O> the type variable linked the output of the {@link Arity5}
 	 * @param f the {@link Arity5} to be converted into a {@link ArityN}
 	 * @return a {@link ArityN} created from the {@link Arity5}
 	 */
-	public static <O> Functions.ArityN<O> nary(
-		Functions.Arity5<?, ?, ?, ?, ?, O> f)
-	{
+	public static <O> Functions.ArityN<O> nary(Functions.Arity5<?, ?, ?, ?, ?, O> f) {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
@@ -1158,14 +1095,12 @@ public final class Functions {
 
 	/**
 	 * Converts a {@link Arity6} to a {@link ArityN}.
-	 *
+	 * 
 	 * @param <O> the type variable linked the output of the {@link Arity6}
 	 * @param f the {@link Arity6} to be converted into a {@link ArityN}
 	 * @return a {@link ArityN} created from the {@link Arity6}
 	 */
-	public static <O> Functions.ArityN<O> nary(
-		Functions.Arity6<?, ?, ?, ?, ?, ?, O> f)
-	{
+	public static <O> Functions.ArityN<O> nary(Functions.Arity6<?, ?, ?, ?, ?, ?, O> f) {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
@@ -1188,14 +1123,12 @@ public final class Functions {
 
 	/**
 	 * Converts a {@link Arity7} to a {@link ArityN}.
-	 *
+	 * 
 	 * @param <O> the type variable linked the output of the {@link Arity7}
 	 * @param f the {@link Arity7} to be converted into a {@link ArityN}
 	 * @return a {@link ArityN} created from the {@link Arity7}
 	 */
-	public static <O> Functions.ArityN<O> nary(
-		Functions.Arity7<?, ?, ?, ?, ?, ?, ?, O> f)
-	{
+	public static <O> Functions.ArityN<O> nary(Functions.Arity7<?, ?, ?, ?, ?, ?, ?, O> f) {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
@@ -1206,8 +1139,7 @@ public final class Functions {
 
 			@Override
 			public O apply(Object... ins) {
-				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5],
-					ins[6]);
+				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6]);
 			}
 
 			@Override
@@ -1219,14 +1151,12 @@ public final class Functions {
 
 	/**
 	 * Converts a {@link Arity8} to a {@link ArityN}.
-	 *
+	 * 
 	 * @param <O> the type variable linked the output of the {@link Arity8}
 	 * @param f the {@link Arity8} to be converted into a {@link ArityN}
 	 * @return a {@link ArityN} created from the {@link Arity8}
 	 */
-	public static <O> Functions.ArityN<O> nary(
-		Functions.Arity8<?, ?, ?, ?, ?, ?, ?, ?, O> f)
-	{
+	public static <O> Functions.ArityN<O> nary(Functions.Arity8<?, ?, ?, ?, ?, ?, ?, ?, O> f) {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
@@ -1237,8 +1167,7 @@ public final class Functions {
 
 			@Override
 			public O apply(Object... ins) {
-				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5],
-					ins[6], ins[7]);
+				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7]);
 			}
 
 			@Override
@@ -1250,14 +1179,12 @@ public final class Functions {
 
 	/**
 	 * Converts a {@link Arity9} to a {@link ArityN}.
-	 *
+	 * 
 	 * @param <O> the type variable linked the output of the {@link Arity9}
 	 * @param f the {@link Arity9} to be converted into a {@link ArityN}
 	 * @return a {@link ArityN} created from the {@link Arity9}
 	 */
-	public static <O> Functions.ArityN<O> nary(
-		Functions.Arity9<?, ?, ?, ?, ?, ?, ?, ?, ?, O> f)
-	{
+	public static <O> Functions.ArityN<O> nary(Functions.Arity9<?, ?, ?, ?, ?, ?, ?, ?, ?, O> f) {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
@@ -1268,8 +1195,7 @@ public final class Functions {
 
 			@Override
 			public O apply(Object... ins) {
-				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5],
-					ins[6], ins[7], ins[8]);
+				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8]);
 			}
 
 			@Override
@@ -1281,14 +1207,12 @@ public final class Functions {
 
 	/**
 	 * Converts a {@link Arity10} to a {@link ArityN}.
-	 *
+	 * 
 	 * @param <O> the type variable linked the output of the {@link Arity10}
 	 * @param f the {@link Arity10} to be converted into a {@link ArityN}
 	 * @return a {@link ArityN} created from the {@link Arity10}
 	 */
-	public static <O> Functions.ArityN<O> nary(
-		Functions.Arity10<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> f)
-	{
+	public static <O> Functions.ArityN<O> nary(Functions.Arity10<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> f) {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
@@ -1299,8 +1223,7 @@ public final class Functions {
 
 			@Override
 			public O apply(Object... ins) {
-				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5],
-					ins[6], ins[7], ins[8], ins[9]);
+				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9]);
 			}
 
 			@Override
@@ -1312,14 +1235,12 @@ public final class Functions {
 
 	/**
 	 * Converts a {@link Arity11} to a {@link ArityN}.
-	 *
+	 * 
 	 * @param <O> the type variable linked the output of the {@link Arity11}
 	 * @param f the {@link Arity11} to be converted into a {@link ArityN}
 	 * @return a {@link ArityN} created from the {@link Arity11}
 	 */
-	public static <O> Functions.ArityN<O> nary(
-		Functions.Arity11<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> f)
-	{
+	public static <O> Functions.ArityN<O> nary(Functions.Arity11<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> f) {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
@@ -1330,8 +1251,7 @@ public final class Functions {
 
 			@Override
 			public O apply(Object... ins) {
-				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5],
-					ins[6], ins[7], ins[8], ins[9], ins[10]);
+				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10]);
 			}
 
 			@Override
@@ -1343,14 +1263,12 @@ public final class Functions {
 
 	/**
 	 * Converts a {@link Arity12} to a {@link ArityN}.
-	 *
+	 * 
 	 * @param <O> the type variable linked the output of the {@link Arity12}
 	 * @param f the {@link Arity12} to be converted into a {@link ArityN}
 	 * @return a {@link ArityN} created from the {@link Arity12}
 	 */
-	public static <O> Functions.ArityN<O> nary(
-		Functions.Arity12<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> f)
-	{
+	public static <O> Functions.ArityN<O> nary(Functions.Arity12<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> f) {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
@@ -1361,8 +1279,7 @@ public final class Functions {
 
 			@Override
 			public O apply(Object... ins) {
-				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5],
-					ins[6], ins[7], ins[8], ins[9], ins[10], ins[11]);
+				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10], ins[11]);
 			}
 
 			@Override
@@ -1374,14 +1291,12 @@ public final class Functions {
 
 	/**
 	 * Converts a {@link Arity13} to a {@link ArityN}.
-	 *
+	 * 
 	 * @param <O> the type variable linked the output of the {@link Arity13}
 	 * @param f the {@link Arity13} to be converted into a {@link ArityN}
 	 * @return a {@link ArityN} created from the {@link Arity13}
 	 */
-	public static <O> Functions.ArityN<O> nary(
-		Functions.Arity13<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> f)
-	{
+	public static <O> Functions.ArityN<O> nary(Functions.Arity13<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> f) {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
@@ -1392,8 +1307,7 @@ public final class Functions {
 
 			@Override
 			public O apply(Object... ins) {
-				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5],
-					ins[6], ins[7], ins[8], ins[9], ins[10], ins[11], ins[12]);
+				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10], ins[11], ins[12]);
 			}
 
 			@Override
@@ -1405,14 +1319,12 @@ public final class Functions {
 
 	/**
 	 * Converts a {@link Arity14} to a {@link ArityN}.
-	 *
+	 * 
 	 * @param <O> the type variable linked the output of the {@link Arity14}
 	 * @param f the {@link Arity14} to be converted into a {@link ArityN}
 	 * @return a {@link ArityN} created from the {@link Arity14}
 	 */
-	public static <O> Functions.ArityN<O> nary(
-		Functions.Arity14<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> f)
-	{
+	public static <O> Functions.ArityN<O> nary(Functions.Arity14<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> f) {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
@@ -1423,14 +1335,11 @@ public final class Functions {
 
 			@Override
 			public O apply(Object... ins) {
-				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5],
-					ins[6], ins[7], ins[8], ins[9], ins[10], ins[11], ins[12], ins[13]);
+				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10], ins[11], ins[12], ins[13]);
 			}
 
 			@Override
-			public Functions.Arity14<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O>
-				op()
-			{
+			public Functions.Arity14<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> op() {
 				return f;
 			}
 		};
@@ -1438,14 +1347,12 @@ public final class Functions {
 
 	/**
 	 * Converts a {@link Arity15} to a {@link ArityN}.
-	 *
+	 * 
 	 * @param <O> the type variable linked the output of the {@link Arity15}
 	 * @param f the {@link Arity15} to be converted into a {@link ArityN}
 	 * @return a {@link ArityN} created from the {@link Arity15}
 	 */
-	public static <O> Functions.ArityN<O> nary(
-		Functions.Arity15<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> f)
-	{
+	public static <O> Functions.ArityN<O> nary(Functions.Arity15<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> f) {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
@@ -1456,15 +1363,11 @@ public final class Functions {
 
 			@Override
 			public O apply(Object... ins) {
-				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5],
-					ins[6], ins[7], ins[8], ins[9], ins[10], ins[11], ins[12], ins[13],
-					ins[14]);
+				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10], ins[11], ins[12], ins[13], ins[14]);
 			}
 
 			@Override
-			public Functions.Arity15<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O>
-				op()
-			{
+			public Functions.Arity15<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> op() {
 				return f;
 			}
 		};
@@ -1472,14 +1375,12 @@ public final class Functions {
 
 	/**
 	 * Converts a {@link Arity16} to a {@link ArityN}.
-	 *
+	 * 
 	 * @param <O> the type variable linked the output of the {@link Arity16}
 	 * @param f the {@link Arity16} to be converted into a {@link ArityN}
 	 * @return a {@link ArityN} created from the {@link Arity16}
 	 */
-	public static <O> Functions.ArityN<O> nary(
-		Functions.Arity16<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> f)
-	{
+	public static <O> Functions.ArityN<O> nary(Functions.Arity16<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> f) {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
@@ -1490,16 +1391,11 @@ public final class Functions {
 
 			@Override
 			public O apply(Object... ins) {
-				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5],
-					ins[6], ins[7], ins[8], ins[9], ins[10], ins[11], ins[12], ins[13],
-					ins[14], ins[15]);
+				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10], ins[11], ins[12], ins[13], ins[14], ins[15]);
 			}
 
 			@Override
-			public
-				Functions.Arity16<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O>
-				op()
-			{
+			public Functions.Arity16<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> op() {
 				return f;
 			}
 		};

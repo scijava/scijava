@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ * 
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -142,8 +142,7 @@ public final class Consumers {
 		 *         operation followed by the {@code after} operation
 		 * @throws NullPointerException if {@code after} is null
 		 */
-		default Arity3<I1, I2, I3> andThen(
-			Arity3<? super I1, ? super I2, ? super I3> after)
+		default Arity3<I1, I2, I3> andThen(Arity3<? super I1, ? super I2, ? super I3> after)
 		{
 			Objects.requireNonNull(after);
 
@@ -195,8 +194,7 @@ public final class Consumers {
 		 *         operation followed by the {@code after} operation
 		 * @throws NullPointerException if {@code after} is null
 		 */
-		default Arity4<I1, I2, I3, I4> andThen(
-			Arity4<? super I1, ? super I2, ? super I3, ? super I4> after)
+		default Arity4<I1, I2, I3, I4> andThen(Arity4<? super I1, ? super I2, ? super I3, ? super I4> after)
 		{
 			Objects.requireNonNull(after);
 
@@ -236,8 +234,7 @@ public final class Consumers {
 		 * @param in4 input argument 4.
 		 * @param in5 input argument 5.
 		 */
-		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
-			final I5 in5);
+		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5);
 
 		/**
 		 * Returns a composed {@code Consumer.Arity5} that performs, in sequence,
@@ -251,8 +248,7 @@ public final class Consumers {
 		 *         operation followed by the {@code after} operation
 		 * @throws NullPointerException if {@code after} is null
 		 */
-		default Arity5<I1, I2, I3, I4, I5> andThen(
-			Arity5<? super I1, ? super I2, ? super I3, ? super I4, ? super I5> after)
+		default Arity5<I1, I2, I3, I4, I5> andThen(Arity5<? super I1, ? super I2, ? super I3, ? super I4, ? super I5> after)
 		{
 			Objects.requireNonNull(after);
 
@@ -294,8 +290,7 @@ public final class Consumers {
 		 * @param in5 input argument 5.
 		 * @param in6 input argument 6.
 		 */
-		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
-			final I5 in5, final I6 in6);
+		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6);
 
 		/**
 		 * Returns a composed {@code Consumer.Arity6} that performs, in sequence,
@@ -309,8 +304,7 @@ public final class Consumers {
 		 *         operation followed by the {@code after} operation
 		 * @throws NullPointerException if {@code after} is null
 		 */
-		default Arity6<I1, I2, I3, I4, I5, I6> andThen(
-			Arity6<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6> after)
+		default Arity6<I1, I2, I3, I4, I5, I6> andThen(Arity6<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6> after)
 		{
 			Objects.requireNonNull(after);
 
@@ -354,8 +348,7 @@ public final class Consumers {
 		 * @param in6 input argument 6.
 		 * @param in7 input argument 7.
 		 */
-		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
-			final I5 in5, final I6 in6, final I7 in7);
+		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7);
 
 		/**
 		 * Returns a composed {@code Consumer.Arity7} that performs, in sequence,
@@ -369,8 +362,7 @@ public final class Consumers {
 		 *         operation followed by the {@code after} operation
 		 * @throws NullPointerException if {@code after} is null
 		 */
-		default Arity7<I1, I2, I3, I4, I5, I6, I7> andThen(
-			Arity7<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6, ? super I7> after)
+		default Arity7<I1, I2, I3, I4, I5, I6, I7> andThen(Arity7<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6, ? super I7> after)
 		{
 			Objects.requireNonNull(after);
 
@@ -416,8 +408,7 @@ public final class Consumers {
 		 * @param in7 input argument 7.
 		 * @param in8 input argument 8.
 		 */
-		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
-			final I5 in5, final I6 in6, final I7 in7, final I8 in8);
+		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8);
 
 		/**
 		 * Returns a composed {@code Consumer.Arity8} that performs, in sequence,
@@ -431,8 +422,7 @@ public final class Consumers {
 		 *         operation followed by the {@code after} operation
 		 * @throws NullPointerException if {@code after} is null
 		 */
-		default Arity8<I1, I2, I3, I4, I5, I6, I7, I8> andThen(
-			Arity8<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6, ? super I7, ? super I8> after)
+		default Arity8<I1, I2, I3, I4, I5, I6, I7, I8> andThen(Arity8<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6, ? super I7, ? super I8> after)
 		{
 			Objects.requireNonNull(after);
 
@@ -480,8 +470,7 @@ public final class Consumers {
 		 * @param in8 input argument 8.
 		 * @param in9 input argument 9.
 		 */
-		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
-			final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9);
+		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9);
 
 		/**
 		 * Returns a composed {@code Consumer.Arity9} that performs, in sequence,
@@ -495,8 +484,7 @@ public final class Consumers {
 		 *         operation followed by the {@code after} operation
 		 * @throws NullPointerException if {@code after} is null
 		 */
-		default Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9> andThen(
-			Arity9<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6, ? super I7, ? super I8, ? super I9> after)
+		default Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9> andThen(Arity9<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6, ? super I7, ? super I8, ? super I9> after)
 		{
 			Objects.requireNonNull(after);
 
@@ -509,8 +497,8 @@ public final class Consumers {
 
 	/**
 	 * Represents an operation that accepts 10 input arguments and returns no
-	 * result. This is the 10-arity specialization of {@link Consumer}. Unlike
-	 * most other functional interfaces, this interface is expected to operate via
+	 * result. This is the 10-arity specialization of {@link Consumer}. Unlike most
+	 * other functional interfaces, this interface is expected to operate via
 	 * side-effects.
 	 * <p>
 	 * This is a functional interface whose functional method is
@@ -546,9 +534,7 @@ public final class Consumers {
 		 * @param in9 input argument 9.
 		 * @param in10 input argument 10.
 		 */
-		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
-			final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9,
-			final I10 in10);
+		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10);
 
 		/**
 		 * Returns a composed {@code Consumer.Arity10} that performs, in sequence,
@@ -558,12 +544,11 @@ public final class Consumers {
 		 * {@code after} operation will not be performed.
 		 *
 		 * @param after the operation to perform after this operation
-		 * @return a composed {@code Consumer.Arity10} that performs in sequence
-		 *         this operation followed by the {@code after} operation
+		 * @return a composed {@code Consumer.Arity10} that performs in sequence this
+		 *         operation followed by the {@code after} operation
 		 * @throws NullPointerException if {@code after} is null
 		 */
-		default Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> andThen(
-			Arity10<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6, ? super I7, ? super I8, ? super I9, ? super I10> after)
+		default Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> andThen(Arity10<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6, ? super I7, ? super I8, ? super I9, ? super I10> after)
 		{
 			Objects.requireNonNull(after);
 
@@ -576,8 +561,8 @@ public final class Consumers {
 
 	/**
 	 * Represents an operation that accepts 11 input arguments and returns no
-	 * result. This is the 11-arity specialization of {@link Consumer}. Unlike
-	 * most other functional interfaces, this interface is expected to operate via
+	 * result. This is the 11-arity specialization of {@link Consumer}. Unlike most
+	 * other functional interfaces, this interface is expected to operate via
 	 * side-effects.
 	 * <p>
 	 * This is a functional interface whose functional method is
@@ -615,9 +600,7 @@ public final class Consumers {
 		 * @param in10 input argument 10.
 		 * @param in11 input argument 11.
 		 */
-		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
-			final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9,
-			final I10 in10, final I11 in11);
+		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11);
 
 		/**
 		 * Returns a composed {@code Consumer.Arity11} that performs, in sequence,
@@ -627,12 +610,11 @@ public final class Consumers {
 		 * {@code after} operation will not be performed.
 		 *
 		 * @param after the operation to perform after this operation
-		 * @return a composed {@code Consumer.Arity11} that performs in sequence
-		 *         this operation followed by the {@code after} operation
+		 * @return a composed {@code Consumer.Arity11} that performs in sequence this
+		 *         operation followed by the {@code after} operation
 		 * @throws NullPointerException if {@code after} is null
 		 */
-		default Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> andThen(
-			Arity11<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6, ? super I7, ? super I8, ? super I9, ? super I10, ? super I11> after)
+		default Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> andThen(Arity11<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6, ? super I7, ? super I8, ? super I9, ? super I10, ? super I11> after)
 		{
 			Objects.requireNonNull(after);
 
@@ -645,8 +627,8 @@ public final class Consumers {
 
 	/**
 	 * Represents an operation that accepts 12 input arguments and returns no
-	 * result. This is the 12-arity specialization of {@link Consumer}. Unlike
-	 * most other functional interfaces, this interface is expected to operate via
+	 * result. This is the 12-arity specialization of {@link Consumer}. Unlike most
+	 * other functional interfaces, this interface is expected to operate via
 	 * side-effects.
 	 * <p>
 	 * This is a functional interface whose functional method is
@@ -686,9 +668,7 @@ public final class Consumers {
 		 * @param in11 input argument 11.
 		 * @param in12 input argument 12.
 		 */
-		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
-			final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9,
-			final I10 in10, final I11 in11, final I12 in12);
+		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12);
 
 		/**
 		 * Returns a composed {@code Consumer.Arity12} that performs, in sequence,
@@ -698,28 +678,25 @@ public final class Consumers {
 		 * {@code after} operation will not be performed.
 		 *
 		 * @param after the operation to perform after this operation
-		 * @return a composed {@code Consumer.Arity12} that performs in sequence
-		 *         this operation followed by the {@code after} operation
+		 * @return a composed {@code Consumer.Arity12} that performs in sequence this
+		 *         operation followed by the {@code after} operation
 		 * @throws NullPointerException if {@code after} is null
 		 */
-		default Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> andThen(
-			Arity12<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6, ? super I7, ? super I8, ? super I9, ? super I10, ? super I11, ? super I12> after)
+		default Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> andThen(Arity12<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6, ? super I7, ? super I8, ? super I9, ? super I10, ? super I11, ? super I12> after)
 		{
 			Objects.requireNonNull(after);
 
-			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11,
-				in12) -> {
+			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12) -> {
 				accept(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
-				after.accept(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11,
-					in12);
+				after.accept(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 			};
 		}
 	}
 
 	/**
 	 * Represents an operation that accepts 13 input arguments and returns no
-	 * result. This is the 13-arity specialization of {@link Consumer}. Unlike
-	 * most other functional interfaces, this interface is expected to operate via
+	 * result. This is the 13-arity specialization of {@link Consumer}. Unlike most
+	 * other functional interfaces, this interface is expected to operate via
 	 * side-effects.
 	 * <p>
 	 * This is a functional interface whose functional method is
@@ -761,9 +738,7 @@ public final class Consumers {
 		 * @param in12 input argument 12.
 		 * @param in13 input argument 13.
 		 */
-		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
-			final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9,
-			final I10 in10, final I11 in11, final I12 in12, final I13 in13);
+		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13);
 
 		/**
 		 * Returns a composed {@code Consumer.Arity13} that performs, in sequence,
@@ -773,30 +748,25 @@ public final class Consumers {
 		 * {@code after} operation will not be performed.
 		 *
 		 * @param after the operation to perform after this operation
-		 * @return a composed {@code Consumer.Arity13} that performs in sequence
-		 *         this operation followed by the {@code after} operation
+		 * @return a composed {@code Consumer.Arity13} that performs in sequence this
+		 *         operation followed by the {@code after} operation
 		 * @throws NullPointerException if {@code after} is null
 		 */
-		default Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>
-			andThen(
-				Arity13<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6, ? super I7, ? super I8, ? super I9, ? super I10, ? super I11, ? super I12, ? super I13> after)
+		default Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> andThen(Arity13<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6, ? super I7, ? super I8, ? super I9, ? super I10, ? super I11, ? super I12, ? super I13> after)
 		{
 			Objects.requireNonNull(after);
 
-			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
-				in13) -> {
-				accept(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
-					in13);
-				after.accept(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11,
-					in12, in13);
+			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13) -> {
+				accept(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
+				after.accept(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 			};
 		}
 	}
 
 	/**
 	 * Represents an operation that accepts 14 input arguments and returns no
-	 * result. This is the 14-arity specialization of {@link Consumer}. Unlike
-	 * most other functional interfaces, this interface is expected to operate via
+	 * result. This is the 14-arity specialization of {@link Consumer}. Unlike most
+	 * other functional interfaces, this interface is expected to operate via
 	 * side-effects.
 	 * <p>
 	 * This is a functional interface whose functional method is
@@ -840,10 +810,7 @@ public final class Consumers {
 		 * @param in13 input argument 13.
 		 * @param in14 input argument 14.
 		 */
-		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
-			final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9,
-			final I10 in10, final I11 in11, final I12 in12, final I13 in13,
-			final I14 in14);
+		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14);
 
 		/**
 		 * Returns a composed {@code Consumer.Arity14} that performs, in sequence,
@@ -853,30 +820,25 @@ public final class Consumers {
 		 * {@code after} operation will not be performed.
 		 *
 		 * @param after the operation to perform after this operation
-		 * @return a composed {@code Consumer.Arity14} that performs in sequence
-		 *         this operation followed by the {@code after} operation
+		 * @return a composed {@code Consumer.Arity14} that performs in sequence this
+		 *         operation followed by the {@code after} operation
 		 * @throws NullPointerException if {@code after} is null
 		 */
-		default Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>
-			andThen(
-				Arity14<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6, ? super I7, ? super I8, ? super I9, ? super I10, ? super I11, ? super I12, ? super I13, ? super I14> after)
+		default Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> andThen(Arity14<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6, ? super I7, ? super I8, ? super I9, ? super I10, ? super I11, ? super I12, ? super I13, ? super I14> after)
 		{
 			Objects.requireNonNull(after);
 
-			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
-				in13, in14) -> {
-				accept(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
-					in13, in14);
-				after.accept(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11,
-					in12, in13, in14);
+			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14) -> {
+				accept(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
+				after.accept(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 			};
 		}
 	}
 
 	/**
 	 * Represents an operation that accepts 15 input arguments and returns no
-	 * result. This is the 15-arity specialization of {@link Consumer}. Unlike
-	 * most other functional interfaces, this interface is expected to operate via
+	 * result. This is the 15-arity specialization of {@link Consumer}. Unlike most
+	 * other functional interfaces, this interface is expected to operate via
 	 * side-effects.
 	 * <p>
 	 * This is a functional interface whose functional method is
@@ -922,10 +884,7 @@ public final class Consumers {
 		 * @param in14 input argument 14.
 		 * @param in15 input argument 15.
 		 */
-		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
-			final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9,
-			final I10 in10, final I11 in11, final I12 in12, final I13 in13,
-			final I14 in14, final I15 in15);
+		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final I15 in15);
 
 		/**
 		 * Returns a composed {@code Consumer.Arity15} that performs, in sequence,
@@ -935,31 +894,25 @@ public final class Consumers {
 		 * {@code after} operation will not be performed.
 		 *
 		 * @param after the operation to perform after this operation
-		 * @return a composed {@code Consumer.Arity15} that performs in sequence
-		 *         this operation followed by the {@code after} operation
+		 * @return a composed {@code Consumer.Arity15} that performs in sequence this
+		 *         operation followed by the {@code after} operation
 		 * @throws NullPointerException if {@code after} is null
 		 */
-		default
-			Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>
-			andThen(
-				Arity15<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6, ? super I7, ? super I8, ? super I9, ? super I10, ? super I11, ? super I12, ? super I13, ? super I14, ? super I15> after)
+		default Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> andThen(Arity15<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6, ? super I7, ? super I8, ? super I9, ? super I10, ? super I11, ? super I12, ? super I13, ? super I14, ? super I15> after)
 		{
 			Objects.requireNonNull(after);
 
-			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
-				in13, in14, in15) -> {
-				accept(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
-					in13, in14, in15);
-				after.accept(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11,
-					in12, in13, in14, in15);
+			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15) -> {
+				accept(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
+				after.accept(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 			};
 		}
 	}
 
 	/**
 	 * Represents an operation that accepts 16 input arguments and returns no
-	 * result. This is the 16-arity specialization of {@link Consumer}. Unlike
-	 * most other functional interfaces, this interface is expected to operate via
+	 * result. This is the 16-arity specialization of {@link Consumer}. Unlike most
+	 * other functional interfaces, this interface is expected to operate via
 	 * side-effects.
 	 * <p>
 	 * This is a functional interface whose functional method is
@@ -1007,10 +960,7 @@ public final class Consumers {
 		 * @param in15 input argument 15.
 		 * @param in16 input argument 16.
 		 */
-		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
-			final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9,
-			final I10 in10, final I11 in11, final I12 in12, final I13 in13,
-			final I14 in14, final I15 in15, final I16 in16);
+		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final I15 in15, final I16 in16);
 
 		/**
 		 * Returns a composed {@code Consumer.Arity16} that performs, in sequence,
@@ -1020,31 +970,25 @@ public final class Consumers {
 		 * {@code after} operation will not be performed.
 		 *
 		 * @param after the operation to perform after this operation
-		 * @return a composed {@code Consumer.Arity16} that performs in sequence
-		 *         this operation followed by the {@code after} operation
+		 * @return a composed {@code Consumer.Arity16} that performs in sequence this
+		 *         operation followed by the {@code after} operation
 		 * @throws NullPointerException if {@code after} is null
 		 */
-		default
-			Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>
-			andThen(
-				Arity16<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6, ? super I7, ? super I8, ? super I9, ? super I10, ? super I11, ? super I12, ? super I13, ? super I14, ? super I15, ? super I16> after)
+		default Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> andThen(Arity16<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6, ? super I7, ? super I8, ? super I9, ? super I10, ? super I11, ? super I12, ? super I13, ? super I14, ? super I15, ? super I16> after)
 		{
 			Objects.requireNonNull(after);
 
-			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
-				in13, in14, in15, in16) -> {
-				accept(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
-					in13, in14, in15, in16);
-				after.accept(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11,
-					in12, in13, in14, in15, in16);
+			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> {
+				accept(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
+				after.accept(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 			};
 		}
 	}
 
 	/**
 	 * Represents an operation that accepts 17 input arguments and returns no
-	 * result. This is the 17-arity specialization of {@link Consumer}. Unlike
-	 * most other functional interfaces, this interface is expected to operate via
+	 * result. This is the 17-arity specialization of {@link Consumer}. Unlike most
+	 * other functional interfaces, this interface is expected to operate via
 	 * side-effects.
 	 * <p>
 	 * This is a functional interface whose functional method is
@@ -1094,10 +1038,7 @@ public final class Consumers {
 		 * @param in16 input argument 16.
 		 * @param in17 input argument 17.
 		 */
-		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4,
-			final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9,
-			final I10 in10, final I11 in11, final I12 in12, final I13 in13,
-			final I14 in14, final I15 in15, final I16 in16, final I17 in17);
+		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final I15 in15, final I16 in16, final I17 in17);
 
 		/**
 		 * Returns a composed {@code Consumer.Arity17} that performs, in sequence,
@@ -1107,23 +1048,17 @@ public final class Consumers {
 		 * {@code after} operation will not be performed.
 		 *
 		 * @param after the operation to perform after this operation
-		 * @return a composed {@code Consumer.Arity17} that performs in sequence
-		 *         this operation followed by the {@code after} operation
+		 * @return a composed {@code Consumer.Arity17} that performs in sequence this
+		 *         operation followed by the {@code after} operation
 		 * @throws NullPointerException if {@code after} is null
 		 */
-		default
-			Arity17<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, I17>
-			andThen(
-				Arity17<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6, ? super I7, ? super I8, ? super I9, ? super I10, ? super I11, ? super I12, ? super I13, ? super I14, ? super I15, ? super I16, ? super I17> after)
+		default Arity17<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, I17> andThen(Arity17<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6, ? super I7, ? super I8, ? super I9, ? super I10, ? super I11, ? super I12, ? super I13, ? super I14, ? super I15, ? super I16, ? super I17> after)
 		{
 			Objects.requireNonNull(after);
 
-			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
-				in13, in14, in15, in16, in17) -> {
-				accept(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12,
-					in13, in14, in15, in16, in17);
-				after.accept(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11,
-					in12, in13, in14, in15, in16, in17);
+			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16, in17) -> {
+				accept(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16, in17);
+				after.accept(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16, in17);
 			};
 		}
 	}

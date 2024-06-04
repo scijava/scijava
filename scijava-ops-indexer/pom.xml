@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>scijava-ops-indexer</artifactId>
-	<version>0-SNAPSHOT</version>
+	<version>1.0.0</version>
 
 	<name>SciJava Ops Indexer</name>
 	<description>An annotation processor for indexing Ops with javadoc.</description>
@@ -66,7 +66,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/scijava/scijava</connection>
 		<developerConnection>scm:git:git@github.com:scijava/scijava</developerConnection>
-		<tag>HEAD</tag>
+		<tag>scijava-aggregator-1.0.0</tag>
 		<url>https://github.com/scijava/scijava</url>
 	</scm>
 	<issueManagement>
@@ -138,10 +138,8 @@
 						<phase>test</phase>
 						<configuration>
 							<rules>
-								<NoPackageCyclesRule
-									implementation="org.scijava.maven.plugin.enforcer.NoPackageCyclesRule" />
-								<NoSubpackageDependenceRule
-									implementation="org.scijava.maven.plugin.enforcer.NoSubpackageDependenceRule" />
+								<NoPackageCyclesRule implementation="org.scijava.maven.plugin.enforcer.NoPackageCyclesRule" />
+								<NoSubpackageDependenceRule implementation="org.scijava.maven.plugin.enforcer.NoSubpackageDependenceRule" />
 							</rules>
 						</configuration>
 					</execution>

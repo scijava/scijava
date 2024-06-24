@@ -83,7 +83,6 @@
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
-		<scijava.jvm.build.version>[11,)</scijava.jvm.build.version>
 
 		<!--
 		NB: Older versions of OpenJDK 11 have a bug in the javadoc tool,
@@ -102,6 +101,7 @@
 
 		<!-- TEMP: Until pom-scijava 38.0.0 is released. -->
 		<scijava-maven-plugin.version>3.0.0</scijava-maven-plugin.version>
+		<moditect-maven-plugin.version>1.1.0</moditect-maven-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -125,6 +125,10 @@
 						org.scijava.ops.indexer.OpImplNoteParser not found
 					-->
 					<proc>none</proc>
+					<!--
+						NB: Enable indexing on Java 8+
+					-->
+					<release>8</release>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -146,12 +150,50 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<Multi-Release>true</Multi-Release>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>
 					<links>
 						<link>https://javadoc.scijava.org/Java11/</link>
 					</links>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.moditect</groupId>
+				<artifactId>moditect-maven-plugin</artifactId>
+				<version>${moditect-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>add-module-info</id>
+						<phase>package</phase>
+						<goals>
+							<goal>add-module-info</goal>
+						</goals>
+						<configuration>
+							<jvmVersion>9</jvmVersion>
+							<module>
+								<moduleInfoSource>
+									module org.scijava.ops.indexer {
+										requires java.compiler;
+										requires org.yaml.snakeyaml;
+
+										provides javax.annotation.processing.Processor with
+											org.scijava.ops.indexer.OpImplNoteParser;
+									}
+								</moduleInfoSource>
+							</module>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

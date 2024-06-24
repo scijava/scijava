@@ -29,22 +29,23 @@
 
 package org.scijava.ops.indexer;
 
-import static org.scijava.ops.indexer.ProcessingUtils.isNullable;
-import static org.scijava.ops.indexer.ProcessingUtils.tagElementSeparator;
-
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.*;
+import javax.lang.model.type.NoType;
+import javax.lang.model.type.TypeMirror;
+import javax.tools.Diagnostic;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Pattern;
 
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.NoType;
-import javax.tools.Diagnostic;
+import static org.scijava.ops.indexer.ProcessingUtils.isNullable;
+import static org.scijava.ops.indexer.ProcessingUtils.tagElementSeparator;
 
 /**
  * {@link OpImplData} implementation handling {@link Field}s annotated with
@@ -78,16 +79,16 @@ class OpFieldImplData extends OpImplData {
 	@Override
 	void parseAdditionalTags(Element source, List<String[]> additionalTags) {
 		// Get the types of each Op parameter.
-        var itr = getParamTypes(source, additionalTags).iterator();
+		Iterator<String> itr = getParamTypes(source, additionalTags).iterator();
 		// Create the list of Op parameters by checking for @input, @container,
 		// @mutable, @output tags
-		for (var tag : additionalTags) {
+		for (String tag[] : additionalTags) {
 			// In the case where parameter types cannot be determined, describe the
 			// types as "UNKNOWN"
-            var pType = itr.hasNext() ? itr.next() : "UNKNOWN";
+            String pType = itr.hasNext() ? itr.next() : "UNKNOWN";
 			switch (tag[0]) {
 				case "@input":
-                    var inData = tagElementSeparator.split(tag[1], 2);
+                    String[] inData = tagElementSeparator.split(tag[1], 2);
 					params.add(new OpParameter(inData[0], pType,
 						OpParameter.IO_TYPE.INPUT, inData[1], isNullable(inData[1])));
 					break;
@@ -97,12 +98,12 @@ class OpFieldImplData extends OpImplData {
 						OpParameter.IO_TYPE.OUTPUT, tag[1], false));
 					break;
 				case "@container":
-                    var containerData = tagElementSeparator.split(tag[1], 2);
+                    String[] containerData = tagElementSeparator.split(tag[1], 2);
 					params.add(new OpParameter(containerData[0], pType,
 						OpParameter.IO_TYPE.CONTAINER, containerData[1], false));
 					break;
 				case "@mutable":
-                    var mutableData = tagElementSeparator.split(tag[1], 2);
+                    String[] mutableData = tagElementSeparator.split(tag[1], 2);
 					params.add(new OpParameter(mutableData[0], pType,
 						OpParameter.IO_TYPE.MUTABLE, mutableData[1], false));
 					break;
@@ -112,20 +113,20 @@ class OpFieldImplData extends OpImplData {
 
 		// With the number of inputs and outputs collected, validate that we have
 		// the correct number of eaach
-        var fieldType = env.getTypeUtils().asElement(source.asType());
+        Element fieldType = env.getTypeUtils().asElement(source.asType());
 		if (fieldType instanceof TypeElement) {
 			// Find functional method of the Op type
-            var fMethod = ProcessingUtils.findFunctionalMethod(env,
+            ExecutableElement fMethod = ProcessingUtils.findFunctionalMethod(env,
 				(TypeElement) fieldType);
 			// Determine number of outputs (in practice, always 0 or 1)
-            var numReturns = 0;
-			for (var p : params) {
+            int numReturns = 0;
+			for (OpParameter p : params) {
 				if (p.ioType == OpParameter.IO_TYPE.OUTPUT) {
 					numReturns++;
 				}
 			}
 			// Compare number of outputs with the number of @output tags
-            var expNumReturns = fMethod.getReturnType() instanceof NoType ? 0 : 1;
+            int expNumReturns = fMethod.getReturnType() instanceof NoType ? 0 : 1;
 			if (expNumReturns != numReturns) {
 				env.getMessager().printMessage(Diagnostic.Kind.ERROR, this.source +
 					" has " + numReturns + " @output tag(s) when it should have " +
@@ -133,8 +134,8 @@ class OpFieldImplData extends OpImplData {
 			}
 			// Compare number of inputs with the number of @input, @container,
 			// @mutable tags
-            var numParams = params.size() - numReturns;
-            var expNumParams = fMethod.getParameters().size();
+            int numParams = params.size() - numReturns;
+            int expNumParams = fMethod.getParameters().size();
 			if (numParams != expNumParams) {
 				env.getMessager().printMessage(Diagnostic.Kind.ERROR, this.source +
 					" has " + numParams +
@@ -166,7 +167,7 @@ class OpFieldImplData extends OpImplData {
 	private List<String> getParamTypes(Element source,
 		List<String[]> additionalTags)
 	{
-		var fieldStr = source.asType().toString();
+		String fieldStr = source.asType().toString();
 		if ( //
 		!SJF_PATTERN.matcher(fieldStr).find() && //
 			!JAVA_PATTERN.matcher(fieldStr).find() //
@@ -178,40 +179,40 @@ class OpFieldImplData extends OpImplData {
 		}
 
 		// Find the enclosing class, so we can grab all the type variables
-        var enclosing = source.getEnclosingElement();
+        Element enclosing = source.getEnclosingElement();
 		while (enclosing.getKind() != ElementKind.CLASS) {
 			enclosing = enclosing.getEnclosingElement();
 		}
 
 		// Replace all instances of each type variable in the field's type
 		// string.
-		for (var e : ((TypeElement) enclosing).getTypeParameters()) {
+		for (TypeParameterElement e : ((TypeElement) enclosing).getTypeParameters()) {
 			// Convert the type variable into a string representation
-            var tpString = new StringBuilder(e.toString()).append(
+            StringBuilder tpString = new StringBuilder(e.toString()).append(
 				" extends ");
-			var bounds = e.getBounds();
-			for (var i = 0; i < bounds.size(); i++) {
+			List<? extends TypeMirror> bounds = e.getBounds();
+			for (int i = 0; i < bounds.size(); i++) {
 				tpString.append(bounds.get(i).toString());
 				if (i < bounds.size() - 1) {
 					tpString.append(" & ");
 				}
 			}
 			// Replace each instance of the type variable with the stringification.
-			var regex = "(?<![a-zA-Z])" + e + "(?![a-zA-Z])";
+			String regex = "(?<![a-zA-Z])" + e + "(?![a-zA-Z])";
 			fieldStr = fieldStr.replaceAll(regex, tpString.toString());
 		}
 
 		// Next, parse out the parameters from the field type e.g.
 		// "Function<T, U>" -> "T, U"
-		var ParamsStr = fieldStr.substring( //
+		String ParamsStr = fieldStr.substring( //
 			fieldStr.indexOf('<') + 1, //
 			fieldStr.length() - 1 //
 		);
 		// Split the type parameters by comma, taking care to avoid nested commas
 		List<String> paramTypes = new ArrayList<>();
-        var tmp = new StringBuilder();
-        var nestCount = 0;
-		for (var i = 0; i < ParamsStr.length(); i++) {
+        StringBuilder tmp = new StringBuilder();
+        int nestCount = 0;
+		for (int i = 0; i < ParamsStr.length(); i++) {
 			if (ParamsStr.charAt(i) == '<') {
 				tmp.append(ParamsStr.charAt(i));
 				nestCount++;
@@ -242,8 +243,12 @@ class OpFieldImplData extends OpImplData {
 
 	@Override
 	String formulateSource(Element source) {
-		return "javaField:/" + URLEncoder.encode(source.getEnclosingElement() +
-			"$" + source, StandardCharsets.UTF_8);
+		try {
+			return "javaField:/" + URLEncoder.encode(source.getEnclosingElement() +
+					"$" + source, StandardCharsets.UTF_8.toString());
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

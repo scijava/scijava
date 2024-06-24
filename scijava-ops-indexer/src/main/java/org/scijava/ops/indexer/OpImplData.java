@@ -138,7 +138,7 @@ abstract class OpImplData {
 		for (String[] tag : tags) {
 			// Parse descriptions
 			if (!tag[0].startsWith("@")) {
-				if (description.isBlank()) this.description = String.join(" ", tag);
+				if (description.trim().isEmpty()) this.description = String.join(" ", tag);
 			}
 			// Parse universal Javadoc tags
 			else if (tag[0].equals("@author")) {
@@ -174,7 +174,7 @@ abstract class OpImplData {
 	 * @param implTag Tag to parse
 	 */
 	private void parseImplNote(String implTag) {
-		var implElements = tagElementSeparator.split(implTag);
+		String[] implElements = tagElementSeparator.split(implTag);
 		if (implElements.length > 1) {
 			for (int i = 1; i < implElements.length; i++) {
 				String[] kv = implElements[i].split("=", 2);
@@ -212,14 +212,14 @@ abstract class OpImplData {
 		Map<String, Object> map = new HashMap<>();
 		map.put("source", source);
 		map.put("version", version);
-		map.put("names", names.toArray(String[]::new));
+		map.put("names", names.toArray());
 		map.put("description", description);
 		map.put("priority", priority);
-		map.put("authors", authors.toArray(String[]::new));
+		map.put("authors", authors.toArray());
 		List<Map<String, Object>> foo = params.stream() //
 			.map(OpParameter::data) //
 			.collect(Collectors.toList());
-		map.put("parameters", foo.toArray(Map[]::new));
+		map.put("parameters", foo.toArray());
 		map.put("tags", tags);
 		return Collections.singletonMap("op", map);
 	}

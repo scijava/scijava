@@ -29,19 +29,21 @@
 
 package org.scijava.ops.indexer;
 
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.*;
+import javax.lang.model.type.NoType;
+import javax.lang.model.type.TypeMirror;
+import javax.tools.Diagnostic;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.*;
-import javax.lang.model.type.NoType;
-import javax.tools.Diagnostic;
 
 /**
  * {@link OpImplData} implementation handling {@link Method}s annotated with
@@ -82,7 +84,7 @@ class OpMethodImplData extends OpImplData {
 		}
 		// All Op dependencies must come before other parameters
 		int lastOpDependency = -1;
-		var params = source.getParameters();
+		List<? extends VariableElement> params = source.getParameters();
 		for (int i = 0; i < params.size(); i++) {
 			if (isDependency(params.get(i))) {
 				if (i != lastOpDependency + 1) {
@@ -117,7 +119,7 @@ class OpMethodImplData extends OpImplData {
 		ExecutableElement exSource = (ExecutableElement) source;
 		// First, parse @param tags
 		List<VariableElement> opDependencies = new ArrayList<>();
-		var paramItr = exSource.getParameters().iterator();
+		Iterator<? extends VariableElement> paramItr = exSource.getParameters().iterator();
 
 		for (String[] tag : additionalTags) {
 			if (!"@param".equals(tag[0])) continue;
@@ -182,7 +184,7 @@ class OpMethodImplData extends OpImplData {
 
 		// Validate 0 or 1 outputs
 		int totalOutputs = 0;
-		for (var p : params) {
+		for (OpParameter p : params) {
 			if (p.ioType != OpParameter.IO_TYPE.INPUT) {
 				totalOutputs++;
 			}
@@ -193,7 +195,7 @@ class OpMethodImplData extends OpImplData {
 		}
 
 		// Validate number of outputs
-		if (!(exSource.getReturnType() instanceof NoType) && returnTag.isEmpty()) {
+		if (!(exSource.getReturnType() instanceof NoType) && !returnTag.isPresent()) {
 			printError(exSource, " has a return, but no @return parameter");
 		}
 	}
@@ -212,7 +214,7 @@ class OpMethodImplData extends OpImplData {
 		// e.g. "Inplace1" means to edit the first parameter
 		Matcher m = COMPUTER_TYPE.matcher(type);
 		if (m.find()) {
-			var idx = m.group(1);
+			String idx = m.group(1);
 			int ioIndex = idx.isEmpty() ? params.size() - 1 : Integer.parseInt(idx) -
 				1;
 			params.get(ioIndex).ioType = OpParameter.IO_TYPE.CONTAINER;
@@ -220,7 +222,7 @@ class OpMethodImplData extends OpImplData {
 		}
 		m = INPLACE_TYPE.matcher(type);
 		if (m.find()) {
-			var idx = m.group(1);
+			String idx = m.group(1);
 			// Unlike for computers, Inplaces MUST have a suffix
 			int ioIndex = Integer.parseInt(idx) - 1;
 			params.get(ioIndex).ioType = OpParameter.IO_TYPE.MUTABLE;
@@ -235,7 +237,7 @@ class OpMethodImplData extends OpImplData {
 	 * @param msg a {@link String} describing the issue with the Op method.
 	 */
 	private void printError(ExecutableElement exSource, String msg) {
-		var clsElement = exSource.getEnclosingElement();
+		Element clsElement = exSource.getEnclosingElement();
 		while (clsElement.getKind() != ElementKind.CLASS) {
 			clsElement = clsElement.getEnclosingElement();
 		}
@@ -273,10 +275,10 @@ class OpMethodImplData extends OpImplData {
 		sb.append(source.getSimpleName());
 
 		// Then, append the parameters
-		var params = exSource.getParameters();
+		List<? extends VariableElement> params = exSource.getParameters();
 		sb.append("(");
 		for (int i = 0; i < params.size(); i++) {
-			var d = env.getTypeUtils().erasure(params.get(i).asType());
+			TypeMirror d = env.getTypeUtils().erasure(params.get(i).asType());
 			sb.append(d);
 			if (i < params.size() - 1) {
 				sb.append(",");
@@ -284,7 +286,11 @@ class OpMethodImplData extends OpImplData {
 		}
 		sb.append(")");
 
-		return "javaMethod:/" + URLEncoder.encode(sb.toString(),
-			StandardCharsets.UTF_8);
+		try {
+			return "javaMethod:/" + URLEncoder.encode(sb.toString(),
+					StandardCharsets.UTF_8.toString());
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

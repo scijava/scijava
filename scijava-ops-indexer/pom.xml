@@ -98,7 +98,7 @@
 		Therefore, we set the minimum build JDK version to 11.0.17 here.
 		-->
 		<scijava.jvm.build.version>[11.0.17,)</scijava.jvm.build.version>
-		<scijava.jvm.version>11</scijava.jvm.version>
+		<scijava.jvm.version>8</scijava.jvm.version>
 
 		<!-- TEMP: Until pom-scijava 38.0.0 is released. -->
 		<scijava-maven-plugin.version>3.0.0</scijava-maven-plugin.version>

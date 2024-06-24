@@ -29,22 +29,23 @@
 
 package org.scijava.ops.indexer;
 
-import static org.scijava.ops.indexer.ProcessingUtils.isNullable;
-import static org.scijava.ops.indexer.ProcessingUtils.tagElementSeparator;
-
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.*;
+import javax.lang.model.type.NoType;
+import javax.lang.model.type.TypeMirror;
+import javax.tools.Diagnostic;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Pattern;
 
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.NoType;
-import javax.tools.Diagnostic;
+import static org.scijava.ops.indexer.ProcessingUtils.isNullable;
+import static org.scijava.ops.indexer.ProcessingUtils.tagElementSeparator;
 
 /**
  * {@link OpImplData} implementation handling {@link Field}s annotated with
@@ -166,7 +167,7 @@ class OpFieldImplData extends OpImplData {
 	private List<String> getParamTypes(Element source,
 		List<String[]> additionalTags)
 	{
-		var fieldStr = source.asType().toString();
+		String fieldStr = source.asType().toString();
 		if ( //
 		!SJF_PATTERN.matcher(fieldStr).find() && //
 			!JAVA_PATTERN.matcher(fieldStr).find() //
@@ -185,11 +186,11 @@ class OpFieldImplData extends OpImplData {
 
 		// Replace all instances of each type variable in the field's type
 		// string.
-		for (var e : ((TypeElement) enclosing).getTypeParameters()) {
+		for (TypeParameterElement e : ((TypeElement) enclosing).getTypeParameters()) {
 			// Convert the type variable into a string representation
 			StringBuilder tpString = new StringBuilder(e.toString()).append(
 				" extends ");
-			var bounds = e.getBounds();
+			List<? extends TypeMirror> bounds = e.getBounds();
 			for (int i = 0; i < bounds.size(); i++) {
 				tpString.append(bounds.get(i).toString());
 				if (i < bounds.size() - 1) {
@@ -197,13 +198,13 @@ class OpFieldImplData extends OpImplData {
 				}
 			}
 			// Replace each instance of the type variable with the stringification.
-			var regex = "(?<![a-zA-Z])" + e + "(?![a-zA-Z])";
+			String regex = "(?<![a-zA-Z])" + e + "(?![a-zA-Z])";
 			fieldStr = fieldStr.replaceAll(regex, tpString.toString());
 		}
 
 		// Next, parse out the parameters from the field type e.g.
 		// "Function<T, U>" -> "T, U"
-		var ParamsStr = fieldStr.substring( //
+		String ParamsStr = fieldStr.substring( //
 			fieldStr.indexOf('<') + 1, //
 			fieldStr.length() - 1 //
 		);
@@ -242,8 +243,12 @@ class OpFieldImplData extends OpImplData {
 
 	@Override
 	String formulateSource(Element source) {
-		return "javaField:/" + URLEncoder.encode(source.getEnclosingElement() +
-			"$" + source, StandardCharsets.UTF_8);
+		try {
+			return "javaField:/" + URLEncoder.encode(source.getEnclosingElement() +
+					"$" + source, StandardCharsets.UTF_8.toString());
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

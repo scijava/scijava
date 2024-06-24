@@ -29,17 +29,15 @@
 
 package org.scijava.ops.indexer;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-
 import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.*;
 import javax.lang.model.type.NoType;
 import javax.tools.Diagnostic;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
+import java.util.List;
 
 import static org.scijava.ops.indexer.ProcessingUtils.*;
 
@@ -74,7 +72,7 @@ class OpClassImplData extends OpImplData {
 			return;
 		}
 		String[] sections = blockSeparator.split(fMethodDoc);
-		var paramTypes = fMethod.getParameters().iterator();
+		Iterator<? extends VariableElement> paramTypes = fMethod.getParameters().iterator();
 
 		int expNoParams = fMethod.getParameters().size();
 		int expNoReturns = fMethod.getReturnType() instanceof NoType ? 0 : 1;
@@ -89,7 +87,7 @@ class OpClassImplData extends OpImplData {
 					String name = foo[0];
 					String description = foo[1];
 					if (paramTypes.hasNext()) {
-						var pType = paramTypes.next();
+						VariableElement pType = paramTypes.next();
 						String type = pType.asType().toString();
 						params.add(new OpParameter(name, type, ProcessingUtils.ioType(
 							description), description, isNullable(pType, description)));
@@ -137,8 +135,8 @@ class OpClassImplData extends OpImplData {
 	void parseAdditionalTags(Element source, List<String[]> additionalTags) {}
 
 	protected String formulateSource(Element source) {
-		var srcString = source.toString();
-		var parent = source.getEnclosingElement();
+		String srcString = source.toString();
+		Element parent = source.getEnclosingElement();
 		// handle inner classes
 		while (parent.getKind() == ElementKind.CLASS) {
 			int badPeriod = srcString.lastIndexOf('.');
@@ -146,7 +144,11 @@ class OpClassImplData extends OpImplData {
 				badPeriod + 1);
 			parent = parent.getEnclosingElement();
 		}
-		return "javaClass:/" + URLEncoder.encode(srcString, StandardCharsets.UTF_8);
+		try {
+			return "javaClass:/" + URLEncoder.encode(srcString, StandardCharsets.UTF_8.toString());
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private void printError(Element source, String msg) {

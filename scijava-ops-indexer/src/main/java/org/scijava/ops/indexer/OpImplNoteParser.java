@@ -147,7 +147,7 @@ public class OpImplNoteParser extends AbstractProcessor {
 	private void outputYamlDoc(List<OpImplData> collectedData)
 		throws IOException
 	{
-		var data = collectedData.stream().map(OpImplData::dumpData).collect(
+		List<Map<String, Object>> data = collectedData.stream().map(OpImplData::dumpData).collect(
 			Collectors.toList());
 		String doc = yaml.dump(data);
 		FileObject resource = processingEnv.getFiler().createResource( //
@@ -184,9 +184,9 @@ public class OpImplNoteParser extends AbstractProcessor {
 			try {
 				if (element.getKind() == CLASS) {
 					TypeElement typeElement = (TypeElement) element;
-					var fMethod = ProcessingUtils.findFunctionalMethod(processingEnv,
+					ExecutableElement fMethod = ProcessingUtils.findFunctionalMethod(processingEnv,
 						typeElement);
-					var fMethodDoc = processingEnv.getElementUtils().getDocComment(
+					String fMethodDoc = processingEnv.getElementUtils().getDocComment(
 						fMethod);
 					return Optional.of(new OpClassImplData(typeElement, fMethod, javadoc,
 						fMethodDoc, processingEnv));

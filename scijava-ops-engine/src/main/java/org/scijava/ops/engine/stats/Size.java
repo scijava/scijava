@@ -43,7 +43,7 @@ public class Size implements OpCollection {
 	 * @param iterable the data to operate over
 	 * @return the size of the dataset, as as {@link Long}
 	 */
-	@OpMethod(names = "stats.size", type = Function.class)
+	@OpMethod(names = "stats.size", type = Function.class, priority = 50.0)
 	public static <T> Long sizeAsLong(Iterable<T> iterable) {
 		return StreamSupport.stream(iterable.spliterator(), false).count();
 	}

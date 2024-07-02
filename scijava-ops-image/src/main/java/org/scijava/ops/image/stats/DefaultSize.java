@@ -41,7 +41,7 @@ import org.scijava.ops.spi.Op;
  * @author Gabriel Selzer
  * @param <I> input type
  * @param <O> output type
- * @implNote op names='stats.size'
+ * @implNote op names='stats.size', priority='100.'
  */
 public class DefaultSize<I extends RealType<I>, O extends RealType<O>>
 	implements Computers.Arity1<Interval, O>

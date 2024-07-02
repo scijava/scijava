@@ -29,31 +29,56 @@
 
 package org.scijava.ops.engine.stats;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.scijava.ops.api.OpBuilder;
+import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.matcher.convert.IdentityCollection;
+import org.scijava.ops.engine.matcher.convert.PrimitiveConverters;
+import org.scijava.ops.engine.math.Add;
+import org.scijava.ops.engine.math.MathOpCollection;
+import org.scijava.types.Nil;
+
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
-import java.util.stream.StreamSupport;
 
-import org.scijava.ops.spi.Op;
-import org.scijava.ops.spi.OpClass;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpMethod;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Size implements OpCollection {
+/**
+ * Tests for {@link Size}
+ */
+public class SizeTest<N extends Number> extends AbstractTestEnvironment {
 
-	/**
-	 * @param iterable the data to operate over
-	 * @return the size of the dataset, as as {@link Long}
-	 */
-	@OpMethod(names = "stats.size", type = Function.class, priority = 50.0)
-	public static <T> Long sizeAsLong(Iterable<T> iterable) {
-		return StreamSupport.stream(iterable.spliterator(), false).count();
+	private static List<Integer> nums;
+
+	@BeforeAll
+	public static void AddNeededOps() {
+		ops.register(new Size());
+		nums = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 	}
 
-	/**
-	 * @param iterable the data to operate over
-	 * @return the size of the dataset, as as {@link Double}
-	 */
-	@OpMethod(names = "stats.size", type = Function.class)
-	public static <T> Double sizeAsDouble(Iterable<T> iterable) {
-		return (double) StreamSupport.stream(iterable.spliterator(), false).count();
+	@Test
+	public void testSizeUntyped() {
+		// Make sure we can call stats without specifying output type
+		Long size = (Long) ops.op("stats.size").input(nums).apply();
+
+		assertEquals(10, size);
+	}
+
+	@Test
+	public void testSizeLong() {
+		// Make sure we can call stats with Long output type
+		Long size = ops.op("stats.size").input(nums).outType(Long.class).apply();
+
+		assertEquals(10, size);
+	}
+
+	@Test
+	public void testSizeDouble() {
+		// Make sure we can call stats with Double output type
+		Double size = ops.op("stats.size").input(nums).outType(Double.class).apply();
+
+		assertEquals(10, size);
 	}
 }

@@ -29,24 +29,15 @@
 
 package org.scijava.ops.engine.matcher.adapt;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
+import org.scijava.common3.Any;
+import org.scijava.common3.Types;
 import org.scijava.ops.api.*;
-import org.scijava.ops.engine.*;
+import org.scijava.ops.engine.BaseOpHints;
+import org.scijava.ops.engine.MatchingConditions;
+import org.scijava.ops.engine.OpDependencyMember;
+import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.engine.matcher.OpCandidate;
 import org.scijava.ops.engine.matcher.OpCandidate.StatusCode;
-import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.engine.matcher.impl.DefaultOpRequest;
 import org.scijava.ops.engine.struct.FunctionalMethodType;
@@ -54,10 +45,15 @@ import org.scijava.ops.engine.struct.FunctionalParameters;
 import org.scijava.ops.engine.util.Infos;
 import org.scijava.priority.Priority;
 import org.scijava.struct.ItemIO;
-import org.scijava.common3.Any;
 import org.scijava.types.Nil;
-import org.scijava.common3.Types;
 import org.scijava.types.infer.GenericAssignability;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class AdaptationMatchingRoutine implements MatchingRoutine {
 
@@ -102,7 +98,6 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 			BaseOpHints.History.IGNORE //
 		);
 		List<Exception> matchingExceptions = new ArrayList<>();
-		List<DependencyMatchingException> depExceptions = new ArrayList<>();
 		for (final OpInfo adaptor : env.infos("engine.adapt")) {
 			Type adaptTo = adaptor.output().type();
 			Map<TypeVariable<?>, Type> map = new HashMap<>();
@@ -154,10 +149,6 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 				adaptedCandidate.setStatus(StatusCode.MATCH);
 				return adaptedCandidate;
 			}
-			catch (DependencyMatchingException d) {
-				depExceptions.add(d);
-				matchingExceptions.add(d);
-			}
 			catch (OpMatchingException | IllegalArgumentException e1) {
 				matchingExceptions.add(e1);
 			}
@@ -165,41 +156,112 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 		OpMatchingException agglomerated = new OpMatchingException(
 			"Unable to find an Op adaptation for " + conditions);
 
-		matchingExceptions.stream().forEach(agglomerated::addSuppressed);
+		matchingExceptions.forEach(agglomerated::addSuppressed);
 		throw agglomerated;
 	}
 
 	/**
 	 * Helper method that captures all type variable mappings found in the search
-	 * for an Op that could satisfy an adaptor input {@code srcType}.
+	 * for an Op that could satisfy an adaptor input {@code adaptorType}.
+	 * <p>
+	 * Notably, this method performs significant checks to ensure no {@link Any} objects
+	 * are added to {@code map}.
+	 * </p>
 	 *
-	 * @param srcType the type of the Op input to an adaptor
+	 * @param adaptorType the type of the Op input to an adaptor
 	 * @param candidate the {@link OpCandidate} matched for the adaptor input
 	 * @param map the mapping
 	 */
-	private void captureTypeVarsFromCandidate(Type srcType, OpCandidate candidate,
+	private void captureTypeVarsFromCandidate(Type adaptorType, OpCandidate candidate,
 		Map<TypeVariable<?>, Type> map)
 	{
-		Consumer<Map<TypeVariable<?>, Type>> typeVarConsumer = assigns -> {
-			for (var key : assigns.keySet()) {
-				if (map.containsKey(key)) {
-					var existing = map.get(key);
-					var replacement = assigns.get(key);
-					// Ignore bounds that are weaker than current bounds.
-					if (Types.isAssignable(existing, replacement) && !Any.is(existing)) {
-						continue;
-					}
+
+		// STEP 1: Base adaptor type variables
+		// For example, let's say we're operating on Computer<I, O>s.
+		// The adaptor might work on Computer<T, T>s. Which we need to resolve.
+		// We can match them to the candidate's type, maybe a Computer<Integer, Any>.
+		// But, to purge the Any we will have to fall back to the Info's type.
+		// That process is performed below.
+		final Type rawType = Types.parameterize(Types.raw(adaptorType));
+		final Map<TypeVariable<?>, Type> adaptorBounds = new HashMap<>();
+		GenericAssignability.inferTypeVariables(
+				new Type[] {rawType},
+				new Type[] {adaptorType},
+				adaptorBounds
+		);
+		final Type infoType = Types.superTypeOf(candidate.opInfo().opType(), Types.raw(adaptorType));
+		final Map<TypeVariable<?>, Type> infoBounds = new HashMap<>();
+		GenericAssignability.inferTypeVariables(
+				new Type[] {rawType},
+				new Type[] {infoType},
+				infoBounds
+		);
+		final Type candidateType = candidate.getType();
+		final Map<TypeVariable<?>, Type> candidateBounds = new HashMap<>();
+		GenericAssignability.inferTypeVariables(
+				new Type[] {rawType},
+				new Type[] {candidateType},
+				candidateBounds
+		);
+		for (TypeVariable<?> tv: adaptorBounds.keySet()) {
+			var adaptorBound = adaptorBounds.get(tv);
+			if (adaptorBound instanceof TypeVariable) {
+				TypeVariable<?> adaptTV = (TypeVariable<?>) adaptorBound;
+				var candidateBound = candidateBounds.get(tv);
+				if (hasAny(candidateBound)) {
+					var infoBound = infoBounds.get(tv);
+					map.put(adaptTV, infoBound);
 				}
-				map.put(key, assigns.get(key));
+				else {
+					map.put(adaptTV, candidateBound);
+				}
+
 			}
-		};
-		// First, capture assignments between the Adaptor and the matched Op
-		final Map<TypeVariable<?>, Type> srcBounds = new HashMap<>();
-		GenericAssignability.inferTypeVariables(new Type[] { srcType }, new Type[] {
-			candidate.getType() }, srcBounds);
-		typeVarConsumer.accept(srcBounds);
-		// Then, capture assignments between the original OpRef and the matched Op
-		typeVarConsumer.accept(candidate.typeVarAssigns());
+		}
+
+		// STEP 2: Additional candidate mappings
+		// Sometimes, there are additional type variables within the candidate
+		// that don't pertain to the adaptor itself, but must still be
+		// preserved for e.g. dependency matching.
+		for (var entry : candidate.typeVarAssigns().entrySet()) {
+			var key = entry.getKey();
+			var value = entry.getValue();
+			if (map.containsKey(key)) {
+				var existing = map.get(key);
+				// Ignore bounds that are weaker than current bounds.
+				if (Types.isAssignable(existing, value) && !hasAny(existing)) {
+					continue;
+				}
+			}
+			if (!hasAny(value)) {
+				map.put(key, value);
+			}
+		}
+	}
+
+
+	/**
+	 * Returns {@code true} iff {@code t} is:
+	 * <ol>
+	 * <li>an {@link Any}</li>
+	 * <li>a {@link Type} that is bounded in some way by an {@link Any}</li>
+	 * </ol>
+	 *
+	 * @param t some {@link Type}
+	 * @return {@code true} iff {@code t} is an {@link Any}
+	 */
+	private boolean hasAny(Type t) {
+		if (Any.is(t)) return true;
+		// NB Classes handled in Any.is call
+		if (t instanceof ParameterizedType) {
+			ParameterizedType pt = (ParameterizedType) t;
+			for(Type arg: pt.getActualTypeArguments()) {
+				if (hasAny(arg)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	private OpRequest inferOpRequest(OpDependencyMember<?> dependency,

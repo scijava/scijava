@@ -122,6 +122,12 @@ public final class Any implements Type {
 		return true;
 	}
 
+	/**
+	 * Returns {@code true} iff {@code o} is an {@link Any}.
+	 *
+	 * @param o some {@link Object}
+	 * @return {@code true} iff {@code o} is an {@link Any}
+	 */
 	public static boolean is(Object o) {
 		return o instanceof Any || o.equals(Any.class);
 	}

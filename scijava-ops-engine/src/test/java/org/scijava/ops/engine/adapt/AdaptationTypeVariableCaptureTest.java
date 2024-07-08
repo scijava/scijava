@@ -54,7 +54,7 @@ import java.util.function.Function;
  * @param <N>
  * @author Gabriel Selzer
  */
-public class AdaptationTypeVariableCaptureTest<N extends Number> extends
+public class AdaptationTypeVariableCaptureTest<N extends Number, O extends Number> extends
 	AbstractTestEnvironment implements OpCollection
 {
 
@@ -108,15 +108,54 @@ public class AdaptationTypeVariableCaptureTest<N extends Number> extends
 	public final Function<List<Byte>, List<Double>> lowCopier = (
 		list) -> new ArrayList<>();
 
+	/**
+	 * Test ensuring that in adaptation type variable assignments are captured.
+	 */
 	@Test
 	public void testCapture() {
 		List<Byte> in = Arrays.asList((byte) 0, (byte) 1);
 		Object out = ops.op("test.adaptedCapture") //
-			//
 			.input(in) //
 			.apply();
 		Assertions.assertInstanceOf(List.class, out);
 		Assertions.assertEquals(2, in.size());
+	}
+
+	/** Op that should be adapted */
+	@OpField(names = "test.adaptedAnyFallback")
+	public final Computers.Arity1<N, List<O>> originalTypeVars = (in, out) -> {
+		O o = out.get(0);
+		out.clear();
+		for (int i = 0; i < (int) in; i++) {
+			out.add(o);
+		}
+	};
+
+	@OpField(names="engine.create")
+	public final Function<N, List<Double>> foo = (in) -> {
+		List<Double> f = new ArrayList<>();
+		f.add(1.0);
+		return f;
+	};
+
+	@OpField(names="engine.create", priority = Priority.HIGH)
+	public final Function<N, List<String>> bar = (in) -> {
+		throw new IllegalStateException("This Op should not be used");
+	};
+
+	/**
+	 * Ensures that, when an {@link Any} is used in matching, the type variable
+	 * assignment is <b>not</b> captured, and instead the type variable is
+	 * mapped to the original type variable bounds on the Op.
+	 */
+	@Test
+	public void testAnyFallbacks() {
+		Integer in = 10;
+		Object out = ops.op("test.adaptedAnyFallback") //
+				.input(in) //
+				.apply();
+		Assertions.assertInstanceOf(List.class, out);
+		Assertions.assertEquals(in, ((List) out).size());
 	}
 
 }

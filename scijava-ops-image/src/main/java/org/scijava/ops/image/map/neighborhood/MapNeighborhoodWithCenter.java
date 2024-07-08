@@ -69,10 +69,10 @@ public class MapNeighborhoodWithCenter<I, O> implements
 		final IterableInterval<O> output)
 	{
 		// TODO can we do this through a mapper/LoopBuilder?
-		RandomAccess<I> inRA = input.randomAccess();
-		Cursor<Neighborhood<I>> neighborhoodsCursor = shape.neighborhoodsSafe(input)
+        var inRA = input.randomAccess();
+        var neighborhoodsCursor = shape.neighborhoodsSafe(input)
 			.cursor();
-		Cursor<O> outCursor = output.cursor();
+        var outCursor = output.cursor();
 		while (outCursor.hasNext()) {
 			outCursor.fwd();
 			inRA.setPosition(outCursor);

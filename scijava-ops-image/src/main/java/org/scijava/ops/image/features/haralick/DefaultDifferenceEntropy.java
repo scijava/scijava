@@ -70,18 +70,18 @@ public class DefaultDifferenceEntropy<T extends RealType<T>> extends
 		final Integer numGreyLevels, final Integer distance,
 		final MatrixOrientation orientation)
 	{
-		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels,
+		final var matrix = getCooccurrenceMatrix(input, numGreyLevels,
 			distance, orientation);
 
-		final double[] pxminusy = coocPXMinusYFunc.apply(matrix);
-		final int nrGrayLevels = matrix.length;
+		final var pxminusy = coocPXMinusYFunc.apply(matrix);
+		final var nrGrayLevels = matrix.length;
 
 		double res = 0;
-		for (int k = 0; k < nrGrayLevels; k++) {
+		for (var k = 0; k < nrGrayLevels; k++) {
 			res += pxminusy[k] * Math.log(pxminusy[k] + EPSILON);
 		}
 
-		DoubleType output = new DoubleType();
+        var output = new DoubleType();
 		output.set(-res);
 		return output;
 

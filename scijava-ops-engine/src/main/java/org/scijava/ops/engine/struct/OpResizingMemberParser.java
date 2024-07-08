@@ -64,13 +64,13 @@ public class OpResizingMemberParser implements
 	 */
 	@Override
 	public List<Member<?>> parse(RetypingRequest source, Type structType) {
-		List<FunctionalMethodType> newFmts = source.newFmts();
-		long numInputs = newFmts.stream() //
+        var newFmts = source.newFmts();
+        var numInputs = newFmts.stream() //
 			.filter(fmt -> fmt.itemIO() == ItemIO.INPUT) //
 			.count();
 		List<Member<?>> newMembers = new ArrayList<>();
 		long inputsAdded = 0;
-		for (Member<?> m : source.struct().members()) {
+		for (var m : source.struct().members()) {
 			if (m.getIOType() == ItemIO.INPUT) {
 				inputsAdded++;
 				if (inputsAdded > numInputs) continue;

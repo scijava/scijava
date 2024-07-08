@@ -69,48 +69,48 @@ public class GlobalFit {
 
 		@Override
 		public void fitBatch(List<int[]> pos, FitEventHandler<I> handler) {
-			int nTrans = pos.size();
+            var nTrans = pos.size();
 
 			// trans data and fitted parameters for each trans
-			final float[][] trans = new float[nTrans][nDataTotal];
-			final float[][] param = new float[nTrans][nParam];
-			final boolean[] transSkipped = new boolean[nTrans];
+			final var trans = new float[nTrans][nDataTotal];
+			final var param = new float[nTrans][nParam];
+			final var transSkipped = new boolean[nTrans];
 
-			final RAHelper<I> helper = new RAHelper<>(params, results);
+			final var helper = new RAHelper<I>(params, results);
 
 			// fetch parameters from RA
-			for (int i = 0; i < nTrans; i++)
+			for (var i = 0; i < nTrans; i++)
 				transSkipped[i] = !helper.loadData(trans[i], param[i], params, pos.get(
 					i));
 
 			// each row is a transient series
-			Float2DMatrix transMat = new Float2DMatrix(trans);
+            var transMat = new Float2DMatrix(trans);
 			// each row is a parameter series
-			Float2DMatrix paramMat = new Float2DMatrix(param);
+            var paramMat = new Float2DMatrix(param);
 			// only the first row is used
-			Float2DMatrix fittedMat = new Float2DMatrix(1, nDataTotal);
-			Float2DMatrix residualMat = new Float2DMatrix(1, nDataTotal);
+            var fittedMat = new Float2DMatrix(1, nDataTotal);
+            var residualMat = new Float2DMatrix(1, nDataTotal);
 			// $\chi^2$ for each trans
-			float[] chisq = new float[nTrans];
+            var chisq = new float[nTrans];
 			// global $\chi^2$
-			float[] chisqGlobal = new float[1];
+            var chisqGlobal = new float[1];
 			// degrees of freedom (used to reduce $\chi^2$)
-			int[] df = new int[1];
+            var df = new int[1];
 
-			final int retCode = FLIMLib.GCI_marquardt_global_exps_instr(params.xInc,
+			final var retCode = FLIMLib.GCI_marquardt_global_exps_instr(params.xInc,
 				transMat, adjFitStart, adjFitEnd, params.instr, params.noise,
 				params.sig, FitType.FIT_GLOBAL_MULTIEXP, paramMat, params.paramFree,
 				params.restrain, params.chisq_delta, fittedMat, residualMat, chisq,
 				chisqGlobal, df, params.dropBad ? 1 : 0);
 
 			// fetch fitted stuff from native
-			float[][] fittedParam = params.getParamMap ? paramMat.asArray() : null;
-			float[][] fitted = params.getFittedMap ? fittedMat.asArray() : null;
-			float[][] residual = params.getResidualsMap ? residualMat.asArray()
+            var fittedParam = params.getParamMap ? paramMat.asArray() : null;
+            var fitted = params.getFittedMap ? fittedMat.asArray() : null;
+            var residual = params.getResidualsMap ? residualMat.asArray()
 				: null;
 
 			// copy back
-			for (int i = 0; i < nTrans; i++) {
+			for (var i = 0; i < nTrans; i++) {
 				results.param = params.getParamMap ? fittedParam[i] : null;
 				results.fitted = params.getFittedMap ? fitted[i] : null;
 				results.residuals = params.getResidualsMap ? residual[i] : null;

@@ -134,7 +134,7 @@ public final class Progress {
 	 */
 	public static void complete() {
 		// update completed task
-		Task t = progressibleStack.get().pop();
+        var t = progressibleStack.get().pop();
 		if (!t.isComplete()) {
 			t.complete();
 			// ping relevant listeners
@@ -205,7 +205,7 @@ public final class Progress {
 			return;
 		}
 		// Ping object-specific listeners
-		List<Consumer<Task>> list = progressibleListeners.getOrDefault( //
+        var list = progressibleListeners.getOrDefault( //
 			task.progressible(), //
 			Collections.emptyList() //
 		);

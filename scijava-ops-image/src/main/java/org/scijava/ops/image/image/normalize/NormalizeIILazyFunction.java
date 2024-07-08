@@ -65,7 +65,7 @@ public class NormalizeIILazyFunction<I extends RealType<I>> implements
 	 */
 	@Override
 	public RandomAccessibleInterval<I> apply(RandomAccessibleInterval<I> input) {
-		RandomAccessibleInterval<I> output = createFunc.apply(input);
+        var output = createFunc.apply(input);
 		normalizer.compute(input, output);
 		return output;
 	}

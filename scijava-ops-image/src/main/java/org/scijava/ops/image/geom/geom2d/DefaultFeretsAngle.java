@@ -56,10 +56,10 @@ public class DefaultFeretsAngle implements
 		final DoubleType feretsAngle)
 	{
 
-		final RealLocalizable p1 = points.getA();
-		final RealLocalizable p2 = points.getB();
+		final var p1 = points.getA();
+		final var p2 = points.getB();
 
-		final double degree = Math.atan2(p2.getDoublePosition(1) - p1
+		final var degree = Math.atan2(p2.getDoublePosition(1) - p1
 			.getDoublePosition(1), p2.getDoublePosition(0) - p1.getDoublePosition(
 				0)) * (180.0 / Math.PI);
 

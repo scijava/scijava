@@ -68,7 +68,7 @@ public class DefaultDetectJunctions implements
 	}
 
 	private boolean areClose(RealPoint p1, List<RealPoint> points) {
-		for (RealPoint p : points) {
+		for (var p : points) {
 			if (areClose(p1, p) == true) return true;
 		}
 		return false;
@@ -121,10 +121,10 @@ public class DefaultDetectJunctions implements
 		// realPointCollection for our junctions.
 		List<RealPoint> output = new ArrayList<>();
 
-		for (int first = 0; first < lines.size() - 1; first++) {
-			WritablePolyline firstLine = lines.get(first);
-			for (int second = first + 1; second < lines.size(); second++) {
-				WritablePolyline secondLine = lines.get(second);
+		for (var first = 0; first < lines.size() - 1; first++) {
+            var firstLine = lines.get(first);
+			for (var second = first + 1; second < lines.size(); second++) {
+                var secondLine = lines.get(second);
 				// interval containing both plines
 				Interval intersect = Intervals.intersect(slightlyEnlarge(firstLine, 2),
 					slightlyEnlarge(secondLine, 2));
@@ -135,24 +135,24 @@ public class DefaultDetectJunctions implements
 				// create an arraylist to contain all of the junctions for these two
 				// lines (so that we can filter the junctions before putting them in
 				// output).
-				ArrayList<RealPoint> currentPairJunctions = new ArrayList<>();
+                var currentPairJunctions = new ArrayList<RealPoint>();
 
-				for (int p = 0; p < firstLine.numVertices() - 1; p++) {
-					for (int q = 0; q < secondLine.numVertices() - 1; q++) {
-						RealLocalizableRealPositionable p1 = firstLine.vertex(p);
-						RealLocalizableRealPositionable p2 = firstLine.vertex(p + 1);
-						RealLocalizableRealPositionable q1 = secondLine.vertex(q);
-						RealLocalizableRealPositionable q2 = secondLine.vertex(q + 1);
+				for (var p = 0; p < firstLine.numVertices() - 1; p++) {
+					for (var q = 0; q < secondLine.numVertices() - 1; q++) {
+                        var p1 = firstLine.vertex(p);
+                        var p2 = firstLine.vertex(p + 1);
+                        var q1 = secondLine.vertex(q);
+                        var q2 = secondLine.vertex(q + 1);
 
 						// special cases if both lines are vertical
-						boolean pVertical = Math.round(p1.getDoublePosition(0)) == Math
+                        var pVertical = Math.round(p1.getDoublePosition(0)) == Math
 							.round(p2.getDoublePosition(0));
-						boolean qVertical = Math.round(q1.getDoublePosition(0)) == Math
+                        var qVertical = Math.round(q1.getDoublePosition(0)) == Math
 							.round(q2.getDoublePosition(0));
 
 						// intersection point between the lines created by line segments p
 						// and q.
-						double[] intersectionPoint = new double[2];
+                        var intersectionPoint = new double[2];
 
 						// if both p and q are vertical, then p and q cannot intersect,
 						// since they are parallel and cannot be the same.
@@ -161,30 +161,30 @@ public class DefaultDetectJunctions implements
 							continue;
 						}
 						else if (pVertical) {
-							double mq = (q2.getDoublePosition(1) - q1.getDoublePosition(1)) /
+                            var mq = (q2.getDoublePosition(1) - q1.getDoublePosition(1)) /
 								(q2.getDoublePosition(0) - q1.getDoublePosition(0));
-							double bq = (q1.getDoublePosition(1) - mq * q1.getDoublePosition(
+                            var bq = (q1.getDoublePosition(1) - mq * q1.getDoublePosition(
 								0));
-							double x = p1.getDoublePosition(0);
-							double y = mq * x + bq;
+                            var x = p1.getDoublePosition(0);
+                            var y = mq * x + bq;
 							intersectionPoint[0] = x;
 							intersectionPoint[1] = y;
 						}
 						else if (qVertical) {
-							double mp = (p2.getDoublePosition(1) - p1.getDoublePosition(1)) /
+                            var mp = (p2.getDoublePosition(1) - p1.getDoublePosition(1)) /
 								(p2.getDoublePosition(0) - p1.getDoublePosition(0));
-							double bp = (p1.getDoublePosition(1) - mp * p1.getDoublePosition(
+                            var bp = (p1.getDoublePosition(1) - mp * p1.getDoublePosition(
 								0));
-							double x = q1.getDoublePosition(0);
-							double y = mp * x + bp;
+                            var x = q1.getDoublePosition(0);
+                            var y = mp * x + bp;
 							intersectionPoint[0] = x;
 							intersectionPoint[1] = y;
 						}
 						else {
 
-							double mp = (p2.getDoublePosition(1) - p1.getDoublePosition(1)) /
+                            var mp = (p2.getDoublePosition(1) - p1.getDoublePosition(1)) /
 								(p2.getDoublePosition(0) - p1.getDoublePosition(0));
-							double mq = (q2.getDoublePosition(1) - q1.getDoublePosition(1)) /
+                            var mq = (q2.getDoublePosition(1) - q1.getDoublePosition(1)) /
 								(q2.getDoublePosition(0) - q1.getDoublePosition(0));
 
 							if (mp == mq) {
@@ -192,28 +192,28 @@ public class DefaultDetectJunctions implements
 								continue;
 							}
 
-							double bp = (p2.getDoublePosition(1) - mp * p2.getDoublePosition(
+                            var bp = (p2.getDoublePosition(1) - mp * p2.getDoublePosition(
 								0));
-							double bq = (q2.getDoublePosition(1) - mq * q2.getDoublePosition(
+                            var bq = (q2.getDoublePosition(1) - mq * q2.getDoublePosition(
 								0));
 
 							// point of intersection of lines created by line segments p and
 							// q.
-							double x = (bq - bp) / (mp - mq);
-							double y = mp * x + bp;
+                            var x = (bq - bp) / (mp - mq);
+                            var y = mp * x + bp;
 							intersectionPoint[0] = x;
 							intersectionPoint[1] = y;
 						}
 
 						// find the distance from the intersection point to both line
 						// segments, and the length of the line segments.
-						double distp1 = getDistance(intersectionPoint, p1);
-						double distp2 = getDistance(intersectionPoint, p2);
-						double distq1 = getDistance(intersectionPoint, q1);
-						double distq2 = getDistance(intersectionPoint, q2);
+                        var distp1 = getDistance(intersectionPoint, p1);
+                        var distp2 = getDistance(intersectionPoint, p2);
+                        var distq1 = getDistance(intersectionPoint, q1);
+                        var distq2 = getDistance(intersectionPoint, q2);
 
 						// max distance from line segment to intersection point
-						double maxDist = Math.max(Math.min(distp1, distp2), Math.min(distq1,
+                        var maxDist = Math.max(Math.min(distp1, distp2), Math.min(distq1,
 							distq2));
 
 						// if the maximum distance is close enough to the two lines, then
@@ -227,7 +227,7 @@ public class DefaultDetectJunctions implements
 				filterJunctions(currentPairJunctions);
 
 				// add the filtered junctions to the output list.
-				for (RealPoint point : currentPairJunctions)
+				for (var point : currentPairJunctions)
 					output.add(point);
 			}
 		}
@@ -241,11 +241,11 @@ public class DefaultDetectJunctions implements
 
 	private void filterJunctions(List<RealPoint> list) {
 		// filter out all vaguely similar junction points.
-		for (int i = 0; i < list.size() - 1; i++) {
-			ArrayList<RealPoint> similars = new ArrayList<>();
+		for (var i = 0; i < list.size() - 1; i++) {
+            var similars = new ArrayList<RealPoint>();
 			similars.add(list.get(i));
 			list.remove(i);
-			for (int j = 0; j < list.size(); j++) {
+			for (var j = 0; j < list.size(); j++) {
 				if (areClose(list.get(j), similars)) {
 					similars.add(list.get(j));
 					list.remove(j);
@@ -259,7 +259,7 @@ public class DefaultDetectJunctions implements
 
 	private RealPoint averagePoints(ArrayList<RealPoint> list) {
 		double[] pos = { 0, 0 };
-		for (RealPoint p : list) {
+		for (var p : list) {
 			pos[0] += p.getDoublePosition(0);
 			pos[1] += p.getDoublePosition(1);
 		}
@@ -275,14 +275,14 @@ public class DefaultDetectJunctions implements
 	{
 
 		// find out whether or not they are on the same line
-		boolean sameLine = false;
+        var sameLine = false;
 		if (areVertical && Math.round(p1.getDoublePosition(0)) == Math.round(q1
 			.getDoublePosition(0))) sameLine = true;
 		else {
-			double m = (q2.getDoublePosition(1) - q1.getDoublePosition(1)) / (q2
+            var m = (q2.getDoublePosition(1) - q1.getDoublePosition(1)) / (q2
 				.getDoublePosition(0) - q1.getDoublePosition(0));
-			double bp = (p2.getDoublePosition(1) - m * p2.getDoublePosition(0));
-			double bq = (q2.getDoublePosition(1) - m * q2.getDoublePosition(0));
+            var bp = (p2.getDoublePosition(1) - m * p2.getDoublePosition(0));
+            var bq = (q2.getDoublePosition(1) - m * q2.getDoublePosition(0));
 
 			if (bp == bq) sameLine = true;
 		}
@@ -294,9 +294,9 @@ public class DefaultDetectJunctions implements
 			q1)), Math.min(getDistance(p1, q2), getDistance(p2, q2))) > threshold)
 			return;
 
-		int foundJunctions = 0;
-		double lengthp = getDistance(p1, p2);
-		double lengthq = getDistance(q1, q2);
+        var foundJunctions = 0;
+        var lengthp = getDistance(p1, p2);
+        var lengthq = getDistance(q1, q2);
 		// if p and q are segments on the same line, then p1, p2, q1, and q2 can all
 		// be junctions. There can be at most 2 junctions between these two line
 		// segments.

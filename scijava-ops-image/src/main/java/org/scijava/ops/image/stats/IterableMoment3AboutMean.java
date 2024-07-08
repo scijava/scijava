@@ -62,15 +62,15 @@ public class IterableMoment3AboutMean<I extends RealType<I>, O extends RealType<
 	 */
 	@Override
 	public void compute(final Iterable<I> input, final O moment3AboutMean) {
-		final O mean = moment3AboutMean.createVariable();
+		final var mean = moment3AboutMean.createVariable();
 		meanComputer.compute(input, mean);
-		final O size = moment3AboutMean.createVariable();
+		final var size = moment3AboutMean.createVariable();
 		sizeComputer.compute(input, size);
 
 		double res = 0;
-		final double m = mean.getRealDouble();
-		for (final I in : input) {
-			final double val = in.getRealDouble() - m;
+		final var m = mean.getRealDouble();
+		for (final var in : input) {
+			final var val = in.getRealDouble() - m;
 			res += val * val * val;
 		}
 

@@ -74,7 +74,7 @@ public class PhasorFit {
 
 		@Override
 		protected void beforeFit() {
-			for (int i = 0; i < paramBuffer.length; i++) {
+			for (var i = 0; i < paramBuffer.length; i++) {
 				// no estimation (+Inf was set by RAHelper#loadData)
 				// this value makes phasor explode
 				if (paramBuffer[i] == Float.POSITIVE_INFINITY) {
@@ -93,7 +93,7 @@ public class PhasorFit {
 
 		@Override
 		protected void doFit() {
-			final int retCode = FLIMLib.GCI_Phasor(params.xInc, transBuffer,
+			final var retCode = FLIMLib.GCI_Phasor(params.xInc, transBuffer,
 				adjFitStart, adjFitEnd, z, u, v, tauPhi, tauMod, tau, fittedBuffer,
 				residualBuffer, chisqBuffer);
 

@@ -60,7 +60,7 @@ public class ComputeMaxLikelihoodThreshold<T extends RealType<T>> extends
 	 */
 	@Override
 	public long computeBin(final Histogram1d<T> hist) {
-		final long[] histogram = hist.toLongArray();
+		final var histogram = hist.toLongArray();
 		return computeBin(histogram);
 	}
 
@@ -88,81 +88,81 @@ public class ComputeMaxLikelihoodThreshold<T extends RealType<T>> extends
 	 * information.
 	 */
 	public static long computeBin(final long[] histogram) {
-		final int n = histogram.length - 1;
+		final var n = histogram.length - 1;
 
 		// I == the Image as double data
 
 		// % Calculate the histogram.
 		// y = hist(I(:),0:n);
-		final long[] y = histogram;
+		final var y = histogram;
 
 		// % The initial estimate for the threshold is found with the MINIMUM
 		// % algorithm.
-		final int T = (int) ComputeMinimumThreshold.computeBin(histogram);
+		final var T = (int) ComputeMinimumThreshold.computeBin(histogram);
 
 		// NB: T might be -1 if ComputeMinimumThreshold doesn't converge
 		if (T < 0) {
 			return 0;
 		}
 
-		final double eps = 0.0000001;
+		final var eps = 0.0000001;
 
 		// % Calculate initial values for the statistics.
-		double mu = Thresholds.B(y, T) / Thresholds.A(y, T);
-		double nu = (Thresholds.B(y, n) - Thresholds.B(y, T)) / (Thresholds.A(y,
+        var mu = Thresholds.B(y, T) / Thresholds.A(y, T);
+        var nu = (Thresholds.B(y, n) - Thresholds.B(y, T)) / (Thresholds.A(y,
 			n) - Thresholds.A(y, T));
-		double p = Thresholds.A(y, T) / Thresholds.A(y, n);
-		double q = (Thresholds.A(y, n) - Thresholds.A(y, T)) / Thresholds.A(y, n);
-		double sigma2 = Thresholds.C(y, T) / Thresholds.A(y, T) - (mu * mu);
-		double tau2 = (Thresholds.C(y, n) - Thresholds.C(y, T)) / (Thresholds.A(y,
+        var p = Thresholds.A(y, T) / Thresholds.A(y, n);
+        var q = (Thresholds.A(y, n) - Thresholds.A(y, T)) / Thresholds.A(y, n);
+        var sigma2 = Thresholds.C(y, T) / Thresholds.A(y, T) - (mu * mu);
+        var tau2 = (Thresholds.C(y, n) - Thresholds.C(y, T)) / (Thresholds.A(y,
 			n) - Thresholds.A(y, T)) - (nu * nu);
 
 		// % Return if sigma2 or tau2 are zero, to avoid division by zero
 		if (sigma2 == 0 || tau2 == 0) return 0;
 
-		double mu_prev = Double.NaN;
-		double nu_prev = Double.NaN;
-		double p_prev = Double.NaN;
-		double q_prev = Double.NaN;
-		double sigma2_prev = Double.NaN;
-		double tau2_prev = Double.NaN;
+        var mu_prev = Double.NaN;
+        var nu_prev = Double.NaN;
+        var p_prev = Double.NaN;
+        var q_prev = Double.NaN;
+        var sigma2_prev = Double.NaN;
+        var tau2_prev = Double.NaN;
 
-		final double[] ind = indices(n + 1);
-		final double[] ind2 = new double[n + 1];
-		final double[] phi = new double[n + 1];
-		final double[] gamma = new double[n + 1];
-		final double[] tmp1 = new double[n + 1];
-		final double[] tmp2 = new double[n + 1];
-		final double[] tmp3 = new double[n + 1];
-		final double[] tmp4 = new double[n + 1];
+		final var ind = indices(n + 1);
+		final var ind2 = new double[n + 1];
+		final var phi = new double[n + 1];
+		final var gamma = new double[n + 1];
+		final var tmp1 = new double[n + 1];
+		final var tmp2 = new double[n + 1];
+		final var tmp3 = new double[n + 1];
+		final var tmp4 = new double[n + 1];
 
 		sqr(ind, ind2);
 
-		int attempts = 0;
+        var attempts = 0;
 		while (true) {
 			if (attempts++ > MAX_ATTEMPTS) {
 				throw new IllegalStateException(
 					"Max likelihood method not converging after " + MAX_ATTEMPTS +
 						" attempts.");
 			}
-			for (int i = 0; i <= n; i++) {
-				final double dmu2 = (i - mu) * (i - mu);
-				final double dnu2 = (i - nu) * (i - nu);
+			for (var i = 0; i <= n; i++) {
+				final var dmu2 = (i - mu) * (i - mu);
+				final var dnu2 = (i - nu) * (i - nu);
 				phi[i] = p / Math.sqrt(sigma2) * Math.exp(-dmu2 / (2 * sigma2)) / (p /
 					Math.sqrt(sigma2) * Math.exp(-dmu2 / (2 * sigma2)) + (q / Math.sqrt(
 						tau2)) * Math.exp(-dnu2 / (2 * tau2)));
 			}
 
 			minus(1, phi, gamma);
-			final double F = mul(phi, y);
-			final double G = mul(gamma, y);
+			final var F = mul(phi, y);
+			final var G = mul(gamma, y);
 			p_prev = p;
 			q_prev = q;
 			mu_prev = mu;
 			nu_prev = nu;
 			sigma2_prev = nu;
 			tau2_prev = nu;
-			final double Ayn = Thresholds.A(y, n);
+			final var Ayn = Thresholds.A(y, n);
 			p = F / Ayn;
 			q = G / Ayn;
 			scale(ind, phi, tmp1);
@@ -183,14 +183,14 @@ public class ComputeMaxLikelihoodThreshold<T extends RealType<T>> extends
 		}
 
 		// % The terms of the quadratic equation to be solved.
-		final double w0 = 1 / sigma2 - 1 / tau2;
-		final double w1 = mu / sigma2 - nu / tau2;
-		final double w2 = (mu * mu) / sigma2 - (nu * nu) / tau2 + Math.log10(
+		final var w0 = 1 / sigma2 - 1 / tau2;
+		final var w1 = mu / sigma2 - nu / tau2;
+		final var w2 = (mu * mu) / sigma2 - (nu * nu) / tau2 + Math.log10(
 			(sigma2 * (q * q)) / (tau2 * (p * p)));
 
 		// % If the threshold would be imaginary, return with threshold set to
 		// zero.
-		final double sqterm = w1 * w1 - w0 * w2;
+		final var sqterm = w1 * w1 - w0 * w2;
 		if (sqterm < 0) {
 			throw new IllegalStateException(
 				"Max likelihood threshold would be imaginary");
@@ -207,7 +207,7 @@ public class ComputeMaxLikelihoodThreshold<T extends RealType<T>> extends
 		if (row.length != col.length) throw new IllegalArgumentException(
 			"row/col lengths differ");
 		double sum = 0;
-		for (int i = 0; i < row.length; i++) {
+		for (var i = 0; i < row.length; i++) {
 			sum += row[i] * col[i];
 		}
 		return sum;
@@ -219,7 +219,7 @@ public class ComputeMaxLikelihoodThreshold<T extends RealType<T>> extends
 		if ((list1.length != list2.length) || (list1.length != output.length)) {
 			throw new IllegalArgumentException("list lengths differ");
 		}
-		for (int i = 0; i < list1.length; i++)
+		for (var i = 0; i < list1.length; i++)
 			output[i] = list1[i] * list2[i];
 	}
 
@@ -227,13 +227,13 @@ public class ComputeMaxLikelihoodThreshold<T extends RealType<T>> extends
 		if (in.length != out.length) {
 			throw new IllegalArgumentException("list lengths differ");
 		}
-		for (int i = 0; i < in.length; i++)
+		for (var i = 0; i < in.length; i++)
 			out[i] = in[i] * in[i];
 	}
 
 	private static double[] indices(final int n) {
-		final double[] indices = new double[n];
-		for (int i = 0; i < n; i++)
+		final var indices = new double[n];
+		for (var i = 0; i < n; i++)
 			indices[i] = i;
 		return indices;
 	}
@@ -244,7 +244,7 @@ public class ComputeMaxLikelihoodThreshold<T extends RealType<T>> extends
 		if (phi.length != gamma.length) {
 			throw new IllegalArgumentException("list lengths differ");
 		}
-		for (int i = 0; i < phi.length; i++) {
+		for (var i = 0; i < phi.length; i++) {
 			gamma[i] = num - phi[i];
 		}
 	}

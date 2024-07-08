@@ -101,7 +101,7 @@ class TypeVarAssigns implements Map<TypeVariable<?>, Type> {
 
 	@Override
 	public Type get(Object key) {
-		TypeMapping value = map.get(key);
+        var value = map.get(key);
 		return value == null ? null : value.getType();
 	}
 
@@ -117,7 +117,7 @@ class TypeVarAssigns implements Map<TypeVariable<?>, Type> {
 
 	@Override
 	public Type put(TypeVariable<?> typeVar, Type type) {
-		final TypeMapping previousMapping = //
+		final var previousMapping = //
 			map.put(typeVar, suitableTypeMapping(typeVar, type, isMalleable(
 				typeVar)));
 		return previousMapping == null ? null : previousMapping.getType();
@@ -125,7 +125,7 @@ class TypeVarAssigns implements Map<TypeVariable<?>, Type> {
 
 	@Override
 	public void putAll(Map<? extends TypeVariable<?>, ? extends Type> m) {
-		for (Map.Entry<? extends TypeVariable<?>, ? extends Type> e : m
+		for (var e : m
 			.entrySet())
 		{
 			put(e.getKey(), e.getValue());
@@ -140,7 +140,7 @@ class TypeVarAssigns implements Map<TypeVariable<?>, Type> {
 
 	@Override
 	public Type remove(Object key) {
-		TypeMapping value = map.remove(key);
+        var value = map.remove(key);
 		return value == null ? null : value.getType();
 	}
 

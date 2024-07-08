@@ -52,7 +52,7 @@ public class JavaFieldYAMLOpInfoCreator implements YAMLOpInfoCreator {
 	public OpInfo create(URI identifier, Map<String, Object> yaml)
 		throws Exception
 	{
-		final String srcString = identifier.getPath().substring(1);
+		final var srcString = identifier.getPath().substring(1);
 		return new YAMLOpFieldInfo(yaml, srcString);
 	}
 }

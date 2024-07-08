@@ -74,10 +74,10 @@ public class OpInstance<T> implements GenericTyped {
 	@Override
 	public boolean equals(Object that) {
 		if (!(that instanceof OpInstance)) return false;
-		OpInstance<?> thatInstance = (OpInstance<?>) that;
-		boolean infosEqual = infoTree().equals(thatInstance.infoTree());
-		boolean objectsEqual = op().equals(thatInstance.op());
-		boolean typesEqual = type().equals(thatInstance.type());
+        var thatInstance = (OpInstance<?>) that;
+        var infosEqual = infoTree().equals(thatInstance.infoTree());
+        var objectsEqual = op().equals(thatInstance.op());
+        var typesEqual = type().equals(thatInstance.type());
 		return infosEqual && objectsEqual && typesEqual;
 	}
 

@@ -60,7 +60,7 @@ public class IFFTMethodsOpI<C extends ComplexType<C>> implements
 	public void mutate(final RandomAccessibleInterval<C> inout) {
 		if (!conforms(inout)) throw new IllegalArgumentException(
 			"The input size does not conform to a supported FFT size!");
-		for (int d = inout.numDimensions() - 1; d >= 0; d--)
+		for (var d = inout.numDimensions() - 1; d >= 0; d--)
 			FFTMethods.complexToComplex(inout, d, false, true);
 	}
 
@@ -69,9 +69,9 @@ public class IFFTMethodsOpI<C extends ComplexType<C>> implements
 	 */
 	public boolean conforms(final RandomAccessibleInterval inout) {
 
-		long[] paddedDimensions = new long[inout.numDimensions()];
+        var paddedDimensions = new long[inout.numDimensions()];
 
-		boolean fastSizeConforms = false;
+        var fastSizeConforms = false;
 
 		FFTMethods.dimensionsComplexToComplexFast(inout, paddedDimensions);
 
@@ -79,7 +79,7 @@ public class IFFTMethodsOpI<C extends ComplexType<C>> implements
 			fastSizeConforms = true;
 		}
 
-		boolean smallSizeConforms = false;
+        var smallSizeConforms = false;
 
 		FFTMethods.dimensionsComplexToComplexSmall(inout, paddedDimensions);
 

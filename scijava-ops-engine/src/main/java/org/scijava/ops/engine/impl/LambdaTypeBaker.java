@@ -102,9 +102,9 @@ public final class LambdaTypeBaker {
 	}
 
 	private static <T> void ensureImplementation(T originalOp, Type reifiedType) {
-		Class<?> opClass = originalOp.getClass();
-		Class<?> opFIFace = FunctionalInterfaces.findFrom(opClass);
-		Class<?> typeFIFace = FunctionalInterfaces.findFrom(reifiedType);
+        var opClass = originalOp.getClass();
+        var opFIFace = FunctionalInterfaces.findFrom(opClass);
+        var typeFIFace = FunctionalInterfaces.findFrom(reifiedType);
 		if (!opFIFace.equals(typeFIFace)) {
 			throw new IllegalArgumentException(originalOp + " does not implement " +
 				Types.raw(reifiedType));
@@ -127,16 +127,16 @@ public final class LambdaTypeBaker {
 	private static Object javassistOp(Object originalOp, Type reifiedType)
 		throws Throwable
 	{
-		ClassPool pool = ClassPool.getDefault();
+        var pool = ClassPool.getDefault();
 
 		// Create wrapper class
-		String className = formClassName(originalOp, reifiedType);
+        var className = formClassName(originalOp, reifiedType);
 		Class<?> c;
 		try {
 			c = pool.getClassLoader().loadClass(className);
 		}
 		catch (ClassNotFoundException e) {
-			CtClass cc = generateSimplifiedWrapper(pool, className, reifiedType);
+            var cc = generateSimplifiedWrapper(pool, className, reifiedType);
 			c = cc.toClass(MethodHandles.lookup());
 		}
 
@@ -148,14 +148,14 @@ public final class LambdaTypeBaker {
 	// TODO: consider correctness
 	private static String formClassName(Object op, Type reifiedType) {
 		// package name - required to be this package for the Lookup to work
-		String packageName = LambdaTypeBaker.class.getPackageName();
-		StringBuilder sb = new StringBuilder(packageName + ".");
+        var packageName = LambdaTypeBaker.class.getPackageName();
+        var sb = new StringBuilder(packageName + ".");
 
 		// class name
-		String implementationName = op.getClass().getSimpleName();
-		String originalName = implementationName.substring(implementationName
+        var implementationName = op.getClass().getSimpleName();
+        var originalName = implementationName.substring(implementationName
 			.lastIndexOf('.') + 1); // we only want the class name
-		String className = originalName.concat("_typeBaked_" + reifiedType
+        var className = originalName.concat("_typeBaked_" + reifiedType
 			.getTypeName());
 		className = className.replaceAll("[^a-zA-Z0-9_]", "_");
 		if (className.chars().anyMatch(c -> !Character.isJavaIdentifierPart(c)))
@@ -169,33 +169,33 @@ public final class LambdaTypeBaker {
 	private static CtClass generateSimplifiedWrapper(ClassPool pool,
 		String className, Type reifiedType) throws Throwable
 	{
-		CtClass cc = pool.makeClass(className);
+        var cc = pool.makeClass(className);
 
 		// Add implemented interface
-		CtClass jasOpType = pool.get(Types.raw(reifiedType).getName());
+        var jasOpType = pool.get(Types.raw(reifiedType).getName());
 		cc.addInterface(jasOpType);
-		CtClass genTyped = pool.get(GenericTyped.class.getName());
+        var genTyped = pool.get(GenericTyped.class.getName());
 		cc.addInterface(genTyped);
 
 		// Add Op field
-		CtField opField = createTypeField(pool, cc, Types.raw(reifiedType), "op");
+        var opField = createTypeField(pool, cc, Types.raw(reifiedType), "op");
 		cc.addField(opField);
 
 		// Add Type field
-		CtField type = createTypeField(pool, cc, Type.class, "type");
+        var type = createTypeField(pool, cc, Type.class, "type");
 		cc.addField(type);
 
 		// Add constructor to take the Simplifiers, as well as the original op.
-		CtConstructor constructor = CtNewConstructor.make(createConstructor(cc,
+        var constructor = CtNewConstructor.make(createConstructor(cc,
 			Types.raw(reifiedType)), cc);
 		cc.addConstructor(constructor);
 
 		// add functional interface method
-		CtMethod functionalMethod = CtNewMethod.make(createFunctionalMethod(
+        var functionalMethod = CtNewMethod.make(createFunctionalMethod(
 			reifiedType), cc);
 		cc.addMethod(functionalMethod);
 
-		CtMethod genTypedMethod = CtNewMethod.make(createGenericTypedMethod(), cc);
+        var genTypedMethod = CtNewMethod.make(createGenericTypedMethod(), cc);
 		cc.addMethod(genTypedMethod);
 
 		// add GenericTyped method
@@ -210,14 +210,14 @@ public final class LambdaTypeBaker {
 		Class<?> opType, String fieldName) throws NotFoundException,
 		CannotCompileException
 	{
-		CtClass fType = pool.get(opType.getName());
-		CtField f = new CtField(fType, fieldName, cc);
+        var fType = pool.get(opType.getName());
+        var f = new CtField(fType, fieldName, cc);
 		f.setModifiers(Modifier.PRIVATE + Modifier.FINAL);
 		return f;
 	}
 
 	private static String createConstructor(CtClass cc, Class<?> opType) {
-		StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
 		// constructor signature
 		sb.append("public " + cc.getSimpleName() + "( ");
 
@@ -245,11 +245,11 @@ public final class LambdaTypeBaker {
 	 *         method
 	 */
 	private static String createFunctionalMethod(Type reifiedType) {
-		StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
 
 		// determine the name of the functional method
-		Class<?> raw = Types.raw(reifiedType);
-		Method m = FunctionalInterfaces.functionalMethodOf(raw);
+        var raw = Types.raw(reifiedType);
+        var m = FunctionalInterfaces.functionalMethodOf(raw);
 
 		// -- signature -- //
 		sb.append(generateSignature(m));
@@ -263,7 +263,7 @@ public final class LambdaTypeBaker {
 			sb.append("return ");
 		}
 		sb.append("op." + m.getName() + "(");
-		for (int i = 0; i < m.getParameterCount(); i++) {
+		for (var i = 0; i < m.getParameterCount(); i++) {
 			sb.append(" in" + i);
 			if (i + 1 < m.getParameterCount()) sb.append(",");
 		}
@@ -274,16 +274,16 @@ public final class LambdaTypeBaker {
 	}
 
 	private static String generateSignature(Method m) {
-		StringBuilder sb = new StringBuilder();
-		String methodName = m.getName();
+        var sb = new StringBuilder();
+        var methodName = m.getName();
 
 		// method modifiers
-		boolean isVoid = m.getReturnType() == void.class;
+        var isVoid = m.getReturnType() == void.class;
 		sb.append("public " + (isVoid ? "void" : "Object") + " " + methodName +
 			"(");
 
-		int inputs = m.getParameterCount();
-		for (int i = 0; i < inputs; i++) {
+        var inputs = m.getParameterCount();
+		for (var i = 0; i < inputs; i++) {
 			sb.append(" Object in" + i);
 			if (i < inputs - 1) sb.append(",");
 		}

@@ -27,8 +27,8 @@ public class FunctionToArrays$classGenerics.call($maxArity) implements OpCollect
 
 	// TODO: extract logic to a utility class
 	private int minLength(Object[]... arrays) {
-		int minLength = Integer.MAX_VALUE;
-		for (Object[] array : arrays)
+		var minLength = Integer.MAX_VALUE;
+		for (var array : arrays)
 			if (array.length < minLength) minLength = array.length;
 		return minLength;
 	}
@@ -41,13 +41,13 @@ public class FunctionToArrays$classGenerics.call($maxArity) implements OpCollect
 	public final Function<$functionArity.call($arity)$generics.call($arity), $functionArity.call($arity)$arrayGenerics.call($arity)> liftFunction$arity =
 		(function) -> {
 			return ($applyArgs.call($arity)) -> {
-				int len = minLength($applyArgs.call($arity));
+				var len = minLength($applyArgs.call($arity));
 				if (len == 0) throw new UnsupportedOperationException("Unable to create an empty output array.");
-				O component = function.apply($arraysAtPos0.call($arity));
+				var component = function.apply($arraysAtPos0.call($arity));
 				@SuppressWarnings("unchecked")
-				O[] out = (O[]) Array.newInstance(component.getClass(), len);
+				var out = (O[]) Array.newInstance(component.getClass(), len);
 				
-				for (int i = 0; i < len; i++) {
+				for (var i = 0; i < len; i++) {
 					out[i] = function.apply($arraysAtPosI.call($arity));
 				}
 				return out;

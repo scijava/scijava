@@ -121,7 +121,7 @@ public class DefaultContour<B extends BooleanType<B>> implements
 		}
 
 		public final void backtrack() {
-			final int[] back = CCLOCKWISE_OFFSETS[m_curOffset];
+			final var back = CCLOCKWISE_OFFSETS[m_curOffset];
 			m_ra.move(back); // undo last move
 
 			// find out, where to continue:
@@ -161,7 +161,7 @@ public class DefaultContour<B extends BooleanType<B>> implements
 		 * backtrack and set only part of neighborhood to be iterated.
 		 */
 		public void backtrackSpecial() {
-			final int[] back = CCLOCKWISE_OFFSETS[m_curOffset];
+			final var back = CCLOCKWISE_OFFSETS[m_curOffset];
 			m_ra.move(back); // undo last move
 
 			// find out, where to continue:
@@ -208,16 +208,16 @@ public class DefaultContour<B extends BooleanType<B>> implements
 
 		List<RealPoint> p = new ArrayList<>();
 
-		final B var = Util.getTypeFromInterval(input).createVariable();
+		final var var = Util.getTypeFromInterval(input).createVariable();
 
 		final RandomAccess<B> raInput = Views.extendValue(input, var)
 			.randomAccess();
-		final Cursor<B> cInput = Views.flatIterable(input).cursor();
-		final ClockwiseMooreNeighborhoodIterator<B> cNeigh =
-			new ClockwiseMooreNeighborhoodIterator<>(raInput);
+		final var cInput = Views.flatIterable(input).cursor();
+		final var cNeigh =
+			new ClockwiseMooreNeighborhoodIterator<B>(raInput);
 
-		double[] position = new double[2];
-		double[] startPos = new double[2];
+        var position = new double[2];
+        var startPos = new double[2];
 
 		// find first true pixel
 		while (cInput.hasNext()) {
@@ -237,14 +237,14 @@ public class DefaultContour<B extends BooleanType<B>> implements
 				while (cNeigh.hasNext()) {
 					if (cNeigh.next().get()) {
 
-						boolean specialBacktrack = false;
+                        var specialBacktrack = false;
 
 						raInput.localize(position);
 						if (startPos[0] == position[0] && startPos[1] == position[1]) {
 							// startPoint was found.
 							if (useJacobs) {
 								// Jacobs stopping criteria
-								final int index = cNeigh.getIndex();
+								final var index = cNeigh.getIndex();
 								if (index == 1 || index == 0) {
 									// Jonathans refinement to
 									// non-terminating jacobs criteria

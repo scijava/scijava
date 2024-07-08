@@ -143,7 +143,7 @@ public final class Parallelization {
 	 * {@code Parallelization.runWithNumThreads( numThreads, () -> myAlgorithm( input ) );}
 	 */
 	public static void runWithNumThreads(int numThreads, Runnable action) {
-		try (TaskExecutor taskExecutor = TaskExecutors.numThreads(numThreads)) {
+		try (var taskExecutor = TaskExecutors.numThreads(numThreads)) {
 			runWithExecutor(taskExecutor, action);
 		}
 	}
@@ -154,7 +154,7 @@ public final class Parallelization {
 	 * {@code output = Parallelization.runWithNumThreads( numThreads, () -> myAlgorithm( input ) );}
 	 */
 	public static <R> R runWithNumThreads(int numThreads, Callable<R> action) {
-		try (TaskExecutor taskExecutor = TaskExecutors.numThreads(numThreads)) {
+		try (var taskExecutor = TaskExecutors.numThreads(numThreads)) {
 			return runWithExecutor(taskExecutor, action);
 		}
 	}
@@ -187,7 +187,7 @@ public final class Parallelization {
 	public static void runWithExecutor(TaskExecutor taskExecutor,
 		Runnable action)
 	{
-		try (Frame frame = setExecutorRequiresReset(taskExecutor)) {
+		try (var frame = setExecutorRequiresReset(taskExecutor)) {
 			action.run();
 		}
 	}
@@ -199,7 +199,7 @@ public final class Parallelization {
 	public static <T> T runWithExecutor(TaskExecutor taskExecutor,
 		Callable<T> action)
 	{
-		try (Frame frame = setExecutorRequiresReset(taskExecutor)) {
+		try (var frame = setExecutorRequiresReset(taskExecutor)) {
 			return action.call();
 		}
 		catch (Exception e) {
@@ -248,7 +248,7 @@ public final class Parallelization {
 	 */
 	// NB: package-private to allow testing
 	static Frame setExecutorRequiresReset(TaskExecutor taskExecutor) {
-		final TaskExecutor old = executor.get();
+		final var old = executor.get();
 		executor.set(taskExecutor);
 		return () -> executor.set(old);
 	}

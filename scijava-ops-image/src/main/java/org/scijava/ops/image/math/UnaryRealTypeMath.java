@@ -76,8 +76,8 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * @implNote op names='math.arccosh'
 	 */
 	public final Computers.Arity1<I, O> arccosh = (input, output) -> {
-		final double xt = input.getRealDouble();
-		double delta = Math.sqrt(xt * xt - 1);
+		final var xt = input.getRealDouble();
+        var delta = Math.sqrt(xt * xt - 1);
 		if (xt <= -1) delta = -delta;
 		output.setReal(Math.log(xt + delta));
 	};
@@ -91,7 +91,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * @implNote op names='math.arccot'
 	 */
 	public final Computers.Arity1<I, O> arccot = (input, output) -> {
-		double value = Math.atan(1.0 / input.getRealDouble());
+        var value = Math.atan(1.0 / input.getRealDouble());
 		if (input.getRealDouble() < 0) value += Math.PI;
 		output.setReal(value);
 	};
@@ -105,7 +105,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * @implNote op names='math.arccoth'
 	 */
 	public final Computers.Arity1<I, O> arccoth = (input, output) -> {
-		final double xt = input.getRealDouble();
+		final var xt = input.getRealDouble();
 		output.setReal(0.5 * Math.log((xt + 1) / (xt - 1)));
 	};
 
@@ -118,15 +118,15 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * @implNote op names='math.arccsc'
 	 */
 	public final Computers.Arity1<I, O> arccsc = (input, output) -> {
-		final double xt = input.getRealDouble();
+		final var xt = input.getRealDouble();
 		if (xt > -1 && xt < 1) throw new IllegalArgumentException(
 			"arccsc(x) : x out of range");
 		else if (xt == -1) output.setReal(-Math.PI / 2);
 		else if (xt == 1) output.setReal(Math.PI / 2);
 		else {
-			DoubleType tmp = new DoubleType();
+            var tmp = new DoubleType();
 			tmp.setReal(1 / xt);
-			DoubleType angle = new DoubleType();
+            var angle = new DoubleType();
 			angle.setReal(Math.asin(tmp.getRealDouble()));
 			output.setReal(angle.getRealDouble());
 		}
@@ -141,8 +141,8 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * @implNote op names='math.arccsch'
 	 */
 	public final Computers.Arity1<I, O> arccsch = (input, output) -> {
-		final double xt = input.getRealDouble();
-		final double delta = Math.sqrt(1 + 1 / (xt * xt));
+		final var xt = input.getRealDouble();
+		final var delta = Math.sqrt(1 + 1 / (xt * xt));
 		output.setReal(Math.log(1 / xt + delta));
 	};
 
@@ -155,17 +155,17 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * @implNote op names='math.arcsec'
 	 */
 	public final Computers.Arity1<I, O> arcsec = (input, output) -> {
-		final double xt = input.getRealDouble();
+		final var xt = input.getRealDouble();
 		if (xt > -1 && xt < 1) throw new IllegalArgumentException(
 			"arcsec(x) : x out of range");
 		else if (xt == -1) output.setReal(Math.PI);
 		else if (xt == 1) output.setReal(0);
 		else {
-			DoubleType tmp = new DoubleType();
+            var tmp = new DoubleType();
 			tmp.setReal(Math.sqrt(xt * xt - 1) / xt);
-			DoubleType angle = new DoubleType();
+            var angle = new DoubleType();
 			angle.setReal(Math.asin(tmp.getRealDouble()));
-			double value = angle.getRealDouble();
+            var value = angle.getRealDouble();
 			if (xt < -1) value += Math.PI;
 			output.setReal(value);
 		}
@@ -180,8 +180,8 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * @implNote op names='math.arcsech'
 	 */
 	public final Computers.Arity1<I, O> arcsech = (input, output) -> {
-		final double xt = input.getRealDouble();
-		final double numer = 1 + Math.sqrt(1 - xt * xt);
+		final var xt = input.getRealDouble();
+		final var numer = 1 + Math.sqrt(1 - xt * xt);
 		output.setReal(Math.log(numer / xt));
 	};
 
@@ -205,8 +205,8 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * @implNote op names='math.arcsinh'
 	 */
 	public final Computers.Arity1<I, O> arcsinh = (input, output) -> {
-		final double xt = input.getRealDouble();
-		final double delta = Math.sqrt(xt * xt + 1);
+		final var xt = input.getRealDouble();
+		final var delta = Math.sqrt(xt * xt + 1);
 		output.setReal(Math.log(xt + delta));
 	};
 
@@ -230,7 +230,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * @implNote op names='math.arctanh'
 	 */
 	public final Computers.Arity1<I, O> arctanh = (input, output) -> {
-		final double xt = input.getRealDouble();
+		final var xt = input.getRealDouble();
 		output.setReal(0.5 * Math.log((1 + xt) / (1 - xt)));
 	};
 
@@ -366,7 +366,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	public final Computers.Arity2<I, Double, O> gamma = (input, constant,
 		output) -> {
-		final double inputVal = input.getRealDouble();
+		final var inputVal = input.getRealDouble();
 		if (inputVal <= 0) output.setReal(0);
 		else {
 			output.setReal(Math.exp(constant * Math.log(inputVal)));
@@ -444,7 +444,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	public final Computers.Arity2<I, Double, O> max = (input, constant,
 		output) -> {
-		final double value = input.getRealDouble();
+		final var value = input.getRealDouble();
 		if (value < constant) output.setReal(value);
 		else output.setReal(constant);
 	};
@@ -462,7 +462,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	public final Computers.Arity2<I, Double, O> min = (input, constant,
 		output) -> {
-		final double value = input.getRealDouble();
+		final var value = input.getRealDouble();
 		if (value > constant) output.setReal(value);
 		else output.setReal(constant);
 	};
@@ -512,7 +512,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	public final Computers.Arity2<I, Integer, I> intPower = (input, constant,
 		output) -> {
 		output.setOne();
-		for (int i = 0; i < constant; i++) {
+		for (var i = 0; i < constant; i++) {
 			output.mul(input);
 		}
 	};
@@ -528,7 +528,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	public final Computers.Arity2<I, Double, O> reciprocal = (input, dbzVal,
 		output) -> {
-		final double inputVal = input.getRealDouble();
+		final var inputVal = input.getRealDouble();
 		if (inputVal == 0) output.setReal(dbzVal);
 		else output.setReal(1.0 / inputVal);
 	};
@@ -600,7 +600,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * @implNote op names='math.sinc'
 	 */
 	public final Computers.Arity1<I, O> sinc = (input, output) -> {
-		final double x = input.getRealDouble();
+		final var x = input.getRealDouble();
 		double value;
 		if (x == 0) value = 1;
 		else value = Math.sin(x) / x;
@@ -617,7 +617,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * @implNote op names='math.sincPi'
 	 */
 	public final Computers.Arity1<I, O> sincPi = (input, output) -> {
-		final double x = input.getRealDouble();
+		final var x = input.getRealDouble();
 		double value;
 		if (x == 0) value = 1;
 		else value = Math.sin(Math.PI * x) / (Math.PI * x);

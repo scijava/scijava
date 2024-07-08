@@ -51,7 +51,7 @@ public class FitParamsTypeExtractor extends SubTypeExtractor<FitParams<?>> {
 
 	@Override
 	protected Type[] getTypeParameters(TypeReifier r, FitParams<?> object) {
-		Type elementType = r.reify(Util.getTypeFromInterval(object.transMap));
+        var elementType = r.reify(Util.getTypeFromInterval(object.transMap));
 		return new Type[] { elementType };
 	}
 

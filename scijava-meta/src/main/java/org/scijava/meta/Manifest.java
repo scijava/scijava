@@ -120,14 +120,14 @@ public class Manifest implements Versioned {
 
 	public String get(final String key) {
 		if (manifest == null) return null;
-		final Attributes mainAttrs = manifest.getMainAttributes();
+		final var mainAttrs = manifest.getMainAttributes();
 		if (mainAttrs == null) return null;
 		return mainAttrs.getValue(key);
 	}
 
 	public Map<Object, Object> getAll() {
 		if (manifest == null) return null;
-		final Attributes mainAttrs = manifest.getMainAttributes();
+		final var mainAttrs = manifest.getMainAttributes();
 		if (mainAttrs == null) return null;
 		return Collections.unmodifiableMap(mainAttrs);
 	}
@@ -149,9 +149,9 @@ public class Manifest implements Versioned {
 	 * XML document was loaded as a resource from inside a JAR.
 	 */
 	public static Manifest manifest(final XML xml) throws IOException {
-		final String path = xml.path();
+		final var path = xml.path();
 		if (path == null || !path.startsWith("file:")) return null;
-		final int dotJAR = path.indexOf(".jar!/");
+		final var dotJAR = path.indexOf(".jar!/");
 		return manifest(new File(path.substring(5, dotJAR + 4)));
 	}
 
@@ -162,7 +162,7 @@ public class Manifest implements Versioned {
 	}
 
 	private static Manifest manifest(final URL jarURL) throws IOException {
-		final JarURLConnection conn = (JarURLConnection) jarURL.openConnection();
+		final var conn = (JarURLConnection) jarURL.openConnection();
 		return new Manifest(conn.getManifest());
 	}
 
@@ -170,18 +170,18 @@ public class Manifest implements Versioned {
 
 	@Override
 	public String version() {
-		final String v = baseVersion();
+		final var v = baseVersion();
 		if (v == null || !v.endsWith("-SNAPSHOT")) return v;
 
 		// append commit hash to differentiate between development versions
-		final String buildNumber = implementationBuild();
+		final var buildNumber = implementationBuild();
 		return buildNumber == null ? v : v + "-" + buildNumber;
 	}
 
 	// -- Helper methods --
 
 	private String baseVersion() {
-		final String manifestVersion = implementationVersion();
+		final var manifestVersion = implementationVersion();
 		if (manifestVersion != null) return manifestVersion;
 		return specificationVersion();
 	}

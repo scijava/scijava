@@ -58,7 +58,7 @@ public class RAHelper<I extends RealType<I>> {
 		retcodeRA = params.getReturnCodeMap ? rslts.retCodeMap.randomAccess()
 			: null;
 
-		int prefixLen = Math.min(params.instr == null ? 0 : params.instr.length,
+        var prefixLen = Math.min(params.instr == null ? 0 : params.instr.length,
 			params.fitStart);
 
 		// where does copy start in transRA
@@ -93,14 +93,14 @@ public class RAHelper<I extends RealType<I>> {
 		transRA.setPosition(xytPos);
 		// to take the trans before start when convolving
 		transRA.setPosition(raOffset, lifetimeAxis);
-		for (int t = 0; t < transBuffer.length; t++, transRA.fwd(lifetimeAxis)) {
+		for (var t = 0; t < transBuffer.length; t++, transRA.fwd(lifetimeAxis)) {
 			transBuffer[t] = transRA.get().getRealFloat();
 		}
 
 		// fill initial values from params.paramMap
 		if (initialParamRA != null) {
 			initialParamRA.setPosition(xytPos);
-			for (int p = 0; p < paramBuffer.length; p++, initialParamRA.fwd(
+			for (var p = 0; p < paramBuffer.length; p++, initialParamRA.fwd(
 				lifetimeAxis))
 			{
 				paramBuffer[p] = initialParamRA.get().getRealFloat();
@@ -108,14 +108,14 @@ public class RAHelper<I extends RealType<I>> {
 		}
 		// try to fill initial values from map if per-pixel parameter not present
 		else if (params.param != null) {
-			for (int p = 0; p < paramBuffer.length; p++) {
+			for (var p = 0; p < paramBuffer.length; p++) {
 				paramBuffer[p] = params.param[p];
 			}
 		}
 		// or if both local and global settings are not present, set to +Inf "no
 		// estimation"
 		else {
-			for (int p = 0; p < paramBuffer.length; p++) {
+			for (var p = 0; p < paramBuffer.length; p++) {
 				paramBuffer[p] = Float.POSITIVE_INFINITY;
 			}
 		}
@@ -157,7 +157,7 @@ public class RAHelper<I extends RealType<I>> {
 	{
 		xytPos[lifetimeAxis] = 0;
 		ra.setPosition(xytPos);
-		for (int i = start; i < end; i++) {
+		for (var i = start; i < end; i++) {
 			ra.get().set(arr[i]);
 			ra.fwd(lifetimeAxis);
 		}

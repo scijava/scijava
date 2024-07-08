@@ -71,7 +71,7 @@ public class ApplyConstantThreshold<T extends RealType<T>> implements
 	{
 		Computers.Arity1<T, BitType> thresholdComputer = (in, out) -> applyThreshold
 			.compute(in, threshold, comparator, out);
-		Computers.Arity1<Iterable<T>, Iterable<BitType>> liftedThreshold = lifter
+        var liftedThreshold = lifter
 			.apply(thresholdComputer);
 		liftedThreshold.accept(input, output);
 	}

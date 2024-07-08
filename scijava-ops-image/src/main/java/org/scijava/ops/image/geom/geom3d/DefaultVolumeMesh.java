@@ -55,7 +55,7 @@ public class DefaultVolumeMesh implements Function<Mesh, DoubleType> {
 	@Override
 	public DoubleType apply(final Mesh input) {
 		double volume = 0;
-		for (final Triangle triangle : input.triangles()) {
+		for (final var triangle : input.triangles()) {
 			volume += signedVolumeOfTriangle(//
 				triangle.v0x(), triangle.v0y(), triangle.v0z(), //
 				triangle.v1x(), triangle.v1y(), triangle.v1z(), //
@@ -70,9 +70,9 @@ public class DefaultVolumeMesh implements Function<Mesh, DoubleType> {
 		final double p2x, final double p2y, final double p2z)
 	{
 		// cross product
-		final double cpx = MathArrays.linearCombination(p1y, p2z, -p1z, p2y);
-		final double cpy = MathArrays.linearCombination(p1z, p2x, -p1x, p2z);
-		final double cpz = MathArrays.linearCombination(p1x, p2y, -p1y, p2x);
+		final var cpx = MathArrays.linearCombination(p1y, p2z, -p1z, p2y);
+		final var cpy = MathArrays.linearCombination(p1z, p2x, -p1x, p2z);
+		final var cpz = MathArrays.linearCombination(p1x, p2y, -p1y, p2x);
 
 		// dot product
 		return MathArrays.linearCombination(p0x, cpx, p0y, cpy, p0z, cpz) / 6.0f;

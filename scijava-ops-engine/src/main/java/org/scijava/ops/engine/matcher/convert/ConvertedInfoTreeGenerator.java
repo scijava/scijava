@@ -59,9 +59,9 @@ public class ConvertedInfoTreeGenerator implements InfoTreeGenerator {
 		Map<String, OpInfo> idMap, Collection<InfoTreeGenerator> generators)
 	{
 		// get the list of components
-		List<String> components = parseComponents(signature.substring(
+        var components = parseComponents(signature.substring(
 			ConvertedOpInfo.IMPL_DECLARATION.length()));
-		Hints dependencyHints = new Hints(BaseOpHints.History.IGNORE);
+        var dependencyHints = new Hints(BaseOpHints.History.IGNORE);
 
 		// For an Op with n inputs, we expect:
 		// n preconverters
@@ -72,16 +72,16 @@ public class ConvertedInfoTreeGenerator implements InfoTreeGenerator {
 
 		// preconverters
 		List<RichOp<Function<?, ?>>> preconverters = new ArrayList<>();
-		int numPreconverters = components.size() - 3;
-		for (int i = 0; i < numPreconverters; i++) {
-			String preconverterComp = components.remove(0);
+        var numPreconverters = components.size() - 3;
+		for (var i = 0; i < numPreconverters; i++) {
+            var preconverterComp = components.remove(0);
 			if (!preconverterComp.startsWith(ConvertedOpInfo.PRECONVERTER_DELIMITER))
 				throw new IllegalArgumentException("Signature " + signature +
 					" does not contain a preconverter signature (starting with " +
 					ConvertedOpInfo.PRECONVERTER_DELIMITER + ")");
-			String preconverterSignature = preconverterComp.substring(
+            var preconverterSignature = preconverterComp.substring(
 				ConvertedOpInfo.PRECONVERTER_DELIMITER.length());
-			InfoTree preconverterTree = InfoTreeGenerator.generateDependencyTree(env,
+            var preconverterTree = InfoTreeGenerator.generateDependencyTree(env,
 				preconverterSignature, idMap, generators);
 
 			preconverters.add(Ops.rich(env.opFromInfoTree(preconverterTree,
@@ -89,43 +89,43 @@ public class ConvertedInfoTreeGenerator implements InfoTreeGenerator {
 		}
 
 		// postconverter
-		String postconverterComp = components.remove(0);
+        var postconverterComp = components.remove(0);
 		if (!postconverterComp.startsWith(ConvertedOpInfo.POSTCONVERTER_DELIMITER))
 			throw new IllegalArgumentException("Signature " + signature +
 				" does not contain a postconverter signature (starting with " +
 				ConvertedOpInfo.POSTCONVERTER_DELIMITER + ")");
-		String postconverterSignature = postconverterComp.substring(
+        var postconverterSignature = postconverterComp.substring(
 			ConvertedOpInfo.POSTCONVERTER_DELIMITER.length());
-		InfoTree postconverterTree = InfoTreeGenerator.generateDependencyTree(env,
+        var postconverterTree = InfoTreeGenerator.generateDependencyTree(env,
 			postconverterSignature, idMap, generators);
 		RichOp<Function<?, ?>> postconverter = Ops.rich(env.opFromInfoTree(
 			postconverterTree, FUNCTION_NIL, dependencyHints));
 
 		// output copier
 		RichOp<Computers.Arity1<?, ?>> copier = null;
-		String outCopyComp = components.remove(0);
+        var outCopyComp = components.remove(0);
 		if (!outCopyComp.startsWith(ConvertedOpInfo.OUTPUT_COPIER_DELIMITER))
 			throw new IllegalArgumentException("Signature " + signature +
 				" does not contain a copier signature (starting with " +
 				ConvertedOpInfo.OUTPUT_COPIER_DELIMITER + ")");
-		String outCopySignature = outCopyComp.substring(
+        var outCopySignature = outCopyComp.substring(
 			ConvertedOpInfo.OUTPUT_COPIER_DELIMITER.length());
 		if (!outCopySignature.isEmpty()) {
-			InfoTree copierTree = InfoTreeGenerator.generateDependencyTree(env,
+            var copierTree = InfoTreeGenerator.generateDependencyTree(env,
 				outCopySignature, idMap, generators);
 			copier = Ops.rich(env.opFromInfoTree(copierTree, COMPUTER_NIL,
 				dependencyHints));
 		}
 
 		// Proceed to original info
-		String originalComponent = components.remove(0);
+        var originalComponent = components.remove(0);
 		if (!originalComponent.startsWith(ConvertedOpInfo.ORIGINAL_INFO))
 			throw new IllegalArgumentException("Signature " + signature +
 				" does not contain an original Op signature (starting with " +
 				ConvertedOpInfo.ORIGINAL_INFO + ")");
-		String originalSignature = originalComponent.substring(
+        var originalSignature = originalComponent.substring(
 			ConvertedOpInfo.ORIGINAL_INFO.length());
-		InfoTree originalTree = InfoTreeGenerator.generateDependencyTree(env,
+        var originalTree = InfoTreeGenerator.generateDependencyTree(env,
 			originalSignature, idMap, generators);
 
 		OpInfo baseInfo = new ConvertedOpInfo(originalTree.info(), preconverters,
@@ -135,9 +135,9 @@ public class ConvertedInfoTreeGenerator implements InfoTreeGenerator {
 
 	private List<String> parseComponents(String signature) {
 		List<String> components = new ArrayList<>();
-		String s = signature;
+        var s = signature;
 		while (!s.isEmpty()) {
-			String subSignatureFrom = InfoTreeGenerator.subSignatureFrom(s, 0);
+            var subSignatureFrom = InfoTreeGenerator.subSignatureFrom(s, 0);
 			components.add(subSignatureFrom);
 			s = s.substring(subSignatureFrom.length());
 		}

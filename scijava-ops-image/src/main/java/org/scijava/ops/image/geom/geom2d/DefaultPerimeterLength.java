@@ -58,13 +58,13 @@ public class DefaultPerimeterLength implements
 	public void compute(final Polygon2D input, final DoubleType boundarySize) {
 		double perimeter = 0;
 		final List<? extends RealLocalizable> vertices = GeomUtils.vertices(input);
-		final int size = vertices.size();
-		for (int i = 0; i < size; i++) {
-			final int nexti = (i + 1) % size;
+		final var size = vertices.size();
+		for (var i = 0; i < size; i++) {
+			final var nexti = (i + 1) % size;
 
-			final double dx2 = vertices.get(nexti).getDoublePosition(0) - vertices
+			final var dx2 = vertices.get(nexti).getDoublePosition(0) - vertices
 				.get(i).getDoublePosition(0);
-			final double dy2 = vertices.get(nexti).getDoublePosition(1) - vertices
+			final var dy2 = vertices.get(nexti).getDoublePosition(1) - vertices
 				.get(i).getDoublePosition(1);
 
 			perimeter += Math.sqrt(dx2 * dx2 + dy2 * dy2);

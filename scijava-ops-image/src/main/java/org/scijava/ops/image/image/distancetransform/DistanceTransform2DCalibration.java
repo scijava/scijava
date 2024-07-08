@@ -62,13 +62,13 @@ public final class DistanceTransform2DCalibration {
 
 		// tempValues stores the integer values of the first phase, i.e. the
 		// first two scans
-		final double[][] tempValues = new double[(int) in.dimension(0)][(int) out
+		final var tempValues = new double[(int) in.dimension(0)][(int) out
 			.dimension(1)];
 
 		// first phase
 		final List<Runnable> list = new ArrayList<>();
 
-		for (int y = 0; y < in.dimension(1); y++) {
+		for (var y = 0; y < in.dimension(1); y++) {
 			list.add(new Phase1Runnable2DCal<>(tempValues, in, y, calibration));
 		}
 
@@ -77,7 +77,7 @@ public final class DistanceTransform2DCalibration {
 		list.clear();
 
 		// second phase
-		for (int x = 0; x < in.dimension(0); x++) {
+		for (var x = 0; x < in.dimension(0); x++) {
 			list.add(new Phase2Runnable2DCal<>(tempValues, out, x, calibration));
 		}
 
@@ -118,7 +118,7 @@ class Phase1Runnable2DCal<B extends BooleanType<B>> implements Runnable {
 		else {
 			tempValues[0][y] = infinite;
 		}
-		for (int x = 1; x < width; x++) {
+		for (var x = 1; x < width; x++) {
 			raIn.setPosition(x, 0);
 			if (!raIn.get().get()) {
 				tempValues[x][y] = 0;
@@ -128,7 +128,7 @@ class Phase1Runnable2DCal<B extends BooleanType<B>> implements Runnable {
 			}
 		}
 		// scan2
-		for (int x = width - 2; x >= 0; x--) {
+		for (var x = width - 2; x >= 0; x--) {
 			if (tempValues[x + 1][y] < tempValues[x][y]) {
 				tempValues[x][y] = calibration[0] + tempValues[x + 1][y];
 			}
@@ -174,14 +174,14 @@ class Phase2Runnable2DCal<T extends RealType<T>> implements Runnable {
 
 	@Override
 	public void run() {
-		final int[] s = new int[height];
-		final int[] t = new int[height];
-		int q = 0;
+		final var s = new int[height];
+		final var t = new int[height];
+        var q = 0;
 		s[0] = 0;
 		t[0] = 0;
 
 		// scan 3
-		for (int u = 1; u < height; u++) {
+		for (var u = 1; u < height; u++) {
 			while (q >= 0 && distancefunc(t[q], s[q],
 				tempValues[xPos][s[q]]) > distancefunc(t[q], u, tempValues[xPos][u]))
 			{
@@ -192,7 +192,7 @@ class Phase2Runnable2DCal<T extends RealType<T>> implements Runnable {
 				s[0] = u;
 			}
 			else {
-				final int w = 1 + sep(s[q], u, tempValues[xPos][u],
+				final var w = 1 + sep(s[q], u, tempValues[xPos][u],
 					tempValues[xPos][s[q]]);
 				if (w < height) {
 					q++;
@@ -203,8 +203,8 @@ class Phase2Runnable2DCal<T extends RealType<T>> implements Runnable {
 		}
 
 		// scan 4
-		final RandomAccess<T> ra = raOut.randomAccess();
-		for (int u = height - 1; u >= 0; u--) {
+		final var ra = raOut.randomAccess();
+		for (var u = height - 1; u >= 0; u--) {
 			ra.setPosition(u, 1);
 			ra.setPosition(xPos, 0);
 			ra.get().setReal(Math.sqrt(distancefunc(u, s[q],

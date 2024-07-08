@@ -65,7 +65,7 @@ public final class DefaultPNorm<I extends RealType<I>, O extends RealType<O>>
 		// set lowerTail if necessary
 		if (lowerTail == null) lowerTail = true;
 
-		double normDistValue = NORMAL_DISTRIBUTION.cumulativeProbability(q
+        var normDistValue = NORMAL_DISTRIBUTION.cumulativeProbability(q
 			.getRealDouble());
 		if (!lowerTail) {
 			normDistValue = 1 - normDistValue;

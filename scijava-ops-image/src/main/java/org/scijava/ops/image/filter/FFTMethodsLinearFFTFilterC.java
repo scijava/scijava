@@ -91,10 +91,10 @@ public class FFTMethodsLinearFFTFilterC<I extends RealType<I>, O extends RealTyp
 		@Nullable RandomAccessibleInterval<C> fftKernel,
 		final RandomAccessibleInterval<O> out)
 	{
-		final C fftType = Util.getTypeFromInterval(fftInput);
+		final var fftType = Util.getTypeFromInterval(fftInput);
 
-		RandomAccessibleInterval<C> inputFFT = fftInput;
-		RandomAccessibleInterval<C> kernelFFT = fftKernel;
+        var inputFFT = fftInput;
+        var kernelFFT = fftKernel;
 
 		// create FFT input memory if needed
 		if (inputFFT == null) inputFFT = createOp.apply(in, fftType, true);

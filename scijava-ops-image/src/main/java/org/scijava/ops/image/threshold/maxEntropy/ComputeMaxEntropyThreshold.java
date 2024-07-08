@@ -53,7 +53,7 @@ public class ComputeMaxEntropyThreshold<T extends RealType<T>> extends
 	 */
 	@Override
 	public long computeBin(final Histogram1d<T> hist) {
-		final long[] histogram = hist.toLongArray();
+		final var histogram = hist.toLongArray();
 		return computeBin(histogram);
 	}
 
@@ -68,7 +68,7 @@ public class ComputeMaxEntropyThreshold<T extends RealType<T>> extends
 	 * routines
 	 */
 	public static long computeBin(final long[] histogram) {
-		int threshold = -1;
+        var threshold = -1;
 		int ih, it;
 		int first_bin;
 		int last_bin;
@@ -76,17 +76,17 @@ public class ComputeMaxEntropyThreshold<T extends RealType<T>> extends
 		double max_ent; /* max entropy */
 		double ent_back; /* entropy of the background pixels at a given threshold */
 		double ent_obj; /* entropy of the object pixels at a given threshold */
-		final double[] norm_histo = new double[histogram.length]; /*
+		final var norm_histo = new double[histogram.length]; /*
 																															* normalized
 																															* histogram
 																															*/
-		final double[] P1 = new double[histogram.length]; /*
+		final var P1 = new double[histogram.length]; /*
 																											* cumulative normalized
 																											* histogram
 																											*/
-		final double[] P2 = new double[histogram.length];
+		final var P2 = new double[histogram.length];
 
-		int total = 0;
+        var total = 0;
 		for (ih = 0; ih < histogram.length; ih++)
 			total += histogram[ih];
 

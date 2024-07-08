@@ -67,13 +67,13 @@ public class FillHoles<T extends BooleanType<T>> implements
 	public void compute(final RandomAccessibleInterval<T> input,
 		final Shape structElement, final RandomAccessibleInterval<T> output)
 	{
-		final IterableInterval<T> iterOp = Views.flatIterable(input);
-		final IterableInterval<T> iterR = Views.flatIterable(output);
+		final var iterOp = Views.flatIterable(input);
+		final var iterR = Views.flatIterable(output);
 
-		long[] dim = new long[output.numDimensions()];
+        var dim = new long[output.numDimensions()];
 		output.dimensions(dim);
-		Cursor<T> rc = iterR.cursor();
-		Cursor<T> opc = iterOp.localizingCursor();
+        var rc = iterR.cursor();
+        var opc = iterOp.localizingCursor();
 		// Fill with non background marker
 		while (rc.hasNext()) {
 			rc.next().setOne();
@@ -87,7 +87,7 @@ public class FillHoles<T extends BooleanType<T>> implements
 			opc.next();
 			if (rc.get().get() && !opc.get().get()) {
 				border = false;
-				for (int i = 0; i < output.numDimensions(); i++) {
+				for (var i = 0; i < output.numDimensions(); i++) {
 					if (rc.getLongPosition(i) == 0 || rc.getLongPosition(i) == dim[i] -
 						1)
 					{

@@ -70,7 +70,7 @@ public class Vertex extends Vector3D implements RealLocalizable {
 	}
 
 	public List<Vertex> getPointsInFront() {
-		Iterator<TriangularFacet> it = facesInFront.iterator();
+        var it = facesInFront.iterator();
 		List<Vertex> l = new ArrayList<>();
 		while (it.hasNext()) {
 			l.addAll(it.next().getVerticesInFront());

@@ -84,16 +84,16 @@ public class DefaultDirectionalityFeature<I extends RealType<I>, O extends RealT
 		if (histogramSize == null) histogramSize = 16;
 
 		// List to store all directions occurring within the image on borders
-		ArrayList<DoubleType> dirList = new ArrayList<>();
+        var dirList = new ArrayList<DoubleType>();
 
 		// Dimension of input region
-		long[] dims = new long[input.numDimensions()];
+        var dims = new long[input.numDimensions()];
 		input.dimensions(dims);
 
 		// create image for derivations in x and y direction
-		I imgType = Views.iterable(input).firstElement();
-		Img<I> derX = imgCreator.apply(input, imgType);
-		Img<I> derY = imgCreator.apply(input, imgType);
+        var imgType = Views.iterable(input).firstElement();
+        var derX = imgCreator.apply(input, imgType);
+        var derY = imgCreator.apply(input, imgType);
 
 		// calculate derivations in x and y direction
 		PartialDerivative.gradientCentralDifference2(Views.extendMirrorSingle(
@@ -102,19 +102,19 @@ public class DefaultDirectionalityFeature<I extends RealType<I>, O extends RealT
 			input), derY, 1);
 
 		// calculate theta at each position: theta = atan(dX/dY) + pi/2
-		Cursor<I> cX = derX.cursor();
-		Cursor<I> cY = derY.cursor();
+        var cX = derX.cursor();
+        var cY = derY.cursor();
 
 		// for each position calculate magnitude and direction
 		while (cX.hasNext()) {
 			cX.next();
 			cY.next();
 
-			double dx = cX.get().getRealDouble();
-			double dy = cY.get().getRealDouble();
+            var dx = cX.get().getRealDouble();
+            var dy = cY.get().getRealDouble();
 
-			double dir = 0.0;
-			double mag = 0.0;
+            var dir = 0.0;
+            var mag = 0.0;
 
 			mag = Math.sqrt(dx * dx + dy * dy);
 
@@ -131,8 +131,8 @@ public class DefaultDirectionalityFeature<I extends RealType<I>, O extends RealT
 		// Otherwise compute histogram over all occurring directions
 		// and calculate inverse second moment on it as output
 		else {
-			Histogram1d<DoubleType> hist = histOp.apply(dirList, histogramSize);
-			double std = stdOp.apply(hist).getRealDouble();
+            var hist = histOp.apply(dirList, histogramSize);
+            var std = stdOp.apply(hist).getRealDouble();
 			output.setReal(1 / std);
 		}
 	}

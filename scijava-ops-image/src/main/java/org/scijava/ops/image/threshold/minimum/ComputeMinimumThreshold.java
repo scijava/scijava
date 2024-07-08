@@ -56,7 +56,7 @@ public class ComputeMinimumThreshold<T extends RealType<T>> extends
 	 */
 	@Override
 	public long computeBin(final Histogram1d<T> hist) {
-		final long[] histogram = hist.toLongArray();
+		final var histogram = hist.toLongArray();
 		return computeBin(histogram);
 	}
 
@@ -82,19 +82,19 @@ public class ComputeMinimumThreshold<T extends RealType<T>> extends
 	 */
 	public static long computeBin(final long[] histogram) {
 		if (histogram.length < 2) return 0;
-		int iter = 0;
-		int max = -1;
-		final double[] iHisto = new double[histogram.length];
+        var iter = 0;
+        var max = -1;
+		final var iHisto = new double[histogram.length];
 
-		for (int i = 0; i < histogram.length; i++) {
+		for (var i = 0; i < histogram.length; i++) {
 			iHisto[i] = histogram[i];
 			if (histogram[i] > 0) max = i;
 		}
-		final double[] tHisto = new double[iHisto.length];
+		final var tHisto = new double[iHisto.length];
 
 		while (!Thresholds.bimodalTest(iHisto)) {
 			// smooth with a 3 point running mean filter
-			for (int i = 1; i < histogram.length - 1; i++)
+			for (var i = 1; i < histogram.length - 1; i++)
 				tHisto[i] = (iHisto[i - 1] + iHisto[i] + iHisto[i + 1]) / 3;
 			// 0 outside
 			tHisto[0] = (iHisto[0] + iHisto[1]) / 3;
@@ -111,8 +111,8 @@ public class ComputeMinimumThreshold<T extends RealType<T>> extends
 		// The threshold is the minimum between the two peaks.
 		// NB - BDZ updated code after ij-devel mailing list communication with
 		// Antti Niemisto on 2-18-13 post 1.03 release of toolbox
-		final double[] y = iHisto;
-		for (int k = 1; k < max; k++) {
+		final var y = iHisto;
+		for (var k = 1; k < max; k++) {
 			// IJ.log(" "+i+" "+iHisto[i]);
 			if (y[k - 1] > y[k] && y[k + 1] >= y[k]) return k;
 		}

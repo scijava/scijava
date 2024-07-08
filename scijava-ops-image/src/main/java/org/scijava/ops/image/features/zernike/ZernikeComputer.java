@@ -59,20 +59,20 @@ public class ZernikeComputer<T extends RealType<T>> implements
 		final Integer repetition)
 	{
 
-		final double width2 = (ii.dimension(0) - 1) / 2.0;
-		final double height2 = (ii.dimension(1) - 1) / 2.0;
+		final var width2 = (ii.dimension(0) - 1) / 2.0;
+		final var height2 = (ii.dimension(1) - 1) / 2.0;
 
-		final double centerX = width2 + ii.min(0);
-		final double centerY = height2 + ii.min(1);
+		final var centerX = width2 + ii.min(0);
+		final var centerY = height2 + ii.min(1);
 
-		final double radius = Math.sqrt(width2 * width2 + height2 * height2);
+		final var radius = Math.sqrt(width2 * width2 + height2 * height2);
 
 		// Compute pascal's triangle for binomial coefficients: d[x][y] equals (x
 		// over y)
-		final double[][] d = computePascalsTriangle(order);
+		final var d = computePascalsTriangle(order);
 
 		// initialize zernike moment
-		final ZernikeMoment moment = initZernikeMoment(order, repetition, d);
+		final var moment = initZernikeMoment(order, repetition, d);
 
 		// get the cursor of the iterable interval
 		final Cursor<? extends RealType<?>> cur = ii.localizingCursor();
@@ -82,16 +82,16 @@ public class ZernikeComputer<T extends RealType<T>> implements
 			cur.fwd();
 
 			// get 2d centered coordinates
-			final int x = (int) (cur.getIntPosition(0) - ii.min(0));
-			final int y = (int) (cur.getIntPosition(1) - ii.min(1));
+			final var x = (int) (cur.getIntPosition(0) - ii.min(0));
+			final var y = (int) (cur.getIntPosition(1) - ii.min(1));
 
-			final double xm = (x - centerX) / radius;
-			final double ym = (y - centerY) / radius;
+			final var xm = (x - centerX) / radius;
+			final var ym = (y - centerY) / radius;
 
-			final double r = Math.sqrt(xm * xm + ym * ym);
+			final var r = Math.sqrt(xm * xm + ym * ym);
 			if (r <= 1 && cur.get().getRealDouble() != 0.0) {
 				// calculate theta for this position
-				final double theta = Math.atan2(xm, ym);
+				final var theta = Math.atan2(xm, ym);
 				moment.getZm().add(multiplyExp(1, moment.getP().evaluate(r), theta,
 					moment.getM()));
 			}
@@ -112,7 +112,7 @@ public class ZernikeComputer<T extends RealType<T>> implements
 	 */
 	private long getNumberOfPixelsInUnitDisk(final double r) {
 		long tmp = 0;
-		for (int i = 1; i <= Math.floor(r); i++) {
+		for (var i = 1; i <= Math.floor(r); i++) {
 			tmp += Math.floor(Math.sqrt(r * r - i * i));
 		}
 
@@ -132,7 +132,7 @@ public class ZernikeComputer<T extends RealType<T>> implements
 	private BigComplex multiplyExp(final double pixel, final double rad,
 		final double theta, final int m)
 	{
-		BigComplex c = new BigComplex();
+        var c = new BigComplex();
 		c.setReal(pixel * rad * Math.cos(m * theta));
 		c.setImag(-(pixel * rad * Math.sin(m * theta)));
 		return c;
@@ -182,11 +182,11 @@ public class ZernikeComputer<T extends RealType<T>> implements
 	 * @return Empty Zernike moment of order n and repetition m
 	 */
 	private ZernikeMoment createZernikeMoment(double[][] d, int n, int m) {
-		ZernikeMoment p = new ZernikeMoment();
+        var p = new ZernikeMoment();
 		p.setM(m);
 		p.setN(n);
 		p.setP(createRadialPolynom(n, m, d));
-		BigComplex complexNumber = new BigComplex();
+        var complexNumber = new BigComplex();
 		p.setZm(complexNumber);
 		return p;
 	}
@@ -198,9 +198,9 @@ public class ZernikeComputer<T extends RealType<T>> implements
 	 * @return pascal's triangle
 	 */
 	private double[][] computePascalsTriangle(int max) {
-		double[][] d = new double[max + 1][max + 1];
-		for (int n = 0; n <= max; n++) {
-			for (int k = 0; k <= n; k++) {
+        var d = new double[max + 1][max + 1];
+		for (var n = 0; n <= max; n++) {
+			for (var k = 0; k <= n; k++) {
 				if (n == 0 && k == 0 || n == k || k == 0) {
 					d[n][k] = 1.0;
 					continue;
@@ -221,9 +221,9 @@ public class ZernikeComputer<T extends RealType<T>> implements
 	public static int computeBinomialFactorial(final int n, final int m,
 		final int k, double[][] d)
 	{
-		int fac1 = (int) d[n - k][k];
-		int fac2 = (int) d[n - 2 * k][(n - m) / 2 - k];
-		int sign = (int) Math.pow(-1, k);
+        var fac1 = (int) d[n - k][k];
+        var fac2 = (int) d[n - 2 * k][(n - m) / 2 - k];
+        var sign = (int) Math.pow(-1, k);
 
 		return sign * fac1 * fac2;
 	}
@@ -247,9 +247,9 @@ public class ZernikeComputer<T extends RealType<T>> implements
 	public static Polynom createRadialPolynom(final int n, final int m,
 		final double[][] d)
 	{
-		final Polynom result = new Polynom(n);
-		for (int s = 0; s <= (n - Math.abs(m)) / 2; ++s) {
-			final int pos = n - 2 * s;
+		final var result = new Polynom(n);
+		for (var s = 0; s <= (n - Math.abs(m)) / 2; ++s) {
+			final var pos = n - 2 * s;
 			result.setCoefficient(pos, computeBinomialFactorial(n, m, s, d));
 		}
 		return result;

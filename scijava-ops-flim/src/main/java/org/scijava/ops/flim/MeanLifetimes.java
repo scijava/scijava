@@ -53,21 +53,21 @@ public class MeanLifetimes {
 	 */
 	public static Img<FloatType> defaultMeanLifetime(FitResults rslt) {
 		RandomAccessibleInterval<FloatType> paramMap = rslt.paramMap;
-		int nComp = (int) (paramMap.dimension(rslt.ltAxis) - 1) / 2;
+        var nComp = (int) (paramMap.dimension(rslt.ltAxis) - 1) / 2;
 
-		long[] dim = new long[paramMap.numDimensions() - 1];
+        var dim = new long[paramMap.numDimensions() - 1];
 		Views.hyperSlice(paramMap, rslt.ltAxis, 0).dimensions(dim);
 
-		ArrayImg<FloatType, FloatArray> tauM = ArrayImgs.floats(dim);
-		ArrayImg<FloatType, FloatArray> tauASum = ArrayImgs.floats(dim);
+        var tauM = ArrayImgs.floats(dim);
+        var tauASum = ArrayImgs.floats(dim);
 
 		// tauM = sum(a_i * tau_i ^ 2), tauASum = sum(a_j * tau_j)
-		for (int c = 0; c < nComp; c++) {
+		for (var c = 0; c < nComp; c++) {
 			var A = Views.hyperSlice(rslt.paramMap, rslt.ltAxis, c * 2 + 1);
 			var tau = Views.hyperSlice(rslt.paramMap, rslt.ltAxis, c * 2 + 2);
 			LoopBuilder.setImages(tau, A, tauM, tauASum) //
 				.forEachPixel((t, a, tM, tASum) -> {
-					FloatType f = new FloatType();
+                    var f = new FloatType();
 					f.set(a);
 					f.mul(t);
 					tASum.add(f);
@@ -75,7 +75,7 @@ public class MeanLifetimes {
 					tM.add(f);
 				});
 		}
-		FloatType f = new FloatType();
+        var f = new FloatType();
 		f.setReal(Float.MIN_VALUE);
 		LoopBuilder.setImages(tauASum, tauM).forEachPixel((tA, tM) -> {
 			tA.add(f);

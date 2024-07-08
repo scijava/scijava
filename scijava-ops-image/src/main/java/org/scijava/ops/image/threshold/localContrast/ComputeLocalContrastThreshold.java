@@ -71,11 +71,11 @@ public class ComputeLocalContrastThreshold<T extends RealType<T>> implements
 		final Iterable<T> inputNeighborhood, final T inputCenterPixel,
 		final Function<Iterable<T>, Pair<T, T>> minMaxOp, final BitType output)
 	{
-		final Pair<T, T> outputs = minMaxOp.apply(inputNeighborhood);
+		final var outputs = minMaxOp.apply(inputNeighborhood);
 
-		final double centerValue = inputCenterPixel.getRealDouble();
-		final double diffMin = centerValue - outputs.getA().getRealDouble();
-		final double diffMax = outputs.getB().getRealDouble() - centerValue;
+		final var centerValue = inputCenterPixel.getRealDouble();
+		final var diffMin = centerValue - outputs.getA().getRealDouble();
+		final var diffMax = outputs.getB().getRealDouble() - centerValue;
 
 		// set to background (false) if pixel closer to min value,
 		// and to foreground (true) if pixel closer to max value.

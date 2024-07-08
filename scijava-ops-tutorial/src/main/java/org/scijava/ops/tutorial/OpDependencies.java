@@ -86,9 +86,9 @@ public class OpDependencies {
 	}
 
 	public static void main(String... args) {
-		OpEnvironment ops = OpEnvironment.build();
+        var ops = OpEnvironment.build();
 		// The mean of this array is 3.0
-		double[] arr = { 1.0, 2.0, 3.0, 4.0, 5.0 };
+        var arr = new double[]{1.0, 2.0, 3.0, 4.0, 5.0};
 
 		// Note that we call only deal with the "stats.mean" Op - the Engine takes
 		// care of matching the dependencies for us!

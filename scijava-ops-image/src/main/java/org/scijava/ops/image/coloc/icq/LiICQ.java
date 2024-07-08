@@ -77,20 +77,20 @@ public class LiICQ<T extends RealType<T>, U extends RealType<U>, V extends RealT
 
 		final Iterable<Pair<T, U>> samples = new IterablePair<>(image1, image2);
 
-		final double m1 = mean1 == null ? computeMeanTOf(image1) : mean1.get();
-		final double m2 = mean2 == null ? computeMeanUOf(image2) : mean2.get();
+		final var m1 = mean1 == null ? computeMeanTOf(image1) : mean1.get();
+		final var m2 = mean2 == null ? computeMeanUOf(image2) : mean2.get();
 
 		// variables to count the positive and negative results
 		// of Li's product of the difference of means.
 		long numPositiveProducts = 0;
 		long numNegativeProducts = 0;
 		// iterate over image
-		for (final Pair<T, U> value : samples) {
+		for (final var value : samples) {
 
-			final double ch1 = value.getA().getRealDouble();
-			final double ch2 = value.getB().getRealDouble();
+			final var ch1 = value.getA().getRealDouble();
+			final var ch2 = value.getB().getRealDouble();
 
-			final double productOfDifferenceOfMeans = (m1 - ch1) * (m2 - ch2);
+			final var productOfDifferenceOfMeans = (m1 - ch1) * (m2 - ch2);
 
 			// check for positive and negative values
 			if (productOfDifferenceOfMeans < 0.0) ++numNegativeProducts;
@@ -101,19 +101,19 @@ public class LiICQ<T extends RealType<T>, U extends RealType<U>, V extends RealT
 		 * calculate Li's ICQ value by dividing the amount of "positive pixels" to the
 		 * total number of pixels. Then shift it in the -0.5,0.5 range.
 		 */
-		final double icqValue = (double) numPositiveProducts /
+		final var icqValue = (double) numPositiveProducts /
 			(double) (numNegativeProducts + numPositiveProducts) - 0.5;
 		return icqValue;
 	}
 
 	private double computeMeanTOf(final Iterable<T> in) {
-		DoubleType mean = new DoubleType();
+        var mean = new DoubleType();
 		meanTOp.compute(in, mean);
 		return mean.get();
 	}
 
 	private double computeMeanUOf(final Iterable<U> in) {
-		DoubleType mean = new DoubleType();
+        var mean = new DoubleType();
 		meanUOp.compute(in, mean);
 		return mean.get();
 	}

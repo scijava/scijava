@@ -50,12 +50,12 @@ public interface Prioritized<T extends Prioritized<T>> extends Comparable<T> {
 		if (that == null) return 1;
 
 		// compare priorities
-		final int priorityCompare = compare(this, that);
+		final var priorityCompare = compare(this, that);
 		if (priorityCompare != 0) return priorityCompare;
 
 		// compare class names as a tiebreaker
-		String thisName = getClass().getName();
-		String thatName = that.getClass().getName();
+        var thisName = getClass().getName();
+        var thatName = that.getClass().getName();
 		return thisName.compareTo(thatName);
 	}
 
@@ -89,8 +89,8 @@ public interface Prioritized<T extends Prioritized<T>> extends Comparable<T> {
 	static <T extends Prioritized<T>> int compare(
 		final Prioritized<T> p1, final Prioritized<T> p2)
 	{
-		final double priority1 = p1 == null ? Double.NEGATIVE_INFINITY : p1.priority();
-		final double priority2 = p2 == null ? Double.NEGATIVE_INFINITY : p2.priority();
+		final var priority1 = p1 == null ? Double.NEGATIVE_INFINITY : p1.priority();
+		final var priority2 = p2 == null ? Double.NEGATIVE_INFINITY : p2.priority();
 		if (priority1 == priority2) return 0;
 		// NB: We invert the ordering here, so that large values come first,
 		// rather than the typical natural ordering of smaller values first.

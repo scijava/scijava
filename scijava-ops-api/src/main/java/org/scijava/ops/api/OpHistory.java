@@ -57,7 +57,7 @@ import org.scijava.priority.Prioritized;
 public interface OpHistory extends Prioritized<OpHistory> {
 
 	static OpHistory getOpHistory() {
-		Optional<OpHistory> historyOptional = Discoverer //
+        var historyOptional = Discoverer //
 			.using(ServiceLoader::load) //
 			.discoverMax(OpHistory.class);
 		if (historyOptional.isEmpty()) {

@@ -60,7 +60,7 @@ public class DefaultBilateral<I extends RealType<I>, O extends RealType<O>>
 	public final static int MAX_DIMS = 2;
 
 	private static double gauss(final double x, final double sigma) {
-		final double mu = 0.0;
+		final var mu = 0.0;
 		return 1 / (sigma * Math.sqrt(2 * Math.PI)) * Math.exp(-0.5 * (x - mu) *
 			(x - mu) / (sigma * sigma));
 	}
@@ -68,7 +68,7 @@ public class DefaultBilateral<I extends RealType<I>, O extends RealType<O>>
 	private double getDistance(long[] x, long[] y) {
 		double distance = 0;
 
-		for (int i = 0; i < x.length; i++) {
+		for (var i = 0; i < x.length; i++) {
 			double separation = x[i] - y[i];
 			if (separation != 0) {
 				distance += separation * separation;
@@ -96,15 +96,15 @@ public class DefaultBilateral<I extends RealType<I>, O extends RealType<O>>
 		final RandomAccessibleInterval<O> output)
 	{
 
-		final long[] size = new long[input.numDimensions()];
+		final var size = new long[input.numDimensions()];
 		input.dimensions(size);
 
-		final RandomAccess<O> outputRA = output.randomAccess();
-		final Cursor<I> inputCursor = Views.iterable(input).localizingCursor();
-		final long[] currentPos = new long[input.numDimensions()];
-		final long[] neighborhoodPos = new long[input.numDimensions()];
-		final long[] neighborhoodMin = new long[input.numDimensions()];
-		final long[] neighborhoodMax = new long[input.numDimensions()];
+		final var outputRA = output.randomAccess();
+		final var inputCursor = Views.iterable(input).localizingCursor();
+		final var currentPos = new long[input.numDimensions()];
+		final var neighborhoodPos = new long[input.numDimensions()];
+		final var neighborhoodMin = new long[input.numDimensions()];
+		final var neighborhoodMax = new long[input.numDimensions()];
 		Neighborhood<I> neighborhood;
 		Cursor<I> neighborhoodCursor;
 		final RectangleNeighborhoodFactory<I> fac = RectangleNeighborhood.factory();
@@ -124,7 +124,7 @@ public class DefaultBilateral<I extends RealType<I>, O extends RealType<O>>
 				interval, input.randomAccess());
 			neighborhoodCursor = neighborhood.localizingCursor();
 			double weight, v = 0.0;
-			double w = 0.0;
+            var w = 0.0;
 			do {
 				neighborhoodCursor.fwd();
 				neighborhoodCursor.localize(neighborhoodPos);

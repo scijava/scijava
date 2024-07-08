@@ -88,7 +88,7 @@ public interface OpInfo extends Comparable<OpInfo> {
 
 	/** The op's output parameter, if there is <b>exactly</b> one. */
 	default Member<?> output() {
-		List<Member<?>> outputs = outputs();
+        var outputs = outputs();
 
 		if (outputs.size() == 0) throw new IllegalStateException(
 			"No outputs in Struct " + struct());

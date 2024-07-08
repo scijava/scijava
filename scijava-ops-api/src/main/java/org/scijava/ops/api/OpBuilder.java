@@ -467,7 +467,7 @@ public class OpBuilder {
 	}
 
 	private void checkRefs(int mutableIndex, String label, Object... objects) {
-		for (int i = 0; i < objects.length; i++) {
+		for (var i = 0; i < objects.length; i++) {
 			if (i == mutableIndex) continue;
 			if (objects[mutableIndex] == objects[i]) {
 				throw new IllegalArgumentException(label +
@@ -15372,8 +15372,8 @@ public class OpBuilder {
 	private static <T> T matchFunctionHelper(final OpEnvironment env, final String opName,
 		final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes)
 	{
-		final Type[] types = new Type[inTypes.length + 1];
-		for (int i = 0; i < inTypes.length; i++)
+		final var types = new Type[inTypes.length + 1];
+		for (var i = 0; i < inTypes.length; i++)
 			types[i] = inTypes[i].type();
 		types[types.length - 1] = outType.type();
 		final Type specialType = Types.parameterize(opClass, types);
@@ -15384,8 +15384,8 @@ public class OpBuilder {
 	private static <T> T matchFunctionHelper(final OpEnvironment env, final String opName, final Hints hints,
 		final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes)
 	{
-		final Type[] types = new Type[inTypes.length + 1];
-		for (int i = 0; i < inTypes.length; i++)
+		final var types = new Type[inTypes.length + 1];
+		for (var i = 0; i < inTypes.length; i++)
 			types[i] = inTypes[i].type();
 		types[types.length - 1] = outType.type();
 		final Type specialType = Types.parameterize(opClass, types);
@@ -15819,8 +15819,8 @@ public class OpBuilder {
 	@SuppressWarnings({ "unchecked" })
 	private static <T> T matchComputerHelper(final OpEnvironment env, final String opName, final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes)
 	{
-		final Type[] types = new Type[inTypes.length + 1];
-		for (int i = 0; i < inTypes.length; i++)
+		final var types = new Type[inTypes.length + 1];
+		for (var i = 0; i < inTypes.length; i++)
 			types[i] = inTypes[i].type();
 		types[types.length - 1] = outType.type();
 		final Type specialType = Types.parameterize(opClass, types);
@@ -15833,8 +15833,8 @@ public class OpBuilder {
 	@SuppressWarnings({ "unchecked" })
 	private static <T> T matchComputerHelper(final OpEnvironment env, final String opName, final Hints hints, final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes)
 	{
-		final Type[] types = new Type[inTypes.length + 1];
-		for (int i = 0; i < inTypes.length; i++)
+		final var types = new Type[inTypes.length + 1];
+		for (var i = 0; i < inTypes.length; i++)
 			types[i] = inTypes[i].type();
 		types[types.length - 1] = outType.type();
 		final Type specialType = Types.parameterize(opClass, types);
@@ -19249,8 +19249,8 @@ public class OpBuilder {
 	private static <T> T matchInplaceHelper(final OpEnvironment env, final String opName,
 		final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes)
 	{
-		final Type[] types = new Type[inTypes.length];
-		for (int i = 0; i < inTypes.length; i++)
+		final var types = new Type[inTypes.length];
+		for (var i = 0; i < inTypes.length; i++)
 			types[i] = inTypes[i].type();
 		final Type specialType = Types.parameterize(opClass, types);
 		return (T) env.op(opName, Nil.of(specialType), inTypes, outType);
@@ -19260,8 +19260,8 @@ public class OpBuilder {
 	private static <T> T matchInplaceHelper(final OpEnvironment env, final String opName, final Hints hints,
 		final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes)
 	{
-		final Type[] types = new Type[inTypes.length];
-		for (int i = 0; i < inTypes.length; i++)
+		final var types = new Type[inTypes.length];
+		for (var i = 0; i < inTypes.length; i++)
 			types[i] = inTypes[i].type();
 		final Type specialType = Types.parameterize(opClass, types);
 		return (T) env.op(opName, Nil.of(specialType), inTypes, outType, hints);

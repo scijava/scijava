@@ -49,7 +49,7 @@ public class FieldParameterMemberParser implements
 		// obtain a parameterData (preferably one that scrapes the javadoc)
 		ParameterData paramData = new SynthesizedFieldParameterData(source);
 
-		final ArrayList<SynthesizedParameterMember<?>> items = new ArrayList<>();
+		final var items = new ArrayList<SynthesizedParameterMember<?>>();
 
 		try {
 			FunctionalParameters.parseFunctionalParameters(items, structType,

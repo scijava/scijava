@@ -67,16 +67,16 @@ public class DefaultPearsons<T extends RealType<T>, U extends RealType<U>>
 	 */
 	private double fastPearsons(final Iterable<Pair<T, U>> samples) {
 		// the actual accumulation of the image values is done in a separate object
-		Accumulator acc = new Accumulator(samples);
+        var acc = new Accumulator(samples);
 
 		// for faster computation, have the inverse of N available
-		final int count = acc.getCount();
-		final double invCount = 1.0 / count;
+		final var count = acc.getCount();
+		final var invCount = 1.0 / count;
 
-		final double pearsons1 = acc.getXY() - acc.getX() * acc.getY() * invCount;
-		final double pearsons2 = acc.getXX() - acc.getX() * acc.getX() * invCount;
-		final double pearsons3 = acc.getYY() - acc.getY() * acc.getY() * invCount;
-		final double pearsonsR = pearsons1 / Math.sqrt(pearsons2 * pearsons3);
+		final var pearsons1 = acc.getXY() - acc.getX() * acc.getY() * invCount;
+		final var pearsons2 = acc.getXX() - acc.getX() * acc.getX() * invCount;
+		final var pearsons3 = acc.getYY() - acc.getY() * acc.getY() * invCount;
+		final var pearsonsR = pearsons1 / Math.sqrt(pearsons2 * pearsons3);
 
 		checkForSanity(pearsonsR, count);
 
@@ -142,10 +142,10 @@ public class DefaultPearsons<T extends RealType<T>, U extends RealType<U>>
 			double xDiff, double yDiff)
 		{
 
-			for (Pair<T, U> sample : samples) {
+			for (var sample : samples) {
 
-				double value1 = sample.getA().getRealDouble();
-				double value2 = sample.getB().getRealDouble();
+                var value1 = sample.getA().getRealDouble();
+                var value2 = sample.getB().getRealDouble();
 
 				if (subtract) {
 					value1 -= xDiff;

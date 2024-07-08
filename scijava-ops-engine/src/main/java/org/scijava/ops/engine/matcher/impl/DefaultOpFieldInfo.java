@@ -103,8 +103,8 @@ public class DefaultOpFieldInfo implements OpInfo {
 
 		// NB: Subclassing a collection and inheriting its fields is NOT
 		// ALLOWED!
-		Type structType = Types.typeOf(field, field.getDeclaringClass());
-		FieldInstance fieldInstance = new FieldInstance(field, instance);
+        var structType = Types.typeOf(field, field.getDeclaringClass());
+        var fieldInstance = new FieldInstance(field, instance);
 		struct = Structs.from(fieldInstance, structType,
 			new FieldParameterMemberParser());
 		Infos.validate(this);
@@ -146,12 +146,12 @@ public class DefaultOpFieldInfo implements OpInfo {
 	@Override
 	public String implementationName() {
 		// Get generic string without modifiers and return type
-		String fullyQualifiedField = field.toGenericString();
-		int lastDotPos = fullyQualifiedField.lastIndexOf('.');
+        var fullyQualifiedField = field.toGenericString();
+        var lastDotPos = fullyQualifiedField.lastIndexOf('.');
 		fullyQualifiedField = fullyQualifiedField.substring(0, lastDotPos) + "$" +
 			fullyQualifiedField.substring(lastDotPos + 1);
-		String packageName = field.getDeclaringClass().getPackageName();
-		int classNameIndex = fullyQualifiedField.lastIndexOf(packageName);
+        var packageName = field.getDeclaringClass().getPackageName();
+        var classNameIndex = fullyQualifiedField.lastIndexOf(packageName);
 		return fullyQualifiedField.substring(classNameIndex);
 	}
 
@@ -171,7 +171,7 @@ public class DefaultOpFieldInfo implements OpInfo {
 		// Calling clone() may or may not work; it does not work with e.g. lambdas.
 		// Better to just use the same value directly, rather than trying to copy.
 		try {
-			final Object object = field.get(instance);
+			final var object = field.get(instance);
 			// TODO: Wrap object in a generic holder with the same interface.
 			return struct().createInstance(object);
 		}
@@ -218,7 +218,7 @@ public class DefaultOpFieldInfo implements OpInfo {
 	@Override
 	public boolean equals(final Object o) {
 		if (!(o instanceof DefaultOpFieldInfo)) return false;
-		final OpInfo that = (OpInfo) o;
+		final var that = (OpInfo) o;
 		return struct().equals(that.struct());
 	}
 

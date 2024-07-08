@@ -50,7 +50,7 @@ public class Polynom {
 	public Polynom(final int degree) {
 		m_degree = degree;
 		m_coefficients = new int[m_degree + 1];
-		for (int i = 0; i <= m_degree; ++i) {
+		for (var i = 0; i <= m_degree; ++i) {
 			setCoefficient(i, 0);
 		}
 	}
@@ -82,9 +82,9 @@ public class Polynom {
 	 * @return the value of the polynom
 	 */
 	public double evaluate(final double x) {
-		double power = 1.0;
-		double result = 0.0;
-		for (int i = 0; i <= m_degree; ++i) {
+        var power = 1.0;
+        var result = 0.0;
+		for (var i = 0; i <= m_degree; ++i) {
 			result += m_coefficients[i] * power;
 			power *= x;
 		}
@@ -99,8 +99,8 @@ public class Polynom {
 	 */
 	@Override
 	public String toString() {
-		final StringBuffer result = new StringBuffer();
-		for (int i = m_degree; i >= 0; i--) {
+		final var result = new StringBuffer();
+		for (var i = m_degree; i >= 0; i--) {
 			if (m_coefficients[i] != 0) {
 				result.append(m_coefficients[i] + "X^" + i + " ");
 			}

@@ -58,14 +58,14 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 	}
 
 	protected List<OpInfo> processClass(Class<?> cls) {
-		String version = Versions.of(cls);
+        var version = Versions.of(cls);
 		List<OpInfo> collectionInfos = new ArrayList<>();
 
 		// add OpFieldInfos
-		final List<Field> fields = Annotations.annotatedFields(cls, OpField.class);
-		final Optional<Object> instance = getInstance(cls);
+		final var fields = Annotations.annotatedFields(cls, OpField.class);
+		final var instance = getInstance(cls);
 		if (instance.isPresent()) {
-			final List<DefaultOpFieldInfo> fieldInfos = //
+			final var fieldInfos = //
 				fields.parallelStream() //
 					.map(f -> generateFieldInfo(f, instance.get(), version)) //
 					.collect(Collectors.toList());
@@ -73,7 +73,7 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 		}
 		// add OpMethodInfos
 		//
-		final List<DefaultOpMethodInfo> methodInfos = //
+		final var methodInfos = //
 			Annotations.annotatedMethods(cls, OpMethod.class).parallelStream() //
 				.map(m -> generateMethodInfo(m, version)) //
 				.collect(Collectors.toList());
@@ -93,8 +93,8 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 	private DefaultOpFieldInfo generateFieldInfo(Field field, Object instance,
 		String version)
 	{
-		final boolean isStatic = Modifier.isStatic(field.getModifiers());
-		OpField annotation = field.getAnnotation(OpField.class);
+		final var isStatic = Modifier.isStatic(field.getModifiers());
+        var annotation = field.getAnnotation(OpField.class);
 		return new DefaultOpFieldInfo( //
 			isStatic ? null : instance, //
 			field, //
@@ -109,7 +109,7 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 	private DefaultOpMethodInfo generateMethodInfo(Method method,
 		String version)
 	{
-		OpMethod annotation = method.getAnnotation(OpMethod.class);
+        var annotation = method.getAnnotation(OpMethod.class);
 		return new DefaultOpMethodInfo( //
 			method, //
 			annotation.type(), //

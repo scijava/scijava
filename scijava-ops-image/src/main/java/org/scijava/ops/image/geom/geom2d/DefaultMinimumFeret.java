@@ -67,31 +67,31 @@ public class DefaultMinimumFeret implements
 		final List<? extends RealLocalizable> points = GeomUtils.vertices(function
 			.apply(input));
 
-		double distance = Double.POSITIVE_INFINITY;
-		RealLocalizable p0 = points.get(0);
-		RealLocalizable p1 = points.get(0);
+        var distance = Double.POSITIVE_INFINITY;
+        var p0 = points.get(0);
+        var p1 = points.get(0);
 		double tmpDist = 0;
-		RealLocalizable tmpP0 = p0;
-		RealLocalizable tmpP1 = p1;
+        var tmpP0 = p0;
+        var tmpP1 = p1;
 
-		for (int i = 0; i < points.size() - 2; i++) {
-			final RealLocalizable lineStart = points.get(i);
-			final RealLocalizable lineEnd = points.get(i + 1);
+		for (var i = 0; i < points.size() - 2; i++) {
+			final var lineStart = points.get(i);
+			final var lineEnd = points.get(i + 1);
 			tmpDist = 0;
-			final Line l = new Line(new Vector2D(lineStart.getDoublePosition(0),
+			final var l = new Line(new Vector2D(lineStart.getDoublePosition(0),
 				lineStart.getDoublePosition(1)), new Vector2D(lineEnd.getDoublePosition(
 					0), lineEnd.getDoublePosition(1)), 10e-12);
 
-			for (int j = 0; j < points.size(); j++) {
+			for (var j = 0; j < points.size(); j++) {
 				if (j != i && j != i + 1) {
-					final RealLocalizable ttmpP0 = points.get(j);
+					final var ttmpP0 = points.get(j);
 
-					final double tmp = l.distance(new Vector2D(ttmpP0.getDoublePosition(
+					final var tmp = l.distance(new Vector2D(ttmpP0.getDoublePosition(
 						0), ttmpP0.getDoublePosition(1)));
 
 					if (tmp > tmpDist) {
 						tmpDist = tmp;
-						final Vector2D vp = (Vector2D) l.project(new Vector2D(ttmpP0
+						final var vp = (Vector2D) l.project(new Vector2D(ttmpP0
 							.getDoublePosition(0), ttmpP0.getDoublePosition(1)));
 						tmpP0 = new RealPoint(vp.getX(), vp.getY());
 						tmpP1 = ttmpP0;
@@ -105,22 +105,22 @@ public class DefaultMinimumFeret implements
 			}
 		}
 
-		final RealLocalizable lineStart = points.get(points.size() - 1);
-		final RealLocalizable lineEnd = points.get(0);
-		final Line l = new Line(new Vector2D(lineStart.getDoublePosition(0),
+		final var lineStart = points.get(points.size() - 1);
+		final var lineEnd = points.get(0);
+		final var l = new Line(new Vector2D(lineStart.getDoublePosition(0),
 			lineStart.getDoublePosition(1)), new Vector2D(lineEnd.getDoublePosition(
 				0), lineEnd.getDoublePosition(1)), 10e-12);
 		tmpDist = 0;
-		for (int j = 0; j < points.size(); j++) {
+		for (var j = 0; j < points.size(); j++) {
 			if (j != points.size() - 1 && j != 0 + 1) {
-				final RealLocalizable ttmpP0 = points.get(j);
+				final var ttmpP0 = points.get(j);
 
-				final double tmp = l.distance(new Vector2D(ttmpP0.getDoublePosition(0),
+				final var tmp = l.distance(new Vector2D(ttmpP0.getDoublePosition(0),
 					ttmpP0.getDoublePosition(1)));
 
 				if (tmp > tmpDist) {
 					tmpDist = tmp;
-					final Vector2D vp = (Vector2D) l.project(new Vector2D(ttmpP0
+					final var vp = (Vector2D) l.project(new Vector2D(ttmpP0
 						.getDoublePosition(0), ttmpP0.getDoublePosition(1)));
 					tmpP0 = new RealPoint(vp.getX(), vp.getY());
 					tmpP1 = ttmpP0;

@@ -100,7 +100,7 @@ public class Task {
 	 */
 	public void complete() {
 		if (tasksDefined && progress() != 1.0) {
-			String msg = "Task " + description();
+            var msg = "Task " + description();
 			if (current.longValue() != max.longValue()) {
 				msg += " finished in the middle of a stage!";
 			}
@@ -187,8 +187,8 @@ public class Task {
 	 * @return the progress
 	 */
 	public double progress() {
-		double totalCompletion = current.doubleValue() / max.doubleValue();
-		for (Task t : subTasks) {
+        var totalCompletion = current.doubleValue() / max.doubleValue();
+		for (var t : subTasks) {
 			totalCompletion += t.progress();
 		}
 		return totalCompletion / totalTasks;

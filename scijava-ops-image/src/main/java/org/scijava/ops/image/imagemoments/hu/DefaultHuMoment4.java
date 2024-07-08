@@ -75,22 +75,22 @@ public class DefaultHuMoment4<I extends RealType<I>, O extends RealType<O>>
 	public void computeMoment(final RandomAccessibleInterval<I> input,
 		final O output)
 	{
-		final O n30 = output.createVariable();
+		final var n30 = output.createVariable();
 		normalizedCentralMoment30Func.compute(input, n30);
-		final O n12 = output.createVariable();
+		final var n12 = output.createVariable();
 		normalizedCentralMoment12Func.compute(input, n12);
-		final O n21 = output.createVariable();
+		final var n21 = output.createVariable();
 		normalizedCentralMoment21Func.compute(input, n21);
-		final O n03 = output.createVariable();
+		final var n03 = output.createVariable();
 		normalizedCentralMoment03Func.compute(input, n03);
 
 		// term1 = (n30 + n12)^2
-		final O term1 = n30.copy();
+		final var term1 = n30.copy();
 		term1.add(n12);
 		term1.mul(term1);
 
 		// term2 = (n21 + n03)^2
-		final O term2 = n21.copy();
+		final var term2 = n21.copy();
 		term2.add(n03);
 		term2.mul(term2);
 

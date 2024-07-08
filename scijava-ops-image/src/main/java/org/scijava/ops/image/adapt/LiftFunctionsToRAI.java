@@ -77,9 +77,9 @@ public final class LiftFunctionsToRAI {
 			Function<I1, O> func //
 		) {
 		return (in1) -> {
-			I1 inType1 = Util.getTypeFromInterval(in1);
-			O outType = func.apply(inType1);
-			RAIO outImg = imgCreator.apply(in1, outType);
+			var inType1 = Util.getTypeFromInterval(in1);
+			var outType = func.apply(inType1);
+			var outImg = imgCreator.apply(in1, outType);
 			LoopBuilder.setImages(in1, outImg).multiThreaded() //
 				.forEachPixel((i1, o) -> o.set(func.apply(i1)));
 			return outImg;
@@ -97,9 +97,9 @@ public final class LiftFunctionsToRAI {
 			BiFunction<I1, I2, O> func //
 		) {
 		return (in1, in2) -> {
-			I1 inType1 = Util.getTypeFromInterval(in1);
-			O outType = func.apply(inType1, in2);
-			RAIO outImg = imgCreator.apply(in1, outType);
+			var inType1 = Util.getTypeFromInterval(in1);
+			var outType = func.apply(inType1, in2);
+			var outImg = imgCreator.apply(in1, outType);
 			LoopBuilder.setImages(in1, outImg).multiThreaded() //
 				.forEachPixel((i1, o) -> o.set(func.apply(i1, in2)));
 			return outImg;
@@ -117,10 +117,10 @@ public final class LiftFunctionsToRAI {
 			BiFunction<I1, I2, O> func //
 		) {
 		return (in1, in2) -> {
-			I1 inType1 = Util.getTypeFromInterval(in1);
-			I2 inType2 = Util.getTypeFromInterval(in2);
-			O outType = func.apply(inType1, inType2);
-			RAIO outImg = imgCreator.apply(in1, outType);
+			var inType1 = Util.getTypeFromInterval(in1);
+			var inType2 = Util.getTypeFromInterval(in2);
+			var outType = func.apply(inType1, inType2);
+			var outImg = imgCreator.apply(in1, outType);
 			LoopBuilder.setImages(in1, in2, outImg).multiThreaded() //
 				.forEachPixel((i1, i2, o) -> o.set(func.apply(i1, i2)));
 			return outImg;
@@ -138,9 +138,9 @@ public final class LiftFunctionsToRAI {
 			Functions.Arity3<I1, I2, I3, O> func //
 		) {
 		return (in1, in2, in3) -> {
-			I1 inType1 = Util.getTypeFromInterval(in1);
-			O outType = func.apply(inType1, in2, in3);
-			RAIO outImg = imgCreator.apply(in1, outType);
+			var inType1 = Util.getTypeFromInterval(in1);
+			var outType = func.apply(inType1, in2, in3);
+			var outImg = imgCreator.apply(in1, outType);
 			LoopBuilder.setImages(in1, outImg).multiThreaded() //
 				.forEachPixel((i1, o) -> o.set(func.apply(i1, in2, in3)));
 			return outImg;
@@ -158,10 +158,10 @@ public final class LiftFunctionsToRAI {
 			Functions.Arity3<I1, I2, I3, O> func //
 		) {
 		return (in1, in2, in3) -> {
-			I1 inType1 = Util.getTypeFromInterval(in1);
-			I2 inType2 = Util.getTypeFromInterval(in2);
-			O outType = func.apply(inType1, inType2, in3);
-			RAIO outImg = imgCreator.apply(in1, outType);
+			var inType1 = Util.getTypeFromInterval(in1);
+			var inType2 = Util.getTypeFromInterval(in2);
+			var outType = func.apply(inType1, inType2, in3);
+			var outImg = imgCreator.apply(in1, outType);
 			LoopBuilder.setImages(in1, in2, outImg).multiThreaded() //
 				.forEachPixel((i1, i2, o) -> o.set(func.apply(i1, i2, in3)));
 			return outImg;
@@ -179,11 +179,11 @@ public final class LiftFunctionsToRAI {
 			Functions.Arity3<I1, I2, I3, O> func //
 		) {
 		return (in1, in2, in3) -> {
-			I1 inType1 = Util.getTypeFromInterval(in1);
-			I2 inType2 = Util.getTypeFromInterval(in2);
-			I3 inType3 = Util.getTypeFromInterval(in3);
-			O outType = func.apply(inType1, inType2, inType3);
-			RAIO outImg = imgCreator.apply(in1, outType);
+			var inType1 = Util.getTypeFromInterval(in1);
+			var inType2 = Util.getTypeFromInterval(in2);
+			var inType3 = Util.getTypeFromInterval(in3);
+			var outType = func.apply(inType1, inType2, inType3);
+			var outImg = imgCreator.apply(in1, outType);
 			LoopBuilder.setImages(in1, in2, in3, outImg).multiThreaded() //
 				.forEachPixel((i1, i2, i3, o) -> o.set(func.apply(i1, i2, i3)));
 			return outImg;
@@ -201,9 +201,9 @@ public final class LiftFunctionsToRAI {
 			Functions.Arity4<I1, I2, I3, I4, O> func //
 		) {
 		return (in1, in2, in3, in4) -> {
-			I1 inType1 = Util.getTypeFromInterval(in1);
-			O outType = func.apply(inType1, in2, in3, in4);
-			RAIO outImg = imgCreator.apply(in1, outType);
+			var inType1 = Util.getTypeFromInterval(in1);
+			var outType = func.apply(inType1, in2, in3, in4);
+			var outImg = imgCreator.apply(in1, outType);
 			LoopBuilder.setImages(in1, outImg).multiThreaded() //
 				.forEachPixel((i1, o) -> o.set(func.apply(i1, in2, in3, in4)));
 			return outImg;
@@ -221,10 +221,10 @@ public final class LiftFunctionsToRAI {
 			Functions.Arity4<I1, I2, I3, I4, O> func //
 		) {
 		return (in1, in2, in3, in4) -> {
-			I1 inType1 = Util.getTypeFromInterval(in1);
-			I2 inType2 = Util.getTypeFromInterval(in2);
-			O outType = func.apply(inType1, inType2, in3, in4);
-			RAIO outImg = imgCreator.apply(in1, outType);
+			var inType1 = Util.getTypeFromInterval(in1);
+			var inType2 = Util.getTypeFromInterval(in2);
+			var outType = func.apply(inType1, inType2, in3, in4);
+			var outImg = imgCreator.apply(in1, outType);
 			LoopBuilder.setImages(in1, in2, outImg).multiThreaded() //
 				.forEachPixel((i1, i2, o) -> o.set(func.apply(i1, i2, in3, in4)));
 			return outImg;
@@ -242,11 +242,11 @@ public final class LiftFunctionsToRAI {
 			Functions.Arity4<I1, I2, I3, I4, O> func //
 		) {
 		return (in1, in2, in3, in4) -> {
-			I1 inType1 = Util.getTypeFromInterval(in1);
-			I2 inType2 = Util.getTypeFromInterval(in2);
-			I3 inType3 = Util.getTypeFromInterval(in3);
-			O outType = func.apply(inType1, inType2, inType3, in4);
-			RAIO outImg = imgCreator.apply(in1, outType);
+			var inType1 = Util.getTypeFromInterval(in1);
+			var inType2 = Util.getTypeFromInterval(in2);
+			var inType3 = Util.getTypeFromInterval(in3);
+			var outType = func.apply(inType1, inType2, inType3, in4);
+			var outImg = imgCreator.apply(in1, outType);
 			LoopBuilder.setImages(in1, in2, in3, outImg).multiThreaded() //
 				.forEachPixel((i1, i2, i3, o) -> o.set(func.apply(i1, i2, i3, in4)));
 			return outImg;
@@ -264,12 +264,12 @@ public final class LiftFunctionsToRAI {
 			Functions.Arity4<I1, I2, I3, I4, O> func //
 		) {
 		return (in1, in2, in3, in4) -> {
-			I1 inType1 = Util.getTypeFromInterval(in1);
-			I2 inType2 = Util.getTypeFromInterval(in2);
-			I3 inType3 = Util.getTypeFromInterval(in3);
-			I4 inType4 = Util.getTypeFromInterval(in4);
-			O outType = func.apply(inType1, inType2, inType3, inType4);
-			RAIO outImg = imgCreator.apply(in1, outType);
+			var inType1 = Util.getTypeFromInterval(in1);
+			var inType2 = Util.getTypeFromInterval(in2);
+			var inType3 = Util.getTypeFromInterval(in3);
+			var inType4 = Util.getTypeFromInterval(in4);
+			var outType = func.apply(inType1, inType2, inType3, inType4);
+			var outImg = imgCreator.apply(in1, outType);
 			LoopBuilder.setImages(in1, in2, in3, in4, outImg).multiThreaded() //
 				.forEachPixel((i1, i2, i3, i4, o) -> o.set(func.apply(i1, i2, i3, i4)));
 			return outImg;
@@ -287,9 +287,9 @@ public final class LiftFunctionsToRAI {
 			Functions.Arity5<I1, I2, I3, I4, I5, O> func //
 		) {
 		return (in1, in2, in3, in4, in5) -> {
-			I1 inType1 = Util.getTypeFromInterval(in1);
-			O outType = func.apply(inType1, in2, in3, in4, in5);
-			RAIO outImg = imgCreator.apply(in1, outType);
+			var inType1 = Util.getTypeFromInterval(in1);
+			var outType = func.apply(inType1, in2, in3, in4, in5);
+			var outImg = imgCreator.apply(in1, outType);
 			LoopBuilder.setImages(in1, outImg).multiThreaded() //
 				.forEachPixel((i1, o) -> o.set(func.apply(i1, in2, in3, in4, in5)));
 			return outImg;
@@ -307,10 +307,10 @@ public final class LiftFunctionsToRAI {
 			Functions.Arity5<I1, I2, I3, I4, I5, O> func //
 		) {
 		return (in1, in2, in3, in4, in5) -> {
-			I1 inType1 = Util.getTypeFromInterval(in1);
-			I2 inType2 = Util.getTypeFromInterval(in2);
-			O outType = func.apply(inType1, inType2, in3, in4, in5);
-			RAIO outImg = imgCreator.apply(in1, outType);
+			var inType1 = Util.getTypeFromInterval(in1);
+			var inType2 = Util.getTypeFromInterval(in2);
+			var outType = func.apply(inType1, inType2, in3, in4, in5);
+			var outImg = imgCreator.apply(in1, outType);
 			LoopBuilder.setImages(in1, in2, outImg).multiThreaded() //
 				.forEachPixel((i1, i2, o) -> o.set(func.apply(i1, i2, in3, in4, in5)));
 			return outImg;
@@ -328,11 +328,11 @@ public final class LiftFunctionsToRAI {
 			Functions.Arity5<I1, I2, I3, I4, I5, O> func //
 		) {
 		return (in1, in2, in3, in4, in5) -> {
-			I1 inType1 = Util.getTypeFromInterval(in1);
-			I2 inType2 = Util.getTypeFromInterval(in2);
-			I3 inType3 = Util.getTypeFromInterval(in3);
-			O outType = func.apply(inType1, inType2, inType3, in4, in5);
-			RAIO outImg = imgCreator.apply(in1, outType);
+			var inType1 = Util.getTypeFromInterval(in1);
+			var inType2 = Util.getTypeFromInterval(in2);
+			var inType3 = Util.getTypeFromInterval(in3);
+			var outType = func.apply(inType1, inType2, inType3, in4, in5);
+			var outImg = imgCreator.apply(in1, outType);
 			LoopBuilder.setImages(in1, in2, in3, outImg).multiThreaded() //
 				.forEachPixel((i1, i2, i3, o) -> o.set(func.apply(i1, i2, i3, in4, in5)));
 			return outImg;
@@ -350,12 +350,12 @@ public final class LiftFunctionsToRAI {
 			Functions.Arity5<I1, I2, I3, I4, I5, O> func //
 		) {
 		return (in1, in2, in3, in4, in5) -> {
-			I1 inType1 = Util.getTypeFromInterval(in1);
-			I2 inType2 = Util.getTypeFromInterval(in2);
-			I3 inType3 = Util.getTypeFromInterval(in3);
-			I4 inType4 = Util.getTypeFromInterval(in4);
-			O outType = func.apply(inType1, inType2, inType3, inType4, in5);
-			RAIO outImg = imgCreator.apply(in1, outType);
+			var inType1 = Util.getTypeFromInterval(in1);
+			var inType2 = Util.getTypeFromInterval(in2);
+			var inType3 = Util.getTypeFromInterval(in3);
+			var inType4 = Util.getTypeFromInterval(in4);
+			var outType = func.apply(inType1, inType2, inType3, inType4, in5);
+			var outImg = imgCreator.apply(in1, outType);
 			LoopBuilder.setImages(in1, in2, in3, in4, outImg).multiThreaded() //
 				.forEachPixel((i1, i2, i3, i4, o) -> o.set(func.apply(i1, i2, i3, i4, in5)));
 			return outImg;
@@ -373,13 +373,13 @@ public final class LiftFunctionsToRAI {
 			Functions.Arity5<I1, I2, I3, I4, I5, O> func //
 		) {
 		return (in1, in2, in3, in4, in5) -> {
-			I1 inType1 = Util.getTypeFromInterval(in1);
-			I2 inType2 = Util.getTypeFromInterval(in2);
-			I3 inType3 = Util.getTypeFromInterval(in3);
-			I4 inType4 = Util.getTypeFromInterval(in4);
-			I5 inType5 = Util.getTypeFromInterval(in5);
-			O outType = func.apply(inType1, inType2, inType3, inType4, inType5);
-			RAIO outImg = imgCreator.apply(in1, outType);
+			var inType1 = Util.getTypeFromInterval(in1);
+			var inType2 = Util.getTypeFromInterval(in2);
+			var inType3 = Util.getTypeFromInterval(in3);
+			var inType4 = Util.getTypeFromInterval(in4);
+			var inType5 = Util.getTypeFromInterval(in5);
+			var outType = func.apply(inType1, inType2, inType3, inType4, inType5);
+			var outImg = imgCreator.apply(in1, outType);
 			LoopBuilder.setImages(in1, in2, in3, in4, in5, outImg).multiThreaded() //
 				.forEachPixel((i1, i2, i3, i4, i5, o) -> o.set(func.apply(i1, i2, i3, i4, i5)));
 			return outImg;

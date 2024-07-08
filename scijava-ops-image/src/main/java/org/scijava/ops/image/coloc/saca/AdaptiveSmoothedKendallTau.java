@@ -69,9 +69,9 @@ public final class AdaptiveSmoothedKendallTau {
 		final RandomAccessibleInterval<DoubleType> result, final I thres1,
 		final I thres2, final long seed)
 	{
-		final long nr = image1.dimension(1);
-		final long nc = image1.dimension(0);
-		final ImgFactory<DoubleType> factory = Util.getSuitableImgFactory(image1,
+		final var nr = image1.dimension(1);
+		final var nc = image1.dimension(0);
+		final var factory = Util.getSuitableImgFactory(image1,
 			new DoubleType());
 		final RandomAccessibleInterval<DoubleType> oldtau = factory.create(image1);
 		final RandomAccessibleInterval<DoubleType> newtau = factory.create(image1);
@@ -80,23 +80,23 @@ public final class AdaptiveSmoothedKendallTau {
 		final RandomAccessibleInterval<DoubleType> newsqrtN = factory.create(
 			image1);
 		final List<RandomAccessibleInterval<DoubleType>> stop = new ArrayList<>();
-		final double Dn = Math.sqrt(Math.log(nr * nc)) * 2;
-		final int TU = 15;
-		final int TL = 8;
-		final double Lambda = Dn;
-		final double stepsize = 1.15;
-		final Random rng = new Random(seed);
-		boolean isCheck = false;
+		final var Dn = Math.sqrt(Math.log(nr * nc)) * 2;
+		final var TU = 15;
+		final var TL = 8;
+		final var Lambda = Dn;
+		final var stepsize = 1.15;
+		final var rng = new Random(seed);
+        var isCheck = false;
 		double size = 1;
 		int intSize;
 
-		for (int s = 0; s < 3; s++)
+		for (var s = 0; s < 3; s++)
 			stop.add(factory.create(image1));
 
 		LoopBuilder.setImages(oldsqrtN).multiThreaded().forEachPixel(t -> t
 			.setOne());
 		Progress.defineTotal(TU);
-		for (int s = 0; s < TU; s++) {
+		for (var s = 0; s < TU; s++) {
 			intSize = (int) Math.floor(size);
 			singleiteration(image1, image2, thres1, thres2, stop, oldtau, oldsqrtN,
 				newtau, newsqrtN, result, Lambda, Dn, intSize, isCheck, rng);
@@ -124,53 +124,53 @@ public final class AdaptiveSmoothedKendallTau {
 		final RandomAccessibleInterval<DoubleType> result, final double Lambda,
 		final double Dn, final int Bsize, final boolean isCheck, final Random rng)
 	{
-		final double[][] kernel = kernelGenerate(Bsize);
+		final var kernel = kernelGenerate(Bsize);
 
-		RandomAccessibleInterval<DoubleType> workingImageStack = Views.stack(oldtau,
+        var workingImageStack = Views.stack(oldtau,
 			newtau, oldsqrtN, newsqrtN, stop.get(0), stop.get(1), stop.get(2));
-		CompositeIntervalView<DoubleType, ? extends GenericComposite<DoubleType>> workingImage =
+        var workingImage =
 			Views.collapse(workingImageStack);
 
-		IntervalView<Localizable> positions = Views.interval(Localizables
+        var positions = Views.interval(Localizables
 			.randomAccessible(result.numDimensions()), result);
 		LoopBuilder.setImages(positions, result, workingImage).forEachChunk(
 			chunk -> {
-				final long[] rowrange = new long[4];
-				final long[] colrange = new long[4];
-				final int totnum = (2 * Bsize + 1) * (2 * Bsize + 1);
-				final double[] LocX = new double[totnum];
-				final double[] LocY = new double[totnum];
-				final double[] LocW = new double[totnum];
-				final double[][] combinedData = new double[totnum][3];
-				final int[] rankedindex = new int[totnum];
-				final double[] rankedw = new double[totnum];
-				final int[] index1 = new int[totnum];
-				final int[] index2 = new int[totnum];
-				final double[] w1 = new double[totnum];
-				final double[] w2 = new double[totnum];
-				final double[] cumw = new double[totnum];
-				final long nr = result.dimension(1);
-				final long nc = result.dimension(0);
-				final RandomAccess<I> gdImage1 = image1.randomAccess();
-				final RandomAccess<I> gdImage2 = image2.randomAccess();
-				final RandomAccess<DoubleType> gdTau = oldtau.randomAccess();
-				final RandomAccess<DoubleType> gdSqrtN = oldsqrtN.randomAccess();
+				final var rowrange = new long[4];
+				final var colrange = new long[4];
+				final var totnum = (2 * Bsize + 1) * (2 * Bsize + 1);
+				final var LocX = new double[totnum];
+				final var LocY = new double[totnum];
+				final var LocW = new double[totnum];
+				final var combinedData = new double[totnum][3];
+				final var rankedindex = new int[totnum];
+				final var rankedw = new double[totnum];
+				final var index1 = new int[totnum];
+				final var index2 = new int[totnum];
+				final var w1 = new double[totnum];
+				final var w2 = new double[totnum];
+				final var cumw = new double[totnum];
+				final var nr = result.dimension(1);
+				final var nc = result.dimension(0);
+				final var gdImage1 = image1.randomAccess();
+				final var gdImage2 = image2.randomAccess();
+				final var gdTau = oldtau.randomAccess();
+				final var gdSqrtN = oldsqrtN.randomAccess();
 				chunk.forEachPixel((pos, resPixel, workingPixel) -> {
-					DoubleType oldtauPix = workingPixel.get(0);
-					DoubleType newtauPix = workingPixel.get(1);
-					DoubleType oldsqrtNPix = workingPixel.get(2);
-					DoubleType newsqrtNPix = workingPixel.get(3);
-					DoubleType stop0Pix = workingPixel.get(4);
-					DoubleType stop1Pix = workingPixel.get(5);
-					DoubleType stop2Pix = workingPixel.get(6);
-					final long row = pos.getLongPosition(1);
+                    var oldtauPix = workingPixel.get(0);
+                    var newtauPix = workingPixel.get(1);
+                    var oldsqrtNPix = workingPixel.get(2);
+                    var newsqrtNPix = workingPixel.get(3);
+                    var stop0Pix = workingPixel.get(4);
+                    var stop1Pix = workingPixel.get(5);
+                    var stop2Pix = workingPixel.get(6);
+					final var row = pos.getLongPosition(1);
 					updateRange(row, Bsize, nr, rowrange);
 					if (isCheck) {
 						if (stop0Pix.getRealDouble() != 0) {
 							return;
 						}
 					}
-					final long col = pos.getLongPosition(0);
+					final var col = pos.getLongPosition(0);
 					updateRange(col, Bsize, nc, colrange);
 					getData(Dn, kernel, gdImage1, gdImage2, gdTau, gdSqrtN, LocX, LocY,
 						LocW, rowrange, colrange, totnum);
@@ -181,7 +181,7 @@ public final class AdaptiveSmoothedKendallTau {
 						resPixel.setZero();
 					}
 					else {
-						final double tau = WtKendallTau.calculate(LocX, LocY, LocW,
+						final var tau = WtKendallTau.calculate(LocX, LocY, LocW,
 							combinedData, rankedindex, rankedw, index1, index2, w1, w2, cumw,
 							rng);
 						newtauPix.setReal(tau);
@@ -189,7 +189,7 @@ public final class AdaptiveSmoothedKendallTau {
 					}
 
 					if (isCheck) {
-						final double taudiff = Math.abs(stop1Pix.getRealDouble() - newtauPix
+						final var taudiff = Math.abs(stop1Pix.getRealDouble() - newtauPix
 							.getRealDouble()) * stop2Pix.getRealDouble();
 						if (taudiff > Lambda) {
 							stop0Pix.setOne();
@@ -216,21 +216,21 @@ public final class AdaptiveSmoothedKendallTau {
 		final double[] sw, final long[] rowrange, final long[] colrange,
 		final int totnum)
 	{
-		int kernelk = (int) (rowrange[0] - rowrange[2] + rowrange[3]);
+        var kernelk = (int) (rowrange[0] - rowrange[2] + rowrange[3]);
 		int kernell;
-		int index = 0;
+        var index = 0;
 		double taudiffabs;
 
 		sqrtN.setPosition(colrange[2], 0);
 		sqrtN.setPosition(rowrange[2], 1);
-		final double sqrtNValue = sqrtN.get().getRealDouble();
+		final var sqrtNValue = sqrtN.get().getRealDouble();
 
-		for (long k = rowrange[0]; k <= rowrange[1]; k++) {
+		for (var k = rowrange[0]; k <= rowrange[1]; k++) {
 			i1RA.setPosition(k, 1);
 			i2RA.setPosition(k, 1);
 			sqrtN.setPosition(k, 1);
 			kernell = (int) (colrange[0] - colrange[2] + colrange[3]);
-			for (long l = colrange[0]; l <= colrange[1]; l++) {
+			for (var l = colrange[0]; l <= colrange[1]; l++) {
 				i1RA.setPosition(l, 0);
 				i2RA.setPosition(l, 0);
 				sqrtN.setPosition(l, 0);
@@ -240,11 +240,11 @@ public final class AdaptiveSmoothedKendallTau {
 
 				tau.setPosition(l, 0);
 				tau.setPosition(k, 1);
-				final double tau1 = tau.get().getRealDouble();
+				final var tau1 = tau.get().getRealDouble();
 
 				tau.setPosition(colrange[2], 0);
 				tau.setPosition(rowrange[2], 1);
-				final double tau2 = tau.get().getRealDouble();
+				final var tau2 = tau.get().getRealDouble();
 
 				taudiffabs = Math.abs(tau1 - tau2) * sqrtNValue;
 				taudiffabs = taudiffabs / Dn;
@@ -282,7 +282,7 @@ public final class AdaptiveSmoothedKendallTau {
 		double sumsqrtW = 0;
 		double tempW;
 
-		for (int index = 0; index < w.length; index++) {
+		for (var index = 0; index < w.length; index++) {
 			if (x[index] < thres1.getRealDouble() || y[index] < thres2
 				.getRealDouble()) w[index] = 0;
 			tempW = w[index];
@@ -291,7 +291,7 @@ public final class AdaptiveSmoothedKendallTau {
 			sumsqrtW += tempW;
 		}
 		double NW;
-		final double Denomi = sumW * sumW;
+		final var Denomi = sumW * sumW;
 		if (Denomi <= 0) {
 			NW = 0;
 		}
@@ -302,14 +302,14 @@ public final class AdaptiveSmoothedKendallTau {
 	}
 
 	private static double[][] kernelGenerate(final int size) {
-		final int L = size * 2 + 1;
-		final double[][] kernel = new double[L][L];
-		final int center = size;
+		final var L = size * 2 + 1;
+		final var kernel = new double[L][L];
+		final var center = size;
 		double temp;
-		final double Rsize = size * Math.sqrt(2.5);
+		final var Rsize = size * Math.sqrt(2.5);
 
-		for (int i = 0; i <= size; i++) {
-			for (int j = 0; j <= size; j++) {
+		for (var i = 0; i <= size; i++) {
+			for (var j = 0; j <= size; j++) {
 				temp = Math.sqrt(i * i + j * j) / Rsize;
 				if (temp >= 1) temp = 0;
 				else temp = 1 - temp;

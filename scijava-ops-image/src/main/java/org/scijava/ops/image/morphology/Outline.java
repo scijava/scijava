@@ -87,11 +87,11 @@ public class Outline<B extends BooleanType<B>> implements
 		if (!Intervals.equalDimensions(input, output))
 			throw new IllegalArgumentException(
 				"input and output must have equal dimensions!");
-		final Cursor<B> inputCursor = Views.iterable(input).localizingCursor();
-		final long[] coordinates = new long[input.numDimensions()];
-		final ExtendedRandomAccessibleInterval<B, RandomAccessibleInterval<B>> extendedInput =
+		final var inputCursor = Views.iterable(input).localizingCursor();
+		final var coordinates = new long[input.numDimensions()];
+		final var extendedInput =
 			extendInterval(input, excludeEdges);
-		final RandomAccess<BitType> outputAccess = output.randomAccess();
+		final var outputAccess = output.randomAccess();
 		while (inputCursor.hasNext()) {
 			inputCursor.fwd();
 			inputCursor.localize(coordinates);
@@ -106,7 +106,7 @@ public class Outline<B extends BooleanType<B>> implements
 	private ExtendedRandomAccessibleInterval<B, RandomAccessibleInterval<B>>
 		extendInterval(RandomAccessibleInterval<B> interval, boolean excludeEdges)
 	{
-		final B type = Util.getTypeFromInterval(interval).createVariable();
+		final var type = Util.getTypeFromInterval(interval).createVariable();
 		type.set(excludeEdges);
 		return Views.extendValue(interval, type);
 	}
@@ -123,11 +123,11 @@ public class Outline<B extends BooleanType<B>> implements
 		final ExtendedRandomAccessibleInterval<B, RandomAccessibleInterval<B>> interval,
 		final long[] coordinates)
 	{
-		final int dimensions = interval.numDimensions();
-		final BoundingBox box = new BoundingBox(dimensions);
-		final long[] minBounds = Arrays.stream(coordinates).map(c -> c - 1)
+		final var dimensions = interval.numDimensions();
+		final var box = new BoundingBox(dimensions);
+		final var minBounds = Arrays.stream(coordinates).map(c -> c - 1)
 			.toArray();
-		final long[] maxBounds = Arrays.stream(coordinates).map(c -> c + 1)
+		final var maxBounds = Arrays.stream(coordinates).map(c -> c + 1)
 			.toArray();
 		box.update(minBounds);
 		box.update(maxBounds);
@@ -136,7 +136,7 @@ public class Outline<B extends BooleanType<B>> implements
 
 	/** Checks if any element in the neighbourhood is background */
 	private boolean isAnyBackground(final IntervalView<B> neighbourhood) {
-		final Cursor<B> cursor = neighbourhood.cursor();
+		final var cursor = neighbourhood.cursor();
 		while (cursor.hasNext()) {
 			cursor.fwd();
 			if (!cursor.get().get()) {
@@ -158,13 +158,13 @@ public class Outline<B extends BooleanType<B>> implements
 		final ExtendedRandomAccessibleInterval<B, RandomAccessibleInterval<B>> source,
 		final long[] coordinates)
 	{
-		final OutOfBounds<B> access = source.randomAccess();
+		final var access = source.randomAccess();
 		access.setPosition(coordinates);
 		if (!access.get().get()) {
 			return false;
 		}
 
-		final IntervalView<B> neighbourhood = neighbourhoodInterval(source,
+		final var neighbourhood = neighbourhoodInterval(source,
 			coordinates);
 		return isAnyBackground(neighbourhood);
 	}

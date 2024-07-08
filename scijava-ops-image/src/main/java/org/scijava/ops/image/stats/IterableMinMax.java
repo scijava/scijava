@@ -74,7 +74,7 @@ public class IterableMinMax<I extends RealType<I>> implements
 				"Cannot determine minimum/maximum of an empty Iterator!");
 		}
 
-		for (final I in : input) {
+		for (final var in : input) {
 			if (in.compareTo(minVal) < 0) minVal.set(in);
 			if (in.compareTo(maxVal) > 0) maxVal.set(in);
 		}

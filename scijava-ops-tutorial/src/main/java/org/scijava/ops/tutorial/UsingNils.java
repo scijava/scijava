@@ -72,7 +72,7 @@ public class UsingNils {
 		() -> ArrayImgs.doubles(10, 10);
 
 	public static void main(String... args) {
-		OpEnvironment ops = OpEnvironment.build();
+        var ops = OpEnvironment.build();
 
 		// The following is the syntax used to create a Nil that encodes the type we
 		// want. Namely, if we want to ensure that the return is an Img<DoubleType>,
@@ -83,7 +83,7 @@ public class UsingNils {
 		// the generic typing of the output. Note that the Nil allows us to
 		// differentiate between the two Ops above, one of which would instead
 		// return an ArrayImg of unsigned bytes.
-		Img<DoubleType> out = ops.op("tutorial.nils").outType(outType).create();
+        var out = ops.op("tutorial.nils").outType(outType).create();
 
 		System.out.println("Found an image " + out + " of doubles!");
 	}

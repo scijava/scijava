@@ -53,21 +53,21 @@ public class CooccurrenceMatrix3D {
 		final MatrixOrientation orientation)
 	{
 
-		double[][] matrix = new double[nrGreyLevels][nrGreyLevels];
+        var matrix = new double[nrGreyLevels][nrGreyLevels];
 
-		final Pair<T, T> minMax = minmax.apply(input);
+		final var minMax = minmax.apply(input);
 
-		double localMin = minMax.getA().getRealDouble();
-		double localMax = minMax.getB().getRealDouble();
+        var localMin = minMax.getA().getRealDouble();
+        var localMax = minMax.getB().getRealDouble();
 
-		final int[][][] pixels = new int[(int) input.dimension(2)][(int) input
+		final var pixels = new int[(int) input.dimension(2)][(int) input
 			.dimension(1)][(int) input.dimension(0)];
 
-		final int minimumX = (int) input.min(0);
-		final int minimumY = (int) input.min(1);
-		final int minimumZ = (int) input.min(2);
+		final var minimumX = (int) input.min(0);
+		final var minimumY = (int) input.min(1);
+		final var minimumZ = (int) input.min(2);
 
-		final double diff = localMax - localMin;
+		final var diff = localMax - localMin;
 		LoopBuilder.setImages(input, Intervals.positions(input)).multiThreaded()
 			.forEachPixel((pixel, pos) -> {
 				pixels[pos.getIntPosition(2) - minimumZ][pos.getIntPosition(1) -
@@ -79,10 +79,10 @@ public class CooccurrenceMatrix3D {
 		final double orientationAtY = orientation.getValueAtDim(1) * distance;
 		final double orientationAtZ = orientation.getValueAtDim(2) * distance;
 
-		int nrPairs = 0;
-		for (int z = 0; z < pixels.length; z++) {
-			for (int y = 0; y < pixels[z].length; y++) {
-				for (int x = 0; x < pixels[z][y].length; x++) {
+        var nrPairs = 0;
+		for (var z = 0; z < pixels.length; z++) {
+			for (var y = 0; y < pixels[z].length; y++) {
+				for (var x = 0; x < pixels[z][y].length; x++) {
 
 					// ignore pixels not in mask
 					if (pixels[z][y][x] == Integer.MAX_VALUE) {
@@ -90,9 +90,9 @@ public class CooccurrenceMatrix3D {
 					}
 
 					// get second pixel
-					final int sx = (int) (x + orientationAtX);
-					final int sy = (int) (y + orientationAtY);
-					final int sz = (int) (z + orientationAtZ);
+					final var sx = (int) (x + orientationAtX);
+					final var sy = (int) (y + orientationAtY);
+					final var sz = (int) (z + orientationAtZ);
 
 					// second pixel in interval and mask
 					if (sx >= 0 && sy >= 0 && sz >= 0 && sz < pixels.length &&
@@ -110,9 +110,9 @@ public class CooccurrenceMatrix3D {
 
 		// normalize matrix
 		if (nrPairs > 0) {
-			double divisor = 1.0 / nrPairs;
-			for (int row = 0; row < matrix.length; row++) {
-				for (int col = 0; col < matrix[row].length; col++) {
+            var divisor = 1.0 / nrPairs;
+			for (var row = 0; row < matrix.length; row++) {
+				for (var col = 0; col < matrix[row].length; col++) {
 					matrix[row][col] *= divisor;
 				}
 			}

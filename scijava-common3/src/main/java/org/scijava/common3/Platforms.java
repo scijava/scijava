@@ -64,7 +64,7 @@ public final class Platforms {
 	// -- Helper methods --
 
 	private static String osName() {
-		final String osName = System.getProperty("os.name");
+		final var osName = System.getProperty("os.name");
 		return osName == null ? "" : osName;
 	}
 

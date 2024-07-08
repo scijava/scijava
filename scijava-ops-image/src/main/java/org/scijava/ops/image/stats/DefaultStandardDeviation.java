@@ -62,7 +62,7 @@ public class DefaultStandardDeviation<I extends RealType<I>, O extends RealType<
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final O stdDev) {
-		O variance = stdDev.createVariable();
+        var variance = stdDev.createVariable();
 		varianceComputer.compute(input, variance);
 		sqrtComputer.compute(variance, stdDev);
 	}

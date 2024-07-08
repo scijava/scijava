@@ -39,7 +39,7 @@ public class FunctionsToComputers {
 		@Override
 		public $computerArity.call($arity)$generics.call($arity) apply($functionArity.call($arity)$generics.call($arity) function) {
 			return ($computeArgs.call($arity)) -> {
-				O temp = function.#if($arity==0)create()#{else}apply($applyArgs.call($arity))#end;
+				var temp = function.#if($arity==0)create()#{else}apply($applyArgs.call($arity))#end;
 				copyOp.compute(temp, out);
 			};
 		}

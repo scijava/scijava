@@ -89,7 +89,7 @@ public class LocalMeanThreshold<T extends RealType<T>> extends
 		final RandomAccessibleInterval<BitType> output)
 	{
 		// Use integral images for sufficiently large windows.
-		RectangleShape rShape = inputNeighborhoodShape instanceof RectangleShape
+        var rShape = inputNeighborhoodShape instanceof RectangleShape
 			? (RectangleShape) inputNeighborhoodShape : null;
 		if (rShape != null && rShape.getSpan() > 2 && !rShape.isSkippingCenter()) {
 			// NB: under these conditions, the RectangleShape will produce

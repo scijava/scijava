@@ -75,7 +75,7 @@ public class IntArray extends AbstractPrimitiveArray<int[], Integer> {
 	}
 
 	public boolean removeValue(final int value) {
-		final int index = indexOf(value);
+		final var index = indexOf(value);
 		if (index < 0) return false;
 		delete(index, 1);
 		return true;
@@ -88,7 +88,7 @@ public class IntArray extends AbstractPrimitiveArray<int[], Integer> {
 
 	public int setValue(final int index, final int value) {
 		checkBounds(index);
-		final int oldValue = getValue(index);
+		final var oldValue = getValue(index);
 		array[index] = value;
 		return oldValue;
 	}
@@ -99,14 +99,14 @@ public class IntArray extends AbstractPrimitiveArray<int[], Integer> {
 	}
 
 	public int indexOf(final int value) {
-		for (int i = 0; i < size(); i++) {
+		for (var i = 0; i < size(); i++) {
 			if (array[i] == value) return i;
 		}
 		return -1;
 	}
 
 	public int lastIndexOf(final int value) {
-		for (int i = size() - 1; i >= 0; i--) {
+		for (var i = size() - 1; i >= 0; i--) {
 			if (array[i] == value) return i;
 		}
 		return -1;
@@ -185,7 +185,7 @@ public class IntArray extends AbstractPrimitiveArray<int[], Integer> {
 	// NB: Overridden for performance.
 	@Override
 	public boolean containsAll(final Collection<?> c) {
-		for (final Object o : c) {
+		for (final var o : c) {
 			if (!(o instanceof Integer)) return false;
 			final int value = (Integer) o;
 			if (indexOf(value) < 0) return false;
@@ -200,7 +200,7 @@ public class IntArray extends AbstractPrimitiveArray<int[], Integer> {
 	{
 		if (c.isEmpty()) return false;
 		insert(index, c.size());
-		int i = index;
+        var i = index;
 		for (final int e : c) {
 			setValue(i++, e);
 		}
@@ -210,11 +210,11 @@ public class IntArray extends AbstractPrimitiveArray<int[], Integer> {
 	// NB: Overridden for performance.
 	@Override
 	public boolean removeAll(final Collection<?> c) {
-		boolean changed = false;
-		for (final Object o : c) {
+        var changed = false;
+		for (final var o : c) {
 			if (!(o instanceof Integer)) continue;
 			final int value = (Integer) o;
-			final boolean result = removeValue(value);
+			final var result = removeValue(value);
 			if (result) changed = true;
 		}
 		return changed;

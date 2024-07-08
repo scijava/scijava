@@ -68,9 +68,9 @@ public class DefaultKurtosis<I extends RealType<I>, O extends RealType<O>>
 	{
 		kurtosis.setReal(Double.NaN);
 
-		final O std = kurtosis.createVariable();
+		final var std = kurtosis.createVariable();
 		stdDevComputer.compute(input, std);
-		final O moment4 = kurtosis.createVariable();
+		final var moment4 = kurtosis.createVariable();
 		moment4AboutMeanComputer.compute(input, moment4);
 
 		if (std.getRealDouble() != 0) {

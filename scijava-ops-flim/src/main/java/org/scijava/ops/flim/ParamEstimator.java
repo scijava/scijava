@@ -93,8 +93,8 @@ public class ParamEstimator<I extends RealType<I>> {
 	public void estimateStartEnd() {
 		// don't touch if not required
 		if (params.fitStart < 0) {
-			int max_idx = 0;
-			for (int t = 0; t < sumAcrossTrans.length; t++) {
+            var max_idx = 0;
+			for (var t = 0; t < sumAcrossTrans.length; t++) {
 				max_idx = sumAcrossTrans[t] > sumAcrossTrans[max_idx] ? t : max_idx;
 			}
 			params.fitStart = max_idx;
@@ -120,21 +120,21 @@ public class ParamEstimator<I extends RealType<I>> {
 
 	private Img<FloatType> calcIMap() {
 		// the intensity image has the same dim as say chisqMap
-		long[] dimFit = new long[params.transMap.numDimensions()];
+        var dimFit = new long[params.transMap.numDimensions()];
 		params.transMap.dimensions(dimFit);
 		dimFit[lifetimeAxis] = 1;
 		Img<FloatType> iMap = ArrayImgs.floats(dimFit);
 
 		// calculate the intensity of each interested trans
-		RandomAccess<I> transRA = params.transMap.randomAccess();
-		RandomAccess<FloatType> iMapRA = iMap.randomAccess();
-		int iSmplCnt = 0;
-		for (int i = 0; i < pos.size(); i++) {
-			int[] xytPos = pos.get(i);
+        var transRA = params.transMap.randomAccess();
+        var iMapRA = iMap.randomAccess();
+        var iSmplCnt = 0;
+		for (var i = 0; i < pos.size(); i++) {
+            var xytPos = pos.get(i);
 			transRA.setPosition(xytPos);
 			float intensity = 0;
-			for (int t = 0; t < nData; t++, transRA.fwd(lifetimeAxis)) {
-				float count = transRA.get().getRealFloat();
+			for (var t = 0; t < nData; t++, transRA.fwd(lifetimeAxis)) {
+                var count = transRA.get().getRealFloat();
 				intensity += count;
 				sumAcrossTrans[t] += count;
 			}
@@ -152,17 +152,17 @@ public class ParamEstimator<I extends RealType<I>> {
 		RandomAccessibleInterval<I> trans, RealMask mask, int lifetimeAxis)
 	{
 		final List<int[]> interested = new ArrayList<>();
-		final IntervalView<I> xyPlane = Views.hyperSlice(trans, lifetimeAxis, 0);
-		final Cursor<I> xyCursor = xyPlane.localizingCursor();
+		final var xyPlane = Views.hyperSlice(trans, lifetimeAxis, 0);
+		final var xyCursor = xyPlane.localizingCursor();
 		// work to do
 		while (xyCursor.hasNext()) {
 			xyCursor.fwd();
 			if (mask.test(xyCursor)) {
-				int[] pos = new int[3];
+                var pos = new int[3];
 				xyCursor.localize(pos);
 				// swap in lifetime axis
-				for (int i = 2; i > lifetimeAxis; i--) {
-					int tmp = pos[i];
+				for (var i = 2; i > lifetimeAxis; i--) {
+                    var tmp = pos[i];
 					pos[i] = pos[i - 1];
 					pos[i - 1] = tmp;
 				}

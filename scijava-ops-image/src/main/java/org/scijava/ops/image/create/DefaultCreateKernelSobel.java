@@ -57,22 +57,22 @@ public final class DefaultCreateKernelSobel {
 		RandomAccessibleInterval<C> createKernel(C type,
 			BiFunction<Dimensions, T, Img<T>> createFunc)
 	{
-		long[] dim = new long[4];
+        var dim = new long[4];
 
 		dim[0] = 3;
 		dim[1] = 1;
 
-		for (int k = 2; k < dim.length; k++) {
+		for (var k = 2; k < dim.length; k++) {
 			dim[k] = 1;
 		}
 
 		dim[dim.length - 1] = 2;
 
-		RandomAccessibleInterval<C> output =
+        var output =
 			(RandomAccessibleInterval<C>) createFunc.apply(new FinalInterval(dim),
 				(T) type);
-		final Cursor<C> cursor = Views.iterable(output).cursor();
-		int i = 0;
+		final var cursor = Views.iterable(output).cursor();
+        var i = 0;
 		while (cursor.hasNext()) {
 			cursor.fwd();
 			cursor.get().setReal(values[i]);

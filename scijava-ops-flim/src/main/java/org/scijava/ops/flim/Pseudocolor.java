@@ -103,17 +103,17 @@ public class Pseudocolor implements
 			lut = tri2();
 		}
 		List<RandomAccessibleInterval<FloatType>> hRaws = new LinkedList<>();
-		int nComp = (int) (rslt.paramMap.dimension(rslt.ltAxis) - 1) / 2;
-		for (int c = 0; c < nComp; c++) {
+        var nComp = (int) (rslt.paramMap.dimension(rslt.ltAxis) - 1) / 2;
+		for (var c = 0; c < nComp; c++) {
 			hRaws.add(Views.hyperSlice(rslt.paramMap, rslt.ltAxis, c * 2 + 2));
 		}
 		hRaws.add(tauMean.apply(rslt));
-		RandomAccessibleInterval<FloatType> hRaw = stacker.apply(hRaws);
+        var hRaw = stacker.apply(hRaws);
 		RandomAccessibleInterval<FloatType> bRaw = rslt.intensityMap;
 		bRaw = rslt.ltAxis <= 0 ? permuter.apply(bRaw, 0, 1) : bRaw;
 		bRaw = rslt.ltAxis <= 1 ? permuter.apply(bRaw, 1, 2) : bRaw;
 		// min, max = 20%, 80%
-		IterableInterval<FloatType> hRawII = Views.iterable(hRaw);
+        var hRawII = Views.iterable(hRaw);
 		if (cMin == null) {
 			cMin = percentiler.apply(hRawII, 5.0f).getRealFloat();
 			System.out.println("color_min automatically set to " + cMin);
@@ -123,7 +123,7 @@ public class Pseudocolor implements
 			System.out.println("color_max automatically set to " + cMax);
 		}
 		// min, max = 0%, 99.5%
-		IterableInterval<FloatType> bRawII = Views.iterable(rslt.intensityMap);
+        var bRawII = Views.iterable(rslt.intensityMap);
 		if (bMin == null) {
 			bMin = 0f;
 			System.out.println("brightness_min automatically set to 0.0");
@@ -134,23 +134,23 @@ public class Pseudocolor implements
 		}
 
 		// cMin, lut);
-		RealLUTConverter<FloatType> hConverter = new RealLUTConverter<>(cMin, cMax,
+        var hConverter = new RealLUTConverter<FloatType>(cMin, cMax,
 			lut);
-		RandomAccessibleInterval<ARGBType> hImg = Converters.convert(hRaw,
+        var hImg = Converters.convert(hRaw,
 			hConverter, new ARGBType());
 
-		Img<ARGBType> colored = imgCreator.apply(hImg, new ARGBType());
-		Cursor<ARGBType> csr = colored.localizingCursor();
-		RandomAccess<FloatType> bRA = bRaw.randomAccess();
-		RandomAccess<ARGBType> hRA = hImg.randomAccess();
+        var colored = imgCreator.apply(hImg, new ARGBType());
+        var csr = colored.localizingCursor();
+        var bRA = bRaw.randomAccess();
+        var hRA = hImg.randomAccess();
 		while (csr.hasNext()) {
 			csr.fwd();
 			bRA.setPosition(csr);
 			bRA.setPosition(0, 2);
 			hRA.setPosition(csr);
-			float b = Math.min(Math.max(bRA.get().get() - bMin, 0) / (bMax - bMin),
+            var b = Math.min(Math.max(bRA.get().get() - bMin, 0) / (bMax - bMin),
 				1);
-			ARGBType h = hRA.get();
+            var h = hRA.get();
 			h.mul(b);
 
 			csr.get().set(h);
@@ -169,7 +169,7 @@ public class Pseudocolor implements
 	 */
 	public static ColorTable8 tri2() {
 		final byte[] r = new byte[256], g = new byte[256], b = new byte[256];
-		final int[] c = new int[] { 0, 0, 0, 255, 3, 0, 255, 6, 0, 255, 9, 0, 255,
+		final var c = new int[] { 0, 0, 0, 255, 3, 0, 255, 6, 0, 255, 9, 0, 255,
 			12, 0, 255, 15, 0, 255, 18, 0, 255, 21, 0, 255, 24, 0, 255, 27, 0, 255,
 			30, 0, 255, 33, 0, 255, 36, 0, 255, 39, 0, 255, 42, 0, 255, 45, 0, 255,
 			48, 0, 255, 51, 0, 255, 54, 0, 255, 57, 0, 255, 60, 0, 255, 63, 0, 255,
@@ -215,8 +215,8 @@ public class Pseudocolor implements
 			255, 0, 48, 255, 0, 45, 255, 0, 42, 255, 0, 39, 255, 0, 36, 255, 0, 33,
 			255, 0, 30, 255, 0, 27, 255, 0, 24, 255, 0, 21, 255, 0, 18, 255, 0, 15,
 			255, 0, 12, 255, 0, 9, 255, 0, 6, 255, 0, 3, 255, 0, 0, 255, };
-		for (int i = 0; i < 256; i++) {
-			int idx = i * 3;
+		for (var i = 0; i < 256; i++) {
+            var idx = i * 3;
 			r[i] = (byte) c[idx];
 			g[i] = (byte) c[idx + 1];
 			b[i] = (byte) c[idx + 2];
@@ -234,8 +234,8 @@ public class Pseudocolor implements
 	 */
 	public static ColorTable8 spci() {
 		final byte[] r = new byte[256], g = new byte[256], b = new byte[256];
-		final int[] rgb = new int[3];
-		for (int i = 0; i < 256; i++) {
+		final var rgb = new int[3];
+		for (var i = 0; i < 256; i++) {
 			hsvToRgb((i / 255d * 200d + 20) / 360d, 1d, 1d, rgb);
 			r[i] = (byte) rgb[0];
 			g[i] = (byte) rgb[1];
@@ -267,11 +267,11 @@ public class Pseudocolor implements
 	{
 		double r01 = 0, g01 = 0, b01 = 0;
 
-		final int i = (int) Math.floor(h * 6);
-		final double f = h * 6 - i;
-		final double p = v * (1 - s);
-		final double q = v * (1 - f * s);
-		final double t = v * (1 - (1 - f) * s);
+		final var i = (int) Math.floor(h * 6);
+		final var f = h * 6 - i;
+		final var p = v * (1 - s);
+		final var q = v * (1 - f * s);
+		final var t = v * (1 - (1 - f) * s);
 
 		switch (i % 6) {
 			case 0:

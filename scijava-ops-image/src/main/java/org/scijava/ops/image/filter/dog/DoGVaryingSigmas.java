@@ -83,7 +83,7 @@ public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>>
 		if (fac == null) fac = new OutOfBoundsMirrorFactory<>(
 			OutOfBoundsMirrorFactory.Boundary.SINGLE);
 
-		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> oobf = fac;
+		final var oobf = fac;
 		Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> gauss1 =
 			(in, out) -> defaultGaussRA.compute(in, sigmas1, oobf, out);
 		Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> gauss2 =
@@ -120,9 +120,9 @@ class DoGSingleSigma<T extends NumericType<T> & NativeType<T>> implements
 		@Nullable OutOfBoundsFactory<T, RandomAccessibleInterval<T>> oobf,
 		RandomAccessibleInterval<T> out)
 	{
-		double[] sigmas1 = new double[input.numDimensions()];
-		double[] sigmas2 = new double[input.numDimensions()];
-		for (int i = 0; i < input.numDimensions(); i++) {
+        var sigmas1 = new double[input.numDimensions()];
+        var sigmas2 = new double[input.numDimensions()];
+		for (var i = 0; i < input.numDimensions(); i++) {
 			sigmas1[i] = sigma1;
 			sigmas2[i] = sigma2;
 		}

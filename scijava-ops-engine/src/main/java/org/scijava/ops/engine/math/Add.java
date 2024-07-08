@@ -59,9 +59,9 @@ public final class Add<M extends Number, I extends Iterable<M>> implements
 																										// resultArray"
 	public final BiFunction<I, I, Iterable<Double>> MathPointwiseAddIterablesFunction =
 		(i1, i2) -> {
-			Stream<? extends Number> s1 = Streams.stream(
+            var s1 = Streams.stream(
 				(Iterable<? extends Number>) i1);
-			Stream<? extends Number> s2 = Streams.stream(
+            var s2 = Streams.stream(
 				(Iterable<? extends Number>) i2);
 			return () -> Streams.zip(s1, s2, (e1, e2) -> e1.doubleValue() + e2
 				.doubleValue()).iterator();
@@ -76,7 +76,7 @@ public final class Add<M extends Number, I extends Iterable<M>> implements
 	@OpField(names = NAMES) // vars = "array1, array2, resultArray"
 	public static final Computers.Arity2<double[], double[], double[]> MathPointwiseAddDoubleArraysComputer =
 		(in1, in2, out) -> {
-			for (int i = 0; i < out.length; i++) {
+			for (var i = 0; i < out.length; i++) {
 				out[i] = in1[i] + in2[i];
 			}
 		};
@@ -86,7 +86,7 @@ public final class Add<M extends Number, I extends Iterable<M>> implements
 	@OpField(names = NAMES) // vars = "arrayIO, array1"
 	public static final Inplaces.Arity2_1<double[], double[]> MathPointwiseAddDoubleArraysInplace1 =
 		(io, in2) -> {
-			for (int i = 0; i < io.length; i++) {
+			for (var i = 0; i < io.length; i++) {
 				io[i] += in2[i];
 			}
 		};

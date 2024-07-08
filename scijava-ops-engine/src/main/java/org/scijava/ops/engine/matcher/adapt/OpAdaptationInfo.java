@@ -77,10 +77,10 @@ public class OpAdaptationInfo implements OpInfo {
 
 		// NOTE: since the source Op has already been shown to be valid, there is
 		// not much for us to do here.
-		List<FunctionalMethodType> fmts = FunctionalParameters
+        var fmts = FunctionalParameters
 			.findFunctionalMethodTypes(type);
 
-		RetypingRequest r = new RetypingRequest(srcInfo.struct(), fmts);
+        var r = new RetypingRequest(srcInfo.struct(), fmts);
 		struct = Structs.from(r, type, new OpRetypingMemberParser());
 		Infos.validate(this);
 	}
@@ -127,12 +127,12 @@ public class OpAdaptationInfo implements OpInfo {
 	@Override
 	public StructInstance<?> createOpInstance(List<?> dependencies) {
 		@SuppressWarnings("unchecked")
-		OpInstance<Function<Object, Object>> adaptorInstance =
+        var adaptorInstance =
 			(OpInstance<Function<Object, Object>>) adaptorTree.newInstance(
 				new Nil<Function<Object, Object>>()
 				{}.type());
-		final Object op = srcInfo.createOpInstance(dependencies).object();
-		final Object adaptedOp = adaptorInstance.op().apply(op);
+		final var op = srcInfo.createOpInstance(dependencies).object();
+		final var adaptedOp = adaptorInstance.op().apply(op);
 		return struct().createInstance(adaptedOp);
 	}
 
@@ -178,14 +178,14 @@ public class OpAdaptationInfo implements OpInfo {
 	@Override
 	public String toString() {
 		// Get the original description
-		String description = Infos.describe(this);
+        var description = Infos.describe(this);
 		// Make the name friendlier
-		StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
 		sb.append(srcInfo.implementationName());
 		sb.append("\n\tAdaptor: ");
 		sb.append(adaptorTree.toString().replace("\n", "\n\t"));
 
-		int nameBreak = description.indexOf('\n');
+        var nameBreak = description.indexOf('\n');
 		sb.append(description.substring(nameBreak));
 		return sb.toString();
 	}

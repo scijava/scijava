@@ -70,7 +70,7 @@ public class LossReporterWrapper<I, O> //
 				preprocess(from, to);
 
 				// Call the op
-				Double output = instance.op().apply(from, to);
+                var output = instance.op().apply(from, to);
 
 				postprocess(output);
 

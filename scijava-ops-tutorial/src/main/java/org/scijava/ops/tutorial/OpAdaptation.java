@@ -69,12 +69,12 @@ public class OpAdaptation {
 
 	public static void main(String... args) {
 		// Create the OpEnvironment
-		OpEnvironment ops = OpEnvironment.build();
+        var ops = OpEnvironment.build();
 		// Call the Op on some inputs
-		Double[] firstArray = new Double[] { 1., 2., 3. };
-		Double[] secondArray = new Double[] { 1., 2., 3. };
+        var firstArray = new Double[] { 1., 2., 3. };
+        var secondArray = new Double[] { 1., 2., 3. };
 		// Ask for an Op of name "tutorial.adapt"
-		Double[] result = ops.op("tutorial.adapt") //
+        var result = ops.op("tutorial.adapt") //
 			// With our two ARRAY inputs
 			.input(firstArray, secondArray) //
 			// And get a Double[] out

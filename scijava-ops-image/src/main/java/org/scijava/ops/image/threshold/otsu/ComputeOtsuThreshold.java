@@ -55,7 +55,7 @@ public class ComputeOtsuThreshold<T extends RealType<T>> extends
 	 */
 	@Override
 	public long computeBin(final Histogram1d<T> hist) {
-		final long[] histogram = hist.toLongArray();
+		final var histogram = hist.toLongArray();
 		return computeBin(histogram);
 	}
 
@@ -66,7 +66,7 @@ public class ComputeOtsuThreshold<T extends RealType<T>> extends
 	 */
 	public static long computeBin(final long[] histogram) {
 		int k, kStar; // k = the current threshold; kStar = optimal threshold
-		final int L = histogram.length; // The total intensity of the image
+		final var L = histogram.length; // The total intensity of the image
 		long N1, N; // N1 = # points with intensity <=k; N = total number of
 		// points
 		long Sk; // The total intensity for all histogram points <=k

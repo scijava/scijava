@@ -56,7 +56,7 @@ public class ComputeTriangleThreshold<T extends RealType<T>> extends
 	 */
 	@Override
 	public long computeBin(final Histogram1d<T> hist) {
-		final long[] histogram = hist.toLongArray();
+		final var histogram = hist.toLongArray();
 		return computeBin(histogram);
 	}
 
@@ -71,7 +71,7 @@ public class ComputeTriangleThreshold<T extends RealType<T>> extends
 		// find min and max
 		int min = 0, max = 0, min2 = 0;
 		long dmax = 0;
-		for (int i = 0; i < histogram.length; i++) {
+		for (var i = 0; i < histogram.length; i++) {
 			if (histogram[i] > 0) {
 				min = i;
 				break;
@@ -86,7 +86,7 @@ public class ComputeTriangleThreshold<T extends RealType<T>> extends
 		// to
 		// find out to which side of the max point the data is furthest, and use
 		// that as the other extreme.
-		for (int i = histogram.length - 1; i > 0; i--) {
+		for (var i = histogram.length - 1; i > 0; i--) {
 			if (histogram[i] > 0) {
 				min2 = i;
 				break;
@@ -95,7 +95,7 @@ public class ComputeTriangleThreshold<T extends RealType<T>> extends
 		// line to the (p==0) point, not to histogram[min]
 		if (min2 < histogram.length - 1) min2++;
 
-		for (int i = 0; i < histogram.length; i++) {
+		for (var i = 0; i < histogram.length; i++) {
 			if (histogram[i] > dmax) {
 				max = i;
 				dmax = histogram[i];
@@ -103,16 +103,16 @@ public class ComputeTriangleThreshold<T extends RealType<T>> extends
 		}
 		// find which is the furthest side
 		// IJ.log(""+min+" "+max+" "+min2);
-		boolean inverted = false;
+        var inverted = false;
 		if ((max - min) < (min2 - max)) {
 			// reverse the histogram
 			// IJ.log("Reversing histogram.");
 			inverted = true;
-			int left = 0; // index of leftmost element
-			int right = histogram.length - 1; // index of rightmost element
+            var left = 0; // index of leftmost element
+            var right = histogram.length - 1; // index of rightmost element
 			while (left < right) {
 				// exchange the left and right elements
-				final long temp = histogram[left];
+				final var temp = histogram[left];
 				histogram[left] = histogram[right];
 				histogram[right] = temp;
 				// move the bounds toward the center
@@ -140,10 +140,10 @@ public class ComputeTriangleThreshold<T extends RealType<T>> extends
 		d = nx * min + ny * histogram[min];
 
 		// find split point
-		int split = min;
+        var split = min;
 		double splitDistance = 0;
-		for (int i = min + 1; i <= max; i++) {
-			final double newDistance = nx * i + ny * histogram[i] - d;
+		for (var i = min + 1; i <= max; i++) {
+			final var newDistance = nx * i + ny * histogram[i] - d;
 			if (newDistance > splitDistance) {
 				split = i;
 				splitDistance = newDistance;
@@ -155,10 +155,10 @@ public class ComputeTriangleThreshold<T extends RealType<T>> extends
 			// The histogram might be used for something else, so let's reverse
 			// it
 			// back
-			int left = 0;
-			int right = histogram.length - 1;
+            var left = 0;
+            var right = histogram.length - 1;
 			while (left < right) {
-				final long temp = histogram[left];
+				final var temp = histogram[left];
 				histogram[left] = histogram[right];
 				histogram[right] = temp;
 				left++;

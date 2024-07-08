@@ -69,16 +69,16 @@ public class HessianRAI<T extends RealType<T>> implements
 		RandomAccessibleInterval<T> input)
 	{
 		List<RandomAccessibleInterval<T>> derivatives = new ArrayList<>();
-		for (int i = 0; i < input.numDimensions(); i++) {
-			RandomAccessibleInterval<T> derivative = createRAI.apply(input);
+		for (var i = 0; i < input.numDimensions(); i++) {
+            var derivative = createRAI.apply(input);
 			derivativeComputer.compute(input, i, derivative);
-			for (int j = 0; j < input.numDimensions(); j++) {
-				RandomAccessibleInterval<T> out = createRAI.apply(input);
+			for (var j = 0; j < input.numDimensions(); j++) {
+                var out = createRAI.apply(input);
 				derivativeComputer.compute(derivative, j, out);
 				derivatives.add(out);
 			}
 		}
-		RandomAccessibleInterval<T> stackedDerivatives = Views.stack(derivatives);
+        var stackedDerivatives = Views.stack(derivatives);
 		return Views.collapseReal(stackedDerivatives);
 	}
 

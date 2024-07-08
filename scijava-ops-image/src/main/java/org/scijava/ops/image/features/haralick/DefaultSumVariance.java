@@ -72,20 +72,20 @@ public class DefaultSumVariance<T extends RealType<T>> extends
 		final Integer numGreyLevels, final Integer distance,
 		final MatrixOrientation orientation)
 	{
-		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels,
+		final var matrix = getCooccurrenceMatrix(input, numGreyLevels,
 			distance, orientation);
 
-		final double[] pxplusy = coocPXPlusYFunc.apply(matrix);
-		final int nrGrayLevels = matrix.length;
-		final double sumEntropy = sumEntropyFunc.apply(input, numGreyLevels,
+		final var pxplusy = coocPXPlusYFunc.apply(matrix);
+		final var nrGrayLevels = matrix.length;
+		final var sumEntropy = sumEntropyFunc.apply(input, numGreyLevels,
 			distance, orientation).getRealDouble();
 
 		double res = 0;
-		for (int i = 2; i <= 2 * nrGrayLevels; i++) {
+		for (var i = 2; i <= 2 * nrGrayLevels; i++) {
 			res += (i - sumEntropy) * (i - sumEntropy) * pxplusy[i];
 		}
 
-		DoubleType output = new DoubleType();
+        var output = new DoubleType();
 		output.set(res);
 		return output;
 	}

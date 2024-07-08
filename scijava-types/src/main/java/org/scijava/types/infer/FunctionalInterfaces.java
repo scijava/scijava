@@ -60,15 +60,15 @@ public final class FunctionalInterfaces {
 	private static Class<?> findFrom(Class<?> type) {
 		if (type == null) return null;
 		if (type.getAnnotation(FunctionalInterface.class) != null) return type;
-		for (Class<?> iface : type.getInterfaces()) {
-			final Class<?> result = findFrom(iface);
+		for (var iface : type.getInterfaces()) {
+			final var result = findFrom(iface);
 			if (result != null) return result;
 		}
 		return findFrom(type.getSuperclass());
 	}
 
 	public static Method functionalMethodOf(Type type) {
-		Class<?> functionalInterface = findFrom(type);
+        var functionalInterface = findFrom(type);
 		if (functionalInterface != null) {
 			return functionalMethodOf(functionalInterface);
 		}
@@ -78,7 +78,7 @@ public final class FunctionalInterfaces {
 	}
 
 	private static Method functionalMethodOf(Class<?> functionalInterface) {
-		Method[] typeMethods = Arrays.stream(functionalInterface.getMethods())
+        var typeMethods = Arrays.stream(functionalInterface.getMethods())
 			.filter(method -> Modifier.isAbstract(method.getModifiers())).toArray(
 				Method[]::new);
 		if (typeMethods.length != 1) {

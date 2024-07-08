@@ -60,7 +60,7 @@ public class DefaultSphericity implements Computers.Arity1<Mesh, DoubleType> {
 	 */
 	@Override
 	public void compute(final Mesh input, final DoubleType sphericity) {
-		final double sphereArea = Math.pow(Math.PI, 1 / 3d) * Math.pow(6 *
+		final var sphereArea = Math.pow(Math.PI, 1 / 3d) * Math.pow(6 *
 			volumeFunc.apply(input).get(), 2 / 3d);
 		sphericity.set(sphereArea / areaFunc.apply(input).get());
 	}

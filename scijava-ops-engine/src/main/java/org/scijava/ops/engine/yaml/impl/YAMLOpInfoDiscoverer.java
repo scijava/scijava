@@ -91,7 +91,7 @@ public class YAMLOpInfoDiscoverer implements Discoverer {
 	 */
 	private List<URL> getOpYAML() {
 		try {
-			Enumeration<URL> e = Classes.classLoader().getResources("ops.yaml");
+            var e = Classes.classLoader().getResources("ops.yaml");
 			return Collections.list(e);
 		}
 		catch (IOException e) {
@@ -109,12 +109,12 @@ public class YAMLOpInfoDiscoverer implements Discoverer {
 			throw new IOException("Failed to parse Op YAML: " + url.getPath(), exc);
 		}
 
-		for (Map<String, Object> op : yamlData) {
-			Map<String, Object> opData = subMap(op, "op");
-			String identifier = value(opData, "source");
+		for (var op : yamlData) {
+            var opData = subMap(op, "op");
+            var identifier = value(opData, "source");
 			try {
-				URI uri = new URI(identifier);
-				Optional<YAMLOpInfoCreator> c = creators.stream() //
+                var uri = new URI(identifier);
+                var c = creators.stream() //
 					.filter(f -> f.canCreateFrom(uri)) //
 					.findFirst();
 				if (c.isPresent()) infos.add(c.get().create(uri, opData));

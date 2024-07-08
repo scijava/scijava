@@ -115,12 +115,12 @@ public class IntegralCursor<T> extends AbstractEuclideanSpace implements
 		index++;
 
 		// Update Gray code
-		final int mask = Integer.lowestOneBit(index);
+		final var mask = Integer.lowestOneBit(index);
 		code ^= mask;
 
 		// Move the cursor in the dimension of the updated bit
-		final int updatedDimension = Integer.numberOfTrailingZeros(index);
-		final int bitInDimension = (code & mask) >> updatedDimension;
+		final var updatedDimension = Integer.numberOfTrailingZeros(index);
+		final var bitInDimension = (code & mask) >> updatedDimension;
 		if (bitInDimension == 1) {
 			source.setPosition(neighborhood.max(updatedDimension) - 1,
 				updatedDimension);

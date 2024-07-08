@@ -75,24 +75,24 @@ public class DefaultVariance<I extends RealType<I>, O extends RealType<O>>
 		final O variance)
 	{
 
-		final DoubleType mean = new DoubleType();
+		final var mean = new DoubleType();
 		meanOp.compute(input, mean);
-		final LongType size = new LongType(0);
+		final var size = new LongType(0);
 		sizeOp.compute(input, size);
 
-		List<DoubleType> chunkSums = LoopBuilder.setImages(input).multiThreaded()
+        var chunkSums = LoopBuilder.setImages(input).multiThreaded()
 			.forEachChunk(chunk -> {
-				DoubleType chunkSum = new DoubleType(0);
-				DoubleType temp = new DoubleType();
+                var chunkSum = new DoubleType(0);
+                var temp = new DoubleType();
 				chunk.forEachPixel(pixel -> {
-					double x = pixel.getRealDouble();
+                    var x = pixel.getRealDouble();
 					temp.set((x - mean.getRealDouble()) * (x - mean.getRealDouble()));
 					chunkSum.add(temp);
 				});
 				return chunkSum;
 			});
 
-		double sum = chunkSums.parallelStream().mapToDouble(DoubleType::get).sum();
+        var sum = chunkSums.parallelStream().mapToDouble(DoubleType::get).sum();
 
 		variance.setReal(sum / (size.get() - 1));
 	}

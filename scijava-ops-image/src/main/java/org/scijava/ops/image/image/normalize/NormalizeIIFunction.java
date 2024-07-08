@@ -75,7 +75,7 @@ public class NormalizeIIFunction<I extends RealType<I>, O extends RealType<O>>
 		final RandomAccessibleInterval<I> input, final I sourceMin,
 		final I sourceMax, final O targetMin, final O targetMax)
 	{
-		RandomAccessibleInterval<O> output = imgCreator.apply(input, targetMin);
+        var output = imgCreator.apply(input, targetMin);
 		normalizer.compute(input, sourceMin, sourceMax, targetMin, targetMax,
 			output);
 		return output;

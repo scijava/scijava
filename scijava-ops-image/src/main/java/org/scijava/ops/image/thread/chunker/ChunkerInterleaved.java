@@ -57,15 +57,15 @@ public class ChunkerInterleaved implements Inplaces.Arity2_1<Chunk, Long> {
 	@Override
 	public void mutate(final Chunk chunk, final Long numberOfElements) {
 
-		final int numThreads = Runtime.getRuntime().availableProcessors();
-		final int numStepsFloor = (int) (numberOfElements / numThreads);
-		final int remainder = numberOfElements.intValue() - (numStepsFloor *
+		final var numThreads = Runtime.getRuntime().availableProcessors();
+		final var numStepsFloor = (int) (numberOfElements / numThreads);
+		final var remainder = numberOfElements.intValue() - (numStepsFloor *
 			numThreads);
 
 		final List<Runnable> list = new ArrayList<>(numThreads);
 
-		for (int i = 0; i < numThreads; i++) {
-			final int j = i;
+		for (var i = 0; i < numThreads; i++) {
+			final var j = i;
 
 			list.add(() -> {
 

@@ -63,8 +63,8 @@ public class InfoMatchingOpRequest implements OpRequest {
 
 	public InfoMatchingOpRequest(OpInfo info, Nil<?> specialType) {
 		this.name = info.names().get(0);
-		Type from = specialType.type();
-		Type to = info.opType();
+        var from = specialType.type();
+        var to = info.opType();
 		this.type = Types.superTypeOf(to, Types.raw(from));
 		if (this.type instanceof ParameterizedType) {
 			if (!GenericAssignability.checkGenericAssignability(from,
@@ -111,7 +111,7 @@ public class InfoMatchingOpRequest implements OpRequest {
 
 	@Override
 	public String label() {
-		final StringBuilder sb = new StringBuilder();
+		final var sb = new StringBuilder();
 		OpRequest.append(sb, name);
 		if (type != null) {
 			OpRequest.append(sb, Types.name(type));

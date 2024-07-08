@@ -70,7 +70,7 @@ public class FFTMethodsOpC<T extends RealType<T>, C extends ComplexType<C>>
 		FFTMethods.realToComplex(input, output, 0, false);
 
 		// loop and perform complex to complex FFT in the remaining dimensions
-		for (int d = 1; d < input.numDimensions(); d++)
+		for (var d = 1; d < input.numDimensions(); d++)
 			FFTMethods.complexToComplex(output, d, true, false);
 	}
 

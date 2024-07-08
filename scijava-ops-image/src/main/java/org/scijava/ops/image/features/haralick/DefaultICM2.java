@@ -69,15 +69,15 @@ public class DefaultICM2<T extends RealType<T>> extends
 		final Integer numGreyLevels, final Integer distance,
 		final MatrixOrientation orientation)
 	{
-		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels,
+		final var matrix = getCooccurrenceMatrix(input, numGreyLevels,
 			distance, orientation);
 
 		double res = 0;
-		final double[] coochxy = coocHXYFunc.apply(matrix);
+		final var coochxy = coocHXYFunc.apply(matrix);
 		res = Math.sqrt(1 - Math.exp(-2 * (coochxy[3] - entropy.apply(input,
 			numGreyLevels, distance, orientation).get())));
 
-		DoubleType output = new DoubleType();
+        var output = new DoubleType();
 		// if NaN
 		if (Double.isNaN(res)) {
 			output.set(0);

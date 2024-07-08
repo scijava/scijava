@@ -65,13 +65,13 @@ public class DefaultSkewness<I extends RealType<I>, O extends RealType<O>>
 	public void compute(final RandomAccessibleInterval<I> input,
 		final O skewness)
 	{
-		final O moment3 = skewness.createVariable();
+		final var moment3 = skewness.createVariable();
 		moment3AboutMeanComputer.compute(input, moment3);
-		final O stdDev = skewness.createVariable();
+		final var stdDev = skewness.createVariable();
 		stdDevComputer.compute(input, stdDev);
 
 		skewness.setReal(Double.NaN);
-		double std = stdDev.getRealDouble();
+        var std = stdDev.getRealDouble();
 		if (std != 0) {
 			skewness.setReal(moment3.getRealDouble() / (std * std * std));
 		}

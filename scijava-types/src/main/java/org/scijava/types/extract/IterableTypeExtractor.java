@@ -61,14 +61,14 @@ public class IterableTypeExtractor extends SubTypeExtractor<Iterable<?>> {
 	@Override
 	protected Type[] getTypeParameters(TypeReifier r, Iterable<?> object) {
 		// Obtain the element type using the TypeService.
-		int typesToCheck = 100;
+        var typesToCheck = 100;
 		// can we make this more efficient (possibly a parallel stream)?
-		Type[] types = StreamSupport.stream(object.spliterator(), false) //
+        var types = StreamSupport.stream(object.spliterator(), false) //
 			.limit(typesToCheck) //
 			.map(r::reify) //
 			.toArray(Type[]::new);
 
-		Type actual = Types.commonSuperTypeOf(types);
+        var actual = Types.commonSuperTypeOf(types);
 		if (actual == null) actual = new Any();
 		return new Type[] { actual };
 	}

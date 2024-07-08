@@ -44,7 +44,7 @@ public class OpBuilder {
 	public static void main(String... args) {
 		// All Ops calls start from an OpEnvironment. This environment determines
 		// the available Ops.
-		OpEnvironment ops = OpEnvironment.build();
+        var ops = OpEnvironment.build();
 
 		/*
 		To run an Op we have to match it. Ops themselves have a name, some number of inputs, and potentially an output
@@ -134,7 +134,7 @@ public class OpBuilder {
 		Choosing to get the Op instead will save time immediately, and will skip
 		matching if you want to call the same Op again later.
 		 */
-		BiFunction<Double, Double, Double> function = // Now, we get a function
+        var function = // Now, we get a function
 			ops.op("math.add") // again, provide the name
 				.input(1.0, 2.0) // again, provide the inputs
 				.outType(Double.class) // again, provide the output TYPE
@@ -150,7 +150,7 @@ public class OpBuilder {
 		Op by using inType() instead of input().
 		 */
 
-		BiFunction<Double, Double, Double> function2 = // Now, we get a function
+        var function2 = // Now, we get a function
 			ops.op("math.add") // again, provide the name
 				.inType(Double.class, Double.class) // we want to give two Doubles
 				.outType(Double.class) // again, provide the output TYPE

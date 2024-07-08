@@ -109,9 +109,9 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 		converterToFloat = (arg0, arg1) -> arg1.setReal(arg0.getRealFloat());
 
 		converterGetMax = (input, output) -> {
-			int idx = 0;
+            var idx = 0;
 			float max = 0;
-			for (int i = 0; i < in.dimension(2); i++) {
+			for (var i = 0; i < in.dimension(2); i++) {
 				if (Math.abs(input.get(i).getRealFloat()) > max) {
 					max = Math.abs(input.get(i).getRealFloat());
 					idx = i;
@@ -123,13 +123,13 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 		if (in.numDimensions() > 3 || in.numDimensions() < 2)
 			throw new IllegalArgumentException(
 				"Input image is of an unsupported number of dimensions");
-		final RandomAccessible<FloatType> convertedIn = Converters.convert(Views
+		final var convertedIn = Converters.convert(Views
 			.extendMirrorDouble(in), converterToFloat, new FloatType());
 
 		// compute partial derivative for each dimension
-		RandomAccessibleInterval<FloatType> derivative0 = createImgOp.apply(
+        var derivative0 = createImgOp.apply(
 			imgOpInterval, new FloatType());
-		RandomAccessibleInterval<FloatType> derivative1 = createImgOp.apply(
+        var derivative1 = createImgOp.apply(
 			imgOpInterval, new FloatType());
 
 		// case of grayscale image
@@ -141,10 +141,10 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 		else {
 			List<RandomAccessibleInterval<FloatType>> listDerivs0 = new ArrayList<>();
 			List<RandomAccessibleInterval<FloatType>> listDerivs1 = new ArrayList<>();
-			for (int i = 0; i < in.dimension(2); i++) {
-				final RandomAccessibleInterval<FloatType> deriv0 = createImgOp.apply(
+			for (var i = 0; i < in.dimension(2); i++) {
+				final var deriv0 = createImgOp.apply(
 					imgOpInterval, new FloatType());
-				final RandomAccessibleInterval<FloatType> deriv1 = createImgOp.apply(
+				final var deriv1 = createImgOp.apply(
 					imgOpInterval, new FloatType());
 				PartialDerivative.gradientCentralDifference(Views.interval(convertedIn,
 					new long[] { 0, 0, i }, new long[] { in.max(0), in.max(1), i }),
@@ -160,26 +160,26 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 			derivative1 = Converters.convert(Views.collapse(Views.stack(listDerivs1)),
 				converterGetMax, new FloatType());
 		}
-		final RandomAccessibleInterval<FloatType> finalderivative0 = derivative0;
-		final RandomAccessibleInterval<FloatType> finalderivative1 = derivative1;
+		final var finalderivative0 = derivative0;
+		final var finalderivative1 = derivative1;
 
 		// compute angles and magnitudes
-		final RandomAccessibleInterval<FloatType> angles = createImgOp.apply(
+		final var angles = createImgOp.apply(
 			imgOpInterval, new FloatType());
-		final RandomAccessibleInterval<FloatType> magnitudes = createImgOp.apply(
+		final var magnitudes = createImgOp.apply(
 			imgOpInterval, new FloatType());
 
-		final CursorBasedChunk chunkable = new CursorBasedChunk() {
+		final var chunkable = new CursorBasedChunk() {
 
 			@Override
 			public void execute(long startIndex, long stepSize, long numSteps) {
-				final Cursor<FloatType> cursorAngles = Views.flatIterable(angles)
+				final var cursorAngles = Views.flatIterable(angles)
 					.localizingCursor();
-				final Cursor<FloatType> cursorMagnitudes = Views.flatIterable(
+				final var cursorMagnitudes = Views.flatIterable(
 					magnitudes).localizingCursor();
-				final Cursor<FloatType> cursorDerivative0 = Views.flatIterable(
+				final var cursorDerivative0 = Views.flatIterable(
 					finalderivative0).localizingCursor();
-				final Cursor<FloatType> cursorDerivative1 = Views.flatIterable(
+				final var cursorDerivative1 = Views.flatIterable(
 					finalderivative1).localizingCursor();
 
 				setToStart(cursorAngles, startIndex);
@@ -188,8 +188,8 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 				setToStart(cursorDerivative1, startIndex);
 
 				for (long i = 0; i < numSteps; i++) {
-					final float x = cursorDerivative0.get().getRealFloat();
-					final float y = cursorDerivative1.get().getRealFloat();
+					final var x = cursorDerivative0.get().getRealFloat();
+					final var y = cursorDerivative1.get().getRealFloat();
 					cursorAngles.get().setReal(getAngle(x, y));
 					cursorMagnitudes.get().setReal(getMagnitude(x, y));
 
@@ -208,11 +208,11 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 
 		// compute descriptor (default 3x3, i.e. 9 channels: one channel for
 		// each bin)
-		final RectangleShape shape = new RectangleShape(spanOfNeighborhood, false);
-		final NeighborhoodsAccessible<FloatType> neighborHood = shape
+		final var shape = new RectangleShape(spanOfNeighborhood, false);
+		final var neighborHood = shape
 			.neighborhoodsRandomAccessible(angles);
 
-		for (int i = 0; i < in.dimension(0); i++) {
+		for (var i = 0; i < in.dimension(0); i++) {
 			listCallables.add(new ComputeDescriptor(Views.interval(convertedIn, in),
 				i, angles.randomAccess(), magnitudes.randomAccess(),
 				(RandomAccess<FloatType>) out.randomAccess(), neighborHood
@@ -252,12 +252,12 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 
 		public void run() {
 
-			final FinalInterval interval = new FinalInterval(in.dimension(0), in
+			final var interval = new FinalInterval(in.dimension(0), in
 				.dimension(1));
-			for (int j = 0; j < in.dimension(1); j++) {
+			for (var j = 0; j < in.dimension(1); j++) {
 				// sum up the magnitudes of all bins in a neighborhood
 				raNeighbor.setPosition(new long[] { i, j });
-				final Cursor<FloatType> cursorNeighborHood = raNeighbor.get().cursor();
+				final var cursorNeighborHood = raNeighbor.get().cursor();
 				while (cursorNeighborHood.hasNext()) {
 					cursorNeighborHood.next();
 					if (Intervals.contains(interval, cursorNeighborHood)) {
@@ -274,7 +274,7 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 
 	// returns the signed angle of a vector
 	private double getAngle(final double x, final double y) {
-		float angle = (float) Math.toDegrees(Math.atan2(x, y));
+        var angle = (float) Math.toDegrees(Math.atan2(x, y));
 		if (angle < 0) {
 			angle += 360;
 		}
@@ -313,8 +313,8 @@ class HistogramOfOrientedGradients2DFunction<T extends RealType<T>> implements
 		final RandomAccessibleInterval<T> input, final Integer numOrientations,
 		final Integer spanOfNeighborhood)
 	{
-		final T inType = Util.getTypeFromInterval(input);
-		RandomAccessibleInterval<T> output = outputCreator.apply(new FinalInterval(
+		final var inType = Util.getTypeFromInterval(input);
+        var output = outputCreator.apply(new FinalInterval(
 			input.dimension(0), input.dimension(1), numOrientations), inType);
 		hogOp.compute(input, numOrientations, spanOfNeighborhood, output);
 		return output;

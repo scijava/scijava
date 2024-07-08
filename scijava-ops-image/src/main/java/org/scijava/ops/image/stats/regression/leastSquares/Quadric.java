@@ -73,7 +73,7 @@ public class Quadric implements Function<Collection<Vector3d>, Matrix4d> {
 	public Matrix4d apply(final Collection<Vector3d> points) {
 		if (points.size() < MIN_DATA) throw new IllegalArgumentException(
 			"Must pass more points in order to fit a quadric equation!");
-		final double[] vector = solveVector(points);
+		final var vector = solveVector(points);
 		return toQuadricMatrix(vector);
 	}
 
@@ -88,11 +88,11 @@ public class Quadric implements Function<Collection<Vector3d>, Matrix4d> {
 	private static PrimitiveMatrix createDesignMatrix(
 		final Collection<Vector3d> points)
 	{
-		final BasicMatrix.Builder<PrimitiveMatrix> builder = PrimitiveMatrix.FACTORY
+		final var builder = PrimitiveMatrix.FACTORY
 			.getBuilder(points.size(), MIN_DATA);
-		final Iterator<Vector3d> iterator = points.iterator();
-		for (int i = 0; i < points.size(); i++) {
-			final Vector3d p = iterator.next();
+		final var iterator = points.iterator();
+		for (var i = 0; i < points.size(); i++) {
+			final var p = iterator.next();
 			builder.set(i, 0, p.x * p.x);
 			builder.set(i, 1, p.y * p.y);
 			builder.set(i, 2, p.z * p.z);
@@ -119,15 +119,15 @@ public class Quadric implements Function<Collection<Vector3d>, Matrix4d> {
 	 * @return the solution vector of the surface.
 	 */
 	private static double[] solveVector(final Collection<Vector3d> points) {
-		final int n = points.size();
+		final var n = points.size();
 		// Find (dT * d)^-1
-		final PrimitiveMatrix d = createDesignMatrix(points);
-		final PrimitiveMatrix dT = d.transpose();
-		final PrimitiveMatrix dTDInv = dT.multiply(d).invert();
+		final var d = createDesignMatrix(points);
+		final var dT = d.transpose();
+		final var dTDInv = dT.multiply(d).invert();
 		// Multiply dT * O, where O = [1, 1, ... 1] (n x 1) matrix
-		final PrimitiveMatrix o = PrimitiveMatrix.FACTORY.makeFilled(n, 1,
+		final var o = PrimitiveMatrix.FACTORY.makeFilled(n, 1,
 			new Deterministic(1.0));
-		final PrimitiveMatrix dTO = dT.multiply(o);
+		final var dTO = dT.multiply(o);
 		// Find solution A = (dT * d)^-1 * (dT * O)
 		return dTDInv.multiply(dTO).toRawCopy1D();
 	}
@@ -143,15 +143,15 @@ public class Quadric implements Function<Collection<Vector3d>, Matrix4d> {
 	private Matrix4d toQuadricMatrix(final double[] solution) {
 		// I'm not a clever man, so I'm using local variables to
 		// better follow the matrix assignment.
-		final double a = solution[0];
-		final double b = solution[1];
-		final double c = solution[2];
-		final double d = solution[3];
-		final double e = solution[4];
-		final double f = solution[5];
-		final double g = solution[6];
-		final double h = solution[7];
-		final double i = solution[8];
+		final var a = solution[0];
+		final var b = solution[1];
+		final var c = solution[2];
+		final var d = solution[3];
+		final var e = solution[4];
+		final var f = solution[5];
+		final var g = solution[6];
+		final var h = solution[7];
+		final var i = solution[8];
 		// @formatter:off
 		return new Matrix4d(
 				a, d, e, g,

@@ -57,7 +57,7 @@ class WildcardTypeMapping extends TypeMapping {
 	 * @return the lower bound of {@code newType}
 	 */
 	private static Type getLowerBound(WildcardType newType) {
-		Type[] lowerBounds = newType.getLowerBounds();
+        var lowerBounds = newType.getLowerBounds();
 		if (lowerBounds.length == 0) {
 			return null;
 		}
@@ -80,7 +80,7 @@ class WildcardTypeMapping extends TypeMapping {
 	 * @return the upper bound of {@code newType}
 	 */
 	private static Type getUpperBound(WildcardType newType) {
-		Type[] upperBounds = newType.getUpperBounds();
+        var upperBounds = newType.getUpperBounds();
 		if (upperBounds.length == 0) {
 			return Object.class;
 		}
@@ -102,7 +102,7 @@ class WildcardTypeMapping extends TypeMapping {
 	{
 		super(typeVar, getUpperBound(mappedType), malleable);
 		lowerBoundList = new ArrayList<>();
-		Type mappedTypeLowerBound = getLowerBound(mappedType);
+        var mappedTypeLowerBound = getLowerBound(mappedType);
 		if (mappedTypeLowerBound != null) {
 			lowerBoundList.add(mappedTypeLowerBound);
 		}
@@ -130,7 +130,7 @@ class WildcardTypeMapping extends TypeMapping {
 		else {
 			super.refine(otherType, newTypeMalleability);
 		}
-		for (Type lowerBound : lowerBoundList) {
+		for (var lowerBound : lowerBoundList) {
 			if (!Types.isAssignable(lowerBound, mappedType))
 				throw new TypeInferenceException(typeVar +
 					" cannot simultaneously be mapped to " + otherType + " and " +
@@ -141,11 +141,11 @@ class WildcardTypeMapping extends TypeMapping {
 	private void refineWildcard(WildcardType otherType,
 		boolean newTypeMalleability)
 	{
-		Type otherLowerBound = getLowerBound(otherType);
+        var otherLowerBound = getLowerBound(otherType);
 		if (otherLowerBound != null) {
 			lowerBoundList.add(otherLowerBound);
 		}
-		Type otherUpperBound = getUpperBound(otherType);
+        var otherUpperBound = getUpperBound(otherType);
 		super.refine(otherUpperBound, newTypeMalleability);
 	}
 }

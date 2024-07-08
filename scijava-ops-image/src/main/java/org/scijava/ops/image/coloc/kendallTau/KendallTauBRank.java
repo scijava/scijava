@@ -100,16 +100,16 @@ public class KendallTauBRank<T extends RealType<T>, U extends RealType<U>>
 		// We only need an upper bound to begin with, so even the number of pixels
 		// in
 		// the first channel would be enough!
-		int capacity = 0;
+        var capacity = 0;
 		for (@SuppressWarnings("unused")
-		Pair<T, U> sample : samples) {
+        var sample : samples) {
 			capacity++;
 		}
 
-		double[] values1 = new double[capacity];
-		double[] values2 = new double[capacity];
-		int count = 0;
-		for (Pair<T, U> sample : samples) {
+        var values1 = new double[capacity];
+        var values2 = new double[capacity];
+        var count = 0;
+		for (var sample : samples) {
 			values1[count] = sample.getA().getRealDouble();
 			values2[count] = sample.getB().getRealDouble();
 			count++;
@@ -142,13 +142,13 @@ public class KendallTauBRank<T extends RealType<T>, U extends RealType<U>>
 	 * @return Tau-b
 	 */
 	private double calculateMergeSort(final Iterable<Pair<T, U>> samples) {
-		final double[][] pairs = getPairs(samples);
-		final double[] x = pairs[0];
-		final double[] y = pairs[1];
-		final int n = x.length;
+		final var pairs = getPairs(samples);
+		final var x = pairs[0];
+		final var y = pairs[1];
+		final var n = x.length;
 
-		int[] index = new int[n];
-		for (int i = 0; i < n; i++) {
+        var index = new int[n];
+		for (var i = 0; i < n; i++) {
 			index[i] = i;
 		}
 
@@ -157,7 +157,7 @@ public class KendallTauBRank<T extends RealType<T>, U extends RealType<U>>
 		IntArraySorter.sort(index, (a, b) -> {
 			double xa = x[a], ya = y[a];
 			double xb = x[b], yb = y[b];
-			int result = Double.compare(xa, xb);
+            var result = Double.compare(xa, xb);
 			return result != 0 ? result : Double.compare(ya, yb);
 		});
 
@@ -165,20 +165,20 @@ public class KendallTauBRank<T extends RealType<T>, U extends RealType<U>>
 		// (n3)
 		// now, while
 		// index is sorted with regards to x.
-		long n0 = n * (long) (n - 1) / 2;
+        var n0 = n * (long) (n - 1) / 2;
 		long n1 = 0, n3 = 0;
 
-		for (int i = 1; i < n; i++) {
-			double x0 = x[index[i - 1]];
+		for (var i = 1; i < n; i++) {
+            var x0 = x[index[i - 1]];
 			if (x[index[i]] != x0) {
 				continue;
 			}
-			double y0 = y[index[i - 1]];
-			int i1 = i;
+            var y0 = y[index[i - 1]];
+            var i1 = i;
 			do {
-				double y1 = y[index[i1++]];
+                var y1 = y[index[i1++]];
 				if (y1 == y0) {
-					int i2 = i1;
+                    var i2 = i1;
 					while (i1 < n && x[index[i1]] == x0 && y[index[i1]] == y0) {
 						i1++;
 					}
@@ -194,21 +194,21 @@ public class KendallTauBRank<T extends RealType<T>, U extends RealType<U>>
 		// Now, let's perform that merge sort that also counts S, the number of
 		// swaps a Bubble Sort would require (and which therefore is half the number
 		// by which we have to adjust n_0 - n_1 - n_2 + n_3 to obtain n_c - n_d)
-		final MergeSort mergeSort = new MergeSort(index, (a, b) -> {
-			double ya = y[a];
-			double yb = y[b];
+		final var mergeSort = new MergeSort(index, (a, b) -> {
+            var ya = y[a];
+            var yb = y[b];
 			return Double.compare(ya, yb);
 		});
-		long S = mergeSort.sort();
+        var S = mergeSort.sort();
 		index = mergeSort.getSorted();
 		long n2 = 0;
 
-		for (int i = 1; i < n; i++) {
-			double y0 = y[index[i - 1]];
+		for (var i = 1; i < n; i++) {
+            var y0 = y[index[i - 1]];
 			if (y[index[i]] != y0) {
 				continue;
 			}
-			int i1 = i + 1;
+            var i1 = i + 1;
 			while (i1 < n && y[index[i1]] == y0) {
 				i1++;
 			}
@@ -244,12 +244,12 @@ public class KendallTauBRank<T extends RealType<T>, U extends RealType<U>>
 		 */
 		public long sort() {
 			long swaps = 0;
-			int n = index.length;
+            var n = index.length;
 			// There are merge sorts which perform in-place, but their runtime is
 			// worse than
 			// O(n log n)
-			int[] index2 = new int[n];
-			for (int step = 1; step < n; step <<= 1) {
+            var index2 = new int[n];
+			for (var step = 1; step < n; step <<= 1) {
 				int begin = 0, k = 0;
 				for (;;) {
 					int begin2 = begin + step, end = begin2 + step;
@@ -264,7 +264,7 @@ public class KendallTauBRank<T extends RealType<T>, U extends RealType<U>>
 					// and perform merge, too
 					int i = begin, j = begin2;
 					while (i < begin2 && j < end) {
-						int compare = comparator.compare(index[i], index[j]);
+                        var compare = comparator.compare(index[i], index[j]);
 						if (compare > 0) {
 							swaps += begin2 - i;
 							index2[k++] = index[j++];
@@ -289,7 +289,7 @@ public class KendallTauBRank<T extends RealType<T>, U extends RealType<U>>
 				if (k < n) {
 					System.arraycopy(index, k, index2, k, n - k);
 				}
-				int[] swapIndex = index2;
+                var swapIndex = index2;
 				index2 = index;
 				index = swapIndex;
 			}

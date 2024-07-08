@@ -45,7 +45,7 @@ public class MatchingConditions {
 	}
 
 	public static MatchingConditions from(OpRequest request, Hints h) {
-		Hints hintCopy = h.copy();
+        var hintCopy = h.copy();
 		return new MatchingConditions(request, hintCopy);
 	}
 
@@ -60,7 +60,7 @@ public class MatchingConditions {
 	@Override
 	public boolean equals(Object that) {
 		if (!(that instanceof MatchingConditions)) return false;
-		MatchingConditions thoseConditions = (MatchingConditions) that;
+        var thoseConditions = (MatchingConditions) that;
 		return request().equals(thoseConditions.request()) && hints().equals(
 			thoseConditions.hints());
 	}

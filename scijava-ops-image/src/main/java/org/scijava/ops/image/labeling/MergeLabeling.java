@@ -84,17 +84,17 @@ public class MergeLabeling<L, I extends IntegerType<I>, B extends BooleanType<B>
 		final ImgLabeling<L, I> input2, //
 		@Nullable final RandomAccessibleInterval<B> mask //
 	) {
-		final ImgLabeling<L, I> output = imgLabelingCreator.apply(input1, Views
+		final var output = imgLabelingCreator.apply(input1, Views
 			.iterable(input1.getSource()).firstElement());
 		if (mask != null) {
 			final IterableRegion iterable = Regions.iterable(mask);
-			final IterableInterval<LabelingType<L>> sample = Regions.sample(
+			final var sample = Regions.sample(
 				(IterableInterval<Void>) iterable, output);
-			final RandomAccess<LabelingType<L>> randomAccess = input1.randomAccess();
-			final RandomAccess<LabelingType<L>> randomAccess2 = input2.randomAccess();
-			final Cursor<LabelingType<L>> cursor = sample.cursor();
+			final var randomAccess = input1.randomAccess();
+			final var randomAccess2 = input2.randomAccess();
+			final var cursor = sample.cursor();
 			while (cursor.hasNext()) {
-				final LabelingType<L> outLabeling = cursor.next();
+				final var outLabeling = cursor.next();
 				randomAccess.setPosition(cursor);
 				outLabeling.addAll(randomAccess.get());
 				randomAccess2.setPosition(cursor);
@@ -102,7 +102,7 @@ public class MergeLabeling<L, I extends IntegerType<I>, B extends BooleanType<B>
 			}
 		}
 		else {
-			Computers.Arity2<Iterable<LabelingType<L>>, Iterable<LabelingType<L>>, Iterable<LabelingType<L>>> adapted =
+            var adapted =
 				adaptor.apply(
 					new Computers.Arity2<LabelingType<L>, LabelingType<L>, LabelingType<L>>()
 					{

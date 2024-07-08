@@ -75,10 +75,10 @@ public class DefaultDoG<T extends NumericType<T> & NativeType<T>> implements
 		final RandomAccessibleInterval<T> output)
 	{
 		// input may potentially be translated
-		final long[] translation = new long[input.numDimensions()];
+		final var translation = new long[input.numDimensions()];
 		input.min(translation);
 
-		final IntervalView<T> tmpInterval = Views.interval(Views.translate(
+		final var tmpInterval = Views.interval(Views.translate(
 			(RandomAccessible<T>) tmpCreator.apply(input), translation), output);
 
 		gauss1.compute(input, tmpInterval);

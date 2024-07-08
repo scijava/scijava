@@ -53,7 +53,7 @@ public class ComputePercentileThreshold<T extends RealType<T>> extends
 	 */
 	@Override
 	public long computeBin(final Histogram1d<T> hist) {
-		final long[] histogram = hist.toLongArray();
+		final var histogram = hist.toLongArray();
 		return computeBin(histogram);
 	}
 
@@ -71,16 +71,16 @@ public class ComputePercentileThreshold<T extends RealType<T>> extends
 	 * presentation and the original Matlab code.
 	 */
 	public static long computeBin(final long[] histogram) {
-		int threshold = -1;
-		final double ptile = 0.5; // default fraction of foreground pixels
-		final double[] avec = new double[histogram.length];
+        var threshold = -1;
+		final var ptile = 0.5; // default fraction of foreground pixels
+		final var avec = new double[histogram.length];
 
-		for (int i = 0; i < histogram.length; i++)
+		for (var i = 0; i < histogram.length; i++)
 			avec[i] = 0.0;
 
-		final double total = partialSum(histogram, histogram.length - 1);
-		double temp = 1.0;
-		for (int i = 0; i < histogram.length; i++) {
+		final var total = partialSum(histogram, histogram.length - 1);
+        var temp = 1.0;
+		for (var i = 0; i < histogram.length; i++) {
 			avec[i] = Math.abs((partialSum(histogram, i) / total) - ptile);
 			// IJ.log("Ptile["+i+"]:"+ avec[i]);
 			if (avec[i] < temp) {
@@ -93,7 +93,7 @@ public class ComputePercentileThreshold<T extends RealType<T>> extends
 
 	private static double partialSum(final long[] y, final int j) {
 		double x = 0;
-		for (int i = 0; i <= j; i++)
+		for (var i = 0; i <= j; i++)
 			x += y[i];
 		return x;
 	}

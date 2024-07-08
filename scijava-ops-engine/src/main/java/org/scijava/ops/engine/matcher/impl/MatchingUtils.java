@@ -106,14 +106,14 @@ public final class MatchingUtils {
 	static int checkGenericOutputsAssignability(Type[] froms, Type[] tos,
 		HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
 	{
-		for (int i = 0; i < froms.length; i++) {
-			Type from = froms[i];
-			Type to = tos[i];
+		for (var i = 0; i < froms.length; i++) {
+            var from = froms[i];
+            var to = tos[i];
 
 			if (Any.is(to)) continue;
 
 			if (from instanceof TypeVariable) {
-				TypeVarInfo typeVarInfo = typeBounds.get(from);
+                var typeVarInfo = typeBounds.get(from);
 				// HACK: we CAN assign, for example, a Function<Iterable<N>, O> to a
 				// Function<Iterable<Integer>, Double>, because in this situation O is
 				// not bounded to any other types. However isAssignable will fail,
@@ -123,8 +123,8 @@ public final class MatchingUtils {
 				// `from` is now fixed to `to`, then simply assigning `from` to `to`,
 				// since `from` only has one bound, being `to`.
 				if (typeVarInfo == null) {
-					TypeVariable<?> fromTypeVar = (TypeVariable<?>) from;
-					TypeVarInfo fromInfo = new TypeVarInfo(fromTypeVar);
+                    var fromTypeVar = (TypeVariable<?>) from;
+                    var fromInfo = new TypeVarInfo(fromTypeVar);
 					fromInfo.fixBounds(to, true);
 					typeBounds.put(fromTypeVar, fromInfo);
 					from = to;
@@ -160,7 +160,7 @@ public final class MatchingUtils {
 	 */
 	public static int isApplicable(final Type[] args, final Type[] params) {
 		// create a HashMap to monitor the restrictions of the type variables.
-		final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds = new HashMap<>();
+		final var typeBounds = new HashMap<TypeVariable<?>, TypeVarInfo>();
 
 		return isApplicable(args, params, typeBounds);
 	}
@@ -172,9 +172,9 @@ public final class MatchingUtils {
 			throw new IllegalArgumentException("src and dest lengths differ");
 		}
 
-		for (int i = 0; i < params.length; i++) {
-			Type arg = args[i];
-			Type param = params[i];
+		for (var i = 0; i < params.length; i++) {
+            var arg = args[i];
+            var param = params[i];
 
 			// if arg is an Any, it must be applicable to param.
 			if (isApplicableToRawTypes(arg, Any.class)) continue;
@@ -205,10 +205,10 @@ public final class MatchingUtils {
 		final Type arg, final Type param)
 	{
 		if (Any.is(arg)) return true;
-		final List<Class<?>> srcClasses = Types.raws(arg);
-		final List<Class<?>> destClasses = Types.raws(param);
-		for (final Class<?> destClass : destClasses) {
-			final Optional<Class<?>> first = srcClasses.stream()
+		final var srcClasses = Types.raws(arg);
+		final var destClasses = Types.raws(param);
+		for (final var destClass : destClasses) {
+			final var first = srcClasses.stream()
 				.filter(srcClass -> Types.isAssignable(srcClass, destClass))
 				.findFirst();
 			if (first.isEmpty()) {
@@ -224,16 +224,16 @@ public final class MatchingUtils {
 		final Map<TypeVariable<?>, TypeVarInfo> typeBounds
 	) {
 		if (arg instanceof Class) {
-			Class<?> paramRaw = Types.raw(param);
+            var paramRaw = Types.raw(param);
 			return Types.isAssignable(arg, paramRaw);
 		}
 
 		// get an array of the destination parameter types
-		Type[] destTypes = param.getActualTypeArguments();
-		Type[] srcTypes = new Type[destTypes.length];
+        var destTypes = param.getActualTypeArguments();
+        var srcTypes = new Type[destTypes.length];
 
 		// get an array of the source argument types
-		Type superType = Types.superTypeOf(arg, Types.raw(param));
+        var superType = Types.superTypeOf(arg, Types.raw(param));
 		if (!(superType instanceof ParameterizedType)) return false;
 		srcTypes = ((ParameterizedType) superType).getActualTypeArguments();
 
@@ -247,11 +247,11 @@ public final class MatchingUtils {
 		List<Integer> ignoredIndices = new ArrayList<>();
 		// check to see if any of the Types of this ParameterizedType are
 		// TypeVariables, if so restrict them to the type parameter of the argument.
-		for (int i = 0; i < destTypes.length; i++) {
-			final Type destType = destTypes[i];
+		for (var i = 0; i < destTypes.length; i++) {
+			final var destType = destTypes[i];
 			if (destType instanceof TypeVariable<?>) {
-				final Type srcType = srcTypes[i];
-				final TypeVariable<?> destTypeVar = (TypeVariable<?>) destType;
+				final var srcType = srcTypes[i];
+				final var destTypeVar = (TypeVariable<?>) destType;
 				if (Any.is(srcType)) continue;
 				if (!isApplicableToTypeParameter(srcType, destTypeVar, typeBounds))
 					return false;
@@ -348,18 +348,18 @@ public final class MatchingUtils {
 		final TypeVariable<?> param,
 		final Map<TypeVariable<?>, TypeVarInfo> typeBounds
 	) {
-		final Type[] paramBounds = typeBounds.get(param).upperBounds;
-		for (final Type paramBound : paramBounds) {
+		final var paramBounds = typeBounds.get(param).upperBounds;
+		for (final var paramBound : paramBounds) {
 			// only have to check the bounds of the
 			if (paramBound instanceof ParameterizedType) {
 
-				final ParameterizedType paramBoundType = (ParameterizedType) paramBound;
-				final Type[] paramBoundTypes = paramBoundType.getActualTypeArguments();
-				final Type[] argTypes = Types.typeParamsOf(arg, Types.raw(paramBoundType));
-				for (int i = 0; i < paramBoundTypes.length; i++) {
+				final var paramBoundType = (ParameterizedType) paramBound;
+				final var paramBoundTypes = paramBoundType.getActualTypeArguments();
+				final var argTypes = Types.typeParamsOf(arg, Types.raw(paramBoundType));
+				for (var i = 0; i < paramBoundTypes.length; i++) {
 					// Get the type parameter of arg from the bound type which we know
 					// is parameterized.
-					final Type argType = i < argTypes.length ? argTypes[i] : null;
+					final var argType = i < argTypes.length ? argTypes[i] : null;
 					if (argType == null) return false;
 					if (paramBoundTypes[i] instanceof TypeVariable<?> &&
 						!isApplicableToTypeParameter(argType,
@@ -375,16 +375,16 @@ public final class MatchingUtils {
 	private static boolean isApplicableToWildcardType(
 		final Type arg, final WildcardType param)
 	{
-		final Type[] upperBounds = param.getUpperBounds();
-		final Type[] lowerBounds = param.getLowerBounds();
-		final Class<?> argType = Types.raw(arg);
-		for (final Type upperBound : upperBounds) {
+		final var upperBounds = param.getUpperBounds();
+		final var lowerBounds = param.getLowerBounds();
+		final var argType = Types.raw(arg);
+		for (final var upperBound : upperBounds) {
 			// check that the argument can satisfy the parameter
-			final Class<?> upperType = Types.raw(upperBound);
+			final var upperType = Types.raw(upperBound);
 			if (!Types.isAssignable(argType, upperType)) return false;
 		}
-		for (final Type lowerBound : lowerBounds) {
-			final Class<?> lowerType = Types.raw(lowerBound);
+		for (final var lowerBound : lowerBounds) {
+			final var lowerType = Types.raw(lowerBound);
 			// check that the argument can satisfy the parameter
 			if (!Types.isAssignable(lowerType, argType)) return false;
 		}
@@ -398,13 +398,13 @@ public final class MatchingUtils {
 		final Map<TypeVariable<?>, TypeVarInfo> typeBounds
 	) {
 		// get a class object of the component type of each array
-		final Type argComponent = Types.component(arg);
-		final Type paramComponent = Types.component(param);
+		final var argComponent = Types.component(arg);
+		final var paramComponent = Types.component(param);
 
 		if (paramComponent instanceof ParameterizedType) {
 			// TODO are these casts safe?
-			final ParameterizedType argType = (ParameterizedType) argComponent;
-			final ParameterizedType paramType = (ParameterizedType) paramComponent;
+			final var argType = (ParameterizedType) argComponent;
+			final var paramType = (ParameterizedType) paramComponent;
 
 			if (!isApplicableToParameterizedTypes(argType, paramType, typeBounds))
 				return false;
@@ -412,7 +412,7 @@ public final class MatchingUtils {
 
 		else if (paramComponent instanceof TypeVariable) {
 			// TODO are these casts safe?
-			final TypeVariable<?> paramType = (TypeVariable<?>) paramComponent;
+			final var paramType = (TypeVariable<?>) paramComponent;
 
 			if (!isApplicableToTypeVariable(argComponent, paramType, typeBounds))
 				return false;
@@ -421,8 +421,8 @@ public final class MatchingUtils {
 		// TODO is this necessary? It is only necessary if the component is allowed
 		// to be
 		// something other than a ParameterizedType or a TypeVariable.
-		final Class<?> argClass = Types.raw(argComponent);
-		final Class<?> paramClass = Types.raw(paramComponent);
+		final var argClass = Types.raw(argComponent);
+		final var paramClass = Types.raw(paramComponent);
 		return Types.isAssignable(argClass, paramClass);
 	}
 
@@ -491,9 +491,9 @@ public final class MatchingUtils {
 				return false;
 			}
 
-			final Class<?> typeClass = Types.raw(type);
+			final var typeClass = Types.raw(type);
 			// make sure that type extends all of the bounds of the type variable
-			for (final Type upperBound : upperBounds) {
+			for (final var upperBound : upperBounds) {
 				if (!Types.raw(upperBound).isAssignableFrom(typeClass)) return false;
 			}
 
@@ -522,7 +522,7 @@ public final class MatchingUtils {
 				return false;
 			}
 
-			for (int i = 0; i < upperBounds.length; i++) {
+			for (var i = 0; i < upperBounds.length; i++) {
 				if (Types.raw(upperBounds[i]).isAssignableFrom(Types.raw(bound)))
 					upperBounds[i] = bound;
 				else return false;
@@ -530,10 +530,10 @@ public final class MatchingUtils {
 
 			// make sure that all of the types that already fit in this variable
 			// before the variable was fixed still are allowed by the type variable.
-			final Set<Type> temp = types;
+			final var temp = types;
 			temp.add(bound);
 			types = new HashSet<>();
-			for (final Type type : temp) {
+			for (final var type : temp) {
 				if (!allowType(type, false)) return false;
 			}
 			return true;
@@ -541,19 +541,19 @@ public final class MatchingUtils {
 
 		@Override
 		public String toString() {
-			StringBuilder s = new StringBuilder();
+            var s = new StringBuilder();
 			s.append(this.getClass().getSimpleName());
 			s.append(": ");
 			s.append(var.getName());
 			s.append("\n\t\t");
 			s.append("of Types:\n\t\t\t");
-			for (Type t : types) {
+			for (var t : types) {
 				s.append(t.getTypeName());
 				s.append("\n\t\t\t");
 			}
 			s.delete(s.length() - 1, s.length());
 			s.append("with upper Bounds:\n\t\t\t");
-			for (Type t : upperBounds) {
+			for (var t : upperBounds) {
 				s.append(t.getTypeName());
 				s.append("\n\t\t\t");
 			}

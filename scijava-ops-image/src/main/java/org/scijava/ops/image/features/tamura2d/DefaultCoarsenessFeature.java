@@ -77,17 +77,17 @@ public class DefaultCoarsenessFeature<I extends RealType<I>, O extends RealType<
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		if (input.numDimensions() != 2) throw new IllegalArgumentException(
 			"Only 2 dimensional images allowed!");
-		HashMap<Integer, Img<I>> meanImages = new HashMap<>();
+        var meanImages = new HashMap<Integer, Img<I>>();
 
 		// get mean images
-		for (int i = 1; i <= 5; i++) {
+		for (var i = 1; i <= 5; i++) {
 			meanImages.put(i, mean(input, i));
 		}
 
-		ArrayList<Double> maxDifferences = sizedLeadDiffValues(input, meanImages);
+        var maxDifferences = sizedLeadDiffValues(input, meanImages);
 
-		double out = 0.0;
-		for (Double i : maxDifferences) {
+        var out = 0.0;
+		for (var i : maxDifferences) {
 			out += i;
 		}
 
@@ -111,12 +111,12 @@ public class DefaultCoarsenessFeature<I extends RealType<I>, O extends RealType<
 		final HashMap<Integer, Img<I>> meanImages)
 	{
 
-		long[] pos = new long[input.numDimensions()];
-		long[] dim = new long[input.numDimensions()];
+        var pos = new long[input.numDimensions()];
+        var dim = new long[input.numDimensions()];
 		input.dimensions(dim);
 
-		ArrayList<Double> maxDifferences = new ArrayList<>();
-		Cursor<I> cursor = meanImages.get(1).cursor();
+        var maxDifferences = new ArrayList<Double>();
+        var cursor = meanImages.get(1).cursor();
 
 		while (cursor.hasNext()) {
 
@@ -125,25 +125,25 @@ public class DefaultCoarsenessFeature<I extends RealType<I>, O extends RealType<
 			// NB: the smallest possible value for maxDiff is 0
 			double maxDiff = 0;
 
-			for (int i = 1; i <= 5; i++) {
+			for (var i = 1; i <= 5; i++) {
 
-				RandomAccess<I> ra1 = meanImages.get(i).randomAccess();
-				RandomAccess<I> ra2 = meanImages.get(i).randomAccess();
+                var ra1 = meanImages.get(i).randomAccess();
+                var ra2 = meanImages.get(i).randomAccess();
 
-				for (int d = 0; d < input.numDimensions(); d++) {
+				for (var d = 0; d < input.numDimensions(); d++) {
 
 					cursor.localize(pos);
 
 					if (pos[d] + 2 * i + 1 < dim[d]) {
 
 						ra1.setPosition(pos);
-						double val1 = ra1.get().getRealDouble();
+                        var val1 = ra1.get().getRealDouble();
 
 						pos[d] += 2 * i + 1;
 						ra2.setPosition(pos);
-						double val2 = ra2.get().getRealDouble();
+                        var val2 = ra2.get().getRealDouble();
 
-						double diff = Math.abs(val2 - val1);
+                        var diff = Math.abs(val2 - val1);
 						maxDiff = diff >= maxDiff ? diff : maxDiff;
 					}
 				}
@@ -164,15 +164,15 @@ public class DefaultCoarsenessFeature<I extends RealType<I>, O extends RealType<
 	@SuppressWarnings("unchecked")
 	private Img<I> mean(final RandomAccessibleInterval<I> input, final int i) {
 
-		long[] dims = new long[input.numDimensions()];
+        var dims = new long[input.numDimensions()];
 		input.dimensions(dims);
 
-		final byte[] array = new byte[(int) Intervals.numElements(new FinalInterval(
+		final var array = new byte[(int) Intervals.numElements(new FinalInterval(
 			dims))];
-		Img<I> meanImg = (Img<I>) ArrayImgs.unsignedBytes(array, dims);
+        var meanImg = (Img<I>) ArrayImgs.unsignedBytes(array, dims);
 
-		OutOfBoundsMirrorFactory<I, RandomAccessibleInterval<I>> oobFactory =
-			new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
+        var oobFactory =
+			new OutOfBoundsMirrorFactory<I, RandomAccessibleInterval<I>>(Boundary.SINGLE);
 
 		meanOp.compute(input, new RectangleShape(i, true), oobFactory, meanImg);
 

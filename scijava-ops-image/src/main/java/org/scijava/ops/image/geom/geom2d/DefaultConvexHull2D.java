@@ -67,9 +67,9 @@ public class DefaultConvexHull2D implements Function<Polygon2D, Polygon2D> {
 
 			@Override
 			public int compare(final RealLocalizable o1, final RealLocalizable o2) {
-				final Double o1x = new Double(o1.getDoublePosition(0));
-				final Double o2x = new Double(o2.getDoublePosition(0));
-				final int result = o1x.compareTo(o2x);
+				final var o1x = new Double(o1.getDoublePosition(0));
+				final var o2x = new Double(o2.getDoublePosition(0));
+				final var result = o1x.compareTo(o2x);
 				if (result == 0) {
 					return new Double(o1.getDoublePosition(1)).compareTo(new Double(o2
 						.getDoublePosition(1)));
@@ -85,7 +85,7 @@ public class DefaultConvexHull2D implements Function<Polygon2D, Polygon2D> {
 		final List<RealLocalizable> U = new ArrayList<>();
 		final List<RealLocalizable> L = new ArrayList<>();
 		// build lower hull
-		for (final RealLocalizable p : RealPoints) {
+		for (final var p : RealPoints) {
 			// while L contains at least two RealPoints and sequence of last
 			// two
 			// RealPoints of L and RealPoint P[i] does not make a
@@ -100,7 +100,7 @@ public class DefaultConvexHull2D implements Function<Polygon2D, Polygon2D> {
 		}
 		// build upper hull
 		Collections.reverse(RealPoints);
-		for (final RealLocalizable p : RealPoints) {
+		for (final var p : RealPoints) {
 			// while U contains at least two RealPoints and sequence of last
 			// two
 			// RealPoints of U and RealPoint P[i] does not make a

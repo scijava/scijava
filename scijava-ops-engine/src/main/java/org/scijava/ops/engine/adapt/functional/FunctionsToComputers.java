@@ -66,7 +66,7 @@ public class FunctionsToComputers {
 		@Override
 		public Computers.Arity0<O> apply(Producer<O> function) {
 			return (out) -> {
-				O temp = function.create();
+				var temp = function.create();
 				copyOp.compute(temp, out);
 			};
 		}
@@ -86,7 +86,7 @@ public class FunctionsToComputers {
 		@Override
 		public Computers.Arity1<I, O> apply(Function<I, O> function) {
 			return (in, out) -> {
-				O temp = function.apply(in);
+				var temp = function.apply(in);
 				copyOp.compute(temp, out);
 			};
 		}
@@ -106,7 +106,7 @@ public class FunctionsToComputers {
 		@Override
 		public Computers.Arity2<I1, I2, O> apply(BiFunction<I1, I2, O> function) {
 			return (in1, in2, out) -> {
-				O temp = function.apply(in1, in2);
+				var temp = function.apply(in1, in2);
 				copyOp.compute(temp, out);
 			};
 		}
@@ -126,7 +126,7 @@ public class FunctionsToComputers {
 		@Override
 		public Computers.Arity3<I1, I2, I3, O> apply(Functions.Arity3<I1, I2, I3, O> function) {
 			return (in1, in2, in3, out) -> {
-				O temp = function.apply(in1, in2, in3);
+				var temp = function.apply(in1, in2, in3);
 				copyOp.compute(temp, out);
 			};
 		}
@@ -146,7 +146,7 @@ public class FunctionsToComputers {
 		@Override
 		public Computers.Arity4<I1, I2, I3, I4, O> apply(Functions.Arity4<I1, I2, I3, I4, O> function) {
 			return (in1, in2, in3, in4, out) -> {
-				O temp = function.apply(in1, in2, in3, in4);
+				var temp = function.apply(in1, in2, in3, in4);
 				copyOp.compute(temp, out);
 			};
 		}
@@ -166,7 +166,7 @@ public class FunctionsToComputers {
 		@Override
 		public Computers.Arity5<I1, I2, I3, I4, I5, O> apply(Functions.Arity5<I1, I2, I3, I4, I5, O> function) {
 			return (in1, in2, in3, in4, in5, out) -> {
-				O temp = function.apply(in1, in2, in3, in4, in5);
+				var temp = function.apply(in1, in2, in3, in4, in5);
 				copyOp.compute(temp, out);
 			};
 		}
@@ -186,7 +186,7 @@ public class FunctionsToComputers {
 		@Override
 		public Computers.Arity6<I1, I2, I3, I4, I5, I6, O> apply(Functions.Arity6<I1, I2, I3, I4, I5, I6, O> function) {
 			return (in1, in2, in3, in4, in5, in6, out) -> {
-				O temp = function.apply(in1, in2, in3, in4, in5, in6);
+				var temp = function.apply(in1, in2, in3, in4, in5, in6);
 				copyOp.compute(temp, out);
 			};
 		}
@@ -206,7 +206,7 @@ public class FunctionsToComputers {
 		@Override
 		public Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> apply(Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> function) {
 			return (in1, in2, in3, in4, in5, in6, in7, out) -> {
-				O temp = function.apply(in1, in2, in3, in4, in5, in6, in7);
+				var temp = function.apply(in1, in2, in3, in4, in5, in6, in7);
 				copyOp.compute(temp, out);
 			};
 		}
@@ -226,7 +226,7 @@ public class FunctionsToComputers {
 		@Override
 		public Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> apply(Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> function) {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, out) -> {
-				O temp = function.apply(in1, in2, in3, in4, in5, in6, in7, in8);
+				var temp = function.apply(in1, in2, in3, in4, in5, in6, in7, in8);
 				copyOp.compute(temp, out);
 			};
 		}
@@ -246,7 +246,7 @@ public class FunctionsToComputers {
 		@Override
 		public Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> apply(Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> function) {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, out) -> {
-				O temp = function.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9);
+				var temp = function.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9);
 				copyOp.compute(temp, out);
 			};
 		}
@@ -266,7 +266,7 @@ public class FunctionsToComputers {
 		@Override
 		public Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> apply(Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> function) {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, out) -> {
-				O temp = function.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
+				var temp = function.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
 				copyOp.compute(temp, out);
 			};
 		}
@@ -286,7 +286,7 @@ public class FunctionsToComputers {
 		@Override
 		public Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> apply(Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> function) {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, out) -> {
-				O temp = function.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
+				var temp = function.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
 				copyOp.compute(temp, out);
 			};
 		}
@@ -306,7 +306,7 @@ public class FunctionsToComputers {
 		@Override
 		public Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> apply(Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> function) {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, out) -> {
-				O temp = function.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
+				var temp = function.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 				copyOp.compute(temp, out);
 			};
 		}
@@ -326,7 +326,7 @@ public class FunctionsToComputers {
 		@Override
 		public Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> apply(Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> function) {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, out) -> {
-				O temp = function.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
+				var temp = function.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 				copyOp.compute(temp, out);
 			};
 		}
@@ -346,7 +346,7 @@ public class FunctionsToComputers {
 		@Override
 		public Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> apply(Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> function) {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, out) -> {
-				O temp = function.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
+				var temp = function.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 				copyOp.compute(temp, out);
 			};
 		}
@@ -366,7 +366,7 @@ public class FunctionsToComputers {
 		@Override
 		public Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> apply(Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> function) {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, out) -> {
-				O temp = function.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
+				var temp = function.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 				copyOp.compute(temp, out);
 			};
 		}
@@ -386,7 +386,7 @@ public class FunctionsToComputers {
 		@Override
 		public Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> apply(Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> function) {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16, out) -> {
-				O temp = function.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
+				var temp = function.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 				copyOp.compute(temp, out);
 			};
 		}

@@ -99,7 +99,7 @@ public class DefaultOpHistory implements OpHistory {
 	}
 
 	private void resolveExecution(RichOp<?> op, Object output) {
-		List<RichOp<?>> l = mutationMap.get(output);
+        var l = mutationMap.get(output);
 		// HACK: sometimes, l can be null. Don't yet know why
 		if (l != null) {
 			synchronized (l) {

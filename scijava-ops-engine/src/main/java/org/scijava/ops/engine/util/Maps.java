@@ -94,8 +94,8 @@ public final class Maps {
 				final Computers.Arity1<I, O> computer)
 			{
 				return (iter1, iter2) -> {
-					Iterator<I> i1 = iter1.iterator();
-					Iterator<O> i2 = iter2.iterator();
+                    var i1 = iter1.iterator();
+                    var i2 = iter2.iterator();
 					while (i1.hasNext() && i2.hasNext()) {
 						computer.compute(i1.next(), i2.next());
 					}

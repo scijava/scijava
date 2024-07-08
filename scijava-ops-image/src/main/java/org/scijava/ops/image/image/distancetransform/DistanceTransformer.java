@@ -65,7 +65,7 @@ public class DistanceTransformer<B extends BooleanType<B>, T extends RealType<T>
 		// make sure that the output type is suitable to be able to hold the maximum
 		// possible distance (replaces Conforms)
 		long max_dist = 0;
-		for (int i = 0; i < binaryInput.numDimensions(); i++)
+		for (var i = 0; i < binaryInput.numDimensions(); i++)
 			max_dist += binaryInput.dimension(i) * binaryInput.dimension(i);
 		if (max_dist > Views.iterable(output).firstElement().getMaxValue())
 			throw new IllegalArgumentException(

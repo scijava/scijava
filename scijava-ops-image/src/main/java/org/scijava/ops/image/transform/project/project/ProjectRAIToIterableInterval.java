@@ -64,12 +64,12 @@ public class ProjectRAIToIterableInterval<T, V> implements
 		if (dim >= input.numDimensions()) throw new IllegalArgumentException(
 			"The dimension provided to compute over does not exist in the input!");
 
-		final Cursor<V> cursor = output.localizingCursor();
-		final RandomAccess<T> access = input.randomAccess();
+		final var cursor = output.localizingCursor();
+		final var access = input.randomAccess();
 
 		while (cursor.hasNext()) {
 			cursor.fwd();
-			for (int d = 0; d < input.numDimensions(); d++) {
+			for (var d = 0; d < input.numDimensions(); d++) {
 				if (d != dim) {
 					access.setPosition(cursor.getIntPosition(d - (d > dim ? -1 : 0)), d);
 				}

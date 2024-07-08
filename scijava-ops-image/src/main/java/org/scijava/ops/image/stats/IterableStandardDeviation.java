@@ -57,10 +57,10 @@ public class IterableStandardDeviation<I extends RealType<I>, O extends RealType
 	public void compute(final Iterable<I> input, final O stdDev) {
 		double sum = 0;
 		double sumSqr = 0;
-		int n = 0;
+        var n = 0;
 
-		for (final I in : input) {
-			final double px = in.getRealDouble();
+		for (final var in : input) {
+			final var px = in.getRealDouble();
 			++n;
 			sum += px;
 			sumSqr += px * px;

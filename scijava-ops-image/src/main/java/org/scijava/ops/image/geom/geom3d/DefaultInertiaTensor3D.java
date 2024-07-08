@@ -67,14 +67,14 @@ public class DefaultInertiaTensor3D<B extends BooleanType<B>> implements
 		if (input.numDimensions() != 3) throw new IllegalArgumentException(
 			"Only three-dimensional inputs allowed!");
 
-		final BlockRealMatrix output = new BlockRealMatrix(3, 3);
-		Cursor<Void> c = input.localizingCursor();
-		double[] pos = new double[3];
-		double[] computedCentroid = new double[3];
+		final var output = new BlockRealMatrix(3, 3);
+        var c = input.localizingCursor();
+        var pos = new double[3];
+        var computedCentroid = new double[3];
 		centroid.apply(input).localize(computedCentroid);
-		final double mX = computedCentroid[0];
-		final double mY = computedCentroid[1];
-		final double mZ = computedCentroid[2];
+		final var mX = computedCentroid[0];
+		final var mY = computedCentroid[1];
+		final var mZ = computedCentroid[2];
 		while (c.hasNext()) {
 			c.fwd();
 			c.localize(pos);

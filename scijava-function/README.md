@@ -29,17 +29,17 @@ private Computers.Arity2<String, Character, List<String>> splitter = (s, c, outL
 	outList.clear();
 	String[] strings = s.split(c);
 
-	for (String str : strings) {
+	for (var str : strings) {
 		outList.add(str);
 	}
 };
 
 public static void main(String... args) {
-	String[] exampleStrings = {"foo:bar:baz", "foo:baz", "bar:baz"};
+    var exampleStrings = new String[]{"foo:bar:baz", "foo:baz", "bar:baz"};
 	List<String> stringsContainingBar = new ArrayList<>();
 
 	List<String> container = new ArrayList<>();
-	for(String example : exampleStrings) {
+	for(var example : exampleStrings) {
 		splitter.compute(example, ':', container);
 		if(container.contains("bar")) {
 			stringsContainingBar.add(example);
@@ -58,7 +58,7 @@ public static void main(String... args) {
  * Increments each number in the list
  */
 private Inplaces.Arity2_2<Integer, List<Integer>> incrementer = (i, list) -> { 
-	for (int index = 0; index < list.size(); index++) {
+	for (var index = 0; index < list.size(); index++) {
 		list.set(index, list.get(index) + i);
 	}
 };

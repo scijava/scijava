@@ -171,7 +171,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	@Override
 	public void discoverUsing(Discoverer... arr) {
-		for (Discoverer d : arr) {
+		for (var d : arr) {
 			discoverers.add(d);
 			d.discover(OpInfo.class).forEach(this::registerInfosFrom);
 			d.discover(Op.class).forEach(this::registerInfosFrom);
@@ -185,9 +185,9 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	private SortedSet<OpInfo> filterInfos(SortedSet<OpInfo> infos, Hints hints) {
-		boolean adapting = hints.contains(BaseOpHints.Adaptation.IN_PROGRESS);
-		boolean converting = hints.contains(BaseOpHints.Conversion.IN_PROGRESS);
-		boolean depMatching = hints.contains(
+        var adapting = hints.contains(BaseOpHints.Adaptation.IN_PROGRESS);
+        var converting = hints.contains(BaseOpHints.Conversion.IN_PROGRESS);
+        var depMatching = hints.contains(
 			BaseOpHints.DependencyMatching.IN_PROGRESS);
 		// if we aren't in any special matching situations, return all Ops
 		if (!(adapting || converting || depMatching)) return infos;
@@ -222,24 +222,24 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		if (!(specialType.type() instanceof ParameterizedType))
 			throw new IllegalArgumentException("TODO");
 		@SuppressWarnings("unchecked")
-		OpInstance<T> instance = (OpInstance<T>) tree.newInstance(specialType
+        var instance = (OpInstance<T>) tree.newInstance(specialType
 			.type());
 		var conditions = MatchingConditions.from( //
 			new InfoMatchingOpRequest(tree.info(), Nil.of(tree.info().opType())), //
 			hints //
 		);
-		RichOp<T> wrappedOp = wrapOp(instance, conditions);
+        var wrappedOp = wrapOp(instance, conditions);
 		return wrappedOp.asOpType();
 	}
 
 	@Override
 	public InfoTree treeFromSignature(String signature) {
 		if (idDirectory == null) initIdDirectory();
-		List<InfoTreeGenerator> infoTreeGenerators = discoverers.stream() //
+        var infoTreeGenerators = discoverers.stream() //
 			.flatMap(d -> d.discover(InfoTreeGenerator.class).stream()) //
 			.collect(Collectors.toList());
 
-		InfoTreeGenerator genOpt = InfoTreeGenerator.findSuitableGenerator(
+        var genOpt = InfoTreeGenerator.findSuitableGenerator(
 			signature, infoTreeGenerators);
 		return genOpt.generate(this, signature, idDirectory, infoTreeGenerators);
 	}
@@ -270,7 +270,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	@Override
 	public void register(Object... objects) {
-		for (Object o : objects) {
+		for (var o : objects) {
 			// Step 1: Register the Op with a discoverer
 			if (o.getClass().isArray()) {
 				register(o);
@@ -318,14 +318,14 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		infos.forEach(addToOpIndex);
 
 		// Step 2: Discover "secondary" OpInfos e.g. ReducedOpInfos
-		for (OpInfo info : infos) {
+		for (var info : infos) {
 			generateAllInfos(info).forEach(addToOpIndex);
 		}
 	}
 
 	@Override
 	public String help(final OpRequest request) {
-		Optional<OpDescriptionGenerator> opt = metaDiscoverer.discoverMax(
+        var opt = metaDiscoverer.discoverMax(
 			OpDescriptionGenerator.class);
 		if (opt.isEmpty()) {
 			return "";
@@ -335,7 +335,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	@Override
 	public String helpVerbose(final OpRequest request) {
-		Optional<OpDescriptionGenerator> opt = metaDiscoverer.discoverMax(
+        var opt = metaDiscoverer.discoverMax(
 			OpDescriptionGenerator.class);
 		if (opt.isEmpty()) {
 			return "";
@@ -352,7 +352,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 		var conditions = MatchingConditions.from(request, hints);
 		try {
-			OpInstance<T> instance = (OpInstance<T>) generateCacheHit(conditions);
+            var instance = (OpInstance<T>) generateCacheHit(conditions);
 			return wrapOp(instance, conditions);
 		}
 		catch (OpMatchingException e) {
@@ -373,7 +373,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 			// The directly suppressed exceptions will be from the individual matchers
 			// Check here for special cases of match failure
-			for (Throwable t : e.getSuppressed()) {
+			for (var t : e.getSuppressed()) {
 				// Duplicate ops detected
 				if (t.getMessage().startsWith("Multiple") && t.getMessage().contains(
 					"ops of priority"))
@@ -408,9 +408,9 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		OpRequest request = new InfoMatchingOpRequest(info, specialType);
 
 		// create new OpCandidate from request and info
-		OpCandidate candidate = new OpCandidate(this, request, info);
+        var candidate = new OpCandidate(this, request, info);
 
-		MatchingConditions conditions = MatchingConditions.from(request, hints);
+        var conditions = MatchingConditions.from(request, hints);
 		var instance = instantiateOp(candidate, conditions.hints());
 
 		// cache instance
@@ -438,7 +438,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 */
 	private OpInstance<?> generateCacheHit(MatchingConditions conditions) {
 		// see if the request has been matched already
-		OpInstance<?> cachedOp = getInstance(conditions);
+        var cachedOp = getInstance(conditions);
 		if (cachedOp != null) return cachedOp;
 
 		// obtain suitable OpCandidate
@@ -481,7 +481,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	private OpInstance<?> instantiateOp(final OpCandidate candidate,
 		Hints hints)
 	{
-		final List<RichOp<?>> conditions = resolveOpDependencies(candidate, hints);
+		final var conditions = resolveOpDependencies(candidate, hints);
 		InfoTree adaptorTree = new DependencyRichOpInfoTree(candidate.opInfo(),
 			conditions);
 		return adaptorTree.newInstance(candidate.getType());
@@ -502,9 +502,9 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 		try {
 			// find the opWrapper that wraps this type of Op
-			OpInfo info = instance.infoTree().info();
-			Class<?> rawType = Types.raw(info.opType());
-			Class<?> wrapper = getWrapperClass(rawType);
+            var info = instance.infoTree().info();
+            var rawType = Types.raw(info.opType());
+            var wrapper = getWrapperClass(rawType);
 			if (wrapper == null) {
 				throw new IllegalArgumentException(info.implementationName() +
 					": matched op Type " + info.opType().getClass() +
@@ -518,9 +518,9 @@ public class DefaultOpEnvironment implements OpEnvironment {
 					", then you must define a new OpWrapper for that class!");
 			}
 			// obtain the generic type of the Op w.r.t. the Wrapper class
-			Type reifiedSuperType = Types.superTypeOf(instance.type(), wrapper);
+            var reifiedSuperType = Types.superTypeOf(instance.type(), wrapper);
 			// wrap the Op
-			final OpWrapper<T> opWrapper = (OpWrapper<T>) wrappers.get(Types.raw(
+			final var opWrapper = (OpWrapper<T>) wrappers.get(Types.raw(
 				reifiedSuperType));
 			return opWrapper.wrap(instance, this, conditions);
 		}
@@ -539,11 +539,11 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		// Check opType itself
 		if (wrappers.containsKey(opType)) return opType;
 		// Check superclass of opType
-		Class<?> wrapperSuperClass = getWrapperClass(opType.getSuperclass());
+        var wrapperSuperClass = getWrapperClass(opType.getSuperclass());
 		if (wrapperSuperClass != null) return wrapperSuperClass;
 		// Check interfaces of opType
-		for (Class<?> iFace : opType.getInterfaces()) {
-			Class<?> wrapperIFace = getWrapperClass(iFace);
+		for (var iFace : opType.getInterfaces()) {
+            var wrapperIFace = getWrapperClass(iFace);
 			if (wrapperIFace != null) return wrapperIFace;
 		}
 		// There is no wrapper
@@ -560,8 +560,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	@SuppressWarnings("rawtypes")
 	private synchronized void initWrappers() {
 		if (wrappers != null) return;
-		HashMap<Class<?>, OpWrapper<?>> tmp = new HashMap<>();
-		for (Discoverer d : discoverers)
+        var tmp = new HashMap<Class<?>, OpWrapper<?>>();
+		for (var d : discoverers)
 			for (OpWrapper wrapper : d.discover(OpWrapper.class))
 				tmp.put(wrapper.type(), wrapper);
 		wrappers = tmp;
@@ -600,7 +600,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		}
 		// Let dependency matching hints contain all user hints, and additional
 		// dependency-matching hints
-		Hints baseDepHints = hints //
+        var baseDepHints = hints //
 			.plus( //
 				BaseOpHints.DependencyMatching.IN_PROGRESS, //
 				BaseOpHints.Conversion.FORBIDDEN, //
@@ -608,14 +608,14 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			).minus(BaseOpHints.Progress.TRACK);
 		// Then, match dependencies
 		final List<RichOp<?>> dependencies = new ArrayList<>();
-		for (final OpDependencyMember<?> dependency : Infos.dependencies(info)) {
-			final OpRequest request = inferOpRequest(dependency,
+		for (final var dependency : Infos.dependencies(info)) {
+			final var request = inferOpRequest(dependency,
 				dependencyTypeVarAssigns);
 			try {
 				// match Op
 				var depHints = baseDepHints.plus(dependency.hints());
 				var conditions = MatchingConditions.from(request, depHints);
-				OpInstance<?> instance = generateCacheHit(conditions);
+                var instance = generateCacheHit(conditions);
 				// add Op to dependencies
 				dependencies.add(wrapOp(instance, conditions));
 				// refine current type variable knowledge
@@ -625,7 +625,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 			}
 			catch (final OpMatchingException e) {
-				String message = DependencyMatchingException.message(info
+                var message = DependencyMatchingException.message(info
 					.implementationName(), dependency.key(), request);
 				if (e instanceof DependencyMatchingException) {
 					throw new DependencyMatchingException(message,
@@ -640,9 +640,9 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	private OpRequest inferOpRequest(OpDependencyMember<?> dependency,
 		Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
-		final Type mappedDependencyType = Types.unroll(
+		final var mappedDependencyType = Types.unroll(
 			new Type[] { dependency.type() }, typeVarAssigns)[0];
-		final String dependencyName = dependency.getDependencyName();
+		final var dependencyName = dependency.getDependencyName();
 		return inferOpRequest(mappedDependencyType, dependencyName, typeVarAssigns);
 	}
 
@@ -676,30 +676,30 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	private OpRequest inferOpRequest(Type type, String name,
 		Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
-		List<FunctionalMethodType> fmts = FunctionalParameters
+        var fmts = FunctionalParameters
 			.findFunctionalMethodTypes(type);
 
-		EnumSet<ItemIO> inIos = EnumSet.of(ItemIO.INPUT, ItemIO.CONTAINER,
+        var inIos = EnumSet.of(ItemIO.INPUT, ItemIO.CONTAINER,
 			ItemIO.MUTABLE);
-		EnumSet<ItemIO> outIos = EnumSet.of(ItemIO.OUTPUT, ItemIO.CONTAINER,
+        var outIos = EnumSet.of(ItemIO.OUTPUT, ItemIO.CONTAINER,
 			ItemIO.MUTABLE);
 
-		Type[] inputs = fmts.stream() //
+        var inputs = fmts.stream() //
 			.filter(fmt -> inIos.contains(fmt.itemIO())) //
 			.map(FunctionalMethodType::type) //
 			.toArray(Type[]::new);
 
-		Type[] outputs = fmts.stream() //
+        var outputs = fmts.stream() //
 			.filter(fmt -> outIos.contains(fmt.itemIO())) //
 			.map(FunctionalMethodType::type) //
 			.toArray(Type[]::new);
 
-		Type[] mappedInputs = Types.unroll(inputs, typeVarAssigns);
-		Type[] mappedOutputs = Types.unroll(outputs, typeVarAssigns);
+        var mappedInputs = Types.unroll(inputs, typeVarAssigns);
+        var mappedOutputs = Types.unroll(outputs, typeVarAssigns);
 
-		final int numOutputs = mappedOutputs.length;
+		final var numOutputs = mappedOutputs.length;
 		if (numOutputs != 1) {
-			String error = "Op '" + name + "' of type " + type + " specifies ";
+            var error = "Op '" + name + "' of type " + type + " specifies ";
 			error += numOutputs == 0 //
 				? "no outputs" //
 				: "multiple outputs: " + Arrays.toString(outputs);
@@ -723,7 +723,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 				"Op implementation must provide name.");
 			return;
 		}
-		for (String opName : opInfo.names()) {
+		for (var opName : opInfo.names()) {
 			opDirectory.put(opName, opInfo);
 		}
 	};

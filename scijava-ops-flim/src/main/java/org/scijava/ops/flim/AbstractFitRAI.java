@@ -95,13 +95,13 @@ public abstract class AbstractFitRAI<I extends RealType<I>, K extends RealType<K
 				kernel, //
 				Util.getTypeFromInterval(params.transMap));
 		}
-		List<int[]> roiPos = getRoiPositions(mask, params.ltAxis, params.transMap);
+        var roiPos = getRoiPositions(mask, params.ltAxis, params.transMap);
 
-		ParamEstimator<I> est = new ParamEstimator<>(params, roiPos);
+        var est = new ParamEstimator<I>(params, roiPos);
 		est.estimateStartEnd();
 		est.estimateIThreshold();
-		FitResults rslts = new FitResults();
-		FitWorker<I> fitWorker = createWorker(params, rslts);
+        var rslts = new FitResults();
+        var fitWorker = createWorker(params, rslts);
 		initRslt(params, fitWorker, est, rslts);
 
 		// -- Run -- //
@@ -149,9 +149,9 @@ public abstract class AbstractFitRAI<I extends RealType<I>, K extends RealType<K
 		ParamEstimator<I> est, //
 		FitResults rslts //
 	) {
-		int lifetimeAxis = params.ltAxis;
+        var lifetimeAxis = params.ltAxis;
 		// get dimensions and replace time axis with decay parameters
-		long[] dimFit = new long[params.transMap.numDimensions()];
+        var dimFit = new long[params.transMap.numDimensions()];
 		params.transMap.dimensions(dimFit);
 		if (params.getParamMap) {
 			dimFit[lifetimeAxis] = fitWorker.nParamOut();
@@ -182,18 +182,18 @@ public abstract class AbstractFitRAI<I extends RealType<I>, K extends RealType<K
 		RandomAccessibleInterval<I> trans)
 	{
 		final List<int[]> interested = new ArrayList<>();
-		final IntervalView<I> xyPlane = Views.hyperSlice(trans, lifetimeAxis, 0);
-		final Cursor<I> xyCursor = xyPlane.localizingCursor();
+		final var xyPlane = Views.hyperSlice(trans, lifetimeAxis, 0);
+		final var xyCursor = xyPlane.localizingCursor();
 
 		// work to do
 		while (xyCursor.hasNext()) {
 			xyCursor.fwd();
 			if (roi.test(xyCursor)) {
-				int[] pos = new int[3];
+                var pos = new int[3];
 				xyCursor.localize(pos);
 				// swap in lifetime axis
-				for (int i = 2; i > lifetimeAxis; i--) {
-					int tmp = pos[i];
+				for (var i = 2; i > lifetimeAxis; i--) {
+                    var tmp = pos[i];
 					pos[i] = pos[i - 1];
 					pos[i - 1] = tmp;
 				}

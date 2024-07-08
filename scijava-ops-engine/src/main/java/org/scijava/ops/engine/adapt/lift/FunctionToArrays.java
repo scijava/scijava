@@ -55,8 +55,8 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 
 	// TODO: extract logic to a utility class
 	private int minLength(Object[]... arrays) {
-		int minLength = Integer.MAX_VALUE;
-		for (Object[] array : arrays)
+		var minLength = Integer.MAX_VALUE;
+		for (var array : arrays)
 			if (array.length < minLength) minLength = array.length;
 		return minLength;
 	}
@@ -68,13 +68,13 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	public final Function<Function<I, O>, Function<I[], O[]>> liftFunction1 =
 		(function) -> {
 			return (in) -> {
-				int len = minLength(in);
+				var len = minLength(in);
 				if (len == 0) throw new UnsupportedOperationException("Unable to create an empty output array.");
-				O component = function.apply(in[0]);
+				var component = function.apply(in[0]);
 				@SuppressWarnings("unchecked")
-				O[] out = (O[]) Array.newInstance(component.getClass(), len);
+				var out = (O[]) Array.newInstance(component.getClass(), len);
 				
-				for (int i = 0; i < len; i++) {
+				for (var i = 0; i < len; i++) {
 					out[i] = function.apply(in[i]);
 				}
 				return out;
@@ -85,13 +85,13 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	public final Function<BiFunction<I1, I2, O>, BiFunction<I1[], I2[], O[]>> liftFunction2 =
 		(function) -> {
 			return (in1, in2) -> {
-				int len = minLength(in1, in2);
+				var len = minLength(in1, in2);
 				if (len == 0) throw new UnsupportedOperationException("Unable to create an empty output array.");
-				O component = function.apply(in1[0], in2[0]);
+				var component = function.apply(in1[0], in2[0]);
 				@SuppressWarnings("unchecked")
-				O[] out = (O[]) Array.newInstance(component.getClass(), len);
+				var out = (O[]) Array.newInstance(component.getClass(), len);
 				
-				for (int i = 0; i < len; i++) {
+				for (var i = 0; i < len; i++) {
 					out[i] = function.apply(in1[i], in2[i]);
 				}
 				return out;
@@ -102,13 +102,13 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	public final Function<Functions.Arity3<I1, I2, I3, O>, Functions.Arity3<I1[], I2[], I3[], O[]>> liftFunction3 =
 		(function) -> {
 			return (in1, in2, in3) -> {
-				int len = minLength(in1, in2, in3);
+				var len = minLength(in1, in2, in3);
 				if (len == 0) throw new UnsupportedOperationException("Unable to create an empty output array.");
-				O component = function.apply(in1[0], in2[0], in3[0]);
+				var component = function.apply(in1[0], in2[0], in3[0]);
 				@SuppressWarnings("unchecked")
-				O[] out = (O[]) Array.newInstance(component.getClass(), len);
+				var out = (O[]) Array.newInstance(component.getClass(), len);
 				
-				for (int i = 0; i < len; i++) {
+				for (var i = 0; i < len; i++) {
 					out[i] = function.apply(in1[i], in2[i], in3[i]);
 				}
 				return out;
@@ -119,13 +119,13 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	public final Function<Functions.Arity4<I1, I2, I3, I4, O>, Functions.Arity4<I1[], I2[], I3[], I4[], O[]>> liftFunction4 =
 		(function) -> {
 			return (in1, in2, in3, in4) -> {
-				int len = minLength(in1, in2, in3, in4);
+				var len = minLength(in1, in2, in3, in4);
 				if (len == 0) throw new UnsupportedOperationException("Unable to create an empty output array.");
-				O component = function.apply(in1[0], in2[0], in3[0], in4[0]);
+				var component = function.apply(in1[0], in2[0], in3[0], in4[0]);
 				@SuppressWarnings("unchecked")
-				O[] out = (O[]) Array.newInstance(component.getClass(), len);
+				var out = (O[]) Array.newInstance(component.getClass(), len);
 				
-				for (int i = 0; i < len; i++) {
+				for (var i = 0; i < len; i++) {
 					out[i] = function.apply(in1[i], in2[i], in3[i], in4[i]);
 				}
 				return out;
@@ -136,13 +136,13 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	public final Function<Functions.Arity5<I1, I2, I3, I4, I5, O>, Functions.Arity5<I1[], I2[], I3[], I4[], I5[], O[]>> liftFunction5 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5) -> {
-				int len = minLength(in1, in2, in3, in4, in5);
+				var len = minLength(in1, in2, in3, in4, in5);
 				if (len == 0) throw new UnsupportedOperationException("Unable to create an empty output array.");
-				O component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0]);
+				var component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0]);
 				@SuppressWarnings("unchecked")
-				O[] out = (O[]) Array.newInstance(component.getClass(), len);
+				var out = (O[]) Array.newInstance(component.getClass(), len);
 				
-				for (int i = 0; i < len; i++) {
+				for (var i = 0; i < len; i++) {
 					out[i] = function.apply(in1[i], in2[i], in3[i], in4[i], in5[i]);
 				}
 				return out;
@@ -153,13 +153,13 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	public final Function<Functions.Arity6<I1, I2, I3, I4, I5, I6, O>, Functions.Arity6<I1[], I2[], I3[], I4[], I5[], I6[], O[]>> liftFunction6 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6) -> {
-				int len = minLength(in1, in2, in3, in4, in5, in6);
+				var len = minLength(in1, in2, in3, in4, in5, in6);
 				if (len == 0) throw new UnsupportedOperationException("Unable to create an empty output array.");
-				O component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0], in6[0]);
+				var component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0], in6[0]);
 				@SuppressWarnings("unchecked")
-				O[] out = (O[]) Array.newInstance(component.getClass(), len);
+				var out = (O[]) Array.newInstance(component.getClass(), len);
 				
-				for (int i = 0; i < len; i++) {
+				for (var i = 0; i < len; i++) {
 					out[i] = function.apply(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i]);
 				}
 				return out;
@@ -170,13 +170,13 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	public final Function<Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Functions.Arity7<I1[], I2[], I3[], I4[], I5[], I6[], I7[], O[]>> liftFunction7 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7) -> {
-				int len = minLength(in1, in2, in3, in4, in5, in6, in7);
+				var len = minLength(in1, in2, in3, in4, in5, in6, in7);
 				if (len == 0) throw new UnsupportedOperationException("Unable to create an empty output array.");
-				O component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0], in6[0], in7[0]);
+				var component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0], in6[0], in7[0]);
 				@SuppressWarnings("unchecked")
-				O[] out = (O[]) Array.newInstance(component.getClass(), len);
+				var out = (O[]) Array.newInstance(component.getClass(), len);
 				
-				for (int i = 0; i < len; i++) {
+				for (var i = 0; i < len; i++) {
 					out[i] = function.apply(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i], in7[i]);
 				}
 				return out;
@@ -187,13 +187,13 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	public final Function<Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Functions.Arity8<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], O[]>> liftFunction8 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8) -> {
-				int len = minLength(in1, in2, in3, in4, in5, in6, in7, in8);
+				var len = minLength(in1, in2, in3, in4, in5, in6, in7, in8);
 				if (len == 0) throw new UnsupportedOperationException("Unable to create an empty output array.");
-				O component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0], in6[0], in7[0], in8[0]);
+				var component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0], in6[0], in7[0], in8[0]);
 				@SuppressWarnings("unchecked")
-				O[] out = (O[]) Array.newInstance(component.getClass(), len);
+				var out = (O[]) Array.newInstance(component.getClass(), len);
 				
-				for (int i = 0; i < len; i++) {
+				for (var i = 0; i < len; i++) {
 					out[i] = function.apply(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i], in7[i], in8[i]);
 				}
 				return out;
@@ -204,13 +204,13 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	public final Function<Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Functions.Arity9<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], I9[], O[]>> liftFunction9 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9) -> {
-				int len = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9);
+				var len = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9);
 				if (len == 0) throw new UnsupportedOperationException("Unable to create an empty output array.");
-				O component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0], in6[0], in7[0], in8[0], in9[0]);
+				var component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0], in6[0], in7[0], in8[0], in9[0]);
 				@SuppressWarnings("unchecked")
-				O[] out = (O[]) Array.newInstance(component.getClass(), len);
+				var out = (O[]) Array.newInstance(component.getClass(), len);
 				
-				for (int i = 0; i < len; i++) {
+				for (var i = 0; i < len; i++) {
 					out[i] = function.apply(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i], in7[i], in8[i], in9[i]);
 				}
 				return out;
@@ -221,13 +221,13 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	public final Function<Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Functions.Arity10<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], I9[], I10[], O[]>> liftFunction10 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10) -> {
-				int len = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
+				var len = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
 				if (len == 0) throw new UnsupportedOperationException("Unable to create an empty output array.");
-				O component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0], in6[0], in7[0], in8[0], in9[0], in10[0]);
+				var component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0], in6[0], in7[0], in8[0], in9[0], in10[0]);
 				@SuppressWarnings("unchecked")
-				O[] out = (O[]) Array.newInstance(component.getClass(), len);
+				var out = (O[]) Array.newInstance(component.getClass(), len);
 				
-				for (int i = 0; i < len; i++) {
+				for (var i = 0; i < len; i++) {
 					out[i] = function.apply(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i], in7[i], in8[i], in9[i], in10[i]);
 				}
 				return out;
@@ -238,13 +238,13 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	public final Function<Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Functions.Arity11<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], I9[], I10[], I11[], O[]>> liftFunction11 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11) -> {
-				int len = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
+				var len = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
 				if (len == 0) throw new UnsupportedOperationException("Unable to create an empty output array.");
-				O component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0], in6[0], in7[0], in8[0], in9[0], in10[0], in11[0]);
+				var component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0], in6[0], in7[0], in8[0], in9[0], in10[0], in11[0]);
 				@SuppressWarnings("unchecked")
-				O[] out = (O[]) Array.newInstance(component.getClass(), len);
+				var out = (O[]) Array.newInstance(component.getClass(), len);
 				
-				for (int i = 0; i < len; i++) {
+				for (var i = 0; i < len; i++) {
 					out[i] = function.apply(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i], in7[i], in8[i], in9[i], in10[i], in11[i]);
 				}
 				return out;
@@ -255,13 +255,13 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	public final Function<Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Functions.Arity12<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], I9[], I10[], I11[], I12[], O[]>> liftFunction12 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12) -> {
-				int len = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
+				var len = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 				if (len == 0) throw new UnsupportedOperationException("Unable to create an empty output array.");
-				O component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0], in6[0], in7[0], in8[0], in9[0], in10[0], in11[0], in12[0]);
+				var component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0], in6[0], in7[0], in8[0], in9[0], in10[0], in11[0], in12[0]);
 				@SuppressWarnings("unchecked")
-				O[] out = (O[]) Array.newInstance(component.getClass(), len);
+				var out = (O[]) Array.newInstance(component.getClass(), len);
 				
-				for (int i = 0; i < len; i++) {
+				for (var i = 0; i < len; i++) {
 					out[i] = function.apply(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i], in7[i], in8[i], in9[i], in10[i], in11[i], in12[i]);
 				}
 				return out;
@@ -272,13 +272,13 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	public final Function<Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], I9[], I10[], I11[], I12[], I13[], O[]>> liftFunction13 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13) -> {
-				int len = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
+				var len = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 				if (len == 0) throw new UnsupportedOperationException("Unable to create an empty output array.");
-				O component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0], in6[0], in7[0], in8[0], in9[0], in10[0], in11[0], in12[0], in13[0]);
+				var component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0], in6[0], in7[0], in8[0], in9[0], in10[0], in11[0], in12[0], in13[0]);
 				@SuppressWarnings("unchecked")
-				O[] out = (O[]) Array.newInstance(component.getClass(), len);
+				var out = (O[]) Array.newInstance(component.getClass(), len);
 				
-				for (int i = 0; i < len; i++) {
+				for (var i = 0; i < len; i++) {
 					out[i] = function.apply(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i], in7[i], in8[i], in9[i], in10[i], in11[i], in12[i], in13[i]);
 				}
 				return out;
@@ -289,13 +289,13 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	public final Function<Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], I9[], I10[], I11[], I12[], I13[], I14[], O[]>> liftFunction14 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14) -> {
-				int len = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
+				var len = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 				if (len == 0) throw new UnsupportedOperationException("Unable to create an empty output array.");
-				O component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0], in6[0], in7[0], in8[0], in9[0], in10[0], in11[0], in12[0], in13[0], in14[0]);
+				var component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0], in6[0], in7[0], in8[0], in9[0], in10[0], in11[0], in12[0], in13[0], in14[0]);
 				@SuppressWarnings("unchecked")
-				O[] out = (O[]) Array.newInstance(component.getClass(), len);
+				var out = (O[]) Array.newInstance(component.getClass(), len);
 				
-				for (int i = 0; i < len; i++) {
+				for (var i = 0; i < len; i++) {
 					out[i] = function.apply(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i], in7[i], in8[i], in9[i], in10[i], in11[i], in12[i], in13[i], in14[i]);
 				}
 				return out;
@@ -306,13 +306,13 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	public final Function<Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], I9[], I10[], I11[], I12[], I13[], I14[], I15[], O[]>> liftFunction15 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15) -> {
-				int len = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
+				var len = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 				if (len == 0) throw new UnsupportedOperationException("Unable to create an empty output array.");
-				O component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0], in6[0], in7[0], in8[0], in9[0], in10[0], in11[0], in12[0], in13[0], in14[0], in15[0]);
+				var component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0], in6[0], in7[0], in8[0], in9[0], in10[0], in11[0], in12[0], in13[0], in14[0], in15[0]);
 				@SuppressWarnings("unchecked")
-				O[] out = (O[]) Array.newInstance(component.getClass(), len);
+				var out = (O[]) Array.newInstance(component.getClass(), len);
 				
-				for (int i = 0; i < len; i++) {
+				for (var i = 0; i < len; i++) {
 					out[i] = function.apply(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i], in7[i], in8[i], in9[i], in10[i], in11[i], in12[i], in13[i], in14[i], in15[i]);
 				}
 				return out;
@@ -323,13 +323,13 @@ public class FunctionToArrays<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 	public final Function<Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<I1[], I2[], I3[], I4[], I5[], I6[], I7[], I8[], I9[], I10[], I11[], I12[], I13[], I14[], I15[], I16[], O[]>> liftFunction16 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> {
-				int len = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
+				var len = minLength(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 				if (len == 0) throw new UnsupportedOperationException("Unable to create an empty output array.");
-				O component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0], in6[0], in7[0], in8[0], in9[0], in10[0], in11[0], in12[0], in13[0], in14[0], in15[0], in16[0]);
+				var component = function.apply(in1[0], in2[0], in3[0], in4[0], in5[0], in6[0], in7[0], in8[0], in9[0], in10[0], in11[0], in12[0], in13[0], in14[0], in15[0], in16[0]);
 				@SuppressWarnings("unchecked")
-				O[] out = (O[]) Array.newInstance(component.getClass(), len);
+				var out = (O[]) Array.newInstance(component.getClass(), len);
 				
-				for (int i = 0; i < len; i++) {
+				for (var i = 0; i < len; i++) {
 					out[i] = function.apply(in1[i], in2[i], in3[i], in4[i], in5[i], in6[i], in7[i], in8[i], in9[i], in10[i], in11[i], in12[i], in13[i], in14[i], in15[i], in16[i]);
 				}
 				return out;

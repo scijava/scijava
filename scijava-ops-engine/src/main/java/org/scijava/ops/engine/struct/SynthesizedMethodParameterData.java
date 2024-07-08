@@ -61,7 +61,7 @@ public class SynthesizedMethodParameterData implements ParameterData {
 		List<String> fmtNames = new ArrayList<>(fmts.size());
 		int ins, outs, containers, mutables;
 		ins = outs = containers = mutables = 1;
-		for (FunctionalMethodType fmt : fmts) {
+		for (var fmt : fmts) {
 			switch (fmt.itemIO()) {
 				case INPUT:
 					fmtNames.add("input" + ins++);
@@ -86,14 +86,14 @@ public class SynthesizedMethodParameterData implements ParameterData {
 	public List<SynthesizedParameterMember<?>> synthesizeMembers(
 		List<FunctionalMethodType> fmts)
 	{
-		Boolean[] optionality = getParameterNullability(m, opType, m
+        var optionality = getParameterNullability(m, opType, m
 			.getParameterCount());
-		List<String> names = getParameterNames(fmts);
-		int p = 0;
+        var names = getParameterNames(fmts);
+        var p = 0;
 		List<SynthesizedParameterMember<?>> members = new ArrayList<>(fmts.size());
-		for (FunctionalMethodType fmt : fmts) {
-			String name = names.get(p);
-			boolean optional = fmt.itemIO() != ItemIO.OUTPUT && optionality[p++];
+		for (var fmt : fmts) {
+            var name = names.get(p);
+            var optional = fmt.itemIO() != ItemIO.OUTPUT && optionality[p++];
 			members.add(new SynthesizedParameterMember<>(fmt, name, !optional, ""));
 		}
 		return members;
@@ -104,7 +104,7 @@ public class SynthesizedMethodParameterData implements ParameterData {
 	{
 		boolean opMethodHasNullables = FunctionalParameters.hasNullableAnnotations(
 			m);
-		List<Method> fMethodsWithNullables = FunctionalParameters
+        var fMethodsWithNullables = FunctionalParameters
 			.fMethodsWithNullable(opType);
 		if (opMethodHasNullables) {
 			fMethodsWithNullables.add(m);
@@ -124,12 +124,12 @@ public class SynthesizedMethodParameterData implements ParameterData {
 	}
 
 	private static Boolean[] getOpMethodNullables(Method m, int opParams) {
-		int[] paramIndex = mapFunctionalParamsToIndices(m.getParameters());
-		Boolean[] arr = FunctionalParameters.generateAllRequiredArray(opParams);
+        var paramIndex = mapFunctionalParamsToIndices(m.getParameters());
+        var arr = FunctionalParameters.generateAllRequiredArray(opParams);
 		// check parameters on m
-		Boolean[] mNullables = FunctionalParameters.findParameterNullability(m);
-		for (int i = 0; i < mNullables.length; i++) {
-			int index = paramIndex[i];
+        var mNullables = FunctionalParameters.findParameterNullability(m);
+		for (var i = 0; i < mNullables.length; i++) {
+            var index = paramIndex[i];
 			if (index == -1) continue;
 			arr[index] |= mNullables[i];
 		}
@@ -147,9 +147,9 @@ public class SynthesizedMethodParameterData implements ParameterData {
 	 *         {@code -1} designate an {@link OpDependency} at that position.
 	 */
 	private static int[] mapFunctionalParamsToIndices(Parameter[] parameters) {
-		int[] paramNo = new int[parameters.length];
-		int paramIndex = 0;
-		for (int i = 0; i < parameters.length; i++) {
+        var paramNo = new int[parameters.length];
+        var paramIndex = 0;
+		for (var i = 0; i < parameters.length; i++) {
 			if (parameters[i].isAnnotationPresent(OpDependency.class)) {
 				paramNo[i] = -1;
 			}

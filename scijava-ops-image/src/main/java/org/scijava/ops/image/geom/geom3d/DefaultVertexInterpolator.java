@@ -44,22 +44,22 @@ public class DefaultVertexInterpolator extends AbstractVertexInterpolator {
 		output = new double[3];
 
 		if (Math.abs(isolevel - p1Value) < 0.00001) {
-			for (int i = 0; i < 3; i++) {
+			for (var i = 0; i < 3; i++) {
 				output[i] = p1[i];
 			}
 		}
 		else if (Math.abs(isolevel - p2Value) < 0.00001) {
-			for (int i = 0; i < 3; i++) {
+			for (var i = 0; i < 3; i++) {
 				output[i] = p2[i];
 			}
 		}
 		else if (Math.abs(p1Value - p2Value) < 0.00001) {
-			for (int i = 0; i < 3; i++) {
+			for (var i = 0; i < 3; i++) {
 				output[i] = p1[i];
 			}
 		}
 		else {
-			double mu = (isolevel - p1Value) / (p2Value - p1Value);
+            var mu = (isolevel - p1Value) / (p2Value - p1Value);
 
 			output[0] = p1[0] + mu * (p2[0] - p1[0]);
 			output[1] = p1[1] + mu * (p2[1] - p1[1]);

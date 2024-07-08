@@ -120,25 +120,25 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>>
 		@Nullable final RandomAccessibleInterval<B> mask, //
 		final ImgLabeling<Integer, IntType> outputLabeling //
 	) {
-		final RandomAccess<T> raIn = in.randomAccess();
+		final var raIn = in.randomAccess();
 
 		RandomAccess<B> raMask = null;
 		if (mask != null) {
 			raMask = mask.randomAccess();
 		}
 		// stores the size of each dimension
-		final long[] dimensSizes = new long[in.numDimensions()];
+		final var dimensSizes = new long[in.numDimensions()];
 		in.dimensions(dimensSizes);
 
 		// calculates the number of points in the n-d space
-		long numPixels = Intervals.numElements(in);
+        var numPixels = Intervals.numElements(in);
 
 		// the pixels indices are stored in an array, which is sorted depending
 		// on the pixel values
 		final List<Long> imiList = new ArrayList<>();
 
 		if (mask != null) {
-			final Cursor<Void> c = Regions.iterable(mask).localizingCursor();
+			final var c = Regions.iterable(mask).localizingCursor();
 			while (c.hasNext()) {
 				c.next();
 				imiList.add(IntervalIndexer.positionToIndex(c, in));
@@ -149,7 +149,7 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>>
 				imiList.add(i);
 			}
 		}
-		final Long[] imi = imiList.toArray(new Long[imiList.size()]);
+		final var imi = imiList.toArray(new Long[imiList.size()]);
 
 		/*
 		 * Sort the pixels of imi in the increasing order of their grey value
@@ -157,29 +157,29 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>>
 		 */
 		Arrays.sort(imi, (o1, o2) -> {
 			IntervalIndexer.indexToPosition(o1, in, raIn);
-			final T value = raIn.get().copy();
+			final var value = raIn.get().copy();
 			IntervalIndexer.indexToPosition(o2, in, raIn);
 			return value.compareTo(raIn.get());
 		});
 
 		// lab and dist store the values calculated after each phase
-		final RandomAccessibleInterval<IntType> lab = imgCreator.apply(in,
+		final var lab = imgCreator.apply(in,
 			new IntType());
 		// extend border to be able to do a quick check, if a voxel is inside
-		final ExtendedRandomAccessibleInterval<IntType, RandomAccessibleInterval<IntType>> labExt =
+		final var labExt =
 			Views.extendBorder(lab);
-		final OutOfBounds<IntType> raLab = labExt.randomAccess();
-		final RandomAccessibleInterval<IntType> dist = imgCreator.apply(in,
+		final var raLab = labExt.randomAccess();
+		final var dist = imgCreator.apply(in,
 			new IntType());
-		final RandomAccess<IntType> raDist = dist.randomAccess();
+		final var raDist = dist.randomAccess();
 
 		// initial values
-		for (final IntType pixel : Views.flatIterable(lab)) {
+		for (final var pixel : Views.flatIterable(lab)) {
 			pixel.set(INIT);
 		}
-		int current_label = 0;
+        var current_label = 0;
 		int current_dist;
-		final ArrayList<Long> fifo = new ArrayList<>();
+		final var fifo = new ArrayList<Long>();
 
 		// RandomAccess for Neighborhoods
 		final Shape shape;
@@ -189,31 +189,31 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>>
 		else {
 			shape = new DiamondShape(1);
 		}
-		final RandomAccessible<Neighborhood<T>> neighborhoods = shape
+		final var neighborhoods = shape
 			.neighborhoodsRandomAccessible(in);
-		final RandomAccess<Neighborhood<T>> raNeighbor = neighborhoods
+		final var raNeighbor = neighborhoods
 			.randomAccess();
 
 		/*
 		 * Start flooding
 		 */
-		for (int j = 0; j < imi.length; j++) {
+		for (var j = 0; j < imi.length; j++) {
 			IntervalIndexer.indexToPosition(imi[j], in, raIn);
-			final T actualH = raIn.get().copy();
-			int i = j;
+			final var actualH = raIn.get().copy();
+            var i = j;
 			while (actualH.compareTo(raIn.get()) == 0) {
 				final long p = imi[i];
 				IntervalIndexer.indexToPosition(p, in, raIn);
 				raLab.setPosition(raIn);
 				raLab.get().set(MASK);
 				raNeighbor.setPosition(raIn);
-				final Cursor<T> neighborHood = raNeighbor.get().cursor();
+				final var neighborHood = raNeighbor.get().cursor();
 
 				while (neighborHood.hasNext()) {
 					neighborHood.fwd();
 					raLab.setPosition(neighborHood);
 					if (!raLab.isOutOfBounds()) {
-						final int f = raLab.get().get();
+						final var f = raLab.get().get();
 						if (f > 0 || f == WSHED) {
 							raDist.setPosition(raIn);
 							raDist.get().set(1);
@@ -244,20 +244,20 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>>
 
 				IntervalIndexer.indexToPosition(p, in, raNeighbor);
 
-				final Cursor<T> neighborHood = raNeighbor.get().cursor();
+				final var neighborHood = raNeighbor.get().cursor();
 
 				raLab.setPosition(raNeighbor);
-				int labp = raLab.get().get();
+                var labp = raLab.get().get();
 
-				final long[] posNeighbor = new long[neighborHood.numDimensions()];
+				final var posNeighbor = new long[neighborHood.numDimensions()];
 				while (neighborHood.hasNext()) {
 					neighborHood.fwd();
 					neighborHood.localize(posNeighbor);
 					raLab.setPosition(posNeighbor);
 					if (!raLab.isOutOfBounds()) {
 						raDist.setPosition(posNeighbor);
-						final int labq = raLab.get().get();
-						final int distq = raDist.get().get();
+						final var labq = raLab.get().get();
+						final var distq = raDist.get().get();
 						if (distq < current_dist && (labq > 0 || labq == WSHED)) {
 							// i.e. q belongs to an already labeled basin or to
 							// the watersheds
@@ -308,15 +308,15 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>>
 					while (!fifo.isEmpty()) {
 						final long q = fifo.remove(0);
 						IntervalIndexer.indexToPosition(q, in, raNeighbor);
-						final Cursor<T> neighborHood = raNeighbor.get().cursor();
+						final var neighborHood = raNeighbor.get().cursor();
 
-						final long[] posNeighbor = new long[neighborHood.numDimensions()];
+						final var posNeighbor = new long[neighborHood.numDimensions()];
 						while (neighborHood.hasNext()) {
 							neighborHood.fwd();
 							neighborHood.localize(posNeighbor);
 							raLab.setPosition(posNeighbor);
 							if (!raLab.isOutOfBounds()) {
-								final long r = IntervalIndexer.positionToIndex(posNeighbor,
+								final var r = IntervalIndexer.positionToIndex(posNeighbor,
 									dimensSizes);
 								if (raLab.get().get() == MASK) {
 									fifo.add(r);
@@ -338,10 +338,10 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>>
 		/*
 		 * Draw output and remove as the case may be the watersheds
 		 */
-		final Cursor<LabelingType<Integer>> cursorOut = outputLabeling.cursor();
+		final var cursorOut = outputLabeling.cursor();
 		while (cursorOut.hasNext()) {
 			cursorOut.fwd();
-			boolean maskValue = true;
+            var maskValue = true;
 			if (mask != null) {
 				raMask.setPosition(cursorOut);
 				if (!raMask.get().get()) {
@@ -355,8 +355,8 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>>
 			else {
 				if (!drawWatersheds && raLab.get().get() == WSHED) {
 					raNeighbor.setPosition(cursorOut);
-					final Cursor<T> neighborHood = raNeighbor.get().cursor();
-					int newLab = WSHED;
+					final var neighborHood = raNeighbor.get().cursor();
+                    var newLab = WSHED;
 					while (neighborHood.hasNext()) {
 						neighborHood.fwd();
 						raLab.setPosition(neighborHood);
@@ -384,8 +384,8 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>>
 		 * Merge already present labels before calculation of watershed
 		 */
 		if (outputLabeling != null) {
-			final Cursor<LabelingType<Integer>> cursor = outputLabeling.cursor();
-			final RandomAccess<LabelingType<Integer>> raOut = outputLabeling
+			final var cursor = outputLabeling.cursor();
+			final var raOut = outputLabeling
 				.randomAccess();
 			while (cursor.hasNext()) {
 				cursor.fwd();

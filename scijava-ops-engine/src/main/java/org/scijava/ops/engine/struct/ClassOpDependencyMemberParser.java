@@ -50,7 +50,7 @@ public class ClassOpDependencyMemberParser implements
 	{
 		if (source == null) return null;
 
-		final ArrayList<FieldOpDependencyMember<?>> items = new ArrayList<>();
+		final var items = new ArrayList<FieldOpDependencyMember<?>>();
 
 		// NB: Reject abstract classes.
 		org.scijava.struct.Structs.checkModifiers(source.getName() + ": ", source
@@ -65,9 +65,9 @@ public class ClassOpDependencyMemberParser implements
 	private static void parseFieldOpDependencies(
 		final List<FieldOpDependencyMember<?>> items, Class<?> annotatedClass)
 	{
-		final List<Field> fields = Annotations.annotatedFields(annotatedClass,
+		final var fields = Annotations.annotatedFields(annotatedClass,
 			OpDependency.class);
-		for (final Field f : fields) {
+		for (final var f : fields) {
 			f.setAccessible(true);
 			if (Modifier.isFinal(f.getModifiers())) {
 				// Final fields are bad because they cannot be modified.

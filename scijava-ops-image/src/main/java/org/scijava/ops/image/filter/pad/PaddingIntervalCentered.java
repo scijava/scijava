@@ -63,10 +63,10 @@ public class PaddingIntervalCentered<T extends ComplexType<T>, I extends RandomA
 	@SuppressWarnings("unchecked")
 	public O apply(final I input, final Dimensions paddedDimensions) {
 
-		final long[] paddedSize = new long[paddedDimensions.numDimensions()];
+		final var paddedSize = new long[paddedDimensions.numDimensions()];
 		paddedDimensions.dimensions(paddedSize);
 
-		O inputInterval = (O) FFTMethods.paddingIntervalCentered(input,
+        var inputInterval = (O) FFTMethods.paddingIntervalCentered(input,
 			FinalDimensions.wrap(paddedSize));
 
 		return inputInterval;

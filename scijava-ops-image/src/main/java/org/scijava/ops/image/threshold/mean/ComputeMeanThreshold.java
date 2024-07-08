@@ -55,7 +55,7 @@ public class ComputeMeanThreshold<T extends RealType<T>> extends
 	 */
 	@Override
 	public long computeBin(final Histogram1d<T> hist) {
-		final long[] histogram = hist.toLongArray();
+		final var histogram = hist.toLongArray();
 		return computeBin(histogram);
 	}
 
@@ -68,9 +68,9 @@ public class ComputeMeanThreshold<T extends RealType<T>> extends
 	 * The threshold is the mean of the greyscale data
 	 */
 	public static long computeBin(final long[] histogram) {
-		int threshold = -1;
+        var threshold = -1;
 		double tot = 0, sum = 0;
-		for (int i = 0; i < histogram.length; i++) {
+		for (var i = 0; i < histogram.length; i++) {
 			tot += histogram[i];
 			sum += (i * histogram[i]);
 		}

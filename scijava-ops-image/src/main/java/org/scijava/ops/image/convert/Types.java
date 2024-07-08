@@ -223,7 +223,7 @@ public final class Types {
 	}
 
 	public static BigInteger uint64(final long value) {
-		BigInteger original = BigInteger.valueOf(value);
+        var original = BigInteger.valueOf(value);
 		return original.and(maskU64);
 	}
 
@@ -240,27 +240,27 @@ public final class Types {
 	}
 
 	public static BigInteger uint128(final long value) {
-		final BigInteger bi = BigInteger.valueOf(value);
+		final var bi = BigInteger.valueOf(value);
 		if (bi.compareTo(BigInteger.ZERO) >= 0) return bi;
 		return new BigInteger(validBytes(bi.toByteArray()));
 	}
 
 	public static BigInteger uint128(final double value) {
-		BigInteger bi = bigInt(value);
+        var bi = bigInt(value);
 		if (bi.compareTo(BigInteger.ZERO) >= 0) return bi;
 		return new BigInteger(validBytes(bi.toByteArray()));
 	}
 
 	private static byte[] validBytes(final byte[] value) {
-		int start = 0;
-		int startBI = 16 - value.length + 1;
+        var start = 0;
+        var startBI = 16 - value.length + 1;
 		if (value.length > 16) {
 			start = value.length - 16;
 			startBI = 0;
 		}
-		byte[] b = new byte[17];
+        var b = new byte[17];
 		b[0] = 0;
-		int cutoff = Math.min(value.length, start + 16);
+        var cutoff = Math.min(value.length, start + 16);
 		for (int i = start, h = startBI; i < cutoff || h < 16; i++, h++) {
 			b[h] = (byte) (value[i] & 0xfffL);
 		}

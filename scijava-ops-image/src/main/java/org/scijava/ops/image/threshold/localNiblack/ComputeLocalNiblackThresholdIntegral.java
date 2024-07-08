@@ -84,17 +84,17 @@ public class ComputeLocalNiblackThresholdIntegral<T extends RealType<T>, U exten
 		final T inputCenterPixel, final Double c, final Double k,
 		final BitType output)
 	{
-		final DoubleType threshold = new DoubleType(0.0d);
+		final var threshold = new DoubleType(0.0d);
 
-		final DoubleType mean = new DoubleType();
+		final var mean = new DoubleType();
 		integralMeanOp.compute(inputNeighborhood, mean);
 
 		threshold.add(mean);
 
-		final DoubleType variance = new DoubleType();
+		final var variance = new DoubleType();
 		integralVarianceOp.compute(inputNeighborhood, variance);
 
-		final DoubleType stdDev = new DoubleType(Math.sqrt(variance.get()));
+		final var stdDev = new DoubleType(Math.sqrt(variance.get()));
 		stdDev.mul(k);
 
 		threshold.add(stdDev);
@@ -104,7 +104,7 @@ public class ComputeLocalNiblackThresholdIntegral<T extends RealType<T>, U exten
 
 		// Set value
 		final Converter<T, DoubleType> conv = new RealDoubleConverter<>();
-		final DoubleType centerPixelAsDoubleType = variance; // NB: Reuse
+		final var centerPixelAsDoubleType = variance; // NB: Reuse
 		// DoubleType
 		conv.convert(inputCenterPixel, centerPixelAsDoubleType);
 

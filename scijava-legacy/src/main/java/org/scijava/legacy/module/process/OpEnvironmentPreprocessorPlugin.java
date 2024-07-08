@@ -55,13 +55,13 @@ public class OpEnvironmentPreprocessorPlugin extends
 
 	@Override
 	public void process(Module module) {
-		for (final ModuleItem<?> input : module.getInfo().inputs()) {
+		for (final var input : module.getInfo().inputs()) {
 			if (!input.isAutoFill()) continue;
 			if (module.isInputResolved(input.getName())) continue;
-			final Class<?> type = input.getType();
+			final var type = input.getType();
 			if (OpEnvironment.class.equals(type)) {
 				@SuppressWarnings("unchecked")
-				final ModuleItem<OpEnvironment> envInput =
+				final var envInput =
 					(ModuleItem<OpEnvironment>) input;
 				envInput.setValue(module, opEnvironmentService.env());
 				module.resolveInput(input.getName());

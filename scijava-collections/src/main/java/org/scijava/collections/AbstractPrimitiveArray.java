@@ -126,17 +126,17 @@ public abstract class AbstractPrimitiveArray<ArrayType, BaseType> extends
 	/** Gets the current capacity of the backing array. */
 	@Override
 	public int capacity() {
-		final ArrayType array = getArray();
+		final var array = getArray();
 		return array == null ? 0 : Array.getLength(array);
 	}
 
 	@Override
 	public void ensureCapacity(final int minCapacity) {
-		final int oldCapacity = capacity();
+		final var oldCapacity = capacity();
 		if (minCapacity <= oldCapacity) return; // no need to grow
 
 		// grow the array by up to 50% (plus a small constant)
-		final int growth = Math.min(oldCapacity / 2 + 16, maximumGrowth);
+		final var growth = Math.min(oldCapacity / 2 + 16, maximumGrowth);
 		final int newCapacity;
 		if (growth > Integer.MAX_VALUE - oldCapacity) {
 			// growth would push array over the maximum array size
@@ -144,7 +144,7 @@ public abstract class AbstractPrimitiveArray<ArrayType, BaseType> extends
 		}
 		else newCapacity = oldCapacity + growth;
 		// ensure the array grows by at least the requested minimum capacity
-		final int newLength = Math.max(minCapacity, newCapacity);
+		final var newLength = Math.max(minCapacity, newCapacity);
 
 		// copy the data into a new array
 		setArray(copyArray(newLength));
@@ -158,7 +158,7 @@ public abstract class AbstractPrimitiveArray<ArrayType, BaseType> extends
 	 */
 	@Override
 	public void insert(final int index, final int count) {
-		int oldSize = size();
+        var oldSize = size();
 		if (index < 0 || index > oldSize) {
 			throw new ArrayIndexOutOfBoundsException("Invalid index value");
 		}
@@ -171,7 +171,7 @@ public abstract class AbstractPrimitiveArray<ArrayType, BaseType> extends
 		}
 		setSize(oldSize + count);
 		if (index < oldSize) {
-			final ArrayType array = getArray();
+			final var array = getArray();
 			System.arraycopy(array, index, array, index + count, oldSize - index);
 		}
 	}
@@ -184,7 +184,7 @@ public abstract class AbstractPrimitiveArray<ArrayType, BaseType> extends
 	 */
 	@Override
 	public void delete(final int index, final int count) {
-		int oldSize = size();
+        var oldSize = size();
 		if (index < 0 || index > oldSize) {
 			throw new ArrayIndexOutOfBoundsException("Invalid index value");
 		}
@@ -194,7 +194,7 @@ public abstract class AbstractPrimitiveArray<ArrayType, BaseType> extends
 		}
 		setSize(oldSize - count);
 		if (index + count < oldSize) {
-			final ArrayType array = getArray();
+			final var array = getArray();
 			System.arraycopy(array, index + count, array, index, oldSize - index -
 				count);
 		}
@@ -212,7 +212,7 @@ public abstract class AbstractPrimitiveArray<ArrayType, BaseType> extends
 
 	@Override
 	public BaseType remove(final int index) {
-		final BaseType removed = get(index);
+		final var removed = get(index);
 		delete(index, 1);
 		return removed;
 	}
@@ -251,8 +251,8 @@ public abstract class AbstractPrimitiveArray<ArrayType, BaseType> extends
 
 	private ArrayType copyArray(final int newLength) {
 		@SuppressWarnings("unchecked")
-		final ArrayType copy = (ArrayType) Array.newInstance(type, newLength);
-		final ArrayType oldArray = getArray();
+		final var copy = (ArrayType) Array.newInstance(type, newLength);
+		final var oldArray = getArray();
 		if (oldArray != null) System.arraycopy(oldArray, 0, copy, 0, size());
 		return copy;
 	}

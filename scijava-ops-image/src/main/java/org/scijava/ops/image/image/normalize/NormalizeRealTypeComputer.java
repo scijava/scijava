@@ -60,7 +60,7 @@ class NormalizeRealTypeComputer<I extends RealType<I>, O extends RealType<O>>
 		final double targetMin, final double targetMax)
 	{
 		this.sourceMin = sourceMin;
-		final double tmp = sourceMax;
+		final var tmp = sourceMax;
 		this.targetMin = targetMin;
 		this.targetMax = targetMax;
 
@@ -71,7 +71,7 @@ class NormalizeRealTypeComputer<I extends RealType<I>, O extends RealType<O>>
 	@Override
 	public void compute(final I input, final O output) {
 
-		final double res = (input.getRealDouble() - sourceMin) * factor + targetMin;
+		final var res = (input.getRealDouble() - sourceMin) * factor + targetMin;
 
 		if (res > targetMax) {
 			output.setReal(targetMax);

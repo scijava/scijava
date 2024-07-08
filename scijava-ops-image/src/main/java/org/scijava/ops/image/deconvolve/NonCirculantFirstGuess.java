@@ -84,26 +84,26 @@ public class NonCirculantFirstGuess<I extends RealType<I>, O extends RealType<O>
 		final O outType, final Dimensions k)
 	{
 
-		final Img<O> firstGuess = create.apply(input, outType);
+		final var firstGuess = create.apply(input, outType);
 
 		// set first guess to be a constant = to the average value
 
 		// so first compute the sum...
-		final DoubleType s = new DoubleType();
+		final var s = new DoubleType();
 		sum.compute(Views.iterable(input), s);
 
 		// then the number of pixels
 		long numPixels = 1;
 
-		for (int d = 0; d < k.numDimensions(); d++) {
+		for (var d = 0; d < k.numDimensions(); d++) {
 			numPixels = numPixels * k.dimension(d);
 		}
 
 		// then the average value...
-		final double average = s.getRealDouble() / (numPixels);
+		final var average = s.getRealDouble() / (numPixels);
 
 		// set first guess as the average value computed above (TODO: use fill op)
-		for (final O type : firstGuess) {
+		for (final var type : firstGuess) {
 			type.setReal(average);
 		}
 

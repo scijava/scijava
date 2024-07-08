@@ -59,19 +59,19 @@ public class DefaultTextureHomogeneity<T extends RealType<T>> extends
 		final Integer numGreyLevels, final Integer distance,
 		final MatrixOrientation orientation)
 	{
-		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels,
+		final var matrix = getCooccurrenceMatrix(input, numGreyLevels,
 			distance, orientation);
 
 		final double nrGreyLevel = matrix.length;
 
 		double res = 0;
-		for (int i = 0; i < nrGreyLevel; i++) {
-			for (int j = 0; j < nrGreyLevel; j++) {
+		for (var i = 0; i < nrGreyLevel; i++) {
+			for (var j = 0; j < nrGreyLevel; j++) {
 				res += matrix[i][j] / (1 + Math.abs(i - j));
 			}
 		}
 
-		DoubleType output = new DoubleType();
+        var output = new DoubleType();
 		output.set(res);
 		return output;
 	}

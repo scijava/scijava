@@ -57,8 +57,8 @@ public class DefaultFeretsDiameter implements
 		final DoubleType feretsDiameter)
 	{
 
-		final RealLocalizable p1 = points.getA();
-		final RealLocalizable p2 = points.getB();
+		final var p1 = points.getA();
+		final var p2 = points.getB();
 
 		feretsDiameter.set(Math.hypot(p1.getDoublePosition(0) - p2
 			.getDoublePosition(0), p1.getDoublePosition(1) - p2.getDoublePosition(

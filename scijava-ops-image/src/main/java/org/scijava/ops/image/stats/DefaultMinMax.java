@@ -63,15 +63,15 @@ public class DefaultMinMax<I extends RealType<I>> implements
 	public Pair<I, I> apply(final RandomAccessibleInterval<I> input) {
 		// set minVal to the largest possible value and maxVal to the smallest
 		// possible.
-		final I minVal = Util.getTypeFromInterval(input).createVariable();
+		final var minVal = Util.getTypeFromInterval(input).createVariable();
 		minVal.setReal(minVal.getMinValue());
-		final I maxVal = minVal.createVariable();
+		final var maxVal = minVal.createVariable();
 		maxVal.setReal(maxVal.getMaxValue());
 
 		List<Pair<I, I>> minMaxes = LoopBuilder.setImages(input).multiThreaded()
 			.forEachChunk(chunk -> {
-				final I min = maxVal.copy();
-				final I max = minVal.copy();
+				final var min = maxVal.copy();
+				final var max = minVal.copy();
 
 				chunk.forEachPixel((in) -> {
 					if (in.compareTo(min) < 0) min.set(in);
@@ -81,11 +81,11 @@ public class DefaultMinMax<I extends RealType<I>> implements
 				return new ValuePair<>(min, max);
 			});
 
-		final I raiMin = minMaxes.parallelStream() //
+		final var raiMin = minMaxes.parallelStream() //
 			.map(pair -> pair.getA()) //
 			.reduce(maxVal, (result, min) -> min.compareTo(result) < 0 ? min
 				: result);
-		final I raiMax = minMaxes.parallelStream() //
+		final var raiMax = minMaxes.parallelStream() //
 			.map(pair -> pair.getB()) //
 			.reduce(minVal, (result, max) -> max.compareTo(result) > 0 ? max
 				: result);

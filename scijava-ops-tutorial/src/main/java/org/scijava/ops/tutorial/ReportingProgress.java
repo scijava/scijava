@@ -103,7 +103,7 @@ public class ReportingProgress {
 			sqrt = (long) Math.sqrt(++val);
 			couldBePrime = true;
 			// Evaluate "prime-ness" of number
-			for (int i = 2; i <= sqrt; i++) {
+			for (var i = 2; i <= sqrt; i++) {
 				if (val % i == 0) {
 					couldBePrime = false;
 					break;
@@ -122,7 +122,7 @@ public class ReportingProgress {
 	};
 
 	public static void main(String... args) {
-		OpEnvironment ops = OpEnvironment.build();
+        var ops = OpEnvironment.build();
 		// To enable Progress Reporting, you must enable the progress tracking hint!
 		ops.setDefaultHints(new Hints("progress.TRACK"));
 

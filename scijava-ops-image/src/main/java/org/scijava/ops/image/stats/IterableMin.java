@@ -57,7 +57,7 @@ public class IterableMin<T extends RealType<T>> implements
 	public void compute(final Iterable<T> input, final T min) {
 		// Re-use output to compare against
 		min.setReal(min.getMaxValue());
-		for (final T in : input)
+		for (final var in : input)
 			if (min.compareTo(in) > 0) min.set(in);
 	}
 }

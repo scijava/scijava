@@ -115,7 +115,7 @@ public class WatershedBinarySingleSigma<T extends BooleanType<T>, B extends Bool
 	) {
 		// ensure the params satisfy the requirements of the op (taken from the old
 		// implementation)
-		boolean conformed = sigma >= 0;
+        var conformed = sigma >= 0;
 		if (!conformed) throw new IllegalArgumentException(
 			"sigma must be non-negative!");
 		if (mask != null) {
@@ -125,13 +125,13 @@ public class WatershedBinarySingleSigma<T extends BooleanType<T>, B extends Bool
 			"mask must be of the same dimensions as the input!");
 
 		// compute distance transform
-		final RandomAccessibleInterval<FloatType> distMap = imgCreator.apply(in,
+		final var distMap = imgCreator.apply(in,
 			new FloatType());
 		distanceTransformer.compute(in, distMap);
-		final RandomAccessibleInterval<FloatType> invertedDT = imgCreator.apply(in,
+		final var invertedDT = imgCreator.apply(in,
 			new FloatType());
 		imgInverter.compute(distMap, invertedDT);
-		final RandomAccessibleInterval<FloatType> gauss = imgCreator.apply(in,
+		final var gauss = imgCreator.apply(in,
 			new FloatType());
 		gaussOp.compute(invertedDT, sigma, gauss);
 		// run the default watershed

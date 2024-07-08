@@ -57,17 +57,17 @@ public class ComputeRosinThreshold<T extends RealType<T>> extends
 	 */
 	@Override
 	public long computeBin(final Histogram1d<T> histo) {
-		final long[] hist = histo.toLongArray();
+		final var hist = histo.toLongArray();
 		return computeBin(hist);
 	}
 
 	public static long computeBin(final long[] hist) {
-		final int noPts = hist.length;
+		final var noPts = hist.length;
 		int pk, st, fi, d1, d2;
 		long tmp;
 		int i;
 		int thresh;
-		boolean doInvert = false;
+        var doInvert = false;
 
 		pk = findStart(hist, noPts);
 		st = findFirst(hist, noPts);
@@ -149,11 +149,11 @@ public class ComputeRosinThreshold<T extends RealType<T>> extends
 	}
 
 	private static int findCorner(final long[] Y, final int st, int noPts) {
-		final long[] X = new long[noPts];
+		final var X = new long[noPts];
 		int i;
 		float dist;
 		float maxDist = -1;
-		int thresh = -1;
+        var thresh = -1;
 		int end;
 
 		for (i = st; i < noPts; i++) {

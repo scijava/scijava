@@ -57,8 +57,8 @@ public class CoocMeanY implements Function<double[][], DoubleType> {
 	public DoubleType apply(double[][] input) {
 
 		double res = 0;
-		final double[] py = coocPYFunc.apply(input);
-		for (int i = 0; i < py.length; i++) {
+		final var py = coocPYFunc.apply(input);
+		for (var i = 0; i < py.length; i++) {
 			res += i * py[i];
 		}
 		return new DoubleType(res);

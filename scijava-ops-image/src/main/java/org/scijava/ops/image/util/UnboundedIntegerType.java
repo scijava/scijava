@@ -156,8 +156,8 @@ public class UnboundedIntegerType implements IntegerType<UnboundedIntegerType> {
 	// -- helpers --
 
 	private void doMul(BigDecimal factor) {
-		BigDecimal val = new BigDecimal(this.v);
-		BigDecimal result = val.multiply(factor);
+        var val = new BigDecimal(this.v);
+        var result = val.multiply(factor);
 		this.v = result.toBigInteger();
 	}
 

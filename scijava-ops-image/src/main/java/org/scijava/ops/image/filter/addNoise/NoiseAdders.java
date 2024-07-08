@@ -81,7 +81,7 @@ public class NoiseAdders {
 		if (seed == null) {
 			seed = defaultSeed;
 		}
-		Random rng = new Random(seed);
+        var rng = new Random(seed);
 		LoopBuilder.setImages(input, output).multiThreaded() //
 			.forEachPixel((in, out) -> {
 				addNoise(in, out, rangeMin, rangeMax, rangeStdDev, rng);
@@ -93,9 +93,9 @@ public class NoiseAdders {
 		final I input, final O output, final double rangeMin, final double rangeMax,
 		final double rangeStdDev, final Random rng)
 	{
-		int i = 0;
+        var i = 0;
 		do {
-			final double newVal = input.getRealDouble() + rng.nextGaussian() *
+			final var newVal = input.getRealDouble() + rng.nextGaussian() *
 				rangeStdDev;
 			if (rangeMin <= newVal && newVal <= rangeMax) {
 				output.setReal(newVal);
@@ -149,7 +149,7 @@ public class NoiseAdders {
 		if (seed == null) {
 			seed = defaultSeed;
 		}
-		Random rng = new Random(seed);
+        var rng = new Random(seed);
 		LoopBuilder.setImages(input, output).multiThreaded() //
 			.forEachPixel((in, out) -> {
 				addPoissonNoise(in, rng, out);
@@ -162,8 +162,8 @@ public class NoiseAdders {
 	public static <I extends RealType<I>, O extends RealType<O>> void
 		addPoissonNoise(final I input, final Random rng, final O output)
 	{
-		double l = Math.exp(-input.getRealDouble());
-		int k = 0;
+        var l = Math.exp(-input.getRealDouble());
+        var k = 0;
 		double p = 1;
 		do {
 			k++;
@@ -198,9 +198,9 @@ public class NoiseAdders {
 			seed = 0xabcdef1234567890L;
 		}
 		// Construct the Random Number Generator
-		MersenneTwisterFast rng = new MersenneTwisterFast(seed);
+        var rng = new MersenneTwisterFast(seed);
 		// Find the range
-		I range = rangeMax.createVariable();
+        var range = rangeMax.createVariable();
 		range.set(rangeMax);
 		range.sub(rangeMin);
 

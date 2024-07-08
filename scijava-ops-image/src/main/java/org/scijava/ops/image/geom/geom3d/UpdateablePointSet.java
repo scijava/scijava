@@ -118,8 +118,8 @@ abstract class UpdateablePointSet<T> {
 	 * @return has edge tail to head
 	 */
 	public boolean hasEdge(final Vertex tail, final Vertex head) {
-		int start = vertices.indexOf(tail);
-		int end = vertices.indexOf(head);
+        var start = vertices.indexOf(tail);
+        var end = vertices.indexOf(head);
 		if (start == -1 || end == -1) {
 			return false;
 		}

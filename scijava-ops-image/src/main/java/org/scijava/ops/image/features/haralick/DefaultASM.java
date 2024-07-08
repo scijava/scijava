@@ -59,18 +59,18 @@ public class DefaultASM<T extends RealType<T>> extends
 		final Integer numGreyLevels, final Integer distance,
 		final MatrixOrientation orientation)
 	{
-		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels,
+		final var matrix = getCooccurrenceMatrix(input, numGreyLevels,
 			distance, orientation);
-		final int nrGrayLevels = matrix.length;
+		final var nrGrayLevels = matrix.length;
 
 		double res = 0;
-		for (int i = 0; i < nrGrayLevels; i++) {
-			for (int j = 0; j < nrGrayLevels; j++) {
+		for (var i = 0; i < nrGrayLevels; i++) {
+			for (var j = 0; j < nrGrayLevels; j++) {
 				res += matrix[i][j] * matrix[i][j];
 			}
 		}
 
-		DoubleType output = new DoubleType();
+        var output = new DoubleType();
 		output.setReal(res);
 		return output;
 	}

@@ -57,9 +57,9 @@ public final class AssertClose {
 	public static void assertCloseEnough(double expected, double actual,
 		int order)
 	{
-		double significand = Math.abs(expected);
-		double exponential = Math.pow(10., order);
-		double delta = significand * exponential;
+        var significand = Math.abs(expected);
+        var exponential = Math.pow(10., order);
+        var delta = significand * exponential;
 		assertEquals(expected, actual, delta);
 	}
 
@@ -75,9 +75,9 @@ public final class AssertClose {
 	public static void assertCloseEnough(double expected, double actual,
 		int order, String message)
 	{
-		double significand = Math.abs(expected);
-		double exponential = Math.pow(10., order);
-		double delta = significand * exponential;
+        var significand = Math.abs(expected);
+        var exponential = Math.pow(10., order);
+        var delta = significand * exponential;
 		assertEquals(expected, actual, delta, message);
 	}
 

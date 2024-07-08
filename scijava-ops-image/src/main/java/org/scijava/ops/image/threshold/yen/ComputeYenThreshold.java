@@ -56,7 +56,7 @@ public class ComputeYenThreshold<T extends RealType<T>> extends
 	 */
 	@Override
 	public long computeBin(final Histogram1d<T> hist) {
-		final long[] histogram = hist.toLongArray();
+		final var histogram = hist.toLongArray();
 		return computeBin(histogram);
 	}
 
@@ -80,16 +80,16 @@ public class ComputeYenThreshold<T extends RealType<T>> extends
 		int ih, it;
 		double crit;
 		double max_crit;
-		final double[] norm_histo = new double[histogram.length]; /*
+		final var norm_histo = new double[histogram.length]; /*
 																															* normalized
 																															* histogram
 																															*/
-		final double[] P1 = new double[histogram.length]; /*
+		final var P1 = new double[histogram.length]; /*
 																											* cumulative normalized
 																											* histogram
 																											*/
-		final double[] P1_sq = new double[histogram.length];
-		final double[] P2_sq = new double[histogram.length];
+		final var P1_sq = new double[histogram.length];
+		final var P2_sq = new double[histogram.length];
 
 		long total = 0;
 		for (ih = 0; ih < histogram.length; ih++)

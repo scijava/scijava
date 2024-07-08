@@ -41,7 +41,7 @@ public class ComputersToFunctionsViaFunction {
 		@Override
 		public $functionArity.call($arity)$generics.call($arity) apply($computerArity.call($arity)$generics.call($arity) computer) {
 			return ($applyArgs.call($arity)) -> {
-				O out = creator.apply(in#if($arity == 1)#{else}1#end);
+				var out = creator.apply(in#if($arity == 1)#{else}1#end);
 				computer.compute($computeArgs.call($arity));
 				return out;
 			};

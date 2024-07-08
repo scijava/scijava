@@ -49,7 +49,7 @@ public final class GeomUtils {
 	public static List<RealLocalizable> vertices(final Polygon2D polygon) {
 		final List<RealLocalizable> vertices = new ArrayList<>(polygon
 			.numVertices());
-		for (int i = 0; i < polygon.numVertices(); i++)
+		for (var i = 0; i < polygon.numVertices(); i++)
 			vertices.add(polygon.vertex(i));
 		return vertices;
 	}

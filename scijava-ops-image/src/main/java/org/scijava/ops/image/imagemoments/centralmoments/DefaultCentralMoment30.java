@@ -74,19 +74,19 @@ public class DefaultCentralMoment30<I extends RealType<I>, O extends RealType<O>
 	public void computeMoment(final RandomAccessibleInterval<I> input,
 		final O output)
 	{
-		final O moment00 = output.createVariable();
+		final var moment00 = output.createVariable();
 		moment00Func.compute(input, moment00);
-		final O moment10 = output.createVariable();
+		final var moment10 = output.createVariable();
 		moment10Func.compute(input, moment10);
 
-		final O centerX = moment10.copy();
+		final var centerX = moment10.copy();
 		centerX.div(moment00);
 
-		List<O> sums = LoopBuilder.setImages(input, Intervals.positions(input))
+        var sums = LoopBuilder.setImages(input, Intervals.positions(input))
 			.multiThreaded().forEachChunk(chunk -> {
-				O sum = output.createVariable();
-				O temp = output.createVariable();
-				O x = output.createVariable();
+                    var sum = output.createVariable();
+                    var temp = output.createVariable();
+                    var x = output.createVariable();
 				chunk.forEachPixel((pixel, pos) -> {
 					// x = (pixelPos - centerX)^3
 					temp.setReal(pos.getDoublePosition(0));
@@ -101,7 +101,7 @@ public class DefaultCentralMoment30<I extends RealType<I>, O extends RealType<O>
 			});
 
 		output.setZero();
-		for (O sum : sums)
+		for (var sum : sums)
 			output.add(sum);
 	}
 }

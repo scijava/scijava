@@ -74,9 +74,9 @@ public class IFFTMethodsOpC<C extends ComplexType<C>, T extends RealType<T>>
 		if (!conforms(input)) throw new IllegalArgumentException(
 			"The input image dimensions to not conform to a supported FFT size");
 
-		final RandomAccessibleInterval<C> temp = copyOp.apply(input);
+		final var temp = copyOp.apply(input);
 
-		for (int d = input.numDimensions() - 1; d > 0; d--)
+		for (var d = input.numDimensions() - 1; d > 0; d--)
 			FFTMethods.complexToComplex(temp, d, false, true);
 
 		FFTMethods.complexToReal(temp, output, FFTMethods.unpaddingIntervalCentered(
@@ -88,10 +88,10 @@ public class IFFTMethodsOpC<C extends ComplexType<C>, T extends RealType<T>>
 	 */
 	public boolean conforms(RandomAccessibleInterval<C> input) {
 
-		long[] paddedDimensions = new long[input.numDimensions()];
-		long[] realDimensions = new long[input.numDimensions()];
+        var paddedDimensions = new long[input.numDimensions()];
+        var realDimensions = new long[input.numDimensions()];
 
-		boolean fastSizeConforms = false;
+        var fastSizeConforms = false;
 
 		FFTMethods.dimensionsComplexToRealFast(input, paddedDimensions,
 			realDimensions);
@@ -100,7 +100,7 @@ public class IFFTMethodsOpC<C extends ComplexType<C>, T extends RealType<T>>
 			fastSizeConforms = true;
 		}
 
-		boolean smallSizeConforms = false;
+        var smallSizeConforms = false;
 
 		FFTMethods.dimensionsComplexToRealSmall(input, paddedDimensions,
 			realDimensions);

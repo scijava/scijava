@@ -70,24 +70,24 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	public OpCandidate findMatch(MatchingConditions conditions, OpMatcher matcher,
 		OpEnvironment env)
 	{
-		final ArrayList<OpCandidate> candidates = new ArrayList<>();
+		final var candidates = new ArrayList<OpCandidate>();
 
-		for (final OpInfo info : getInfos(env, conditions)) {
+		for (final var info : getInfos(env, conditions)) {
 			Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
 			if (typesMatch(info.opType(), conditions.request().type(),
 				typeVarAssigns))
 			{
-				OpCandidate candidate = new OpCandidate(env, conditions.request(), info,
+                var candidate = new OpCandidate(env, conditions.request(), info,
 					typeVarAssigns);
 				candidates.add(candidate);
 			}
 		}
-		List<OpRequest> reqs = Collections.singletonList(conditions.request());
+        var reqs = Collections.singletonList(conditions.request());
 		if (candidates.isEmpty()) {
 			return MatchingResult.empty(reqs).singleMatch();
 		}
 		// narrow down candidates to the exact matches
-		final List<OpCandidate> matches = filterMatches(candidates);
+		final var matches = filterMatches(candidates);
 		return new MatchingResult(candidates, matches, reqs).singleMatch();
 
 	}
@@ -107,9 +107,9 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	private List<OpCandidate> checkCandidates(
 		final List<OpCandidate> candidates)
 	{
-		final ArrayList<OpCandidate> validCandidates = new ArrayList<>();
-		for (final OpCandidate candidate : candidates) {
-			final Type[] args = candidate.paddedArgs();
+		final var validCandidates = new ArrayList<OpCandidate>();
+		for (final var candidate : candidates) {
+			final var args = candidate.paddedArgs();
 			if (args == null) continue;
 			if (missArgs(candidate, args)) continue;
 			validCandidates.add(candidate);
@@ -120,7 +120,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	protected List<OpCandidate> filterMatches(
 		final List<OpCandidate> candidates)
 	{
-		final List<OpCandidate> validCandidates = checkCandidates(candidates);
+		final var validCandidates = checkCandidates(candidates);
 
 		// List of valid candidates needs to be sorted according to priority.
 		// This is used as an optimization in order to not look at ops with
@@ -148,10 +148,10 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	private List<OpCandidate> filterMatches(final List<OpCandidate> candidates,
 		final Predicate<OpCandidate> filter)
 	{
-		final ArrayList<OpCandidate> matches = new ArrayList<>();
-		double priority = Double.NaN;
-		for (final OpCandidate candidate : candidates) {
-			final double p = candidate.priority();
+		final var matches = new ArrayList<OpCandidate>();
+        var priority = Double.NaN;
+		for (final var candidate : candidates) {
+			final var p = candidate.priority();
 			if (p != priority && !matches.isEmpty()) {
 				// NB: Lower priority was reached; stop looking for any more
 				// matches.
@@ -186,21 +186,21 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	{
 		if (checkCandidates(Collections.singletonList(candidate)).isEmpty())
 			return false;
-		final Type[] reqArgTypes = candidate.paddedArgs();
-		final Type reqType = candidate.getRequest().type();
-		final Type infoType = candidate.opInfo().opType();
-		Type implementedInfoType = Types.superTypeOf(infoType,
+		final var reqArgTypes = candidate.paddedArgs();
+		final var reqType = candidate.getRequest().type();
+		final var infoType = candidate.opInfo().opType();
+        var implementedInfoType = Types.superTypeOf(infoType,
 			Types.raw(reqType));
 		if (!(implementedInfoType instanceof ParameterizedType)) {
 			throw new UnsupportedOperationException(
 				"Op type is not a ParameterizedType; we don't know how to deal with these yet.");
 		}
-		Type[] implTypeParams = ((ParameterizedType) implementedInfoType)
+        var implTypeParams = ((ParameterizedType) implementedInfoType)
 			.getActualTypeArguments();
-		Type[] candidateArgTypes = candidate.opInfo().struct().members().stream()//
+        var candidateArgTypes = candidate.opInfo().struct().members().stream()//
 			.map(member -> member.isInput() ? member.type() : null) //
 			.toArray(Type[]::new);
-		for (int i = 0; i < implTypeParams.length; i++) {
+		for (var i = 0; i < implTypeParams.length; i++) {
 			if (candidateArgTypes[i] == null) implTypeParams[i] = null;
 		}
 		candidateArgTypes = Arrays.stream(implTypeParams) //
@@ -217,11 +217,11 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 			return false;
 		}
 
-		int conflictingIndex = MatchingUtils.isApplicable(reqArgTypes,
+        var conflictingIndex = MatchingUtils.isApplicable(reqArgTypes,
 			candidateArgTypes, typeBounds);
 		if (conflictingIndex != -1) {
-			final Type to = reqArgTypes[conflictingIndex];
-			final Type from = candidateArgTypes[conflictingIndex];
+			final var to = reqArgTypes[conflictingIndex];
+			final var from = candidateArgTypes[conflictingIndex];
 			candidate.setStatus(StatusCode.ARG_TYPES_DO_NOT_MATCH, //
 				"request=" + to.getTypeName() + ", actual=" + from.getTypeName());
 			return false;
@@ -238,8 +238,8 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	private boolean missArgs(final OpCandidate candidate,
 		final Type[] paddedArgs)
 	{
-		int i = 0;
-		for (final Member<?> member : candidate.opInfo().inputs()) {
+        var i = 0;
+		for (final var member : candidate.opInfo().inputs()) {
 			if (paddedArgs[i++] == null && member.isRequired()) {
 				candidate.setStatus(StatusCode.REQUIRED_ARG_IS_NULL, null, member);
 				return true;
@@ -259,12 +259,12 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	private boolean outputsMatch(final OpCandidate candidate,
 		HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
 	{
-		final Type reqOutType = candidate.getRequest().outType();
+		final var reqOutType = candidate.getRequest().outType();
 		if (reqOutType == null) return true; // no constraints on output types
 
 		if (candidate.opInfo().output().isInput()) return true;
-		final Type candidateOutType = candidate.opInfo().outputType();
-		final int conflictingIndex = MatchingUtils.checkGenericOutputsAssignability(
+		final var candidateOutType = candidate.opInfo().outputType();
+		final var conflictingIndex = MatchingUtils.checkGenericOutputsAssignability(
 			new Type[] { candidateOutType }, new Type[] { reqOutType }, typeBounds);
 		if (conflictingIndex != -1) {
 			candidate.setStatus(StatusCode.OUTPUT_TYPES_DO_NOT_MATCH, //
@@ -284,7 +284,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	 * @return whether the arg types are satisfied
 	 */
 	private boolean typesMatch(final OpCandidate candidate) {
-		HashMap<TypeVariable<?>, TypeVarInfo> typeBounds = new HashMap<>();
+        var typeBounds = new HashMap<TypeVariable<?>, TypeVarInfo>();
 		if (!inputsMatch(candidate, typeBounds)) {
 			return false;
 		}
@@ -325,16 +325,16 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	 * match with the request.
 	 */
 	private boolean typesPerfectMatch(final OpCandidate candidate) {
-		int i = 0;
-		Type[] paddedArgs = candidate.paddedArgs();
-		for (final Type t : candidate.opInfo().inputTypes()) {
+        var i = 0;
+        var paddedArgs = candidate.paddedArgs();
+		for (final var t : candidate.opInfo().inputTypes()) {
 			if (paddedArgs[i] != null) {
 				if (!t.equals(paddedArgs[i])) return false;
 			}
 			i++;
 		}
 
-		final Type outputType = candidate.getRequest().outType();
+		final var outputType = candidate.getRequest().outType();
 		if (!Objects.equals(outputType, candidate.opInfo().outputType()))
 			return false;
 

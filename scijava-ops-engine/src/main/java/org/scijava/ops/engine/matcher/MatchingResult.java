@@ -95,7 +95,7 @@ public class MatchingResult {
 		}
 
 		// There is no clear matching Op
-		final String analysis = MatchingResult.matchInfo(this);
+		final var analysis = MatchingResult.matchInfo(this);
 		throw new OpMatchingException(analysis);
 	}
 
@@ -113,26 +113,26 @@ public class MatchingResult {
 	 *         whether it matched, and if not, why not).
 	 */
 	public static String matchInfo(final MatchingResult res) {
-		final StringBuilder sb = new StringBuilder();
+		final var sb = new StringBuilder();
 
-		List<OpCandidate> candidates = res.getCandidates();
-		List<OpCandidate> matches = res.getMatches();
+        var candidates = res.getCandidates();
+        var matches = res.getMatches();
 
-		final OpRequest request = res.getOriginalQueries().get(0);
+		final var request = res.getOriginalQueries().get(0);
 		if (matches.isEmpty()) {
 			// no matches
 			sb.append("No matching '" + request.label() + "' op\n");
 		}
 		else {
 			// multiple matches
-			final double priority = matches.get(0).priority();
+			final var priority = matches.get(0).priority();
 			sb.append("Multiple '" + request.label() + "' ops of priority " +
 				priority + ":\n");
 			if (typeCheckingIncomplete(matches)) {
 				sb.append("Incomplete output type checking may have occurred!\n");
 			}
-			int count = 0;
-			for (final OpCandidate match : matches) {
+            var count = 0;
+			for (final var match : matches) {
 				sb.append(++count + ". ");
 				sb.append(match.toString() + "\n");
 			}
@@ -147,11 +147,11 @@ public class MatchingResult {
 		if (candidates.isEmpty()) {
 			sb.append("-\t No candidates found!");
 		}
-		int count = 0;
-		for (final OpCandidate candidate : candidates) {
+        var count = 0;
+		for (final var candidate : candidates) {
 			sb.append(++count + ". ");
 			sb.append("\t" + Infos.describe(candidate.opInfo()) + "\n");
-			final String status = candidate.getStatus();
+			final var status = candidate.getStatus();
 			if (status != null) sb.append("\t" + status + "\n");
 			if (candidate.getStatusCode() == StatusCode.DOES_NOT_CONFORM) {
 				// TODO: Conformity not yet implemented
@@ -176,8 +176,8 @@ public class MatchingResult {
 	 */
 	private static boolean typeCheckingIncomplete(List<OpCandidate> matches) {
 		Type outputType = null;
-		for (OpCandidate match : matches) {
-			Type ts = match.opInfo().outputType();
+		for (var match : matches) {
+            var ts = match.opInfo().outputType();
 			if (outputType == null || Objects.equals(outputType, ts)) {
 				outputType = ts;
 			}

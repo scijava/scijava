@@ -51,14 +51,14 @@ public class CopyOpCollection<T> implements OpCollection {
 
 	@OpField(names = "copy.array, engine.copy", params = "array, arrayCopy")
 	public final Computers.Arity1<byte[], byte[]> copyByteArray = (from, to) -> {
-		int arrMax = Math.max(from.length, to.length);
+        var arrMax = Math.max(from.length, to.length);
 		System.arraycopy(from, 0, to, 0, arrMax);
 	};
 
 	@OpField(names = "copy.array, engine.copy", params = "array, arrayCopy")
 	public final Computers.Arity1<Byte[], Byte[]> copyBoxedByteArray = (from,
 		to) -> {
-		int arrMax = Math.max(from.length, to.length);
+        var arrMax = Math.max(from.length, to.length);
 		System.arraycopy(from, 0, to, 0, arrMax);
 	};
 
@@ -69,14 +69,14 @@ public class CopyOpCollection<T> implements OpCollection {
 	@OpField(names = "copy.array, engine.copy", params = "array, arrayCopy")
 	public final Computers.Arity1<short[], short[]> copyShortArray = (from,
 		to) -> {
-		int arrMax = Math.max(from.length, to.length);
+        var arrMax = Math.max(from.length, to.length);
 		System.arraycopy(from, 0, to, 0, arrMax);
 	};
 
 	@OpField(names = "copy.array, engine.copy", params = "array, arrayCopy")
 	public final Computers.Arity1<Short[], Short[]> copyBoxedShortArray = (from,
 		to) -> {
-		int arrMax = Math.max(from.length, to.length);
+        var arrMax = Math.max(from.length, to.length);
 		System.arraycopy(from, 0, to, 0, arrMax);
 	};
 
@@ -85,14 +85,14 @@ public class CopyOpCollection<T> implements OpCollection {
 
 	@OpField(names = "copy.array, engine.copy", params = "array, arrayCopy")
 	public final Computers.Arity1<int[], int[]> copyIntArray = (from, to) -> {
-		int arrMax = Math.max(from.length, to.length);
+        var arrMax = Math.max(from.length, to.length);
 		System.arraycopy(from, 0, to, 0, arrMax);
 	};
 
 	@OpField(names = "copy.array, engine.copy", params = "array, arrayCopy")
 	public final Computers.Arity1<Integer[], Integer[]> copyBoxedIntegerArray = (
 		from, to) -> {
-		int arrMax = Math.max(from.length, to.length);
+        var arrMax = Math.max(from.length, to.length);
 		System.arraycopy(from, 0, to, 0, arrMax);
 	};
 
@@ -101,14 +101,14 @@ public class CopyOpCollection<T> implements OpCollection {
 
 	@OpField(names = "copy.array, engine.copy", params = "array, arrayCopy")
 	public final Computers.Arity1<long[], long[]> copyLongArray = (from, to) -> {
-		int arrMax = Math.max(from.length, to.length);
+        var arrMax = Math.max(from.length, to.length);
 		System.arraycopy(from, 0, to, 0, arrMax);
 	};
 
 	@OpField(names = "copy.array, engine.copy", params = "array, arrayCopy")
 	public final Computers.Arity1<Long[], Long[]> copyBoxedLongArray = (from,
 		to) -> {
-		int arrMax = Math.max(from.length, to.length);
+        var arrMax = Math.max(from.length, to.length);
 		System.arraycopy(from, 0, to, 0, arrMax);
 	};
 
@@ -119,14 +119,14 @@ public class CopyOpCollection<T> implements OpCollection {
 	@OpField(names = "copy.array, engine.copy", params = "array, arrayCopy")
 	public final Computers.Arity1<float[], float[]> copyFloatArray = (from,
 		to) -> {
-		int arrMax = Math.max(from.length, to.length);
+        var arrMax = Math.max(from.length, to.length);
 		System.arraycopy(from, 0, to, 0, arrMax);
 	};
 
 	@OpField(names = "copy.array, engine.copy", params = "array, arrayCopy")
 	public final Computers.Arity1<Float[], Float[]> copyBoxedFloatArray = (from,
 		to) -> {
-		int arrMax = Math.max(from.length, to.length);
+        var arrMax = Math.max(from.length, to.length);
 		System.arraycopy(from, 0, to, 0, arrMax);
 	};
 
@@ -137,14 +137,14 @@ public class CopyOpCollection<T> implements OpCollection {
 	@OpField(names = "copy.array, engine.copy", params = "array, arrayCopy")
 	public final Computers.Arity1<double[], double[]> copyDoubleArray = (from,
 		to) -> {
-		int arrMax = Math.max(from.length, to.length);
+        var arrMax = Math.max(from.length, to.length);
 		System.arraycopy(from, 0, to, 0, arrMax);
 	};
 
 	@OpField(names = "copy.array, engine.copy", params = "array, arrayCopy")
 	public final Computers.Arity1<Double[], Double[]> copyBoxedDoubleArray = (
 		from, to) -> {
-		int arrMax = Math.max(from.length, to.length);
+        var arrMax = Math.max(from.length, to.length);
 		System.arraycopy(from, 0, to, 0, arrMax);
 	};
 

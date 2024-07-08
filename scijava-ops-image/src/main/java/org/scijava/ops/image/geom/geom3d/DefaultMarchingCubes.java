@@ -81,21 +81,21 @@ public class DefaultMarchingCubes<T extends BooleanType<T>> implements
 			new DefaultVertexInterpolator();
 
 		Mesh output = new NaiveDoubleMesh();
-		ExtendedRandomAccessibleInterval<T, RandomAccessibleInterval<T>> extended =
+        var extended =
 			Views.extendValue(input, (T) new BoolType(false));
-		Cursor<T> c = Views.interval(extended, new FinalInterval(new long[] { input
+        var c = Views.interval(extended, new FinalInterval(new long[] { input
 			.min(0) - 1, input.min(1) - 1, input.min(2) - 1 }, new long[] { input.max(
 				0) + 1, input.max(1) + 1, input.max(2) + 1 })).localizingCursor();
 
 		while (c.hasNext()) {
 			c.next();
 
-			int cursorX = c.getIntPosition(0);
-			int cursorY = c.getIntPosition(1);
-			int cursorZ = c.getIntPosition(2);
-			Cursor<T> cu = getCube(extended, cursorX, cursorY, cursorZ);
-			int i = 0;
-			double[] vertex_values = new double[8];
+            var cursorX = c.getIntPosition(0);
+            var cursorY = c.getIntPosition(1);
+            var cursorZ = c.getIntPosition(2);
+            var cu = getCube(extended, cursorX, cursorY, cursorZ);
+            var i = 0;
+            var vertex_values = new double[8];
 			while (cu.hasNext()) {
 				vertex_values[i++] = (cu.next().get()) ? 1 : 0;
 			}
@@ -112,19 +112,19 @@ public class DefaultMarchingCubes<T extends BooleanType<T>> implements
 			// | 0---|-1
 			// |/ |/
 			// 3-----2
-			int cubeindex = getCubeIndex(vertex_values);
+            var cubeindex = getCubeIndex(vertex_values);
 
 			if (EDGE_TABLE[cubeindex] != 0) {
-				int[] p0 = new int[] { 0 + cursorX, 0 + cursorY, 1 + cursorZ };
-				int[] p1 = new int[] { 1 + cursorX, 0 + cursorY, 1 + cursorZ };
-				int[] p2 = new int[] { 1 + cursorX, 0 + cursorY, 0 + cursorZ };
-				int[] p3 = new int[] { 0 + cursorX, 0 + cursorY, 0 + cursorZ };
-				int[] p4 = new int[] { 0 + cursorX, 1 + cursorY, 1 + cursorZ };
-				int[] p5 = new int[] { 1 + cursorX, 1 + cursorY, 1 + cursorZ };
-				int[] p6 = new int[] { 1 + cursorX, 1 + cursorY, 0 + cursorZ };
-				int[] p7 = new int[] { 0 + cursorX, 1 + cursorY, 0 + cursorZ };
+                var p0 = new int[] { 0 + cursorX, 0 + cursorY, 1 + cursorZ };
+                var p1 = new int[] { 1 + cursorX, 0 + cursorY, 1 + cursorZ };
+                var p2 = new int[] { 1 + cursorX, 0 + cursorY, 0 + cursorZ };
+                var p3 = new int[] { 0 + cursorX, 0 + cursorY, 0 + cursorZ };
+                var p4 = new int[] { 0 + cursorX, 1 + cursorY, 1 + cursorZ };
+                var p5 = new int[] { 1 + cursorX, 1 + cursorY, 1 + cursorZ };
+                var p6 = new int[] { 1 + cursorX, 1 + cursorY, 0 + cursorZ };
+                var p7 = new int[] { 0 + cursorX, 1 + cursorY, 0 + cursorZ };
 
-				double[][] vertlist = new double[12][];
+                var vertlist = new double[12][];
 
 				/* Find the vertices where the surface intersects the cube */
 				if (0 != (EDGE_TABLE[cubeindex] & 1)) {
@@ -178,15 +178,15 @@ public class DefaultMarchingCubes<T extends BooleanType<T>> implements
 
 				/* Create the triangle */
 				for (i = 0; TRIANGLE_TABLE[cubeindex][i] != -1; i += 3) {
-					final double v0x = vertlist[TRIANGLE_TABLE[cubeindex][i + 2]][0];
-					final double v0y = vertlist[TRIANGLE_TABLE[cubeindex][i + 2]][1];
-					final double v0z = vertlist[TRIANGLE_TABLE[cubeindex][i + 2]][2];
-					final double v1x = vertlist[TRIANGLE_TABLE[cubeindex][i + 1]][0];
-					final double v1y = vertlist[TRIANGLE_TABLE[cubeindex][i + 1]][1];
-					final double v1z = vertlist[TRIANGLE_TABLE[cubeindex][i + 1]][2];
-					final double v2x = vertlist[TRIANGLE_TABLE[cubeindex][i]][0];
-					final double v2y = vertlist[TRIANGLE_TABLE[cubeindex][i]][1];
-					final double v2z = vertlist[TRIANGLE_TABLE[cubeindex][i]][2];
+					final var v0x = vertlist[TRIANGLE_TABLE[cubeindex][i + 2]][0];
+					final var v0y = vertlist[TRIANGLE_TABLE[cubeindex][i + 2]][1];
+					final var v0z = vertlist[TRIANGLE_TABLE[cubeindex][i + 2]][2];
+					final var v1x = vertlist[TRIANGLE_TABLE[cubeindex][i + 1]][0];
+					final var v1y = vertlist[TRIANGLE_TABLE[cubeindex][i + 1]][1];
+					final var v1z = vertlist[TRIANGLE_TABLE[cubeindex][i + 1]][2];
+					final var v2x = vertlist[TRIANGLE_TABLE[cubeindex][i]][0];
+					final var v2y = vertlist[TRIANGLE_TABLE[cubeindex][i]][1];
+					final var v2z = vertlist[TRIANGLE_TABLE[cubeindex][i]][2];
 					if (positiveArea(v0x, v0y, v0z, v1x, v1y, v1z, v2x, v2y, v2z)) {
 						output.triangles().add(v0x, v0y, v0z, v1x, v1y, v1z, v2x, v2y, v2z);
 					}
@@ -200,17 +200,17 @@ public class DefaultMarchingCubes<T extends BooleanType<T>> implements
 		double v1x, double v1y, double v1z, //
 		double v2x, double v2y, double v2z)
 	{
-		final double p1x = v0x - v1x;
-		final double p1y = v0y - v1y;
-		final double p1z = v0z - v1z;
-		final double p2x = v2x - v0x;
-		final double p2y = v2y - v0y;
-		final double p2z = v2z - v0z;
+		final var p1x = v0x - v1x;
+		final var p1y = v0y - v1y;
+		final var p1z = v0z - v1z;
+		final var p2x = v2x - v0x;
+		final var p2y = v2y - v0y;
+		final var p2z = v2z - v0z;
 
 		// cross product
-		final double cpx = MathArrays.linearCombination(p1y, p2z, -p1z, p2y);
-		final double cpy = MathArrays.linearCombination(p1z, p2x, -p1x, p2z);
-		final double cpz = MathArrays.linearCombination(p1x, p2y, -p1y, p2x);
+		final var cpx = MathArrays.linearCombination(p1y, p2z, -p1z, p2y);
+		final var cpy = MathArrays.linearCombination(p1z, p2x, -p1x, p2z);
+		final var cpz = MathArrays.linearCombination(p1x, p2y, -p1y, p2x);
 
 		return cpx != 0 || cpy != 0 || cpz != 0;
 	}
@@ -227,8 +227,8 @@ public class DefaultMarchingCubes<T extends BooleanType<T>> implements
 	}
 
 	private int getCubeIndex(final double[] vertex_values) {
-		int cubeindex = 0;
-		for (int i = 0; i < 8; i++) {
+        var cubeindex = 0;
+		for (var i = 0; i < 8; i++) {
 			if (vertex_values[i] < this.isolevel) {
 				cubeindex |= (int) Math.pow(2, i);
 			}
@@ -237,7 +237,7 @@ public class DefaultMarchingCubes<T extends BooleanType<T>> implements
 	}
 
 	private double[] mapFlatIterableToLookUpCube(final double[] vertex_values) {
-		double[] vv = new double[8];
+        var vv = new double[8];
 		vv[0] = vertex_values[4];
 		vv[1] = vertex_values[5];
 		vv[2] = vertex_values[1];

@@ -52,8 +52,8 @@ public final class NextSmoothNumber {
 	}
 
 	public static int nextSmooth(int x) {
-		int result = -1;
-		int z = 50;
+        var result = -1;
+        var z = 50;
 		while (result == -1) {
 			result = nextSmooth(7, x, z);
 			x = x + z;
@@ -62,15 +62,15 @@ public final class NextSmoothNumber {
 	}
 
 	public static int nextSmooth(final int y, final int x, final int z) {
-		double delta = 0.000001;
+        var delta = 0.000001;
 
-		final double[] a = new double[z];
+		final var a = new double[z];
 		handlePrime(2, x, a);
 		handlePrime(3, x, a);
 		handlePrime(5, x, a);
 		handlePrime(7, x, a);
-		double log = Math.log(x);
-		for (int i = 0; i < a.length; i++) {
+        var log = Math.log(x);
+		for (var i = 0; i < a.length; i++) {
 			if (a[i] >= log - delta) return x + i;
 		}
 		// System.err.println(Arrays.toString(a));
@@ -79,9 +79,9 @@ public final class NextSmoothNumber {
 	}
 
 	private static void handlePrime(final int p, final int x, final double[] a) {
-		double log = Math.log(p);
-		for (int power = p; power <= x + a.length; power *= p) {
-			int j = x % power;
+        var log = Math.log(p);
+		for (var power = p; power <= x + a.length; power *= p) {
+            var j = x % power;
 			if (j > 0) j = power - j;
 			while (j < a.length) {
 				a[j] += log;

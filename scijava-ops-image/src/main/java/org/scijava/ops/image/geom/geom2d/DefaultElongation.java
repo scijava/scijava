@@ -66,19 +66,19 @@ public class DefaultElongation implements
 		final List<? extends RealLocalizable> minBB = GeomUtils.vertices(
 			minimumBoundingBoxFunc.apply(input));
 
-		final RealLocalizable p1 = minBB.get(0);
-		final RealLocalizable p2 = minBB.get(1);
-		final RealLocalizable p3 = minBB.get(2);
+		final var p1 = minBB.get(0);
+		final var p2 = minBB.get(1);
+		final var p3 = minBB.get(2);
 
-		double width = Math.sqrt(Math.pow(p1.getDoublePosition(0) - p2
+        var width = Math.sqrt(Math.pow(p1.getDoublePosition(0) - p2
 			.getDoublePosition(0), 2) + Math.pow(p1.getDoublePosition(1) - p2
 				.getDoublePosition(1), 2));
-		double length = Math.sqrt(Math.pow(p2.getDoublePosition(0) - p3
+        var length = Math.sqrt(Math.pow(p2.getDoublePosition(0) - p3
 			.getDoublePosition(0), 2) + Math.pow(p2.getDoublePosition(1) - p3
 				.getDoublePosition(1), 2));
 
 		if (width > length) {
-			final double tmp = width;
+			final var tmp = width;
 			width = length;
 			length = tmp;
 		}

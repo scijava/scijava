@@ -59,16 +59,16 @@ public class DefaultSum<I extends RealType<I>, O extends RealType<O>> implements
 	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final O sum) {
 		sum.setZero();
-		List<O> chunkSums = LoopBuilder.setImages(input).multiThreaded()
+        var chunkSums = LoopBuilder.setImages(input).multiThreaded()
 			.forEachChunk(chunk -> {
-				O chunkSum = sum.createVariable();
+                var chunkSum = sum.createVariable();
 				chunkSum.setZero();
 				chunk.forEachPixel(pixel -> chunkSum.setReal(chunkSum.getRealDouble() +
 					pixel.getRealDouble()));
 				return chunkSum;
 			});
 
-		for (O chunkSum : chunkSums)
+		for (var chunkSum : chunkSums)
 			sum.add(chunkSum);
 	}
 }

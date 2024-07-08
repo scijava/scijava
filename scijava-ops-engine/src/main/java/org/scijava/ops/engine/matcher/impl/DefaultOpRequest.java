@@ -125,7 +125,7 @@ public class DefaultOpRequest implements OpRequest {
 	 */
 	@Override
 	public String label() {
-		final StringBuilder sb = new StringBuilder();
+		final var sb = new StringBuilder();
 		OpRequest.append(sb, name);
 		if (type != null) {
 			OpRequest.append(sb, Types.name(type));

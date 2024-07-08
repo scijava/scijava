@@ -139,18 +139,18 @@ public class OpEvaluator extends DefaultStackEvaluator {
 	/** Executes the given op with the specified argument list. */
 	public Object execute(final String opName, final Object... args) {
 		// Unwrap the arguments.
-		final Object[] argValues = new Object[args.length];
-		for (int i = 0; i < args.length; i++) {
+		final var argValues = new Object[args.length];
+		for (var i = 0; i < args.length; i++) {
 			argValues[i] = value(args[i]);
 		}
 
 		// generate Nils from types
 		Nil<?>[] inTypes = Arrays.stream(args).map((obj) -> type(value(obj)))
 			.toArray(Nil[]::new);
-		Nil<Object> outType = new Nil<>() {};
+        var outType = new Nil<>() {};
 
 		// Try executing the op.
-		Functions.ArityN<Object> func = FunctionUtils.matchN(ops, opName, outType,
+        var func = FunctionUtils.matchN(ops, opName, outType,
 			inTypes);
 		return func.apply(argValues);
 	}
@@ -194,8 +194,8 @@ public class OpEvaluator extends DefaultStackEvaluator {
 	public Object dot(final Object a, final Object b) {
 		if (a instanceof Variable && b instanceof Variable) {
 			// NB: Concatenate variable names, for namespace support
-			final String namespace = ((Variable) a).getToken();
-			final String opName = ((Variable) b).getToken();
+			final var namespace = ((Variable) a).getToken();
+			final var opName = ((Variable) b).getToken();
 			return new Variable(namespace + "." + opName);
 		}
 		return execute(Operators.DOT, a, b);
@@ -404,22 +404,22 @@ public class OpEvaluator extends DefaultStackEvaluator {
 	@Override
 	public Object execute(final Operator op, final Deque<Object> stack) {
 		// Pop the arguments.
-		final int arity = op.getArity();
-		final Object[] args = new Object[arity];
-		for (int i = args.length - 1; i >= 0; i--) {
+		final var arity = op.getArity();
+		final var args = new Object[arity];
+		for (var i = args.length - 1; i >= 0; i--) {
 			args[i] = stack.pop();
 		}
 
 		// Try the base execute, which handles assignment-oriented operations.
 		// (NB: super.execute pops the arguments again, so put them back first.)
-		for (Object arg : args) {
+		for (var arg : args) {
 			stack.push(arg);
 		}
-		final Object result = super.execute(op, stack);
+		final var result = super.execute(op, stack);
 		if (result != null) return result;
 
 		// Unwrap the arguments.
-		for (int i = 0; i < args.length; i++) {
+		for (var i = 0; i < args.length; i++) {
 			args[i] = value(args[i]);
 		}
 

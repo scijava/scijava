@@ -69,8 +69,8 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 	{
 		double distance = 0;
 
-		for (int i = 0; i < d; i++) {
-			double separation = (ahead.getLongPosition(i) - behind.getLongPosition(
+		for (var i = 0; i < d; i++) {
+            var separation = (ahead.getLongPosition(i) - behind.getLongPosition(
 				i)) * spacing[i];
 			if (separation != 0) {
 				distance += (separation * separation);
@@ -107,7 +107,7 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 		// set spacing if the parameter is not passed.
 		if (spacing == null) {
 			spacing = new double[input.numDimensions()];
-			for (int i = 0; i < input.numDimensions(); i++)
+			for (var i = 0; i < input.numDimensions(); i++)
 				spacing[i] = 1;
 		}
 
@@ -119,16 +119,16 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 	{
 
 		// create denominators used for gaussians later.
-		double ad = 2 * alpha * alpha;
-		double bd = 2 * beta * beta;
+        var ad = 2 * alpha * alpha;
+        var bd = 2 * beta * beta;
 
 		// OutOfBoundsMirrorStrategy for use when the cursor reaches the edges.
-		OutOfBoundsMirrorFactory<T, RandomAccessibleInterval<T>> osmf =
-			new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
+        var osmf =
+			new OutOfBoundsMirrorFactory<T, RandomAccessibleInterval<T>>(Boundary.SINGLE);
 
-		Cursor<T> cursor = Views.iterable(in).localizingCursor();
+        var cursor = Views.iterable(in).localizingCursor();
 
-		Matrix hessian = new Matrix(in.numDimensions(), in.numDimensions());
+        var hessian = new Matrix(in.numDimensions(), in.numDimensions());
 
 		// use three RandomAccess<T> Objects to find the values needed to calculate
 		// the
@@ -137,15 +137,15 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 		RandomAccess<T> behind = osmf.create(in);
 		RandomAccess<T> ahead = osmf.create(in);
 
-		RandomAccess<U> outputRA = out.randomAccess();
+        var outputRA = out.randomAccess();
 
 		while (cursor.hasNext()) {
 
 			cursor.fwd();
 
 			// calculate the hessian
-			for (int m = 0; m < in.numDimensions(); m++) {
-				for (int n = 0; n < in.numDimensions(); n++) {
+			for (var m = 0; m < in.numDimensions(); m++) {
+				for (var n = 0; n < in.numDimensions(); n++) {
 
 					current.setPosition(cursor);
 					ahead.setPosition(cursor);
@@ -156,7 +156,7 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 					if (m != n) behind.move(-step, n);
 
 					// take the derivative between the two points
-					double derivativeA = derive(behind.get().getRealDouble(), current
+                    var derivativeA = derive(behind.get().getRealDouble(), current
 						.get().getRealDouble(), getDistance(behind, current, in
 							.numDimensions(), spacing));
 
@@ -165,12 +165,12 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 					if (m != n) ahead.move(step, n);
 
 					// take the derivative between the two points
-					double derivativeB = derive(current.get().getRealDouble(), ahead.get()
+                    var derivativeB = derive(current.get().getRealDouble(), ahead.get()
 						.getRealDouble(), getDistance(current, ahead, in.numDimensions(),
 							spacing));
 
 					// take the second derivative using the two first derivatives
-					double derivative2 = derive(derivativeA, derivativeB, getDistance(
+                    var derivative2 = derive(derivativeA, derivativeB, getDistance(
 						behind, ahead, in.numDimensions(), spacing));
 
 					hessian.set(m, n, derivative2);
@@ -179,14 +179,14 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 			}
 
 			// find the FrobeniusNorm (used later)
-			double s = hessian.normF();
-			double cn = -(s * s);
+            var s = hessian.normF();
+            var cn = -(s * s);
 
 			// find and sort the eigenvalues and eigenvectors of the Hessian
-			EigenvalueDecomposition e = hessian.eig();
-			double[] eigenvaluesArray = e.getRealEigenvalues();
-			ArrayList<Double> eigenvaluesArrayList = new ArrayList<>();
-			for (double d : eigenvaluesArray)
+            var e = hessian.eig();
+            var eigenvaluesArray = e.getRealEigenvalues();
+            var eigenvaluesArrayList = new ArrayList<Double>();
+			for (var d : eigenvaluesArray)
 				eigenvaluesArrayList.add(d);
 			eigenvaluesArrayList.sort(Comparator.comparingDouble(Math::abs));
 
@@ -195,36 +195,36 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 
 			if (in.numDimensions() == 2) {
 				double c = 15;
-				double cd = 2 * c * c;
+                var cd = 2 * c * c;
 
 				// lambda values
 				double l1 = eigenvaluesArrayList.get(0);
-				double al1 = Math.abs(l1);
+                var al1 = Math.abs(l1);
 				double l2 = eigenvaluesArrayList.get(1);
-				double al2 = Math.abs(l2);
+                var al2 = Math.abs(l2);
 
 				// Check to see if the point is on a tubular structure.
 				if (l2 < 0) {
 
 					// ratio Rb
-					double rb = al1 / al2;
+                    var rb = al1 / al2;
 
 					// values for ease of final calculation
-					double bn = -(rb * rb);
+                    var bn = -(rb * rb);
 					v = Math.exp(bn / bd) * (1 - Math.exp(cn / cd));
 				}
 			}
 			else if (in.numDimensions() == 3) {
 				double c = 200;
-				double cd = 2 * c * c;
+                var cd = 2 * c * c;
 
 				// lambda values
 				double l1 = eigenvaluesArrayList.get(0);
-				double al1 = Math.abs(l1);
+                var al1 = Math.abs(l1);
 				double l2 = eigenvaluesArrayList.get(1);
-				double al2 = Math.abs(l2);
+                var al2 = Math.abs(l2);
 				double l3 = eigenvaluesArrayList.get(2);
-				double al3 = Math.abs(l3);
+                var al3 = Math.abs(l3);
 
 				// Check to see if the point is on a tubular structure.
 				/*
@@ -239,12 +239,12 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 				 */
 				if (l3 < 0) {
 					// ratios Rb and Ra
-					double rb = al1 / Math.sqrt(al2 * al3);
-					double ra = al2 / al3;
+                    var rb = al1 / Math.sqrt(al2 * al3);
+                    var ra = al2 / al3;
 
 					// values for ease of final calculation
-					double an = -(ra * ra);
-					double bn = -(rb * rb);
+                    var an = -(ra * ra);
+                    var bn = -(rb * rb);
 
 					// System.out.println(l1 + " " + l2 + " " + l3);
 

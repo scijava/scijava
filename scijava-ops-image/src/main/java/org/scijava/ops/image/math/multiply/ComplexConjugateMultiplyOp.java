@@ -54,7 +54,7 @@ public class ComplexConjugateMultiplyOp<T extends ComplexType<T>> implements
 	 */
 	@Override
 	public void compute(final T input1, final T input2, final T output) {
-		T temp = input2.copy();
+        var temp = input2.copy();
 		temp.complexConjugate();
 		temp.mul(input1);
 		output.set(temp);

@@ -45,10 +45,10 @@ public final class Thresholds {
 	}
 
 	public static boolean bimodalTest(double[] y) {
-		int len = y.length;
-		int modes = 0;
+        var len = y.length;
+        var modes = 0;
 
-		for (int k = 1; k < len - 1; k++) {
+		for (var k = 1; k < len - 1; k++) {
 			if (y[k - 1] < y[k] && y[k + 1] < y[k]) {
 				modes++;
 				if (modes > 2) return false;
@@ -64,7 +64,7 @@ public final class Thresholds {
 	 */
 	public static double A(long[] y, int j) {
 		double x = 0;
-		for (int i = 0; i <= j; i++)
+		for (var i = 0; i <= j; i++)
 			x += y[i];
 		return x;
 	}
@@ -76,7 +76,7 @@ public final class Thresholds {
 	 */
 	public static double B(long[] y, int j) {
 		double x = 0;
-		for (int i = 0; i <= j; i++)
+		for (var i = 0; i <= j; i++)
 			x += y[i] * i;
 		return x;
 	}
@@ -88,7 +88,7 @@ public final class Thresholds {
 	 */
 	public static double C(long[] y, int j) {
 		double x = 0;
-		for (int i = 0; i <= j; i++)
+		for (var i = 0; i <= j; i++)
 			x += y[i] * i * i;
 		return x;
 	}
@@ -100,7 +100,7 @@ public final class Thresholds {
 	 */
 	public static double D(long[] y, int j) {
 		double x = 0;
-		for (int i = 0; i <= j; i++)
+		for (var i = 0; i <= j; i++)
 			x += y[i] * i * i * i;
 		return x;
 	}

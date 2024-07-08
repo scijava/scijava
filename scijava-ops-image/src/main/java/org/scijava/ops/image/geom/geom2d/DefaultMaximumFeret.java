@@ -64,15 +64,15 @@ public class DefaultMaximumFeret implements
 		final List<? extends RealLocalizable> points = GeomUtils.vertices(function
 			.apply(input));
 
-		double distance = Double.NEGATIVE_INFINITY;
-		RealLocalizable p0 = points.get(0);
-		RealLocalizable p1 = points.get(0);
-		for (int i = 0; i < points.size(); i++) {
-			for (int j = i + 2; j < points.size(); j++) {
-				final RealLocalizable tmpP0 = points.get(i);
-				final RealLocalizable tmpP1 = points.get(j);
+        var distance = Double.NEGATIVE_INFINITY;
+        var p0 = points.get(0);
+        var p1 = points.get(0);
+		for (var i = 0; i < points.size(); i++) {
+			for (var j = i + 2; j < points.size(); j++) {
+				final var tmpP0 = points.get(i);
+				final var tmpP1 = points.get(j);
 
-				final double tmp = Math.sqrt(Math.pow(tmpP0.getDoublePosition(0) - tmpP1
+				final var tmp = Math.sqrt(Math.pow(tmpP0.getDoublePosition(0) - tmpP1
 					.getDoublePosition(0), 2) + Math.pow(tmpP0.getDoublePosition(1) -
 						tmpP1.getDoublePosition(1), 2));
 

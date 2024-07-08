@@ -154,17 +154,17 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 
 		this.maxIterations = maxIterations;
 
-		RandomAccessibleInterval<O> output = outputCreator.apply(input, outType);
+        var output = outputCreator.apply(input, outType);
 
-		final int numDimensions = input.numDimensions();
+		final var numDimensions = input.numDimensions();
 
 		// 1. Calculate desired extended size of the image
 
-		final long[] paddedSize = new long[numDimensions];
+		final var paddedSize = new long[numDimensions];
 
 		if (borderSize == null) {
 			// if no border size was passed in, then extend based on kernel size
-			for (int d = 0; d < numDimensions; ++d) {
+			for (var d = 0; d < numDimensions; ++d) {
 				paddedSize[d] = (int) input.dimension(d) + (int) kernel.dimension(d) -
 					1;
 			}
@@ -172,7 +172,7 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 		}
 		else {
 			// if borderSize was passed in
-			for (int d = 0; d < numDimensions; ++d) {
+			for (var d = 0; d < numDimensions; ++d) {
 
 				paddedSize[d] = Math.max(kernel.dimension(d) + 2 * borderSize[d], input
 					.dimension(d) + 2 * borderSize[d]);
@@ -180,10 +180,10 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 		}
 
 		Progress.defineTotal(0, 1);
-		RandomAccessibleInterval<I> paddedInput = padOp.apply(input,
+        var paddedInput = padOp.apply(input,
 			new FinalDimensions(paddedSize), true, obfInput);
 
-		RandomAccessibleInterval<K> paddedKernel = padKernelOp.apply(kernel,
+        var paddedKernel = padKernelOp.apply(kernel,
 			new FinalDimensions(paddedSize));
 
 		computeFilter(input, kernel, paddedInput, paddedKernel, output, paddedSize,
@@ -204,7 +204,7 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 			RandomAccessibleInterval<C> fftImg, RandomAccessibleInterval<C> fftKernel,
 			boolean accelerate, RandomAccessibleInterval<O> output)
 	{
-		C complexType = Util.getTypeFromInterval(fftImg).createVariable();
+        var complexType = Util.getTypeFromInterval(fftImg).createVariable();
 
 		// if non-circulant mode, set up the richardson-lucy computer in
 		// non-circulant mode and return it
@@ -214,8 +214,8 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 				normalizer.mutate(io, unpaddedInput, unpaddedKernel, fftImg, fftKernel);
 			};
 
-			ArrayList<Inplaces.Arity1<RandomAccessibleInterval<O>>> list =
-				new ArrayList<>();
+            var list =
+				new ArrayList<Inplaces.Arity1<RandomAccessibleInterval<O>>>();
 
 			list.add(normalizerSimplified);
 
@@ -264,17 +264,17 @@ public class PadAndRichardsonLucy<I extends RealType<I> & NativeType<I>, O exten
 		boolean accelerate)
 	{
 
-		RandomAccessibleInterval<C> fftInput = createOp.apply(new FinalDimensions(
+        var fftInput = createOp.apply(new FinalDimensions(
 			paddedSize), complexType, true);
 
-		RandomAccessibleInterval<C> fftKernel = createOp.apply(new FinalDimensions(
+        var fftKernel = createOp.apply(new FinalDimensions(
 			paddedSize), complexType, true);
 
 		// TODO: in this case it is difficult to match the filter op in the
 		// 'initialize' as we don't know the size yet, thus we can't create
 		// memory
 		// for the FFTs
-		Computers.Arity2<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> filter =
+        var filter =
 			createFilterComputer(input, kernel, paddedInput, paddedKernel, fftInput,
 				fftKernel, accelerate, output);
 

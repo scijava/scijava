@@ -50,7 +50,7 @@ public class OpClassOpInfoGenerator implements OpInfoGenerator {
 	}
 
 	protected List<OpInfo> processClass(Class<?> c) {
-		OpClass p = c.getAnnotation(OpClass.class);
+        var p = c.getAnnotation(OpClass.class);
 		if (p == null) return Collections.emptyList();
 		return Collections.singletonList(new DefaultOpClassInfo( //
 			c, //
@@ -64,8 +64,8 @@ public class OpClassOpInfoGenerator implements OpInfoGenerator {
 
 	@Override
 	public boolean canGenerateFrom(Object o) {
-		boolean isOp = o instanceof Op;
-		boolean isOpClass = o.getClass().isAnnotationPresent(OpClass.class);
+        var isOp = o instanceof Op;
+        var isOpClass = o.getClass().isAnnotationPresent(OpClass.class);
 		return isOp && isOpClass;
 	}
 

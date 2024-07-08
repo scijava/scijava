@@ -97,19 +97,19 @@ public class DefaultSigmaFilter<T extends RealType<T>, V extends RealType<V>>
 				final Double range, final Double minPixelFraction, final V output)
 		{
 
-				DoubleType varianceResult = new DoubleType();
+            var varianceResult = new DoubleType();
 				varianceOp.compute(neighborhood, varianceResult);
-				double varianceValue = varianceResult.getRealDouble() * range;
+            var varianceValue = varianceResult.getRealDouble() * range;
 
-				final double centerValue = center.getRealDouble();
+				final var centerValue = center.getRealDouble();
 				double sumAll = 0;
 				double sumWithin = 0;
 				long countAll = 0;
 				long countWithin = 0;
 
-				for (T neighbor : neighborhood) {
-					final double pixelValue = neighbor.getRealDouble();
-					final double diff = centerValue - pixelValue;
+				for (var neighbor : neighborhood) {
+					final var pixelValue = neighbor.getRealDouble();
+					final var diff = centerValue - pixelValue;
 
 					sumAll += pixelValue;
 					++countAll;

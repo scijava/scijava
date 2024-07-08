@@ -84,7 +84,7 @@ public abstract class Abstract3x3NeighbourhoodThinning implements
 	 *         clockwise order.
 	 */
 	protected boolean[] getNeighbourhood(final RandomAccess<BitType> access) {
-		final boolean[] vals = new boolean[9];
+		final var vals = new boolean[9];
 
 		vals[0] = access.get().get();
 
@@ -124,8 +124,8 @@ public abstract class Abstract3x3NeighbourhoodThinning implements
 	 * @return Amount of true-false switches in the neighbourhood.
 	 */
 	protected int findPatternSwitches(final boolean[] vals) {
-		int res = 0;
-		for (int i = 1; i < vals.length - 1; ++i) {
+        var res = 0;
+		for (var i = 1; i < vals.length - 1; ++i) {
 			if (vals[i] == m_foreground && vals[i + 1] == m_background) {
 				++res;
 			}

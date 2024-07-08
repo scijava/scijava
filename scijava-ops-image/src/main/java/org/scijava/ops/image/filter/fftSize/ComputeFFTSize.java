@@ -63,8 +63,8 @@ public class ComputeFFTSize implements
 		long[] paddedSize, long[] fftSize, Boolean forward, Boolean fast)
 	{
 
-		long[] paddedOutput = Arrays.copyOf(paddedSize, paddedSize.length);
-		long[] fftOutput = Arrays.copyOf(fftSize, fftSize.length);
+        var paddedOutput = Arrays.copyOf(paddedSize, paddedSize.length);
+        var fftOutput = Arrays.copyOf(fftSize, fftSize.length);
 
 		if (fast && forward) {
 

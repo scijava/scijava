@@ -53,8 +53,8 @@ public final class LiftNeighborhoodComputersToRAI {
 		Computers.Arity2<RandomAccessibleInterval<T>, Shape, RandomAccessibleInterval<U>>
 		adapt1UsingShape(Computers.Arity1<Neighborhood<T>, U> op)
 	{
-		OutOfBoundsMirrorFactory<T, RandomAccessibleInterval<T>> oobf //
-			= new OutOfBoundsMirrorFactory<>(
+        var oobf //
+			= new OutOfBoundsMirrorFactory<T, RandomAccessibleInterval<T>>(
 				OutOfBoundsMirrorFactory.Boundary.SINGLE);
 		return (in, shape, out) -> {
 			var extended = Views.extend(in, oobf);
@@ -90,8 +90,8 @@ public final class LiftNeighborhoodComputersToRAI {
 		Computers.Arity3<RandomAccessibleInterval<T>, V, Shape, RandomAccessibleInterval<U>>
 		adapt2UsingShape(Computers.Arity2<Neighborhood<T>, V, U> op)
 	{
-		OutOfBoundsMirrorFactory<T, RandomAccessibleInterval<T>> oobf //
-			= new OutOfBoundsMirrorFactory<>(
+        var oobf //
+			= new OutOfBoundsMirrorFactory<T, RandomAccessibleInterval<T>>(
 				OutOfBoundsMirrorFactory.Boundary.SINGLE);
 		return (in1, in2, shape, out) -> {
 			var extended = Views.extend(in1, oobf);
@@ -129,8 +129,8 @@ public final class LiftNeighborhoodComputersToRAI {
 		Computers.Arity4<RandomAccessibleInterval<T>, V, W, Shape, RandomAccessibleInterval<U>>
 		adapt3UsingShape(Computers.Arity3<Neighborhood<T>, V, W, U> op)
 	{
-		OutOfBoundsMirrorFactory<T, RandomAccessibleInterval<T>> oobf //
-			= new OutOfBoundsMirrorFactory<>(
+        var oobf //
+			= new OutOfBoundsMirrorFactory<T, RandomAccessibleInterval<T>>(
 				OutOfBoundsMirrorFactory.Boundary.SINGLE);
 		return (in1, in2, in3, shape, out) -> {
 			var extended = Views.extend(in1, oobf);

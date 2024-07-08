@@ -79,10 +79,10 @@ public class DefaultCCA<T extends IntegerType<T>, L, I extends IntegerType<I>>
 		if (labelGenerator == null) {
 			labelGenerator = new DefaultLabelIterator();
 		}
-		ImgLabeling<Integer, IntType> output =
+        var output =
 			(ImgLabeling<Integer, IntType>) imgLabelingCreator.apply(input,
 				new IntType());
-		ExecutorService es = Parallelization.getExecutorService();
+        var es = Parallelization.getExecutorService();
 		ConnectedComponents.labelAllConnectedComponents(input, output,
 			labelGenerator, se, es);
 		return output;

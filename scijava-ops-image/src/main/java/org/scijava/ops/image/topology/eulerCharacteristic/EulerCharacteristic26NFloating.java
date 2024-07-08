@@ -232,12 +232,12 @@ public class EulerCharacteristic26NFloating<B extends BooleanType<B>> implements
 	public void compute(RandomAccessibleInterval<B> interval, DoubleType output) {
 		if (interval.numDimensions() != 3) throw new IllegalArgumentException(
 			"Input must have 3 dimensions!");
-		final Octant<B> octant = new Octant<>(interval);
-		int sumDeltaEuler = 0;
+		final var octant = new Octant<B>(interval);
+        var sumDeltaEuler = 0;
 
-		for (int z = 0; z <= interval.dimension(2); z++) {
-			for (int y = 0; y <= interval.dimension(1); y++) {
-				for (int x = 0; x <= interval.dimension(0); x++) {
+		for (var z = 0; z <= interval.dimension(2); z++) {
+			for (var y = 0; y <= interval.dimension(1); y++) {
+				for (var x = 0; x <= interval.dimension(0); x++) {
 					octant.setNeighborhood(x, y, z);
 					sumDeltaEuler += getDeltaEuler(octant);
 				}
@@ -256,7 +256,7 @@ public class EulerCharacteristic26NFloating<B extends BooleanType<B>> implements
 			return 0;
 		}
 
-		int index = 1;
+        var index = 1;
 		if (octant.isNeighborForeground(8)) {
 			if (octant.isNeighborForeground(1)) {
 				index |= 128;

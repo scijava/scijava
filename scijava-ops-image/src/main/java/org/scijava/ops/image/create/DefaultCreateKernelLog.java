@@ -61,38 +61,38 @@ public final class DefaultCreateKernelLog {
 		RandomAccessibleInterval<C> createKernel(double[] sigmas, C type,
 			BiFunction<Dimensions, T, Img<T>> imgFromDimsAndType)
 	{
-		final double[] sigmaPixels = new double[sigmas.length];
-		for (int i = 0; i < sigmaPixels.length; i++) {
+		final var sigmaPixels = new double[sigmas.length];
+		for (var i = 0; i < sigmaPixels.length; i++) {
 			// Optimal sigma for LoG approach and dimensionality.
-			final double sigma_optimal = sigmas[i] / Math.sqrt(sigmas.length);
+			final var sigma_optimal = sigmas[i] / Math.sqrt(sigmas.length);
 
 			sigmaPixels[i] = sigma_optimal;
 		}
-		final int n = sigmaPixels.length;
-		final long[] dims = new long[n];
-		final long[] middle = new long[n];
-		for (int d = 0; d < n; ++d) {
+		final var n = sigmaPixels.length;
+		final var dims = new long[n];
+		final var middle = new long[n];
+		for (var d = 0; d < n; ++d) {
 			// The half size of the kernel is 3 standard deviations (or a
 			// minimum half size of 2)
-			final int hksizes = Math.max(2, (int) (3 * sigmaPixels[d] + 0.5) + 1);
+			final var hksizes = Math.max(2, (int) (3 * sigmaPixels[d] + 0.5) + 1);
 			// add 3 border pixels to achieve smoother derivatives at the border
 			dims[d] = 3 + 2 * hksizes;
 			middle[d] = 1 + hksizes;
 		}
 
 		// TODO is this safe? I think so...
-		final RandomAccessibleInterval<C> output =
+		final var output =
 			(RandomAccessibleInterval<C>) imgFromDimsAndType.apply(new FinalInterval(
 				dims), (T) type);
 
-		final Cursor<C> c = Views.iterable(output).cursor();
-		final long[] coords = new long[sigmas.length];
+		final var c = Views.iterable(output).cursor();
+		final var coords = new long[sigmas.length];
 		/*
 		 * The gaussian normalization factor, divided by a constant value. This
 		 * is a fudge factor, that more or less put the quality values close to
 		 * the maximal value of a blob of optimal radius.
 		 */
-		final double C = 1d / 20d * Math.pow(1d / sigmas[0] / Math.sqrt(2 *
+		final var C = 1d / 20d * Math.pow(1d / sigmas[0] / Math.sqrt(2 *
 			Math.PI), sigmas.length);
 		// Work in image coordinates
 		while (c.hasNext()) {
@@ -100,7 +100,7 @@ public final class DefaultCreateKernelLog {
 			c.localize(coords);
 			double mantissa = 0;
 			double exponent = 0;
-			for (int d = 0; d < coords.length; d++) {
+			for (var d = 0; d < coords.length; d++) {
 				final double x = coords[d] - middle[d];
 				mantissa += -C * (x * x / sigmas[0] / sigmas[0] - 1d);
 				exponent += -x * x / 2d / sigmas[0] / sigmas[0];

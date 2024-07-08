@@ -61,15 +61,15 @@ public class PaddingIntervalOrigin<T extends ComplexType<T>, I extends RandomAcc
 	@SuppressWarnings("unchecked")
 	public O apply(final I input, final Interval centeredInterval) {
 
-		int numDimensions = input.numDimensions();
+        var numDimensions = input.numDimensions();
 
 		// compute where to place the final Interval for the input so that the
 		// coordinate in the center
 		// of the input is at position (0,0).
-		final long[] min = new long[numDimensions];
-		final long[] max = new long[numDimensions];
+		final var min = new long[numDimensions];
+		final var max = new long[numDimensions];
 
-		for (int d = 0; d < numDimensions; ++d) {
+		for (var d = 0; d < numDimensions; ++d) {
 			min[d] = input.min(d) + input.dimension(d) / 2;
 			max[d] = min[d] + centeredInterval.dimension(d) - 1;
 		}

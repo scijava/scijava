@@ -59,14 +59,14 @@ public class DefaultChunker implements Inplaces.Arity2_1<Chunk, Long> {
 
 		// TODO: is there a better way to determine the optimal chunk size?
 
-		final long numSteps = Math.max(1, (long) (numberOfElements / Runtime
+		final var numSteps = Math.max(1, (long) (numberOfElements / Runtime
 			.getRuntime().availableProcessors()));
 
-		final int numChunks = (int) (numberOfElements / numSteps);
+		final var numChunks = (int) (numberOfElements / numSteps);
 
 		List<Runnable> list = new ArrayList<>();
 
-		for (int i = 0; i < numChunks - 1; i++) {
+		for (var i = 0; i < numChunks - 1; i++) {
 			final long j = i;
 			list.add(() -> chunk.execute(j * numSteps, STEP_SIZE, numSteps));
 		}

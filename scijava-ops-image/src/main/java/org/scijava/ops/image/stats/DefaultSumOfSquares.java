@@ -70,7 +70,7 @@ public class DefaultSumOfSquares<I extends RealType<I>, O extends RealType<O>>
 	public void compute(final RandomAccessibleInterval<I> input,
 		final O sumOfSquares)
 	{
-		RandomAccessibleInterval<O> tmpImg = imgCreator.apply(input, sumOfSquares);
+        var tmpImg = imgCreator.apply(input, sumOfSquares);
 		sqrOp.compute(input, tmpImg);
 		sumOp.compute(tmpImg, sumOfSquares);
 	}

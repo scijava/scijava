@@ -67,13 +67,13 @@ public class DefaultFeretsDiameterForAngle implements
 		final List<? extends RealLocalizable> points = GeomUtils.vertices(function
 			.apply(input));
 
-		final double angleRad = -angle * Math.PI / 180.0;
+		final var angleRad = -angle * Math.PI / 180.0;
 
-		double minX = Double.POSITIVE_INFINITY;
-		double maxX = Double.NEGATIVE_INFINITY;
+        var minX = Double.POSITIVE_INFINITY;
+        var maxX = Double.NEGATIVE_INFINITY;
 
-		for (RealLocalizable p : points) {
-			final double tmpX = p.getDoublePosition(0) * Math.cos(angleRad) - p
+		for (var p : points) {
+			final var tmpX = p.getDoublePosition(0) * Math.cos(angleRad) - p
 				.getDoublePosition(1) * Math.sin(angleRad);
 			minX = tmpX < minX ? tmpX : minX;
 			maxX = tmpX > maxX ? tmpX : maxX;

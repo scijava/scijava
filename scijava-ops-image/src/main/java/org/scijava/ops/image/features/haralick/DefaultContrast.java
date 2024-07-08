@@ -66,16 +66,16 @@ public class DefaultContrast<T extends RealType<T>> extends
 		final Integer numGreyLevels, final Integer distance,
 		final MatrixOrientation orientation)
 	{
-		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels,
+		final var matrix = getCooccurrenceMatrix(input, numGreyLevels,
 			distance, orientation);
-		final double[] pxminusxy = coocPXMinusYFunc.apply(matrix);
+		final var pxminusxy = coocPXMinusYFunc.apply(matrix);
 
 		double res = 0;
-		for (int k = 0; k <= matrix.length - 1; k++) {
+		for (var k = 0; k <= matrix.length - 1; k++) {
 			res += k * k * pxminusxy[k];
 		}
 
-		DoubleType output = new DoubleType();
+        var output = new DoubleType();
 		output.set(res);
 		return output;
 	}

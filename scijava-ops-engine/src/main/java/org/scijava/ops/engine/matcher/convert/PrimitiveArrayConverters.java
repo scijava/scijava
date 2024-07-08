@@ -51,7 +51,7 @@ public class PrimitiveArrayConverters<N extends Number> implements
 	@OpField(names = "engine.convert")
 	public final Function<N[], ObjectArray<Number>> fromNumber = arr -> {
 		var oa = new ObjectArray<>(Number.class, arr.length);
-		for (int i = 0; i < arr.length; i++) {
+		for (var i = 0; i < arr.length; i++) {
 			oa.set(i, arr[i]);
 		}
 		return oa;
@@ -64,7 +64,7 @@ public class PrimitiveArrayConverters<N extends Number> implements
 	public final Function<byte[], ObjectArray<Number>> fromPrimitiveByte =
 		arr -> {
 			var oa = new ObjectArray<>(Number.class, arr.length);
-			for (int i = 0; i < arr.length; i++) {
+			for (var i = 0; i < arr.length; i++) {
 				oa.set(i, arr[i]);
 			}
 			return oa;
@@ -75,7 +75,7 @@ public class PrimitiveArrayConverters<N extends Number> implements
 	public final Function<short[], ObjectArray<Number>> fromPrimitiveShort =
 		arr -> {
 			var oa = new ObjectArray<>(Number.class, arr.length);
-			for (int i = 0; i < arr.length; i++) {
+			for (var i = 0; i < arr.length; i++) {
 				oa.set(i, arr[i]);
 			}
 			return oa;
@@ -85,7 +85,7 @@ public class PrimitiveArrayConverters<N extends Number> implements
 	@OpField(names = "engine.convert")
 	public final Function<int[], ObjectArray<Number>> fromPrimitiveInt = arr -> {
 		var oa = new ObjectArray<>(Number.class, arr.length);
-		for (int i = 0; i < arr.length; i++) {
+		for (var i = 0; i < arr.length; i++) {
 			oa.set(i, arr[i]);
 		}
 		return oa;
@@ -96,7 +96,7 @@ public class PrimitiveArrayConverters<N extends Number> implements
 	public final Function<long[], ObjectArray<Number>> fromPrimitiveLong =
 		arr -> {
 			var oa = new ObjectArray<>(Number.class, arr.length);
-			for (int i = 0; i < arr.length; i++) {
+			for (var i = 0; i < arr.length; i++) {
 				oa.set(i, arr[i]);
 			}
 			return oa;
@@ -107,7 +107,7 @@ public class PrimitiveArrayConverters<N extends Number> implements
 	public final Function<float[], ObjectArray<Number>> fromPrimitiveFloat =
 		arr -> {
 			var oa = new ObjectArray<>(Number.class, arr.length);
-			for (int i = 0; i < arr.length; i++) {
+			for (var i = 0; i < arr.length; i++) {
 				oa.set(i, arr[i]);
 			}
 			return oa;
@@ -118,7 +118,7 @@ public class PrimitiveArrayConverters<N extends Number> implements
 	public final Function<double[], ObjectArray<Number>> fromPrimitiveDouble =
 		arr -> {
 			var oa = new ObjectArray<>(Number.class, arr.length);
-			for (int i = 0; i < arr.length; i++) {
+			for (var i = 0; i < arr.length; i++) {
 				oa.set(i, arr[i]);
 			}
 			return oa;
@@ -162,8 +162,8 @@ public class PrimitiveArrayConverters<N extends Number> implements
 	@OpHints(hints = { Conversion.FORBIDDEN })
 	@OpField(names = "engine.convert")
 	public final Function<ObjectArray<Number>, byte[]> toPrimitiveByte = o -> {
-		byte[] arr = new byte[o.size()];
-		for (int i = 0; i < o.size(); i++) {
+        var arr = new byte[o.size()];
+		for (var i = 0; i < o.size(); i++) {
 			arr[i] = o.get(i).byteValue();
 		}
 		return arr;
@@ -172,8 +172,8 @@ public class PrimitiveArrayConverters<N extends Number> implements
 	@OpHints(hints = { Conversion.FORBIDDEN })
 	@OpField(names = "engine.convert")
 	public final Function<ObjectArray<Number>, short[]> toPrimitiveShort = o -> {
-		short[] arr = new short[o.size()];
-		for (int i = 0; i < o.size(); i++) {
+        var arr = new short[o.size()];
+		for (var i = 0; i < o.size(); i++) {
 			arr[i] = o.get(i).shortValue();
 		}
 		return arr;
@@ -182,8 +182,8 @@ public class PrimitiveArrayConverters<N extends Number> implements
 	@OpHints(hints = { Conversion.FORBIDDEN })
 	@OpField(names = "engine.convert")
 	public final Function<ObjectArray<Number>, int[]> toPrimitiveInt = o -> {
-		int[] arr = new int[o.size()];
-		for (int i = 0; i < o.size(); i++) {
+        var arr = new int[o.size()];
+		for (var i = 0; i < o.size(); i++) {
 			arr[i] = o.get(i).intValue();
 		}
 		return arr;
@@ -192,8 +192,8 @@ public class PrimitiveArrayConverters<N extends Number> implements
 	@OpHints(hints = { Conversion.FORBIDDEN })
 	@OpField(names = "engine.convert")
 	public final Function<ObjectArray<Number>, long[]> toPrimitiveLong = o -> {
-		long[] arr = new long[o.size()];
-		for (int i = 0; i < o.size(); i++) {
+        var arr = new long[o.size()];
+		for (var i = 0; i < o.size(); i++) {
 			arr[i] = o.get(i).longValue();
 		}
 		return arr;
@@ -202,8 +202,8 @@ public class PrimitiveArrayConverters<N extends Number> implements
 	@OpHints(hints = { Conversion.FORBIDDEN })
 	@OpField(names = "engine.convert")
 	public final Function<ObjectArray<Number>, float[]> toPrimitiveFloat = o -> {
-		float[] arr = new float[o.size()];
-		for (int i = 0; i < o.size(); i++) {
+        var arr = new float[o.size()];
+		for (var i = 0; i < o.size(); i++) {
 			arr[i] = o.get(i).floatValue();
 		}
 		return arr;
@@ -213,8 +213,8 @@ public class PrimitiveArrayConverters<N extends Number> implements
 	@OpField(names = "engine.convert")
 	public final Function<ObjectArray<Number>, double[]> toPrimitiveDouble =
 		o -> {
-			double[] arr = new double[o.size()];
-			for (int i = 0; i < o.size(); i++) {
+            var arr = new double[o.size()];
+			for (var i = 0; i < o.size(); i++) {
 				arr[i] = o.get(i).doubleValue();
 			}
 			return arr;

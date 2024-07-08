@@ -64,15 +64,15 @@ public class ZhangSuenThinningStrategy extends
 	{
 
 		// Setup
-		final RandomAccess<BitType> access = randomAccess(accessible);
+		final var access = randomAccess(accessible);
 		access.setPosition(position);
 
-		final boolean[] vals = getNeighbourhood(access);
+		final var vals = getNeighbourhood(access);
 
 		// First two conditions are similar to Hilditch-Thinning.
-		int numForeground = 0;
+        var numForeground = 0;
 
-		for (int i = 1; i < vals.length; ++i) {
+		for (var i = 1; i < vals.length; ++i) {
 			if (vals[i] == m_foreground) {
 				++numForeground;
 			}
@@ -81,7 +81,7 @@ public class ZhangSuenThinningStrategy extends
 		if (!(2 <= numForeground && numForeground <= 6)) {
 			return false;
 		}
-		final int numPatternSwitches = findPatternSwitches(vals);
+		final var numPatternSwitches = findPatternSwitches(vals);
 		if (!(numPatternSwitches == 1)) {
 			return false;
 		}

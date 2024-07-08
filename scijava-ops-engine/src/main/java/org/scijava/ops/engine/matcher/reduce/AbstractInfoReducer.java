@@ -40,22 +40,22 @@ public abstract class AbstractInfoReducer implements InfoReducer {
 
 	@Override
 	public boolean canReduce(OpInfo info) {
-		boolean isReducerType = isReducerType(FunctionalInterfaces.findFrom(info
+        var isReducerType = isReducerType(FunctionalInterfaces.findFrom(info
 			.opType()));
-		boolean canReduce = info.declaredHints().containsNone(
+        var canReduce = info.declaredHints().containsNone(
 			BaseOpHints.Reduction.FORBIDDEN);
 		return isReducerType && canReduce;
 	}
 
 	@Override
 	public ReducedOpInfo reduce(OpInfo info, int numReductions) {
-		Class<?> rawType = FunctionalInterfaces.findFrom(info.opType());
-		int originalArity = arityOf(rawType);
-		int reducedArity = originalArity - numReductions;
-		Class<?> reducedRawType = ofArity(reducedArity);
-		Type[] inputTypes = info.inputTypes().toArray(Type[]::new);
-		Type outputType = info.output().type();
-		Type[] newTypes = new Type[reducedArity + 1];
+        var rawType = FunctionalInterfaces.findFrom(info.opType());
+        var originalArity = arityOf(rawType);
+        var reducedArity = originalArity - numReductions;
+        var reducedRawType = ofArity(reducedArity);
+        var inputTypes = info.inputTypes().toArray(Type[]::new);
+        var outputType = info.output().type();
+        var newTypes = new Type[reducedArity + 1];
 		if (reducedArity >= 0) System.arraycopy(inputTypes, 0, newTypes, 0,
 			reducedArity);
 		newTypes[newTypes.length - 1] = outputType;

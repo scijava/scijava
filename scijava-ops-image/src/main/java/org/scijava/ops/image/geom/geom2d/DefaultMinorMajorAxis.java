@@ -63,28 +63,28 @@ public class DefaultMinorMajorAxis implements
 	private double[] getMinorMajorAxis(final Polygon2D input,
 		final List<RealLocalizable> points)
 	{
-		double[] moments = getMoments(input, points);
+        var moments = getMoments(input, points);
 
-		double m00 = moments[0];
-		double u20 = moments[1];
-		double u11 = moments[2];
-		double u02 = moments[3];
+        var m00 = moments[0];
+        var u20 = moments[1];
+        var u11 = moments[2];
+        var u02 = moments[3];
 
-		double m4 = 4.0 * Math.abs(u02 * u20 - u11 * u11);
+        var m4 = 4.0 * Math.abs(u02 * u20 - u11 * u11);
 		if (m4 < 0.000001) {
 			m4 = 0.000001;
 		}
 
-		double a11 = u02 / m4;
-		double a12 = u11 / m4;
-		double a22 = u20 / m4;
+        var a11 = u02 / m4;
+        var a12 = u11 / m4;
+        var a22 = u20 / m4;
 
-		double tmp = a11 - a22;
+        var tmp = a11 - a22;
 		if (tmp == 0.0) {
 			tmp = 0.000001;
 		}
 
-		double ta = 0.5 * Math.atan(2.0 * a12 / tmp);
+        var ta = 0.5 * Math.atan(2.0 * a12 / tmp);
 		if (ta < 0.0) {
 			ta += Math.PI / 2d;
 		}
@@ -106,15 +106,15 @@ public class DefaultMinorMajorAxis implements
 
 		tmp = Math.sin(ta);
 		if (tmp == 0.0) tmp = 0.000001;
-		double z = a12 * Math.cos(ta) / tmp;
-		double major = Math.sqrt(1.0 / Math.abs(a22 + z));
-		double minor = Math.sqrt(1.0 / Math.abs(a11 - z));
+        var z = a12 * Math.cos(ta) / tmp;
+        var major = Math.sqrt(1.0 / Math.abs(a22 + z));
+        var minor = Math.sqrt(1.0 / Math.abs(a11 - z));
 		// equalize areas
-		double scale = Math.sqrt(m00 / (Math.PI * major * minor));
+        var scale = Math.sqrt(m00 / (Math.PI * major * minor));
 
 		major = major * scale * 2.0;
 		minor = minor * scale * 2.0;
-		double angle = 180.0 * ta / Math.PI;
+        var angle = 180.0 * ta / Math.PI;
 
 		if (angle == 180.0) angle = 0.0;
 		if (major < minor) {
@@ -145,8 +145,8 @@ public class DefaultMinorMajorAxis implements
 		double m11 = 0;
 		double m20 = 0;
 
-		for (int i = 1; i < points.size(); i++) {
-			double a = getX(input, i - 1) * getY(input, i) - getX(input, i) * getY(
+		for (var i = 1; i < points.size(); i++) {
+            var a = getX(input, i - 1) * getY(input, i) - getX(input, i) * getY(
 				input, i - 1);
 
 			m00 += a;
@@ -170,21 +170,21 @@ public class DefaultMinorMajorAxis implements
 		m20 /= 12d * m00;
 
 		// calculate central moments
-		double n20 = m20 - Math.pow(m10, 2);
-		double n11 = m11 - m10 * m01;
-		double n02 = m02 - Math.pow(m01, 2);
+        var n20 = m20 - Math.pow(m10, 2);
+        var n11 = m11 - m10 * m01;
+        var n02 = m02 - Math.pow(m01, 2);
 
 		return new double[] { m00, n20, n11, n02 };
 	}
 
 	private double getY(final Polygon2D input, final int index) {
-		int i = index;
+        var i = index;
 		if (i == input.numVertices()) i = 0;
 		return input.vertex(i).getDoublePosition(1);
 	}
 
 	private double getX(final Polygon2D input, final int index) {
-		int i = index;
+        var i = index;
 		if (i == input.numVertices()) i = 0;
 		return input.vertex(i).getDoublePosition(0);
 	}
@@ -207,9 +207,9 @@ public class DefaultMinorMajorAxis implements
 
 			@Override
 			public int compare(final RealLocalizable o1, final RealLocalizable o2) {
-				final Double o1x = new Double(o1.getDoublePosition(0));
-				final Double o2x = new Double(o2.getDoublePosition(0));
-				final int result = o2x.compareTo(o1x);
+				final var o1x = new Double(o1.getDoublePosition(0));
+				final var o2x = new Double(o2.getDoublePosition(0));
+				final var result = o2x.compareTo(o1x);
 				if (result == 0) {
 					return new Double(o2.getDoublePosition(1)).compareTo(new Double(o1
 						.getDoublePosition(1)));
@@ -220,7 +220,7 @@ public class DefaultMinorMajorAxis implements
 		points.add(points.get(0));
 
 		// calculate minor and major axis
-		double[] minorMajorAxis = getMinorMajorAxis(input, points);
+        var minorMajorAxis = getMinorMajorAxis(input, points);
 		return new ValuePair<>(new DoubleType(minorMajorAxis[0]), new DoubleType(
 			minorMajorAxis[1]));
 	}

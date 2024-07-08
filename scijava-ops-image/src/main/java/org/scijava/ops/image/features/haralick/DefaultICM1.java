@@ -70,16 +70,16 @@ public class DefaultICM1<T extends RealType<T>> extends
 		final Integer numGreyLevels, final Integer distance,
 		final MatrixOrientation orientation)
 	{
-		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels,
+		final var matrix = getCooccurrenceMatrix(input, numGreyLevels,
 			distance, orientation);
 
-		final double[] coochxy = coocHXYFunc.apply(matrix);
+		final var coochxy = coocHXYFunc.apply(matrix);
 
-		final double res = (entropy.apply(input, numGreyLevels, distance,
+		final var res = (entropy.apply(input, numGreyLevels, distance,
 			orientation).get() - coochxy[2]) / (coochxy[0] > coochxy[1] ? coochxy[0]
 				: coochxy[1]);
 
-		DoubleType output = new DoubleType();
+        var output = new DoubleType();
 		output.set(res);
 		return output;
 	}

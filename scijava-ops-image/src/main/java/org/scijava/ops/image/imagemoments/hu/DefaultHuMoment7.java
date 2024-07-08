@@ -75,25 +75,25 @@ public class DefaultHuMoment7<I extends RealType<I>, O extends RealType<O>>
 	public void computeMoment(final RandomAccessibleInterval<I> input,
 		final O output)
 	{
-		final O n03 = output.createVariable();
+		final var n03 = output.createVariable();
 		normalizedCentralMoment03Func.compute(input, n03);
-		final O n12 = output.createVariable();
+		final var n12 = output.createVariable();
 		normalizedCentralMoment12Func.compute(input, n12);
-		final O n21 = output.createVariable();
+		final var n21 = output.createVariable();
 		normalizedCentralMoment21Func.compute(input, n21);
-		final O n30 = output.createVariable();
+		final var n30 = output.createVariable();
 		normalizedCentralMoment30Func.compute(input, n30);
 
 		// term1 = (3*n21 - n03)(n30 + n12)[(n30 + n12)^2 - 3*(n21 + n03)^2]
 		// term11 = (3*n21 - n03)
-		final O term11 = n21.copy();
+		final var term11 = n21.copy();
 		term11.mul(3d);
 		term11.sub(n03);
 		// term12 = (n30 + n12)
-		final O term12 = n30.copy();
+		final var term12 = n30.copy();
 		term12.add(n12);
 		// term13 = [(n30 + n12)^2 - 3*(n21 + n03)^2]
-		final O term13 = term12.copy();
+		final var term13 = term12.copy();
 		term13.mul(term12);
 		output.set(n21);
 		output.add(n03);
@@ -101,28 +101,28 @@ public class DefaultHuMoment7<I extends RealType<I>, O extends RealType<O>>
 		output.mul(3);
 		term13.sub(output);
 
-		final O term1 = term11.copy();
+		final var term1 = term11.copy();
 		term1.mul(term12);
 		term1.mul(term13);
 
 		// term2 = (n30 - 3*n12)(n21 + n03)[3*(n30 + n12)^2 - (n21 + n03)^2]
 		// term21 = (n30 - 3*n12)
-		final O term21 = n30.copy();
+		final var term21 = n30.copy();
 		output.set(n12);
 		output.mul(3);
 		term21.sub(output);
 		// term22 = (n21 + n03)
-		final O term22 = n21.copy();
+		final var term22 = n21.copy();
 		term22.add(n03);
 		// term23 = [3*(n30 + n12)^2 - (n21 + n03)^2] = [3*(term12^2) - term22^2]
-		final O term23 = term12.copy();
+		final var term23 = term12.copy();
 		term23.mul(term12);
 		term23.mul(3);
 		output.set(term22);
 		output.mul(term22);
 		term23.sub(output);
 
-		final O term2 = term21.copy();
+		final var term2 = term21.copy();
 		term2.mul(term22);
 		term2.mul(term23);
 

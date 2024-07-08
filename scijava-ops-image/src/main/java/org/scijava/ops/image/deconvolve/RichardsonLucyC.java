@@ -163,11 +163,11 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 		fftKernelOp.compute(kernel, fftKernel);
 
 		// create acceleration state
-		AccelerationState<O> state = new AccelerationState<>(raiExtendedEstimate);
+        var state = new AccelerationState<O>(raiExtendedEstimate);
 
 		// -- perform iterations --
 		Progress.defineTotal(maxIterations);
-		for (int i = 0; i < maxIterations; i++) {
+		for (var i = 0; i < maxIterations; i++) {
 			// create reblurred by convolving kernel with estimate
 			// NOTE: the FFT of the PSF of the kernel has been passed in as a
 			// parameter. when the op was set up, and computed above, so we can use
@@ -183,7 +183,7 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 			updateOp.compute(raiExtendedReblurred, raiExtendedEstimate);
 
 			// apply post processing
-			for (Inplaces.Arity1<RandomAccessibleInterval<O>> pp : iterativePostProcessingOps) {
+			for (var pp : iterativePostProcessingOps) {
 				pp.mutate(raiExtendedEstimate);
 			}
 
@@ -195,10 +195,10 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 
 		// -- copy crop padded back to original size
 
-		final long[] start = new long[out.numDimensions()];
-		final long[] end = new long[out.numDimensions()];
+		final var start = new long[out.numDimensions()];
+		final var end = new long[out.numDimensions()];
 
-		for (int d = 0; d < out.numDimensions(); d++) {
+		for (var d = 0; d < out.numDimensions(); d++) {
 			start[d] = 0;
 			end[d] = start[d] + out.dimension(d) - 1;
 		}

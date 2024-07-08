@@ -55,7 +55,7 @@ public class ComputeFFTMethodsSize implements
 	@Override
 	public long[][] apply(Dimensions dimensions, Boolean forward, Boolean fast) {
 
-		long[][] size = new long[2][];
+        var size = new long[2][];
 		size[0] = new long[dimensions.numDimensions()];
 		size[1] = new long[dimensions.numDimensions()];
 

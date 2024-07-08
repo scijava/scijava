@@ -55,16 +55,16 @@ public class DefaultSizePolygon implements
 	@Override
 	public void compute(Polygon2D input, DoubleType size) {
 		double sum = 0;
-		final int numVertices = input.numVertices();
-		for (int i = 0; i < numVertices; i++) {
+		final var numVertices = input.numVertices();
+		for (var i = 0; i < numVertices; i++) {
 
-			final RealLocalizable p0 = input.vertex(i);
-			final RealLocalizable p1 = input.vertex((i + 1) % numVertices);
+			final var p0 = input.vertex(i);
+			final var p1 = input.vertex((i + 1) % numVertices);
 
-			final double p0_x = p0.getDoublePosition(0);
-			final double p0_y = p0.getDoublePosition(1);
-			final double p1_x = p1.getDoublePosition(0);
-			final double p1_y = p1.getDoublePosition(1);
+			final var p0_x = p0.getDoublePosition(0);
+			final var p0_y = p0.getDoublePosition(1);
+			final var p1_x = p1.getDoublePosition(0);
+			final var p1_y = p1.getDoublePosition(1);
 
 			sum += p0_x * p1_y - p0_y * p1_x;
 		}

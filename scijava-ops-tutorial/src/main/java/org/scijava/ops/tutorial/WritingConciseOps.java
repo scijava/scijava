@@ -99,9 +99,9 @@ public class WritingConciseOps {
 	}
 
 	public static void main(String... args) {
-		OpEnvironment ops = OpEnvironment.build();
+        var ops = OpEnvironment.build();
 
-		Double result = ops.op("test.opField.power") //
+        var result = ops.op("test.opField.power") //
 			.input(2.0, 10.0) //
 			.outType(Double.class) //
 			.apply();

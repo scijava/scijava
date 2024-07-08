@@ -76,24 +76,24 @@ public class DefaultCorrelation<T extends RealType<T>> extends
 		final Integer numGreyLevels, final Integer distance,
 		final MatrixOrientation orientation)
 	{
-		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels,
+		final var matrix = getCooccurrenceMatrix(input, numGreyLevels,
 			distance, orientation);
 
-		final int nrGrayLevels = matrix.length;
+		final var nrGrayLevels = matrix.length;
 
-		final double meanx = coocMeanXFunc.apply(matrix).get();
-		final double meany = coocMeanYFunc.apply(matrix).get();
-		final double stdx = coocStdXFunc.apply(matrix).get();
-		final double stdy = coocStdYFunc.apply(matrix).get();
+		final var meanx = coocMeanXFunc.apply(matrix).get();
+		final var meany = coocMeanYFunc.apply(matrix).get();
+		final var stdx = coocStdXFunc.apply(matrix).get();
+		final var stdy = coocStdYFunc.apply(matrix).get();
 
 		double sum = 0;
-		for (int i = 0; i < nrGrayLevels; i++) {
-			for (int j = 0; j < nrGrayLevels; j++) {
+		for (var i = 0; i < nrGrayLevels; i++) {
+			for (var j = 0; j < nrGrayLevels; j++) {
 				sum += i * j * matrix[i][j];
 			}
 		}
 
-		DoubleType output = new DoubleType();
+        var output = new DoubleType();
 		output.set((sum - meanx * meany) / (stdx * stdy));
 		return output;
 	}

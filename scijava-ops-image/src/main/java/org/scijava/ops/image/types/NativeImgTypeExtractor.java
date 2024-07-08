@@ -64,8 +64,8 @@ public class NativeImgTypeExtractor extends SubTypeExtractor<NativeImg<?, ?>> {
 
 	@Override
 	protected Type[] getTypeParameters(TypeReifier r, NativeImg<?, ?> object) {
-		Type componentType = r.reify(object.firstElement());
-		Type backingType = r.reify(object.update(object.cursor()));
+        var componentType = r.reify(object.firstElement());
+        var backingType = r.reify(object.update(object.cursor()));
 		return new Type[] { componentType, backingType };
 	}
 

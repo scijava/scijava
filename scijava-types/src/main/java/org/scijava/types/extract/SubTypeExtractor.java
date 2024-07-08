@@ -70,7 +70,7 @@ public abstract class SubTypeExtractor<T> implements TypeExtractor {
 				" can only reify Objects of Class " + baseClass().getSimpleName() +
 				"!");
 		@SuppressWarnings("unchecked")
-		final Type[] typeVars = getTypeParameters(r, (T) object);
+		final var typeVars = getTypeParameters(r, (T) object);
 
 		// TODO: Check whether Types already has a method with this functionality.
 		return parameterizeViaSuperType(object.getClass(), baseClass(), typeVars);
@@ -91,7 +91,7 @@ public abstract class SubTypeExtractor<T> implements TypeExtractor {
 		final Class<?> superCls, final Type... superClsTypeVars)
 	{
 		Type t = Types.parameterize(cls);
-		Type[] typeVars = Types.typeParamsOf(t, superCls);
+        var typeVars = Types.typeParamsOf(t, superCls);
 		if (typeVars.length != superClsTypeVars.length) {
 			throw new IllegalArgumentException("Type variables " + Arrays.toString(
 				typeVars) + " of class " + cls +
@@ -99,7 +99,7 @@ public abstract class SubTypeExtractor<T> implements TypeExtractor {
 					superClsTypeVars) + " of superclass " + superCls);
 		}
 		Map<TypeVariable<?>, Type> map = new HashMap<>();
-		for (int i = 0; i < typeVars.length; i++) {
+		for (var i = 0; i < typeVars.length; i++) {
 			if (typeVars[i] instanceof TypeVariable) map.put(
 				(TypeVariable<?>) typeVars[i], superClsTypeVars[i]);
 		}

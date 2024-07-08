@@ -58,17 +58,17 @@ public class CentroidPolygon implements Function<Polygon2D, RealLocalizable> {
 	@Override
 	public RealLocalizable apply(final Polygon2D input) {
 
-		double area = sizeFunc.apply(input).get();
+        var area = sizeFunc.apply(input).get();
 		double cx = 0;
 		double cy = 0;
-		for (int i = 0; i < input.numVertices(); i++) {
-			RealLocalizable p0 = input.vertex(i);
-			RealLocalizable p1 = input.vertex((i + 1) % input.numVertices());
+		for (var i = 0; i < input.numVertices(); i++) {
+            var p0 = input.vertex(i);
+            var p1 = input.vertex((i + 1) % input.numVertices());
 
-			double p0_x = p0.getDoublePosition(0);
-			double p0_y = p0.getDoublePosition(1);
-			double p1_x = p1.getDoublePosition(0);
-			double p1_y = p1.getDoublePosition(1);
+            var p0_x = p0.getDoublePosition(0);
+            var p0_y = p0.getDoublePosition(1);
+            var p1_x = p1.getDoublePosition(0);
+            var p1_y = p1.getDoublePosition(1);
 
 			cx += (p0_x + p1_x) * (p0_x * p1_y - p1_x * p0_y);
 			cy += (p0_y + p1_y) * (p0_x * p1_y - p1_x * p0_y);

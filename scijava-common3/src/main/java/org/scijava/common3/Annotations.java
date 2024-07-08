@@ -100,7 +100,7 @@ public final class Annotations {
 	public static <A extends Annotation> List<Method> annotatedMethods(
 		final Class<?> c, final Class<A> annotationClass)
 	{
-		List<Method> methods = methodCache.getList(c, annotationClass);
+        var methods = methodCache.getList(c, annotationClass);
 
 		if (methods == null) {
 			methods = new ArrayList<>();
@@ -125,10 +125,10 @@ public final class Annotations {
 	public static <A extends Annotation> void annotatedMethods(final Class<?> c,
 		final Class<A> annotationClass, final List<Method> methods)
 	{
-		List<Method> cachedMethods = methodCache.getList(c, annotationClass);
+        var cachedMethods = methodCache.getList(c, annotationClass);
 
 		if (cachedMethods == null) {
-			final Query query = new Query();
+			final var query = new Query();
 			query.put(annotationClass, Method.class);
 			cacheAnnotatedObjects(c, query);
 			cachedMethods = methodCache.getList(c, annotationClass);
@@ -154,7 +154,7 @@ public final class Annotations {
 	public static <A extends Annotation> List<Field> annotatedFields(
 		final Class<?> c, final Class<A> annotationClass)
 	{
-		List<Field> fields = fieldCache.getList(c, annotationClass);
+        var fields = fieldCache.getList(c, annotationClass);
 
 		if (fields == null) {
 			fields = new ArrayList<>();
@@ -179,10 +179,10 @@ public final class Annotations {
 	public static <A extends Annotation> void annotatedFields(final Class<?> c,
 		final Class<A> annotationClass, final List<Field> fields)
 	{
-		List<Field> cachedFields = fieldCache.getList(c, annotationClass);
+        var cachedFields = fieldCache.getList(c, annotationClass);
 
 		if (cachedFields == null) {
-			final Query query = new Query();
+			final var query = new Query();
 			query.put(annotationClass, Field.class);
 			cacheAnnotatedObjects(c, query);
 			cachedFields = fieldCache.getList(c, annotationClass);
@@ -241,7 +241,7 @@ public final class Annotations {
 
 			// Initialize step - determine which queries are solved
 			final Set<Class<? extends Annotation>> keysToDrop = new HashSet<>();
-			for (final Class<? extends Annotation> annotationClass : query.keySet()) {
+			for (final var annotationClass : query.keySet()) {
 				// Fields
 				if (fieldCache.getList(scannedClass, annotationClass) != null) {
 					keysToDrop.add(annotationClass);
@@ -252,7 +252,7 @@ public final class Annotations {
 			}
 
 			// Clean up resolved keys
-			for (final Class<? extends Annotation> key : keysToDrop) {
+			for (final var key : keysToDrop) {
 				query.remove(key);
 			}
 
@@ -262,7 +262,7 @@ public final class Annotations {
 			final List<Class<?>> inherited = new ArrayList<>();
 
 			// cache all parents recursively
-			final Class<?> superClass = scannedClass.getSuperclass();
+			final var superClass = scannedClass.getSuperclass();
 			if (superClass != null) {
 				// Recursive step
 				cacheAnnotatedObjects(superClass, new Query(query));
@@ -270,15 +270,15 @@ public final class Annotations {
 			}
 
 			// cache all interfaces recursively
-			for (final Class<?> ifaceClass : scannedClass.getInterfaces()) {
+			for (final var ifaceClass : scannedClass.getInterfaces()) {
 				// Recursive step
 				cacheAnnotatedObjects(ifaceClass, new Query(query));
 				inherited.add(ifaceClass);
 			}
 
 			// Populate supported objects for scanned class
-			for (final Class<? extends Annotation> annotationClass : query.keySet()) {
-				final Class<? extends AnnotatedElement> objectClass = query.get(
+			for (final var annotationClass : query.keySet()) {
+				final var objectClass = query.get(
 					annotationClass);
 
 				try {
@@ -312,12 +312,12 @@ public final class Annotations {
 		final CacheMap<T> cacheMap, final T[] declaredElements)
 	{
 		// Add inherited elements
-		for (final Class<?> inheritedClass : inherited) {
-			final List<T> annotatedElements = cacheMap.getList(inheritedClass,
+		for (final var inheritedClass : inherited) {
+			final var annotatedElements = cacheMap.getList(inheritedClass,
 				annotationClass);
 
 			if (annotatedElements != null && !annotatedElements.isEmpty()) {
-				final List<T> scannedElements = cacheMap.makeList(scannedClass,
+				final var scannedElements = cacheMap.makeList(scannedClass,
 					annotationClass);
 
 				scannedElements.addAll(annotatedElements);
@@ -328,7 +328,7 @@ public final class Annotations {
 		if (declaredElements != null && declaredElements.length > 0) {
 			List<T> scannedElements = null;
 
-			for (final T t : declaredElements) {
+			for (final var t : declaredElements) {
 				if (t.getAnnotation(annotationClass) != null) {
 					if (scannedElements == null) {
 						scannedElements = cacheMap.makeList(scannedClass, annotationClass);
@@ -378,7 +378,7 @@ public final class Annotations {
 		public List<T> getList(final Class<?> c,
 			final Class<? extends Annotation> annotationClass)
 		{
-			final Map<Class<? extends Annotation>, List<T>> annotationTypes = get(c);
+			final var annotationTypes = get(c);
 			return annotationTypes == null ? null : annotationTypes.get(
 				annotationClass);
 		}
@@ -395,7 +395,7 @@ public final class Annotations {
 			final Class<? extends Annotation> annotationClass,
 			final List<T> annotatedElements)
 		{
-			Map<Class<? extends Annotation>, List<T>> map = get(c);
+            var map = get(c);
 			if (map == null) {
 				map = new HashMap<>();
 				put(c, map);
@@ -417,7 +417,7 @@ public final class Annotations {
 		public List<T> makeList(final Class<?> c,
 			final Class<? extends Annotation> annotationClass)
 		{
-			List<T> elements = getList(c, annotationClass);
+            var elements = getList(c, annotationClass);
 			if (elements == null) {
 				elements = new ArrayList<>();
 				putList(c, annotationClass, elements);

@@ -63,10 +63,10 @@ public class IterableCentralMoment00<I extends RealType<I>, O extends RealType<O
 
 		double moment00 = 0;
 
-		final Cursor<I> cur = input.localizingCursor();
+		final var cur = input.localizingCursor();
 		while (cur.hasNext()) {
 			cur.fwd();
-			double val = cur.get().getRealDouble();
+            var val = cur.get().getRealDouble();
 			moment00 += val;
 		}
 

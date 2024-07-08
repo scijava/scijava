@@ -78,16 +78,16 @@ class OpFieldImplData extends OpImplData {
 	@Override
 	void parseAdditionalTags(Element source, List<String[]> additionalTags) {
 		// Get the types of each Op parameter.
-		Iterator<String> itr = getParamTypes(source, additionalTags).iterator();
+        var itr = getParamTypes(source, additionalTags).iterator();
 		// Create the list of Op parameters by checking for @input, @container,
 		// @mutable, @output tags
-		for (String[] tag : additionalTags) {
+		for (var tag : additionalTags) {
 			// In the case where parameter types cannot be determined, describe the
 			// types as "UNKNOWN"
-			String pType = itr.hasNext() ? itr.next() : "UNKNOWN";
+            var pType = itr.hasNext() ? itr.next() : "UNKNOWN";
 			switch (tag[0]) {
 				case "@input":
-					String[] inData = tagElementSeparator.split(tag[1], 2);
+                    var inData = tagElementSeparator.split(tag[1], 2);
 					params.add(new OpParameter(inData[0], pType,
 						OpParameter.IO_TYPE.INPUT, inData[1], isNullable(inData[1])));
 					break;
@@ -97,12 +97,12 @@ class OpFieldImplData extends OpImplData {
 						OpParameter.IO_TYPE.OUTPUT, tag[1], false));
 					break;
 				case "@container":
-					String[] containerData = tagElementSeparator.split(tag[1], 2);
+                    var containerData = tagElementSeparator.split(tag[1], 2);
 					params.add(new OpParameter(containerData[0], pType,
 						OpParameter.IO_TYPE.CONTAINER, containerData[1], false));
 					break;
 				case "@mutable":
-					String[] mutableData = tagElementSeparator.split(tag[1], 2);
+                    var mutableData = tagElementSeparator.split(tag[1], 2);
 					params.add(new OpParameter(mutableData[0], pType,
 						OpParameter.IO_TYPE.MUTABLE, mutableData[1], false));
 					break;
@@ -112,20 +112,20 @@ class OpFieldImplData extends OpImplData {
 
 		// With the number of inputs and outputs collected, validate that we have
 		// the correct number of eaach
-		Element fieldType = env.getTypeUtils().asElement(source.asType());
+        var fieldType = env.getTypeUtils().asElement(source.asType());
 		if (fieldType instanceof TypeElement) {
 			// Find functional method of the Op type
-			ExecutableElement fMethod = ProcessingUtils.findFunctionalMethod(env,
+            var fMethod = ProcessingUtils.findFunctionalMethod(env,
 				(TypeElement) fieldType);
 			// Determine number of outputs (in practice, always 0 or 1)
-			int numReturns = 0;
-			for (OpParameter p : params) {
+            var numReturns = 0;
+			for (var p : params) {
 				if (p.ioType == OpParameter.IO_TYPE.OUTPUT) {
 					numReturns++;
 				}
 			}
 			// Compare number of outputs with the number of @output tags
-			int expNumReturns = fMethod.getReturnType() instanceof NoType ? 0 : 1;
+            var expNumReturns = fMethod.getReturnType() instanceof NoType ? 0 : 1;
 			if (expNumReturns != numReturns) {
 				env.getMessager().printMessage(Diagnostic.Kind.ERROR, this.source +
 					" has " + numReturns + " @output tag(s) when it should have " +
@@ -133,8 +133,8 @@ class OpFieldImplData extends OpImplData {
 			}
 			// Compare number of inputs with the number of @input, @container,
 			// @mutable tags
-			int numParams = params.size() - numReturns;
-			int expNumParams = fMethod.getParameters().size();
+            var numParams = params.size() - numReturns;
+            var expNumParams = fMethod.getParameters().size();
 			if (numParams != expNumParams) {
 				env.getMessager().printMessage(Diagnostic.Kind.ERROR, this.source +
 					" has " + numParams +
@@ -178,7 +178,7 @@ class OpFieldImplData extends OpImplData {
 		}
 
 		// Find the enclosing class, so we can grab all the type variables
-		Element enclosing = source.getEnclosingElement();
+        var enclosing = source.getEnclosingElement();
 		while (enclosing.getKind() != ElementKind.CLASS) {
 			enclosing = enclosing.getEnclosingElement();
 		}
@@ -187,10 +187,10 @@ class OpFieldImplData extends OpImplData {
 		// string.
 		for (var e : ((TypeElement) enclosing).getTypeParameters()) {
 			// Convert the type variable into a string representation
-			StringBuilder tpString = new StringBuilder(e.toString()).append(
+            var tpString = new StringBuilder(e.toString()).append(
 				" extends ");
 			var bounds = e.getBounds();
-			for (int i = 0; i < bounds.size(); i++) {
+			for (var i = 0; i < bounds.size(); i++) {
 				tpString.append(bounds.get(i).toString());
 				if (i < bounds.size() - 1) {
 					tpString.append(" & ");
@@ -209,9 +209,9 @@ class OpFieldImplData extends OpImplData {
 		);
 		// Split the type parameters by comma, taking care to avoid nested commas
 		List<String> paramTypes = new ArrayList<>();
-		StringBuilder tmp = new StringBuilder();
-		int nestCount = 0;
-		for (int i = 0; i < ParamsStr.length(); i++) {
+        var tmp = new StringBuilder();
+        var nestCount = 0;
+		for (var i = 0; i < ParamsStr.length(); i++) {
 			if (ParamsStr.charAt(i) == '<') {
 				tmp.append(ParamsStr.charAt(i));
 				nestCount++;

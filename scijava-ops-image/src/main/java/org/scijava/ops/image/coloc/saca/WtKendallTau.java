@@ -59,24 +59,24 @@ final class WtKendallTau {
 		final double[] w1, final double[] w2, final double[] cumw, final Random rng)
 	{
 
-		final double[][] rankedData = rank(X, Y, W, combinedData, rng);
+		final var rankedData = rank(X, Y, W, combinedData, rng);
 
-		for (int i = 0; i < X.length; i++) {
+		for (var i = 0; i < X.length; i++) {
 			rankedindex[i] = (int) rankedData[i][0];
 			rankedw[i] = rankedData[i][2];
 		}
 
-		final double swap = sort(rankedindex, rankedw, Integer::compare, index1,
+		final var swap = sort(rankedindex, rankedw, Integer::compare, index1,
 			index2, w1, w2, cumw);
-		final double tw = totw(W) / 2;
+		final var tw = totw(W) / 2;
 
 		// compute tau and check for NaN results
-		double tauTemp = (tw - 2 * swap) / tw;
+        var tauTemp = (tw - 2 * swap) / tw;
 		if (Double.isNaN(tauTemp)) {
 			tauTemp = 0.0;
 		}
 
-		final double tau = tauTemp;
+		final var tau = tauTemp;
 
 		return tau;
 	}
@@ -85,12 +85,12 @@ final class WtKendallTau {
 		double sumw = 0;
 		double sumsquarew = 0;
 
-		for (int i = 0; i < w.length; i++) {
+		for (var i = 0; i < w.length; i++) {
 			sumw += w[i];
 			sumsquarew += w[i] * w[i];
 		}
 
-		final double result = sumw * sumw - sumsquarew;
+		final var result = sumw * sumw - sumsquarew;
 
 		return result;
 	}
@@ -99,7 +99,7 @@ final class WtKendallTau {
 		final double[] IW, final double[][] combinedData, final Random rng)
 	{
 
-		for (int i = 0; i < IX.length; i++) {
+		for (var i = 0; i < IX.length; i++) {
 			combinedData[i][0] = IX[i];
 			combinedData[i][1] = IY[i];
 			combinedData[i][2] = IW[i];
@@ -119,9 +119,9 @@ final class WtKendallTau {
 	private static void rank1D(final double[][] combinedData, final int dim,
 		final Random rng)
 	{
-		int start = 0;
-		int end = 1;
-		int rank = 1;
+        var start = 0;
+        var end = 1;
+        var rank = 1;
 
 		while (start < combinedData.length) {
 			if (end < combinedData.length &&
@@ -135,15 +135,15 @@ final class WtKendallTau {
 					combinedData[start][dim] == combinedData[end][dim]);
 				// now assign unique rank randomly over these indices -- Fisher-Yates
 				// shuffle!
-				for (int i = start; i < end - 1; i++) {
-					final int newIndex = start + rng.nextInt(end - start);
-					final double[] tmp = combinedData[i];
+				for (var i = start; i < end - 1; i++) {
+					final var newIndex = start + rng.nextInt(end - start);
+					final var tmp = combinedData[i];
 					combinedData[i] = combinedData[newIndex];
 					combinedData[newIndex] = tmp;
 				}
 				rank += end - start;
 			}
-			for (int i = start; i < end; i++) {
+			for (var i = start; i < end; i++) {
 				combinedData[i][dim] = rank++;
 			}
 			start = end;
@@ -157,14 +157,14 @@ final class WtKendallTau {
 	{
 		double swap = 0;
 		double tempswap;
-		final int n = data.length;
-		int step = 1;
+		final var n = data.length;
+        var step = 1;
 		int begin;
 		int begin2;
 		int end;
 		int k;
 
-		for (int i = 0; i < n; i++) {
+		for (var i = 0; i < n; i++) {
 			index1[i] = data[i];
 			w1[i] = weight[i];
 		}
@@ -173,7 +173,7 @@ final class WtKendallTau {
 			begin = 0;
 			k = 0;
 			cumw[0] = w1[0];
-			for (int i = 1; i < n; i++) {
+			for (var i = 1; i < n; i++) {
 				cumw[i] = cumw[i - 1] + w1[i];
 			}
 
@@ -184,8 +184,8 @@ final class WtKendallTau {
 					if (begin2 > n) break;
 					end = n;
 				}
-				int i = begin;
-				int j = begin2;
+                var i = begin;
+                var j = begin2;
 				while (i < begin2 && j < end) {
 					if (comparator.compare(index1[i], index1[j]) > 0) {
 						if (i == 0) {
@@ -224,7 +224,7 @@ final class WtKendallTau {
 					k++;
 				}
 			}
-			for (int i = 0; i < n; i++) {
+			for (var i = 0; i < n; i++) {
 				index1[i] = index2[i];
 				w1[i] = w2[i];
 			}

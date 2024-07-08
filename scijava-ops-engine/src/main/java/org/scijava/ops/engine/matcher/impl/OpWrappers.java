@@ -74,7 +74,7 @@ public class OpWrappers {
 					preprocess();
 
 					// Call the op
-					T out = instance.op().create();
+					var out = instance.op().create();
 
 					postprocess(out);
 
@@ -120,7 +120,7 @@ public class OpWrappers {
 					preprocess(in);
 
 					// Call the op
-					O out = instance.op().apply(in);
+					var out = instance.op().apply(in);
 
 					postprocess(out);
 					return out;
@@ -163,7 +163,7 @@ public class OpWrappers {
 					preprocess(in1, in2);
 
 					// Call the op
-					O out = instance.op().apply(in1, in2);
+					var out = instance.op().apply(in1, in2);
 
 					postprocess(out);
 					return out;
@@ -206,7 +206,7 @@ public class OpWrappers {
 					preprocess(in1, in2, in3);
 
 					// Call the op
-					O out = instance.op().apply(in1, in2, in3);
+					var out = instance.op().apply(in1, in2, in3);
 
 					postprocess(out);
 					return out;
@@ -249,7 +249,7 @@ public class OpWrappers {
 					preprocess(in1, in2, in3, in4);
 
 					// Call the op
-					O out = instance.op().apply(in1, in2, in3, in4);
+					var out = instance.op().apply(in1, in2, in3, in4);
 
 					postprocess(out);
 					return out;
@@ -292,7 +292,7 @@ public class OpWrappers {
 					preprocess(in1, in2, in3, in4, in5);
 
 					// Call the op
-					O out = instance.op().apply(in1, in2, in3, in4, in5);
+					var out = instance.op().apply(in1, in2, in3, in4, in5);
 
 					postprocess(out);
 					return out;
@@ -335,7 +335,7 @@ public class OpWrappers {
 					preprocess(in1, in2, in3, in4, in5, in6);
 
 					// Call the op
-					O out = instance.op().apply(in1, in2, in3, in4, in5, in6);
+					var out = instance.op().apply(in1, in2, in3, in4, in5, in6);
 
 					postprocess(out);
 					return out;
@@ -378,7 +378,7 @@ public class OpWrappers {
 					preprocess(in1, in2, in3, in4, in5, in6, in7);
 
 					// Call the op
-					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7);
+					var out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7);
 
 					postprocess(out);
 					return out;
@@ -421,7 +421,7 @@ public class OpWrappers {
 					preprocess(in1, in2, in3, in4, in5, in6, in7, in8);
 
 					// Call the op
-					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8);
+					var out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8);
 
 					postprocess(out);
 					return out;
@@ -464,7 +464,7 @@ public class OpWrappers {
 					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9);
 
 					// Call the op
-					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9);
+					var out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9);
 
 					postprocess(out);
 					return out;
@@ -507,7 +507,7 @@ public class OpWrappers {
 					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
 
 					// Call the op
-					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
+					var out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
 
 					postprocess(out);
 					return out;
@@ -550,7 +550,7 @@ public class OpWrappers {
 					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
 
 					// Call the op
-					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
+					var out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
 
 					postprocess(out);
 					return out;
@@ -593,7 +593,7 @@ public class OpWrappers {
 					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 
 					// Call the op
-					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
+					var out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 
 					postprocess(out);
 					return out;
@@ -636,7 +636,7 @@ public class OpWrappers {
 					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 
 					// Call the op
-					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
+					var out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 
 					postprocess(out);
 					return out;
@@ -679,7 +679,7 @@ public class OpWrappers {
 					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 
 					// Call the op
-					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
+					var out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 
 					postprocess(out);
 					return out;
@@ -722,7 +722,7 @@ public class OpWrappers {
 					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 
 					// Call the op
-					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
+					var out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 
 					postprocess(out);
 					return out;
@@ -765,7 +765,7 @@ public class OpWrappers {
 					preprocess(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 
 					// Call the op
-					O out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
+					var out = instance.op().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 
 					postprocess(out);
 					return out;

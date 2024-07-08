@@ -64,9 +64,9 @@ public class DefaultCompactness implements Computers.Arity1<Mesh, DoubleType> {
 	 */
 	@Override
 	public void compute(final Mesh input, final DoubleType compactness) {
-		final double s3 = Math.pow(surfaceArea.apply(input).get(), 3);
-		final double v2 = Math.pow(volume.apply(input).get(), 2);
-		final double c = s3 / v2;
+		final var s3 = Math.pow(surfaceArea.apply(input).get(), 3);
+		final var v2 = Math.pow(volume.apply(input).get(), 2);
+		final var c = s3 / v2;
 		compactness.set((36.0 * Math.PI) / c);
 	}
 

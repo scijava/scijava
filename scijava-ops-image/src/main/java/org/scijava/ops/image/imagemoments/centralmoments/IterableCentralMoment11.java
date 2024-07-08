@@ -61,17 +61,17 @@ public class IterableCentralMoment11<I extends RealType<I>, O extends RealType<O
 		if (input.numDimensions() != 2) throw new IllegalArgumentException(
 			"Only two-dimensional inputs allowed!");
 
-		double moment00 = 0d;
-		double moment01 = 0d;
-		double moment10 = 0d;
-		double moment11 = 0d;
+        var moment00 = 0d;
+        var moment01 = 0d;
+        var moment10 = 0d;
+        var moment11 = 0d;
 
-		final Cursor<I> cursor = input.localizingCursor();
+		final var cursor = input.localizingCursor();
 		while (cursor.hasNext()) {
 			cursor.fwd();
-			final double x = cursor.getDoublePosition(0);
-			final double y = cursor.getDoublePosition(1);
-			final double val = cursor.get().getRealDouble();
+			final var x = cursor.getDoublePosition(0);
+			final var y = cursor.getDoublePosition(1);
+			final var val = cursor.get().getRealDouble();
 
 			moment00 += val;
 			moment01 += y * val;
@@ -79,7 +79,7 @@ public class IterableCentralMoment11<I extends RealType<I>, O extends RealType<O
 			moment11 += x * y * val;
 		}
 
-		double centerx = moment10 / moment00;
+        var centerx = moment10 / moment00;
 		output.setReal(moment11 - (centerx * moment01));
 	}
 }

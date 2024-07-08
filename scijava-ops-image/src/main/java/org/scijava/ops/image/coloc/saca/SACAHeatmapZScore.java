@@ -88,8 +88,8 @@ public class SACAHeatmapZScore<I extends RealType<I>> implements
 		RandomAccessibleInterval<DoubleType> result)
 	{
 		// ensure images have the same dimensions
-		FinalDimensions dims1 = new FinalDimensions(image1.dimensionsAsLongArray());
-		FinalDimensions dims2 = new FinalDimensions(image2.dimensionsAsLongArray());
+        var dims1 = new FinalDimensions(image1.dimensionsAsLongArray());
+        var dims2 = new FinalDimensions(image2.dimensionsAsLongArray());
 		if (!(Intervals.equalDimensions(dims1, dims2))) {
 			throw new IllegalArgumentException(
 				"Input image dimensions do not match.");

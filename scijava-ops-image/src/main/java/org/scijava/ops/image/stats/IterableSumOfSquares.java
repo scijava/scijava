@@ -55,9 +55,9 @@ public class IterableSumOfSquares<I extends RealType<I>, O extends RealType<O>>
 	 */
 	@Override
 	public void compute(final Iterable<I> input, final O sumOfSquares) {
-		double res = 0.0;
-		for (final I in : input) {
-			final double tmp = in.getRealDouble();
+        var res = 0.0;
+		for (final var in : input) {
+			final var tmp = in.getRealDouble();
 			res += tmp * tmp;
 		}
 		sumOfSquares.setReal(res);

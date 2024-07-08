@@ -85,16 +85,16 @@ public class EulerCorrection<B extends BooleanType<B>> implements
 	public void compute(RandomAccessibleInterval<B> input, DoubleType output) {
 		if (input.numDimensions() != 3) throw new IllegalArgumentException(
 			"Input must have 3 dimensions!");
-		final Traverser<B> traverser = new Traverser<>(input);
+		final var traverser = new Traverser<B>(input);
 		final long chiZero = stackCorners(traverser);
-		final long e = stackEdges(traverser) + 3 * chiZero;
-		final long d = voxelEdgeIntersections(traverser) + chiZero;
-		final long c = stackFaces(traverser) + 2 * e - 3 * chiZero;
-		final long b = voxelEdgeFaceIntersections(traverser);
-		final long a = voxelFaceIntersections(traverser);
+		final var e = stackEdges(traverser) + 3 * chiZero;
+		final var d = voxelEdgeIntersections(traverser) + chiZero;
+		final var c = stackFaces(traverser) + 2 * e - 3 * chiZero;
+		final var b = voxelEdgeFaceIntersections(traverser);
+		final var a = voxelFaceIntersections(traverser);
 
-		final long chiOne = d - e;
-		final long chiTwo = a - b + c;
+		final var chiOne = d - e;
+		final var chiTwo = a - b + c;
 
 		output.set(chiTwo / 2.0 + chiOne / 4.0 + chiZero / 8.0);
 	}
@@ -108,7 +108,7 @@ public class EulerCorrection<B extends BooleanType<B>> implements
 	public static <B extends BooleanType<B>> int stackCorners(
 		final Traverser<B> traverser)
 	{
-		int foregroundVoxels = 0;
+        var foregroundVoxels = 0;
 		foregroundVoxels += getAtLocation(traverser, traverser.x0, traverser.y0,
 			traverser.z0);
 		foregroundVoxels += getAtLocation(traverser, traverser.x1, traverser.y0,
@@ -176,27 +176,27 @@ public class EulerCorrection<B extends BooleanType<B>> implements
 	public static <B extends BooleanType<B>> int stackFaces(
 		final Traverser<B> traverser)
 	{
-		final int[] foregroundVoxels = { 0 };
+		final var foregroundVoxels = new int[]{0};
 
 		LongStream.of(traverser.z0, traverser.z1).forEach(z -> {
-			for (int y = 1; y < traverser.y1; y++) {
-				for (int x = 1; x < traverser.x1; x++) {
+			for (var y = 1; y < traverser.y1; y++) {
+				for (var x = 1; x < traverser.x1; x++) {
 					foregroundVoxels[0] += getAtLocation(traverser, x, y, z);
 				}
 			}
 		});
 
 		LongStream.of(traverser.y0, traverser.y1).forEach(y -> {
-			for (int z = 1; z < traverser.z1; z++) {
-				for (int x = 1; x < traverser.x1; x++) {
+			for (var z = 1; z < traverser.z1; z++) {
+				for (var x = 1; x < traverser.x1; x++) {
 					foregroundVoxels[0] += getAtLocation(traverser, x, y, z);
 				}
 			}
 		});
 
 		LongStream.of(traverser.x0, traverser.x1).forEach(x -> {
-			for (int y = 1; y < traverser.y1; y++) {
-				for (int z = 1; z < traverser.z1; z++) {
+			for (var y = 1; y < traverser.y1; y++) {
+				for (var z = 1; z < traverser.z1; z++) {
 					foregroundVoxels[0] += getAtLocation(traverser, x, y, z);
 				}
 			}
@@ -215,15 +215,15 @@ public class EulerCorrection<B extends BooleanType<B>> implements
 	public static <B extends BooleanType<B>> long voxelEdgeIntersections(
 		final Traverser<B> traverser)
 	{
-		final int[] voxelVertices = { 0 };
+		final var voxelVertices = new int[]{0};
 
 		LongStream.of(traverser.z0, traverser.z1).forEach(z -> {
 			traverser.access.setPosition(z, 2);
 			LongStream.of(traverser.y0, traverser.y1).forEach(y -> {
 				traverser.access.setPosition(y, 1);
 				for (long x = 1; x < traverser.xSize; x++) {
-					final int voxelA = getAtLocation(traverser, x, y, z);
-					final int voxelB = getAtLocation(traverser, x - 1, y, z);
+					final var voxelA = getAtLocation(traverser, x, y, z);
+					final var voxelB = getAtLocation(traverser, x - 1, y, z);
 					voxelVertices[0] += voxelA | voxelB;
 				}
 			});
@@ -234,8 +234,8 @@ public class EulerCorrection<B extends BooleanType<B>> implements
 			LongStream.of(traverser.x0, traverser.x1).forEach(x -> {
 				traverser.access.setPosition(x, 0);
 				for (long y = 1; y < traverser.ySize; y++) {
-					final int voxelA = getAtLocation(traverser, x, y, z);
-					final int voxelB = getAtLocation(traverser, x, y - 1, z);
+					final var voxelA = getAtLocation(traverser, x, y, z);
+					final var voxelB = getAtLocation(traverser, x, y - 1, z);
 					voxelVertices[0] += voxelA | voxelB;
 				}
 			});
@@ -246,8 +246,8 @@ public class EulerCorrection<B extends BooleanType<B>> implements
 			LongStream.of(traverser.x0, traverser.x1).forEach(x -> {
 				traverser.access.setPosition(x, 0);
 				for (long z = 1; z < traverser.zSize; z++) {
-					final int voxelA = getAtLocation(traverser, x, y, z);
-					final int voxelB = getAtLocation(traverser, x, y, z - 1);
+					final var voxelA = getAtLocation(traverser, x, y, z);
+					final var voxelB = getAtLocation(traverser, x, y, z - 1);
 					voxelVertices[0] += voxelA | voxelB;
 				}
 			});
@@ -271,9 +271,9 @@ public class EulerCorrection<B extends BooleanType<B>> implements
 
 		// Front and back faces (all 4 edges). Check 2 edges per voxel
 		LongStream.of(traverser.z0, traverser.z1).forEach(z -> {
-			for (int y = 0; y <= traverser.ySize; y++) {
-				for (int x = 0; x <= traverser.xSize; x++) {
-					final int voxel = getAtLocation(traverser, x, y, z);
+			for (var y = 0; y <= traverser.ySize; y++) {
+				for (var x = 0; x <= traverser.xSize; x++) {
+					final var voxel = getAtLocation(traverser, x, y, z);
 					if (voxel > 0) {
 						iterations[0]++;
 						voxelEdges[0] += 2;
@@ -288,10 +288,10 @@ public class EulerCorrection<B extends BooleanType<B>> implements
 
 		// Top and bottom faces (horizontal edges)
 		LongStream.of(traverser.y0, traverser.y1).forEach(y -> {
-			for (int x = 0; x < traverser.xSize; x++) {
-				for (int z = 1; z < traverser.zSize; z++) {
-					final int voxelA = getAtLocation(traverser, x, y, z);
-					final int voxelB = getAtLocation(traverser, x, y, z - 1);
+			for (var x = 0; x < traverser.xSize; x++) {
+				for (var z = 1; z < traverser.zSize; z++) {
+					final var voxelA = getAtLocation(traverser, x, y, z);
+					final var voxelB = getAtLocation(traverser, x, y, z - 1);
 					voxelEdges[0] += voxelA | voxelB;
 				}
 			}
@@ -300,11 +300,11 @@ public class EulerCorrection<B extends BooleanType<B>> implements
 		// Top and bottom faces (vertical edges)
 		LongStream.of(traverser.y0, traverser.y1).forEach(y -> {
 			traverser.access.setPosition(y, 1);
-			for (int z = 0; z < traverser.zSize; z++) {
+			for (var z = 0; z < traverser.zSize; z++) {
 				traverser.access.setPosition(z, 2);
-				for (int x = 0; x <= traverser.xSize; x++) {
-					final int voxelA = getAtLocation(traverser, x, y, z);
-					final int voxelB = getAtLocation(traverser, x - 1, y, z);
+				for (var x = 0; x <= traverser.xSize; x++) {
+					final var voxelA = getAtLocation(traverser, x, y, z);
+					final var voxelB = getAtLocation(traverser, x - 1, y, z);
 					voxelEdges[0] += voxelA | voxelB;
 				}
 			}
@@ -313,11 +313,11 @@ public class EulerCorrection<B extends BooleanType<B>> implements
 		// Left and right faces (horizontal edges)
 		LongStream.of(traverser.x0, traverser.x1).forEach(x -> {
 			traverser.access.setPosition(x, 0);
-			for (int y = 0; y < traverser.ySize; y++) {
+			for (var y = 0; y < traverser.ySize; y++) {
 				traverser.access.setPosition(y, 1);
-				for (int z = 1; z < traverser.zSize; z++) {
-					final int voxelA = getAtLocation(traverser, x, y, z);
-					final int voxelB = getAtLocation(traverser, x, y, z - 1);
+				for (var z = 1; z < traverser.zSize; z++) {
+					final var voxelA = getAtLocation(traverser, x, y, z);
+					final var voxelB = getAtLocation(traverser, x, y, z - 1);
 					voxelEdges[0] += voxelA | voxelB;
 				}
 			}
@@ -326,11 +326,11 @@ public class EulerCorrection<B extends BooleanType<B>> implements
 		// Left and right faces (vertical edges)
 		LongStream.of(traverser.x0, traverser.x1).forEach(x -> {
 			traverser.access.setPosition(x, 0);
-			for (int z = 0; z < traverser.zSize; z++) {
+			for (var z = 0; z < traverser.zSize; z++) {
 				traverser.access.setPosition(z, 2);
-				for (int y = 1; y < traverser.ySize; y++) {
-					final int voxelA = getAtLocation(traverser, x, y, z);
-					final int voxelB = getAtLocation(traverser, x, y - 1, z);
+				for (var y = 1; y < traverser.ySize; y++) {
+					final var voxelA = getAtLocation(traverser, x, y, z);
+					final var voxelB = getAtLocation(traverser, x, y - 1, z);
 					voxelEdges[0] += voxelA | voxelB;
 				}
 			}
@@ -353,12 +353,12 @@ public class EulerCorrection<B extends BooleanType<B>> implements
 
 		LongStream.of(traverser.z0, traverser.z1).forEach(z -> {
 			traverser.access.setPosition(z, 2);
-			for (int y = 0; y <= traverser.ySize; y++) {
-				for (int x = 0; x <= traverser.xSize; x++) {
-					final int voxelA = getAtLocation(traverser, x, y, z);
-					final int voxelB = getAtLocation(traverser, x - 1, y, z);
-					final int voxelC = getAtLocation(traverser, x, y - 1, z);
-					final int voxelD = getAtLocation(traverser, x - 1, y - 1, z);
+			for (var y = 0; y <= traverser.ySize; y++) {
+				for (var x = 0; x <= traverser.xSize; x++) {
+					final var voxelA = getAtLocation(traverser, x, y, z);
+					final var voxelB = getAtLocation(traverser, x - 1, y, z);
+					final var voxelC = getAtLocation(traverser, x, y - 1, z);
+					final var voxelD = getAtLocation(traverser, x - 1, y - 1, z);
 					voxelFaces[0] += voxelA | voxelB | voxelC | voxelD;
 				}
 			}
@@ -366,24 +366,24 @@ public class EulerCorrection<B extends BooleanType<B>> implements
 
 		LongStream.of(traverser.x0, traverser.x1).forEach(x -> {
 			traverser.access.setPosition(x, 0);
-			for (int y = 0; y <= traverser.ySize; y++) {
-				for (int z = 1; z < traverser.zSize; z++) {
-					final int voxelA = getAtLocation(traverser, x, y, z);
-					final int voxelB = getAtLocation(traverser, x, y - 1, z);
-					final int voxelC = getAtLocation(traverser, x, y, z - 1);
-					final int voxelD = getAtLocation(traverser, x, y - 1, z - 1);
+			for (var y = 0; y <= traverser.ySize; y++) {
+				for (var z = 1; z < traverser.zSize; z++) {
+					final var voxelA = getAtLocation(traverser, x, y, z);
+					final var voxelB = getAtLocation(traverser, x, y - 1, z);
+					final var voxelC = getAtLocation(traverser, x, y, z - 1);
+					final var voxelD = getAtLocation(traverser, x, y - 1, z - 1);
 					voxelFaces[0] += voxelA | voxelB | voxelC | voxelD;
 				}
 			}
 		});
 
 		LongStream.of(traverser.y0, traverser.y1).forEach(y -> {
-			for (int x = 1; x < traverser.xSize; x++) {
-				for (int z = 1; z < traverser.zSize; z++) {
-					final int voxelA = getAtLocation(traverser, x, y, z);
-					final int voxelB = getAtLocation(traverser, x, y, z - 1);
-					final int voxelC = getAtLocation(traverser, x - 1, y, z);
-					final int voxelD = getAtLocation(traverser, x - 1, y, z - 1);
+			for (var x = 1; x < traverser.xSize; x++) {
+				for (var z = 1; z < traverser.zSize; z++) {
+					final var voxelA = getAtLocation(traverser, x, y, z);
+					final var voxelB = getAtLocation(traverser, x, y, z - 1);
+					final var voxelC = getAtLocation(traverser, x - 1, y, z);
+					final var voxelD = getAtLocation(traverser, x - 1, y, z - 1);
 					voxelFaces[0] += voxelA | voxelB | voxelC | voxelD;
 				}
 			}
@@ -399,7 +399,7 @@ public class EulerCorrection<B extends BooleanType<B>> implements
 		traverser.access.setPosition(x, 0);
 		traverser.access.setPosition(y, 1);
 		traverser.access.setPosition(z, 2);
-		final double realDouble = traverser.access.get().getRealDouble();
+		final var realDouble = traverser.access.get().getRealDouble();
 
 		return (int) realDouble;
 	}

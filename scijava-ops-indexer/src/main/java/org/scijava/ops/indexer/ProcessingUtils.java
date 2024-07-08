@@ -101,9 +101,9 @@ final class ProcessingUtils {
 	public static boolean isNullable(final VariableElement element,
 		final String paramDesc)
 	{
-		boolean elementIsNullable = element.getAnnotationMirrors().stream()
+        var elementIsNullable = element.getAnnotationMirrors().stream()
 			.anyMatch(a -> a.toString().contains("Nullable"));
-		boolean descIsNullable = isNullable(paramDesc);
+        var descIsNullable = isNullable(paramDesc);
 		return elementIsNullable || descIsNullable;
 	}
 
@@ -130,8 +130,8 @@ final class ProcessingUtils {
 	public static void printProcessingException(Element source, Throwable t,
 		ProcessingEnvironment env)
 	{
-		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
+        var sw = new StringWriter();
+        var pw = new PrintWriter(sw);
 		t.printStackTrace(pw);
 		env.getMessager().printMessage(Diagnostic.Kind.ERROR,
 			"Exception parsing source " + source + ": " + sw);
@@ -153,14 +153,14 @@ final class ProcessingUtils {
 		ProcessingEnvironment env, TypeElement source)
 	{
 		// Step 1: Find abstract interface method somewhere in the hierarchy
-		ExecutableElement fMethod = findAbstractFunctionalMethod(env, source);
+        var fMethod = findAbstractFunctionalMethod(env, source);
 		// Step 2: Find the member of source that matches that abstract interface
 		// method
 		if (fMethod != null) {
-			for (Element e : env.getElementUtils().getAllMembers(source)) {
+			for (var e : env.getElementUtils().getAllMembers(source)) {
 				if (e.getKind().equals(METHOD)) {
-					ExecutableElement ex = (ExecutableElement) e;
-					boolean isFIFace = source.getAnnotationsByType(
+                    var ex = (ExecutableElement) e;
+                    var isFIFace = source.getAnnotationsByType(
 						FunctionalInterface.class).length > 0;
 					if ( //
 					// The functional method will have an @Override
@@ -186,9 +186,9 @@ final class ProcessingUtils {
 		if (source.getAnnotationMirrors().stream().anyMatch(a -> a.toString()
 			.contains("FunctionalInterface")))
 		{
-			int abstractMethodCount = 0;
+            var abstractMethodCount = 0;
 			ExecutableElement firstAbstractMethod = null;
-			for (Element e : source.getEnclosedElements()) {
+			for (var e : source.getEnclosedElements()) {
 				if (e.getKind() == METHOD && e.getModifiers().contains(
 					Modifier.ABSTRACT))
 				{
@@ -203,16 +203,16 @@ final class ProcessingUtils {
 		}
 		// Otherwise, check up the class hierarchy
 		// First, check the interfaces
-		for (TypeMirror e : source.getInterfaces()) {
-			Element iFace = env.getTypeUtils().asElement(e);
+		for (var e : source.getInterfaces()) {
+            var iFace = env.getTypeUtils().asElement(e);
 			if (iFace instanceof TypeElement) {
-				ExecutableElement fMethod = findAbstractFunctionalMethod(env,
+                var fMethod = findAbstractFunctionalMethod(env,
 					(TypeElement) iFace);
 				if (fMethod != null) return fMethod;
 			}
 		}
 		// Then, check the superclass
-		Element superCls = env.getTypeUtils().asElement(source.getSuperclass());
+        var superCls = env.getTypeUtils().asElement(source.getSuperclass());
 		if (superCls instanceof TypeElement) {
 			return findAbstractFunctionalMethod(env, (TypeElement) superCls);
 		}

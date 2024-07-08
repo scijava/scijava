@@ -68,7 +68,7 @@ public class CreateOutputFFTMethods<T> implements
 			fast = true;
 		}
 
-		Dimensions paddedFFTMethodsFFTDimensions = FFTMethodsUtility
+        var paddedFFTMethodsFFTDimensions = FFTMethodsUtility
 			.getFFTDimensionsRealToComplex(fast, paddedDimensions);
 
 		return create.apply(paddedFFTMethodsFFTDimensions, outType);

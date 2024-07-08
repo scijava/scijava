@@ -92,9 +92,9 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 	 */
 	public final Computers.Arity3<RandomAccessible<T>, Localizable, Shape, RandomAccessible<T>> fillSimple =
 		(source, seed, shape, target) -> {
-			RandomAccess<T> sourceRA = source.randomAccess();
+            var sourceRA = source.randomAccess();
 			sourceRA.setPosition(seed);
-			T fillLabel = sourceRA.get().copy();
+            var fillLabel = sourceRA.get().copy();
 			FloodFill.fill(source, target, seed, fillLabel, shape);
 		};
 
@@ -108,7 +108,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 	 */
 	public final Computers.Arity4<RandomAccessibleInterval<T>, Localizable, U, Shape, RandomAccessibleInterval<U>> fillRAI =
 		(source, seed, fillLabel, shape, target) -> {
-			RandomAccess<T> sourceRA = source.randomAccess();
+            var sourceRA = source.randomAccess();
 			sourceRA.setPosition(seed);
 			FloodFill.fill(Views.extendValue(source, sourceRA.get()), Views
 				.extendValue(target, fillLabel), seed, fillLabel, shape);
@@ -125,7 +125,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 	 */
 	public final Computers.Arity5<RandomAccessibleInterval<T>, Localizable, U, Shape, BiPredicate<T, U>, RandomAccessibleInterval<U>> fillWithPredicateRAI =
 		(source, seed, fillLabel, shape, filter, target) -> {
-			RandomAccess<T> sourceRA = source.randomAccess();
+            var sourceRA = source.randomAccess();
 			sourceRA.setPosition(seed);
 			FloodFill.fill(Views.extendValue(source, sourceRA.get()), Views
 				.extendValue(target, fillLabel), seed, fillLabel, shape, filter);
@@ -140,9 +140,9 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 	 */
 	public final Computers.Arity3<RandomAccessibleInterval<T>, Localizable, Shape, RandomAccessibleInterval<T>> fillSimpleRAI =
 		(source, seed, shape, target) -> {
-			RandomAccess<T> sourceRA = source.randomAccess();
+            var sourceRA = source.randomAccess();
 			sourceRA.setPosition(seed);
-			T fillLabel = sourceRA.get().copy();
+            var fillLabel = sourceRA.get().copy();
 			FloodFill.fill(Views.extendValue(source, fillLabel), Views.extendValue(
 				target, fillLabel), seed, fillLabel, shape);
 		};

@@ -133,7 +133,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	 */
 	public final BiFunction<Dimensions, T, Img<T>> imgFromDimsAndType = (dims,
 		type) -> {
-		ImgFactory<T> factory = dims instanceof Img<?> ? ((Img<T>) dims).factory()
+        var factory = dims instanceof Img<?> ? ((Img<T>) dims).factory()
 			: Util.getSuitableImgFactory(dims, type);
 		return Imgs.create(factory, dims, type);
 	};
@@ -144,8 +144,8 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	 * @implNote op names='create.img, engine.create'
 	 */
 	public final Function<int[], Img<DoubleType>> imgFromIntArray = (array) -> {
-		FinalDimensions dims = new FinalDimensions(array);
-		DoubleType type = new DoubleType();
+        var dims = new FinalDimensions(array);
+        var type = new DoubleType();
 		return Imgs.create(Util.getSuitableImgFactory(dims, type), dims, type);
 	};
 
@@ -165,8 +165,8 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	 */
 	public final Function<long[], Img<DoubleType>> imgFromPrimitiveLongArray = (
 		array) -> {
-		FinalDimensions dims = new FinalDimensions(array);
-		DoubleType type = new DoubleType();
+        var dims = new FinalDimensions(array);
+        var type = new DoubleType();
 		return Imgs.create(Util.getSuitableImgFactory(dims, type), dims, type);
 	};
 
@@ -202,7 +202,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	 */
 	public final Function<Interval, Img<DoubleType>> imgFromInterval = (
 		interval) -> {
-		DoubleType type = new DoubleType();
+        var type = new DoubleType();
 		return Imgs.create(Util.getSuitableImgFactory(interval, type), interval,
 			type);
 	};
@@ -255,7 +255,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	 */
 	public final Functions.Arity3<Dimensions, I, ImgFactory<I>, ImgLabeling<L, I>> imgLabelingFromDimsTypeAndFactory =
 		(dims, type, factory) -> {
-			Img<I> img = Imgs.create(factory, dims, type);
+            var img = Imgs.create(factory, dims, type);
 			return imgLabelingFromImg.apply(img);
 		};
 
@@ -279,13 +279,13 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	 */
 	public final BiFunction<double[][], C, RandomAccessibleInterval<C>> kernel2DFromValuesAndType =
 		(arr, type) -> {
-			FinalDimensions dims = new FinalDimensions(new long[] { arr.length,
+            var dims = new FinalDimensions(new long[] { arr.length,
 				arr[0].length });
-			RandomAccessibleInterval<C> rai =
+            var rai =
 				(RandomAccessibleInterval<C>) imgFromDimsAndType.apply(dims, (T) type);
-			Cursor<C> cursor = Views.iterable(rai).cursor();
-			for (int j = 0; j < arr.length; j++) {
-				for (int k = 0; k < arr[j].length; k++) {
+            var cursor = Views.iterable(rai).cursor();
+			for (var j = 0; j < arr.length; j++) {
+				for (var k = 0; k < arr[j].length; k++) {
 					cursor.fwd();
 					cursor.get().setReal(arr[j][k]);
 				}
@@ -337,7 +337,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	 */
 	public final Functions.Arity3<Double, Integer, C, RandomAccessibleInterval<C>> kernelGaussSymmetric =
 		(sigma, numDims, type) -> {
-			double[] sigmas = new double[numDims];
+            var sigmas = new double[numDims];
 			Arrays.fill(sigmas, sigma);
 			return kernelGauss.apply(sigmas, type);
 		};
@@ -384,7 +384,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	 */
 	public final Functions.Arity3<Double, Integer, C, RandomAccessibleInterval<C>> kernelLogSymmetric =
 		(sigma, numDims, type) -> {
-			double[] sigmas = new double[numDims];
+            var sigmas = new double[numDims];
 			Arrays.fill(sigmas, sigma);
 			return kernelLog.apply(sigmas, type);
 		};
@@ -529,7 +529,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	 */
 	public final Functions.Arity3<Double, double[], C, RandomAccessibleInterval<C>> kernelGaborSingleSigma =
 		(sigma, periods, outType) -> {
-			double[] sigmas = new double[periods.length];
+            var sigmas = new double[periods.length];
 			Arrays.fill(sigmas, sigma);
 			return DefaultCreateKernelGabor.createKernel(sigmas, periods, outType,
 				imgFromDimsAndType);
@@ -543,7 +543,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	 */
 	public final BiFunction<Double, double[], RandomAccessibleInterval<DoubleType>> kernelGaborDoubleSingleSigma =
 		(sigma, periods) -> {
-			double[] sigmas = new double[periods.length];
+            var sigmas = new double[periods.length];
 			Arrays.fill(sigmas, sigma);
 			return (RandomAccessibleInterval<DoubleType>) kernelGabor.apply(sigmas,
 				periods, (C) new DoubleType());
@@ -557,7 +557,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	 */
 	public final BiFunction<Double, double[], RandomAccessibleInterval<FloatType>> kernelGaborFloatSingleSigma =
 		(sigma, periods) -> {
-			double[] sigmas = new double[periods.length];
+            var sigmas = new double[periods.length];
 			Arrays.fill(sigmas, sigma);
 			return (RandomAccessibleInterval<FloatType>) kernelGabor.apply(sigmas,
 				periods, (C) new FloatType());
@@ -571,7 +571,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	 */
 	public final BiFunction<Double, double[], RandomAccessibleInterval<ComplexDoubleType>> kernelGaborComplexDoubleSingleSigma =
 		(sigma, periods) -> {
-			double[] sigmas = new double[periods.length];
+            var sigmas = new double[periods.length];
 			Arrays.fill(sigmas, sigma);
 			return (RandomAccessibleInterval<ComplexDoubleType>) kernelGabor.apply(
 				sigmas, periods, (C) new ComplexDoubleType());
@@ -585,7 +585,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	 */
 	public final BiFunction<Double, double[], RandomAccessibleInterval<ComplexFloatType>> kernelGaborComplexFloatSingleSigma =
 		(sigma, periods) -> {
-			double[] sigmas = new double[periods.length];
+            var sigmas = new double[periods.length];
 			Arrays.fill(sigmas, sigma);
 			return (RandomAccessibleInterval<ComplexFloatType>) kernelGabor.apply(
 				sigmas, periods, (C) new ComplexFloatType());

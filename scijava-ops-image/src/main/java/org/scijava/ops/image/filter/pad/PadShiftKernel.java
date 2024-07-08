@@ -76,7 +76,7 @@ public class PadShiftKernel<T extends ComplexType<T>, I extends RandomAccessible
 
 		// if an fftsize op has been set recompute padded size
 		if (getFFTSizeOp() != null) {
-			long[][] sizes = getFFTSizeOp().apply(paddedDimensions);
+            var sizes = getFFTSizeOp().apply(paddedDimensions);
 
 			paddedFFTInputDimensions = new FinalDimensions(sizes[0]);
 		}
@@ -89,10 +89,10 @@ public class PadShiftKernel<T extends ComplexType<T>, I extends RandomAccessible
 		// coordinate in the center
 		// of the kernel is shifted to position (0,0).
 
-		final Interval kernelConvolutionInterval = paddingIntervalCentered.apply(
+		final var kernelConvolutionInterval = paddingIntervalCentered.apply(
 			kernel, paddedFFTInputDimensions);
 
-		final Interval kernelConvolutionIntervalOrigin = paddingIntervalOrigin
+		final var kernelConvolutionIntervalOrigin = paddingIntervalOrigin
 			.apply(kernel, kernelConvolutionInterval);
 
 		return (O) Views.interval(Views.extendPeriodic(Views.interval(Views

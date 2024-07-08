@@ -116,10 +116,10 @@ public class XML {
 		}
 
 		XPath xp;
-		final Thread thread = Thread.currentThread();
-		final ClassLoader contextClassLoader = thread.getContextClassLoader();
+		final var thread = Thread.currentThread();
+		final var contextClassLoader = thread.getContextClassLoader();
 		try {
-			ClassLoader loader = contextClassLoader;
+            var loader = contextClassLoader;
 			while (true) {
 				try {
 					xp = XPathFactory.newInstance().newXPath();
@@ -164,7 +164,7 @@ public class XML {
 
 	/** Obtains the CDATA identified by the given XPath expression. */
 	public String cdata(final String expression) {
-		final NodeList nodes = xpath(expression);
+		final var nodes = xpath(expression);
 		if (nodes == null || nodes.getLength() == 0) return null;
 		return cdata(nodes.item(0));
 	}
@@ -179,7 +179,7 @@ public class XML {
 		catch (final TransformerException exc) {
 			// NB: Return the exception stack trace as the string.
 			// Although this is a bad idea, I find it somehow hilarious.
-			final ByteArrayOutputStream out = new ByteArrayOutputStream();
+			final var out = new ByteArrayOutputStream();
 			exc.printStackTrace(new PrintStream(out));
 			return out.toString();
 		}
@@ -189,10 +189,10 @@ public class XML {
 
 	/** Gets the CData beneath the given node. */
 	private static String cdata(final Node item) {
-		final NodeList children = item.getChildNodes();
+		final var children = item.getChildNodes();
 		if (children.getLength() == 0) return null;
-		for (int i = 0; i < children.getLength(); i++) {
-			final Node child = children.item(i);
+		for (var i = 0; i < children.getLength(); i++) {
+			final var child = children.item(i);
 			if (child.getNodeType() != Node.TEXT_NODE) continue;
 			return child.getNodeValue();
 		}
@@ -213,7 +213,7 @@ public class XML {
 
 	/** Loads an XML document from the given URL. */
 	private static Document loadXML(final URL url) throws IOException {
-		try (final InputStream in = url.openStream()) {
+		try (final var in = url.openStream()) {
 			return loadXML(in);
 		}
 	}
@@ -250,10 +250,10 @@ public class XML {
 		throws TransformerException
 	{
 		final Source source = new DOMSource(doc);
-		final StringWriter stringWriter = new StringWriter();
+		final var stringWriter = new StringWriter();
 		final Result result = new StreamResult(stringWriter);
-		final TransformerFactory factory = TransformerFactory.newInstance();
-		final Transformer transformer = factory.newTransformer();
+		final var factory = TransformerFactory.newInstance();
+		final var transformer = factory.newTransformer();
 		transformer.transform(source, result);
 		return stringWriter.getBuffer().toString();
 	}

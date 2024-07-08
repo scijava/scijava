@@ -79,7 +79,7 @@ public class OpImplNoteParser extends AbstractProcessor {
 	{
 		processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE,
 			"Processing Ops written using the implNote syntax...");
-		final Map<String, String> options = processingEnv.getOptions();
+		final var options = processingEnv.getOptions();
 		if ("true".equals(options.get(PARSE_OPS))) {
 			final List<OpImplData> data = new ArrayList<>();
 
@@ -89,15 +89,15 @@ public class OpImplNoteParser extends AbstractProcessor {
 			// If retaining Javadoc for all packages, the @RetainJavadoc annotation is
 			// redundant. Otherwise, make sure annotated classes have their Javadoc
 			// retained regardless of package.
-			for (TypeElement annotation : annotations) {
-				for (Element e : roundEnvironment.getElementsAnnotatedWith(
+			for (var annotation : annotations) {
+				for (var e : roundEnvironment.getElementsAnnotatedWith(
 					annotation))
 				{
 					generateJavadoc(e, data, alreadyProcessed);
 				}
 			}
 
-			for (Element e : roundEnvironment.getRootElements()) {
+			for (var e : roundEnvironment.getRootElements()) {
 				generateJavadoc(e, data, alreadyProcessed);
 			}
 
@@ -133,12 +133,12 @@ public class OpImplNoteParser extends AbstractProcessor {
 		}
 
 		// Start by checking the element itself
-		TypeElement classElement = (TypeElement) element;
-		Optional<OpImplData> clsData = elementToImplData(classElement);
+        var classElement = (TypeElement) element;
+        var clsData = elementToImplData(classElement);
 		clsData.ifPresent(data::add);
 
 		// Then check contained elements
-		for (Element e : classElement.getEnclosedElements()) {
+		for (var e : classElement.getEnclosedElements()) {
 			elementToImplData(e).ifPresent(data::add);
 		}
 
@@ -149,13 +149,13 @@ public class OpImplNoteParser extends AbstractProcessor {
 	{
 		var data = collectedData.stream().map(OpImplData::dumpData).collect(
 			Collectors.toList());
-		String doc = yaml.dump(data);
-		FileObject resource = processingEnv.getFiler().createResource( //
+        var doc = yaml.dump(data);
+        var resource = processingEnv.getFiler().createResource( //
 			StandardLocation.CLASS_OUTPUT, //
 			"", //
 			"ops.yaml" //
 		);
-		try (OutputStream os = resource.openOutputStream()) {
+		try (var os = resource.openOutputStream()) {
 			os.write(doc.getBytes(UTF_8));
 		}
 	}
@@ -179,11 +179,11 @@ public class OpImplNoteParser extends AbstractProcessor {
 	}
 
 	private Optional<OpImplData> elementToImplData(final Element element) {
-		String javadoc = processingEnv.getElementUtils().getDocComment(element);
+        var javadoc = processingEnv.getElementUtils().getDocComment(element);
 		if (javadoc != null && javadoc.contains("implNote op")) {
 			try {
 				if (element.getKind() == CLASS) {
-					TypeElement typeElement = (TypeElement) element;
+                    var typeElement = (TypeElement) element;
 					var fMethod = ProcessingUtils.findFunctionalMethod(processingEnv,
 						typeElement);
 					var fMethodDoc = processingEnv.getElementUtils().getDocComment(

@@ -52,7 +52,7 @@ public class ClassParameterMemberParser implements
 	{
 		if (source == null) return null;
 
-		final ArrayList<SynthesizedParameterMember<?>> items = new ArrayList<>();
+		final var items = new ArrayList<SynthesizedParameterMember<?>>();
 
 		// NB: Reject abstract classes.
 		Structs.checkModifiers(source.getName() + ": ", source.getModifiers(), true,
@@ -69,7 +69,7 @@ public class ClassParameterMemberParser implements
 		}
 
 		// obtain a parameterData
-		Class<?> fIface = FunctionalInterfaces.findFrom(source);
+        var fIface = FunctionalInterfaces.findFrom(source);
 		ParameterData paramData = new SynthesizedMethodParameterData(opMethod,
 			fIface);
 
@@ -96,8 +96,8 @@ public class ClassParameterMemberParser implements
 	 */
 	private Method getDeclaredOpMethod(Class<?> c) throws NoSuchMethodException {
 		// NB this is the functional method w.r.t. the interface, not w.r.t. the Op
-		Method fMethod = FunctionalInterfaces.functionalMethodOf(c);
-		Type[] paramTypes = Types.paramTypesOf(fMethod, c);
+        var fMethod = FunctionalInterfaces.functionalMethodOf(c);
+        var paramTypes = Types.paramTypesOf(fMethod, c);
 		Class<?>[] rawParamTypes = Arrays.stream(paramTypes).map(t -> Types.raw(t))
 			.toArray(Class[]::new);
 		try {

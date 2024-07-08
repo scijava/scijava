@@ -71,7 +71,7 @@ public class ComputeLocalMeanThreshold<T extends RealType<T>> implements
 		final Double c, final Computers.Arity1<Iterable<T>, DoubleType> meanOp,
 		final BitType output)
 	{
-		final DoubleType m = new DoubleType();
+		final var m = new DoubleType();
 
 		meanOp.compute(inputNeighborhood, m);
 		output.set(inputCenterPixel.getRealDouble() > m.getRealDouble() - c);

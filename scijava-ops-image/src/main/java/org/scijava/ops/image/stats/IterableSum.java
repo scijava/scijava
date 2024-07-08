@@ -56,7 +56,7 @@ public class IterableSum<I extends RealType<I>, O extends RealType<O>>
 	@Override
 	public void compute(final Iterable<I> input, final O sum) {
 		double s = 0;
-		for (final I in : input) {
+		for (final var in : input) {
 			s += in.getRealDouble();
 		}
 

@@ -97,7 +97,7 @@ public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends Re
 //	@OpDependency(name = "math.divide") TODO: match an Op here?
 	private BiConsumer<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> divide =
 		(numerResult, denom) -> {
-			final O tmp = Util.getTypeFromInterval(numerResult).createVariable();
+			final var tmp = Util.getTypeFromInterval(numerResult).createVariable();
 			LoopBuilder.setImages(numerResult, denom).forEachPixel((n, d) -> {
 				if (n.getRealFloat() > 0) {
 					tmp.set(n);
@@ -144,69 +144,69 @@ public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends Re
 	{
 
 		// k is the window size (valid image region)
-		final int length = k.numDimensions();
+		final var length = k.numDimensions();
 
-		final long[] n = new long[length];
-		final long[] nFFT = new long[length];
+		final var n = new long[length];
+		final var nFFT = new long[length];
 
 		// n is the valid image size plus the extended region
 		// also referred to as object space size
-		for (int d = 0; d < length; d++) {
+		for (var d = 0; d < length; d++) {
 			n[d] = k.dimension(d) + l.dimension(d) - 1;
 		}
 
 		// nFFT is the size of n after (potentially) extending further
 		// to a fast FFT size
-		for (int d = 0; d < length; d++) {
+		for (var d = 0; d < length; d++) {
 			nFFT[d] = fastFFTInterval.dimension(d);
 		}
 
-		FinalDimensions fd = new FinalDimensions(nFFT);
+        var fd = new FinalDimensions(nFFT);
 
 		// create the normalization image
 		normalization = create.apply(fd, type);
 
 		// size of the measurement window
-		final Point size = new Point(length);
-		final long[] sizel = new long[length];
+		final var size = new Point(length);
+		final var sizel = new long[length];
 
-		for (int d = 0; d < length; d++) {
+		for (var d = 0; d < length; d++) {
 			size.setPosition(k.dimension(d), d);
 			sizel[d] = k.dimension(d);
 		}
 
 		// starting point of the measurement window when it is centered in fft space
-		final Point start = new Point(length);
-		final long[] startl = new long[length];
-		final long[] endl = new long[length];
+		final var start = new Point(length);
+		final var startl = new long[length];
+		final var endl = new long[length];
 
-		for (int d = 0; d < length; d++) {
+		for (var d = 0; d < length; d++) {
 			start.setPosition((nFFT[d] - k.dimension(d)) / 2, d);
 			startl[d] = (nFFT[d] - k.dimension(d)) / 2;
 			endl[d] = startl[d] + sizel[d] - 1;
 		}
 
 		// size of the object space
-		final Point maskSize = new Point(length);
-		final long[] maskSizel = new long[length];
+		final var maskSize = new Point(length);
+		final var maskSizel = new long[length];
 
-		for (int d = 0; d < length; d++) {
+		for (var d = 0; d < length; d++) {
 			maskSize.setPosition(Math.min(n[d], nFFT[d]), d);
 			maskSizel[d] = Math.min(n[d], nFFT[d]);
 		}
 
 		// starting point of the object space within the fft space
-		final Point maskStart = new Point(length);
-		final long[] maskStartl = new long[length];
+		final var maskStart = new Point(length);
+		final var maskStartl = new long[length];
 
-		for (int d = 0; d < length; d++) {
+		for (var d = 0; d < length; d++) {
 			maskStart.setPosition((Math.max(0, nFFT[d] - n[d]) / 2), d);
 			maskStartl[d] = (Math.max(0, nFFT[d] - n[d]) / 2);
 		}
 
 		final RandomAccessibleInterval<O> temp = Views.interval(normalization,
 			new FinalInterval(startl, endl));
-		final Cursor<O> normCursor = Views.iterable(temp).cursor();
+		final var normCursor = Views.iterable(temp).cursor();
 
 		// draw a cube the size of the measurement space
 		while (normCursor.hasNext()) {
@@ -214,7 +214,7 @@ public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends Re
 			normCursor.get().setReal(1.0);
 		}
 
-		final Img<O> tempImg = create.apply(fd, type);
+		final var tempImg = create.apply(fd, type);
 
 		// 3. correlate psf with the output of step 2.
 		correlater.compute(normalization, null, fftInput, fftKernel, true, false,
@@ -222,7 +222,7 @@ public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends Re
 
 		normalization = tempImg;
 
-		final Cursor<O> cursorN = normalization.cursor();
+		final var cursorN = normalization.cursor();
 
 		while (cursorN.hasNext()) {
 			cursorN.fwd();

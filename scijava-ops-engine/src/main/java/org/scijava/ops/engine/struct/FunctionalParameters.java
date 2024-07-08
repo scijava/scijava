@@ -57,15 +57,15 @@ public final class FunctionalParameters {
 	{
 		// Search for the functional method of 'type' and map its signature to
 		// ItemIO
-		List<FunctionalMethodType> fmts = FunctionalParameters
+        var fmts = FunctionalParameters
 			.findFunctionalMethodTypes(type);
 
 		// Synthesize members
-		List<SynthesizedParameterMember<?>> fmtMembers = data.synthesizeMembers(
+        var fmtMembers = data.synthesizeMembers(
 			fmts);
 
-		for (SynthesizedParameterMember<?> m : fmtMembers) {
-			final Class<?> itemType = Types.raw(m.type());
+		for (var m : fmtMembers) {
+			final var itemType = Types.raw(m.type());
 			if ((m.getIOType() == ItemIO.MUTABLE || m
 				.getIOType() == ItemIO.CONTAINER) && Structs.isImmutable(itemType))
 			{
@@ -99,20 +99,20 @@ public final class FunctionalParameters {
 	public static List<FunctionalMethodType> findFunctionalMethodTypes(
 		Type functionalType)
 	{
-		Method functionalMethod = FunctionalInterfaces.functionalMethodOf(
+        var functionalMethod = FunctionalInterfaces.functionalMethodOf(
 			functionalType);
 		if (functionalMethod == null) throw new IllegalArgumentException("Type " +
 			functionalType +
 			" is not a functional type, thus its functional method types cannot be determined");
 
-		Type paramfunctionalType = functionalType;
+        var paramfunctionalType = functionalType;
 		if (functionalType instanceof Class) {
 			paramfunctionalType = Types.parameterize((Class<?>) functionalType);
 		}
 
 		List<FunctionalMethodType> out = new ArrayList<>();
-		int i = 0;
-		for (Type t : Types.paramTypesOf(functionalMethod,
+        var i = 0;
+		for (var t : Types.paramTypesOf(functionalMethod,
 			paramfunctionalType))
 		{
 			final ItemIO ioType;
@@ -125,7 +125,7 @@ public final class FunctionalParameters {
 			i++;
 		}
 
-		Type returnType = Types.returnTypeOf(functionalMethod,
+        var returnType = Types.returnTypeOf(functionalMethod,
 			paramfunctionalType);
 		if (!returnType.equals(void.class)) {
 			out.add(new FunctionalMethodType(returnType, ItemIO.OUTPUT));
@@ -145,7 +145,7 @@ public final class FunctionalParameters {
 	}
 
 	public static List<Method> fMethodsWithNullable(Class<?> opClass) {
-		Method superFMethod = FunctionalInterfaces.functionalMethodOf(opClass);
+        var superFMethod = FunctionalInterfaces.functionalMethodOf(opClass);
 		return Arrays.stream(opClass.getMethods()) //
 			.filter(m -> m.getName().equals(superFMethod.getName())) //
 			.filter(m -> m.getParameterCount() == superFMethod.getParameterCount()) //
@@ -154,7 +154,7 @@ public final class FunctionalParameters {
 	}
 
 	public static Boolean[] generateAllRequiredArray(int num) {
-		Boolean[] arr = new Boolean[num];
+        var arr = new Boolean[num];
 		Arrays.fill(arr, false);
 		return arr;
 	}

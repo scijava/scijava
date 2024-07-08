@@ -52,7 +52,7 @@ public interface Struct extends Iterable<Member<?>> {
 	default <C> StructInstance<C> createInstance(final C object) {
 		final LinkedHashMap<String, MemberInstance<?>> memberMap;
 		memberMap = new LinkedHashMap<>();
-		for (final Member<?> member : members()) {
+		for (final var member : members()) {
 			memberMap.put(member.key(), member.createInstance(object));
 		}
 

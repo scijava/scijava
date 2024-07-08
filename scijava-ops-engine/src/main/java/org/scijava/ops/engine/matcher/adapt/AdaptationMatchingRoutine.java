@@ -93,13 +93,13 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 	public OpCandidate findMatch(MatchingConditions conditions, OpMatcher matcher,
 		OpEnvironment env) throws OpMatchingException
 	{
-		Hints adaptationHints = conditions.hints().plus( //
+        var adaptationHints = conditions.hints().plus( //
 			BaseOpHints.Adaptation.IN_PROGRESS, //
 			BaseOpHints.History.IGNORE //
 		);
 		List<Exception> matchingExceptions = new ArrayList<>();
-		for (final OpInfo adaptor : env.infos("engine.adapt")) {
-			Type adaptTo = adaptor.output().type();
+		for (final var adaptor : env.infos("engine.adapt")) {
+			var adaptTo = adaptor.output().type();
 			Map<TypeVariable<?>, Type> map = new HashMap<>();
 			// make sure that the adaptor outputs the correct type
 			if (!adaptOpOutputSatisfiesReqTypes(adaptTo, map, conditions.request()))
@@ -114,23 +114,23 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 				// grab the first type parameter from the OpInfo and search for
 				// an Op that will then be adapted (this will be the only input of the
 				// adaptor since we know it is a Function)
-				Type adaptFrom = adaptor.inputTypes().get(0);
-				Type srcOpType = Types.unroll(adaptFrom, map);
-				final OpRequest srcOpRequest = inferOpRequest(srcOpType, conditions
+                var adaptFrom = adaptor.inputTypes().get(0);
+                var srcOpType = Types.unroll(adaptFrom, map);
+				final var srcOpRequest = inferOpRequest(srcOpType, conditions
 					.request().name(), map);
-				final OpCandidate srcCandidate = matcher.match(MatchingConditions.from(
+				final var srcCandidate = matcher.match(MatchingConditions.from(
 					srcOpRequest, adaptationHints), env);
 				// Then, once we've matched an Op, use the bounds of that match
 				// to refine the bounds on the adaptor (for dependency matching)
 				captureTypeVarsFromCandidate(adaptFrom, srcCandidate, map);
 				// Finally, resolve the adaptor's dependencies
-				List<InfoTree> depTrees = Infos.dependencies(adaptor).stream() //
+                var depTrees = Infos.dependencies(adaptor).stream() //
 					.map(d -> {
-						OpRequest request = inferOpRequest(d, map);
-						Nil<?> type = Nil.of(request.type());
+                        var request = inferOpRequest(d, map);
+                        var type = Nil.of(request.type());
 						Nil<?>[] args = Arrays.stream(request.argTypes()).map(Nil::of)
 							.toArray(Nil[]::new);
-						Nil<?> outType = Nil.of(request.outType());
+                        var outType = Nil.of(request.outType());
 						var op = env.op(request.name(), type, args, outType,
 							adaptationHints);
 						// NB the dependency is interested in the INFOTREE of the match,
@@ -139,12 +139,12 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 						return Ops.infoTree(op);
 					}).collect(Collectors.toList());
 				// And return the Adaptor, wrapped up into an OpCandidate
-				Type adapterOpType = Types.unroll(adaptor.output()
+                var adapterOpType = Types.unroll(adaptor.output()
 					.type(), map);
-				InfoTree adaptorTree = new InfoTree(adaptor, depTrees);
-				OpAdaptationInfo adaptedInfo = new OpAdaptationInfo(srcCandidate
+                var adaptorTree = new InfoTree(adaptor, depTrees);
+                var adaptedInfo = new OpAdaptationInfo(srcCandidate
 					.opInfo(), adapterOpType, adaptorTree);
-				OpCandidate adaptedCandidate = new OpCandidate(env, conditions
+                var adaptedCandidate = new OpCandidate(env, conditions
 					.request(), adaptedInfo, map);
 				adaptedCandidate.setStatus(StatusCode.MATCH);
 				return adaptedCandidate;
@@ -153,7 +153,7 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 				matchingExceptions.add(e1);
 			}
 		}
-		OpMatchingException agglomerated = new OpMatchingException(
+        var agglomerated = new OpMatchingException(
 			"Unable to find an Op adaptation for " + conditions);
 
 		matchingExceptions.forEach(agglomerated::addSuppressed);
@@ -267,10 +267,10 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 	private OpRequest inferOpRequest(OpDependencyMember<?> dependency,
 		Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
-		final Type mappedDependencyType = Types.unroll(new Type[] {
+		final var mappedDependencyType = Types.unroll(new Type[] {
 			dependency.type() }, typeVarAssigns)[0];
-		final String dependencyName = dependency.getDependencyName();
-		final OpRequest inferred = inferOpRequest(mappedDependencyType,
+		final var dependencyName = dependency.getDependencyName();
+		final var inferred = inferOpRequest(mappedDependencyType,
 			dependencyName, typeVarAssigns);
 		if (inferred != null) return inferred;
 		throw new OpMatchingException("Could not infer functional " +
@@ -281,7 +281,7 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 	private boolean adaptOpOutputSatisfiesReqTypes(Type adaptTo,
 		Map<TypeVariable<?>, Type> map, OpRequest request)
 	{
-		Type opType = request.type();
+        var opType = request.type();
 		// TODO: clean this logic -- can this just be request.typesMatch() ?
 		if (opType instanceof ParameterizedType) {
 			if (!GenericAssignability.checkGenericAssignability(adaptTo,
@@ -324,27 +324,27 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 	private OpRequest inferOpRequest(Type type, String name,
 		Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
-		List<FunctionalMethodType> fmts = FunctionalParameters
+        var fmts = FunctionalParameters
 			.findFunctionalMethodTypes(type);
 		if (fmts == null) return null;
 
-		EnumSet<ItemIO> inIos = EnumSet.of(ItemIO.INPUT, ItemIO.CONTAINER,
+        var inIos = EnumSet.of(ItemIO.INPUT, ItemIO.CONTAINER,
 			ItemIO.MUTABLE);
-		EnumSet<ItemIO> outIos = EnumSet.of(ItemIO.OUTPUT, ItemIO.CONTAINER,
+        var outIos = EnumSet.of(ItemIO.OUTPUT, ItemIO.CONTAINER,
 			ItemIO.MUTABLE);
 
-		Type[] inputs = fmts.stream().filter(fmt -> inIos.contains(fmt.itemIO()))
+        var inputs = fmts.stream().filter(fmt -> inIos.contains(fmt.itemIO()))
 			.map(fmt -> fmt.type()).toArray(Type[]::new);
 
-		Type[] outputs = fmts.stream().filter(fmt -> outIos.contains(fmt.itemIO()))
+        var outputs = fmts.stream().filter(fmt -> outIos.contains(fmt.itemIO()))
 			.map(fmt -> fmt.type()).toArray(Type[]::new);
 
-		Type[] mappedInputs = Types.unroll(inputs, typeVarAssigns);
-		Type[] mappedOutputs = Types.unroll(outputs, typeVarAssigns);
+        var mappedInputs = Types.unroll(inputs, typeVarAssigns);
+        var mappedOutputs = Types.unroll(outputs, typeVarAssigns);
 
-		final int numOutputs = mappedOutputs.length;
+		final var numOutputs = mappedOutputs.length;
 		if (numOutputs != 1) {
-			String error = "Op '" + name + "' of type " + type + " specifies ";
+            var error = "Op '" + name + "' of type " + type + " specifies ";
 			error += numOutputs == 0 //
 				? "no outputs" //
 				: "multiple outputs: " + Arrays.toString(outputs);

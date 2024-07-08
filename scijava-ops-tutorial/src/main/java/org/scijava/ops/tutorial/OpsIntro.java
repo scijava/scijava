@@ -69,19 +69,19 @@ public class OpsIntro {
 		The easiest way to obtain an OpEnvironment is to use the following static
 		method.
 		*/
-		OpEnvironment ops = OpEnvironment.build();
+        var ops = OpEnvironment.build();
 
 		/*
 		OpEnvironments contain Ops, and there are a lot of them.
 		 */
-		int numberOfOps = count(ops.infos());
+        var numberOfOps = count(ops.infos());
 		System.out.println("There are " + numberOfOps +
 			" ops in the OpEnvironment");
 
 		/*
 		Because each Op has at least one name, we can search for all Ops by name:
 		 */
-		int numberOfGaussianOps = count(ops.infos("filter.gauss"));
+        var numberOfGaussianOps = count(ops.infos("filter.gauss"));
 		System.out.println("There are " + numberOfGaussianOps +
 			" gaussian filters in the OpEnvironment");
 
@@ -90,7 +90,7 @@ public class OpsIntro {
 		(For an explanation of the OpBuilder syntax, please see the OpBuilder
 		tutorial).
 		 */
-		Double result = ops.op("math.add") //
+        var result = ops.op("math.add") //
 			.input(1., 1.) //
 			.outType(Double.class) //
 			.apply();
@@ -125,8 +125,8 @@ public class OpsIntro {
 	 * @return the number of elements in {@code iterable}
 	 */
 	private static int count(Iterable<?> iterable) {
-		int num = 0;
-		for (Object ignored : iterable) {
+        var num = 0;
+		for (var ignored : iterable) {
 			num++;
 		}
 		return num;
@@ -140,8 +140,8 @@ public class OpsIntro {
 	 */
 	private static Img<?> openLymp() {
 		Img<?> img = null;
-		try (Context ctx = new Context()) {
-			ImgOpener opener = new ImgOpener(ctx);
+		try (var ctx = new Context()) {
+            var opener = new ImgOpener(ctx);
 			img = opener.openImgs("https://imagej.net/images/lymp.tif").get(0)
 				.getImg();
 		}

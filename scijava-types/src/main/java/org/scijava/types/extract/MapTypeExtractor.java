@@ -66,9 +66,9 @@ public class MapTypeExtractor extends SubTypeExtractor<Map<?, ?>> {
 		if (object.isEmpty()) {
 			return new Type[] { new Any(), new Any() };
 		}
-		Map.Entry<?, ?> e = object.entrySet().iterator().next();
-		Type keyType = r.reify(e.getKey());
-		Type valueType = r.reify(e.getValue());
+        var e = object.entrySet().iterator().next();
+        var keyType = r.reify(e.getKey());
+        var valueType = r.reify(e.getValue());
 		return new Type[] { keyType, valueType };
 	}
 

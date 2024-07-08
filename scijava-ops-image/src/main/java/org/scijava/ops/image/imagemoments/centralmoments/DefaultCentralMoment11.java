@@ -73,17 +73,17 @@ public class DefaultCentralMoment11<I extends RealType<I>, O extends RealType<O>
 	public void computeMoment(final RandomAccessibleInterval<I> input,
 		final O output)
 	{
-		final O moment00 = output.createVariable();
+		final var moment00 = output.createVariable();
 		moment00Func.compute(input, moment00);
-		final O moment01 = output.createVariable();
+		final var moment01 = output.createVariable();
 		moment01Func.compute(input, moment01);
-		final O moment10 = output.createVariable();
+		final var moment10 = output.createVariable();
 		moment10Func.compute(input, moment10);
-		final O moment11 = output.createVariable();
+		final var moment11 = output.createVariable();
 		moment11Func.compute(input, moment11);
 
 		// output = moment11 - (moment10 * moment01 / moment00)
-		final O centerX = moment10;
+		final var centerX = moment10;
 		centerX.div(moment00);
 		centerX.mul(moment01);
 

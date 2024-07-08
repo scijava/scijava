@@ -92,11 +92,11 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>> implements
 		if (!Intervals.equalDimensions(image1, image2)) {
 			throw new IllegalArgumentException("Image dimensions do not match");
 		}
-		final long n1 = Intervals.numElements(image1);
+		final var n1 = Intervals.numElements(image1);
 		if (n1 > Integer.MAX_VALUE) {
 			throw new IllegalArgumentException("Image dimensions too large: " + n1);
 		}
-		final int n = (int) n1;
+		final var n = (int) n1;
 
 		// Check nullable seed
 		if (seed == null) {
@@ -106,26 +106,26 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>> implements
 		}
 
 		// compute thresholds
-		final double thresh1 = thresholdT(image1);
-		final double thresh2 = thresholdU(image2);
+		final var thresh1 = thresholdT(image1);
+		final var thresh2 = thresholdU(image2);
 
-		double[][] rank = rankTransformation(image1, image2, thresh1, thresh2, n,
+        var rank = rankTransformation(image1, image2, thresh1, thresh2, n,
 			seed);
 
-		double maxtau = calculateMaxKendallTau(rank, thresh1, thresh2, n);
+        var maxtau = calculateMaxKendallTau(rank, thresh1, thresh2, n);
 		return maxtau;
 	}
 
 	double thresholdT(final RandomAccessibleInterval<T> image) {
-		final Histogram1d<T> histogram = histogramOpT.apply(Views.iterable(image));
-		final T result = Util.getTypeFromInterval(image).createVariable();
+		final var histogram = histogramOpT.apply(Views.iterable(image));
+		final var result = Util.getTypeFromInterval(image).createVariable();
 		thresholdOpT.compute(histogram, result);
 		return result.getRealDouble();
 	}
 
 	double thresholdU(final RandomAccessibleInterval<U> image) {
-		final Histogram1d<U> histogram = histogramOpU.apply(Views.iterable(image));
-		final U result = Util.getTypeFromInterval(image).createVariable();
+		final var histogram = histogramOpU.apply(Views.iterable(image));
+		final var result = Util.getTypeFromInterval(image).createVariable();
 		thresholdOpU.compute(histogram, result);
 		return result.getRealDouble();
 	}
@@ -136,20 +136,20 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>> implements
 			final double thres2, final int n, long seed)
 	{
 		// FIRST...
-		final int[] rankIndex1 = rankSamples(image1, seed);
-		final int[] rankIndex2 = rankSamples(image2, seed);
+		final var rankIndex1 = rankSamples(image1, seed);
+		final var rankIndex2 = rankSamples(image2, seed);
 
-		IntArray validIndex = new IntArray(new int[n]);
+        var validIndex = new IntArray(new int[n]);
 		validIndex.setSize(0);
-		for (int i = 0; i < n; i++) {
+		for (var i = 0; i < n; i++) {
 			if (rankIndex1[i] >= thres1 && rankIndex2[i] >= thres2) {
 				validIndex.addValue(i);
 			}
 		}
-		int rn = validIndex.size();
-		double[][] finalRanks = new double[rn][2];
-		for (int i = 0; i < rn; i++) {
-			final int index = validIndex.getValue(i);
+        var rn = validIndex.size();
+        var finalRanks = new double[rn][2];
+		for (var i = 0; i < rn; i++) {
+			final var index = validIndex.getValue(i);
 			finalRanks[i][0] = rankIndex1[index];
 			finalRanks[i][1] = rankIndex2[index];
 		}
@@ -159,28 +159,28 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>> implements
 	private static <V extends RealType<V>> int[] rankSamples(
 		RandomAccessibleInterval<V> image, long seed)
 	{
-		final long elementCount = Intervals.numElements(image);
+		final var elementCount = Intervals.numElements(image);
 		if (elementCount > Integer.MAX_VALUE) {
 			throw new IllegalArgumentException("Image dimensions too large: " +
 				elementCount);
 		}
-		final int n = (int) elementCount;
+		final var n = (int) elementCount;
 
 		// NB: Initialize rank index in random order, to ensure random tie-breaking.
-		final int[] rankIndex = new int[n];
-		for (int i = 0; i < n; i++) {
+		final var rankIndex = new int[n];
+		for (var i = 0; i < n; i++) {
 			rankIndex[i] = i;
 		}
-		Random r = new Random(seed);
+        var r = new Random(seed);
 		ColocUtil.shuffle(rankIndex, r);
 
-		final V a = Util.getTypeFromInterval(image).createVariable();
-		final RandomAccess<V> ra = image.randomAccess();
+		final var a = Util.getTypeFromInterval(image).createVariable();
+		final var ra = image.randomAccess();
 		Collections.sort(new IntArray(rankIndex), (indexA, indexB) -> {
 			IntervalIndexer.indexToPosition(indexA, image, ra);
 			a.set(ra.get());
 			IntervalIndexer.indexToPosition(indexB, image, ra);
-			final V b = ra.get();
+			final var b = ra.get();
 			return a.compareTo(b);
 		});
 		return rankIndex;
@@ -189,19 +189,19 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>> implements
 	static double calculateMaxKendallTau(final double[][] rank,
 		final double thresholdRank1, final double thresholdRank2, final int n)
 	{
-		final int rn = rank.length;
+		final var rn = rank.length;
 		int an;
-		final double step = 1 + 1.0 / Math.log(Math.log(n)); /// ONE PROBLEM IS HERE
+		final var step = 1 + 1.0 / Math.log(Math.log(n)); /// ONE PROBLEM IS HERE
 																													/// - STEP SIZE IS
 																													/// PERHAPS TOO
 																													/// SMALL??
 		double tempOff1 = 1;
 		double tempOff2;
-		IntArray activeIndex = new IntArray();
+        var activeIndex = new IntArray();
 		double sdTau;
 		double kendallTau;
 		double normalTau;
-		double maxNormalTau = Double.MIN_VALUE;
+        var maxNormalTau = Double.MIN_VALUE;
 
 		while (tempOff1 * step + thresholdRank1 < n) {
 			tempOff1 *= step;
@@ -210,7 +210,7 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>> implements
 				tempOff2 *= step;
 
 				activeIndex.setSize(0);
-				for (int i = 0; i < rn; i++) {
+				for (var i = 0; i < rn; i++) {
 					if (rank[i][0] >= n - tempOff1 && rank[i][1] >= n - tempOff2) {
 						activeIndex.addValue(i);
 					}
@@ -233,31 +233,31 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>> implements
 	static double calculateKendallTau(final double[][] rank,
 		final IntArray activeIndex)
 	{
-		final int an = activeIndex.size();
+		final var an = activeIndex.size();
 
-		int indicator = 0;
-		final double[][] partRank = new double[2][an];
-		for (final Integer i : activeIndex) {
+        var indicator = 0;
+		final var partRank = new double[2][an];
+		for (final var i : activeIndex) {
 			partRank[0][indicator] = rank[i][0];
 			partRank[1][indicator] = rank[i][1];
 			indicator++;
 		}
-		final double[] partRank1 = partRank[0];
-		final double[] partRank2 = partRank[1];
+		final var partRank1 = partRank[0];
+		final var partRank2 = partRank[1];
 
-		final int[] index = new int[an];
-		for (int i = 0; i < an; i++) {
+		final var index = new int[an];
+		for (var i = 0; i < an; i++) {
 			index[i] = i;
 		}
 
 		IntArraySorter.sort(index, (a, b) -> Double.compare(partRank1[a],
 			partRank1[b]));
 
-		final MergeSort mergeSort = new MergeSort(index, (a, b) -> Double.compare(
+		final var mergeSort = new MergeSort(index, (a, b) -> Double.compare(
 			partRank2[a], partRank2[b]));
 
-		final long n0 = an * (long) (an - 1) / 2;
-		final long S = mergeSort.sort();
+		final var n0 = an * (long) (an - 1) / 2;
+		final var S = mergeSort.sort();
 		return (n0 - 2 * S) / (double) n0;
 	}
 

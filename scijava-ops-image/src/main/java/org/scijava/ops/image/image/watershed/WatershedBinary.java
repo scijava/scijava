@@ -118,8 +118,8 @@ public class WatershedBinary<T extends BooleanType<T>, B extends BooleanType<B>>
 		// make sure that the params conform to the requirements of the op (copied
 		// from
 		// the old implementation)
-		boolean conformed = sigma.length >= in.numDimensions();
-		for (int i = 0; i < sigma.length; i++) {
+        var conformed = sigma.length >= in.numDimensions();
+		for (var i = 0; i < sigma.length; i++) {
 			conformed &= sigma[i] >= 0;
 		}
 		if (!conformed) throw new IllegalArgumentException(
@@ -131,13 +131,13 @@ public class WatershedBinary<T extends BooleanType<T>, B extends BooleanType<B>>
 			"Mask must be the same size as the input!");
 
 		// compute distance transform
-		final RandomAccessibleInterval<FloatType> distMap = imgCreator.apply(in,
+		final var distMap = imgCreator.apply(in,
 			new FloatType());
 		distanceTransformer.compute(in, distMap);
-		final RandomAccessibleInterval<FloatType> invertedDT = imgCreator.apply(in,
+		final var invertedDT = imgCreator.apply(in,
 			new FloatType());
 		imgInverter.compute(distMap, invertedDT);
-		final RandomAccessibleInterval<FloatType> gauss = imgCreator.apply(in,
+		final var gauss = imgCreator.apply(in,
 			new FloatType());
 		gaussOp.compute(invertedDT, sigma, gauss);
 		// run the default watershed

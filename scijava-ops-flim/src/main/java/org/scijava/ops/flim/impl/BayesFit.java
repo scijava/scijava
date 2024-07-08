@@ -107,30 +107,30 @@ public class BayesFit {
 			gridMin = new float[nParam];
 			gridMax = new float[nParam];
 
-			FitParams<I> copyParams = params.copy();
+            var copyParams = params.copy();
 			copyParams.getChisqMap = true;
 			copyParams.param = null;
-			FitResults estResults = rldFitter.apply(params);
-			Img<FloatType> paramMap = estResults.paramMap;
-			Img<FloatType> chisqMap = estResults.chisqMap;
+            var estResults = rldFitter.apply(params);
+            var paramMap = estResults.paramMap;
+            var chisqMap = estResults.chisqMap;
 
-			float chisqCutoff = percentileOp.apply(chisqMap, 20).getRealFloat();
+            var chisqCutoff = percentileOp.apply(chisqMap, 20).getRealFloat();
 
 			// calculate mean and std (exluding Inf and NaN)
-			for (int i = 0; i <= paramMap.max(params.ltAxis); i++) {
+			for (var i = 0; i <= paramMap.max(params.ltAxis); i++) {
 				double mean = 0;
 				double std = 0;
 				double count = 0;
 
-				IntervalView<FloatType> paramPlane = Views.hyperSlice(paramMap,
+                var paramPlane = Views.hyperSlice(paramMap,
 					params.ltAxis, i);
-				Cursor<FloatType> ppCursor = paramPlane.cursor();
-				Cursor<FloatType> xmCursor = chisqMap.cursor();
+                var ppCursor = paramPlane.cursor();
+                var xmCursor = chisqMap.cursor();
 
 				// calculate the mean and std of best 20% fit
 				while (ppCursor.hasNext()) {
-					float pf = ppCursor.next().getRealFloat();
-					float xf = xmCursor.next().getRealFloat();
+                    var pf = ppCursor.next().getRealFloat();
+                    var xf = xmCursor.next().getRealFloat();
 					if (xf <= chisqCutoff && Float.isFinite(pf)) {
 						mean += pf;
 						std += pf * pf;
@@ -162,7 +162,7 @@ public class BayesFit {
 		 */
 		@Override
 		public void doFit() {
-			final int retCode = FLIMLib.Bayes_fitting_engine(params.xInc, transBuffer,
+			final var retCode = FLIMLib.Bayes_fitting_engine(params.xInc, transBuffer,
 				adjFitStart, adjFitEnd, laserPeriod, params.instr, paramBuffer,
 				params.paramFree, fittedBuffer, residualBuffer, error, minusLogProb,
 				nPhotons, chisqBuffer);
@@ -207,7 +207,7 @@ public class BayesFit {
 			FitResults rslts)
 		{
 			// child will inherit the estimated grid config
-			BayesFitWorker<I> child = new BayesFitWorker<>(params, rslts, rldFitter,
+            var child = new BayesFitWorker<I>(params, rslts, rldFitter,
 				percentileOp);
 			child.gridMin = this.gridMin;
 			child.gridMax = this.gridMax;

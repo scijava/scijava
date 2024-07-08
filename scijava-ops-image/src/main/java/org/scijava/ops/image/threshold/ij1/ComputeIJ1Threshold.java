@@ -57,7 +57,7 @@ public class ComputeIJ1Threshold<T extends RealType<T>> extends
 	 */
 	@Override
 	public long computeBin(final Histogram1d<T> hist) {
-		final long[] histogram = hist.toLongArray();
+		final var histogram = hist.toLongArray();
 		return computeBin(histogram);
 	}
 
@@ -66,13 +66,13 @@ public class ComputeIJ1Threshold<T extends RealType<T>> extends
 	 */
 	public static long computeBin(final long[] histogram) {
 		int level;
-		final int maxValue = histogram.length - 1;
+		final var maxValue = histogram.length - 1;
 		double result, sum1, sum2, sum3, sum4;
 
-		int min = 0;
+        var min = 0;
 		while (histogram[min] == 0 && min < maxValue)
 			min++;
-		int max = maxValue;
+        var max = maxValue;
 		while (histogram[max] == 0 && max > 0)
 			max--;
 		if (min >= max) {
@@ -80,14 +80,14 @@ public class ComputeIJ1Threshold<T extends RealType<T>> extends
 			return level;
 		}
 
-		int movingIndex = min;
+        var movingIndex = min;
 		do {
 			sum1 = sum2 = sum3 = sum4 = 0.0;
-			for (int i = min; i <= movingIndex; i++) {
+			for (var i = min; i <= movingIndex; i++) {
 				sum1 += i * histogram[i];
 				sum2 += histogram[i];
 			}
-			for (int i = movingIndex + 1; i <= max; i++) {
+			for (var i = movingIndex + 1; i <= max; i++) {
 				sum3 += i * histogram[i];
 				sum4 += histogram[i];
 			}

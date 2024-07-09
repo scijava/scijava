@@ -52,18 +52,18 @@ public final class ColocUtil {
 		{
 			return true;
 		}
-		IterableInterval<?> ii1 = (IterableInterval<?>) i1;
-		IterableInterval<?> ii2 = (IterableInterval<?>) i2;
+        var ii1 = (IterableInterval<?>) i1;
+        var ii2 = (IterableInterval<?>) i2;
 		return Intervals.equalDimensions(ii1, ii2) && Util.equalIterationOrder(ii1,
 			ii2);
 	}
 
 	/** Fisher-Yates shuffle. */
 	public static void shuffle(int[] array, Random rnd) {
-		final int size = array.length;
-		for (int i = size - 1; i > 0; i--) {
-			final int j = rnd.nextInt(i + 1);
-			final int v = array[i];
+		final var size = array.length;
+		for (var i = size - 1; i > 0; i--) {
+			final var j = rnd.nextInt(i + 1);
+			final var v = array[i];
 			array[i] = array[j];
 			array[j] = v;
 		}

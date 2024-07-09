@@ -57,19 +57,19 @@ public class CentroidII implements
 	 */
 	@Override
 	public RealLocalizable apply(final IterableInterval<?> input) {
-		int numDimensions = input.numDimensions();
-		double[] output = new double[numDimensions];
-		Cursor<?> c = input.localizingCursor();
-		double[] pos = new double[numDimensions];
+        var numDimensions = input.numDimensions();
+        var output = new double[numDimensions];
+        var c = input.localizingCursor();
+        var pos = new double[numDimensions];
 		while (c.hasNext()) {
 			c.fwd();
 			c.localize(pos);
-			for (int i = 0; i < output.length; i++) {
+			for (var i = 0; i < output.length; i++) {
 				output[i] += pos[i];
 			}
 		}
 
-		for (int i = 0; i < output.length; i++) {
+		for (var i = 0; i < output.length; i++) {
 			output[i] = output[i] / input.size();
 		}
 

@@ -58,7 +58,7 @@ public class IterableSize<I extends RealType<I>, O extends RealType<O>>
 		double s = 0;
 
 		for (@SuppressWarnings("unused")
-		final I i : input) {
+		final var i : input) {
 			s++;
 		}
 

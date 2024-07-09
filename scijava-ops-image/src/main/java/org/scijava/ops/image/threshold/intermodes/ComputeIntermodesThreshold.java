@@ -56,7 +56,7 @@ public class ComputeIntermodesThreshold<T extends RealType<T>> extends
 	 */
 	@Override
 	public long computeBin(final Histogram1d<T> hist) {
-		final long[] histogram = hist.toLongArray();
+		final var histogram = hist.toLongArray();
 		return computeBin(histogram);
 	}
 
@@ -82,16 +82,16 @@ public class ComputeIntermodesThreshold<T extends RealType<T>> extends
 	 * ??at valley are unsuitable for this method.
 	 */
 	public static long computeBin(final long[] histogram) {
-		final double[] iHisto = new double[histogram.length];
-		int iter = 0;
-		int threshold = -1;
-		for (int i = 0; i < histogram.length; i++)
+		final var iHisto = new double[histogram.length];
+        var iter = 0;
+        var threshold = -1;
+		for (var i = 0; i < histogram.length; i++)
 			iHisto[i] = histogram[i];
 
 		while (!Thresholds.bimodalTest(iHisto)) {
 			// smooth with a 3 point running mean filter
 			double previous = 0, current = 0, next = iHisto[0];
-			for (int i = 0; i < histogram.length - 1; i++) {
+			for (var i = 0; i < histogram.length - 1; i++) {
 				previous = current;
 				current = next;
 				next = iHisto[i + 1];
@@ -106,8 +106,8 @@ public class ComputeIntermodesThreshold<T extends RealType<T>> extends
 		}
 
 		// The threshold is the mean between the two peaks.
-		int tt = 0;
-		for (int i = 1; i < histogram.length - 1; i++) {
+        var tt = 0;
+		for (var i = 1; i < histogram.length - 1; i++) {
 			if (iHisto[i - 1] < iHisto[i] && iHisto[i + 1] < iHisto[i]) {
 				tt += i;
 				// IJ.log("mode:" +i);

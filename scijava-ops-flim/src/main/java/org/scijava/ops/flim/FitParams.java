@@ -226,7 +226,7 @@ public class FitParams<I extends RealType<I>> {
 	 * @return A clone of the current instance.
 	 */
 	public FitParams<I> copy() {
-		FitParams<I> newParams = new FitParams<>();
+        var newParams = new FitParams<I>();
 		newParams.xInc = xInc;
 		newParams.trans = trans;
 		newParams.ltAxis = ltAxis;
@@ -278,7 +278,7 @@ public class FitParams<I extends RealType<I>> {
 
 			return new JsonPrimitive(name);
 		};
-		Gson gson = new GsonBuilder().serializeSpecialFloatingPointValues()
+        var gson = new GsonBuilder().serializeSpecialFloatingPointValues()
 			.excludeFieldsWithoutExposeAnnotation().registerTypeAdapter(FitFunc.class,
 				fitFuncSerializer).setPrettyPrinting().create();
 		return gson.toJson(this);
@@ -307,7 +307,7 @@ public class FitParams<I extends RealType<I>> {
 						.getAsString());
 			}
 		};
-		Gson gson = new GsonBuilder().registerTypeAdapter(FitFunc.class,
+        var gson = new GsonBuilder().registerTypeAdapter(FitFunc.class,
 			fitfuncDeserializer).create();
 		return gson.fromJson(jsonString, new TypeToken<FitParams<I>>() {}
 			.getType());
@@ -315,7 +315,7 @@ public class FitParams<I extends RealType<I>> {
 
 	@Override
 	public String toString() {
-		String str = String.format(
+        var str = String.format(
 			"xInc: %f, interval: [%d, %d), intensity threshold: %f, instr: %s, noise: %s, sig: %s, param: %s, paramFree: %s, restrain: %s, fitFunc: %s, chisq_target: %f, chisq_delta: %f, chisq_percent: %d",
 			xInc, fitStart, fitEnd, iThresh, Arrays.toString(instr), noise.name(),
 			Arrays.toString(sig), Arrays.toString(param), Arrays.toString(paramFree),

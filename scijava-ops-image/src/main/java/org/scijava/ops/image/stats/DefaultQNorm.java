@@ -82,9 +82,9 @@ public final class DefaultQNorm implements
 		}
 
 		// compute QNorm
-		final NormalDistribution dist = new NormalDistribution(mean, sd);
+		final var dist = new NormalDistribution(mean, sd);
 		if (logP) p = Math.exp(p);
-		final double q = dist.inverseCumulativeProbability(p);
+		final var q = dist.inverseCumulativeProbability(p);
 		return lowerTail ? q : -q;
 
 	}

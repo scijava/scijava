@@ -64,16 +64,16 @@ public class SynthesizedFieldParameterData implements ParameterData {
 	{
 
 		// determine the optionality of each input
-		Boolean[] optionality = getParameterNullability(fieldInstance.instance(),
+        var optionality = getParameterNullability(fieldInstance.instance(),
 			fieldInstance.field(), numInputs);
 		// determine the name of each fmt
-		List<String> names = getParameterNames(fmts);
+        var names = getParameterNames(fmts);
 		// map fmts to members
-		int p = 0;
+        var p = 0;
 		List<SynthesizedParameterMember<?>> members = new ArrayList<>(fmts.size());
-		for (FunctionalMethodType fmt : fmts) {
-			String name = names.get(p);
-			boolean optional = fmt.itemIO() != ItemIO.OUTPUT && optionality[p++];
+		for (var fmt : fmts) {
+            var name = names.get(p);
+            var optional = fmt.itemIO() != ItemIO.OUTPUT && optionality[p++];
 			members.add(new SynthesizedParameterMember<>(fmt, name, !optional, ""));
 		}
 		return members;
@@ -83,7 +83,7 @@ public class SynthesizedFieldParameterData implements ParameterData {
 		List<String> fmtNames = new ArrayList<>(fmts.size());
 		int ins, outs, containers, mutables;
 		ins = outs = containers = mutables = 1;
-		for (FunctionalMethodType fmt : fmts) {
+		for (var fmt : fmts) {
 			switch (fmt.itemIO()) {
 				case INPUT:
 					fmtNames.add("input" + ins++);
@@ -116,10 +116,10 @@ public class SynthesizedFieldParameterData implements ParameterData {
 			// TODO Auto-generated catch block
 			throw new IllegalArgumentException(exc);
 		}
-		List<Method> fMethodsWithNullables = FunctionalParameters
+        var fMethodsWithNullables = FunctionalParameters
 			.fMethodsWithNullable(fieldClass);
-		Class<?> fIface = FunctionalInterfaces.findFrom(fieldClass);
-		List<Method> fIfaceMethodsWithNullables = FunctionalParameters
+        var fIface = FunctionalInterfaces.findFrom(fieldClass);
+        var fIfaceMethodsWithNullables = FunctionalParameters
 			.fMethodsWithNullable(fIface);
 
 		if (fMethodsWithNullables.isEmpty() && fIfaceMethodsWithNullables

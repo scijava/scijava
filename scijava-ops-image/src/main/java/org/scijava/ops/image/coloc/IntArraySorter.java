@@ -63,9 +63,9 @@ public final class IntArraySorter {
 			limit >>= 1;
 
 			// median of three
-			int a = array[begin];
-			int b = array[begin + (end - begin) / 2 + 1];
-			int c = array[end - 1];
+            var a = array[begin];
+            var b = array[begin + (end - begin) / 2 + 1];
+            var c = array[end - 1];
 			int median;
 			if (comparator.compare(a, b) < 0) {
 				median = comparator.compare(b, c) < 0 ? b : (comparator.compare(a,
@@ -90,7 +90,7 @@ public final class IntArraySorter {
 					pivot = i;
 					break;
 				}
-				int swap = array[i];
+                var swap = array[i];
 				array[i] = array[j];
 				array[j] = swap;
 				++i;
@@ -104,13 +104,13 @@ public final class IntArraySorter {
 	private static void heapSort(int[] array, IntComparator comparator, int begin,
 		int end)
 	{
-		int count = end - begin;
-		for (int i = count / 2 - 1; i >= 0; --i) {
+        var count = end - begin;
+		for (var i = count / 2 - 1; i >= 0; --i) {
 			siftDown(array, comparator, i, count, begin);
 		}
-		for (int i = count - 1; i > 0; --i) {
+		for (var i = count - 1; i > 0; --i) {
 			// swap begin and begin + i
-			int swap = array[begin + i];
+            var swap = array[begin + i];
 			array[begin + i] = array[begin];
 			array[begin] = swap;
 
@@ -121,9 +121,9 @@ public final class IntArraySorter {
 	private static void siftDown(int[] array, IntComparator comparator, int i,
 		int count, int offset)
 	{
-		int value = array[offset + i];
+        var value = array[offset + i];
 		while (i < count / 2) {
-			int child = 2 * i + 1;
+            var child = 2 * i + 1;
 			if (child + 1 < count && comparator.compare(array[child], array[child +
 				1]) < 0)
 			{
@@ -139,9 +139,9 @@ public final class IntArraySorter {
 	}
 
 	private static void insertionSort(int[] array, IntComparator comparator) {
-		for (int j = 1; j < array.length; ++j) {
-			int t = array[j];
-			int i = j - 1;
+		for (var j = 1; j < array.length; ++j) {
+            var t = array[j];
+            var i = j - 1;
 			while (i >= 0 && comparator.compare(array[i], t) > 0) {
 				array[i + 1] = array[i];
 				i = i - 1;

@@ -75,7 +75,7 @@ public interface Discoverer {
 			public <U> List<U> discover(Class<U> c) {
 				// If we can use c, look up the implementations
 				try {
-					Iterable<U> itr = (Iterable<U>) func.apply((Class<T>) c);
+                    var itr = (Iterable<U>) func.apply((Class<T>) c);
 					return StreamSupport.stream(itr.spliterator(), false).collect(
 						Collectors.toList());
 				}
@@ -116,7 +116,7 @@ public interface Discoverer {
 		// First, create the general-purpose Discoverer using the
 		// using(Function<...>)
 		// method
-		Discoverer d = using(func);
+        var d = using(func);
 
 		// Then, use that Discoverer to discoverer all Discoverers provided to the
 		// caller module
@@ -158,8 +158,8 @@ public interface Discoverer {
 	 * @return the wrapping
 	 */
 	default Discoverer onlyFor(Class<?>... classes) {
-		List<Class<?>> list = Arrays.asList(classes);
-		Discoverer d = this;
+        var list = Arrays.asList(classes);
+        var d = this;
 		return new Discoverer() {
 
 			@Override
@@ -178,8 +178,8 @@ public interface Discoverer {
 	 * @return the wrapping
 	 */
 	default Discoverer except(Class<?>... classes) {
-		List<Class<?>> list = Arrays.asList(classes);
-		Discoverer d = this;
+        var list = Arrays.asList(classes);
+        var d = this;
 		return new Discoverer() {
 
 			@Override
@@ -199,7 +199,7 @@ public interface Discoverer {
 	 * @return the maximum implementation of {@code c}
 	 */
 	default <U extends Comparable<U>> Optional<U> discoverMax(Class<U> c) {
-		List<U> discoveries = discover(c);
+        var discoveries = discover(c);
 		// NB: natural order sorts in ascending order
 		return discoveries.stream().max(Comparator.naturalOrder());
 	}
@@ -213,7 +213,7 @@ public interface Discoverer {
 	 * @return the minimum implementation of {@code c}
 	 */
 	default <U extends Comparable<U>> Optional<U> discoverMin(Class<U> c) {
-		List<U> discoveries = discover(c);
+        var discoveries = discover(c);
 		// NB: natural order sorts in ascending order
 		return discoveries.stream().min(Comparator.naturalOrder());
 	}

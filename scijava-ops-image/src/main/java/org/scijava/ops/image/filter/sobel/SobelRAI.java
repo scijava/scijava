@@ -73,8 +73,8 @@ public class SobelRAI<T extends RealType<T>> implements
 		RandomAccessibleInterval<T> output)
 	{
 
-		for (int i = 0; i < input.numDimensions(); i++) {
-			RandomAccessibleInterval<T> derivative = createRAI.apply(input);
+		for (var i = 0; i < input.numDimensions(); i++) {
+            var derivative = createRAI.apply(input);
 			derivativeComputer.compute(input, i, derivative);
 			squareMapOp.compute(derivative, derivative);
 			addOp.compute(output, derivative, output);

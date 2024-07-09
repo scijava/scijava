@@ -79,7 +79,7 @@ public class PartialDerivativeRAI<T extends RealType<T>> implements
 	public void setupConvolves(RandomAccessibleInterval<T> input,
 		Integer dimension)
 	{
-		RandomAccessibleInterval<T> kernel = sobelKernelCreator.apply(Util
+        var kernel = sobelKernelCreator.apply(Util
 			.getTypeFromInterval(input));
 
 		RandomAccessibleInterval<T> kernelA = Views.hyperSlice(Views.hyperSlice(
@@ -92,12 +92,12 @@ public class PartialDerivativeRAI<T extends RealType<T>> implements
 		if (input.numDimensions() > 2) {
 			RandomAccessible<T> expandedKernelA = Views.addDimension(kernelA);
 			RandomAccessible<T> expandedKernelB = Views.addDimension(kernelB);
-			for (int i = 0; i < input.numDimensions() - 3; i++) {
+			for (var i = 0; i < input.numDimensions() - 3; i++) {
 				expandedKernelA = Views.addDimension(expandedKernelA);
 				expandedKernelB = Views.addDimension(expandedKernelB);
 			}
-			long[] dims = new long[input.numDimensions()];
-			for (int j = 0; j < input.numDimensions(); j++) {
+            var dims = new long[input.numDimensions()];
+			for (var j = 0; j < input.numDimensions(); j++) {
 				dims[j] = 1;
 			}
 			dims[0] = 3;
@@ -106,17 +106,17 @@ public class PartialDerivativeRAI<T extends RealType<T>> implements
 			kernelB = Views.interval(expandedKernelB, kernelInterval);
 		}
 
-		long[] dims = new long[input.numDimensions()];
+        var dims = new long[input.numDimensions()];
 		if (dimension == 0) {
 			// HACK needs to be final so that the compiler can encapsulate it.
-			final RandomAccessibleInterval<T> finalKernelB = kernelB;
+			final var finalKernelB = kernelB;
 			// FIXME hack
 			kernelBConvolveOp = (in, out) -> convolveOp.compute(in, finalKernelB,
 				out);
 		}
 		else {
 			// rotate kernel B to dimension
-			for (int j = 0; j < input.numDimensions(); j++) {
+			for (var j = 0; j < input.numDimensions(); j++) {
 				if (j == dimension) {
 					dims[j] = 3;
 				}
@@ -125,10 +125,10 @@ public class PartialDerivativeRAI<T extends RealType<T>> implements
 				}
 			}
 
-			Img<DoubleType> kernelInterval = createImg.apply(dims);
+            var kernelInterval = createImg.apply(dims);
 
-			RandomAccessibleInterval<T> rotatedKernelB = kernelB;
-			for (int i = 0; i < dimension; i++) {
+            var rotatedKernelB = kernelB;
+			for (var i = 0; i < dimension; i++) {
 				rotatedKernelB = Views.rotate(rotatedKernelB, i, i + 1);
 			}
 
@@ -145,15 +145,15 @@ public class PartialDerivativeRAI<T extends RealType<T>> implements
 		kernelAConvolveOps = new Computers.Arity1[input.numDimensions()];
 		if (dimension != 0) {
 			// HACK needs to be final so that the compiler can encapsulate it.
-			final RandomAccessibleInterval<T> finalKernelA = kernelA;
+			final var finalKernelA = kernelA;
 			kernelAConvolveOps[0] = (in, out) -> convolveOp.compute(in, finalKernelA,
 				out);
 		}
-		RandomAccessibleInterval<T> rotatedKernelA = kernelA;
-		for (int i = 1; i < input.numDimensions(); i++) {
+        var rotatedKernelA = kernelA;
+		for (var i = 1; i < input.numDimensions(); i++) {
 			if (i != dimension) {
 				dims = new long[input.numDimensions()];
-				for (int j = 0; j < input.numDimensions(); j++) {
+				for (var j = 0; j < input.numDimensions(); j++) {
 					if (i == j) {
 						dims[j] = 3;
 					}
@@ -161,13 +161,13 @@ public class PartialDerivativeRAI<T extends RealType<T>> implements
 						dims[j] = 1;
 					}
 				}
-				Img<DoubleType> kernelInterval = createImg.apply(dims);
-				for (int j = 0; j < i; j++) {
+                var kernelInterval = createImg.apply(dims);
+				for (var j = 0; j < i; j++) {
 					rotatedKernelA = Views.rotate(rotatedKernelA, j, j + 1);
 				}
 
 				// HACK needs to be final so that the compiler can encapsulate it.
-				final RandomAccessibleInterval<T> finalRotatedKernelA = rotatedKernelA;
+				final var finalRotatedKernelA = rotatedKernelA;
 				kernelAConvolveOps[i] = (in, out) -> convolveOp.compute(in, Views
 					.interval(finalRotatedKernelA, kernelInterval), out);
 				rotatedKernelA = kernelA;
@@ -188,8 +188,8 @@ public class PartialDerivativeRAI<T extends RealType<T>> implements
 		final Integer dimension, RandomAccessibleInterval<T> output)
 	{
 		setupConvolves(input, dimension);
-		RandomAccessibleInterval<T> in = input;
-		for (int i = input.numDimensions() - 1; i >= 0; i--) {
+        var in = input;
+		for (var i = input.numDimensions() - 1; i >= 0; i--) {
 			RandomAccessibleInterval<T> derivative = createRAI.apply(input);
 			if (dimension == i) {
 				kernelBConvolveOp.compute(Views.interval(Views.extendMirrorDouble(in),

@@ -408,12 +408,12 @@ public class BigComplex implements ComplexType<BigComplex> {
 	 * Set self to the result of multiplication between two BigComplex values.
 	 */
 	public void mul(BigComplex a, BigComplex b) {
-		BigDecimal t1 = a.r.multiply(b.r);
-		BigDecimal t2 = a.i.multiply(b.i);
-		BigDecimal sum1 = t1.subtract(t2);
+        var t1 = a.r.multiply(b.r);
+        var t2 = a.i.multiply(b.i);
+        var sum1 = t1.subtract(t2);
 		t1 = a.i.multiply(b.r);
 		t2 = a.r.multiply(b.i);
-		BigDecimal sum2 = t1.add(t2);
+        var sum2 = t1.add(t2);
 		r = sum1;
 		i = sum2;
 	}
@@ -431,15 +431,15 @@ public class BigComplex implements ComplexType<BigComplex> {
 	 * loss is possible.
 	 */
 	public void div(BigComplex a, BigComplex b) {
-		BigDecimal t1 = b.r.multiply(b.r);
-		BigDecimal t2 = b.i.multiply(b.i);
-		BigDecimal denom = t1.add(t2);
+        var t1 = b.r.multiply(b.r);
+        var t2 = b.i.multiply(b.i);
+        var denom = t1.add(t2);
 		t1 = a.r.multiply(b.r);
 		t2 = a.i.multiply(b.i);
-		BigDecimal sum1 = t1.add(t2);
+        var sum1 = t1.add(t2);
 		t1 = a.i.multiply(b.r);
 		t2 = a.r.multiply(b.i);
-		BigDecimal sum2 = t1.subtract(t2);
+        var sum2 = t1.subtract(t2);
 		r = sum1.divide(denom, DIGITS, RoundingMode.HALF_UP);
 		i = sum2.divide(denom, DIGITS, RoundingMode.HALF_UP);
 	}
@@ -717,9 +717,9 @@ public class BigComplex implements ComplexType<BigComplex> {
 	// -- helpers --
 
 	private BigDecimal modulus() {
-		BigDecimal a = r.multiply(r);
-		BigDecimal b = i.multiply(i);
-		BigDecimal sum = a.add(b);
+        var a = r.multiply(r);
+        var b = i.multiply(i);
+        var sum = a.add(b);
 		return bigSqrt(sum);
 	}
 
@@ -739,7 +739,7 @@ public class BigComplex implements ComplexType<BigComplex> {
 	 * @param c
 	 */
 	private static BigDecimal bigSqrt(BigDecimal c) {
-		BigDecimal precision = BigDecimal.ONE.divide(SQRT_PRE, DIGITS,
+        var precision = BigDecimal.ONE.divide(SQRT_PRE, DIGITS,
 			RoundingMode.HALF_UP);
 		return sqrtNewtonRaphson(c, BigDecimal.ONE, precision);
 	}
@@ -756,12 +756,12 @@ public class BigComplex implements ComplexType<BigComplex> {
 	private static BigDecimal sqrtNewtonRaphson(BigDecimal c, BigDecimal xn,
 		BigDecimal precision)
 	{
-		BigDecimal fx = xn.pow(2).add(c.negate());
-		BigDecimal fpx = xn.multiply(TWO);
-		BigDecimal xn1 = fx.divide(fpx, 2 * DIGITS, RoundingMode.HALF_DOWN);
+        var fx = xn.pow(2).add(c.negate());
+        var fpx = xn.multiply(TWO);
+        var xn1 = fx.divide(fpx, 2 * DIGITS, RoundingMode.HALF_DOWN);
 		xn1 = xn.add(xn1.negate());
-		BigDecimal currentSquare = xn1.pow(2);
-		BigDecimal currentPrecision = currentSquare.subtract(c);
+        var currentSquare = xn1.pow(2);
+        var currentPrecision = currentSquare.subtract(c);
 		currentPrecision = currentPrecision.abs();
 		if (currentPrecision.compareTo(precision) <= 0) {
 			return xn1;
@@ -773,9 +773,9 @@ public class BigComplex implements ComplexType<BigComplex> {
 	// and http://bsvi.ru/uploads/CORDIC--_10EBA/cordic.pdf
 
 	private BigDecimal atan2(BigDecimal y, BigDecimal x) {
-		BigDecimal tx = x;
-		BigDecimal ty = y;
-		BigDecimal angle = BigDecimal.ZERO;
+        var tx = x;
+        var ty = y;
+        var angle = BigDecimal.ZERO;
 		if (tx.compareTo(BigDecimal.ZERO) < 0) {
 			angle = PI;
 			tx = tx.negate();
@@ -785,10 +785,10 @@ public class BigComplex implements ComplexType<BigComplex> {
 
 		BigDecimal xNew, yNew;
 
-		for (int j = 0; j < ANGLES.length; j++) {
-			BigDecimal twoPowJ = POWERS_OF_TWO[j];
-			BigDecimal dx = tx.divide(twoPowJ, DIGITS, RoundingMode.HALF_UP);
-			BigDecimal dy = ty.divide(twoPowJ, DIGITS, RoundingMode.HALF_UP);
+		for (var j = 0; j < ANGLES.length; j++) {
+            var twoPowJ = POWERS_OF_TWO[j];
+            var dx = tx.divide(twoPowJ, DIGITS, RoundingMode.HALF_UP);
+            var dy = ty.divide(twoPowJ, DIGITS, RoundingMode.HALF_UP);
 			if (ty.compareTo(BigDecimal.ZERO) < 0) {
 				// Rotate counter-clockwise
 				xNew = tx.subtract(dy);
@@ -912,9 +912,9 @@ public class BigComplex implements ComplexType<BigComplex> {
 	}
 
 	private static BigDecimal[] powersOfTwo(int length) {
-		BigDecimal[] powers = new BigDecimal[length];
-		BigDecimal power = BigDecimal.ONE;
-		for (int i = 0; i < length; i++) {
+        var powers = new BigDecimal[length];
+        var power = BigDecimal.ONE;
+		for (var i = 0; i < length; i++) {
 			powers[i] = power;
 			power = power.multiply(TWO);
 		}

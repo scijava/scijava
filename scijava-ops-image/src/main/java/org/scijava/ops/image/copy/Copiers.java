@@ -155,8 +155,8 @@ public final class Copiers {
 	{
 		ensureEqualDimensions(input, output);
 
-		final Object inArray = input.update(null).getCurrentStorageArray();
-		final Object outArray = output.update(null).getCurrentStorageArray();
+		final var inArray = input.update(null).getCurrentStorageArray();
+		final var outArray = output.update(null).getCurrentStorageArray();
 		System.arraycopy(inArray, 0, outArray, 0, Array.getLength(inArray));
 	}
 

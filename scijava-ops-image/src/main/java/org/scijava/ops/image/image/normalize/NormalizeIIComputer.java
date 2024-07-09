@@ -65,9 +65,9 @@ public class NormalizeIIComputer<I extends RealType<I>, O extends RealType<O>>
 		final I sourceMin, final I sourceMax, final O targetMin, final O targetMax)
 	{
 		// the four elements are source min, source max, target min, and target max.
-		final double[] result = new double[4];
+		final var result = new double[4];
 		if (minMaxFunc != null) {
-			final Pair<I, I> minMax = minMaxFunc.apply(input);
+			final var minMax = minMaxFunc.apply(input);
 			result[0] = (sourceMin == null ? minMax.getA() : sourceMin)
 				.getRealDouble();
 			result[1] = (sourceMax == null ? minMax.getB() : sourceMax)
@@ -77,7 +77,7 @@ public class NormalizeIIComputer<I extends RealType<I>, O extends RealType<O>>
 			result[0] = sourceMin.getRealDouble();
 			result[1] = sourceMax.getRealDouble();
 		}
-		final I first = Util.getTypeFromInterval(input);
+		final var first = Util.getTypeFromInterval(input);
 		result[2] = targetMin == null ? first.getMinValue() : targetMin
 			.getRealDouble();
 		result[3] = targetMax == null ? first.getMaxValue() : targetMax
@@ -101,7 +101,7 @@ public class NormalizeIIComputer<I extends RealType<I>, O extends RealType<O>>
 		final RandomAccessibleInterval<O> output)
 	{
 		normalizer = new NormalizeRealTypeComputer<>();
-		final double[] bounds = getBounds(input, sourceMin, sourceMax, targetMin,
+		final var bounds = getBounds(input, sourceMin, sourceMax, targetMin,
 			targetMax);
 		normalizer.setup(bounds[0], bounds[1], bounds[2], bounds[3]);
 		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel((in,

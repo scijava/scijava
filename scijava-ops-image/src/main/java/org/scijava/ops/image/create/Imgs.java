@@ -81,11 +81,11 @@ public final class Imgs {
 		final Object minMax)
 	{
 		if (!(minMax instanceof Interval)) return img;
-		final Interval interval = (Interval) minMax;
+		final var interval = (Interval) minMax;
 
-		final long[] min = new long[interval.numDimensions()];
+		final var min = new long[interval.numDimensions()];
 		interval.min(min);
-		for (int d = 0; d < min.length; d++) {
+		for (var d = 0; d < min.length; d++) {
 			if (min[d] != 0) {
 				return ImgView.wrap(Views.translate(img, min), img.factory());
 			}

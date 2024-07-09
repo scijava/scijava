@@ -70,17 +70,17 @@ public class DefaultSumEntropy<T extends RealType<T>> extends
 		final Integer numGreyLevels, final Integer distance,
 		final MatrixOrientation orientation)
 	{
-		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels,
+		final var matrix = getCooccurrenceMatrix(input, numGreyLevels,
 			distance, orientation);
-		final double[] pxplusy = coocPXPlusFunc.apply(matrix);
-		final int nrGrayLevels = matrix.length;
+		final var pxplusy = coocPXPlusFunc.apply(matrix);
+		final var nrGrayLevels = matrix.length;
 
 		double res = 0;
-		for (int i = 2; i <= 2 * nrGrayLevels; i++) {
+		for (var i = 2; i <= 2 * nrGrayLevels; i++) {
 			res += pxplusy[i] * Math.log(pxplusy[i] + EPSILON);
 		}
 
-		DoubleType output = new DoubleType();
+        var output = new DoubleType();
 		output.set(-res);
 		return output;
 	}

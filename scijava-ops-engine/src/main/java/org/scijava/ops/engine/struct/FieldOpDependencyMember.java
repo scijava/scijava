@@ -63,7 +63,7 @@ public class FieldOpDependencyMember<T> extends AnnotatedOpDependencyMember<T>
 		field.setAccessible(true);
 		try {
 			@SuppressWarnings("unchecked")
-			final T value = (T) field.get(o);
+			final var value = (T) field.get(o);
 			return value;
 		}
 		catch (final IllegalAccessException exc) {

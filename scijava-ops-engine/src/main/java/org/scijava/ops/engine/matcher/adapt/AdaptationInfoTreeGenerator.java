@@ -49,37 +49,37 @@ public class AdaptationInfoTreeGenerator implements InfoTreeGenerator {
 	{
 
 		// Resolve adaptor
-		String adaptorComponent = signature.substring(signature.indexOf(
+        var adaptorComponent = signature.substring(signature.indexOf(
 			OpAdaptationInfo.ADAPTOR), signature.indexOf(OpAdaptationInfo.ORIGINAL));
 		if (!adaptorComponent.startsWith(OpAdaptationInfo.ADAPTOR))
 			throw new IllegalArgumentException("Adaptor component " +
 				adaptorComponent + " must begin with prefix " +
 				OpAdaptationInfo.ADAPTOR);
-		String adaptorSignature = adaptorComponent.substring(
+        var adaptorSignature = adaptorComponent.substring(
 			OpAdaptationInfo.ADAPTOR.length());
-		InfoTree adaptorTree = InfoTreeGenerator.generateDependencyTree(env,
+        var adaptorTree = InfoTreeGenerator.generateDependencyTree(env,
 			adaptorSignature, idMap, generators);
 
 		// Resolve original op
-		String originalComponent = signature.substring(signature.indexOf(
+        var originalComponent = signature.substring(signature.indexOf(
 			OpAdaptationInfo.ORIGINAL));
 		if (!originalComponent.startsWith(OpAdaptationInfo.ORIGINAL))
 			throw new IllegalArgumentException("Original Op component " +
 				originalComponent + " must begin with prefix " +
 				OpAdaptationInfo.ORIGINAL);
-		String originalSignature = originalComponent.substring(
+        var originalSignature = originalComponent.substring(
 			OpAdaptationInfo.ORIGINAL.length());
-		InfoTree originalTree = InfoTreeGenerator.generateDependencyTree(env,
+        var originalTree = InfoTreeGenerator.generateDependencyTree(env,
 			originalSignature, idMap, generators);
 
 		// Rebuild original tree with an OpAdaptationInfo
-		OpInfo originalInfo = originalTree.info();
+        var originalInfo = originalTree.info();
 		// TODO: The op type is wrong!
 		Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
 		if (!Types.isAssignable(originalInfo.opType(), adaptorTree.info().inputs()
 			.get(0).type(), typeVarAssigns)) throw new IllegalArgumentException(
 				"The adaptor cannot be used on Op " + originalInfo);
-		Type adaptedOpType = Types.unroll(adaptorTree.info()
+        var adaptedOpType = Types.unroll(adaptorTree.info()
 			.output().type(), typeVarAssigns);
 		OpInfo adaptedInfo = new OpAdaptationInfo(originalInfo, adaptedOpType,
 			adaptorTree);

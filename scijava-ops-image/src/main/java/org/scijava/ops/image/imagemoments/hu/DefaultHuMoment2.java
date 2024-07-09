@@ -74,21 +74,21 @@ public class DefaultHuMoment2<I extends RealType<I>, O extends RealType<O>>
 		final O output)
 	{
 
-		final O n11 = output.createVariable();
+		final var n11 = output.createVariable();
 		normalizedCentralMoment11Func.compute(input, n11);
-		final O n20 = output.createVariable();
+		final var n20 = output.createVariable();
 		normalizedCentralMoment20Func.compute(input, n20);
-		final O n02 = output.createVariable();
+		final var n02 = output.createVariable();
 		normalizedCentralMoment02Func.compute(input, n02);
 
 		// n11Squared = 4 * n11 * n11
-		final O n11Squared = n11.copy();
+		final var n11Squared = n11.copy();
 		n11Squared.mul(n11);
 		output.setReal(4d);
 		n11Squared.mul(output);
 
 		// n2Squared = (n20 - n02)^2
-		final O n2Squared = n20.copy();
+		final var n2Squared = n20.copy();
 		n2Squared.sub(n02);
 		n2Squared.mul(n2Squared);
 

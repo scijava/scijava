@@ -43,7 +43,7 @@ public class InplacesToFunctions$generics.call($classArity, $classArity) impleme
 		@Override
 		public $functionArity.call($arity)$functionGenerics.call($arity, $a) apply($inplaceType.call($arity, $a)$generics.call($arity, $a) t) {
 			return ($mutateArgs.call($arity, $a)) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate($mutateTempParams.call($arity, $a));
 				return temp;

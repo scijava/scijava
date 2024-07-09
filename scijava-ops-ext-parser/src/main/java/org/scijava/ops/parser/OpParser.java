@@ -95,7 +95,7 @@ public final class OpParser {
 		}
 
 		// Parse the config yaml to an Op yaml representation
-		final String opYaml = parseOpDocument(args[0]);
+		final var opYaml = parseOpDocument(args[0]);
 
 		// Write out the results
 		try {
@@ -115,15 +115,15 @@ public final class OpParser {
 	public static String parseOpDocument(String inputYamlPath)
 		throws ClassNotFoundException
 	{
-		Yaml configYaml = new Yaml();
+        var configYaml = new Yaml();
 		String namespace = null;
 		List<OpData> ops = new ArrayList<>();
 		List<String> authors = new ArrayList<>();
-		String version = "unknown";
+        var version = "unknown";
 		Map<String, Object> opsYaml;
 
 		// -- Parse the yaml --
-		try (FileReader reader = new FileReader(inputYamlPath)) {
+		try (var reader = new FileReader(inputYamlPath)) {
 			opsYaml = configYaml.load(reader);
 		}
 		catch (IOException e) {
@@ -144,28 +144,28 @@ public final class OpParser {
 
 		// We assume the remaining entries are nested maps of classes to (maps of
 		// method names to an alias for that method).
-		for (Map.Entry<String, Object> opDeclaration : opsYaml.entrySet()) {
-			final String className = opDeclaration.getKey();
-			final Class<?> clazz = Class.forName(className);
+		for (var opDeclaration : opsYaml.entrySet()) {
+			final var className = opDeclaration.getKey();
+			final var clazz = Class.forName(className);
 			// As our YAML specification for desired method names, we want all
 			// overloaded implementations of those methods.
-			Multimap<String, Method> methods = makeMultimap(clazz);
-			final Map<String, Map<String, Object>> opMethods =
+            var methods = makeMultimap(clazz);
+			final var opMethods =
 				(Map<String, Map<String, Object>>) opDeclaration.getValue();
-			for (Map.Entry<String, Map<String, Object>> opMethod : opMethods
+			for (var opMethod : opMethods
 				.entrySet())
 			{
-				final String methodName = opMethod.getKey();
+				final var methodName = opMethod.getKey();
 				final List<String> opNames = new ArrayList<>();
-				final Map<String, Object> opMetadata = opMethod.getValue();
-				final String opType = (String) opMetadata.getOrDefault(TYPE_KEY, "");
-				final String description = (String) opMetadata.getOrDefault(
+				final var opMetadata = opMethod.getValue();
+				final var opType = (String) opMetadata.getOrDefault(TYPE_KEY, "");
+				final var description = (String) opMetadata.getOrDefault(
 					DESCRIPTION_KEY, "");
-				final double priority = Double.parseDouble((String) opMetadata
+				final var priority = Double.parseDouble((String) opMetadata
 					.getOrDefault(PRIORITY_KEY, "0.0"));
 
 				if (opMetadata.containsKey(ALIAS_KEY)) {
-					Object alias = opMetadata.get(ALIAS_KEY);
+                    var alias = opMetadata.get(ALIAS_KEY);
 					if (alias instanceof String) {
 						opNames.add((String) alias);
 					}
@@ -177,7 +177,7 @@ public final class OpParser {
 					opNames.add("ext." + methodName);
 				}
 
-				List<String> opAuthors = authors;
+                var opAuthors = authors;
 				if (opMetadata.containsKey(AUTHOR_KEY)) {
 					opAuthors = getListHelper(AUTHOR_KEY, opMetadata);
 				}
@@ -194,13 +194,13 @@ public final class OpParser {
 					throw new InvalidOpException("No method named " + methodName +
 						" in class " + className);
 				}
-				for (Method method : methods.get(methodName)) {
+				for (var method : methods.get(methodName)) {
 					Map<String, Object> tags = new HashMap<>();
 					List<OpParameter> params = new ArrayList<>();
-					String opSource = parseOpSource(className, methodName, method
+                    var opSource = parseOpSource(className, methodName, method
 						.getParameterTypes());
 					parseParams(method, params, tags, opType);
-					OpData data = new OpData(opSource, version, opNames, params, tags,
+                    var data = new OpData(opSource, version, opNames, params, tags,
 						opAuthors, priority, description);
 					ops.add(data);
 				}
@@ -218,7 +218,7 @@ public final class OpParser {
 	private static List<String> getListHelper(String key,
 		Map<String, Object> map)
 	{
-		Object value = map.get(key);
+        var value = map.get(key);
 		if (value instanceof List) {
 			return (List<String>) value;
 		}
@@ -264,17 +264,17 @@ public final class OpParser {
 	private static void parseParams(final Method method,
 		final List<OpParameter> params, Map<String, Object> tags, final String type)
 	{
-		int containerIndex = -1;
+        var containerIndex = -1;
 		if (!Strings.isNullOrEmpty(type)) {
 			containerIndex = Integer.parseInt(type.substring(type.length() - 1)) - 1;
 		}
 
 		// Iterate over each parameter
-		Class<?>[] types = method.getParameterTypes();
-		for (int i = 0; i < types.length; i++) {
-			String className = types[i].getName();
-			OpParameter.IO_TYPE ioType = OpParameter.IO_TYPE.INPUT;
-			String paramName = method.getParameters()[i].getName();
+        var types = method.getParameterTypes();
+		for (var i = 0; i < types.length; i++) {
+            var className = types[i].getName();
+            var ioType = OpParameter.IO_TYPE.INPUT;
+            var paramName = method.getParameters()[i].getName();
 			if (i == containerIndex) {
 				ioType = OpParameter.IO_TYPE.CONTAINER;
 				tags.put("type", type);
@@ -284,8 +284,8 @@ public final class OpParser {
 
 		if (containerIndex < 0) {
 			method.getReturnType();
-			OpParameter.IO_TYPE ioType = OpParameter.IO_TYPE.OUTPUT;
-			String paramName = "output";
+            var ioType = OpParameter.IO_TYPE.OUTPUT;
+            var paramName = "output";
 			params.add(new OpParameter(paramName, method.getReturnType().getName(),
 				ioType, ""));
 		}
@@ -299,7 +299,7 @@ public final class OpParser {
 	private static Multimap<String, Method> makeMultimap(final Class<?> clazz) {
 		Multimap<String, Method> multimap = MultimapBuilder.treeKeys()
 			.treeSetValues(OpParser::compareParamCount).build();
-		for (Method m : clazz.getMethods()) {
+		for (var m : clazz.getMethods()) {
 			multimap.put(m.getName(), m);
 		}
 		return multimap;
@@ -310,9 +310,9 @@ public final class OpParser {
 	 * of parameters.
 	 */
 	private static int compareParamCount(Method m1, Method m2) {
-		int result = Integer.compare(m1.getParameterCount(), m2
+        var result = Integer.compare(m1.getParameterCount(), m2
 			.getParameterCount());
-		for (int i = 0; result == 0 && i < m1.getParameterCount(); i++) {
+		for (var i = 0; result == 0 && i < m1.getParameterCount(); i++) {
 			result = m1.getParameterTypes()[i].getName().compareTo(m2
 				.getParameterTypes()[i].getName());
 		}
@@ -323,7 +323,7 @@ public final class OpParser {
 	 * Helper method to write an {@link OpData} list to an {@code ops.yaml} file.
 	 */
 	private static void outputYamlDoc(String opYaml) throws IOException {
-		File f = new File("ops.yaml");
+        var f = new File("ops.yaml");
 		try (OutputStream os = new FileOutputStream(f)) {
 			os.write(opYaml.getBytes(UTF_8));
 		}
@@ -409,8 +409,8 @@ public final class OpParser {
 						". Op names cannot be empty!");
 			}
 
-			int outputs = 0;
-			for (OpParameter p : params) {
+            var outputs = 0;
+			for (var p : params) {
 				if (p.ioType.equals(OpParameter.IO_TYPE.OUTPUT)) outputs++;
 			}
 			if (outputs > 1) {
@@ -432,7 +432,7 @@ public final class OpParser {
 			map.put("description", description);
 			map.put("priority", priority);
 			map.put("authors", authors.toArray(String[]::new));
-			List<Map<String, Object>> foo = params.stream() //
+            var foo = params.stream() //
 					.map(OpParameter::data) //
 					.collect(Collectors.toList());
 			map.put("parameters", foo.toArray(Map[]::new));

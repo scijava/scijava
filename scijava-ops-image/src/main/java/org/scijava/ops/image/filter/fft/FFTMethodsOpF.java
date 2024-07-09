@@ -91,9 +91,9 @@ public class FFTMethodsOpF<T extends RealType<T>, C extends ComplexType<C>>
 			fast = true;
 		}
 		// calculate the padded size
-		long[] paddedSize = new long[input.numDimensions()];
+        var paddedSize = new long[input.numDimensions()];
 
-		for (int d = 0; d < input.numDimensions(); d++) {
+		for (var d = 0; d < input.numDimensions(); d++) {
 			paddedSize[d] = input.dimension(d);
 
 			if (borderSize != null) {
@@ -104,11 +104,11 @@ public class FFTMethodsOpF<T extends RealType<T>, C extends ComplexType<C>>
 		Dimensions paddedDimensions = new FinalDimensions(paddedSize);
 
 		// create the complex output
-		RandomAccessibleInterval<C> output = createOp.apply(paddedDimensions,
+        var output = createOp.apply(paddedDimensions,
 			fftType, fast);
 
 		// pad the input
-		RandomAccessibleInterval<T> paddedInput = padOp.apply(input,
+        var paddedInput = padOp.apply(input,
 			paddedDimensions, fast, null);
 
 		// compute and return fft

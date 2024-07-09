@@ -52,10 +52,10 @@ public final class LiftFunctionsToRAI {
 		) {
 		return (#foreach($a in [1..$arity])in$a#if($a < $arity), #end#{end}) -> {
 #foreach($a in [1..$rais])
-			I$a inType$a = Util.getTypeFromInterval(in$a);
+			var inType$a = Util.getTypeFromInterval(in$a);
 #end
-			O outType = func.apply(#foreach($a in [1..$arity])#if($a <= $rais)inType#{else}in#end$a#if($a < $arity), #end#{end});
-			RAIO outImg = imgCreator.apply(in1, outType);
+			var outType = func.apply(#foreach($a in [1..$arity])#if($a <= $rais)inType#{else}in#end$a#if($a < $arity), #end#{end});
+			var outImg = imgCreator.apply(in1, outType);
 			LoopBuilder.setImages(#foreach($a in [1..$rais])in$a, #{end}outImg).multiThreaded() //
 				.forEachPixel((#foreach($a in [1..$rais])i$a, #{end}o) -> o.set(func.apply(#foreach($a in [1..$arity])#if($a <= $rais)i$a#{else}in$a#end#if($a < $arity), #end#{end})));
 			return outImg;

@@ -118,23 +118,23 @@ public final class BoxCount {
 				"Scaling must be > 1.0 or algorithm won't stop.");
 		}
 		final List<ValuePair<DoubleType, DoubleType>> points = new ArrayList<>();
-		final int dimensions = input.numDimensions();
-		final long[] sizes = new long[dimensions];
+		final var dimensions = input.numDimensions();
+		final var sizes = new long[dimensions];
 		input.dimensions(sizes);
 		for (long sectionSize = maxSize; sectionSize >= minSize; sectionSize /=
 			scaling)
 		{
-			final long numTranslations = limitTranslations(sectionSize, 1 +
+			final var numTranslations = limitTranslations(sectionSize, 1 +
 				gridMoves);
-			final long translationAmount = sectionSize / numTranslations;
-			final Stream<long[]> translations = translationStream(numTranslations,
+			final var translationAmount = sectionSize / numTranslations;
+			final var translations = translationStream(numTranslations,
 				translationAmount, dimensions - 1, new long[dimensions]);
-			final LongStream foregroundCounts = countTranslatedGrids(input,
+			final var foregroundCounts = countTranslatedGrids(input,
 				translations, sizes, sectionSize);
-			final long foreground = foregroundCounts.min().orElse(0);
-			final double logSize = -Math.log(sectionSize);
-			final double logCount = Math.log(foreground);
-			final ValuePair<DoubleType, DoubleType> point = new ValuePair<>(
+			final var foreground = foregroundCounts.min().orElse(0);
+			final var logSize = -Math.log(sectionSize);
+			final var logCount = Math.log(foreground);
+			final var point = new ValuePair<DoubleType, DoubleType>(
 				new DoubleType(logSize), new DoubleType(logCount));
 			points.add(point);
 		}
@@ -191,10 +191,10 @@ public final class BoxCount {
 		final RandomAccessibleInterval<B> input, final Stream<long[]> translations,
 		final long[] sizes, final long sectionSize)
 	{
-		final int lastDimension = sizes.length - 1;
+		final var lastDimension = sizes.length - 1;
 		return translations.parallel().mapToLong(gridOffset -> {
-			final LongType foreground = new LongType();
-			final long[] sectionPosition = new long[sizes.length];
+			final var foreground = new LongType();
+			final var sectionPosition = new long[sizes.length];
 			countGrid(input, lastDimension, sizes, gridOffset, sectionPosition,
 				sectionSize, foreground);
 			return foreground.get();
@@ -219,18 +219,18 @@ public final class BoxCount {
 		final RandomAccessibleInterval<B> interval, final long[] sizes,
 		final long[] coordinates, final long sectionSize)
 	{
-		final int n = sizes.length;
-		final long[] startPosition = IntStream.range(0, n).mapToLong(i -> Math.max(
+		final var n = sizes.length;
+		final var startPosition = IntStream.range(0, n).mapToLong(i -> Math.max(
 			0, coordinates[i])).toArray();
-		final long[] endPosition = IntStream.range(0, n).mapToLong(i -> Math.min(
+		final var endPosition = IntStream.range(0, n).mapToLong(i -> Math.min(
 			(sizes[i] - 1), (coordinates[i] + sectionSize - 1))).toArray();
-		final boolean badBox = IntStream.range(0, n).anyMatch(
+		final var badBox = IntStream.range(0, n).anyMatch(
 			d -> (startPosition[d] >= sizes[d]) || (endPosition[d] < 0) ||
 				(endPosition[d] < startPosition[d]));
 		if (badBox) {
 			return null;
 		}
-		final BoundingBox box = new BoundingBox(n);
+		final var box = new BoundingBox(n);
 		box.update(startPosition);
 		box.update(endPosition);
 		return Views.offsetInterval(interval, box);
@@ -240,7 +240,7 @@ public final class BoxCount {
 	private static <B extends BooleanType<B>> boolean hasForeground(
 		IntervalView<B> view)
 	{
-		final Spliterator<B> spliterator = view.spliterator();
+		final var spliterator = view.spliterator();
 		return StreamSupport.stream(spliterator, false).anyMatch(BooleanType::get);
 	}
 
@@ -262,10 +262,10 @@ public final class BoxCount {
 		final long[] sizes, final long[] translation, final long[] sectionPosition,
 		final long sectionSize, final LongType foreground)
 	{
-		for (int p = 0; p < sizes[dimension]; p += sectionSize) {
+		for (var p = 0; p < sizes[dimension]; p += sectionSize) {
 			sectionPosition[dimension] = translation[dimension] + p;
 			if (dimension == 0) {
-				final IntervalView<B> box = sectionView(interval, sizes,
+				final var box = sectionView(interval, sizes,
 					sectionPosition, sectionSize);
 				if (box != null && hasForeground(box)) {
 					foreground.inc();
@@ -318,7 +318,7 @@ public final class BoxCount {
 		final long amount, final int dimension, final long[] translation,
 		final Stream.Builder<long[]> builder)
 	{
-		for (int t = 0; t < numTranslations; t++) {
+		for (var t = 0; t < numTranslations; t++) {
 			translation[dimension] = -t * amount;
 			if (dimension == 0) {
 				builder.add(translation.clone());

@@ -89,7 +89,7 @@ class TypeMapping {
 		}
 		if (otherType instanceof WildcardType) {
 			malleable &= newTypeMalleability;
-			WildcardType wType = (WildcardType) otherType;
+            var wType = (WildcardType) otherType;
 			if (wType.getLowerBounds().length == 0 && //
 				wType.getUpperBounds().length == 1 && //
 				wType.getUpperBounds()[0].equals(mappedType))
@@ -126,7 +126,7 @@ class TypeMapping {
 	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof TypeMapping)) return false;
-		final TypeMapping that = (TypeMapping) o;
+		final var that = (TypeMapping) o;
 		return Objects.equal(typeVar, that.typeVar) && //
 			Objects.equal(mappedType, that.mappedType) && //
 			Objects.equal(malleable, that.malleable);

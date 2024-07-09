@@ -84,7 +84,7 @@ public class OpParallelization implements OpCollection {
 	}
 
 	public static void main(String... args) {
-		OpEnvironment ops = OpEnvironment.build();
+        var ops = OpEnvironment.build();
 
 		// First, we show parallelization at work for our per-pixel Op.
 		// SciJava Ops understands how to apply that Op to each pixel of the input

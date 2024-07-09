@@ -46,7 +46,7 @@ public class OpWrappers {
 					preprocess();
 
 					// Call the op
-					T out = instance.op().create();
+					var out = instance.op().create();
 
 					postprocess(out);
 
@@ -94,7 +94,7 @@ public class OpWrappers {
 					preprocess($applyArgs.call($arity));
 
 					// Call the op
-					O out = instance.op().apply($applyArgs.call($arity));
+					var out = instance.op().apply($applyArgs.call($arity));
 
 					postprocess(out);
 					return out;

@@ -74,10 +74,10 @@ public class SlicesII<T> extends AbstractInterval implements
 	{
 		super(initIntervals(source, axesOfInterest));
 
-		final long[] sliceMin = new long[source.numDimensions()];
-		final long[] sliceMax = new long[source.numDimensions()];
+		final var sliceMin = new long[source.numDimensions()];
+		final var sliceMax = new long[source.numDimensions()];
 
-		for (int d = 0; d < source.numDimensions(); d++) {
+		for (var d = 0; d < source.numDimensions(); d++) {
 			if (dimension(d) == 1) {
 				sliceMin[d] = source.min(d);
 				sliceMax[d] = source.max(d);
@@ -106,12 +106,12 @@ public class SlicesII<T> extends AbstractInterval implements
 		final int[] axesOfInterest)
 	{
 
-		final long[] dimensionsToIterate = new long[src.numDimensions()];
+		final var dimensionsToIterate = new long[src.numDimensions()];
 		src.dimensions(dimensionsToIterate);
 
 		// determine axis to iterate
-		for (int i = 0; i < src.numDimensions(); i++) {
-			for (int j = 0; j < axesOfInterest.length; j++) {
+		for (var i = 0; i < src.numDimensions(); i++) {
+			for (var j = 0; j < axesOfInterest.length; j++) {
 
 				if (axesOfInterest[j] == i) {
 					dimensionsToIterate[i] = 1;
@@ -197,12 +197,12 @@ public class SlicesII<T> extends AbstractInterval implements
 		public RandomAccessibleInterval<T> get() {
 			localize(tmpPosition);
 
-			final long[] offset = tmpPosition.clone();
-			for (int d = 0; d < max.length; d++) {
+			final var offset = tmpPosition.clone();
+			for (var d = 0; d < max.length; d++) {
 				offset[d] += sliceOffset[d];
 			}
 
-			final IntervalView<T> res = Views.offsetInterval(src, offset, sliceDims);
+			final var res = Views.offsetInterval(src, offset, sliceDims);
 
 			return dropSingletonDimensions ? Views.dropSingletonDimensions(res) : res;
 		}

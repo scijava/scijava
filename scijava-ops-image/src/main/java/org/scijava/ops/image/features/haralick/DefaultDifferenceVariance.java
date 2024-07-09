@@ -68,22 +68,22 @@ public class DefaultDifferenceVariance<T extends RealType<T>> extends
 		final Integer numGreyLevels, final Integer distance,
 		final MatrixOrientation orientation)
 	{
-		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels,
+		final var matrix = getCooccurrenceMatrix(input, numGreyLevels,
 			distance, orientation);
-		final double[] pxminusy = coocPXMinusYFunc.apply(matrix);
+		final var pxminusy = coocPXMinusYFunc.apply(matrix);
 
-		double mu = 0.0;
+        var mu = 0.0;
 
-		for (int i = 0; i < numGreyLevels; i++) {
+		for (var i = 0; i < numGreyLevels; i++) {
 			mu += i * pxminusy[i];
 		}
 
-		double sum = 0.0d;
-		for (int k = 0; k < numGreyLevels; k++) {
+        var sum = 0.0d;
+		for (var k = 0; k < numGreyLevels; k++) {
 			sum += Math.pow(k - mu, 2) * pxminusy[k];
 		}
 
-		DoubleType output = new DoubleType();
+        var output = new DoubleType();
 		output.set(sum);
 		return output;
 	}

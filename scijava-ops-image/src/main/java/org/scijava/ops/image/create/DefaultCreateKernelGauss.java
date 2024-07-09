@@ -61,27 +61,27 @@ public final class DefaultCreateKernelGauss {
 		RandomAccessibleInterval<C> createKernel(double[] input, C type,
 			BiFunction<Dimensions, T, Img<T>> imgFromDimsAndType)
 	{
-		final double[] sigmaPixels = new double[input.length];
+		final var sigmaPixels = new double[input.length];
 
-		final long[] dims = new long[input.length];
-		final double[][] kernelArrays = new double[input.length][];
+		final var dims = new long[input.length];
+		final var kernelArrays = new double[input.length][];
 
-		for (int d = 0; d < input.length; d++) {
+		for (var d = 0; d < input.length; d++) {
 			sigmaPixels[d] = input[d];
 
 			dims[d] = Math.max(3, 2 * (int) (3 * sigmaPixels[d] + 0.5) + 1);
 			kernelArrays[d] = Util.createGaussianKernel1DDouble(sigmaPixels[d], true);
 		}
 
-		final RandomAccessibleInterval<C> out =
+		final var out =
 			(RandomAccessibleInterval<C>) imgFromDimsAndType.apply(new FinalInterval(
 				dims), (T) type);
 
-		final Cursor<C> cursor = Views.iterable(out).cursor();
+		final var cursor = Views.iterable(out).cursor();
 		while (cursor.hasNext()) {
 			cursor.fwd();
 			double result = 1.0f;
-			for (int d = 0; d < input.length; d++) {
+			for (var d = 0; d < input.length; d++) {
 				result *= kernelArrays[d][cursor.getIntPosition(d)];
 			}
 

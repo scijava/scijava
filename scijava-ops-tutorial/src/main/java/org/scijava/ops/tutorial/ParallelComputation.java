@@ -52,10 +52,10 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 public class ParallelComputation {
 
 	public static void main(String... args) {
-		OpEnvironment ops = OpEnvironment.build();
+        var ops = OpEnvironment.build();
 		// To compute tasks using Parallelization, we must first gather a list of
 		// parameters.
-		List<Double> fillValues = Arrays.asList(1.0, 2.0, 3.0, 4.0);
+        var fillValues = Arrays.asList(1.0, 2.0, 3.0, 4.0);
 		Img<UnsignedByteType> data = ArrayImgs.unsignedBytes(10, 10, 10);
 		Nil<Img<UnsignedByteType>> outNil = new Nil<>() {};
 
@@ -77,10 +77,10 @@ public class ParallelComputation {
 		// then be applied in parallel on each parameter, and the return is a list,
 		// with the ith output being the application of the function on the ith
 		// parameter.
-		List<Img<UnsignedByteType>> filledImages = //
+        var filledImages = //
 			Parallelization.getTaskExecutor().forEachApply(fillValues, fillImage);
 
-		for (int i = 0; i < fillValues.size(); i++) {
+		for (var i = 0; i < fillValues.size(); i++) {
 			if (filledImages.get(i) != null) {
 				System.out.println("Image " + i + " was filled with value " +
 					filledImages.get(i).firstElement().get());

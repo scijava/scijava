@@ -381,7 +381,7 @@ public final class ApplyThresholdMethodLocal {
 		}
 
 		private Computers.Arity2<Iterable<T>, T, BitType> getThresholdOp() {
-			final Computers.Arity1<Histogram1d<T>, T> computeThresholdOp =
+			final var computeThresholdOp =
 				getComputeThresholdOp();
 			return new Computers.Arity2<Iterable<T>, T, BitType>() {
 
@@ -389,9 +389,9 @@ public final class ApplyThresholdMethodLocal {
 				public void compute(final Iterable<T> inputNeighborhood,
 					final T inputCenterPixel, final BitType output)
 				{
-					final Histogram1d<T> histogram = createHistogramOp.apply(
+					final var histogram = createHistogramOp.apply(
 						inputNeighborhood);
-					final T threshold = inputNeighborhood.iterator().next()
+					final var threshold = inputNeighborhood.iterator().next()
 						.createVariable();
 					computeThresholdOp.compute(histogram, threshold);
 					applyThresholdOp.compute(inputCenterPixel, threshold, output);

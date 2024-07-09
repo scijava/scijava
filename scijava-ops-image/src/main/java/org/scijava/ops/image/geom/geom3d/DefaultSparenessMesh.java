@@ -65,23 +65,23 @@ public class DefaultSparenessMesh implements
 	@Override
 	public void compute(final Mesh input, final DoubleType spareness) {
 
-		final RealMatrix it = inertiaTensor.apply(input);
-		final EigenDecomposition ed = new EigenDecomposition(it);
+		final var it = inertiaTensor.apply(input);
+		final var ed = new EigenDecomposition(it);
 
-		final double l1 = ed.getRealEigenvalue(0) - ed.getRealEigenvalue(2) + ed
+		final var l1 = ed.getRealEigenvalue(0) - ed.getRealEigenvalue(2) + ed
 			.getRealEigenvalue(1);
-		final double l2 = ed.getRealEigenvalue(0) - ed.getRealEigenvalue(1) + ed
+		final var l2 = ed.getRealEigenvalue(0) - ed.getRealEigenvalue(1) + ed
 			.getRealEigenvalue(2);
-		final double l3 = ed.getRealEigenvalue(2) - ed.getRealEigenvalue(0) + ed
+		final var l3 = ed.getRealEigenvalue(2) - ed.getRealEigenvalue(0) + ed
 			.getRealEigenvalue(1);
 
-		final double g = 1 / (8 * Math.PI / 15);
+		final var g = 1 / (8 * Math.PI / 15);
 
-		final double a = Math.pow(g * l1 * l1 / Math.sqrt(l2 * l3), 1 / 5d);
-		final double b = Math.pow(g * l2 * l2 / Math.sqrt(l1 * l3), 1 / 5d);
-		final double c = Math.pow(g * l3 * l3 / Math.sqrt(l1 * l2), 1 / 5d);
+		final var a = Math.pow(g * l1 * l1 / Math.sqrt(l2 * l3), 1 / 5d);
+		final var b = Math.pow(g * l2 * l2 / Math.sqrt(l1 * l3), 1 / 5d);
+		final var c = Math.pow(g * l3 * l3 / Math.sqrt(l1 * l2), 1 / 5d);
 
-		double volumeEllipsoid = (4 / 3d * Math.PI * a * b * c);
+        var volumeEllipsoid = (4 / 3d * Math.PI * a * b * c);
 
 		spareness.set(volume.apply(input).get() / volumeEllipsoid);
 	}

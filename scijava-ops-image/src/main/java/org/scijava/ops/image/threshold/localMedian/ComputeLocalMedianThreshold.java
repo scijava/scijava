@@ -70,7 +70,7 @@ public class ComputeLocalMedianThreshold<T extends RealType<T>> implements
 		final Double c, final Computers.Arity1<Iterable<T>, DoubleType> medianOp,
 		final BitType output)
 	{
-		final DoubleType m = new DoubleType();
+		final var m = new DoubleType();
 		medianOp.compute(inputNeighborhood, m);
 		output.set(inputCenterPixel.getRealDouble() > m.getRealDouble() - c);
 	}

@@ -106,13 +106,13 @@ public class EulerCharacteristic26N<B extends BooleanType<B>> implements
 	public void compute(RandomAccessibleInterval<B> interval, DoubleType output) {
 		if (interval.numDimensions() != 3) throw new IllegalArgumentException(
 			"Input must have 3 dimensions!");
-		final RandomAccess<B> access = interval.randomAccess();
+		final var access = interval.randomAccess();
 		long sumDeltaEuler = 0;
 
 		for (long z = 0; z < interval.dimension(2) - 1; z++) {
 			for (long y = 0; y < interval.dimension(1) - 1; y++) {
 				for (long x = 0; x < interval.dimension(0) - 1; x++) {
-					int index = neighborhoodEulerIndex(access, x, y, z);
+                    var index = neighborhoodEulerIndex(access, x, y, z);
 					sumDeltaEuler += EULER_LUT[index];
 				}
 			}
@@ -133,7 +133,7 @@ public class EulerCharacteristic26N<B extends BooleanType<B>> implements
 	public static <B extends BooleanType<B>> int neighborhoodEulerIndex(
 		final RandomAccess<B> access, final long x, final long y, final long z)
 	{
-		int index = 0;
+        var index = 0;
 
 		index += getAtLocation(access, x, y, z);
 		index += getAtLocation(access, x + 1, y, z) << 1;

@@ -55,8 +55,8 @@ public class IterableSumOfLogs<I extends RealType<I>, O extends RealType<O>>
 	 */
 	@Override
 	public void compute(final Iterable<I> input, final O sumOfLogs) {
-		double res = 0.0;
-		for (final I in : input) {
+        var res = 0.0;
+		for (final var in : input) {
 			res += Math.log(in.getRealDouble());
 		}
 		sumOfLogs.setReal(res);

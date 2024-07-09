@@ -95,9 +95,9 @@ public class YAMLOpMethodInfo extends AbstractYAMLOpInfo implements OpInfo {
 	@Override
 	public String implementationName() {
 		// Get generic string without modifiers and return type
-		String fullyQualifiedMethod = method.toGenericString();
-		String packageName = method.getDeclaringClass().getPackageName();
-		int classNameIndex = fullyQualifiedMethod.indexOf(packageName);
+        var fullyQualifiedMethod = method.toGenericString();
+        var packageName = method.getDeclaringClass().getPackageName();
+        var classNameIndex = fullyQualifiedMethod.indexOf(packageName);
 		return fullyQualifiedMethod.substring(classNameIndex);
 	}
 
@@ -140,28 +140,28 @@ public class YAMLOpMethodInfo extends AbstractYAMLOpInfo implements OpInfo {
 		throws NoSuchMethodException
 	{
 		// first, remove generics
-		String rawIdentifier = sanitizeGenerics(identifier);
+        var rawIdentifier = sanitizeGenerics(identifier);
 
 		// parse class
-		int clsIndex = rawIdentifier.lastIndexOf('.', rawIdentifier.indexOf('('));
-		String clsString = rawIdentifier.substring(0, clsIndex);
-		Class<?> src = Classes.load(clsString);
+        var clsIndex = rawIdentifier.lastIndexOf('.', rawIdentifier.indexOf('('));
+        var clsString = rawIdentifier.substring(0, clsIndex);
+        var src = Classes.load(clsString);
 		// parse method
-		String methodString = rawIdentifier.substring(clsIndex + 1, rawIdentifier
+        var methodString = rawIdentifier.substring(clsIndex + 1, rawIdentifier
 			.indexOf('('));
-		String[] paramStrings = rawIdentifier.substring(rawIdentifier.indexOf('(') +
+        var paramStrings = rawIdentifier.substring(rawIdentifier.indexOf('(') +
 			1, rawIdentifier.indexOf(')')).split("\\s*,\\s*");
-		Class<?>[] paramClasses = new Class<?>[paramStrings.length];
-		for (int i = 0; i < paramStrings.length; i++) {
+        var paramClasses = new Class<?>[paramStrings.length];
+		for (var i = 0; i < paramStrings.length; i++) {
 			paramClasses[i] = deriveType(identifier, paramStrings[i]);
 		}
 		return src.getMethod(methodString, paramClasses);
 	}
 
 	private Class<?> deriveOpType() {
-		List<Map<String, Object>> params = (List<Map<String, Object>>) yaml.get(
+        var params = (List<Map<String, Object>>) yaml.get(
 			"parameters");
-		for (int i = params.size() - 1; i >= 0; i--) {
+		for (var i = params.size() - 1; i >= 0; i--) {
 			var pMap = params.get(i);
 			switch (((String) pMap.get("parameter type"))) {
 				case "OUTPUT":
@@ -194,10 +194,10 @@ public class YAMLOpMethodInfo extends AbstractYAMLOpInfo implements OpInfo {
 	}
 
 	private static String sanitizeGenerics(String method) {
-		int nested = 0;
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < method.length(); i++) {
-			char c = method.charAt(i);
+        var nested = 0;
+        var sb = new StringBuilder();
+		for (var i = 0; i < method.length(); i++) {
+            var c = method.charAt(i);
 			if (c == '<') {
 				nested++;
 			}
@@ -223,9 +223,9 @@ public class YAMLOpMethodInfo extends AbstractYAMLOpInfo implements OpInfo {
 		}
 
 		// If the Op is not in the SciJava Ops Engine module, check visibility
-		Module methodModule = method.getDeclaringClass().getModule();
+        var methodModule = method.getDeclaringClass().getModule();
 		if (methodModule != YAMLOpMethodInfo.class.getModule()) {
-			String packageName = method.getDeclaringClass().getPackageName();
+            var packageName = method.getDeclaringClass().getPackageName();
 			if (!methodModule.isOpen(packageName, methodModule)) {
 				throw new UnreadableOpException(packageName);
 			}
@@ -234,25 +234,25 @@ public class YAMLOpMethodInfo extends AbstractYAMLOpInfo implements OpInfo {
 
 	private Struct createStruct(Map<String, Object> yaml) {
 		List<Member<?>> members = new ArrayList<>();
-		List<Map<String, Object>> params = (List<Map<String, Object>>) yaml.get(
+        var params = (List<Map<String, Object>>) yaml.get(
 			"parameters");
-		Parameter[] methodParams = method.getParameters();
+        var methodParams = method.getParameters();
 		// Skip any Op dependencies
 		// HACK - some components in RuntimeSafeMatchingRoutine expect dependencies
 		// to come last in the struct.
 		var fmts = FunctionalParameters.findFunctionalMethodTypes(OpMethodUtils
 			.getOpMethodType(deriveOpType(), method));
-		for (int i = 0; i < params.size(); i++) {
+		for (var i = 0; i < params.size(); i++) {
 			var pMap = params.get(i);
 			var fmt = fmts.get(i);
-			String name = (String) pMap.get("name");
-			String description = (String) pMap.get("description");
-			boolean nullable = (boolean) pMap.getOrDefault("nullable", false);
+            var name = (String) pMap.get("name");
+            var description = (String) pMap.get("description");
+            var nullable = (boolean) pMap.getOrDefault("nullable", false);
 			members.add(new SynthesizedParameterMember<>(fmt, name, !nullable,
 				description));
 		}
 
-		for (Parameter methodParam : methodParams) {
+		for (var methodParam : methodParams) {
 			if (!methodParam.isAnnotationPresent(OpDependency.class)) break;
 			members.add(new MethodParameterOpDependencyMember<>( //
 				methodParam.getName(), //

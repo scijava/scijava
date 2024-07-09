@@ -63,10 +63,10 @@ public class MorphologicalThinningStrategy extends
 	{
 
 		// Setup
-		final RandomAccess<BitType> access = randomAccess(accessible);
+		final var access = randomAccess(accessible);
 		access.setPosition(position);
 
-		final boolean[] vals = getNeighbourhood(access);
+		final var vals = getNeighbourhood(access);
 
 		// Depending on the current step of the cycle, we rotate the two Filters by
 		// 0, 90, 180 or 270 Degrees.

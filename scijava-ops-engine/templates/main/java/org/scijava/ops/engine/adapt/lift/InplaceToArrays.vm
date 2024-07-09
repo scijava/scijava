@@ -22,8 +22,8 @@ import org.scijava.ops.spi.OpCollection;
 public class InplaceToArrays$classGenerics.call($maxArity) implements OpCollection {
 
 	private int minLength(Object[]... arrays) {
-		int minLength = Integer.MAX_VALUE;
-		for (Object[] array : arrays)
+		var minLength = Integer.MAX_VALUE;
+		for (var array : arrays)
 			if (array.length < minLength) minLength = array.length;
 		return minLength;
 	}
@@ -34,8 +34,8 @@ public class InplaceToArrays$classGenerics.call($maxArity) implements OpCollecti
 	public final Function<$inplaceType.call($arity, $a)$generics.call($arity, $a), $inplaceType.call($arity, $a)$arrayGenerics.call($arity, $a)> liftInplace$inplaceSuffix.call($arity, $a) =
 		(inplace) -> {
 			return ($mutateParams.call($arity, $a)) -> {
-				int max = minLength($mutateParams.call($arity, $a));
-				for (int i = 0; i < max; i++) {
+				var max = minLength($mutateParams.call($arity, $a));
+				for (var i = 0; i < max; i++) {
 					inplace.mutate($arraysAtPosI.call($arity, $a));
 				}
 			};

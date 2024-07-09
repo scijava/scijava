@@ -49,13 +49,13 @@ public class CoocPXPlusY implements Function<double[][], double[]> {
 	@Override
 	public double[] apply(double[][] matrix) {
 
-		final int nrGrayLevels = matrix.length;
+		final var nrGrayLevels = matrix.length;
 
-		final double[] pxplusy = new double[2 * nrGrayLevels + 1];
+		final var pxplusy = new double[2 * nrGrayLevels + 1];
 
-		for (int k = 2; k <= 2 * nrGrayLevels; k++) {
-			for (int i = 0; i < nrGrayLevels; i++) {
-				for (int j = 0; j < nrGrayLevels; j++) {
+		for (var k = 2; k <= 2 * nrGrayLevels; k++) {
+			for (var i = 0; i < nrGrayLevels; i++) {
+				for (var j = 0; j < nrGrayLevels; j++) {
 					if (i + 1 + j + 1 == k) {
 						pxplusy[k] += matrix[i][j];
 					}

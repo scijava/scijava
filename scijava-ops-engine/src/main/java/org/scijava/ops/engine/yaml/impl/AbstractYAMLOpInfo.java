@@ -93,7 +93,7 @@ public abstract class AbstractYAMLOpInfo implements OpInfo {
 				" declares no names!");
 		}
 		// Trim names
-		for (int i = 0; i < names.size(); i++) {
+		for (var i = 0; i < names.size(); i++) {
 			names.set(i, names.get(i).trim());
 		}
 		// Return names
@@ -109,7 +109,7 @@ public abstract class AbstractYAMLOpInfo implements OpInfo {
 	protected double parsePriority() {
 		// Parse priority
 		if (yaml.containsKey("priority")) {
-			Object p = yaml.get("priority");
+            var p = yaml.get("priority");
 			if (p instanceof Number) return ((Number) p).doubleValue();
 			else if (p instanceof String) {
 				return Double.parseDouble((String) p);
@@ -151,7 +151,7 @@ public abstract class AbstractYAMLOpInfo implements OpInfo {
 	@Override
 	public boolean equals(final Object o) {
 		if (!(o instanceof YAMLOpMethodInfo)) return false;
-		final OpInfo that = (OpInfo) o;
+		final var that = (OpInfo) o;
 		return struct().equals(that.struct());
 	}
 

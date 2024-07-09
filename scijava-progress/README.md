@@ -16,7 +16,7 @@ public class HeavyCalculator implements Function<List<Integer>, List<Integer>> {
 	@Override
 	public List<Integer> apply(List<Integer> in) {
 		List<Integer> out = new ArrayList<>();
-		for(int i = 0; i < in.size(); i++) {
+		for(var i = 0; i < in.size(); i++) {
 			out.add(doTheComputation(in.get(i)));
 		}
 		return out;
@@ -48,7 +48,7 @@ public class HeavyCalculator implements Function<List<Integer>, List<Integer>> {
 
 		// compute
 		List<Integer> out = new ArrayList<>();
-		for(int i = 0; i < in.size(); i++) {
+		for(var i = 0; i < in.size(); i++) {
 			out.add(doTheComputation(in.get(i)));
 			Progress.update();
 		}

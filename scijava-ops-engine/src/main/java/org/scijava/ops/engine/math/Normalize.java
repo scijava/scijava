@@ -60,8 +60,8 @@ public class Normalize {
 				throw new IllegalStateException("Min must be smaller than max.");
 			}
 
-			double min = Arrays.stream(t).min().getAsDouble();
-			double max = Arrays.stream(t).max().getAsDouble();
+            var min = Arrays.stream(t).min().getAsDouble();
+            var max = Arrays.stream(t).max().getAsDouble();
 			double nMin = newMin;
 			double nMax = newMax;
 

@@ -50,9 +50,9 @@ public abstract class AbstractApplyThresholdImg<T extends RealType<T>> extends
 
 	@Override
 	protected T computeThreshold(final Iterable<T> input) {
-		final Histogram1d<T> inputHistogram = createHistogramOp.apply(input);
-		final T threshold = input.iterator().next().createVariable();
-		final Computers.Arity1<Histogram1d<T>, T> computeThresholdOp =
+		final var inputHistogram = createHistogramOp.apply(input);
+		final var threshold = input.iterator().next().createVariable();
+		final var computeThresholdOp =
 			getComputeThresholdOp();
 		computeThresholdOp.compute(inputHistogram, threshold);
 		return threshold;

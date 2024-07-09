@@ -78,13 +78,13 @@ public abstract class ParamTaglet implements Taglet {
 	/** Reformats the tag content to match the HTML we want to have. */
 	private String tagToHTML(final DocTree tag) {
 		// Strip the leading tag string.
-		final String text = tag.toString().trim().replaceFirst("^@" + tagName, "")
+		final var text = tag.toString().trim().replaceFirst("^@" + tagName, "")
 			.trim();
 		// Extract parameter name.
-		final String paramName = text.replaceFirst("\\s.*", "");
+		final var paramName = text.replaceFirst("\\s.*", "");
 		// Extract parameter description, if any.
-		final String description = text.substring(paramName.length()).trim();
-		final String separator = description.isEmpty() ? "" : " - ";
+		final var description = text.substring(paramName.length()).trim();
+		final var separator = description.isEmpty() ? "" : " - ";
 		// Slap together the HTML.
 		return "<code>" + paramName + "</code>" + separator + description;
 	}

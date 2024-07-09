@@ -134,7 +134,7 @@ public final class TaskExecutors {
 	 * number of threads.
 	 */
 	public static TaskExecutor fixedThreadPool(int numThreads) {
-		ThreadFactory threadFactory = threadFactory(() -> singleThreaded());
+        var threadFactory = threadFactory(() -> singleThreaded());
 		return forExecutorService(Executors.newFixedThreadPool(numThreads,
 			threadFactory));
 	}
@@ -152,7 +152,7 @@ public final class TaskExecutors {
 	public static TaskExecutor nestedFixedThreadPool(int numThreads,
 		int numSubThreads)
 	{
-		ThreadFactory threadFactory = threadFactory(() -> fixedThreadPool(
+        var threadFactory = threadFactory(() -> fixedThreadPool(
 			numSubThreads));
 		return forExecutorService(Executors.newFixedThreadPool(numThreads,
 			threadFactory));
@@ -180,7 +180,7 @@ public final class TaskExecutors {
 		Supplier<TaskExecutor> taskExecutorFactory, ThreadFactory threadFactory)
 	{
 		return runnable -> threadFactory.newThread(() -> {
-			try (TaskExecutor taskExecutor = taskExecutorFactory.get()) {
+			try (var taskExecutor = taskExecutorFactory.get()) {
 				Parallelization.runWithExecutor(taskExecutor, runnable);
 			}
 		});
@@ -219,14 +219,14 @@ public final class TaskExecutors {
 		public void runAll(final List<Runnable> tasks) {
 			final List<Callable<Object>> callables = new ArrayList<>(tasks.size());
 			// use for-loop because stream with collect(Collectors.toList) is slow.
-			for (Runnable task : tasks)
+			for (var task : tasks)
 				callables.add(Executors.callable(task));
 			invokeAllIgnoreResults(callables);
 		}
 
 		@Override
 		public int suggestNumberOfTasks() {
-			int parallelism = getParallelism();
+            var parallelism = getParallelism();
 			return (parallelism == 1) ? 1 : (int) Math.min((long) parallelism * 4L,
 				(long) Integer.MAX_VALUE);
 		}
@@ -237,7 +237,7 @@ public final class TaskExecutors {
 		{
 			final List<Callable<Object>> callables = new ArrayList<>(parameters.size());
 			// use for-loop because stream with collect(Collectors.toList) is slow.
-			for (T parameter : parameters)
+			for (var parameter : parameters)
 				callables.add(() -> {
 					task.accept(parameter);
 					return null;
@@ -251,12 +251,12 @@ public final class TaskExecutors {
 		{
 			final List<Callable<R>> callables = new ArrayList<>(parameters.size());
 			// use for-loop because stream with collect(Collectors.toList) is slow.
-			for (T parameter : parameters)
+			for (var parameter : parameters)
 				callables.add(() -> task.apply(parameter));
 			try {
-				final List<Future<R>> futures = executorService.invokeAll(callables);
+				final var futures = executorService.invokeAll(callables);
 				final List<R> results = new ArrayList<>(futures.size());
-				for (Future<R> future : futures)
+				for (var future : futures)
 					results.add(future.get());
 				return results;
 			}
@@ -267,8 +267,8 @@ public final class TaskExecutors {
 
 		private void invokeAllIgnoreResults(final List<Callable<Object>> callables) {
 			try {
-				final List<Future<Object>> futures = executorService.invokeAll(callables);
-				for (Future<Object> future : futures)
+				final var futures = executorService.invokeAll(callables);
+				for (var future : futures)
 					future.get();
 			}
 			catch (InterruptedException | ExecutionException e) {
@@ -284,7 +284,7 @@ public final class TaskExecutors {
 		 */
 		private RuntimeException unwrapExecutionException(Throwable e) {
 			if (e instanceof ExecutionException) {
-				final Throwable cause = e.getCause();
+				final var cause = e.getCause();
 				cause.setStackTrace(concatenate(cause.getStackTrace(), e
 					.getStackTrace()));
 				e = cause;
@@ -294,10 +294,10 @@ public final class TaskExecutors {
 		}
 
 		private <T> T[] concatenate(final T[] a, final T[] b) {
-			int aLen = a.length;
-			int bLen = b.length;
+            var aLen = a.length;
+            var bLen = b.length;
 			@SuppressWarnings("unchecked")
-			T[] c = (T[]) Array.newInstance(a.getClass().getComponentType(), aLen +
+            var c = (T[]) Array.newInstance(a.getClass().getComponentType(), aLen +
 				bLen);
 			System.arraycopy(a, 0, c, 0, aLen);
 			System.arraycopy(b, 0, c, aLen, bLen);
@@ -383,7 +383,7 @@ public final class TaskExecutors {
 			// Also revisit the submit/execute methods below.
 			// See https://github.com/imglib/imglib2/pull/269#discussion_r326855353
 			List<ForkJoinTask<T>> futures = new ArrayList<>(collection.size());
-			for (Callable<T> callable : collection)
+			for (var callable : collection)
 				futures.add(ForkJoinTask.adapt(callable));
 			ForkJoinTask.invokeAll(futures);
 			return Collections.unmodifiableList(futures);
@@ -419,7 +419,7 @@ public final class TaskExecutors {
 		}
 
 		private ForkJoinPool getPool() {
-			ForkJoinPool pool = ForkJoinTask.getPool();
+            var pool = ForkJoinTask.getPool();
 			return pool != null ? pool : ForkJoinPool.commonPool();
 		}
 	}
@@ -500,7 +500,7 @@ public final class TaskExecutors {
 
 		@Override
 		public void runAll(List<Runnable> tasks) {
-			for (Runnable task : tasks)
+			for (var task : tasks)
 				task.run();
 		}
 
@@ -508,7 +508,7 @@ public final class TaskExecutors {
 		public <T> void forEach(List<? extends T> parameters,
 								Consumer<? super T> task)
 		{
-			for (T value : parameters)
+			for (var value : parameters)
 				task.accept(value);
 		}
 
@@ -517,8 +517,8 @@ public final class TaskExecutors {
 										   Function<? super T, ? extends R> task)
 		{
 			final List<R> results = new ArrayList<>(parameters.size());
-			for (final T value : parameters) {
-				R result = task.apply(value);
+			for (final var value : parameters) {
+                var result = task.apply(value);
 				results.add(result);
 			}
 			return results;

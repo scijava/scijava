@@ -62,8 +62,8 @@ public class DefaultEccentricity implements
 	@Override
 	public void compute(final Polygon2D input, final DoubleType eccentricity) {
 
-		final double a = majorAxisFunc.apply(input).get() / 2.0;
-		final double b = minorAxisFunc.apply(input).get() / 2.0;
+		final var a = majorAxisFunc.apply(input).get() / 2.0;
+		final var b = minorAxisFunc.apply(input).get() / 2.0;
 
 		eccentricity.set(Math.sqrt(1 - Math.pow(b / a, 2)));
 	}

@@ -57,7 +57,7 @@ public class OpTypes {
 
 		We will showcase each of the types below.
 		 */
-		OpEnvironment ops = OpEnvironment.build();
+        var ops = OpEnvironment.build();
 
 		/**
 		 * The most basic category of Ops are Functions. Function Ops encapsulate
@@ -75,7 +75,7 @@ public class OpTypes {
 
 		ops.register(new SampleFunction());
 
-		BiFunction<Double, Double, Double> sumOp = ops //
+        var sumOp = ops //
 			// Look for a "math.add" op
 			.op("tutorial.add") //
 			// There should be two Double inputs
@@ -88,7 +88,7 @@ public class OpTypes {
 		/*
 		To execute a Function, call the "apply" method with our two Double inputs.
 		 */
-		Double onePlusTwo = sumOp.apply(1., 2.);
+        var onePlusTwo = sumOp.apply(1., 2.);
 		System.out.println("One plus Two is " + onePlusTwo);
 
 		/*
@@ -101,16 +101,16 @@ public class OpTypes {
 
 		The request for a Computer is very similar to the request for a Function:
 		 */
-		Computers.Arity2<double[], Double, double[]> powerOp = ops //
+        var powerOp = ops //
 			// Look for a "math.power" Op
 			.op("math.power") //
 			.inType(double[].class, Double.class) //
 			.outType(double[].class) //
 			.computer();
 
-		double[] bases = new double[] { 1, 2, 3, 4 };
-		double exponent = 2.;
-		double[] powers = new double[4];
+        var bases = new double[] { 1, 2, 3, 4 };
+        var exponent = 2.;
+        var powers = new double[4];
 
 		/*
 		Inplace Ops improve on the performance of Computers by directly mutating
@@ -122,7 +122,7 @@ public class OpTypes {
 		Note that the INDEX of the mutable input is specified in the
 		 */
 
-		Inplaces.Arity4_1<RandomAccessibleInterval<BitType>, Interval, Shape, Integer> openOp =
+        var openOp =
 			ops.op("morphology.open") //
 				.inType(new Nil<RandomAccessibleInterval<BitType>>()
 				{}, Nil.of(Interval.class), Nil.of(Shape.class), Nil.of(Integer.class))

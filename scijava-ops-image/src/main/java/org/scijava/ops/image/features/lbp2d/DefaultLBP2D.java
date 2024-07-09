@@ -71,26 +71,26 @@ public class DefaultLBP2D<I extends RealType<I>> implements
 	public ArrayList<LongType> apply(RandomAccessibleInterval<I> input,
 		Integer distance, Integer histogramSize)
 	{
-		ArrayList<LongType> output = new ArrayList<>();
+        var output = new ArrayList<LongType>();
 
 		if (input.numDimensions() != 2) throw new IllegalArgumentException(
 			"Only 2 dimensional images allowed!");
-		ArrayList<LongType> numberList = new ArrayList<>();
+        var numberList = new ArrayList<LongType>();
 		RandomAccess<I> raInput = Views.extendZero(input).randomAccess();
-		final Cursor<I> cInput = Views.flatIterable(input).cursor();
-		final ClockwiseDistanceNeighborhoodIterator<I> cNeigh =
-			new ClockwiseDistanceNeighborhoodIterator<>(raInput, distance);
+		final var cInput = Views.flatIterable(input).cursor();
+		final var cNeigh =
+			new ClockwiseDistanceNeighborhoodIterator<I>(raInput, distance);
 
 		while (cInput.hasNext()) {
 			cInput.next();
-			double centerValue = cInput.get().getRealDouble();
+            var centerValue = cInput.get().getRealDouble();
 
-			int resultBinaryValue = 0;
+            var resultBinaryValue = 0;
 
 			cNeigh.reset();
 			while (cNeigh.hasNext()) {
-				double nValue = cNeigh.next().getRealDouble();
-				int pos = cNeigh.getIndex();
+                var nValue = cNeigh.next().getRealDouble();
+                var pos = cNeigh.getIndex();
 				if (nValue >= centerValue) {
 					resultBinaryValue |= 1 << pos;
 				}
@@ -98,8 +98,8 @@ public class DefaultLBP2D<I extends RealType<I>> implements
 			numberList.add(new LongType(resultBinaryValue));
 		}
 
-		Histogram1d<LongType> hist = histOp.apply(numberList, histogramSize);
-		Iterator<LongType> c = hist.iterator();
+        var hist = histOp.apply(numberList, histogramSize);
+        var c = hist.iterator();
 		while (c.hasNext()) {
 			output.add(new LongType(c.next().get()));
 		}

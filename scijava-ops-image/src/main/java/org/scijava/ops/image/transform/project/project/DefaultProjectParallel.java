@@ -70,9 +70,9 @@ public class DefaultProjectParallel<T, V> implements
 
 		LoopBuilder.setImages(output, Intervals.positions(output)).multiThreaded()
 			.forEachChunk(chunk -> {
-				RandomAccess<T> chunkRA = input.randomAccess();
+                var chunkRA = input.randomAccess();
 				chunk.forEachPixel((pixel, position) -> {
-					for (int d = 0; d < input.numDimensions(); d++) {
+					for (var d = 0; d < input.numDimensions(); d++) {
 						if (d != dim) {
 							chunkRA.setPosition(position.getIntPosition(d - (d > dim ? 1
 								: 0)), d);

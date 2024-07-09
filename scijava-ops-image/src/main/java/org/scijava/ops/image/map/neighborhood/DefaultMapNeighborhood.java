@@ -66,8 +66,8 @@ public class DefaultMapNeighborhood<I, O> implements
 		final IterableInterval<O> output)
 	{
 		// TODO can we do this through a mapper?
-		Cursor<Neighborhood<I>> inCursor = shape.neighborhoodsSafe(input).cursor();
-		Cursor<O> outCursor = output.cursor();
+        var inCursor = shape.neighborhoodsSafe(input).cursor();
+        var outCursor = output.cursor();
 		while (outCursor.hasNext()) {
 			outCursor.fwd();
 			inCursor.fwd();

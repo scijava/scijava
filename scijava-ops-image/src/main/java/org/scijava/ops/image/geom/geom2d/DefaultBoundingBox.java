@@ -55,12 +55,12 @@ public class DefaultBoundingBox implements Function<Polygon2D, Polygon2D> {
 	 */
 	@Override
 	public Polygon2D apply(final Polygon2D input) {
-		double min_x = Double.POSITIVE_INFINITY;
-		double max_x = Double.NEGATIVE_INFINITY;
-		double min_y = Double.POSITIVE_INFINITY;
-		double max_y = Double.NEGATIVE_INFINITY;
+        var min_x = Double.POSITIVE_INFINITY;
+        var max_x = Double.NEGATIVE_INFINITY;
+        var min_y = Double.POSITIVE_INFINITY;
+        var max_y = Double.NEGATIVE_INFINITY;
 
-		for (final RealLocalizable rl : GeomUtils.vertices(input)) {
+		for (final var rl : GeomUtils.vertices(input)) {
 			if (rl.getDoublePosition(0) < min_x) {
 				min_x = rl.getDoublePosition(0);
 			}

@@ -80,10 +80,10 @@ public class ComputeLocalBernsenThreshold<T extends RealType<T>> implements
 		final Double contrastThreshold, final Double halfMaxValue,
 		final Function<Iterable<T>, Pair<T, T>> minMaxOp, final BitType output)
 	{
-		final Pair<T, T> outputs = minMaxOp.apply(inputNeighborhood);
-		final double minValue = outputs.getA().getRealDouble();
-		final double maxValue = outputs.getB().getRealDouble();
-		final double midGrey = (maxValue + minValue) / 2.0;
+		final var outputs = minMaxOp.apply(inputNeighborhood);
+		final var minValue = outputs.getA().getRealDouble();
+		final var maxValue = outputs.getB().getRealDouble();
+		final var midGrey = (maxValue + minValue) / 2.0;
 
 		if ((maxValue - minValue) < contrastThreshold) {
 			output.set(midGrey >= halfMaxValue);

@@ -77,17 +77,17 @@ public class DefaultSmallestEnclosingRectangle implements
 
 		List<RealLocalizable> out = new ArrayList<>();
 
-		for (RealLocalizable RealPoint : GeomUtils.vertices(inPoly)) {
+		for (var RealPoint : GeomUtils.vertices(inPoly)) {
 
 			// double angleInRadians = Math.toRadians(angleInDegrees);
-			double cosTheta = Math.cos(angle);
-			double sinTheta = Math.sin(angle);
+            var cosTheta = Math.cos(angle);
+            var sinTheta = Math.sin(angle);
 
-			double x = cosTheta * (RealPoint.getDoublePosition(0) - center
+            var x = cosTheta * (RealPoint.getDoublePosition(0) - center
 				.getDoublePosition(0)) - sinTheta * (RealPoint.getDoublePosition(1) -
 					center.getDoublePosition(1)) + center.getDoublePosition(0);
 
-			double y = sinTheta * (RealPoint.getDoublePosition(0) - center
+            var y = sinTheta * (RealPoint.getDoublePosition(0) - center
 				.getDoublePosition(0)) + cosTheta * (RealPoint.getDoublePosition(1) -
 					center.getDoublePosition(1)) + center.getDoublePosition(1);
 
@@ -107,25 +107,25 @@ public class DefaultSmallestEnclosingRectangle implements
 		if (input == null) throw new IllegalArgumentException(
 			"Input cannot be null!");
 
-		Polygon2D ch = convexHullFunc.apply(input);
-		RealLocalizable cog = centroidFunc.apply(ch);
+        var ch = convexHullFunc.apply(input);
+        var cog = centroidFunc.apply(ch);
 
-		Polygon2D minBounds = input;
-		double minArea = Double.POSITIVE_INFINITY;
+        var minBounds = input;
+        var minArea = Double.POSITIVE_INFINITY;
 		// for each edge (i.e. line from P(i-1) to P(i)
-		for (int i = 1; i < ch.numVertices() - 1; i++) {
-			final double angle = Math.atan2(ch.vertex(i).getDoublePosition(1) - ch
+		for (var i = 1; i < ch.numVertices() - 1; i++) {
+			final var angle = Math.atan2(ch.vertex(i).getDoublePosition(1) - ch
 				.vertex(i - 1).getDoublePosition(1), ch.vertex(i).getDoublePosition(0) -
 					ch.vertex(i - 1).getDoublePosition(0));
 
 			// rotate the polygon in such a manner that the line has an angle of 0
-			final Polygon2D rotatedPoly = rotate(ch, -angle, cog);
+			final var rotatedPoly = rotate(ch, -angle, cog);
 
 			// get the bounds
-			final Polygon2D bounds = boundingBoxFunc.apply(rotatedPoly);
+			final var bounds = boundingBoxFunc.apply(rotatedPoly);
 
 			// calculate the area of the bounds
-			final double area = areaFunc.apply(bounds).get();
+			final var area = areaFunc.apply(bounds).get();
 
 			// if the area of the bounds is smaller, rotate it to match the
 			// original polygon and save it.
@@ -136,19 +136,19 @@ public class DefaultSmallestEnclosingRectangle implements
 		}
 
 		// edge (n-1) to 0
-		final double angle = Math.atan2(ch.vertex(0).getDoublePosition(1) - ch
+		final var angle = Math.atan2(ch.vertex(0).getDoublePosition(1) - ch
 			.vertex(ch.numVertices() - 1).getDoublePosition(1), ch.vertex(0)
 				.getDoublePosition(0) - ch.vertex(ch.numVertices() - 1)
 					.getDoublePosition(0));
 
 		// rotate the polygon in such a manner that the line has an angle of 0
-		final Polygon2D rotatedPoly = rotate(ch, -angle, cog);
+		final var rotatedPoly = rotate(ch, -angle, cog);
 
 		// get the bounds
-		final Polygon2D bounds = boundingBoxFunc.apply(rotatedPoly);
+		final var bounds = boundingBoxFunc.apply(rotatedPoly);
 
 		// calculate the area of the bounds
-		final double area = areaFunc.apply(bounds).get();
+		final var area = areaFunc.apply(bounds).get();
 
 		// if the area of the bounds is smaller, rotate it to match the
 		// original polygon and save it.

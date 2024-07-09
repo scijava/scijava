@@ -128,7 +128,7 @@ public class FitResults {
 	 * @return A clone of the current instance.
 	 */
 	public FitResults copy() {
-		FitResults newResults = new FitResults();
+        var newResults = new FitResults();
 		newResults.ltAxis = ltAxis;
 		newResults.retCode = retCode;
 		newResults.retCodeMap = retCodeMap;

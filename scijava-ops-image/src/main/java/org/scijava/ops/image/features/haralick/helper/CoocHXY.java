@@ -58,27 +58,27 @@ public class CoocHXY implements Function<double[][], double[]> {
 	 */
 	@Override
 	public double[] apply(double[][] matrix) {
-		double hx = 0.0d;
-		double hy = 0.0d;
-		double hxy1 = 0.0d;
-		double hxy2 = 0.0d;
+        var hx = 0.0d;
+        var hy = 0.0d;
+        var hxy1 = 0.0d;
+        var hxy2 = 0.0d;
 
-		final int nrGrayLevels = matrix.length;
+		final var nrGrayLevels = matrix.length;
 
-		final double[] px = coocPXFunc.apply(matrix);
-		final double[] py = coocPYFunc.apply(matrix);
+		final var px = coocPXFunc.apply(matrix);
+		final var py = coocPYFunc.apply(matrix);
 
-		for (int i = 0; i < px.length; i++) {
+		for (var i = 0; i < px.length; i++) {
 			hx += px[i] * Math.log(px[i] + EPSILON);
 		}
 		hx = -hx;
 
-		for (int j = 0; j < py.length; j++) {
+		for (var j = 0; j < py.length; j++) {
 			hy += py[j] * Math.log(py[j] + EPSILON);
 		}
 		hy = -hy;
-		for (int i = 0; i < nrGrayLevels; i++) {
-			for (int j = 0; j < nrGrayLevels; j++) {
+		for (var i = 0; i < nrGrayLevels; i++) {
+			for (var j = 0; j < nrGrayLevels; j++) {
 				hxy1 += matrix[i][j] * Math.log(px[i] * py[j] + EPSILON);
 				hxy2 += px[i] * py[j] * Math.log(px[i] * py[j] + EPSILON);
 			}

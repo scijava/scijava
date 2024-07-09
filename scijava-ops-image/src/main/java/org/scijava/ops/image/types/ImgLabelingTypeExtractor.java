@@ -57,16 +57,16 @@ public class ImgLabelingTypeExtractor extends
 	@Override
 	protected Type[] getTypeParameters(TypeReifier r, ImgLabeling<?, ?> object) {
 		// o.firstElement will return a LabelingType
-		Type labelingType = r.reify(object.firstElement());
+        var labelingType = r.reify(object.firstElement());
 		// sanity check
 		if (!(labelingType instanceof ParameterizedType))
 			throw new IllegalArgumentException(
 				"ImgLabeling is not of a LabelingType");
 		// get type arg of labelingType
-		ParameterizedType pType = (ParameterizedType) labelingType;
-		Type mappingType = pType.getActualTypeArguments()[0];
+        var pType = (ParameterizedType) labelingType;
+        var mappingType = pType.getActualTypeArguments()[0];
 		// otherwise n == 1
-		Type elementType = r.reify(Views.iterable(object.getSource())
+        var elementType = r.reify(Views.iterable(object.getSource())
 			.firstElement());
 		return new Type[] { mappingType, elementType };
 	}

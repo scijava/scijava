@@ -57,7 +57,7 @@ public class IterableHarmonicMean<I extends RealType<I>, O extends RealType<O>>
 	public void compute(final Iterable<I> input, final O harmonicMean) {
 		double size = 0;
 		double sumOfInverses = 0;
-		for (final I in : input) {
+		for (final var in : input) {
 			size++;
 			sumOfInverses += 1.0d / in.getRealDouble();
 		}

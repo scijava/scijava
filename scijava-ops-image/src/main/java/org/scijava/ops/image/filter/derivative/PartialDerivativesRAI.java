@@ -70,13 +70,13 @@ public class PartialDerivativesRAI<T extends RealType<T>> implements
 		RandomAccessibleInterval<T> input)
 	{
 		List<RandomAccessibleInterval<T>> derivatives = new ArrayList<>();
-		for (int i = 0; i < input.numDimensions(); i++) {
-			RandomAccessibleInterval<T> derivative = imgCreator.apply(input);
+		for (var i = 0; i < input.numDimensions(); i++) {
+            var derivative = imgCreator.apply(input);
 			derivativeFunction.compute(input, i, derivative);
 			derivatives.add(derivative);
 		}
 
-		RandomAccessibleInterval<T> stacked = Views.stack(derivatives);
+        var stacked = Views.stack(derivatives);
 		return Views.collapseReal(stacked);
 	}
 }

@@ -53,7 +53,7 @@ public class Power implements OpCollection {
 	@OpField(names = NAMES, params = "array, power, resultArray")
 	public static final Computers.Arity2<double[], Double, double[]> MathPointwisePowerDoubleArrayComputer =
 		(in, pow, out) -> {
-			for (int i = 0; i < in.length; i++)
+			for (var i = 0; i < in.length; i++)
 				out[i] = Math.pow(in[i], pow);
 		};
 

@@ -79,41 +79,41 @@ public class RidgeDetectionMetadata {
 		final Computers.Arity3<RandomAccessibleInterval<DoubleType>, double[], int[], RandomAccessibleInterval<DoubleType>> partialDerivativeOp)
 	{
 		// convert input to doubleType
-		final RandomAccessibleInterval<DoubleType> converted = createOp.apply(input,
+		final var converted = createOp.apply(input,
 			new DoubleType());
 		convertOp.compute(input, converted);
 
 		// create dimensions array for p and n values images, later used for setting
 		// positions for their randomAccesses
-		final long[] valuesArr = new long[input.numDimensions() + 1];
-		for (int d = 0; d < input.numDimensions(); d++)
+		final var valuesArr = new long[input.numDimensions() + 1];
+		for (var d = 0; d < input.numDimensions(); d++)
 			valuesArr[d] = input.dimension(d);
 		valuesArr[valuesArr.length - 1] = 2;
 
 		// create metadata images and randomAccesses
 		pValues = (Img<DoubleType>) createOp.apply(new FinalDimensions(valuesArr),
 			new DoubleType());
-		final RandomAccess<DoubleType> pRA = pValues.randomAccess();
+		final var pRA = pValues.randomAccess();
 		nValues = (Img<DoubleType>) createOp.apply(new FinalDimensions(valuesArr),
 			new DoubleType());
-		final RandomAccess<DoubleType> nRA = nValues.randomAccess();
+		final var nRA = nValues.randomAccess();
 		gradients = (Img<DoubleType>) createOp.apply(input, new DoubleType());
-		final RandomAccess<DoubleType> gradientsRA = gradients.randomAccess();
+		final var gradientsRA = gradients.randomAccess();
 
 		// create a cursor of the input to direct all of the randomAccesses.
-		final Cursor<T> cursor = Views.iterable(input).localizingCursor();
+		final var cursor = Views.iterable(input).localizingCursor();
 
 		// create partial derivative images, randomAccesses
 		x = copyOp.apply(converted);
-		final RandomAccess<DoubleType> xRA = x.randomAccess();
+		final var xRA = x.randomAccess();
 		y = copyOp.apply(converted);
-		final RandomAccess<DoubleType> yRA = y.randomAccess();
+		final var yRA = y.randomAccess();
 		xx = copyOp.apply(converted);
-		final RandomAccess<DoubleType> xxRA = xx.randomAccess();
+		final var xxRA = xx.randomAccess();
 		xy = copyOp.apply(converted);
-		final RandomAccess<DoubleType> xyRA = xy.randomAccess();
+		final var xyRA = xy.randomAccess();
 		yy = copyOp.apply(converted);
-		final RandomAccess<DoubleType> yyRA = yy.randomAccess();
+		final var yyRA = yy.randomAccess();
 
 		// fill partial derivative images with gaussian derivative convolutions
 		partialDerivativeOp.compute(converted, new double[] { sigma, sigma },
@@ -139,15 +139,15 @@ public class RidgeDetectionMetadata {
 			yyRA.setPosition(cursor);
 
 			// Get all of the values needed for the point.
-			final double rx = xRA.get().getRealDouble();
-			final double ry = yRA.get().getRealDouble();
-			final double rxx = xxRA.get().getRealDouble();
-			final double rxy = xyRA.get().getRealDouble();
-			final double ryy = yyRA.get().getRealDouble();
+			final var rx = xRA.get().getRealDouble();
+			final var ry = yRA.get().getRealDouble();
+			final var rxx = xxRA.get().getRealDouble();
+			final var rxy = xyRA.get().getRealDouble();
+			final var ryy = yyRA.get().getRealDouble();
 
 			// convolve image with 2D partial kernel,
 			// make a Hessian using the kernels
-			final Matrix hessian = new Matrix(input.numDimensions(), input
+			final var hessian = new Matrix(input.numDimensions(), input
 				.numDimensions());
 			hessian.set(0, 0, xxRA.get().getRealDouble());
 			hessian.set(0, 1, xyRA.get().getRealDouble());
@@ -155,26 +155,26 @@ public class RidgeDetectionMetadata {
 			hessian.set(1, 1, yyRA.get().getRealDouble());
 
 			// Jacobian rotation to eliminate rxy
-			final EigenvalueDecomposition e = hessian.eig();
-			final Matrix eigenvalues = e.getD();
-			final Matrix eigenvectors = e.getV();
+			final var e = hessian.eig();
+			final var eigenvalues = e.getD();
+			final var eigenvectors = e.getV();
 
 			// since the eigenvalues matrix is diagonal, find the index of the largest
 			// eigenvalue
-			final int index = Math.abs(eigenvalues.get(0, 0)) > Math.abs(eigenvalues
+			final var index = Math.abs(eigenvalues.get(0, 0)) > Math.abs(eigenvalues
 				.get(1, 1)) ? 0 : 1;
 
 			// get (nx, ny), i.e. the components of a vector perpendicular to our
 			// line, with length of one.
-			final double nx = eigenvectors.get(0, index);
-			final double ny = eigenvectors.get(1, index);
+			final var nx = eigenvectors.get(0, index);
+			final var ny = eigenvectors.get(1, index);
 
 			// obtain (px, py), the point in subpixel space where the first
 			// directional derivative vanishes.
-			final double t = -1 * (rx * nx + ry * ny) / (rxx * nx * nx + 2 * rxy *
+			final var t = -1 * (rx * nx + ry * ny) / (rxx * nx * nx + 2 * rxy *
 				nx * ny + ryy * ny * ny);
-			final double px = t * nx;
-			final double py = t * ny;
+			final var px = t * nx;
+			final var py = t * ny;
 
 			// so long as the absolute values of px and py are below 0.5, this point
 			// is a line point.
@@ -203,7 +203,7 @@ public class RidgeDetectionMetadata {
 
 				// the eigenvalue is equal to the gradient at that pixel. If a large
 				// negative, we are on a line. Otherwise 0.
-				final double gradient = eigenvalues.get(index, index) < -smallMax ? Math
+				final var gradient = eigenvalues.get(index, index) < -smallMax ? Math
 					.abs(eigenvalues.get(index, index)) : 0;
 
 				// set the gradient

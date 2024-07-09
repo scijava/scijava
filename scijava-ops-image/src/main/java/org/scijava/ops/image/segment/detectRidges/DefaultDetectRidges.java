@@ -105,22 +105,22 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 		List<RealPoint> points, int octant, double lastnx, double lastny,
 		double lastpx, double lastpy, Double lowerThreshold)
 	{
-		Point currentPos = new Point(gradientRA);
+        var currentPos = new Point(gradientRA);
 		// variables for the best line point of the three.
-		Point salientPoint = new Point(gradientRA);
+        var salientPoint = new Point(gradientRA);
 		double salientnx = 0;
 		double salientny = 0;
 		double salientpx = 0;
 		double salientpy = 0;
-		double bestSalience = Double.MAX_VALUE;
-		boolean lastPointInLine = true;
+        var bestSalience = Double.MAX_VALUE;
+        var lastPointInLine = true;
 		// check the three possible points that could continue the line, starting at
 		// the octant after the given octant and rotating clockwise around the
 		// current pixel.
-		double lastAngle = RidgeDetectionUtils.getAngle(lastnx, lastny);
+        var lastAngle = RidgeDetectionUtils.getAngle(lastnx, lastny);
 
-		for (int i = 1; i < 4; i++) {
-			int[] modifier = RidgeDetectionUtils.getOctantCoords(octant + i);
+		for (var i = 1; i < 4; i++) {
+            var modifier = RidgeDetectionUtils.getOctantCoords(octant + i);
 			gradientRA.move(modifier[0], 0);
 			gradientRA.move(modifier[1], 1);
 			// make sure that we only do the calculations if there is a line point
@@ -128,20 +128,20 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 			if (gradientRA.get()
 				.get() > lowerThreshold /* && isMaxRA.get().get() > 0 */)
 			{
-				long[] vectorArr = { gradientRA.getLongPosition(0), gradientRA
-					.getLongPosition(1), 0 };
+                var vectorArr = new long[]{gradientRA.getLongPosition(0), gradientRA
+                        .getLongPosition(1), 0};
 				nRA.setPosition(vectorArr);
-				double nx = nRA.get().get();
+                var nx = nRA.get().get();
 				nRA.fwd(2);
-				double ny = nRA.get().get();
+                var ny = nRA.get().get();
 				pRA.setPosition(vectorArr);
-				double px = pRA.get().get();
+                var px = pRA.get().get();
 				pRA.fwd(2);
-				double py = pRA.get().get();
-				double currentAngle = RidgeDetectionUtils.getAngle(nx, ny);
-				double subpixelDiff = Math.sqrt(Math.pow(px - lastpx, 2) + Math.pow(py -
+                var py = pRA.get().get();
+                var currentAngle = RidgeDetectionUtils.getAngle(nx, ny);
+                var subpixelDiff = Math.sqrt(Math.pow(px - lastpx, 2) + Math.pow(py -
 					lastpy, 2));
-				double angleDiff = Math.abs(currentAngle - lastAngle);
+                var angleDiff = Math.abs(currentAngle - lastAngle);
 				lastPointInLine = false;
 				// A salient line point will have the smallest combination of these
 				// numbers relative to other potential line points.
@@ -183,7 +183,7 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 			// vector by 180 degrees for the purposes of this detector. We set the
 			// threshold for angle fixing just above 90 degrees since any lower would
 			// prevent ridges curving.
-			double potentialGradient = RidgeDetectionUtils.getAngle(salientnx,
+            var potentialGradient = RidgeDetectionUtils.getAngle(salientnx,
 				salientny);
 			// we increase any angles too close to zero since, for example, having one
 			// angle at 5 degrees and another at 355 would not satisfy the conditional
@@ -230,21 +230,21 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 		if (input.numDimensions() != 2) throw new IllegalArgumentException(
 			"Input image must be of two dimensions!");
 
-		double sigma = (width / (2 * Math.sqrt(3)));
+        var sigma = (width / (2 * Math.sqrt(3)));
 
 		// generate the metadata images
-		RidgeDetectionMetadata ridgeDetectionMetadata = new RidgeDetectionMetadata(
+        var ridgeDetectionMetadata = new RidgeDetectionMetadata(
 			input, sigma, lowerThreshold, higherThreshold, convertOp, createOp,
 			copyOp, partialDerivativeOp);
 
 		// retrieve the metadata images
-		Img<DoubleType> p_values = ridgeDetectionMetadata.getPValues();
-		Img<DoubleType> n_values = ridgeDetectionMetadata.getNValues();
-		Img<DoubleType> gradients = ridgeDetectionMetadata.getGradients();
+        var p_values = ridgeDetectionMetadata.getPValues();
+        var n_values = ridgeDetectionMetadata.getNValues();
+        var gradients = ridgeDetectionMetadata.getGradients();
 
 		// create RandomAccesses for the metadata images
-		OutOfBoundsConstantValueFactory<DoubleType, RandomAccessibleInterval<DoubleType>> oscvf =
-			new OutOfBoundsConstantValueFactory<>(new DoubleType(0));
+        var oscvf =
+			new OutOfBoundsConstantValueFactory<DoubleType, RandomAccessibleInterval<DoubleType>>(new DoubleType(0));
 		RandomAccess<DoubleType> pRA = oscvf.create(p_values);
 		RandomAccess<DoubleType> nRA = oscvf.create(n_values);
 		RandomAccess<DoubleType> gradientRA = oscvf.create(gradients);
@@ -262,20 +262,20 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 			List<RealPoint> points = new ArrayList<>();
 
 			// get all of the necessary metadata from the image.
-			long[] eigenvectorPos = { gradientRA.getLongPosition(0), gradientRA
-				.getLongPosition(1), 0 };
+            var eigenvectorPos = new long[]{gradientRA.getLongPosition(0), gradientRA
+                    .getLongPosition(1), 0};
 
 			// obtain the n-values
 			nRA.setPosition(eigenvectorPos);
-			double eigenx = nRA.get().getRealDouble();
+            var eigenx = nRA.get().getRealDouble();
 			nRA.fwd(2);
-			double eigeny = nRA.get().getRealDouble();
+            var eigeny = nRA.get().getRealDouble();
 
 			// obtain the p-values
 			pRA.setPosition(eigenvectorPos);
-			double px = pRA.get().getRealDouble();
+            var px = pRA.get().getRealDouble();
 			pRA.fwd(2);
-			double py = pRA.get().getRealDouble();
+            var py = pRA.get().getRealDouble();
 
 			// start the list by adding the current point, which is the most line-like
 			// point on the polyline
@@ -303,7 +303,7 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 			// turn the list of points into a polyline, add to output list. If the
 			// list has fewer vertices than the parameter, then we do not report it.
 			if (points.size() > ridgeLengthMin) {
-				DefaultWritablePolyline pline = new DefaultWritablePolyline(points);
+                var pline = new DefaultWritablePolyline(points);
 				lines.add(pline);
 			}
 			// find the next max absolute value

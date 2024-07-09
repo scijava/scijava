@@ -67,7 +67,7 @@ public class ReducedOpInfo implements OpInfo {
 		this.paramsReduced = paramsReduced;
 		this.hints = srcInfo.declaredHints().plus(BaseOpHints.Reduction.FORBIDDEN);
 
-		RetypingRequest r = retypingRequest();
+        var r = retypingRequest();
 		this.struct = Structs.from(r, reducedOpType, new OpResizingMemberParser());
 	}
 
@@ -102,12 +102,12 @@ public class ReducedOpInfo implements OpInfo {
 	 *         of this {@link ReducedOpInfo}
 	 */
 	private RetypingRequest mutableOutputOpRetypingRequest() {
-		List<Member<?>> inputs = srcInfo.inputs();
+        var inputs = srcInfo.inputs();
 		// We need n - paramsReduced - 1 pure inputs
-		int retainedPureInputs = inputs.size() - paramsReduced - 1;
+        var retainedPureInputs = inputs.size() - paramsReduced - 1;
 		List<FunctionalMethodType> newFmts = new ArrayList<>();
-		int addedPureInputs = 0;
-		for (Member<?> m : srcInfo.inputs()) {
+        var addedPureInputs = 0;
+		for (var m : srcInfo.inputs()) {
 			// if pure input, add only if we haven't added enough pure inputs
 			if (!m.isOutput() && addedPureInputs < retainedPureInputs) {
 				newFmts.add(new FunctionalMethodType(m));
@@ -131,10 +131,10 @@ public class ReducedOpInfo implements OpInfo {
 	 *         of this {@link ReducedOpInfo}
 	 */
 	private RetypingRequest pureOutputOpRetypingRequest() {
-		List<Member<?>> inputs = srcInfo.inputs();
+        var inputs = srcInfo.inputs();
 		// Of the n inputs in srcInfo, we need to keep n-paramsReduced of them.
 		long retainedPureInputs = inputs.size() - paramsReduced;
-		List<FunctionalMethodType> newFmts = inputs.stream() //
+        var newFmts = inputs.stream() //
 			.limit(retainedPureInputs) //
 			.map(FunctionalMethodType::new) //
 			.collect(Collectors.toList());
@@ -181,9 +181,9 @@ public class ReducedOpInfo implements OpInfo {
 
 	@Override
 	public StructInstance<?> createOpInstance(List<?> dependencies) {
-		final Object op = srcInfo.createOpInstance(dependencies).object();
+		final var op = srcInfo.createOpInstance(dependencies).object();
 		try {
-			Object reducedOp = ReductionUtils.javassistOp(op, this);
+            var reducedOp = ReductionUtils.javassistOp(op, this);
 			return struct().createInstance(reducedOp);
 		}
 		catch (Throwable ex) {
@@ -215,7 +215,7 @@ public class ReducedOpInfo implements OpInfo {
 	@Override
 	public String id() {
 		// declaration
-		StringBuilder sb = new StringBuilder(IMPL_DECLARATION);
+        var sb = new StringBuilder(IMPL_DECLARATION);
 		// params reduced
 		sb.append(PARAMS_REDUCED);
 		sb.append(paramsReduced());

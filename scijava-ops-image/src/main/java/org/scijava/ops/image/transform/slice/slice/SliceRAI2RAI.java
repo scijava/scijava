@@ -72,15 +72,15 @@ public class SliceRAI2RAI<I, O> implements
 			dropSingleDimensions = true;
 		}
 
-		SlicesII<I> slicedInput = new SlicesII<>(input, axisIndices,
+        var slicedInput = new SlicesII<I>(input, axisIndices,
 			dropSingleDimensions);
-		SlicesII<O> slicedOutput = new SlicesII<>(output, axisIndices,
+        var slicedOutput = new SlicesII<O>(output, axisIndices,
 			dropSingleDimensions);
 
 		// TODO: can we make this more efficient?
-		Cursor<RandomAccessibleInterval<I>> slicedInputCursor = slicedInput
+        var slicedInputCursor = slicedInput
 			.cursor();
-		Cursor<RandomAccessibleInterval<O>> slicedOutputCursor = slicedOutput
+        var slicedOutputCursor = slicedOutput
 			.cursor();
 		while (slicedInputCursor.hasNext()) {
 			op.compute(slicedInputCursor.next(), slicedOutputCursor.next());

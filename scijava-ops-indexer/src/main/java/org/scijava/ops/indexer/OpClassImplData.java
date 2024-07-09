@@ -73,24 +73,24 @@ class OpClassImplData extends OpImplData {
 				" has a functional method without javadoc!");
 			return;
 		}
-		String[] sections = blockSeparator.split(fMethodDoc);
+        var sections = blockSeparator.split(fMethodDoc);
 		var paramTypes = fMethod.getParameters().iterator();
 
-		int expNoParams = fMethod.getParameters().size();
-		int expNoReturns = fMethod.getReturnType() instanceof NoType ? 0 : 1;
+        var expNoParams = fMethod.getParameters().size();
+        var expNoReturns = fMethod.getReturnType() instanceof NoType ? 0 : 1;
 		int noParams = 0, noReturns = 0;
 
-		for (String section : sections) {
-			String[] elements = tagElementSeparator.split(section, 2);
+		for (var section : sections) {
+            var elements = tagElementSeparator.split(section, 2);
 			switch (elements[0]) {
 				case "@param": {
 					noParams++;
-					String[] foo = tagElementSeparator.split(elements[1], 2);
-					String name = foo[0];
-					String description = foo[1];
+                    var foo = tagElementSeparator.split(elements[1], 2);
+                    var name = foo[0];
+                    var description = foo[1];
 					if (paramTypes.hasNext()) {
 						var pType = paramTypes.next();
-						String type = pType.asType().toString();
+                        var type = pType.asType().toString();
 						params.add(new OpParameter(name, type, ProcessingUtils.ioType(
 							description), description, isNullable(pType, description)));
 					}
@@ -103,9 +103,9 @@ class OpClassImplData extends OpImplData {
 				}
 				case "@return": {
 					noReturns++;
-					String name = "output";
-					String description = elements[1];
-					String type = fMethod.getReturnType().toString();
+                    var name = "output";
+                    var description = elements[1];
+                    var type = fMethod.getReturnType().toString();
 					params.add(new OpParameter(name, type, OpParameter.IO_TYPE.OUTPUT,
 						description, false));
 					break;
@@ -141,7 +141,7 @@ class OpClassImplData extends OpImplData {
 		var parent = source.getEnclosingElement();
 		// handle inner classes
 		while (parent.getKind() == ElementKind.CLASS) {
-			int badPeriod = srcString.lastIndexOf('.');
+            var badPeriod = srcString.lastIndexOf('.');
 			srcString = srcString.substring(0, badPeriod) + '$' + srcString.substring(
 				badPeriod + 1);
 			parent = parent.getEnclosingElement();

@@ -67,9 +67,9 @@ public class OpRetypingMemberParser implements
 	 */
 	@Override
 	public List<Member<?>> parse(RetypingRequest source, Type structType) {
-		List<Member<?>> original = source.struct().members();
-		List<FunctionalMethodType> newFmts = source.newFmts();
-		List<Member<?>> ios = original.stream().filter(m -> m.isInput() || m
+        var original = source.struct().members();
+        var newFmts = source.newFmts();
+        var ios = original.stream().filter(m -> m.isInput() || m
 			.isOutput()).collect(Collectors.toList());
 		if (ios.size() == newFmts.size()) return strictConversion(original,
 			newFmts);
@@ -83,7 +83,7 @@ public class OpRetypingMemberParser implements
 		List<Member<?>> newMembers = IntStream.range(0, newFmts.size()).boxed().map(
 			foo -> mapToMember(foo, newFmts.get(foo))).collect(Collectors.toList());
 		// Add any non-I/O members (e.g. dependencies)
-		for (Member<?> m : original) {
+		for (var m : original) {
 			if (!m.isInput() && !m.isOutput()) {
 				newMembers.add(m);
 			}
@@ -96,7 +96,7 @@ public class OpRetypingMemberParser implements
 
 			@Override
 			public String key() {
-				ItemIO ioType = fmt.itemIO();
+                var ioType = fmt.itemIO();
 				if (ioType == ItemIO.INPUT) return "in" + i + 1;
 				else if (ioType == ItemIO.CONTAINER) return "container";
 				else if (ioType == ItemIO.MUTABLE) return "mutable";
@@ -124,12 +124,12 @@ public class OpRetypingMemberParser implements
 	private List<Member<?>> strictConversion(List<Member<?>> originalMembers,
 		List<FunctionalMethodType> newFmts)
 	{
-		FunctionalMethodType outputFmt = newFmts.stream().filter(fmt -> fmt
+        var outputFmt = newFmts.stream().filter(fmt -> fmt
 			.itemIO() == ItemIO.OUTPUT || fmt.itemIO() == ItemIO.MUTABLE || fmt
 				.itemIO() == ItemIO.CONTAINER).findFirst().get();
 		List<Member<?>> newMembers = new ArrayList<>();
-		int inputIndex = 0;
-		for (Member<?> m : originalMembers) {
+        var inputIndex = 0;
+		for (var m : originalMembers) {
 			if (m.isInput()) {
 				m = ConvertedParameterMember.from(m, newFmts.get(inputIndex++));
 			}

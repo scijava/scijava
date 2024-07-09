@@ -66,7 +66,7 @@ public final class AnnotationUtils {
 	public static <A extends Annotation> A getMethodParameterAnnotation(
 		Method method, int i, Class<A> annotationClass)
 	{
-		AnnotatedType[] params = method.getAnnotatedParameterTypes();
+        var params = method.getAnnotatedParameterTypes();
 		if (i >= params.length) {
 			return null;
 		}

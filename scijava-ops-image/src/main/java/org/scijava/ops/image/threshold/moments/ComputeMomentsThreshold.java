@@ -55,7 +55,7 @@ public class ComputeMomentsThreshold<T extends RealType<T>> extends
 	 */
 	@Override
 	public long computeBin(final Histogram1d<T> hist) {
-		final long[] histogram = hist.toLongArray();
+		final var histogram = hist.toLongArray();
 		return computeBin(histogram);
 	}
 
@@ -71,21 +71,21 @@ public class ComputeMomentsThreshold<T extends RealType<T>> extends
 	 */
 	public static long computeBin(final long[] histogram) {
 		double total = 0;
-		final double m0 = 1.0;
+		final var m0 = 1.0;
 		double m1 = 0.0, m2 = 0.0, m3 = 0.0, sum = 0.0, p0 = 0.0;
 		double cd, c0, c1, z0, z1; /* auxiliary variables */
-		int threshold = -1;
+        var threshold = -1;
 
-		final double[] histo = new double[histogram.length];
+		final var histo = new double[histogram.length];
 
-		for (int i = 0; i < histogram.length; i++)
+		for (var i = 0; i < histogram.length; i++)
 			total += histogram[i];
 
-		for (int i = 0; i < histogram.length; i++)
+		for (var i = 0; i < histogram.length; i++)
 			histo[i] = histogram[i] / total; // normalised histogram
 
 		/* Calculate the first, second, and third order moments */
-		for (int i = 0; i < histogram.length; i++) {
+		for (var i = 0; i < histogram.length; i++) {
 			m1 += i * histo[i];
 			m2 += i * i * histo[i];
 			m3 += i * i * i * histo[i];
@@ -108,7 +108,7 @@ public class ComputeMomentsThreshold<T extends RealType<T>> extends
 		// The threshold is the gray-level closest
 		// to the p0-tile of the normalized histogram
 		sum = 0;
-		for (int i = 0; i < histogram.length; i++) {
+		for (var i = 0; i < histogram.length; i++) {
 			sum += histo[i];
 			if (sum > p0) {
 				threshold = i;

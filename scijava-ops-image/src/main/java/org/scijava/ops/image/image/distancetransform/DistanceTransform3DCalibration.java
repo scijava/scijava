@@ -61,14 +61,14 @@ public final class DistanceTransform3DCalibration {
 
 		// tempValues stores the integer values of the first phase, i.e. the
 		// first two scans
-		final double[][][] tempValues = new double[(int) in.dimension(0)][(int) out
+		final var tempValues = new double[(int) in.dimension(0)][(int) out
 			.dimension(1)][(int) out.dimension(2)];
 
 		// first phase
 		final List<Runnable> list = new ArrayList<>();
 
-		for (int z = 0; z < in.dimension(2); z++) {
-			for (int y = 0; y < in.dimension(1); y++) {
+		for (var z = 0; z < in.dimension(2); z++) {
+			for (var y = 0; y < in.dimension(1); y++) {
 				list.add(new Phase1Runnable3DCal<>(tempValues, in, y, z, calibration));
 			}
 		}
@@ -78,10 +78,10 @@ public final class DistanceTransform3DCalibration {
 		list.clear();
 
 		// second phase
-		final double[][][] tempValues_new = new double[(int) in.dimension(
+		final var tempValues_new = new double[(int) in.dimension(
 			0)][(int) out.dimension(1)][(int) out.dimension(2)];
-		for (int z = 0; z < in.dimension(2); z++) {
-			for (int x = 0; x < in.dimension(0); x++) {
+		for (var z = 0; z < in.dimension(2); z++) {
+			for (var x = 0; x < in.dimension(0); x++) {
 				list.add(new Phase2Runnable3DCal<>(tempValues, tempValues_new, out, x,
 					z, calibration));
 			}
@@ -90,8 +90,8 @@ public final class DistanceTransform3DCalibration {
 		Parallelization.getTaskExecutor().runAll(list);
 
 		// third phase
-		for (int x = 0; x < in.dimension(0); x++) {
-			for (int y = 0; y < in.dimension(1); y++) {
+		for (var x = 0; x < in.dimension(0); x++) {
+			for (var y = 0; y < in.dimension(1); y++) {
 
 				list.add(new Phase3Runnable3DCal<>(tempValues_new, out, x, y,
 					calibration));
@@ -138,7 +138,7 @@ class Phase1Runnable3DCal<B extends BooleanType<B>> implements Runnable {
 		else {
 			tempValues[0][y][z] = infinite;
 		}
-		for (int x = 1; x < width; x++) {
+		for (var x = 1; x < width; x++) {
 			raIn.setPosition(x, 0);
 			if (!raIn.get().get()) {
 				tempValues[x][y][z] = 0;
@@ -148,7 +148,7 @@ class Phase1Runnable3DCal<B extends BooleanType<B>> implements Runnable {
 			}
 		}
 		// scan2
-		for (int x = width - 2; x >= 0; x--) {
+		for (var x = width - 2; x >= 0; x--) {
 			if (tempValues[x + 1][y][z] < tempValues[x][y][z]) {
 				tempValues[x][y][z] = calibration[0] + tempValues[x + 1][y][z];
 			}
@@ -194,14 +194,14 @@ class Phase2Runnable3DCal<T extends RealType<T>> implements Runnable {
 
 	@Override
 	public void run() {
-		final int[] s = new int[height];
-		final int[] t = new int[height];
-		int q = 0;
+		final var s = new int[height];
+		final var t = new int[height];
+        var q = 0;
 		s[0] = 0;
 		t[0] = 0;
 
 		// scan 3
-		for (int u = 1; u < height; u++) {
+		for (var u = 1; u < height; u++) {
 			while (q >= 0 && distancefunc(t[q], s[q],
 				tempValues[xPos][s[q]][zPos]) > distancefunc(t[q], u,
 					tempValues[xPos][u][zPos]))
@@ -213,7 +213,7 @@ class Phase2Runnable3DCal<T extends RealType<T>> implements Runnable {
 				s[0] = u;
 			}
 			else {
-				final int w = 1 + sep(s[q], u, tempValues[xPos][u][zPos],
+				final var w = 1 + sep(s[q], u, tempValues[xPos][u][zPos],
 					tempValues[xPos][s[q]][zPos]);
 				if (w < height) {
 					q++;
@@ -224,7 +224,7 @@ class Phase2Runnable3DCal<T extends RealType<T>> implements Runnable {
 		}
 
 		// scan 4
-		for (int u = height - 1; u >= 0; u--) {
+		for (var u = height - 1; u >= 0; u--) {
 			tempValues_new[xPos][u][zPos] = distancefunc(u, s[q],
 				tempValues[xPos][s[q]][zPos]);
 			if (u == t[q]) {
@@ -271,14 +271,14 @@ class Phase3Runnable3DCal<T extends RealType<T>> implements Runnable {
 
 	@Override
 	public void run() {
-		final int[] s = new int[deep];
-		final int[] t = new int[deep];
-		int q = 0;
+		final var s = new int[deep];
+		final var t = new int[deep];
+        var q = 0;
 		s[0] = 0;
 		t[0] = 0;
 
 		// scan 3
-		for (int u = 1; u < deep; u++) {
+		for (var u = 1; u < deep; u++) {
 			while (q >= 0 && distancefunc(t[q], s[q],
 				tempValues[xPos][yPos][s[q]]) > distancefunc(t[q], u,
 					tempValues[xPos][yPos][u]))
@@ -290,7 +290,7 @@ class Phase3Runnable3DCal<T extends RealType<T>> implements Runnable {
 				s[0] = u;
 			}
 			else {
-				final int w = 1 + sep(s[q], u, tempValues[xPos][yPos][u],
+				final var w = 1 + sep(s[q], u, tempValues[xPos][yPos][u],
 					tempValues[xPos][yPos][s[q]]);
 				if (w < deep) {
 					q++;
@@ -301,8 +301,8 @@ class Phase3Runnable3DCal<T extends RealType<T>> implements Runnable {
 		}
 
 		// scan 4
-		final RandomAccess<T> ra = raOut.randomAccess();
-		for (int u = deep - 1; u >= 0; u--) {
+		final var ra = raOut.randomAccess();
+		for (var u = deep - 1; u >= 0; u--) {
 			ra.setPosition(xPos, 0);
 			ra.setPosition(yPos, 1);
 			ra.setPosition(u, 2);

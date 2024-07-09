@@ -174,7 +174,7 @@ public class Hints {
 	@Override
 	public boolean equals(Object that) {
 		if (!(that instanceof Hints)) return false;
-		Hints thatHints = (Hints) that;
+        var thatHints = (Hints) that;
 		return hints.equals(thatHints.hints);
 	}
 

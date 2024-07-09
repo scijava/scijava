@@ -66,14 +66,14 @@ public class DefaultContrastFeature<I extends RealType<I>, O extends RealType<O>
 			"Only 2 dimensional images allowed!");
 
 		// Get fourth moment about mean
-		double m4 = m4Op.apply(input).getRealDouble();
-		double var = varOp.apply(input).getRealDouble();
-		double std = stdOp.apply(input).getRealDouble();
+        var m4 = m4Op.apply(input).getRealDouble();
+        var var = varOp.apply(input).getRealDouble();
+        var std = stdOp.apply(input).getRealDouble();
 
-		double l4 = m4 / (var * var);
+        var l4 = m4 / (var * var);
 
 		// contrast
-		double fCon = std / Math.pow(l4, 0.25);
+        var fCon = std / Math.pow(l4, 0.25);
 		output.setReal(fCon);
 	}
 

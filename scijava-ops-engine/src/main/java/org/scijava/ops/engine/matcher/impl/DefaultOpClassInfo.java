@@ -134,7 +134,7 @@ public class DefaultOpClassInfo implements OpInfo {
 			// TODO: Consider whether this is really the best way to
 			// instantiate the op class here. No framework usage?
 			// E.g., what about pluginService.createInstance?
-			Constructor<?> ctor = opClass.getDeclaredConstructor();
+            var ctor = opClass.getDeclaredConstructor();
 			ctor.setAccessible(true);
 			op = ctor.newInstance();
 		}
@@ -148,8 +148,8 @@ public class DefaultOpClassInfo implements OpInfo {
 				.getName() + "' Ensure that the Op has a no-args constructor.", e);
 		}
 		final var dependencyMembers = Infos.dependencies(this);
-		for (int i = 0; i < dependencyMembers.size(); i++) {
-			final OpDependencyMember<?> dependencyMember = dependencyMembers.get(i);
+		for (var i = 0; i < dependencyMembers.size(); i++) {
+			final var dependencyMember = dependencyMembers.get(i);
 			try {
 				dependencyMember.createInstance(op).set(dependencies.get(i));
 			}
@@ -177,7 +177,7 @@ public class DefaultOpClassInfo implements OpInfo {
 	@Override
 	public boolean equals(final Object o) {
 		if (!(o instanceof DefaultOpClassInfo)) return false;
-		final OpInfo that = (OpInfo) o;
+		final var that = (OpInfo) o;
 		return struct().equals(that.struct());
 	}
 

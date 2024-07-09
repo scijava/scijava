@@ -61,10 +61,10 @@ public class CoocStdX implements Function<double[][], DoubleType> {
 
 		double res = 0;
 
-		final double meanx = coocMeanXFunc.apply(input).get();
-		final double[] px = coocPXFunc.apply(input);
+		final var meanx = coocMeanXFunc.apply(input).get();
+		final var px = coocPXFunc.apply(input);
 
-		for (int i = 0; i < px.length; i++) {
+		for (var i = 0; i < px.length; i++) {
 			res += (i - meanx) * (i - meanx) * px[i];
 		}
 

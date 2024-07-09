@@ -59,7 +59,7 @@ public class IterableMean<I extends RealType<I>, O extends RealType<O>>
 		double sum = 0;
 		double size = 0;
 
-		for (final I in : input) {
+		for (final var in : input) {
 			sum += in.getRealDouble();
 			size++;
 		}

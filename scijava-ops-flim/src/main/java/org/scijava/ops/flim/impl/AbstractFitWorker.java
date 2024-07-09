@@ -89,7 +89,7 @@ public abstract class AbstractFitWorker<I extends RealType<I>> implements
 		else {
 			fillStart = params.paramFree.length;
 		}
-		for (int i = fillStart; i < params.paramFree.length; i++) {
+		for (var i = fillStart; i < params.paramFree.length; i++) {
 			params.paramFree[i] = true;
 		}
 
@@ -105,9 +105,9 @@ public abstract class AbstractFitWorker<I extends RealType<I>> implements
 		// we want to copy a little bit more around the interval to correctly conv
 		// with
 		// instr
-		int instrLen = params.instr == null ? 0 : params.instr.length;
-		int prefixLen = Math.min(instrLen, params.fitStart);
-		int suffixLen = Math.min(instrLen, (int) params.transMap.dimension(
+        var instrLen = params.instr == null ? 0 : params.instr.length;
+        var prefixLen = Math.min(instrLen, params.fitStart);
+        var suffixLen = Math.min(instrLen, (int) params.transMap.dimension(
 			params.ltAxis) - params.fitEnd);
 		nDataTotal = prefixLen + nData + suffixLen;
 
@@ -123,17 +123,17 @@ public abstract class AbstractFitWorker<I extends RealType<I>> implements
 		if (params.restrain.equals(RestrainType.ECF_RESTRAIN_USER) &&
 			(params.restraintMin != null || params.restraintMax != null))
 		{
-			boolean[] restrain = new boolean[this.nParam];
-			float[] rMinOrig = params.restraintMin;
-			float[] rMaxOrig = params.restraintMax;
-			float[] rMin = new float[this.nParam];
-			float[] rMax = new float[this.nParam];
+            var restrain = new boolean[this.nParam];
+            var rMinOrig = params.restraintMin;
+            var rMaxOrig = params.restraintMax;
+            var rMin = new float[this.nParam];
+            var rMax = new float[this.nParam];
 
-			for (int i = 0; i < restrain.length; i++) {
+			for (var i = 0; i < restrain.length; i++) {
 				// only restrain the parameter if at least one of the restraints are
 				// valid (finite
 				// or inf)
-				boolean restrainCurrent = false;
+                var restrainCurrent = false;
 				if (rMinOrig != null && i < rMinOrig.length && !Float.isNaN(
 					rMinOrig[i]))
 				{

@@ -42,22 +42,22 @@ public class About {
 	private static String about(final Class<?> c, final String groupId,
 		final String artifactId)
 	{
-		final POM pom = POM.pom(c, groupId, artifactId);
-		final String version = Versions.of(c, groupId, artifactId);
-		final StringBuilder sb = new StringBuilder();
+		final var pom = POM.pom(c, groupId, artifactId);
+		final var version = Versions.of(c, groupId, artifactId);
+		final var sb = new StringBuilder();
 
-		final String projectName = pom.projectName();
+		final var projectName = pom.projectName();
 		if (projectName != null && !projectName.isEmpty()) sb.append(projectName);
 		else sb.append(groupId + ":" + artifactId);
 		if (version != null && !version.isEmpty()) sb.append(" v" + version);
 		sb.append("\n");
 
-		final String licenseName = pom.cdata("//project/licenses/license/name");
+		final var licenseName = pom.cdata("//project/licenses/license/name");
 		if (licenseName != null && !licenseName.isEmpty()) {
 			sb.append("Project license: " + licenseName + "\n");
 		}
 
-		final String projectURL = pom.projectURL();
+		final var projectURL = pom.projectURL();
 		if (projectURL != null && !projectURL.isEmpty()) {
 			sb.append("Project website: " + projectURL);
 		}

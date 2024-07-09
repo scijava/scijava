@@ -93,7 +93,7 @@ public final class Any implements Type {
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Any) || obj == null) return false;
-		Any other = (Any) obj;
+        var other = (Any) obj;
 
 		return equalBounds(getUpperBounds(), other.getUpperBounds()) &&
 			equalBounds(getLowerBounds(), other.getLowerBounds());
@@ -101,10 +101,10 @@ public final class Any implements Type {
 
 	@Override
 	public int hashCode() {
-		int hash = 0;
-		for (Type t : getUpperBounds())
+        var hash = 0;
+		for (var t : getUpperBounds())
 			hash ^= t.hashCode();
-		for (Type t : getLowerBounds())
+		for (var t : getLowerBounds())
 			hash ^= t.hashCode();
 		return hash;
 	}
@@ -112,10 +112,10 @@ public final class Any implements Type {
 	private boolean equalBounds(Type[] ours, Type[] theirs) {
 		if (ours.length != theirs.length) return false;
 
-		List<Type> ourList = Arrays.asList(ours);
-		List<Type> theirList = Arrays.asList(theirs);
+        var ourList = Arrays.asList(ours);
+        var theirList = Arrays.asList(theirs);
 
-		for (Type t : ourList) {
+		for (var t : ourList) {
 			if (!theirList.contains(t)) return false;
 		}
 

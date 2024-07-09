@@ -57,8 +57,8 @@ public class CoocMeanX implements Function<double[][], DoubleType> {
 	public DoubleType apply(double[][] input) {
 
 		double res = 0;
-		final double[] px = coocPXFunc.apply(input);
-		for (int i = 0; i < px.length; i++) {
+		final var px = coocPXFunc.apply(input);
+		for (var i = 0; i < px.length; i++) {
 			res += i * px[i];
 		}
 

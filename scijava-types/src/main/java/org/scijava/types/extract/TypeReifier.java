@@ -109,14 +109,14 @@ public interface TypeReifier {
 		}
 
 		// Otherwise, we'll need to look at the class
-		final Class<?> c = o.getClass();
+		final var c = o.getClass();
 		// NB TypeToken.getTypes() returns all subtypes before all supertypes.
 		// This means that if we write a TypeExtractor that works on a subtype
 		// and a TypeExtractor that will work on the supertype, we will always use
 		// the subtype TypeExtractor first because we'll encounter the subtype
 		// first.
 		for (final var token : TypeToken.of(c).getTypes()) {
-			Optional<TypeExtractor> opt = getExtractor(token.getRawType());
+            var opt = getExtractor(token.getRawType());
 			// If token has a TypeExtractor
 			if (opt.isPresent()) {
 				// Use it!
@@ -134,7 +134,7 @@ public interface TypeReifier {
 		}
 		// Otherwise parameterize with all Anys
 		final Map<TypeVariable<?>, Type> resolved = new HashMap<>();
-		for (final TypeVariable<?> typeVar : typeVars) {
+		for (final var typeVar : typeVars) {
 			resolved.putIfAbsent(typeVar, Any.class);
 		}
 		return Types.parameterize(c, resolved);

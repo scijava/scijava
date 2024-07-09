@@ -68,21 +68,21 @@ public class DefaultClusterProminence<T extends RealType<T>> extends
 		final Integer numGreyLevels, final Integer distance,
 		final MatrixOrientation orientation)
 	{
-		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels,
+		final var matrix = getCooccurrenceMatrix(input, numGreyLevels,
 			distance, orientation);
 
-		final int nrGrayLevels = matrix.length;
+		final var nrGrayLevels = matrix.length;
 
-		final double mux = coocMeanXFunc.apply(matrix).getRealDouble();
-		final double muy = coocMeanYFunc.apply(matrix).getRealDouble();
+		final var mux = coocMeanXFunc.apply(matrix).getRealDouble();
+		final var muy = coocMeanYFunc.apply(matrix).getRealDouble();
 
 		double res = 0;
-		for (int i = 0; i < nrGrayLevels; i++) {
-			for (int j = 0; j < nrGrayLevels; j++) {
+		for (var i = 0; i < nrGrayLevels; i++) {
+			for (var j = 0; j < nrGrayLevels; j++) {
 				res += Math.pow(i + j - mux - muy, 4) * matrix[i][j];
 			}
 		}
-		DoubleType output = new DoubleType();
+        var output = new DoubleType();
 		output.setReal(res);
 		return output;
 	}

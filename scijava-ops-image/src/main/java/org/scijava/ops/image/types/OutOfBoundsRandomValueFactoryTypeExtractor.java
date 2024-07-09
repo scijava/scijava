@@ -62,14 +62,14 @@ public class OutOfBoundsRandomValueFactoryTypeExtractor extends
 	{
 		Object elementObject;
 		try {
-			Field elementField = object.getClass().getDeclaredField("value");
+            var elementField = object.getClass().getDeclaredField("value");
 			elementField.setAccessible(true);
 			elementObject = elementField.get(object);
 		}
 		catch (Exception e) {
 			elementObject = new Any();
 		}
-		Type elementType = r.reify(elementObject);
+        var elementType = r.reify(elementObject);
 		// if we need the second type parameter, it can just be a
 		// randomAccessibleInterval of elementType.
 		Type raiType = Types.parameterize(RandomAccessibleInterval.class,

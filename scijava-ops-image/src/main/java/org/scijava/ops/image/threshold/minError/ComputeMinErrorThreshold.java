@@ -60,7 +60,7 @@ public class ComputeMinErrorThreshold<T extends RealType<T>> extends
 	 */
 	@Override
 	public long computeBin(final Histogram1d<T> hist) {
-		final long[] histogram = hist.toLongArray();
+		final var histogram = hist.toLongArray();
 		return computeBin(histogram);
 	}
 
@@ -80,8 +80,8 @@ public class ComputeMinErrorThreshold<T extends RealType<T>> extends
 	 */
 	public static long computeBin(final long[] histogram) {
 		// Initial estimate for the threshold is found with the MEAN algorithm.
-		int threshold = (int) ComputeMeanThreshold.computeBin(histogram);
-		int Tprev = -2;
+        var threshold = (int) ComputeMeanThreshold.computeBin(histogram);
+        var Tprev = -2;
 		double mu, nu, p, q, sigma2, tau2, w0, w1, w2, sqterm, temp;
 		// int counter=1;
 		while (threshold != Tprev) {

@@ -48,10 +48,10 @@ public class CoocPX implements Function<double[][], double[]> {
 	 */
 	@Override
 	public double[] apply(double[][] input) {
-		final int nrGrayLevels = input.length;
-		final double[] output = new double[nrGrayLevels];
-		for (int i = 0; i < nrGrayLevels; i++) {
-			for (int j = 0; j < nrGrayLevels; j++) {
+		final var nrGrayLevels = input.length;
+		final var output = new double[nrGrayLevels];
+		for (var i = 0; i < nrGrayLevels; i++) {
+			for (var j = 0; j < nrGrayLevels; j++) {
 				output[j] += input[i][j];
 			}
 		}

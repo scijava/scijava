@@ -93,11 +93,11 @@ public interface OpRequest {
 	// -- Object methods --
 
 	default String requestString() {
-		StringBuilder n = new StringBuilder(name() == null ? "" : "Name: \"" +
+        var n = new StringBuilder(name() == null ? "" : "Name: \"" +
 			name() + "\", Types: ");
 		n.append(type()).append("\n");
 		n.append("Input Types: \n");
-		for (Type arg : argTypes()) {
+		for (var arg : argTypes()) {
 			n.append("\t\t* ");
 			n.append(arg == null ? "" : arg.getTypeName());
 			n.append("\n");
@@ -113,7 +113,7 @@ public interface OpRequest {
 		if (this == obj) return true;
 		if (obj == null) return false;
 		if (getClass() != obj.getClass()) return false;
-		final OpRequest other = (OpRequest) obj;
+		final var other = (OpRequest) obj;
 		if (!Objects.equals(name(), other.name())) return false;
 		if (!Objects.equals(type(), other.type())) return false;
 		if (!Objects.equals(outType(), other.outType())) return false;

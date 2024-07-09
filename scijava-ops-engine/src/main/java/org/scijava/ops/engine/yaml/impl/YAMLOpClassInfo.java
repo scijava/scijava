@@ -115,23 +115,23 @@ public class YAMLOpClassInfo extends AbstractYAMLOpInfo {
 
 	private Struct createStruct(Map<String, Object> yaml) {
 		List<Member<?>> members = new ArrayList<>();
-		List<Map<String, Object>> params = (List<Map<String, Object>>) yaml.get(
+        var params = (List<Map<String, Object>>) yaml.get(
 			"parameters");
 		var fmts = FunctionalParameters.findFunctionalMethodTypes(cls);
-		for (int i = 0; i < params.size(); i++) {
+		for (var i = 0; i < params.size(); i++) {
 			var pMap = params.get(i);
 			var fmt = fmts.get(i);
-			String name = (String) pMap.get("name");
-			String description = (String) pMap.get("description");
-			boolean nullable = (boolean) pMap.getOrDefault("nullable", false);
+            var name = (String) pMap.get("name");
+            var description = (String) pMap.get("description");
+            var nullable = (boolean) pMap.getOrDefault("nullable", false);
 			members.add(new SynthesizedParameterMember<>(fmt, name, !nullable,
 				description));
 		}
 
 		// Add Op Dependencies
-		final List<Field> fields = Annotations.annotatedFields(cls,
+		final var fields = Annotations.annotatedFields(cls,
 			OpDependency.class);
-		for (final Field f : fields) {
+		for (final var f : fields) {
 			f.setAccessible(true);
 			if (Modifier.isFinal(f.getModifiers())) {
 				// Final fields are bad because they cannot be modified.
@@ -149,7 +149,7 @@ public class YAMLOpClassInfo extends AbstractYAMLOpInfo {
 	public StructInstance<?> createOpInstance(List<?> dependencies) {
 		final Object op;
 		try {
-			Constructor<?> ctor = cls.getDeclaredConstructor();
+            var ctor = cls.getDeclaredConstructor();
 			ctor.setAccessible(true);
 			op = ctor.newInstance();
 		}
@@ -161,8 +161,8 @@ public class YAMLOpClassInfo extends AbstractYAMLOpInfo {
 				.getName() + "' Ensure that the Op has a no-args constructor.", e);
 		}
 		final var dependencyMembers = Infos.dependencies(this);
-		for (int i = 0; i < dependencyMembers.size(); i++) {
-			final OpDependencyMember<?> dependencyMember = dependencyMembers.get(i);
+		for (var i = 0; i < dependencyMembers.size(); i++) {
+			final var dependencyMember = dependencyMembers.get(i);
 			try {
 				dependencyMember.createInstance(op).set(dependencies.get(i));
 			}

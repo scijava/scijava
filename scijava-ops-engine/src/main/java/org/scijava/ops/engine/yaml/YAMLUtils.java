@@ -45,7 +45,7 @@ public final class YAMLUtils {
 			throw new IllegalArgumentException("YAML map " + map +
 				" does not contain key " + key);
 		}
-		Object value = map.get(key);
+        var value = map.get(key);
 		if (!(value instanceof Map)) {
 			throw new IllegalArgumentException("YAML map " + map +
 				" has a non-map value for key " + key);

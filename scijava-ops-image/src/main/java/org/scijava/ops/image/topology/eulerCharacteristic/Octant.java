@@ -100,7 +100,7 @@ public class Octant<B extends BooleanType<B>> {
 
 	private void countForegroundNeighbors() {
 		foregroundNeighbors = 0;
-		for (boolean neighbor : neighborhood) {
+		for (var neighbor : neighborhood) {
 			if (neighbor) {
 				foregroundNeighbors++;
 			}

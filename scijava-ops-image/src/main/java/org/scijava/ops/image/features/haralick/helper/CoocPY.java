@@ -48,11 +48,11 @@ public class CoocPY implements Function<double[][], double[]> {
 	 */
 	@Override
 	public double[] apply(final double[][] matrix) {
-		final int nrGrayLevels = matrix.length;
+		final var nrGrayLevels = matrix.length;
 
-		final double[] px = new double[nrGrayLevels];
-		for (int i = 0; i < nrGrayLevels; i++) {
-			for (int j = 0; j < nrGrayLevels; j++) {
+		final var px = new double[nrGrayLevels];
+		for (var i = 0; i < nrGrayLevels; i++) {
+			for (var j = 0; j < nrGrayLevels; j++) {
 				px[i] += matrix[i][j];
 			}
 		}

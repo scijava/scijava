@@ -59,11 +59,11 @@ public class MergeSort {
 	 */
 	public long sort() {
 		long swaps = 0;
-		int n = data.length;
+        var n = data.length;
 		// There are merge sorts which perform in-place, but their runtime is worse
 		// than O(n log n)
-		int[] data2 = new int[n];
-		for (int step = 1; step < n; step <<= 1) {
+        var data2 = new int[n];
+		for (var step = 1; step < n; step <<= 1) {
 			int begin = 0, k = 0;
 			for (;;) {
 				int begin2 = begin + step, end = begin2 + step;
@@ -78,7 +78,7 @@ public class MergeSort {
 				// and perform merge, too
 				int i = begin, j = begin2;
 				while (i < begin2 && j < end) {
-					int compare = comparator.compare(data[i], data[j]);
+                    var compare = comparator.compare(data[i], data[j]);
 					if (compare > 0) {
 						swaps += (begin2 - i);
 						data2[k++] = data[j++];
@@ -104,7 +104,7 @@ public class MergeSort {
 			if (k < n) {
 				System.arraycopy(data, k, data2, k, n - k);
 			}
-			int[] swapIndex = data2;
+            var swapIndex = data2;
 			data2 = data;
 			data = swapIndex;
 		}

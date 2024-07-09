@@ -66,9 +66,9 @@ public class DefaultQuantile<I extends RealType<I>, N extends Number, O extends 
 				"Quantile must be between 0 and 1 (inclusive) but is " + quantile);
 		}
 
-		final ArrayList<Double> statistics = new ArrayList<>();
+		final var statistics = new ArrayList<Double>();
 
-		for (I i : input) {
+		for (var i : input) {
 			statistics.add(i.getRealDouble());
 		}
 
@@ -85,8 +85,8 @@ public class DefaultQuantile<I extends RealType<I>, N extends Number, O extends 
 	 */
 	static double select(final ArrayList<Double> array, final int k) {
 
-		int left = 0;
-		int right = array.size() - 1;
+        var left = 0;
+        var right = array.size() - 1;
 
 		while (true) {
 
@@ -99,7 +99,7 @@ public class DefaultQuantile<I extends RealType<I>, N extends Number, O extends 
 				return array.get(k);
 
 			}
-			final int middle = (left + right) >>> 1;
+			final var middle = (left + right) >>> 1;
 			swap(array, middle, left + 1);
 
 			if (array.get(left) > array.get(right)) {
@@ -114,8 +114,8 @@ public class DefaultQuantile<I extends RealType<I>, N extends Number, O extends 
 				swap(array, left, left + 1);
 			}
 
-			int i = left + 1;
-			int j = right;
+            var i = left + 1;
+            var j = right;
 			final double pivot = array.get(left + 1);
 
 			while (true) {

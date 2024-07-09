@@ -71,7 +71,7 @@ public interface InfoTreeGenerator extends Prioritized<InfoTreeGenerator> {
 	static InfoTreeGenerator findSuitableGenerator(String signature,
 		Collection<InfoTreeGenerator> generators)
 	{
-		List<InfoTreeGenerator> suitableGenerators = generators.stream() //
+        var suitableGenerators = generators.stream() //
 			.filter(g -> g.canGenerate(signature)) //
 			.sorted() //
 			.collect(Collectors.toList());
@@ -84,7 +84,7 @@ public interface InfoTreeGenerator extends Prioritized<InfoTreeGenerator> {
 	static InfoTree generateDependencyTree(OpEnvironment env, String subsignature,
 		Map<String, OpInfo> idMap, Collection<InfoTreeGenerator> generators)
 	{
-		InfoTreeGenerator genOpt = InfoTreeGenerator.findSuitableGenerator(
+        var genOpt = InfoTreeGenerator.findSuitableGenerator(
 			subsignature, generators);
 		return genOpt.generate(env, subsignature, idMap, generators);
 	}
@@ -100,10 +100,10 @@ public interface InfoTreeGenerator extends Prioritized<InfoTreeGenerator> {
 	 * @return a signature contained withing {@code signature}
 	 */
 	static String subSignatureFrom(String signature, int start) {
-		int depsStart = signature.indexOf(InfoTree.DEP_START_DELIM, start);
-		int depth = 0;
-		for (int i = depsStart; i < signature.length(); i++) {
-			char ch = signature.charAt(i);
+        var depsStart = signature.indexOf(InfoTree.DEP_START_DELIM, start);
+        var depth = 0;
+		for (var i = depsStart; i < signature.length(); i++) {
+            var ch = signature.charAt(i);
 			if (ch == InfoTree.DEP_START_DELIM) depth++;
 			else if (ch == InfoTree.DEP_END_DELIM) {
 				depth--;

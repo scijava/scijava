@@ -48,7 +48,7 @@ public final class Apps {
 	static {
 		// Get the class whose main method launched the application. The heuristic
 		// will fail if the main thread has terminated before this class loads.
-		final String className = mainClassName();
+		final var className = mainClassName();
 		mainClass = className == null ? null : Classes.load(className);
 	}
 
@@ -61,13 +61,13 @@ public final class Apps {
 	 * will fail if the main thread has terminated before this method is called.
 	 */
 	private static String mainClassName() {
-		final Map<Thread, StackTraceElement[]> traceMap = Thread
+		final var traceMap = Thread
 			.getAllStackTraces();
-		for (final Thread thread : traceMap.keySet()) {
+		for (final var thread : traceMap.keySet()) {
 			if (!"main".equals(thread.getName())) continue;
-			final StackTraceElement[] trace = traceMap.get(thread);
+			final var trace = traceMap.get(thread);
 			if (trace == null || trace.length == 0) continue;
-			final StackTraceElement element = trace[trace.length - 1];
+			final var element = trace[trace.length - 1];
 			return element.getClassName();
 		}
 		return null;
@@ -100,14 +100,14 @@ public final class Apps {
 	public static File baseDirectory(final String sysProp, final Class<?> c,
 		final String baseSubdirectory)
 	{
-		final String property = System.getProperty(sysProp);
+		final var property = System.getProperty(sysProp);
 		if (property != null) {
-			final File dir = new File(property);
+			final var dir = new File(property);
 			if (dir.isDirectory()) return dir;
 		}
 
 		// look for valid base directory relative to this class
-		final File basePath = Apps.baseDirectory(c, baseSubdirectory);
+		final var basePath = Apps.baseDirectory(c, baseSubdirectory);
 		if (basePath != null) return basePath;
 
 		// NB: Look for valid base directory relative to the main class which
@@ -117,8 +117,8 @@ public final class Apps {
 		// repository cache (~/.m2/repository), so the corePath will be null.
 		// However, the classes of the launching project will be located in
 		// target/classes, so we search up the tree from one of those.
-		final Class<?> mc = Apps.mainClass();
-		final File appPath = mc == null ? null : Apps.baseDirectory(mc);
+		final var mc = Apps.mainClass();
+		final var appPath = mc == null ? null : Apps.baseDirectory(mc);
 		if (appPath != null) return appPath;
 
 		// last resort: use current working directory
@@ -149,7 +149,7 @@ public final class Apps {
 		// see: http://stackoverflow.com/a/12733172/1207769
 
 		// step 1: convert Class to URL
-		final URL location = Classes.location(c);
+		final var location = Classes.location(c);
 
 		// step 2: convert URL to File
 		File baseFile;
@@ -236,7 +236,7 @@ public final class Apps {
 		final String baseSubdirectory)
 	{
 		if (classLocation == null) return null;
-		String path = classLocation.getAbsolutePath().replace('\\', '/');
+        var path = classLocation.getAbsolutePath().replace('\\', '/');
 
 		if (path.contains("/.m2/repository/")) {
 			// NB: The class is in a JAR in the Maven repository cache.
@@ -245,19 +245,19 @@ public final class Apps {
 		}
 
 		// check whether the class is in a Maven build directory
-		String basePrefix = "/";
+        var basePrefix = "/";
 		if (baseSubdirectory != null) basePrefix += baseSubdirectory + "/";
 
-		final String targetClassesSuffix = basePrefix + "target/classes";
-		final String targetTestClassesSuffix = basePrefix + "target/test-classes";
-		final String[] suffixes = { targetClassesSuffix, targetTestClassesSuffix };
-		for (final String suffix : suffixes) {
+		final var targetClassesSuffix = basePrefix + "target/classes";
+		final var targetTestClassesSuffix = basePrefix + "target/test-classes";
+		final var suffixes = new String[]{targetClassesSuffix, targetTestClassesSuffix};
+		for (final var suffix : suffixes) {
 			if (!path.endsWith(suffix)) continue;
 
 			// NB: The class is a file beneath a Maven build directory.
 			path = path.substring(0, path.length() - suffix.length());
 
-			File dir = new File(path);
+            var dir = new File(path);
 			if (baseSubdirectory == null) {
 				// NB: There is no hint as to the directory structure.
 				// So we scan up the tree to find the topmost pom.xml file.
@@ -270,19 +270,19 @@ public final class Apps {
 			return dir;
 		}
 
-		final Pattern pattern = Pattern.compile(".*(" + Pattern.quote(basePrefix +
+		final var pattern = Pattern.compile(".*(" + Pattern.quote(basePrefix +
 			"target/") + "[^/]*\\.jar)");
-		final Matcher matcher = pattern.matcher(path);
+		final var matcher = pattern.matcher(path);
 		if (matcher.matches()) {
 			// NB: The class is in the Maven build directory inside a JAR file
 			// ("target/[something].jar").
-			final int index = matcher.start(1);
+			final var index = matcher.start(1);
 			path = path.substring(0, index);
 			return new File(path);
 		}
 
 		if (path.endsWith(".jar")) {
-			final File jarDirectory = classLocation.getParentFile();
+			final var jarDirectory = classLocation.getParentFile();
 			// NB: The class is in a JAR file, which we assume is nested one level
 			// deep (i.e., directly beneath the application base directory).
 			return jarDirectory.getParentFile();

@@ -61,11 +61,11 @@ public final class Lambdas {
 		MethodHandle methodHandle, Class<?>[] capturedClasses,
 		Object[] capturedArgs) throws Throwable
 	{
-		MethodHandles.Lookup caller = MethodHandles.lookup();
+        var caller = MethodHandles.lookup();
 
 		// determine the method name used by the functionalInterface (e.g. for
 		// Consumer this name is "accept").
-		String[] invokedNames = Arrays.stream(functionalInterface
+        var invokedNames = Arrays.stream(functionalInterface
 			.getDeclaredMethods()) //
 			.filter(method -> Modifier.isAbstract(method.getModifiers())) //
 			.map(Method::getName) //
@@ -74,23 +74,23 @@ public final class Lambdas {
 			"The passed class is not a functional interface");
 		// see the LambdaMetafactory javadocs for explanations on these
 		// MethodTypes.
-		MethodType invokedType = MethodType.methodType(functionalInterface, //
+        var invokedType = MethodType.methodType(functionalInterface, //
 			capturedClasses //
 		);
-		MethodType methodType = methodHandle.type();
+        var methodType = methodHandle.type();
 		// Drop captured arguments
 		methodType = methodType.dropParameterTypes(0, capturedArgs.length);
 		// Box primitive parameter types
-		for (int i = 0; i < methodType.parameterCount(); i++) {
-			Class<?> paramType = methodType.parameterType(i);
+		for (var i = 0; i < methodType.parameterCount(); i++) {
+            var paramType = methodType.parameterType(i);
 			if (paramType.isPrimitive()) methodType = methodType.changeParameterType(
 				i, Classes.box(paramType));
 		}
-		Class<?> rType = methodType.returnType();
+        var rType = methodType.returnType();
 		if (rType.isPrimitive() && rType != void.class) rType = Classes.box(rType);
-		MethodType samMethodType = methodType.generic() //
+        var samMethodType = methodType.generic() //
 			.changeReturnType(rType == void.class ? rType : Object.class);
-		MethodHandle callSite = LambdaMetafactory.metafactory(//
+        var callSite = LambdaMetafactory.metafactory(//
 			caller, //
 			invokedNames[0], //
 			invokedType, //

@@ -84,26 +84,26 @@ public class DefaultHuMoment6<I extends RealType<I>, O extends RealType<O>>
 	public void computeMoment(final RandomAccessibleInterval<I> input,
 		final O output)
 	{
-		final O n02 = output.createVariable();
+		final var n02 = output.createVariable();
 		normalizedCentralMoment02Func.compute(input, n02);
-		final O n03 = output.createVariable();
+		final var n03 = output.createVariable();
 		normalizedCentralMoment03Func.compute(input, n03);
-		final O n11 = output.createVariable();
+		final var n11 = output.createVariable();
 		normalizedCentralMoment11Func.compute(input, n11);
-		final O n12 = output.createVariable();
+		final var n12 = output.createVariable();
 		normalizedCentralMoment12Func.compute(input, n12);
-		final O n20 = output.createVariable();
+		final var n20 = output.createVariable();
 		normalizedCentralMoment20Func.compute(input, n20);
-		final O n21 = output.createVariable();
+		final var n21 = output.createVariable();
 		normalizedCentralMoment21Func.compute(input, n21);
-		final O n30 = output.createVariable();
+		final var n30 = output.createVariable();
 		normalizedCentralMoment30Func.compute(input, n30);
 
 		// term11 = (n20 - n02)
-		final O term11 = n20.copy();
+		final var term11 = n20.copy();
 		term11.sub(n02);
 		// term12 = [(n30 + n12)^2 - (n21 + n03)^2]
-		final O term12 = n30.copy();
+		final var term12 = n30.copy();
 		term12.add(n12);
 		term12.mul(term12);
 		output.set(n21);
@@ -111,20 +111,20 @@ public class DefaultHuMoment6<I extends RealType<I>, O extends RealType<O>>
 		output.mul(output);
 		term12.sub(output);
 		// term1 = term11 * term12
-		final O term1 = term11.copy();
+		final var term1 = term11.copy();
 		term1.mul(term12);
 
 		// term21 = 4*n11
-		final O term21 = n11.copy();
+		final var term21 = n11.copy();
 		term21.mul(4);
 		// term22 = (n30 + n12)
-		final O term22 = n30.copy();
+		final var term22 = n30.copy();
 		term22.add(n12);
 		// term23 = (n21 + n03)
-		final O term23 = n21.copy();
+		final var term23 = n21.copy();
 		term23.add(n03);
 		// term2 = term21 * term22 * term23
-		final O term2 = term21.copy();
+		final var term2 = term21.copy();
 		term2.mul(term22);
 		term2.mul(term23);
 

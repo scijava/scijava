@@ -74,11 +74,11 @@ public class ShuffledView<T> extends AbstractInterval implements
 		this.blockSize = blockSize;
 
 		// compute some info about our block sizes
-		final int numDims = image.numDimensions();
+		final var numDims = image.numDimensions();
 		blockDims = new int[numDims];
 		long totalBlocks = 1;
-		for (int d = 0; d < numDims; d++) {
-			final long blockDim = image.dimension(d) / blockSize[d];
+		for (var d = 0; d < numDims; d++) {
+			final var blockDim = image.dimension(d) / blockSize[d];
 			if (blockDim * blockSize[d] != image.dimension(d)) {
 				throw new IllegalArgumentException("Image dimension #" + d +
 					" is not evenly divisible by block size:" + blockSize[d] +
@@ -108,7 +108,7 @@ public class ShuffledView<T> extends AbstractInterval implements
 
 	private void initializeBlocks() {
 		// generate the identity mapping of indices
-		for (int b = 0; b < blockIndices.length; b++)
+		for (var b = 0; b < blockIndices.length; b++)
 			blockIndices[b] = b;
 	}
 
@@ -153,17 +153,17 @@ public class ShuffledView<T> extends AbstractInterval implements
 		@Override
 		public T get() {
 			// Convert from image coordinates to block coordinates.
-			for (int d = 0; d < position.length; d++) {
+			for (var d = 0; d < position.length; d++) {
 				blockPos[d] = position[d] / blockSize[d];
 				blockOffset[d] = position[d] % blockSize[d];
 			}
 
 			// Convert N-D block coordinates to 1D block index.
-			final int blockIndex = IntervalIndexer.positionToIndex(blockPos,
+			final var blockIndex = IntervalIndexer.positionToIndex(blockPos,
 				blockDims);
 
 			// Map block index to shuffled block index.
-			final int shuffledBlockIndex = blockIndices[blockIndex];
+			final var shuffledBlockIndex = blockIndices[blockIndex];
 
 			// Now convert our 1D shuffled block index back to N-D block
 			// coordinates.
@@ -172,8 +172,8 @@ public class ShuffledView<T> extends AbstractInterval implements
 
 			// Finally, position the original image according to our shuffled
 			// position.
-			for (int d = 0; d < position.length; d++) {
-				final long pd = shuffledBlockPos[d] * blockSize[d] + blockOffset[d];
+			for (var d = 0; d < position.length; d++) {
+				final var pd = shuffledBlockPos[d] * blockSize[d] + blockOffset[d];
 				imageRA.setPosition(pd, d);
 			}
 			return imageRA.get();
@@ -194,8 +194,8 @@ public class ShuffledView<T> extends AbstractInterval implements
 	public static <T> RandomAccessibleInterval<T> cropAtMax(
 		final RandomAccessibleInterval<T> image, final int[] blockSize)
 	{
-		final long[] pos = new long[image.numDimensions()];
-		for (int d = 0; d < pos.length; d++) {
+		final var pos = new long[image.numDimensions()];
+		for (var d = 0; d < pos.length; d++) {
 			pos[d] = image.dimension(d) % blockSize[d];
 		}
 		return cropAt(image, blockSize, new Point(pos));
@@ -204,8 +204,8 @@ public class ShuffledView<T> extends AbstractInterval implements
 	public static <T> RandomAccessibleInterval<T> cropAtCenter(
 		final RandomAccessibleInterval<T> image, final int[] blockSize)
 	{
-		final long[] pos = new long[image.numDimensions()];
-		for (int d = 0; d < pos.length; d++) {
+		final var pos = new long[image.numDimensions()];
+		for (var d = 0; d < pos.length; d++) {
 			pos[d] = (image.dimension(d) % blockSize[d]) / 2;
 		}
 		return cropAt(image, blockSize, new Point(pos));
@@ -215,11 +215,11 @@ public class ShuffledView<T> extends AbstractInterval implements
 		final RandomAccessibleInterval<T> image, final int[] blockSize,
 		final Localizable offset)
 	{
-		final int numDims = image.numDimensions();
-		final long[] minsize = new long[numDims * 2];
-		for (int d = 0; d < numDims; d++) {
+		final var numDims = image.numDimensions();
+		final var minsize = new long[numDims * 2];
+		for (var d = 0; d < numDims; d++) {
 			minsize[d] = offset.getLongPosition(d);
-			final long shaveSize = image.dimension(d) % blockSize[d];
+			final var shaveSize = image.dimension(d) % blockSize[d];
 			minsize[numDims + d] = image.dimension(d) - shaveSize;
 		}
 		return Views.interval(image, FinalInterval.createMinSize(minsize));

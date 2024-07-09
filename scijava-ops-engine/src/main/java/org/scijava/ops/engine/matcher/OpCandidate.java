@@ -102,7 +102,7 @@ public class OpCandidate {
 	public static Type getReifiedType(OpRequest request, OpInfo info,
 		Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
-		Type exactSuperType = Types.superTypeOf(info.opType(), Types.raw(
+        var exactSuperType = Types.superTypeOf(info.opType(), Types.raw(
 			request.type()));
 		return Types.unroll(exactSuperType, typeVarAssigns);
 	}
@@ -187,10 +187,10 @@ public class OpCandidate {
 
 	/** Gets a descriptive status message in human readable form. */
 	public String getStatus() {
-		final StatusCode statusCode = getStatusCode();
+		final var statusCode = getStatusCode();
 		if (statusCode == null) return null;
 
-		final StringBuilder sb = new StringBuilder();
+		final var sb = new StringBuilder();
 		switch (statusCode) {
 			case MATCH:
 				sb.append("MATCH");
@@ -219,7 +219,7 @@ public class OpCandidate {
 			default:
 				return message;
 		}
-		final String msg = message;
+		final var msg = message;
 		if (msg != null) sb.append(": ").append(msg);
 
 		return sb.toString();
@@ -257,7 +257,7 @@ public class OpCandidate {
 	}
 
 	private Type[] padTypes(final OpCandidate candidate, Type[] types) {
-		final Object[] padded = padArgs(candidate, (Object[]) types);
+		final var padded = padArgs(candidate, (Object[]) types);
 		return Arrays.copyOf(padded, padded.length, Type[].class);
 	}
 
@@ -268,7 +268,7 @@ public class OpCandidate {
 		argName = "args";
 
 		int inputCount = 0, requiredCount = 0;
-		for (final Member<?> item : members) {
+		for (final var item : members) {
 			inputCount++;
 			if (!item.isRequired()) requiredCount++;
 		}
@@ -292,12 +292,12 @@ public class OpCandidate {
 		}
 
 		// pad nullable parameters with null (from right to left)
-		final int argsToPad = inputCount - args.length;
-		final int nullableCount = inputCount - requiredCount;
-		final int nullablesToFill = nullableCount - argsToPad;
-		final Object[] paddedArgs = new Object[inputCount];
+		final var argsToPad = inputCount - args.length;
+		final var nullableCount = inputCount - requiredCount;
+		final var nullablesToFill = nullableCount - argsToPad;
+		final var paddedArgs = new Object[inputCount];
 		int argIndex = 0, paddedIndex = 0, nullableIndex = 0;
-		for (final Member<?> item : members) {
+		for (final var item : members) {
 			if (!item.isRequired() && nullableIndex++ >= nullablesToFill) {
 				// skip this nullable parameter (pad with null)
 				paddedIndex++;

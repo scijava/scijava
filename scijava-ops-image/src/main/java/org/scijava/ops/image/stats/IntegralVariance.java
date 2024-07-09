@@ -65,40 +65,39 @@ public class IntegralVariance<I extends RealType<I>> implements
 	{
 		// computation according to
 		// https://en.wikipedia.org/wiki/Summed_area_table
-		final IntegralCursor<? extends Composite<I>> cursorS1 =
-			new IntegralCursor<>(input);
-		final int dimensions = input.numDimensions();
+		final var cursorS1 = new IntegralCursor<>(input);
+		final var dimensions = input.numDimensions();
 
 		// Compute \sum (-1)^{dim - ||cornerVector||_{1}} * I(x^{cornerVector})
-		final DoubleType sum1 = new DoubleType();
+		final var sum1 = new DoubleType();
 		sum1.setZero();
 
 		// Convert from input to return type
 		final Converter<I, DoubleType> conv = new RealDoubleConverter<>();
 
 		// Compute \sum (-1)^{dim - ||cornerVector||_{1}} * I(x^{cornerVector})
-		final DoubleType sum2 = new DoubleType();
+		final var sum2 = new DoubleType();
 		sum2.setZero();
 
-		final DoubleType valueAsDoubleType = new DoubleType();
+		final var valueAsDoubleType = new DoubleType();
 
 		while (cursorS1.hasNext()) {
-			final Composite<I> compositeValue = cursorS1.next();
-			final I value1 = compositeValue.get(0).copy();
+			final var compositeValue = cursorS1.next();
+			final var value1 = compositeValue.get(0).copy();
 			conv.convert(value1, valueAsDoubleType);
 
 			// Obtain the cursor position encoded as corner vector
-			final int cornerInteger1 = cursorS1.getCornerRepresentation();
+			final var cornerInteger1 = cursorS1.getCornerRepresentation();
 
 			// Determine if the value has to be added (factor==1) or subtracted
 			// (factor==-1)
-			final DoubleType factor = new DoubleType(Math.pow(-1.0d, dimensions -
+			final var factor = new DoubleType(Math.pow(-1.0d, dimensions -
 				IntegralMean.norm(cornerInteger1)));
 			valueAsDoubleType.mul(factor);
 
 			sum1.add(valueAsDoubleType);
 
-			final I value2 = compositeValue.get(1).copy();
+			final var value2 = compositeValue.get(1).copy();
 			conv.convert(value2, valueAsDoubleType);
 
 			// Determine if the value has to be added (factor==1) or subtracted
@@ -108,7 +107,7 @@ public class IntegralVariance<I extends RealType<I>> implements
 			sum2.add(valueAsDoubleType);
 		}
 
-		final int area = (int) Intervals.numElements(Intervals.expand(input, -1l));
+		final var area = (int) Intervals.numElements(Intervals.expand(input, -1l));
 
 		valueAsDoubleType.set(area); // NB: Reuse available DoubleType
 		sum1.mul(sum1);

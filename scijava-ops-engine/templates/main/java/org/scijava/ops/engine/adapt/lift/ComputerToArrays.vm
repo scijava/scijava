@@ -20,8 +20,8 @@ import org.scijava.ops.spi.OpCollection;
 public class ComputerToArrays$classGenerics.call($maxArity) implements OpCollection {
 
 	private int minLength(Object[]... arrays) {
-		int minLength = Integer.MAX_VALUE;
-		for (Object[] array : arrays)
+		var minLength = Integer.MAX_VALUE;
+		for (var array : arrays)
 			if (array.length < minLength) minLength = array.length;
 		return minLength;
 	}
@@ -31,8 +31,8 @@ public class ComputerToArrays$classGenerics.call($maxArity) implements OpCollect
 	public final Function<$computerArity.call($arity)$generics.call($arity), $computerArity.call($arity)$arrayGenerics.call($arity)> liftComputer$arity =
 		(computer) -> {
 			return ($computeArgs.call($arity)) -> {
-				int max = minLength($computeArgs.call($arity));
-				for (int i = 0; i < max; i++) {
+				var max = minLength($computeArgs.call($arity));
+				for (var i = 0; i < max; i++) {
 					computer.compute($arraysAtPosI.call($arity));
 				}
 			};

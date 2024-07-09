@@ -63,22 +63,22 @@ public class DefaultInertiaTensor3DMesh implements Function<Mesh, RealMatrix> {
 	public RealMatrix apply(final Mesh input) {
 		// ensure validity of inputs
 		if (input == null) throw new IllegalArgumentException("Input is null!");
-		final RealLocalizable cent = centroid.apply(input);
-		final double originX = cent.getDoublePosition(0);
-		final double originY = cent.getDoublePosition(1);
-		final double originZ = cent.getDoublePosition(2);
+		final var cent = centroid.apply(input);
+		final var originX = cent.getDoublePosition(0);
+		final var originY = cent.getDoublePosition(1);
+		final var originZ = cent.getDoublePosition(2);
 
-		BlockRealMatrix tensor = new BlockRealMatrix(3, 3);
-		for (final Triangle triangle : input.triangles()) {
-			final double x1 = triangle.v0x() - originX;
-			final double y1 = triangle.v0y() - originY;
-			final double z1 = triangle.v0z() - originZ;
-			final double x2 = triangle.v1x() - originX;
-			final double y2 = triangle.v1y() - originY;
-			final double z2 = triangle.v1z() - originZ;
-			final double x3 = triangle.v2x() - originX;
-			final double y3 = triangle.v2y() - originY;
-			final double z3 = triangle.v2z() - originZ;
+        var tensor = new BlockRealMatrix(3, 3);
+		for (final var triangle : input.triangles()) {
+			final var x1 = triangle.v0x() - originX;
+			final var y1 = triangle.v0y() - originY;
+			final var z1 = triangle.v0z() - originZ;
+			final var x2 = triangle.v1x() - originX;
+			final var y2 = triangle.v1y() - originY;
+			final var z2 = triangle.v1z() - originZ;
+			final var x3 = triangle.v2x() - originX;
+			final var y3 = triangle.v2y() - originY;
+			final var z3 = triangle.v2z() - originZ;
 			tensor = tensor.add(//
 				tetrahedronInertiaTensor(x1, y1, z1, x2, y2, z2, x3, y3, z3));
 		}
@@ -110,28 +110,28 @@ public class DefaultInertiaTensor3DMesh implements Function<Mesh, RealMatrix> {
 		final double x2, final double y2, final double z2, //
 		final double x3, final double y3, final double z3)
 	{
-		final double volume = tetrahedronVolume(new Vector3D(x1, y1, z1),
+		final var volume = tetrahedronVolume(new Vector3D(x1, y1, z1),
 			new Vector3D(x2, y2, z2), new Vector3D(x3, y3, z3));
 
-		final double a = 6 * volume * (y1 * y1 + y1 * y2 + y2 * y2 + y1 * y3 + y2 *
+		final var a = 6 * volume * (y1 * y1 + y1 * y2 + y2 * y2 + y1 * y3 + y2 *
 			y3 + y3 * y3 + z1 * z1 + z1 * z2 + z2 * z2 + z1 * z3 + z2 * z3 + z3 *
 				z3) / 60.0;
-		final double b = 6 * volume * (x1 * x1 + x1 * x2 + x2 * x2 + x1 * x3 + x2 *
+		final var b = 6 * volume * (x1 * x1 + x1 * x2 + x2 * x2 + x1 * x3 + x2 *
 			x3 + x3 * x3 + z1 * z1 + z1 * z2 + z2 * z2 + z1 * z3 + z2 * z3 + z3 *
 				z3) / 60.0;
-		final double c = 6 * volume * (x1 * x1 + x1 * x2 + x2 * x2 + x1 * x3 + x2 *
+		final var c = 6 * volume * (x1 * x1 + x1 * x2 + x2 * x2 + x1 * x3 + x2 *
 			x3 + x3 * x3 + y1 * y1 + y1 * y2 + y2 * y2 + y1 * y3 + y2 * y3 + y3 *
 				y3) / 60.0;
-		final double aa = 6 * volume * (2 * y1 * z1 + y2 * z1 + y3 * z1 + y1 * z2 +
+		final var aa = 6 * volume * (2 * y1 * z1 + y2 * z1 + y3 * z1 + y1 * z2 +
 			2 * y2 * z2 + y3 * z2 + y1 * z3 + y2 * z3 + 2 * y3 * z3) / 120.0;
 
-		final double bb = 6 * volume * (2 * x1 * y1 + x2 * y1 + x3 * y1 + x1 * y2 +
+		final var bb = 6 * volume * (2 * x1 * y1 + x2 * y1 + x3 * y1 + x1 * y2 +
 			2 * x2 * y2 + x3 * y2 + x1 * y3 + x2 * y3 + 2 * x3 * y3) / 120.0;
 
-		final double cc = 6 * volume * (2 * x1 * z1 + x2 * z1 + x3 * z1 + x1 * z2 +
+		final var cc = 6 * volume * (2 * x1 * z1 + x2 * z1 + x3 * z1 + x1 * z2 +
 			2 * x2 * z2 + x3 * z2 + x1 * z3 + x2 * z3 + 2 * x3 * z3) / 120.0;
 
-		final BlockRealMatrix t = new BlockRealMatrix(3, 3);
+		final var t = new BlockRealMatrix(3, 3);
 		t.setRow(0, new double[] { a, -bb, -cc });
 		t.setRow(1, new double[] { -bb, b, -aa });
 		t.setRow(2, new double[] { -cc, -aa, c });

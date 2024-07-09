@@ -61,9 +61,9 @@ public class DefaultNormalizedCentralMoment30<I extends RealType<I>, O extends R
 	public void computeMoment(final RandomAccessibleInterval<I> input,
 		final O output)
 	{
-		final O moment00 = output.createVariable();
+		final var moment00 = output.createVariable();
 		centralMoment00Func.compute(input, moment00);
-		final O moment30 = output.createVariable();
+		final var moment30 = output.createVariable();
 		centralMoment30Func.compute(input, moment30);
 
 		output.setReal(moment30.getRealDouble() / Math.pow(moment00.getRealDouble(),

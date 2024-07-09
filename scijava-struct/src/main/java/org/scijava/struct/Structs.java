@@ -62,7 +62,7 @@ public final class Structs {
 		@SuppressWarnings("unchecked") MemberParser<S, ? extends Member<?>>... parsers)
 	{
 		List<Member<?>> members = new ArrayList<>();
-		for (MemberParser<S, ? extends Member<?>> p : parsers) {
+		for (var p : parsers) {
 			members.addAll(p.parse(source, structType));
 		}
 		return () -> members;
@@ -78,7 +78,7 @@ public final class Structs {
 	public static void checkModifiers(String message, final int actualModifiers,
 		final boolean negate, final int... requiredModifiers)
 	{
-		for (int mod : requiredModifiers) {
+		for (var mod : requiredModifiers) {
 			if (negate) {
 				if ((actualModifiers & mod) != 0) {
 					throw new IllegalArgumentException(message +
@@ -108,7 +108,7 @@ public final class Structs {
 	}
 
 	private static String toString(Struct struct, int level) {
-		String indent = " ".repeat(2 * level);
+        var indent = " ".repeat(2 * level);
 		return indent + String.join("\n" + indent,
 			struct.members().stream()
 				.map(m -> toString(m, level))
@@ -117,8 +117,8 @@ public final class Structs {
 	}
 
 	private static String toString(Member<?> member, int level) {
-		String desc = member.description();
-		String descriptionSuffix = desc == null ? "" : " {" + desc.trim() + "}";
+        var desc = member.description();
+        var descriptionSuffix = desc == null ? "" : " {" + desc.trim() + "}";
 		return String.format("%s: %s%s [%s]%s%s",
 				member.key(),
 				Types.name(member.type()),

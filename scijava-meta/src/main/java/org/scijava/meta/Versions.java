@@ -66,7 +66,7 @@ public final class Versions {
 	 * @return Version of specified {@link Class} or null if not found.
 	 */
 	public static String of(final Class<?> c, final String groupId, final String artifactId) {
-		final String version = fromManifest(c);
+		final var version = fromManifest(c);
 		if (version != null) return version;
 		return fromPOM(c, groupId, artifactId);
 	}
@@ -79,7 +79,7 @@ public final class Versions {
 	 * @return Version of specified {@link Class} or null if not found.
 	 */
 	public static String fromManifest(final Class<?> c) {
-		final Manifest m = Manifest.manifest(c);
+		final var m = Manifest.manifest(c);
 		return m == null ? null : m.version();
 	}
 
@@ -94,7 +94,7 @@ public final class Versions {
 	 * @return Version of specified {@link Class} or null if not found.
 	 */
 	public static String fromPOM(final Class<?> c, final String groupId, final String artifactId) {
-		final POM pom = POM.pom(c, groupId, artifactId);
+		final var pom = POM.pom(c, groupId, artifactId);
 		return pom == null ? null : pom.version();
 	}
 
@@ -107,7 +107,7 @@ public final class Versions {
 	 * @return Build number of specified {@link Class} or null if not found.
 	 */
 	public static String buildNumber(final Class<?> c) {
-		final Manifest m = Manifest.manifest(c);
+		final var m = Manifest.manifest(c);
 		return m == null ? null : m.implementationBuild();
 	}
 
@@ -121,9 +121,9 @@ public final class Versions {
 	 */
 	public static int compare(final String v1, final String v2) {
 		final String[] t1 = splitDots(v1), t2 = splitDots(v2);
-		final int count = Math.min(t1.length, t2.length);
-		for (int t = 0; t < count; t++) {
-			final int c = compareToken(t1[t], t2[t]);
+		final var count = Math.min(t1.length, t2.length);
+		for (var t = 0; t < count; t++) {
+			final var c = compareToken(t1[t], t2[t]);
 			if (c != 0) return c;
 		}
 		if (t1.length == t2.length) return 0;
@@ -146,8 +146,8 @@ public final class Versions {
 		String suffix1 = t1, suffix2 = t2;
 		if (i1 > 0 && i2 > 0) {
 			// Versions start with digits; compare them numerically.
-			final long d1 = Long.parseLong(t1.substring(0, i1));
-			final long d2 = Long.parseLong(t2.substring(0, i2));
+			final var d1 = Long.parseLong(t1.substring(0, i1));
+			final var d2 = Long.parseLong(t2.substring(0, i2));
 			if (d1 < d2) return -1;
 			if (d1 > d2) return 1;
 			suffix1 = t1.substring(i1);
@@ -166,9 +166,9 @@ public final class Versions {
 
 	/** Gets the subsequent index to all the given string's leading digits. */
 	private static int digitIndex(final String s) {
-		int index = 0;
-		for (int i = 0; i < s.length(); i++) {
-			final char ch = s.charAt(index);
+        var index = 0;
+		for (var i = 0; i < s.length(); i++) {
+			final var ch = s.charAt(index);
 			if (ch < '0' || ch > '9') break;
 			index++;
 		}

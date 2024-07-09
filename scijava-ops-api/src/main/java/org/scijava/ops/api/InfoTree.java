@@ -123,15 +123,15 @@ public class InfoTree {
 		List<Object> dependencyInstances = dependencies().stream() //
 			.map(d -> d.newInstance().op()) //
 			.collect(Collectors.toList());
-		Object op = info().createOpInstance(dependencyInstances).object();
+        var op = info().createOpInstance(dependencyInstances).object();
 		return op;
 	}
 
 	private synchronized void generateSignature() {
 		if (id != null) return;
-		String s = info().id();
+        var s = info().id();
 		s = s.concat(String.valueOf(DEP_START_DELIM));
-		for (InfoTree dependency : dependencies()) {
+		for (var dependency : dependencies()) {
 			s = s.concat(dependency.signature());
 		}
 		id = s.concat(String.valueOf(DEP_END_DELIM));
@@ -139,7 +139,7 @@ public class InfoTree {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder(info().implementationName());
+        var sb = new StringBuilder(info().implementationName());
 		for (var dep : dependencies()) {
 			sb.append(DEPENDENCY_DELIM).append(dep.toString().replace("\n", "\n\t"));
 		}

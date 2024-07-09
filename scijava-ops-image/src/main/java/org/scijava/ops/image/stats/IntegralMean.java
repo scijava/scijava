@@ -65,35 +65,34 @@ public class IntegralMean<I extends RealType<I>> implements
 	{
 		// computation according to
 		// https://en.wikipedia.org/wiki/Summed_area_table
-		final IntegralCursor<? extends Composite<I>> cursor = new IntegralCursor<>(
-			input);
-		final int dimensions = input.numDimensions();
+		final var cursor = new IntegralCursor<>(input);
+		final var dimensions = input.numDimensions();
 
 		// Compute \sum (-1)^{dim - ||cornerVector||_{1}} * I(x^{cornerVector})
-		final DoubleType sum = new DoubleType();
+		final var sum = new DoubleType();
 		sum.setZero();
 
 		// Convert from input to return type
 		final Converter<I, DoubleType> conv = new RealDoubleConverter<>();
-		final DoubleType valueAsDoubleType = new DoubleType();
+		final var valueAsDoubleType = new DoubleType();
 
 		while (cursor.hasNext()) {
-			final I value = cursor.next().get(0).copy();
+			final var value = cursor.next().get(0).copy();
 			conv.convert(value, valueAsDoubleType);
 
 			// Obtain the cursor position encoded as corner vector
-			final int cornerInteger = cursor.getCornerRepresentation();
+			final var cornerInteger = cursor.getCornerRepresentation();
 
 			// Determine if the value has to be added (factor==1) or subtracted
 			// (factor==-1)
-			final DoubleType factor = new DoubleType(Math.pow(-1.0d, dimensions -
+			final var factor = new DoubleType(Math.pow(-1.0d, dimensions -
 				IntegralMean.norm(cornerInteger)));
 			valueAsDoubleType.mul(factor);
 
 			sum.add(valueAsDoubleType);
 		}
 
-		final int area = (int) Intervals.numElements(Intervals.expand(input, -1l));
+		final var area = (int) Intervals.numElements(Intervals.expand(input, -1l));
 
 		// Compute mean by dividing the sum divided by the number of elements
 		valueAsDoubleType.set(area); // NB: Reuse DoubleType

@@ -67,7 +67,7 @@ public final class Conversions {
 	public static int mutableIndexOf(Type t) {
 		var method = FunctionalInterfaces.functionalMethodOf(t);
 		var params = method.getAnnotatedParameterTypes();
-		for (int i = 0; i < params.length; i++) {
+		for (var i = 0; i < params.length; i++) {
 			if (params[i].isAnnotationPresent(Container.class)) return i;
 			if (params[i].isAnnotationPresent(Mutable.class)) return i;
 		}
@@ -108,23 +108,23 @@ public final class Conversions {
 		OpRequest request)
 	{
 		// fail fast if clearly inconvertible
-		Type opType = info.opType();
-		Type reqType = request.type();
+        var opType = info.opType();
+        var reqType = request.type();
 		if (!Types.isAssignable(Types.raw(opType), Types.raw(reqType))) {
 			return null;
 		}
 
-		Hints h = new Hints( //
+        var h = new Hints( //
 			BaseOpHints.Adaptation.FORBIDDEN, //
 			BaseOpHints.Conversion.FORBIDDEN, //
 			BaseOpHints.History.IGNORE //
 		);
 		final Map<TypeVariable<?>, Type> vars = new HashMap<>();
 		// Find input converters
-		Type[] fromArgs = request.argTypes();
-		List<Type> toArgs = inputTypesAgainst(info, Types.raw(reqType));
+        var fromArgs = request.argTypes();
+        var toArgs = inputTypesAgainst(info, Types.raw(reqType));
 		List<RichOp<Function<?, ?>>> preConverters = new ArrayList<>();
-		for (int i = 0; i < fromArgs.length; i++) {
+		for (var i = 0; i < fromArgs.length; i++) {
 			var opt = findConverter(fromArgs[i], toArgs.get(i), vars, env, h);
 			preConverters.add(opt);
 		}
@@ -162,9 +162,9 @@ public final class Conversions {
 	 * @return the input types
 	 */
 	private static List<Type> inputTypesAgainst(OpInfo info, Class<?> against) {
-		List<Type> types = info.inputTypes();
-		int fromIoIndex = mutableIndexOf(info.opType());
-		int toIoIndex = mutableIndexOf(against);
+        var types = info.inputTypes();
+        var fromIoIndex = mutableIndexOf(info.opType());
+        var toIoIndex = mutableIndexOf(against);
 		if (fromIoIndex != toIoIndex) {
 			types.add(toIoIndex, types.remove(fromIoIndex));
 		}
@@ -193,7 +193,7 @@ public final class Conversions {
 		Map<TypeVariable<?>, Type> vars, OpEnvironment env, Hints hints)
 	{
 		// This procedure only applies to functions
-		int ioIndex = mutableIndexOf(request.type());
+        var ioIndex = mutableIndexOf(request.type());
 		if (ioIndex > -1) {
 			return Optional.empty();
 		}
@@ -236,7 +236,7 @@ public final class Conversions {
 		Map<TypeVariable<?>, Type> vars, OpEnvironment env)
 	{
 		// This procedure only applies to Ops with mutable outputs
-		int ioIndex = mutableIndexOf(request.type());
+        var ioIndex = mutableIndexOf(request.type());
 		if (ioIndex == -1) {
 			return Optional.empty();
 		}
@@ -286,7 +286,7 @@ public final class Conversions {
 		Map<TypeVariable<?>, Type> vars, OpEnvironment env, Hints hints)
 	{
 		// This procedure only applies to Ops with mutable outputs
-		int ioIndex = mutableIndexOf(request.type());
+        var ioIndex = mutableIndexOf(request.type());
 		if (ioIndex == -1) {
 			return Optional.empty();
 		}
@@ -349,7 +349,7 @@ public final class Conversions {
 		Map<TypeVariable<?>, Type> vars, OpEnvironment env, Hints hints)
 	{
 		// This procedure only applies to Ops with mutable outputs
-		int ioIndex = mutableIndexOf(request.type());
+        var ioIndex = mutableIndexOf(request.type());
 		if (ioIndex == -1) {
 			return Optional.empty();
 		}
@@ -427,7 +427,7 @@ public final class Conversions {
 	{
 		Type reqType = Types.parameterize(Function.class, new Type[] { source,
 			dest });
-		Type infoType = rich.instance().type();
+        var infoType = rich.instance().type();
 		GenericAssignability.inferTypeVariables(new Type[] { reqType }, new Type[] {
 			infoType }, vars);
 	}
@@ -447,17 +447,17 @@ public final class Conversions {
 	 *         with wildcards
 	 */
 	private static Nil<?> wildcardVacuousTypeVars(final Type t) {
-		Type[] typeParams = Types.typeParamsOf(t, Types.raw(t));
+        var typeParams = Types.typeParamsOf(t, Types.raw(t));
 		if (t instanceof TypeVariable<?>) {
-			TypeVariable<?> tv = (TypeVariable<?>) t;
+            var tv = (TypeVariable<?>) t;
 			// Create an Any with the type variable bounds
 			return Nil.of(new Any(tv.getBounds()));
 		}
 		var vars = new HashMap<TypeVariable<?>, Type>();
-		for (Type typeParam : typeParams) {
+		for (var typeParam : typeParams) {
 			if (typeParam instanceof TypeVariable<?>) {
 				// Get the type variable
-				TypeVariable<?> from = (TypeVariable<?>) typeParam;
+                var from = (TypeVariable<?>) typeParam;
 				// Create an Any with the type variable bounds
 				Type to = new Any(from.getBounds());
 				vars.put(from, to);
@@ -475,8 +475,8 @@ public final class Conversions {
 	 * @return - a name that is legal as part of a class name.
 	 */
 	static String getClassName(Type t) {
-		Class<?> clazz = Types.raw(t);
-		String className = clazz.getSimpleName();
+        var clazz = Types.raw(t);
+        var className = clazz.getSimpleName();
 		if (className.chars().allMatch(Character::isJavaIdentifierPart))
 			return className;
 		if (clazz.isArray()) return clazz.getComponentType().getSimpleName() +

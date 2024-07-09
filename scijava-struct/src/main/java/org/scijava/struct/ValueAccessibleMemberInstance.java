@@ -74,7 +74,7 @@ public class ValueAccessibleMemberInstance<T> implements MemberInstance<T> {
 				Types.name(type));
 		}
 		@SuppressWarnings("unchecked")
-		final T tValue = (T) value;
+		final var tValue = (T) value;
 		access.set(tValue, object);
 	}
 }

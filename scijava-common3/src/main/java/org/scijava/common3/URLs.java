@@ -111,12 +111,12 @@ public final class URLs {
 		final URL directory, final boolean recurse, final boolean filesOnly)
 	{
 		if (directory == null) return result; // nothing to append
-		final String protocol = directory.getProtocol();
+		final var protocol = directory.getProtocol();
 		if (protocol.equals("file")) {
-			final File dir = toFile(directory);
-			final File[] list = dir.listFiles();
+			final var dir = toFile(directory);
+			final var list = dir.listFiles();
 			if (list != null) {
-				for (final File file : list) {
+				for (final var file : list) {
 					try {
 						if (!filesOnly || file.isFile()) {
 							result.add(file.toURI().toURL());
@@ -133,19 +133,19 @@ public final class URLs {
 		}
 		else if (protocol.equals("jar")) {
 			try {
-				final String url = directory.toString();
-				final int bang = url.indexOf("!/");
+				final var url = directory.toString();
+				final var bang = url.indexOf("!/");
 				if (bang < 0) return result;
-				final String prefix = url.substring(bang + 2);
-				final String baseURL = url.substring(0, bang + 2);
+				final var prefix = url.substring(bang + 2);
+				final var baseURL = url.substring(0, bang + 2);
 
-				final JarURLConnection connection = (JarURLConnection) new URL(baseURL)
+				final var connection = (JarURLConnection) new URL(baseURL)
 					.openConnection();
-				try (final JarFile jar = connection.getJarFile()) {
-					final Enumeration<JarEntry> entries = jar.entries();
+				try (final var jar = connection.getJarFile()) {
+					final var entries = jar.entries();
 					while (entries.hasMoreElements()) {
-						final JarEntry entry = entries.nextElement();
-						final String urlEncoded = new URI(null, null, entry.getName(), null)
+						final var entry = entries.nextElement();
+						final var urlEncoded = new URI(null, null, entry.getName(), null)
 							.toString();
 						if (urlEncoded.length() > prefix.length() && // omit directory
 																													// itself
@@ -157,7 +157,7 @@ public final class URLs {
 							}
 							if (!recurse) {
 								// check whether this URL is a *direct* child of the directory
-								final int slash = urlEncoded.indexOf("/", prefix.length());
+								final var slash = urlEncoded.indexOf("/", prefix.length());
 								if (slash >= 0 && slash != urlEncoded.length() - 1) {
 									// not a direct child
 									continue;
@@ -201,10 +201,10 @@ public final class URLs {
 	 * @throws IllegalArgumentException if the URL does not correspond to a file.
 	 */
 	public static File toFile(final String url) {
-		String path = url;
+        var path = url;
 		if (path.startsWith("jar:")) {
 			// remove "jar:" prefix and "!/" suffix
-			final int index = path.indexOf("!/");
+			final var index = path.indexOf("!/");
 			path = path.substring(4, index);
 		}
 		try {

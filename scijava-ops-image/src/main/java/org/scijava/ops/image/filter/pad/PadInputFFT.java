@@ -90,7 +90,7 @@ public abstract class PadInputFFT<T extends ComplexType<T>, I extends RandomAcce
 		Dimensions paddedFFTInputDimensions;
 
 		// if an fftsize op has been set recompute padded size
-		long[][] sizes = getFFTSizeOp(fast).apply(paddedDimensions);
+        var sizes = getFFTSizeOp(fast).apply(paddedDimensions);
 
 		paddedFFTInputDimensions = new FinalDimensions(sizes[0]);
 

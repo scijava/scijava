@@ -45,17 +45,17 @@ public class DefaultInfoTreeGenerator implements InfoTreeGenerator {
 	public InfoTree generate(OpEnvironment env, String signature,
 		Map<String, OpInfo> idMap, Collection<InfoTreeGenerator> generators)
 	{
-		int dependencyStart = signature.indexOf(InfoTree.DEP_START_DELIM);
-		int dependencyEnd = signature.lastIndexOf(InfoTree.DEP_END_DELIM);
-		String infoID = signature.substring(0, dependencyStart);
-		OpInfo info = idMap.get(infoID);
+        var dependencyStart = signature.indexOf(InfoTree.DEP_START_DELIM);
+        var dependencyEnd = signature.lastIndexOf(InfoTree.DEP_END_DELIM);
+        var infoID = signature.substring(0, dependencyStart);
+        var info = idMap.get(infoID);
 		if (info == null) throw new IllegalArgumentException(
 			"Could not find an OpInfo corresponding to id " + infoID);
-		String dependencySignature = signature.substring(dependencyStart + 1,
+        var dependencySignature = signature.substring(dependencyStart + 1,
 			dependencyEnd);
-		List<String> dependencies = getDependencies(dependencySignature);
+        var dependencies = getDependencies(dependencySignature);
 		List<InfoTree> dependencyTrees = new ArrayList<>();
-		for (String dep : dependencies) {
+		for (var dep : dependencies) {
 			dependencyTrees.add(InfoTreeGenerator.generateDependencyTree(env, dep,
 				idMap, generators));
 		}
@@ -63,12 +63,12 @@ public class DefaultInfoTreeGenerator implements InfoTreeGenerator {
 	}
 
 	private List<String> getDependencies(String signature) {
-		int parenDepth = 0;
-		int start = 0;
+        var parenDepth = 0;
+        var start = 0;
 		List<String> splits = new ArrayList<>();
 
-		for (int i = 0; i < signature.length(); i++) {
-			char ch = signature.charAt(i);
+		for (var i = 0; i < signature.length(); i++) {
+            var ch = signature.charAt(i);
 			if (ch == InfoTree.DEP_START_DELIM) parenDepth++;
 			else if (ch == InfoTree.DEP_END_DELIM) {
 				parenDepth--;

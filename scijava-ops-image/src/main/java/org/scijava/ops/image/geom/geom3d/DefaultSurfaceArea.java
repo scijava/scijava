@@ -54,13 +54,13 @@ public class DefaultSurfaceArea implements Computers.Arity1<Mesh, DoubleType> {
 	@Override
 	public void compute(final Mesh input, final DoubleType boundarySize) {
 		double total = 0;
-		for (final Triangle tri : input.triangles()) {
-			final Vector3D v0 = new Vector3D(tri.v0x(), tri.v0y(), tri.v0z());
-			final Vector3D v1 = new Vector3D(tri.v1x(), tri.v1y(), tri.v1z());
-			final Vector3D v2 = new Vector3D(tri.v2x(), tri.v2y(), tri.v2z());
+		for (final var tri : input.triangles()) {
+			final var v0 = new Vector3D(tri.v0x(), tri.v0y(), tri.v0z());
+			final var v1 = new Vector3D(tri.v1x(), tri.v1y(), tri.v1z());
+			final var v2 = new Vector3D(tri.v2x(), tri.v2y(), tri.v2z());
 
-			final Vector3D cross = v0.subtract(v1).crossProduct(v2.subtract(v0));
-			final double norm = cross.getNorm();
+			final var cross = v0.subtract(v1).crossProduct(v2.subtract(v0));
+			final var norm = cross.getNorm();
 			if (norm > 0) total += norm * 0.5;
 		}
 		boundarySize.set(total);

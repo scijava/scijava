@@ -76,7 +76,7 @@ public class LMAFit {
 		@Override
 		protected void beforeFit() {
 			// needs RLD estimation
-			for (float param : paramBuffer) {
+			for (var param : paramBuffer) {
 				// no estimation (+Inf was set by RAHelper#loadData)
 				if (param == Float.POSITIVE_INFINITY) {
 					estimatorWorker.fitSingle();
@@ -91,7 +91,7 @@ public class LMAFit {
 		 */
 		@Override
 		public void doFit() {
-			final int retCode = FLIMLib.GCI_marquardt_fitting_engine(params.xInc,
+			final var retCode = FLIMLib.GCI_marquardt_fitting_engine(params.xInc,
 				transBuffer, adjFitStart, adjFitEnd, params.instr, params.noise,
 				params.sig, paramBuffer, params.paramFree, params.restrain,
 				params.fitFunc, fittedBuffer, residualBuffer, chisqBuffer, covar, alpha,

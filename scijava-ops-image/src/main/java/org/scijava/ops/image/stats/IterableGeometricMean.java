@@ -57,7 +57,7 @@ public class IterableGeometricMean<I extends RealType<I>, O extends RealType<O>>
 	public void compute(final Iterable<I> input, final O geometricMean) {
 		double size = 0;
 		double sumOfLogs = 0;
-		for (final I in : input) {
+		for (final var in : input) {
 			size++;
 			sumOfLogs += Math.log(in.getRealDouble());
 		}

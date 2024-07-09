@@ -67,7 +67,7 @@ public class DefaultEval implements
 		final OpEnvironment ops, //
 		@Nullable final Map<String, ?> vars //
 	) {
-		OpEvaluator e = new OpEvaluator(ops);
+        var e = new OpEvaluator(ops);
 		if (vars != null) e.setAll(vars);
 		return e.evaluate(input);
 	}

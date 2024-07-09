@@ -58,8 +58,8 @@ public class OpPriorities {
 	 */
 	public final Function<Iterable<Integer>, String> iterableFunc = //
 		n -> {
-			int max = Integer.MIN_VALUE;
-			for (Integer object : n) {
+            var max = Integer.MIN_VALUE;
+			for (var object : n) {
 				if (object > max) max = object;
 			}
 			return "This maximum (Iterable Op): " + max;
@@ -85,13 +85,13 @@ public class OpPriorities {
 	 * something else.
 	 */
 	public static void main(String... args) {
-		OpEnvironment ops = OpEnvironment.build();
+        var ops = OpEnvironment.build();
 		// Say we have a Collection of numbers
 		var ourNumbers = Arrays.asList(4, 8, 2, 3);
 
 		// ArrayList is not a SortedSet, so it will use our Iterable Op
 		List<Integer> list = new ArrayList<>(ourNumbers);
-		String resultForAllIterables = ops.op("tutorial.priority") //
+        var resultForAllIterables = ops.op("tutorial.priority") //
 			.input(list) //
 			.outType(String.class) //
 			.apply();
@@ -101,8 +101,8 @@ public class OpPriorities {
 		// SortedSet Op. The SortedSet Op doesn't have to loop through the data, so
 		// we want to use that one for performance. To do that, we set the priority
 		// of that Op higher!
-		TreeSet<Integer> set = new TreeSet<>(ourNumbers);
-		String resultForATreeSet = ops.op("tutorial.priority") //
+        var set = new TreeSet<Integer>(ourNumbers);
+        var resultForATreeSet = ops.op("tutorial.priority") //
 			.input(set) //
 			.outType(String.class) //
 			.apply();

@@ -80,8 +80,8 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh> {
 	public Mesh apply(final Mesh input) {
 		Mesh output = new NaiveDoubleMesh();
 		Set<Vertex> vertices = new LinkedHashSet<>();
-		for (final net.imglib2.mesh.Vertex v : input.vertices()) {
-			final Vertex vertex = new Vertex(v.x(), v.y(), v.z());
+		for (final var v : input.vertices()) {
+			final var vertex = new Vertex(v.x(), v.y(), v.z());
 			vertices.add(vertex);
 		}
 		List<TriangularFacet> facets = new ArrayList<>();
@@ -89,20 +89,20 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh> {
 		/*epsilon = */computeHull(vertices, facets, facetsWithPointInFront);
 
 		final Map<Vertex, Long> vertexIndices = new HashMap<>();
-		for (final TriangularFacet f : facets) {
-			final Vertex v0 = f.getP0();
-			final Vertex v1 = f.getP1();
-			final Vertex v2 = f.getP2();
+		for (final var f : facets) {
+			final var v0 = f.getP0();
+			final var v1 = f.getP1();
+			final var v2 = f.getP2();
 			final long vIndex0 = vertexIndices.computeIfAbsent(v0, //
 				v -> output.vertices().add(v0.getX(), v0.getY(), v0.getZ()));
 			final long vIndex1 = vertexIndices.computeIfAbsent(v1, //
 				v -> output.vertices().add(v1.getX(), v1.getY(), v1.getZ()));
 			final long vIndex2 = vertexIndices.computeIfAbsent(v2, //
 				v -> output.vertices().add(v2.getX(), v2.getY(), v2.getZ()));
-			final Vector3D normal = f.getNormal();
-			final double nx = normal.getX();
-			final double ny = normal.getY();
-			final double nz = normal.getZ();
+			final var normal = f.getNormal();
+			final var nx = normal.getX();
+			final var ny = normal.getY();
+			final var nz = normal.getZ();
 			output.triangles().add(vIndex0, vIndex1, vIndex2, nx, ny, nz);
 		}
 		return output;
@@ -117,7 +117,7 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh> {
 		final List<TriangularFacet> facets,
 		final List<TriangularFacet> facetsWithPointInFront)
 	{
-		final double eps = createSimplex(vertices, facets, facetsWithPointInFront);
+		final var eps = createSimplex(vertices, facets, facetsWithPointInFront);
 		while (!facetsWithPointInFront.isEmpty()) {
 			replaceFacet(eps, vertices, facets, facetsWithPointInFront,
 				facetsWithPointInFront.remove(0));
@@ -136,8 +136,8 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh> {
 		final List<TriangularFacet> facets,
 		final List<TriangularFacet> facetsPointInFront, final TriangularFacet facet)
 	{
-		final Vertex v = facet.getMaximumDistanceVertex();
-		final Horizon horizon = computeHorizon(eps, vertices, facets,
+		final var v = facet.getMaximumDistanceVertex();
+		final var horizon = computeHorizon(eps, vertices, facets,
 			facetsPointInFront, facet, v);
 		assignPointsToFacets(eps, vertices, createFacets(horizon, v), facets,
 			facetsPointInFront);
@@ -157,11 +157,11 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh> {
 		Vertex vLeft, vRight;
 
 		// triangles 1 to n
-		for (int i = 1; i < horizon.size(); i++) {
+		for (var i = 1; i < horizon.size(); i++) {
 			vLeft = horizon.getVertex(i - 1);
 			vRight = horizon.getVertex(i);
 
-			TriangularFacet f = new TriangularFacet(vRight, vTop, vLeft);
+            var f = new TriangularFacet(vRight, vTop, vLeft);
 
 			setNeighborZero(f, horizon.getNeighbor(i));
 
@@ -173,7 +173,7 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh> {
 		vRight = horizon.getVertex(0);
 		vLeft = horizon.getLastVertex();
 
-		TriangularFacet f = new TriangularFacet(vRight, vTop, vLeft);
+        var f = new TriangularFacet(vRight, vTop, vLeft);
 
 		setNeighborZero(f, horizon.getNeighbor(0));
 
@@ -191,8 +191,8 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh> {
 	 * @param newFacets the triangles
 	 */
 	private void connectTriangles(final List<TriangularFacet> newFacets) {
-		int lastFacetIndex = newFacets.size() - 1;
-		for (int i = 1; i < lastFacetIndex; i++) {
+        var lastFacetIndex = newFacets.size() - 1;
+		for (var i = 1; i < lastFacetIndex; i++) {
 			newFacets.get(i).setNeighbor(1, newFacets.get(i + 1));
 			newFacets.get(i).setNeighbor(2, newFacets.get(i - 1));
 		}
@@ -212,7 +212,7 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh> {
 	private void setNeighborZero(final TriangularFacet f,
 		final TriangularFacet n)
 	{
-		int vertexIndex = n.indexOfVertex(f.getVertex(2));
+        var vertexIndex = n.indexOfVertex(f.getVertex(2));
 		n.replaceNeighbor(vertexIndex, f);
 
 		f.setNeighbor(0, n);
@@ -238,8 +238,8 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh> {
 		// frontFacet is not a result facet. Remove it from result list.
 		facets.remove(frontFacet);
 
-		Horizon h = new Horizon(frontFacet);
-		TriangularFacet merge = nextFacetToMerge(eps, h, vTop);
+        var h = new Horizon(frontFacet);
+        var merge = nextFacetToMerge(eps, h, vTop);
 		while (merge != null) {
 			// This points have to be reassigned as well.
 			vertices.addAll(merge.getVerticesInFront());
@@ -273,7 +273,7 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh> {
 	private void updateNeighbors(final TriangularFacet frontFacet,
 		final TriangularFacet merge)
 	{
-		for (TriangularFacet f : merge.getNeighbors()) {
+		for (var f : merge.getNeighbors()) {
 			if (!f.equals(frontFacet)) {
 				f.replaceNeighbor(f.indexOfNeighbor(merge), frontFacet);
 			}
@@ -290,18 +290,18 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh> {
 	private TriangularFacet nextFacetToMerge(final double eps,
 		final Horizon frontFacet, final Vertex vTop)
 	{
-		Iterator<TriangularFacet> it = frontFacet.getNeighbors().iterator();
+        var it = frontFacet.getNeighbors().iterator();
 		while (it.hasNext()) {
-			TriangularFacet f = it.next();
+            var f = it.next();
 			if (f.distanceToPlane(vTop) > eps) {
 				// if frontFacet contains all vertices of f it either is
 				// connected
 				// with two edges or one edge
 				if (frontFacet.containsAll(f.getVertices())) {
-					Vertex v0 = f.getVertex(0);
-					Vertex v1 = f.getVertex(1);
-					Vertex v2 = f.getVertex(2);
-					int numEdges = 0;
+                    var v0 = f.getVertex(0);
+                    var v1 = f.getVertex(1);
+                    var v2 = f.getVertex(2);
+                    var numEdges = 0;
 					if (frontFacet.hasEdge(v0, v2)) {
 						numEdges++;
 					}
@@ -346,17 +346,17 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh> {
 		final List<TriangularFacet> facets,
 		final List<TriangularFacet> facetsWithPointInFront)
 	{
-		Iterator<Vertex> vertexIt = vertices.iterator();
+        var vertexIt = vertices.iterator();
 		while (vertexIt.hasNext()) {
-			Vertex v = vertexIt.next();
+            var v = vertexIt.next();
 
-			Iterator<TriangularFacet> facetIt = newFacets.iterator();
+            var facetIt = newFacets.iterator();
 			TriangularFacet maxFacet = null;
-			double maxdis = eps;
+            var maxdis = eps;
 
 			while (facetIt.hasNext()) {
-				TriangularFacet f = facetIt.next();
-				double distanceToPlane = f.distanceToPlane(v);
+                var f = facetIt.next();
+                var distanceToPlane = f.distanceToPlane(v);
 				// point is assigned to the facet with maximum distance
 				if (distanceToPlane > maxdis) {
 					maxdis = distanceToPlane;
@@ -391,29 +391,29 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh> {
 		final List<TriangularFacet> facetsWithPointInFront)
 	{
 
-		final Pair<Double, Vertex[]> minMax = computeMinMax(vertices);
+		final var minMax = computeMinMax(vertices);
 		final double eps = minMax.getA();
 
-		int i = getMaxDistPointIndex(minMax.getB());
+        var i = getMaxDistPointIndex(minMax.getB());
 
-		Vertex v0 = minMax.getB()[i];
-		Vertex v1 = minMax.getB()[i + 3];
+        var v0 = minMax.getB()[i];
+        var v1 = minMax.getB()[i + 3];
 
 		vertices.remove(v0);
 		vertices.remove(v1);
 
-		Vertex v2 = getV2(eps, vertices, v0, v1);
+        var v2 = getV2(eps, vertices, v0, v1);
 
 		vertices.remove(v2);
 
-		Vertex v3 = getV3(eps, vertices, v0, v1, v2);
+        var v3 = getV3(eps, vertices, v0, v1, v2);
 
 		vertices.remove(v3);
 
-		TriangularFacet f0 = new TriangularFacet(v0, v1, v2);
+        var f0 = new TriangularFacet(v0, v1, v2);
 		if (f0.distanceToPlane(v3) > eps) {
 			// change triangle orientation to counter clockwise
-			Vertex tmp = v1;
+            var tmp = v1;
 			v1 = v2;
 			v2 = tmp;
 			f0 = new TriangularFacet(v0, v1, v2);
@@ -421,11 +421,11 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh> {
 		// v3 is behind f0
 		assert f0.distanceToPlane(v3) < eps;
 
-		TriangularFacet f1 = new TriangularFacet(v1, v0, v3);
+        var f1 = new TriangularFacet(v1, v0, v3);
 
-		TriangularFacet f2 = new TriangularFacet(v2, v1, v3);
+        var f2 = new TriangularFacet(v2, v1, v3);
 
-		TriangularFacet f3 = new TriangularFacet(v0, v2, v3);
+        var f3 = new TriangularFacet(v0, v2, v3);
 
 		f0.setNeighbor(0, f3);
 		f0.setNeighbor(1, f1);
@@ -471,13 +471,13 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh> {
 	private Vertex getV3(final double eps, final Set<Vertex> vertices,
 		final Vertex v0, final Vertex v1, final Vertex v2)
 	{
-		double distPlanePoint = eps;
+        var distPlanePoint = eps;
 		Vertex v3 = null;
-		Vector3D d0 = v1.subtract(v0);
-		Vector3D d1 = v2.subtract(v0);
-		Vector3D normal = d0.crossProduct(d1).normalize();
-		for (final Vertex v : vertices) {
-			double d = Math.abs(normal.dotProduct(v.subtract(v0)));
+        var d0 = v1.subtract(v0);
+        var d1 = v2.subtract(v0);
+        var normal = d0.crossProduct(d1).normalize();
+		for (final var v : vertices) {
+            var d = Math.abs(normal.dotProduct(v.subtract(v0)));
 			if (d > distPlanePoint) {
 				distPlanePoint = d;
 				v3 = v;
@@ -496,7 +496,7 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh> {
 	private Vertex getV2(final double eps, final Set<Vertex> vertices,
 		final Vertex v0, final Vertex v1)
 	{
-		Iterator<Vertex> it = vertices.iterator();
+        var it = vertices.iterator();
 
 		// v0 -------------------------------------v1
 		// |
@@ -507,14 +507,14 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh> {
 		// d = |(v - v0) x (v - v1)| / |(v1 - v0)|
 		// We can omit the common denominator because it does not change over
 		// all computations.
-		double distLinePoint = eps;
+        var distLinePoint = eps;
 		Vertex v2 = null;
 		while (it.hasNext()) {
-			Vertex v = it.next();
-			Vector3D d0 = v.subtract(v1);
-			Vector3D d1 = v.subtract(v0);
+            var v = it.next();
+            var d0 = v.subtract(v1);
+            var d1 = v.subtract(v0);
 
-			double lengthSq = d0.crossProduct(d1).getNormSq();
+            var lengthSq = d0.crossProduct(d1).getNormSq();
 			if (lengthSq > distLinePoint) {
 				distLinePoint = lengthSq;
 				v2 = v;
@@ -532,13 +532,13 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh> {
 	 *         points.
 	 */
 	private int getMaxDistPointIndex(final Vertex[] minMax) {
-		double[] diff = new double[] { minMax[3].getX() - minMax[0].getX(),
+        var diff = new double[] { minMax[3].getX() - minMax[0].getX(),
 			minMax[4].getY() - minMax[1].getY(), minMax[5].getZ() - minMax[2]
 				.getZ() };
 
 		double max = 0;
-		int imax = 0;
-		for (int i = 0; i < diff.length; i++) {
+        var imax = 0;
+		for (var i = 0; i < diff.length; i++) {
 			if (diff[i] > max) {
 				max = diff[i];
 				imax = i;
@@ -553,13 +553,13 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh> {
 	 * @return min and max vertices of each dimension
 	 */
 	private Pair<Double, Vertex[]> computeMinMax(final Set<Vertex> vertices) {
-		Vertex[] minMax = new Vertex[6];
+        var minMax = new Vertex[6];
 		double maxX, maxY, maxZ;
 		double minX, minY, minZ;
-		Iterator<Vertex> it = vertices.iterator();
+        var it = vertices.iterator();
 
-		Vertex initPoint = it.next();
-		for (int i = 0; i < minMax.length; i++) {
+        var initPoint = it.next();
+		for (var i = 0; i < minMax.length; i++) {
 			minMax[i] = initPoint;
 		}
 		minX = maxX = initPoint.getX();
@@ -567,7 +567,7 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh> {
 		minZ = maxZ = initPoint.getZ();
 
 		while (it.hasNext()) {
-			Vertex v = it.next();
+            var v = it.next();
 			if (v.getX() > maxX) {
 				maxX = v.getX();
 				minMax[3] = v;
@@ -596,7 +596,7 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh> {
 
 		// This epsilon formula comes from John Lloyd's quickhull
 		// implementation http://www.cs.ubc.ca/~lloyd/java/quickhull3d.html
-		final double eps = 3 * DOUBLE_PREC * (Math.max(Math.abs(maxX), Math.abs(
+		final var eps = 3 * DOUBLE_PREC * (Math.max(Math.abs(maxX), Math.abs(
 			minX)) + Math.max(Math.abs(maxY), Math.abs(minY)) + Math.max(Math.abs(
 				maxZ), Math.abs(minZ)));
 
@@ -619,8 +619,8 @@ class DefaultConvexHull3DEpsilon implements Function<Mesh, Double> {
 	@Override
 	public Double apply(final Mesh input) {
 		Set<Vertex> vertices = new LinkedHashSet<>();
-		for (final net.imglib2.mesh.Vertex v : input.vertices()) {
-			final Vertex vertex = new Vertex(v.x(), v.y(), v.z());
+		for (final var v : input.vertices()) {
+			final var vertex = new Vertex(v.x(), v.y(), v.z());
 			vertices.add(vertex);
 		}
 		List<TriangularFacet> facets = new ArrayList<>();

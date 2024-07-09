@@ -53,7 +53,7 @@ public class Fills {
 	public static <T extends Type<T>> void iteratorFill(final T constant,
 		final Iterable<T> output)
 	{
-		for (T t : output) {
+		for (var t : output) {
 			t.set(constant);
 		}
 	}
@@ -69,8 +69,8 @@ public class Fills {
 	public static void iteratorU128bitFill(final Unsigned128BitType constant,
 		final Iterable<Unsigned128BitType> output)
 	{
-		BigInteger bi = constant.getBigInteger();
-		for (Unsigned128BitType t : output) {
+        var bi = constant.getBigInteger();
+		for (var t : output) {
 			t.set(bi);
 		}
 	}
@@ -100,7 +100,7 @@ public class Fills {
 	public static void u128bitFill(final Unsigned128BitType constant,
 		final RandomAccessibleInterval<Unsigned128BitType> output)
 	{
-		BigInteger bi = constant.getBigInteger();
+        var bi = constant.getBigInteger();
 		LoopBuilder.setImages(output).multiThreaded().forEachPixel(pixel -> pixel
 			.set(bi));
 	}

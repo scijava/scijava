@@ -76,8 +76,8 @@ public final class FFTMethodsUtility {
 	public static Dimensions getPaddedInputDimensionsRealToComplex(
 		final boolean fast, final Dimensions inputDimensions)
 	{
-		final long[] paddedSize = new long[inputDimensions.numDimensions()];
-		final long[] fftSize = new long[inputDimensions.numDimensions()];
+		final var paddedSize = new long[inputDimensions.numDimensions()];
+		final var fftSize = new long[inputDimensions.numDimensions()];
 
 		dimensionsRealToComplex(fast, inputDimensions, paddedSize, fftSize);
 
@@ -95,8 +95,8 @@ public final class FFTMethodsUtility {
 	public static Dimensions getFFTDimensionsRealToComplex(final boolean fast,
 		final Dimensions inputDimensions)
 	{
-		final long[] paddedSize = new long[inputDimensions.numDimensions()];
-		final long[] fftSize = new long[inputDimensions.numDimensions()];
+		final var paddedSize = new long[inputDimensions.numDimensions()];
+		final var fftSize = new long[inputDimensions.numDimensions()];
 
 		dimensionsRealToComplex(fast, inputDimensions, paddedSize, fftSize);
 

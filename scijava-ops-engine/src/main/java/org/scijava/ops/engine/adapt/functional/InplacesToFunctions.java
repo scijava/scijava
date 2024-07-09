@@ -68,7 +68,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Function<IO, IO> apply(Inplaces.Arity1<IO> t) {
 			return (IO io) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(temp);
 				return temp;
@@ -91,7 +91,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public BiFunction<IO, I2, IO> apply(Inplaces.Arity2_1<IO, I2> t) {
 			return (IO io, I2 in2) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(temp, in2);
 				return temp;
@@ -114,7 +114,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public BiFunction<I1, IO, IO> apply(Inplaces.Arity2_2<I1, IO> t) {
 			return (I1 in1, IO io) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, temp);
 				return temp;
@@ -137,7 +137,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity3<IO, I2, I3, IO> apply(Inplaces.Arity3_1<IO, I2, I3> t) {
 			return (IO io, I2 in2, I3 in3) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(temp, in2, in3);
 				return temp;
@@ -160,7 +160,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity3<I1, IO, I3, IO> apply(Inplaces.Arity3_2<I1, IO, I3> t) {
 			return (I1 in1, IO io, I3 in3) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, temp, in3);
 				return temp;
@@ -183,7 +183,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity3<I1, I2, IO, IO> apply(Inplaces.Arity3_3<I1, I2, IO> t) {
 			return (I1 in1, I2 in2, IO io) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, temp);
 				return temp;
@@ -206,7 +206,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity4<IO, I2, I3, I4, IO> apply(Inplaces.Arity4_1<IO, I2, I3, I4> t) {
 			return (IO io, I2 in2, I3 in3, I4 in4) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(temp, in2, in3, in4);
 				return temp;
@@ -229,7 +229,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity4<I1, IO, I3, I4, IO> apply(Inplaces.Arity4_2<I1, IO, I3, I4> t) {
 			return (I1 in1, IO io, I3 in3, I4 in4) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, temp, in3, in4);
 				return temp;
@@ -252,7 +252,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity4<I1, I2, IO, I4, IO> apply(Inplaces.Arity4_3<I1, I2, IO, I4> t) {
 			return (I1 in1, I2 in2, IO io, I4 in4) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, temp, in4);
 				return temp;
@@ -275,7 +275,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity4<I1, I2, I3, IO, IO> apply(Inplaces.Arity4_4<I1, I2, I3, IO> t) {
 			return (I1 in1, I2 in2, I3 in3, IO io) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, temp);
 				return temp;
@@ -298,7 +298,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity5<IO, I2, I3, I4, I5, IO> apply(Inplaces.Arity5_1<IO, I2, I3, I4, I5> t) {
 			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(temp, in2, in3, in4, in5);
 				return temp;
@@ -321,7 +321,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity5<I1, IO, I3, I4, I5, IO> apply(Inplaces.Arity5_2<I1, IO, I3, I4, I5> t) {
 			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, temp, in3, in4, in5);
 				return temp;
@@ -344,7 +344,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity5<I1, I2, IO, I4, I5, IO> apply(Inplaces.Arity5_3<I1, I2, IO, I4, I5> t) {
 			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, temp, in4, in5);
 				return temp;
@@ -367,7 +367,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity5<I1, I2, I3, IO, I5, IO> apply(Inplaces.Arity5_4<I1, I2, I3, IO, I5> t) {
 			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, temp, in5);
 				return temp;
@@ -390,7 +390,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity5<I1, I2, I3, I4, IO, IO> apply(Inplaces.Arity5_5<I1, I2, I3, I4, IO> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, temp);
 				return temp;
@@ -413,7 +413,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity6<IO, I2, I3, I4, I5, I6, IO> apply(Inplaces.Arity6_1<IO, I2, I3, I4, I5, I6> t) {
 			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(temp, in2, in3, in4, in5, in6);
 				return temp;
@@ -436,7 +436,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity6<I1, IO, I3, I4, I5, I6, IO> apply(Inplaces.Arity6_2<I1, IO, I3, I4, I5, I6> t) {
 			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, temp, in3, in4, in5, in6);
 				return temp;
@@ -459,7 +459,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity6<I1, I2, IO, I4, I5, I6, IO> apply(Inplaces.Arity6_3<I1, I2, IO, I4, I5, I6> t) {
 			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, temp, in4, in5, in6);
 				return temp;
@@ -482,7 +482,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity6<I1, I2, I3, IO, I5, I6, IO> apply(Inplaces.Arity6_4<I1, I2, I3, IO, I5, I6> t) {
 			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, temp, in5, in6);
 				return temp;
@@ -505,7 +505,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity6<I1, I2, I3, I4, IO, I6, IO> apply(Inplaces.Arity6_5<I1, I2, I3, I4, IO, I6> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, temp, in6);
 				return temp;
@@ -528,7 +528,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity6<I1, I2, I3, I4, I5, IO, IO> apply(Inplaces.Arity6_6<I1, I2, I3, I4, I5, IO> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, temp);
 				return temp;
@@ -551,7 +551,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity7<IO, I2, I3, I4, I5, I6, I7, IO> apply(Inplaces.Arity7_1<IO, I2, I3, I4, I5, I6, I7> t) {
 			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(temp, in2, in3, in4, in5, in6, in7);
 				return temp;
@@ -574,7 +574,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity7<I1, IO, I3, I4, I5, I6, I7, IO> apply(Inplaces.Arity7_2<I1, IO, I3, I4, I5, I6, I7> t) {
 			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, temp, in3, in4, in5, in6, in7);
 				return temp;
@@ -597,7 +597,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity7<I1, I2, IO, I4, I5, I6, I7, IO> apply(Inplaces.Arity7_3<I1, I2, IO, I4, I5, I6, I7> t) {
 			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, temp, in4, in5, in6, in7);
 				return temp;
@@ -620,7 +620,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity7<I1, I2, I3, IO, I5, I6, I7, IO> apply(Inplaces.Arity7_4<I1, I2, I3, IO, I5, I6, I7> t) {
 			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, temp, in5, in6, in7);
 				return temp;
@@ -643,7 +643,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity7<I1, I2, I3, I4, IO, I6, I7, IO> apply(Inplaces.Arity7_5<I1, I2, I3, I4, IO, I6, I7> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, temp, in6, in7);
 				return temp;
@@ -666,7 +666,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity7<I1, I2, I3, I4, I5, IO, I7, IO> apply(Inplaces.Arity7_6<I1, I2, I3, I4, I5, IO, I7> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, temp, in7);
 				return temp;
@@ -689,7 +689,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity7<I1, I2, I3, I4, I5, I6, IO, IO> apply(Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, IO> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, temp);
 				return temp;
@@ -712,7 +712,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity8<IO, I2, I3, I4, I5, I6, I7, I8, IO> apply(Inplaces.Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8> t) {
 			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(temp, in2, in3, in4, in5, in6, in7, in8);
 				return temp;
@@ -735,7 +735,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity8<I1, IO, I3, I4, I5, I6, I7, I8, IO> apply(Inplaces.Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8> t) {
 			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, temp, in3, in4, in5, in6, in7, in8);
 				return temp;
@@ -758,7 +758,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity8<I1, I2, IO, I4, I5, I6, I7, I8, IO> apply(Inplaces.Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8> t) {
 			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, temp, in4, in5, in6, in7, in8);
 				return temp;
@@ -781,7 +781,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity8<I1, I2, I3, IO, I5, I6, I7, I8, IO> apply(Inplaces.Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8> t) {
 			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, temp, in5, in6, in7, in8);
 				return temp;
@@ -804,7 +804,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity8<I1, I2, I3, I4, IO, I6, I7, I8, IO> apply(Inplaces.Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, temp, in6, in7, in8);
 				return temp;
@@ -827,7 +827,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity8<I1, I2, I3, I4, I5, IO, I7, I8, IO> apply(Inplaces.Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, temp, in7, in8);
 				return temp;
@@ -850,7 +850,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity8<I1, I2, I3, I4, I5, I6, IO, I8, IO> apply(Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, temp, in8);
 				return temp;
@@ -873,7 +873,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, IO, IO> apply(Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, temp);
 				return temp;
@@ -896,7 +896,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity9<IO, I2, I3, I4, I5, I6, I7, I8, I9, IO> apply(Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9> t) {
 			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(temp, in2, in3, in4, in5, in6, in7, in8, in9);
 				return temp;
@@ -919,7 +919,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity9<I1, IO, I3, I4, I5, I6, I7, I8, I9, IO> apply(Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9> t) {
 			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, temp, in3, in4, in5, in6, in7, in8, in9);
 				return temp;
@@ -942,7 +942,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity9<I1, I2, IO, I4, I5, I6, I7, I8, I9, IO> apply(Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9> t) {
 			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, temp, in4, in5, in6, in7, in8, in9);
 				return temp;
@@ -965,7 +965,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity9<I1, I2, I3, IO, I5, I6, I7, I8, I9, IO> apply(Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9> t) {
 			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, temp, in5, in6, in7, in8, in9);
 				return temp;
@@ -988,7 +988,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity9<I1, I2, I3, I4, IO, I6, I7, I8, I9, IO> apply(Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, temp, in6, in7, in8, in9);
 				return temp;
@@ -1011,7 +1011,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity9<I1, I2, I3, I4, I5, IO, I7, I8, I9, IO> apply(Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, temp, in7, in8, in9);
 				return temp;
@@ -1034,7 +1034,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity9<I1, I2, I3, I4, I5, I6, IO, I8, I9, IO> apply(Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, temp, in8, in9);
 				return temp;
@@ -1057,7 +1057,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, IO, I9, IO> apply(Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, temp, in9);
 				return temp;
@@ -1080,7 +1080,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, IO, IO> apply(Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, temp);
 				return temp;
@@ -1103,7 +1103,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity10<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO> apply(Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10> t) {
 			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(temp, in2, in3, in4, in5, in6, in7, in8, in9, in10);
 				return temp;
@@ -1126,7 +1126,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity10<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, IO> apply(Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10> t) {
 			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, temp, in3, in4, in5, in6, in7, in8, in9, in10);
 				return temp;
@@ -1149,7 +1149,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity10<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, IO> apply(Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10> t) {
 			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, temp, in4, in5, in6, in7, in8, in9, in10);
 				return temp;
@@ -1172,7 +1172,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity10<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, IO> apply(Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10> t) {
 			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, temp, in5, in6, in7, in8, in9, in10);
 				return temp;
@@ -1195,7 +1195,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity10<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, IO> apply(Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, temp, in6, in7, in8, in9, in10);
 				return temp;
@@ -1218,7 +1218,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity10<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, IO> apply(Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9, I10 in10) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, temp, in7, in8, in9, in10);
 				return temp;
@@ -1241,7 +1241,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity10<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, IO> apply(Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9, I10 in10) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, temp, in8, in9, in10);
 				return temp;
@@ -1264,7 +1264,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, IO> apply(Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9, I10 in10) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, temp, in9, in10);
 				return temp;
@@ -1287,7 +1287,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, IO> apply(Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io, I10 in10) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, temp, in10);
 				return temp;
@@ -1310,7 +1310,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, IO> apply(Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, IO io) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, temp);
 				return temp;
@@ -1333,7 +1333,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity11<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> apply(Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> t) {
 			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(temp, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
 				return temp;
@@ -1356,7 +1356,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity11<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> apply(Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11> t) {
 			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, temp, in3, in4, in5, in6, in7, in8, in9, in10, in11);
 				return temp;
@@ -1379,7 +1379,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity11<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, IO> apply(Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11> t) {
 			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, temp, in4, in5, in6, in7, in8, in9, in10, in11);
 				return temp;
@@ -1402,7 +1402,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity11<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, IO> apply(Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11> t) {
 			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, temp, in5, in6, in7, in8, in9, in10, in11);
 				return temp;
@@ -1425,7 +1425,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity11<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, IO> apply(Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, temp, in6, in7, in8, in9, in10, in11);
 				return temp;
@@ -1448,7 +1448,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity11<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, IO> apply(Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, temp, in7, in8, in9, in10, in11);
 				return temp;
@@ -1471,7 +1471,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity11<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, IO> apply(Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9, I10 in10, I11 in11) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, temp, in8, in9, in10, in11);
 				return temp;
@@ -1494,7 +1494,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, IO> apply(Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9, I10 in10, I11 in11) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, temp, in9, in10, in11);
 				return temp;
@@ -1517,7 +1517,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, IO> apply(Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io, I10 in10, I11 in11) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, temp, in10, in11);
 				return temp;
@@ -1540,7 +1540,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, IO> apply(Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, IO io, I11 in11) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, temp, in11);
 				return temp;
@@ -1563,7 +1563,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, IO> apply(Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, IO io) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, temp);
 				return temp;
@@ -1586,7 +1586,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity12<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> apply(Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> t) {
 			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(temp, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 				return temp;
@@ -1609,7 +1609,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity12<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> apply(Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> t) {
 			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, temp, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 				return temp;
@@ -1632,7 +1632,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity12<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> apply(Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12> t) {
 			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, temp, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 				return temp;
@@ -1655,7 +1655,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity12<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, IO> apply(Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12> t) {
 			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, temp, in5, in6, in7, in8, in9, in10, in11, in12);
 				return temp;
@@ -1678,7 +1678,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity12<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, IO> apply(Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, temp, in6, in7, in8, in9, in10, in11, in12);
 				return temp;
@@ -1701,7 +1701,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity12<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, IO> apply(Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, temp, in7, in8, in9, in10, in11, in12);
 				return temp;
@@ -1724,7 +1724,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity12<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, IO> apply(Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, temp, in8, in9, in10, in11, in12);
 				return temp;
@@ -1747,7 +1747,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, IO> apply(Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9, I10 in10, I11 in11, I12 in12) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, temp, in9, in10, in11, in12);
 				return temp;
@@ -1770,7 +1770,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, IO> apply(Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io, I10 in10, I11 in11, I12 in12) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, temp, in10, in11, in12);
 				return temp;
@@ -1793,7 +1793,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, IO> apply(Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, IO io, I11 in11, I12 in12) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, temp, in11, in12);
 				return temp;
@@ -1816,7 +1816,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, IO> apply(Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, IO io, I12 in12) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, temp, in12);
 				return temp;
@@ -1839,7 +1839,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, IO> apply(Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, IO io) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, temp);
 				return temp;
@@ -1862,7 +1862,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity13<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> apply(Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> t) {
 			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(temp, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 				return temp;
@@ -1885,7 +1885,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity13<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> apply(Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> t) {
 			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, temp, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 				return temp;
@@ -1908,7 +1908,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity13<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> apply(Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> t) {
 			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, temp, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 				return temp;
@@ -1931,7 +1931,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity13<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> apply(Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13> t) {
 			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, temp, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 				return temp;
@@ -1954,7 +1954,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity13<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, IO> apply(Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, temp, in6, in7, in8, in9, in10, in11, in12, in13);
 				return temp;
@@ -1977,7 +1977,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity13<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, IO> apply(Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, temp, in7, in8, in9, in10, in11, in12, in13);
 				return temp;
@@ -2000,7 +2000,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, IO> apply(Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, temp, in8, in9, in10, in11, in12, in13);
 				return temp;
@@ -2023,7 +2023,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, IO> apply(Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, temp, in9, in10, in11, in12, in13);
 				return temp;
@@ -2046,7 +2046,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, IO> apply(Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io, I10 in10, I11 in11, I12 in12, I13 in13) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, temp, in10, in11, in12, in13);
 				return temp;
@@ -2069,7 +2069,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, IO> apply(Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, IO io, I11 in11, I12 in12, I13 in13) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, temp, in11, in12, in13);
 				return temp;
@@ -2092,7 +2092,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, IO> apply(Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, IO io, I12 in12, I13 in13) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, temp, in12, in13);
 				return temp;
@@ -2115,7 +2115,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, IO> apply(Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, IO io, I13 in13) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, temp, in13);
 				return temp;
@@ -2138,7 +2138,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, IO> apply(Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, IO io) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, temp);
 				return temp;
@@ -2161,7 +2161,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity14<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> apply(Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> t) {
 			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(temp, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 				return temp;
@@ -2184,7 +2184,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity14<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> apply(Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> t) {
 			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, temp, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 				return temp;
@@ -2207,7 +2207,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity14<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> apply(Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> t) {
 			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, temp, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 				return temp;
@@ -2230,7 +2230,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity14<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> apply(Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> t) {
 			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, temp, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 				return temp;
@@ -2253,7 +2253,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity14<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> apply(Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, temp, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 				return temp;
@@ -2276,7 +2276,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity14<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, IO> apply(Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, temp, in7, in8, in9, in10, in11, in12, in13, in14);
 				return temp;
@@ -2299,7 +2299,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, IO> apply(Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, temp, in8, in9, in10, in11, in12, in13, in14);
 				return temp;
@@ -2322,7 +2322,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, IO> apply(Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, temp, in9, in10, in11, in12, in13, in14);
 				return temp;
@@ -2345,7 +2345,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, IO> apply(Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, temp, in10, in11, in12, in13, in14);
 				return temp;
@@ -2368,7 +2368,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, IO> apply(Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, IO io, I11 in11, I12 in12, I13 in13, I14 in14) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, temp, in11, in12, in13, in14);
 				return temp;
@@ -2391,7 +2391,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, IO> apply(Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, IO io, I12 in12, I13 in13, I14 in14) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, temp, in12, in13, in14);
 				return temp;
@@ -2414,7 +2414,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, IO> apply(Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, IO io, I13 in13, I14 in14) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, temp, in13, in14);
 				return temp;
@@ -2437,7 +2437,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, IO> apply(Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, IO io, I14 in14) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, temp, in14);
 				return temp;
@@ -2460,7 +2460,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, IO> apply(Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, IO io) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, temp);
 				return temp;
@@ -2483,7 +2483,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity15<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> apply(Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> t) {
 			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(temp, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 				return temp;
@@ -2506,7 +2506,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity15<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> apply(Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> t) {
 			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, temp, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 				return temp;
@@ -2529,7 +2529,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity15<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> apply(Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> t) {
 			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, temp, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 				return temp;
@@ -2552,7 +2552,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity15<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> apply(Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> t) {
 			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, temp, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 				return temp;
@@ -2575,7 +2575,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity15<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> apply(Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, temp, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 				return temp;
@@ -2598,7 +2598,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity15<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> apply(Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, temp, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 				return temp;
@@ -2621,7 +2621,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, IO> apply(Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, temp, in8, in9, in10, in11, in12, in13, in14, in15);
 				return temp;
@@ -2644,7 +2644,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, IO> apply(Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, temp, in9, in10, in11, in12, in13, in14, in15);
 				return temp;
@@ -2667,7 +2667,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, IO> apply(Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, temp, in10, in11, in12, in13, in14, in15);
 				return temp;
@@ -2690,7 +2690,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, IO> apply(Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, IO io, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, temp, in11, in12, in13, in14, in15);
 				return temp;
@@ -2713,7 +2713,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, IO> apply(Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, IO io, I12 in12, I13 in13, I14 in14, I15 in15) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, temp, in12, in13, in14, in15);
 				return temp;
@@ -2736,7 +2736,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, IO> apply(Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, IO io, I13 in13, I14 in14, I15 in15) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, temp, in13, in14, in15);
 				return temp;
@@ -2759,7 +2759,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, IO> apply(Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, IO io, I14 in14, I15 in15) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, temp, in14, in15);
 				return temp;
@@ -2782,7 +2782,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, IO> apply(Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, IO io, I15 in15) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, temp, in15);
 				return temp;
@@ -2805,7 +2805,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, IO> apply(Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, IO io) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, temp);
 				return temp;
@@ -2828,7 +2828,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity16<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> t) {
 			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(temp, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 				return temp;
@@ -2851,7 +2851,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity16<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> t) {
 			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, temp, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 				return temp;
@@ -2874,7 +2874,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity16<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> t) {
 			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, temp, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 				return temp;
@@ -2897,7 +2897,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity16<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> t) {
 			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, temp, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 				return temp;
@@ -2920,7 +2920,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity16<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, temp, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 				return temp;
@@ -2943,7 +2943,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity16<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, temp, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 				return temp;
@@ -2966,7 +2966,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, temp, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 				return temp;
@@ -2989,7 +2989,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, temp, in9, in10, in11, in12, in13, in14, in15, in16);
 				return temp;
@@ -3012,7 +3012,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, temp, in10, in11, in12, in13, in14, in15, in16);
 				return temp;
@@ -3035,7 +3035,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, IO io, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, temp, in11, in12, in13, in14, in15, in16);
 				return temp;
@@ -3058,7 +3058,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, IO io, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, temp, in12, in13, in14, in15, in16);
 				return temp;
@@ -3081,7 +3081,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, IO io, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, temp, in13, in14, in15, in16);
 				return temp;
@@ -3104,7 +3104,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16, IO> apply(Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, IO io, I14 in14, I15 in15, I16 in16) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, temp, in14, in15, in16);
 				return temp;
@@ -3127,7 +3127,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16, IO> apply(Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, IO io, I15 in15, I16 in16) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, temp, in15, in16);
 				return temp;
@@ -3150,7 +3150,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16, IO> apply(Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, IO io, I16 in16) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, temp, in16);
 				return temp;
@@ -3173,7 +3173,7 @@ public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I
 		@Override
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO, IO> apply(Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> t) {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, IO io) -> {
-				IO temp = createOp.apply(io);
+				var temp = createOp.apply(io);
 				copyOp.accept(io, temp);
 				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, temp);
 				return temp;

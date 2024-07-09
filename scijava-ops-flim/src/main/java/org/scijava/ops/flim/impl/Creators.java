@@ -55,7 +55,7 @@ public class Creators {
 	 */
 	public static Img<DoubleType> makeSquareKernel(int size) {
 		Img<DoubleType> out = ArrayImgs.doubles(size, size, 1);
-		Cursor<DoubleType> cursor = out.cursor();
+        var cursor = out.cursor();
 		while (cursor.hasNext()) {
 			cursor.fwd();
 			cursor.get().set(1.0);

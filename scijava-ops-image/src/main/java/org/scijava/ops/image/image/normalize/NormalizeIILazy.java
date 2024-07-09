@@ -71,10 +71,10 @@ public class NormalizeIILazy<I extends RealType<I>, O extends RealType<O>>
 	public void compute(RandomAccessibleInterval<I> input,
 		RandomAccessibleInterval<O> output)
 	{
-		Pair<I, I> sourceMinMax = minMaxFunc.apply(input);
-		O min = Util.getTypeFromInterval(output).createVariable();
+        var sourceMinMax = minMaxFunc.apply(input);
+        var min = Util.getTypeFromInterval(output).createVariable();
 		min.setReal(min.getMinValue());
-		O max = Util.getTypeFromInterval(output).createVariable();
+        var max = Util.getTypeFromInterval(output).createVariable();
 		max.setReal(max.getMaxValue());
 
 		normalizerFunc.accept(input, sourceMinMax.getA(), sourceMinMax.getB(), min,

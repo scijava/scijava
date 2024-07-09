@@ -60,10 +60,10 @@ public class CoocStdY implements Function<double[][], DoubleType> {
 	public DoubleType apply(double[][] input) {
 		double res = 0;
 
-		final double meany = coocMeanYFunc.apply(input).getRealDouble();
-		final double[] py = coocPYFunc.apply(input);
+		final var meany = coocMeanYFunc.apply(input).getRealDouble();
+		final var py = coocPYFunc.apply(input);
 
-		for (int i = 0; i < py.length; i++) {
+		for (var i = 0; i < py.length; i++) {
 			res += (i - meany) * (i - meany) * py[i];
 		}
 

@@ -59,18 +59,18 @@ public class AmplitudeFractions {
 	) {
 
 		RandomAccessibleInterval<FloatType> paramMap = rslt.paramMap;
-		int nComp = (int) (paramMap.dimension(rslt.ltAxis) - 1) / 2;
+        var nComp = (int) (paramMap.dimension(rslt.ltAxis) - 1) / 2;
 
-		long[] dim = new long[paramMap.numDimensions() - 1];
+        var dim = new long[paramMap.numDimensions() - 1];
 		Views.hyperSlice(paramMap, rslt.ltAxis, 0).dimensions(dim);
 
-		ArrayImg<FloatType, FloatArray> APercent = ArrayImgs.floats(dim);
-		ArrayImg<FloatType, FloatArray> ASum = ArrayImgs.floats(dim);
+        var APercent = ArrayImgs.floats(dim);
+        var ASum = ArrayImgs.floats(dim);
 
-		for (int c = 0; c < nComp; c++)
+		for (var c = 0; c < nComp; c++)
 			LoopBuilder.setImages(ASum, getSlice(rslt, c * 2 + 1)) //
 				.forEachPixel(FloatType::add);
-		FloatType f = new FloatType();
+        var f = new FloatType();
 		f.setReal(Float.MIN_VALUE);
 		LoopBuilder.setImages(ASum, APercent, getSlice(rslt, index * 2 + 1))
 			.forEachPixel((aS, aP, s) -> {

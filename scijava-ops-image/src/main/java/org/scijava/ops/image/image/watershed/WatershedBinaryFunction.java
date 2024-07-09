@@ -80,7 +80,7 @@ public class WatershedBinaryFunction<T extends BooleanType<T>, B extends Boolean
 		double[] sigma, //
 		@Nullable RandomAccessibleInterval<B> mask //
 	) {
-		ImgLabeling<Integer, IntType> outputLabeling = labelingCreator.apply(in,
+        var outputLabeling = labelingCreator.apply(in,
 			new IntType());
 		watershedOp.compute(in, useEightConnectivity, drawWatersheds, sigma, mask,
 			outputLabeling);

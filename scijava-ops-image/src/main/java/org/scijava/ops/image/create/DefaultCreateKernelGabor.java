@@ -76,30 +76,30 @@ public final class DefaultCreateKernelGabor {
 
 		// sigmas must be reasonable
 		// NB: sigma==0 indicates no filtering along its axis
-		for (final double s : sigmas)
+		for (final var s : sigmas)
 			if (s < 0.0) throw new IllegalArgumentException(
 				"Input sigma must be non-negative.");
 
 		// the size and center of the output image
-		final long[] dims = new long[sigmas.length];
-		final long[] centre = new long[sigmas.length];
-		for (int d = 0; d < dims.length; d++) {
+		final var dims = new long[sigmas.length];
+		final var centre = new long[sigmas.length];
+		for (var d = 0; d < dims.length; d++) {
 			dims[d] = Math.max(3, 2 * (int) (3 * sigmas[d] + 0.5) + 1);
 			centre[d] = (int) (dims[d] / 2);
 		}
 
 		// prepare the output image
-		final RandomAccessibleInterval<C> out =
+		final var out =
 			(RandomAccessibleInterval<C>) createImgFunc.apply(new FinalInterval(dims),
 				(T) typeVar);
 
 		// calculate the squared length of the period vector
-		double perLengthSq = 0.0;
-		for (int d = 0; d < period.length; d++)
+        var perLengthSq = 0.0;
+		for (var d = 0; d < period.length; d++)
 			perLengthSq += period[d] * period[d];
 
 		// fill the output image
-		final Cursor<C> cursor = Views.iterable(out).cursor();
+		final var cursor = Views.iterable(out).cursor();
 		while (cursor.hasNext()) {
 			cursor.fwd();
 
@@ -107,14 +107,14 @@ public final class DefaultCreateKernelGabor {
 			cursor.localize(dims);
 
 			// to calculate current Gabor kernel value
-			double GaussExp = 0.0;
-			double freqPart = 0.0;
+            var GaussExp = 0.0;
+            var freqPart = 0.0;
 
 			// but produce no Gaussian envelope for axes for which sigma==0
-			double blockingExp = 1.0; // no blocking by default
+            var blockingExp = 1.0; // no blocking by default
 
 			// sweep over all dimensions to determine voxel value
-			for (int d = 0; d < dims.length; d++) {
+			for (var d = 0; d < dims.length; d++) {
 				final double dx = dims[d] - centre[d];
 
 				if (sigmas[d] > 0.)

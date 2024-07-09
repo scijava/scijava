@@ -63,12 +63,12 @@ public class DefaultMedian<I extends RealType<I>, O extends RealType<O>>
 	 */
 	@Override
 	public void compute(final Iterable<I> input, final O median) {
-		final ArrayList<Double> statistics = new ArrayList<>();
+		final var statistics = new ArrayList<Double>();
 
 		input.forEach(i -> statistics.add(i.getRealDouble()));
 
-		final int k = statistics.size() / 2;
-		double result = DefaultQuantile.select(statistics, k);
+		final var k = statistics.size() / 2;
+        var result = DefaultQuantile.select(statistics, k);
 		if (statistics.size() % 2 == 0) {
 			result += DefaultQuantile.select(statistics, k - 1);
 			result *= 0.5;

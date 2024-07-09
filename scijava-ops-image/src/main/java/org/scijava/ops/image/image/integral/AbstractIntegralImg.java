@@ -70,15 +70,15 @@ public abstract class AbstractIntegralImg<I extends RealType<I>, O extends RealT
 		// nice, but to do that we need the intermediary to start with the input
 		// data
 		// (so we convert the input to type O here)
-		RandomAccessibleInterval<O> generalizedInput = Converters.convert(input,
+        var generalizedInput = Converters.convert(input,
 			(Converter<I, O>) (arg0, arg1) -> arg1.setReal(arg0.getRealDouble()),
 			Views.iterable(output).firstElement().createVariable());
 
 		// Create integral image
-		for (int i = 0; i < input.numDimensions(); ++i) {
+		for (var i = 0; i < input.numDimensions(); ++i) {
 			// Slicewise integral addition in one direction
 			// TODO can we find a way to parallelize this?
-			for (int j = 0; j < input.dimension(i); j++)
+			for (var j = 0; j < input.dimension(i); j++)
 				getComputer(i).compute(Views.hyperSlice(generalizedInput, i, j), Views
 					.hyperSlice(output, i, j));
 			generalizedInput = output;
@@ -100,14 +100,14 @@ public abstract class AbstractIntegralImg<I extends RealType<I>, O extends RealT
 	public final Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> computeAdd =
 		(input, output) -> {
 
-			final Cursor<O> inputCursor = Views.iterable(input).cursor();
-			final Cursor<O> outputCursor = Views.iterable(output).cursor();
+			final var inputCursor = Views.iterable(input).cursor();
+			final var outputCursor = Views.iterable(output).cursor();
 
-			double tmp = 0.0d;
+            var tmp = 0.0d;
 			while (outputCursor.hasNext()) {
 
-				final O inputValue = inputCursor.next();
-				final O outputValue = outputCursor.next();
+				final var inputValue = inputCursor.next();
+				final var outputValue = outputCursor.next();
 
 				tmp += inputValue.getRealDouble();
 
@@ -118,14 +118,14 @@ public abstract class AbstractIntegralImg<I extends RealType<I>, O extends RealT
 	public final Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> computeSquareAndAdd =
 		(input, output) -> {
 
-			final Cursor<O> inputCursor = Views.iterable(input).cursor();
-			final Cursor<O> outputCursor = Views.iterable(output).cursor();
+			final var inputCursor = Views.iterable(input).cursor();
+			final var outputCursor = Views.iterable(output).cursor();
 
-			double tmp = 0.0d;
+            var tmp = 0.0d;
 			while (outputCursor.hasNext()) {
 
-				final O inputValue = inputCursor.next();
-				final O outputValue = outputCursor.next();
+				final var inputValue = inputCursor.next();
+				final var outputValue = outputCursor.next();
 
 				tmp += Math.pow(inputValue.getRealDouble(), 2);
 

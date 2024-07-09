@@ -61,27 +61,27 @@ public class DefaultVariance<T extends RealType<T>> extends
 		final Integer numGreyLevels, final Integer distance,
 		final MatrixOrientation orientation)
 	{
-		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels,
+		final var matrix = getCooccurrenceMatrix(input, numGreyLevels,
 			distance, orientation);
 
-		final int nrGreyLevel = matrix.length;
+		final var nrGreyLevel = matrix.length;
 
-		double mean = 0.0;
-		for (int i = 0; i < nrGreyLevel; i++) {
-			for (int j = 0; j < nrGreyLevel; j++) {
+        var mean = 0.0;
+		for (var i = 0; i < nrGreyLevel; i++) {
+			for (var j = 0; j < nrGreyLevel; j++) {
 				mean += matrix[i][j];
 			}
 		}
 		mean /= nrGreyLevel * nrGreyLevel;
 
-		double result = 0.0;
-		for (int i = 0; i < nrGreyLevel; i++) {
-			for (int j = 0; j < nrGreyLevel; j++) {
+        var result = 0.0;
+		for (var i = 0; i < nrGreyLevel; i++) {
+			for (var j = 0; j < nrGreyLevel; j++) {
 				result += (i - mean) * (i - mean) * matrix[i][j];
 			}
 		}
 
-		DoubleType output = new DoubleType();
+        var output = new DoubleType();
 		output.set(result);
 		return output;
 	}

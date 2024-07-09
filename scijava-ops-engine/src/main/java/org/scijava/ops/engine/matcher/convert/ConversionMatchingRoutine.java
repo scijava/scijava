@@ -67,9 +67,9 @@ public class ConversionMatchingRoutine extends RuntimeSafeMatchingRoutine {
 			conditions.request(), //
 			conditions.hints().plus(BaseOpHints.Conversion.IN_PROGRESS) //
 		);
-		OpRequest request = conditions.request();
-		final ArrayList<OpCandidate> candidates = new ArrayList<>();
-		for (final OpInfo info : env.infos(request.name(), convertConditions
+        var request = conditions.request();
+		final var candidates = new ArrayList<OpCandidate>();
+		for (final var info : env.infos(request.name(), convertConditions
 			.hints()))
 		{
 			Conversions.tryConvert(env, info, request).ifPresent(converted -> {
@@ -81,7 +81,7 @@ public class ConversionMatchingRoutine extends RuntimeSafeMatchingRoutine {
 				));
 			});
 		}
-		final List<OpCandidate> matches = filterMatches(candidates);
+		final var matches = filterMatches(candidates);
 		try {
 			return new MatchingResult(candidates, matches, Collections.singletonList(
 				request)).singleMatch();

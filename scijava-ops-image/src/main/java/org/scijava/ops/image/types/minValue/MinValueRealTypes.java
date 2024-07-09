@@ -284,7 +284,7 @@ public class MinValueRealTypes {
 	 */
 	public final Function<UnsignedVariableBitLengthType, UnsignedVariableBitLengthType> minVarLengthType =
 		in -> {
-			int nBits = in.getBitsPerPixel();
+            var nBits = in.getBitsPerPixel();
 			return new UnsignedVariableBitLengthType(0l, nBits);
 		};
 

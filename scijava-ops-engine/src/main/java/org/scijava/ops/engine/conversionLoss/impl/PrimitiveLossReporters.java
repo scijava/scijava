@@ -60,7 +60,7 @@ public class PrimitiveLossReporters implements OpCollection {
 	@OpField(names = "engine.lossReporter")
 	public final IntToDecimalReporter<Long, Double> LongDoubleReporter = (from,
 		to) -> {
-		long maxValue = Long.MAX_VALUE - 1;
+        var maxValue = Long.MAX_VALUE - 1;
 		double converted = maxValue;
 		return (double) Math.abs(maxValue - (long) converted);
 	};
@@ -68,16 +68,16 @@ public class PrimitiveLossReporters implements OpCollection {
 	@OpHints(hints = { Conversion.FORBIDDEN })
 	@OpField(names = "engine.lossReporter")
 	public final LossReporter<Double, Long> DoubleLongReporter = (from, to) -> {
-		double maxValue = Double.MAX_VALUE;
-		long converted = (long) maxValue;
+        var maxValue = Double.MAX_VALUE;
+        var converted = (long) maxValue;
 		return maxValue - converted;
 	};
 
 	@OpHints(hints = { Conversion.FORBIDDEN })
 	@OpField(names = "engine.lossReporter")
 	public final LossReporter<Long, Integer> LongIntegerReporter = (from, to) -> {
-		long maxValue = Long.MAX_VALUE;
-		int converted = (int) maxValue;
+        var maxValue = Long.MAX_VALUE;
+        var converted = (int) maxValue;
 		return (double) Math.abs(maxValue - converted);
 	};
 
@@ -100,8 +100,8 @@ public class PrimitiveLossReporters implements OpCollection {
 	@OpField(names = "engine.lossReporter")
 	public final LossReporter<Double, Integer> DoubleIntegerReporter = (from,
 		to) -> {
-		double maxValue = Double.MAX_VALUE;
-		int converted = (int) maxValue;
+        var maxValue = Double.MAX_VALUE;
+        var converted = (int) maxValue;
 		return maxValue - converted;
 	};
 

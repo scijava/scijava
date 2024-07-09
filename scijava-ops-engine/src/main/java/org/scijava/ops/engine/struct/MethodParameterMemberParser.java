@@ -55,10 +55,10 @@ public class MethodParameterMemberParser implements
 		ParameterData paramData = new SynthesizedMethodParameterData(source, Types
 			.raw(structType));
 
-		final ArrayList<SynthesizedParameterMember<?>> items = new ArrayList<>();
+		final var items = new ArrayList<SynthesizedParameterMember<?>>();
 
 		// Determine functional type
-		Type functionalType = OpMethodUtils.getOpMethodType(Types.raw(structType),
+        var functionalType = OpMethodUtils.getOpMethodType(Types.raw(structType),
 			source);
 
 		// Parse method level @Parameter annotations.

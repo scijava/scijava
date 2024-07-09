@@ -117,7 +117,7 @@ public final class Gaussians {
 			@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> outOfBounds, //
 			final RandomAccessibleInterval<O> output //
 	) {
-		final double[] sigmas = new double[input.numDimensions()];
+		final var sigmas = new double[input.numDimensions()];
 		Arrays.fill(sigmas, sigma);
 		defaultGaussRAI(input, sigmas, outOfBounds, output);
 	};

@@ -62,14 +62,14 @@ public class LabelingMappingTypeExtractor extends
 		// determine the type arg of the mapping through looking at the Set of
 		// Labels (object.getLabels() returns a Set<T>, which can be reified by
 		// another TypeService plugin).
-		Type labelingMappingSet = r.reify(object.getLabels());
+        var labelingMappingSet = r.reify(object.getLabels());
 		// sanity check, argType will always be a set so argType should always be a
 		// ParameterizedType
 		if (!(labelingMappingSet instanceof ParameterizedType))
 			throw new IllegalArgumentException(
 				"Impossible LabelingMapping provided as input");
 		// The type arg of argType is the same type arg of o.
-		Type elementType = ((ParameterizedType) labelingMappingSet)
+        var elementType = ((ParameterizedType) labelingMappingSet)
 			.getActualTypeArguments()[0];
 		return new Type[] { elementType };
 	}

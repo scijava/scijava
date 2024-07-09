@@ -74,8 +74,8 @@ public final class OpMethodUtils {
 			throw new FunctionalTypeOpException(opMethod, e);
 
 		}
-		Type[] typeMethodParams = abstractMethod.getGenericParameterTypes();
-		java.lang.reflect.Parameter[] opMethodParams = getOpParams(opMethod
+        var typeMethodParams = abstractMethod.getGenericParameterTypes();
+        var opMethodParams = getOpParams(opMethod
 			.getParameters());
 
 		if (typeMethodParams.length != opMethodParams.length) {
@@ -89,7 +89,7 @@ public final class OpMethodUtils {
 		GenericAssignability.inferTypeVariables(typeMethodParams, getOpParamTypes(
 			opMethodParams), typeVarAssigns);
 		if (abstractMethod.getReturnType() != void.class) {
-			Type returnType = opMethod.getGenericReturnType();
+            var returnType = opMethod.getGenericReturnType();
 			if (Types.raw(returnType).isPrimitive()) returnType = Classes.box(Types
 				.raw(returnType));
 			GenericAssignability.inferTypeVariables(new Type[] { abstractMethod
@@ -135,14 +135,14 @@ public final class OpMethodUtils {
 	{
 		// NB LambdaMetaFactory only works if this Module (org.scijava.ops.engine)
 		// can read the Module containing the Op. So we also have to check that.
-		Module methodModule = method.getDeclaringClass().getModule();
-		Module opsEngine = OpMethodUtils.class.getModule();
+        var methodModule = method.getDeclaringClass().getModule();
+        var opsEngine = OpMethodUtils.class.getModule();
 
 		opsEngine.addReads(methodModule);
 		try {
 			method.setAccessible(true);
-			MethodHandle handle = MethodHandles.lookup().unreflect(method);
-			Object op = Lambdas.lambdaize( //
+            var handle = MethodHandles.lookup().unreflect(method);
+            var op = Lambdas.lambdaize( //
 				Types.raw(info.opType()), //
 				handle, //
 				Infos.dependencies(info).stream().map(Member::rawType).toArray(

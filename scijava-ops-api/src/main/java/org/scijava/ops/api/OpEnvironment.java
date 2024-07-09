@@ -72,7 +72,7 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 * @see #build() for an {@link OpEnvironment} that is fully populated
 	 */
 	static OpEnvironment buildEmpty() {
-		Optional<OpEnvironment> opsOptional = Discoverer //
+        var opsOptional = Discoverer //
 			.using(ServiceLoader::load) //
 			.discoverMax(OpEnvironment.class);
 		return opsOptional.orElseThrow( //
@@ -87,7 +87,7 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 * @see #buildEmpty() for an {@link OpEnvironment} that is empty
 	 */
 	static OpEnvironment build() {
-		OpEnvironment ops = buildEmpty();
+        var ops = buildEmpty();
 		ops.discoverEverything();
 		return ops;
 	}
@@ -196,7 +196,7 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	default <T> T opFromSignature(final String signature,
 		final Nil<T> specialType)
 	{
-		InfoTree info = treeFromSignature(signature);
+        var info = treeFromSignature(signature);
 		return opFromInfoTree(info, specialType);
 	}
 

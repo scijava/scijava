@@ -117,7 +117,7 @@ public final class Functions {
 	 */
 	public static boolean isFunction(Class<?> c) {
 		try {
-			Class<?> superType = superType(c);
+			var superType = superType(c);
 			return true;
 		} catch (IllegalArgumentException e) {
 			return false;
@@ -126,7 +126,7 @@ public final class Functions {
 
 	public static Class<?> superType(Class<?> c) {
 		if (ALL_FUNCTIONS.containsValue(c)) return c;
-		for(Class<?> func : ALL_ARITIES.keySet()) {
+		for(var func : ALL_ARITIES.keySet()) {
 			if (func.isAssignableFrom(c)) return func;
 		}
 		throw new IllegalArgumentException(c + " is not a subclass of any known Functions!");
@@ -964,8 +964,7 @@ public final class Functions {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
-		Function<Object, O> func =
-			(Function<Object, O>) f;
+		var func = (Function<Object, O>) f;
 
 		return new ArityN<>() {
 
@@ -992,8 +991,7 @@ public final class Functions {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
-		BiFunction<Object, Object, O> func =
-			(BiFunction<Object, Object, O>) f;
+		var func = (BiFunction<Object, Object, O>) f;
 
 		return new ArityN<>() {
 
@@ -1020,8 +1018,7 @@ public final class Functions {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
-		Functions.Arity3<Object, Object, Object, O> func =
-			(Functions.Arity3<Object, Object, Object, O>) f;
+		var func = (Functions.Arity3<Object, Object, Object, O>) f;
 
 		return new ArityN<>() {
 
@@ -1048,8 +1045,7 @@ public final class Functions {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
-		Functions.Arity4<Object, Object, Object, Object, O> func =
-			(Functions.Arity4<Object, Object, Object, Object, O>) f;
+		var func = (Functions.Arity4<Object, Object, Object, Object, O>) f;
 
 		return new ArityN<>() {
 
@@ -1076,8 +1072,7 @@ public final class Functions {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
-		Functions.Arity5<Object, Object, Object, Object, Object, O> func =
-			(Functions.Arity5<Object, Object, Object, Object, Object, O>) f;
+		var func = (Functions.Arity5<Object, Object, Object, Object, Object, O>) f;
 
 		return new ArityN<>() {
 
@@ -1104,8 +1099,7 @@ public final class Functions {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
-		Functions.Arity6<Object, Object, Object, Object, Object, Object, O> func =
-			(Functions.Arity6<Object, Object, Object, Object, Object, Object, O>) f;
+		var func = (Functions.Arity6<Object, Object, Object, Object, Object, Object, O>) f;
 
 		return new ArityN<>() {
 
@@ -1132,8 +1126,7 @@ public final class Functions {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
-		Functions.Arity7<Object, Object, Object, Object, Object, Object, Object, O> func =
-			(Functions.Arity7<Object, Object, Object, Object, Object, Object, Object, O>) f;
+		var func = (Functions.Arity7<Object, Object, Object, Object, Object, Object, Object, O>) f;
 
 		return new ArityN<>() {
 
@@ -1160,8 +1153,7 @@ public final class Functions {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
-		Functions.Arity8<Object, Object, Object, Object, Object, Object, Object, Object, O> func =
-			(Functions.Arity8<Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
+		var func = (Functions.Arity8<Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
 
 		return new ArityN<>() {
 
@@ -1188,8 +1180,7 @@ public final class Functions {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
-		Functions.Arity9<Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func =
-			(Functions.Arity9<Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
+		var func = (Functions.Arity9<Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
 
 		return new ArityN<>() {
 
@@ -1216,8 +1207,7 @@ public final class Functions {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
-		Functions.Arity10<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func =
-			(Functions.Arity10<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
+		var func = (Functions.Arity10<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
 
 		return new ArityN<>() {
 
@@ -1244,8 +1234,7 @@ public final class Functions {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
-		Functions.Arity11<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func =
-			(Functions.Arity11<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
+		var func = (Functions.Arity11<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
 
 		return new ArityN<>() {
 
@@ -1272,8 +1261,7 @@ public final class Functions {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
-		Functions.Arity12<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func =
-			(Functions.Arity12<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
+		var func = (Functions.Arity12<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
 
 		return new ArityN<>() {
 
@@ -1300,8 +1288,7 @@ public final class Functions {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
-		Functions.Arity13<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func =
-			(Functions.Arity13<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
+		var func = (Functions.Arity13<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
 
 		return new ArityN<>() {
 
@@ -1328,8 +1315,7 @@ public final class Functions {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
-		Functions.Arity14<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func =
-			(Functions.Arity14<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
+		var func = (Functions.Arity14<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
 
 		return new ArityN<>() {
 
@@ -1356,8 +1342,7 @@ public final class Functions {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
-		Functions.Arity15<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func =
-			(Functions.Arity15<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
+		var func = (Functions.Arity15<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
 
 		return new ArityN<>() {
 
@@ -1384,8 +1369,7 @@ public final class Functions {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
-		Functions.Arity16<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func =
-			(Functions.Arity16<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
+		var func = (Functions.Arity16<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
 
 		return new ArityN<>() {
 

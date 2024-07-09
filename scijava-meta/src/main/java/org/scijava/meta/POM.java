@@ -88,7 +88,7 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 
 	/** Gets the POM's groupId. */
 	public String groupId() {
-		final String groupId = cdata("//project/groupId");
+		final var groupId = cdata("//project/groupId");
 		if (groupId != null) return groupId;
 		return parentGroupId();
 	}
@@ -231,7 +231,7 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 	public static POM pom(final Class<?> c, final String groupId,
 												final String artifactId)
 	{
-		final URL location = Classes.location(c);
+		final var location = Classes.location(c);
 		return POMS.computeIfAbsent( //
 			location, //
 			l -> findPOM(l, groupId, artifactId) //
@@ -261,9 +261,9 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 				// look for pom.xml in JAR's META-INF/maven subdirectory
 				if (groupId == null || artifactId == null) {
 					// groupId and/or artifactId is unknown; scan for the POM
-					final URL pomBase = new URL("jar:" + //
+					final var pomBase = new URL("jar:" + //
 						location + "!/META-INF/maven");
-					for (final URL url : URLs.listContents(pomBase, true, true)) {
+					for (final var url : URLs.listContents(pomBase, true, true)) {
 						if (url.toExternalForm().endsWith("/pom.xml")) {
 							return new POM(url);
 						}
@@ -271,16 +271,16 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 				}
 				else {
 					// known groupId and artifactId; grab it directly
-					final String pomPath = "META-INF/maven/" + groupId + "/" +
+					final var pomPath = "META-INF/maven/" + groupId + "/" +
 						artifactId + "/pom.xml";
-					final URL pomURL = new URL("jar:" + location + "!/" + pomPath);
+					final var pomURL = new URL("jar:" + location + "!/" + pomPath);
 					return new POM(pomURL);
 				}
 			}
 			// look for the POM in the class's base directory
-			final File file = URLs.toFile(location);
-			final File baseDir = Apps.baseDirectory(file, null);
-			final File pomFile = new File(baseDir, "pom.xml");
+			final var file = URLs.toFile(location);
+			final var baseDir = Apps.baseDirectory(file, null);
+			final var pomFile = new File(baseDir, "pom.xml");
 			return new POM(pomFile);
 		}
 		catch (final IOException e) {
@@ -291,8 +291,8 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 	/** Gets all available Maven POMs on the class path. */
 	public static List<POM> allPOMs() {
 		// find all META-INF/maven/ folders on the classpath
-		final String pomPrefix = "META-INF/maven/";
-		final ClassLoader classLoader = Classes.classLoader();
+		final var pomPrefix = "META-INF/maven/";
+		final var classLoader = Classes.classLoader();
 		final Enumeration<URL> resources;
 		try {
 			resources = classLoader.getResources(pomPrefix);
@@ -301,12 +301,12 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 			return null;
 		}
 
-		final ArrayList<POM> poms = new ArrayList<>();
+		final var poms = new ArrayList<POM>();
 
 		// recursively list contents of META-INF/maven/ directories
 		while (resources.hasMoreElements()) {
-			final URL resource = resources.nextElement();
-			for (final URL url : URLs.listContents(resource)) {
+			final var resource = resources.nextElement();
+			for (final var url : URLs.listContents(resource)) {
 				// look for pom.xml files amongst the contents
 				if (url.getPath().endsWith("/pom.xml")) {
 					try {
@@ -356,18 +356,18 @@ public class POM extends XML implements Comparable<POM>, Versioned {
 	 * @see Comparator#compare(Object, Object)
 	 */
 	public static int compareVersions(final String v1, final String v2) {
-		final String[] t1 = v1.split("[^\\w]");
-		final String[] t2 = v2.split("[^\\w]");
-		final int size = Math.min(t1.length, t2.length);
-		for (int i = 0; i < size; i++) {
+		final var t1 = v1.split("[^\\w]");
+		final var t2 = v2.split("[^\\w]");
+		final var size = Math.min(t1.length, t2.length);
+		for (var i = 0; i < size; i++) {
 			try {
-				final long n1 = Long.parseLong(t1[i]);
-				final long n2 = Long.parseLong(t2[i]);
+				final var n1 = Long.parseLong(t1[i]);
+				final var n2 = Long.parseLong(t2[i]);
 				if (n1 < n2) return -1;
 				if (n1 > n2) return 1;
 			}
 			catch (final NumberFormatException exc) {
-				final int result = t1[i].compareTo(t2[i]);
+				final var result = t1[i].compareTo(t2[i]);
 				if (result != 0) return result;
 			}
 		}

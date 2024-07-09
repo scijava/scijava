@@ -103,10 +103,10 @@ abstract class OpImplData {
 		this.source = formulateSource(source);
 		this.version = env.getOptions().getOrDefault(OpImplNoteParser.OP_VERSION,
 			"UNKNOWN");
-		List<String[]> tags = blockSeparator.splitAsStream(doc) //
+        var tags = blockSeparator.splitAsStream(doc) //
 			.map(section -> tagElementSeparator.split(section, 2)) //
 			.collect(Collectors.toList());
-		List<String[]> remaining = parseUniversalTags(tags);
+        var remaining = parseUniversalTags(tags);
 		parseAdditionalTags(source, remaining);
 		validateOpImpl();
 	}
@@ -123,8 +123,8 @@ abstract class OpImplData {
 				". Op names cannot be empty!");
 		}
 
-		int outputs = 0;
-		for (OpParameter p : params) {
+        var outputs = 0;
+		for (var p : params) {
 			if (p.ioType.equals(OpParameter.IO_TYPE.OUTPUT)) outputs++;
 		}
 		if (outputs > 1) {
@@ -135,7 +135,7 @@ abstract class OpImplData {
 
 	private List<String[]> parseUniversalTags(List<String[]> tags) {
 		List<String[]> remainingTags = new ArrayList<>();
-		for (String[] tag : tags) {
+		for (var tag : tags) {
 			// Parse descriptions
 			if (!tag[0].startsWith("@")) {
 				if (description.isBlank()) this.description = String.join(" ", tag);
@@ -176,10 +176,10 @@ abstract class OpImplData {
 	private void parseImplNote(String implTag) {
 		var implElements = tagElementSeparator.split(implTag);
 		if (implElements.length > 1) {
-			for (int i = 1; i < implElements.length; i++) {
-				String[] kv = implElements[i].split("=", 2);
+			for (var i = 1; i < implElements.length; i++) {
+                var kv = implElements[i].split("=", 2);
 				if (kv.length == 2) {
-					String value = kv[1].replaceAll("^[,\"']+|[,\"']+$", "");
+                    var value = kv[1].replaceAll("^[,\"']+|[,\"']+$", "");
 					if ("priority".equals(kv[0])) {
 						this.priority = Double.parseDouble(value);
 					}
@@ -216,7 +216,7 @@ abstract class OpImplData {
 		map.put("description", description);
 		map.put("priority", priority);
 		map.put("authors", authors.toArray(String[]::new));
-		List<Map<String, Object>> foo = params.stream() //
+        var foo = params.stream() //
 			.map(OpParameter::data) //
 			.collect(Collectors.toList());
 		map.put("parameters", foo.toArray(Map[]::new));

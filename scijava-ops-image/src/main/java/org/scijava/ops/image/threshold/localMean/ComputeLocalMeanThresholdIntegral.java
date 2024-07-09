@@ -79,14 +79,14 @@ public class ComputeLocalMeanThresholdIntegral<T extends RealType<T>, U extends 
 		final RectangleNeighborhood<? extends Composite<U>> inputNeighborhood,
 		final T inputCenterPixel, final Double c, final BitType output)
 	{
-		final DoubleType sum = new DoubleType();
+		final var sum = new DoubleType();
 		integralMeanOp.compute(inputNeighborhood, sum);
 
 		// Subtract the contrast
 		sum.sub(new DoubleType(c));
 
 		// Set value
-		final DoubleType centerPixelAsDoubleType = new DoubleType();
+		final var centerPixelAsDoubleType = new DoubleType();
 		centerPixelAsDoubleType.set(inputCenterPixel.getRealDouble());
 
 		output.set(centerPixelAsDoubleType.compareTo(sum) > 0);

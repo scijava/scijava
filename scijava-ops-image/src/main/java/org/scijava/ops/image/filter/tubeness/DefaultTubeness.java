@@ -116,11 +116,11 @@ public class DefaultTubeness<T extends RealType<T>> implements
 		final IterableInterval<DoubleType> tubeness)
 	{
 
-		final int numDimensions = input.numDimensions();
+		final var numDimensions = input.numDimensions();
 		// Sigmas in pixel units.
-		final double[] sigmas = new double[numDimensions];
-		for (int d = 0; d < sigmas.length; d++) {
-			final double cal = d < calibration.length ? calibration[d] : 1;
+		final var sigmas = new double[numDimensions];
+		for (var d = 0; d < sigmas.length; d++) {
+			final var cal = d < calibration.length ? calibration[d] : 1;
 			sigmas[d] = sigma / cal;
 		}
 
@@ -129,27 +129,27 @@ public class DefaultTubeness<T extends RealType<T>> implements
 		 */
 
 		// Get a suitable image factory.
-		final long[] gradientDims = new long[numDimensions + 1];
-		final long[] hessianDims = new long[numDimensions + 1];
-		for (int d = 0; d < numDimensions; d++) {
+		final var gradientDims = new long[numDimensions + 1];
+		final var hessianDims = new long[numDimensions + 1];
+		for (var d = 0; d < numDimensions; d++) {
 			hessianDims[d] = input.dimension(d);
 			gradientDims[d] = input.dimension(d);
 		}
 		hessianDims[numDimensions] = numDimensions * (numDimensions + 1) / 2;
 		gradientDims[numDimensions] = numDimensions;
 		final Dimensions hessianDimensions = FinalDimensions.wrap(hessianDims);
-		final FinalDimensions gradientDimensions = FinalDimensions.wrap(
+		final var gradientDimensions = FinalDimensions.wrap(
 			gradientDims);
-		final ImgFactory<DoubleType> factory = createFactoryOp.apply(
+		final var factory = createFactoryOp.apply(
 			hessianDimensions);
-		final Img<DoubleType> hessian = factory.create(hessianDimensions,
+		final var hessian = factory.create(hessianDimensions,
 			new DoubleType());
-		final Img<DoubleType> gradient = factory.create(gradientDimensions,
+		final var gradient = factory.create(gradientDimensions,
 			new DoubleType());
-		final Img<DoubleType> gaussian = factory.create(input, new DoubleType());
+		final var gaussian = factory.create(input, new DoubleType());
 
 		// Handle multithreading.
-		final int nThreads = Runtime.getRuntime().availableProcessors();
+		final var nThreads = Runtime.getRuntime().availableProcessors();
 
 		try {
 			var es = Parallelization.getExecutorService();
@@ -159,7 +159,7 @@ public class DefaultTubeness<T extends RealType<T>> implements
 				sigma);
 
 			// Hessian eigenvalues.
-			final RandomAccessibleInterval<DoubleType> evs = TensorEigenValues
+			final var evs = TensorEigenValues
 				.calculateEigenValuesSymmetric(hessian, TensorEigenValues
 					.createAppropriateResultImg(hessian, factory, new DoubleType()),
 					nThreads, es);
@@ -204,9 +204,9 @@ public class DefaultTubeness<T extends RealType<T>> implements
 			final DoubleType output)
 		{
 			// Use just the largest one.
-			final Iterator<DoubleType> it = input.iterator();
+			final var it = input.iterator();
 			it.next();
-			final double val = it.next().get();
+			final var val = it.next().get();
 			if (val >= 0.) output.setZero();
 			else output.set(sigma * sigma * Math.abs(val));
 		}
@@ -227,10 +227,10 @@ public class DefaultTubeness<T extends RealType<T>> implements
 			final DoubleType output)
 		{
 			// Use the two largest ones.
-			final Iterator<DoubleType> it = input.iterator();
+			final var it = input.iterator();
 			it.next();
-			final double val1 = it.next().get();
-			final double val2 = it.next().get();
+			final var val1 = it.next().get();
+			final var val2 = it.next().get();
 			if (val1 >= 0. || val2 >= 0.) output.setZero();
 			else output.set(sigma * sigma * Math.sqrt(val1 * val2));
 		}

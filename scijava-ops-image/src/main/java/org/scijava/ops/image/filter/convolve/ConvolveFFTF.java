@@ -98,17 +98,17 @@ public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealT
 		@Nullable OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput)
 	{
 
-		RandomAccessibleInterval<O> output = outputCreator.apply(input, outType);
+        var output = outputCreator.apply(input, outType);
 
-		final int numDimensions = input.numDimensions();
+		final var numDimensions = input.numDimensions();
 
 		// 1. Calculate desired extended size of the image
 
-		final long[] paddedSize = new long[numDimensions];
+		final var paddedSize = new long[numDimensions];
 
 		if (borderSize == null) {
 			// if no border size was passed in, then extend based on kernel size
-			for (int d = 0; d < numDimensions; ++d) {
+			for (var d = 0; d < numDimensions; ++d) {
 				paddedSize[d] = (int) input.dimension(d) + (int) kernel.dimension(d) -
 					1;
 			}
@@ -116,7 +116,7 @@ public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealT
 		}
 		else {
 			// if borderSize was passed in
-			for (int d = 0; d < numDimensions; ++d) {
+			for (var d = 0; d < numDimensions; ++d) {
 
 				paddedSize[d] = Math.max(kernel.dimension(d) + 2 * borderSize[d], input
 					.dimension(d) + 2 * borderSize[d]);
@@ -128,10 +128,10 @@ public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealT
 				input).createVariable());
 		}
 
-		RandomAccessibleInterval<I> paddedInput = padOp.apply(input,
+        var paddedInput = padOp.apply(input,
 			new FinalDimensions(paddedSize), true, obfInput);
 
-		RandomAccessibleInterval<K> paddedKernel = padKernelOp.apply(kernel,
+        var paddedKernel = padKernelOp.apply(kernel,
 			new FinalDimensions(paddedSize));
 
 		computeFilter(paddedInput, paddedKernel, output, paddedSize, complexType);
@@ -148,17 +148,17 @@ public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealT
 		RandomAccessibleInterval<O> output, long[] paddedSize, C complexType)
 	{
 
-		RandomAccessibleInterval<C> fftInput = createOp.apply(new FinalDimensions(
+        var fftInput = createOp.apply(new FinalDimensions(
 			paddedSize), complexType, true);
 
-		RandomAccessibleInterval<C> fftKernel = createOp.apply(new FinalDimensions(
+        var fftKernel = createOp.apply(new FinalDimensions(
 			paddedSize), complexType, true);
 
 		// TODO: in this case it is difficult to match the filter op in the
 		// 'initialize' as we don't know the size yet, thus we can't create
 		// memory
 		// for the FFTs
-		Computers.Arity2<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> filter =
+        var filter =
 			createFilterComputer(input, kernel, fftInput, fftKernel, output);
 
 		filter.compute(input, kernel, output);

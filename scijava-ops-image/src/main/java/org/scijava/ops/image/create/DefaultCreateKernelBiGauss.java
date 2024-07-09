@@ -88,38 +88,38 @@ public final class DefaultCreateKernelBiGauss {
 			"Input dimensionality must both positive.");
 
 		// the size and center of the output image
-		final long[] dims = new long[dimensionality];
-		final long[] centre = new long[dimensionality];
+		final var dims = new long[dimensionality];
+		final var centre = new long[dimensionality];
 
 		// time-saver... (must hold now: dimensionality > 0)
 		dims[0] = Math.max(3, 2 * (int) (sigmas[0] + 2 * sigmas[1] + 0.5) + 1);
 		centre[0] = (int) (dims[0] / 2);
 
 		// fill the size and center arrays
-		for (int d = 1; d < dims.length; d++) {
+		for (var d = 1; d < dims.length; d++) {
 			dims[d] = dims[0];
 			centre[d] = centre[0];
 		}
 
 		// prepare some scaling constants
-		final double k = sigmas[1] / sigmas[0] * (sigmas[1] / sigmas[0]); // eq. (6)
-		final double c0 = 0.24197 * (sigmas[1] / sigmas[0] - 1.0) / sigmas[0]; // eq.
+		final var k = sigmas[1] / sigmas[0] * (sigmas[1] / sigmas[0]); // eq. (6)
+		final var c0 = 0.24197 * (sigmas[1] / sigmas[0] - 1.0) / sigmas[0]; // eq.
 																																						// (9)
 		// 0.24197 = 1/sqrt(2*PI*e) = 1/sqrt(2*PI) * exp(-0.5)
-		final double[] C = { 1.0 / (2.50663 * sigmas[0]), 1.0 / (2.50663 *
-			sigmas[1]) };
+		final var C = new double[]{1.0 / (2.50663 * sigmas[0]), 1.0 / (2.50663 *
+                sigmas[1])};
 		// 2.50663 = sqrt(2*PI)
 
 		// prepare squared input sigmas
 		final double sigmasSq[] = { sigmas[0] * sigmas[0], sigmas[1] * sigmas[1] };
 
 		// prepare the output image
-		final RandomAccessibleInterval<C> out =
+		final var out =
 			(RandomAccessibleInterval<C>) createImgFunc.apply(new FinalInterval(dims),
 				(T) typeVar);
 
 		// fill the output image
-		final Cursor<C> cursor = Views.iterable(out).cursor();
+		final var cursor = Views.iterable(out).cursor();
 		while (cursor.hasNext()) {
 			cursor.fwd();
 
@@ -127,16 +127,16 @@ public final class DefaultCreateKernelBiGauss {
 			cursor.localize(dims);
 
 			// calculate distance from the image centre
-			double dist = 0.; // TODO: can JVM reuse this var or is it allocated again
+            var dist = 0.; // TODO: can JVM reuse this var or is it allocated again
 												// and again (and multipling in the memory)?
-			for (int d = 0; d < dims.length; d++) {
+			for (var d = 0; d < dims.length; d++) {
 				final double dx = dims[d] - centre[d];
 				dist += dx * dx;
 			}
 			// dist = Math.sqrt(dist); -- gonna work with squared distance
 
 			// which of the two Gaussians should we use?
-			double val = 0.;
+            var val = 0.;
 			if (dist < sigmasSq[0]) {
 				// the inner one
 				val = C[0] * Math.exp(-0.5 * dist / sigmasSq[0]) + c0;

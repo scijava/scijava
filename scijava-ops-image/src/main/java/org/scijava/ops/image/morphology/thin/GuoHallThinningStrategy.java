@@ -61,14 +61,14 @@ public class GuoHallThinningStrategy extends Abstract3x3NeighbourhoodThinning {
 	{
 
 		// Setup
-		final RandomAccess<BitType> access = randomAccess(accessible);
+		final var access = randomAccess(accessible);
 		access.setPosition(position);
 
-		final boolean[] vals = getNeighbourhood(access);
+		final var vals = getNeighbourhood(access);
 
 		// First we need to count the amount of connected neighbours in the
 		// vicinity.
-		int simpleConnectedNeighbours = 0;
+        var simpleConnectedNeighbours = 0;
 		if (vals[1] == m_background && (vals[2] == m_foreground ||
 			vals[3] == m_foreground))
 		{
@@ -95,9 +95,9 @@ public class GuoHallThinningStrategy extends Abstract3x3NeighbourhoodThinning {
 		}
 
 		// Check for foreground pixels in each sector.
-		final int sectorsOne = countSectors(vals, -1);
-		final int sectorsTwo = countSectors(vals, 1);
-		final int minSectors = Math.min(sectorsOne, sectorsTwo);
+		final var sectorsOne = countSectors(vals, -1);
+		final var sectorsTwo = countSectors(vals, 1);
+		final var minSectors = Math.min(sectorsOne, sectorsTwo);
 		if (!((2 <= minSectors) && (minSectors <= 3))) {
 			return false;
 		}
@@ -124,8 +124,8 @@ public class GuoHallThinningStrategy extends Abstract3x3NeighbourhoodThinning {
 	// offset, the sector borders are
 	// rotated by 45 degrees.
 	private int countSectors(final boolean[] vals, final int offset) {
-		int res = 0;
-		for (int i = 1; i < vals.length - 1; i = i + 2) {
+        var res = 0;
+		for (var i = 1; i < vals.length - 1; i = i + 2) {
 			if (i + offset == 0) {
 				if (vals[1] == m_foreground || vals[8] == m_foreground) {
 					++res;

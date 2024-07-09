@@ -55,32 +55,32 @@ public final class ArrayIO {
 	}
 
 	public static double[] doubles(final InputStream is) throws IOException {
-		final ByteBuffer bb = ByteBuffer.wrap(is.readAllBytes());
-		final DoubleBuffer view = bb.asDoubleBuffer();
+		final var bb = ByteBuffer.wrap(is.readAllBytes());
+		final var view = bb.asDoubleBuffer();
 		return DoubleBuffer.allocate(view.limit()).put(view).array();
 	}
 
 	public static float[] floats(final InputStream is) throws IOException {
-		final ByteBuffer bb = ByteBuffer.wrap(is.readAllBytes());
-		final FloatBuffer view = bb.asFloatBuffer();
+		final var bb = ByteBuffer.wrap(is.readAllBytes());
+		final var view = bb.asFloatBuffer();
 		return FloatBuffer.allocate(view.limit()).put(view).array();
 	}
 
 	public static int[] ints(final InputStream is) throws IOException {
-		final ByteBuffer bb = ByteBuffer.wrap(is.readAllBytes());
-		final IntBuffer view = bb.asIntBuffer();
+		final var bb = ByteBuffer.wrap(is.readAllBytes());
+		final var view = bb.asIntBuffer();
 		return IntBuffer.allocate(view.limit()).put(view).array();
 	}
 
 	public static long[] longs(final InputStream is) throws IOException {
-		final ByteBuffer bb = ByteBuffer.wrap(is.readAllBytes());
-		final LongBuffer view = bb.asLongBuffer();
+		final var bb = ByteBuffer.wrap(is.readAllBytes());
+		final var view = bb.asLongBuffer();
 		return LongBuffer.allocate(view.limit()).put(view).array();
 	}
 
 	public static short[] shorts(final InputStream is) throws IOException {
-		final ByteBuffer bb = ByteBuffer.wrap(is.readAllBytes());
-		final ShortBuffer view = bb.asShortBuffer();
+		final var bb = ByteBuffer.wrap(is.readAllBytes());
+		final var view = bb.asShortBuffer();
 		return ShortBuffer.allocate(view.limit()).put(view).array();
 	}
 
@@ -93,7 +93,7 @@ public final class ArrayIO {
 	public static void writeDoubles(final double[] data, final OutputStream os)
 		throws IOException
 	{
-		final ByteBuffer bb = ByteBuffer.allocate(4 * data.length);
+		final var bb = ByteBuffer.allocate(4 * data.length);
 		bb.asDoubleBuffer().put(DoubleBuffer.wrap(data));
 		os.write(bb.array());
 	}
@@ -101,7 +101,7 @@ public final class ArrayIO {
 	public static void writeFloats(final float[] data, final OutputStream os)
 		throws IOException
 	{
-		final ByteBuffer bb = ByteBuffer.allocate(4 * data.length);
+		final var bb = ByteBuffer.allocate(4 * data.length);
 		bb.asFloatBuffer().put(FloatBuffer.wrap(data));
 		os.write(bb.array());
 	}
@@ -109,7 +109,7 @@ public final class ArrayIO {
 	public static void writeInts(final int[] data, final OutputStream os)
 		throws IOException
 	{
-		final ByteBuffer bb = ByteBuffer.allocate(4 * data.length);
+		final var bb = ByteBuffer.allocate(4 * data.length);
 		bb.asIntBuffer().put(IntBuffer.wrap(data));
 		os.write(bb.array());
 	}
@@ -117,7 +117,7 @@ public final class ArrayIO {
 	public static void writeLongs(final long[] data, final OutputStream os)
 		throws IOException
 	{
-		final ByteBuffer bb = ByteBuffer.allocate(8 * data.length);
+		final var bb = ByteBuffer.allocate(8 * data.length);
 		bb.asLongBuffer().put(LongBuffer.wrap(data));
 		os.write(bb.array());
 	}
@@ -125,7 +125,7 @@ public final class ArrayIO {
 	public static void writeShorts(final short[] data, final OutputStream os)
 		throws IOException
 	{
-		final ByteBuffer bb = ByteBuffer.allocate(4 * data.length);
+		final var bb = ByteBuffer.allocate(4 * data.length);
 		bb.asShortBuffer().put(ShortBuffer.wrap(data));
 		os.write(bb.array());
 	}

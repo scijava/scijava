@@ -59,15 +59,15 @@ public class HilditchThinningStrategy extends Abstract3x3NeighbourhoodThinning {
 	public boolean removePixel(final long[] position,
 		final RandomAccessible<BitType> accessible, final int iteration)
 	{
-		final RandomAccess<BitType> access = randomAccess(accessible);
+		final var access = randomAccess(accessible);
 		access.setPosition(position);
 
-		final boolean[] vals = getNeighbourhood(access);
+		final var vals = getNeighbourhood(access);
 
 		// First condition is to ensure there are at least 2 and at most 6
 		// neighbouring foreground pixels.
-		int numForeground = 0;
-		for (int i = 1; i < vals.length; ++i) {
+        var numForeground = 0;
+		for (var i = 1; i < vals.length; ++i) {
 			if (vals[i] == m_foreground) {
 				++numForeground;
 			}
@@ -80,7 +80,7 @@ public class HilditchThinningStrategy extends Abstract3x3NeighbourhoodThinning {
 		// Second condition checks for transitions between foreground and
 		// background. Exactly 1 such transition
 		// is required.
-		final int numPatterns = findPatternSwitches(vals);
+		final var numPatterns = findPatternSwitches(vals);
 		if (!(numPatterns == 1)) {
 			return false;
 		}
@@ -93,7 +93,7 @@ public class HilditchThinningStrategy extends Abstract3x3NeighbourhoodThinning {
 		// pixel.
 		access.setPosition(position);
 		access.move(-1, 1);
-		final int p2Patterns = findPatternSwitches((getNeighbourhood(access)));
+		final var p2Patterns = findPatternSwitches((getNeighbourhood(access)));
 		if (!((vals[1] == m_background || vals[3] == m_background ||
 			vals[7] == m_background) || p2Patterns != 1))
 		{
@@ -102,7 +102,7 @@ public class HilditchThinningStrategy extends Abstract3x3NeighbourhoodThinning {
 
 		access.setPosition(position);
 		access.move(1, 0);
-		final int p4Patterns = findPatternSwitches((getNeighbourhood(access)));
+		final var p4Patterns = findPatternSwitches((getNeighbourhood(access)));
 
 		if (!((vals[1] == m_background || vals[3] == m_background ||
 			vals[5] == m_background) || p4Patterns != 1))

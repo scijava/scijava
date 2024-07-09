@@ -51,7 +51,7 @@ public abstract class AbstractComputeThresholdHistogram<T extends RealType<T>>
 	 */
 	@Override
 	public void compute(final Histogram1d<T> input, final T output) {
-		final long binPos = computeBin(input);
+		final var binPos = computeBin(input);
 
 		// convert bin number to corresponding gray level
 		input.getCenterValue(binPos, output);

@@ -74,7 +74,7 @@ public class DefaultSumOfInverses<I extends RealType<I>, O extends RealType<O>>
 	public void compute(final RandomAccessibleInterval<I> input, final O dbzValue,
 		final O output)
 	{
-		RandomAccessibleInterval<O> tmpImg = imgCreator.apply(input, output);
+        var tmpImg = imgCreator.apply(input, output);
 		// TODO: Can we lift this? Would require making a RAI of Doubles.
 		LoopBuilder.setImages(input, tmpImg).multiThreaded().forEachPixel((inPixel,
 			outPixel) -> {

@@ -61,7 +61,7 @@ public class DefaultOpMatcher implements OpMatcher {
 	public OpCandidate match(MatchingConditions conditions, OpEnvironment env) {
 		List<OpMatchingException> exceptions = new ArrayList<>(matchers.size());
 		// in priority order, search for a match
-		for (MatchingRoutine r : matchers) {
+		for (var r : matchers) {
 			try {
 				return r.match(conditions, this, env);
 			}
@@ -80,7 +80,7 @@ public class DefaultOpMatcher implements OpMatcher {
 		final List<OpMatchingException> list, //
 		final OpEnvironment env //
 	) {
-		OpMatchingException agglomerated = new OpMatchingException(
+        var agglomerated = new OpMatchingException(
 			"No match found");
 		list.forEach(agglomerated::addSuppressed);
 		return agglomerated;

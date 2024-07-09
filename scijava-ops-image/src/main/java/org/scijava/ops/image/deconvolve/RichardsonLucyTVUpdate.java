@@ -86,11 +86,11 @@ public class RichardsonLucyTVUpdate<T extends RealType<T> & NativeType<T>, I ext
 
 		divUnitGradFastThread(estimate, variation);
 
-		final Cursor<T> cursorCorrection = Views.iterable(correction).cursor();
+		final var cursorCorrection = Views.iterable(correction).cursor();
 
-		final Cursor<T> cursorVariation = Views.iterable(variation).cursor();
+		final var cursorVariation = Views.iterable(variation).cursor();
 
-		final Cursor<T> cursorEstimate = Views.iterable(estimate).cursor();
+		final var cursorEstimate = Views.iterable(estimate).cursor();
 
 		while (cursorEstimate.hasNext()) {
 			cursorCorrection.fwd();
@@ -141,27 +141,27 @@ public class RichardsonLucyTVUpdate<T extends RealType<T> & NativeType<T>, I ext
 			Nz = 1;
 		}
 
-		final AtomicInteger ai = new AtomicInteger(0);
-		final int numThreads = 4;
+		final var ai = new AtomicInteger(0);
+		final var numThreads = 4;
 
 		// TODO proper thread handling
-		final Thread[] threads = SimpleMultiThreading.newThreads(numThreads);
+		final var threads = SimpleMultiThreading.newThreads(numThreads);
 
-		final int zChunkSize = Nz / threads.length;
+		final var zChunkSize = Nz / threads.length;
 
-		for (int ithread = 0; ithread < threads.length; ++ithread) {
+		for (var ithread = 0; ithread < threads.length; ++ithread) {
 			threads[ithread] = new Thread(new Runnable() {
 
 				@Override
 				public void run() {
 
-					final RandomAccess<T> outRandom = variation.randomAccess();
-					final Cursor<T> outCursor = Views.iterable(variation).cursor();
+					final var outRandom = variation.randomAccess();
+					final var outCursor = Views.iterable(variation).cursor();
 
 					// Thread ID
-					final int myNumber = ai.getAndIncrement();
+					final var myNumber = ai.getAndIncrement();
 
-					int start = myNumber * zChunkSize;
+                    var start = myNumber * zChunkSize;
 
 					int end;
 					if (myNumber < numThreads - 1) {
@@ -185,26 +185,26 @@ public class RichardsonLucyTVUpdate<T extends RealType<T> & NativeType<T>, I ext
 					hy = 1;
 					hz = 3;
 					// i minus 1 cursors
-					Cursor<T> fimjmCursor = Views.iterable(estimate).cursor();
-					Cursor<T> fimCursor = Views.iterable(estimate).cursor();
-					Cursor<T> fimkmCursor = Views.iterable(estimate).cursor();
-					Cursor<T> fimkpCursor = Views.iterable(estimate).cursor();
-					Cursor<T> fimjpCursor = Views.iterable(estimate).cursor();
+                    var fimjmCursor = Views.iterable(estimate).cursor();
+                    var fimCursor = Views.iterable(estimate).cursor();
+                    var fimkmCursor = Views.iterable(estimate).cursor();
+                    var fimkpCursor = Views.iterable(estimate).cursor();
+                    var fimjpCursor = Views.iterable(estimate).cursor();
 
 					// i cursors
-					Cursor<T> fjmkmCursor = Views.iterable(estimate).cursor();
-					Cursor<T> fjmCursor = Views.iterable(estimate).cursor();
-					Cursor<T> fjmkpCursor = Views.iterable(estimate).cursor();
-					Cursor<T> fkmCursor = Views.iterable(estimate).cursor();
-					Cursor<T> fijkCursor = Views.iterable(estimate).cursor();
-					Cursor<T> fkpCursor = Views.iterable(estimate).cursor();
-					Cursor<T> fjpkmCursor = Views.iterable(estimate).cursor();
-					Cursor<T> fjpCursor = Views.iterable(estimate).cursor();
+                    var fjmkmCursor = Views.iterable(estimate).cursor();
+                    var fjmCursor = Views.iterable(estimate).cursor();
+                    var fjmkpCursor = Views.iterable(estimate).cursor();
+                    var fkmCursor = Views.iterable(estimate).cursor();
+                    var fijkCursor = Views.iterable(estimate).cursor();
+                    var fkpCursor = Views.iterable(estimate).cursor();
+                    var fjpkmCursor = Views.iterable(estimate).cursor();
+                    var fjpCursor = Views.iterable(estimate).cursor();
 
 					// i plus 1 cursors
-					Cursor<T> fipjmCursor = Views.iterable(estimate).cursor();
-					Cursor<T> fipkmCursor = Views.iterable(estimate).cursor();
-					Cursor<T> fipCursor = Views.iterable(estimate).cursor();
+                    var fipjmCursor = Views.iterable(estimate).cursor();
+                    var fipkmCursor = Views.iterable(estimate).cursor();
+                    var fipCursor = Views.iterable(estimate).cursor();
 
 					for (k = start; k < end; k++) {
 						km1 = (k > 0 ? k - 1 : 0);

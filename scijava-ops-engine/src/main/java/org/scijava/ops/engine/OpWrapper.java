@@ -56,7 +56,7 @@ public interface OpWrapper<T> {
 		MatchingConditions conditions);
 
 	default Class<?> type() {
-		Type wrapperType = getClass().getGenericInterfaces()[0];
+        var wrapperType = getClass().getGenericInterfaces()[0];
 		if (wrapperType instanceof ParameterizedType) {
 			return Types.raw(((ParameterizedType) wrapperType)
 				.getActualTypeArguments()[0]);

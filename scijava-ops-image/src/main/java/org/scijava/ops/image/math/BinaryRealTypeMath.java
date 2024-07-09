@@ -91,7 +91,7 @@ public class BinaryRealTypeMath<I1 extends RealType<I1>, I2 extends RealType<I2>
 			output.setReal(dbzVal);
 		}
 		else {
-			double result = input1.getRealDouble() / input2.getRealDouble();
+            var result = input1.getRealDouble() / input2.getRealDouble();
 			if (Types.isAssignable(output.getClass(), IntegerType.class)) {
 				// Preserve integer division logic if we have an IntegerType
 				output.setReal((int) result);

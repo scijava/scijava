@@ -78,10 +78,10 @@ public class ComputeLocalNiblackThreshold<T extends RealType<T>> implements
 		final Computers.Arity1<Iterable<T>, DoubleType> stdDeviationOp,
 		final BitType output)
 	{
-		final DoubleType m = new DoubleType();
+		final var m = new DoubleType();
 		meanOp.compute(inputNeighborhood, m);
 
-		final DoubleType stdDev = new DoubleType();
+		final var stdDev = new DoubleType();
 		stdDeviationOp.compute(inputNeighborhood, stdDev);
 
 		output.set(inputCenterPixel.getRealDouble() > m.getRealDouble() + k * stdDev

@@ -61,11 +61,11 @@ public final class FunctionUtils {
 	public static <O, T> Functions.ArityN<O> matchN(final OpEnvironment env,
 		final String opName, final Nil<O> outType, final Nil<?>... inTypes)
 	{
-		Map.Entry<Integer, Class<?>> c = Functions.ALL_FUNCTIONS //
+		var c = Functions.ALL_FUNCTIONS //
 			.entrySet().stream() //
 			.filter(e -> e.getKey() == inTypes.length) //
 			.findAny().get();
-		Object op = matchHelper(env, opName, c.getValue(), outType, inTypes);
+		var op = matchHelper(env, opName, c.getValue(), outType, inTypes);
 		if (op instanceof Producer) {
 			return Functions.nary((Producer<O>) op);
 		}
@@ -121,8 +121,8 @@ public final class FunctionUtils {
 	private static <T> T matchHelper(final OpEnvironment env, final String opName,
 		final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes)
 	{
-		final Type[] types = new Type[inTypes.length + 1];
-		for (int i = 0; i < inTypes.length; i++)
+		final var types = new Type[inTypes.length + 1];
+		for (var i = 0; i < inTypes.length; i++)
 			types[i] = inTypes[i].type();
 		types[types.length - 1] = outType.type();
 		final Type specialType = Types.parameterize(opClass, types);

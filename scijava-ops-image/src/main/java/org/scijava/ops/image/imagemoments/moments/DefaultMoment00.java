@@ -57,11 +57,11 @@ public class DefaultMoment00<I extends RealType<I>, O extends RealType<O>>
 		final O output)
 	{
 
-		List<O> sums = LoopBuilder.setImages(input).multiThreaded().forEachChunk(
+        var sums = LoopBuilder.setImages(input).multiThreaded().forEachChunk(
 			chunk -> {
-				O sum = output.createVariable();
+                var sum = output.createVariable();
 				sum.setZero();
-				O temp = output.createVariable();
+                var temp = output.createVariable();
 				chunk.forEachPixel(pixel -> {
 					temp.setReal(pixel.getRealDouble());
 					sum.add(temp);
@@ -70,7 +70,7 @@ public class DefaultMoment00<I extends RealType<I>, O extends RealType<O>>
 			});
 
 		output.setZero();
-		for (O sum : sums)
+		for (var sum : sums)
 			output.add(sum);
 	}
 }

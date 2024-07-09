@@ -58,21 +58,21 @@ public class DefaultCenterOfGravity<T extends RealType<T>> implements
 	 */
 	@Override
 	public RealLocalizable apply(final IterableInterval<T> input) {
-		final int numDimensions = input.numDimensions();
+		final var numDimensions = input.numDimensions();
 
-		final double[] output = new double[numDimensions];
-		final double[] intensityValues = new double[numDimensions];
+		final var output = new double[numDimensions];
+		final var intensityValues = new double[numDimensions];
 
-		final Cursor<T> c = input.localizingCursor();
+		final var c = input.localizingCursor();
 		while (c.hasNext()) {
 			c.fwd();
-			for (int i = 0; i < output.length; i++) {
+			for (var i = 0; i < output.length; i++) {
 				output[i] += c.getDoublePosition(i) * c.get().getRealDouble();
 				intensityValues[i] += c.get().getRealDouble();
 			}
 		}
 
-		for (int i = 0; i < output.length; i++) {
+		for (var i = 0; i < output.length; i++) {
 			output[i] = output[i] / intensityValues[i];
 		}
 

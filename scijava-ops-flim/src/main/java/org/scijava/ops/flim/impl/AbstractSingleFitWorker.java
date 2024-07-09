@@ -132,11 +132,11 @@ public abstract class AbstractSingleFitWorker<I extends RealType<I>> extends
 
 	@Override
 	public void fitBatch(List<int[]> pos, FitEventHandler<I> handler) {
-		final AbstractSingleFitWorker<I> thisWorker = this;
+		final var thisWorker = this;
 
 		Consumer<int[]> worker = (data) -> {
-			int start = data[0];
-			int size = data[1];
+            var start = data[0];
+            var size = data[1];
 			if (!runMultiThreaded()) {
 				// let the first fitting thread do all the work
 				if (start != 0) {
@@ -165,10 +165,10 @@ public abstract class AbstractSingleFitWorker<I extends RealType<I>> extends
 			}
 			fitWorker.onThreadInit();
 
-			final RAHelper<I> helper = new RAHelper<>(params, results);
+			final var helper = new RAHelper<I>(params, results);
 
-			for (int i = start; i < start + size; i++) {
-				final int[] xytPos = pos.get(i);
+			for (var i = start; i < start + size; i++) {
+				final var xytPos = pos.get(i);
 
 				if (!helper.loadData(fitWorker.transBuffer, fitWorker.paramBuffer,
 					params, xytPos)) lResults.retCode =
@@ -177,7 +177,7 @@ public abstract class AbstractSingleFitWorker<I extends RealType<I>> extends
 					fitWorker.fitSingle();
 
 					// invalidate fit if chisq is insane
-					final float chisq = lResults.chisq;
+					final var chisq = lResults.chisq;
 					if (params.dropBad && lResults.retCode == FitResults.RET_OK &&
 						(chisq < 0 || chisq > 1E5 || Float.isNaN(chisq))) lResults.retCode =
 							FitResults.RET_BAD_FIT_CHISQ_OUT_OF_RANGE;
@@ -194,15 +194,15 @@ public abstract class AbstractSingleFitWorker<I extends RealType<I>> extends
 		// rounded quotient ((int) t / n) and r be the remainder (t mod n).
 		// Each task should thus be responsible for at least s pixels, with the
 		// first r tasks also assuming an additional pixel.
-		int n = Parallelization.getTaskExecutor().suggestNumberOfTasks();
-		int s = pos.size() / n;
-		int r = pos.size() % n;
+        var n = Parallelization.getTaskExecutor().suggestNumberOfTasks();
+        var s = pos.size() / n;
+        var r = pos.size() % n;
 
 		List<int[]> list = new ArrayList<>(n);
-		int start = 0;
+        var start = 0;
 		// Initial size is s + 1
-		int size = s + 1;
-		for (int i = 0; i < n; i++) {
+        var size = s + 1;
+		for (var i = 0; i < n; i++) {
 			// The first r tasks take an additional pixel - the remaining tasks
 			// should only take s pixels
 			if (i == r) {

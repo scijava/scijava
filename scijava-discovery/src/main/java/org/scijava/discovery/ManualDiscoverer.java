@@ -49,15 +49,15 @@ public class ManualDiscoverer implements Discoverer {
 	}
 
 	public void register(Object[]... objects) {
-		for (Object[] arr : objects) {
-			for (Object o : arr) {
+		for (var arr : objects) {
+			for (var o : arr) {
 				set.add(o);
 			}
 		}
 	}
 
 	public void register(Object... objects) {
-		for (Object o : objects) {
+		for (var o : objects) {
 			set.add(o);
 		}
 	}

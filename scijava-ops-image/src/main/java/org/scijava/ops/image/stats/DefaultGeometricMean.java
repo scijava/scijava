@@ -66,9 +66,9 @@ public class DefaultGeometricMean<I extends RealType<I>, O extends RealType<O>>
 	public void compute(final RandomAccessibleInterval<I> input,
 		final O geometricMean)
 	{
-		final O size = geometricMean.createVariable();
+		final var size = geometricMean.createVariable();
 		sizeComputer.compute(input, size);
-		final O sumOfLogs = geometricMean.createVariable();
+		final var sumOfLogs = geometricMean.createVariable();
 		sumOfLogsComputer.compute(input, sumOfLogs);
 
 		if (size.getRealDouble() != 0) {

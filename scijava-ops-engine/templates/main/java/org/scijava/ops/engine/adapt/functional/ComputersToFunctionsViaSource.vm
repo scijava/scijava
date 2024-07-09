@@ -43,7 +43,7 @@ public class ComputersToFunctionsViaSource {
 		@Override
 		public $functionArity.call($arity)$generics.call($arity) apply($computerArity.call($arity)$generics.call($arity) computer) {
 			return (#if($arity == 0)#{else}$applyArgs.call($arity)#end) -> {
-				O out = creator.create();
+				var out = creator.create();
 				computer.compute($computeArgs.call($arity));
 				return out;
 			};

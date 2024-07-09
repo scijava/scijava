@@ -64,12 +64,12 @@ public class YAMLOpFieldInfo extends AbstractYAMLOpInfo {
 		super(yaml, identifier);
 
 		// parse class
-		int clsIndex = identifier.indexOf('$');
-		String clsString = identifier.substring(0, clsIndex);
-		Class<?> cls = Classes.load(clsString);
+        var clsIndex = identifier.indexOf('$');
+        var clsString = identifier.substring(0, clsIndex);
+        var cls = Classes.load(clsString);
 		this.instance = cls.getConstructor().newInstance();
 		// parse Field
-		String fieldString = identifier.substring(clsIndex + 1);
+        var fieldString = identifier.substring(clsIndex + 1);
 		this.field = cls.getDeclaredField(fieldString);
 		// parse Struct
 		this.struct = createStruct(yaml);
@@ -93,12 +93,12 @@ public class YAMLOpFieldInfo extends AbstractYAMLOpInfo {
 	@Override
 	public String implementationName() {
 		// Get generic string without modifiers and return type
-		String fullyQualifiedField = field.toGenericString();
-		int lastDotPos = fullyQualifiedField.lastIndexOf('.');
+        var fullyQualifiedField = field.toGenericString();
+        var lastDotPos = fullyQualifiedField.lastIndexOf('.');
 		fullyQualifiedField = fullyQualifiedField.substring(0, lastDotPos) + "$" +
 			fullyQualifiedField.substring(lastDotPos + 1);
-		String packageName = field.getDeclaringClass().getPackageName();
-		int classNameIndex = fullyQualifiedField.lastIndexOf(packageName);
+        var packageName = field.getDeclaringClass().getPackageName();
+        var classNameIndex = fullyQualifiedField.lastIndexOf(packageName);
 		return fullyQualifiedField.substring(classNameIndex);
 	}
 
@@ -127,15 +127,15 @@ public class YAMLOpFieldInfo extends AbstractYAMLOpInfo {
 
 	private Struct createStruct(Map<String, Object> yaml) {
 		List<Member<?>> members = new ArrayList<>();
-		List<Map<String, Object>> params = (List<Map<String, Object>>) yaml.get(
+        var params = (List<Map<String, Object>>) yaml.get(
 			"parameters");
 		var fmts = FunctionalParameters.findFunctionalMethodTypes(opType());
-		for (int i = 0; i < params.size(); i++) {
+		for (var i = 0; i < params.size(); i++) {
 			var pMap = params.get(i);
 			var fmt = fmts.get(i);
-			String name = (String) pMap.get("name");
-			String description = (String) pMap.get("description");
-			boolean nullable = (boolean) pMap.getOrDefault("nullable", false);
+            var name = (String) pMap.get("name");
+            var description = (String) pMap.get("description");
+            var nullable = (boolean) pMap.getOrDefault("nullable", false);
 			members.add(new SynthesizedParameterMember<>(fmt, name, !nullable,
 				description));
 		}
@@ -159,7 +159,7 @@ public class YAMLOpFieldInfo extends AbstractYAMLOpInfo {
 		// Calling clone() may or may not work; it does not work with e.g. lambdas.
 		// Better to just use the same value directly, rather than trying to copy.
 		try {
-			final Object object = field.get(instance);
+			final var object = field.get(instance);
 			// TODO: Wrap object in a generic holder with the same interface.
 			return struct().createInstance(object);
 		}

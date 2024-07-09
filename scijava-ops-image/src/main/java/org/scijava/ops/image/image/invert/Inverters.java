@@ -60,8 +60,8 @@ public class Inverters<T extends RealType<T>, I extends IntegerType<I>> {
 			// Others (fortunately all in this category are IntegerTypes)
 			// must use the slower BigInteger inverter.
 			// TODO: Think of a better solution.
-			final T copy = Util.getTypeFromInterval(input).createVariable();
-			boolean typeTooBig = false;
+			final var copy = Util.getTypeFromInterval(input).createVariable();
+            var typeTooBig = false;
 			// if the type is an integer type that can handle Long.MAX_VALUE
 			// then we have to run the slow version
 			if (copy instanceof IntegerType) {
@@ -89,16 +89,16 @@ public class Inverters<T extends RealType<T>, I extends IntegerType<I>> {
 	 */
 	public final Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> simpleInvert =
 		(input, output) -> {
-			T type = Util.getTypeFromInterval(input);
+            var type = Util.getTypeFromInterval(input);
 			delegatorInvert.compute(input, minValue(type), maxValue(type), output);
 		};
 
 	public void computeII(final RandomAccessibleInterval<T> input, final T min,
 		final T max, final RandomAccessibleInterval<T> output)
 	{
-		final double minDouble = min.getRealDouble();
-		final double maxDouble = max.getRealDouble();
-		final double minMax = min.getRealDouble() + max.getRealDouble();
+		final var minDouble = min.getRealDouble();
+		final var maxDouble = max.getRealDouble();
+		final var minMax = min.getRealDouble() + max.getRealDouble();
 
 		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel((in,
 			out) -> {
@@ -120,13 +120,13 @@ public class Inverters<T extends RealType<T>, I extends IntegerType<I>> {
 		final T min, final T max, final RandomAccessibleInterval<T> output)
 	{
 
-		final BigInteger minValue = getBigInteger(min);
-		final BigInteger maxValue = getBigInteger(max);
-		final BigInteger minMax = minValue.add(maxValue);
+		final var minValue = getBigInteger(min);
+		final var maxValue = getBigInteger(max);
+		final var minMax = minValue.add(maxValue);
 
 		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel((in,
 			out) -> {
-			BigInteger inverted = minMax.subtract(getBigInteger(in));
+            var inverted = minMax.subtract(getBigInteger(in));
 
 			if (inverted.compareTo(getBigInteger(minValue(out))) <= 0) out.set(
 				minValue(out));
@@ -155,7 +155,7 @@ public class Inverters<T extends RealType<T>, I extends IntegerType<I>> {
 
 	public static <T extends RealType<T>> T minValue(T type) {
 		// TODO: Consider making minValue an Op.
-		final T min = type.createVariable();
+		final var min = type.createVariable();
 		if (type instanceof UnboundedIntegerType) min.setReal(0);
 		else min.setReal(min.getMinValue());
 		return min;
@@ -164,13 +164,13 @@ public class Inverters<T extends RealType<T>, I extends IntegerType<I>> {
 
 	public static <T extends RealType<T>> T maxValue(T type) {
 		// TODO: Consider making maxValue an Op.
-		final T max = type.createVariable();
+		final var max = type.createVariable();
 		if (max instanceof Unsigned128BitType) {
-			final Unsigned128BitType t = (Unsigned128BitType) max;
+			final var t = (Unsigned128BitType) max;
 			t.set(t.getMaxBigIntegerValue());
 		}
 		else if (max instanceof UnsignedLongType) {
-			final UnsignedLongType t = (UnsignedLongType) max;
+			final var t = (UnsignedLongType) max;
 			t.set(t.getMaxBigIntegerValue());
 		}
 		else if (max instanceof UnboundedIntegerType) {

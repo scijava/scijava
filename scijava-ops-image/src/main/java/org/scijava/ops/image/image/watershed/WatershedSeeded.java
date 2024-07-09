@@ -145,7 +145,7 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>>
 	) {
 
 		// ensure that the parameters conform with the requirements of the op
-		boolean conformed = true;
+        var conformed = true;
 		if (maskInput != null) {
 			conformed = Intervals.equalDimensions(maskInput, in);
 		}
@@ -157,24 +157,24 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>>
 			"seed labeling must be of the same size as the input");
 
 		// extend border to be able to do a quick check, if a voxel is inside
-		final LabelingType<Integer> outside = out.firstElement().copy();
+		final var outside = out.firstElement().copy();
 		outside.clear();
 		outside.add(OUTSIDE);
-		final ExtendedRandomAccessibleInterval<LabelingType<Integer>, ImgLabeling<Integer, IntType>> outExt =
+		final var outExt =
 			Views.extendValue(out, outside);
-		final OutOfBounds<LabelingType<Integer>> raOut = outExt.randomAccess();
+		final var raOut = outExt.randomAccess();
 
 		// if no mask provided, set the mask to the whole image
-		RandomAccessibleInterval<B> mask = maskInput;
+        var mask = maskInput;
 		if (mask == null) {
 			mask = (RandomAccessibleInterval<B>) imgCreator.apply(in, new BitType());
-			for (B b : Views.flatIterable(mask)) {
+			for (var b : Views.flatIterable(mask)) {
 				b.set(true);
 			}
 		}
 
 		// initialize output labels
-		final Cursor<B> maskCursor = Views.flatIterable(mask).cursor();
+		final var maskCursor = Views.flatIterable(mask).cursor();
 		while (maskCursor.hasNext()) {
 			maskCursor.fwd();
 			if (maskCursor.get().get()) {
@@ -185,8 +185,8 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>>
 		}
 
 		// RandomAccess for Mask, Seeds and Neighborhoods
-		final RandomAccess<B> raMask = mask.randomAccess();
-		final RandomAccess<LabelingType<Integer>> raSeeds = seeds.randomAccess();
+		final var raMask = mask.randomAccess();
+		final var raSeeds = seeds.randomAccess();
 		final Shape shape;
 		if (useEightConnectivity) {
 			shape = new RectangleShape(1, true);
@@ -194,21 +194,21 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>>
 		else {
 			shape = new DiamondShape(1);
 		}
-		final RandomAccessible<Neighborhood<T>> neighborhoods = shape
+		final var neighborhoods = shape
 			.neighborhoodsRandomAccessible(in);
-		final RandomAccess<Neighborhood<T>> raNeigh = neighborhoods.randomAccess();
+		final var raNeigh = neighborhoods.randomAccess();
 
 		/*
 		 * Carry over the seeding points to the new label and adds them to a voxel
 		 * priority queue
 		 */
-		final PriorityQueue<WatershedVoxel> pq = new PriorityQueue<>();
+		final var pq = new PriorityQueue<WatershedVoxel>();
 
 		// Only iterate seeds that are not excluded by the mask
-		final IterableRegion<B> maskRegions = Regions.iterable(mask);
-		final IterableInterval<LabelingType<Integer>> seedsMasked = Regions.sample(
+		final var maskRegions = Regions.iterable(mask);
+		final var seedsMasked = Regions.sample(
 			(IterableInterval<Void>) maskRegions, seeds);
-		final Cursor<LabelingType<Integer>> cursorSeeds = seedsMasked
+		final var cursorSeeds = seedsMasked
 			.localizingCursor();
 
 		while (cursorSeeds.hasNext()) {
@@ -220,14 +220,14 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>>
 				throw new IllegalArgumentException(
 					"Seeds must have exactly one label!");
 			}
-			final Integer label = l.iterator().next();
+			final var label = l.iterator().next();
 			if (label < 0) {
 				throw new IllegalArgumentException(
 					"Seeds must have positive integers as labels!");
 			}
 			raNeigh.setPosition(cursorSeeds);
 
-			final Cursor<T> neighborhood = raNeigh.get().cursor();
+			final var neighborhood = raNeigh.get().cursor();
 
 			// Add unlabeled neighbors to priority queue
 			while (neighborhood.hasNext()) {
@@ -235,7 +235,7 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>>
 				raSeeds.setPosition(neighborhood);
 				raMask.setPosition(neighborhood);
 				raOut.setPosition(neighborhood);
-				final Integer labelNeigh = raOut.get().iterator().next();
+				final var labelNeigh = raOut.get().iterator().next();
 				if (labelNeigh != INQUEUE && labelNeigh != OUTSIDE && !raOut
 					.isOutOfBounds() && raMask.get().get() && raSeeds.get().isEmpty())
 				{
@@ -259,12 +259,12 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>>
 		 */
 
 		// list to store neighbor labels
-		final ArrayList<Integer> neighborLabels = new ArrayList<>();
+		final var neighborLabels = new ArrayList<Integer>();
 		// list to store neighbor voxels
-		final ArrayList<WatershedVoxel> neighborVoxels = new ArrayList<>();
+		final var neighborVoxels = new ArrayList<WatershedVoxel>();
 
 		// iterate the queue
-		final Point pos = new Point(in.numDimensions());
+		final var pos = new Point(in.numDimensions());
 		while (!pq.isEmpty()) {
 			IntervalIndexer.indexToPosition(pq.poll().getPos(), out, pos);
 
@@ -276,7 +276,7 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>>
 
 			// iterate the neighborhood of the pixel
 			raNeigh.setPosition(pos);
-			final Cursor<T> neighborhood = raNeigh.get().cursor();
+			final var neighborhood = raNeigh.get().cursor();
 			while (neighborhood.hasNext()) {
 				neighborhood.fwd();
 				// Unlabeled neighbors go into the queue if they are not there
@@ -284,7 +284,7 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>>
 				raOut.setPosition(neighborhood);
 				raMask.setPosition(raOut);
 				if (!raOut.get().isEmpty()) {
-					final Integer label = raOut.get().iterator().next();
+					final var label = raOut.get().iterator().next();
 					if (label == INIT && raMask.get().get()) {
 						neighborVoxels.add(new WatershedVoxel(IntervalIndexer
 							.positionToIndex(neighborhood, out), neighborhood.get()
@@ -313,7 +313,7 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>>
 					raOut.get().add(neighborLabels.get(0));
 					// now that we know the voxel is labeled, add neighbors to
 					// list
-					for (final WatershedVoxel v : neighborVoxels) {
+					for (final var v : neighborVoxels) {
 						IntervalIndexer.indexToPosition(v.getPos(), out, raOut);
 						raOut.get().clear();
 						raOut.get().add(INQUEUE);
@@ -329,9 +329,9 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>>
 
 					// take the label which most of the neighbors have
 					if (neighborLabels.size() > 2) {
-						final Map<Integer, Long> countLabels = neighborLabels.stream()
+						final var countLabels = neighborLabels.stream()
 							.collect(Collectors.groupingBy(e -> e, Collectors.counting()));
-						final Integer keyMax = Collections.max(countLabels.entrySet(),
+						final var keyMax = Collections.max(countLabels.entrySet(),
 							Comparator.comparingLong(Map.Entry::getValue)).getKey();
 						raOut.get().add(keyMax);
 					}
@@ -340,7 +340,7 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>>
 					}
 					// now that we know the voxel is labeled, add neighbors to
 					// list
-					for (final WatershedVoxel v : neighborVoxels) {
+					for (final var v : neighborVoxels) {
 						IntervalIndexer.indexToPosition(v.getPos(), out, raOut);
 						raOut.get().clear();
 						raOut.get().add(INQUEUE);
@@ -354,7 +354,7 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>>
 		 * Merge already present labels before calculation of watershed
 		 */
 		if (out != null) {
-			final Cursor<LabelingType<Integer>> cursor = out.cursor();
+			final var cursor = out.cursor();
 			while (cursor.hasNext()) {
 				cursor.fwd();
 				raOut.setPosition(cursor);
@@ -393,7 +393,7 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>>
 
 		@Override
 		public int compareTo(WatershedVoxel o) {
-			int res = Double.compare(value, o.value);
+            var res = Double.compare(value, o.value);
 			if (res == 0) res = seqNum < o.seqNum ? -1 : 1;
 
 			return res;

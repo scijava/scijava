@@ -60,7 +60,7 @@ public final class Functions {
 	 */
 	public static boolean isFunction(Class<?> c) {
 		try {
-			Class<?> superType = superType(c);
+			var superType = superType(c);
 			return true;
 		} catch (IllegalArgumentException e) {
 			return false;
@@ -69,7 +69,7 @@ public final class Functions {
 
 	public static Class<?> superType(Class<?> c) {
 		if (ALL_FUNCTIONS.containsValue(c)) return c;
-		for(Class<?> func : ALL_ARITIES.keySet()) {
+		for(var func : ALL_ARITIES.keySet()) {
 			if (func.isAssignableFrom(c)) return func;
 		}
 		throw new IllegalArgumentException(c + " is not a subclass of any known Functions!");
@@ -182,8 +182,7 @@ public final class Functions {
 
 		// NB f must be cast to accept a set of input Objects for apply
 		@SuppressWarnings("unchecked")
-		$functionArity.call($arity)$objectGenerics.call($arity) func =
-			($functionArity.call($arity)$objectGenerics.call($arity)) f;
+		var func = ($functionArity.call($arity)$objectGenerics.call($arity)) f;
 
 		return new ArityN<>() {
 

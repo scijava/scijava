@@ -82,7 +82,7 @@ public class RLDFit {
 		 */
 		@Override
 		protected void doFit() {
-			final int retCode = FLIMLib.GCI_triple_integral_fitting_engine(
+			final var retCode = FLIMLib.GCI_triple_integral_fitting_engine(
 				params.xInc, transBuffer, adjFitStart, adjFitEnd, params.instr,
 				params.noise, params.sig, z, a, tau, fittedBuffer, residualBuffer,
 				chisqBuffer, rawChisq_target);
@@ -136,7 +136,7 @@ public class RLDFit {
 			if (params.nComp >= 4) {
 				// doesn't really matter, used estimation for global
 				// see flimlib:flimlib/src/main/c/EcfGlobal.c
-				for (int i = 7; i < nParam; i += 2) {
+				for (var i = 7; i < nParam; i += 2) {
 					if (params.paramFree[i]) {
 						paramBuffer[i] = a[0] / i;
 					}

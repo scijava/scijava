@@ -54,45 +54,45 @@ public class CooccurrenceMatrix2D {
 		final MatrixOrientation orientation)
 	{
 
-		final double[][] output = new double[nrGreyLevels][nrGreyLevels];
+		final var output = new double[nrGreyLevels][nrGreyLevels];
 
-		final Pair<T, T> minMax = minmax.apply(input);
+		final var minMax = minmax.apply(input);
 
-		final double localMin = minMax.getA().getRealDouble();
-		final double localMax = minMax.getB().getRealDouble();
+		final var localMin = minMax.getA().getRealDouble();
+		final var localMax = minMax.getB().getRealDouble();
 
-		final int[][] pixels = new int[(int) input.dimension(1)][(int) input
+		final var pixels = new int[(int) input.dimension(1)][(int) input
 			.dimension(0)];
 
-		for (int i = 0; i < pixels.length; i++) {
+		for (var i = 0; i < pixels.length; i++) {
 			Arrays.fill(pixels[i], Integer.MAX_VALUE);
 		}
 
-		final int minimumX = (int) input.min(0);
-		final int minimumY = (int) input.min(1);
-		final double diff = localMax - localMin;
+		final var minimumX = (int) input.min(0);
+		final var minimumY = (int) input.min(1);
+		final var diff = localMax - localMin;
 		LoopBuilder.setImages(input, Intervals.positions(input)).multiThreaded()
 			.forEachPixel((pixel, pos) -> {
-				final int bin = (int) ((pixel.getRealDouble() - localMin) / diff *
+				final var bin = (int) ((pixel.getRealDouble() - localMin) / diff *
 					nrGreyLevels);
 				pixels[pos.getIntPosition(1) - minimumY][pos.getIntPosition(0) -
 					minimumX] = bin < nrGreyLevels - 1 ? bin : nrGreyLevels - 1;
 			});
 
-		int nrPairs = 0;
+        var nrPairs = 0;
 
-		final int orientationAtX = orientation.getValueAtDim(0) * distance;
-		final int orientationAtY = orientation.getValueAtDim(1) * distance;
-		for (int y = 0; y < pixels.length; y++) {
-			for (int x = 0; x < pixels[y].length; x++) {
+		final var orientationAtX = orientation.getValueAtDim(0) * distance;
+		final var orientationAtY = orientation.getValueAtDim(1) * distance;
+		for (var y = 0; y < pixels.length; y++) {
+			for (var x = 0; x < pixels[y].length; x++) {
 				// ignore pixels not in mask
 				if (pixels[y][x] == Integer.MAX_VALUE) {
 					continue;
 				}
 
 				// // get second pixel
-				final int sx = x + orientationAtX;
-				final int sy = y + orientationAtY;
+				final var sx = x + orientationAtX;
+				final var sy = y + orientationAtY;
 
 				// second pixel in interval and mask
 				if (sx >= 0 && sy >= 0 && sy < pixels.length &&
@@ -106,9 +106,9 @@ public class CooccurrenceMatrix2D {
 		}
 
 		if (nrPairs > 0) {
-			double divisor = 1.0 / nrPairs;
-			for (int row = 0; row < output.length; row++) {
-				for (int col = 0; col < output[row].length; col++) {
+            var divisor = 1.0 / nrPairs;
+			for (var row = 0; row < output.length; row++) {
+				for (var col = 0; col < output[row].length; col++) {
 					output[row][col] *= divisor;
 				}
 			}

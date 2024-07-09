@@ -178,20 +178,20 @@ public abstract class Nil<T> implements GenericTyped, Proxyable<T> {
 	 */
 	@Override
 	public T proxy() {
-		final ClassLoader loader = Classes.classLoader();
+		final var loader = Classes.classLoader();
 
 		// extract the generic type's interfaces
 		final Set<?> ifaceSet = typeToken.getTypes().interfaces().rawTypes();
-		final boolean appendGT = !ifaceSet.contains(GenericTyped.class);
-		final int ifaceCount = ifaceSet.size() + (appendGT ? 1 : 0);
-		final Class<?>[] interfaces = new Class<?>[ifaceCount];
+		final var appendGT = !ifaceSet.contains(GenericTyped.class);
+		final var ifaceCount = ifaceSet.size() + (appendGT ? 1 : 0);
+		final var interfaces = new Class<?>[ifaceCount];
 		ifaceSet.toArray(interfaces);
 		if (appendGT) interfaces[ifaceCount - 1] = GenericTyped.class;
 
 		// NB: Technically, this cast is not safe, because T might not be
 		// an interface, and thus might not be one of the proxy's types.
 		@SuppressWarnings("unchecked")
-		final T proxy = (T) Proxy.newProxyInstance(loader, interfaces,
+		final var proxy = (T) Proxy.newProxyInstance(loader, interfaces,
 			new InvocationHandler() {
 				@Override
 				public Object invoke(final Object proxy, final Method method,
@@ -199,7 +199,7 @@ public abstract class Nil<T> implements GenericTyped, Proxyable<T> {
 				{
 					try {
 						// Look for a Nil subclass method of the same signature.
-						final Method m = callbacks.getClass().getMethod(method.getName(), //
+						final var m = callbacks.getClass().getMethod(method.getName(), //
 							method.getParameterTypes());
 						return m.invoke(callbacks, args);
 					}

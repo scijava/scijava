@@ -72,16 +72,16 @@ public class DefaultMomentNAboutMean<I extends RealType<I>, O extends RealType<O
 	public void compute(final RandomAccessibleInterval<I> input, final Integer n,
 		final O output)
 	{
-		final DoubleType mean = new DoubleType();
+		final var mean = new DoubleType();
 		meanComputer.compute(input, mean);
-		final DoubleType size = new DoubleType();
+		final var size = new DoubleType();
 		sizeComputer.compute(input, size);
 
-		List<DoubleType> chunkSums = LoopBuilder.setImages(input).multiThreaded()
+        var chunkSums = LoopBuilder.setImages(input).multiThreaded()
 			.forEachChunk(chunk -> {
-				DoubleType chunkSum = new DoubleType(0);
-				DoubleType difference = new DoubleType();
-				DoubleType product = new DoubleType();
+                var chunkSum = new DoubleType(0);
+                var difference = new DoubleType();
+                var product = new DoubleType();
 				chunk.forEachPixel(pixel -> {
 					difference.set(pixel.getRealDouble());
 					difference.sub(mean);
@@ -91,8 +91,8 @@ public class DefaultMomentNAboutMean<I extends RealType<I>, O extends RealType<O
 				return chunkSum;
 			});
 
-		DoubleType sum = new DoubleType(0);
-		for (DoubleType chunkSum : chunkSums)
+        var sum = new DoubleType(0);
+		for (var chunkSum : chunkSums)
 			sum.add(chunkSum);
 		sum.div(size);
 

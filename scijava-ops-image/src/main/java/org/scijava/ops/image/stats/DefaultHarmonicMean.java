@@ -66,9 +66,9 @@ public class DefaultHarmonicMean<I extends RealType<I>, O extends RealType<O>>
 	public void compute(final RandomAccessibleInterval<I> input,
 		final O harmonicMean)
 	{
-		final O area = harmonicMean.createVariable();
+		final var area = harmonicMean.createVariable();
 		sizeComputer.compute(input, area);
-		final O sumOfInverses = harmonicMean.createVariable();
+		final var sumOfInverses = harmonicMean.createVariable();
 		sumOfInversesComputer.compute(input, sumOfInverses);
 
 		if (sumOfInverses.getRealDouble() != 0) {

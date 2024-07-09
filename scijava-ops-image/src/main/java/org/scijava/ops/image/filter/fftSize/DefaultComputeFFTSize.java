@@ -55,11 +55,11 @@ public class DefaultComputeFFTSize implements
 	@Override
 	public long[][] apply(Dimensions dimensions, Boolean powerOfTwo) {
 
-		long[][] size = new long[2][];
+        var size = new long[2][];
 		size[0] = new long[dimensions.numDimensions()];
 		size[1] = new long[dimensions.numDimensions()];
 
-		for (int i = 0; i < dimensions.numDimensions(); i++) {
+		for (var i = 0; i < dimensions.numDimensions(); i++) {
 			// real size
 			if (powerOfTwo) {
 				size[0][i] = NextPowerOfTwo.nextPowerOfTwo(dimensions.dimension(i));

@@ -94,21 +94,21 @@ public class ComputeLocalPhansalkarThresholdIntegral<T extends RealType<T>>
 		if (k == null) k = DEFAULT_K;
 		if (r == null) r = DEFAULT_R;
 
-		final DoubleType mean = new DoubleType();
+		final var mean = new DoubleType();
 		integralMeanOp.compute(inputNeighborhood, mean);
 
-		final DoubleType variance = new DoubleType();
+		final var variance = new DoubleType();
 		integralVarianceOp.compute(inputNeighborhood, variance);
 
-		final DoubleType stdDev = new DoubleType(Math.sqrt(variance.get()));
+		final var stdDev = new DoubleType(Math.sqrt(variance.get()));
 
-		final DoubleType threshold = new DoubleType(mean.getRealDouble() * (1.0d +
+		final var threshold = new DoubleType(mean.getRealDouble() * (1.0d +
 			P * Math.exp(-Q * mean.getRealDouble()) + k * ((stdDev.getRealDouble() /
 				r) - 1.0)));
 
 		// Set value
 		final Converter<T, DoubleType> conv = new RealDoubleConverter<>();
-		final DoubleType centerPixelAsDoubleType = variance; // NB: Reuse
+		final var centerPixelAsDoubleType = variance; // NB: Reuse
 		// DoubleType
 		conv.convert(inputCenterPixel, centerPixelAsDoubleType);
 

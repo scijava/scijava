@@ -67,9 +67,9 @@ public class HistogramCreate<T extends RealType<T>> implements
 	{
 		if (numBins == null) numBins = DEFAULT_NUM_BINS;
 
-		final Pair<T, T> res = minMaxFunc.apply(input);
+		final var res = minMaxFunc.apply(input);
 
-		final Histogram1d<T> histogram1d = new Histogram1d<>(new Real1dBinMapper<T>(
+		final var histogram1d = new Histogram1d<T>(new Real1dBinMapper<T>(
 			res.getA().getRealDouble(), res.getB().getRealDouble(), numBins, false));
 
 		histogram1d.countData(input);

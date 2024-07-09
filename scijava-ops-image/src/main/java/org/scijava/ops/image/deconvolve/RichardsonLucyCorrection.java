@@ -77,7 +77,7 @@ public class RichardsonLucyCorrection<I extends RealType<I>, O extends RealType<
 		(denomResult, numer) -> {
 			LoopBuilder.setImages(denomResult, numer).multiThreaded().forEachChunk(
 				chunk -> {
-					final O tmp = Util.getTypeFromInterval(denomResult).createVariable();
+					final var tmp = Util.getTypeFromInterval(denomResult).createVariable();
 					chunk.forEachPixel((d, n) -> {
 						if (d.getRealFloat() > 0) {
 							tmp.setReal(n.getRealFloat());

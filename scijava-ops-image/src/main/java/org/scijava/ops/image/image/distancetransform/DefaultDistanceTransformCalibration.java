@@ -63,20 +63,20 @@ public final class DefaultDistanceTransformCalibration {
 		final RandomAccessibleInterval<T> out)
 	{
 		// stores the size of each dimension
-		final int[] dimensSizes = new int[in.numDimensions()];
+		final var dimensSizes = new int[in.numDimensions()];
 
 		// stores the actual position in the image
-		final int[] positions = new int[in.numDimensions()];
+		final var positions = new int[in.numDimensions()];
 
 		// calculates the number of points in the n-d space
-		int numPoints = 1;
-		for (int i = 0; i < in.numDimensions(); i++) {
+        var numPoints = 1;
+		for (var i = 0; i < in.numDimensions(); i++) {
 			numPoints *= in.dimension(i);
 			dimensSizes[i] = (int) in.dimension(i);
 			positions[i] = 0;
 		}
 		// stores the values calculated after each phase
-		final double[] actualValues = new double[numPoints];
+		final var actualValues = new double[numPoints];
 
 		// stores each Thread to execute
 		final List<Runnable> list = new ArrayList<>();
@@ -84,7 +84,7 @@ public final class DefaultDistanceTransformCalibration {
 		/*
 		 * initial phase calculates the first dimension
 		 */
-		int index = dimensSizes.length - 1;
+        var index = dimensSizes.length - 1;
 		list.add(new InitPhaseCal<>(actualValues, in, dimensSizes, positions
 			.clone(), calibration));
 		while (index > 0) {
@@ -105,14 +105,14 @@ public final class DefaultDistanceTransformCalibration {
 		list.clear();
 
 		// squared values needed for further calculations
-		for (int i = 0; i < actualValues.length; i++) {
+		for (var i = 0; i < actualValues.length; i++) {
 			actualValues[i] *= actualValues[i];
 		}
 
 		/*
 		 * next phases calculates remaining dimensions
 		 */
-		for (int actualDimension = 1; actualDimension < in
+		for (var actualDimension = 1; actualDimension < in
 			.numDimensions(); actualDimension++)
 		{
 			Arrays.fill(positions, 0);
@@ -147,7 +147,7 @@ public final class DefaultDistanceTransformCalibration {
 		 * create output
 		 */
 		Arrays.fill(positions, 0);
-		final RandomAccess<T> raOut = out.randomAccess();
+		final var raOut = out.randomAccess();
 		raOut.setPosition(positions);
 		raOut.get().setReal(Math.sqrt(actualValues[IntervalIndexer.positionToIndex(
 			positions, dimensSizes)]));
@@ -185,8 +185,8 @@ class InitPhaseCal<B extends BooleanType<B>, T extends RealType<T>> implements
 	{
 		this.actualValues = actualValues;
 		this.raIn = raIn.randomAccess();
-		int inf = 0;
-		for (int i = 0; i < dimensSizes.length; i++)
+        var inf = 0;
+		for (var i = 0; i < dimensSizes.length; i++)
 			inf += calibration[i] * calibration[i] * dimensSizes[i] * dimensSizes[i];
 		this.infinite = inf;
 		this.dimensSizes = dimensSizes;
@@ -206,7 +206,7 @@ class InitPhaseCal<B extends BooleanType<B>, T extends RealType<T>> implements
 			actualValues[IntervalIndexer.positionToIndex(positions, dimensSizes)] =
 				infinite;
 		}
-		for (int x = 1; x < dimensSizes[0]; x++) {
+		for (var x = 1; x < dimensSizes[0]; x++) {
 			positions[0] = x;
 			raIn.setPosition(positions);
 			if (!raIn.get().get()) {
@@ -214,7 +214,7 @@ class InitPhaseCal<B extends BooleanType<B>, T extends RealType<T>> implements
 					0;
 			}
 			else {
-				final int[] temp = positions.clone();
+				final var temp = positions.clone();
 				temp[0] = x - 1;
 				actualValues[IntervalIndexer.positionToIndex(positions, dimensSizes)] =
 					actualValues[IntervalIndexer.positionToIndex(temp, dimensSizes)] +
@@ -222,9 +222,9 @@ class InitPhaseCal<B extends BooleanType<B>, T extends RealType<T>> implements
 			}
 		}
 		// scan2
-		for (int x = dimensSizes[0] - 2; x >= 0; x--) {
+		for (var x = dimensSizes[0] - 2; x >= 0; x--) {
 			positions[0] = x;
-			final int[] temp = positions.clone();
+			final var temp = positions.clone();
 			temp[0] = x + 1;
 			if (actualValues[IntervalIndexer.positionToIndex(temp,
 				dimensSizes)] < actualValues[IntervalIndexer.positionToIndex(positions,
@@ -278,14 +278,14 @@ class NextPhaseCal<T extends RealType<T>> implements Runnable {
 
 	@Override
 	public void run() {
-		final int[] s = new int[dimensSizes[actualDimension]];
-		final int[] t = new int[dimensSizes[actualDimension]];
-		int q = 0;
+		final var s = new int[dimensSizes[actualDimension]];
+		final var t = new int[dimensSizes[actualDimension]];
+        var q = 0;
 		s[0] = 0;
 		t[0] = 0;
 
 		// scan 3
-		for (int u = 1; u < dimensSizes[actualDimension]; u++) {
+		for (var u = 1; u < dimensSizes[actualDimension]; u++) {
 			positions[actualDimension] = s[q];
 			positions2[actualDimension] = u;
 			while (q >= 0 && distancefunc(t[q], s[q], actualValues[IntervalIndexer
@@ -303,7 +303,7 @@ class NextPhaseCal<T extends RealType<T>> implements Runnable {
 			else {
 				positions[actualDimension] = s[q];
 				positions2[actualDimension] = u;
-				final int w = 1 + sep(s[q], u, actualValues[IntervalIndexer
+				final var w = 1 + sep(s[q], u, actualValues[IntervalIndexer
 					.positionToIndex(positions2, dimensSizes)],
 					actualValues[IntervalIndexer.positionToIndex(positions,
 						dimensSizes)]);
@@ -316,8 +316,8 @@ class NextPhaseCal<T extends RealType<T>> implements Runnable {
 		}
 
 		// scan 4
-		final double[] newValues = new double[dimensSizes[actualDimension]];
-		for (int u = dimensSizes[actualDimension] - 1; u >= 0; u--) {
+		final var newValues = new double[dimensSizes[actualDimension]];
+		for (var u = dimensSizes[actualDimension] - 1; u >= 0; u--) {
 			positions[actualDimension] = s[q];
 			newValues[u] = distancefunc(u, s[q], actualValues[IntervalIndexer
 				.positionToIndex(positions, dimensSizes)]);
@@ -325,7 +325,7 @@ class NextPhaseCal<T extends RealType<T>> implements Runnable {
 				q--;
 			}
 		}
-		for (int u = dimensSizes[actualDimension] - 1; u >= 0; u--) {
+		for (var u = dimensSizes[actualDimension] - 1; u >= 0; u--) {
 			positions[actualDimension] = u;
 			actualValues[IntervalIndexer.positionToIndex(positions, dimensSizes)] =
 				newValues[u];

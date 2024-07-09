@@ -69,8 +69,8 @@ public final class LiftNeighborhoodComputersToFunctionsOnImgs {
 			"adaptation.FORBIDDEN" }) BiFunction<Dimensions, T, Img<T>> creator,
 			Computers.Arity1<Neighborhood<T>, T> op)
 	{
-		OutOfBoundsMirrorFactory<T, RandomAccessibleInterval<T>> oobf //
-			= new OutOfBoundsMirrorFactory<>(
+        var oobf //
+			= new OutOfBoundsMirrorFactory<T, RandomAccessibleInterval<T>>(
 				OutOfBoundsMirrorFactory.Boundary.SINGLE);
 		return (in, shape) -> {
 			var output = creator.apply(in, Util.getTypeFromInterval(in));

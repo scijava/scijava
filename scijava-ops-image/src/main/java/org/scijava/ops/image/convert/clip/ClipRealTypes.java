@@ -52,9 +52,9 @@ public class ClipRealTypes<I extends RealType<I>, O extends RealType<O>>
 	 */
 	@Override
 	public void compute(final I input, final O output) {
-		final double v = input.getRealDouble();
-		final double outMin = output.getMinValue();
-		final double outMax = output.getMaxValue();
+		final var v = input.getRealDouble();
+		final var outMin = output.getMinValue();
+		final var outMax = output.getMaxValue();
 		if (v > outMax) {
 			output.setReal(outMax);
 		}

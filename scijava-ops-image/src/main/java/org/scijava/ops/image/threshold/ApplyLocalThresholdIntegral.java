@@ -120,15 +120,15 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>, U exten
 
 		final List<RandomAccessibleInterval<U>> listOfIntegralImages =
 			new ArrayList<>(integralImageOps.size());
-		for (final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>> //
+		for (final var //
 		integralImageOp : integralImageOps) {
-			final RandomAccessibleInterval<U> requiredIntegralImg = getIntegralImage(
+			final var requiredIntegralImg = getIntegralImage(
 				input, inputNeighborhoodShape, outOfBoundsFactory, integralImageOp);
 			listOfIntegralImages.add(requiredIntegralImg);
 		}
 
 		// Composite image of integral images of all orders
-		final RandomAccessibleInterval<U> stacked = Views.stack(
+		final var stacked = Views.stack(
 			listOfIntegralImages);
 		// NB Views.collapse returns a RandomAccessibleInterval<? extends
 		// GenericComposite<U>>. We know that any subclass of GenericComposite<U> is
@@ -139,10 +139,10 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>, U exten
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		final RandomAccessibleInterval<Composite<U>> compositeRAI =
 			(RandomAccessibleInterval) Views.collapse(stacked);
-		final RandomAccessibleInterval<Composite<U>> extendedCompositeRAI =
+		final var extendedCompositeRAI =
 			removeLeadingZeros(compositeRAI, inputNeighborhoodShape);
 
-		RandomAccessibleInterval<RectangleNeighborhood<Composite<U>>> neighborhoodsRAI =
+        var neighborhoodsRAI =
 			asRectangularNeighborhoodInterval(inputNeighborhoodShape,
 				extendedCompositeRAI);
 
@@ -155,9 +155,9 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>, U exten
 		asRectangularNeighborhoodInterval(RectangleShape inputNeighborhoodShape,
 			final RandomAccessibleInterval<A> extendedCompositeRAI)
 	{
-		final NeighborhoodsAccessible<A> neighborhoods = inputNeighborhoodShape
+		final var neighborhoods = inputNeighborhoodShape
 			.neighborhoodsRandomAccessibleSafe(extendedCompositeRAI);
-		final IntervalView<Neighborhood<A>> interval = Views.interval(neighborhoods,
+		final var interval = Views.interval(neighborhoods,
 			extendedCompositeRAI);
 
 		if (!(Util.getTypeFromInterval(
@@ -184,13 +184,13 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>, U exten
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>> integralOp)
 	{
-		final ExtendedRandomAccessibleInterval<T, RandomAccessibleInterval<T>> extendedInput =
+		final var extendedInput =
 			Views.extend(input, outOfBoundsFactory);
-		final FinalInterval expandedInterval = Intervals.expand(input, shape
+		final var expandedInterval = Intervals.expand(input, shape
 			.getSpan() - 1l);
-		final IntervalView<T> offsetInterval2 = Views.offsetInterval(extendedInput,
+		final var offsetInterval2 = Views.offsetInterval(extendedInput,
 			expandedInterval);
-		final RandomAccessibleInterval<U> img = integralOp.apply(offsetInterval2);
+		final var img = integralOp.apply(offsetInterval2);
 		return addLeadingZeros(img);
 	}
 
@@ -203,19 +203,19 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>, U exten
 	private static <T extends RealType<T>> RandomAccessibleInterval<T>
 		addLeadingZeros(final RandomAccessibleInterval<T> input)
 	{
-		final long[] min = Intervals.minAsLongArray(input);
-		final long[] max = Intervals.maxAsLongArray(input);
+		final var min = Intervals.minAsLongArray(input);
+		final var max = Intervals.maxAsLongArray(input);
 
-		for (int i = 0; i < max.length; i++) {
+		for (var i = 0; i < max.length; i++) {
 			min[i]--;
 		}
 
-		final T realZero = Util.getTypeFromInterval(input).copy();
+		final var realZero = Util.getTypeFromInterval(input).copy();
 		realZero.setZero();
 
-		final ExtendedRandomAccessibleInterval<T, RandomAccessibleInterval<T>> extendedImg =
+		final var extendedImg =
 			Views.extendValue(input, realZero.getRealFloat());
-		final IntervalView<T> offsetInterval = Views.interval(extendedImg, min,
+		final var offsetInterval = Views.interval(extendedImg, min,
 			max);
 
 		return Views.zeroMin(offsetInterval);
@@ -231,17 +231,17 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>, U exten
 		final RandomAccessibleInterval<T> input, final RectangleShape shape)
 	{
 		// Remove 0s from integralImg by shifting its interval by +1
-		final long[] min = Intervals.minAsLongArray(input);
-		final long[] max = Intervals.maxAsLongArray(input);
+		final var min = Intervals.minAsLongArray(input);
+		final var max = Intervals.maxAsLongArray(input);
 
-		for (int d = 0; d < input.numDimensions(); ++d) {
-			final int correctedSpan = shape.getSpan() - 1;
+		for (var d = 0; d < input.numDimensions(); ++d) {
+			final var correctedSpan = shape.getSpan() - 1;
 			min[d] += (1 + correctedSpan);
 			max[d] -= correctedSpan;
 		}
 
 		// Define the Interval on the infinite random accessibles
-		final FinalInterval interval = new FinalInterval(min, max);
+		final var interval = new FinalInterval(min, max);
 
 		return Views.offsetInterval(Views.extendBorder(input), interval);
 	}

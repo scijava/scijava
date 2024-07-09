@@ -67,12 +67,12 @@ public abstract class AbstractThin implements
 			throw new IllegalArgumentException(
 				"Source and target images must be of the same size!");
 
-		final IterableInterval<BitType> targetIt = Views.iterable(target);
-		final IterableInterval<BitType> sourceIt = Views.iterable(source);
+		final var targetIt = Views.iterable(target);
+		final var sourceIt = Views.iterable(source);
 
 		if (sourceIt.iterationOrder().equals(targetIt.iterationOrder())) {
-			final Cursor<BitType> targetCursor = targetIt.cursor();
-			final Cursor<BitType> sourceCursor = sourceIt.cursor();
+			final var targetCursor = targetIt.cursor();
+			final var sourceCursor = sourceIt.cursor();
 			while (sourceCursor.hasNext()) {
 				targetCursor.fwd();
 				sourceCursor.fwd();
@@ -80,8 +80,8 @@ public abstract class AbstractThin implements
 			}
 		}
 		else { // Fallback to random access
-			final RandomAccess<BitType> targetRA = target.randomAccess();
-			final Cursor<BitType> sourceCursor = sourceIt.localizingCursor();
+			final var targetRA = target.randomAccess();
+			final var sourceCursor = sourceIt.localizingCursor();
 			while (sourceCursor.hasNext()) {
 				sourceCursor.fwd();
 				targetRA.setPosition(sourceCursor);
@@ -99,10 +99,10 @@ public abstract class AbstractThin implements
 		// the image
 		// without changing it.
 
-		final Img<BitType> buffer = imgCreator.apply(input, new BitType());
+		final var buffer = imgCreator.apply(input, new BitType());
 
-		final IterableInterval<BitType> it1 = Views.iterable(buffer);
-		final IterableInterval<BitType> it2 = Views.iterable(output);
+		final var it1 = Views.iterable(buffer);
+		final var it2 = Views.iterable(output);
 
 		// Extend the buffer in order to be able to iterate care-free later.
 		final RandomAccessible<BitType> ra1 = Views.extendBorder(buffer);
@@ -112,9 +112,9 @@ public abstract class AbstractThin implements
 		RandomAccessible<BitType> currRa = Views.extendBorder(input);
 
 		// Create cursors.
-		final Cursor<BitType> firstCursor = it1.localizingCursor();
-		Cursor<BitType> currentCursor = Views.iterable(input).localizingCursor();
-		final Cursor<BitType> secondCursor = it2.localizingCursor();
+		final var firstCursor = it1.localizingCursor();
+        var currentCursor = Views.iterable(input).localizingCursor();
+		final var secondCursor = it2.localizingCursor();
 
 		// Create pointers to the current and next cursor and set them to Buffer and
 		// output respectively.
@@ -122,15 +122,15 @@ public abstract class AbstractThin implements
 		nextCursor = secondCursor;
 
 		// The main loop.
-		boolean changes = true;
-		int i = 0;
+        var changes = true;
+        var i = 0;
 		// Until no more changes, do:
-		final long[] coordinates = new long[currentCursor.numDimensions()];
+		final var coordinates = new long[currentCursor.numDimensions()];
 		while (changes) {
 			changes = false;
 			// This For-Loop makes sure, that iterations only end on full cycles (as
 			// defined by the strategies).
-			for (int j = 0; j < m_strategy.getIterationsPerCycle(); ++j) {
+			for (var j = 0; j < m_strategy.getIterationsPerCycle(); ++j) {
 				// For each pixel in the image.
 				while (currentCursor.hasNext()) {
 					// Move both cursors
@@ -140,14 +140,14 @@ public abstract class AbstractThin implements
 					currentCursor.localize(coordinates);
 
 					// Copy the value of the image currently operated upon.
-					final boolean curr = currentCursor.get().get();
+					final var curr = currentCursor.get().get();
 					nextCursor.get().set(curr);
 
 					// Only foreground pixels may be thinned
 					if (curr) {
 
 						// Ask the strategy whether to flip the foreground pixel or not.
-						final boolean flip = m_strategy.removePixel(coordinates, currRa, j);
+						final var flip = m_strategy.removePixel(coordinates, currRa, j);
 
 						// If yes - change and keep track of the change.
 						if (flip) {

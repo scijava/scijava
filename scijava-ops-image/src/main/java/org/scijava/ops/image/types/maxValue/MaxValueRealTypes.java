@@ -293,14 +293,14 @@ public class MaxValueRealTypes {
 	 */
 	public final Function<UnsignedVariableBitLengthType, UnsignedVariableBitLengthType> maxVarLengthType =
 		in -> {
-			int nBits = in.getBitsPerPixel();
+            var nBits = in.getBitsPerPixel();
 			if (nBits < 64) {
-				long maxVal = (1l << nBits) - 1;
+                var maxVal = (1l << nBits) - 1;
 				return new UnsignedVariableBitLengthType(maxVal, nBits);
 			}
-			BigInteger maxVal = BigInteger.TWO.pow(nBits - 1).subtract(
+            var maxVal = BigInteger.TWO.pow(nBits - 1).subtract(
 				BigInteger.ONE);
-			UnsignedVariableBitLengthType typeMax = new UnsignedVariableBitLengthType(
+            var typeMax = new UnsignedVariableBitLengthType(
 				nBits);
 			typeMax.setBigInteger(maxVal);
 			return typeMax;

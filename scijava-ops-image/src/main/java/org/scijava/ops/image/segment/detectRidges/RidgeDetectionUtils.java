@@ -90,8 +90,8 @@ public final class RidgeDetectionUtils {
 	 * @return int denoting the octant in which a vector is in.
 	 */
 	protected static int getOctant(double x, double y) {
-		int octant = 1;
-		double angle = getAngle(x, y);
+        var octant = 1;
+        var angle = getAngle(x, y);
 
 		while (angle > 22.5) {
 			octant++;
@@ -114,7 +114,7 @@ public final class RidgeDetectionUtils {
 	 *         y-coordinate.
 	 */
 	protected static int[] getOctantCoords(int octant) {
-		int[] coords = new int[2];
+        var coords = new int[2];
 		switch (octant) {
 			case 9:
 			case 1:
@@ -163,7 +163,7 @@ public final class RidgeDetectionUtils {
 	 * @return Point in 2D space.
 	 */
 	protected static Point get2DPoint(RandomAccess<DoubleType> RA) {
-		long[] coords = new long[2];
+        var coords = new long[2];
 		coords[0] = RA.getLongPosition(0);
 		coords[1] = RA.getLongPosition(1);
 
@@ -179,7 +179,7 @@ public final class RidgeDetectionUtils {
 	 * @return Point in 2D space.
 	 */
 	protected static RealPoint get2DRealPoint(RandomAccess<DoubleType> RA) {
-		double[] coords = new double[2];
+        var coords = new double[2];
 		coords[0] = RA.getDoublePosition(0);
 		coords[1] = RA.getDoublePosition(1);
 
@@ -200,16 +200,16 @@ public final class RidgeDetectionUtils {
 	protected static long[] getMaxCoords(
 		RandomAccessibleInterval<DoubleType> input, boolean useAbsoluteValue)
 	{
-		long[] dims = new long[input.numDimensions()];
-		double max = Double.MIN_VALUE;
-		Cursor<DoubleType> cursor = Views.iterable(input).localizingCursor();
+        var dims = new long[input.numDimensions()];
+        var max = Double.MIN_VALUE;
+        var cursor = Views.iterable(input).localizingCursor();
 		while (cursor.hasNext()) {
 			cursor.fwd();
-			double current = useAbsoluteValue ? Math.abs(cursor.get().get()) : cursor
+            var current = useAbsoluteValue ? Math.abs(cursor.get().get()) : cursor
 				.get().get();
 			if (current > max) {
 				max = current;
-				for (int d = 0; d < input.numDimensions(); d++) {
+				for (var d = 0; d < input.numDimensions(); d++) {
 					dims[d] = cursor.getLongPosition(d);
 				}
 			}

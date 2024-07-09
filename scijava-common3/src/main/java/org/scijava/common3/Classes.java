@@ -55,7 +55,7 @@ public final class Classes {
 	 * @see ClassLoader#getSystemClassLoader()
 	 */
 	public static ClassLoader classLoader() {
-		final ClassLoader contextCL = Thread.currentThread()
+		final var contextCL = Thread.currentThread()
 			.getContextClassLoader();
 		return contextCL != null ? contextCL : ClassLoader.getSystemClassLoader();
 	}
@@ -154,25 +154,25 @@ public final class Classes {
 
 		// handle source style arrays (e.g.: "java.lang.String[]")
 		if (name.endsWith("[]")) {
-			final String elementClassName = name.substring(0, name.length() - 2);
+			final var elementClassName = name.substring(0, name.length() - 2);
 			return arrayOrNull(load(elementClassName, classLoader));
 		}
 
 		// handle non-primitive internal arrays (e.g.: "[Ljava.lang.String;")
 		if (name.startsWith("[L") && name.endsWith(";")) {
-			final String elementClassName = name.substring(2, name.length() - 1);
+			final var elementClassName = name.substring(2, name.length() - 1);
 			return arrayOrNull(load(elementClassName, classLoader));
 		}
 
 		// handle other internal arrays (e.g.: "[I", "[[I", "[[Ljava.lang.String;")
 		if (name.startsWith("[")) {
-			final String elementClassName = name.substring(1);
+			final var elementClassName = name.substring(1);
 			return arrayOrNull(load(elementClassName, classLoader));
 		}
 
 		// load the class!
 		try {
-			final ClassLoader cl = classLoader == null ? classLoader() : classLoader;
+			final var cl = classLoader == null ? classLoader() : classLoader;
 			return cl.loadClass(className);
 		}
 		catch (final Throwable t) {
@@ -225,9 +225,9 @@ public final class Classes {
 
 		// try the easy way first
 		try {
-			final CodeSource codeSource = c.getProtectionDomain().getCodeSource();
+			final var codeSource = c.getProtectionDomain().getCodeSource();
 			if (codeSource != null) {
-				final URL location = codeSource.getLocation();
+				final var location = codeSource.getLocation();
 				if (location != null) return location;
 				why = "null code source location";
 			}
@@ -244,15 +244,15 @@ public final class Classes {
 		// leaving the base path.
 
 		// get the class's raw resource path
-		final URL classResource = c.getResource(c.getSimpleName() + ".class");
+		final var classResource = c.getResource(c.getSimpleName() + ".class");
 		if (classResource == null) {
 			// cannot find class resource
 			if (quietly) return null;
 			throw iae(cause, "No class resource for class: %s (%s)", c.getName(), why);
 		}
 
-		final String url = classResource.toString();
-		final String suffix = c.getCanonicalName().replace('.', '/') + ".class";
+		final var url = classResource.toString();
+		final var suffix = c.getCanonicalName().replace('.', '/') + ".class";
 		if (!url.endsWith(suffix)) {
 			// weird URL
 			if (quietly) return null;
@@ -260,9 +260,9 @@ public final class Classes {
 		}
 
 		// strip the class's path from the URL string
-		final String base = url.substring(0, url.length() - suffix.length());
+		final var base = url.substring(0, url.length() - suffix.length());
 
-		String path = base;
+        var path = base;
 
 		// remove the "jar:" prefix and "!/" suffix, if present
 		if (path.startsWith("jar:")) path = path.substring(4, path.length() - 2);
@@ -350,7 +350,7 @@ public final class Classes {
 		else if (type == void.class) destType = Void.class;
 		else destType = type;
 		@SuppressWarnings("unchecked")
-		final Class<T> result = (Class<T>) destType;
+		final var result = (Class<T>) destType;
 		return result;
 	}
 
@@ -384,7 +384,7 @@ public final class Classes {
 		else if (type == Void.class) destType = void.class;
 		else destType = type;
 		@SuppressWarnings("unchecked")
-		final Class<T> result = (Class<T>) destType;
+		final var result = (Class<T>) destType;
 		return result;
 	}
 
@@ -405,7 +405,7 @@ public final class Classes {
 		else if (type == short.class) defaultValue = (short) 0;
 		else defaultValue = null;
 		@SuppressWarnings("unchecked")
-		final T result = (T) defaultValue;
+		final var result = (T) defaultValue;
 		return result;
 	}
 
@@ -534,8 +534,8 @@ public final class Classes {
 	 */
 	public static int compare(final Class<?> c1, final Class<?> c2) {
 		if (c1 == c2) return 0;
-		final String name1 = c1 == null ? null : c1.getName();
-		final String name2 = c2 == null ? null : c2.getName();
+		final var name1 = c1 == null ? null : c1.getName();
+		final var name2 = c2 == null ? null : c2.getName();
 		return Comparisons.compare(name1, name2);
 	}
 
@@ -557,8 +557,8 @@ public final class Classes {
 	private static IllegalArgumentException iae(final Throwable cause,
 		final String formattedMessage, final String... values)
 	{
-		final String s = String.format(formattedMessage, (Object[]) values);
-		final IllegalArgumentException exc = new IllegalArgumentException(s);
+		final var s = String.format(formattedMessage, (Object[]) values);
+		final var exc = new IllegalArgumentException(s);
 		if (cause != null) exc.initCause(cause);
 		return exc;
 	}

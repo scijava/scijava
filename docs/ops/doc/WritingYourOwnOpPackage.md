@@ -267,7 +267,7 @@ In this example, the two `OpDependency` Ops already exist within the SciJava Ops
 class DoubleSumOp implements Function<double[], Double> {
 	public Double apply(final double[] inArray) {
 		double sum = 0;
-		for (double v : inArray) {
+		for (var v : inArray) {
 			sum += v;
 		}
 		return i;
@@ -318,7 +318,7 @@ class DoubleSumOp implements Function<double[], Double> {
         // define total progress size
         Progress.defineTotal(inArray.length);
         double sum = 0;
-        for (double v : inArray) {
+        for (var v : inArray) {
             sum += v;
             // increment progress
             Progress.update();
@@ -356,11 +356,10 @@ class DoubleMeanOp implements Function<double[], Double> {
     public Double apply(final double[] inArray) {
         // There's no significant work here, but we do have 2 subtasks.
         Progress.defineTotal(0, 2);
-        final Double sum = sumOp.apply(inArray);
+        final var sum = sumOp.apply(inArray);
         final Double size = sizeOp.apply(inArray);
         return sum / size;
-    }
-}
+    
 ```
 
 For best results, ensure your Op records Progress updates at a reasonable frequency. If too frequent, progress updates can detract from algorithm performance, and if too infrequent, they will be of little help to the user!

@@ -66,7 +66,7 @@ public class DefaultMean<I extends RealType<I>, O extends RealType<O>>
 	public void compute(final RandomAccessibleInterval<I> input, final O mean) {
 
 		sumComputer.compute(input, mean);
-		final O size = mean.createVariable();
+		final var size = mean.createVariable();
 		areaComputer.compute(input, size);
 		mean.div(size);
 	}

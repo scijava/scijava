@@ -68,8 +68,8 @@ public class MethodOpDependencyMemberParser implements
 
 		source.setAccessible(true);
 
-		final ArrayList<MethodParameterOpDependencyMember<?>> items =
-			new ArrayList<>();
+		final var items =
+			new ArrayList<MethodParameterOpDependencyMember<?>>();
 
 		// Parse method level @OpDependency annotations.
 		parseMethodOpDependencies(items, source);
@@ -81,10 +81,10 @@ public class MethodOpDependencyMemberParser implements
 		final List<MethodParameterOpDependencyMember<?>> items,
 		final Method annotatedMethod)
 	{
-		Boolean[] isDependency = Arrays.stream(annotatedMethod.getParameters()) //
+        var isDependency = Arrays.stream(annotatedMethod.getParameters()) //
 			.map(param -> param.isAnnotationPresent(OpDependency.class)).toArray(
 				Boolean[]::new);
-		for (int i = 0; i < isDependency.length - 1; i++) {
+		for (var i = 0; i < isDependency.length - 1; i++) {
 			if (!isDependency[i] && isDependency[i + 1]) {
 				// OpDependencies must come first so that they can be curried within
 				// LambdaMetafactory
@@ -92,16 +92,16 @@ public class MethodOpDependencyMemberParser implements
 			}
 		}
 
-		final java.lang.reflect.Parameter[] methodParams = annotatedMethod
+		final var methodParams = annotatedMethod
 			.getParameters();
 
-		for (java.lang.reflect.Parameter methodParam : methodParams) {
-			final OpDependency dependency = methodParam.getAnnotation(
+		for (var methodParam : methodParams) {
+			final var dependency = methodParam.getAnnotation(
 				OpDependency.class);
 			if (dependency == null) continue;
 
-			final String name = methodParam.getName();
-			final Type methodParamType = methodParam.getParameterizedType();
+			final var name = methodParam.getName();
+			final var methodParamType = methodParam.getParameterizedType();
 			items.add(new MethodParameterOpDependencyMember<>( //
 				name, //
 				"", //

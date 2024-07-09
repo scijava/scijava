@@ -93,7 +93,7 @@ public class ObjectArray<E> extends AbstractPrimitiveArray<E[], E> {
 	}
 
 	public boolean removeValue(final E value) {
-		final int index = indexOf(value);
+		final var index = indexOf(value);
 		if (index < 0) return false;
 		delete(index, 1);
 		return true;
@@ -106,7 +106,7 @@ public class ObjectArray<E> extends AbstractPrimitiveArray<E[], E> {
 
 	public E setValue(final int index, final E value) {
 		checkBounds(index);
-		final E oldValue = getValue(index);
+		final var oldValue = getValue(index);
 		array[index] = value;
 		return oldValue;
 	}
@@ -152,7 +152,7 @@ public class ObjectArray<E> extends AbstractPrimitiveArray<E[], E> {
 	@Override
 	public int indexOf(final Object o) {
 		if (!compatibleClass(o)) return -1;
-		for (int i = 0; i < size(); i++) {
+		for (var i = 0; i < size(); i++) {
 			if (array[i].equals(o)) return i;
 		}
 		return -1;
@@ -162,7 +162,7 @@ public class ObjectArray<E> extends AbstractPrimitiveArray<E[], E> {
 	@Override
 	public int lastIndexOf(final Object o) {
 		if (!compatibleClass(o)) return -1;
-		for (int i = size() - 1; i >= 0; i--) {
+		for (var i = size() - 1; i >= 0; i--) {
 			if (array[i].equals(o)) return i;
 		}
 		return -1;
@@ -182,14 +182,14 @@ public class ObjectArray<E> extends AbstractPrimitiveArray<E[], E> {
 	public boolean remove(final Object o) {
 		if (!compatibleClass(o)) return false;
 		@SuppressWarnings("unchecked")
-		final E value = (E) o;
+		final var value = (E) o;
 		return removeValue(value);
 	}
 
 	// NB: Overridden for performance.
 	@Override
 	public boolean containsAll(final Collection<?> c) {
-		for (final Object o : c) {
+		for (final var o : c) {
 			if (!compatibleClass(o)) return false;
 			if (indexOf(o) < 0) return false;
 		}
@@ -201,8 +201,8 @@ public class ObjectArray<E> extends AbstractPrimitiveArray<E[], E> {
 	public boolean addAll(final int index, final Collection<? extends E> c) {
 		if (c.size() == 0) return false;
 		insert(index, c.size());
-		int i = index;
-		for (final E e : c) {
+        var i = index;
+		for (final var e : c) {
 			setValue(i++, e);
 		}
 		return true;
@@ -211,12 +211,12 @@ public class ObjectArray<E> extends AbstractPrimitiveArray<E[], E> {
 	// NB: Overridden for performance.
 	@Override
 	public boolean removeAll(final Collection<?> c) {
-		boolean changed = false;
-		for (final Object o : c) {
+        var changed = false;
+		for (final var o : c) {
 			if (!compatibleClass(o)) continue;
 			@SuppressWarnings("unchecked")
-			final E value = (E) o;
-			final boolean result = removeValue(value);
+			final var value = (E) o;
+			final var result = removeValue(value);
 			if (result) changed = true;
 		}
 		return changed;

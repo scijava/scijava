@@ -78,7 +78,7 @@ public final class ConvertImages {
 				name = "convert.bit") Computers.Arity1<C, BitType> converter,
 			final RAIC input)
 	{
-		RandomAccessibleInterval<BitType> output = creator.apply(input,
+        var output = creator.apply(input,
 			new BitType());
 		LoopBuilder.setImages(input, output).forEachPixel(converter);
 		return output;
@@ -100,7 +100,7 @@ public final class ConvertImages {
 				name = "convert.uint2") Computers.Arity1<C, Unsigned2BitType> converter,
 			final RAIC input)
 	{
-		RandomAccessibleInterval<Unsigned2BitType> output = creator.apply(input,
+        var output = creator.apply(input,
 			new Unsigned2BitType());
 		LoopBuilder.setImages(input, output).forEachPixel(converter);
 		return output;
@@ -122,7 +122,7 @@ public final class ConvertImages {
 				name = "convert.uint4") Computers.Arity1<C, Unsigned4BitType> converter,
 			final RAIC input)
 	{
-		RandomAccessibleInterval<Unsigned4BitType> output = creator.apply(input,
+        var output = creator.apply(input,
 			new Unsigned4BitType());
 		LoopBuilder.setImages(input, output).forEachPixel(converter);
 		return output;
@@ -145,7 +145,7 @@ public final class ConvertImages {
 				name = "convert.int8") Computers.Arity1<C, ByteType> converter,
 			final RAIC input)
 	{
-		RandomAccessibleInterval<ByteType> output = creator.apply(input,
+        var output = creator.apply(input,
 			new ByteType());
 		LoopBuilder.setImages(input, output).forEachPixel(converter);
 		return output;
@@ -167,7 +167,7 @@ public final class ConvertImages {
 				name = "convert.uint8") Computers.Arity1<C, UnsignedByteType> converter,
 			final RAIC input)
 	{
-		RandomAccessibleInterval<UnsignedByteType> output = creator.apply(input,
+        var output = creator.apply(input,
 			new UnsignedByteType());
 		LoopBuilder.setImages(input, output).forEachPixel(converter);
 		return output;
@@ -190,7 +190,7 @@ public final class ConvertImages {
 				name = "convert.uint12") Computers.Arity1<C, Unsigned12BitType> converter,
 			final RAIC input)
 	{
-		RandomAccessibleInterval<Unsigned12BitType> output = creator.apply(input,
+        var output = creator.apply(input,
 			new Unsigned12BitType());
 		LoopBuilder.setImages(input, output).forEachPixel(converter);
 		return output;
@@ -212,7 +212,7 @@ public final class ConvertImages {
 				name = "convert.int16") Computers.Arity1<C, ShortType> converter,
 			final RAIC input)
 	{
-		RandomAccessibleInterval<ShortType> output = creator.apply(input,
+        var output = creator.apply(input,
 			new ShortType());
 		LoopBuilder.setImages(input, output).forEachPixel(converter);
 		return output;
@@ -235,7 +235,7 @@ public final class ConvertImages {
 				name = "convert.uint16") Computers.Arity1<C, UnsignedShortType> converter,
 			final RAIC input)
 	{
-		RandomAccessibleInterval<UnsignedShortType> output = creator.apply(input,
+        var output = creator.apply(input,
 			new UnsignedShortType());
 		LoopBuilder.setImages(input, output).forEachPixel(converter);
 		return output;
@@ -257,7 +257,7 @@ public final class ConvertImages {
 				name = "convert.int32") Computers.Arity1<C, IntType> converter,
 			final RAIC input)
 	{
-		RandomAccessibleInterval<IntType> output = creator.apply(input,
+        var output = creator.apply(input,
 			new IntType());
 		LoopBuilder.setImages(input, output).forEachPixel(converter);
 		return output;
@@ -279,7 +279,7 @@ public final class ConvertImages {
 				name = "convert.uint32") Computers.Arity1<C, UnsignedIntType> converter,
 			final RAIC input)
 	{
-		RandomAccessibleInterval<UnsignedIntType> output = creator.apply(input,
+        var output = creator.apply(input,
 			new UnsignedIntType());
 		LoopBuilder.setImages(input, output).forEachPixel(converter);
 		return output;
@@ -301,7 +301,7 @@ public final class ConvertImages {
 				name = "convert.int64") Computers.Arity1<C, LongType> converter,
 			final RAIC input)
 	{
-		RandomAccessibleInterval<LongType> output = creator.apply(input,
+        var output = creator.apply(input,
 			new LongType());
 		LoopBuilder.setImages(input, output).forEachPixel(converter);
 		return output;
@@ -323,7 +323,7 @@ public final class ConvertImages {
 				name = "convert.uint64") Computers.Arity1<C, UnsignedLongType> converter,
 			final RAIC input)
 	{
-		RandomAccessibleInterval<UnsignedLongType> output = creator.apply(input,
+        var output = creator.apply(input,
 			new UnsignedLongType());
 		LoopBuilder.setImages(input, output).forEachPixel(converter);
 		return output;
@@ -346,7 +346,7 @@ public final class ConvertImages {
 				name = "convert.uint128") Computers.Arity1<C, Unsigned128BitType> converter,
 			final RAIC input)
 	{
-		RandomAccessibleInterval<Unsigned128BitType> output = creator.apply(input,
+        var output = creator.apply(input,
 			new Unsigned128BitType());
 		LoopBuilder.setImages(input, output).forEachPixel(converter);
 		return output;
@@ -368,7 +368,7 @@ public final class ConvertImages {
 				name = "convert.float32") Computers.Arity1<C, FloatType> converter,
 			final RAIC input)
 	{
-		RandomAccessibleInterval<FloatType> output = creator.apply(input,
+        var output = creator.apply(input,
 			new FloatType());
 		LoopBuilder.setImages(input, output).forEachPixel(converter);
 		return output;
@@ -391,7 +391,7 @@ public final class ConvertImages {
 				name = "convert.cfloat32") Computers.Arity1<C, ComplexFloatType> converter,
 			final RAIC input)
 	{
-		RandomAccessibleInterval<ComplexFloatType> output = creator.apply(input,
+        var output = creator.apply(input,
 			new ComplexFloatType());
 		LoopBuilder.setImages(input, output).forEachPixel(converter);
 		return output;
@@ -413,7 +413,7 @@ public final class ConvertImages {
 				name = "convert.float64") Computers.Arity1<C, DoubleType> converter,
 			final RAIC input)
 	{
-		RandomAccessibleInterval<DoubleType> output = creator.apply(input,
+        var output = creator.apply(input,
 			new DoubleType());
 		LoopBuilder.setImages(input, output).forEachPixel(converter);
 		return output;
@@ -436,7 +436,7 @@ public final class ConvertImages {
 				name = "convert.cfloat64") Computers.Arity1<C, ComplexDoubleType> converter,
 			final RAIC input)
 	{
-		RandomAccessibleInterval<ComplexDoubleType> output = creator.apply(input,
+        var output = creator.apply(input,
 			new ComplexDoubleType());
 		LoopBuilder.setImages(input, output).forEachPixel(converter);
 		return output;

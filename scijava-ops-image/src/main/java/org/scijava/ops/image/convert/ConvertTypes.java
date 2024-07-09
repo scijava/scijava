@@ -243,8 +243,8 @@ public final class ConvertTypes<C extends ComplexType<C>, T extends IntegerType<
 	 */
 	public final Computers.Arity1<C, UnsignedLongType> complexToUint64 = (input,
 		output) -> {
-		final BigDecimal bd = BigDecimal.valueOf(input.getRealDouble());
-		final BigDecimal r = bd.remainder(BigDecimal.ONE);
+		final var bd = BigDecimal.valueOf(input.getRealDouble());
+		final var r = bd.remainder(BigDecimal.ONE);
 		if (r.compareTo(BigDecimal.ZERO) == 0) {
 			output.set(bd.toBigIntegerExact().longValue());
 		}
@@ -268,8 +268,8 @@ public final class ConvertTypes<C extends ComplexType<C>, T extends IntegerType<
 	 */
 	public final Computers.Arity1<C, Unsigned128BitType> complexToUint128 = (
 		input, output) -> {
-		final BigDecimal bd = BigDecimal.valueOf(input.getRealDouble());
-		final BigDecimal r = bd.remainder(BigDecimal.ONE);
+		final var bd = BigDecimal.valueOf(input.getRealDouble());
+		final var r = bd.remainder(BigDecimal.ONE);
 		if (r.compareTo(BigDecimal.ZERO) == 0) {
 			output.set(bd.toBigIntegerExact());
 		}

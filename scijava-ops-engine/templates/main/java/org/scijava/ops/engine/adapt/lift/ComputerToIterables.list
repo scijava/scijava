@@ -37,10 +37,10 @@ iteratorCtor = ```
   if(arity == 0)
     inputs = []
   else if( arity == 1 )
-    inputs = ['Iterator<I> itrin = in.iterator();']
+    inputs = ['var itrin = in.iterator();']
   else
-    inputs = (1..arity).stream().map{a -> 'Iterator<I' + a + '> itrin' + a + ' = in' + a + '.iterator();'}.collect()
-  output = ['Iterator<O> itrout = out.iterator();']
+    inputs = (1..arity).stream().map{a -> 'var itrin' + a + ' = in' + a + '.iterator();'}.collect()
+  output = ['var itrout = out.iterator();']
   return inputs.plus(output)
 }
 ```

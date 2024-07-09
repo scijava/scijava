@@ -59,9 +59,9 @@ public class IterableSumOfInverses<I extends RealType<I>, O extends RealType<O>>
 	public void compute(final Iterable<I> iterableInput, final O dbzValue,
 		final O output)
 	{
-		double res = 0.0;
-		for (final I in : iterableInput) {
-			double inVal = in.getRealDouble();
+        var res = 0.0;
+		for (final var in : iterableInput) {
+            var inVal = in.getRealDouble();
 			if (inVal == 0d) {
 				res += dbzValue.getRealDouble();
 			}

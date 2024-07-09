@@ -73,10 +73,10 @@ public class ComputeLocalMidGreyThreshold<T extends RealType<T>> implements
 		final Double c, final Function<Iterable<T>, Pair<T, T>> minMaxOp,
 		final BitType output)
 	{
-		final Pair<T, T> outputs = minMaxOp.apply(inputNeighborhood);
+		final var outputs = minMaxOp.apply(inputNeighborhood);
 
-		final double minValue = outputs.getA().getRealDouble();
-		final double maxValue = outputs.getB().getRealDouble();
+		final var minValue = outputs.getA().getRealDouble();
+		final var maxValue = outputs.getB().getRealDouble();
 
 		output.set(inputCenterPixel.getRealDouble() > ((maxValue + minValue) /
 			2.0) - c);

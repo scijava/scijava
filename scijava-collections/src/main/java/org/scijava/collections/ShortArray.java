@@ -75,7 +75,7 @@ public class ShortArray extends AbstractPrimitiveArray<short[], Short> {
 	}
 
 	public boolean removeValue(final short value) {
-		final int index = indexOf(value);
+		final var index = indexOf(value);
 		if (index < 0) return false;
 		delete(index, 1);
 		return true;
@@ -88,7 +88,7 @@ public class ShortArray extends AbstractPrimitiveArray<short[], Short> {
 
 	public short setValue(final int index, final short value) {
 		checkBounds(index);
-		final short oldValue = getValue(index);
+		final var oldValue = getValue(index);
 		array[index] = value;
 		return oldValue;
 	}
@@ -99,14 +99,14 @@ public class ShortArray extends AbstractPrimitiveArray<short[], Short> {
 	}
 
 	public int indexOf(final short value) {
-		for (int i = 0; i < size(); i++) {
+		for (var i = 0; i < size(); i++) {
 			if (array[i] == value) return i;
 		}
 		return -1;
 	}
 
 	public int lastIndexOf(final short value) {
-		for (int i = size() - 1; i >= 0; i--) {
+		for (var i = size() - 1; i >= 0; i--) {
 			if (array[i] == value) return i;
 		}
 		return -1;
@@ -185,7 +185,7 @@ public class ShortArray extends AbstractPrimitiveArray<short[], Short> {
 	// NB: Overridden for performance.
 	@Override
 	public boolean containsAll(final Collection<?> c) {
-		for (final Object o : c) {
+		for (final var o : c) {
 			if (!(o instanceof Short)) return false;
 			final short value = (Short) o;
 			if (indexOf(value) < 0) return false;
@@ -198,7 +198,7 @@ public class ShortArray extends AbstractPrimitiveArray<short[], Short> {
 	public boolean addAll(final int index, final Collection<? extends Short> c) {
 		if (c.isEmpty()) return false;
 		insert(index, c.size());
-		int i = index;
+        var i = index;
 		for (final short e : c) {
 			setValue(i++, e);
 		}
@@ -208,11 +208,11 @@ public class ShortArray extends AbstractPrimitiveArray<short[], Short> {
 	// NB: Overridden for performance.
 	@Override
 	public boolean removeAll(final Collection<?> c) {
-		boolean changed = false;
-		for (final Object o : c) {
+        var changed = false;
+		for (final var o : c) {
 			if (!(o instanceof Short)) continue;
 			final short value = (Short) o;
-			final boolean result = removeValue(value);
+			final var result = removeValue(value);
 			if (result) changed = true;
 		}
 		return changed;

@@ -71,7 +71,7 @@ public class DefaultSumOfLogs<I extends RealType<I>, O extends RealType<O>>
 	public void compute(final RandomAccessibleInterval<I> input,
 		final O sumOfLogs)
 	{
-		RandomAccessibleInterval<DoubleType> logImg = imgCreator.apply(input,
+        var logImg = imgCreator.apply(input,
 			new DoubleType());
 		logOp.compute(input, logImg);
 		sumOp.compute(logImg, sumOfLogs);

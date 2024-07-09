@@ -64,13 +64,13 @@ public class FunctionToIterables$classGenerics.call($maxArity) implements OpColl
 					private Iterator<?>[] iterators;
 					{
 						iterators = new Iterator<?>[iterables.length];
-						for (int i = 0; i < iterables.length; i++)
+						for (var i = 0; i < iterables.length; i++)
 							iterators[i] = iterables[i].iterator();
 					}
 
 					@Override
 					public boolean hasNext() {
-						for (Iterator<?> itr : iterators)
+						for (var itr : iterators)
 							if (!itr.hasNext()) return false;
 						return true;
 					}

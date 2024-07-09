@@ -126,9 +126,9 @@ public class ConvertedOpInfo implements OpInfo {
 		List<RichOp<Function<?, ?>>> preconverter,
 		RichOp<Function<?, ?>> postconverter)
 	{
-		Type[] inTypes = inTypes(info.inputTypes(), preconverter);
-		Type outType = outType(info.outputType(), postconverter);
-		Class<?> fIface = FunctionalInterfaces.findFrom(info.opType());
+        var inTypes = inTypes(info.inputTypes(), preconverter);
+        var outType = outType(info.outputType(), postconverter);
+        var fIface = FunctionalInterfaces.findFrom(info.opType());
 		return retypeOpType(fIface, inTypes, outType);
 	}
 
@@ -169,23 +169,23 @@ public class ConvertedOpInfo implements OpInfo {
 		List<Member<?>> ioMembers = new ArrayList<>(info.struct().members());
 		// If the mutable index differs between the declared Op type and the
 		// requested Op type, we must move the IO memberr
-		int fromIOIdx = Conversions.mutableIndexOf(Types.raw(info.opType()));
-		int toIOIdx = Conversions.mutableIndexOf(Types.raw(opType));
+        var fromIOIdx = Conversions.mutableIndexOf(Types.raw(info.opType()));
+        var toIOIdx = Conversions.mutableIndexOf(Types.raw(opType));
 		if (fromIOIdx != toIOIdx) {
 			originalIns.add(toIOIdx, originalIns.remove(fromIOIdx));
 			ioMembers.add(toIOIdx, ioMembers.remove(fromIOIdx));
 		}
 		// Create the functional member types of the new OpInfo
-		int index = 0;
+        var index = 0;
 		List<FunctionalMethodType> fmts = new ArrayList<>();
-		for (Member<?> m : ioMembers) {
+		for (var m : ioMembers) {
 			if (m.getIOType() == ItemIO.NONE) continue;
-			Type newType = m.isInput() ? this.inTypes.get(index++) : m.isOutput()
+            var newType = m.isInput() ? this.inTypes.get(index++) : m.isOutput()
 				? outType : null;
 			fmts.add(new FunctionalMethodType(newType, m.getIOType()));
 		}
 		// generate new struct
-		RetypingRequest r = new RetypingRequest(info.struct(), fmts);
+        var r = new RetypingRequest(info.struct(), fmts);
 		return Structs.from(r, opType, new OpRetypingMemberParser());
 	}
 
@@ -220,9 +220,9 @@ public class ConvertedOpInfo implements OpInfo {
 
 	@Override
 	public String implementationName() {
-		StringBuilder sb = new StringBuilder(info.implementationName());
+        var sb = new StringBuilder(info.implementationName());
 		sb.append("|converted");
-		for (Member<?> m : struct()) {
+		for (var m : struct()) {
 			if (m.isInput() || m.isOutput()) {
 				sb.append("_");
 				sb.append(Conversions.getClassName(m.type()));
@@ -251,9 +251,9 @@ public class ConvertedOpInfo implements OpInfo {
 	 */
 	@Override
 	public StructInstance<?> createOpInstance(List<?> dependencies) {
-		final Object op = info.createOpInstance(dependencies).object();
+		final var op = info.createOpInstance(dependencies).object();
 		try {
-			Object convertedOp = javassistOp( //
+            var convertedOp = javassistOp( //
 				op, //
 				this, //
 				this.preconverters.stream().map(rich -> {
@@ -286,7 +286,7 @@ public class ConvertedOpInfo implements OpInfo {
 		if (this.priority() > that.priority()) return -1;
 
 		// compare implementation names
-		int implNameDiff = Comparisons.compare(this.implementationName(), that
+        var implNameDiff = Comparisons.compare(this.implementationName(), that
 			.implementationName());
 		if (implNameDiff != 0) return implNameDiff;
 
@@ -299,8 +299,8 @@ public class ConvertedOpInfo implements OpInfo {
 
 	private int compareConvertedInfos(ConvertedOpInfo that) {
 		// Compare structs
-		int thisHash = this.struct().members().hashCode();
-		int thatHash = that.struct().members().hashCode();
+        var thisHash = this.struct().members().hashCode();
+        var thatHash = that.struct().members().hashCode();
 		return thisHash - thatHash;
 	}
 
@@ -322,9 +322,9 @@ public class ConvertedOpInfo implements OpInfo {
 	@Override
 	public String id() {
 		// original Op
-		StringBuilder sb = new StringBuilder(IMPL_DECLARATION);
+        var sb = new StringBuilder(IMPL_DECLARATION);
 		// preconverters
-		for (RichOp<Function<?, ?>> i : preconverters) {
+		for (var i : preconverters) {
 			sb.append(PRECONVERTER_DELIMITER);
 			sb.append(i.infoTree().signature());
 		}
@@ -346,8 +346,8 @@ public class ConvertedOpInfo implements OpInfo {
 		List<RichOp<Function<?, ?>>> preconverters)
 	{
 		Map<TypeVariable<?>, Type> typeAssigns = new HashMap<>();
-		Type[] inTypes = new Type[originalInputs.size()];
-		for (int i = 0; i < originalInputs.size(); i++) {
+        var inTypes = new Type[originalInputs.size()];
+		for (var i = 0; i < originalInputs.size(); i++) {
 			typeAssigns.clear();
 			// Start by looking at the input type T of the preconverter
 			var type = preconverters.get(i).instance().type();
@@ -382,7 +382,7 @@ public class ConvertedOpInfo implements OpInfo {
 		// Start by looking at the output type T of the postconverter
 		var type = postconverter.instance().type();
 		var pType = (ParameterizedType) type;
-		Type outType = pType.getActualTypeArguments()[1];
+        var outType = pType.getActualTypeArguments()[1];
 		// Sometimes, the type of the Op instance can contain wildcards.
 		// These do not help us in determining the new type, so we have to
 		// start over with the postconverter's output type.
@@ -455,23 +455,23 @@ public class ConvertedOpInfo implements OpInfo {
 	 */
 	private double calculatePriority(OpEnvironment env) {
 		// BASE PRIORITY
-		double base = Priority.VERY_LOW;
+        var base = Priority.VERY_LOW;
 
 		// ORIGINAL PRIORITY
-		double originalPriority = info.priority();
+        var originalPriority = info.priority();
 
 		// PENALTY
 		double penalty = 0;
 
-		List<Type> originalInputs = info.inputTypes();
-		List<Type> inputs = inputTypes();
-		for (int i = 0; i < inputs.size(); i++) {
+        var originalInputs = info.inputTypes();
+        var inputs = inputTypes();
+		for (var i = 0; i < inputs.size(); i++) {
 			var from = inputs.get(i);
 			var to = Types.unroll(originalInputs.get(i), typeVarAssigns);
 			penalty += determineLoss(env, Nil.of(from), Nil.of(to));
 		}
 
-		Type opOutput = info.outputType();
+        var opOutput = info.outputType();
 		penalty += determineLoss(env, Nil.of(opOutput), Nil.of(outputType()));
 
 		// PRIORITY = BASE + ORIGINAL - PENALTY
@@ -497,19 +497,19 @@ public class ConvertedOpInfo implements OpInfo {
 		Type specialType = Types.parameterize(LossReporter.class, new Type[] { from
 			.type(), to.type() });
 		@SuppressWarnings("unchecked")
-		Nil<LossReporter<T, R>> specialTypeNil = (Nil<LossReporter<T, R>>) Nil.of(
+        var specialTypeNil = (Nil<LossReporter<T, R>>) Nil.of(
 			specialType);
 		try {
 			Type nilFromType = Types.parameterize(Nil.class, new Type[] { from
 				.type() });
 			Type nilToType = Types.parameterize(Nil.class, new Type[] { to
 				.type() });
-			Hints h = new Hints( //
+            var h = new Hints( //
 				BaseOpHints.Adaptation.FORBIDDEN, //
 				BaseOpHints.Conversion.FORBIDDEN, //
 				BaseOpHints.History.IGNORE //
 			);
-			LossReporter<T, R> op = env.op("engine.lossReporter", specialTypeNil,
+            var op = env.op("engine.lossReporter", specialTypeNil,
 				new Nil[] { Nil.of(nilFromType), Nil.of(nilToType) }, Nil.of(
 					Double.class), h);
 			return op.apply(from, to);
@@ -543,18 +543,18 @@ public class ConvertedOpInfo implements OpInfo {
 		Type[] newArgs, Type newOutType)
 	{
 		// only retype types that we know how to retype
-		Class<?> opType = Types.raw(originalOpType);
-		Method fMethod = FunctionalInterfaces.functionalMethodOf(opType);
+        var opType = Types.raw(originalOpType);
+        var fMethod = FunctionalInterfaces.functionalMethodOf(opType);
 
 		Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
 
 		// solve input types
-		Type[] genericParameterTypes = paramTypesFromOpType(opType, fMethod);
+        var genericParameterTypes = paramTypesFromOpType(opType, fMethod);
 		GenericAssignability.inferTypeVariables(genericParameterTypes, newArgs,
 			typeVarAssigns);
 
 		// solve output type
-		Type genericReturnType = returnTypeFromOpType(opType, fMethod);
+        var genericReturnType = returnTypeFromOpType(opType, fMethod);
 		if (genericReturnType != void.class) {
 			GenericAssignability.inferTypeVariables(new Type[] { genericReturnType },
 				new Type[] { newOutType }, typeVarAssigns);
@@ -565,7 +565,7 @@ public class ConvertedOpInfo implements OpInfo {
 	}
 
 	private static Type[] paramTypesFromOpType(Class<?> opType, Method fMethod) {
-		Type[] genericParameterTypes = fMethod.getGenericParameterTypes();
+        var genericParameterTypes = fMethod.getGenericParameterTypes();
 		if (fMethod.getDeclaringClass().equals(opType))
 			return genericParameterTypes;
 		return typesFromOpType(opType, fMethod, genericParameterTypes);
@@ -573,7 +573,7 @@ public class ConvertedOpInfo implements OpInfo {
 	}
 
 	private static Type returnTypeFromOpType(Class<?> opType, Method fMethod) {
-		Type genericReturnType = fMethod.getGenericReturnType();
+        var genericReturnType = fMethod.getGenericReturnType();
 		if (fMethod.getDeclaringClass().equals(opType)) return genericReturnType;
 		return typesFromOpType(opType, fMethod, genericReturnType)[0];
 	}
@@ -582,10 +582,10 @@ public class ConvertedOpInfo implements OpInfo {
 		Type... types)
 	{
 		Map<TypeVariable<?>, Type> map = new HashMap<>();
-		Class<?> declaringClass = fMethod.getDeclaringClass();
+        var declaringClass = fMethod.getDeclaringClass();
 		Type genericDeclaringClass = Types.parameterize(declaringClass);
 		Type genericClass = Types.parameterize(opType);
-		Type superGenericClass = Types.superTypeOf(genericClass,
+        var superGenericClass = Types.superTypeOf(genericClass,
 			declaringClass);
 		GenericAssignability.inferTypeVariables(new Type[] {
 			genericDeclaringClass }, new Type[] { superGenericClass }, map);
@@ -615,16 +615,16 @@ public class ConvertedOpInfo implements OpInfo {
 		Function<?, ?> postconverter, //
 		Computers.Arity1<?, ?> copyOp //
 	) throws Throwable {
-		ClassPool pool = ClassPool.getDefault();
+        var pool = ClassPool.getDefault();
 
 		// Create wrapper class
-		String className = formClassName(alteredInfo);
+        var className = formClassName(alteredInfo);
 		Class<?> c;
 		try {
 			c = pool.getClassLoader().loadClass(className);
 		}
 		catch (ClassNotFoundException e) {
-			CtClass cc = generateConvertedClass( //
+            var cc = generateConvertedClass( //
 				pool, //
 				className, //
 				alteredInfo, //
@@ -646,11 +646,11 @@ public class ConvertedOpInfo implements OpInfo {
 		boolean addCopyOp //
 	) {
 		// there are 2*numInputs input mutators, 2 output mutators
-		int numMutators = originalInfo.inputTypes().size() + 1;
+        var numMutators = originalInfo.inputTypes().size() + 1;
 		// original Op plus a output copier if applicable
-		int numOps = addCopyOp ? 2 : 1;
-		Class<?>[] args = new Class<?>[numMutators + numOps];
-		for (int i = 0; i < numMutators; i++)
+        var numOps = addCopyOp ? 2 : 1;
+        var args = new Class<?>[numMutators + numOps];
+		for (var i = 0; i < numMutators; i++)
 			args[i] = Function.class;
 		args[args.length - numOps] = Types.raw(originalInfo.opType());
 		if (addCopyOp) args[args.length - 1] = Computers.Arity1.class;
@@ -676,12 +676,12 @@ public class ConvertedOpInfo implements OpInfo {
 	// TODO: consider correctness
 	private static String formClassName(OpInfo altered) {
 		// package name - required to be this package for the Lookup to work
-		String packageName = Conversions.class.getPackageName();
-		StringBuilder sb = new StringBuilder(packageName + ".");
+        var packageName = Conversions.class.getPackageName();
+        var sb = new StringBuilder(packageName + ".");
 
 		// class name
-		String implementationName = altered.implementationName();
-		String className = implementationName.replaceAll("[^a-zA-Z0-9\\-]", "_");
+        var implementationName = altered.implementationName();
+        var className = implementationName.replaceAll("[^a-zA-Z0-9\\-]", "_");
 		if (className.chars().anyMatch(c -> !Character.isJavaIdentifierPart(c)))
 			throw new IllegalArgumentException(className +
 				" is not a valid class name!");
@@ -696,11 +696,11 @@ public class ConvertedOpInfo implements OpInfo {
 		List<Function<?, ?>> preconverters, //
 		Computers.Arity1<?, ?> outputCopier //
 	) throws Throwable {
-		CtClass cc = pool.makeClass(className);
-		Class<?> rawType = Types.raw(altered.opType());
+        var cc = pool.makeClass(className);
+        var rawType = Types.raw(altered.opType());
 
 		// Add implemented interface
-		CtClass jasOpType = pool.get(rawType.getName());
+        var jasOpType = pool.get(rawType.getName());
 		cc.addInterface(jasOpType);
 
 		// Add preconverter fields
@@ -710,18 +710,18 @@ public class ConvertedOpInfo implements OpInfo {
 		generateNFields(pool, cc, "postconverter", 1);
 
 		// Add Op field
-		CtField opField = createOpField(pool, cc, rawType, "op");
+        var opField = createOpField(pool, cc, rawType, "op");
 		cc.addField(opField);
 
 		// Add copy Op field iff not pure output
 		if (outputCopier != null) {
-			CtField copyOpField = createOpField(pool, cc, Computers.Arity1.class,
+            var copyOpField = createOpField(pool, cc, Computers.Arity1.class,
 				"copyOp");
 			cc.addField(copyOpField);
 		}
 
 		// Add constructor to take the converters, as well as the original op.
-		CtConstructor constructor = CtNewConstructor.make(createConstructor(cc, //
+        var constructor = CtNewConstructor.make(createConstructor(cc, //
 			altered, //
 			preconverters.size(), //
 			outputCopier != null //
@@ -729,9 +729,9 @@ public class ConvertedOpInfo implements OpInfo {
 		cc.addConstructor(constructor);
 
 		// add functional interface method
-		Class<?> opType = Types.raw(altered.opType());
-		int ioIndex = Conversions.mutableIndexOf(opType);
-		CtMethod functionalMethod = CtNewMethod.make(createFunctionalMethod( //
+        var opType = Types.raw(altered.opType());
+        var ioIndex = Conversions.mutableIndexOf(opType);
+        var functionalMethod = CtNewMethod.make(createFunctionalMethod( //
 			opType, //
 			ioIndex, //
 			altered, //
@@ -746,8 +746,8 @@ public class ConvertedOpInfo implements OpInfo {
 	private static void generateNFields(ClassPool pool, CtClass cc, String base,
 		int numFields) throws NotFoundException, CannotCompileException
 	{
-		for (int i = 0; i < numFields; i++) {
-			CtField f = createMutatorField(pool, cc, base + i);
+		for (var i = 0; i < numFields; i++) {
+            var f = createMutatorField(pool, cc, base + i);
 			cc.addField(f);
 		}
 	}
@@ -755,8 +755,8 @@ public class ConvertedOpInfo implements OpInfo {
 	private static CtField createMutatorField(ClassPool pool, CtClass cc,
 		String name) throws NotFoundException, CannotCompileException
 	{
-		CtClass fType = pool.get(Function.class.getName());
-		CtField f = new CtField(fType, name, cc);
+        var fType = pool.get(Function.class.getName());
+        var f = new CtField(fType, name, cc);
 		f.setModifiers(Modifier.PRIVATE + Modifier.FINAL);
 		return f;
 	}
@@ -765,8 +765,8 @@ public class ConvertedOpInfo implements OpInfo {
 		Class<?> opType, String fieldName) throws NotFoundException,
 		CannotCompileException
 	{
-		CtClass fType = pool.get(opType.getName());
-		CtField f = new CtField(fType, fieldName, cc);
+        var fType = pool.get(opType.getName());
+        var f = new CtField(fType, fieldName, cc);
 		f.setModifiers(Modifier.PRIVATE + Modifier.FINAL);
 		return f;
 	}
@@ -775,12 +775,12 @@ public class ConvertedOpInfo implements OpInfo {
 		int numInputProcessors, //
 		boolean hasCopyOp //
 	) {
-		StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
 		// constructor signature
 		sb.append("public ").append(cc.getSimpleName()).append("(");
 		Class<?> depClass = Function.class;
 		// preconverter
-		for (int i = 0; i < numInputProcessors; i++) {
+		for (var i = 0; i < numInputProcessors; i++) {
 			sb.append(depClass.getName()).append(" preconverter").append(i);
 			sb.append(",");
 		}
@@ -797,7 +797,7 @@ public class ConvertedOpInfo implements OpInfo {
 		sb.append(") {");
 
 		// assign dependencies to field
-		for (int i = 0; i < numInputProcessors; i++) {
+		for (var i = 0; i < numInputProcessors; i++) {
 			sb.append("this.preconverter") //
 				.append(i) //
 				.append(" = preconverter") //
@@ -835,12 +835,12 @@ public class ConvertedOpInfo implements OpInfo {
 		OpInfo altered, List<Function<?, ?>> preconverters,
 		Computers.Arity1<?, ?> copier)
 	{
-		StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
 
 		// determine the name of the functional method
-		Method m = FunctionalInterfaces.functionalMethodOf(opType);
+        var m = FunctionalInterfaces.functionalMethodOf(opType);
 		// determine the name of the output:
-		String opOutput = "originalOut";
+        var opOutput = "originalOut";
 		if (ioIndex > -1) {
 			opOutput = "processed" + ioIndex;
 		}
@@ -873,19 +873,19 @@ public class ConvertedOpInfo implements OpInfo {
 	}
 
 	private static String generateSignature(Method m) {
-		StringBuilder sb = new StringBuilder();
-		String methodName = m.getName();
+        var sb = new StringBuilder();
+        var methodName = m.getName();
 
 		// method modifiers
-		boolean isVoid = m.getReturnType() == void.class;
+        var isVoid = m.getReturnType() == void.class;
 		sb.append("public ") //
 			.append(isVoid ? "void" : "Object") //
 			.append(" ") //
 			.append(methodName) //
 			.append("(");
 
-		int inputs = m.getParameterCount();
-		for (int i = 0; i < inputs; i++) {
+        var inputs = m.getParameterCount();
+		for (var i = 0; i < inputs; i++) {
 			sb.append(" Object in").append(i);
 			if (i < inputs - 1) sb.append(",");
 		}
@@ -898,15 +898,15 @@ public class ConvertedOpInfo implements OpInfo {
 	private static String fMethodProcessing(Method m, String opOutput,
 		int ioIndex, OpInfo altered)
 	{
-		StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
 		// declare / assign Op's original output
 		if (ioIndex == -1) {
 			sb.append("Object ").append(opOutput).append(" = ");
 		}
 		// call the op
 		sb.append("op.").append(m.getName()).append("(");
-		int numInputs = altered.inputTypes().size();
-		for (int i = 0; i < numInputs; i++) {
+        var numInputs = altered.inputTypes().size();
+		for (var i = 0; i < numInputs; i++) {
 			sb.append(" processed").append(i);
 			if (i + 1 < numInputs) sb.append(",");
 		}
@@ -917,7 +917,7 @@ public class ConvertedOpInfo implements OpInfo {
 	private static String fMethodPostprocessing(String opOutput, int ioIndex,
 		Computers.Arity1<?, ?> outputCopier)
 	{
-		StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
 
 		// postconvert output
 		sb.append("Object processedOutput = postconverter0.apply(").append(opOutput)
@@ -925,7 +925,7 @@ public class ConvertedOpInfo implements OpInfo {
 
 		// call copy op iff it exists
 		if (outputCopier != null) {
-			String originalIOArg = "in" + ioIndex;
+            var originalIOArg = "in" + ioIndex;
 			sb.append("copyOp.compute(processedOutput, ") //
 				.append(originalIOArg) //
 				.append(");");
@@ -937,10 +937,10 @@ public class ConvertedOpInfo implements OpInfo {
 	private static String fMethodPreprocessing(
 		List<Function<?, ?>> preconverter)
 	{
-		StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
 
 		// focus all inputs
-		for (int i = 0; i < preconverter.size(); i++) {
+		for (var i = 0; i < preconverter.size(); i++) {
 			sb.append("Object processed") //
 				.append(i) //
 				.append(" = preconverter") //

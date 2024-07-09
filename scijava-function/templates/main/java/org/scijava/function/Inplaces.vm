@@ -64,7 +64,7 @@ public final class Inplaces {
 #foreach($arity in $arities)
 #foreach($a in [1..$arity])
 #set($inplaceIndex = $a - 1)
-        InplaceInfo info_${arity}_${a} = new InplaceInfo(${arity}, $inplaceIndex);
+        var info_${arity}_${a} = new InplaceInfo(${arity}, $inplaceIndex);
 		ALL_INPLACES.put(info_${arity}_${a}, $inplaceClass.call($arity, $a));
 		ALL_ARITIES.put($inplaceClass.call($arity, $a), info_${arity}_${a});
 #end
@@ -92,7 +92,7 @@ public final class Inplaces {
 	 *           arity {@code arity}.
 	 */
 	public static Class<?> inplaceOfArity(int arity, int mutableIndex) {
-		InplaceInfo info = new InplaceInfo(arity, mutableIndex);
+		var info = new InplaceInfo(arity, mutableIndex);
 		if (ALL_INPLACES.containsKey(info)) return ALL_INPLACES.get(info);
 		throw new IllegalArgumentException("No Inplace of arity " + arity +
 			" and mutable index " + mutableIndex);
@@ -165,7 +165,7 @@ public final class Inplaces {
 		@Override
 		public boolean equals(Object that) {
 			if (!(that instanceof InplaceInfo)) return false;
-			InplaceInfo other = (InplaceInfo) that;
+			var other = (InplaceInfo) that;
 			return other.arity == arity && other.mutablePosition == mutablePosition;
 		}
 

@@ -71,7 +71,7 @@ public class DefaultASCII<T extends RealType<T>> implements
 		@Nullable T max)
 	{
 		if (min == null || max == null) {
-			final Pair<T, T> minMax = minMaxFunc.apply(input);
+			final var minMax = minMaxFunc.apply(input);
 			if (min == null) min = minMax.getA();
 			if (max == null) max = minMax.getB();
 		}
@@ -83,38 +83,38 @@ public class DefaultASCII<T extends RealType<T>> implements
 	public static <T extends RealType<T>> String ascii(
 		final IterableInterval<T> image, final T min, final T max)
 	{
-		final long dim0 = image.dimension(0);
-		final long dim1 = image.dimension(1);
+		final var dim0 = image.dimension(0);
+		final var dim1 = image.dimension(1);
 		// TODO: Check bounds.
-		final int w = (int) (dim0 + 1);
-		final int h = (int) dim1;
+		final var w = (int) (dim0 + 1);
+		final var h = (int) dim1;
 
 		// span = max - min
-		final T span = max.copy();
+		final var span = max.copy();
 		span.sub(min);
 
 		// allocate ASCII character array
-		final char[] c = new char[w * h];
-		for (int y = 1; y <= h; y++) {
+		final var c = new char[w * h];
+		for (var y = 1; y <= h; y++) {
 			c[w * y - 1] = '\n'; // end of row
 		}
 
 		// loop over all available positions
-		final Cursor<T> cursor = image.localizingCursor();
-		final int[] pos = new int[image.numDimensions()];
-		final T tmp = image.firstElement().copy();
+		final var cursor = image.localizingCursor();
+		final var pos = new int[image.numDimensions()];
+		final var tmp = image.firstElement().copy();
 		while (cursor.hasNext()) {
 			cursor.fwd();
 			cursor.localize(pos);
-			final int index = w * pos[1] + pos[0];
+			final var index = w * pos[1] + pos[0];
 
 			// normalized = (value - min) / (max - min)
 			tmp.set(cursor.get());
 			tmp.sub(min);
-			final double normalized = tmp.getRealDouble() / span.getRealDouble();
+			final var normalized = tmp.getRealDouble() / span.getRealDouble();
 
-			final int charLen = CHARS.length();
-			final int charIndex = (int) (charLen * normalized);
+			final var charLen = CHARS.length();
+			final var charIndex = (int) (charLen * normalized);
 			c[index] = CHARS.charAt(charIndex < charLen ? charIndex : charLen - 1);
 		}
 

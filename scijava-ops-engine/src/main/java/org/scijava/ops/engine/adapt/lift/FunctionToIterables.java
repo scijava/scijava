@@ -195,13 +195,13 @@ public class FunctionToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 					private Iterator<?>[] iterators;
 					{
 						iterators = new Iterator<?>[iterables.length];
-						for (int i = 0; i < iterables.length; i++)
+						for (var i = 0; i < iterables.length; i++)
 							iterators[i] = iterables[i].iterator();
 					}
 
 					@Override
 					public boolean hasNext() {
-						for (Iterator<?> itr : iterators)
+						for (var itr : iterators)
 							if (!itr.hasNext()) return false;
 						return true;
 					}

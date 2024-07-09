@@ -170,14 +170,14 @@ public final class GenericAssignability {
 		if (!Types.isAssignable(Types.raw(src), Types.raw(dest))) return false;
 
 		// when raw types are assignable, check the type variables of src and dest
-		Type[] srcTypes = Types.typeParamsOf(src, Types.raw(dest));
-		Type[] destTypes = dest.getActualTypeArguments();
+        var srcTypes = Types.typeParamsOf(src, Types.raw(dest));
+        var destTypes = dest.getActualTypeArguments();
 
 		// if there are no type parameters in src (w.r.t. dest), do a basic
 		// assignability check.
 		if (srcTypes.length == 0) return Types.isAssignable(src, dest);
 		// if there are type parameters, do a more complicated assignability check.
-		boolean result = checkGenericAssignability(srcTypes, destTypes, src, dest,
+        var result = checkGenericAssignability(srcTypes, destTypes, src, dest,
 			typeVarAssigns, safeAssignability);
 		return result;
 	}
@@ -248,16 +248,16 @@ public final class GenericAssignability {
 		Map<TypeVariable<?>, Type> typeVarAssigns, Type src, Type dest)
 	{
 
-		Method[] destMethods = Arrays.stream(Types.raw(dest).getDeclaredMethods())
+        var destMethods = Arrays.stream(Types.raw(dest).getDeclaredMethods())
 			.filter(method -> Modifier.isAbstract(method.getModifiers())).toArray(
 				Method[]::new);
 		if (destMethods.length == 0) {
 			throw new IllegalArgumentException(src +
 				" does not have an abstract method!");
 		}
-		Type[] params = Types.paramTypesOf(destMethods[0], src);
-		Type returnType = Types.returnTypeOf(destMethods[0], src);
-		for (int i = 0; i < params.length; i++) {
+        var params = Types.paramTypesOf(destMethods[0], src);
+        var returnType = Types.returnTypeOf(destMethods[0], src);
+		for (var i = 0; i < params.length; i++) {
 			if (!Types.isAssignable(destTypes[i], params[i], typeVarAssigns))
 				return false;
 		}
@@ -336,8 +336,8 @@ public final class GenericAssignability {
 		}
 
 		// Map TypeVariables in src to Types
-		Class<?> matchingRawType = Types.raw(dest);
-		Type[] mappedSrcTypes = mapVarToTypes(srcTypes, typeVarAssigns);
+        var matchingRawType = Types.raw(dest);
+        var mappedSrcTypes = mapVarToTypes(srcTypes, typeVarAssigns);
 		Type inferredSrcType = Types.parameterize(matchingRawType, mappedSrcTypes);
 
 		// Check assignability
@@ -362,8 +362,8 @@ public final class GenericAssignability {
 	 *         sole purpose of type inference).
 	 */
 	private static Type getInferrableBound(WildcardType type) {
-		Type[] lBounds = type.getLowerBounds();
-		Type[] uBounds = type.getUpperBounds();
+        var lBounds = type.getLowerBounds();
+        var uBounds = type.getUpperBounds();
 		if (lBounds.length == 1 && uBounds.length == 1 &&
 			uBounds[0] == Object.class) return lBounds[0];
 		else if (lBounds.length == 0 && uBounds.length == 1) return uBounds[0];
@@ -377,12 +377,12 @@ public final class GenericAssignability {
 		Map<TypeVariable<?>, TypeMapping> typeMappings)
 	{
 		if (inferFrom instanceof TypeVariable<?>) {
-			TypeVarAssigns typeVarAssigns = new TypeVarAssigns(typeMappings);
+            var typeVarAssigns = new TypeVarAssigns(typeMappings);
 			// If current type var is absent put it to the map. Otherwise,
 			// we already encountered that var.
 			// Hence, we require them to be exactly the same.
 			if (Types.isAssignable(type, inferFrom, typeVarAssigns)) {
-				Type current = typeVarAssigns.putIfAbsent((TypeVariable<?>) inferFrom,
+                var current = typeVarAssigns.putIfAbsent((TypeVariable<?>) inferFrom,
 					type);
 				if (current != null) {
 					if (Any.is(current)) {
@@ -401,16 +401,16 @@ public final class GenericAssignability {
 		boolean malleable)
 	{
 		if (inferFrom instanceof Class<?> && ((Class<?>) inferFrom).isArray()) {
-			Type componentType = type.getGenericComponentType();
+            var componentType = type.getGenericComponentType();
 			Type componentInferFrom = ((Class<?>) inferFrom).getComponentType();
 			inferTypeVariables(componentType, componentInferFrom, typeMappings,
 				malleable);
 		}
 		else if (inferFrom instanceof WildcardType) {
-			Type inferrableBound = getInferrableBound((WildcardType) inferFrom);
+            var inferrableBound = getInferrableBound((WildcardType) inferFrom);
 			// ? super T -> T IS malleable
 			// ? extends T -> T is NOT malleable
-			boolean newMalleable = ((WildcardType) inferFrom)
+            var newMalleable = ((WildcardType) inferFrom)
 				.getLowerBounds().length == 1;
 			inferTypeVariables(type, inferrableBound, typeMappings, newMalleable);
 		}
@@ -438,9 +438,9 @@ public final class GenericAssignability {
 		// inferring from a StrangeThing<Long> extends Thing<Double> and our
 		// Op requires a Thing<T>. We need to ensure that T gets
 		// resolved to a Double and NOT a Long.
-		Type superInferFrom = Types.superTypeOf(inferFrom, Types.raw(type));
+        var superInferFrom = Types.superTypeOf(inferFrom, Types.raw(type));
 		if (superInferFrom instanceof ParameterizedType) {
-			ParameterizedType paramInferFrom = (ParameterizedType) superInferFrom;
+            var paramInferFrom = (ParameterizedType) superInferFrom;
 			if (!Types.isRecursive(paramInferFrom)) {
 				inferTypeVariables(type.getActualTypeArguments(), paramInferFrom
 					.getActualTypeArguments(), typeMappings, false);
@@ -454,8 +454,8 @@ public final class GenericAssignability {
 			}
 		}
 		else if (superInferFrom instanceof Class) {
-			TypeVarAssigns typeVarAssigns = new TypeVarAssigns(typeMappings);
-			Type mappedType = Types.unroll(type, typeVarAssigns);
+            var typeVarAssigns = new TypeVarAssigns(typeMappings);
+            var mappedType = Types.unroll(type, typeVarAssigns);
 			// Use isAssignable to attempt to infer the type variables present in type
 			if (!Types.isAssignable(superInferFrom, mappedType, typeVarAssigns)) {
 				throw new TypeInferenceException(inferFrom +
@@ -479,7 +479,7 @@ public final class GenericAssignability {
 			// edge case 2: if inferFrom is a superType of type, we can get (some of)
 			// the types of type by finding the exact superType of type w.r.t.
 			// inferFrom.
-			Type superTypeOfType = Types.superTypeOf(type, Types.raw(
+            var superTypeOfType = Types.superTypeOf(type, Types.raw(
 				inferFrom));
 			if (superTypeOfType == null) {
 				throw new TypeInferenceException(inferFrom +
@@ -530,11 +530,11 @@ public final class GenericAssignability {
 		if (types.length != inferFroms.length) throw new TypeInferenceException(
 			"Could not infer type variables: Type arrays must be of the same size");
 
-		for (int i = 0; i < types.length; i++) {
+		for (var i = 0; i < types.length; i++) {
 			inferTypeVariables(types[i], inferFroms[i], typeMappings, malleable);
 		}
 		// Check if the inferred types satisfy their bounds
-		TypeVarAssigns typeVarAssigns = new TypeVarAssigns(typeMappings);
+        var typeVarAssigns = new TypeVarAssigns(typeMappings);
 		if (!Types.varsSatisfied(typeVarAssigns)) {
 			throw new TypeInferenceException();
 		}
@@ -543,7 +543,7 @@ public final class GenericAssignability {
 	private static void inferTypeVariables(TypeVariable<?> type, Type inferFrom,
 		Map<TypeVariable<?>, TypeMapping> typeMappings, boolean malleable)
 	{
-		TypeMapping typeData = typeMappings.get(type);
+        var typeData = typeMappings.get(type);
 		// If current is not null then we have already encountered that
 		// variable. If so, we require them to be exactly the same, and throw a
 		// TypeInferenceException if they are not.
@@ -554,7 +554,7 @@ public final class GenericAssignability {
 			resolveTypeInMap(type, inferFrom, typeMappings, malleable);
 			// Bounds could also contain type vars, hence possibly go into
 			// recursion
-			for (Type bound : type.getBounds()) {
+			for (var bound : type.getBounds()) {
 				if (bound instanceof TypeVariable && typeMappings.get(bound) != null) {
 					// If the bound of the current var (let's call it A) to
 					// infer is also a var (let's call it B):
@@ -573,7 +573,7 @@ public final class GenericAssignability {
 					// suffices to check whether Double can be assigned
 					// to Number, it does not have to be equal as it is just
 					// a transitive bound for B.
-					Type typeAssignForBound = typeMappings.get(bound).getType();
+                    var typeAssignForBound = typeMappings.get(bound).getType();
 					if (!Types.isAssignable(inferFrom, typeAssignForBound)) {
 						throw new TypeInferenceException();
 					}
@@ -585,7 +585,7 @@ public final class GenericAssignability {
 						// Double, the O would be seen here. It is important that the O
 						// be malleable, as it is not yet fixed, and could be changed to
 						// another type later
-						TypeVariable<?> tv = (TypeVariable<?>) bound;
+                        var tv = (TypeVariable<?>) bound;
 						inferTypeVariables(tv, inferFrom, typeMappings, true);
 					}
 					else {
@@ -601,7 +601,7 @@ public final class GenericAssignability {
 	private static void inferTypeVariables(WildcardType type, Type inferFrom,
 		Map<TypeVariable<?>, TypeMapping> typeMappings)
 	{
-		Type inferrableBound = getInferrableBound(type);
+        var inferrableBound = getInferrableBound(type);
 		if (inferFrom instanceof WildcardType) {
 			// NB if both type and inferFrom are Wildcards, it doesn't really matter
 			// (for the purpose of Type inference) whether those Wildcards have a
@@ -618,7 +618,7 @@ public final class GenericAssignability {
 				typeMappings, true);
 		}
 		else if (inferrableBound instanceof ParameterizedType) {
-			ParameterizedType parameterizedUpperBound =
+            var parameterizedUpperBound =
 				(ParameterizedType) inferrableBound;
 			inferTypeVariables(parameterizedUpperBound, inferFrom, typeMappings,
 				true);
@@ -633,25 +633,25 @@ public final class GenericAssignability {
 
 		if (type instanceof TypeVariable) {
 			if (typeMappings.containsKey(type)) return;
-			TypeVariable<?> typeVar = (TypeVariable<?>) type;
+            var typeVar = (TypeVariable<?>) type;
 			typeMappings.put(typeVar, suitableTypeMapping(typeVar, Any.class, true));
 		}
 		else if (type instanceof ParameterizedType) {
-			ParameterizedType pType = (ParameterizedType) type;
-			Type[] typeParams = pType.getActualTypeArguments();
-			for (Type typeParam : typeParams) {
+            var pType = (ParameterizedType) type;
+            var typeParams = pType.getActualTypeArguments();
+			for (var typeParam : typeParams) {
 				mapTypeVarsToAny(typeParam, typeMappings);
 			}
 		}
 		else if (type instanceof WildcardType) {
-			WildcardType wildcard = (WildcardType) type;
-			for (Type lowerBound : wildcard.getLowerBounds())
+            var wildcard = (WildcardType) type;
+			for (var lowerBound : wildcard.getLowerBounds())
 				mapTypeVarsToAny(lowerBound, typeMappings);
-			for (Type upperBound : wildcard.getUpperBounds())
+			for (var upperBound : wildcard.getUpperBounds())
 				mapTypeVarsToAny(upperBound, typeMappings);
 		}
 		else if (type instanceof Class) {
-			Class<?> clazz = (Class<?>) type;
+            var clazz = (Class<?>) type;
 			for (Type typeParam : clazz.getTypeParameters())
 				mapTypeVarsToAny(typeParam, typeMappings);
 		}

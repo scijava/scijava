@@ -58,7 +58,7 @@ public class OutOfBoundsConstantValueFactoryTypeExtractor extends
 	protected Type[] getTypeParameters(TypeReifier r,
 		OutOfBoundsConstantValueFactory<?, ?> object)
 	{
-		Type elementType = r.reify(object.getValue());
+        var elementType = r.reify(object.getValue());
 		Type raiType = Types.parameterize(RandomAccessibleInterval.class,
 			new Type[] { elementType });
 		return new Type[] { elementType, raiType };

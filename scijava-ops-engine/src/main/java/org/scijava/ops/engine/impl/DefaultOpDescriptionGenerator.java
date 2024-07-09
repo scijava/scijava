@@ -80,8 +80,8 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 		Function<OpInfo, String> descriptionFunction)
 	{
 		// handle namespaces queries
-		String name = req.name();
-		Optional<String> nsString = getNonOpString(env, name);
+        var name = req.name();
+        var nsString = getNonOpString(env, name);
 		if (nsString.isPresent()) {
 			return nsString.get();
 		}
@@ -89,7 +89,7 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 		// handle name queries
 		Collection<OpInfo> infos = env.infos(name);
 		var filtered = filterInfos(infos, req);
-		String opString = filtered.stream() //
+        var opString = filtered.stream() //
 			.map(descriptionFunction) //
 			.map(s -> s.replaceAll("\n", "\n\t")) //
 			.distinct() //
@@ -126,7 +126,7 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 			prefix = "Names:\n\t> ";
 		}
 		if (nsStream == null) return Optional.empty();
-		String suffix = nsStream.collect(Collectors.joining("\n\t> "));
+        var suffix = nsStream.collect(Collectors.joining("\n\t> "));
 
 		if (Strings.isNullOrEmpty(suffix)) return Optional.of(
 			"Not a valid Op name or namespace:\n\t> " + name);
@@ -169,7 +169,7 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 				.filter(m -> !ItemIO.CONTAINER.equals(m.getIOType())) //
 				.count();
 
-			Type[] args = req.argTypes();
+            var args = req.argTypes();
 			if (args == null || args.length == numPureInputs) {
 				filtered.add(info);
 			}
@@ -181,7 +181,7 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 	private static String describeUsingOps(final OpInfo info,
 		final OpEnvironment env)
 	{
-		final StringBuilder sb = new StringBuilder("(");
+		final var sb = new StringBuilder("(");
 		// describe inputs
 		var memberItr = info.inputs().iterator();
 		while (memberItr.hasNext()) {
@@ -222,17 +222,17 @@ public class DefaultOpDescriptionGenerator implements OpDescriptionGenerator {
 		Type specialType = Types.parameterize(Function.class, new Type[] { Types
 			.parameterize(Nil.class, new Type[] { from.type() }), String.class });
 		@SuppressWarnings("unchecked")
-		Nil<Function<Nil<T>, String>> specialTypeNil =
+        var specialTypeNil =
 			(Nil<Function<Nil<T>, String>>) Nil.of(specialType);
 		try {
 			Type nilFromType = Types.parameterize(Nil.class, new Type[] { from
 				.type() });
-			Hints h = new Hints( //
+            var h = new Hints( //
 				BaseOpHints.Adaptation.FORBIDDEN, //
 				BaseOpHints.Conversion.FORBIDDEN, //
 				BaseOpHints.History.IGNORE //
 			);
-			Function<Nil<T>, String> op = env.op("engine.describe", specialTypeNil,
+            var op = env.op("engine.describe", specialTypeNil,
 				new Nil[] { Nil.of(nilFromType) }, Nil.of(String.class), h);
 			return op.apply(from);
 		}

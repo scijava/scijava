@@ -57,9 +57,9 @@ public class Horizon extends UpdateablePointSet<TriangularFacet> {
 	 * @param f the facet to merge into this facet.
 	 */
 	public void simpleMerge(final TriangularFacet f) {
-		int neighborIndex = neighbors.indexOf(f);
-		int newVertex = -1;
-		for (int i = 0; i < f.getVertices().size(); i++) {
+        var neighborIndex = neighbors.indexOf(f);
+        var newVertex = -1;
+		for (var i = 0; i < f.getVertices().size(); i++) {
 			if (vertices.indexOf(f.getVertex(i)) == -1) {
 				newVertex = i;
 				break;
@@ -82,9 +82,9 @@ public class Horizon extends UpdateablePointSet<TriangularFacet> {
 	 * @param f the facet to merge into this facet.
 	 */
 	public void complexMerge(final TriangularFacet f) {
-		Vertex v0 = f.getVertex(0);
-		Vertex v1 = f.getVertex(1);
-		Vertex v2 = f.getVertex(2);
+        var v0 = f.getVertex(0);
+        var v1 = f.getVertex(1);
+        var v2 = f.getVertex(2);
 		if (hasEdge(v0, v2)) {
 			if (hasEdge(v1, v0)) {
 				mergeTwoAdjacentEdges(f, v0, 2);
@@ -121,7 +121,7 @@ public class Horizon extends UpdateablePointSet<TriangularFacet> {
 	private void mergeTwoAdjacentEdges(final TriangularFacet f, final Vertex v0,
 		final int neighborIndex)
 	{
-		int i = vertices.indexOf(v0);
+        var i = vertices.indexOf(v0);
 		vertices.remove(i);
 		neighbors.remove(i);
 		i = i % neighbors.size();

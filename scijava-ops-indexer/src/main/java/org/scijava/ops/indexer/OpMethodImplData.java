@@ -81,9 +81,9 @@ class OpMethodImplData extends OpImplData {
 			printError(source, " should be a static method!");
 		}
 		// All Op dependencies must come before other parameters
-		int lastOpDependency = -1;
+        var lastOpDependency = -1;
 		var params = source.getParameters();
-		for (int i = 0; i < params.size(); i++) {
+		for (var i = 0; i < params.size(); i++) {
 			if (isDependency(params.get(i))) {
 				if (i != lastOpDependency + 1) {
 					printError(source,
@@ -114,26 +114,26 @@ class OpMethodImplData extends OpImplData {
 	 */
 	@Override
 	void parseAdditionalTags(Element source, List<String[]> additionalTags) {
-		ExecutableElement exSource = (ExecutableElement) source;
+        var exSource = (ExecutableElement) source;
 		// First, parse @param tags
 		List<VariableElement> opDependencies = new ArrayList<>();
 		var paramItr = exSource.getParameters().iterator();
 
-		for (String[] tag : additionalTags) {
+		for (var tag : additionalTags) {
 			if (!"@param".equals(tag[0])) continue;
 			if (paramIsTypeVariable(tag[1])) {
 				// Ignore type variables
 				continue;
 			}
-			VariableElement param = paramItr.next();
+            var param = paramItr.next();
 			if (isDependency(param)) {
 				opDependencies.add(param);
 			}
 			else {
 				// Coerce @param tag + VariableElement into an OpParameter
-				String name = param.getSimpleName().toString();
-				String type = param.asType().toString();
-				String remainder = tag[1];
+                var name = param.getSimpleName().toString();
+                var type = param.asType().toString();
+                var remainder = tag[1];
 				String description;
 				if (remainder.contains(" ")) {
 					description = remainder.substring(remainder.indexOf(" "));
@@ -165,12 +165,12 @@ class OpMethodImplData extends OpImplData {
 		}
 
 		// Finally, parse the return
-		Optional<String[]> returnTag = additionalTags.stream() //
+        var returnTag = additionalTags.stream() //
 			.filter(t -> t[0].startsWith("@return")).findFirst();
 		if (returnTag.isPresent()) {
-			String totalTag = String.join(" ", returnTag.get());
+            var totalTag = String.join(" ", returnTag.get());
 			totalTag = totalTag.replaceFirst("[^\\s]+\\s", "");
-			String returnType = exSource.getReturnType().toString();
+            var returnType = exSource.getReturnType().toString();
 			params.add(new OpParameter( //
 				"output", //
 				returnType, //
@@ -181,7 +181,7 @@ class OpMethodImplData extends OpImplData {
 		}
 
 		// Validate 0 or 1 outputs
-		int totalOutputs = 0;
+        var totalOutputs = 0;
 		for (var p : params) {
 			if (p.ioType != OpParameter.IO_TYPE.INPUT) {
 				totalOutputs++;
@@ -210,10 +210,10 @@ class OpMethodImplData extends OpImplData {
 	private void editIOIndex(String type, List<OpParameter> params) {
 		// NB the parameter index will be the discovered int, minus one.
 		// e.g. "Inplace1" means to edit the first parameter
-		Matcher m = COMPUTER_TYPE.matcher(type);
+        var m = COMPUTER_TYPE.matcher(type);
 		if (m.find()) {
 			var idx = m.group(1);
-			int ioIndex = idx.isEmpty() ? params.size() - 1 : Integer.parseInt(idx) -
+            var ioIndex = idx.isEmpty() ? params.size() - 1 : Integer.parseInt(idx) -
 				1;
 			params.get(ioIndex).ioType = OpParameter.IO_TYPE.CONTAINER;
 			return;
@@ -222,7 +222,7 @@ class OpMethodImplData extends OpImplData {
 		if (m.find()) {
 			var idx = m.group(1);
 			// Unlike for computers, Inplaces MUST have a suffix
-			int ioIndex = Integer.parseInt(idx) - 1;
+            var ioIndex = Integer.parseInt(idx) - 1;
 			params.get(ioIndex).ioType = OpParameter.IO_TYPE.MUTABLE;
 		}
 	}
@@ -255,8 +255,8 @@ class OpMethodImplData extends OpImplData {
 	private boolean paramIsTypeVariable(String tag) {
 		// TODO: Why doesn't Pattern.matches(".*<\\p{L}>.*", tag) work??
 		if (tag.charAt(0) != '<') return false;
-		for (int i = 1; i < tag.length(); i++) {
-			char c = tag.charAt(i);
+		for (var i = 1; i < tag.length(); i++) {
+            var c = tag.charAt(i);
 			if (Character.isLetter(c)) continue;
 			return c == '>';
 		}
@@ -264,9 +264,9 @@ class OpMethodImplData extends OpImplData {
 	}
 
 	protected String formulateSource(Element source) {
-		ExecutableElement exSource = (ExecutableElement) source;
+        var exSource = (ExecutableElement) source;
 		// First, append the class
-		StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
 		sb.append(source.getEnclosingElement());
 		sb.append(".");
 		// Then, append the method
@@ -275,7 +275,7 @@ class OpMethodImplData extends OpImplData {
 		// Then, append the parameters
 		var params = exSource.getParameters();
 		sb.append("(");
-		for (int i = 0; i < params.size(); i++) {
+		for (var i = 0; i < params.size(); i++) {
 			var d = env.getTypeUtils().erasure(params.get(i).asType());
 			sb.append(d);
 			if (i < params.size() - 1) {

@@ -95,7 +95,7 @@ public final class Infos {
 	 * @param info the {@link OpInfo} to validate
 	 */
 	public static void validate(final OpInfo info) {
-		final long numOutputs = info.struct().members().stream() //
+		final var numOutputs = info.struct().members().stream() //
 			.filter(Member::isOutput).count();
 		if (numOutputs > 1) {
 			throw new MultipleOutputsOpException(info.implementationName());
@@ -118,12 +118,12 @@ public final class Infos {
 	 * @return the index of the mutable argument.
 	 */
 	public static int IOIndex(final OpInfo info) {
-		List<Member<?>> inputs = info.inputs();
-		Optional<Member<?>> ioArg = inputs.stream() //
+        var inputs = info.inputs();
+        var ioArg = inputs.stream() //
 			.filter(m -> m.isInput() && m.isOutput()) //
 			.findFirst();
 		if (ioArg.isEmpty()) return -1;
-		Member<?> ioMember = ioArg.get();
+        var ioMember = ioArg.get();
 		return inputs.indexOf(ioMember);
 	}
 
@@ -146,7 +146,7 @@ public final class Infos {
 	 * @return a verbose description of {@code info}
 	 */
 	public static String describe(final OpInfo info) {
-		final StringBuilder sb = new StringBuilder(info.implementationName());
+		final var sb = new StringBuilder(info.implementationName());
 		// Step 2: Description (if present)
 		if (!info.description().isEmpty()) {
 			var desc = info.description().replaceAll("\n", "\n\t");
@@ -177,7 +177,7 @@ public final class Infos {
 			}
 		}
 		// Step 4: Output
-		Member<?> output = info.output();
+        var output = info.output();
 		if (output.getIOType() == ItemIO.OUTPUT) {
 			sb.append("\n\tReturns : ").append(typeString(output.type(), true));
 		}
@@ -189,8 +189,8 @@ public final class Infos {
 		if (verbose) return str;
 		if (input instanceof TypeVariable<?>) {
 			var bounds = ((TypeVariable<?>) input).getBounds();
-			String[] s = new String[bounds.length];
-			for (int i = 0; i < s.length; i++) {
+            var s = new String[bounds.length];
+			for (var i = 0; i < s.length; i++) {
 				s[i] = typeString(Types.raw(bounds[i]), false);
 			}
 			return String.join("+", s);
@@ -198,9 +198,9 @@ public final class Infos {
 		else if (input instanceof ParameterizedType) {
 			var pType = (ParameterizedType) input;
 			var raw = typeString(pType.getRawType(), false);
-			Type[] args = pType.getActualTypeArguments();
-			String[] s = new String[args.length];
-			for (int i = 0; i < args.length; i++) {
+            var args = pType.getActualTypeArguments();
+            var s = new String[args.length];
+			for (var i = 0; i < args.length; i++) {
 				s[i] = typeString(args[i], false);
 			}
 			return raw + "<" + String.join(", ", s) + ">";

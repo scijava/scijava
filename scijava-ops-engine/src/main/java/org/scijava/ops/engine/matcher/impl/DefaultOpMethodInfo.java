@@ -106,9 +106,9 @@ public class DefaultOpMethodInfo implements OpInfo {
 		}
 
 		// If the Op is not in the SciJava Ops Engine module, check visibility
-		Module methodModule = method.getDeclaringClass().getModule();
+        var methodModule = method.getDeclaringClass().getModule();
 		if (methodModule != this.getClass().getModule()) {
-			String packageName = method.getDeclaringClass().getPackageName();
+            var packageName = method.getDeclaringClass().getPackageName();
 			if (!methodModule.isOpen(packageName, methodModule)) {
 				throw new UnreadableOpException(packageName);
 			}
@@ -150,9 +150,9 @@ public class DefaultOpMethodInfo implements OpInfo {
 	@Override
 	public String implementationName() {
 		// Get generic string without modifiers and return type
-		String fullyQualifiedMethod = method.toGenericString();
-		String packageName = method.getDeclaringClass().getPackageName();
-		int classNameIndex = fullyQualifiedMethod.indexOf(packageName);
+        var fullyQualifiedMethod = method.toGenericString();
+        var packageName = method.getDeclaringClass().getPackageName();
+        var classNameIndex = fullyQualifiedMethod.indexOf(packageName);
 		return fullyQualifiedMethod.substring(classNameIndex);
 	}
 
@@ -192,7 +192,7 @@ public class DefaultOpMethodInfo implements OpInfo {
 	@Override
 	public boolean equals(final Object o) {
 		if (!(o instanceof DefaultOpMethodInfo)) return false;
-		final OpInfo that = (OpInfo) o;
+		final var that = (OpInfo) o;
 		return struct().equals(that.struct());
 	}
 

@@ -59,15 +59,15 @@ public class IterableVariance<I extends RealType<I>, O extends RealType<O>>
 	 */
 	@Override
 	public void compute(final Iterable<I> input, final O variance) {
-		int n = 0;
-		double mean = 0.0;
-		double M2 = 0.0;
+        var n = 0;
+        var mean = 0.0;
+        var M2 = 0.0;
 
-		for (final I in : input) {
-			double x = in.getRealDouble();
+		for (final var in : input) {
+            var x = in.getRealDouble();
 
 			n = n + 1;
-			double delta = x - mean;
+            var delta = x - mean;
 			mean = mean + delta / n;
 			M2 = M2 + delta * (x - mean);
 		}

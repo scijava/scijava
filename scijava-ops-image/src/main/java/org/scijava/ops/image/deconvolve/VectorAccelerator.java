@@ -76,11 +76,11 @@ public class VectorAccelerator<T extends RealType<T>> implements
 
 	private void initialize(AccelerationState<T> state) {
 		if (state.ykPrediction() == null) {
-			long[] temp = new long[state.ykIterated().numDimensions()];
-			T type = Util.getTypeFromInterval(state.ykIterated());
+            var temp = new long[state.ykIterated().numDimensions()];
+            var type = Util.getTypeFromInterval(state.ykIterated());
 			state.ykIterated().dimensions(temp);
 
-			FinalDimensions dims = new FinalDimensions(temp);
+            var dims = new FinalDimensions(temp);
 
 			state.ykPrediction(create.apply(dims, type));
 			state.xkm1Previous(create.apply(dims, type));
@@ -97,7 +97,7 @@ public class VectorAccelerator<T extends RealType<T>> implements
 		// to calculate the acceleration factor
 		if (state.ykPrediction() != null) {
 
-			double accelerationFactor = computeAccelerationFactor(state);
+            var accelerationFactor = computeAccelerationFactor(state);
 
 			if ((accelerationFactor < 0)) {
 				state.gkm1(null);
@@ -112,7 +112,7 @@ public class VectorAccelerator<T extends RealType<T>> implements
 		}
 
 		// current estimate for x is yk_iterated
-		RandomAccessibleInterval<T> xk_estimate = state.ykIterated();
+        var xk_estimate = state.ykIterated();
 
 		// calculate the change vector between x and x previous
 		if (state.accelerationFactor() > 0) {
@@ -141,11 +141,11 @@ public class VectorAccelerator<T extends RealType<T>> implements
 		// gk=StaticFunctions.Subtract(yk_iterated, yk_prediction);
 		Subtract(state.ykIterated(), state.ykPrediction(), state.gk());
 
-		double result = 0.0;
+        var result = 0.0;
 
 		if (state.gkm1() != null) {
-			double numerator = DotProduct(state.gk(), state.gkm1());
-			double denominator = DotProduct(state.gkm1(), state.gkm1());
+            var numerator = DotProduct(state.gk(), state.gkm1());
+            var denominator = DotProduct(state.gkm1(), state.gkm1());
 
 			result = numerator / denominator;
 		}
@@ -159,17 +159,17 @@ public class VectorAccelerator<T extends RealType<T>> implements
 	 * multiply inputOutput by input and place the result in input
 	 */
 	private double DotProduct(final Img<T> image1, final Img<T> image2) {
-		final Cursor<T> cursorImage1 = image1.cursor();
-		final Cursor<T> cursorImage2 = image2.cursor();
+		final var cursorImage1 = image1.cursor();
+		final var cursorImage2 = image2.cursor();
 
-		double dotProduct = 0.0d;
+        var dotProduct = 0.0d;
 
 		while (cursorImage1.hasNext()) {
 			cursorImage1.fwd();
 			cursorImage2.fwd();
 
-			float val1 = cursorImage1.get().getRealFloat();
-			float val2 = cursorImage2.get().getRealFloat();
+            var val1 = cursorImage1.get().getRealFloat();
+            var val2 = cursorImage2.get().getRealFloat();
 
 			dotProduct += val1 * val2;
 		}
@@ -182,9 +182,9 @@ public class VectorAccelerator<T extends RealType<T>> implements
 		RandomAccessibleInterval<T> input, RandomAccessibleInterval<T> output)
 	{
 
-		final Cursor<T> cursorA = Views.iterable(a).cursor();
-		final Cursor<T> cursorInput = Views.iterable(input).cursor();
-		final Cursor<T> cursorOutput = Views.iterable(output).cursor();
+		final var cursorA = Views.iterable(a).cursor();
+		final var cursorInput = Views.iterable(input).cursor();
+		final var cursorOutput = Views.iterable(output).cursor();
 
 		while (cursorA.hasNext()) {
 			cursorA.fwd();
@@ -200,21 +200,21 @@ public class VectorAccelerator<T extends RealType<T>> implements
 	private Img<T> AddAndScale(final RandomAccessibleInterval<T> img1,
 		final Img<T> img2, final float a)
 	{
-		Img<T> out = create.apply(img1, Util.getTypeFromInterval(img1));
+        var out = create.apply(img1, Util.getTypeFromInterval(img1));
 
-		final Cursor<T> cursor1 = Views.iterable(img1).cursor();
-		final Cursor<T> cursor2 = img2.cursor();
-		final Cursor<T> cursorOut = out.cursor();
+		final var cursor1 = Views.iterable(img1).cursor();
+		final var cursor2 = img2.cursor();
+		final var cursorOut = out.cursor();
 
 		while (cursor1.hasNext()) {
 			cursor1.fwd();
 			cursor2.fwd();
 			cursorOut.fwd();
 
-			float val1 = cursor1.get().getRealFloat();
-			float val2 = cursor2.get().getRealFloat();
+            var val1 = cursor1.get().getRealFloat();
+            var val2 = cursor2.get().getRealFloat();
 
-			float val3 = Math.max(val1 + a * val2, 0.0001f);
+            var val3 = Math.max(val1 + a * val2, 0.0001f);
 
 			cursorOut.get().setReal(val3);
 		}

@@ -53,7 +53,7 @@ public final class Threads {
 	/** Extracts the given exception's corresponding stack trace to a string. */
 	public static String stackTrace(final Throwable t) {
 		try {
-			final ByteArrayOutputStream out = new ByteArrayOutputStream();
+			final var out = new ByteArrayOutputStream();
 			t.printStackTrace(new PrintStream(out, false, "UTF-8"));
 			return new String(out.toByteArray(), "UTF-8");
 		}
@@ -70,7 +70,7 @@ public final class Threads {
 	 * </p>
 	 */
 	public static String stackTrace(final Thread thread) {
-		final StringBuilder sb = new StringBuilder();
+		final var sb = new StringBuilder();
 		dumpThread(thread, thread.getStackTrace(), sb);
 		return sb.toString();
 	}
@@ -82,16 +82,16 @@ public final class Threads {
 	 * on Windows) is pressed from the console.
 	 */
 	public static String dumpAll() {
-		final StringBuilder sb = new StringBuilder();
+		final var sb = new StringBuilder();
 
-		final Map<Thread, StackTraceElement[]> stackTraces = Thread
+		final var stackTraces = Thread
 			.getAllStackTraces();
 
 		// sort list of threads by name
-		final ArrayList<Thread> threads = new ArrayList<>(stackTraces.keySet());
+		final var threads = new ArrayList<Thread>(stackTraces.keySet());
 		Collections.sort(threads, (t1, t2) -> t1.getName().compareTo(t2.getName()));
 
-		for (final Thread t : threads) {
+		for (final var t : threads) {
 			dumpThread(t, stackTraces.get(t), sb);
 		}
 
@@ -104,7 +104,7 @@ public final class Threads {
 		final StackTraceElement[] trace, final StringBuilder sb)
 	{
 		threadInfo(t, sb);
-		for (final StackTraceElement element : trace) {
+		for (final var element : trace) {
 			sb.append("\tat ");
 			sb.append(element);
 			sb.append(NL);

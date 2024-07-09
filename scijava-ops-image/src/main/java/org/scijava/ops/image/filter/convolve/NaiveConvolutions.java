@@ -126,24 +126,24 @@ public class NaiveConvolutions {
 			final RandomAccessibleInterval<O> output //
 	) {
 		// TODO: try a decomposition of the kernel into n 1-dim kernels
-		final long[] min = new long[input.numDimensions()];
-		final long[] max = new long[input.numDimensions()];
+		final var min = new long[input.numDimensions()];
+		final var max = new long[input.numDimensions()];
 
-		for (int d = 0; d < kernel.numDimensions(); d++) {
+		for (var d = 0; d < kernel.numDimensions(); d++) {
 			min[d] = -kernel.dimension(d);
 			max[d] = kernel.dimension(d) + output.dimension(d);
 		}
 
-		final RandomAccess<I> inRA = input.randomAccess(new FinalInterval(min,
+		final var inRA = input.randomAccess(new FinalInterval(min,
 			max));
 
-		final Cursor<K> kernelC = Views.iterable(kernel).localizingCursor();
+		final var kernelC = Views.iterable(kernel).localizingCursor();
 
-		final Cursor<O> outC = Views.iterable(output).localizingCursor();
+		final var outC = Views.iterable(output).localizingCursor();
 
-		final long[] pos = new long[input.numDimensions()];
-		final long[] kernelRadius = new long[kernel.numDimensions()];
-		for (int i = 0; i < kernelRadius.length; i++) {
+		final var pos = new long[input.numDimensions()];
+		final var kernelRadius = new long[kernel.numDimensions()];
+		for (var i = 0; i < kernelRadius.length; i++) {
 			kernelRadius[i] = kernel.dimension(i) / 2;
 		}
 
@@ -162,7 +162,7 @@ public class NaiveConvolutions {
 			while (kernelC.hasNext()) {
 				kernelC.fwd();
 
-				for (int i = 0; i < kernelRadius.length; i++) {
+				for (var i = 0; i < kernelRadius.length; i++) {
 					// dimension can have zero extension e.g. vertical 1d kernel
 					if (kernelRadius[i] > 0) {
 						inRA.setPosition(pos[i] + kernelC.getLongPosition(i) -

@@ -106,7 +106,7 @@ public class TriangularFacet extends UpdateablePointSet<TriangularFacet>
 	 * Compute the area of this facet.
 	 */
 	private void computeArea() {
-		Vector3D cross = vertices.get(0).subtract(vertices.get(1)).crossProduct(
+        var cross = vertices.get(0).subtract(vertices.get(1)).crossProduct(
 			vertices.get(2).subtract(vertices.get(0)));
 		area = cross.getNorm() * 0.5;
 	}
@@ -128,7 +128,7 @@ public class TriangularFacet extends UpdateablePointSet<TriangularFacet>
 	 */
 	private void computeCentroid() {
 		centroid = Vector3D.ZERO;
-		Iterator<Vertex> it = vertices.iterator();
+        var it = vertices.iterator();
 
 		while (it.hasNext()) {
 			centroid = centroid.add(it.next());
@@ -231,8 +231,8 @@ public class TriangularFacet extends UpdateablePointSet<TriangularFacet>
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
+		final var prime = 31;
+        var result = 1;
 		long temp;
 		temp = Double.doubleToLongBits(area);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -250,7 +250,7 @@ public class TriangularFacet extends UpdateablePointSet<TriangularFacet>
 		if (this == obj) return true;
 		if (obj == null) return false;
 		if (getClass() != obj.getClass()) return false;
-		TriangularFacet other = (TriangularFacet) obj;
+        var other = (TriangularFacet) obj;
 		if (Double.doubleToLongBits(area) != Double.doubleToLongBits(other.area))
 			return false;
 		if (centroid == null) {

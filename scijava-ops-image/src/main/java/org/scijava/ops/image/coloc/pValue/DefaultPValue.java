@@ -96,12 +96,12 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>>
 			seed = 0x27372034L;
 		}
 
-		final int[] blockSize = blockSize(image1, psfSize);
-		final RandomAccessibleInterval<T> trimmedImage1 = trim(image1, blockSize);
-		final RandomAccessibleInterval<U> trimmedImage2 = trim(image2, blockSize);
-		final T type1 = Util.getTypeFromInterval(image1);
+		final var blockSize = blockSize(image1, psfSize);
+		final var trimmedImage1 = trim(image1, blockSize);
+		final var trimmedImage2 = trim(image2, blockSize);
+		final var type1 = Util.getTypeFromInterval(image1);
 
-		final double[] sampleDistribution = new double[nrRandomizations];
+		final var sampleDistribution = new double[nrRandomizations];
 
 		// compute actual coloc value
 		final double value = op.apply(trimmedImage1, trimmedImage2);
@@ -110,27 +110,27 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>>
 		var executor = Parallelization.getTaskExecutor();
 		var numTasks = executor.suggestNumberOfTasks();
 
-		Random r = new Random(seed);
-		long[] seeds = new long[nrRandomizations];
-		for (int s = 0; s < nrRandomizations; s++) {
+        var r = new Random(seed);
+        var seeds = new long[nrRandomizations];
+		for (var s = 0; s < nrRandomizations; s++) {
 			seeds[s] = r.nextLong();
 		}
 
-		List<Integer> params = IntStream.rangeClosed(0, numTasks - 1) //
+        var params = IntStream.rangeClosed(0, numTasks - 1) //
 			.boxed().collect(Collectors.toList());
 
 		// NB final variable needed for use in lambda
-		final Integer nr = nrRandomizations;
+		final var nr = nrRandomizations;
 		Consumer<Integer> task = (t) -> {
-			int offset = t * nr / numTasks;
-			int count = (t + 1) * nr / numTasks - offset;
+            var offset = t * nr / numTasks;
+            var count = (t + 1) * nr / numTasks - offset;
 			// a new one per thread and each needs its own seed
-			final ShuffledView<T> shuffled = new ShuffledView<>(trimmedImage1,
+			final var shuffled = new ShuffledView<T>(trimmedImage1,
 				blockSize, seeds[offset]);
-			Img<T> buffer = Util.getSuitableImgFactory(shuffled, type1).create(
+            var buffer = Util.getSuitableImgFactory(shuffled, type1).create(
 				shuffled);
-			for (int i = 0; i < count; i++) {
-				int index = offset + i;
+			for (var i = 0; i < count; i++) {
+                var index = offset + i;
 				if (index >= nr) break;
 				if (i > 0) shuffled.shuffleBlocks(seeds[index]);
 				copy(shuffled, buffer);
@@ -142,7 +142,7 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>>
 			executor.forEach(params, task);
 		}
 		catch (final Exception exc) {
-			final Throwable cause = exc.getCause();
+			final var cause = exc.getCause();
 			if (cause instanceof RuntimeException) throw (RuntimeException) cause;
 			throw new RuntimeException(exc);
 		}
@@ -153,10 +153,10 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>>
 	}
 
 	private void copy(ShuffledView<T> shuffled, Img<T> buffer) {
-		Cursor<T> cursor = buffer.localizingCursor();
-		RandomAccess<T> ra = shuffled.randomAccess();
+        var cursor = buffer.localizingCursor();
+        var ra = shuffled.randomAccess();
 		while (cursor.hasNext()) {
-			T v = cursor.next();
+            var v = cursor.next();
 			ra.setPosition(cursor);
 			v.set(ra.get());
 		}
@@ -166,12 +166,12 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>>
 		final double[] distribution)
 	{
 		double count = 0;
-		for (int i = 0; i < distribution.length; i++) {
+		for (var i = 0; i < distribution.length; i++) {
 			if (distribution[i] > input) {
 				count++;
 			}
 		}
-		final double pval = count / distribution.length;
+		final var pval = count / distribution.length;
 		return pval;
 	}
 
@@ -180,9 +180,9 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>>
 	{
 		if (psfSize != null) return Intervals.dimensionsAsIntArray(psfSize);
 
-		final int[] blockSize = new int[image.numDimensions()];
-		for (int d = 0; d < blockSize.length; d++) {
-			final long size = (long) Math.floor(Math.sqrt(image.dimension(d)));
+		final var blockSize = new int[image.numDimensions()];
+		for (var d = 0; d < blockSize.length; d++) {
+			final var size = (long) Math.floor(Math.sqrt(image.dimension(d)));
 			if (size > Integer.MAX_VALUE) {
 				throw new IllegalArgumentException("Image dimension #" + d +
 					" is too large: " + image.dimension(d));
@@ -195,11 +195,11 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>>
 	private static <V> RandomAccessibleInterval<V> trim(
 		final RandomAccessibleInterval<V> image, final int[] blockSize)
 	{
-		final long[] min = Intervals.minAsLongArray(image);
-		final long[] max = Intervals.maxAsLongArray(image);
-		for (int d = 0; d < blockSize.length; d++) {
-			final long trimSize = image.dimension(d) % blockSize[d];
-			final long half = trimSize / 2;
+		final var min = Intervals.minAsLongArray(image);
+		final var max = Intervals.maxAsLongArray(image);
+		for (var d = 0; d < blockSize.length; d++) {
+			final var trimSize = image.dimension(d) % blockSize[d];
+			final var half = trimSize / 2;
 			min[d] += half;
 			max[d] -= trimSize - half;
 		}

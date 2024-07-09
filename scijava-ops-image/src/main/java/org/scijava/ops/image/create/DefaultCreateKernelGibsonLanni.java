@@ -64,19 +64,19 @@ public final class DefaultCreateKernelGibsonLanni {
 
 		// //////// physical parameters /////////////
 
-		double ng0 = 1.5; // coverslip refractive index, design value
-		double ng = 1.5; // coverslip refractive index, experimental
-		double ni0 = 1.5; // immersion refractive index, design
-		double ti0 = 150E-06; // working distance of the objective,
+        var ng0 = 1.5; // coverslip refractive index, design value
+        var ng = 1.5; // coverslip refractive index, experimental
+        var ni0 = 1.5; // immersion refractive index, design
+        var ti0 = 150E-06; // working distance of the objective,
 		// desig
 		// a bit precision lost if use 170*1.0E-6
-		double tg0 = 170E-6; // coverslip thickness, design value
-		double tg = 170E-06; // coverslip thickness, experimental value
+        var tg0 = 170E-6; // coverslip thickness, design value
+        var tg = 170E-06; // coverslip thickness, experimental value
 
 		// ////////approximation parameters /////////////
-		int numBasis = 100; // number of basis functions
-		int numSamp = 1000; // number of sampling
-		int overSampling = 2; // overSampling
+        var numBasis = 100; // number of basis functions
+        var numSamp = 1000; // number of sampling
+        var overSampling = 2; // overSampling
 
 		// initialization in the case of null params
 		if (NA == null) NA = 1.4;
@@ -89,9 +89,9 @@ public final class DefaultCreateKernelGibsonLanni {
 
 		ni0 = ni;
 
-		int nx = -1; // psf size
-		int ny = -1;
-		int nz = -1;
+        var nx = -1; // psf size
+        var ny = -1;
+        var nz = -1;
 
 		if (size.numDimensions() == 2) {
 			nx = (int) size.dimension(0);
@@ -105,43 +105,43 @@ public final class DefaultCreateKernelGibsonLanni {
 		}
 
 		// compute the distance between the particle position (pZ) and the center
-		int distanceFromCenter = (int) Math.abs(Math.ceil(pZ / resAxial));
+        var distanceFromCenter = (int) Math.abs(Math.ceil(pZ / resAxial));
 
 		// increase z size so that the PSF is large enough so that we can later
 		// recrop a centered psf
 		nz = nz + 2 * distanceFromCenter;
 
-		double x0 = (nx - 1) / 2.0D;
-		double y0 = (ny - 1) / 2.0D;
+        var x0 = (nx - 1) / 2.0D;
+        var y0 = (ny - 1) / 2.0D;
 
-		double xp = x0;
-		double yp = y0;
+        var xp = x0;
+        var yp = y0;
 
-		int maxRadius = (int) Math.round(Math.sqrt((nx - x0) * (nx - x0) + (ny -
+        var maxRadius = (int) Math.round(Math.sqrt((nx - x0) * (nx - x0) + (ny -
 			y0) * (ny - y0))) + 1;
-		double[] r = new double[maxRadius * overSampling];
-		double[][] h = new double[nz][r.length];
+        var r = new double[maxRadius * overSampling];
+        var h = new double[nz][r.length];
 
-		double a = 0.0D;
-		double b = Math.min(1.0D, ns / NA);
+        var a = 0.0D;
+        var b = Math.min(1.0D, ns / NA);
 
-		double k0 = 2 * Math.PI / lambda;
-		double factor1 = 545 * 1.0E-9 / lambda;
-		double factor = factor1 * NA / 1.4;
-		double deltaRho = (b - a) / (numSamp - 1);
+        var k0 = 2 * Math.PI / lambda;
+        var factor1 = 545 * 1.0E-9 / lambda;
+        var factor = factor1 * NA / 1.4;
+        var deltaRho = (b - a) / (numSamp - 1);
 
 		// basis construction
-		double rho = 0.0D;
-		double am = 0.0;
-		double[][] Basis = new double[numSamp][numBasis];
+        var rho = 0.0D;
+        var am = 0.0;
+        var Basis = new double[numSamp][numBasis];
 
-		BesselJ bj0 = new BesselJ(0);
-		BesselJ bj1 = new BesselJ(1);
+        var bj0 = new BesselJ(0);
+        var bj1 = new BesselJ(1);
 
-		for (int m = 0; m < numBasis; m++) {
+		for (var m = 0; m < numBasis; m++) {
 			// am = (3 * m + 1) * factor;
 			am = 3 * m + 1;
-			for (int rhoi = 0; rhoi < numSamp; rhoi++) {
+			for (var rhoi = 0; rhoi < numSamp; rhoi++) {
 				rho = rhoi * deltaRho;
 				Basis[rhoi][m] = bj0.value(am * rho);
 			}
@@ -149,19 +149,19 @@ public final class DefaultCreateKernelGibsonLanni {
 
 		// compute the function to be approximated
 
-		double ti = 0.0D;
+        var ti = 0.0D;
 		double OPD = 0;
 		double W = 0;
 
-		double[][] Coef = new double[nz][numBasis * 2];
-		double[][] Ffun = new double[numSamp][nz * 2];
+        var Coef = new double[nz][numBasis * 2];
+        var Ffun = new double[numSamp][nz * 2];
 
 		double rhoNA2;
 
-		for (int z = 0; z < nz; z++) {
+		for (var z = 0; z < nz; z++) {
 			ti = ti0 + resAxial * (z - (nz - 1.0D) / 2.0D);
 
-			for (int rhoi = 0; rhoi < numSamp; rhoi++) {
+			for (var rhoi = 0; rhoi < numSamp; rhoi++) {
 				rho = rhoi * deltaRho;
 				rhoNA2 = rho * rho * NA * NA;
 
@@ -183,7 +183,7 @@ public final class DefaultCreateKernelGibsonLanni {
 
 		RealMatrix coefficients = new Array2DRowRealMatrix(Basis, false);
 		RealMatrix rhsFun = new Array2DRowRealMatrix(Ffun, false);
-		DecompositionSolver solver = new SingularValueDecomposition(coefficients)
+        var solver = new SingularValueDecomposition(coefficients)
 			.getSolver(); // slower
 		// but
 		// more
@@ -191,20 +191,20 @@ public final class DefaultCreateKernelGibsonLanni {
 		// DecompositionSolver solver = new
 		// QRDecomposition(coefficients).getSolver(); // faster, less accurate
 
-		RealMatrix solution = solver.solve(rhsFun);
+        var solution = solver.solve(rhsFun);
 		Coef = solution.getData();
 
 		// end.......
 
-		double[][] RM = new double[numBasis][r.length];
-		double beta = 0.0D;
+        var RM = new double[numBasis][r.length];
+        var beta = 0.0D;
 
-		double rm = 0.0D;
-		for (int n = 0; n < r.length; n++) {
+        var rm = 0.0D;
+		for (var n = 0; n < r.length; n++) {
 			r[n] = n * 1.0 / overSampling;
 			beta = k0 * NA * r[n] * resLateral;
 
-			for (int m = 0; m < numBasis; m++) {
+			for (var m = 0; m < numBasis; m++) {
 				// am = (3 * m + 1) * factor;
 				am = 3 * m + 1;
 				rm = am * bj1.value(am * b) * bj0.value(beta * b) * b;
@@ -215,12 +215,12 @@ public final class DefaultCreateKernelGibsonLanni {
 		}
 
 		// obtain one component
-		double maxValue = 0.0D;
-		for (int z = 0; z < nz; z++) {
-			for (int n = 0; n < r.length; n++) {
-				double realh = 0.0D;
-				double imgh = 0.0D;
-				for (int m = 0; m < numBasis; m++) {
+        var maxValue = 0.0D;
+		for (var z = 0; z < nz; z++) {
+			for (var n = 0; n < r.length; n++) {
+                var realh = 0.0D;
+                var imgh = 0.0D;
+				for (var m = 0; m < numBasis; m++) {
 					realh = realh + RM[m][n] * Coef[m][z];
 					imgh = imgh + RM[m][n] * Coef[m][z + nz];
 
@@ -231,16 +231,16 @@ public final class DefaultCreateKernelGibsonLanni {
 
 		// assign
 
-		double[][] Pixel = new double[nz][nx * ny];
+        var Pixel = new double[nz][nx * ny];
 
-		for (int z = 0; z < nz; z++) {
+		for (var z = 0; z < nz; z++) {
 
-			for (int x = 0; x < nx; x++) {
-				for (int y = 0; y < ny; y++) {
-					double rPixel = Math.sqrt((x - xp) * (x - xp) + (y - yp) * (y - yp));
-					int index = (int) Math.floor(rPixel * overSampling);
+			for (var x = 0; x < nx; x++) {
+				for (var y = 0; y < ny; y++) {
+                    var rPixel = Math.sqrt((x - xp) * (x - xp) + (y - yp) * (y - yp));
+                    var index = (int) Math.floor(rPixel * overSampling);
 
-					double value = h[z][index] + (h[z][index + 1] - h[z][index]) *
+                    var value = h[z][index] + (h[z][index + 1] - h[z][index]) *
 						(rPixel - r[index]) * overSampling;
 					Pixel[z][x + nx * y] = value;
 					if (value > maxValue) {
@@ -254,10 +254,10 @@ public final class DefaultCreateKernelGibsonLanni {
 
 		// create an RAI to store the PSF
 		@SuppressWarnings("unchecked")
-		final Img<C> psf3d = (Img<C>) createFunc.apply(size, (T) type);
+		final var psf3d = (Img<C>) createFunc.apply(size, (T) type);
 
 		// use a RandomAccess to access pixels
-		RandomAccess<C> ra = psf3d.randomAccess();
+        var ra = psf3d.randomAccess();
 
 		int start, finish;
 
@@ -275,12 +275,12 @@ public final class DefaultCreateKernelGibsonLanni {
 		}
 
 		// loop and copy pixel values from the PSF array to the output PSF RAI
-		for (int z = start; z < finish; z++) {
+		for (var z = start; z < finish; z++) {
 
-			for (int x = 0; x < nx; x++) {
-				for (int y = 0; y < ny; y++) {
+			for (var x = 0; x < nx; x++) {
+				for (var y = 0; y < ny; y++) {
 
-					double value = Pixel[z][x + nx * y] / maxValue;
+                    var value = Pixel[z][x + nx * y] / maxValue;
 
 					ra.setPosition(new int[] { x, y, z - start });
 					ra.get().setReal(value);

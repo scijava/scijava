@@ -77,22 +77,22 @@ public final class ReductionUtils {
 	protected static Object javassistOp(Object originalOp,
 		ReducedOpInfo reducedInfo) throws Throwable
 	{
-		ClassPool pool = ClassPool.getDefault();
+        var pool = ClassPool.getDefault();
 
 		// NB LambdaMetaFactory only works if this Module (org.scijava.ops.engine)
 		// can read the Module containing the Op. So we also have to check that.
-		Module methodModule = originalOp.getClass().getModule();
-		Module opsEngine = ReductionUtils.class.getModule();
+        var methodModule = originalOp.getClass().getModule();
+        var opsEngine = ReductionUtils.class.getModule();
 		opsEngine.addReads(methodModule);
 
 		// Create wrapper class
-		String className = formClassName(reducedInfo);
+        var className = formClassName(reducedInfo);
 		Class<?> c;
 		try {
 			c = pool.getClassLoader().loadClass(className);
 		}
 		catch (ClassNotFoundException e) {
-			CtClass cc = generateReducedWrapper(pool, className, reducedInfo);
+            var cc = generateReducedWrapper(pool, className, reducedInfo);
 			c = cc.toClass(MethodHandles.lookup());
 		}
 
@@ -110,17 +110,17 @@ public final class ReductionUtils {
 	private static String formClassName(ReducedOpInfo reducedInfo) {
 		// -- package name --
 		// NB required to be this package for the Lookup to work
-		String packageName = getPackageName();
-		StringBuilder sb = new StringBuilder(packageName + ".");
+        var packageName = getPackageName();
+        var sb = new StringBuilder(packageName + ".");
 
 		// -- class name --
 		// Start with the class of the implementation
-		String originalName = className(reducedInfo);
+        var originalName = className(reducedInfo);
 		// Add the input members for uniqueness
-		String parameters = memberNames(reducedInfo);
+        var parameters = memberNames(reducedInfo);
 
 		// -- ensure the name is valid --
-		String className = originalName.concat(parameters);
+        var className = originalName.concat(parameters);
 		if (className.chars().anyMatch(c -> !Character.isJavaIdentifierPart(c)))
 			throw new IllegalArgumentException(className +
 				" is not a valid class name!");
@@ -135,8 +135,8 @@ public final class ReductionUtils {
 	}
 
 	private static String className(ReducedOpInfo reducedInfo) {
-		String implName = reducedInfo.implementationName();
-		int parenIndex = implName.indexOf('(');
+        var implName = reducedInfo.implementationName();
+        var parenIndex = implName.indexOf('(');
 		int classStart;
 		// no paren - structure is package.class
 		if (parenIndex == -1) {
@@ -144,11 +144,11 @@ public final class ReductionUtils {
 		}
 		// paren - structure is packge.class.method(params)
 		else {
-			int methodStart = implName.substring(0, parenIndex).lastIndexOf('.');
+            var methodStart = implName.substring(0, parenIndex).lastIndexOf('.');
 			classStart = implName.substring(0, methodStart).lastIndexOf('.') + 1;
 		}
 
-		String originalName = implName.substring(classStart); // we only want the
+        var originalName = implName.substring(classStart); // we only want the
 																													// class name
 		// replace non-valid identifiers with underscore (the underscore is
 		// arbitrary)
@@ -156,11 +156,11 @@ public final class ReductionUtils {
 	}
 
 	private static String memberNames(ReducedOpInfo reducedInfo) {
-		Stream<String> memberNames = //
+        var memberNames = //
 			Streams.concat(reducedInfo.inputTypes().stream(), //
 				Stream.of(reducedInfo.output().type())) //
 				.map(type -> getClassName(Types.raw(type)));
-		Iterable<String> iterableNames = (Iterable<String>) memberNames::iterator;
+        var iterableNames = (Iterable<String>) memberNames::iterator;
 		return String.join("_", iterableNames);
 	}
 
@@ -173,7 +173,7 @@ public final class ReductionUtils {
 	 * @return - a name that is legal as part of a class name.
 	 */
 	private static String getClassName(Class<?> clazz) {
-		String className = clazz.getSimpleName();
+        var className = clazz.getSimpleName();
 		if (className.chars().allMatch(c -> Character.isJavaIdentifierPart(c)))
 			return className;
 		if (clazz.isArray()) return clazz.getComponentType().getSimpleName() +
@@ -184,23 +184,23 @@ public final class ReductionUtils {
 	private static CtClass generateReducedWrapper(ClassPool pool,
 		String className, ReducedOpInfo reducedInfo) throws Throwable
 	{
-		CtClass cc = pool.makeClass(className);
+        var cc = pool.makeClass(className);
 		// Add implemented interface
-		CtClass jasOpType = pool.get(Types.raw(reducedInfo.opType()).getName());
+        var jasOpType = pool.get(Types.raw(reducedInfo.opType()).getName());
 		cc.addInterface(jasOpType);
 
 		// Add Op field
-		CtField opField = createOpField(pool, cc, Types.raw(reducedInfo.srcInfo()
+        var opField = createOpField(pool, cc, Types.raw(reducedInfo.srcInfo()
 			.opType()), "op");
 		cc.addField(opField);
 
 		// Add constructor
-		CtConstructor constructor = CtNewConstructor.make(createConstructor(cc,
+        var constructor = CtNewConstructor.make(createConstructor(cc,
 			reducedInfo), cc);
 		cc.addConstructor(constructor);
 
 		// add functional interface method
-		CtMethod functionalMethod = CtNewMethod.make(createFunctionalMethod(
+        var functionalMethod = CtNewMethod.make(createFunctionalMethod(
 			reducedInfo), cc);
 		cc.addMethod(functionalMethod);
 		return cc;
@@ -210,8 +210,8 @@ public final class ReductionUtils {
 		Class<?> opType, String fieldName) throws NotFoundException,
 		CannotCompileException
 	{
-		CtClass fType = pool.get(opType.getName());
-		CtField f = new CtField(fType, fieldName, cc);
+        var fType = pool.get(opType.getName());
+        var f = new CtField(fType, fieldName, cc);
 		f.setModifiers(Modifier.PRIVATE + Modifier.FINAL);
 		return f;
 	}
@@ -219,11 +219,11 @@ public final class ReductionUtils {
 	private static String createConstructor(CtClass cc,
 		ReducedOpInfo reducedInfo)
 	{
-		StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
 		// constructor signature
 		sb.append("public " + cc.getSimpleName() + "(");
 		// argument - original op
-		Class<?> opClass = Types.raw(reducedInfo.srcInfo().opType());
+        var opClass = Types.raw(reducedInfo.srcInfo().opType());
 		sb.append(" " + opClass.getName() + " op");
 		sb.append(") {");
 
@@ -252,15 +252,15 @@ public final class ReductionUtils {
 	 *         method of the reduced Op
 	 */
 	private static String createFunctionalMethod(ReducedOpInfo info) {
-		StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
 
 		// determine the name of the functional method
-		Class<?> fIface = FunctionalInterfaces.findFrom(info.opType());
-		Method m = FunctionalInterfaces.functionalMethodOf(fIface);
-		Class<?> srcFIface = FunctionalInterfaces.findFrom(info.srcInfo().opType());
-		Method srcM = FunctionalInterfaces.functionalMethodOf(srcFIface);
+        var fIface = FunctionalInterfaces.findFrom(info.opType());
+        var m = FunctionalInterfaces.functionalMethodOf(fIface);
+        var srcFIface = FunctionalInterfaces.findFrom(info.srcInfo().opType());
+        var srcM = FunctionalInterfaces.functionalMethodOf(srcFIface);
 		// determine the name of the output:
-		String opOutput = "out";
+        var opOutput = "out";
 
 		// -- signature -- //
 		sb.append(generateSignature(m));
@@ -274,13 +274,13 @@ public final class ReductionUtils {
 		}
 		sb.append("op." + srcM.getName() + "(");
 		int i;
-		List<Member<?>> totalArguments = info.srcInfo().inputs();
-		int totalArgs = totalArguments.size();
-		long totalOptionals = totalArguments.parallelStream().filter(
+        var totalArguments = info.srcInfo().inputs();
+        var totalArgs = totalArguments.size();
+        var totalOptionals = totalArguments.parallelStream().filter(
 			member -> !member.isRequired()).count();
-		long neededOptionals = totalOptionals - info.paramsReduced();
-		int reducedArg = 0;
-		int nullables = 0;
+        var neededOptionals = totalOptionals - info.paramsReduced();
+        var reducedArg = 0;
+        var nullables = 0;
 		for (i = 0; i < totalArgs; i++) {
 			// NB due to our nullability paradigm (if there are n nullable parameters,
 			// they must be the last n), we just need to pass null for the last n
@@ -312,11 +312,11 @@ public final class ReductionUtils {
 	 * @return the index of the mutable argument.
 	 */
 	private static int ioArgIndex(final OpInfo info) {
-		List<Member<?>> inputs = info.inputs();
-		Optional<Member<?>> ioArg = inputs.stream().filter(m -> m.isInput() && m
+        var inputs = info.inputs();
+        var ioArg = inputs.stream().filter(m -> m.isInput() && m
 			.isOutput()).findFirst();
 		if (ioArg.isEmpty()) return -1;
-		Member<?> ioMember = ioArg.get();
+        var ioMember = ioArg.get();
 		return inputs.indexOf(ioMember);
 	}
 
@@ -325,16 +325,16 @@ public final class ReductionUtils {
 	}
 
 	private static String generateSignature(Method m) {
-		StringBuilder sb = new StringBuilder();
-		String methodName = m.getName();
+        var sb = new StringBuilder();
+        var methodName = m.getName();
 
 		// method modifiers
-		boolean isVoid = m.getReturnType() == void.class;
+        var isVoid = m.getReturnType() == void.class;
 		sb.append("public " + (isVoid ? "void" : "Object") + " " + methodName +
 			"(");
 
-		int inputs = m.getParameterCount();
-		for (int i = 0; i < inputs; i++) {
+        var inputs = m.getParameterCount();
+		for (var i = 0; i < inputs; i++) {
 			sb.append(" Object in" + i);
 			if (i < inputs - 1) sb.append(",");
 		}

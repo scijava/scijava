@@ -165,6 +165,15 @@
 					<links>
 						<link>https://javadoc.scijava.org/Java11/</link>
 					</links>
+					<!--
+						NB: This module must be explicitly named for Javadoc
+						generation (just on CI, on Java 11?) due to the inlined
+						module-info
+					-->
+					<additionalOptions>
+						<option>--add-modules</option>
+						<option>java.compiler</option>
+					</additionalOptions>
 				</configuration>
 			</plugin>
 			<plugin>

@@ -72,6 +72,7 @@ module org.scijava.ops.engine {
 	provides org.scijava.ops.engine.InfoTreeGenerator with
 		org.scijava.ops.engine.matcher.adapt.AdaptationInfoTreeGenerator,
 		org.scijava.ops.engine.impl.DefaultInfoTreeGenerator,
+		org.scijava.ops.engine.matcher.reduce.ReducedInfoTreeGenerator,
 		org.scijava.ops.engine.matcher.convert.ConvertedInfoTreeGenerator;
 
 	provides org.scijava.ops.api.OpEnvironment with

@@ -32,10 +32,7 @@ package org.scijava.ops.image.labeling;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import net.imglib2.Cursor;
 import net.imglib2.Dimensions;
-import net.imglib2.IterableInterval;
-import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.roi.IterableRegion;
 import net.imglib2.roi.Regions;
@@ -43,7 +40,6 @@ import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.roi.labeling.LabelingType;
 import net.imglib2.type.BooleanType;
 import net.imglib2.type.numeric.IntegerType;
-import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
@@ -72,24 +68,21 @@ public class MergeLabeling<L, I extends IntegerType<I>, B extends BooleanType<B>
 	 * TODO
 	 *
 	 * @param input1
-	 * @param input1
+	 * @param input2
 	 * @param mask
 	 * @return an {@link ImgLabeling} that combines the labels of {@code input1}
 	 *         and {@code input2}
 	 */
 	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes", "hiding" })
 	public ImgLabeling<L, I> apply( //
 		final ImgLabeling<L, I> input1, //
 		final ImgLabeling<L, I> input2, //
 		@Nullable final RandomAccessibleInterval<B> mask //
 	) {
-		final var output = imgLabelingCreator.apply(input1, Views
-			.iterable(input1.getSource()).firstElement());
+		final var output = imgLabelingCreator.apply(input1, input1.getSource().firstElement());
 		if (mask != null) {
-			final IterableRegion iterable = Regions.iterable(mask);
-			final var sample = Regions.sample(
-				(IterableInterval<Void>) iterable, output);
+			final IterableRegion<B> iterable = Regions.iterable(mask);
+			final var sample = Regions.sample(iterable.inside(), output);
 			final var randomAccess = input1.randomAccess();
 			final var randomAccess2 = input2.randomAccess();
 			final var cursor = sample.cursor();

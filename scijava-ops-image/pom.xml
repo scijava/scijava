@@ -266,6 +266,11 @@
 		<scijava-maven-plugin.version>3.0.0</scijava-maven-plugin.version>
 		<imglib2-mesh.version>1.0.0</imglib2-mesh.version>
 		<net.imglib2.imglib2-mesh.version>${imglib2-mesh.version}</net.imglib2.imglib2-mesh.version>
+
+		<imglib2.version>7.0.1</imglib2.version>
+		<imglib2-roi.version>0.15.0</imglib2-roi.version>
+		<imglib2-algorithm.version>0.15.1</imglib2-algorithm.version>
+		<imglib2-realtransform.version>4.0.3</imglib2-realtransform.version>
 	</properties>
 
 	<dependencies>

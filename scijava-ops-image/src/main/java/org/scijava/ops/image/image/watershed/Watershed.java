@@ -138,7 +138,7 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>>
 		final List<Long> imiList = new ArrayList<>();
 
 		if (mask != null) {
-			final var c = Regions.iterable(mask).localizingCursor();
+			final var c = Regions.iterable(mask).inside().localizingCursor();
 			while (c.hasNext()) {
 				c.next();
 				imiList.add(IntervalIndexer.positionToIndex(c, in));

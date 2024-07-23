@@ -163,16 +163,20 @@ public class StatisticsTest extends AbstractOpTest {
 
 	@Test
 	public void testMinAdapted() {
-		final UnsignedByteType min = (UnsignedByteType) ops.op("stats.min").input(
-			randomlyFilledImg).apply();
+		final UnsignedByteType min = ops.op("stats.min") //
+				.input(randomlyFilledImg) //
+				.outType(UnsignedByteType.class) //
+				.apply();
 		Assertions.assertEquals(0, min.getRealDouble(), 0.00001d, "Min");
 	}
 
 	@Test
 	public void testMaxAdapted() {
-		final UnsignedByteType min = (UnsignedByteType) ops.op("stats.max").input(
-			randomlyFilledImg).apply();
-		Assertions.assertEquals(254d, min.getRealDouble(), 0.00001d, "Max");
+		final UnsignedByteType max = ops.op("stats.max") //
+				.input(randomlyFilledImg) //
+				.outType(UnsignedByteType.class) //
+				.apply();
+		Assertions.assertEquals(254d, max.getRealDouble(), 0.00001d, "Max");
 	}
 
 	@Test

@@ -118,6 +118,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
+			<artifactId>scijava-ops-spi</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
 			<artifactId>scijava-priority</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -138,7 +143,7 @@
 			<artifactId>imglib2</artifactId>
 		</dependency>
 
-		<!-- Legacy SciJava/ImageJ2 dependencies -->
+		<!-- Legacy dependencies (SciJava, ImageJ2, ImageJ) -->
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-common</artifactId>
@@ -146,6 +151,14 @@
 		<dependency>
 			<groupId>net.imagej</groupId>
 			<artifactId>imagej-common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.imagej</groupId>
+			<artifactId>ij</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.imglib2</groupId>
+			<artifactId>imglib2-ij</artifactId>
 		</dependency>
 
 		<!-- Test scope dependencies -->

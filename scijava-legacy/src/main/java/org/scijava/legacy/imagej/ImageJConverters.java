@@ -26,22 +26,38 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+package org.scijava.legacy.imagej;
 
-open module org.scijava.legacy {
+import ij.ImagePlus;
+import net.imagej.Dataset;
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.img.Img;
+import net.imglib2.img.display.imagej.ImageJFunctions;
+import net.imglib2.type.NativeType;
+import net.imglib2.type.numeric.NumericType;
+import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpField;
+import org.scijava.ops.spi.OpHints;
 
-	requires ij;
-	requires net.imagej;
-	requires net.imglib2;
-	requires net.imglib2.img; // net.imglib2:imglib2-ij
-	requires org.scijava; // org.scijava:scijava-common
-	requires org.scijava.ops.api;
-	requires org.scijava.ops.spi;
-	requires org.scijava.priority;
-	requires org.scijava.progress;
-	requires org.scijava.types;
+import java.util.function.Function;
 
-	uses org.scijava.ops.spi.OpCollection;
+/**
+ * A set of {@code engine.convert} Ops for ImageJ-related data types.
+ *
+ * @author Curtis Rueden
+ */
+public class ImageJConverters< T extends NumericType< T > & NativeType< T >> implements OpCollection {
 
-	provides org.scijava.ops.spi.OpCollection with org.scijava.legacy.imagej.ImageJConverters;
-	provides org.scijava.types.extract.TypeExtractor with org.scijava.legacy.types.DatasetTypeExtractor;
+	@OpHints(hints = { "conversion.FORBIDDEN" })
+	@OpField(names = "engine.convert")
+	public final Function<ImagePlus, Img<T>> impToImg = ImageJFunctions::wrap;
+
+	@OpHints(hints = { "conversion.FORBIDDEN" })
+	@OpField(names = "engine.convert")
+	public final Function<RandomAccessibleInterval<T>, ImagePlus> raiToImp = rai -> ImageJFunctions.wrap(rai, "Image");
+
+	@OpHints(hints = { "conversion.FORBIDDEN" })
+	@OpField(names = "engine.convert")
+	public final Function<Dataset, ImagePlus> datasetToImp = dataset -> ImageJFunctions.wrap((RandomAccessibleInterval) dataset, dataset.getName());
+
 }

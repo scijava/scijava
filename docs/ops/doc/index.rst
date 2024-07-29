@@ -15,16 +15,15 @@ The combination of these libraries allows declarative image analysis workflows, 
 
    WhyOps
    Installation
+   ScriptingInFiji
 
 .. toctree::
    :maxdepth: 2
    :caption: 🪄 How-to guides
 
-   CallingOps
    SearchingForOps
+   CallingOps
    IntrospectingOps
-   Benchmarks
-   ScriptingInFiji
 
 .. toctree::
    :maxdepth: 2
@@ -43,6 +42,7 @@ The combination of these libraries allows declarative image analysis workflows, 
 
    WritingYourOwnOpPackage
    Migrating Ops Written for ImageJ Ops<MigratingFromImageJOps>
+   Benchmarks
 
 .. toctree::
    :maxdepth: 2

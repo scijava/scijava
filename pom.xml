@@ -66,6 +66,7 @@
 		<module>scijava-legacy</module>
 		<module>scijava-meta</module>
 		<module>scijava-ops-api</module>
+		<module>scijava-ops-desktop</module>
 		<module>scijava-ops-engine</module>
 		<module>scijava-ops-flim</module>
 		<module>scijava-ops-image</module>

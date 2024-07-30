@@ -119,7 +119,7 @@ Reproducing these Results
 1. Create a local copy of the SciJava core from the `GitHub repository <https://github.com/scijava/scijava>`_
 2. Ensure you have package manager `Mamba <https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html#fresh-install-recommended>`_ installed.
 3. Run the script `docs/ops/bin/benchmark.sh`, which will:
-    * Create the mamba Environment
+    * Create the mamba environment
     * Build the benchmarking code
     * Execute all JMH benchmarks
     * Build `plotly <https://plotly.com/>`_ figures for each benchmark

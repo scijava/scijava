@@ -102,4 +102,13 @@
 		<maven.deploy.skip>true</maven.deploy.skip>
 		<maven.install.skip>true</maven.install.skip>
 	</properties>
+
+	<profiles>
+		<profile>
+			<id>benchmarks</id>
+			<modules>
+				<module>scijava-ops-benchmarks</module>
+			</modules>
+		</profile>
+	</profiles>
 </project>

@@ -33,6 +33,7 @@ open module org.scijava.ops.desktop {
 
 	requires java.desktop;
 	requires net.imglib2;
+	requires org.scijava.function;
 	requires org.scijava.ops.api;
 	requires org.scijava.ops.spi;
 

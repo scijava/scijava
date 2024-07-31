@@ -60,7 +60,7 @@ Calling our Gaussian blur as a *computer* above is great when we have pre-alloca
 var outImage = ops.op("filter.gauss").input(inImage, 2.0).apply()
 ```
 
-*Inplaces* are used when we want to destructively modify one of the existing inputs (which is explicitly forbidden by *computers*; a *computer* Op's output should be a different object from all of its inputs). We indicate this by the `mutate#()` method, where the `#` corresponds to the *parameter index* that will be modified:
+*Inplaces* are used when we want to destructively modify one of the existing inputs (which is explicitly forbidden by *computers*; a *computer* Op's output should be a different object from all of its inputs). We indicate this by the `mutate#()` method, where the `#` corresponds to the *parameter index* (starting from 1 for the first parameter) that will be modified:
 
 ```java
 // Modify the first input in-place

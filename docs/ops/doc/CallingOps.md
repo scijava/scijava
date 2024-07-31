@@ -90,10 +90,14 @@ While we do pass concrete inputs and outputs in this example, they are essential
 
 *Note that the default `OpEnvironment` implementations cache Op requests* - this means that repeated `OpBuilder` requests targeting the same action will be faster than the original matching call.
 
-### Matching with classes
+### Matching with types/classes
 
 In addition to the `.input()` and `.output()` builder steps, there are parallel `.inType()` and `.outType()`
 methods. These accept either a `Class` or a `Nil` - the latter allowing retention of generic types. 
+These methods makes it possible to search for an Op without actually having an instance of the objects
+you (eventually) plan to operate upon. For example, you might want to look up the `filter.gauss` Op that
+would be used to smooth an `ImgPlus` by a particular `double` value, without actually having an `ImgPlus`
+image available to pass to the builder request:
 
 ```java
 var computer = ops.op("filter.gauss").inType(ImgPlus.class, Double.class).outType(ImgPlus.class).computer()

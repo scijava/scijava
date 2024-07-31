@@ -19,54 +19,54 @@ figures = [
         "name": "BenchmarkMatching",
         "title": "Basic Op Matching Performance",
         "bars": {
-            "noOps": "Static Method",
-            "noOpsAdapted": f"Static Method {A}",
+            "sjOpsAdapted": f"SciJava Ops {A}",
             "sjOps": "SciJava Ops",
-            "sjOpsAdapted": f"SciJava Ops {A}"
+            "noOpsAdapted": f"Static Method {A}",
+            "noOps": "Static Method",
         }
     },
     {
         "name": "BenchmarkCaching",
         "title": "Caching Effects on Op Matching Performance",
         "bars": {
-            "noOps": "Static Method",
+            "sjOpsWithCache": "SciJava Ops (cached)",
             "sjOps": "SciJava Ops",
-            "sjOpsWithCache": "SciJava Ops (cached)"
+            "noOps": "Static Method",
         }
     },
     {
         "name": "BenchmarkConversion",
         "title": "Parameter Conversion Performance",
         "bars": {
-            "noOpsConverted": f"Static Method {C}",
-            "noOpsAdaptedAndConverted": f"Static Method {AC}",
+            "sjOpsConvertedAndAdapted": f"SciJava Ops {AC}",
             "sjOpsConverted": f"SciJava Ops {C}",
-            "sjOpsConvertedAndAdapted": f"SciJava Ops {AC}"
+            "noOpsAdaptedAndConverted": f"Static Method {AC}",
+            "noOpsConverted": f"Static Method {C}",
         }
     },
     {
         "name": "BenchmarkFrameworks",
         "title": "Algorithm Execution Performance by Framework",
         "bars": {
-            "noOps": "Static Method",
+            "ijOps": "ImageJ Ops",
             "sjOps": "SciJava Ops",
-            "ijOps": "ImageJ Ops"
+            "noOps": "Static Method",
         }
     },
     {
         "name": "BenchmarkCombined",
         "title": "Combined Performance Metrics",
         "bars": {
-            "noOps": "Static Method",
-            "noOpsAdapted": f"Static Method {A}",
-            "noOpsConverted": f"Static Method {C}",
-            "noOpsAdaptedAndConverted": f"Static Method {AC}",
-            "sjOpsWithCache": "SciJava Ops (cached)",
-            "sjOps": "SciJava Ops",
-            "sjOpsAdapted": f"SciJava Ops {A}",
-            "sjOpsConverted": f"SciJava Ops {C}",
-            "sjOpsConvertedAndAdapted": f"SciJava Ops {AC}",
             "ijOps": "ImageJ Ops",
+            "sjOpsConvertedAndAdapted": f"SciJava Ops {AC}",
+            "sjOpsConverted": f"SciJava Ops {C}",
+            "sjOpsAdapted": f"SciJava Ops {A}",
+            "sjOps": "SciJava Ops",
+            "sjOpsWithCache": "SciJava Ops (cached)",
+            "noOpsAdaptedAndConverted": f"Static Method {AC}",
+            "noOpsConverted": f"Static Method {C}",
+            "noOpsAdapted": f"Static Method {A}",
+            "noOps": "Static Method",
         }
     }
 ]

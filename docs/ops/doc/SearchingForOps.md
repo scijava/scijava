@@ -1,6 +1,6 @@
 # Searching for Ops in the Environment
 
-The first step when workin with Ops is always to obtain an `OpEnvironment`: your gateway to all Ops functionality.
+The first step when working with Ops is always to obtain an `OpEnvironment`: your gateway to all Ops functionality.
 
 If you're working in a [Fiji script](ScriptingInFiji) then this is done with a script parameter:
 
@@ -15,7 +15,7 @@ import org.scijava.ops.api.OpEnvironment
 ops = OpEnvironment.build()
 ```
 
-Typically we would only want to do this once per application, to avoid diverging environments and recurring the performance cost of the build. All code examples in this section will assume we have created an `OpEnvironment` named `ops`.
+Typically we would only want to do this once per application, to avoid diverging environments and reincurring the performance cost of the build. All code examples in this section will assume we have created an `OpEnvironment` named `ops`.
 
 As the `OpEnvironment` is fully extensible, different `OpEnvironment`s might contain different Ops, so it is important to be able to query an `OpEnvironment` about its available Ops. We also need to be able to get information about the usage of these Ops, to know what parameters may be required.
 
@@ -23,9 +23,9 @@ The `OpEnvironment.help()` API is your window into the `OpEnvironment`. In the f
 
 ## Listing Namespaces
 
-The no-argument method `OpEnvironment.help()` is designed to give you a broad overview over the *categories* (namespaces) of Ops available within the `OpEnvironment`:
+The no-argument method `ops.help()` is designed to give you a broad overview over the *categories* (namespaces) of Ops available within the `OpEnvironment`:
 
-```
+```python
 print(ops.help())
 ```
 
@@ -64,7 +64,8 @@ These namespace categories can then be interrogated further to explore the parti
 ## Querying a Namespace
 
 You can choose one of the above namespaces, and `ops.help()` will give you information about the algorithms contained within:
-```
+
+```python
 print(ops.help("filter"))
 ```
 
@@ -111,9 +112,9 @@ Names:
 
 ## Querying Op Signatures
 
-Finally, you can use `OpEnvironment.help()` on any Op name to see the list of signatures:
+Finally, you can use `ops.help()` on any Op name to see the list of signatures:
 
-```
+```python
 print(ops.help("filter.gauss"))
 ```
 
@@ -127,7 +128,7 @@ filter.gauss:
 
 ## In-depth Op Information
 
-The basic descriptions from `OpEnvironment.help()` are intentionally simplified to avoid providing overwhelming amounts of information. However, you can obtain more complete descriptions, including documentation (if available), from `OpEnvironment.helpVerbose()`:
+The basic descriptions from `ops.help()` are intentionally simplified to avoid providing overwhelming amounts of information. However, you can obtain more complete descriptions, including documentation (if available), from `ops.helpVerbose()`:
 
 ```
 print(ops.helpVerbose("filter.gauss"))
@@ -159,4 +160,4 @@ filter.gauss:
 			the preallocated output image
 ```
 
-`OpEnvironment.helpVerbose()` can be used interchangeably whenever you would use `OpEnvironment.help()`, as needed.
+The `ops.helpVerbose()` method can be used interchangeably whenever you would use `ops.help()`, as needed.

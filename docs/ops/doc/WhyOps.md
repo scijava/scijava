@@ -17,6 +17,32 @@ SciJava Ops takes strides to ease these burdens by separating the *what* ("I wan
 6. **Extensibility**: Ops provides a mechanism for incorporating existing algorithm implementations into the framework code-free. Existing ops can always be extended in new directions or specialized for particular inputs.
 7. **Performance**: The Ops framework provides a means to override any general-but-slow op with a faster-but-more-specific alternative and the execution framework adds minimal overhead.
 
+
+## How does SciJava Ops compare with ImageJ Ops?
+
+As an evolution of the [ImageJ Ops](https://imagej.net/libs/imagej-ops/) project, SciJava Ops adds many new features and makes many improvements. We first highlight how users can benefit by adopting SciJava Ops; we then provide benefits for developers who choose to write Ops to be exposed within the framework.
+
+### User Features
+
+1. [**Faster Matching**](Benchmarks.rst): SciJava Ops is able to match Ops to user requests dramatically faster than ImageJ Ops, and caches matching requests to provide virtually no overhead on re-requests.
+2. **Precise Matching**: SciJava Ops uses the [Op builder pattern](CallingOps.md) to obtain precise knowledge about the user's desired Op inputs and outputs, leading to precise Op matches.
+    * *ImageJ Ops' `OpService.run` mechanism is vulnerable to uncertain return values and frequent result casting*.
+3. **Simple API**: In SciJava Ops, each Op is **either** a `Function`, a `Computer`, or an `Inplace`, containing a **single method** that executes all functionality.
+    * *In ImageJ Ops, an Op might implement many different interfaces and expose redundant API*.
+4. **Automatic Progress Updates**: SciJava Ops automatically records Op executions within the SciJava Progress framework, providing a simple mechanism for monitoring script execution.
+    * *In ImageJ Ops, Op execution is silent unless explicitly defined, and very few Ops do so.*
+
+### Developer Features
+1. **Zero-code Op Declaration**: Executable code can be registered as an Op purely through YAML specifications, allowing the induction of entire external libraries without upstream edits.
+    * *In ImageJ Ops, a separate class is required to wrap each algorithm from an external source*.
+2. **Minimal Op Boilerplate**: Developers can choose to write Ops as Java classes, methods, or fields, depending on Op requirements.
+    * *In ImageJ Ops, a distinct class, including annotations and interface inheritance, is necessary for each Op*.
+3. **Op Adaptation**: SciJava Ops can automatically iterate pixelwise algorithms across entire images, and can automatically create output buffers if the user does not provide one, **without any additional code**.
+    * *In ImageJ Ops, developers were required to program each additional way to call an Op to provide the same flexibility*.
+4. **Full support for Java Generics**: Generic typing information baked into Java code enables SciJava Ops to consider each parameter's **generic** type in determining a match. This functionality allows developers to write separate Ops to specialize in increasingly narrow parameter types.
+    * *In ImageJ Ops, developers were required to encapsulate functionality within delegation Ops*.
+
+
 ## How do we integrate all of these different libraries and data structures?
 
 Core to SciJava Ops is the observation that algorithmic data structures generally fall into a one of a set of "forms", including:

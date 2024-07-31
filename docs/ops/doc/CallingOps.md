@@ -1,12 +1,14 @@
 # Calling Ops with the `OpBuilder`
 
-Ops are designed to be called from the Op matcher, using the `OpBuilder` syntax. OpBuilder chains follow the [builder pattern](https://refactoring.guru/design-patterns/builder), allowing users to create complex Op calls by "chaining" or appending consecutive, simpler method calls.
+Use of the Ops framework centers on a process of matching Op requests are to function implementations based on the parameters provided. The easiest way to make these queries is to use the `OpBuilder` syntax, which follows the [builder pattern](https://refactoring.guru/design-patterns/builder) to assemble the required components of an Op matching request from a particular `OpEnvironment`.
 
-On this page, we will be constructing an `OpBuilder` call on an `OpEnvironment ops` to execute a Gaussian Blur on an input image `inImage`, with our output buffer `outImage`.
+In this page we start after having [identified a Gaussian Blur Op](SearchingForOps) that we would like to use. We assume we already have created an `OpEnvironment`, named `ops`, as well as the input image to blur, and a pre-allocated output image for the result - `inImage` and `outImage`, respectively.
+
+**Note:** we are incrementally building one line of code in this example. Running an intermediate step simply returns an appropriate builder that knows what has been set so far, and which step is next. If you're following along in an IDE or script editor, the code you actually *run* would be the last step, once our builder call is fully constructed.
 
 ## Specifying the name with `.op()`
 
-From the `OpEnvironment`, an `OpBuilder` call is initialized with the method `OpEnvironment.op(String)`, which is used to describe the name of the Op that the `OpBuilder` must return:
+From the `OpEnvironment`, an `OpBuilder` chain is initialized with the `OpEnvironment.op(String)` method, which describes the name of the Op that we ultimately want to call:
 
 ```groovy
 ops.op("filter.gauss")
@@ -14,9 +16,9 @@ ops.op("filter.gauss")
 
 ## Passing the inputs with `.input()`
 
-With the name defined in the `OpBuilder` call, we can then chain the inputs with the `input()` method.
+With the name established in the `OpBuilder` chain, we can then specify our input(s) with the `.input()` method.
 
-For our gaussian blur, we will pass as inputs our input image `inImage`, and a `double` as our sigma parameter:
+For this Gaussian blur, we have two inputs: `inImage` is the image we want to blur, and a `double` as our sigma parameter:
 
 ```groovy
 ops.op("filter.gauss").input(inImage, 2.0)
@@ -24,9 +26,9 @@ ops.op("filter.gauss").input(inImage, 2.0)
 
 ## Passing an output buffer with `.output()`
 
-Now that the inputs are specified, we can chain the output buffer using the `output()` method.
+After specifying inputs, we provide preallocated outputs using the `.output()` method.
 
-For our gaussian blur, we will pass as the output buffer our output image `outImage`:
+For our Gaussian blur, we will pass our output image `outImage` as a buffer for the result:
 
 ```groovy
 ops.op("filter.gauss").input(inImage, 2.0).output(outImage)
@@ -34,7 +36,7 @@ ops.op("filter.gauss").input(inImage, 2.0).output(outImage)
 
 ## Computing with `.compute()`
 
-With all of the components of the needed Op specified, we can begin computation with the `.compute()` method.
+With all of our desired Op's inputs and outputs now specified, we can run it with the `.compute()` method.
 
 ```groovy
 ops.op("filter.gauss").input(inImage, 2.0).output(outImage).compute()
@@ -44,18 +46,51 @@ In the call to `compute()`, the `OpEnvironment` will use the components of the `
 * Match an Op based on the name provided, as well as the types of the provided input and output `Object`s
 * Execute the Op on the provided input and output `Object`s.
 
-## Additions: Repeating execution
+After this step, `outImage` will contain the results of the Gaussian blur on `inImage`.
 
-When an Op should be executed many times on different inputs, the `OpBuilder` syntax can be modified to return the *Op* instead. Instead of calling the `.compute()` function at the end of our `OpBuilder` call, we can instead call the `.computer()` method to get back the matched Op:
+## Variations on use
+
+### Using `Function` or `InPlace`
+
+Calling our Gaussian blur as a `Computer` above is great when we have pre-allocated output, but for other scenarios we can request Ops as `Functions` or `InPlaces`.
+
+`Functions` are used when we want to *create* the final output, indicated by ending the builder with `.apply()`:
+
+```groovy
+var outImage = ops.op("filter.gauss").input(inImage, 2.0).apply()
+```
+
+`InPlaces` are used when we want to destructively modify one of the existing inputs (which is explicitly forbidden by `Computers`). We indicate this by the `mutate#()` method, where the `#` corresponds to the *parameter index* that will be modified:
+
+```
+# Modify the first input in-place
+ops.op("filter.gauss").input(inImage, 2.0).mutate1()
+```
+
+Note that although the final method call changes for each mode of operation, *this is based on the path taken through the `OpBuilder` chain*. For example, we cannot call the `compute()` method if we haven't provided an `.output()`:
+
+```
+# Does not compute
+ops.op("filter.gauss").input(inImage, 2.0).compute()
+```
+
+A key takeaway from this section is that how you **request** the Op does not necessarily need to match how the Op is **implemented**. `Functions` and `Computers` should be largely interchangeable. For the 1.0.0 release we do not have the necessary converters to go between `InPlaces` and the other paradigms, but it is on our [development roadmap](https://github.com/scijava/scijava/issues/47)!
+
+### Repeating execution
+
+When you want to call an Op many times on different inputs, the `OpBuilder` syntax can be modified to return the *Op* itself, instead of performing the computation. Instead of calling the `.compute()` function at the end of our `OpBuilder` chain, we can use the `.computer()` method (or `.inplace()` or `.function()`, as appropriate) to get back the matched Op, which can then be reused via its `.compute()` method (or `.apply()`, `.mutate#()`):
 
 ```groovy
 var gaussOp = ops.op("filter.gauss").input(inImage, 2.0).output(outImage).computer()
-gaussOp.compute(inImage, 2.0, outImage)
+gaussOp.compute(inImage, 2.0, outImage1)
+gaussOp.compute(inImage, 5.0, outImage2)
 ```
+
+While we do pass concrete inputs and outputs in this example, they are essentially just being used to reason about the desired *types* - which we'll cover in the next section.
 
 *Note that the default `OpEnvironment` implementations cache Op requests* - this means that repeated `OpBuilder` requests targeting the same action will be faster than the original matching call.
 
-## Additions: Matching with classes
+### Matching with classes
 
 In addition to the `.input()` and `.output()` builder steps, there are parallel `.inType()` and `.outType()`
 methods. These accept either a `Class` or a `Nil` - the latter allowing retention of generic types. 
@@ -64,8 +99,15 @@ methods. These accept either a `Class` or a `Nil` - the latter allowing retentio
 var computer = ops.op("filter.gauss").inType(ImgPlus.class, Double.class).outType(ImgPlus.class).computer()
 ```
 
-When using the `*Type` methods of the builder, the terminal steps will only allow *creation* of the Op, not
-direct execution, since the parameters have not been concretely specified yet.
+In this case, we *must* use the `computer()` terminal method of the builder: we
+can only *create* the Op, not directly execute it, since the parameters have
+not been concretely specified yet. This is very sensible when we want to re-use a computer many times.
+
+We can also use the `.outType()` methods to add type safety to our `Function` calls:
+
+```java
+Img outImage = ops.op("filter.gauss").input(inImage, 2.0).outType(Img.class).apply();
+```
 
 ## Common Pitfalls: Wildcards
 

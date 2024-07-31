@@ -1,23 +1,37 @@
 # Searching for Ops in the Environment
 
-As the `OpEnvironment` is fully extensible, different `OpEnvironment`s might contain different Ops, and it is important to be able to query an `OpEnvironment` about the available Ops.
+The first step when workin with Ops is always to obtain an `OpEnvironment`: your gateway to all Ops functionality.
 
-The `OpEnvironment.help()` API allows you to query an `OpEnvironment` about the types of Ops it contains, as we show in the following sections. **Note that the example printouts from the help API may not reflect the Ops available in *your* Op environment**. 
+If you're working in a [Fiji script](ScriptingInFiji) then this is done with a script parameter:
 
-## Searching for operations
+```
+#@ OpEnvironment ops
+```
 
-The no-argument method `OpEnvironment.help()` is designed to give you a broad overview over the *categories* of Ops available within the `OpEnvironment`:
+Otherwise we can import and build one ourselves:
 
-```groovy
+```
 import org.scijava.ops.api.OpEnvironment
 ops = OpEnvironment.build()
+```
 
+Typically we would only want to do this once per application, to avoid diverging environments and recurring the performance cost of the build. All code examples in this section will assume we have created an `OpEnvironment` named `ops`.
+
+As the `OpEnvironment` is fully extensible, different `OpEnvironment`s might contain different Ops, so it is important to be able to query an `OpEnvironment` about its available Ops. We also need to be able to get information about the usage of these Ops, to know what parameters may be required.
+
+The `OpEnvironment.help()` API is your window into the `OpEnvironment`. In the following sections we cover the different types of information that can be obtained. **Note that the exact printouts from the help API may be different from the Ops available in *your* environment**. 
+
+## Listing Namespaces
+
+The no-argument method `OpEnvironment.help()` is designed to give you a broad overview over the *categories* (namespaces) of Ops available within the `OpEnvironment`:
+
+```
 print(ops.help())
 ```
 
-This gives the following printout:
+Might print output such as:
 
-```
+```text
 Namespaces:
 	> coloc
 	> convert
@@ -45,19 +59,18 @@ Namespaces:
 	> types
 ```
 
-## Interrogating a Namespace
+These namespace categories can then be interrogated further to explore the particular Ops in each.
+
+## Querying a Namespace
 
 You can choose one of the above namespaces, and `ops.help()` will give you information about the algorithms contained within:
-```groovy
-import org.scijava.ops.api.OpEnvironment
-ops = OpEnvironment.build()
-
+```
 print(ops.help("filter"))
 ```
 
-This gives the following printout:
+Prints the current list of `filter` ops in the `OpEnvironment`:
 
-```
+```text
 Names:
 	> filter.dog
 	> filter.addNoise
@@ -96,18 +109,15 @@ Names:
 	> filter.variance
 ```
 
-## Signatures for Op Names
+## Querying Op Signatures
 
 Finally, you can use `OpEnvironment.help()` on any Op name to see the list of signatures:
 
-```groovy
-import org.scijava.ops.api.OpEnvironment
-ops = OpEnvironment.build()
-
+```
 print(ops.help("filter.gauss"))
 ```
 
-```
+```text
 filter.gauss:
 	- (input, sigmas, @CONTAINER container1) -> None
 	- (input, sigmas, outOfBounds = null, @CONTAINER container1) -> None
@@ -115,16 +125,17 @@ filter.gauss:
 	- (input, sigma, outOfBounds = null, @CONTAINER container1) -> None
 ```
 
-Note that these descriptions are simple, and you can obtain more verbose descriptions by instead using the method `OpEnvironment.helpVerbose()`:
+## In-depth Op Information
 
-```groovy
-import org.scijava.ops.api.OpEnvironment
-ops = OpEnvironment.build()
+The basic descriptions from `OpEnvironment.help()` are intentionally simplified to avoid providing overwhelming amounts of information. However, you can obtain more complete descriptions, including documentation (if available), from `OpEnvironment.helpVerbose()`:
 
+```
 print(ops.helpVerbose("filter.gauss"))
 ```
 
-```
+Gives us actual typing and usage notes for the parameters:
+
+```text
 filter.gauss:
 	- org.scijava.ops.image.filter.gauss.Gaussians.defaultGaussRAI(net.imglib2.RandomAccessibleInterval<I>,double[],net.imglib2.outofbounds.OutOfBoundsFactory<I, net.imglib2.RandomAccessibleInterval<I>>,net.imglib2.RandomAccessibleInterval<O>)
 		> input : net.imglib2.RandomAccessibleInterval<I>
@@ -147,3 +158,5 @@ filter.gauss:
 		> container1 : @CONTAINER net.imglib2.RandomAccessibleInterval<O>
 			the preallocated output image
 ```
+
+`OpEnvironment.helpVerbose()` can be used interchangeably whenever you would use `OpEnvironment.help()`, as needed.

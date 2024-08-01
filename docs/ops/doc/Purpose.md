@@ -1,4 +1,4 @@
-# Why Use SciJava Ops?
+# Purpose
 
 The fundamental goal of SciJava Ops is to fit the "best" algorithm possible to each task. Historically, identifying and applying the "best" algorithm has been difficult for a variety of reasons:
 * **Technology iterates quickly:** the "best" algorithm five years ago may be replaced by "better" algorithms within new libraries, in different programming languages, incompatible with established workflows.
@@ -7,12 +7,11 @@ The fundamental goal of SciJava Ops is to fit the "best" algorithm possible to e
 
 SciJava Ops takes strides to ease these burdens by separating the *what* ("I want to perform a gaussian blur on this image with this sigma value) from the *how* (using scikit-image on zarr arrays). By creating these abstractions, we move towards a single unified, standardized mechanism for applying algorithms. In such an environment, portable workflows can be created quickly and new technologies can be integrated seamlessly.
 
-## What are the driving values of SciJava Ops?
+## Driving Values
 
 1. **Consistency**:  All Ops are called in the same way, regardless of the mechanisms used by the underlying framework. This means that you don't have to learn Python to call Ops written in Python, but it also means that you could pass the output from an Op written in Python to an Op written in Java, all with the same syntax!
 2. **Reusability**: Ops extends Java's mantra of "write once, run anywhere" to image processing algorithms. Algorithms written for the SciJava Ops framework are usable as-is from any SciJava-compatible software project including Fiji, or from Python using PyImageJ. 
-3. **Reproducibility**: Ops are deterministic: calling the same op twice with the same arguments yields the same result, always. Ops are also versioned, meaning that if you use the same Op environment with the same library versions, you will always have reproducible workflows.
-4. **Flexibility**: Through adaptation and simplification pathways, Ops can be applied to all kinds of inputs, relaxing considerations for data structures. For example, binary numerical Ops are automatically looped and parallelized to operate on images. New data types extending core interfaces can be supported immediately, without rewriting existing algorithms.
+4. **Flexibility**: Through adaptation and conversion pathways, Ops can be applied to all kinds of inputs, relaxing considerations for data structures. For example, binary numerical Ops are automatically looped and parallelized to operate on images. New data types extending core interfaces can be supported immediately, without rewriting existing algorithms.
 5. **Safety**: An op may consist of any number of strongly typed inputs, and calls to access those ops can be as specific as desired. This allows analyst users to use ops without regard for data structure, while developers can rely on the type safety guarantees needed for optimization.
 6. **Extensibility**: Ops provides a mechanism for incorporating existing algorithm implementations into the framework code-free. Existing ops can always be extended in new directions or specialized for particular inputs.
 7. **Performance**: The Ops framework provides a means to override any general-but-slow op with a faster-but-more-specific alternative and the execution framework adds minimal overhead.

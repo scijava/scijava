@@ -338,5 +338,7 @@
 				</pluginManagement>
 			</build>
 		</profile>
+		<!-- HACK: Squelch profile activation warning. -->
+		<profile><id>benchmarks</id></profile>
 	</profiles>
 </project>

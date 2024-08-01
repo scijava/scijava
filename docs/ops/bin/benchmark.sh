@@ -11,8 +11,8 @@ fi
 
 SCRIPT_PATH=$(dirname "$(realpath -s "$0")")
 DOCS_OPS_PATH="$SCRIPT_PATH/.."
-INC_PATH="$DOCS_OPS_PATH/../../"
-BENCHMARKS_PATH="$INC_PATH/scijava-ops-benchmarks"
+BASE_PATH="$DOCS_OPS_PATH/../../"
+BENCHMARKS_PATH="$BASE_PATH/scijava-ops-benchmarks"
 BENCH_OUT_FILE=scijava-ops-benchmarks_results.json
 BENCH_OUT_PATH=$(realpath -s "$DOCS_OPS_PATH/$BENCH_OUT_FILE")
 
@@ -24,8 +24,8 @@ then
 else
   echo
   echo '=== BUILDING THE CODE ==='
-  cd "$INC_PATH"
-  mvn -Denforcer.skip -Dinvoker.skip -Dmaven.test.skip -P benchmarks clean install -pl scijava-ops-benchmarks -am | grep '\(Building.*[0-9]\]\|ERROR\)'
+  cd "$BASE_PATH"
+  mvn -Denforcer.skip -Dinvoker.skip -Dmaven.test.skip -P benchmarks clean install -pl scijava-ops-benchmarks -am
 
   echo
   echo '=== COPYING DEPENDENCIES ==='

@@ -8,15 +8,15 @@ Hardware and Software
 
 This analysis was performed with the following hardware:
 
-* 2021 Dell OptiPlex 5090 Small Form Factor
-* Intel(R) Core(TM) i7-10700 CPU @ 2.90GHz
-* 64 GB 3200 MHz DDR4 RAM
+* Mainboard: Gigabyte Technology Co., Ltd. X570 AORUS PRO WIFI
+* CPU: AMD Ryzen 7 3700X × 16
+* Memory: 32 GB 3200 MHz DDR4 RAM
 
 The following software components were used:
 
-* Ubuntu 20.04.6 LTS
-* Java HotSpot(TM) 64-Bit Server VM Oracle GraalVM 20.0.1+9.1 (build 20.0.1+9-jvmci-23.0-b12, mixed mode, sharing)
-* SciJava core commit `0b8012b2 <https://github.com/scijava/scijava/commit/0b8012b2b00ba84b0583ef7260fab1be8f251041>`_
+* Ubuntu 24.04 LTS
+* OpenJDK 64-Bit Server VM Zulu11.72+19-CA (build 11.0.23+9-LTS, mixed mode)
+* SciJava core commit `018d03ed <https://github.com/scijava/scijava/commit/018d03edd2c4fd20747b472d87f65a8a7033bfe1>`_
 * ImageJ Ops version ``2.0.0``
 
 All benchmarks are executed using the `Java Microbenchmark Harness <https://github.com/openjdk/jmh>`_, using the following parameters:
@@ -119,7 +119,7 @@ Reproducing these Results
 1. Create a local copy of the SciJava core from the `GitHub repository <https://github.com/scijava/scijava>`_
 2. Ensure you have package manager `Mamba <https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html#fresh-install-recommended>`_ installed.
 3. Run the script `docs/ops/bin/benchmark.sh`, which will:
-    * Create the mamba Environment
+    * Create the mamba environment
     * Build the benchmarking code
     * Execute all JMH benchmarks
     * Build `plotly <https://plotly.com/>`_ figures for each benchmark

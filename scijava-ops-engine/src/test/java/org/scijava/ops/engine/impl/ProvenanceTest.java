@@ -558,7 +558,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 	 * This method returns {@code true} iff:
 	 * <ol>
 	 * <li><b>Both</b> {@code op1} and {@code op2} are {@link RichOp}s</li>
-	 * <li>The backing Op {@link Class}es are equal</li>
+	 * <li>The backing Op {@link InfoTree}s are equal</li>
 	 * </ol>
 	 *
 	 * @param op1 an Op
@@ -569,9 +569,9 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 		boolean isRichOp1 = op1 instanceof RichOp;
 		boolean isRichOp2 = op2 instanceof RichOp;
 		if (isRichOp1 && isRichOp2) {
-			var backingCls1 = ((RichOp<?>) op1).op().getClass();
-			var backingCls2 = ((RichOp<?>) op2).op().getClass();
-			return backingCls1 == backingCls2;
+			var backingCls1 = ((RichOp<?>) op1).infoTree();
+			var backingCls2 = ((RichOp<?>) op2).infoTree();
+			return backingCls1.equals(backingCls2);
 		}
 		return false;
 	}

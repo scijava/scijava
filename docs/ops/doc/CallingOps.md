@@ -1,5 +1,7 @@
 # Calling Ops with the `OpBuilder`
 
+
+
 Use of the Ops framework centers on a process of matching Op requests to algorithm implementations based on the parameters provided. The easiest way to make these queries is to use the `OpBuilder` syntax, which follows the [builder pattern](https://refactoring.guru/design-patterns/builder) to assemble the required components of an Op matching request from a particular `OpEnvironment`.
 
 In this page, we start after having [identified a Gaussian Blur Op](SearchingForOps) that we would like to use. We assume we already have created an `OpEnvironment` named `ops`, as well as the input image to blur, and a pre-allocated output image for the result&mdash;`inImage` and `outImage`, respectively.

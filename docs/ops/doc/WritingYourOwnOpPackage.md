@@ -284,12 +284,10 @@ At compile time, the SciJava Ops Indexer will convert each `@implNote` annotatio
 
 #### Adding the SciJava Ops Indexer to your POM
 
-Ops written through Javadoc are discovered by the SciJava Ops Indexer, which creates a file `ops.yaml` containing all of the data needed to import each Op you declare.
+Ops written through Javadoc are discovered by the SciJava Ops Indexer, which creates an `ops.yaml` file containing all of the data needed to import each Op you declare.
 
 Until the SciJava Ops annotation processor is integrated into [pom-scijava](https://github.com/scijava/pom-scijava), developers must add the following block of code to the `build` section of their project POM:
 
-TODO: Replace with the pom-scijava version needed to grab this annotation processor.
-TODO: Replace the SciJava Ops Indexer version with the correct initial version
 ```xml
 <build>
     <plugins>
@@ -314,6 +312,7 @@ TODO: Replace the SciJava Ops Indexer version with the correct initial version
     </plugins>
 </build>
 ```
+**Note:** Replace the `<version>` property with the [latest release](https://maven.scijava.org/#nexus-search;quick~scijava-ops-indexer), or omit if using a [parent pom](https://github.com/scijava/pom-scijava) managing the indexer.
 
 #### Declaring Ops with the `@implNote` syntax
 
@@ -369,7 +368,7 @@ public class MyClassOp
      * @param arg1 the first argument to the Op
      * @param arg2 the first argument to the Op
      * @return the result of the Op
-	 */
+   */
 	@Override
     public Double apply(Double arg1, Double arg2) {
 		return null;
@@ -384,9 +383,11 @@ Note that the only supported functional interfaces that can be used without addi
     <dependency>
         <groupId>org.scijava</groupId>
         <artifactId>scijava-function</artifactId>
+				<version>1.0.0</version>
     </dependency>
 </dependencies>
 ```
+**Note:** Replace the `<version>` property with the [latest release](https://maven.scijava.org/#nexus-search;quick~scijava-function), or omit if using a [parent pom](https://github.com/scijava/pom-scijava) managing SciJava Function.
 
 #### Declaring Ops as Fields
 
@@ -400,7 +401,7 @@ public class MyOpCollection {
      * @input arg2 the second {@link Double}
      * @output arg2 the second {@link Double}
      * @implNote op names='my.op'
-	 */
+   */
     public final BiFunction<Double, Double, Double> myFieldOp =
         (arg1, arg2) -> {...computation...};
 	
@@ -413,16 +414,7 @@ To describe each Op parameter, add the following tags to its javadoc:
 * To describe a conatiner (for a computer Op), add the Javadoc tag `@container <parameter_name> <description>`
 * To describe a mutable input (for an inplace Op), add the Javadoc tag `@mutable <parameter_name> <description>`
 
-Note again that the only supported functional interfaces that can be used without additional dependencies are `java.util.function.Function` and `java.util.function.BiFunction` - if you'd like to write an Op requiring more than two inputs, or to write an Op that takes a pre-allocated output buffer, you'll need to depend on the SciJava Function library:
-
-```xml
-<dependencies>
-    <dependency>
-        <groupId>org.scijava</groupId>
-        <artifactId>scijava-function</artifactId>
-    </dependency>
-</dependencies>
-```
+Note again that the only supported functional interfaces that can be used without additional dependencies are `java.util.function.Function` and `java.util.function.BiFunction` - if you'd like to write an Op requiring more than two inputs, or to write an Op that takes a pre-allocated output buffer, you'll need to depend on the SciJava Function library, as mentioned above.
 
 ### YAML
 

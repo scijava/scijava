@@ -3,7 +3,7 @@
 This page is designed to help *Ops users* understand the SciJava Ops concepts powering the framework.
 
 ## Ops
-An **algorithm** is a mathematical routine that transforms, interrogate, or refines input values into output values. Algorithms are used throughout scientific computing, and the fundamental [purpose](Purpose) of SciJava Ops is to facilitate their application.
+An **algorithm** is a mathematical routine that transforms, interrogate, or refines input values into output values. Algorithms are used throughout scientific computing, and the fundamental [purpose](Purpose.rst) of SciJava Ops is to facilitate their application.
 
 We do that by providing a framework for consistently defining and invoking algorithm implementations as **Ops**. Ops have:
 * a **name**, establishing its purpose. An Op's name describes *what* the Op does, but not *how* the Op does it.

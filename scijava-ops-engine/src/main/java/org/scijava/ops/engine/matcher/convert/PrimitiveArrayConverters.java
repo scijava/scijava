@@ -29,6 +29,7 @@
 
 package org.scijava.ops.engine.matcher.convert;
 
+import java.util.Collection;
 import java.util.function.Function;
 
 import org.scijava.collections.ObjectArray;
@@ -128,32 +129,32 @@ public class PrimitiveArrayConverters<N extends Number> implements
 
 	@OpHints(hints = { Conversion.FORBIDDEN })
 	@OpField(names = "engine.convert")
-	public final Function<ObjectArray<Number>, Byte[]> toByte = o -> o.stream()
+	public final Function<Collection<Number>, Byte[]> toByte = o -> o.stream()
 		.map(b -> b == null ? null : b.byteValue()).toArray(Byte[]::new);
 
 	@OpHints(hints = { Conversion.FORBIDDEN })
 	@OpField(names = "engine.convert")
-	public final Function<ObjectArray<Number>, Integer[]> toInteger = o -> o
+	public final Function<Collection<Number>, Integer[]> toInteger = o -> o
 		.stream().map(i -> i == null ? null : i.intValue()).toArray(Integer[]::new);
 
 	@OpHints(hints = { Conversion.FORBIDDEN })
 	@OpField(names = "engine.convert")
-	public final Function<ObjectArray<Number>, Short[]> toShort = o -> o.stream()
+	public final Function<Collection<Number>, Short[]> toShort = o -> o.stream()
 		.map(s -> s == null ? null : s.shortValue()).toArray(Short[]::new);
 
 	@OpHints(hints = { Conversion.FORBIDDEN })
 	@OpField(names = "engine.convert")
-	public final Function<ObjectArray<Number>, Long[]> toLong = o -> o.stream()
+	public final Function<Collection<Number>, Long[]> toLong = o -> o.stream()
 		.map(l -> l == null ? null : l.longValue()).toArray(Long[]::new);
 
 	@OpHints(hints = { Conversion.FORBIDDEN })
 	@OpField(names = "engine.convert")
-	public final Function<ObjectArray<Number>, Float[]> toFloat = o -> o.stream()
+	public final Function<Collection<Number>, Float[]> toFloat = o -> o.stream()
 		.map(f -> f == null ? null : f.floatValue()).toArray(Float[]::new);
 
 	@OpHints(hints = { Conversion.FORBIDDEN })
 	@OpField(names = "engine.convert")
-	public final Function<ObjectArray<Number>, Double[]> toDouble = o -> o
+	public final Function<Collection<Number>, Double[]> toDouble = o -> o
 		.stream().map(d -> d == null ? null : d.doubleValue()).toArray(
 			Double[]::new);
 
@@ -161,62 +162,56 @@ public class PrimitiveArrayConverters<N extends Number> implements
 
 	@OpHints(hints = { Conversion.FORBIDDEN })
 	@OpField(names = "engine.convert")
-	public final Function<ObjectArray<Number>, byte[]> toPrimitiveByte = o -> {
+	public final Function<Collection<Number>, byte[]> toPrimitiveByte = o -> {
         var arr = new byte[o.size()];
-		for (var i = 0; i < o.size(); i++) {
-			arr[i] = o.get(i).byteValue();
-		}
+		int i = 0;
+		for (var num : o) arr[i++] = num.byteValue();
 		return arr;
 	};
 
 	@OpHints(hints = { Conversion.FORBIDDEN })
 	@OpField(names = "engine.convert")
-	public final Function<ObjectArray<Number>, short[]> toPrimitiveShort = o -> {
+	public final Function<Collection<Number>, short[]> toPrimitiveShort = o -> {
         var arr = new short[o.size()];
-		for (var i = 0; i < o.size(); i++) {
-			arr[i] = o.get(i).shortValue();
-		}
+		int i = 0;
+		for (var num : o) arr[i++] = num.shortValue();
 		return arr;
 	};
 
 	@OpHints(hints = { Conversion.FORBIDDEN })
 	@OpField(names = "engine.convert")
-	public final Function<ObjectArray<Number>, int[]> toPrimitiveInt = o -> {
+	public final Function<Collection<Number>, int[]> toPrimitiveInt = o -> {
         var arr = new int[o.size()];
-		for (var i = 0; i < o.size(); i++) {
-			arr[i] = o.get(i).intValue();
-		}
+		int i = 0;
+		for (var num : o) arr[i++] = num.intValue();
 		return arr;
 	};
 
 	@OpHints(hints = { Conversion.FORBIDDEN })
 	@OpField(names = "engine.convert")
-	public final Function<ObjectArray<Number>, long[]> toPrimitiveLong = o -> {
+	public final Function<Collection<Number>, long[]> toPrimitiveLong = o -> {
         var arr = new long[o.size()];
-		for (var i = 0; i < o.size(); i++) {
-			arr[i] = o.get(i).longValue();
-		}
+		int i = 0;
+		for (var num : o) arr[i++] = num.longValue();
 		return arr;
 	};
 
 	@OpHints(hints = { Conversion.FORBIDDEN })
 	@OpField(names = "engine.convert")
-	public final Function<ObjectArray<Number>, float[]> toPrimitiveFloat = o -> {
+	public final Function<Collection<Number>, float[]> toPrimitiveFloat = o -> {
         var arr = new float[o.size()];
-		for (var i = 0; i < o.size(); i++) {
-			arr[i] = o.get(i).floatValue();
-		}
+		int i = 0;
+		for (var num : o) arr[i++] = num.floatValue();
 		return arr;
 	};
 
 	@OpHints(hints = { Conversion.FORBIDDEN })
 	@OpField(names = "engine.convert")
-	public final Function<ObjectArray<Number>, double[]> toPrimitiveDouble =
+	public final Function<Collection<Number>, double[]> toPrimitiveDouble =
 		o -> {
             var arr = new double[o.size()];
-			for (var i = 0; i < o.size(); i++) {
-				arr[i] = o.get(i).doubleValue();
-			}
+			int i = 0;
+			for (var num : o) arr[i++] = num.doubleValue();
 			return arr;
 		};
 

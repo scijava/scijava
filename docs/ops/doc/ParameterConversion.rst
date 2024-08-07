@@ -153,3 +153,141 @@ In such cases, devising methods to *wrap* the user arguments, instead of *copyin
 		};
 		return ArrayImgs.doubles(access, input.length, input[0].length);
 	}
+
+.. _function-output:
+
+Converting ``Function`` outputs
+===============================
+
+Now, imagine that the user wished to execute the Op using **only** ``double[][]``\ s. In other words, they have a ``double[][] input``, a ``double[][] kernel``, and want back a ``double[][]`` containing the result:
+
+.. code-block:: java
+
+    double[][] in = ...
+    // 3x3 averaging kernel
+    double[][] kernel = { //
+        { 1/9, 1/9, 1/9}, //
+        { 1/9, 1/9, 1/9}, //
+        { 1/9, 1/9, 1/9} //
+    };
+
+    // Ideal case - no need to wrap to Img
+    double[][] result = ops.op("filter.convolve") //
+        .input(in, kernel) //
+        .outType(double[][].class) //
+        .apply();
+
+Looking back at our :ref:`original Op<original-op>`, we would have to write an *additional* converter, to turn the output ``RandomAccessibleInterval<DoubleType>`` into a ``double[][]``:
+
+.. code-block:: java
+
+	/**
+	 * @param input the input data
+	 * @return a {@code double[][]}, containing the data stored in {@code input}
+	 * @implNote op names='engine.convert', type=Function
+	 */
+	public static double[][] doublesToArray(final RandomAccessibleInterval<DoubleType> input)
+	{
+        // Create the array
+		var width = input.dimension(0);
+		var height = input.dimension(1);
+		var result = new double[(int) width][(int) height];
+
+		// Unfortunately, we have to deep copy here
+		var ra = input.randomAccess();
+		for(int i = 0; i < width; i++) {
+			for(int j = 0; j < height; j++) {
+				result[i][j] = ra.setPositionAndGet(i, j).get();
+			}
+		}
+		return result;
+	}
+
+When the user tries to invoke our ``filter.convolve`` ``Function`` Op on all ``double[][]``\ s, the following happens:
+
+#. Each ``double[][]`` is converted into a ``RandomAccessibleInterval<DoubleType>`` using our ``engine.convert(in: double[][]) -> RandomAccessibleInterval<DoubleType>`` Op.
+#. The ``filter.convolve`` Op is invoked on the ``RandomAccessibleInterval<DoubleType>``\ s, returning a ``RandomAccessibleInterval<DoubleType>`` as an output.
+#. The output ``RandomAccessibleInterval<DoubleType>`` is converted into a ``double[][]`` using our ``engine.convert(in: RandomAccessibleInterval<DoubleType>) -> double[][]`` Op.
+#. The **converted** ``double[][]`` output is returned to the user.
+
+Converting ``Computer`` and ``Inplace`` outputs
+===============================================
+
+Consider our ``filter.convolve`` Op example, instead written as a ``Computer``.
+
+.. code-block:: java
+
+	/**
+	 * Convolves an image with a kernel, placing the result in the output buffer
+	 *
+	 * @param input the input data
+	 * @param kernel the kernel
+	 * @param output the result buffer
+	 * @implNote op names="filter.convolve"
+	 */
+	public static void convolveNaive(
+			final RandomAccessibleInterval<DoubleType> input,
+			final RandomAccessibleInterval<DoubleType> kernel,
+			final RandomAccessibleInterval<DoubleType> output
+        ) {
+            // convolve convolve convolve //
+        }
+
+If we want to call this Op using *only* ``double[][]``\ s, as so, we will certainly need the ``engine.convert(in: double[][]) -> RandomAccessibleInterval<DoubleType>`` Op and the ``engine.convert(in: RandomAccessibleInterval<DoubleType>) -> double[][]`` Op we wrote above:
+
+.. code-block:: java
+
+    double[][] in = ...
+    // 3x3 averaging kernel
+    double[][] kernel = { //
+        { 1/9, 1/9, 1/9}, //
+        { 1/9, 1/9, 1/9}, //
+        { 1/9, 1/9, 1/9} //
+    };
+    double[][] result = new double[in.length][in[0].length];
+
+    ops.op("filter.convolve").input(in, kernel).output(result).apply();
+
+However, if we follow the same procedure with :ref:`Functions <function-output>`, the user will not see the output in their ``result`` object. This is because many ``engine.convert`` Ops (including the one we wrote :ref:`above <function-output>` for our ``RandomAccessibleInterval``, and the original converter we wrote for the input ``double[][]``\ s), make *deep copies* instead of wrapping the user arguments. Indeed, SciJava Ops cannot guarantee that ``engine.convert`` Ops wrap user arguments, so without an additional step parameter conversion would not work for output buffers.
+
+SciJava Ops remedies the situation by, after invoking the original Op and converting the output, calling an ``engine.copy`` Op to store the converted output *back into the user's object*. Thus, **if you want to enable parameter conversion on** ``Computer``\ **s or** ``Inplace``\ **s, you'll need** ``engine.copy`` **Ops too**.
+
+Below is an ``engine.copy`` Op that would store the converted Op's output ``double[][]`` back into the user's Object:
+
+.. code-block:: java
+
+	/**
+	 * Convolves an image with a kernel, placing the result in the output buffer
+	 *
+	 * @param opOutput the {@code double[][]} converted from the Op output
+	 * @param userBuffer the original {@code double[][]} provided by the user
+	 * @implNote op names="engine.copy" type=Computer
+	 */
+	public static void copyDoubleMatrix(
+			final double[][] opOutput,
+			final double[][] userBuffer
+	) {
+		for(int i = 0; i < opOutput.length; i++) {
+			System.arraycopy(opOutput[i], 0, userBuffer[i], 0, opOutput[i].length);
+		}
+	}
+
+When the user tries to invoke our ``filter.convolve`` ``Computer`` Op on all ``double[][]``\ s, the following happens:
+
+#. Each ``double[][]`` is converted into a ``RandomAccessibleInterval<DoubleType>`` using our ``engine.convert(in: double[][]) -> RandomAccessibleInterval<DoubleType>`` Op.
+#. The ``filter.convolve`` Op is invoked on the ``RandomAccessibleInterval<DoubleType>``\ s, returning a ``RandomAccessibleInterval<DoubleType>`` as an output.
+#. The output ``RandomAccessibleInterval<DoubleType>`` is converted into a ``double[][]`` using our ``engine.convert(in: RandomAccessibleInterval<DoubleType>) -> double[][]`` Op.
+#. The **converted** output ``double[][]`` is *copied* back into the user's ``double[][]`` buffer.
+
+Summary
+=======
+
+All in all, you can enable parameter conversion from type ``A`` to type ``B`` by providing the following Ops:
+
+* An ``engine.convert(input: A) -> B`` for input conversion
+* An ``engine.convert(input: B) -> A`` for output conversion
+* An ``engine.copy(converted_output: B, user_buffer: B)`` for ``Computer``\ s and ``Inplace``\ s, to move the converted output into the user's buffer object.
+
+Note that, in the process of creating your ``engine.convert`` ``Function`` Ops, you'll likely want to write some ``engine.create`` Ops that could produce objects of type ``B``. In addition to making your ``engine.convert`` Ops more granular by using them as Op dependencies, but they'll additionally help enable features like Op adaptation.
+
+Beyond this, it would also be helpful to ensure that an ``engine.copy(converted_output: A, user_buffer: A)`` Op exists, such that users can also call *your* ``Computer`` and ``Inplace`` Ops using objects of type ``A``.

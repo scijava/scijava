@@ -29,8 +29,6 @@
 
 package org.scijava.ops.image.convert;
 
-import java.util.function.BiFunction;
-
 import net.imglib2.Dimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.loops.LoopBuilder;
@@ -38,22 +36,13 @@ import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.complex.ComplexDoubleType;
 import net.imglib2.type.numeric.complex.ComplexFloatType;
-import net.imglib2.type.numeric.integer.ByteType;
-import net.imglib2.type.numeric.integer.IntType;
-import net.imglib2.type.numeric.integer.LongType;
-import net.imglib2.type.numeric.integer.ShortType;
-import net.imglib2.type.numeric.integer.Unsigned128BitType;
-import net.imglib2.type.numeric.integer.Unsigned12BitType;
-import net.imglib2.type.numeric.integer.Unsigned2BitType;
-import net.imglib2.type.numeric.integer.Unsigned4BitType;
-import net.imglib2.type.numeric.integer.UnsignedByteType;
-import net.imglib2.type.numeric.integer.UnsignedIntType;
-import net.imglib2.type.numeric.integer.UnsignedLongType;
-import net.imglib2.type.numeric.integer.UnsignedShortType;
+import net.imglib2.type.numeric.integer.*;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
+
+import java.util.function.BiFunction;
 
 /**
  * Converters for converting between images of Complex types

@@ -40,6 +40,8 @@ import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.outofbounds.OutOfBoundsRandomValueFactory;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.real.DoubleType;
+import net.imglib2.view.ExtendedRandomAccessibleInterval;
+import net.imglib2.view.Views;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.image.AbstractOpTest;
@@ -55,6 +57,44 @@ import java.lang.reflect.Type;
  * @author Gabriel Selzer
  */
 public class TypeExtractorTests extends AbstractOpTest {
+
+	@Test
+	public void testExtendedRAITypeExtractor() {
+		Img<DoubleType> data = ArrayImgs.doubles(20, 20);
+		// Use an Op to get a histogram
+		var eRAI = Views.extendZero(data);
+		// Get the generic type (indirectly using the Type reification system through ops)
+		Type objType = ops.genericType(eRAI);
+		Assertions.assertInstanceOf(ParameterizedType.class, objType);
+		ParameterizedType pType = (ParameterizedType) objType;
+		// Assert raw type
+		Assertions.assertEquals(ExtendedRandomAccessibleInterval.class, pType.getRawType());
+		// Assert first type parameter
+		Assertions.assertEquals(DoubleType.class, pType.getActualTypeArguments()[0]);
+		// Assert second type parameter
+		ParameterizedType secondArgType = (ParameterizedType) pType.getActualTypeArguments()[1];
+		Assertions.assertEquals(ArrayImg.class, secondArgType.getRawType());
+		Assertions.assertEquals(DoubleType.class, secondArgType.getActualTypeArguments()[0]);
+		Assertions.assertEquals(DoubleArray.class, secondArgType.getActualTypeArguments()[1]);
+	}
+
+	@Test
+	public void testHistogram1dTypeExtractor() {
+		Img<DoubleType> data = ArrayImgs.doubles(20, 20);
+		// Use an Op to get a histogram
+		Histogram1d<DoubleType> doubles = ops.op("image.histogram") //
+				.input(data) //
+				.outType(new Nil<Histogram1d<DoubleType>>() {}) //
+				.apply();
+		// Get the generic type (indirectly using the Type reification system through ops)
+		Type objType = ops.genericType(doubles);
+		Assertions.assertInstanceOf(ParameterizedType.class, objType);
+		ParameterizedType pType = (ParameterizedType) objType;
+		// Assert raw type
+		Assertions.assertEquals(Histogram1d.class, pType.getRawType());
+		// Assert first type parameter
+		Assertions.assertArrayEquals(new Type[] {DoubleType.class}, pType.getActualTypeArguments());
+	}
 
 	@Test
 	public void testOutOfBoundsConstantValueFactoryTypeExtractors() {
@@ -106,23 +146,5 @@ public class TypeExtractorTests extends AbstractOpTest {
 			new Type[] {DoubleType.class, DoubleArray.class}, //
 			pType.getActualTypeArguments() //
 		);
-	}
-
-	@Test
-	public void testHistogram1dTypeExtractor() {
-		Img<DoubleType> data = ArrayImgs.doubles(20, 20);
-		// Use an Op to get a histogram
-		Histogram1d<DoubleType> doubles = ops.op("image.histogram") //
-				.input(data) //
-				.outType(new Nil<Histogram1d<DoubleType>>() {}) //
-				.apply();
-		// Get the generic type (indirectly using the Type reification system through ops)
-		Type objType = ops.genericType(doubles);
-		Assertions.assertInstanceOf(ParameterizedType.class, objType);
-		ParameterizedType pType = (ParameterizedType) objType;
-		// Assert raw type
-		Assertions.assertEquals(Histogram1d.class, pType.getRawType());
-		// Assert first type parameter
-		Assertions.assertArrayEquals(new Type[] {DoubleType.class}, pType.getActualTypeArguments());
 	}
 }

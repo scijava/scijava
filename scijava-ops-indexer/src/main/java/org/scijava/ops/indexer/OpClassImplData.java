@@ -29,17 +29,15 @@
 
 package org.scijava.ops.indexer;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-
 import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.*;
 import javax.lang.model.type.NoType;
 import javax.tools.Diagnostic;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
+import java.util.List;
 
 import static org.scijava.ops.indexer.ProcessingUtils.*;
 
@@ -73,24 +71,24 @@ class OpClassImplData extends OpImplData {
 				" has a functional method without javadoc!");
 			return;
 		}
-        var sections = blockSeparator.split(fMethodDoc);
-		var paramTypes = fMethod.getParameters().iterator();
+		String[] sections = blockSeparator.split(fMethodDoc);
+		Iterator<? extends VariableElement> paramTypes = fMethod.getParameters().iterator();
 
-        var expNoParams = fMethod.getParameters().size();
-        var expNoReturns = fMethod.getReturnType() instanceof NoType ? 0 : 1;
+        int expNoParams = fMethod.getParameters().size();
+        int expNoReturns = fMethod.getReturnType() instanceof NoType ? 0 : 1;
 		int noParams = 0, noReturns = 0;
 
-		for (var section : sections) {
-            var elements = tagElementSeparator.split(section, 2);
+		for (String section : sections) {
+            String[] elements = tagElementSeparator.split(section, 2);
 			switch (elements[0]) {
 				case "@param": {
 					noParams++;
-                    var foo = tagElementSeparator.split(elements[1], 2);
-                    var name = foo[0];
-                    var description = foo[1];
+                    String[] foo = tagElementSeparator.split(elements[1], 2);
+                    String name = foo[0];
+                    String description = foo[1];
 					if (paramTypes.hasNext()) {
-						var pType = paramTypes.next();
-                        var type = pType.asType().toString();
+						VariableElement pType = paramTypes.next();
+						String type = pType.asType().toString();
 						params.add(new OpParameter(name, type, ProcessingUtils.ioType(
 							description), description, isNullable(pType, description)));
 					}
@@ -103,9 +101,9 @@ class OpClassImplData extends OpImplData {
 				}
 				case "@return": {
 					noReturns++;
-                    var name = "output";
-                    var description = elements[1];
-                    var type = fMethod.getReturnType().toString();
+                    String name = "output";
+                    String description = elements[1];
+                    String type = fMethod.getReturnType().toString();
 					params.add(new OpParameter(name, type, OpParameter.IO_TYPE.OUTPUT,
 						description, false));
 					break;
@@ -137,16 +135,20 @@ class OpClassImplData extends OpImplData {
 	void parseAdditionalTags(Element source, List<String[]> additionalTags) {}
 
 	protected String formulateSource(Element source) {
-		var srcString = source.toString();
-		var parent = source.getEnclosingElement();
+		String srcString = source.toString();
+		Element parent = source.getEnclosingElement();
 		// handle inner classes
 		while (parent.getKind() == ElementKind.CLASS) {
-            var badPeriod = srcString.lastIndexOf('.');
+            int badPeriod = srcString.lastIndexOf('.');
 			srcString = srcString.substring(0, badPeriod) + '$' + srcString.substring(
 				badPeriod + 1);
 			parent = parent.getEnclosingElement();
 		}
-		return "javaClass:/" + URLEncoder.encode(srcString, StandardCharsets.UTF_8);
+		try {
+			return "javaClass:/" + URLEncoder.encode(srcString, StandardCharsets.UTF_8.toString());
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private void printError(Element source, String msg) {

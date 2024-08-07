@@ -29,15 +29,14 @@
 
 package org.scijava.ops.indexer;
 
-import static org.scijava.ops.indexer.ProcessingUtils.blockSeparator;
-import static org.scijava.ops.indexer.ProcessingUtils.tagElementSeparator;
-
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.Element;
 import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Element;
+import static org.scijava.ops.indexer.ProcessingUtils.blockSeparator;
+import static org.scijava.ops.indexer.ProcessingUtils.tagElementSeparator;
 
 /**
  * A data structure containing all the metadata needed to define an Op
@@ -103,10 +102,10 @@ abstract class OpImplData {
 		this.source = formulateSource(source);
 		this.version = env.getOptions().getOrDefault(OpImplNoteParser.OP_VERSION,
 			"UNKNOWN");
-        var tags = blockSeparator.splitAsStream(doc) //
+        List<String[]> tags = blockSeparator.splitAsStream(doc) //
 			.map(section -> tagElementSeparator.split(section, 2)) //
 			.collect(Collectors.toList());
-        var remaining = parseUniversalTags(tags);
+        List<String[]> remaining = parseUniversalTags(tags);
 		parseAdditionalTags(source, remaining);
 		validateOpImpl();
 	}
@@ -123,8 +122,8 @@ abstract class OpImplData {
 				". Op names cannot be empty!");
 		}
 
-        var outputs = 0;
-		for (var p : params) {
+        int outputs = 0;
+		for (OpParameter p : params) {
 			if (p.ioType.equals(OpParameter.IO_TYPE.OUTPUT)) outputs++;
 		}
 		if (outputs > 1) {
@@ -135,10 +134,10 @@ abstract class OpImplData {
 
 	private List<String[]> parseUniversalTags(List<String[]> tags) {
 		List<String[]> remainingTags = new ArrayList<>();
-		for (var tag : tags) {
+		for (String[] tag : tags) {
 			// Parse descriptions
 			if (!tag[0].startsWith("@")) {
-				if (description.isBlank()) this.description = String.join(" ", tag);
+				if (description.trim().isEmpty()) this.description = String.join(" ", tag);
 			}
 			// Parse universal Javadoc tags
 			else if (tag[0].equals("@author")) {
@@ -174,12 +173,12 @@ abstract class OpImplData {
 	 * @param implTag Tag to parse
 	 */
 	private void parseImplNote(String implTag) {
-		var implElements = tagElementSeparator.split(implTag);
+		String[] implElements = tagElementSeparator.split(implTag);
 		if (implElements.length > 1) {
-			for (var i = 1; i < implElements.length; i++) {
-                var kv = implElements[i].split("=", 2);
+			for (int i = 1; i < implElements.length; i++) {
+                String[] kv = implElements[i].split("=", 2);
 				if (kv.length == 2) {
-                    var value = kv[1].replaceAll("^[,\"']+|[,\"']+$", "");
+                    String value = kv[1].replaceAll("^[,\"']+|[,\"']+$", "");
 					if ("priority".equals(kv[0])) {
 						this.priority = Double.parseDouble(value);
 					}
@@ -212,14 +211,12 @@ abstract class OpImplData {
 		Map<String, Object> map = new HashMap<>();
 		map.put("source", source);
 		map.put("version", version);
-		map.put("names", names.toArray(String[]::new));
+		map.put("names", names.toArray());
 		map.put("description", description);
 		map.put("priority", priority);
-		map.put("authors", authors.toArray(String[]::new));
-        var foo = params.stream() //
-			.map(OpParameter::data) //
-			.collect(Collectors.toList());
-		map.put("parameters", foo.toArray(Map[]::new));
+		map.put("authors", authors.toArray());
+        map.put("parameters", params.stream() //
+                .map(OpParameter::data).toArray());
 		map.put("tags", tags);
 		return Collections.singletonMap("op", map);
 	}

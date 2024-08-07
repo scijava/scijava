@@ -50,7 +50,7 @@ Suppose a user wants to use this Op with a small, fixed kernel, which for ease i
         { 1/9, 1/9, 1/9} //
     };
     // transform double[][] into a RandomAccessibleInterval
-    Img<DoubleType> kernel = ArrayImgs.doubles(data, new long[] {3, 3});
+    Img<DoubleType> kernel = ArrayImgs.doubles(data, 3, 3);
     var cursor = kernel.cursor();
     while(cursor.hasNext())
         cursor.next().set(kernel[cursor.getIntPosition(0)][cursor.getIntPosition(1)]);

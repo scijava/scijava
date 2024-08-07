@@ -65,7 +65,7 @@ Ideally, the user could just pass their ``double[][]`` to their Op matching call
 An ``engine.convert`` Op
 ==============================
 
-All ``engine.convert`` Ops are simple ``Function``\ s that are given user arguments and return a *translation* of that data into the type expected by the Op. For our example ``Function``, we want to convert *from* the user's ``double[][]`` into a ``RandomAccessibleInterval<DoubleType>``:
+All ``engine.convert`` Ops are ``Function``\ s that are given user arguments and return a *translation* of that data into the type expected by the Op. For our example ``Function``, we want to convert *from* the user's ``double[][]`` into a ``RandomAccessibleInterval<DoubleType>``:
 
 .. code-block:: java
 

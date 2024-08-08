@@ -126,7 +126,7 @@ In such cases, devising methods to instead *wrap* user arguments will maximize p
 	/**
 	 * @param input the input data
 	 * @return an output image whose values are equivalent to {@code input}s
-	 *         values but whose element types are {@link BitType}s.
+	 *         values but whose element types are {@link DoubleType}s.
 	 * @implNote op names='engine.convert', type=Function
 	 */
 	public static RandomAccessibleInterval<DoubleType> arrayToDoubles(final double[][] input)

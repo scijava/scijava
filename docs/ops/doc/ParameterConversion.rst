@@ -22,17 +22,17 @@ Suppose we have a ``Function`` Op that inherently operates on ``RandomAccessible
 
 .. code-block:: java
 
-	/**
-	 * Convolves an image with a kernel, returning the output in a new object
-	 *
-	 * @param input the input data
-	 * @param kernel the kernel
-	 * @return the convolution of {@code input} and {@code kernel}
-	 * @implNote op names="filter.convolve"
-	 */
-	public static RandomAccessibleInterval<DoubleType> convolveNaive(
-			final RandomAccessibleInterval<DoubleType> input,
-			final RandomAccessibleInterval<DoubleType> kernel
+  /**
+   * Convolves an image with a kernel, returning the output in a new object
+   *
+   * @param input the input data
+   * @param kernel the kernel
+   * @return the convolution of {@code input} and {@code kernel}
+   * @implNote op names="filter.convolve"
+   */
+  public static RandomAccessibleInterval<DoubleType> convolveNaive(
+      final RandomAccessibleInterval<DoubleType> input,
+      final RandomAccessibleInterval<DoubleType> kernel
         ) {
             // convolve convolve convolve //
         }
@@ -124,34 +124,34 @@ In such cases, devising methods to instead *wrap* user arguments will maximize p
 
 .. code-block:: java
 
-	/**
-	 * @param input the input data
-	 * @return an image ({@link RandomAccessibleInterval}) backed by the input {@code double[][]}
-	 * @implNote op names='engine.convert', type=Function
-	 */
-	public static RandomAccessibleInterval<DoubleType> arrayToRAI(final double[][] input)
-	{
-		// Wrap 2D array into DoubleAccess usable by ArrayImg
-		var access = new DoubleAccess() {
+  /**
+   * @param input the input data
+   * @return an image ({@link RandomAccessibleInterval}) backed by the input {@code double[][]}
+   * @implNote op names='engine.convert', type=Function
+   */
+  public static RandomAccessibleInterval<DoubleType> arrayToRAI(final double[][] input)
+  {
+    // Wrap 2D array into DoubleAccess usable by ArrayImg
+    var access = new DoubleAccess() {
 
-			private final int rowSize = input[0].length;
+      private final int rowSize = input[0].length;
 
-			@Override
-			public double getValue(int index) {
-				var row = index / rowSize;
-				var col = index % rowSize;
-				return input[row][col];
-			}
+      @Override
+      public double getValue(int index) {
+        var row = index / rowSize;
+        var col = index % rowSize;
+        return input[row][col];
+      }
 
-			@Override
-			public void setValue(int index, double value) {
-				var row = index / rowSize;
-				var col = index % rowSize;
-				input[row][col] = value;
-			}
-		};
-		return ArrayImgs.doubles(access, input.length, input[0].length);
-	}
+      @Override
+      public void setValue(int index, double value) {
+        var row = index / rowSize;
+        var col = index % rowSize;
+        input[row][col] = value;
+      }
+    };
+    return ArrayImgs.doubles(access, input.length, input[0].length);
+  }
 
 .. _function-output:
 
@@ -179,27 +179,27 @@ Looking back at our :ref:`original Op<original-op>`, we would have to write an *
 
 .. code-block:: java
 
-	/**
-	 * @param input the input data
-	 * @return a {@code double[][]} representation of the input image ({@link RandomAccessibleInterval})
-	 * @implNote op names='engine.convert', type=Function
-	 */
-	public static double[][] raiToArray(final RandomAccessibleInterval<DoubleType> input)
-	{
+  /**
+   * @param input the input data
+   * @return a {@code double[][]} representation of the input image ({@link RandomAccessibleInterval})
+   * @implNote op names='engine.convert', type=Function
+   */
+  public static double[][] raiToArray(final RandomAccessibleInterval<DoubleType> input)
+  {
         // Create the array
-		var width = input.dimension(0);
-		var height = input.dimension(1);
-		var result = new double[(int) width][(int) height];
+    var width = input.dimension(0);
+    var height = input.dimension(1);
+    var result = new double[(int) width][(int) height];
 
-		// Unfortunately, we have to deep copy here
-		var ra = input.randomAccess();
-		for(int i = 0; i < width; i++) {
-			for(int j = 0; j < height; j++) {
-				result[i][j] = ra.setPositionAndGet(i, j).get();
-			}
-		}
-		return result;
-	}
+    // Unfortunately, we have to deep copy here
+    var ra = input.randomAccess();
+    for(int i = 0; i < width; i++) {
+      for(int j = 0; j < height; j++) {
+        result[i][j] = ra.setPositionAndGet(i, j).get();
+      }
+    }
+    return result;
+  }
 
 When the user tries to invoke our ``filter.convolve`` ``Function`` Op on all ``double[][]``\ s, the following happens:
 
@@ -217,18 +217,18 @@ Finally, consider our ``filter.convolve`` Op example, instead written as a ``Com
 
 .. code-block:: java
 
-	/**
-	 * Convolves an image with a kernel, placing the result in the output buffer
-	 *
-	 * @param input the input data
-	 * @param kernel the kernel
-	 * @param output the result buffer
-	 * @implNote op names="filter.convolve"
-	 */
-	public static void convolveNaive(
-			final RandomAccessibleInterval<DoubleType> input,
-			final RandomAccessibleInterval<DoubleType> kernel,
-			final RandomAccessibleInterval<DoubleType> output
+  /**
+   * Convolves an image with a kernel, placing the result in the output buffer
+   *
+   * @param input the input data
+   * @param kernel the kernel
+   * @param output the result buffer
+   * @implNote op names="filter.convolve"
+   */
+  public static void convolveNaive(
+      final RandomAccessibleInterval<DoubleType> input,
+      final RandomAccessibleInterval<DoubleType> kernel,
+      final RandomAccessibleInterval<DoubleType> output
         ) {
             // convolve convolve convolve //
         }
@@ -256,21 +256,21 @@ Below is an ``engine.copy`` Op that would store the converted Op's output ``doub
 
 .. code-block:: java
 
-	/**
-	 * Convolves an image with a kernel, placing the result in the output buffer
-	 *
-	 * @param opOutput the {@code double[][]} converted from the Op output
-	 * @param userBuffer the original {@code double[][]} provided by the user
-	 * @implNote op names="engine.copy" type=Computer
-	 */
-	public static void copyDoubleMatrix(
-			final double[][] opOutput,
-			final double[][] userBuffer
-	) {
-		for(int i = 0; i < opOutput.length; i++) {
-			System.arraycopy(opOutput[i], 0, userBuffer[i], 0, opOutput[i].length);
-		}
-	}
+  /**
+   * Convolves an image with a kernel, placing the result in the output buffer
+   *
+   * @param opOutput the {@code double[][]} converted from the Op output
+   * @param userBuffer the original {@code double[][]} provided by the user
+   * @implNote op names="engine.copy" type=Computer
+   */
+  public static void copyDoubleMatrix(
+      final double[][] opOutput,
+      final double[][] userBuffer
+  ) {
+    for(int i = 0; i < opOutput.length; i++) {
+      System.arraycopy(opOutput[i], 0, userBuffer[i], 0, opOutput[i].length);
+    }
+  }
 
 When the user tries to invoke our ``filter.convolve`` ``Computer`` Op on all ``double[][]``\ s, the following happens:
 

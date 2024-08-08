@@ -71,10 +71,11 @@ All ``engine.convert`` Ops are ``Function``\ s that are given user arguments and
 
     /**
      * @param input the input data
-     * @return a {@link RandomAccessibleInterval}, containing the data stored in {@code input}
+     * @return an image ({@link RandomAccessibleInterval}) whose values are equivalent to {@code input}s
+     *         values but converted to {@link DoubleType}s.
      * @implNote op names='engine.convert', type=Function
      */
-    public static RandomAccessibleInterval<DoubleType> arrayToDoubles(final double[][] input)
+    public static RandomAccessibleInterval<DoubleType> arrayToRAI(final double[][] input)
     {
         // Creates an empty image of doubles
         var img = ArrayImgs.doubles(input.length, input[0].length);
@@ -125,11 +126,10 @@ In such cases, devising methods to instead *wrap* user arguments will maximize p
 
 	/**
 	 * @param input the input data
-	 * @return an output image whose values are equivalent to {@code input}s
-	 *         values but whose element types are {@link DoubleType}s.
+	 * @return an image ({@link RandomAccessibleInterval}) backed by the input {@code double[][]}
 	 * @implNote op names='engine.convert', type=Function
 	 */
-	public static RandomAccessibleInterval<DoubleType> arrayToDoubles(final double[][] input)
+	public static RandomAccessibleInterval<DoubleType> arrayToRAI(final double[][] input)
 	{
 		// Wrap 2D array into DoubleAccess usable by ArrayImg
 		var access = new DoubleAccess() {
@@ -181,10 +181,10 @@ Looking back at our :ref:`original Op<original-op>`, we would have to write an *
 
 	/**
 	 * @param input the input data
-	 * @return a {@code double[][]}, containing the data stored in {@code input}
+	 * @return a {@code double[][]} representation of the input image ({@link RandomAccessibleInterval})
 	 * @implNote op names='engine.convert', type=Function
 	 */
-	public static double[][] doublesToArray(final RandomAccessibleInterval<DoubleType> input)
+	public static double[][] raiToArray(final RandomAccessibleInterval<DoubleType> input)
 	{
         // Create the array
 		var width = input.dimension(0);
@@ -203,9 +203,9 @@ Looking back at our :ref:`original Op<original-op>`, we would have to write an *
 
 When the user tries to invoke our ``filter.convolve`` ``Function`` Op on all ``double[][]``\ s, the following happens:
 
-#. Each ``double[][]`` is converted into a ``RandomAccessibleInterval<DoubleType>`` using our ``engine.convert(in: double[][]) -> RandomAccessibleInterval<DoubleType>`` Op.
-#. The ``filter.convolve`` Op is invoked on the ``RandomAccessibleInterval<DoubleType>``\ s, returning a ``RandomAccessibleInterval<DoubleType>`` as an output.
-#. The output ``RandomAccessibleInterval<DoubleType>`` is converted into a ``double[][]`` using our ``engine.convert(in: RandomAccessibleInterval<DoubleType>) -> double[][]`` Op.
+#. Each ``double[][]`` is converted into a ``RandomAccessibleInterval<DoubleType>`` using our ``arrayToRAI`` ``engine.convert`` Op.
+#. The ``filter.convolve`` Op is invoked on the ``RandomAccessibleInterval<DoubleType>``\ s, returning a ``RandomAccessibleInterval<DoubleType>`` as output.
+#. This output ``RandomAccessibleInterval<DoubleType>`` is converted into a ``double[][]`` using our ``raiToArray`` ``engine.convert`` Op.
 #. The **converted** ``double[][]`` output is returned to the user.
 
 The result is offering to the user a ``filter.convolve(input: double[][], kernel: double[][]) -> double[][]`` Op, even though we never wrote one!

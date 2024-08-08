@@ -33,6 +33,7 @@ The combination of these libraries allows declarative image analysis workflows, 
    examples/deconvolution
    examples/flim_analysis
    examples/gaussian_subtraction
+   examples/mesh_viz
    examples/opencv_denoise
    examples/saca
    examples/scyjava

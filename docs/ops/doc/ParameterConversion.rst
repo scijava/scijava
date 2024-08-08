@@ -45,9 +45,9 @@ Suppose a user wants to use this Op with a small, fixed kernel, which for ease i
     Img<DoubleType> in = ...
     // 3x3 averaging kernel
     double[][] kernel = { //
-        { 1/9, 1/9, 1/9}, //
-        { 1/9, 1/9, 1/9}, //
-        { 1/9, 1/9, 1/9} //
+        { 1/9d, 1/9d, 1/9d}, //
+        { 1/9d, 1/9d, 1/9d}, //
+        { 1/9d, 1/9d, 1/9d} //
     };
     // transform double[][] into a RandomAccessibleInterval
     Img<DoubleType> kernel = ArrayImgs.doubles(data, 3, 3);
@@ -95,9 +95,9 @@ Using this ``engine.convert`` Op, SciJava Ops can match our ``filter.convolve`` 
     Img<DoubleType> in = ...
     // 3x3 averaging kernel
     double[][] kernel = { //
-        { 1/9, 1/9, 1/9}, //
-        { 1/9, 1/9, 1/9}, //
-        { 1/9, 1/9, 1/9} //
+        { 1/9d, 1/9d, 1/9d}, //
+        { 1/9d, 1/9d, 1/9d}, //
+        { 1/9d, 1/9d, 1/9d} //
     };
 
     // Ideal case - no need to wrap to Img
@@ -165,9 +165,9 @@ Now, imagine that the user wished to execute the Op using **only** ``double[][]`
     double[][] in = ...
     // 3x3 averaging kernel
     double[][] kernel = { //
-        { 1/9, 1/9, 1/9}, //
-        { 1/9, 1/9, 1/9}, //
-        { 1/9, 1/9, 1/9} //
+        { 1/9d, 1/9d, 1/9d}, //
+        { 1/9d, 1/9d, 1/9d}, //
+        { 1/9d, 1/9d, 1/9d} //
     };
 
     double[][] result = ops.op("filter.convolve") //
@@ -240,9 +240,9 @@ Suppose that again the user wants to call this Op using *only* ``double[][]``\ s
     double[][] in = ...
     // 3x3 averaging kernel
     double[][] kernel = { //
-        { 1/9, 1/9, 1/9}, //
-        { 1/9, 1/9, 1/9}, //
-        { 1/9, 1/9, 1/9} //
+        { 1/9d, 1/9d, 1/9d}, //
+        { 1/9d, 1/9d, 1/9d}, //
+        { 1/9d, 1/9d, 1/9d} //
     };
     double[][] result = new double[in.length][in[0].length];
 

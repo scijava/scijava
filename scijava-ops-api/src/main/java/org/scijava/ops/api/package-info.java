@@ -64,10 +64,12 @@
  * An Op is an algorithm adhering to the following traits:
  * </p>
  * <ol>
- * <li>Ops are stateless and deterministic - with no internal state, calling an
- * Op two times on the same inputs will produce the same output.</li>
  * <li>Ops are named - this name conveys an Op's purpose, and allows us to find
  * all Ops implementing a particular operation</li>
+ * <li>Ops have a number of input and output parameters, each defined by a
+ * type</li>
+ * <li>Ops adhere to a {@link java.lang.FunctionalInterface}, defining how it
+ * operates</li>
  * </ol>
  * <p>
  * Using the name and the combination of input and output parameters, we can
@@ -151,10 +153,11 @@
  * and SciJava Ops will take care to call the correct Op based on the concrete
  * inputs provided.</li>
  * <li>Result-equivalence, and therefore reproducibility, in Ops, is guaranteed
- * within an OpEnvironment and a set of input objects, but not just for Op
- * calls. This allows us to ensure reproducible pipelines, but also allows us to
- * introduce new Ops into the pipeline or to run pipelines on different inputs
- * without changing the pipeline itself.</li>
+ * within an OpEnvironment and a set of input objects, when <b>deterministic</b>
+ * algorithms are used. Cognizance of algorithm determinism allows users to
+ * create reproducible pipelines, however determinism is <b>not</b> a
+ * requirement for Ops, as it would preclude many valuable algorithms from
+ * becoming an Op. </li>
  * </ol>
  */
 

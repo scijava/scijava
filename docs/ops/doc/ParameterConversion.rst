@@ -129,7 +129,7 @@ In such cases, devising methods to instead *wrap* user arguments will maximize p
    * @return an image ({@link RandomAccessibleInterval}) backed by the input {@code double[][]}
    * @implNote op names='engine.convert', type=Function
    */
-  public static RandomAccessibleInterval<DoubleType> arrayToRAI(final double[][] input)
+  public static RandomAccessibleInterval<DoubleType> arrayToRAIWrap(final double[][] input)
   {
     // Wrap 2D array into DoubleAccess usable by ArrayImg
     var access = new DoubleAccess() {
@@ -203,7 +203,7 @@ Looking back at our :ref:`original Op<original-op>`, we would have to write an *
 
 When the user tries to invoke our ``filter.convolve`` ``Function`` Op on all ``double[][]``\ s, the following happens:
 
-#. Each ``double[][]`` is converted into a ``RandomAccessibleInterval<DoubleType>`` using our ``arrayToRAI`` ``engine.convert`` Op.
+#. Each ``double[][]`` is converted into a ``RandomAccessibleInterval<DoubleType>`` using our ``arrayToRAIWrap`` ``engine.convert`` Op.
 #. The ``filter.convolve`` Op is invoked on the ``RandomAccessibleInterval<DoubleType>``\ s, returning a ``RandomAccessibleInterval<DoubleType>`` as output.
 #. This output ``RandomAccessibleInterval<DoubleType>`` is converted into a ``double[][]`` using our ``raiToArray`` ``engine.convert`` Op.
 #. The **converted** ``double[][]`` output is returned to the user.
@@ -274,7 +274,7 @@ Below is an ``engine.copy`` Op that would store the converted Op's output ``doub
 
 When the user tries to invoke our ``filter.convolve`` ``Computer`` Op on all ``double[][]``\ s, the following happens:
 
-#. Each ``double[][]`` is converted into a ``RandomAccessibleInterval<DoubleType>`` using our ``arrayToRAI`` ``engine.convert`` Op.
+#. Each ``double[][]`` is converted into a ``RandomAccessibleInterval<DoubleType>`` using our ``arrayToRAIWrap`` ``engine.convert`` Op.
 #. The ``filter.convolve`` Op is invoked on the ``RandomAccessibleInterval<DoubleType>``\ s, returning a ``RandomAccessibleInterval<DoubleType>`` as an output.
 #. The output ``RandomAccessibleInterval<DoubleType>`` is converted into a ``double[][]`` using our ``raiToArray`` ``engine.convert`` Op.
 #. The **converted** output ``double[][]`` is *copied* back into the user's ``double[][]`` buffer using our ``copyDoubleMatrix`` ``engine.copy`` Op.

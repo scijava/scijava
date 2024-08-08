@@ -2,7 +2,7 @@
 Fast Non-Local Means Denoise with OpenCV
 ========================================
 
-In this example we will use a denoise algorithm from the external `OpenCV libray`_.
+In this example we will use a denoise algorithm from the external `OpenCV library`_.
 
 This method progressively scans through an image's pixels, comparing a patch centered around
 a pixel of interest (*e.g.* a 5x5 patch) with patches from other pixels from the image. These
@@ -120,5 +120,5 @@ SciJava Ops via Fiji's scripting engine with `script parameters`_:
         result = output
 
 .. _`script parameters`: https://imagej.net/scripting/parameters
-.. _`OpenCV libray`: https://docs.opencv.org/4.x/d5/d69/tutorial_py_non_local_means.html
+.. _`OpenCV library`: https://docs.opencv.org/4.x/d5/d69/tutorial_py_non_local_means.html
 .. _`here`: https://media.scijava.org/scijava-ops/1.0.0/opencv_denoise_16bit.tif

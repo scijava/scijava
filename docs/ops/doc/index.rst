@@ -42,6 +42,7 @@ The combination of these libraries allows declarative image analysis workflows, 
    :caption: 🛠️ Development
 
    WritingYourOwnOpPackage
+   ParameterConversion
    Migrating Ops Written for ImageJ Ops<MigratingFromImageJOps>
    Benchmarks
 

@@ -274,10 +274,10 @@ Below is an ``engine.copy`` Op that would store the converted Op's output ``doub
 
 When the user tries to invoke our ``filter.convolve`` ``Computer`` Op on all ``double[][]``\ s, the following happens:
 
-#. Each ``double[][]`` is converted into a ``RandomAccessibleInterval<DoubleType>`` using our ``engine.convert(in: double[][]) -> RandomAccessibleInterval<DoubleType>`` Op.
+#. Each ``double[][]`` is converted into a ``RandomAccessibleInterval<DoubleType>`` using our ``arrayToRAI`` ``engine.convert`` Op.
 #. The ``filter.convolve`` Op is invoked on the ``RandomAccessibleInterval<DoubleType>``\ s, returning a ``RandomAccessibleInterval<DoubleType>`` as an output.
-#. The output ``RandomAccessibleInterval<DoubleType>`` is converted into a ``double[][]`` using our ``engine.convert(in: RandomAccessibleInterval<DoubleType>) -> double[][]`` Op.
-#. The **converted** output ``double[][]`` is *copied* back into the user's ``double[][]`` buffer.
+#. The output ``RandomAccessibleInterval<DoubleType>`` is converted into a ``double[][]`` using our ``raiToArray`` ``engine.convert`` Op.
+#. The **converted** output ``double[][]`` is *copied* back into the user's ``double[][]`` buffer using our ``copyDoubleMatrix`` ``engine.copy`` Op.
 
 Summary
 =======

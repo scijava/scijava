@@ -257,7 +257,7 @@ Below is an ``engine.copy`` Op that would store the converted Op's output ``doub
 .. code-block:: java
 
   /**
-   * Convolves an image with a kernel, placing the result in the output buffer
+   * Copy one {@code double[][]} to another.
    *
    * @param opOutput the {@code double[][]} converted from the Op output
    * @param userBuffer the original {@code double[][]} provided by the user

@@ -109,10 +109,9 @@ Using this ``engine.convert`` Op, SciJava Ops can match our ``filter.convolve`` 
 
 At runtime, the Op matcher will invoke the following steps:
 
-* The ``Img<DoubleType> input`` is left alone, as it is already of the type expected by the Op.
+* The ``Img<DoubleType> in`` is left alone, as it is already of the type expected by the Op.
 * The ``double[][] kernel`` is converted to a ``RandomAccessibleInterval<DoubleType> kernel1`` using our ``engine.convert`` Op.
-* The Op convolves ``input1`` with ``kernel1``, returning an ``Img<DoubleType> output1``
-* The ``Img<DoubleType> input1`` is left alone and returned to the user, as it is already of the type expected by the user.
+* The Op convolves ``input`` with ``kernel1``, returning an ``Img<DoubleType> result``.
 
 
 Adding efficiency
@@ -223,7 +222,7 @@ Finally, consider our ``filter.convolve`` Op example, instead written as a ``Com
    * @param input the input data
    * @param kernel the kernel
    * @param output the result buffer
-   * @implNote op names="filter.convolve"
+   * @implNote op names="filter.convolve" type=Computer
    */
   public static void convolveNaive(
       final RandomAccessibleInterval<DoubleType> input,

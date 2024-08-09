@@ -11,7 +11,7 @@ In this example, we will use SciJava Ops to construct a 3D mesh from a binary da
 
 .. TODO: Update SciJava Ops Image -> imglib2-mesh
 
-The following script accepts the binary dataset as its sole input, and creates the mesh using the `marching cubes`_ algorithm, which is included within SciJava Ops Image. We then use SciJava Ops to compute mesh volume, and then convert the mesh into a ``CustomTriangleMesh`` that can be passed to the 3DViewer.
+The following script accepts the binary dataset as its sole input, and creates the mesh using the `marching cubes`_ algorithm, which is included within SciJava Ops Image. We then use SciJava Ops to compute mesh volume, and then convert the mesh into a ``CustomTriangleMesh`` that can be passed to the 3D Viewer.
 
 .. tabs::
 
@@ -32,6 +32,7 @@ The following script accepts the binary dataset as its sole input, and creates t
         import net.imglib2.type.BooleanType
         import net.imglib2.util.Util
 
+        import org.scijava.vecmath.Color3f
         import org.scijava.vecmath.Point3f
 
         import customnode.CustomTriangleMesh
@@ -50,8 +51,6 @@ The following script accepts the binary dataset as its sole input, and creates t
         }
         println("Mask = $mask [type=${Util.getTypeFromInterval(mask).getClass().getName()}]")
 
-        //ui.show(mask)
-
         // Compute surface mesh using marching cubes.
         status.showStatus("Computing surface...")
         mesh = ops.op("geom.marchingCubes").input(mask).apply()
@@ -66,25 +65,48 @@ The following script accepts the binary dataset as its sole input, and creates t
         hullVolume = ops.op("geom.size").input(hull).apply().getRealDouble()
         println("hull volume = $hullVolume")
 
-        // Display original image and meshes in 3D Viewer.
-
-        def opsMeshToCustomMesh(opsMesh) {
+        // Convert ImgLib2 meshes to 3D Viewer meshes.
+        def opsMeshToCustomMesh(opsMesh, color) {
             points = []
-            for (t in hull.triangles()) {
+            for (t in opsMesh.triangles()) {
                 points.add(new Point3f(t.v0xf(), t.v0yf(), t.v0zf()))
                 points.add(new Point3f(t.v1xf(), t.v1yf(), t.v1zf()))
                 points.add(new Point3f(t.v2xf(), t.v2yf(), t.v2zf()))
             }
-            return new CustomTriangleMesh(points)
+            ctm = new CustomTriangleMesh(points)
+            ctm.setColor(color)
+            return ctm
         }
+        mesh3dv = opsMeshToCustomMesh(mesh, new Color3f(1, 0, 1))
+        hull3dv = opsMeshToCustomMesh(hull, new Color3f(0, 1, 0))
+        println("Hull volume according to 3D Viewer: ${hull3dv.getVolume()}");
 
-        mesh_hull = opsMeshToCustomMesh(hull)
-        println("Hull volume according to 3D Viewer: ${mesh_hull.getVolume()}");
-
+        // Display original image and meshes in 3D Viewer.
         univ = new Image3DUniverse()
         univ.addVoltex(imp, 1)
-        univ.addCustomMesh(mesh_hull, "Convex Hull")
+        univ.addCustomMesh(mesh3dv, "Surface Mesh")
+        univ.addCustomMesh(hull3dv, "Convex Hull")
         univ.show()
+
+        // Extra credit: work around 3D Viewer's lack of object inspection panel
+        // with a mini-GUI that makes it easy to toggle each displayed object.
+        import javax.swing.*
+        togglePanel = new JPanel()
+        togglePanel.setLayout(new BoxLayout(togglePanel, BoxLayout.Y_AXIS))
+        def checkbox(name) {
+          jcb = new JCheckBox(name)
+          jcb.setSelected(univ.getContent(name).isVisible())
+          jcb.addActionListener { e -> univ.getContent(name).setVisible(e.getSource().isSelected()) }
+          return jcb
+        }
+        togglePanel.add(checkbox(imp.getTitle()))
+        togglePanel.add(checkbox("Surface Mesh"))
+        togglePanel.add(checkbox("Convex Hull"))
+        toggleFrame = new JFrame("Toggle Mesh Visibility")
+        toggleFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE)
+        toggleFrame.setContentPane(togglePanel)
+        toggleFrame.setSize(600, 300)
+        toggleFrame.setVisible(true)
 
 .. _3D Viewer: https://imagej.net/plugins/3d-viewer/
 .. _bat cochlea volume: https://imagej.net/images/bat-cochlea-volume.zip

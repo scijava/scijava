@@ -25,13 +25,13 @@ Suppose we have a ``Function`` Op that inherently operates on ``RandomAccessible
   /**
    * Convolves an image with a kernel, returning the output in a new object
    *
-   * @param input the input data
+   * @param image the input image
    * @param kernel the kernel
-   * @return the convolution of {@code input} and {@code kernel}
+   * @return the convolution of {@code image} and {@code kernel}
    * @implNote op names="filter.convolve"
    */
   public static RandomAccessibleInterval<DoubleType> convolveNaive(
-      final RandomAccessibleInterval<DoubleType> input,
+      final RandomAccessibleInterval<DoubleType> image,
       final RandomAccessibleInterval<DoubleType> kernel
         ) {
             // convolve convolve convolve //
@@ -42,7 +42,7 @@ Suppose a user wants to use this Op with a small, fixed kernel, which for ease i
 
 .. code-block:: java
 
-    Img<DoubleType> in = ...
+    Img<DoubleType> image = ...
     // 3x3 averaging kernel
     double[][] kernel = { //
         { 1/9d, 1/9d, 1/9d}, //
@@ -50,13 +50,13 @@ Suppose a user wants to use this Op with a small, fixed kernel, which for ease i
         { 1/9d, 1/9d, 1/9d} //
     };
     // transform double[][] into a RandomAccessibleInterval
-    Img<DoubleType> kernel = ArrayImgs.doubles(data, 3, 3);
-    var cursor = kernel.cursor();
-    while(cursor.hasNext())
+    Img<DoubleType> kernelImg = ArrayImgs.doubles(kernel, 3, 3);
+    var cursor = kernelImg.cursor();
+    while (cursor.hasNext())
         cursor.next().set(kernel[cursor.getIntPosition(0)][cursor.getIntPosition(1)]);
 
     var result = ops.op("filter.convolve") //
-        .input(in, kernel) //
+        .input(image, kernelImg) //
         .outType(new Nil<RandomAccessibleInterval<DoubleType>>() {}) //
         .apply();
 
@@ -70,20 +70,20 @@ All ``engine.convert`` Ops are ``Function``\ s that are given user arguments and
 .. code-block:: java
 
     /**
-     * @param input the input data
-     * @return an image ({@link RandomAccessibleInterval}) whose values are equivalent to {@code input}s
+     * @param image the input image, as a matrix in 2D array form
+     * @return an image ({@link RandomAccessibleInterval}) whose values are equivalent to {@code image}'s
      *         values but converted to {@link DoubleType}s.
      * @implNote op names='engine.convert', type=Function
      */
-    public static RandomAccessibleInterval<DoubleType> arrayToRAI(final double[][] input)
+    public static RandomAccessibleInterval<DoubleType> arrayToRAI(final double[][] image)
     {
         // Creates an empty image of doubles
-        var img = ArrayImgs.doubles(input.length, input[0].length);
+        var img = ArrayImgs.doubles(image.length, image[0].length);
         var ra = img.randomAccess();
         // Deep copies the double[][] into the RAI
-        for(int i = 0; i < input.length; i++) {
-            for(int j = 0; j < input[0].length; j++) {
-                ra.setPositionAndGet(i, j).set(input[i][j]);
+        for(int i = 0; i < image.length; i++) {
+            for(int j = 0; j < image[0].length; j++) {
+                ra.setPositionAndGet(i, j).set(image[i][j]);
             }
         }
         return img;
@@ -93,7 +93,7 @@ Using this ``engine.convert`` Op, SciJava Ops can match our ``filter.convolve`` 
 
 .. code-block:: java
 
-    Img<DoubleType> in = ...
+    Img<DoubleType> image = ...
     // 3x3 averaging kernel
     double[][] kernel = { //
         { 1/9d, 1/9d, 1/9d}, //
@@ -103,16 +103,15 @@ Using this ``engine.convert`` Op, SciJava Ops can match our ``filter.convolve`` 
 
     // Ideal case - no need to wrap to Img
     var result = ops.op("filter.convolve") //
-        .input(in, kernel) //
+        .input(image, kernel) //
         .outType(new Nil<RandomAccessibleInterval<DoubleType>>() {}) //
         .apply();
 
 At runtime, the Op matcher will invoke the following steps:
 
-* The ``Img<DoubleType> input`` is left alone, as it is already of the type expected by the Op.
+* The ``Img<DoubleType> image`` is left alone, as it is already of the type expected by the Op.
 * The ``double[][] kernel`` is converted to a ``RandomAccessibleInterval<DoubleType> kernel1`` using our ``engine.convert`` Op.
-* The Op convolves ``input1`` with ``kernel1``, returning an ``Img<DoubleType> output1``
-* The ``Img<DoubleType> input1`` is left alone and returned to the user, as it is already of the type expected by the user.
+* The Op convolves ``image`` with ``kernel1``, returning an ``Img<DoubleType> result``.
 
 
 Adding efficiency
@@ -162,7 +161,7 @@ Now, imagine that the user wished to execute the Op using **only** ``double[][]`
 
 .. code-block:: java
 
-    double[][] in = ...
+    double[][] image = ...
     // 3x3 averaging kernel
     double[][] kernel = { //
         { 1/9d, 1/9d, 1/9d}, //
@@ -171,7 +170,7 @@ Now, imagine that the user wished to execute the Op using **only** ``double[][]`
     };
 
     double[][] result = ops.op("filter.convolve") //
-        .input(in, kernel) //
+        .input(image, kernel) //
         .outType(double[][].class) //
         .apply();
 
@@ -220,13 +219,13 @@ Finally, consider our ``filter.convolve`` Op example, instead written as a ``Com
   /**
    * Convolves an image with a kernel, placing the result in the output buffer
    *
-   * @param input the input data
+   * @param image the input image
    * @param kernel the kernel
    * @param output the result buffer
-   * @implNote op names="filter.convolve"
+   * @implNote op names="filter.convolve" type=Computer
    */
   public static void convolveNaive(
-      final RandomAccessibleInterval<DoubleType> input,
+      final RandomAccessibleInterval<DoubleType> image,
       final RandomAccessibleInterval<DoubleType> kernel,
       final RandomAccessibleInterval<DoubleType> output
         ) {
@@ -237,18 +236,18 @@ Suppose that again the user wants to call this Op using *only* ``double[][]``\ s
 
 .. code-block:: java
 
-    double[][] in = ...
+    double[][] image = ...
     // 3x3 averaging kernel
     double[][] kernel = { //
         { 1/9d, 1/9d, 1/9d}, //
         { 1/9d, 1/9d, 1/9d}, //
         { 1/9d, 1/9d, 1/9d} //
     };
-    double[][] result = new double[in.length][in[0].length];
+    double[][] result = new double[image.length][image[0].length];
 
-    ops.op("filter.convolve").input(in, kernel).output(result).apply();
+    ops.op("filter.convolve").input(image, kernel).output(result).apply();
 
-We will certainly need the ``engine.convert(in: double[][]) -> RandomAccessibleInterval<DoubleType>`` Op and the ``engine.convert(in: RandomAccessibleInterval<DoubleType>) -> double[][]`` Op we wrote above, however if we follow the same procedure with :ref:`Functions <function-output>`, the ``result`` array they provided will be empty/unmodified. This is because our ``raiToArray` ``engine.convert`` Op we wrote above *creates a new ``double[][]``*. Writing ``engine.convert`` Ops as wrappers is ideal, but in cases like this may not be possible (i.e. we can't create a custom ``double[][]`` implementation).
+We will certainly need the ``engine.convert(input: double[][]) -> RandomAccessibleInterval<DoubleType>`` Op and the ``engine.convert(input: RandomAccessibleInterval<DoubleType>) -> double[][]`` Op we wrote above, however if we follow the same procedure with :ref:`Functions <function-output>`, the ``result`` array they provided will be empty/unmodified. This is because our ``raiToArray` ``engine.convert`` Op we wrote above *creates a new ``double[][]``*. Writing ``engine.convert`` Ops as wrappers is ideal, but in cases like this may not be possible (i.e. we can't create a custom ``double[][]`` implementation).
 
 Because SciJava Ops cannot guarantee that ``engine.convert`` Ops wrap user arguments, an additional step is required for parameter conversion with ``Computer`` Ops. This is done by calling an ``engine.copy`` Op to copy the converted output *back into the user's object*. **If you want to enable parameter conversion** on ``Computer``\ s or ``Inplace``\ s, **you must implement** an ``engine.copy`` identity Op for your data type in addition to any ``engine.convert`` Ops. Because there is no way to know how Ops will be implemented (and ``Computer``\s do make a large portion of current Ops) **this is highly recommended**.
 

@@ -35,8 +35,8 @@ import org.scijava.ops.engine.util.Infos;
 import org.scijava.priority.Priority;
 import org.scijava.struct.Struct;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -59,7 +59,10 @@ public abstract class AbstractYAMLOpInfo implements OpInfo {
 		this.priority = parsePriority();
 		this.description = yaml.getOrDefault("description", "").toString();
 		this.version = (String) yaml.get("version");
-		this.hints = new Hints();
+		this.hints = new Hints((List<String>) yaml.getOrDefault( //
+				"hints", //
+				Collections.emptyList() //
+		));
 	}
 
 	/**

@@ -57,7 +57,7 @@ public class YAMLMethodOp {
 	/**
 	 * Another example Op, implemented by a {@link Method}
 	 *
-	 * @implNote op name=example.xor, type=Inplace1
+	 * @implNote op name=example.xor, type=Inplace1, hints="Adaptation.FORBIDDEN,Conversion.FORBIDDEN"
 	 * @param aList the first integer {@link List}
 	 * @param aList2 the second integer {@link List}
 	 */

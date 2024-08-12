@@ -121,4 +121,16 @@ public class YAMLOpTest extends AbstractTestEnvironment {
 		Assertions.assertEquals(expected, actual);
 	}
 
+	@Test
+	public void testYAMLHints() {
+		var infos = ops.infos("example.xor");
+		Assertions.assertEquals(1, infos.size());
+		var info = infos.iterator().next();
+		var hints = info.declaredHints();
+		Assertions.assertTrue(hints.containsAll( //
+				"Adaptation.FORBIDDEN", //
+				"Conversion.FORBIDDEN" //
+		));
+	}
+
 }

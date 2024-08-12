@@ -10,7 +10,7 @@ SciJava Ops is designed for modularity, extensibility, and granularity - you can
 
 ### Fostering reproduciblity
 
-[Determinism](https://en.wikipedia.org/wiki/Deterministic_algorithm) is a valuable aspect of scientific computing, as it is necessary for reproducible science. As many powerful algorithms, due to internal state or parallel processing, behave non-deterministically SciJava Ops does not require Ops be deterministic, however if your Op can be deterministic, we highly recommend you make it so. Consider the following algorithm:
+[Determinism](https://en.wikipedia.org/wiki/Deterministic_algorithm) is a valuable aspect of scientific computing, as our goal is to facilitate reproducible science. As many powerful algorithms behave non-deterministically, due to factors such as internal state or parallel processing, SciJava Ops does not *require* Ops be deterministic. However, if your Op *can be* deterministic, we highly recommend you make it so. Consider the following algorithm:
 
 ```java
 /**
@@ -49,7 +49,7 @@ public static void addNoise(double[] data, @Nullable Long seed) {
 }
 ```
 
-These small steps ensure that user workflows return the same result every time, even years later!
+These small steps give workflows the best chance to return consistent results every time, even years later!
 
 ### Using Dependencies
 

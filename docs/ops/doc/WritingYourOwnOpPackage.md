@@ -8,6 +8,49 @@ You'll find this page organized into two broad sections. The first section descr
 
 SciJava Ops is designed for modularity, extensibility, and granularity - you can exploit these aspects by adhering to the following guidelines when writing Ops:
 
+### Fostering reproduciblity
+
+[Determinism](https://en.wikipedia.org/wiki/Deterministic_algorithm) is a valuable aspect of scientific computing, as our goal is to facilitate reproducible science. As many powerful algorithms behave non-deterministically, due to factors such as internal state or parallel processing, SciJava Ops does not *require* Ops be deterministic. However, if your Op *can be* deterministic, we highly recommend you make it so. Consider the following algorithm:
+
+```java
+/**
+ * A simple noise adder
+ * @param input the input data
+ * @implNote op name="filter.addNoise" type=Inplace
+ */
+public static void addNoise(double[] data) {
+    Random r = new Random();
+    for(int i = 0; i < data.length; i++) {
+        // Add a number in [-0.5, 0.5)
+        data[i] += (r.nextDouble() - 0.5);
+    }
+}
+```
+
+We can make it deterministic by adding an `@Nullable` `seed` parameter, with a default value if the user does not pass one:
+
+```java
+/**
+ * A simple noise adder
+ * @param input the input data
+ * @param seed the seed to the {@link java.util.Random}
+ * @implNote op name="filter.addNoise" type=Inplace
+ */
+public static void addNoise(double[] data, @Nullable Long seed) {
+    // use default seed if not provided
+    if (seed == null) {
+        seed = 0xdeadbeef;
+    }  
+    Random r = new Random(seed);
+    for(int i = 0; i < data.length; i++) {
+        // Add a number in [-0.5, 0.5)
+        data[i] += (r.nextDouble() - 0.5);
+    }
+}
+```
+
+These small steps give workflows the best chance to return consistent results every time, even years later!
+
 ### Using Dependencies
 
 If you are writing an Op that performs many intermediate operations, there's a good chance someone else has written (and even optimized) some or all of them.

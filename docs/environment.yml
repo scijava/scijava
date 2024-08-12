@@ -1,7 +1,6 @@
 name: scijava-docs
 channels:
   - conda-forge
-  - defaults
 dependencies:
   - myst-nb
   - openjdk=11

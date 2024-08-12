@@ -157,7 +157,7 @@
  * algorithms are used. Cognizance of algorithm determinism allows users to
  * create reproducible pipelines, however determinism is <b>not</b> a
  * requirement for Ops, as it would preclude many valuable algorithms from
- * becoming an Op. </li>
+ * becoming an Op.</li>
  * </ol>
  */
 

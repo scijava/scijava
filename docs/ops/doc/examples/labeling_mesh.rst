@@ -34,6 +34,32 @@ output for the puncta within nuclear regions only.
 
    Results of 3D nuclear puncta segmentation on the sample data.
 
+
+Script parameter descriptions
+-----------------------------
+
+This example script uses 8 different customizable parameters that impact the two results tables produced (one for each channel). Modify the values in the **Channel settings** section with the names and channel posistion numbers respectively.
+The **Image calibration** setting values are determined at acquisition time of the dataset. The sample HIV Vif data used in this example has HIV :sub:`NL4-3` Vif in the first channel, DAPI stained nuclei in the second,
+and a pixel width and height of 0.0650 μm with a step size of 0.1 μm (see the table below).
+
++--------------------+---------+
+| Parameter          | Value   |
++====================+=========+
+| Channel A name     | Vif     |
++--------------------+---------+
+| Channel B name     | Nucleus |
++--------------------+---------+
+| Channel A position | 1       |
++--------------------+---------+
+| Channel B position | 2       |
++--------------------+---------+
+| Pixel width (μm)   | 0.0650  |
++--------------------+---------+
+| Pixel height (μm)  | 0.0650  |
++--------------------+---------+
+| Voxel depth (μm)   | 0.1000  |
++--------------------+---------+
+
 .. tabs::
 
    .. code-tab:: python

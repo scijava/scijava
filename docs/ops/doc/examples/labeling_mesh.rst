@@ -25,12 +25,13 @@ To use the script in the example first download the sample dataset `here`_. Next
 where you can customize some values to your own data, such as the channel names, channel position and image calibration values.
 
 .. figure:: https://media.scijava.org/scijava-ops/1.0.1/labeling_mesh_example_dialog.png
+   :align: center
 
 Once the script has been configured click **OK** to start the analysis. The script will display two tables (one for each channel with the given channel name) and the labeling
 output for the puncta within nuclear regions only.
 
 .. figure:: https://media.scijava.org/scijava-ops/1.0.1/labeling_mesh_example_1.gif
-
+   :align: center
 
    Results of 3D nuclear puncta segmentation on the sample data.
 
@@ -59,6 +60,29 @@ and a pixel width and height of 0.0650 μm with a step size of 0.1 μm (see the 
 +--------------------+---------+
 | Voxel depth (μm)   | 0.1000  |
 +--------------------+---------+
+
+
+Labeling output and result tables
+---------------------------------
+
+After the script completes two results tables will be displayed, one for each channel respectively. Each table contains measurements for the **size** of the label, the **volume** and the **sphericity**. Both the volume and sphericity Ops
+work on mesh objects, while the size Op works on the sample itself.
+
+.. figure:: https://media.scijava.org/scijava-ops/1.0.1/labeling_mesh_example_result_tables.png
+   :align: center
+
+   The output result tables for the "Vif" and "Nuclei" channels.
+
+In addition to the result tables, the label imdage (also known as an *index image*) of the channel "A" data extracted from channel "B" regions is shown. Note that these labels are 3D (XYZ) and are used to create meshes for the geometry measurements.
+
+
+.. figure:: https://media.scijava.org/scijava-ops/1.0.1/labeling_mesh_example_2.gif
+   :width: 65%
+   :align: center
+
+   The output label image with "3-3-2 RGB" LUTs applied in Fiji.
+
+**Please note that this script can take upwards of 2-3 minutes to run!**
 
 .. tabs::
 

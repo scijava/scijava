@@ -34,10 +34,13 @@ import net.imglib2.IterableInterval;
 import net.imglib2.Localizable;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.Shape;
+import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.BooleanType;
+import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
+import org.scijava.function.Inplaces;
 import org.scijava.ops.spi.OpDependency;
 
 /**
@@ -56,6 +59,9 @@ public class FillHoles<T extends BooleanType<T>> implements
 	@OpDependency(name = "morphology.floodFill")
 	private Computers.Arity3<RandomAccessibleInterval<T>, Localizable, Shape, RandomAccessibleInterval<T>> floodFillComp;
 
+	@OpDependency(name = "image.fill")
+	private Computers.Arity1<T, RandomAccessibleInterval<T>> fillConstant;
+
 	/**
 	 * TODO
 	 *
@@ -67,39 +73,51 @@ public class FillHoles<T extends BooleanType<T>> implements
 	public void compute(final RandomAccessibleInterval<T> input,
 		final Shape structElement, final RandomAccessibleInterval<T> output)
 	{
-		final var iterOp = Views.flatIterable(input);
-		final var iterR = Views.flatIterable(output);
-
-        var dim = new long[output.numDimensions()];
+		var dim = new long[output.numDimensions()];
 		output.dimensions(dim);
-        var rc = iterR.cursor();
-        var opc = iterOp.localizingCursor();
+
 		// Fill with non background marker
-		while (rc.hasNext()) {
-			rc.next().setOne();
+		T one = Util.getTypeFromInterval(output).copy();
+		one.setOne();
+		fillConstant.compute(one, output);
+
+		// Flood fill background along the edges, to exclude holes bordering an edge.
+		// What is left will be the shape with interior holes filled in.
+		var raIn = input.randomAccess();
+		var raOut = output.randomAccess();
+
+		[5, 4, 3]
+		[0, ..., ...]
+		[l_i-1, ..., ...]
+		[..., 0, ...]
+		[..., l_i-1, ...]
+		[..., ..., 0]
+		[..., ..., l_i-1]
+		for (var i = 0; i < dim.length; i++) {
+			var topSlice = Views.hyperSlice(input, i, 0);
+			var bottomSlice = Views.hyperSlice(input, i, dim[i] - 1);
+			LoopBuilder.setImages(topSlice).forEachPixel(t -> {
+				floodFillComp.compute(topSlice, , structElement, output);
+			});
 		}
 
-		rc.reset();
-		boolean border;
-		// Flood fill from every background border voxel
 		while (rc.hasNext()) {
 			rc.next();
 			opc.next();
-			if (rc.get().get() && !opc.get().get()) {
-				border = false;
-				for (var i = 0; i < output.numDimensions(); i++) {
-					if (rc.getLongPosition(i) == 0 || rc.getLongPosition(i) == dim[i] -
-						1)
-					{
-						border = true;
-						break;
-					}
+			if (!opc.get().get()) continue; // this pixel is not a background pixel
+			if (rc.get().get()) continue; // a flood fill already took care of this pixel
+			boolean border = false;
+			for (var i = 0; i < output.numDimensions(); i++) {
+				if (rc.getLongPosition(i) == 0 || rc.getLongPosition(i) == dim[i] -
+					1)
+				{
+					border = true;
+					break;
 				}
-				if (border) {
-					floodFillComp.compute(input, rc, structElement, output);
-				}
+			}
+			if (border) {
+				floodFillComp.compute(input, rc, structElement, output);
 			}
 		}
 	}
-
 }

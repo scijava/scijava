@@ -68,8 +68,8 @@ and a pixel width and height of 0.0650 μm with a step size of 0.1 μm (see the 
         #@ UIService ui
         #@ ImgPlus img
         #@ String (visibility = MESSAGE, value = "<b>Channel settings</b>", required = false) ch_msg
-        #@ String (label = "Channel A name", value = "a") ch_a_name
-        #@ String (label = "Channel B name", value = "b") ch_b_name
+        #@ String (label = "Channel A name", value = "Vif") ch_a_name
+        #@ String (label = "Channel B name", value = "Nuclei") ch_b_name
         #@ Integer (label = "Channel A position", value = 1) ch_a
         #@ Integer (label = "Channel B position", value = 2) ch_b
         #@ String (visibility = MESSAGE, value = "<b>Image calibration</b>", required = false) cal_msg
@@ -85,8 +85,6 @@ and a pixel width and height of 0.0650 μm with a step size of 0.1 μm (see the 
         from net.imglib2.type.numeric.real import FloatType
         
         from org.scijava.table import DefaultGenericTable
-        
-        from jarray import array
         
         
         def extract_channel(image, ch):
@@ -108,7 +106,6 @@ and a pixel width and height of 0.0650 μm with a step size of 0.1 μm (see the 
             """
             # find C and Z axis indicies
             c_idx = find_axis_index(image, "Channel")
-            z_idx = find_axis_index(image, "Z")
         
             return ops.op("transform.hyperSliceView").input(image, c_idx, ch - 1).apply()
         
@@ -208,7 +205,6 @@ and a pixel width and height of 0.0650 μm with a step size of 0.1 μm (see the 
         ch_b_ths= ops.op("create.img").input(ch_b_img, BitType()).apply()
         ops.op("threshold.otsu").input(ch_b_img).output(ch_b_ths).compute()
         ch_b_mask = ops.op("morphology.open").input(ch_b_ths, HyperSphereShape(2), 4).apply()
-        ch_b_mask = ops.op("morphology.fillHoles").input(ch_b_mask, HyperSphereShape(2)).apply()
         
         # extract mask "A" data from mask "B" region
         ch_ab_mask = extract_inside_mask(ch_a_mask, ch_b_mask)
@@ -217,7 +213,7 @@ and a pixel width and height of 0.0650 μm with a step size of 0.1 μm (see the 
         ab_labeling = ops.op("labeling.cca").input(ch_ab_mask, StructuringElement.EIGHT_CONNECTED).apply()
         b_labeling = ops.op("labeling.cca").input(ch_b_mask, StructuringElement.EIGHT_CONNECTED).apply()
         
-        # create a table and make measurement
+        # create a table for the "AB" mask and make mesurements
         ab_table = DefaultGenericTable(3, 0)
         ab_table.setColumnHeader(0, "{} size (pixels)".format(ch_a_name))
         ab_table.setColumnHeader(1, "{} volume (um^3)".format(ch_a_name))
@@ -235,11 +231,12 @@ and a pixel width and height of 0.0650 μm with a step size of 0.1 μm (see the 
                     ).apply()
             mesh = ops.op("geom.marchingCubes").input(crop).apply()
             ab_table.appendRow()
+            # measure mesh/sample geometry and stats
             ab_table.set("{} size (pixels)".format(ch_a_name), i, ops.op("stats.size").input(sample).apply())
             ab_table.set("{} volume (um^3)".format(ch_a_name), i, ops.op("geom.size").input(mesh).apply().getRealFloat() * (x_cal * y_cal * z_cal))
             ab_table.set("{} sphericity".format(ch_a_name), i, ops.op("geom.sphericity").input(mesh).apply())
             i += 1
-        
+        # create a table for the "B" mask and make measurements
         b_table = DefaultGenericTable(3, 0)
         b_table.setColumnHeader(0, "{} size (pixels)".format(ch_b_name))
         b_table.setColumnHeader(1, "{} volume (um^3)".format(ch_b_name))
@@ -257,12 +254,13 @@ and a pixel width and height of 0.0650 μm with a step size of 0.1 μm (see the 
                     ).apply()
             mesh = ops.op("geom.marchingCubes").input(crop).apply()
             b_table.appendRow()
+            # measure mesh/sample geometry and stats
             b_table.set("{} size (pixels)".format(ch_b_name), j, ops.op("stats.size").input(sample).apply())
             b_table.set("{} volume (um^3)".format(ch_b_name), j, ops.op("geom.size").input(mesh).apply().getRealFloat() * (x_cal * y_cal * z_cal))
             b_table.set("{} sphericity".format(ch_b_name), j, ops.op("geom.sphericity").input(mesh).apply())
             j += 1
         
-        # display table and labeling
+        # display results tables and labeling image
         ui.show(ab_labeling.getIndexImg())
         ui.show("{} results table".format(ch_a_name), ab_table)
         ui.show("{} results table".format(ch_b_name), b_table)

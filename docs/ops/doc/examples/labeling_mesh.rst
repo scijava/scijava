@@ -82,8 +82,6 @@ In addition to the result tables, the label imdage (also known as an *index imag
 
    The output label image with "3-3-2 RGB" LUTs applied in Fiji.
 
-**Please note that this script can take upwards of 2-3 minutes to run!**
-
 .. tabs::
 
    .. code-tab:: python
@@ -110,7 +108,8 @@ In addition to the result tables, the label imdage (also known as an *index imag
         
         from org.scijava.table import DefaultGenericTable
         
-        
+        from jarray import array
+
         def extract_channel(image, ch):
             """Extract a channel from the input image.
         
@@ -214,10 +213,17 @@ In addition to the result tables, the label imdage (also known as an *index imag
         
             return out
         
+        # crop the input data to a 450 x 450 patch
+        min_arr = array([370, 136, 0, 0], "l")
+        max_arr = array([819, 585, 2, 59], "l")
+        img_crop = ops.op("transform.intervalView").input(img, min_arr, max_arr).apply()
+        img_crop = Views.dropSingletonDimensions(img_crop)
+        img_crop = ops.op("transform.offsetView").input(img_crop, array([370, 136, 0, 0], "l")).apply()
+
         # extract channels
-        ch_a_img = extract_channel(img, ch_a)
-        ch_b_img = extract_channel(img, ch_b)
-        
+        ch_a_img = extract_channel(img_crop, ch_a)
+        ch_b_img = extract_channel(img_crop, ch_b)
+
         # customize the following sections below for your own data
         # clean up channel "A" and create a mask
         ch_a_img = gaussian_subtraction(ch_a_img, 8.0)

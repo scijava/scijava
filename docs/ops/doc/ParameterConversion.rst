@@ -9,7 +9,7 @@ Basics
 
 A :ref:`value <driving-values>` of SciJava Ops is flexibility, and flexibility is (in part) achieved through **parameter conversion**. At its core, parameter conversion allows *translation* of data stored in one data structure (e.g. an ImgLib2 ``RandomAccessibleInterval``) into a different data structure (e.g. an OpenCV ``Mat``) **on the fly**. This allows SciJava Ops to execute Ops backed by OpenCV code **on ImgLib2 data structures**.
 
-.. figure:: https://media.scijava.org/scijava-ops/1.0.1/parameter-conversion-opencv.svg
+.. figure:: https://media.scijava.org/scijava-ops/1.1.0/parameter-conversion-opencv.svg
 
 At matching time, parameter conversion is invoked when an Op matches a user request in name and in Op type, but differing in individual parameter types. In these situations, it looks for ``engine.convert`` Ops that could potentially convert the user's provided inputs into the required Op inputs, and the same, in the other direction, for the output.
 

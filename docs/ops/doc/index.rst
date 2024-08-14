@@ -37,6 +37,7 @@ The combination of these libraries allows declarative image analysis workflows, 
    examples/opencv_denoise
    examples/saca
    examples/scyjava
+   examples/volume_labeling
 
 .. toctree::
    :maxdepth: 2

@@ -1,6 +1,6 @@
-======================================
-3D Labeling and Mesh Geometry Analysis
-======================================
+============================================
+Volumetric Labeling and 3D Geometry Analysis
+============================================
 
 In this example we will use SciJava Ops to segment puncta only in the nuclear space and create individual
 meshes for each isolated puncta with geomtry measurements (*e.g.* sphericity). This example uses a dataset consisting of

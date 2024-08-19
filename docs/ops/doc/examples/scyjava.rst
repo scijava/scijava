@@ -121,7 +121,7 @@ Activate the ``scijava-ops`` conda/mamba environment and run the following Pytho
         """
         mesh = ops.op("geom.marchingCubes").input(rai).apply()
         # Mesh volume returned in voxels
-        volume = ops.op("geom.size").input(mesh).apply().getRealDouble()
+        volume = ops.op("geom.size").input(mesh).apply()
 
         # Convert voxels to um^3
         for c in cal:

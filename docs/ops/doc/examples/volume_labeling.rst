@@ -273,7 +273,7 @@ In addition to the result tables, the label imdage (also known as an *index imag
             ab_table.appendRow()
             # measure mesh/sample geometry and stats
             ab_table.set("{} size (pixels)".format(ch_a_name), i, ops.op("stats.size").input(sample).apply())
-            ab_table.set("{} volume (um^3)".format(ch_a_name), i, ops.op("geom.size").input(mesh).apply().getRealFloat() * (x_cal * y_cal * z_cal))
+            ab_table.set("{} volume (um^3)".format(ch_a_name), i, ops.op("geom.size").input(mesh).apply() * (x_cal * y_cal * z_cal))
             ab_table.set("{} sphericity".format(ch_a_name), i, ops.op("geom.sphericity").input(mesh).apply())
             i += 1
         # create a table for the "B" mask and make measurements
@@ -296,7 +296,7 @@ In addition to the result tables, the label imdage (also known as an *index imag
             b_table.appendRow()
             # measure mesh/sample geometry and stats
             b_table.set("{} size (pixels)".format(ch_b_name), j, ops.op("stats.size").input(sample).apply())
-            b_table.set("{} volume (um^3)".format(ch_b_name), j, ops.op("geom.size").input(mesh).apply().getRealFloat() * (x_cal * y_cal * z_cal))
+            b_table.set("{} volume (um^3)".format(ch_b_name), j, ops.op("geom.size").input(mesh).apply() * (x_cal * y_cal * z_cal))
             b_table.set("{} sphericity".format(ch_b_name), j, ops.op("geom.sphericity").input(mesh).apply())
             j += 1
         

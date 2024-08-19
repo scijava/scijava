@@ -54,6 +54,7 @@ import net.imglib2.type.Type;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.IntegerType;
+import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.complex.ComplexDoubleType;
 import net.imglib2.type.numeric.complex.ComplexFloatType;
 import net.imglib2.type.numeric.integer.ByteType;
@@ -72,6 +73,7 @@ import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.scijava.function.Functions;
 import org.scijava.function.Producer;
+import org.scijava.ops.spi.OpDependency;
 
 public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T extends Type<T>, C extends ComplexType<C>, W extends ComplexType<W> & NativeType<W>, B extends BooleanType<B>, A extends ArrayDataAccess<A>> {
 
@@ -196,16 +198,19 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 		.factory(), img, img.firstElement());
 
 	/**
-	 * @input interval
-	 * @output img
-	 * @implNote op names='create.img, engine.create', priority='-100.'
+	 * @param typeCreator a {@link Producer} that knows how to create the resulting image type.
+	 * @param interval the interval of the resulting {@link Img}
+	 * @return an {@link Img}
+	 * @implNote op names='create.img, engine.create', priority='-1000.'
 	 */
-	public final Function<Interval, Img<DoubleType>> imgFromInterval = (
-		interval) -> {
-        var type = new DoubleType();
+	public static <T extends Type<T>> Img<T> imgFromInterval( //
+			@OpDependency(name="engine.create") Producer<T> typeCreator, //
+			Interval interval  //
+	) {
+		var type = typeCreator.create();
 		return Imgs.create(Util.getSuitableImgFactory(interval, type), interval,
-			type);
-	};
+				type);
+	}
 
 	/**
 	 * @input arrayImg

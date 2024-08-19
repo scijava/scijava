@@ -32,6 +32,7 @@ package org.scijava.ops.image.threshold;
 import java.util.function.Function;
 
 import net.imglib2.histogram.Histogram1d;
+import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
@@ -41,15 +42,15 @@ import org.scijava.ops.spi.OpDependency;
  * @author Curtis Rueden
  * @author Christian Dietz (University of Konstanz)
  */
-public abstract class AbstractApplyThresholdImg<T extends RealType<T>> extends
-	AbstractApplyThresholdIterable<T>
+public abstract class AbstractApplyThresholdImg<T extends RealType<T>, U extends Iterable<T>, V extends Iterable<BitType>> extends
+	AbstractApplyThresholdIterable<T, U, V>
 {
 
 	@OpDependency(name = "image.histogram")
-	private Function<Iterable<T>, Histogram1d<T>> createHistogramOp;
+	private Function<U, Histogram1d<T>> createHistogramOp;
 
 	@Override
-	protected T computeThreshold(final Iterable<T> input) {
+	protected T computeThreshold(final U input) {
 		final var inputHistogram = createHistogramOp.apply(input);
 		final var threshold = input.iterator().next().createVariable();
 		final var computeThresholdOp =

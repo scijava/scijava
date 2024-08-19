@@ -30,6 +30,7 @@
 package org.scijava.ops.image.threshold;
 
 import net.imglib2.histogram.Histogram1d;
+import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
@@ -51,8 +52,8 @@ public final class ApplyThresholdMethod {
 	/**
 	 * @implNote op names='threshold.huang'
 	 */
-	public static class Huang<T extends RealType<T>> extends
-		AbstractApplyThresholdImg<T>
+	public static class Huang<T extends RealType<T>, U extends Iterable<T>, V extends Iterable<BitType>> extends
+		AbstractApplyThresholdImg<T, U, V>
 	{
 
 		@OpDependency(name = "threshold.huang")
@@ -67,8 +68,8 @@ public final class ApplyThresholdMethod {
 	/**
 	 * @implNote op names='threshold.ij1'
 	 */
-	public static class IJ1<T extends RealType<T>> extends
-		AbstractApplyThresholdImg<T>
+	public static class IJ1<T extends RealType<T>, U extends Iterable<T>, V extends Iterable<BitType>> extends
+		AbstractApplyThresholdImg<T, U, V>
 	{
 
 		@OpDependency(name = "threshold.ij1")
@@ -83,8 +84,8 @@ public final class ApplyThresholdMethod {
 	/**
 	 * @implNote op names='threshold.intermodes'
 	 */
-	public static class Intermodes<T extends RealType<T>> extends
-		AbstractApplyThresholdImg<T>
+	public static class Intermodes<T extends RealType<T>, U extends Iterable<T>, V extends Iterable<BitType>> extends
+		AbstractApplyThresholdImg<T, U, V>
 	{
 
 		@OpDependency(name = "threshold.intermodes")
@@ -99,8 +100,8 @@ public final class ApplyThresholdMethod {
 	/**
 	 * @implNote op names='threshold.isoData'
 	 */
-	public static class IsoData<T extends RealType<T>> extends
-		AbstractApplyThresholdImg<T>
+	public static class IsoData<T extends RealType<T>, U extends Iterable<T>, V extends Iterable<BitType>> extends
+		AbstractApplyThresholdImg<T, U, V>
 	{
 
 		@OpDependency(name = "threshold.isoData")
@@ -115,8 +116,8 @@ public final class ApplyThresholdMethod {
 	/**
 	 * @implNote op names='threshold.li'
 	 */
-	public static class Li<T extends RealType<T>> extends
-		AbstractApplyThresholdImg<T>
+	public static class Li<T extends RealType<T>, U extends Iterable<T>, V extends Iterable<BitType>> extends
+		AbstractApplyThresholdImg<T, U, V>
 	{
 
 		@OpDependency(name = "threshold.li")
@@ -131,8 +132,8 @@ public final class ApplyThresholdMethod {
 	/**
 	 * @implNote op names='threshold.maxEntropy'
 	 */
-	public static class MaxEntropy<T extends RealType<T>> extends
-		AbstractApplyThresholdImg<T>
+	public static class MaxEntropy<T extends RealType<T>, U extends Iterable<T>, V extends Iterable<BitType>> extends
+		AbstractApplyThresholdImg<T, U, V>
 	{
 
 		@OpDependency(name = "threshold.maxEntropy")
@@ -147,8 +148,8 @@ public final class ApplyThresholdMethod {
 	/**
 	 * @implNote op names='threshold.maxLikelihood'
 	 */
-	public static class MaxLikelihood<T extends RealType<T>> extends
-		AbstractApplyThresholdImg<T>
+	public static class MaxLikelihood<T extends RealType<T>, U extends Iterable<T>, V extends Iterable<BitType>> extends
+		AbstractApplyThresholdImg<T, U, V>
 	{
 
 		@OpDependency(name = "threshold.maxLikelihood")
@@ -163,8 +164,8 @@ public final class ApplyThresholdMethod {
 	/**
 	 * @implNote op names='threshold.mean'
 	 */
-	public static class Mean<T extends RealType<T>> extends
-		AbstractApplyThresholdImg<T>
+	public static class Mean<T extends RealType<T>, U extends Iterable<T>, V extends Iterable<BitType>> extends
+		AbstractApplyThresholdImg<T, U, V>
 	{
 
 		@OpDependency(name = "threshold.mean")
@@ -179,8 +180,8 @@ public final class ApplyThresholdMethod {
 	/**
 	 * @implNote op names='threshold.minError'
 	 */
-	public static class MinError<T extends RealType<T>> extends
-		AbstractApplyThresholdImg<T>
+	public static class MinError<T extends RealType<T>, U extends Iterable<T>, V extends Iterable<BitType>> extends
+		AbstractApplyThresholdImg<T, U, V>
 	{
 
 		@OpDependency(name = "threshold.minError")
@@ -195,8 +196,8 @@ public final class ApplyThresholdMethod {
 	/**
 	 * @implNote op names='threshold.minimum'
 	 */
-	public static class Minimum<T extends RealType<T>> extends
-		AbstractApplyThresholdImg<T>
+	public static class Minimum<T extends RealType<T>, U extends Iterable<T>, V extends Iterable<BitType>> extends
+		AbstractApplyThresholdImg<T, U, V>
 	{
 
 		@OpDependency(name = "threshold.minimum")
@@ -211,8 +212,8 @@ public final class ApplyThresholdMethod {
 	/**
 	 * @implNote op names='threshold.moments'
 	 */
-	public static class Moments<T extends RealType<T>> extends
-		AbstractApplyThresholdImg<T>
+	public static class Moments<T extends RealType<T>, U extends Iterable<T>, V extends Iterable<BitType>> extends
+		AbstractApplyThresholdImg<T, U, V>
 	{
 
 		@OpDependency(name = "threshold.moments")
@@ -227,8 +228,8 @@ public final class ApplyThresholdMethod {
 	/**
 	 * @implNote op names='threshold.otsu'
 	 */
-	public static class Otsu<T extends RealType<T>> extends
-		AbstractApplyThresholdImg<T>
+	public static class Otsu<T extends RealType<T>, U extends Iterable<T>, V extends Iterable<BitType>> extends
+		AbstractApplyThresholdImg<T, U, V>
 	{
 
 		@OpDependency(name = "threshold.otsu")
@@ -243,8 +244,8 @@ public final class ApplyThresholdMethod {
 	/**
 	 * @implNote op names='threshold.percentile'
 	 */
-	public static class Percentile<T extends RealType<T>> extends
-		AbstractApplyThresholdImg<T>
+	public static class Percentile<T extends RealType<T>, U extends Iterable<T>, V extends Iterable<BitType>> extends
+		AbstractApplyThresholdImg<T, U, V>
 	{
 
 		@OpDependency(name = "threshold.percentile")
@@ -259,8 +260,8 @@ public final class ApplyThresholdMethod {
 	/**
 	 * @implNote op names='threshold.renyiEntropy'
 	 */
-	public static class RenyiEntropy<T extends RealType<T>> extends
-		AbstractApplyThresholdImg<T>
+	public static class RenyiEntropy<T extends RealType<T>, U extends Iterable<T>, V extends Iterable<BitType>> extends
+		AbstractApplyThresholdImg<T, U, V>
 	{
 
 		@OpDependency(name = "threshold.renyiEntropy")
@@ -275,8 +276,8 @@ public final class ApplyThresholdMethod {
 	/**
 	 * @implNote op names='threshold.rosin'
 	 */
-	public static class Rosin<T extends RealType<T>> extends
-		AbstractApplyThresholdImg<T>
+	public static class Rosin<T extends RealType<T>, U extends Iterable<T>, V extends Iterable<BitType>> extends
+		AbstractApplyThresholdImg<T, U, V>
 	{
 
 		@OpDependency(name = "threshold.rosin")
@@ -291,8 +292,8 @@ public final class ApplyThresholdMethod {
 	/**
 	 * @implNote op names='threshold.shanbhag'
 	 */
-	public static class Shanbhag<T extends RealType<T>> extends
-		AbstractApplyThresholdImg<T>
+	public static class Shanbhag<T extends RealType<T>, U extends Iterable<T>, V extends Iterable<BitType>> extends
+		AbstractApplyThresholdImg<T, U, V>
 	{
 
 		@OpDependency(name = "threshold.shanbhag")
@@ -307,8 +308,8 @@ public final class ApplyThresholdMethod {
 	/**
 	 * @implNote op names='threshold.triangle'
 	 */
-	public static class Triangle<T extends RealType<T>> extends
-		AbstractApplyThresholdImg<T>
+	public static class Triangle<T extends RealType<T>, U extends Iterable<T>, V extends Iterable<BitType>> extends
+		AbstractApplyThresholdImg<T, U, V>
 	{
 
 		@OpDependency(name = "threshold.triangle")
@@ -323,8 +324,8 @@ public final class ApplyThresholdMethod {
 	/**
 	 * @implNote op names='threshold.yen'
 	 */
-	public static class Yen<T extends RealType<T>> extends
-		AbstractApplyThresholdImg<T>
+	public static class Yen<T extends RealType<T>, U extends Iterable<T>, V extends Iterable<BitType>> extends
+		AbstractApplyThresholdImg<T, U, V>
 	{
 
 		@OpDependency(name = "threshold.yen")

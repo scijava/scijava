@@ -38,12 +38,12 @@ import org.scijava.ops.spi.OpDependency;
  * @author Curtis Rueden
  * @author Christian Dietz (University of Konstanz)
  */
-public abstract class AbstractApplyThresholdIterable<T> implements
-	Computers.Arity1<Iterable<T>, Iterable<BitType>>
+public abstract class AbstractApplyThresholdIterable<T, U extends Iterable<T>, V extends Iterable<BitType>> implements
+	Computers.Arity1<U, V>
 {
 
 	@OpDependency(name = "threshold.apply")
-	private Computers.Arity2<Iterable<T>, T, Iterable<BitType>> applyThresholdOp;
+	private Computers.Arity2<U, T, V> applyThresholdOp;
 
 	/**
 	 * TODO
@@ -52,9 +52,9 @@ public abstract class AbstractApplyThresholdIterable<T> implements
 	 * @param output
 	 */
 	@Override
-	public void compute(final Iterable<T> input, final Iterable<BitType> output) {
+	public void compute(final U input, final V output) {
 		applyThresholdOp.compute(input, computeThreshold(input), output);
 	}
 
-	protected abstract T computeThreshold(Iterable<T> input);
+	protected abstract T computeThreshold(U input);
 }

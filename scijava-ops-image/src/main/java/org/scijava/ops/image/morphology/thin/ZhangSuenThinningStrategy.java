@@ -38,7 +38,6 @@ import net.imglib2.type.logic.BitType;
  * Suen.
  *
  * @author Andreas Burger, University of Konstanz
- * @implNote thinningstrategy names='ZhangSuen'
  */
 public class ZhangSuenThinningStrategy extends
 	Abstract3x3NeighbourhoodThinning

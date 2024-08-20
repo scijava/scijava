@@ -37,7 +37,6 @@ import net.imglib2.type.logic.BitType;
  * Represents the thinning algorithm proposed by Z. Guo and R. W. Hall.
  *
  * @author Andreas Burger, University of Konstanz
- * @implNote thinningstrategy names='GuoHall'
  */
 public class GuoHallThinningStrategy extends Abstract3x3NeighbourhoodThinning {
 

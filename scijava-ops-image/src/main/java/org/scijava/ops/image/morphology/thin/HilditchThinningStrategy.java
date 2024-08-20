@@ -37,7 +37,6 @@ import net.imglib2.type.logic.BitType;
  * An implementation of the Algorithm proposed by C. J. Hilditch.
  *
  * @author Andreas Burger, University of Konstanz
- * @implNote thinningstrategy names='Hilditch'
  */
 public class HilditchThinningStrategy extends Abstract3x3NeighbourhoodThinning {
 

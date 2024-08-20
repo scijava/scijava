@@ -37,7 +37,6 @@ import net.imglib2.type.logic.BitType;
  * A Class implementing a standard morphological thinning.
  *
  * @author Andreas Burger, University of Konstanz
- * @implNote thinningstrategy names='Morphological'
  */
 public class MorphologicalThinningStrategy extends
 	Abstract3x3NeighbourhoodThinning

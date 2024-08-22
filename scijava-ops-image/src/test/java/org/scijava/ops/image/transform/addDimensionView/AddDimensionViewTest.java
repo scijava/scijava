@@ -86,6 +86,25 @@ public class AddDimensionViewTest extends AbstractOpTest {
 	}
 
 	@Test
+	public void testAddDimensionIterable() {
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
+				new int[] { 10, 10 });
+
+		IntervalView<DoubleType> il2 = Views.addDimension(img, 0, 0);
+
+		Function<RandomAccessibleInterval<DoubleType>, IntervalView<DoubleType>> addDimFunc =
+				ops.op("transform.addDimensionView",
+						new Nil<Function<RandomAccessibleInterval<DoubleType>, IntervalView<DoubleType>>>()
+						{}, new Nil[] { new Nil<RandomAccessibleInterval<DoubleType>>() {} }, new Nil<IntervalView<DoubleType>>() {});
+		IntervalView<DoubleType> opr = addDimFunc.apply(img);
+
+		assertEquals(il2.numDimensions(), opr.numDimensions(), 0.0);
+		for (int i = 0; i < il2.numDimensions(); i++) {
+			assertEquals(il2.dimension(i), opr.dimension(i), 0.0);
+		}
+	}
+
+	@Test
 	public void testAddDimensionMinMax() {
 		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(
 			new int[] { 10, 10 });

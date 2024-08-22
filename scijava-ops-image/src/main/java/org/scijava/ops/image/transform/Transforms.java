@@ -82,10 +82,18 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	/**
 	 * @input input
 	 * @output result
+	 * @implNote op names='transform.addDimensionView', priority='-100.'
+	 */
+	public final Function<RandomAccessible<T>, MixedTransformView<T>>
+			addDimensionMixedView = Views::addDimension;
+
+	/**
+	 * @input input
+	 * @output result
 	 * @implNote op names='transform.addDimensionView'
 	 */
-	public final Function<RandomAccessible<T>, MixedTransformView<T>> addDimensionView =
-		Views::addDimension;
+	public final Function<RandomAccessibleInterval<T>, IntervalView<T>> addDimensionView =
+			(RandomAccessibleInterval<T> interval) -> Views.addDimension(interval, 0, 0);
 
 	/**
 	 * @input input

@@ -8,7 +8,7 @@ The fundamental goal of SciJava Ops is to fit the "best" algorithm possible to e
 * **Hardware dependence limits reuse:** as analysis increasingly migrates to GPU-based calculations, operating environments proliferate and algorithms become less portable.
 * **Algorithm libraries are fragmented:** actually *finding* the "best" algorithm is no simple task, as diverse implementations may exist across any number of programming languages and documentation styles.
 
-SciJava Ops takes strides to ease these burdens by separating the *what* ("I want to perform a gaussian blur on this image with this sigma value) from the *how* (using scikit-image on zarr arrays). By creating these abstractions, we move towards a single unified, standardized mechanism for applying algorithms. In such an environment, portable workflows can be created quickly and new technologies can be integrated seamlessly.
+SciJava Ops takes strides to ease these burdens by separating the *what* ("I want to perform a gaussian blur on this image with this sigma value") from the *how* ("using scikit-image on zarr arrays"). By creating these abstractions, we move towards a single unified, standardized mechanism for applying algorithms. In such an environment, portable workflows can be created quickly and new technologies can be integrated seamlessly.
 
 .. _driving-values:
 

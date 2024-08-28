@@ -5,7 +5,7 @@
 
 Welcome to the Ops documentation!
 ====================================
-SciJava Ops is a library for extensible algorithm retrieval and execution. SciJava Ops Image is a collection of Ops for scientific image processing, built on SciJava Ops.
+SciJava Ops is a framework for extensible algorithm retrieval and execution. SciJava Ops Image is a collection of Ops for scientific image processing, built on SciJava Ops.
 
 The combination of these libraries allows declarative image analysis workflows, allowing users to think more about the *what* than the *how*.
 

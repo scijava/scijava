@@ -31,6 +31,7 @@ package org.scijava.ops.image.threshold.apply;
 
 import java.util.Comparator;
 
+import net.imglib2.RandomAccessibleInterval;
 import org.scijava.ops.image.threshold.AbstractThresholdTest;
 import net.imglib2.exception.IncompatibleTypeException;
 import net.imglib2.img.Img;
@@ -64,6 +65,12 @@ public class ApplyManualThresholdTest extends AbstractThresholdTest {
 			.getRealDouble() - c2.getRealDouble());
 		createFunc.compute(in, threshold, comparator, out);
 		assertCount(out, 54);
+	}
+
+	@Test
+	public void testApplyThresholdMethod() {
+		final Img<BitType> out = bitmap();
+		ops.op("threshold.mean").input(in).outType(new Nil<RandomAccessibleInterval<BitType>>() {}).apply();
 	}
 
 }

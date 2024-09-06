@@ -2,7 +2,12 @@
 3D Analysis and Visualization
 =============================
 
-In this example, we will use SciJava Ops to construct a 3D mesh from a binary dataset, passing the result into `3D Viewer`_ for visualization. We use the `bat cochlea volume`_ dataset (more information `here <https://imagej.net/images/bat-cochlea-volume.txt>`_) from the ImageJ sample images, which users can either download using the link or open from the ``File → Open Samples → Bat Cochlea Volume`` menu selection within Fiji.
+In this example, we will use SciJava Ops to construct a 3D mesh from a binary dataset, passing the result into `3D Viewer`_ for visualization. We use the bat cochlea volume dataset (more information `here <https://imagej.net/images/bat-cochlea-volume.txt>`_) from the ImageJ sample images. The dataset can either be downloaded here, or opened directly in Fiji via ``File → Open Samples → Bat Cochlea Volume``
+
+.. admonition:: Download
+   :class: note
+
+   `bat-cochlea-volume.zip`_
 
 .. figure:: https://media.scijava.org/scijava-ops/1.1.0/mesh-visualization.png
 
@@ -109,6 +114,6 @@ The following script accepts the binary dataset as its sole input, and creates t
         toggleFrame.setVisible(true)
 
 .. _3D Viewer: https://imagej.net/plugins/3d-viewer/
-.. _bat cochlea volume: https://imagej.net/images/bat-cochlea-volume.zip
+.. _`bat-cochlea-volume.zip`: https://imagej.net/images/bat-cochlea-volume.zip
 .. _bat cochlea info: https://imagej.net/images/bat-cochlea-volume.txt
 .. _marching cubes: https://en.wikipedia.org/wiki/Marching_cubes

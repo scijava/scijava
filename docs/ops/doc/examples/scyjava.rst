@@ -3,10 +3,17 @@ SciJava Ops from Python
 =======================
 
 This example demonstrates how to use SciJava Ops with Python. Using SciJava Ops framework with Python depends on ``scyjava`` to provide robust
-Java code access and ``imglyb`` to bridge the ImgLib2 and NumPy data structures. The Python script in this example downloads a `3D 3T3 cell`_
-nucleus dataset (with shape: ``37, 300, 300``), performes image processing with to improve the nucleus signal, segments the nucleus and measures
+Java code access and ``imglyb`` to bridge the ImgLib2 and NumPy data structures. The Python script in this example downloads a 3T3
+nucleus dataset (with shape: ``37, 300, 300``), performs image processing with to improve the nucleus signal, segments the nucleus and measures
 the 3D volume of the nucleus by creating a mesh. Finally the input image, processed image and the segmented label images are displayed in
 ``matplotlib``, and the volume (μm\ :sup:`3`) is printed to the console.
+
+You can download the 3D 3T3 cell dataset here:
+
+.. admonition:: Download
+   :class: note
+
+   `3t3_nucleus.tif`_
 
 .. figure:: https://media.scijava.org/scijava-ops/1.0.0/scyjava_example_1.png
 
@@ -167,4 +174,4 @@ Activate the ``scijava-ops`` conda/mamba environment and run the following Pytho
     plt.tight_layout()
     plt.show()
 
-.. _`3D 3T3 cell`: https://media.scijava.org/scijava-ops/1.0.0/3t3_nucleus.tif
+.. _`3t3_nucleus.tif`: https://media.scijava.org/scijava-ops/1.0.0/3t3_nucleus.tif

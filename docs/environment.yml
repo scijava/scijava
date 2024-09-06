@@ -1,4 +1,4 @@
-name: scijava-docs-ops
+name: scijava-docs
 channels:
   - conda-forge
   - defaults

@@ -21,7 +21,14 @@ to accomplish this analysis goal the script utilizes SciJava Ops to:
 5. Measure the 3D geometry of the puncta and nuclear regions.
 6. Display results in two tables (puncta and nuclear).
 
-To use the script in the example first download the sample dataset `here`_. Next, open Fiji, the sample image and this scipt. Click **Run** to create the script parameter GUI,
+To use the script in the example, first download the sample dataset:
+
+.. admonition:: Download
+   :class: note
+
+   `hela_hiv_vif.tif`_
+
+Next, open Fiji, the sample image and this script. Click **Run** to create the script parameter GUI,
 where you can customize some values to your own data, such as the channel names, channel position and image calibration values.
 
 .. figure:: https://media.scijava.org/scijava-ops/1.1.0/labeling_mesh_example_dialog.png
@@ -295,4 +302,4 @@ In addition to the result tables, the label imdage (also known as an *index imag
         ui.show("{} results table".format(ch_a_name), ab_table)
         ui.show("{} results table".format(ch_b_name), b_table)
 
-.. _`here`: https://media.scijava.org/scijava-ops/1.0.0/hela_hiv_vif.tif
+.. _`hela_hiv_vif.tif`: https://media.scijava.org/scijava-ops/1.0.0/hela_hiv_vif.tif

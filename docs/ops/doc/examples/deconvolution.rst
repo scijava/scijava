@@ -8,7 +8,12 @@ The SciJava Ops framework currently supports the standard RL algorithm as well a
 algorithm, which utilizes a regularization factor to limit the noise amplified by the RL algorithm :sup:`1`. Typically,
 the RLTV algorithm returns improved axial and lateral resolution when compared to RL.
 
-You can download the 3D HeLa cell nuclus dataset `here`_.
+You can download the 3D HeLa cell nucleus dataset here:
+
+.. admonition:: Download
+   :class: note
+
+   `hela_nucleus.tif`_
 
 .. figure:: https://media.scijava.org/scijava-ops/1.0.0/rltv_example_1.gif
 
@@ -145,5 +150,5 @@ SciJava Ops via Fiji's scripting engine with `script parameters`_:
 
 .. _`Dey et. al, Micros Res Tech 2006`: https://pubmed.ncbi.nlm.nih.gov/16586486/
 .. _`Gibson & Lanni, JOSA 1992`: https://pubmed.ncbi.nlm.nih.gov/1738047/
-.. _`here`: https://media.scijava.org/scijava-ops/1.0.0/hela_nucleus.tif
+.. _`hela_nucleus.tif`: https://media.scijava.org/scijava-ops/1.0.0/hela_nucleus.tif
 .. _`script parameters`: https://imagej.net/scripting/parameters

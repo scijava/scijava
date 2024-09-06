@@ -9,7 +9,12 @@ a pixel of interest (*e.g.* a 5x5 patch) with patches from other pixels from the
 patches are then averaged to eliminate gaussian noise, without the requirement of additional
 images for comparison.
 
-The sample data for this example can be downloaded `here`_.
+The sample data for this example can be downloaded here:
+
+.. admonition:: Download
+   :class: note
+
+   `opencv_denoise_16bit.tif`_
 
 .. figure:: https://media.scijava.org/scijava-ops/1.0.0/opencv_denoise_example_1.png
 
@@ -121,4 +126,4 @@ SciJava Ops via Fiji's scripting engine with `script parameters`_:
 
 .. _`script parameters`: https://imagej.net/scripting/parameters
 .. _`OpenCV library`: https://docs.opencv.org/4.x/d5/d69/tutorial_py_non_local_means.html
-.. _`here`: https://media.scijava.org/scijava-ops/1.0.0/opencv_denoise_16bit.tif
+.. _`opencv_denoise_16bit.tif`: https://media.scijava.org/scijava-ops/1.0.0/opencv_denoise_16bit.tif

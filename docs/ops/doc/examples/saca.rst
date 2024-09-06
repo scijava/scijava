@@ -17,7 +17,12 @@ can be computed easily by using the *Z*-score heatmap with the ``stats.pnorm`` O
 significantly colocalized. This example script takes advantage of this feature of the SACA framework and utilizes the significant pixel
 mask as a region of interest to compute Pearson's :sup:`4` and Li's :sup:`5` colocalization coefficients.
 
-You can download the colocalization dataset `here`_.
+You can download the colocalization dataset here:
+
+.. admonition:: Download
+   :class: note
+
+   `hela_hiv_gag_ms2_mcherry.tif`_
 
 .. figure:: https://media.scijava.org/scijava-ops/1.0.0/saca_input.png
 
@@ -169,5 +174,5 @@ To apply the ``phase`` LUT and a colorbar use the following script and select th
 .. _`Becker and Sherer, JVI 2017`: https://pubmed.ncbi.nlm.nih.gov/28053097/
 .. _`Wang et. al, IEEE 2019`: https://ieeexplore.ieee.org/abstract/document/8681436
 .. _`Stockley et. al, Bacteriophage 2016`: https://pubmed.ncbi.nlm.nih.gov/27144089/
-.. _`here`: https://media.scijava.org/scijava-ops/1.0.0/hela_hiv_gag_ms2_mcherry.tif
+.. _`hela_hiv_gag_ms2_mcherry.tif`: https://media.scijava.org/scijava-ops/1.0.0/hela_hiv_gag_ms2_mcherry.tif
 .. _`script parameters`: https://imagej.net/scripting/parameters

@@ -62,7 +62,7 @@ public class Hints {
 		this(Arrays.asList(startingHints));
 	}
 
-	private Hints(final Collection<String> hints) {
+	public Hints(final Collection<String> hints) {
 		this.hints = new HashSet<>(hints);
 	}
 

@@ -467,6 +467,7 @@ Assuming your project is following Maven's [standard directory layout](https://m
 ```yaml
 - op:
     names: [your.op.name1, your.op.name2, ...] # Array of Strings
+    hints: [op.hint1, op.hint2, ...] # Array of Strings
     description: 'your Op description' # String
     source: yourOpSource # String - see below
     priority: 0.0 # Number
@@ -492,6 +493,17 @@ Assuming your project is following Maven's [standard directory layout](https://m
 ```
 
 Of particular note are the following sections:
+
+#### Hints
+
+Each Op can define a set of hints (i.e. flags to the matcher) that can enable/disable particular aspects of the matcher.
+
+Some of the most useful Op hints are described below:
+
+| Hint                   | Use Case                                                                                                                                                                                                                                                              |
+|------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Adaptation.FORBIDDEN` | Some algorithms like a [Fast Fourier Transform](https://en.wikipedia.org/wiki/Fast_Fourier_transform) require their outputs be <br>of a particular size (not equivalent to the input size). If they are a `Computer`, <br>adaptation to `Function`s may cause errors. |
+| `Conversion.FORBIDDEN` | `engine.convert` Ops often require this hint to avoid infinite loops in <br>converted Op matching.                                                                                                                                                                    |
 
 #### Source
 

@@ -29,15 +29,14 @@
 
 package org.scijava.ops.indexer;
 
-import static org.scijava.ops.indexer.ProcessingUtils.blockSeparator;
-import static org.scijava.ops.indexer.ProcessingUtils.tagElementSeparator;
-
 import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
+
+import static org.scijava.ops.indexer.ProcessingUtils.*;
 
 /**
  * A data structure containing all the metadata needed to define an Op
@@ -88,6 +87,11 @@ abstract class OpImplData {
 	 * A {@link List} of the authors of this Op
 	 */
 	protected final List<String> authors = new ArrayList<>();
+
+	/**
+	 * A {@link List} of the hints declared by this Op
+	 */
+	protected final List<String> hints = new ArrayList<>();
 
 	protected final ProcessingEnvironment env;
 
@@ -186,6 +190,10 @@ abstract class OpImplData {
 					else if ("names".equals(kv[0]) || "name".equals(kv[0])) {
 						names.addAll(Arrays.asList(value.split("\\s*,\\s*")));
 					}
+					else if ("hints".equals(kv[0])) {
+
+						hints.addAll(Arrays.asList(value.split("\\s*,\\s*")));
+					}
 					else {
 						if (value.contains(",")) {
 							tags.put(kv[0], value.split(","));
@@ -216,6 +224,7 @@ abstract class OpImplData {
 		map.put("description", description);
 		map.put("priority", priority);
 		map.put("authors", authors.toArray(String[]::new));
+		map.put("hints", hints.toArray(String[]::new));
         var foo = params.stream() //
 			.map(OpParameter::data) //
 			.collect(Collectors.toList());

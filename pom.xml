@@ -106,7 +106,7 @@
 		<scijava-function.version>1.0.1-SNAPSHOT</scijava-function.version>
 		<scijava-legacy.version>1.0.1-SNAPSHOT</scijava-legacy.version>
 		<scijava-meta.version>1.0.1-SNAPSHOT</scijava-meta.version>
-		<scijava-ops-api.version>1.0.1-SNAPSHOT</scijava-ops-api.version>
+		<scijava-ops-api.version>1.1.0-SNAPSHOT</scijava-ops-api.version>
 		<scijava-ops-engine.version>1.0.1-SNAPSHOT</scijava-ops-engine.version>
 		<scijava-ops-ext-parser.version>1.0.1-SNAPSHOT</scijava-ops-ext-parser.version>
 		<scijava-ops-flim.version>1.0.1-SNAPSHOT</scijava-ops-flim.version>

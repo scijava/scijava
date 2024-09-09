@@ -4,9 +4,8 @@
 
 	<parent>
 		<groupId>org.scijava</groupId>
-		<artifactId>pom-scijava</artifactId>
-		<version>37.0.0</version>
-		<relativePath />
+		<artifactId>scijava-core-parent</artifactId>
+		<version>1.2.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>scijava-legacy</artifactId>
@@ -109,27 +108,22 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-discovery</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-api</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-priority</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-progress</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-types</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 
 		<!-- ImgLib2 dependencies -->
@@ -157,7 +151,6 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-common3</artifactId>
-			<version>${project.version}</version>
 			<!--
 				NB: Scope is compile because it is a transitive compile-time dependency,
 				and overriding it to test scope here would cause the main build to fail
@@ -167,7 +160,6 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-engine</artifactId>
-			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -188,7 +180,7 @@
 						<path>
 							<groupId>org.scijava</groupId>
 							<artifactId>scijava-ops-indexer</artifactId>
-							<version>${project.version}</version>
+							<version>${org.scijava.scijava-ops-indexer.version}</version>
 						</path>
 						<path>
 							<groupId>org.scijava</groupId>
@@ -218,7 +210,7 @@
 						<tagletArtifact>
 							<groupId>org.scijava</groupId>
 							<artifactId>scijava-taglets</artifactId>
-							<version>${project.version}</version>
+							<version>${org.scijava.scijava-taglets.version}</version>
 						</tagletArtifact>
 					</tagletArtifacts>
 					<tags>
@@ -229,24 +221,6 @@
 						</tag>
 					</tags>
 				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-enforcer-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>enforce-package-rules</id>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-						<phase>test</phase>
-						<configuration>
-							<rules>
-								<NoPackageCyclesRule implementation="org.scijava.maven.plugin.enforcer.NoPackageCyclesRule" />
-								<NoSubpackageDependenceRule implementation="org.scijava.maven.plugin.enforcer.NoSubpackageDependenceRule" />
-							</rules>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
@@ -269,6 +243,7 @@
 			</plugin>
 		</plugins>
 	</build>
+
 	<profiles>
 		<profile>
 			<id>only-eclipse-scijava</id>

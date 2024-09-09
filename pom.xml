@@ -5,16 +5,16 @@
 	<parent>
 		<groupId>org.scijava</groupId>
 		<artifactId>pom-scijava</artifactId>
-		<version>37.0.0</version>
+		<version>38.0.1</version>
 		<relativePath />
 	</parent>
 
-	<artifactId>scijava-aggregator</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<artifactId>scijava-core-parent</artifactId>
+	<version>1.2.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>SciJava</name>
-	<description>Core components of the SciJava platform.</description>
+	<description>Parent POM for core components of the SciJava platform.</description>
 	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2017</inceptionYear>
 	<organization>
@@ -98,10 +98,197 @@
 		<license.licenseName>N/A</license.licenseName>
 		<license.copyrightOwners>N/A</license.copyrightOwners>
 
-		<!-- NB: Do not install/deploy this aggregator POM. -->
-		<maven.deploy.skip>true</maven.deploy.skip>
-		<maven.install.skip>true</maven.install.skip>
+		<scijava-collections.version>1.0.1-SNAPSHOT</scijava-collections.version>
+		<scijava-common3.version>1.0.1-SNAPSHOT</scijava-common3.version>
+		<scijava-concurrent.version>1.0.1-SNAPSHOT</scijava-concurrent.version>
+		<scijava-discovery-test.version>1.0.1-SNAPSHOT</scijava-discovery-test.version>
+		<scijava-discovery.version>1.0.1-SNAPSHOT</scijava-discovery.version>
+		<scijava-function.version>1.0.1-SNAPSHOT</scijava-function.version>
+		<scijava-legacy.version>1.0.1-SNAPSHOT</scijava-legacy.version>
+		<scijava-meta.version>1.0.1-SNAPSHOT</scijava-meta.version>
+		<scijava-ops-api.version>1.0.1-SNAPSHOT</scijava-ops-api.version>
+		<scijava-ops-engine.version>1.0.1-SNAPSHOT</scijava-ops-engine.version>
+		<scijava-ops-ext-parser.version>1.0.1-SNAPSHOT</scijava-ops-ext-parser.version>
+		<scijava-ops-flim.version>1.0.1-SNAPSHOT</scijava-ops-flim.version>
+		<scijava-ops-image.version>1.0.1-SNAPSHOT</scijava-ops-image.version>
+		<scijava-ops-indexer.version>1.0.1-SNAPSHOT</scijava-ops-indexer.version>
+		<scijava-ops-opencv.version>1.0.1-SNAPSHOT</scijava-ops-opencv.version>
+		<scijava-ops-spi.version>1.0.1-SNAPSHOT</scijava-ops-spi.version>
+		<scijava-ops-tutorial.version>1.0.1-SNAPSHOT</scijava-ops-tutorial.version>
+		<scijava-priority.version>1.0.1-SNAPSHOT</scijava-priority.version>
+		<scijava-progress.version>1.0.1-SNAPSHOT</scijava-progress.version>
+		<scijava-struct.version>1.0.1-SNAPSHOT</scijava-struct.version>
+		<scijava-taglets.version>1.0.1-SNAPSHOT</scijava-taglets.version>
+		<scijava-testutil.version>1.0.1-SNAPSHOT</scijava-testutil.version>
+		<scijava-types.version>1.0.1-SNAPSHOT</scijava-types.version>
+
+		<org.scijava.scijava-collections.version>${scijava-collections.version}</org.scijava.scijava-collections.version>
+		<org.scijava.scijava-common3.version>${scijava-common3.version}</org.scijava.scijava-common3.version>
+		<org.scijava.scijava-concurrent.version>${scijava-concurrent.version}</org.scijava.scijava-concurrent.version>
+		<org.scijava.scijava-discovery-test.version>${scijava-discovery-test.version}</org.scijava.scijava-discovery-test.version>
+		<org.scijava.scijava-discovery.version>${scijava-discovery.version}</org.scijava.scijava-discovery.version>
+		<org.scijava.scijava-function.version>${scijava-function.version}</org.scijava.scijava-function.version>
+		<org.scijava.scijava-legacy.version>${scijava-legacy.version}</org.scijava.scijava-legacy.version>
+		<org.scijava.scijava-meta.version>${scijava-meta.version}</org.scijava.scijava-meta.version>
+		<org.scijava.scijava-ops-api.version>${scijava-ops-api.version}</org.scijava.scijava-ops-api.version>
+		<org.scijava.scijava-ops-engine.version>${scijava-ops-engine.version}</org.scijava.scijava-ops-engine.version>
+		<org.scijava.scijava-ops-ext-parser.version>${scijava-ops-ext-parser.version}</org.scijava.scijava-ops-ext-parser.version>
+		<org.scijava.scijava-ops-flim.version>${scijava-ops-flim.version}</org.scijava.scijava-ops-flim.version>
+		<org.scijava.scijava-ops-image.version>${scijava-ops-image.version}</org.scijava.scijava-ops-image.version>
+		<org.scijava.scijava-ops-indexer.version>${scijava-ops-indexer.version}</org.scijava.scijava-ops-indexer.version>
+		<org.scijava.scijava-ops-opencv.version>${scijava-ops-opencv.version}</org.scijava.scijava-ops-opencv.version>
+		<org.scijava.scijava-ops-spi.version>${scijava-ops-spi.version}</org.scijava.scijava-ops-spi.version>
+		<org.scijava.scijava-ops-tutorial.version>${scijava-ops-tutorial.version}</org.scijava.scijava-ops-tutorial.version>
+		<org.scijava.scijava-priority.version>${scijava-priority.version}</org.scijava.scijava-priority.version>
+		<org.scijava.scijava-progress.version>${scijava-progress.version}</org.scijava.scijava-progress.version>
+		<org.scijava.scijava-struct.version>${scijava-struct.version}</org.scijava.scijava-struct.version>
+		<org.scijava.scijava-taglets.version>${scijava-taglets.version}</org.scijava.scijava-taglets.version>
+		<org.scijava.scijava-testutil.version>${scijava-testutil.version}</org.scijava.scijava-testutil.version>
+		<org.scijava.scijava-types.version>${scijava-types.version}</org.scijava.scijava-types.version>
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.scijava</groupId>
+				<artifactId>scijava-collections</artifactId>
+				<version>${org.scijava.scijava-collections.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scijava</groupId>
+				<artifactId> scijava-common3</artifactId>
+				<version>${org.scijava.scijava-common3.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scijava</groupId>
+				<artifactId> scijava-concurrent</artifactId>
+				<version>${org.scijava.scijava-concurrent.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scijava</groupId>
+				<artifactId> scijava-discovery-test</artifactId>
+				<version>${org.scijava.scijava-discovery-test.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scijava</groupId>
+				<artifactId> scijava-discovery</artifactId>
+				<version>${org.scijava.scijava-discovery.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scijava</groupId>
+				<artifactId> scijava-function</artifactId>
+				<version>${org.scijava.scijava-function.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scijava</groupId>
+				<artifactId> scijava-legacy</artifactId>
+				<version>${org.scijava.scijava-legacy.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scijava</groupId>
+				<artifactId> scijava-meta</artifactId>
+				<version>${org.scijava.scijava-meta.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scijava</groupId>
+				<artifactId> scijava-ops-api</artifactId>
+				<version>${org.scijava.scijava-ops-api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scijava</groupId>
+				<artifactId> scijava-ops-engine</artifactId>
+				<version>${org.scijava.scijava-ops-engine.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scijava</groupId>
+				<artifactId> scijava-ops-ext-parser</artifactId>
+				<version>${org.scijava.scijava-ops-ext-parser.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scijava</groupId>
+				<artifactId> scijava-ops-flim</artifactId>
+				<version>${org.scijava.scijava-ops-flim.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scijava</groupId>
+				<artifactId> scijava-ops-image</artifactId>
+				<version>${org.scijava.scijava-ops-image.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scijava</groupId>
+				<artifactId> scijava-ops-indexer</artifactId>
+				<version>${org.scijava.scijava-ops-indexer.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scijava</groupId>
+				<artifactId> scijava-ops-opencv</artifactId>
+				<version>${org.scijava.scijava-ops-opencv.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scijava</groupId>
+				<artifactId> scijava-ops-spi</artifactId>
+				<version>${org.scijava.scijava-ops-spi.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scijava</groupId>
+				<artifactId> scijava-ops-tutorial</artifactId>
+				<version>${org.scijava.scijava-ops-tutorial.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scijava</groupId>
+				<artifactId> scijava-priority</artifactId>
+				<version>${org.scijava.scijava-priority.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scijava</groupId>
+				<artifactId> scijava-progress</artifactId>
+				<version>${org.scijava.scijava-progress.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scijava</groupId>
+				<artifactId> scijava-struct</artifactId>
+				<version>${org.scijava.scijava-struct.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scijava</groupId>
+				<artifactId> scijava-taglets</artifactId>
+				<version>${org.scijava.scijava-taglets.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scijava</groupId>
+				<artifactId> scijava-testutil</artifactId>
+				<version>${org.scijava.scijava-testutil.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scijava</groupId>
+				<artifactId> scijava-types</artifactId>
+				<version>${org.scijava.scijava-types.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>enforce-package-rules</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<phase>test</phase>
+						<configuration>
+							<rules>
+								<NoPackageCyclesRule implementation="org.scijava.maven.plugin.enforcer.NoPackageCyclesRule" />
+								<NoSubpackageDependenceRule implementation="org.scijava.maven.plugin.enforcer.NoSubpackageDependenceRule" />
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
 	<profiles>
 		<profile>

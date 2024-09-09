@@ -4,9 +4,8 @@
 
 	<parent>
 		<groupId>org.scijava</groupId>
-		<artifactId>pom-scijava</artifactId>
-		<version>37.0.0</version>
-		<relativePath />
+		<artifactId>scijava-core-parent</artifactId>
+		<version>1.2.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>scijava-ops-ext-parser</artifactId>
@@ -142,7 +141,6 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-opencv</artifactId>
-			<version>${project.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
@@ -189,24 +187,6 @@
 
 	<build>
 		<plugins>
-			<plugin>
-				<artifactId>maven-enforcer-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>enforce-package-rules</id>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-						<phase>test</phase>
-						<configuration>
-							<rules>
-								<NoPackageCyclesRule implementation="org.scijava.maven.plugin.enforcer.NoPackageCyclesRule" />
-								<NoSubpackageDependenceRule implementation="org.scijava.maven.plugin.enforcer.NoSubpackageDependenceRule" />
-							</rules>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>

@@ -677,7 +677,8 @@ public final class GenericAssignability {
 				malleability);
 		}
 		if (Any.is(newType)) {
-			return new AnyTypeMapping(typeVar, newType, malleability);
+			Any a = newType instanceof Any ? (Any) newType : new Any(typeVar.getBounds());
+			return new AnyTypeMapping(typeVar, a, malleability);
 		}
 		return new TypeMapping(typeVar, newType, malleability);
 	}

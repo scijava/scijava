@@ -1127,7 +1127,11 @@ public final class Types {
 			final Map<TypeVariable<?>, Type> typeVarAssigns)
 		{
 			if (type instanceof TypeVariable) {
-				// TODO: do we need to do here what we do with the ParameterizedType?
+				// If the type variable has an assignment already, use it!
+				TypeVariable<?> typeVar = (TypeVariable<?>) type;
+				if (typeVarAssigns.containsKey(typeVar)) {{
+					return isAssignable(typeVarAssigns.get(typeVar), toType, typeVarAssigns);
+				}}
 			}
 			if (type instanceof ParameterizedType) {
 				// check if any of the type parameters are TypeVariables, and if so

@@ -17,7 +17,7 @@ class AnyTypeMapping extends TypeMapping {
                         boolean malleable)
     {
         super(typeVar, any, malleable);
-        this.boundingAny = any instanceof Any ? (Any) any : new Any();
+        this.boundingAny = any instanceof Any ? (Any) any : new Any(typeVar.getBounds());
     }
 
     @Override

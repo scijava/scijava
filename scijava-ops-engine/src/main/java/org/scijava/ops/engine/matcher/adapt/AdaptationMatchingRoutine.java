@@ -122,7 +122,7 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 					srcOpRequest, adaptationHints), env);
 				// Then, once we've matched an Op, use the bounds of that match
 				// to refine the bounds on the adaptor (for dependency matching)
-				captureTypeVarsFromCandidate(adaptFrom, srcCandidate, map);
+				captureTypeVarsFromCandidate(conditions.request().type(), adaptFrom, srcCandidate, map);
 				// Finally, resolve the adaptor's dependencies
                 var depTrees = Infos.dependencies(adaptor).stream() //
 					.map(d -> {
@@ -172,7 +172,7 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 	 * @param candidate the {@link OpCandidate} matched for the adaptor input
 	 * @param map the mapping
 	 */
-	private void captureTypeVarsFromCandidate(Type adaptorType, OpCandidate candidate,
+	private void captureTypeVarsFromCandidate(Type requestType, Type adaptorType, OpCandidate candidate,
 		Map<TypeVariable<?>, Type> map)
 	{
 
@@ -237,6 +237,10 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 				map.put(key, value);
 			}
 		}
+
+		// STEP 3: Original request mappings
+		Type foo = GenericAssignability.mapVarToTypes(new Type[] {adaptorType}, map)[0];
+		GenericAssignability.inferTypeVariables(foo, requestType);
 	}
 
 

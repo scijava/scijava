@@ -205,7 +205,7 @@ public class InferTypeVariablesTest {
 		// We expect O = Any
 		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.type();
 		Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
-		expected.put(typeVarO, new TypeMapping(typeVarO, Any.class, true));
+		expected.put(typeVarO, new TypeMapping(typeVarO, new Any(new Type[]{Number.class}), true));
 
 		Assertions.assertEquals(expected, typeAssigns);
 	}
@@ -223,7 +223,7 @@ public class InferTypeVariablesTest {
 		// We expect O = Any
 		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.type();
 		Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
-		expected.put(typeVarO, new TypeMapping(typeVarO, Any.class, true));
+		expected.put(typeVarO, new TypeMapping(typeVarO, new Any(new Type[] {Number.class}), true));
 
 		Assertions.assertEquals(expected, typeAssigns);
 	}
@@ -241,7 +241,7 @@ public class InferTypeVariablesTest {
 		// We expect O = Any
 		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.type();
 		Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
-		expected.put(typeVarO, new TypeMapping(typeVarO, Any.class, true));
+		expected.put(typeVarO, new TypeMapping(typeVarO, new Any(new Type[] {Number.class}), true));
 
 		Assertions.assertEquals(expected, typeAssigns);
 	}
@@ -259,7 +259,7 @@ public class InferTypeVariablesTest {
 		// We expect O = Any
 		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.type();
 		Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
-		expected.put(typeVarO, new TypeMapping(typeVarO, Any.class, true));
+		expected.put(typeVarO, new TypeMapping(typeVarO, new Any(new Type[] {Number.class}), true));
 
 		Assertions.assertEquals(expected, typeAssigns);
 	}
@@ -425,7 +425,7 @@ public class InferTypeVariablesTest {
 			paramType }, new java.lang.reflect.Type[] { argType }, typeAssigns);
 		TypeVariable<?> typeVar = (TypeVariable<?>) new Nil<L>() {}.type();
 		final Map<TypeVariable<?>, Type> expected = new HashMap<>();
-		expected.put(typeVar, Any.class);
+		expected.put(typeVar, new Any(new Type[] {new Nil<RecursiveThing<L>>() {}.type()}));
 		Assertions.assertEquals(expected, typeAssigns);
 	}
 }

@@ -676,6 +676,10 @@ public final class GenericAssignability {
 			return new WildcardTypeMapping(typeVar, (WildcardType) newType,
 				malleability);
 		}
+		if (Any.is(newType)) {
+			Any a = newType instanceof Any ? (Any) newType : new Any(typeVar.getBounds());
+			return new AnyTypeMapping(typeVar, a, malleability);
+		}
 		return new TypeMapping(typeVar, newType, malleability);
 	}
 

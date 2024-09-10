@@ -1127,8 +1127,23 @@ public final class Types {
 			final Map<TypeVariable<?>, Type> typeVarAssigns)
 		{
 			if (type instanceof TypeVariable) {
-				// TODO: do we need to do here what we do with the ParameterizedType?
+				// If the type variable has an assignment already, we should check against that instead.
+				TypeVariable<?> typeVar = (TypeVariable<?>) type;
+				if (typeVarAssigns.containsKey(typeVar)) {{
+					return isAssignable(typeVarAssigns.get(typeVar), toType, typeVarAssigns);
+				}}
 			}
+
+			// For a type to be assignable to an Any, it must fit within the Any's upper and lower bounds.
+			for (var upperBound : toType.getUpperBounds()) {
+				if (!isAssignable(type, upperBound)) return false;
+			}
+
+			for (var lowerBound : toType.getLowerBounds()) {
+				if (!isAssignable(lowerBound, type)) return false;
+			}
+
+			// Now that we know the type is assignable to an Any, we can do some type variable mapping.
 			if (type instanceof ParameterizedType) {
 				// check if any of the type parameters are TypeVariables, and if so
 				// bind them to a new Any with the bounds of the TypeVariable.
@@ -1143,14 +1158,6 @@ public final class Types {
 
 				}
 				return true;
-			}
-
-			for (var upperBound : toType.getUpperBounds()) {
-				if (!isAssignable(type, upperBound)) return false;
-			}
-
-			for (var lowerBound : toType.getLowerBounds()) {
-				if (!isAssignable(lowerBound, type)) return false;
 			}
 
 			return true;
@@ -1367,10 +1374,14 @@ public final class Types {
 						typeVarAssigns.put(unbounded, fromResolved);
 						toResolved = fromResolved;
 					}
-					// bind unbounded to another type variable
+					// bind unbounded to a TypeVariable or Any
 					else {
-						typeVarAssigns.put((TypeVariable<?>) toTypeVarAssigns.get(var),
-							fromTypeVarAssigns.get(var));
+						TypeVariable<?> to = (TypeVariable<?>) toTypeVarAssigns.get(var);
+						Type from = fromTypeVarAssigns.get(var);
+						if (from == null) {
+							from = new Any(to.getBounds());
+						}
+						typeVarAssigns.put(to, from);
 					}
 				}
 
@@ -1379,8 +1390,20 @@ public final class Types {
 				// parameters of the target type.
 				if (fromResolved != null && !fromResolved.equals(toResolved)) {
 					// check for anys
-					if (Any.is(fromResolved) || Any.is(toResolved)) continue;
-					if (fromResolved instanceof ParameterizedType &&
+					if (Any.is(toResolved)) {
+						Any a = toResolved instanceof Any ? (Any) toResolved : new Any();
+						for (Type upper: a.getUpperBounds()) {
+							if (!Types.isAssignable(fromResolved, upper))
+								return false;
+						}
+						for (Type lower: a.getLowerBounds()) {
+							if (!Types.isAssignable(lower, fromResolved))
+								return false;
+						}
+						continue;
+					}
+					else if (Any.is(fromResolved)) continue;
+					else if (fromResolved instanceof ParameterizedType &&
 						toResolved instanceof ParameterizedType)
 					{
 						if (raw(fromResolved) != raw(toResolved)) {
@@ -1791,8 +1814,8 @@ public final class Types {
 			}
 
 			if (Any.is(type)) {
-				typeVarAssigns.put(toTypeVariable, new Any(toTypeVariable.getBounds()));
-				return true;
+				typeVarAssigns.putIfAbsent(toTypeVariable, new Any(toTypeVariable.getBounds()));
+				return isAssignable(typeVarAssigns.get(toTypeVariable), type);
 			}
 
 			throw new IllegalStateException("found an unhandled type: " + type);

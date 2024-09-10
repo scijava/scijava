@@ -85,6 +85,20 @@ class TypeMapping {
 			return;
 		}
 		if (Any.is(otherType)) {
+			// verify Any's bounds:
+			if (otherType instanceof Any) {
+				Any casted = (Any) otherType;
+				for (Type t: casted.getUpperBounds()) {
+					if (!Types.isAssignable(mappedType, t)) {
+						throw new TypeInferenceException("Any " + casted + " has an upper bound on " + t + ", which is outside of the current mapped type " + mappedType + " of TypeVariable " + typeVar);
+					}
+				}
+				for (Type t: casted.getLowerBounds()) {
+					if (!Types.isAssignable(t, mappedType)) {
+						throw new TypeInferenceException("Any " + casted + " has an lower bound on " + t + ", which is outside of the current mapped type " + mappedType + " of TypeVariable " + typeVar);
+					}
+				}
+			}
 			return;
 		}
 		if (otherType instanceof WildcardType) {

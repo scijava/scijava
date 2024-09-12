@@ -112,20 +112,24 @@ In addition to the result tables, the label imdage (also known as an *index imag
         from net.imglib2.roi.labeling import LabelRegions
         from net.imglib2.type.logic import BitType
         from net.imglib2.type.numeric.real import FloatType
-        
+
         from org.scijava.table import DefaultGenericTable
         
         from jarray import array
 
-        def extract_channel(image, ch):
+        def extract_channel(image, axis, ch):
             """Extract a channel from the input image.
         
             Extract the given channel from the input image.
         
             :param image:
-        
-                Input Img.
-        
+
+                Input image.
+
+            :param axis:
+
+                Integer corresponding to the Channel axis.
+
             :param ch:
         
                 Channel number to extract.
@@ -134,12 +138,10 @@ In addition to the result tables, the label imdage (also known as an *index imag
         
                 A view of the extracted channel.
             """
-            # find C and Z axis indicies
-            c_idx = find_axis_index(image, "Channel")
-        
-            return ops.op("transform.hyperSliceView").input(image, c_idx, ch - 1).apply()
-        
-        
+
+            return ops.op("transform.hyperSliceView").input(image, axis, ch - 1).apply()
+
+
         def extract_inside_mask(mask_a, mask_b):
             """Extract the mask "A" data from regions inside mask "B".
         
@@ -193,43 +195,44 @@ In addition to the result tables, the label imdage (also known as an *index imag
                     return i
                 else:
                     continue
-        
+
             return None
-        
-        
+
+
         def gaussian_subtraction(image, sigma):
             """Perform a Gaussian subtraction on an image.
-        
+
             Apply a Gaussian blur and subtract from input image.
-        
+
             :param image:
-        
+
                 Input Img.
-        
+
             :param sigma:
-        
+
                 Sigma value.
-        
+
             :return:
-        
+
                 Gaussian blur subtracted image.
             """
             blur = ops.op("filter.gauss").input(image, sigma).apply()
             out = ops.op("create.img").input(image, FloatType()).apply()
             ops.op("math.sub").input(image, blur).output(out).compute()
-        
+
             return out
-        
+
         # crop the input data to a 450 x 450 patch
         min_arr = array([370, 136, 0, 0], "l")
         max_arr = array([819, 585, 2, 59], "l")
         img_crop = ops.op("transform.intervalView").input(img, min_arr, max_arr).apply()
-        img_crop = Views.dropSingletonDimensions(img_crop)
+        img_crop = ops.op("transform.dropSingletonDimensionsView").input(img_crop).apply()
         img_crop = ops.op("transform.offsetView").input(img_crop, array([370, 136, 0, 0], "l")).apply()
 
         # extract channels
-        ch_a_img = extract_channel(img_crop, ch_a)
-        ch_b_img = extract_channel(img_crop, ch_b)
+        c_idx = find_axis_index(img, "Channel")
+        ch_a_img = extract_channel(img_crop, c_idx, ch_a)
+        ch_b_img = extract_channel(img_crop, c_idx, ch_b)
 
         # customize the following sections below for your own data
         # clean up channel "A" and create a mask

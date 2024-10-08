@@ -25,6 +25,8 @@ author = "SciJava developers"
 
 # -- General configuration ---------------------------------------------------
 
+github_url = "https://github.com/scijava/scijava/blob/main/docs/ops/doc"
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 

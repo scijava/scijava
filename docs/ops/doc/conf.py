@@ -50,6 +50,16 @@ nb_execution_mode = "off"
 copybutton_selector = "div:not(.no-copybutton) > div.highlight > pre"
 
 # -- Options for HTML output -------------------------------------------------
+
+# Always show the Edit on GitHub buttons
+# Set the correct path for Edit on GitHub
+html_context = {
+    'display_github': True,
+    'github_user': 'scijava',
+    'github_repo': 'scijava',
+    'github_version': 'main/docs/ops/doc/',
+}
+
 # Add the SciJava logo
 # html_logo = "doc-images/logo.svg"
 # html_theme_options = {

@@ -1,7 +1,11 @@
 SciJava Ops: An Improved Algorithms Framework for Fiji and Beyond
 =================================================================
 
-This page serves as a stable location for the SciJava Ops Paper and associated resources. If you find SciJava Ops useful, please cite our (forthcoming) paper:
+This page serves as a stable location for the SciJava Ops Paper and associated resources. If you use, extend, or contribute to SciJava Ops, please cite our publication:
+
+  Selzer GJ, Rueden CT, Hiner MC, Evans EL, Kolb D, Wiedenmann M, Birkhold C, Buchholz T-O, Helfrich S, Northan B, Walter A, Schindelin J, Pietzsch T, Saalfeld S, Berthold MR and Eliceiri KW. (2024). SciJava Ops: an improved algorithms framework for Fiji and beyond. *Front. Bioinform. 4:1435733*. `doi:10.3389/fbinf.2024.1435733 <https://doi.org/10.3389/fbinf.2024.1435733>`_
+
+The following sections highlight some of the use cases found within the paper.
 
 Python (scyjava)
 ----------------

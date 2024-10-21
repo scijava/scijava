@@ -1,5 +1,28 @@
 """
-TODO: Module description.
+Classes
+-------
+
+    - OpsNamespace
+    - OpsGateway
+
+Functions
+---------
+
+    - init
+
+Variables
+---------
+
+    - `ops`   
+
+Example
+-------
+
+    - Interactive Python session:
+        python -i ops-gateway.py
+    - Module import:
+        >>> import ops-gateway
+        >>> ops = ops-gateway.init()
 """
 
 from types import MethodType

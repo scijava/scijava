@@ -225,4 +225,5 @@ def _find_op_names(env: "scijava.OpEnvironment") -> set:
     """
     return {str(name) for info in env.infos() for name in info.names()}
 
-ops = init(endpoints)
+if __name__ == "__main__":
+    ops = init(endpoints)

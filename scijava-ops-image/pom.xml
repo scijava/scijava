@@ -269,7 +269,7 @@
 
 		<imglib2.version>7.0.1</imglib2.version>
 		<imglib2-roi.version>0.15.0</imglib2-roi.version>
-		<imglib2-algorithm.version>0.15.1</imglib2-algorithm.version>
+		<imglib2-algorithm.version>0.15.2</imglib2-algorithm.version>
 		<imglib2-realtransform.version>4.0.3</imglib2-realtransform.version>
 	</properties>
 

@@ -206,8 +206,7 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>>
 
 		// Only iterate seeds that are not excluded by the mask
 		final var maskRegions = Regions.iterable(mask);
-		final var seedsMasked = Regions.sample(
-			(IterableInterval<Void>) maskRegions, seeds);
+		final var seedsMasked = Regions.sample(maskRegions.inside(), seeds);
 		final var cursorSeeds = seedsMasked
 			.localizingCursor();
 

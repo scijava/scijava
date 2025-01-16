@@ -208,14 +208,6 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	};
 
 	/**
-	 * @input rai
-	 * @output img
-	 * @implNote op names='create.img, engine.create', priority='0.'
-	 */
-	public final Function<RandomAccessibleInterval<T>, Img<T>> imgFromRAI = (
-		rai) -> imgFromDimsAndType.apply(rai, Util.getTypeFromInterval(rai));
-
-	/**
 	 * @input arrayImg
 	 * @output img
 	 * @implNote op names='create.img, engine.create', priority='1000.'

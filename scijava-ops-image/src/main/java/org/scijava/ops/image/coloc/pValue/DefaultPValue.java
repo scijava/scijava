@@ -29,7 +29,6 @@
 
 package org.scijava.ops.image.coloc.pValue;
 
-import java.util.List;
 import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -39,12 +38,9 @@ import java.util.stream.IntStream;
 import org.scijava.concurrent.Parallelization;
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.Nullable;
-import org.scijava.ops.spi.OpDependency;
 
 import org.scijava.ops.image.coloc.ShuffledView;
-import net.imglib2.Cursor;
 import net.imglib2.Dimensions;
-import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.RealType;
@@ -63,7 +59,7 @@ import net.imglib2.view.Views;
  */
 public class DefaultPValue<T extends RealType<T>, U extends RealType<U>>
 	implements
-	Computers.Arity6<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double>, Integer, Dimensions, Long, PValueResult>
+	Computers.Arity6<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<? super RandomAccessibleInterval<T>, ? super RandomAccessibleInterval<U>, Double>, Integer, Dimensions, Long, PValueResult>
 {
 
 	/**
@@ -81,7 +77,7 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>>
 	public void compute( //
 		final RandomAccessibleInterval<T> image1, //
 		final RandomAccessibleInterval<U> image2, //
-		final BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> op, //
+		final BiFunction<? super RandomAccessibleInterval<T>, ? super RandomAccessibleInterval<U>, Double> op, //
 		@Nullable Integer nrRandomizations, //
 		@Nullable Dimensions psfSize, //
 		@Nullable Long seed, //

@@ -220,7 +220,7 @@ public class WatershedTest extends AbstractOpTest {
 		// count labels
 		Set<Integer> labelSet = new HashSet<>();
 		for (LabelingType<Integer> pixel : Regions.sample(
-			(IterableInterval<Void>) regions, out))
+			regions.inside(), out))
 		{
 			labelSet.addAll(pixel);
 		}

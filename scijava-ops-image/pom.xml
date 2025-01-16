@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.scijava</groupId>
 		<artifactId>pom-scijava</artifactId>
-		<version>37.0.0</version>
+		<version>40.0.0</version>
 		<relativePath />
 	</parent>
 
@@ -262,15 +262,8 @@
 
 		<scijava.ops.parse>true</scijava.ops.parse>
 
-		<!-- TEMP: Until pom-scijava 38.0.0 is released. -->
-		<scijava-maven-plugin.version>3.0.0</scijava-maven-plugin.version>
+		<!-- TEMP: Until #267 is merged. -->
 		<imglib2-mesh.version>1.0.0</imglib2-mesh.version>
-		<net.imglib2.imglib2-mesh.version>${imglib2-mesh.version}</net.imglib2.imglib2-mesh.version>
-
-		<imglib2.version>7.0.1</imglib2.version>
-		<imglib2-roi.version>0.15.0</imglib2-roi.version>
-		<imglib2-algorithm.version>0.15.2</imglib2-algorithm.version>
-		<imglib2-realtransform.version>4.0.3</imglib2-realtransform.version>
 	</properties>
 
 	<dependencies>
@@ -342,8 +335,6 @@
 		<dependency>
 			<groupId>net.imglib2</groupId>
 			<artifactId>imglib2-mesh</artifactId>
-			<!-- TEMP: until added to pom-scijava -->
-			<version>${net.imglib2.imglib2-mesh.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>net.imglib2</groupId>

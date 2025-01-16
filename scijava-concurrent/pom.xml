@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.scijava</groupId>
 		<artifactId>pom-scijava</artifactId>
-		<version>37.0.0</version>
+		<version>40.0.0</version>
 		<relativePath />
 	</parent>
 
@@ -100,9 +100,6 @@
 		-->
 		<scijava.jvm.build.version>[11.0.17,)</scijava.jvm.build.version>
 		<scijava.jvm.version>11</scijava.jvm.version>
-
-		<!-- TEMP: Until pom-scijava 38.0.0 is released. -->
-		<scijava-maven-plugin.version>3.0.0</scijava-maven-plugin.version>
 	</properties>
 
 	<dependencies>

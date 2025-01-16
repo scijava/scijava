@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.scijava</groupId>
 		<artifactId>pom-scijava</artifactId>
-		<version>37.0.0</version>
+		<version>40.0.0</version>
 		<relativePath />
 	</parent>
 
@@ -113,9 +113,6 @@
     <scijava.ops.parse>true</scijava.ops.parse>
 
 		<flimlib.version>2.1.1</flimlib.version>
-
-		<!-- TEMP: Until pom-scijava 38.0.0 is released. -->
-		<scijava-maven-plugin.version>3.0.0</scijava-maven-plugin.version>
 	</properties>
 
 	<dependencies>

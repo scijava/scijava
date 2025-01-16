@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.scijava</groupId>
 		<artifactId>pom-scijava</artifactId>
-		<version>37.0.0</version>
+		<version>40.0.0</version>
 		<relativePath />
 	</parent>
 
@@ -130,9 +130,6 @@
 			org.scijava.ops.engine" to unnamed module @402e37bc
 		-->
 		<scijava.surefire.args>--add-exports org.scijava.ops.engine/org.scijava.ops.engine=ALL-UNNAMED</scijava.surefire.args>
-
-		<!-- TEMP: Until pom-scijava 38.0.0 is released. -->
-		<scijava-maven-plugin.version>3.0.0</scijava-maven-plugin.version>
 	</properties>
 
 	<dependencies>

@@ -130,6 +130,22 @@
 			org.scijava.ops.engine" to unnamed module @402e37bc
 		-->
 		<scijava.surefire.args>--add-exports org.scijava.ops.engine/org.scijava.ops.engine=ALL-UNNAMED</scijava.surefire.args>
+
+		<!-- TEMP: Can be removed once present in pom-scijava -->
+		<scijava-collections.version>1.0.1-SNAPSHOT</scijava-collections.version>
+		<scijava-common3.version>1.0.1-SNAPSHOT</scijava-common3.version>
+		<scijava-discovery.version>1.0.1-SNAPSHOT</scijava-discovery.version>
+		<scijava-function.version>1.0.1-SNAPSHOT</scijava-function.version>
+		<scijava-indexer.version>1.0.1-SNAPSHOT</scijava-indexer.version>
+		<scijava-meta.version>1.0.1-SNAPSHOT</scijava-meta.version>
+		<scijava-ops-api.version>1.0.1-SNAPSHOT</scijava-ops-api.version>
+		<scijava-ops-spi.version>1.0.1-SNAPSHOT</scijava-ops-spi.version>
+		<scijava-priority.version>1.0.1-SNAPSHOT</scijava-priority.version>
+		<scijava-progress.version>1.0.1-SNAPSHOT</scijava-progress.version>
+		<scijava-struct.version>1.0.1-SNAPSHOT</scijava-struct.version>
+		<scijava-taglets.version>1.0.1-SNAPSHOT</scijava-taglets.version>
+		<scijava-testutil.version>1.0.1-SNAPSHOT</scijava-testutil.version>
+		<scijava-types.version>1.0.1-SNAPSHOT</scijava-types.version>
 	</properties>
 
 	<dependencies>
@@ -141,57 +157,57 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-collections</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-collections.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-common3</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-common3.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-meta</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-meta.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-api</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-ops-api.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-spi</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-ops-spi.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-discovery</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-discovery.version}</version>
 		</dependency>
 		<dependency>
 			<groupId> org.scijava</groupId>
 			<artifactId>scijava-function</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-function.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-priority</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-priority.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-progress</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-progress.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-struct</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-struct.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-types</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-types.version}</version>
 		</dependency>
 
 		<!-- Third-party dependencies -->
@@ -221,7 +237,7 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-testutil</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-testutil.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -235,7 +251,7 @@
 						<path>
 							<groupId>org.scijava</groupId>
 							<artifactId>scijava-ops-indexer</artifactId>
-							<version>${project.version}</version>
+							<version>${scijava-indexer.version}</version>
 						</path>
 					</annotationProcessorPaths>
 					<fork>true</fork>
@@ -259,7 +275,7 @@
 						<tagletArtifact>
 							<groupId>org.scijava</groupId>
 							<artifactId>scijava-taglets</artifactId>
-							<version>${project.version}</version>
+							<version>${scijava-taglets.version}</version>
 						</tagletArtifact>
 					</tagletArtifacts>
 					<tags>

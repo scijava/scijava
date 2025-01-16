@@ -98,6 +98,16 @@
 		-->
 		<scijava.jvm.build.version>[11.0.17,)</scijava.jvm.build.version>
 		<scijava.jvm.version>11</scijava.jvm.version>
+
+		<!-- TEMP: Can be removed once present in pom-scijava -->
+		<scijava-common3.version>1.0.1-SNAPSHOT</scijava-common3.version>
+		<scijava-discovery.version>1.0.1-SNAPSHOT</scijava-discovery.version>
+		<scijava-ops-api.version>1.0.1-SNAPSHOT</scijava-ops-api.version>
+		<scijava-ops-engine.version>1.0.1-SNAPSHOT</scijava-ops-engine.version>
+		<scijava-ops-spi.version>1.0.1-SNAPSHOT</scijava-ops-spi.version>
+		<scijava-priority.version>1.0.1-SNAPSHOT</scijava-priority.version>
+		<scijava-progress.version>1.0.1-SNAPSHOT</scijava-progress.version>
+		<scijava-types.version>1.0.1-SNAPSHOT</scijava-types.version>
 	</properties>
 
 	<dependencies>
@@ -105,27 +115,27 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-discovery</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-discovery.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-api</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-ops-api.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-priority</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-priority.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-progress</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-progress.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-types</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-types.version}</version>
 		</dependency>
 
 		<!-- ImgLib2 dependencies -->
@@ -153,7 +163,7 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-common3</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-common3.version}</version>
 			<!--
 				NB: Scope is compile because it is a transitive compile-time dependency,
 				and overriding it to test scope here would cause the main build to fail
@@ -163,7 +173,7 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-engine</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-ops-engine.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -183,47 +193,10 @@
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.scijava</groupId>
-							<artifactId>scijava-ops-indexer</artifactId>
-							<version>${project.version}</version>
-						</path>
-						<path>
-							<groupId>org.scijava</groupId>
 							<artifactId>scijava-common</artifactId>
 							<version>${scijava-common.version}</version>
 						</path>
 					</annotationProcessorPaths>
-					<fork>true</fork>
-					<compilerArgs>
-						<arg>-Ascijava.ops.parse="${scijava.ops.parse}"</arg>
-						<arg>-Ascijava.ops.opVersion="${project.version}"</arg>
-					</compilerArgs>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<links>
-						<link>https://javadoc.scijava.org/Java11/</link>
-						<link>https://javadoc.scijava.org/ImageJ2/</link>
-						<link>https://javadoc.scijava.org/ImgLib2/</link>
-						<link>https://javadoc.scijava.org/SciJava/</link>
-						<link>https://javadoc.scijava.org/Guava/</link>
-						<link>https://javadoc.scijava.org/JAMA/</link>
-					</links>
-					<tagletArtifacts>
-						<tagletArtifact>
-							<groupId>org.scijava</groupId>
-							<artifactId>scijava-taglets</artifactId>
-							<version>${project.version}</version>
-						</tagletArtifact>
-					</tagletArtifacts>
-					<tags>
-						<tag>
-							<name>implNote</name>
-							<placement>a</placement>
-							<head>Implementation Note:</head>
-						</tag>
-					</tags>
 				</configuration>
 			</plugin>
 			<plugin>

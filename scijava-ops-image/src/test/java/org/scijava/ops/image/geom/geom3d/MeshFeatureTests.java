@@ -200,6 +200,35 @@ public class MeshFeatureTests extends AbstractFeatureTest {
 		// https://github.com/imagej/imagej-ops/issues/422
 	}
 
+	/**
+	 * Determines whether two {@link Mesh} {@link Triangle}s are equivalent.
+	 * <p>
+	 * NB For two triangles to be the same, they must have:
+	 * <ol>
+	 * <li>The same three vertices</li>
+	 * <li>The same "front" side, which is determined by the normal and the
+	 * vertex ordering</li>
+	 * </ol>
+	 * </p>
+	 * <p>
+	 * Therefore, two triangles can be the same if:
+	 * <ol>
+	 * <li>They share the same normal {@code n} and vertices {@code (v1, v2, v3)},
+	 * with identical ordering</li>
+	 * <li>They share the same normal and vertices {@code (v1, v2, v3)}, but one
+	 * triangle orders them {@code (v1, v2, v3)} and the other {@code (v2, v3, v1)}</li>
+	 * <li>One has vertices {@code (v1, v2, v3)} and normal {@code n}, and the other
+	 * vertices {@code (v1, v3, v2)} and normal {@code -n}</li>
+	 * <li>A combination of the first two cases (inverse normal, opposite
+	 * ordering, <b>and</b> offset ordering)</li>
+	 * </ol>
+	 * </p>
+	 * This method covers all of those cases.
+	 *
+	 * @param exp the expected {@link Triangle}
+	 * @param act the actual {@link Triangle}
+	 * @param eps the allowed error in equality checks
+	 */
 	private static void assertTriangleEquality( //
 		final Triangle exp, //
 		final Triangle act, //

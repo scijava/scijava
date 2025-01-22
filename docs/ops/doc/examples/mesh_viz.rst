@@ -61,13 +61,13 @@ The following script accepts the binary dataset as its sole input, and creates t
         mesh = ops.op("geom.marchingCubes").input(mask).apply()
         println("mesh = ${mesh} [${mesh.triangles().size()} triangles, ${mesh.vertices().size()} vertices]")
 
-        meshVolume = ops.op("geom.size").input(mesh).apply().getRealDouble()
+        meshVolume = ops.op("geom.size").input(mesh).apply()
         println("mesh volume = " + meshVolume)
 
         hull = ops.op("geom.convexHull").input(mesh).apply()
         println("hull = ${hull} [${hull.triangles().size()} triangles, ${hull.vertices().size()} vertices]")
 
-        hullVolume = ops.op("geom.size").input(hull).apply().getRealDouble()
+        hullVolume = ops.op("geom.size").input(hull).apply()
         println("hull volume = $hullVolume")
 
         // Convert ImgLib2 meshes to 3D Viewer meshes.

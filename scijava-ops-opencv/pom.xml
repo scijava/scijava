@@ -113,6 +113,17 @@
 		-->
 		<scijava.jvm.build.version>[11.0.17,)</scijava.jvm.build.version>
 		<scijava.jvm.version>11</scijava.jvm.version>
+
+		<!-- TEMP: Can be removed once present in pom-scijava -->
+		<scijava-ops-api.version>1.0.1-SNAPSHOT</scijava-ops-api.version>
+		<scijava-ops-engine.version>1.0.1-SNAPSHOT</scijava-ops-engine.version>
+		<scijava-ops-image.version>2.0.0-SNAPSHOT</scijava-ops-image.version>
+		<scijava-ops-indexer.version>1.0.1-SNAPSHOT</scijava-ops-indexer.version>
+		<scijava-ops-spi.version>1.0.1-SNAPSHOT</scijava-ops-spi.version>
+		<scijava-taglets.version>1.0.1-SNAPSHOT</scijava-taglets.version>
+		<scijava-types.version>1.0.1-SNAPSHOT</scijava-types.version>
+
+		<scijava.ops.parse>true</scijava.ops.parse>
 	</properties>
 
 	<dependencies>
@@ -120,7 +131,7 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-types</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-types.version}</version>
 		</dependency>
 
 		<!-- OpenCV dependencies -->
@@ -158,19 +169,19 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-api</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-ops-api.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-engine</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-ops-engine.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-image</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-ops-image.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -191,7 +202,7 @@
 						<path>
 							<groupId>org.scijava</groupId>
 							<artifactId>scijava-ops-indexer</artifactId>
-							<version>${project.version}</version>
+							<version>${scijava-ops-indexer.version}</version>
 						</path>
 					</annotationProcessorPaths>
 					<fork>true</fork>
@@ -211,7 +222,7 @@
 						<tagletArtifact>
 							<groupId>org.scijava</groupId>
 							<artifactId>scijava-taglets</artifactId>
-							<version>${project.version}</version>
+							<version>${scijava-taglets.version}</version>
 						</tagletArtifact>
 					</tagletArtifacts>
 					<tags>

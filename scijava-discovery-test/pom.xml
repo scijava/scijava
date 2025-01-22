@@ -103,6 +103,10 @@
 		-->
 		<scijava.jvm.build.version>[11.0.17,)</scijava.jvm.build.version>
 		<scijava.jvm.version>11</scijava.jvm.version>
+
+		<!-- TEMP: Can be removed once present in pom-scijava -->
+		<scijava-discovery.version>1.0.1-SNAPSHOT</scijava-discovery.version>
+		<scijava-ops-spi.version>1.0.1-SNAPSHOT</scijava-ops-spi.version>
 	</properties>
 
 	<dependencies>
@@ -110,7 +114,7 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-spi</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-ops-spi.version}</version>
 		</dependency>
 
 		<!-- Test scope dependencies -->
@@ -122,7 +126,7 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-discovery</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-discovery.version}</version>
 		</dependency>
 	</dependencies>
 

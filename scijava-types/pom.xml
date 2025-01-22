@@ -107,6 +107,11 @@
 		-->
 		<scijava.jvm.build.version>[11.0.17,)</scijava.jvm.build.version>
 		<scijava.jvm.version>11</scijava.jvm.version>
+
+		<!-- TEMP: Can be removed once present in pom-scijava -->
+		<scijava-common3.version>1.0.1-SNAPSHOT</scijava-common3.version>
+		<scijava-discovery.version>1.0.1-SNAPSHOT</scijava-discovery.version>
+		<scijava-priority.version>1.0.1-SNAPSHOT</scijava-priority.version>
 	</properties>
 
 	<dependencies>
@@ -114,17 +119,17 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-common3</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-common3.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-discovery</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-discovery.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-priority</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-priority.version}</version>
 		</dependency>
 
 		<!-- Third-party dependencies -->

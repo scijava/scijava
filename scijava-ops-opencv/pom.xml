@@ -114,7 +114,7 @@
 		<scijava.jvm.build.version>[11.0.17,)</scijava.jvm.build.version>
 		<scijava.jvm.version>11</scijava.jvm.version>
 
-		<!-- TEMP: Can be removed once present in pom-scijava -->
+		<!-- Note: These versions must match across all component POMs! -->
 		<scijava-ops-api.version>1.0.1-SNAPSHOT</scijava-ops-api.version>
 		<scijava-ops-engine.version>1.0.1-SNAPSHOT</scijava-ops-engine.version>
 		<scijava-ops-image.version>2.0.0-SNAPSHOT</scijava-ops-image.version>

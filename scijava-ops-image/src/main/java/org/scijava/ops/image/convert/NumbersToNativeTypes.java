@@ -29,6 +29,7 @@
 package org.scijava.ops.image.convert;
 
 import net.imglib2.type.NativeType;
+import net.imglib2.type.numeric.IntegerType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.*;
 import net.imglib2.type.numeric.real.DoubleType;
@@ -42,7 +43,7 @@ import java.util.function.Function;
  *
  * @author Gabriel Selzer
  */
-public class NumbersToNativeTypes<N extends Number, T extends RealType<T>> {
+public class NumbersToNativeTypes<N extends Number, T extends RealType<T>, I extends IntegerType<I>> {
 
     // -- Numbers to RealTypes -- //
 
@@ -95,9 +96,12 @@ public class NumbersToNativeTypes<N extends Number, T extends RealType<T>> {
             num -> new FloatType(num.floatValue());
 
     /**
+     * NB This converter wins against those above in requests for e.g.
+     * {@code Function<N, NativeType<T>>}
+     *
      * @input num the {@link Number} to convert
      * @output a {@link DoubleType} containing the information in {@code num}
-     * @implNote op names='engine.convert, convert.float64'
+     * @implNote op names='engine.convert, convert.float64', priority=100
      */
     public final Function<N, DoubleType> numberToDoubleType = //
             num -> new DoubleType(num.doubleValue());
@@ -107,42 +111,78 @@ public class NumbersToNativeTypes<N extends Number, T extends RealType<T>> {
     /**
      * @input realType the {@link ByteType} to convert
      * @output the {@link Byte}, converted from {@code realType}
+     * @implNote op names='engine.convert, convert.int8', priority="10"
+     */
+    public final Function<I, Byte> integerTypeToByte = i -> (byte) i.getIntegerLong();
+
+    /**
+     * NB potentially lossy, so lower priority
+     *
+     * @input realType the {@link ByteType} to convert
+     * @output the {@link Byte}, converted from {@code realType}
      * @implNote op names='engine.convert, convert.int8'
      */
-    public final Function<ByteType, Byte> byteTypeToByte = ByteType::get;
+    public final Function<T, Byte> realTypeToByte = i -> (byte) i.getRealDouble();
 
     /**
      * @input realType the {@link ShortType} to convert
      * @output the {@link Short}, converted from {@code realType}
+     * @implNote op names='engine.convert, convert.int16', priority="10"
+     */
+    public final Function<I, Short> integerTypeToShort = i -> (short) i.getInteger();
+
+    /**
+     * NB potentially lossy, so lower priority
+     *
+     * @input realType the {@link ShortType} to convert
+     * @output the {@link Short}, converted from {@code realType}
      * @implNote op names='engine.convert, convert.int16'
      */
-    public final Function<ShortType, Short> shortTypeToShort = ShortType::get;
+    public final Function<T, Short> realTypeToShort = i -> (short) i.getRealDouble();
 
     /**
      * @input realType the {@link IntType} to convert
      * @output the {@link Integer}, converted from {@code realType}
-     * @implNote op names='engine.convert, convert.int32'
+     * @implNote op names='engine.convert, convert.int32', priority="10"
      */
-    public final Function<IntType, Integer> intTypeToInteger = IntType::get;
+    public final Function<I, Integer> integerTypeToInteger = IntegerType::getInteger;
 
     /**
-     * @input realType the {@link LongType} to convert
+     * NB potentially lossy, so lower priority
+     *
+     * @input realType the {@link RealType} to convert
+     * @output the {@link Integer}, converted from {@code realType}
+     * @implNote op names='engine.convert, convert.int32'
+     */
+    public final Function<T, Integer> realTypeToInteger = i -> (int) i.getRealDouble();
+
+    /**
+     * @input integerType the {@link IntegerType} to convert
+     * @output the {@link Long}, converted from {@code integerType}
+     * @implNote op names='engine.convert, convert.int64', priority="10"
+     */
+    public final Function<I, Long> integerTypeToLong = IntegerType::getIntegerLong;
+
+    /**
+     * NB potentially lossy, so lower priority
+     *
+     * @input realType the {@link RealType} to convert
      * @output the {@link Long}, converted from {@code realType}
      * @implNote op names='engine.convert, convert.int64'
      */
-    public final Function<LongType, Long> longTypeToLong = LongType::get;
+    public final Function<T, Long> realTypeToLong = i -> (long) i.getRealDouble();
 
     /**
-     * @input num the {@link Number} to convert
-     * @output a {@link DoubleType} containing the information in {@code num}
+     * @input realType the {@link RealType} to convert
+     * @output the {@link Long}, converted from {@code realType}
      * @implNote op names='engine.convert, convert.float32'
      */
-    public final Function<FloatType, Float> floatTypeToFloat = FloatType::get;
+    public final Function<T, Float> realTypeToFloat = RealType::getRealFloat;
 
     /**
-     * @input num the {@link Number} to convert
-     * @output a {@link DoubleType} containing the information in {@code num}
+     * @input realType the {@link RealType} to convert
+     * @output the {@link Long}, converted from {@code realType}
      * @implNote op names='engine.convert, convert.float64'
      */
-    public final Function<DoubleType, Double> doubleTypeToDouble = DoubleType::get;
+    public final Function<T, Double> realTypeToDouble = RealType::getRealDouble;
 }

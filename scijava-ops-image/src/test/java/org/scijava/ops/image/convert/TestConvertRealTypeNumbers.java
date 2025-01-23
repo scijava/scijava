@@ -28,17 +28,13 @@
  */
 package org.scijava.ops.image.convert;
 
-import net.imglib2.type.numeric.integer.ByteType;
-import net.imglib2.type.numeric.integer.IntType;
-import net.imglib2.type.numeric.integer.LongType;
-import net.imglib2.type.numeric.integer.ShortType;
+import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.integer.*;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.image.AbstractOpTest;
-
-import java.util.function.Function;
 
 public class TestConvertRealTypeNumbers extends AbstractOpTest {
 
@@ -62,7 +58,6 @@ public class TestConvertRealTypeNumbers extends AbstractOpTest {
 
     @Test
     public void testConversion() {
-        Function<?, ?> f;
         for(Class<?> rt: REAL_TYPES){
             for (Class<?> n: NUMBERS) {
                 // rt -> n
@@ -85,4 +80,61 @@ public class TestConvertRealTypeNumbers extends AbstractOpTest {
         }
 
     }
+
+    /**
+     * Creates a five.
+     *
+     * @param input some unused input
+     * @return five
+     * @implNote op names="create.five"
+     */
+    public static <T extends RealType<T>> LongType createRealTypeFive(T input) {
+        return new LongType(5L);
+    }
+
+    /**
+     * Creates a five.
+     *
+     * @param input some unused input
+     * @return five
+     * @implNote op names="create.five"
+     */
+    public static <N extends Number> LongType createNumberFive(N input) {
+        return new LongType(5L);
+    }
+
+    /**
+     * Test that in practice the converters work
+     */
+    @Test
+    public void testExecution() {
+        Object[] numbers = { //
+            (byte) 5, //
+            (short) 5, //
+            5, //
+            5L, //
+            5f, //
+            5d //
+        };
+        for (var i: numbers) {
+            ops.op("create.five").input(i).outType(LongType.class).apply();
+        }
+
+        Object[] realTypes = { //
+                new ByteType((byte) 5), //
+                new UnsignedByteType( 5), //
+                new ShortType((short) 5), //
+                new UnsignedShortType( 5), //
+                new IntType(5), //
+                new UnsignedIntType( 5), //
+                new LongType(5), //
+                new UnsignedLongType( 5), //
+                new FloatType( 5f), //
+                new DoubleType( 5d), //
+        };
+        for (var i: realTypes) {
+            ops.op("create.five").input(i).outType(LongType.class).apply();
+        }
+    }
+
 }

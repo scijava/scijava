@@ -60,7 +60,7 @@ public final class LiftNeighborhoodComputersToRAI {
 			var extended = Views.extend(in, oobf);
 			var neighborhoods = shape.neighborhoodsRandomAccessible(extended);
 			var intervaled = Views.interval(neighborhoods, in);
-			LoopBuilder.setImages(intervaled, out).forEachPixel(op);
+			LoopBuilder.setImages(intervaled, out).multiThreaded().forEachPixel(op);
 		};
 	}
 
@@ -77,7 +77,7 @@ public final class LiftNeighborhoodComputersToRAI {
 			var extended = Views.extend(in, oobf);
 			var neighborhoods = shape.neighborhoodsRandomAccessible(extended);
 			var intervaled = Views.interval(neighborhoods, in);
-			LoopBuilder.setImages(intervaled, out).forEachPixel(op);
+			LoopBuilder.setImages(intervaled, out).multiThreaded().forEachPixel(op);
 		};
 	}
 
@@ -97,7 +97,7 @@ public final class LiftNeighborhoodComputersToRAI {
 			var extended = Views.extend(in1, oobf);
 			var neighborhoods = shape.neighborhoodsRandomAccessible(extended);
 			var intervaled = Views.interval(neighborhoods, in1);
-			LoopBuilder.setImages(intervaled, out).forEachPixel((in, container) -> op
+			LoopBuilder.setImages(intervaled, out).multiThreaded().forEachPixel((in, container) -> op
 				.compute(in, in2, container));
 		};
 	}
@@ -115,7 +115,7 @@ public final class LiftNeighborhoodComputersToRAI {
 			var extended = Views.extend(in1, oobf);
 			var neighborhoods = shape.neighborhoodsRandomAccessible(extended);
 			var intervaled = Views.interval(neighborhoods, in1);
-			LoopBuilder.setImages(intervaled, out).forEachPixel((in, container) -> op
+			LoopBuilder.setImages(intervaled, out).multiThreaded().forEachPixel((in, container) -> op
 				.compute(in, in2, container));
 		};
 	}
@@ -136,7 +136,7 @@ public final class LiftNeighborhoodComputersToRAI {
 			var extended = Views.extend(in1, oobf);
 			var neighborhoods = shape.neighborhoodsRandomAccessible(extended);
 			var intervaled = Views.interval(neighborhoods, in1);
-			LoopBuilder.setImages(intervaled, out).forEachPixel((in, container) -> op
+			LoopBuilder.setImages(intervaled, out).multiThreaded().forEachPixel((in, container) -> op
 				.compute(in, in2, in3, container));
 		};
 	}
@@ -154,7 +154,7 @@ public final class LiftNeighborhoodComputersToRAI {
 			var extended = Views.extend(in1, oobf);
 			var neighborhoods = shape.neighborhoodsRandomAccessible(extended);
 			var intervaled = Views.interval(neighborhoods, in1);
-			LoopBuilder.setImages(intervaled, out).forEachPixel((in, container) -> op
+			LoopBuilder.setImages(intervaled, out).multiThreaded().forEachPixel((in, container) -> op
 				.compute(in, in2, in3, container));
 		};
 	}

@@ -45,13 +45,17 @@ import org.scijava.ops.spi.OpCollection;
  * that operate on {@link Iterable}s of types. N.B. it is the user's
  * responsibility to pass {@link Iterable}s of the same length (otherwise the Op
  * will stop when one of the {@link Iterable}s runs out of {@link Object}s).
- * 
+ * <p>
+ * Note the use of generic types for each of the {@link Iterable}s in the output
+ * Ops. This is particularly useful for matching the Ops themselves, outside of
+ * adaptation.
+ * </p>
  * @author Gabriel Selzer
  */
-public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> implements OpCollection {
+public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O, II extends Iterable<I>, II1 extends Iterable<I1>, II2 extends Iterable<I2>, II3 extends Iterable<I3>, II4 extends Iterable<I4>, II5 extends Iterable<I5>, II6 extends Iterable<I6>, II7 extends Iterable<I7>, II8 extends Iterable<I8>, II9 extends Iterable<I9>, II10 extends Iterable<I10>, II11 extends Iterable<I11>, II12 extends Iterable<I12>, II13 extends Iterable<I13>, II14 extends Iterable<I14>, II15 extends Iterable<I15>, II16 extends Iterable<I16>, IO extends Iterable<O>> implements OpCollection {
 
 	@OpField(names = "engine.adapt")
-	public final Function<Computers.Arity0<O>, Computers.Arity0<Iterable<O>>> liftComputer0 = 
+	public final Function<Computers.Arity0<O>, Computers.Arity0<IO>> liftComputer0 = 
 		(computer) -> {
 			return (out) -> {
 				var itrout = out.iterator();
@@ -62,7 +66,7 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "engine.adapt")
-	public final Function<Computers.Arity1<I, O>, Computers.Arity1<Iterable<I>, Iterable<O>>> liftComputer1 = 
+	public final Function<Computers.Arity1<I, O>, Computers.Arity1<II, IO>> liftComputer1 = 
 		(computer) -> {
 			return (in, out) -> {
 				var itrin = in.iterator();
@@ -74,7 +78,7 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "engine.adapt")
-	public final Function<Computers.Arity2<I1, I2, O>, Computers.Arity2<Iterable<I1>, Iterable<I2>, Iterable<O>>> liftComputer2 = 
+	public final Function<Computers.Arity2<I1, I2, O>, Computers.Arity2<II1, II2, IO>> liftComputer2 = 
 		(computer) -> {
 			return (in1, in2, out) -> {
 				var itrin1 = in1.iterator();
@@ -87,7 +91,7 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "engine.adapt")
-	public final Function<Computers.Arity3<I1, I2, I3, O>, Computers.Arity3<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<O>>> liftComputer3 = 
+	public final Function<Computers.Arity3<I1, I2, I3, O>, Computers.Arity3<II1, II2, II3, IO>> liftComputer3 = 
 		(computer) -> {
 			return (in1, in2, in3, out) -> {
 				var itrin1 = in1.iterator();
@@ -101,7 +105,7 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "engine.adapt")
-	public final Function<Computers.Arity4<I1, I2, I3, I4, O>, Computers.Arity4<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<O>>> liftComputer4 = 
+	public final Function<Computers.Arity4<I1, I2, I3, I4, O>, Computers.Arity4<II1, II2, II3, II4, IO>> liftComputer4 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, out) -> {
 				var itrin1 = in1.iterator();
@@ -116,7 +120,7 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "engine.adapt")
-	public final Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Computers.Arity5<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<O>>> liftComputer5 = 
+	public final Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Computers.Arity5<II1, II2, II3, II4, II5, IO>> liftComputer5 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, out) -> {
 				var itrin1 = in1.iterator();
@@ -132,7 +136,7 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "engine.adapt")
-	public final Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Computers.Arity6<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<O>>> liftComputer6 = 
+	public final Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Computers.Arity6<II1, II2, II3, II4, II5, II6, IO>> liftComputer6 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, out) -> {
 				var itrin1 = in1.iterator();
@@ -149,7 +153,7 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "engine.adapt")
-	public final Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Computers.Arity7<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<O>>> liftComputer7 = 
+	public final Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Computers.Arity7<II1, II2, II3, II4, II5, II6, II7, IO>> liftComputer7 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, out) -> {
 				var itrin1 = in1.iterator();
@@ -167,7 +171,7 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "engine.adapt")
-	public final Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<O>>> liftComputer8 = 
+	public final Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<II1, II2, II3, II4, II5, II6, II7, II8, IO>> liftComputer8 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, out) -> {
 				var itrin1 = in1.iterator();
@@ -186,7 +190,7 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "engine.adapt")
-	public final Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<O>>> liftComputer9 = 
+	public final Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<II1, II2, II3, II4, II5, II6, II7, II8, II9, IO>> liftComputer9 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, out) -> {
 				var itrin1 = in1.iterator();
@@ -206,7 +210,7 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "engine.adapt")
-	public final Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<O>>> liftComputer10 = 
+	public final Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<II1, II2, II3, II4, II5, II6, II7, II8, II9, II10, IO>> liftComputer10 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, out) -> {
 				var itrin1 = in1.iterator();
@@ -227,7 +231,7 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "engine.adapt")
-	public final Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<O>>> liftComputer11 = 
+	public final Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<II1, II2, II3, II4, II5, II6, II7, II8, II9, II10, II11, IO>> liftComputer11 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, out) -> {
 				var itrin1 = in1.iterator();
@@ -249,7 +253,7 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "engine.adapt")
-	public final Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<O>>> liftComputer12 = 
+	public final Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<II1, II2, II3, II4, II5, II6, II7, II8, II9, II10, II11, II12, IO>> liftComputer12 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, out) -> {
 				var itrin1 = in1.iterator();
@@ -272,7 +276,7 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "engine.adapt")
-	public final Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<O>>> liftComputer13 = 
+	public final Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<II1, II2, II3, II4, II5, II6, II7, II8, II9, II10, II11, II12, II13, IO>> liftComputer13 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, out) -> {
 				var itrin1 = in1.iterator();
@@ -296,7 +300,7 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "engine.adapt")
-	public final Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<O>>> liftComputer14 = 
+	public final Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<II1, II2, II3, II4, II5, II6, II7, II8, II9, II10, II11, II12, II13, II14, IO>> liftComputer14 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, out) -> {
 				var itrin1 = in1.iterator();
@@ -321,7 +325,7 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "engine.adapt")
-	public final Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<I15>, Iterable<O>>> liftComputer15 = 
+	public final Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<II1, II2, II3, II4, II5, II6, II7, II8, II9, II10, II11, II12, II13, II14, II15, IO>> liftComputer15 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, out) -> {
 				var itrin1 = in1.iterator();
@@ -347,7 +351,7 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "engine.adapt")
-	public final Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<I15>, Iterable<I16>, Iterable<O>>> liftComputer16 = 
+	public final Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<II1, II2, II3, II4, II5, II6, II7, II8, II9, II10, II11, II12, II13, II14, II15, II16, IO>> liftComputer16 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16, out) -> {
 				var itrin1 = in1.iterator();

@@ -28,24 +28,24 @@
  */
 package org.scijava.ops.image.convert;
 
-import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.IntegerType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.*;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
-import org.scijava.ops.spi.OpDependency;
 
 import java.util.function.Function;
 
 /**
- * Converters for converting between {@link NativeType}s and {@link Number}s
+ * Converters for converting between {@link RealType}s and {@link Number}s
  *
  * @author Gabriel Selzer
  */
-public class NumbersToNativeTypes<N extends Number, T extends RealType<T>, I extends IntegerType<I>> {
+public class ConvertNumbersToRealTypes<N extends Number, T extends RealType<T>, I extends IntegerType<I>> {
 
     // -- Numbers to RealTypes -- //
+
+    // NB Combo conversion uses these to convert to any RealType
 
     /**
      * @input num the {@link Number} to convert
@@ -109,8 +109,8 @@ public class NumbersToNativeTypes<N extends Number, T extends RealType<T>, I ext
     // -- RealTypes to Numbers -- //
 
     /**
-     * @input realType the {@link ByteType} to convert
-     * @output the {@link Byte}, converted from {@code realType}
+     * @input integerType the {@link IntegerType} to convert
+     * @output the {@link Byte}, converted from {@code integerType}
      * @implNote op names='engine.convert, convert.int8', priority="10"
      */
     public final Function<I, Byte> integerTypeToByte = i -> (byte) i.getIntegerLong();
@@ -118,15 +118,15 @@ public class NumbersToNativeTypes<N extends Number, T extends RealType<T>, I ext
     /**
      * NB potentially lossy, so lower priority
      *
-     * @input realType the {@link ByteType} to convert
+     * @input realType the {@link RealType} to convert
      * @output the {@link Byte}, converted from {@code realType}
      * @implNote op names='engine.convert, convert.int8'
      */
     public final Function<T, Byte> realTypeToByte = i -> (byte) i.getRealDouble();
 
     /**
-     * @input realType the {@link ShortType} to convert
-     * @output the {@link Short}, converted from {@code realType}
+     * @input integerType the {@link IntegerType} to convert
+     * @output the {@link Short}, converted from {@code integerType}
      * @implNote op names='engine.convert, convert.int16', priority="10"
      */
     public final Function<I, Short> integerTypeToShort = i -> (short) i.getInteger();
@@ -134,15 +134,15 @@ public class NumbersToNativeTypes<N extends Number, T extends RealType<T>, I ext
     /**
      * NB potentially lossy, so lower priority
      *
-     * @input realType the {@link ShortType} to convert
+     * @input realType the {@link RealType} to convert
      * @output the {@link Short}, converted from {@code realType}
      * @implNote op names='engine.convert, convert.int16'
      */
     public final Function<T, Short> realTypeToShort = i -> (short) i.getRealDouble();
 
     /**
-     * @input realType the {@link IntType} to convert
-     * @output the {@link Integer}, converted from {@code realType}
+     * @input integerType the {@link IntegerType} to convert
+     * @output the {@link Integer}, converted from {@code integerType}
      * @implNote op names='engine.convert, convert.int32', priority="10"
      */
     public final Function<I, Integer> integerTypeToInteger = IntegerType::getInteger;
@@ -174,14 +174,14 @@ public class NumbersToNativeTypes<N extends Number, T extends RealType<T>, I ext
 
     /**
      * @input realType the {@link RealType} to convert
-     * @output the {@link Long}, converted from {@code realType}
+     * @output the {@link Float}, converted from {@code realType}
      * @implNote op names='engine.convert, convert.float32'
      */
     public final Function<T, Float> realTypeToFloat = RealType::getRealFloat;
 
     /**
      * @input realType the {@link RealType} to convert
-     * @output the {@link Long}, converted from {@code realType}
+     * @output the {@link Double}, converted from {@code realType}
      * @implNote op names='engine.convert, convert.float64'
      */
     public final Function<T, Double> realTypeToDouble = RealType::getRealDouble;

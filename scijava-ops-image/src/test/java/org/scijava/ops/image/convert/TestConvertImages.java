@@ -60,7 +60,7 @@ import net.imglib2.type.numeric.real.FloatType;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests the {@link ConvertTypes} ops.
+ * Tests the {@link ConvertComplexTypes} ops.
  *
  * @author Alison Walter
  */
@@ -73,7 +73,7 @@ public class TestConvertImages extends AbstractOpTest{
 	private final BigInteger p128 = new BigInteger("2CAFE0321BEEF0717BABE0929DEAD0311", 16);
 	private final BigInteger n128 = new BigInteger("-482301498A285BFD0982EE7DE02398BC9080459284CCDE90E9F0D00C043981210481AAADEF2", 16);
 
-	/** Tests {@link ConvertTypes#integerToBit}. */
+	/** Tests {@link ConvertComplexTypes#integerToBit}. */
 	@Test
 	public void testBitToBit() {
 
@@ -100,7 +100,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToBit}. */
+	/** Tests {@link ConvertComplexTypes#integerToBit}. */
 	@Test
 	public void testUint2ToBit() {
 
@@ -127,7 +127,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToBit}. */
+	/** Tests {@link ConvertComplexTypes#integerToBit}. */
 	@Test
 	public void testUint4ToBit() {
 
@@ -154,7 +154,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToBit}. */
+	/** Tests {@link ConvertComplexTypes#integerToBit}. */
 	@Test
 	public void testInt8ToBit() {
 
@@ -189,7 +189,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToBit}. */
+	/** Tests {@link ConvertComplexTypes#integerToBit}. */
 	@Test
 	public void testUint8ToBit() {
 
@@ -216,7 +216,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToBit}. */
+	/** Tests {@link ConvertComplexTypes#integerToBit}. */
 	@Test
 	public void testUint12ToBit() {
 
@@ -243,7 +243,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToBit}. */
+	/** Tests {@link ConvertComplexTypes#integerToBit}. */
 	@Test
 	public void testInt16ToBit() {
 
@@ -278,7 +278,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToBit}. */
+	/** Tests {@link ConvertComplexTypes#integerToBit}. */
 	@Test
 	public void testUint16ToBit() {
 
@@ -305,7 +305,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToBit}. */
+	/** Tests {@link ConvertComplexTypes#integerToBit}. */
 	@Test
 	public void testInt32ToBit() {
 
@@ -340,7 +340,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToBit}. */
+	/** Tests {@link ConvertComplexTypes#integerToBit}. */
 	@Test
 	public void testUint32ToBit() {
 
@@ -367,7 +367,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToBit}. */
+	/** Tests {@link ConvertComplexTypes#integerToBit}. */
 	@Test
 	public void testInt64ToBit() {
 
@@ -402,7 +402,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToBit}. */
+	/** Tests {@link ConvertComplexTypes#integerToBit}. */
 	@Test
 	public void testUint64ToBit() {
 
@@ -437,7 +437,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToBit}. */
+	/** Tests {@link ConvertComplexTypes#integerToBit}. */
 	@Test
 	public void testUint128ToBit() {
 
@@ -472,7 +472,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToBit}. */
+	/** Tests {@link ConvertComplexTypes#integerToBit}. */
 	@Test
 	public void testFloat32ToBit() {
 
@@ -507,7 +507,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToBit}. */
+	/** Tests {@link ConvertComplexTypes#integerToBit}. */
 	@Test
 	public void testCfloat32ToBit() {
 
@@ -542,7 +542,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToBit}. */
+	/** Tests {@link ConvertComplexTypes#integerToBit}. */
 	@Test
 	public void testFloat64ToBit() {
 
@@ -585,7 +585,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToBit}. */
+	/** Tests {@link ConvertComplexTypes#integerToBit}. */
 	@Test
 	public void testCfloat64ToBit() {
 
@@ -620,7 +620,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint2}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint2}. */
 	@Test
 	public void testBitToUint2() {
 
@@ -647,7 +647,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint2}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint2}. */
 	@Test
 	public void testUint2ToUint2() {
 
@@ -674,7 +674,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint2}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint2}. */
 	@Test
 	public void testUint4ToUint2() {
 
@@ -701,7 +701,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint2}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint2}. */
 	@Test
 	public void testInt8ToUint2() {
 
@@ -736,7 +736,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint2}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint2}. */
 	@Test
 	public void testUint8ToUint2() {
 
@@ -763,7 +763,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint2}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint2}. */
 	@Test
 	public void testUint12ToUint2() {
 
@@ -790,7 +790,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint2}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint2}. */
 	@Test
 	public void testInt16ToUint2() {
 
@@ -825,7 +825,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint2}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint2}. */
 	@Test
 	public void testUint16ToUint2() {
 
@@ -852,7 +852,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint2}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint2}. */
 	@Test
 	public void testInt32ToUint2() {
 
@@ -887,7 +887,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint2}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint2}. */
 	@Test
 	public void testUint32ToUint2() {
 
@@ -914,7 +914,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint2}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint2}. */
 	@Test
 	public void testInt64ToUint2() {
 
@@ -949,7 +949,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint2}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint2}. */
 	@Test
 	public void testUint64ToUint2() {
 
@@ -984,7 +984,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint2}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint2}. */
 	@Test
 	public void testUint128ToUint2() {
 
@@ -1019,7 +1019,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint2}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint2}. */
 	@Test
 	public void testFloat32ToUint2() {
 
@@ -1054,7 +1054,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint2}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint2}. */
 	@Test
 	public void testCfloat32ToUint2() {
 
@@ -1089,7 +1089,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint2}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint2}. */
 	@Test
 	public void testFloat64ToUint2() {
 
@@ -1132,7 +1132,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint2}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint2}. */
 	@Test
 	public void testCfloat64ToUint2() {
 
@@ -1167,7 +1167,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint4}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint4}. */
 	@Test
 	public void testBitToUint4() {
 
@@ -1194,7 +1194,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint4}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint4}. */
 	@Test
 	public void testUint2ToUint4() {
 
@@ -1221,7 +1221,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint4}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint4}. */
 	@Test
 	public void testUint4ToUint4() {
 
@@ -1248,7 +1248,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint4}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint4}. */
 	@Test
 	public void testInt8ToUint4() {
 
@@ -1283,7 +1283,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint4}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint4}. */
 	@Test
 	public void testUint8ToUint4() {
 
@@ -1310,7 +1310,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint4}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint4}. */
 	@Test
 	public void testUint12ToUint4() {
 
@@ -1337,7 +1337,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint4}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint4}. */
 	@Test
 	public void testInt16ToUint4() {
 
@@ -1372,7 +1372,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint4}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint4}. */
 	@Test
 	public void testUint16ToUint4() {
 
@@ -1399,7 +1399,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint4}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint4}. */
 	@Test
 	public void testInt32ToUint4() {
 
@@ -1434,7 +1434,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint4}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint4}. */
 	@Test
 	public void testUint32ToUint4() {
 
@@ -1461,7 +1461,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint4}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint4}. */
 	@Test
 	public void testInt64ToUint4() {
 
@@ -1496,7 +1496,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint4}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint4}. */
 	@Test
 	public void testUint64ToUint4() {
 
@@ -1531,7 +1531,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint4}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint4}. */
 	@Test
 	public void testUint128ToUint4() {
 
@@ -1566,7 +1566,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint4}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint4}. */
 	@Test
 	public void testFloat32ToUint4() {
 
@@ -1601,7 +1601,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint4}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint4}. */
 	@Test
 	public void testCfloat32ToUint4() {
 
@@ -1636,7 +1636,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint4}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint4}. */
 	@Test
 	public void testFloat64ToUint4() {
 
@@ -1679,7 +1679,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint4}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint4}. */
 	@Test
 	public void testCfloat64ToUint4() {
 
@@ -1714,7 +1714,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt8}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt8}. */
 	@Test
 	public void testBitToInt8() {
 
@@ -1741,7 +1741,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt8}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt8}. */
 	@Test
 	public void testUint2ToInt8() {
 
@@ -1768,7 +1768,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt8}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt8}. */
 	@Test
 	public void testUint4ToInt8() {
 
@@ -1795,7 +1795,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt8}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt8}. */
 	@Test
 	public void testInt8ToInt8() {
 
@@ -1830,7 +1830,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt8}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt8}. */
 	@Test
 	public void testUint8ToInt8() {
 
@@ -1857,7 +1857,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt8}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt8}. */
 	@Test
 	public void testUint12ToInt8() {
 
@@ -1884,7 +1884,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt8}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt8}. */
 	@Test
 	public void testInt16ToInt8() {
 
@@ -1919,7 +1919,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt8}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt8}. */
 	@Test
 	public void testUint16ToInt8() {
 
@@ -1946,7 +1946,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt8}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt8}. */
 	@Test
 	public void testInt32ToInt8() {
 
@@ -1981,7 +1981,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt8}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt8}. */
 	@Test
 	public void testUint32ToInt8() {
 
@@ -2008,7 +2008,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt8}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt8}. */
 	@Test
 	public void testInt64ToInt8() {
 
@@ -2043,7 +2043,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt8}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt8}. */
 	@Test
 	public void testUint64ToInt8() {
 
@@ -2078,7 +2078,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt8}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt8}. */
 	@Test
 	public void testUint128ToInt8() {
 
@@ -2113,7 +2113,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt8}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt8}. */
 	@Test
 	public void testFloat32ToInt8() {
 
@@ -2148,7 +2148,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt8}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt8}. */
 	@Test
 	public void testCfloat32ToInt8() {
 
@@ -2183,7 +2183,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt8}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt8}. */
 	@Test
 	public void testFloat64ToInt8() {
 
@@ -2226,7 +2226,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt8}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt8}. */
 	@Test
 	public void testCfloat64ToInt8() {
 
@@ -2261,7 +2261,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint8}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint8}. */
 	@Test
 	public void testBitToUint8() {
 
@@ -2288,7 +2288,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint8}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint8}. */
 	@Test
 	public void testUint2ToUint8() {
 
@@ -2315,7 +2315,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint8}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint8}. */
 	@Test
 	public void testUint4ToUint8() {
 
@@ -2342,7 +2342,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint8}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint8}. */
 	@Test
 	public void testInt8ToUint8() {
 
@@ -2377,7 +2377,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint8}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint8}. */
 	@Test
 	public void testUint8ToUint8() {
 
@@ -2404,7 +2404,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint8}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint8}. */
 	@Test
 	public void testUint12ToUint8() {
 
@@ -2431,7 +2431,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint8}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint8}. */
 	@Test
 	public void testInt16ToUint8() {
 
@@ -2466,7 +2466,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint8}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint8}. */
 	@Test
 	public void testUint16ToUint8() {
 
@@ -2493,7 +2493,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint8}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint8}. */
 	@Test
 	public void testInt32ToUint8() {
 
@@ -2528,7 +2528,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint8}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint8}. */
 	@Test
 	public void testUint32ToUint8() {
 
@@ -2555,7 +2555,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint8}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint8}. */
 	@Test
 	public void testInt64ToUint8() {
 
@@ -2590,7 +2590,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint8}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint8}. */
 	@Test
 	public void testUint64ToUint8() {
 
@@ -2625,7 +2625,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint8}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint8}. */
 	@Test
 	public void testUint128ToUint8() {
 
@@ -2660,7 +2660,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint8}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint8}. */
 	@Test
 	public void testFloat32ToUint8() {
 
@@ -2695,7 +2695,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint8}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint8}. */
 	@Test
 	public void testCfloat32ToUint8() {
 
@@ -2730,7 +2730,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint8}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint8}. */
 	@Test
 	public void testFloat64ToUint8() {
 
@@ -2773,7 +2773,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint8}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint8}. */
 	@Test
 	public void testCfloat64ToUint8() {
 
@@ -2808,7 +2808,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint12}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint12}. */
 	@Test
 	public void testBitToUint12() {
 
@@ -2835,7 +2835,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint12}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint12}. */
 	@Test
 	public void testUint2ToUint12() {
 
@@ -2862,7 +2862,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint12}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint12}. */
 	@Test
 	public void testUint4ToUint12() {
 
@@ -2889,7 +2889,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint12}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint12}. */
 	@Test
 	public void testInt8ToUint12() {
 
@@ -2924,7 +2924,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint12}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint12}. */
 	@Test
 	public void testUint8ToUint12() {
 
@@ -2951,7 +2951,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint12}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint12}. */
 	@Test
 	public void testUint12ToUint12() {
 
@@ -2978,7 +2978,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint12}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint12}. */
 	@Test
 	public void testInt16ToUint12() {
 
@@ -3013,7 +3013,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint12}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint12}. */
 	@Test
 	public void testUint16ToUint12() {
 
@@ -3040,7 +3040,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint12}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint12}. */
 	@Test
 	public void testInt32ToUint12() {
 
@@ -3075,7 +3075,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint12}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint12}. */
 	@Test
 	public void testUint32ToUint12() {
 
@@ -3102,7 +3102,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint12}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint12}. */
 	@Test
 	public void testInt64ToUint12() {
 
@@ -3137,7 +3137,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint12}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint12}. */
 	@Test
 	public void testUint64ToUint12() {
 
@@ -3172,7 +3172,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint12}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint12}. */
 	@Test
 	public void testUint128ToUint12() {
 
@@ -3207,7 +3207,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint12}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint12}. */
 	@Test
 	public void testFloat32ToUint12() {
 
@@ -3242,7 +3242,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint12}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint12}. */
 	@Test
 	public void testCfloat32ToUint12() {
 
@@ -3277,7 +3277,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint12}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint12}. */
 	@Test
 	public void testFloat64ToUint12() {
 
@@ -3320,7 +3320,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint12}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint12}. */
 	@Test
 	public void testCfloat64ToUint12() {
 
@@ -3355,7 +3355,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt16}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt16}. */
 	@Test
 	public void testBitToInt16() {
 
@@ -3382,7 +3382,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt16}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt16}. */
 	@Test
 	public void testUint2ToInt16() {
 
@@ -3409,7 +3409,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt16}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt16}. */
 	@Test
 	public void testUint4ToInt16() {
 
@@ -3436,7 +3436,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt16}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt16}. */
 	@Test
 	public void testInt8ToInt16() {
 
@@ -3471,7 +3471,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt16}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt16}. */
 	@Test
 	public void testUint8ToInt16() {
 
@@ -3498,7 +3498,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt16}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt16}. */
 	@Test
 	public void testUint12ToInt16() {
 
@@ -3525,7 +3525,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt16}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt16}. */
 	@Test
 	public void testInt16ToInt16() {
 
@@ -3560,7 +3560,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt16}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt16}. */
 	@Test
 	public void testUint16ToInt16() {
 
@@ -3587,7 +3587,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt16}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt16}. */
 	@Test
 	public void testInt32ToInt16() {
 
@@ -3622,7 +3622,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt16}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt16}. */
 	@Test
 	public void testUint32ToInt16() {
 
@@ -3649,7 +3649,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt16}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt16}. */
 	@Test
 	public void testInt64ToInt16() {
 
@@ -3684,7 +3684,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt16}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt16}. */
 	@Test
 	public void testUint64ToInt16() {
 
@@ -3719,7 +3719,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt16}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt16}. */
 	@Test
 	public void testUint128ToInt16() {
 
@@ -3754,7 +3754,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt16}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt16}. */
 	@Test
 	public void testFloat32ToInt16() {
 
@@ -3789,7 +3789,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt16}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt16}. */
 	@Test
 	public void testCfloat32ToInt16() {
 
@@ -3824,7 +3824,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt16}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt16}. */
 	@Test
 	public void testFloat64ToInt16() {
 
@@ -3867,7 +3867,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt16}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt16}. */
 	@Test
 	public void testCfloat64ToInt16() {
 
@@ -3902,7 +3902,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint16}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint16}. */
 	@Test
 	public void testBitToUint16() {
 
@@ -3929,7 +3929,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint16}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint16}. */
 	@Test
 	public void testUint2ToUint16() {
 
@@ -3956,7 +3956,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint16}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint16}. */
 	@Test
 	public void testUint4ToUint16() {
 
@@ -3983,7 +3983,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint16}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint16}. */
 	@Test
 	public void testInt8ToUint16() {
 
@@ -4018,7 +4018,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint16}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint16}. */
 	@Test
 	public void testUint8ToUint16() {
 
@@ -4045,7 +4045,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint16}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint16}. */
 	@Test
 	public void testUint12ToUint16() {
 
@@ -4072,7 +4072,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint16}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint16}. */
 	@Test
 	public void testInt16ToUint16() {
 
@@ -4107,7 +4107,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint16}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint16}. */
 	@Test
 	public void testUint16ToUint16() {
 
@@ -4134,7 +4134,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint16}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint16}. */
 	@Test
 	public void testInt32ToUint16() {
 
@@ -4169,7 +4169,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint16}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint16}. */
 	@Test
 	public void testUint32ToUint16() {
 
@@ -4196,7 +4196,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint16}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint16}. */
 	@Test
 	public void testInt64ToUint16() {
 
@@ -4231,7 +4231,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint16}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint16}. */
 	@Test
 	public void testUint64ToUint16() {
 
@@ -4266,7 +4266,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint16}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint16}. */
 	@Test
 	public void testUint128ToUint16() {
 
@@ -4301,7 +4301,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint16}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint16}. */
 	@Test
 	public void testFloat32ToUint16() {
 
@@ -4336,7 +4336,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint16}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint16}. */
 	@Test
 	public void testCfloat32ToUint16() {
 
@@ -4371,7 +4371,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint16}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint16}. */
 	@Test
 	public void testFloat64ToUint16() {
 
@@ -4414,7 +4414,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint16}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint16}. */
 	@Test
 	public void testCfloat64ToUint16() {
 
@@ -4449,7 +4449,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt32}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt32}. */
 	@Test
 	public void testBitToInt32() {
 
@@ -4476,7 +4476,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt32}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt32}. */
 	@Test
 	public void testUint2ToInt32() {
 
@@ -4503,7 +4503,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt32}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt32}. */
 	@Test
 	public void testUint4ToInt32() {
 
@@ -4530,7 +4530,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt32}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt32}. */
 	@Test
 	public void testInt8ToInt32() {
 
@@ -4565,7 +4565,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt32}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt32}. */
 	@Test
 	public void testUint8ToInt32() {
 
@@ -4592,7 +4592,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt32}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt32}. */
 	@Test
 	public void testUint12ToInt32() {
 
@@ -4619,7 +4619,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt32}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt32}. */
 	@Test
 	public void testInt16ToInt32() {
 
@@ -4654,7 +4654,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt32}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt32}. */
 	@Test
 	public void testUint16ToInt32() {
 
@@ -4681,7 +4681,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt32}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt32}. */
 	@Test
 	public void testInt32ToInt32() {
 
@@ -4716,7 +4716,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt32}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt32}. */
 	@Test
 	public void testUint32ToInt32() {
 
@@ -4743,7 +4743,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt32}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt32}. */
 	@Test
 	public void testInt64ToInt32() {
 
@@ -4778,7 +4778,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt32}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt32}. */
 	@Test
 	public void testUint64ToInt32() {
 
@@ -4813,7 +4813,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt32}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt32}. */
 	@Test
 	public void testUint128ToInt32() {
 
@@ -4848,7 +4848,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt32}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt32}. */
 	@Test
 	public void testFloat32ToInt32() {
 
@@ -4883,7 +4883,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt32}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt32}. */
 	@Test
 	public void testCfloat32ToInt32() {
 
@@ -4918,7 +4918,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt32}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt32}. */
 	@Test
 	public void testFloat64ToInt32() {
 
@@ -4961,7 +4961,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt32}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt32}. */
 	@Test
 	public void testCfloat64ToInt32() {
 
@@ -4996,7 +4996,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint32}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint32}. */
 	@Test
 	public void testBitToUint32() {
 
@@ -5023,7 +5023,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint32}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint32}. */
 	@Test
 	public void testUint2ToUint32() {
 
@@ -5050,7 +5050,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint32}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint32}. */
 	@Test
 	public void testUint4ToUint32() {
 
@@ -5077,7 +5077,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint32}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint32}. */
 	@Test
 	public void testInt8ToUint32() {
 
@@ -5112,7 +5112,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint32}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint32}. */
 	@Test
 	public void testUint8ToUint32() {
 
@@ -5139,7 +5139,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint32}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint32}. */
 	@Test
 	public void testUint12ToUint32() {
 
@@ -5166,7 +5166,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint32}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint32}. */
 	@Test
 	public void testInt16ToUint32() {
 
@@ -5201,7 +5201,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint32}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint32}. */
 	@Test
 	public void testUint16ToUint32() {
 
@@ -5228,7 +5228,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint32}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint32}. */
 	@Test
 	public void testInt32ToUint32() {
 
@@ -5263,7 +5263,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint32}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint32}. */
 	@Test
 	public void testUint32ToUint32() {
 
@@ -5290,7 +5290,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint32}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint32}. */
 	@Test
 	public void testInt64ToUint32() {
 
@@ -5325,7 +5325,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint32}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint32}. */
 	@Test
 	public void testUint64ToUint32() {
 
@@ -5360,7 +5360,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint32}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint32}. */
 	@Test
 	public void testUint128ToUint32() {
 
@@ -5395,7 +5395,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint32}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint32}. */
 	@Test
 	public void testFloat32ToUint32() {
 
@@ -5430,7 +5430,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint32}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint32}. */
 	@Test
 	public void testCfloat32ToUint32() {
 
@@ -5465,7 +5465,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint32}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint32}. */
 	@Test
 	public void testFloat64ToUint32() {
 
@@ -5508,7 +5508,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint32}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint32}. */
 	@Test
 	public void testCfloat64ToUint32() {
 
@@ -5543,7 +5543,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt64}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt64}. */
 	@Test
 	public void testBitToInt64() {
 
@@ -5570,7 +5570,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt64}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt64}. */
 	@Test
 	public void testUint2ToInt64() {
 
@@ -5597,7 +5597,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt64}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt64}. */
 	@Test
 	public void testUint4ToInt64() {
 
@@ -5624,7 +5624,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt64}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt64}. */
 	@Test
 	public void testInt8ToInt64() {
 
@@ -5659,7 +5659,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt64}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt64}. */
 	@Test
 	public void testUint8ToInt64() {
 
@@ -5686,7 +5686,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt64}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt64}. */
 	@Test
 	public void testUint12ToInt64() {
 
@@ -5713,7 +5713,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt64}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt64}. */
 	@Test
 	public void testInt16ToInt64() {
 
@@ -5748,7 +5748,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt64}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt64}. */
 	@Test
 	public void testUint16ToInt64() {
 
@@ -5775,7 +5775,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt64}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt64}. */
 	@Test
 	public void testInt32ToInt64() {
 
@@ -5810,7 +5810,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt64}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt64}. */
 	@Test
 	public void testUint32ToInt64() {
 
@@ -5837,7 +5837,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt64}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt64}. */
 	@Test
 	public void testInt64ToInt64() {
 
@@ -5872,7 +5872,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt64}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt64}. */
 	@Test
 	public void testUint64ToInt64() {
 
@@ -5907,7 +5907,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt64}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt64}. */
 	@Test
 	public void testUint128ToInt64() {
 
@@ -5942,7 +5942,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt64}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt64}. */
 	@Test
 	public void testFloat32ToInt64() {
 
@@ -5977,7 +5977,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt64}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt64}. */
 	@Test
 	public void testCfloat32ToInt64() {
 
@@ -6012,7 +6012,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt64}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt64}. */
 	@Test
 	public void testFloat64ToInt64() {
 
@@ -6055,7 +6055,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToInt64}. */
+	/** Tests {@link ConvertComplexTypes#integerToInt64}. */
 	@Test
 	public void testCfloat64ToInt64() {
 
@@ -6090,7 +6090,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint64}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint64}. */
 	@Test
 	public void testBitToUint64() {
 
@@ -6117,7 +6117,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint64}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint64}. */
 	@Test
 	public void testUint2ToUint64() {
 
@@ -6144,7 +6144,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint64}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint64}. */
 	@Test
 	public void testUint4ToUint64() {
 
@@ -6171,7 +6171,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint64}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint64}. */
 	@Test
 	public void testInt8ToUint64() {
 
@@ -6206,7 +6206,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint64}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint64}. */
 	@Test
 	public void testUint8ToUint64() {
 
@@ -6233,7 +6233,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint64}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint64}. */
 	@Test
 	public void testUint12ToUint64() {
 
@@ -6260,7 +6260,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint64}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint64}. */
 	@Test
 	public void testInt16ToUint64() {
 
@@ -6295,7 +6295,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint64}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint64}. */
 	@Test
 	public void testUint16ToUint64() {
 
@@ -6322,7 +6322,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint64}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint64}. */
 	@Test
 	public void testInt32ToUint64() {
 
@@ -6357,7 +6357,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint64}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint64}. */
 	@Test
 	public void testUint32ToUint64() {
 
@@ -6384,7 +6384,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint64}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint64}. */
 	@Test
 	public void testInt64ToUint64() {
 
@@ -6419,7 +6419,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint64}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint64}. */
 	@Test
 	public void testUint64ToUint64() {
 
@@ -6454,7 +6454,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint64}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint64}. */
 	@Test
 	public void testUint128ToUint64() {
 
@@ -6489,7 +6489,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint64}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint64}. */
 	@Test
 	public void testFloat32ToUint64() {
 
@@ -6524,7 +6524,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint64}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint64}. */
 	@Test
 	public void testCfloat32ToUint64() {
 
@@ -6559,7 +6559,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint64}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint64}. */
 	@Test
 	public void testFloat64ToUint64() {
 
@@ -6602,7 +6602,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint64}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint64}. */
 	@Test
 	public void testCfloat64ToUint64() {
 
@@ -6637,7 +6637,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testBitToUint128() {
 
@@ -6664,7 +6664,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint2ToUint128() {
 
@@ -6691,7 +6691,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint4ToUint128() {
 
@@ -6718,7 +6718,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testInt8ToUint128() {
 
@@ -6753,7 +6753,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint8ToUint128() {
 
@@ -6780,7 +6780,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint12ToUint128() {
 
@@ -6807,7 +6807,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testInt16ToUint128() {
 
@@ -6842,7 +6842,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint16ToUint128() {
 
@@ -6869,7 +6869,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testInt32ToUint128() {
 
@@ -6904,7 +6904,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint32ToUint128() {
 
@@ -6931,7 +6931,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testInt64ToUint128() {
 
@@ -6966,7 +6966,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint64ToUint128() {
 
@@ -7001,7 +7001,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint128ToUint128() {
 
@@ -7036,7 +7036,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testFloat32ToUint128() {
 
@@ -7071,7 +7071,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testCfloat32ToUint128() {
 
@@ -7106,7 +7106,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testFloat64ToUint128() {
 
@@ -7149,7 +7149,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testCfloat64ToUint128() {
 
@@ -7184,7 +7184,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testBitToFloat32() {
 
@@ -7211,7 +7211,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint2ToFloat32() {
 
@@ -7238,7 +7238,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint4ToFloat32() {
 
@@ -7265,7 +7265,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testInt8ToFloat32() {
 
@@ -7300,7 +7300,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint8ToFloat32() {
 
@@ -7327,7 +7327,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint12ToFloat32() {
 
@@ -7354,7 +7354,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testInt16ToFloat32() {
 
@@ -7389,7 +7389,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint16ToFloat32() {
 
@@ -7416,7 +7416,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testInt32ToFloat32() {
 
@@ -7451,7 +7451,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint32ToFloat32() {
 
@@ -7478,7 +7478,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testInt64ToFloat32() {
 
@@ -7513,7 +7513,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint64ToFloat32() {
 
@@ -7548,7 +7548,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint128ToFloat32() {
 
@@ -7583,7 +7583,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testFloat32ToFloat32() {
 
@@ -7618,7 +7618,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testCfloat32ToFloat32() {
 
@@ -7653,7 +7653,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testFloat64ToFloat32() {
 
@@ -7696,7 +7696,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testCfloat64ToFloat32() {
 
@@ -7731,7 +7731,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testBitToCfloat32() {
 
@@ -7760,7 +7760,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint2ToCfloat32() {
 
@@ -7789,7 +7789,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint4ToCfloat32() {
 
@@ -7818,7 +7818,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testInt8ToCfloat32() {
 
@@ -7856,7 +7856,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint8ToCfloat32() {
 
@@ -7885,7 +7885,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint12ToCfloat32() {
 
@@ -7914,7 +7914,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testInt16ToCfloat32() {
 
@@ -7952,7 +7952,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint16ToCfloat32() {
 
@@ -7981,7 +7981,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testInt32ToCfloat32() {
 
@@ -8019,7 +8019,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint32ToCfloat32() {
 
@@ -8048,7 +8048,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testInt64ToCfloat32() {
 
@@ -8086,7 +8086,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint64ToCfloat32() {
 
@@ -8124,7 +8124,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint128ToCfloat32() {
 
@@ -8162,7 +8162,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testFloat32ToCfloat32() {
 
@@ -8200,7 +8200,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testCfloat32ToCfloat32() {
 
@@ -8238,7 +8238,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testFloat64ToCfloat32() {
 
@@ -8285,7 +8285,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testCfloat64ToCfloat32() {
 
@@ -8323,7 +8323,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testBitToFloat64() {
 
@@ -8350,7 +8350,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint2ToFloat64() {
 
@@ -8377,7 +8377,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint4ToFloat64() {
 
@@ -8404,7 +8404,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testInt8ToFloat64() {
 
@@ -8439,7 +8439,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint8ToFloat64() {
 
@@ -8466,7 +8466,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint12ToFloat64() {
 
@@ -8493,7 +8493,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testInt16ToFloat64() {
 
@@ -8528,7 +8528,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint16ToFloat64() {
 
@@ -8555,7 +8555,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testInt32ToFloat64() {
 
@@ -8590,7 +8590,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint32ToFloat64() {
 
@@ -8617,7 +8617,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testInt64ToFloat64() {
 
@@ -8652,7 +8652,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint64ToFloat64() {
 
@@ -8687,7 +8687,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint128ToFloat64() {
 
@@ -8722,7 +8722,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testFloat32ToFloat64() {
 
@@ -8757,7 +8757,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testCfloat32ToFloat64() {
 
@@ -8792,7 +8792,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testFloat64ToFloat64() {
 
@@ -8835,7 +8835,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testCfloat64ToFloat64() {
 
@@ -8870,7 +8870,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testBitToCfloat64() {
 
@@ -8899,7 +8899,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint2ToCfloat64() {
 
@@ -8928,7 +8928,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint4ToCfloat64() {
 
@@ -8957,7 +8957,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testInt8ToCfloat64() {
 
@@ -8995,7 +8995,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint8ToCfloat64() {
 
@@ -9024,7 +9024,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint12ToCfloat64() {
 
@@ -9053,7 +9053,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testInt16ToCfloat64() {
 
@@ -9091,7 +9091,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint16ToCfloat64() {
 
@@ -9120,7 +9120,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testInt32ToCfloat64() {
 
@@ -9158,7 +9158,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint32ToCfloat64() {
 
@@ -9187,7 +9187,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testInt64ToCfloat64() {
 
@@ -9225,7 +9225,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint64ToCfloat64() {
 
@@ -9263,7 +9263,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testUint128ToCfloat64() {
 
@@ -9301,7 +9301,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testFloat32ToCfloat64() {
 
@@ -9339,7 +9339,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testCfloat32ToCfloat64() {
 
@@ -9377,7 +9377,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testFloat64ToCfloat64() {
 
@@ -9424,7 +9424,7 @@ public class TestConvertImages extends AbstractOpTest{
 
 	}
 
-	/** Tests {@link ConvertTypes#integerToUint128}. */
+	/** Tests {@link ConvertComplexTypes#integerToUint128}. */
 	@Test
 	public void testCfloat64ToCfloat64() {
 

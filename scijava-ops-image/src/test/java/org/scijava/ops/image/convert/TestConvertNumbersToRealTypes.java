@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.image.AbstractOpTest;
 
-public class TestConvertRealTypeNumbers extends AbstractOpTest {
+public class TestConvertNumbersToRealTypes extends AbstractOpTest {
 
     public static final Class<?>[] REAL_TYPES = {
             ByteType.class,

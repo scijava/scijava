@@ -58,7 +58,7 @@ import org.scijava.function.Computers;
  *
  * @author Alison Walter
  */
-public final class ConvertTypes<C extends ComplexType<C>, T extends IntegerType<T>> {
+public final class ConvertComplexTypes<C extends ComplexType<C>, T extends IntegerType<T>> {
 
 	/**
 	 * @input input

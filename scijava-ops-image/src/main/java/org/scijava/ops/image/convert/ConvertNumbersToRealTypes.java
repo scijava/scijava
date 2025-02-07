@@ -58,7 +58,7 @@ public class ConvertNumbersToRealTypes<N extends Number, T extends RealType<T>, 
     /**
      * @input num the {@link Number} to convert
      * @output a {@link UnsignedByteType} containing the information in {@code num}
-     * @implNote op names='engine.convert, convert.int8'
+     * @implNote op names='engine.convert, convert.uint8'
      */
     public final Function<N, UnsignedByteType> numberToUnsignedByteType = //
             num -> new UnsignedByteType(num.shortValue());
@@ -73,11 +73,27 @@ public class ConvertNumbersToRealTypes<N extends Number, T extends RealType<T>, 
 
     /**
      * @input num the {@link Number} to convert
+     * @output a {@link UnsignedShortType} containing the information in {@code num}
+     * @implNote op names='engine.convert, convert.uint16'
+     */
+    public final Function<N, UnsignedShortType> numberToUnsignedShortType = //
+            num -> new UnsignedShortType(num.intValue());
+
+    /**
+     * @input num the {@link Number} to convert
      * @output a {@link IntType} containing the information in {@code num}
      * @implNote op names='engine.convert, convert.int32'
      */
     public final Function<N, IntType> numberToIntType = //
             num -> new IntType(num.intValue());
+
+    /**
+     * @input num the {@link Number} to convert
+     * @output a {@link UnsignedIntType} containing the information in {@code num}
+     * @implNote op names='engine.convert, convert.uint32'
+     */
+    public final Function<N, UnsignedIntType> numberToUnsignedIntType = //
+            num -> new UnsignedIntType(num.longValue());
 
     /**
      * @input num the {@link Number} to convert

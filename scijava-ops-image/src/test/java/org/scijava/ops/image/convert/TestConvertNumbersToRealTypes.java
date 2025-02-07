@@ -40,8 +40,11 @@ public class TestConvertNumbersToRealTypes extends AbstractOpTest {
 
     public static final Class<?>[] REAL_TYPES = {
             ByteType.class,
+            UnsignedByteType.class,
             ShortType.class,
+            UnsignedShortType.class,
             IntType.class,
+            UnsignedIntType.class,
             LongType.class,
             FloatType.class,
             DoubleType.class

@@ -32,11 +32,11 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
 
 /**
- * Tests the {@link ConvertTypes} ops.
+ * Tests the {@link ConvertComplexTypes} ops.
  *
  * @author Alison Walter
  */
-public class TestConvertType extends AbstractOpTest{
+public class TestConvertComplexTypes extends AbstractOpTest{
 
 #foreach ($bi in $biv)
 	private final BigInteger $bi.name = $bi.v;
@@ -54,9 +54,9 @@ public class TestConvertType extends AbstractOpTest{
 #end
 #foreach ($fromType in $types)
 #if ($fromType.built.contains("float") || $toType.built.contains("float"))
-#set ($jdocName = "ConvertTypes#complexTo$toType.op")
+#set ($jdocName = "ConvertComplexTypes#complexTo$toType.op")
 #else
-#set ($className = "ConvertTypes#integerTo$toType.op")
+#set ($className = "ConvertComplexTypes#integerTo$toType.op")
 #end
 #set ($imgLibType2 = "$fromType.imglibT" + "Type")
 #set ($first = "true")

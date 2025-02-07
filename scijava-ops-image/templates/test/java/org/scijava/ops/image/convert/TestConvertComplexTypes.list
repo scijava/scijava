@@ -1,6 +1,6 @@
 # Unit tests for convert ops
 
-[TestConvertType.java]
+[TestConvertComplexTypes.java]
 biv = ```
 [
 	[name: "p64",     v: 'new BigInteger("AEF234567ABCD123", 16)'],

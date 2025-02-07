@@ -40,7 +40,6 @@ import org.scijava.ops.engine.matcher.OpCandidate;
 import org.scijava.ops.engine.matcher.OpCandidate.StatusCode;
 import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.engine.matcher.impl.DefaultOpRequest;
-import org.scijava.ops.engine.struct.FunctionalMethodType;
 import org.scijava.ops.engine.struct.FunctionalParameters;
 import org.scijava.ops.engine.util.Infos;
 import org.scijava.priority.Priority;
@@ -172,10 +171,11 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 	 * @param candidate the {@link OpCandidate} matched for the adaptor input
 	 * @param map the mapping
 	 */
-	private void captureTypeVarsFromCandidate(Type adaptorType, OpCandidate candidate,
-		Map<TypeVariable<?>, Type> map)
-	{
-
+	private void captureTypeVarsFromCandidate(
+		Type adaptorType,
+		OpCandidate candidate,
+		Map<TypeVariable<?>, Type> map
+	) {
 		// STEP 1: Base adaptor type variables
 		// For example, let's say we're operating on Computer<I, O>s.
 		// The adaptor might work on Computer<T, T>s. Which we need to resolve.

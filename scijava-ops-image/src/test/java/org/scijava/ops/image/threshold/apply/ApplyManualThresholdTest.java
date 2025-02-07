@@ -29,8 +29,12 @@
 
 package org.scijava.ops.image.threshold.apply;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import net.imglib2.RandomAccessibleInterval;
 import org.scijava.ops.image.threshold.AbstractThresholdTest;
 import net.imglib2.exception.IncompatibleTypeException;
 import net.imglib2.img.Img;
@@ -51,19 +55,30 @@ public class ApplyManualThresholdTest extends AbstractThresholdTest {
 
 	@Test
 	public void testApplyThreshold() throws IncompatibleTypeException {
-		Computers.Arity3<Img<UnsignedShortType>, UnsignedShortType, Comparator<UnsignedShortType>, Iterable<BitType>> createFunc =
-			OpBuilder.matchComputer(ops, "threshold.apply",
-				new Nil<Img<UnsignedShortType>>()
-				{}, new Nil<UnsignedShortType>() {},
-				new Nil<Comparator<UnsignedShortType>>()
-				{}, new Nil<Iterable<BitType>>() {});
-
-		final Img<BitType> out = bitmap();
-		final UnsignedShortType threshold = new UnsignedShortType(30000);
-		Comparator<UnsignedShortType> comparator = (c1, c2) -> (int) Math.ceil(c1
-			.getRealDouble() - c2.getRealDouble());
-		createFunc.compute(in, threshold, comparator, out);
+        final var out = bitmap();
+		final var threshold = new UnsignedShortType(30000);
+		final Comparator<UnsignedShortType> comparator =  //
+				(c1, c2) -> (int) Math.ceil(c1 .getRealDouble() - c2.getRealDouble());
+		ops.op("threshold.apply").input(in, threshold, comparator).output(out).compute();
 		assertCount(out, 54);
+	}
+
+	@Test
+	public void testApplyThresholdRAIs() {
+		ops.op("threshold.mean") //
+				.input(in) //
+				.outType(new Nil<RandomAccessibleInterval<BitType>>() {}) //
+				.apply();
+	}
+	@Test
+	public void testApplyThresholdIterables() {
+		List<UnsignedShortType> itr = in.stream().collect(Collectors.toList());
+		List<UnsignedShortType> output = new ArrayList<UnsignedShortType>(itr.size());
+
+		ops.op("threshold.mean") //
+				.input(in) //
+				.output(output) //
+				.compute();
 	}
 
 }

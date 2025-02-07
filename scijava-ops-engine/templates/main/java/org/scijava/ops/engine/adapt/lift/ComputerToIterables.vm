@@ -17,7 +17,11 @@ import org.scijava.ops.spi.OpCollection;
  * that operate on {@link Iterable}s of types. N.B. it is the user's
  * responsibility to pass {@link Iterable}s of the same length (otherwise the Op
  * will stop when one of the {@link Iterable}s runs out of {@link Object}s).
- * 
+ * <p>
+ * Note the use of generic types for each of the {@link Iterable}s in the output
+ * Ops. This is particularly useful for matching the Ops themselves, outside of
+ * adaptation.
+ * </p>
  * @author Gabriel Selzer
  */
 public class ComputerToIterables$classGenerics.call($maxArity) implements OpCollection {

@@ -1379,6 +1379,21 @@ public final class Types {
 						TypeVariable<?> to = (TypeVariable<?>) toTypeVarAssigns.get(var);
 						Type from = fromTypeVarAssigns.get(var);
 						if (from == null) {
+							// IMPORTANT: Understanding the Any bounds are very important
+							// here for understanding type variable bounds ACROSS
+							// isAssignable calls. This happens often in SciJava Ops, to which
+							// the following description pertains:
+							//
+							// Suppose we ask for a
+							// Function<IntType, Any> , hoping to match some
+							// Computers.Arity1<I extends RealType<I>, O extends RealType<O>> via
+							// adaptation. Adapation requires (1) the underlying Computers.Arity1<I, O>
+							// Op, but also (2) some way to generate the output (in practice, either a
+							// Function<IntType, Any> or a Producer<Any>). If there are no bounds on
+							// the Any, then we can get incorrect matches, such as a Producer<Double>,
+							// which would produce an object unsuitable for the Computers.Arity1 op
+							// being adapted. Therefore it is necessary to attach bounds on the Any (as
+							// an example, an Any bounded by RealType) to ensure correct matching.
 							from = new Any(to.getBounds());
 						}
 						typeVarAssigns.put(to, from);

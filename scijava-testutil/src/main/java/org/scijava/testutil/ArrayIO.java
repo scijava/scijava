@@ -2,7 +2,7 @@
  * #%L
  * Shared test utilities for SciJava projects.
  * %%
- * Copyright (C) 2020 - 2024 SciJava developers.
+ * Copyright (C) 2020 - 2025 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:

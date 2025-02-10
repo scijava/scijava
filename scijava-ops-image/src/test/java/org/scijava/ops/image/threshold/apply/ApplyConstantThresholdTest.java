@@ -35,23 +35,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import net.imglib2.RandomAccessibleInterval;
+import org.junit.jupiter.api.Assertions;
+import org.scijava.ops.api.OpMatchingException;
 import org.scijava.ops.image.threshold.AbstractThresholdTest;
 import net.imglib2.exception.IncompatibleTypeException;
-import net.imglib2.img.Img;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.function.Computers;
-import org.scijava.ops.api.OpBuilder;
 import org.scijava.types.Nil;
 
 /**
- * Tests {@link ApplyManualThreshold}.
+ * Tests {@link ApplyConstantThreshold} and its wrappers.
  *
  * @author Curtis Rueden
+ * @author Gabriel Selzer
  */
-public class ApplyManualThresholdTest extends AbstractThresholdTest {
+public class ApplyConstantThresholdTest extends AbstractThresholdTest {
 
 	@Test
 	public void testApplyThreshold() throws IncompatibleTypeException {
@@ -65,15 +65,22 @@ public class ApplyManualThresholdTest extends AbstractThresholdTest {
 
 	@Test
 	public void testApplyThresholdRAIs() {
-		ops.op("threshold.mean") //
+		// Test as Computer
+		final var buffer = bitmap();
+		Assertions.assertDoesNotThrow(() -> ops.op("threshold.mean") //
 				.input(in) //
-				.outType(new Nil<RandomAccessibleInterval<BitType>>() {}) //
-				.apply();
+				.output(buffer) //
+				.compute());
+		// Test as Function
+		Assertions.assertDoesNotThrow(() -> ops.op("threshold.mean") //
+				.input(in) //
+				.apply());
 	}
+
 	@Test
 	public void testApplyThresholdIterables() {
 		List<UnsignedShortType> itr = in.stream().collect(Collectors.toList());
-		List<UnsignedShortType> output = new ArrayList<UnsignedShortType>(itr.size());
+		List<UnsignedShortType> output = new ArrayList<>(itr.size());
 
 		ops.op("threshold.mean") //
 				.input(in) //

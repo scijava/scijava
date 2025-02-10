@@ -5,12 +5,16 @@ arities = (1..maxArity).collect()
 
 iterableGenerics = ```
 { arity ->
-  '<' + String.join(', ', genericParamTypes(arity).stream().map{a -> 'Iterable<' + a + '>'}.collect()) + '>'
+  gpt = genericParamTypes(arity)
+  gpt.remove(gpt.size() - 1)
+  '<' + String.join(', ', gpt.stream().map{a -> 'I' + a}.collect()) + ', Iterable<O>>'
 }
 ```
 classGenerics = ```
 { arity ->
-  '<I, ' + String.join(', ', genericParamTypes(arity)) + '>'
+  gpt = genericParamTypes(arity)
+  itr_gpt = gpt.stream().map{a -> 'I' + a + ' extends Iterable<' + a + '>'}.collect()
+  '<I, ' + String.join(', ', gpt) + ', II extends Iterable<I>, ' + String.join(', ', itr_gpt) + '>'
 }
 ```
 iteratorsHaveNext = ```

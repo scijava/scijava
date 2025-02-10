@@ -29,41 +29,63 @@
 
 package org.scijava.ops.image.threshold.apply;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import net.imglib2.RandomAccessibleInterval;
+import org.junit.jupiter.api.Assertions;
+import org.scijava.ops.api.OpMatchingException;
 import org.scijava.ops.image.threshold.AbstractThresholdTest;
 import net.imglib2.exception.IncompatibleTypeException;
-import net.imglib2.img.Img;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.function.Computers;
-import org.scijava.ops.api.OpBuilder;
 import org.scijava.types.Nil;
 
 /**
- * Tests {@link ApplyManualThreshold}.
+ * Tests {@link ApplyConstantThreshold} and its wrappers.
  *
  * @author Curtis Rueden
+ * @author Gabriel Selzer
  */
-public class ApplyManualThresholdTest extends AbstractThresholdTest {
+public class ApplyConstantThresholdTest extends AbstractThresholdTest {
 
 	@Test
 	public void testApplyThreshold() throws IncompatibleTypeException {
-		Computers.Arity3<Img<UnsignedShortType>, UnsignedShortType, Comparator<UnsignedShortType>, Iterable<BitType>> createFunc =
-			OpBuilder.matchComputer(ops, "threshold.apply",
-				new Nil<Img<UnsignedShortType>>()
-				{}, new Nil<UnsignedShortType>() {},
-				new Nil<Comparator<UnsignedShortType>>()
-				{}, new Nil<Iterable<BitType>>() {});
-
-		final Img<BitType> out = bitmap();
-		final UnsignedShortType threshold = new UnsignedShortType(30000);
-		Comparator<UnsignedShortType> comparator = (c1, c2) -> (int) Math.ceil(c1
-			.getRealDouble() - c2.getRealDouble());
-		createFunc.compute(in, threshold, comparator, out);
+        final var out = bitmap();
+		final var threshold = new UnsignedShortType(30000);
+		final Comparator<UnsignedShortType> comparator =  //
+				(c1, c2) -> (int) Math.ceil(c1 .getRealDouble() - c2.getRealDouble());
+		ops.op("threshold.apply").input(in, threshold, comparator).output(out).compute();
 		assertCount(out, 54);
+	}
+
+	@Test
+	public void testApplyThresholdRAIs() {
+		// Test as Computer
+		final var buffer = bitmap();
+		Assertions.assertDoesNotThrow(() -> ops.op("threshold.mean") //
+				.input(in) //
+				.output(buffer) //
+				.compute());
+		// Test as Function
+		Assertions.assertDoesNotThrow(() -> ops.op("threshold.mean") //
+				.input(in) //
+				.apply());
+	}
+
+	@Test
+	public void testApplyThresholdIterables() {
+		List<UnsignedShortType> itr = in.stream().collect(Collectors.toList());
+		List<UnsignedShortType> output = new ArrayList<>(itr.size());
+
+		ops.op("threshold.mean") //
+				.input(in) //
+				.output(output) //
+				.compute();
 	}
 
 }

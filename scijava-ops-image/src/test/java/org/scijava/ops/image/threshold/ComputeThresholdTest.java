@@ -199,9 +199,7 @@ public class ComputeThresholdTest extends AbstractThresholdTest {
 	private Computers.Arity1<Histogram1d<UnsignedShortType>, UnsignedShortType>
 		getComputeThresholdOp(final String name)
 	{
-		return OpBuilder.matchComputer(ops, name,
-			new Nil<Histogram1d<UnsignedShortType>>()
-			{}, new Nil<UnsignedShortType>() {});
+		return OpBuilder.matchComputer(ops, name, new Nil<>() {}, new Nil<>() {});
 	}
 
 }

@@ -31,31 +31,58 @@ package org.scijava.ops.image.threshold;
 
 import java.util.function.Function;
 
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.histogram.Histogram1d;
+import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 
+import net.imglib2.util.Util;
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
 
 /**
+ * An abstract base class for Ops using a {@link Histogram1d} to compute a
+ * threshold across an {@link Iterable}.
+ * <p>
+ * Note the use of type parameters {@code I} and {@code J}, allowing
+ * dependencies to be matched on the concrete input types instead of just on
+ * {@link Iterable}
+ * </p>
+ *
  * @author Curtis Rueden
  * @author Christian Dietz (University of Konstanz)
+ * @author Gabriel Selzer
+ * @param <T> the {@link RealType} implementation of input elements
+ * @param <I> the {@link Iterable} subclass of the input
+ * @param <J> the {@link Iterable} subclass of the output
  */
-public abstract class AbstractApplyThresholdImg<T extends RealType<T>> extends
-	AbstractApplyThresholdIterable<T>
-{
+public abstract class AbstractApplyThresholdImg< //
+		T extends RealType<T>, //
+		I extends Iterable<T>, //
+		J extends Iterable<BitType> //
+	> implements Computers.Arity1<I, J> {
 
 	@OpDependency(name = "image.histogram")
-	private Function<Iterable<T>, Histogram1d<T>> createHistogramOp;
+	private Function<I, Histogram1d<T>> createHistogramOp;
 
+	@OpDependency(name = "threshold.apply")
+	private Computers.Arity2<I, T, J> applyThresholdOp;
+
+	/**
+	 * Thresholds {@code input}, storing the result in {@code output}.
+	 *
+	 * @param input the input dataset
+	 * @param output the output dataset
+	 */
 	@Override
-	protected T computeThreshold(final Iterable<T> input) {
+	public void compute(final I input, final J output) {
+		// Compute the histogram
 		final var inputHistogram = createHistogramOp.apply(input);
+		// Compute the threshold value from the histogram
 		final var threshold = input.iterator().next().createVariable();
-		final var computeThresholdOp =
-			getComputeThresholdOp();
-		computeThresholdOp.compute(inputHistogram, threshold);
-		return threshold;
+		getComputeThresholdOp().compute(inputHistogram, threshold);
+		// Threshold the image against the computed value
+		applyThresholdOp.compute(input, threshold, output);
 	}
 
 	protected abstract Computers.Arity1<Histogram1d<T>, T>

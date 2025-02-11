@@ -29,7 +29,9 @@
 package org.scijava.ops.image.filter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
+import org.junit.jupiter.api.Assertions;
 import org.scijava.ops.image.AbstractOpTest;
 import org.scijava.ops.image.util.TestImgGeneration;
 import net.imglib2.Cursor;
@@ -207,6 +209,34 @@ public class FFTTest extends AbstractOpTest {
 		// assert that PadShiftKernelFFTMethods padded to the FFTMethods fast size
 		assertEquals(1120, shift2.dimension(0));
 
+	}
+
+	@Test
+	public void testFFTFunctionMatching() {
+		int i = 9;
+		final long[] dimensions = new long[] { i, i, i };
+
+		// create an input with a small sphere at the center
+		final Img<FloatType> in = TestImgGeneration.floatArray(false, dimensions);
+		placeSphereInCenter(in);
+
+		// When type not provided, an Img<ComplexFloatType> is returned
+		var out = ops.op("filter.fft").input(in).apply();
+		assertInstanceOf(Img.class, out);
+		var outImg = (Img<?>) out;
+		assertInstanceOf(ComplexFloatType.class, outImg.firstElement());
+
+		// This should be identical to what is given when output type provided.
+		var typedOut = ops.op("filter.fft").input(in, new ComplexFloatType()).apply();
+		assertInstanceOf(Img.class, typedOut);
+		var typedOutImg = (Img<?>) typedOut;
+		assertInstanceOf(ComplexFloatType.class, typedOutImg.firstElement());
+
+		assertComplexImagesEqual( //
+			(Img<ComplexFloatType>) outImg, //
+			(Img<ComplexFloatType>) typedOutImg, //
+			0f //
+		);
 	}
 
 	/**

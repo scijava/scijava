@@ -29,12 +29,10 @@
 
 package org.scijava.ops.image.stats;
 
-import java.util.ArrayList;
-
 import net.imglib2.type.numeric.RealType;
 
+import org.scijava.collections.DoubleArray;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
 
 /**
@@ -56,6 +54,11 @@ public class DefaultMedian<I extends RealType<I>, O extends RealType<O>>
 	private Computers.Arity2<Iterable<I>, Double, O> quantileOp;
 
 	/**
+	 * TODO: One/many of these lists could get really big over time. Maybe that will be a problem?
+	 */
+	private static final ThreadLocal<DoubleArray> BUFFER = ThreadLocal.withInitial(DoubleArray::new);
+
+	/**
 	 * TODO
 	 *
 	 * @param input
@@ -63,9 +66,11 @@ public class DefaultMedian<I extends RealType<I>, O extends RealType<O>>
 	 */
 	@Override
 	public void compute(final Iterable<I> input, final O median) {
-		final var statistics = new ArrayList<Double>();
+		final var statistics = BUFFER.get();
+		statistics.clear();
+//		final var statistics = new ArrayList<Double>();
 
-		input.forEach(i -> statistics.add(i.getRealDouble()));
+		input.forEach(i -> statistics.addValue(i.getRealDouble()));
 
 		final var k = statistics.size() / 2;
         var result = DefaultQuantile.select(statistics, k);

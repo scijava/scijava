@@ -33,6 +33,7 @@ import net.imglib2.type.numeric.RealType;
 import org.scijava.function.Computers;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.Collections.swap;
 
@@ -83,7 +84,7 @@ public class DefaultQuantile<I extends RealType<I>, N extends Number, O extends 
 	 * This an all-in-one method version of your basic quick select algorithm.
 	 * </p>
 	 */
-	static double select(final ArrayList<Double> array, final int k) {
+	static double select(final List<Double> array, final int k) {
 
         var left = 0;
         var right = array.size() - 1;

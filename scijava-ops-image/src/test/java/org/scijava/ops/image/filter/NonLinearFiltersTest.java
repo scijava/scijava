@@ -34,8 +34,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.type.numeric.real.FloatType;
 import org.scijava.ops.image.AbstractOpTest;
 import org.scijava.ops.image.filter.sigma.DefaultSigmaFilter;
+import org.scijava.ops.image.stats.SlidingWindowMedian;
 import org.scijava.ops.image.util.TestImgGeneration;
 import net.imglib2.algorithm.neighborhood.Neighborhood;
 import net.imglib2.algorithm.neighborhood.RectangleShape;
@@ -129,6 +132,24 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	@Test
 	public void testMeanFilterNullable() {
 		ops.op("filter.mean").input(in, shape).output(out).compute();
+	}
+
+	/**
+	 * @see NeighborhoodFilters#defaultMedian(Computers.Arity1, Neighborhood,
+	 *      Object)
+	 */
+	@Test
+	public void testFoo() {
+		var foo = new SlidingWindowMedian();
+		var image = ops.op("convert.float32").input(in).apply();
+		var oobf = new OutOfBoundsMirrorFactory<FloatType, RandomAccessibleInterval<FloatType>>(Boundary.SINGLE);
+		var extend = Views.extend((RandomAccessibleInterval<FloatType>) image, oobf);
+		var output = ops.op("create.img").input(image).apply();
+		foo.compute(extend, 1, (RandomAccessibleInterval<FloatType>) output);
+
+		var expected = ops.op("filter.median").input(image, shape, oobf).apply();
+		var raOut = ((RandomAccessibleInterval<FloatType>) output).randomAccess();
+		var raExp = ((RandomAccessibleInterval<FloatType>) expected).randomAccess();
 	}
 
 	/**

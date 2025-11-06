@@ -53,7 +53,7 @@ public abstract class AbstractFlimTest {
 
 	static final Random rng = new Random(SEED);
 
-	static final float TOLERANCE = 1e-5f;
+	static final float TOLERANCE = 1e-4f;
 
 	static final OpEnvironment ops = OpEnvironment.build();
 

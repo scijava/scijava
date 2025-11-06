@@ -107,6 +107,9 @@
 		-->
 		<scijava.jvm.build.version>[11.0.17,)</scijava.jvm.build.version>
 		<scijava.jvm.version>11</scijava.jvm.version>
+
+		<!-- Note: These versions must match across all component POMs! -->
+		<scijava-common3.version>1.0.1-SNAPSHOT</scijava-common3.version>
 	</properties>
 
 	<dependencies>
@@ -114,7 +117,7 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-common3</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-common3.version}</version>
 		</dependency>
 
 		<!-- Test scope dependencies -->

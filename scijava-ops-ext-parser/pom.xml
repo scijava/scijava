@@ -114,6 +114,9 @@
 		-->
 		<scijava.jvm.build.version>[11.0.17,)</scijava.jvm.build.version>
 		<scijava.jvm.version>11</scijava.jvm.version>
+
+		<!-- Note: These versions must match across all component POMs! -->
+		<scijava-ops-opencv.version>1.0.1-SNAPSHOT</scijava-ops-opencv.version>
 	</properties>
 
 	<dependencies>
@@ -139,7 +142,7 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-opencv</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-ops-opencv.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>

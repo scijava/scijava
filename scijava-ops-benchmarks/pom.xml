@@ -113,6 +113,9 @@
 		<scijava.jvm.version>11</scijava.jvm.version>
 
 		<scijava.ops.parse>true</scijava.ops.parse>
+
+		<!-- Note: These versions must match across all component POMs! -->
+		<scijava-ops-indexer.version>1.0.1-SNAPSHOT</scijava-ops-indexer.version>
 	</properties>
 
 	<repositories>
@@ -131,12 +134,12 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-api</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-ops-api.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-engine</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-ops-engine.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<!--
@@ -148,7 +151,7 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-image</artifactId>
-			<version>${project.version}</version>
+			<version>${scijava-ops-image.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 
@@ -190,7 +193,7 @@
 						<path>
 							<groupId>org.scijava</groupId>
 							<artifactId>scijava-ops-indexer</artifactId>
-							<version>${project.version}</version>
+							<version>${scijava-ops-indexer.version}</version>
 						</path>
 						<path>
 							<groupId>org.scijava</groupId>
@@ -223,7 +226,7 @@
 						<tagletArtifact>
 							<groupId>org.scijava</groupId>
 							<artifactId>scijava-taglets</artifactId>
-							<version>${project.version}</version>
+							<version>${scijava-taglets.version}</version>
 						</tagletArtifact>
 					</tagletArtifacts>
 					<tags>

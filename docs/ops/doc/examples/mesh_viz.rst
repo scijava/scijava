@@ -31,9 +31,9 @@ The following script accepts the binary dataset as its sole input, and creates t
         import java.util.ArrayList
         import java.util.List
 
-        import net.imagej.mesh.Mesh
-        import net.imagej.mesh.Triangle
         import net.imglib2.RandomAccessibleInterval
+        import net.imglib2.mesh.Mesh
+        import net.imglib2.mesh.Triangle
         import net.imglib2.type.BooleanType
         import net.imglib2.util.Util
 

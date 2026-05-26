@@ -45,6 +45,7 @@ open module org.scijava.ops.image {
 	requires org.scijava.meta;
 	requires org.scijava.ops.api;
 	requires org.scijava.ops.spi;
+	requires org.scijava.parsington;
 	requires org.scijava.priority;
 	requires org.scijava.progress;
 	requires org.scijava.types;

@@ -283,6 +283,10 @@
 		<!-- SciJava dependencies -->
 		<dependency>
 			<groupId>org.scijava</groupId>
+			<artifactId>parsington</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
 			<artifactId>scijava-collections</artifactId>
 			<version>${scijava-collections.version}</version>
 		</dependency>

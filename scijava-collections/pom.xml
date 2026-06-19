@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.scijava</groupId>
 		<artifactId>pom-scijava</artifactId>
-		<version>43.0.0</version>
+		<version>44.0.0</version>
 		<relativePath />
 	</parent>
 
@@ -93,21 +93,6 @@
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
-
-		<!--
-		NB: Older versions of OpenJDK 11 have a bug in the javadoc tool,
-		which causes errors like:
-
-		[ERROR] javadoc: error - The code being documented uses packages
-		in the unnamed module, but the packages defined in
-		https://github.com/scijava/scijava/apidocs/ are in named modules.
-
-		The most recent version of OpenJDK 11 known to have this problem
-		is 11.0.8; the oldest version known to have fixed it is 11.0.17.
-		Therefore, we set the minimum build JDK version to 11.0.17 here.
-		-->
-		<scijava.jvm.build.version>[11.0.17,)</scijava.jvm.build.version>
-		<scijava.jvm.version>11</scijava.jvm.version>
 	</properties>
 
 	<dependencies>

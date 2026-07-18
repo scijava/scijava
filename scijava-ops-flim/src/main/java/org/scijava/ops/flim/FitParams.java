@@ -31,7 +31,6 @@ package org.scijava.ops.flim;
 
 import com.google.gson.*;
 import com.google.gson.annotations.Expose;
-import com.google.gson.reflect.TypeToken;
 import flimlib.FitFunc;
 import flimlib.NoiseType;
 import flimlib.RestrainType;
@@ -309,8 +308,12 @@ public class FitParams<I extends RealType<I>> {
 		};
         var gson = new GsonBuilder().registerTypeAdapter(FitFunc.class,
 			fitfuncDeserializer).create();
-		return gson.fromJson(jsonString, new TypeToken<FitParams<I>>() {}
-			.getType());
+		// Deserialize to the raw FitParams type: the only field using the type
+		// variable I ({@link #transMap}) is not serialized (no @Expose), and
+		// recent Gson versions reject a TypeToken that contains a type variable.
+		@SuppressWarnings("unchecked")
+		FitParams<I> params = gson.fromJson(jsonString, FitParams.class);
+		return params;
 	}
 
 	@Override

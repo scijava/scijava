@@ -241,8 +241,8 @@ public final class Conversions {
 			return Optional.empty();
 		}
 		// And only applies when the mutable index was "converted" with identity
-		if (Ops.info(preConverters.get(ioIndex)).names().contains(
-			"engine.identity"))
+		var names = Ops.info(preConverters.get(ioIndex)).names();
+		if (names.contains("engine.identity") || names.contains("engine.wrap"))
 		{
 			// In this case, we need neither a postprocessor nor a copier,
 			// because the mutable output was directly edited.

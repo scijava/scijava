@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops.image.transform.project.project;
+package org.scijava.ops.image.transform.project;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -50,7 +50,6 @@ public class ProjectTest extends AbstractOpTest {
 	private Img<UnsignedByteType> in;
 	private Img<UnsignedByteType> out1;
 	private Img<UnsignedByteType> out2;
-	private Computers.Arity1<Iterable<UnsignedByteType>, UnsignedByteType> op;
 
 	@BeforeEach
 	public void initImg() {
@@ -70,18 +69,11 @@ public class ProjectTest extends AbstractOpTest {
 
 		out1 = TestImgGeneration.unsignedByteArray(false, 10, 10);
 		out2 = TestImgGeneration.unsignedByteArray(false, 10, 10);
-
-		op = OpBuilder.matchComputer(ops, "stats.sum",
-			new Nil<Iterable<UnsignedByteType>>()
-			{}, new Nil<UnsignedByteType>() {});
 	}
 
 	@Test
 	public void testProjector() {
-		// TODO: uncomment when this Op is ported (assuming it will be?)
-		// ops.run(DefaultProjectParallel.class, out1, in, op, PROJECTION_DIM);
-		// ops.run(DefaultProjectParallel.class, out2, in, op, PROJECTION_DIM);
-		// testEquality(out1, out2);
+		var op = ops.op("stats.sum").input(in).outType(UnsignedByteType.class).computer();
 
 		ops.op("transform.project").input(in, op, PROJECTION_DIM).output(out1)
 			.compute();

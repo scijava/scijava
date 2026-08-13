@@ -36,6 +36,7 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.util.Intervals;
 
+import net.imglib2.view.Views;
 import org.scijava.function.Computers;
 
 /**
@@ -44,7 +45,7 @@ import org.scijava.function.Computers;
  * @implNote op name='transform.project', priority='99.'
  */
 public class DefaultProjectParallel<T, V> implements
-	Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<Iterable<T>, V>, Integer, RandomAccessibleInterval<V>>
+	Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<? super RandomAccessibleInterval<T>, V>, Integer, RandomAccessibleInterval<V>>
 {
 
 	/**
@@ -57,9 +58,8 @@ public class DefaultProjectParallel<T, V> implements
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
-		Computers.Arity1<Iterable<T>, V> op, Integer dim,
-		final RandomAccessibleInterval<V> output)
-	{
+		Computers.Arity1<? super RandomAccessibleInterval<T>, V> op, Integer dim,
+		final RandomAccessibleInterval<V> output) {
 		// TODO this first check is too simple, but for now ok
 		if (input.numDimensions() != output.numDimensions() + 1) //
 			throw new IllegalArgumentException(
@@ -69,22 +69,12 @@ public class DefaultProjectParallel<T, V> implements
 				"ERROR: input image must contain dimension " + dim);
 
 		LoopBuilder.setImages(output, Intervals.positions(output)).multiThreaded()
-			.forEachChunk(chunk -> {
-                var chunkRA = input.randomAccess();
-				chunk.forEachPixel((pixel, position) -> {
-					for (var d = 0; d < input.numDimensions(); d++) {
-						if (d != dim) {
-							chunkRA.setPosition(position.getIntPosition(d - (d > dim ? 1
-								: 0)), d);
-						}
-					}
-
-					op.compute(new DimensionIterable(input.dimension(dim), dim, chunkRA),
-						pixel);
-
-				});
-
-				return null;
+			.forEachPixel((pixel, position) -> {
+				var ra = input;
+				for (var d = 0; d < position.numDimensions(); d++) {
+					ra = Views.hyperSlice(ra, d < dim ? 0 : 1, position.getIntPosition(d));
+				}
+				op.compute(ra, pixel);
 			});
 	}
 

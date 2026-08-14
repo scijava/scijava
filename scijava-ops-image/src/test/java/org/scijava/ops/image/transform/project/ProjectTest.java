@@ -31,6 +31,10 @@ package org.scijava.ops.image.transform.project;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import net.imglib2.FinalInterval;
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.img.array.ArrayImgs;
+import net.imglib2.view.Views;
 import org.scijava.ops.image.AbstractOpTest;
 import org.scijava.ops.image.util.TestImgGeneration;
 import net.imglib2.RandomAccess;
@@ -80,6 +84,37 @@ public class ProjectTest extends AbstractOpTest {
 		ops.op("transform.project").input(in, op, PROJECTION_DIM).output(out2)
 			.compute();
 		testEquality(out1, out2);
+	}
+
+	/**
+	 * Ensures {@code "transform.project"} runs only within the passed interval.
+	 */
+	@Test
+	public void testInterval() {
+		// Set up img[x, y, z] = z
+		var input = ArrayImgs.unsignedBytes(10, 10, 10);
+		for(int x = 0; x < 10; x++) {
+			for(int y = 0; y < 10; y++) {
+				for(int z = 0; z < 10; z++) {
+					input.getAt(x, y, z).set(z);
+				}
+			}
+		}
+		// Create an interval containing 2<=z<=4
+		var intervaled = Views.interval(input, new FinalInterval(new long[] {0, 0, 2}, new long[] {10, 10, 4}));
+
+		// Project on the interval
+		var out = ArrayImgs.unsignedBytes(10, 10);
+		var op = ops.op("stats.sum").input(intervaled).outType(UnsignedByteType.class).computer();
+		ops.op("transform.project").input(intervaled, op, PROJECTION_DIM).output(out).compute();
+
+		// Assert that the projection (summation) only covered z=2, z=3, z=4
+		var outCursor = out.cursor();
+		while (outCursor.hasNext()) {
+			// 2 + 3 + 4 = 9
+			assertEquals(9, outCursor.next().get());
+		}
+
 	}
 
 	private void testEquality(final Img<UnsignedByteType> img1,

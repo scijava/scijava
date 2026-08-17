@@ -66,7 +66,7 @@ public class CorrelateFFTF<I extends RealType<I> & NativeType<I>, O extends Real
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, O, RandomAccessibleInterval<O>> outputCreator;
 
-	@OpDependency(name = "filter.pad")
+	@OpDependency(name = "filter.padInputFFT")
 	private Functions.Arity4<RandomAccessibleInterval<I>, Dimensions, Boolean, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<I>> padOp;
 
 	@OpDependency(name = "filter.padShiftFFTKernel")

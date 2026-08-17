@@ -41,7 +41,9 @@ import org.scijava.ops.image.AbstractOpTest;
 import java.util.Arrays;
 
 /**
- * Tests involving convolvers.
+ * Tests for {@code filter.correlate} Ops
+ *
+ * @author Gabriel Selzer
  */
 public class CorrelateTest extends AbstractOpTest {
 

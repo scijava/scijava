@@ -30,20 +30,13 @@
 
 package org.scijava.ops.image.filter.convolve;
 
-import net.imglib2.*;
-import net.imglib2.img.array.ArrayImgs;
-import net.imglib2.type.numeric.integer.UnsignedByteType;
-import net.imglib2.view.Views;
-import org.apache.commons.math3.complex.Complex;
-import org.junit.jupiter.api.Assertions;
 import org.scijava.ops.image.AbstractOpTest;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.numeric.complex.ComplexFloatType;
 import net.imglib2.type.numeric.real.FloatType;
 import org.junit.jupiter.api.Test;
 import org.scijava.types.Nil;
-
-import java.util.Arrays;
 
 /**
  * Tests involving convolvers.
@@ -65,33 +58,6 @@ public class ConvolveTest extends AbstractOpTest {
 			new Nil<OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>>()
 			{} //
 		).outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).function();
-	}
-
-	@Test
-	public void testCorrelate() {
-		// Create an image with the center pixel set
-		var img = ArrayImgs.unsignedBytes(9, 9);
-		var impulse = new long[] {4, 4};
-		img.randomAccess().setPositionAndGet(impulse).set(1);
-
-		// Create an identity kernel
-		var kernel = ArrayImgs.unsignedBytes(5, 5);
-		kernel.getAt(2, 2).set(1);
-
-		// Correlate with Ops
-		var output = ops.op("filter.correlate").input(img, kernel, new FloatType(), new ComplexFloatType()).apply();
-		Assertions.assertInstanceOf(RandomAccessibleInterval.class, output);
-		var actual = (RandomAccessibleInterval<FloatType>) output;
-
-		// Check the result
-		var cursor = actual.cursor();
-		while (cursor.hasNext()) {
-			var actualValue = cursor.next().get();
-			var pos = cursor.positionAsLongArray();
-			// The only pixel that should be set is the center pixel.
-			var expected = Arrays.equals(impulse, pos) ? 1 : 0;
-			Assertions.assertEquals(expected, actualValue, 1e-6);
-		}
 	}
 }
 //

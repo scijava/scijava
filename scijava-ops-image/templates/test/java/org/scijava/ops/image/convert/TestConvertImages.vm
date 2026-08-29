@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigInteger;
 
-import org.scijava.ops.image.AbstractOpTest;
 import net.imglib2.FinalDimensions;
 import net.imglib2.IterableInterval;
 import net.imglib2.type.logic.BitType;
@@ -30,6 +29,7 @@ import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
 import org.junit.jupiter.api.Test;
+import org.scijava.ops.image.AbstractOpTest;
 
 /**
  * Tests the {@link ConvertComplexTypes} ops.
@@ -61,6 +61,7 @@ public class TestConvertImages extends AbstractOpTest{
 #set ($imgLibType2 = "$fromType.imglibT" + "Type")
 #set ($first = "true")
 	/** Tests {@link $className}. */
+	@SuppressWarnings("unchecked")
 	@Test
 	public void test${fromType.op}To${toType.op}() {
 
@@ -73,7 +74,7 @@ public class TestConvertImages extends AbstractOpTest{
 				.apply();
 		ops.op("image.fill").input(b).output(img).compute();
 		// Create the converted image
-    var converted = ops.op("convert.$toType.built").input(img).apply();
+        var converted = ops.op("convert.$toType.built").input(img).apply();
 		var cursor = ((IterableInterval<$imgLibType>) converted).cursor();
 		while(cursor.hasNext()) {
 #if($toType.op.contains("C"))
@@ -89,7 +90,7 @@ public class TestConvertImages extends AbstractOpTest{
 		}
 #set ($first = "false")
 #else
-    b.set($value.v);
+        b.set($value.v);
 		ops.op("image.fill").input(b).output(img).compute();
 		converted = ops.op("convert.$toType.built").input(img).apply();
 		cursor = ((IterableInterval<$imgLibType>) converted).cursor();

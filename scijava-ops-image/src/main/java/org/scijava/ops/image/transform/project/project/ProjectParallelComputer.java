@@ -29,21 +29,21 @@
 
 package org.scijava.ops.image.transform.project.project;
 
-import java.util.Iterator;
 
-import net.imglib2.RandomAccess;
+import net.imglib2.FinalInterval;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.util.Intervals;
 
 import net.imglib2.view.Views;
 import org.scijava.function.Computers;
-import org.scijava.function.Functions;
-import org.scijava.ops.spi.OpDependency;
 
 /**
  * <b>Projection</b> is the act of creating 1-dimensional slices of an n-dimensional image,
  * reducing that slice down to a single value, and combining those images back into a (n-1)-dimensional array
+ * <p>
+ * Note that this Op cannot be adapted because the output is necessarily of different dimensionality than the input.
+ * </p>
  *
  * @param <T> the type of input image elements
  * @param <V> the type of output image elements
@@ -51,12 +51,13 @@ import org.scijava.ops.spi.OpDependency;
  * @see ProjectParallelFunction for an Op that creates its own output
  */
 public class ProjectParallelComputer<T, V> implements
-	Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<? super RandomAccessibleInterval<T>, V>, Integer, RandomAccessibleInterval<V>>
+	Computers.Arity3<
+		RandomAccessibleInterval<T>,
+		Computers.Arity1<? super RandomAccessibleInterval<T>, V>,
+		Integer,
+		RandomAccessibleInterval<V>
+	>
 {
-
-	@OpDependency(name="transform.hyperSliceView")
-	Functions.Arity3<RandomAccessibleInterval<T>, Integer, Long, RandomAccessibleInterval<T>> slicer;
-
 	/**
 	 * Projects {@code op} along 1-dimensional slices (along dimension {@code dim}) of {@code input}
 	 *
@@ -78,52 +79,19 @@ public class ProjectParallelComputer<T, V> implements
 				"ERROR: input image must contain dimension " + dim);
 
 		LoopBuilder.setImages(output, Intervals.positions(output)).multiThreaded()
-			.forEachPixel((pixel, position) -> {
-				var ra = input;
-				for (var d = 0; d < position.numDimensions(); d++) {
-					ra = slicer.apply(ra, d < dim ? 0 : 1, position.getLongPosition(d));
-				}
-				op.compute(ra, pixel);
+			.forEachChunk(chunk -> {
+				var min = new long[input.numDimensions()];
+				var max = new long[input.numDimensions()];
+				min[dim] = input.min(dim);
+				max[dim] = input.max(dim);
+				chunk.forEachPixel((pixel, position) -> {
+					for (var d = 0; d < position.numDimensions(); d++) {
+						min[d >= dim ? d+1 : d] = position.getLongPosition(d);
+						max[d >= dim ? d+1 : d] = position.getLongPosition(d);
+					}
+					op.compute(Views.interval(input, new FinalInterval(min, max)), pixel);
+				});
+				return chunk;
 			});
-	}
-
-	final class DimensionIterable implements Iterable<T> {
-
-		private final long size;
-		private final int dim;
-		private final RandomAccess<T> access;
-
-		public DimensionIterable(final long size, final int dim,
-			final RandomAccess<T> access)
-		{
-			this.size = size;
-			this.dim = dim;
-			this.access = access;
-		}
-
-		@Override
-		public Iterator<T> iterator() {
-			return new Iterator<T>() {
-
-				int k = -1;
-
-				@Override
-				public boolean hasNext() {
-					return k < size - 1;
-				}
-
-				@Override
-				public T next() {
-					k++;
-					access.setPosition(k, dim);
-					return access.get();
-				}
-
-				@Override
-				public void remove() {
-					throw new UnsupportedOperationException("Not supported");
-				}
-			};
-		}
 	}
 }

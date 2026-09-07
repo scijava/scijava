@@ -40,9 +40,13 @@ import net.imglib2.view.Views;
 import org.scijava.function.Computers;
 
 /**
- * @param <T>
- * @param <V>
- * @implNote op name='transform.project', priority='99.'
+ * <b>Projection</b> is the act of creating 1-dimensional slices of an n-dimensional image,
+ * reducing that slice down to a single value, and combining those images back into a (n-1)-dimensional array
+ *
+ * @param <T> the type of input image elements
+ * @param <V> the type of output image elements
+ * @implNote op name='transform.project', priority='99.', hints="adaptation.FORBIDDEN"
+ * @see ProjectParallelFunction for an Op that creates its own output
  */
 public class DefaultProjectParallel<T, V> implements
 	Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<? super RandomAccessibleInterval<T>, V>, Integer, RandomAccessibleInterval<V>>

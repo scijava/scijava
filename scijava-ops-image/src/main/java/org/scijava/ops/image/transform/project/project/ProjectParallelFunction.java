@@ -10,7 +10,7 @@ import org.scijava.ops.spi.OpDependency;
 import java.util.function.BiFunction;
 
 /**
- * Wraps {@link DefaultProjectParallel}, but creates a new output image in the process.
+ * Wraps {@link ProjectParallelComputer}, but creates a new output image in the process.
  * @param <T> the type of input image elements
  * @param <V> the type of output image elements
  * @author Gabriel Selzer
@@ -33,6 +33,7 @@ public class ProjectParallelFunction<T, V> implements
 
 
     /**
+     * Projects {@code op} along 1-dimensional slices (along dimension {@code dim}) of {@code input}
      *
      * @param input the input {@code n}-dimensional dataset
      * @param op the Op to project over {@code dim}

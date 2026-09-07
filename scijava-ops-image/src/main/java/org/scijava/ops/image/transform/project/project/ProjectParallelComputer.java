@@ -48,17 +48,17 @@ import org.scijava.function.Computers;
  * @implNote op name='transform.project', priority='99.', hints="adaptation.FORBIDDEN"
  * @see ProjectParallelFunction for an Op that creates its own output
  */
-public class DefaultProjectParallel<T, V> implements
+public class ProjectParallelComputer<T, V> implements
 	Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<? super RandomAccessibleInterval<T>, V>, Integer, RandomAccessibleInterval<V>>
 {
 
 	/**
-	 * TODO
+	 * Projects {@code op} along 1-dimensional slices (along dimension {@code dim}) of {@code input}
 	 *
-	 * @param input
-	 * @param op
-	 * @param dim
-	 * @param output
+	 * @param input the input {@code n}-dimensional dataset
+	 * @param op the Op to project over {@code dim}
+	 * @param dim the dimension along {@code input} to project
+	 * @param output the output {@code n-1}-dimensional dataset
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,

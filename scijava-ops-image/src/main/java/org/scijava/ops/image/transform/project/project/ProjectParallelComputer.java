@@ -38,6 +38,8 @@ import net.imglib2.util.Intervals;
 
 import net.imglib2.view.Views;
 import org.scijava.function.Computers;
+import org.scijava.function.Functions;
+import org.scijava.ops.spi.OpDependency;
 
 /**
  * <b>Projection</b> is the act of creating 1-dimensional slices of an n-dimensional image,
@@ -51,6 +53,9 @@ import org.scijava.function.Computers;
 public class ProjectParallelComputer<T, V> implements
 	Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<? super RandomAccessibleInterval<T>, V>, Integer, RandomAccessibleInterval<V>>
 {
+
+	@OpDependency(name="transform.hyperSliceView")
+	Functions.Arity3<RandomAccessibleInterval<T>, Integer, Long, RandomAccessibleInterval<T>> slicer;
 
 	/**
 	 * Projects {@code op} along 1-dimensional slices (along dimension {@code dim}) of {@code input}
@@ -76,7 +81,7 @@ public class ProjectParallelComputer<T, V> implements
 			.forEachPixel((pixel, position) -> {
 				var ra = input;
 				for (var d = 0; d < position.numDimensions(); d++) {
-					ra = Views.hyperSlice(ra, d < dim ? 0 : 1, position.getIntPosition(d));
+					ra = slicer.apply(ra, d < dim ? 0 : 1, position.getLongPosition(d));
 				}
 				op.compute(ra, pixel);
 			});

@@ -27,10 +27,12 @@
  * #L%
  */
 
-package org.scijava.ops.image.transform.project.project;
+package org.scijava.ops.image.transform.project;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import net.imglib2.FinalInterval;
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.img.array.ArrayImgs;
+import net.imglib2.view.Views;
 import org.scijava.ops.image.AbstractOpTest;
 import org.scijava.ops.image.util.TestImgGeneration;
 import net.imglib2.RandomAccess;
@@ -43,6 +45,11 @@ import org.scijava.function.Computers;
 import org.scijava.ops.api.OpBuilder;
 import org.scijava.types.Nil;
 
+import java.util.Random;
+import java.util.function.Function;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 public class ProjectTest extends AbstractOpTest {
 
 	private final int PROJECTION_DIM = 2;
@@ -50,7 +57,6 @@ public class ProjectTest extends AbstractOpTest {
 	private Img<UnsignedByteType> in;
 	private Img<UnsignedByteType> out1;
 	private Img<UnsignedByteType> out2;
-	private Computers.Arity1<Iterable<UnsignedByteType>, UnsignedByteType> op;
 
 	@BeforeEach
 	public void initImg() {
@@ -59,9 +65,9 @@ public class ProjectTest extends AbstractOpTest {
 		final RandomAccess<UnsignedByteType> randomAccess = in.randomAccess();
 
 		// at each x,y,z fill with x+y
-		for (int x = 0; x < 10; x++) {
-			for (int y = 0; y < 10; y++) {
-				for (int z = 0; z < 10; z++) {
+		for (int x = 0; x < in.dimension(0); x++) {
+			for (int y = 0; y < in.dimension(1); y++) {
+				for (int z = 0; z < in.dimension(2); z++) {
 					randomAccess.setPosition(new long[] { x, y, z });
 					randomAccess.get().setReal(x + y);
 				}
@@ -70,24 +76,95 @@ public class ProjectTest extends AbstractOpTest {
 
 		out1 = TestImgGeneration.unsignedByteArray(false, 10, 10);
 		out2 = TestImgGeneration.unsignedByteArray(false, 10, 10);
-
-		op = OpBuilder.matchComputer(ops, "stats.sum",
-			new Nil<Iterable<UnsignedByteType>>()
-			{}, new Nil<UnsignedByteType>() {});
 	}
 
 	@Test
 	public void testProjector() {
-		// TODO: uncomment when this Op is ported (assuming it will be?)
-		// ops.run(DefaultProjectParallel.class, out1, in, op, PROJECTION_DIM);
-		// ops.run(DefaultProjectParallel.class, out2, in, op, PROJECTION_DIM);
-		// testEquality(out1, out2);
+		var op = ops.op("stats.sum").input(in).outType(UnsignedByteType.class).computer();
 
 		ops.op("transform.project").input(in, op, PROJECTION_DIM).output(out1)
 			.compute();
 		ops.op("transform.project").input(in, op, PROJECTION_DIM).output(out2)
 			.compute();
 		testEquality(out1, out2);
+	}
+
+	/**
+	 * Ensures {@code "transform.project"} runs only within the passed interval.
+	 */
+	@Test
+	public void testInterval() {
+		// Set up img[x, y, z] = z
+		var input = ArrayImgs.unsignedBytes(10, 10, 10);
+		for(int x = 0; x < 10; x++) {
+			for(int y = 0; y < 10; y++) {
+				for(int z = 0; z < 10; z++) {
+					input.getAt(x, y, z).set(z);
+				}
+			}
+		}
+		// Create an interval containing 2<=z<=4
+		var intervaled = Views.interval(input, new FinalInterval(new long[] {0, 0, 2}, new long[] {10, 10, 4}));
+
+		// Project on the interval
+		var out = ArrayImgs.unsignedBytes(10, 10);
+		var op = ops.op("stats.sum").input(intervaled).outType(UnsignedByteType.class).computer();
+		ops.op("transform.project").input(intervaled, op, PROJECTION_DIM).output(out).compute();
+
+		// Assert that the projection (summation) only covered z=2, z=3, z=4
+		var outCursor = out.cursor();
+		while (outCursor.hasNext()) {
+			// 2 + 3 + 4 = 9
+			assertEquals(9, outCursor.next().get());
+		}
+	}
+
+	/**
+	 * Ensures {@code "transform.project"} can run as a {@link Function}
+	 */
+	@Test
+	public void testFunction() {
+		var op = ops.op("stats.sum").input(in).outType(UnsignedByteType.class).computer();
+
+		RandomAccessibleInterval<UnsignedByteType> output = ops.op("transform.project").input(in, op, 2).outType(new Nil<RandomAccessibleInterval<UnsignedByteType>>() {}).apply();
+
+		for (int x = 0; x < output.dimension(0); x++) {
+			for (int y = 0; y < output.dimension(1); y++) {
+				assertEquals(in.dimension(2) * (x + y), output.getAt(x, y).getIntegerLong());
+			}
+		}
+	}
+
+	/**
+	 * Ensures {@code "transform.project"} runs only within the passed interval.
+	 */
+	@Test
+	public void testFunctionInterval() {
+		// Set up img[x, y, z] = z
+		var input = ArrayImgs.unsignedBytes(10, 10, 10);
+		for(int x = 0; x < 10; x++) {
+			for(int y = 0; y < 10; y++) {
+				for(int z = 0; z < 10; z++) {
+					input.getAt(x, y, z).set(z);
+				}
+			}
+		}
+		// Create an interval containing 1<=x<=3, 1<=y<=4, 2<=z<=4
+		var intervaled = Views.interval(input, new FinalInterval(new long[] {1, 1, 2}, new long[] {3, 4, 4}));
+
+		// Project on the interval
+		var op = ops.op("stats.sum").input(intervaled).outType(UnsignedByteType.class).computer();
+		var out = ops.op("transform.project").input(intervaled, op, PROJECTION_DIM)
+				.outType(new Nil<RandomAccessibleInterval<UnsignedByteType>>() {}).apply();
+
+		// Assert that the projection (summation) only covered z=2, z=3, z=4
+		var outCursor = out.cursor();
+		while (outCursor.hasNext()) {
+			// 2 + 3 + 4 = 9
+			assertEquals(9, outCursor.next().get());
+		}
+		assertArrayEquals(new long[] {1, 1}, out.minAsLongArray());
+		assertArrayEquals(new long[] {3, 4}, out.maxAsLongArray());
 	}
 
 	private void testEquality(final Img<UnsignedByteType> img1,

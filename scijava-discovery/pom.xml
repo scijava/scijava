@@ -14,7 +14,7 @@
 
 	<name>SciJava Discovery</name>
 	<description>Plugin discovery subsystem for SciJava libraries.</description>
-	<url>https://github.com/scijava/scijava-discovery</url>
+	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2021</inceptionYear>
 	<organization>
 		<name>SciJava</name>

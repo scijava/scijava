@@ -14,7 +14,7 @@
 
 	<name>SciJava Ops API</name>
 	<description>The public API of SciJava Ops.</description>
-	<url>https://github.com/scijava/scijava-ops-api</url>
+	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2021</inceptionYear>
 	<organization>
 		<name>SciJava</name>

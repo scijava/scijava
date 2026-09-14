@@ -14,7 +14,7 @@
 
 	<name>SciJava Ops Engine</name>
 	<description>Java implementation of the SciJava Ops matching engine.</description>
-	<url>https://github.com/scijava/scijava-ops-engine</url>
+	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2016</inceptionYear>
 	<organization>
 		<name>SciJava</name>

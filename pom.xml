@@ -63,6 +63,7 @@
 		<module>scijava-concurrent</module>
 		<module>scijava-discovery</module>
 		<module>scijava-discovery-test</module>
+		<module>scijava-events</module>
 		<module>scijava-function</module>
 		<module>scijava-index</module>
 		<module>scijava-io3</module>

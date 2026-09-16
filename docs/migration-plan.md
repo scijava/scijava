@@ -274,9 +274,14 @@ reporting progress.
   only completes the future exceptionally. Expose `ExecutorService` futures
   where cancellation must reach a compute loop.
 - The interrupt flag is thread-bound and **does not inherit**, unlike
-  `Progress`, which is an `InheritableThreadLocal`. So `Parallelization` and
-  `TaskExecutor` must propagate cancellation to worker futures deliberately.
-  That is the one piece of real work this design implies.
+  `Progress`, which is an `InheritableThreadLocal`. Propagation to workers is
+  therefore deliberate. In `TaskExecutors` most of it was already there:
+  `ExecutorService.invokeAll` cancels its unfinished tasks — interrupting
+  them — when the awaiting thread is interrupted. What was missing was the
+  other half: the `InterruptedException` was wrapped in a plain
+  `RuntimeException` and **the caller's own flag was never restored**, so
+  cancellation died at that layer. It now restores the flag and throws
+  `CancellationException`.
 - Plain `InputStream`/`FileInputStream` reads are not interruptible; only NIO
   channels are. Blocking I/O therefore aborts between operations, not during
   one.
@@ -298,7 +303,9 @@ it stands**. In-process: interruption. Across processes: an explicit protocol.
    submit to an executor, and cancellation is `future.cancel(true)`.
 3. `Progress.update()` checks for interruption and throws
    `CancellationException`.
-4. `Parallelization` propagates cancellation to its workers.
+4. `Parallelization` propagates cancellation to its workers: `TaskExecutors`
+   restores the interrupt flag and throws `CancellationException` rather than
+   swallowing the interrupt in a `RuntimeException`.
 5. `DataHandles.copy` checks once per block and throws
    `java.io.InterruptedIOException`, which is an `IOException` — so it fits
    the existing signature — and whose `bytesTransferred` field reports the

@@ -92,6 +92,7 @@
 		<!-- Note: These versions must match across all component POMs! -->
 		<scijava-discovery.version>1.0.1-SNAPSHOT</scijava-discovery.version>
 		<scijava-ops-spi.version>1.0.1-SNAPSHOT</scijava-ops-spi.version>
+		<scijava-priority.version>1.0.1-SNAPSHOT</scijava-priority.version>
 	</properties>
 
 	<dependencies>

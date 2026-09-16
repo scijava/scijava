@@ -84,6 +84,9 @@
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
+
+		<!-- Note: These versions must match across all component POMs! -->
+		<scijava-priority.version>1.0.1-SNAPSHOT</scijava-priority.version>
 	</properties>
 
 	<dependencies>

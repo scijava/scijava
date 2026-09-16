@@ -43,7 +43,7 @@ public class ServiceLoaderDiscovererTest {
 
 	@Test
 	public void testServiceLoaderWithBoth() {
-		Discoverer d = Discoverer.using(ServiceLoader::load);
+		Discoverer d = Discoverer.usingProviders(c -> ServiceLoader.load(c).stream());
 		assertDiscoveryRequirements(d, OpCollection.class,
 			ServiceBasedMultipliers.class);
 		assertDiscoveryRequirements(d, Op.class, ServiceBasedAdder.class);
@@ -53,7 +53,7 @@ public class ServiceLoaderDiscovererTest {
 	private static <T> void assertDiscoveryRequirements(Discoverer d,
 		Class<T> discovery, Class<? extends T>... impls)
 	{
-		List<Class<T>> implementingClasses = d.discover(discovery).stream().map(
+		List<Class<T>> implementingClasses = d.instances(discovery).stream().map(
 			o -> (Class<T>) o.getClass()).collect(Collectors.toList());
 		for (Class<? extends T> cls : impls)
 			Assertions.assertTrue(implementingClasses.contains(cls));

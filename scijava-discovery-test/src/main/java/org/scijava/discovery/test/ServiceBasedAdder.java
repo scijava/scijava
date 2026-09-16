@@ -39,6 +39,16 @@ public class ServiceBasedAdder implements BiFunction<Number, Number, Double>,
 	Op
 {
 
+	/**
+	 * Whether this class has ever been constructed, so that tests can assert
+	 * that discovery does not instantiate what it discovers.
+	 */
+	public static volatile boolean constructed = false;
+
+	public ServiceBasedAdder() {
+		constructed = true;
+	}
+
 	@Override
 	public Double apply(Number t, Number u) {
 		return t.doubleValue() + u.doubleValue();

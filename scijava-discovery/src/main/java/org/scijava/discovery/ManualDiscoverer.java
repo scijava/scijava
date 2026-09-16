@@ -29,7 +29,7 @@
 
 package org.scijava.discovery;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -45,7 +45,7 @@ public class ManualDiscoverer implements Discoverer {
 	private Set<Object> set;
 
 	public ManualDiscoverer() {
-		set = new HashSet<>();
+		set = new LinkedHashSet<>();
 	}
 
 	public void register(Object[]... objects) {
@@ -64,10 +64,10 @@ public class ManualDiscoverer implements Discoverer {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> List<T> discover(Class<T> c) {
-		return set.parallelStream() //
+	public <T> List<Discovery<T>> discover(Class<T> c) {
+		return set.stream() //
 			.filter(o -> c.isAssignableFrom(o.getClass())) //
-			.map(o -> (T) o) //
+			.map(o -> Discovery.of((T) o)) //
 			.collect(Collectors.toList());
 	}
 

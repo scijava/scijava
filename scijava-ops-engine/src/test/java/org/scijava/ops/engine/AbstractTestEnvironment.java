@@ -78,7 +78,7 @@ public abstract class AbstractTestEnvironment {
 	}
 
 	protected static OpEnvironment barebonesEnvironment() {
-		Discoverer serviceLoading = Discoverer.using(ServiceLoader::load).except( //
+		Discoverer serviceLoading = Discoverer.usingProviders(c -> ServiceLoader.load(c).stream()).except( //
 			Op.class, //
 			OpInfo.class, //
 			OpCollection.class //

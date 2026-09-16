@@ -62,7 +62,7 @@ public class DefaultTypeReifierTest {
 
 	@BeforeEach
 	public void setUp() {
-		Discoverer serviceLoaderDiscoverer = Discoverer.using(ServiceLoader::load);
+		Discoverer serviceLoaderDiscoverer = Discoverer.usingProviders(c -> ServiceLoader.load(c).stream());
 		types = new DefaultTypeReifier(serviceLoaderDiscoverer);
 	}
 

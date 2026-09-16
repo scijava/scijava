@@ -31,6 +31,8 @@ module org.scijava.discovery {
 
 	exports org.scijava.discovery;
 
+	requires transitive org.scijava.priority;
+
 	uses org.scijava.discovery.Discoverer;
 
 }

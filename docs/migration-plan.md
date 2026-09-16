@@ -219,6 +219,92 @@ has always had. The cost to a plugin module is one line:
 opens my.plugins.impl to org.scijava.context;
 ```
 
+### Cancellation is thread interruption
+
+SciJava has invented several cancellation APIs over the years — `Cancelable`
+in SJC's `module` package and across ImageJ Ops, the cancel half of
+`task.Task`, and Appose's `cancel()`. SciJava Ops deliberately shipped without
+any of them. The replacement is the platform's own mechanism, not a fourth
+invention.
+
+- **Mechanism:** thread interruption. Every interruptible JDK blocking call
+  already honors it — `Thread.sleep`, `Object.wait`, `BlockingQueue`,
+  `Lock.lockInterruptibly`, NIO channels — and Java 21's
+  `StructuredTaskScope` cancels its subtasks by interrupting them, so this
+  stays current.
+- **Client API:** `ExecutorService.submit()` → `Future.cancel(true)`. That is
+  what a caller holds: cancellation, completion and result in one object every
+  Java developer already knows.
+- **No `Cancelable`, and no cancellation token parameter.** Every scheme is
+  cooperative, so that is not the differentiator; composition is. An ambient
+  thread flag is honored by code we did not write, while an `isCanceled()`
+  interface only works for code that knows about it, and a token pollutes
+  every signature while still being unable to abort a JDK blocking call.
+
+**An interrupt carries no reason.** `Thread.interrupt()` takes no argument and
+the JDK constructs `InterruptedException` with a null message, so a reason
+cannot ride along. A reason belongs to the requesting side — the `Future`, or
+the caller's own record of why it cancelled — not to the exception.
+
+#### Cooperating in code that cannot throw
+
+Ops are `Function`, `Computers.Arity*` and similar, whose methods declare no
+checked exceptions, so an op cannot throw `InterruptedException`. The idiom:
+
+```java
+if (Thread.interrupted()) {            // NB: this clears the flag...
+    Thread.currentThread().interrupt(); // ...so restore it
+    throw new CancellationException("op cancelled");
+}
+```
+
+`java.util.concurrent.CancellationException` is unchecked and is what
+`Future.get()` already throws for a cancelled task, so callers see one type.
+
+**`Progress.update()` is the checkpoint.** Ops that do long work already call
+it periodically, so making it check for interruption gives cancellation with
+no new API, no extra parameter, and no per-op work. Progress and cancellation
+are both ambient and thread-scoped; they belong on the same rail. An op that
+reports no progress is not cancellable, which is honest, and a nudge toward
+reporting progress.
+
+#### Known limits, accepted deliberately
+
+- `CompletableFuture.cancel()` does **not** interrupt the running thread; it
+  only completes the future exceptionally. Expose `ExecutorService` futures
+  where cancellation must reach a compute loop.
+- The interrupt flag is thread-bound and **does not inherit**, unlike
+  `Progress`, which is an `InheritableThreadLocal`. So `Parallelization` and
+  `TaskExecutor` must propagate cancellation to worker futures deliberately.
+  That is the one piece of real work this design implies.
+- Plain `InputStream`/`FileInputStream` reads are not interruptible; only NIO
+  channels are. Blocking I/O therefore aborts between operations, not during
+  one.
+- Native code ignores interrupts: a long OpenCV call cannot be cancelled
+  mid-call.
+- The common practical hazard is library code that catches
+  `InterruptedException` and swallows it. The rule is always: propagate it, or
+  restore the flag.
+
+#### Across a process boundary
+
+Interruption cannot cross one, so **Appose's explicit `cancel()` is correct as
+it stands**. In-process: interruption. Across processes: an explicit protocol.
+
+#### Consequences for this migration
+
+1. `Cancelable` is **not ported** (see [migration.md](migration.md)).
+2. The Phase 3 execution layer hands back a `Future`; module and op execution
+   submit to an executor, and cancellation is `future.cancel(true)`.
+3. `Progress.update()` checks for interruption and throws
+   `CancellationException`.
+4. `Parallelization` propagates cancellation to its workers.
+5. `DataHandles.copy` checks once per block and throws
+   `java.io.InterruptedIOException`, which is an `IOException` — so it fits
+   the existing signature — and whose `bytesTransferred` field reports the
+   partial copy. The granularity is per-block, identical to the
+   `task.isCanceled()` check it replaces.
+
 ### Logging
 
 SLF4J, used directly, as `scijava-types` and `scijava-ops-engine` already do.
@@ -253,9 +339,9 @@ No application context required by anything in this phase.
   were **not** left behind as deprecated aliases, which the repository's
   current adoption level permits.
   - The test for membership: *if a class can implement it without knowing
-    about any SciJava framework, it is SPI.* `Cancelable` fails that test
-    (cancellation concerns a running thing — it belongs with the execution
-    layer, near `Progress`/`Task`), as do `Validated`, `BasicDetails`,
+    about any SciJava framework, it is SPI.* `Cancelable` fails that test —
+    and is not ported at all, since cancellation is thread interruption — as
+    do `Validated`, `BasicDetails`,
     `UIDetails` and `Plugin` (metadata bags for the plugin/module layer) and
     `Initializable` (lifecycle, so it belongs with `scijava-context`).
   - `Named` exposes `String name()` only. Mutability is a separate contract;
@@ -317,10 +403,11 @@ No application context required by anything in this phase.
     position and buffers of one open stream, so `create()` instantiates a
     fresh one per call. SciJava Common got this from `WrapperService`; here
     it is explicit, and tested.
-  - **Open question:** `DataHandles.copy` took a `Task`, which carried both
-    progress *and cancellation*; its replacement `LongConsumer` carries only
-    progress. If cancellable copies are wanted, that needs a deliberate
-    mechanism rather than falling out of the progress type.
+  - `DataHandles.copy` took a `Task`, which carried both progress *and
+    cancellation*; its replacement `LongConsumer` carries only progress.
+    Cancellation is thread interruption instead — see the cancellation
+    section — so `copy` checks the flag once per block and throws
+    `InterruptedIOException`.
   - Still to port: `io.nio`.
 - **`scijava-events`** (new, `org.scijava.events`): a clean-room event bus,
   no context, designed for typed topics and weak-reference subscribers. Not a
@@ -390,7 +477,8 @@ No application context required by anything in this phase.
   useful it runs the other way, `ops-engine` → execution layer.
 - **Execution module** (name TBD): pre/postprocessor chains, input resolution,
   a `@Parameter` equivalent, and a runner — built on `scijava-struct`.
-  `Cancelable`'s replacement lives here.
+  Cancellation needs nothing here: the runner hands back a `Future`, and
+  cancelling it interrupts the worker.
 - **Commands:** a struct, plus menu metadata, plus `run`. Commands and Ops
   remain separate concepts sharing this layer.
 - **Scripting:** `javax.script` is not general enough. GraalVM's Truffle

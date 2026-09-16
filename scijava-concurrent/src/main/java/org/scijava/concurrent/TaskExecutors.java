@@ -36,6 +36,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.AbstractExecutorService;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -260,7 +261,10 @@ public final class TaskExecutors {
 					results.add(future.get());
 				return results;
 			}
-			catch (InterruptedException | ExecutionException e) {
+			catch (final InterruptedException e) {
+				throw cancelled();
+			}
+			catch (final ExecutionException e) {
 				throw unwrapExecutionException(e);
 			}
 		}
@@ -271,7 +275,10 @@ public final class TaskExecutors {
 				for (var future : futures)
 					future.get();
 			}
-			catch (InterruptedException | ExecutionException e) {
+			catch (final InterruptedException e) {
+				throw cancelled();
+			}
+			catch (final ExecutionException e) {
 				throw unwrapExecutionException(e);
 			}
 		}
@@ -282,6 +289,22 @@ public final class TaskExecutors {
 		 * read. This method unwraps the {@link ExecutionException} and thereby
 		 * reveals the original exception, and ensures it's complete stack trace.
 		 */
+		/**
+		 * Reports that this thread was cancelled while awaiting its workers.
+		 * <p>
+		 * NB: {@link ExecutorService#invokeAll} has already cancelled the
+		 * unfinished tasks, which interrupts their threads. What is left is this
+		 * thread's own flag, which {@link InterruptedException} cleared on its
+		 * way out; restoring it is what lets code further up the stack see that
+		 * the work was cancelled rather than that it failed.
+		 * </p>
+		 */
+		private CancellationException cancelled() {
+			Thread.currentThread().interrupt();
+			return new CancellationException("Cancelled: " + Thread.currentThread()
+				.getName());
+		}
+
 		private RuntimeException unwrapExecutionException(Throwable e) {
 			if (e instanceof ExecutionException) {
 				final var cause = e.getCause();

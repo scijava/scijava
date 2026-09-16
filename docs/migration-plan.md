@@ -292,9 +292,23 @@ No application context required by anything in this phase.
     from the index. It belongs with whichever component defines the
     annotation, so it lands in Phase 2.
 - **`scijava-io3`** (new, `org.scijava.io3.{location, handle, nio}`): ports
-  `io.location`, `io.handle`, `io.nio` and `ByteBank`. Handles and resolvers
-  are found via `Discoverer` + `Priority`. The external `scijava-io-http`
-  folds in later as `org.scijava.io3.http`.
+  `io.location`, `io.handle`, `io.nio` and `ByteBank`. Locations are **done**;
+  handles are next. The external `scijava-io-http` folds in later as
+  `org.scijava.io3.http`.
+  - **This component stays standalone**: it is broadly useful on its own — to
+    Bio-Formats, for instance — so it depends on nothing but
+    `scijava-collections`, and resolvers are discovered with **plain
+    `ServiceLoader`** rather than `Discoverer` or a container. Nothing here
+    requires buying into a framework.
+  - That works because the `uses`-resolves-against-the-caller constraint only
+    bites a *generic* facade discovering arbitrary types on another module's
+    behalf. This component knows its own service type, so it declares
+    `uses org.scijava.io3.location.LocationResolver` in its own
+    `module-info.java` and is self-contained.
+  - `LocationResolver` carries its own `priority()` as a plain `double`
+    rather than depending on `scijava-priority`; the `Priority` constants are
+    compatible with it. `Locations` can also be constructed with an explicit
+    resolver list, for embedding and testing.
 - **`scijava-events`** (new, `org.scijava.events`): a clean-room event bus,
   no context, designed for typed topics and weak-reference subscribers. Not a
   port of the bushe fork — rewriting removes the attribution obligation. The

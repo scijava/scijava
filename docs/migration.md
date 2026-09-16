@@ -23,7 +23,7 @@ A **dropped** row is a successful outcome, not a gap.
 | `AppUtils` | `org.scijava.common3.Apps` | ported |
 | `ArrayUtils` | mostly dropped: `contains`/`indexOf` → `Arrays.asList(a).contains(v)` for object arrays, a loop or stream for primitives; `array` → an array literal; `toCollection` → no replacement. `safeMultiply32`/`safeMultiply64` → `common3.Numbers` (they wrap `Math.multiplyExact`) | ported |
 | `BoolArray`, `ByteArray`, `CharArray`, `DoubleArray`, `FloatArray`, `IntArray`, `LongArray`, `ObjectArray`, `ShortArray`, `PrimitiveArray` | `org.scijava.collections.*` | ported |
-| `Bytes` | deferred to `scijava-io3`, its natural consumer; `java.nio.ByteBuffer` covers casual use | open |
+| `Bytes` | `scijava-io3`, alongside the handles that need it (Phase 1, in progress) | planned |
 | `CheckSezpoz` | none | dropped |
 | `ClassUtils` | `org.scijava.common3.Classes` (mostly already deprecated in SJC) | ported |
 | `ColorRGB`, `ColorRGBA`, `Colors` | UI layer (Phase 4) | open |
@@ -97,7 +97,9 @@ A **dropped** row is a successful outcome, not a gap.
 | `annotations.EclipseHelper` | none — m2e `.factorypath` covers it; `DirectoryIndexer` is ported, so a Maven plugin can still index a directory | dropped |
 | `annotations.AnnotationCombiner` | `scijava-maven-plugin` — it merges indexes for shaded JARs, which is build tooling | dropped |
 | `annotations.legacy` | none — reads the pre-2013 `META-INF/annotations/` format | dropped |
-| `io.location`, `io.handle`, `io.nio`, `ByteBank` | `org.scijava.io3.*` (Phase 1) | planned |
+| `io.location` | `org.scijava.io3.location`. `LocationService`/`DefaultLocationService` become `Locations`, backed by plain `ServiceLoader`; `LocationResolver` no longer extends `HandlerPlugin` and carries its own `priority()`. `URILocation`'s injected `LogService` was dead code and is gone | ported |
+| `ByteBank`, `ByteArrayByteBank` | `org.scijava.io3` | ported |
+| `io.handle`, `io.nio` | `org.scijava.io3.handle` (Phase 1, in progress) | planned |
 | `io` (`IOPlugin`, `IOService`, `RecentFileService`) | `scijava-io3` (Phase 1), pending review of what is still used | open |
 | `event`, `event.bushe` | `org.scijava.events` — clean-room rewrite, not a port (Phase 1) | planned |
 | `parse` | Parsington (`org.scijava.parsington`) | planned |

@@ -30,9 +30,11 @@ The deliverable is not a reimplementation of SJC. It is:
 - **Classpath-first, module-path-clean.** Fiji runs on the classpath, so JPMS
   strictness binds only those who deliberately modularize. Design so that
   modularization is *possible* without contorting for it: no split packages,
-  plugin classes public in exported packages, constructor injection rather
-  than private-field reflection, resources under `META-INF/`. The one thing we
-  give up is `setAccessible`-based injection into private fields.
+  resources under `META-INF/`, and a qualified `opens` to the container where
+  a module wants its implementations injected. Notably we give up **nothing**
+  here: implementation packages stay unexported and encapsulated, and
+  declarative field injection keeps working. See the JPMS section below for
+  the measurements behind this.
 - **Leave SJC alone.** No functional changes, no Java version bump, no
   delegation layer. Only `@deprecated` javadoc.
 - **One-way migration.** Downstream components migrate by swapping the
@@ -190,17 +192,32 @@ elsewhere too).
 
 ### JPMS specifics
 
-- Index resources are safe: `META-INF/json/...` is not a valid package name,
-  so it stays readable via `ClassLoader.getResources` from named modules.
-- Instantiating a public class with a public no-arg constructor in an
-  **exported** package needs no `opens`.
-- `setAccessible` on private fields — how SJC injects `@Parameter`
-  (`Context.java:510`, `ServiceHelper.java:317`) — **does** require `opens`.
-  This is the one thing forcing every plugin module to open itself.
+These were measured, not reasoned about, with a three-module test project
+(`javac --module-source-path`, run on the module path, JDK 21):
 
-Therefore the SJ3 context uses **constructor injection** (or an explicit
-`initialize(Context)`), so that `exports` suffices and `@Plugin` coexists with
-JPMS.
+| Situation | Result |
+| --- | --- |
+| Index resources (`META-INF/json/...`) read via `ClassLoader.getResources` | **works** — `META-INF` is not a valid package name, so it is never encapsulated |
+| `ServiceLoader` finding a provider declared with `provides`, in a package that is neither exported nor opened | **works** — the `provides` declaration itself grants the access |
+| Reflective `newInstance` on a public class in a package that is neither exported nor opened | **fails**: `IllegalAccessException` |
+| The same, with a qualified `opens <pkg> to <container>` | **works** |
+| `setAccessible` injection into a **private** field, with that qualified `opens` | **works** |
+| An ordinary module importing a class from that opened-but-unexported package | **compile error**: "package ... is declared in module ..., which does not export it" |
+| A service with a **private** constructor plus a `public static provider()` factory | **works** — `ServiceLoader` prefers the factory |
+
+The load-bearing conclusion is the second-to-last row: **`opens` is not
+`exports`.** A qualified `opens` grants the container deep reflective access at
+runtime while leaving the package invisible to ordinary callers at compile
+time. Implementations therefore stay encapsulated — callers cannot import
+them, cannot cast to them, and cannot call their non-API methods — and the
+container can still construct and inject them.
+
+So the SJ3 context keeps **declarative field injection**, as SciJava Common
+has always had. The cost to a plugin module is one line:
+
+```java
+opens my.plugins.impl to org.scijava.context;
+```
 
 ### Logging
 
@@ -298,10 +315,19 @@ No application context required by anything in this phase.
 ### Phase 2 — The application context
 
 - **`scijava-context`** (new, `org.scijava.context`): services with a
-  lifecycle and **constructor-based** dependency injection; plugin metadata
-  from `scijava-index`; instantiation via `Discoverer`; ordering via
-  `scijava-priority`. Plus the core services: object registry, prefs, thread,
-  app/status.
+  lifecycle and dependency injection; plugin metadata from `scijava-index`;
+  instantiation via `Discoverer`; ordering via `scijava-priority`. Plus the
+  core services: object registry, prefs, thread, app/status.
+  - **Dependencies are not constructor arguments.** Constructor injection
+    would publish every dependency in a signature, so changing an internal
+    dependency would be an API change and a binary compatibility break unless
+    old constructors were kept forever. It also cannot work for the
+    `ServiceLoader` tier, which requires a public no-arg constructor or a
+    static `provider()` factory. Dependencies are instead acquired after
+    construction — declaratively, by annotated field, as SciJava Common does —
+    which keeps them an implementation detail.
+  - Services may therefore have a **private** constructor and a
+    `public static provider()` factory, exposing no construction API at all.
   - Deliberately a much smaller surface than SJC's `Context` +
     `PluginService` + `PluginInfo` + the handler/wrapper/typed-service
     hierarchy. Keep what is used; drop the rest.

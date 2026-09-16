@@ -65,6 +65,7 @@
 		<module>scijava-discovery-test</module>
 		<module>scijava-function</module>
 		<module>scijava-index</module>
+		<module>scijava-io3</module>
 		<module>scijava-legacy</module>
 		<module>scijava-meta</module>
 		<module>scijava-ops-api</module>

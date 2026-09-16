@@ -21,9 +21,9 @@ A **dropped** row is a successful outcome, not a gap.
 | --- | --- | --- |
 | `AbstractPrimitiveArray` | `org.scijava.collections.AbstractPrimitiveArray` | ported |
 | `AppUtils` | `org.scijava.common3.Apps` | ported |
-| `ArrayUtils` | `org.scijava.common3` (Phase 1) | planned |
+| `ArrayUtils` | mostly dropped: `contains`/`indexOf` → `Arrays.asList(a).contains(v)` for object arrays, a loop or stream for primitives; `array` → an array literal; `toCollection` → no replacement. `safeMultiply32`/`safeMultiply64` → `common3.Numbers` (they wrap `Math.multiplyExact`) | ported |
 | `BoolArray`, `ByteArray`, `CharArray`, `DoubleArray`, `FloatArray`, `IntArray`, `LongArray`, `ObjectArray`, `ShortArray`, `PrimitiveArray` | `org.scijava.collections.*` | ported |
-| `Bytes` | `org.scijava.common3` (Phase 1) | planned |
+| `Bytes` | deferred to `scijava-io3`, its natural consumer; `java.nio.ByteBuffer` covers casual use | open |
 | `CheckSezpoz` | none | dropped |
 | `ClassUtils` | `org.scijava.common3.Classes` (mostly already deprecated in SJC) | ported |
 | `ColorRGB`, `ColorRGBA`, `Colors` | UI layer (Phase 4) | open |
@@ -31,29 +31,29 @@ A **dropped** row is a successful outcome, not a gap.
 | `ConversionUtils` | `scijava-convert3` (Phase 2); already deprecated in SJC | planned |
 | `DebugUtils` | `org.scijava.common3.Threads` | ported |
 | `DefaultTreeNode`, `TreeNode` | on hold — only `imagej-common` uses it; may move there | open |
-| `DigestUtils` | `org.scijava.common3` (Phase 1) | planned |
+| `DigestUtils` | `org.scijava.common3.Digests`. `digest` now throws `IllegalArgumentException` for an unknown algorithm rather than returning `null`; `best*` is SHA-1, since every Java platform guarantees it | ported |
 | `FileUtils` | `org.scijava.common3` (non-URL parts, Phase 1); URL parts in `common3.URLs` | planned |
 | `GenericUtils` | `org.scijava.common3.Types` (already deprecated in SJC) | ported |
 | `IntCoords`, `IntRect`, `RealCoords`, `RealRect` | UI layer (Phase 4) | open |
 | `IteratorPlus` | none — use the standard `Iterator`/`Iterable` API | dropped |
 | `LastRecentlyUsed` | `java.util.LinkedHashMap` with `accessOrder=true` + `removeEldestEntry` | dropped |
-| `ListUtils` | `org.scijava.common3` (Phase 1); `first` is one line, inline it | planned |
+| `ListUtils` | dropped: `first` is one line, inline it; `string` → `StringJoiner` or `String.join` | dropped |
 | `LineOutputStream`, `ReadInto`, `StringMaker`, `Query` | none — inline as needed | dropped |
 | `Manifest` | `org.scijava.meta.Manifest` | ported |
 | `MersenneTwisterFast` | `org.scijava.common3.MersenneTwisterFast` | ported |
 | `MirrorWebsite`, `TunePlayer`, `ReflectedUniverse`, `ReflectException` | none | dropped |
 | `MiscUtils` | `org.scijava.common3.Comparisons` | ported |
-| `NumberUtils` | `org.scijava.common3` (Phase 1) | planned |
+| `NumberUtils` | `org.scijava.common3.Numbers`. `getMinimumNumber`/`getMaximumNumber` → `minimum`/`maximum`; `asBigDecimal`/`asBigInteger` → `bigDecimal`/`bigInteger`; `clampToRange` → `clamp`. **`toNumber` no longer consults a conversion framework** — it handles numbers and strings only, so `common3` stays dependency-free | ported |
 | `PlatformUtils` | `org.scijava.common3.Platforms` | ported |
 | `POM` | `org.scijava.meta.POM` | ported |
 | `Prefs` | `scijava-context` prefs service (Phase 2); already deprecated in SJC | planned |
-| `ProcessUtils` | `org.scijava.common3` (Phase 1) | planned |
+| `ProcessUtils` | `org.scijava.common3.Processes`, reimplemented on `ProcessBuilder`; no longer needs `ReadInto` | ported |
 | `PropertiesHelper` | none — inline | dropped |
 | `Sizable`, `SizableArrayList` | none — the reflective-resizing rationale died with Java 17 | dropped |
-| `StringUtils` | `org.scijava.common3` (Phase 1) | planned |
+| `StringUtils` | `org.scijava.common3.Strings`: `padStart`, `padEnd`, `isNullOrEmpty`, `splitUnquoted`. `sanitize`, `sanitizeDouble`, `stripNulls` and `samePrefix` are dropped — no usages anywhere | ported |
 | `Timing` | on hold — pending evidence of downstream usage | open |
 | `Types` | `org.scijava.common3.Types` + `org.scijava.common3.Classes` — **not** a drop-in superset, see below | ported |
-| `UnitUtils` | `org.scijava.common3` (Phase 1) | planned |
+| `UnitUtils` | dropped — one usage ecosystem-wide; add it back on demand | dropped |
 | `VersionUtils` | `org.scijava.meta.Versions` | ported |
 | `XML` | `org.scijava.meta.XML` | ported |
 

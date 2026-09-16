@@ -95,6 +95,7 @@
 
 		<!-- Note: These versions must match across all component POMs! -->
 		<scijava-common3.version>1.0.1-SNAPSHOT</scijava-common3.version>
+		<scijava-spi.version>1.0.0-SNAPSHOT</scijava-spi.version>
 	</properties>
 
 	<dependencies>
@@ -103,6 +104,11 @@
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-common3</artifactId>
 			<version>${scijava-common3.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-spi</artifactId>
+			<version>${scijava-spi.version}</version>
 		</dependency>
 
 		<!-- Test scope dependencies -->

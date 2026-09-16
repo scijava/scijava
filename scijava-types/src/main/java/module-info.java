@@ -37,6 +37,7 @@ module org.scijava.types {
 	exports org.scijava.types.extract;
 
 	requires transitive org.scijava.common3;
+	requires transitive org.scijava.spi;
 	requires transitive org.scijava.discovery;
 	requires org.scijava.priority;
 

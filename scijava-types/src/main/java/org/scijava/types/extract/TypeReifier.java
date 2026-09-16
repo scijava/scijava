@@ -38,7 +38,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.scijava.common3.Any;
-import org.scijava.common3.GenericTyped;
+import org.scijava.spi.GenericTyped;
 import org.scijava.common3.Types;
 
 import com.google.common.reflect.TypeToken;

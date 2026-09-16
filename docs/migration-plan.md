@@ -255,8 +255,25 @@ No application context required by anything in this phase.
   `ListUtils`, `UnitUtils`, and the non-URL parts of `FileUtils`. It stays
   dependency-free. (`Timing` is on hold — unclear downstream usage.)
 - **`scijava-index`** (new, `org.scijava.index`): ports `annotations` — the
-  annotation processor and index reader — plus a `Discoverer` backed by the
-  index. This is what supplies plugin metadata without loading classes.
+  annotation processor and index reader — plus `IndexDiscoverer`, a
+  `Discoverer` backed by the index. **Done.** This is what supplies plugin
+  metadata without loading classes, and it is what the `Discovery` refactor
+  was for: a test proves that discovery never asks the class loader for an
+  implementation class, using a recording class loader rather than a static
+  flag, since reading such a flag would itself load the class.
+  - The index format (`META-INF/json/<annotation>`) is deliberately unchanged
+    from SJC, so an index written by either side is readable by the other.
+  - Which type an indexed item provides must be answerable from metadata,
+    so `IndexDiscoverer` takes a function for it; for an annotation shaped
+    like `@Plugin(type = Service.class)` that is
+    `item -> item.annotation().type().getName()`, which loads the *declared*
+    type but never the implementation.
+  - The component sets `maven.compiler.proc` to `none` for itself: javac
+    reads `META-INF/services` before the processor class it names exists.
+    SJC has the same constraint, and solves it the same way.
+  - Still to do: the loud runtime diagnostic for an annotated class missing
+    from the index. It belongs with whichever component defines the
+    annotation, so it lands in Phase 2.
 - **`scijava-io3`** (new, `org.scijava.io3.{location, handle, nio}`): ports
   `io.location`, `io.handle`, `io.nio` and `ByteBank`. Handles and resolvers
   are found via `Discoverer` + `Priority`. The external `scijava-io-http`

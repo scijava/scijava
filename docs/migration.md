@@ -37,8 +37,8 @@ A **dropped** row is a successful outcome, not a gap.
 | `IntCoords`, `IntRect`, `RealCoords`, `RealRect` | UI layer (Phase 4) | open |
 | `IteratorPlus` | none — use the standard `Iterator`/`Iterable` API | dropped |
 | `LastRecentlyUsed` | `java.util.LinkedHashMap` with `accessOrder=true` + `removeEldestEntry` | dropped |
+| `ListUtils` | `org.scijava.common3` (Phase 1); `first` is one line, inline it | planned |
 | `LineOutputStream`, `ReadInto`, `StringMaker`, `Query` | none — inline as needed | dropped |
-| `ListUtils` | `org.scijava.common3` (Phase 1) | planned |
 | `Manifest` | `org.scijava.meta.Manifest` | ported |
 | `MersenneTwisterFast` | `org.scijava.common3.MersenneTwisterFast` | ported |
 | `MirrorWebsite`, `TunePlayer`, `ReflectedUniverse`, `ReflectException` | none | dropped |

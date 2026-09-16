@@ -415,7 +415,11 @@ No application context required by anything in this phase.
     Cancellation is thread interruption instead — see the cancellation
     section — so `copy` checks the flag once per block and throws
     `InterruptedIOException`.
-  - Still to port: `io.nio`.
+  - `io.nio` is **not ported**: `NIOService` wraps two JDK calls and has no
+    usages, and `ByteBufferByteBank` has none either and caps at
+    `Integer.MAX_VALUE` just as `ByteArrayByteBank` does, so it adds no
+    capability. See [migration.md](migration.md). This component is therefore
+    complete.
 - **`scijava-events`** (new, `org.scijava.events`): a clean-room event bus,
   no context, designed for typed topics and weak-reference subscribers. Not a
   port of the bushe fork — rewriting removes the attribution obligation. The

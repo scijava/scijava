@@ -93,8 +93,10 @@ A **dropped** row is a successful outcome, not a gap.
 
 | SJC package | Replacement | Status |
 | --- | --- | --- |
-| `annotations` | `org.scijava.index` (Phase 1) | planned |
-| `annotations.EclipseHelper` | none — m2e `.factorypath` covers it; directory indexing belongs in `scijava-maven-plugin` | dropped |
+| `annotations` | `org.scijava.index`: `Indexable`, `Index`, `IndexItem`, `IndexReader`, `AbstractIndexWriter`, `AnnotationProcessor`, `ByteCodeAnalyzer`, `DirectoryIndexer`, plus the new `IndexDiscoverer`. The index format (`META-INF/json/<annotation>`) is unchanged, so indexes stay readable by both | ported |
+| `annotations.EclipseHelper` | none — m2e `.factorypath` covers it; `DirectoryIndexer` is ported, so a Maven plugin can still index a directory | dropped |
+| `annotations.AnnotationCombiner` | `scijava-maven-plugin` — it merges indexes for shaded JARs, which is build tooling | dropped |
+| `annotations.legacy` | none — reads the pre-2013 `META-INF/annotations/` format | dropped |
 | `io.location`, `io.handle`, `io.nio`, `ByteBank` | `org.scijava.io3.*` (Phase 1) | planned |
 | `io` (`IOPlugin`, `IOService`, `RecentFileService`) | `scijava-io3` (Phase 1), pending review of what is still used | open |
 | `event`, `event.bushe` | `org.scijava.events` — clean-room rewrite, not a port (Phase 1) | planned |

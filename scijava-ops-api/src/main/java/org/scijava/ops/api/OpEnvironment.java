@@ -73,7 +73,7 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 */
 	static OpEnvironment buildEmpty() {
         var opsOptional = Discoverer //
-			.using(ServiceLoader::load) //
+			.usingProviders((Class<OpEnvironment> c) -> ServiceLoader.load(c).stream()) //
 			.discoverMax(OpEnvironment.class);
 		return opsOptional.orElseThrow( //
 			() -> new RuntimeException("No OpEnvironment Provided!") //

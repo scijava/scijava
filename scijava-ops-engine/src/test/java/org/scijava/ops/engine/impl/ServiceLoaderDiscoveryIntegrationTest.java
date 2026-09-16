@@ -45,8 +45,8 @@ public class ServiceLoaderDiscoveryIntegrationTest {
 
 	@Test
 	public void testOpDiscoveryRegressionIT() {
-		final Discoverer d = Discoverer.using(ServiceLoader::load);
-		final List<Op> discoveries = d.discover(Op.class);
+		final Discoverer d = Discoverer.usingProviders(c -> ServiceLoader.load(c).stream());
+		final List<Op> discoveries = d.instances(Op.class);
 		Assertions.assertEquals(237, discoveries.size());
 
 		@SuppressWarnings("unused")
@@ -59,8 +59,8 @@ public class ServiceLoaderDiscoveryIntegrationTest {
 
 	@Test
 	public void testOpCollectionDiscoveryRegressionIT() {
-		final Discoverer d = Discoverer.using(ServiceLoader::load);
-		final List<OpCollection> discoveries = d.discover(OpCollection.class);
+		final Discoverer d = Discoverer.usingProviders(c -> ServiceLoader.load(c).stream());
+		final List<OpCollection> discoveries = d.instances(OpCollection.class);
 		Assertions.assertEquals(22, discoveries.size());
 		@SuppressWarnings("unused")
 		final OpInfoGenerator g = new OpCollectionInfoGenerator();

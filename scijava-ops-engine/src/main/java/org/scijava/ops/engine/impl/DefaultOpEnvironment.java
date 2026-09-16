@@ -77,8 +77,8 @@ import java.util.stream.Collectors;
 public class DefaultOpEnvironment implements OpEnvironment {
 
 	// A Discoverer used to discover backend plugins, like OpInfoGenerators
-	private final Discoverer metaDiscoverer = Discoverer.union(Discoverer.all(
-		ServiceLoader::load));
+	private final Discoverer metaDiscoverer = Discoverer.union(Discoverer.all( //
+		Discoverer.usingProviders(c -> ServiceLoader.load(c).stream())));
 
 	private final List<Discoverer> discoverers = new ArrayList<>();
 
@@ -136,7 +136,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		typeReifier = new DefaultTypeReifier(metaDiscoverer);
 		history = OpHistory.getOpHistory();
 		matcher = new DefaultOpMatcher( //
-			metaDiscoverer.discover(MatchingRoutine.class) //
+			metaDiscoverer.instances(MatchingRoutine.class) //
 		);
 		discoverUsing(discoverers);
 		discoverUsing(manDiscoverer);
@@ -173,9 +173,9 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	public void discoverUsing(Discoverer... arr) {
 		for (var d : arr) {
 			discoverers.add(d);
-			d.discover(OpInfo.class).forEach(this::registerInfosFrom);
-			d.discover(Op.class).forEach(this::registerInfosFrom);
-			d.discover(OpCollection.class).forEach(this::registerInfosFrom);
+			d.instances(OpInfo.class).forEach(this::registerInfosFrom);
+			d.instances(Op.class).forEach(this::registerInfosFrom);
+			d.instances(OpCollection.class).forEach(this::registerInfosFrom);
 		}
 	}
 
@@ -236,7 +236,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	public InfoTree treeFromSignature(String signature) {
 		if (idDirectory == null) initIdDirectory();
         var infoTreeGenerators = discoverers.stream() //
-			.flatMap(d -> d.discover(InfoTreeGenerator.class).stream()) //
+			.flatMap(d -> d.instances(InfoTreeGenerator.class).stream()) //
 			.collect(Collectors.toList());
 
         var genOpt = InfoTreeGenerator.findSuitableGenerator(
@@ -301,7 +301,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 */
 	private List<OpInfo> generateAllInfos(Object o) {
 		// Find all OpInfoGenerators
-		return metaDiscoverer.discover(OpInfoGenerator.class) //
+		return metaDiscoverer.instances(OpInfoGenerator.class) //
 			.stream() //
 			// Filter to the ones that can operate on o
 			.filter(g -> g.canGenerateFrom(o)) //
@@ -562,7 +562,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		if (wrappers != null) return;
         var tmp = new HashMap<Class<?>, OpWrapper<?>>();
 		for (var d : discoverers)
-			for (OpWrapper wrapper : d.discover(OpWrapper.class))
+			for (OpWrapper wrapper : d.instances(OpWrapper.class))
 				tmp.put(wrapper.type(), wrapper);
 		wrappers = tmp;
 	}

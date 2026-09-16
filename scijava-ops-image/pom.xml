@@ -249,6 +249,7 @@
 		<scijava-collections.version>1.0.1-SNAPSHOT</scijava-collections.version>
 		<scijava-common3.version>1.0.1-SNAPSHOT</scijava-common3.version>
 		<scijava-concurrent.version>1.0.1-SNAPSHOT</scijava-concurrent.version>
+		<scijava-discovery.version>1.0.1-SNAPSHOT</scijava-discovery.version>
 		<scijava-function.version>1.0.1-SNAPSHOT</scijava-function.version>
 		<scijava-meta.version>1.0.1-SNAPSHOT</scijava-meta.version>
 		<scijava-ops-api.version>1.0.1-SNAPSHOT</scijava-ops-api.version>

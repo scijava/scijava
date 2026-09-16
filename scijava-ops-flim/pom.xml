@@ -97,12 +97,14 @@
 
 		<!-- Note: These versions must match across all component POMs! -->
 		<scijava-concurrent.version>1.0.1-SNAPSHOT</scijava-concurrent.version>
+		<scijava-discovery.version>1.0.1-SNAPSHOT</scijava-discovery.version>
 		<scijava-function.version>1.0.1-SNAPSHOT</scijava-function.version>
 		<scijava-ops-api.version>1.0.1-SNAPSHOT</scijava-ops-api.version>
 		<scijava-ops-engine.version>1.0.1-SNAPSHOT</scijava-ops-engine.version>
 		<scijava-ops-image.version>2.0.0-SNAPSHOT</scijava-ops-image.version>
 		<scijava-ops-indexer.version>1.0.1-SNAPSHOT</scijava-ops-indexer.version>
 		<scijava-ops-spi.version>1.0.1-SNAPSHOT</scijava-ops-spi.version>
+		<scijava-priority.version>1.0.1-SNAPSHOT</scijava-priority.version>
 		<scijava-taglets.version>1.0.1-SNAPSHOT</scijava-taglets.version>
 		<scijava-types.version>1.0.1-SNAPSHOT</scijava-types.version>
 

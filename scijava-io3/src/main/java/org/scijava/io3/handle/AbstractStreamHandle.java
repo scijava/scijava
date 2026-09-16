@@ -27,23 +27,37 @@
  * #L%
  */
 
-module org.scijava.io3 {
+package org.scijava.io3.handle;
 
-	exports org.scijava.io3;
-	exports org.scijava.io3.handle;
-	exports org.scijava.io3.location;
+import org.scijava.io3.location.Location;
 
-	requires org.scijava.collections;
+/**
+ * Abstract base class for {@link StreamHandle} implementations.
+ *
+ * @author Curtis Rueden
+ * @author Melissa Linkert
+ */
+public abstract class AbstractStreamHandle<L extends Location> extends
+	AbstractDataHandle<L> implements StreamHandle<L>
+{
 
-	uses org.scijava.io3.handle.DataHandle;
-	uses org.scijava.io3.location.LocationResolver;
+	// -- Fields --
 
-	provides org.scijava.io3.handle.DataHandle with
-			org.scijava.io3.handle.FileHandle,
-			org.scijava.io3.handle.BytesHandle,
-			org.scijava.io3.handle.DummyHandle;
+	/** Current position within the stream(s). */
+	private long offset;
 
-	provides org.scijava.io3.location.LocationResolver with
-			org.scijava.io3.location.FileLocationResolver;
+	// -- StreamHandle methods --
+
+	@Override
+	public void setOffset(final long offset) {
+		this.offset = offset;
+	}
+
+	// -- DataHandle methods --
+
+	@Override
+	public long offset() {
+		return offset;
+	}
 
 }

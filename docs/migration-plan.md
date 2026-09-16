@@ -309,6 +309,19 @@ No application context required by anything in this phase.
     rather than depending on `scijava-priority`; the `Priority` constants are
     compatible with it. `Locations` can also be constructed with an explicit
     resolver list, for embedding and testing.
+  - Handles are **done** too, on the same pattern: `DataHandle` absorbs the
+    tiny `WrapperPlugin` contract (`locationType`, `supports`, `set`, `get`,
+    `priority`) instead of extending the plugin framework, and
+    `DataHandleService` becomes `DataHandles`.
+  - Note that discovered handles are **prototypes**: a handle carries the
+    position and buffers of one open stream, so `create()` instantiates a
+    fresh one per call. SciJava Common got this from `WrapperService`; here
+    it is explicit, and tested.
+  - **Open question:** `DataHandles.copy` took a `Task`, which carried both
+    progress *and cancellation*; its replacement `LongConsumer` carries only
+    progress. If cancellable copies are wanted, that needs a deliberate
+    mechanism rather than falling out of the progress type.
+  - Still to port: `io.nio`.
 - **`scijava-events`** (new, `org.scijava.events`): a clean-room event bus,
   no context, designed for typed topics and weak-reference subscribers. Not a
   port of the bushe fork — rewriting removes the attribution obligation. The

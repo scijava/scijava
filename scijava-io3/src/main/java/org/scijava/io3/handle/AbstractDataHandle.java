@@ -27,23 +27,68 @@
  * #L%
  */
 
-module org.scijava.io3 {
+package org.scijava.io3.handle;
 
-	exports org.scijava.io3;
-	exports org.scijava.io3.handle;
-	exports org.scijava.io3.location;
+import org.scijava.io3.location.Location;
 
-	requires org.scijava.collections;
+/**
+ * Abstract base class for {@link DataHandle} implementations.
+ *
+ * @author Curtis Rueden
+ */
+public abstract class AbstractDataHandle<L extends Location> implements
+	DataHandle<L>
+{
 
-	uses org.scijava.io3.handle.DataHandle;
-	uses org.scijava.io3.location.LocationResolver;
+	private L location;
 
-	provides org.scijava.io3.handle.DataHandle with
-			org.scijava.io3.handle.FileHandle,
-			org.scijava.io3.handle.BytesHandle,
-			org.scijava.io3.handle.DummyHandle;
+	// -- DataHandle methods --
 
-	provides org.scijava.io3.location.LocationResolver with
-			org.scijava.io3.location.FileLocationResolver;
+	@Override
+	public void set(final L location) {
+		if (!supports(location)) {
+			throw new IllegalArgumentException("Incompatible location: " + location);
+		}
+		this.location = location;
+	}
+
+	@Override
+	public L get() {
+		return location;
+	}
+
+	private byte[] conversionBuffer = new byte[8];
+	
+	@Override
+	public byte[] conversionBuffer() {
+		return conversionBuffer;
+	}
+ 
+	// -- Fields --
+
+	private ByteOrder order = ByteOrder.BIG_ENDIAN;
+	private String encoding = "UTF-8";
+
+	// -- DataHandle methods --
+
+	@Override
+	public ByteOrder getOrder() {
+		return order;
+	}
+
+	@Override
+	public void setOrder(final ByteOrder order) {
+		this.order = order;
+	}
+
+	@Override
+	public String getEncoding() {
+		return encoding;
+	}
+
+	@Override
+	public void setEncoding(final String encoding) {
+		this.encoding = encoding;
+	}
 
 }

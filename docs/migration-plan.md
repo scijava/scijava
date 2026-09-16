@@ -415,10 +415,13 @@ No application context required by anything in this phase.
     Cancellation is thread interruption instead — see the cancellation
     section — so `copy` checks the flag once per block and throws
     `InterruptedIOException`.
-  - `io.nio` is **not ported**: `NIOService` wraps two JDK calls and has no
-    usages, and `ByteBufferByteBank` has none either and caps at
-    `Integer.MAX_VALUE` just as `ByteArrayByteBank` does, so it adds no
-    capability. See [migration.md](migration.md). This component is therefore
+  - From `io.nio`, `ByteBufferByteBank` **is** ported: a direct buffer is
+    off-heap, so its bytes reach native code and shared memory without a
+    copy — which matters increasingly for Appose's named shared memory
+    blocks. `NIOService` is dropped, being two JDK calls behind a
+    system-property switch; nothing in the ported architecture precludes
+    reintroducing `FileChannel` later, since a handle may open a channel and
+    a bank may be backed by a mapped buffer. This component is therefore
     complete.
 - **`scijava-events`** (new, `org.scijava.events`): a clean-room event bus,
   no context, designed for typed topics and weak-reference subscribers. Not a

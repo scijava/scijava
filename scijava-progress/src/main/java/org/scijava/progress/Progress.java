@@ -30,6 +30,7 @@
 package org.scijava.progress;
 
 import java.util.*;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
@@ -258,11 +259,45 @@ public final class Progress {
 	 *
 	 * @param numElements the number of elements completed in the current stage.
 	 * @param task the {@link Task} to update
+	 * @throws CancellationException if this thread has been interrupted
 	 * @see Task#update(long)
+	 * @see #checkCancellation()
 	 */
 	public static void update(final long numElements, final Task task) {
+		checkCancellation();
 		task.update(numElements);
 		pingListeners(task);
+	}
+
+	/**
+	 * Throws {@link CancellationException} if this thread has been interrupted.
+	 * <p>
+	 * Cancellation in SciJava is thread interruption: a caller holding a
+	 * {@link java.util.concurrent.Future} cancels with
+	 * {@code future.cancel(true)}, which interrupts the worker thread. Work that
+	 * cannot throw {@link InterruptedException} - an {@code Op} implementing a
+	 * plain {@link java.util.function.Function}, for instance - cooperates by
+	 * calling this method periodically.
+	 * </p>
+	 * <p>
+	 * {@link #update()} calls it already, so anything that reports progress is
+	 * cancellable without further effort. Call it directly in a long loop that
+	 * reports no progress.
+	 * </p>
+	 * <p>
+	 * The interrupt flag is restored before throwing, so that code further up
+	 * the stack still sees that this thread was cancelled.
+	 * </p>
+	 *
+	 * @throws CancellationException if this thread has been interrupted
+	 */
+	public static void checkCancellation() {
+		// NB: Thread.interrupted() clears the flag, hence the restore below.
+		if (Thread.interrupted()) {
+			Thread.currentThread().interrupt();
+			throw new CancellationException("Cancelled: " + Thread.currentThread()
+				.getName());
+		}
 	}
 
 	/**

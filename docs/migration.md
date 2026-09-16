@@ -79,7 +79,7 @@ A **dropped** row is a successful outcome, not a gap.
 | `Locatable` | deferred — its only content was a default implementation needing `common3.Classes.location`, which `scijava-spi` cannot depend on | open |
 | `Typed` | deferred to the plugin layer — no consumer yet, and `Class<T> type()` collides with `GenericTyped.type()` | open |
 | `Initializable` | `scijava-context` (Phase 2) — a lifecycle hook, not an SPI contract | planned |
-| `Cancelable` | execution layer (Phase 3) — cancellation concerns a running thing | planned |
+| `Cancelable` | **not ported** — cancellation is thread interruption, and the client API is `Future.cancel(true)`. See the cancellation section of [migration-plan.md](migration-plan.md) | dropped |
 | `ItemIO` | `org.scijava.struct.ItemIO` | ported |
 | `ItemVisibility` | input harvesting (Phase 4) | open |
 | `Context`, `Contextual`, `AbstractContextual`, `NullContextException`, `NoSuchServiceException` | `org.scijava.context` (Phase 2) | planned |

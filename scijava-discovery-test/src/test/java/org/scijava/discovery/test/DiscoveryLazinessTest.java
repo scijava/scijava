@@ -1,8 +1,8 @@
 /*-
  * #%L
- * Java implementation of the SciJava Ops matching engine.
+ * Integration tests for the scijava-discovery library.
  * %%
- * Copyright (C) 2016 - 2025 SciJava developers.
+ * Copyright (C) 2021 - 2025 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,47 +27,54 @@
  * #L%
  */
 
-package org.scijava.ops.engine.impl;
+package org.scijava.discovery.test;
 
 import java.util.List;
 import java.util.ServiceLoader;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.scijava.discovery.Discoverer;
-import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.engine.OpInfoGenerator;
+import org.scijava.discovery.Discovery;
 import org.scijava.ops.spi.Op;
-import org.scijava.ops.spi.OpCollection;
 
-public class ServiceLoaderDiscoveryIntegrationTest {
+/**
+ * Tests that {@link Discovery} reports what is available without constructing
+ * it - the property that lets metadata-only consumers, such as menu building,
+ * avoid paying for objects they will never use.
+ *
+ * @author Curtis Rueden
+ */
+public class DiscoveryLazinessTest {
 
+	/**
+	 * A {@link Discoverer} backed by {@link ServiceLoader} must report the
+	 * implementation class name without constructing the implementation.
+	 */
 	@Test
-	public void testOpDiscoveryRegressionIT() {
-		final Discoverer d = Discoverer.usingProviders(c -> ServiceLoader.load(c).stream());
-		final List<Op> discoveries = d.instances(Op.class);
-		Assertions.assertEquals(237, discoveries.size());
+	public void testServiceLoaderDiscoveryIsLazy() {
+		final Discoverer d = Discoverer.usingProviders( //
+			c -> ServiceLoader.load(c).stream());
 
-		@SuppressWarnings("unused")
-		final OpInfoGenerator g = new OpClassOpInfoGenerator();
-		final List<OpInfo> infos = discoveries.stream() //
-			.flatMap(c -> g.generateInfosFrom(c).stream()) //
-			.collect(Collectors.toList());
-		Assertions.assertEquals(237, infos.size());
+		final List<Discovery<Op>> discoveries = d.discover(Op.class);
+		Assertions.assertEquals(1, discoveries.size());
+
+		final Discovery<Op> discovery = discoveries.get(0);
+		Assertions.assertEquals(ServiceBasedAdder.class.getName(), //
+			discovery.implClassName());
+		Assertions.assertFalse(ServiceBasedAdder.constructed,
+			"Discovery must not construct the implementation");
+
+		// Only now should the object come into existence.
+		Assertions.assertNotNull(discovery.get());
+		Assertions.assertTrue(ServiceBasedAdder.constructed);
 	}
 
+	/** Discoveries of an unknown type yield nothing rather than failing. */
 	@Test
-	public void testOpCollectionDiscoveryRegressionIT() {
-		final Discoverer d = Discoverer.usingProviders(c -> ServiceLoader.load(c).stream());
-		final List<OpCollection> discoveries = d.instances(OpCollection.class);
-		Assertions.assertEquals(22, discoveries.size());
-		@SuppressWarnings("unused")
-		final OpInfoGenerator g = new OpCollectionInfoGenerator();
-		final List<OpInfo> infos = discoveries.stream() //
-			.flatMap(c -> g.generateInfosFrom(c).stream()) //
-			.collect(Collectors.toList());
-		Assertions.assertEquals(300, infos.size());
+	public void testUnknownTypeYieldsNothing() {
+		final Discoverer d = Discoverer.usingProviders( //
+			c -> ServiceLoader.load(c).stream());
+		Assertions.assertTrue(d.discover(Runnable.class).isEmpty());
 	}
-
 }

@@ -84,10 +84,10 @@ Remaining SJC usage inside this repository:
 - `scijava-code-api` — `Context`, `Plugin`, `Service`, `ScriptService`,
   `ModuleItem`. Intentional for now; it is the Phase 2 pilot.
 - `scijava-legacy` — intentional; it is the bridge.
-- `scijava-ops-image` / `scijava-ops-flim` tests — `util.MersenneTwisterFast`
-  (16 usages), `util.LongArray`, `util.ListUtils`, `io.location.FileLocation`,
-  `Context`. Removable today (Phase 0).
-- `scijava-ops-tutorial` — one import in main code.
+- `scijava-ops-image` / `scijava-ops-flim` tests — `io.location.FileLocation`,
+  imposed by SCIFIO's `ImgOpener` API. Gone once SCIFIO migrates; the utility
+  usages were removed in Phase 0.
+- `scijava-ops-benchmarks` — three imports.
 
 ## Cross-cutting design decisions
 
@@ -131,6 +131,22 @@ All three mechanisms map cleanly: `ServiceLoader.stream()` supplies
 `Provider::type` (loads without instantiating) and `Provider::get`; the
 `@Plugin` index supplies `implClassName` and `attrs` with no loading at all;
 op YAML files already have this shape.
+
+**A JPMS constraint discovered while implementing this:** `ServiceLoader`
+resolves `uses` declarations against the module of its *caller*, so
+`scijava-discovery` cannot perform a `ServiceLoader` lookup on another
+module's behalf — doing so fails for every type that `org.scijava.discovery`
+does not itself declare `uses` for. The lookup function must therefore be
+supplied by the consuming module:
+
+```java
+Discoverer.usingProviders(c -> ServiceLoader.load(c).stream())
+```
+
+The one exception is `Discoverer.all()`, which looks up `Discoverer` itself —
+a type this module does declare `uses` for — and so can be a no-argument
+convenience. This is a real constraint on any generic discovery facade under
+JPMS, not an artifact of our design.
 
 **This refactor should land before `scijava-context` is built on top of
 `Discoverer`.** It is mechanical now and expensive later. `ManualDiscoverer`
@@ -186,8 +202,10 @@ SLF4J, used directly, as `scijava-types` and `scijava-ops-engine` already do.
 
 - Remove SJC usage where an SJ3 replacement already exists: switch the
   `ops-image` / `ops-flim` tests to `common3.MersenneTwisterFast` and
-  `collections.LongArray`, replace `ListUtils`, fix the `ops-tutorial` import.
-  Afterwards only `scijava-legacy` and `scijava-code-api` depend on SJC.
+  `collections.LongArray`, replace `ListUtils`. **Done.** Note that the
+  remaining `io.location.FileLocation` usage in the `ops-image` and `ops-flim`
+  tests is imposed by SCIFIO's `ImgOpener` API, so it cannot go away until
+  SCIFIO migrates; `scijava-ops-tutorial` turned out to have no SJC usage.
 - Add `@deprecated` javadoc pointers in SJC for everything already superseded
   (see the table above).
 - Start [migration.md](migration.md), scripting the mapping where possible.
@@ -195,6 +213,7 @@ SLF4J, used directly, as `scijava-types` and `scijava-ops-engine` already do.
   `isBoolean` and friends moved to `Classes`, and `enumFromString` / `args`
   were dropped.
 - Refactor `Discoverer` to the `Discovery` descriptor API (see above).
+  **Done.**
 
 ### Phase 1 — Standalone leaves
 

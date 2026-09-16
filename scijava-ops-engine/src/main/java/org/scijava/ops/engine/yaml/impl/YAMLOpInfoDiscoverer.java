@@ -42,9 +42,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
 import org.scijava.common3.Classes;
 import org.scijava.discovery.Discoverer;
+import org.scijava.discovery.Discovery;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.yaml.YAMLOpInfoCreator;
 import org.slf4j.Logger;
@@ -63,12 +65,13 @@ public class YAMLOpInfoDiscoverer implements Discoverer {
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
-	private final List<YAMLOpInfoCreator> creators = Discoverer.using(
-		ServiceLoader::load).discover(YAMLOpInfoCreator.class);
+	private final List<YAMLOpInfoCreator> creators = Discoverer //
+		.usingProviders((Class<YAMLOpInfoCreator> c) -> ServiceLoader.load(c).stream()) //
+		.instances(YAMLOpInfoCreator.class);
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <U> List<U> discover(Class<U> c) {
+	public <U> List<Discovery<U>> discover(Class<U> c) {
 		// We only discover OpInfos
 		if (!c.equals(OpInfo.class)) return Collections.emptyList();
 		// Parse each YAML file
@@ -81,7 +84,10 @@ public class YAMLOpInfoDiscoverer implements Discoverer {
 				log.warn("Could not read Op YAML file " + opFile + ": ", e);
 			}
 		});
-		return (List<U>) opInfos;
+		// NB: the OpInfos are already built, so these discoveries are eager.
+		return opInfos.stream() //
+			.map(info -> Discovery.of((U) info)) //
+			.collect(Collectors.toList());
 	}
 
 	/**

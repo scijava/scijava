@@ -60,7 +60,7 @@ public class OpCachingTest implements OpCollection {
 
 	@BeforeEach
 	public void setUp() {
-		Discoverer serviceLoading = Discoverer.using(ServiceLoader::load) //
+		Discoverer serviceLoading = Discoverer.usingProviders(c -> ServiceLoader.load(c).stream()) //
 			.onlyFor( //
 				OpWrapper.class, //
 				MatchingRoutine.class, //

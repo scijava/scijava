@@ -86,6 +86,14 @@
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 	</properties>
 
+	<dependencies>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-priority</artifactId>
+			<version>${scijava-priority.version}</version>
+		</dependency>
+	</dependencies>
+
 	<build>
 		<plugins>
 			<plugin>

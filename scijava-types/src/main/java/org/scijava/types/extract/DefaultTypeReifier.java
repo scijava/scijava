@@ -70,7 +70,7 @@ public class DefaultTypeReifier implements TypeReifier {
 	private Map<Class<?>, TypeExtractor> getInstances() {
 		Map<Class<?>, TypeExtractor> instances = new HashMap<>();
 		discoverers.stream() //
-			.flatMap(d -> d.discover(TypeExtractor.class).stream()) //
+			.flatMap(d -> d.instances(TypeExtractor.class).stream()) //
 			// Find the correct set for each extractor and add it.
 			.sorted() //
 			.forEach(e -> {

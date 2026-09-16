@@ -30,11 +30,18 @@
 module org.scijava.io3 {
 
 	exports org.scijava.io3;
+	exports org.scijava.io3.handle;
 	exports org.scijava.io3.location;
 
 	requires org.scijava.collections;
 
+	uses org.scijava.io3.handle.DataHandle;
 	uses org.scijava.io3.location.LocationResolver;
+
+	provides org.scijava.io3.handle.DataHandle with
+			org.scijava.io3.handle.FileHandle,
+			org.scijava.io3.handle.BytesHandle,
+			org.scijava.io3.handle.DummyHandle;
 
 	provides org.scijava.io3.location.LocationResolver with
 			org.scijava.io3.location.FileLocationResolver;

@@ -23,7 +23,7 @@ A **dropped** row is a successful outcome, not a gap.
 | `AppUtils` | `org.scijava.common3.Apps` | ported |
 | `ArrayUtils` | mostly dropped: `contains`/`indexOf` → `Arrays.asList(a).contains(v)` for object arrays, a loop or stream for primitives; `array` → an array literal; `toCollection` → no replacement. `safeMultiply32`/`safeMultiply64` → `common3.Numbers` (they wrap `Math.multiplyExact`) | ported |
 | `BoolArray`, `ByteArray`, `CharArray`, `DoubleArray`, `FloatArray`, `IntArray`, `LongArray`, `ObjectArray`, `ShortArray`, `PrimitiveArray` | `org.scijava.collections.*` | ported |
-| `Bytes` | `scijava-io3`, alongside the handles that need it (Phase 1, in progress) | planned |
+| `Bytes` | `org.scijava.io3.Bytes` | ported |
 | `CheckSezpoz` | none | dropped |
 | `ClassUtils` | `org.scijava.common3.Classes` (mostly already deprecated in SJC) | ported |
 | `ColorRGB`, `ColorRGBA`, `Colors` | UI layer (Phase 4) | open |
@@ -99,7 +99,8 @@ A **dropped** row is a successful outcome, not a gap.
 | `annotations.legacy` | none — reads the pre-2013 `META-INF/annotations/` format | dropped |
 | `io.location` | `org.scijava.io3.location`. `LocationService`/`DefaultLocationService` become `Locations`, backed by plain `ServiceLoader`; `LocationResolver` no longer extends `HandlerPlugin` and carries its own `priority()`. `URILocation`'s injected `LogService` was dead code and is gone | ported |
 | `ByteBank`, `ByteArrayByteBank` | `org.scijava.io3` | ported |
-| `io.handle`, `io.nio` | `org.scijava.io3.handle` (Phase 1, in progress) | planned |
+| `io.handle` | `org.scijava.io3.handle`. `DataHandle` no longer extends `WrapperPlugin`: the contract was `getType()` plus `set`/`get`, now inlined as `locationType()`, `supports`, `set`, `get` and `priority()`. `DataHandleService` becomes `DataHandles`, backed by plain `ServiceLoader`. `DataHandles.copy` reports progress to a `LongConsumer` rather than a `Task`, and so no longer supports cancellation | ported |
+| `io.nio` | not yet ported — `ByteBuffer`-backed byte banks | planned |
 | `io` (`IOPlugin`, `IOService`, `RecentFileService`) | `scijava-io3` (Phase 1), pending review of what is still used | open |
 | `event`, `event.bushe` | `org.scijava.events` — clean-room rewrite, not a port (Phase 1) | planned |
 | `parse` | Parsington (`org.scijava.parsington`) | planned |

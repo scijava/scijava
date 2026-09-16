@@ -127,6 +127,7 @@
 		<scijava-ops-spi.version>1.0.1-SNAPSHOT</scijava-ops-spi.version>
 		<scijava-priority.version>1.0.1-SNAPSHOT</scijava-priority.version>
 		<scijava-progress.version>1.0.1-SNAPSHOT</scijava-progress.version>
+		<scijava-spi.version>1.0.0-SNAPSHOT</scijava-spi.version>
 		<scijava-struct.version>1.0.1-SNAPSHOT</scijava-struct.version>
 		<scijava-taglets.version>1.0.1-SNAPSHOT</scijava-taglets.version>
 		<scijava-testutil.version>1.0.1-SNAPSHOT</scijava-testutil.version>
@@ -183,6 +184,11 @@
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-progress</artifactId>
 			<version>${scijava-progress.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-spi</artifactId>
+			<version>${scijava-spi.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>

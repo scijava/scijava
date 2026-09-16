@@ -1,8 +1,8 @@
-/*-
+/*
  * #%L
- * SciJava library for generic type reasoning.
+ * Minimal interfaces implementable by any SciJava-friendly object.
  * %%
- * Copyright (C) 2016 - 2025 SciJava developers.
+ * Copyright (C) 2026 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,27 +27,21 @@
  * #L%
  */
 
-module org.scijava.types {
+package org.scijava.spi;
 
-	exports org.scijava.types;
-	exports org.scijava.types.infer;
+/**
+ * An object that can be identified by a string.
+ * <p>
+ * An identifier is a weak form of long-term serialization: an object's
+ * identifier can be written to durable storage, and later - in a new JVM - used
+ * to query an index for the object it names. Neither serializability nor
+ * {@link Object#equals} comparison of freshly synthesized objects is needed.
+ * </p>
+ *
+ * @author Curtis Rueden
+ */
+public interface Identifiable {
 
-	opens org.scijava.types;
-	opens org.scijava.types.extract;
-	exports org.scijava.types.extract;
-
-	requires transitive org.scijava.common3;
-	requires transitive org.scijava.spi;
-	requires transitive org.scijava.discovery;
-	requires org.scijava.priority;
-
-	requires com.google.common;
-	requires org.slf4j;
-
-	uses org.scijava.types.extract.TypeExtractor;
-
-	provides org.scijava.types.extract.TypeExtractor with //
-			org.scijava.types.extract.IterableTypeExtractor,
-			org.scijava.types.extract.MapTypeExtractor;
-
+	/** Gets a string intended to function as an identifier for the object. */
+	String id();
 }

@@ -333,7 +333,7 @@ public interface OpEnvironment extends Prioritized<OpEnvironment> {
 	 *               contract of the stated {@code opType}.
 	 * @return An enriched version of the lambda object that embeds knowledge of
 	 *         its generic type by implementing the
-	 *         {@link org.scijava.common3.GenericTyped} interface.
+	 *         {@link org.scijava.spi.GenericTyped} interface.
 	 */
 	<T> T typeLambda(Nil<T> opType, T lambda);
 

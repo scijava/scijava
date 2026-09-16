@@ -71,8 +71,12 @@ A **dropped** row is a successful outcome, not a gap.
 | SJC class | Replacement | Status |
 | --- | --- | --- |
 | `Priority`, `Prioritized` | `org.scijava.priority.*` | ported |
-| `Versioned` | `org.scijava.spi.Versioned` (Phase 1; currently `common3`) | planned |
-| `Named`, `Identifiable`, `Locatable`, `Typed`, `Disposable` | `org.scijava.spi.*` (Phase 1). `Named` becomes read-only — `String name()` — with mutability a separate contract | planned |
+| `Versioned` | `org.scijava.spi.Versioned` (moved out of `common3`) | ported |
+| `Named` | `org.scijava.spi.Named` — read-only `String name()`; mutability is a separate contract | ported |
+| `Identifiable` | `org.scijava.spi.Identifiable` — `getIdentifier()` is now `id()` | ported |
+| `Disposable` | `org.scijava.spi.Disposable` — `dispose()` is abstract, not a no-op default | ported |
+| `Locatable` | deferred — its only content was a default implementation needing `common3.Classes.location`, which `scijava-spi` cannot depend on | open |
+| `Typed` | deferred to the plugin layer — no consumer yet, and `Class<T> type()` collides with `GenericTyped.type()` | open |
 | `Initializable` | `scijava-context` (Phase 2) — a lifecycle hook, not an SPI contract | planned |
 | `Cancelable` | execution layer (Phase 3) — cancellation concerns a running thing | planned |
 | `ItemIO` | `org.scijava.struct.ItemIO` | ported |

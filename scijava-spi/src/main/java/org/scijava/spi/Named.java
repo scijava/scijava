@@ -1,8 +1,8 @@
-/*-
+/*
  * #%L
- * SciJava library for generic type reasoning.
+ * Minimal interfaces implementable by any SciJava-friendly object.
  * %%
- * Copyright (C) 2016 - 2025 SciJava developers.
+ * Copyright (C) 2026 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,27 +27,22 @@
  * #L%
  */
 
-module org.scijava.types {
+package org.scijava.spi;
 
-	exports org.scijava.types;
-	exports org.scijava.types.infer;
+/**
+ * An object that knows its name.
+ * <p>
+ * Note that naming an object is deliberately <em>not</em> part of this
+ * contract: an implementation whose name can change should expose its own
+ * setter, rather than every caller having to discover at runtime whether this
+ * particular {@code Named} happens to be mutable.
+ * </p>
+ *
+ * @author Lee Kamentsky
+ * @author Curtis Rueden
+ */
+public interface Named {
 
-	opens org.scijava.types;
-	opens org.scijava.types.extract;
-	exports org.scijava.types.extract;
-
-	requires transitive org.scijava.common3;
-	requires transitive org.scijava.spi;
-	requires transitive org.scijava.discovery;
-	requires org.scijava.priority;
-
-	requires com.google.common;
-	requires org.slf4j;
-
-	uses org.scijava.types.extract.TypeExtractor;
-
-	provides org.scijava.types.extract.TypeExtractor with //
-			org.scijava.types.extract.IterableTypeExtractor,
-			org.scijava.types.extract.MapTypeExtractor;
-
+	/** Gets the name of the object. */
+	String name();
 }

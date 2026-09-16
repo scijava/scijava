@@ -31,6 +31,7 @@ module org.scijava.meta {
 	requires java.xml;
 
 	requires org.scijava.common3;
+	requires transitive org.scijava.spi;
 
 	exports org.scijava.meta;
 }

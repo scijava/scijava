@@ -61,6 +61,17 @@ The deliverable is not a reimplementation of SJC. It is:
    acceptable for a component in wind-down.
 3. **`scijava-legacy` bridges the other way** (SJ3 → SJC), and is the only
    place in this repository permitted to depend on `scijava-common`.
+4. **Every component POM must pin the version of every SciJava artifact it
+   consumes, transitively included.** The modules here inherit from
+   `pom-scijava`, not from this repository's aggregator POM, so a version
+   property that is merely *absent* silently resolves the last *released*
+   artifact instead of the reactor's snapshot. Nothing enforces the "these
+   versions must match across all component POMs" convention, and the failure
+   is invisible until an API changes — at which point it surfaces as
+   `NoSuchMethodError` or `NoClassDefFoundError` at test time, far from its
+   cause. Six components were found in this state while moving interfaces into
+   `scijava-spi`. **An enforcer rule for this would pay for itself**; it is
+   listed under open decisions.
 
 ## Current state
 
@@ -219,11 +230,11 @@ SLF4J, used directly, as `scijava-types` and `scijava-ops-engine` already do.
 
 No application context required by anything in this phase.
 
-- **`scijava-spi`** (new): pure interfaces, no behavior, no dependencies —
-  `Versioned`, `GenericTyped`, `Named`, `Identifiable`, `Locatable`, `Typed`,
-  `Disposable`. `Versioned` and `GenericTyped` move here from `common3`, which
-  retains deprecated sub-interfaces so implementors stay source-compatible.
-  `common3` does **not** gain a transitive dependency on it.
+- **`scijava-spi`** (new): pure interfaces, no behavior, no dependencies.
+  **Done**, with `Versioned`, `GenericTyped`, `Named`, `Identifiable` and
+  `Disposable`. `Versioned` and `GenericTyped` moved here from `common3` and
+  were **not** left behind as deprecated aliases, which the repository's
+  current adoption level permits.
   - The test for membership: *if a class can implement it without knowing
     about any SciJava framework, it is SPI.* `Cancelable` fails that test
     (cancellation concerns a running thing — it belongs with the execution
@@ -233,6 +244,12 @@ No application context required by anything in this phase.
   - `Named` exposes `String name()` only. Mutability is a separate contract;
     a default `setName` that throws `UnsupportedOperationException` forces
     every caller to feature-detect.
+  - **Deferred, pending a consumer:** `Locatable`, whose only real content was
+    a default implementation that needs `common3.Classes.location` — which
+    this module cannot depend on; and `Typed`, which has no consumer until the
+    plugin layer exists, and whose `Class<T> type()` would collide awkwardly
+    with `GenericTyped.type()` returning a `Type`. Both are cheap to add when
+    something needs them; neither is cheap to remove once published.
 - **`scijava-common3`** absorbs the remaining general utilities: `ArrayUtils`,
   `StringUtils`, `Bytes`, `DigestUtils`, `NumberUtils`, `ProcessUtils`,
   `ListUtils`, `UnitUtils`, and the non-URL parts of `FileUtils`. It stays
@@ -397,4 +414,7 @@ independence and should not carry the `scijava-` prefix.
   the bridge content grows.
 - **`util.Timing` and `util.TreeNode`:** port or drop, pending evidence of
   downstream usage.
+- **A build-time check that every consumed SciJava artifact is version-pinned
+  in the consuming POM** — see hard constraint 4. Today this is caught only by
+  a full clean build after an API change.
 - **`display`:** what the redesigned output-presentation mechanism looks like.

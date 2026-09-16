@@ -39,7 +39,7 @@ import java.util.Map;
 import java.util.jar.Attributes;
 
 import org.scijava.common3.Classes;
-import org.scijava.common3.Versioned;
+import org.scijava.spi.Versioned;
 
 /**
  * Helper class for working with JAR manifests.

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.scijava</groupId>
+		<artifactId>pom-scijava</artifactId>
+		<version>44.0.0</version>
+		<relativePath />
+	</parent>
+
+	<artifactId>scijava-index</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+
+	<name>SciJava Index</name>
+	<description>Annotation indexing, for discovery without class loading.</description>
+	<url>https://github.com/scijava/scijava</url>
+	<inceptionYear>2026</inceptionYear>
+	<organization>
+		<name>SciJava</name>
+		<url>https://scijava.org/</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>Simplified BSD License</name>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<id>ctrueden</id>
+			<name>Curtis Rueden</name>
+			<roles>
+				<role>founder</role>
+				<role>lead</role>
+				<role>reviewer</role>
+				<role>support</role>
+				<role>maintainer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>gselzer</id>
+			<name>Gabriel Selzer</name>
+			<roles>
+				<role>founder</role>
+				<role>debugger</role>
+				<role>reviewer</role>
+				<role>support</role>
+			</roles>
+		</developer>
+	</developers>
+	<contributors>
+		<contributor>
+			<name>Johannes Schindelin</name>
+			<properties><id>dscho</id></properties>
+		</contributor>
+	</contributors>
+
+	<mailingLists>
+		<mailingList>
+			<name>Image.sc Forum</name>
+			<archive>https://forum.image.sc/tag/scijava</archive>
+		</mailingList>
+	</mailingLists>
+
+	<scm>
+		<connection>scm:git:https://github.com/scijava/scijava</connection>
+		<developerConnection>scm:git:git@github.com:scijava/scijava</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/scijava/scijava</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/scijava/scijava/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<system>GitHub Actions</system>
+		<url>https://github.com/scijava/scijava/actions</url>
+	</ciManagement>
+
+	<properties>
+		<package-name>org.scijava.index</package-name>
+
+		<!--
+		This component provides an annotation processor, and so cannot run one
+		while compiling itself: javac reads META-INF/services before the class
+		it names exists. SciJava Common has the same constraint. Note that this
+		means this component's own classes are never indexed, which is fine:
+		it declares no indexable annotations of its own.
+		-->
+		<maven.compiler.proc>none</maven.compiler.proc>
+
+		<license.licenseName>bsd_2</license.licenseName>
+		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
+
+		<!-- Note: These versions must match across all component POMs! -->
+		<scijava-common3.version>1.0.1-SNAPSHOT</scijava-common3.version>
+		<scijava-discovery.version>1.0.1-SNAPSHOT</scijava-discovery.version>
+		<scijava-priority.version>1.0.1-SNAPSHOT</scijava-priority.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-common3</artifactId>
+			<version>${scijava-common3.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-discovery</artifactId>
+			<version>${scijava-discovery.version}</version>
+		</dependency>
+
+		<!-- Test scope dependencies -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>enforce-package-rules</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<phase>test</phase>
+						<configuration>
+							<rules>
+								<NoPackageCyclesRule implementation="org.scijava.maven.plugin.enforcer.NoPackageCyclesRule" />
+								<NoSubpackageDependenceRule implementation="org.scijava.maven.plugin.enforcer.NoSubpackageDependenceRule" />
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<links>
+						<link>https://javadoc.scijava.org/Java11/</link>
+					</links>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

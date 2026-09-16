@@ -48,7 +48,7 @@ import org.scijava.types.ExampleTypes.Bag;
 import org.scijava.types.ExampleTypes.BlueThing;
 import org.scijava.types.ExampleTypes.RedThing;
 import org.scijava.types.Nil;
-import org.scijava.common3.GenericTyped;
+import org.scijava.spi.GenericTyped;
 
 /**
  * Tests {@link DefaultTypeReifier}, including core {@link TypeExtractor}

@@ -35,6 +35,7 @@ module org.scijava.ops.engine {
 	requires java.compiler;
 
 	requires org.scijava.common3;
+	requires org.scijava.spi;
 	requires org.scijava.collections;
 	requires org.scijava.discovery;
 	requires org.scijava.function;

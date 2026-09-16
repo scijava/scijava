@@ -76,6 +76,7 @@
 		<module>scijava-ops-tutorial</module>
 		<module>scijava-priority</module>
 		<module>scijava-progress</module>
+		<module>scijava-spi</module>
 		<module>scijava-struct</module>
 		<module>scijava-testutil</module>
 		<module>scijava-types</module>

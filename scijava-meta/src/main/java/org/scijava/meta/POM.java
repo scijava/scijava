@@ -38,7 +38,7 @@ import java.util.*;
 import org.scijava.common3.Apps;
 import org.scijava.common3.Classes;
 import org.scijava.common3.URLs;
-import org.scijava.common3.Versioned;
+import org.scijava.spi.Versioned;
 
 /**
  * Helper class for working with Maven POMs.

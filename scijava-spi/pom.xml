@@ -9,13 +9,13 @@
 		<relativePath />
 	</parent>
 
-	<artifactId>scijava-meta</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<artifactId>scijava-spi</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
 
-	<name>SciJava Meta</name>
-	<description>Utility functions to introspect metadata of SciJava libraries.</description>
+	<name>SciJava SPI</name>
+	<description>Minimal interfaces implementable by any SciJava-friendly object.</description>
 	<url>https://github.com/scijava/scijava</url>
-	<inceptionYear>2022</inceptionYear>
+	<inceptionYear>2026</inceptionYear>
 	<organization>
 		<name>SciJava</name>
 		<url>https://scijava.org/</url>
@@ -49,19 +49,11 @@
 				<role>support</role>
 			</roles>
 		</developer>
-		<developer>
-			<id>hinerm</id>
-			<name>Mark Hiner</name>
-			<roles>
-				<role>debugger</role>
-				<role>reviewer</role>
-				<role>support</role>
-			</roles>
-		</developer>
 	</developers>
 	<contributors>
 		<contributor>
-			<name>None</name>
+			<name>Johannes Schindelin</name>
+			<properties><id>dscho</id></properties>
 		</contributor>
 	</contributors>
 
@@ -88,28 +80,14 @@
 	</ciManagement>
 
 	<properties>
-		<package-name>org.scijava.meta</package-name>
+		<package-name>org.scijava.spi</package-name>
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
-
-		<!-- Note: These versions must match across all component POMs! -->
-		<scijava-common3.version>1.0.1-SNAPSHOT</scijava-common3.version>
-		<scijava-spi.version>1.0.0-SNAPSHOT</scijava-spi.version>
 	</properties>
 
 	<dependencies>
-		<!-- SciJava dependencies -->
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-common3</artifactId>
-			<version>${scijava-common3.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-spi</artifactId>
-			<version>${scijava-spi.version}</version>
-		</dependency>
+		<!-- No dependencies allowed! -->
 
 		<!-- Test scope dependencies -->
 		<dependency>

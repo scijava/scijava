@@ -33,17 +33,23 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -151,6 +157,64 @@ public class DataHandlesTest {
 		assertArrayEquals(data, Files.readAllBytes(out.toPath()));
 		assertFalse(progress.isEmpty(), "progress was never reported");
 		assertEquals(data.length, progress.get(progress.size() - 1));
+	}
+
+	/**
+	 * Cancellation is thread interruption: a copy stops at the next block
+	 * boundary, reports how far it got, and leaves the interrupt flag set for
+	 * whoever is further up the stack.
+	 */
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testCopyIsCancelledByInterruption(@TempDir final Path dir)
+		throws Exception
+	{
+		final File in = dir.resolve("in.bin").toFile();
+		Files.write(in.toPath(), new byte[20000]);
+		final File out = dir.resolve("out.bin").toFile();
+
+		final AtomicReference<InterruptedIOException> thrown =
+			new AtomicReference<>();
+		final AtomicBoolean flagStillSet = new AtomicBoolean();
+		final CountDownLatch started = new CountDownLatch(1);
+
+		final Thread worker = new Thread(() -> {
+			try (final DataHandle<Location> source = (DataHandle<Location>) //
+			(DataHandle<?>) DataHandles.get().create(new FileLocation(in));
+					final DataHandle<Location> target = (DataHandle<Location>) //
+					(DataHandle<?>) DataHandles.get().create(new FileLocation(out)))
+			{
+				started.countDown();
+				// NB: one byte at a time, so the copy is still running when the
+				// interrupt lands.
+				DataHandles.copy(source, target, 0, bytes -> {
+					try {
+						Thread.sleep(1);
+					}
+					catch (final InterruptedException exc) {
+						Thread.currentThread().interrupt();
+					}
+				}, 1);
+			}
+			catch (final InterruptedIOException exc) {
+				thrown.set(exc);
+				flagStillSet.set(Thread.currentThread().isInterrupted());
+			}
+			catch (final IOException exc) {
+				throw new AssertionError(exc);
+			}
+		});
+		worker.start();
+		assertTrue(started.await(5, TimeUnit.SECONDS));
+		Thread.sleep(50);
+		worker.interrupt();
+		worker.join(5000);
+
+		final InterruptedIOException exc = thrown.get();
+		assertNotNull(exc, "copy was not cancelled");
+		assertTrue(exc.bytesTransferred > 0, "no partial progress reported");
+		assertTrue(exc.bytesTransferred < 20000, "copy ran to completion");
+		assertTrue(flagStillSet.get(), "the interrupt flag must be restored");
 	}
 
 	/** Where two handles support a location, the higher priority one wins. */

@@ -31,6 +31,7 @@ package org.scijava.io3.handle;
 
 import java.io.DataOutput;
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.io.UTFDataFormatException;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -187,6 +188,9 @@ public class DataHandles {
 	 * @param progress notified with the running total, or null for none
 	 * @param bufferSize the size of the copy buffer
 	 * @return the number of bytes copied
+	 * @throws InterruptedIOException if the thread is interrupted, with
+	 *           {@link InterruptedIOException#bytesTransferred} set to what had
+	 *           been copied
 	 */
 	public static long copy(final DataHandle<Location> in,
 		final DataHandle<Location> out, final long length,
@@ -195,6 +199,20 @@ public class DataHandles {
 		final byte[] buffer = new byte[bufferSize];
 		long totalRead = 0;
 		while (true) {
+			// NB: cancellation is thread interruption. The check is per block, the
+			// same granularity as the Task.isCanceled() check this replaces; a read
+			// already under way cannot be aborted, since plain streams are not
+			// interruptible.
+			if (Thread.interrupted()) {
+				// NB: Thread.interrupted() clears the flag, so restore it: callers
+				// further up the stack must still see that this thread was cancelled.
+				Thread.currentThread().interrupt();
+				final InterruptedIOException exc = new InterruptedIOException(
+					"Copy cancelled");
+				// NB: int, per the field's type; saturate rather than wrap around.
+				exc.bytesTransferred = (int) Math.min(totalRead, Integer.MAX_VALUE);
+				throw exc;
+			}
 			final int r;
 			// NB: do not read past the requested length.
 			if (length > 0 && totalRead + bufferSize > length) {

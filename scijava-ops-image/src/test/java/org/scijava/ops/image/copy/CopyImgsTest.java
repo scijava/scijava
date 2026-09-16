@@ -32,7 +32,7 @@ package org.scijava.ops.image.copy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.util.MersenneTwisterFast;
+import org.scijava.common3.MersenneTwisterFast;
 
 import org.scijava.ops.image.AbstractOpTest;
 import net.imglib2.Cursor;

@@ -48,7 +48,7 @@ import org.junit.jupiter.api.Test;
 import org.scijava.function.Functions;
 import org.scijava.ops.api.OpBuilder;
 import org.scijava.types.Nil;
-import org.scijava.util.MersenneTwisterFast;
+import org.scijava.common3.MersenneTwisterFast;
 
 /**
  * Tests {@link org.scijava.ops.image.Ops.Transform.IntervalView} ops.

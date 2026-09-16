@@ -32,7 +32,8 @@ A **dropped** row is a successful outcome, not a gap.
 | `DebugUtils` | `org.scijava.common3.Threads` | ported |
 | `DefaultTreeNode`, `TreeNode` | on hold — only `imagej-common` uses it; may move there | open |
 | `DigestUtils` | `org.scijava.common3.Digests`. `digest` now throws `IllegalArgumentException` for an unknown algorithm rather than returning `null`; `best*` is SHA-1, since every Java platform guarantees it | ported |
-| `FileUtils` | `org.scijava.common3` (non-URL parts, Phase 1); URL parts in `common3.URLs` | planned |
+| `FileUtils` | split: filename logic → `org.scijava.common3.FilePaths` (`getPath` → `normalizeSeparators`, `getExtension` → `extension`, `stripFilenameVersion` → `stripVersion`, `getAllVersions` → `allVersions`, `matchVersionedFilename`, `deleteRecursively`); `urlToFile`/`listContents`/`appendContents` → `common3.URLs`; `findResources` → `scijava-index` (Phase 1) | ported |
+| `FileUtils` (dropped parts) | `readFile`/`writeFile` → `java.nio.file.Files.readAllBytes`/`write`; `createTemporaryDirectory` → `Files.createTempDirectory`; `getModifiedTime` → `Files.getLastModifiedTime`; `shortenPath`/`limitPath` → no replacement, used only inside SJC itself | dropped |
 | `GenericUtils` | `org.scijava.common3.Types` (already deprecated in SJC) | ported |
 | `IntCoords`, `IntRect`, `RealCoords`, `RealRect` | UI layer (Phase 4) | open |
 | `IteratorPlus` | none — use the standard `Iterator`/`Iterable` API | dropped |

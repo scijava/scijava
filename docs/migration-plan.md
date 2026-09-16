@@ -423,10 +423,50 @@ No application context required by anything in this phase.
     reintroducing `FileChannel` later, since a handle may open a channel and
     a bank may be backed by a mapped buffer. This component is therefore
     complete.
-- **`scijava-events`** (new, `org.scijava.events`): a clean-room event bus,
-  no context, designed for typed topics and weak-reference subscribers. Not a
-  port of the bushe fork — rewriting removes the attribution obligation. The
-  external `scijava-listeners` folds in here.
+- **`scijava-events`** (new, `org.scijava.events`): a clean-room typed event
+  bus. **Done.** Not a port of the bushe fork, so the attribution obligation
+  is gone. The external `scijava-listeners` stays a separate concern: a
+  listener list is the right primitive for "this object notifies its
+  observers", and is not a bus.
+  - **Lambdas, not annotations.** `subscribe(Class<E>, Consumer<? super E>)`
+    is type-safe, needs no reflection, and so needs no `opens`.
+    `@EventHandler` ergonomics are not lost: `scijava-context` already
+    reflects over services, so it can scan annotated methods, register them as
+    lambdas, and hold the subscriptions. The convenience lives in the tier
+    that already pays for reflection.
+  - **Strong references plus an explicit `Subscription`.** SciJava Common held
+    subscribers weakly, which produced handlers that silently stopped firing
+    and forced a `WeakHashMap` named `keepEm` whose only job was stopping the
+    proxies from being collected too early — the implementation fighting its
+    own design. Cleanup is structural instead: `EventBus.close()` drops every
+    subscription, and a context calls it on dispose, so a service that
+    subscribes never arranges its own cleanup.
+  - **No shared instance, deliberately.** A bus is nothing but shared mutable
+    subscriber state, so an ambient singleton would let two application
+    contexts hear each other's events. Each context owns one bus. NB: this is
+    the opposite call from `Locations.get()` and `DataHandles.get()`, which
+    are safe to share precisely because they hold no such state.
+  - **Class-hierarchy dispatch** is retained — it is what makes a bus more
+    than a listener list — and any object may be an event, with no marker
+    interface, so a type from another library can be one.
+  - **Consumption is opt-in**, via a `Consumable` interface on the event, on
+    the model of AWT's `InputEvent.consume()`. Toolkit-style input events can
+    then stop propagation without every event paying for the concept.
+  - **Subscriber order** is by `scijava-priority`, descending, ties broken by
+    subscription order. It matters most for consumable events, where an
+    earlier subscriber gets first refusal.
+  - **A failing subscriber does not truncate delivery.** Everyone still
+    receives the event, and the failures are thrown together afterward as an
+    `EventDeliveryException` — first as cause, rest suppressed, none lost.
+    Cancellation is the exception: an interrupted subscriber, or one throwing
+    `CancellationException`, stops delivery at once, since an interrupt means
+    this thread is being cancelled and must not be buried among unrelated
+    failures.
+  - **`EventHistory` is dropped.** The real need behind it — a macro recorder
+    that tracks module executions so a user can review what they did — is
+    better served by an explicit layer later; note that SciJava Ops already
+    tracks execution provenance per output object (`OpHistory.executionsUpon`),
+    which answers "what produced this?" rather than "what happened?".
 - **Key/value parsing moves to Parsington**, not into a SJ3 module. The whole
   SJC `parse` package is 319 lines whose only non-Parsington dependency is
   `ObjectArray` (replaceable with `ArrayList`), and Parsington already carries

@@ -40,7 +40,7 @@ import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.types.Nil;
-import org.scijava.util.MersenneTwisterFast;
+import org.scijava.common3.MersenneTwisterFast;
 
 /**
  * @author Simon Schmid (University of Konstanz)

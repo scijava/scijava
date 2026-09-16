@@ -67,7 +67,7 @@ import net.imglib2.view.RandomAccessibleIntervalCursor;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.junit.jupiter.api.BeforeEach;
-import org.scijava.util.LongArray;
+import org.scijava.collections.LongArray;
 
 /**
  * @author Daniel Seebacher (University of Konstanz)

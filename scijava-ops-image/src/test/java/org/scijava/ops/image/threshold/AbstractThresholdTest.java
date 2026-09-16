@@ -48,7 +48,6 @@ import net.imglib2.type.numeric.integer.UnsignedShortType;
 import org.junit.jupiter.api.BeforeEach;
 import org.scijava.ops.api.OpBuilder;
 import org.scijava.types.Nil;
-import org.scijava.util.ListUtils;
 
 /**
  * Tests for threshold ops.
@@ -95,11 +94,15 @@ public class AbstractThresholdTest extends AbstractOpTest {
 	}
 
 	protected void assertThreshold(final int expected, final Object actual) {
-		final Object value = actual instanceof List ? ListUtils.first(
-			(List<?>) actual) : actual;
+		final Object value = actual instanceof List ? first((List<?>) actual)
+			: actual;
 		assertTrue(value instanceof UnsignedShortType);
 		final UnsignedShortType threshold = (UnsignedShortType) value;
 		assertEquals(expected, threshold.get());
+	}
+
+	private static <T> T first(final List<T> list) {
+		return list == null || list.isEmpty() ? null : list.get(0);
 	}
 
 	protected Img<BitType> bitmap() throws IncompatibleTypeException {

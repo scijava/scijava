@@ -42,7 +42,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.scijava.types.Nil;
-import org.scijava.util.MersenneTwisterFast;
+import org.scijava.common3.MersenneTwisterFast;
 
 /**
  * Test {@link CopyImg}.

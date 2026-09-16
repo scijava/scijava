@@ -27,23 +27,25 @@
  * #L%
  */
 
-module org.scijava.io3 {
+package org.scijava.io3.handle;
 
-	exports org.scijava.io3;
-	exports org.scijava.io3.handle;
-	exports org.scijava.io3.location;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
-	requires org.scijava.collections;
+import org.scijava.io3.location.Location;
 
-	uses org.scijava.io3.handle.DataHandle;
-	uses org.scijava.io3.location.LocationResolver;
+/**
+ * A {@link DataHandle} backed by an {@link InputStream} and/or
+ * {@link OutputStream}. Supports seeking to an arbitrary position within the
+ * stream.
+ *
+ * @author Gabriel Einsdorf
+ */
+public interface SeekableStreamHandle<L extends Location> extends
+	ResettableStreamHandle<L>
+{
 
-	provides org.scijava.io3.handle.DataHandle with
-			org.scijava.io3.handle.FileHandle,
-			org.scijava.io3.handle.BytesHandle,
-			org.scijava.io3.handle.DummyHandle;
-
-	provides org.scijava.io3.location.LocationResolver with
-			org.scijava.io3.location.FileLocationResolver;
-
+	@Override
+	void seek(long pos) throws IOException;
 }

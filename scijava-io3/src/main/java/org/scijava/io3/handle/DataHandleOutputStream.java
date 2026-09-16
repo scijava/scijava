@@ -27,23 +27,63 @@
  * #L%
  */
 
-module org.scijava.io3 {
+package org.scijava.io3.handle;
 
-	exports org.scijava.io3;
-	exports org.scijava.io3.handle;
-	exports org.scijava.io3.location;
+import java.io.IOException;
+import java.io.OutputStream;
 
-	requires org.scijava.collections;
+import org.scijava.io3.location.Location;
 
-	uses org.scijava.io3.handle.DataHandle;
-	uses org.scijava.io3.location.LocationResolver;
+/**
+ * {@link OutputStream} backed by a {@link DataHandle}.
+ * 
+ * @author Curtis Rueden
+ * @author Melissa Linkert
+ */
+public class DataHandleOutputStream<L extends Location> extends OutputStream {
 
-	provides org.scijava.io3.handle.DataHandle with
-			org.scijava.io3.handle.FileHandle,
-			org.scijava.io3.handle.BytesHandle,
-			org.scijava.io3.handle.DummyHandle;
+	// -- Fields --
 
-	provides org.scijava.io3.location.LocationResolver with
-			org.scijava.io3.location.FileLocationResolver;
+	private final DataHandle<L> handle;
+
+	// -- Constructor --
+
+	/** Creates an output stream around the given {@link DataHandle}. */
+	public DataHandleOutputStream(final DataHandle<L> handle) {
+		this.handle = handle;
+	}
+
+	// -- OutputStream methods --
+
+	@Override
+	public void write(final int i) throws IOException {
+		handle.write(i);
+	}
+
+	@Override
+	public void write(final byte[] b) throws IOException {
+		handle.write(b);
+	}
+
+	@Override
+	public void write(final byte[] b, final int off, final int len)
+		throws IOException
+	{
+		handle.write(b, off, len);
+	}
+
+	// -- Closeable methods --
+
+	@Override
+	public void close() throws IOException {
+		handle.close();
+	}
+
+	// -- Flushable methods --
+
+	@Override
+	public void flush() throws IOException {
+		// NB: No action needed.
+	}
 
 }

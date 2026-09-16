@@ -27,23 +27,44 @@
  * #L%
  */
 
-module org.scijava.io3 {
+package org.scijava.io3.handle;
 
-	exports org.scijava.io3;
-	exports org.scijava.io3.handle;
-	exports org.scijava.io3.location;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
-	requires org.scijava.collections;
+import org.scijava.io3.location.Location;
 
-	uses org.scijava.io3.handle.DataHandle;
-	uses org.scijava.io3.location.LocationResolver;
+/**
+ * A {@link DataHandle} backed by an {@link InputStream} and/or
+ * {@link OutputStream}. Supports resetting the handle to the start of the
+ * internal stream(s).
+ */
+public interface ResettableStreamHandle<L extends Location> extends
+	StreamHandle<L>
+{
 
-	provides org.scijava.io3.handle.DataHandle with
-			org.scijava.io3.handle.FileHandle,
-			org.scijava.io3.handle.BytesHandle,
-			org.scijava.io3.handle.DummyHandle;
+	@Override
+	default void seek(final long pos) throws IOException {
+		final long off = offset();
+		if (pos == off) return; // nothing to do
+		if (pos > off) {
+			// jump from the current offset
+			jump(pos - off);
+		}
+		else {
+			// jump from the beginning of the stream
+			resetStream();
+			jump(pos);
+		}
+		setOffset(pos);
+	}
 
-	provides org.scijava.io3.location.LocationResolver with
-			org.scijava.io3.location.FileLocationResolver;
-
+	/**
+	 * Resets the stream to its start.
+	 *
+	 * @throws IOException If something goes wrong with the reset
+	 */
+	@Override
+	void resetStream() throws IOException;
 }

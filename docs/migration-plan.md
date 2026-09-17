@@ -704,6 +704,55 @@ subsystems, with no dependency on external `scijava-<foo>` components.
 intended to work standalone — Parsington, for instance — keep their
 independence and should not carry the `scijava-` prefix.
 
+### The core services are not a block to port
+
+The plan once said Phase 2 would bring over "the core services: object
+registry, prefs, thread, app/status". Measured against usage and against what
+has since been built, most of that does not survive:
+
+| SJC service | Files outside SJC | Disposition |
+| --- | --- | --- |
+| `StatusService` | 57 | **Superseded** by `scijava-progress`. Porting it would re-create what was just replaced. |
+| `ThreadService` | 76 | Mostly EDT dispatch, which is a **UI** concern: `scijava-concurrent` covers parallelism, and the rest belongs with the UI layer (Phase 4). |
+| `ObjectService` | 52 | Real, but its consumers are the widgets and the conversion layer. It should land with them, so its shape is driven by a consumer rather than guessed (Phase 3/4). |
+| `AppService` | 52 | Largely version and title metadata, which `scijava-meta` covers; the rest is app-shell material already dropped. |
+| `PrefService` | 31 | Split in two — see below. |
+
+#### Preferences: a store, and a policy
+
+`PrefService` is really two things, and only one of them is core.
+
+**Widget value persistence** — remembering what a user last typed into a given
+parameter of a given module — is *policy*. It needs module identity, parameter
+names, and a rule for when to save, none of which mean anything without the
+input harvester. It belongs with the harvester, in Phase 4.
+
+**A settings store** — durable key/value state in a file — is a general
+capability whose API needs no consumer to get right. Deferred, but with the
+design settled now, so that Phase 4 inherits decisions rather than a debate:
+
+- **Not `java.util.prefs`.** Its opacity is the actual complaint: the registry
+  on Windows, plists on macOS, `~/.java/.userPrefs` on Linux; values over 8KB
+  silently truncated; nothing a user can inspect or diff.
+- **YAML.** `snakeyaml` is already in this stack for op declarations, so it is
+  no new dependency, and unlike JSON it supports **comments**, which a
+  hand-editable file wants. Load with the safe constructor and quote scalars
+  on write, to avoid implicit typing turning `no` into `false` and version
+  strings into numbers.
+- **`$XDG_CONFIG_HOME/fiji`, else `~/.config/fiji`** — what users asked for —
+  on every platform rather than `%APPDATA%` and `~/Library`. The complaint was
+  opacity, and a path users can find, back up and quote in a bug report beats
+  platform convention here. Overridable by system property, and the effective
+  path should be printable at runtime.
+- **Namespaced by class**, as SJC does, mapping onto sections in the file.
+- **No migration** from the old store: SJC keeps working for SJC, and a
+  one-time import is a feature to add if asked for, not a reason to couple the
+  two.
+- **Open, and genuinely blocked on the harvester:** what to do about stale
+  keys. Remembered values accumulate for modules that no longer exist, and
+  neither SJC nor a plain file store has an answer. The harvester is what
+  knows which keys are still live.
+
 ## Later, not now
 
 - **`scijava-persist`** (in the incubator): polymorphic serialization where

@@ -559,8 +559,20 @@ No application context required by anything in this phase.
     real module boundary, proving both halves of the earlier claim at once:
     the qualified `opens` grants the container deep reflection, and the
     package is still exported to nobody.
-  - Still to do here: `@EventHandler` scanning, the one-way legacy bridge, and
-    the core services themselves.
+  - **`@EventHandler` scanning is done**, and it is what the two-tier design
+    was protecting: the event bus itself stays reflection-free, while the
+    container — which already reflects — turns annotated methods into
+    subscriptions. A service's handlers are subscribed when the context
+    creates it and dropped when the context is disposed, so a service author
+    writes no subscription or cleanup code at all.
+  - Objects the context did **not** create are not subscribed automatically:
+    a plugin may be created and discarded many times in a session, and
+    handlers outliving their objects would pile up. `Context.subscribe(Object)`
+    returns the subscriptions for the caller to close.
+  - What a handler throws reaches the publisher unwrapped, rather than as an
+    `InvocationTargetException`.
+  - Still to do here: the one-way legacy bridge, and the core services
+    themselves.
   - **Dependencies are not constructor arguments.** Constructor injection
     would publish every dependency in a signature, so changing an internal
     dependency would be an API change and a binary compatibility break unless

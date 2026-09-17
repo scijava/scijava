@@ -30,6 +30,8 @@
 package org.scijava.context;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -45,6 +47,7 @@ import java.util.stream.Collectors;
 
 import org.scijava.discovery.Discovery;
 import org.scijava.events.EventBus;
+import org.scijava.events.Subscription;
 import org.scijava.index.IndexDiscoverer;
 import org.scijava.spi.Disposable;
 
@@ -156,6 +159,9 @@ public class Context implements Disposable, AutoCloseable {
 				// on each other resolve instead of recursing.
 				byRequestedType.put(type, s);
 				inject(s);
+				// NB: a service's lifetime is the context's, so its handlers need
+				// no cleanup by the author: disposing the context closes the bus.
+				subscribe(s);
 				initialize(s);
 				// NB: record for disposal only once initialization has finished.
 				// A service's dependencies finish first, so they land earlier in
@@ -217,6 +223,34 @@ public class Context implements Disposable, AutoCloseable {
 				injectField(target, field, dependency);
 			}
 		}
+	}
+
+	/**
+	 * Subscribes the {@link EventHandler}-annotated methods of the given object
+	 * to this context's {@link EventBus}.
+	 * <p>
+	 * Services are subscribed automatically when the context creates them, and
+	 * unsubscribed when it is disposed. This is for everything else: a plugin
+	 * may be created and discarded many times in a session, so its handlers are
+	 * the caller's to manage.
+	 * </p>
+	 *
+	 * @param target the object whose handlers to subscribe
+	 * @return a subscription per handler; close them when the object is done
+	 * @throws ServiceException if a handler is malformed, or the target's
+	 *           package is not open to this module
+	 */
+	public List<Subscription> subscribe(final Object target) {
+		if (target == null) throw new NullPointerException("target");
+		final List<Subscription> subscriptions = new ArrayList<>();
+		for (Class<?> c = target.getClass(); c != null; c = c.getSuperclass()) {
+			for (final Method method : c.getDeclaredMethods()) {
+				final EventHandler handler = method.getAnnotation(EventHandler.class);
+				if (handler == null) continue;
+				subscriptions.add(subscribeHandler(target, method, handler));
+			}
+		}
+		return subscriptions;
 	}
 
 	/** Gets this context's event bus. */
@@ -308,6 +342,54 @@ public class Context implements Disposable, AutoCloseable {
 				". Does its module declare `opens " + target.getClass()
 					.getPackageName() + " to org.scijava.context;`?", exc);
 		}
+	}
+
+	/** Subscribes one annotated method. */
+	private Subscription subscribeHandler(final Object target,
+		final Method method, final EventHandler handler)
+	{
+		final Class<?>[] params = method.getParameterTypes();
+		if (params.length != 1) {
+			throw new ServiceException("An @EventHandler takes exactly one" + //
+				" parameter, the event: " + method.getDeclaringClass().getName() + //
+				"." + method.getName() + " takes " + params.length);
+		}
+		try {
+			// NB: the same deep reflection, and the same `opens`, that
+			// @Dependency needs.
+			method.setAccessible(true);
+		}
+		catch (final RuntimeException exc) {
+			throw new ServiceException("Cannot subscribe " + method
+				.getDeclaringClass().getName() + "." + method.getName() + //
+				". Does its module declare `opens " + method.getDeclaringClass()
+					.getPackageName() + " to org.scijava.context;`?", exc);
+		}
+		return subscribeTyped(params[0], handler.priority(), target, method);
+	}
+
+	/** Captures the event type, so that the bus sees a typed subscription. */
+	private <E> Subscription subscribeTyped(final Class<E> eventType,
+		final double priority, final Object target, final Method method)
+	{
+		return events.subscribe(eventType, priority, event -> {
+			try {
+				method.invoke(target, event);
+			}
+			catch (final IllegalAccessException exc) {
+				throw new ServiceException("Cannot invoke handler " + method
+					.getDeclaringClass().getName() + "." + method.getName(), exc);
+			}
+			catch (final InvocationTargetException exc) {
+				// NB: unwrap, so subscribers see what the handler actually threw
+				// rather than a reflection wrapper.
+				final Throwable cause = exc.getCause();
+				if (cause instanceof RuntimeException) throw (RuntimeException) cause;
+				if (cause instanceof Error) throw (Error) cause;
+				throw new ServiceException("Handler failed: " + method
+					.getDeclaringClass().getName() + "." + method.getName(), cause);
+			}
+		});
 	}
 
 	/** Resolves what to inject for a field of the given type. */

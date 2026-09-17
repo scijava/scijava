@@ -27,19 +27,30 @@
  * #L%
  */
 
-module org.scijava.context.test {
+package org.scijava.context.test.impl;
 
-	// NB: the implementation package is deliberately NOT exported. It is
-	// opened to the container only, which is what plugin construction needs --
-	// and opens is not exports, so callers still cannot reach these classes.
-	exports org.scijava.context.test;
-	opens org.scijava.context.test.impl to org.scijava.context;
+import java.util.ArrayList;
+import java.util.List;
 
-	requires org.scijava.context;
-	requires org.scijava.discovery;
+import org.scijava.context.EventHandler;
+import org.scijava.context.test.RecordingService;
+import org.scijava.context.test.ShoutRecorded;
 
-	provides org.scijava.context.Service with
-			org.scijava.context.test.impl.HiddenGreeter,
-			org.scijava.context.test.impl.DefaultRecordingService;
+/**
+ * A service whose event handler is <em>private</em>, in a package opened only
+ * to the container.
+ */
+public class DefaultRecordingService implements RecordingService {
 
+	private final List<String> recorded = new ArrayList<>();
+
+	@EventHandler
+	private void onShout(final ShoutRecorded event) {
+		recorded.add(event.text());
+	}
+
+	@Override
+	public List<String> recorded() {
+		return recorded;
+	}
 }

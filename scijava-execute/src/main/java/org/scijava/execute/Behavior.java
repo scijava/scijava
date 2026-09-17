@@ -29,44 +29,31 @@
 
 package org.scijava.execute;
 
-import java.util.Optional;
-
-import org.scijava.struct.StructInstance;
-
 /**
- * One instance of an {@link Executable}, whose parameters can be set and which
- * can then be run.
+ * A named piece of behavior belonging to an executable: a callback run when a
+ * parameter changes, a validator, a function generating parameters.
  * <p>
- * NB: SciJava Common called this {@code Module}.
+ * The point of naming behavior rather than reflecting a Java method is that a
+ * script has no Java methods. SciJava Common's callbacks, initializers and
+ * validaters were method-name strings resolved through Java reflection, which
+ * is exactly why they were never finished for scripts. An
+ * {@link ExecutableInstance} resolves a name however its own kind of code
+ * does: a Java class by reflecting a method, a script by asking its engine for
+ * a function.
  * </p>
  *
  * @author Curtis Rueden
+ * @see ExecutableInstance#behavior(String)
  */
-public interface ExecutableInstance {
-
-	/** Gets what this is an instance of. */
-	Executable executable();
-
-	/** Gets the parameters, bound to their values. */
-	StructInstance<?> parameters();
-
-	/** Runs it, with whatever values its parameters currently hold. */
-	void run();
+@FunctionalInterface
+public interface Behavior {
 
 	/**
-	 * Looks up a named piece of behavior belonging to this instance - a
-	 * callback, a validator, a function generating parameters.
-	 * <p>
-	 * A Java executable resolves the name by reflecting a method; a script
-	 * resolves it by asking its engine for a function of that name. Naming
-	 * behavior rather than reflecting a method is what lets both work, where
-	 * SciJava Common's callbacks were Java-only.
-	 * </p>
+	 * Invokes this behavior.
 	 *
-	 * @param name the behavior's name
-	 * @return the behavior, or empty if this instance has none by that name
+	 * @param args the arguments, if it takes any
+	 * @return whatever it returns, or null
+	 * @throws BehaviorException if it fails
 	 */
-	default Optional<Behavior> behavior(final String name) {
-		return Optional.empty();
-	}
+	Object invoke(Object... args);
 }

@@ -79,4 +79,25 @@ public @interface Parameter {
 
 	/** A longer human-readable description. */
 	String description() default "";
+
+	/**
+	 * A behavior to run when this parameter's value changes.
+	 * <p>
+	 * NB: a name, not a method reference, so that a script can supply one too;
+	 * see {@link Behavior}.
+	 * </p>
+	 */
+	String callback() default "";
+
+	/**
+	 * A behavior that checks this parameter's value, returning a message
+	 * describing the problem, or null or an empty string if there is none.
+	 */
+	String validator() default "";
+
+	/** A behavior deciding whether this parameter is currently shown. */
+	String visibleWhen() default "";
+
+	/** The group this parameter belongs to, if any. */
+	String group() default "";
 }

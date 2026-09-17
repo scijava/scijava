@@ -1,6 +1,6 @@
 /*
  * #%L
- * Running things that declare their inputs and outputs.
+ * The model behind a parameter dialog: groups, dependencies, validation.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,46 +27,42 @@
  * #L%
  */
 
-package org.scijava.execute;
+package org.scijava.harvest;
 
+import java.util.List;
 import java.util.Optional;
 
-import org.scijava.struct.StructInstance;
+import org.scijava.struct.MemberInstance;
 
 /**
- * One instance of an {@link Executable}, whose parameters can be set and which
- * can then be run.
- * <p>
- * NB: SciJava Common called this {@code Module}.
- * </p>
+ * A node in the tree a dialog renders: either one parameter, or a group of
+ * them.
  *
  * @author Curtis Rueden
  */
-public interface ExecutableInstance {
+public interface ParameterNode {
 
-	/** Gets what this is an instance of. */
-	Executable executable();
+	/** Gets the label to display. */
+	String label();
 
-	/** Gets the parameters, bound to their values. */
-	StructInstance<?> parameters();
+	/** Gets the parameter this node edits, if it is a single parameter. */
+	Optional<MemberInstance<?>> member();
 
-	/** Runs it, with whatever values its parameters currently hold. */
-	void run();
+	/** Gets the nodes beneath this one, empty for a single parameter. */
+	List<ParameterNode> children();
 
-	/**
-	 * Looks up a named piece of behavior belonging to this instance - a
-	 * callback, a validator, a function generating parameters.
-	 * <p>
-	 * A Java executable resolves the name by reflecting a method; a script
-	 * resolves it by asking its engine for a function of that name. Naming
-	 * behavior rather than reflecting a method is what lets both work, where
-	 * SciJava Common's callbacks were Java-only.
-	 * </p>
-	 *
-	 * @param name the behavior's name
-	 * @return the behavior, or empty if this instance has none by that name
-	 */
-	default Optional<Behavior> behavior(final String name) {
-		return Optional.empty();
+	/** Gets whether this node holds others. */
+	default boolean isGroup() {
+		return member().isEmpty();
+	}
+
+	/** Gets whether the user can fold this group away. */
+	default boolean isCollapsible() {
+		return false;
+	}
+
+	/** Gets whether this group starts folded. */
+	default boolean isCollapsed() {
+		return false;
 	}
 }

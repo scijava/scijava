@@ -1,6 +1,6 @@
 /*
  * #%L
- * Running things that declare their inputs and outputs.
+ * The model behind a parameter dialog: groups, dependencies, validation.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,46 +27,11 @@
  * #L%
  */
 
-package org.scijava.execute;
+open module org.scijava.harvest {
 
-import java.util.Optional;
+	exports org.scijava.harvest;
 
-import org.scijava.struct.StructInstance;
+	requires transitive org.scijava.execute;
+	requires transitive org.scijava.struct;
 
-/**
- * One instance of an {@link Executable}, whose parameters can be set and which
- * can then be run.
- * <p>
- * NB: SciJava Common called this {@code Module}.
- * </p>
- *
- * @author Curtis Rueden
- */
-public interface ExecutableInstance {
-
-	/** Gets what this is an instance of. */
-	Executable executable();
-
-	/** Gets the parameters, bound to their values. */
-	StructInstance<?> parameters();
-
-	/** Runs it, with whatever values its parameters currently hold. */
-	void run();
-
-	/**
-	 * Looks up a named piece of behavior belonging to this instance - a
-	 * callback, a validator, a function generating parameters.
-	 * <p>
-	 * A Java executable resolves the name by reflecting a method; a script
-	 * resolves it by asking its engine for a function of that name. Naming
-	 * behavior rather than reflecting a method is what lets both work, where
-	 * SciJava Common's callbacks were Java-only.
-	 * </p>
-	 *
-	 * @param name the behavior's name
-	 * @return the behavior, or empty if this instance has none by that name
-	 */
-	default Optional<Behavior> behavior(final String name) {
-		return Optional.empty();
-	}
 }

@@ -29,7 +29,11 @@
 
 package org.scijava.execute;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodHandles.Lookup;
+import java.lang.reflect.Method;
+import java.util.Optional;
 
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
@@ -44,6 +48,7 @@ public class JavaExecutable implements Executable {
 
 	private final Class<? extends Runnable> type;
 	private final Struct struct;
+	private final Lookup lookup;
 
 	public JavaExecutable(final Class<? extends Runnable> type) {
 		this(type, null);
@@ -59,6 +64,7 @@ public class JavaExecutable implements Executable {
 		final Lookup lookup)
 	{
 		this.type = type;
+		this.lookup = lookup;
 		this.struct = Executables.struct(type, lookup);
 	}
 
@@ -92,12 +98,82 @@ public class JavaExecutable implements Executable {
 			public void run() {
 				object.run();
 			}
+
+			@Override
+			public Optional<Behavior> behavior(final String name) {
+				return methodNamed(name).map(method -> args -> invoke(method, object,
+					args));
+			}
 		};
 	}
 
 	/** Gets the class this describes. */
 	public Class<? extends Runnable> type() {
 		return type;
+	}
+
+	/**
+	 * Resolves a named behavior on the given object.
+	 * <p>
+	 * NB: shared with {@link Executables#executableOf}, so that an object handed
+	 * in directly supports callbacks and generators exactly as a discovered
+	 * class does. Having only one of the two paths resolve behaviors made them
+	 * silently do nothing, which is a poor way to find out.
+	 * </p>
+	 */
+	static Optional<Behavior> behaviorOf(final Class<?> type, final Lookup lookup,
+		final Object target, final String name)
+	{
+		return methodNamed(type, name).map(method -> args -> invoke(type, lookup,
+			method, target, args));
+	}
+
+	/** Finds a declared method by name, in this class or a superclass. */
+	private Optional<Method> methodNamed(final String name) {
+		return methodNamed(type, name);
+	}
+
+	private static Optional<Method> methodNamed(final Class<?> type,
+		final String name)
+	{
+		for (Class<?> c = type; c != null; c = c.getSuperclass()) {
+			for (final Method method : c.getDeclaredMethods()) {
+				// NB: by name alone. A behavior is identified by its name, and
+				// overloading one would be ambiguous rather than useful.
+				if (method.getName().equals(name)) return Optional.of(method);
+			}
+		}
+		return Optional.empty();
+	}
+
+	private Object invoke(final Method method, final Object target,
+		final Object[] args)
+	{
+		return invoke(type, lookup, method, target, args);
+	}
+
+	private static Object invoke(final Class<?> type, final Lookup lookup,
+		final Method method, final Object target, final Object[] args)
+	{
+		try {
+			final Lookup access;
+			if (lookup != null) access = lookup;
+			else {
+				// NB: see FieldParameterMember.ownLookupIn -- privateLookupIn needs
+				// this module to read the target's, which only its own code may add.
+				JavaExecutable.class.getModule().addReads(type.getModule());
+				access = MethodHandles.privateLookupIn(type, MethodHandles.lookup());
+			}
+			final MethodHandle handle = access.unreflect(method);
+			final Object[] all = new Object[args.length + 1];
+			all[0] = target;
+			System.arraycopy(args, 0, all, 1, args.length);
+			return handle.invokeWithArguments(all);
+		}
+		catch (final Throwable exc) {
+			throw new BehaviorException("Behavior failed: " + type.getName() + "." + //
+				method.getName(), exc);
+		}
 	}
 
 	private Runnable instantiate() {

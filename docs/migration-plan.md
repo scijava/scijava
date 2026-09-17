@@ -764,6 +764,51 @@ after it.
 
 ### Phase 4 — UI and desktop
 
+- **`scijava-harvest`** (`org.scijava.harvest`): the model behind a parameter
+  dialog — groups, dependencies between parameters, validation — with no
+  toolkit anywhere, so it is testable headless and a Swing or JavaFX binding
+  renders it. **Prototyped**, against the four dialog behaviours actually
+  asked for, and each taught something:
+  - **A chosen implementation brings its own parameters.** Expansion is driven
+    by the **value's class**, not the declared type: the field says `Joke`, the
+    value is a knock-knock joke, and it is the joke's parameters that appear.
+    Expanding the declared type finds nothing, an interface having no fields —
+    so `Structs.expand`, which uses the static `childStruct()`, is not enough.
+  - **Static nesting is then the degenerate case** where the value's class
+    never varies. One concept covers both, and the reason is the value-driven
+    expansion rather than anything about `isStruct()`.
+  - **A group whose size depends on a value cannot be fields at all**, since a
+    class's fields are fixed when it is compiled. It needs parameters built at
+    runtime — which is exactly what a script header needs, so both are served
+    by `Parameters.builder()`, members over a map. Two requirements that looked
+    unrelated turned out to be one primitive.
+  - **An "advanced" toggle** is a group with a `visibleWhen` behavior; a
+    hidden group disappears rather than showing as an empty box.
+  - **Callbacks work for scripts**, which SciJava Common never managed: it
+    resolved `callback = "foo"` by Java reflection, leaving a script nothing to
+    name. `ExecutableInstance.behavior(String)` resolves a name however that
+    kind of code does — Java reflects a method, a script asks its engine for a
+    function.
+  - **Cascading callbacks terminate.** A callback may change any parameter, so
+    changes cascade, and two that set each other — Celsius and Fahrenheit, a
+    real case — would never stop. Each parameter's callback runs at most once
+    per `set`.
+  - **Validation has one protocol**: return a message, or do not. SciJava
+    Common allows either throwing *or* returning a non-empty string, which is
+    why it needs both `validate` and `validateMessage`; with one protocol a
+    thrown exception means the validator is broken, rather than being a second
+    way to report a bad value.
+  - **`ObjectService` is not the mechanism** after all. A subgroup's parameters
+    come from whatever object the parameter holds; where that object came from
+    is a separate question, for a chooser widget's candidate list. It is one
+    source among several, so the harvester is not blocked on it.
+  - **Known rough edges**: group placement is provisional (a group appears
+    where its first member would, and a generated group needs an explicit
+    `after` anchor); `ParameterModel` decides the tree changed by comparing
+    `toString()`, which is right for correctness and wrong for a UI that should
+    patch rather than rebuild; and nothing here has met a toolkit yet, which is
+    where the prototype's `WidgetFactory`/`WidgetPanelFactory` return.
+
 - **Input harvesting is a headline deliverable**, not a port. It is the
   workhorse that lets Fiji users write scripts without UI-specific concerns.
   Build it on `scijava-struct`, and complete the long-requested

@@ -69,6 +69,7 @@
 		<module>scijava-events</module>
 		<module>scijava-execute</module>
 		<module>scijava-function</module>
+		<module>scijava-harvest</module>
 		<module>scijava-index</module>
 		<module>scijava-io3</module>
 		<module>scijava-legacy</module>

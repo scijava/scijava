@@ -32,6 +32,7 @@ open module org.scijava.execute {
 	exports org.scijava.execute;
 
 	requires org.scijava.common3;
+	requires transitive org.scijava.priority;
 	requires transitive org.scijava.struct;
 
 }

@@ -85,7 +85,7 @@ public final class Executables {
 	public static Map<String, Object> run(final Runnable executable,
 		final Map<String, Object> inputs)
 	{
-		final StructInstance<?> instance = bind(executable, inputs);
+		final StructInstance<?> instance = bind(executable, inputs, true);
 		checkCancellation();
 		executable.run();
 		checkCancellation();
@@ -106,9 +106,15 @@ public final class Executables {
 		return () -> run(executable, inputs);
 	}
 
-	/** Binds the given input values onto the object's parameters. */
-	private static StructInstance<?> bind(final Object executable,
-		final Map<String, Object> inputs)
+	/**
+	 * Binds the given input values onto the object's parameters.
+	 *
+	 * @param requireInputs whether to insist that required inputs be supplied
+	 *          now. A {@link Runner} passes false, since a preprocessor may
+	 *          supply them later.
+	 */
+	static StructInstance<?> bind(final Object executable,
+		final Map<String, Object> inputs, final boolean requireInputs)
 	{
 		final Struct struct = struct(executable.getClass());
 		final StructInstance<?> instance = struct.createInstance(executable);
@@ -125,7 +131,7 @@ public final class Executables {
 			if (inputs.containsKey(key)) {
 				member.set(inputs.get(key));
 			}
-			else if (member.member().isRequired()) {
+			else if (requireInputs && member.member().isRequired()) {
 				// NB: require the value to be supplied, rather than checking
 				// whether the field is null. A primitive field is never null -- a
 				// missing required `double` would silently run as 0.0.
@@ -137,7 +143,7 @@ public final class Executables {
 	}
 
 	/** Collects the object's output values. */
-	private static Map<String, Object> outputs(final StructInstance<?> instance) {
+	static Map<String, Object> outputs(final StructInstance<?> instance) {
 		final Map<String, Object> outputs = new LinkedHashMap<>();
 		for (final MemberInstance<?> member : instance.members()) {
 			if (member.member().isOutput()) outputs.put(member.member().key(), //
@@ -155,7 +161,7 @@ public final class Executables {
 		return sb.length() == 0 ? "no parameters" : sb.toString();
 	}
 
-	private static void checkCancellation() {
+	static void checkCancellation() {
 		// NB: cancellation is thread interruption; restore the flag so callers
 		// further up still see it.
 		if (Thread.interrupted()) {

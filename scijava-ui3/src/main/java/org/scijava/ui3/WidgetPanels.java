@@ -35,6 +35,8 @@ import java.util.List;
 
 import org.scijava.harvest.ParameterModel;
 import org.scijava.harvest.ParameterNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Turns the shape a dialog should have into the widgets that show it.
@@ -48,6 +50,9 @@ import org.scijava.harvest.ParameterNode;
  * @author Curtis Rueden
  */
 public class WidgetPanels<W extends Widget> {
+
+	private static final Logger log = LoggerFactory.getLogger(
+		WidgetPanels.class);
 
 	private final List<WidgetFactory<W>> factories;
 	private final WidgetPanelFactory<W> panels;
@@ -85,7 +90,10 @@ public class WidgetPanels<W extends Widget> {
 			if (factory.supports(node)) return factory.create(node, model, panels);
 		}
 		// NB: a parameter no widget accepts is left out rather than fatal, so
-		// that an unusual type does not make the whole dialog unavailable.
+		// that an unusual type does not make the whole dialog unavailable. It is
+		// worth saying, though: a dialog silently missing one row is a puzzle.
+		log.warn("No widget for parameter '{}'; it will not be shown", node
+			.label());
 		return null;
 	}
 

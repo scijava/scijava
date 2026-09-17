@@ -44,6 +44,8 @@ import org.scijava.execute.Preprocessor;
 import org.scijava.harvest.ParameterModel;
 import org.scijava.ui3.InputHarvester;
 import org.scijava.ui3.WidgetFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Asks the user for a run's remaining inputs, in a Swing dialog.
@@ -52,6 +54,9 @@ import org.scijava.ui3.WidgetFactory;
  */
 @Plugin(type = Preprocessor.class)
 public class SwingInputHarvester extends InputHarvester {
+
+	private static final Logger log = LoggerFactory.getLogger(
+		SwingInputHarvester.class);
 
 	@Dependency(required = false)
 	private Context context;
@@ -126,6 +131,18 @@ public class SwingInputHarvester extends InputHarvester {
 					(WidgetFactory<SwingWidget>) factory;
 				found.add(swing);
 			}
+		}
+		if (found.isEmpty()) {
+			// NB: the usual cause is a missing annotation index, which javac
+			// produces only when scijava-index is on the annotation processor path
+			// -- and says nothing at all when it is not. The dialog would otherwise
+			// come up empty, with no clue as to why.
+			log.warn("No Swing widget factories discovered. Is the annotation " +
+				"index (META-INF/json/org.scijava.context.Plugin) on the classpath?");
+		}
+		else if (log.isDebugEnabled()) {
+			found.forEach(f -> log.debug("Widget factory: {}", f.getClass()
+				.getName()));
 		}
 		factories = List.copyOf(found);
 		return factories;

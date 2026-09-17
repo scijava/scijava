@@ -126,6 +126,24 @@ public final class Widgets {
 		return number(node, ParameterMember.MAX);
 	}
 
+	/**
+	 * Gets the smallest value a slider should span, falling back to
+	 * {@link #min}.
+	 */
+	public static Number softMin(final ParameterNode node) {
+		final Number soft = number(node, ParameterMember.SOFT_MIN);
+		return soft == null ? min(node) : soft;
+	}
+
+	/**
+	 * Gets the largest value a slider should span, falling back to
+	 * {@link #max}.
+	 */
+	public static Number softMax(final ParameterNode node) {
+		final Number soft = number(node, ParameterMember.SOFT_MAX);
+		return soft == null ? max(node) : soft;
+	}
+
 	/** Gets the parameter's step size, defaulting to one. */
 	public static Number stepSize(final ParameterNode node) {
 		final Number step = number(node, ParameterMember.STEP_SIZE);

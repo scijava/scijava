@@ -114,7 +114,19 @@ public class SwingTextWidget extends SwingWidget implements DocumentListener {
 
 	private void changed() {
 		final String s = text.getText();
-		if (Widgets.type(node()) == String.class) update(s);
-		else if (!s.isEmpty()) update(s.charAt(0)); // NB: a char parameter
+		final Class<?> type = Widgets.box(Widgets.type(node()));
+		if (type == String.class) {
+			update(s);
+		}
+		else if (type == Character.class) {
+			if (!s.isEmpty()) update(s.charAt(0));
+		}
+		else {
+			// NB: BigInteger and BigDecimal land here, a spinner being unable to
+			// step them. Half-typed text is not a value, so an unparseable field
+			// leaves the parameter alone rather than writing a zero into it.
+			final Number value = Widgets.toType(s, type);
+			if (value != null) update(value);
+		}
 	}
 }

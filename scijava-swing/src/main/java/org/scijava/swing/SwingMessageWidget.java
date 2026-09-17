@@ -27,19 +27,51 @@
  * #L%
  */
 
-module org.scijava.swing {
+package org.scijava.swing;
 
-	exports org.scijava.swing;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 
-	// NB: one opens, to the container alone, so that it can inject and
-	// construct these plugins. `opens` is not `exports`.
-	opens org.scijava.swing to org.scijava.context;
+import org.scijava.harvest.ParameterModel;
+import org.scijava.harvest.ParameterNode;
 
-	requires transitive java.desktop;
-	requires transitive org.scijava.ui3;
-	requires transitive org.scijava.context;
-	requires org.scijava.discovery;
-	requires org.scijava.priority;
-	requires org.slf4j;
+/**
+ * A widget that shows text rather than collecting it: a heading, a note, a
+ * warning that another value has just provoked.
+ * <p>
+ * The parameter's value is the message, so a callback can rewrite it.
+ * </p>
+ *
+ * @author Curtis Rueden
+ */
+public class SwingMessageWidget extends SwingWidget {
 
+	/** Style hint: show this parameter rather than collecting it. */
+	public static final String MESSAGE = "message";
+
+	private final JLabel label;
+
+	public SwingMessageWidget(final ParameterNode node,
+		final ParameterModel model)
+	{
+		super(node, model);
+		label = new JLabel();
+		refresh();
+	}
+
+	@Override
+	public JComponent component() {
+		return label;
+	}
+
+	@Override
+	public boolean isLabeled() {
+		return false; // NB: the message is the whole row.
+	}
+
+	@Override
+	protected void doRefresh() {
+		final Object value = value();
+		label.setText(value == null ? "" : value.toString());
+	}
 }

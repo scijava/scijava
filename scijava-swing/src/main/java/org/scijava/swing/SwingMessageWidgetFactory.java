@@ -27,19 +27,39 @@
  * #L%
  */
 
-module org.scijava.swing {
+package org.scijava.swing;
 
-	exports org.scijava.swing;
+import org.scijava.context.Plugin;
+import org.scijava.harvest.ParameterModel;
+import org.scijava.harvest.ParameterNode;
+import org.scijava.priority.Priority;
+import org.scijava.ui3.WidgetFactory;
+import org.scijava.ui3.WidgetPanelFactory;
+import org.scijava.ui3.Widgets;
 
-	// NB: one opens, to the container alone, so that it can inject and
-	// construct these plugins. `opens` is not `exports`.
-	opens org.scijava.swing to org.scijava.context;
+/**
+ * Makes {@link SwingMessageWidget}s.
+ *
+ * @author Curtis Rueden
+ */
+@Plugin(type = WidgetFactory.class)
+public class SwingMessageWidgetFactory implements SwingWidgetFactory {
 
-	requires transitive java.desktop;
-	requires transitive org.scijava.ui3;
-	requires transitive org.scijava.context;
-	requires org.scijava.discovery;
-	requires org.scijava.priority;
-	requires org.slf4j;
+	@Override
+	public boolean supports(final ParameterNode node) {
+		return Widgets.isStyle(node, SwingMessageWidget.MESSAGE);
+	}
 
+	@Override
+	public SwingWidget create(final ParameterNode node,
+		final ParameterModel model, final WidgetPanelFactory<SwingWidget> panels)
+	{
+		return new SwingMessageWidget(node, model);
+	}
+
+	@Override
+	public double priority() {
+		// NB: an explicit "show this, do not collect it" outranks the type.
+		return Priority.VERY_HIGH;
+	}
 }

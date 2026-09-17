@@ -136,6 +136,8 @@ public class FieldParameterMember<T> implements ParameterMember<T>,
 		put(attrs, MIN, parameter.min());
 		put(attrs, MAX, parameter.max());
 		put(attrs, STEP_SIZE, parameter.stepSize());
+		put(attrs, SOFT_MIN, parameter.softMin());
+		put(attrs, SOFT_MAX, parameter.softMax());
 		put(attrs, STYLE, parameter.style());
 		return attrs;
 	}

@@ -44,6 +44,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.scijava.harvest.ParameterModel;
 import org.scijava.ui3.WidgetFactory;
 import org.scijava.ui3.WidgetPanels;
@@ -60,6 +63,8 @@ import org.scijava.ui3.WidgetPanels;
  */
 public class SwingDialog {
 
+	private static final Logger log = LoggerFactory.getLogger(SwingDialog.class);
+
 	private final ParameterModel model;
 	private final WidgetPanels<SwingWidget> builder;
 	private final JDialog dialog;
@@ -70,6 +75,7 @@ public class SwingDialog {
 	private SwingPanel panel;
 	private boolean accepted;
 	private boolean rebuilding;
+	private boolean placed;
 
 	public SwingDialog(final Window owner, final String title,
 		final ParameterModel model,
@@ -108,7 +114,10 @@ public class SwingDialog {
 
 		// NB: a value may reshape the dialog - reveal a group, add parameters -
 		// so the tree is rebuilt on every change and the widgets follow it.
-		model.onTreeChanged(tree -> SwingUtilities.invokeLater(this::rebuild));
+		model.onTreeChanged(tree -> SwingUtilities.invokeLater(() -> {
+			log.debug("Parameter tree changed; rebuilding widgets");
+			rebuild();
+		}));
 		// NB: a callback may change values other than the one the user touched,
 		// with the shape unchanged; those widgets still have to catch up.
 		model.values().onChange(change -> SwingUtilities.invokeLater(
@@ -140,23 +149,64 @@ public class SwingDialog {
 		rebuilding = true;
 		try {
 			panel = (SwingPanel) builder.build(model);
-			content.removeAll();
-			content.add(new JScrollPane(panel.component()), BorderLayout.CENTER);
-			validate();
-			dialog.pack();
-			final Dimension size = dialog.getSize();
-			// NB: keep a dialog with many parameters on the screen; the scroll
-			// pane takes care of the rest.
-			final Dimension screen = dialog.getGraphicsConfiguration() == null ? null
-				: dialog.getGraphicsConfiguration().getBounds().getSize();
-			if (screen != null && size.height > screen.height * 0.8) {
-				dialog.setSize(size.width + 20, (int) (screen.height * 0.8));
+			log.debug("Built {} widget(s) for {}", panel.widgets().size(), dialog
+				.getTitle());
+			if (panel.widgets().isEmpty()) {
+				// NB: an empty dialog is what a missing annotation index looks like
+				// from the outside, and it is otherwise entirely silent.
+				log.warn("No widgets for {}: either it declares no inputs, or no " +
+					"widget factory accepted them", dialog.getTitle());
 			}
-			dialog.setLocationRelativeTo(dialog.getOwner());
+			content.removeAll();
+			// NB: the widgets hug the top. A GridBagLayout centers its rows in
+			// whatever height it is given, so a dialog dragged taller would
+			// otherwise split the new space above and below them.
+			final JPanel top = new JPanel(new BorderLayout());
+			top.setOpaque(false);
+			top.add(panel.component(), BorderLayout.NORTH);
+			final JScrollPane scroll = new JScrollPane(top);
+			scroll.setBorder(BorderFactory.createEmptyBorder());
+			scroll.getViewport().setOpaque(false);
+			scroll.setOpaque(false);
+			content.add(scroll, BorderLayout.CENTER);
+			validate();
+			resize();
+			content.revalidate();
+			content.repaint();
 		}
 		finally {
 			rebuilding = false;
 		}
+	}
+
+	/**
+	 * Sizes the dialog for the widgets it now holds.
+	 * <p>
+	 * NB: only the first build places the dialog. Afterwards it may grow, to
+	 * make room for parameters that have just appeared, but it never moves and
+	 * never shrinks: a dialog that jumped back to the middle of the screen, or
+	 * closed up around a group the user had just collapsed, would move the
+	 * controls out from under the pointer.
+	 * </p>
+	 */
+	private void resize() {
+		final Dimension before = dialog.getSize();
+		dialog.pack();
+		final Dimension packed = dialog.getSize();
+		if (placed) {
+			dialog.setSize(Math.max(before.width, packed.width), //
+				Math.max(before.height, packed.height));
+			return;
+		}
+		placed = true;
+		// NB: keep a dialog with many parameters on the screen; the scroll pane
+		// takes care of the rest.
+		final Dimension screen = dialog.getGraphicsConfiguration() == null ? null
+			: dialog.getGraphicsConfiguration().getBounds().getSize();
+		if (screen != null && packed.height > screen.height * 0.8) {
+			dialog.setSize(packed.width + 20, (int) (screen.height * 0.8));
+		}
+		dialog.setLocationRelativeTo(dialog.getOwner());
 	}
 
 	private void refresh() {

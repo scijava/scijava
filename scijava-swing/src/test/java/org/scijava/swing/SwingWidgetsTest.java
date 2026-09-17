@@ -60,6 +60,7 @@ public class SwingWidgetsTest {
 	}
 
 	private static final List<WidgetFactory<SwingWidget>> FACTORIES = List.of( //
+		new SwingMessageWidgetFactory(), //
 		new SwingChoiceWidgetFactory(), //
 		new SwingNumberWidgetFactory(), //
 		new SwingToggleWidgetFactory(), //
@@ -72,9 +73,15 @@ public class SwingWidgetsTest {
 		final SwingPanel panel = panel(model);
 
 		assertEquals(List.of( //
+			SwingMessageWidget.class, // message
 			SwingTextWidget.class, // name
 			SwingNumberWidget.class, // percent
+			SwingNumberWidget.class, // iterations
 			SwingNumberWidget.class, // weight
+			SwingChoiceWidget.class, // method, an enum
+			SwingNumberWidget.class, // boxed, an Integer rather than an int
+			SwingTextWidget.class, // exact, a BigDecimal a spinner cannot step
+			SwingTextWidget.class, // initial, a char
 			SwingToggleWidget.class, // enabled
 			SwingChoiceWidget.class, // statistic
 			SwingFileWidget.class, // input
@@ -126,6 +133,50 @@ public class SwingWidgetsTest {
 			panel.widgets().get(1));
 		assertEquals(List.of("id", "label", "area", "mean"), column.node()
 			.choices());
+	}
+
+	/** An enum offers its own constants, with no annotation. */
+	@Test
+	public void testEnumChoices() {
+		final ParameterModel model = model(new Demos.KitchenSink());
+		final SwingChoiceWidget method = assertInstanceOf(SwingChoiceWidget.class,
+			panel(model).widgets().get(5));
+		assertEquals(List.of(Demos.Method.values()), method.node().choices());
+	}
+
+	/**
+	 * A widget reads its node out of the current tree, not the one it was built
+	 * from - so computed choices stay in step even when the dialog's shape has
+	 * not changed and nothing was rebuilt.
+	 */
+	@Test
+	public void testWidgetSeesRecomputedChoices() {
+		final ParameterModel model = model(new Demos.ComputedChoices());
+		final SwingPanel panel = panel(model);
+		final SwingChoiceWidget column = assertInstanceOf(SwingChoiceWidget.class,
+			panel.widgets().get(1));
+		assertEquals(List.of("X", "Y", "Z", "Channel"), column.node().choices());
+
+		model.set("file", "table.csv");
+
+		// NB: the same widget object, never rebuilt.
+		assertEquals(List.of("id", "label", "area", "mean"), column.node()
+			.choices());
+		panel.refresh();
+		assertEquals("id", model.get("column"));
+	}
+
+	/** A third value decides whether two others move together. */
+	@Test
+	public void testLockedAspectRatio() {
+		final ParameterModel model = model(new Demos.LockAspectRatio());
+
+		model.set("width", 400);
+		assertEquals(300, model.get("height"));
+
+		model.set("lock", false);
+		model.set("width", 800);
+		assertEquals(300, model.get("height"));
 	}
 
 	/** A widget writes through the model, so callbacks run. */

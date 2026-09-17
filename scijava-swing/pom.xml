@@ -144,7 +144,22 @@
 			<version>${scijava-struct.version}</version>
 		</dependency>
 
+		<!-- Third-party dependencies -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+
 		<!-- Test scope dependencies -->
+		<!--
+		NB: so that the demos can say what they are doing. Turn it up with
+		-Dorg.slf4j.simpleLogger.defaultLogLevel=debug
+		-->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>

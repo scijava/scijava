@@ -81,6 +81,12 @@ public interface ParameterMember<T> extends Member<T> {
 	/** Metadata key: how far one step moves a numeric parameter. */
 	String STEP_SIZE = "stepSize";
 
+	/** Metadata key: the smallest value a slider should span. */
+	String SOFT_MIN = "softMin";
+
+	/** Metadata key: the largest value a slider should span. */
+	String SOFT_MAX = "softMax";
+
 	/** Metadata key: a hint about how to display this parameter. */
 	String STYLE = "style";
 

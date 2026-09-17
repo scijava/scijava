@@ -40,5 +40,6 @@ module org.scijava.swing {
 	requires transitive org.scijava.context;
 	requires org.scijava.discovery;
 	requires org.scijava.priority;
+	requires org.slf4j;
 
 }

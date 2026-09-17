@@ -29,6 +29,9 @@
 
 package org.scijava.execute;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodHandles.Lookup;
+import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 
@@ -49,8 +52,31 @@ public class FieldParameterMember<T> implements Member<T>, ValueAccessible<T> {
 	private final Field field;
 	private final Parameter parameter;
 	private final Type itemType;
+	private final Lookup lookup;
+	private VarHandle handle;
 
 	public FieldParameterMember(final Field field, final Type structType) {
+		this(field, structType, null);
+	}
+
+	/**
+	 * Creates a member whose value is read and written through the given lookup.
+	 * <p>
+	 * NB: reflective access is checked against the module that performs it, so
+	 * a lookup supplied by the container is what lets a plugin author open
+	 * their package to the container alone, rather than to every SciJava module
+	 * that might touch their fields.
+	 * </p>
+	 *
+	 * @param field the annotated field
+	 * @param structType the type declaring it
+	 * @param lookup a lookup with private access to the declaring class, or
+	 *          null to reflect with this module's own access
+	 */
+	public FieldParameterMember(final Field field, final Type structType,
+		final Lookup lookup)
+	{
+		this.lookup = lookup;
 		this.field = field;
 		this.parameter = field.getAnnotation(Parameter.class);
 		if (parameter == null) {
@@ -101,31 +127,34 @@ public class FieldParameterMember<T> implements Member<T>, ValueAccessible<T> {
 	@Override
 	@SuppressWarnings("unchecked")
 	public T get(final Object o) {
-		try {
-			field.setAccessible(true);
-			return (T) field.get(o);
-		}
-		catch (final RuntimeException | IllegalAccessException exc) {
-			throw new IllegalStateException(cannotAccess(o), exc);
-		}
+		return (T) handle().get(o);
 	}
 
 	@Override
 	public void set(final T value, final Object o) {
-		try {
-			field.setAccessible(true);
-			field.set(o, value);
-		}
-		catch (final RuntimeException | IllegalAccessException exc) {
-			throw new IllegalStateException(cannotAccess(o), exc);
-		}
+		handle().set(o, value);
 	}
 
-	private String cannotAccess(final Object o) {
-		// NB: the same qualified-opens requirement as everywhere else that
-		// reflects into user classes.
+	/** Gets the handle for this field, resolving it on first use. */
+	private synchronized VarHandle handle() {
+		if (handle == null) {
+			try {
+				final Lookup access = lookup != null ? lookup //
+					: MethodHandles.privateLookupIn(field.getDeclaringClass(),
+						MethodHandles.lookup());
+				handle = access.unreflectVarHandle(field);
+			}
+			catch (final RuntimeException | IllegalAccessException exc) {
+				throw new IllegalStateException(cannotAccess(), exc);
+			}
+		}
+		return handle;
+	}
+
+	private String cannotAccess() {
 		return "Cannot access " + field.getDeclaringClass().getName() + "." + //
 			field.getName() + ". Does its module declare `opens " + field
-				.getDeclaringClass().getPackageName() + " to org.scijava.execute;`?";
+				.getDeclaringClass().getPackageName() + " to org.scijava.context;`?" + //
+			" A caller with no container must open to org.scijava.execute instead.";
 	}
 }

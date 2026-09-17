@@ -32,6 +32,7 @@ package org.scijava.command;
 import java.util.Map;
 import java.util.Optional;
 
+import org.scijava.context.Context;
 import org.scijava.discovery.Discovery;
 import org.scijava.execute.Executable;
 import org.scijava.execute.ExecutableInstance;
@@ -60,13 +61,15 @@ public class CommandInfo implements Executable {
 
 	private final Discovery<Command> discovery;
 	private final Map<String, String> menu;
+	private final Context context;
 	private Executable delegate;
 
 	CommandInfo(final Discovery<Command> discovery,
-		final Map<String, String> menu)
+		final Map<String, String> menu, final Context context)
 	{
 		this.discovery = discovery;
 		this.menu = menu;
+		this.context = context;
 	}
 
 	// -- Metadata, readable without loading the class --
@@ -153,7 +156,10 @@ public class CommandInfo implements Executable {
 	private synchronized Executable delegate() {
 		if (delegate == null) {
 			final Class<? extends Command> type = discovery.type();
-			delegate = Executables.of(type);
+			// NB: the lookup comes from the context, so a command's package need
+			// only be opened to org.scijava.context -- not additionally to the
+			// execution layer that reads its @Parameter fields.
+			delegate = Executables.of(type, context.privateLookupIn(type));
 		}
 		return delegate;
 	}

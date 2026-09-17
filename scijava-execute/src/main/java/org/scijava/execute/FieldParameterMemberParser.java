@@ -29,6 +29,7 @@
 
 package org.scijava.execute;
 
+import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,20 @@ public class FieldParameterMemberParser implements
 	MemberParser<Class<?>, Member<?>>
 {
 
+	private final Lookup lookup;
+
+	public FieldParameterMemberParser() {
+		this(null);
+	}
+
+	/**
+	 * @param lookup a lookup with private access to the classes being parsed,
+	 *          or null to reflect with this module's own access
+	 */
+	public FieldParameterMemberParser(final Lookup lookup) {
+		this.lookup = lookup;
+	}
+
 	@Override
 	public List<Member<?>> parse(final Class<?> source, final Type structType) {
 		if (source == null) return List.of();
@@ -55,7 +70,7 @@ public class FieldParameterMemberParser implements
 		for (Class<?> c = source; c != null; c = c.getSuperclass()) {
 			for (final var field : c.getDeclaredFields()) {
 				if (!field.isAnnotationPresent(Parameter.class)) continue;
-				members.add(new FieldParameterMember<>(field, structType));
+				members.add(new FieldParameterMember<>(field, structType, lookup));
 			}
 		}
 		return members;

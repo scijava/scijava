@@ -27,12 +27,27 @@
  * #L%
  */
 
-open module org.scijava.execute {
+package org.scijava.execute;
 
-	exports org.scijava.execute;
+import org.scijava.priority.Priority;
 
-	requires org.scijava.common3;
-	requires transitive org.scijava.priority;
-	requires transitive org.scijava.struct;
+/**
+ * Handles the outputs of a run that has finished - displaying them, recording
+ * them, converting them.
+ * <p>
+ * A postprocessor cannot decline: the work has already happened and its
+ * outputs exist, so declining would be a lie. To report a problem, throw.
+ * </p>
+ *
+ * @author Curtis Rueden
+ */
+public interface Postprocessor {
 
+	/** Handles the outputs of the given run. */
+	void process(Execution execution);
+
+	/** Sorts postprocessors, highest first. See {@link Priority}. */
+	default double priority() {
+		return Priority.NORMAL;
+	}
 }

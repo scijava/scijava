@@ -121,7 +121,8 @@ A **dropped** row is a successful outcome, not a gap.
 | `app` | mostly `org.scijava.meta` for version and title metadata; the rest is app-shell material, dropped | planned |
 | `thread` | EDT dispatch belongs with the UI layer (Phase 4); parallelism is `org.scijava.concurrent` | planned |
 | `convert` | `scijava-convert3` (Phase 2) | planned |
-| `module`, `module.process`, `command` | execution layer on `scijava-struct` (Phase 3) | planned |
+| `module`, `module.process` | `org.scijava.execute`: `@Parameter` on fields, `Executables` for the plain case, and `Runner` for the processor chain. `ModuleService.run` becomes `Runner.run`, still returning a future, but of an `ExecutionResult` that reports a declined run with its reason and its author rather than through `ModulePreprocessor.isCanceled()` | ported |
+| `command` | still to come: a command is a struct plus menu metadata plus `run` | planned |
 | `script`, `script.process` | scripting facade + `javax.script` / GraalVM polyglot / Appose adapters (Phase 3) | planned |
 | `widget` | input harvesting on `scijava-struct`, with dynamic subgroups (Phase 4) | planned |
 | `ui`, `menu` | minimal UI API; `ApplicationFrame`/`Desktop`/`StatusBar`/`ToolBar` dropped (Phase 4) | planned |

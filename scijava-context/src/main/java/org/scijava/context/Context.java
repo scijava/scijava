@@ -29,6 +29,7 @@
 
 package org.scijava.context;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -154,6 +155,7 @@ public class Context implements Disposable, AutoCloseable {
 				// NB: publish before initializing, so that two services depending
 				// on each other resolve instead of recursing.
 				byRequestedType.put(type, s);
+				inject(s);
 				initialize(s);
 				// NB: record for disposal only once initialization has finished.
 				// A service's dependencies finish first, so they land earlier in
@@ -193,6 +195,28 @@ public class Context implements Disposable, AutoCloseable {
 			.discover(type));
 		plugins.sort(Comparator.comparingDouble(Discovery<P>::priority).reversed());
 		return plugins;
+	}
+
+	/**
+	 * Fills in the {@link Dependency}-annotated fields of the given object.
+	 * <p>
+	 * Services and plugins the context creates are injected automatically; this
+	 * is for objects it did not create.
+	 * </p>
+	 *
+	 * @param target the object whose dependencies to fill in
+	 * @throws ServiceException if a required dependency is missing, or the
+	 *           target's package is not open to this module
+	 */
+	public void inject(final Object target) {
+		if (target == null) throw new NullPointerException("target");
+		for (Class<?> c = target.getClass(); c != null; c = c.getSuperclass()) {
+			for (final Field field : c.getDeclaredFields()) {
+				final Dependency dependency = field.getAnnotation(Dependency.class);
+				if (dependency == null) continue;
+				injectField(target, field, dependency);
+			}
+		}
 	}
 
 	/** Gets this context's event bus. */
@@ -257,6 +281,45 @@ public class Context implements Disposable, AutoCloseable {
 
 	// -- Helper methods --
 
+	/** Fills in one annotated field. */
+	private void injectField(final Object target, final Field field,
+		final Dependency dependency)
+	{
+		final Object value;
+		try {
+			value = resolve(field.getType());
+		}
+		catch (final NoSuchServiceException exc) {
+			if (!dependency.required()) return;
+			throw new ServiceException("Cannot satisfy " + target.getClass()
+				.getName() + "." + field.getName() + ": no service of type " + field
+					.getType().getName(), exc);
+		}
+		try {
+			// NB: deep reflection, so the target's package must be open to this
+			// module. `opens` is not `exports`: the package stays invisible to
+			// ordinary callers.
+			field.setAccessible(true);
+			field.set(target, value);
+		}
+		catch (final RuntimeException | IllegalAccessException exc) {
+			throw new ServiceException("Cannot inject " + target.getClass()
+				.getName() + "." + field.getName() + //
+				". Does its module declare `opens " + target.getClass()
+					.getPackageName() + " to org.scijava.context;`?", exc);
+		}
+	}
+
+	/** Resolves what to inject for a field of the given type. */
+	private Object resolve(final Class<?> type) {
+		if (type == Context.class) return this;
+		if (type == EventBus.class) return events;
+		if (Service.class.isAssignableFrom(type)) {
+			return service(type.asSubclass(Service.class));
+		}
+		throw new NoSuchServiceException(type);
+	}
+
 	/**
 	 * Builds the index-backed plugin discoverer.
 	 * <p>
@@ -265,13 +328,13 @@ public class Context implements Disposable, AutoCloseable {
 	 * annotation loads the <em>declared</em> type, never the implementation.
 	 * </p>
 	 */
-	private static IndexDiscoverer<Plugin> createPluginDiscoverer() {
+	private IndexDiscoverer<Plugin> createPluginDiscoverer() {
 		return new IndexDiscoverer<>(Plugin.class, //
 			item -> item.annotation().type().getName(), //
 			item -> attrsOf(item.annotation()), //
 			item -> item.annotation().priority(), //
 			Thread.currentThread().getContextClassLoader(), //
-			Context::instantiate);
+			this::instantiate);
 	}
 
 	/**
@@ -284,15 +347,18 @@ public class Context implements Disposable, AutoCloseable {
 	 * packages to {@code org.scijava.context}.
 	 * </p>
 	 */
-	private static Object instantiate(final Class<?> type) {
+	private Object instantiate(final Class<?> type) {
+		final Object plugin;
 		try {
-			return type.getDeclaredConstructor().newInstance();
+			plugin = type.getDeclaredConstructor().newInstance();
 		}
 		catch (final ReflectiveOperationException exc) {
 			throw new ServiceException("Cannot construct plugin: " + //
-				type.getName() + ". Does its module open the package to" + //
-				" org.scijava.context?", exc);
+				type.getName() + ". Does its module declare `opens " + type
+					.getPackageName() + " to org.scijava.context;`?", exc);
 		}
+		inject(plugin);
+		return plugin;
 	}
 
 	/** Flattens a plugin's metadata into the discovery's attribute map. */

@@ -734,11 +734,14 @@ design settled now, so that Phase 4 inherits decisions rather than a debate:
 - **Not `java.util.prefs`.** Its opacity is the actual complaint: the registry
   on Windows, plists on macOS, `~/.java/.userPrefs` on Linux; values over 8KB
   silently truncated; nothing a user can inspect or diff.
-- **YAML.** `snakeyaml` is already in this stack for op declarations, so it is
-  no new dependency, and unlike JSON it supports **comments**, which a
-  hand-editable file wants. Load with the safe constructor and quote scalars
-  on write, to avoid implicit typing turning `no` into `false` and version
-  strings into numbers.
+- **TOML.** It reads like the INI files everyone already understands
+  (`key = value`), supports comments, and — unlike YAML — is not
+  whitespace-fragile and has no implicit typing, so `no` stays the string
+  `no` and `1.10` stays `1.10`. Those YAML traps bite exactly the values a
+  config file holds. Jaunch already uses TOML, so the format is familiar
+  across the stack. The cost is a dependency: the JDK has no TOML parser,
+  where `snakeyaml` was already present — worth choosing the library when
+  this is built.
 - **`$XDG_CONFIG_HOME/fiji`, else `~/.config/fiji`** — what users asked for —
   on every platform rather than `%APPDATA%` and `~/Library`. The complaint was
   opacity, and a path users can find, back up and quote in a bug report beats

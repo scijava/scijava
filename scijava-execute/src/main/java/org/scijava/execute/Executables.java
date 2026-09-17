@@ -59,6 +59,63 @@ public final class Executables {
 		// NB: prevent instantiation of utility class.
 	}
 
+	/**
+	 * Describes the given class as an {@link Executable}.
+	 *
+	 * @param type a class whose {@link Parameter} fields declare its parameters
+	 * @return a description of it
+	 */
+	public static Executable of(final Class<? extends Runnable> type) {
+		return new JavaExecutable(type);
+	}
+
+	/**
+	 * Describes an already-constructed object as an {@link Executable} whose
+	 * {@code create} yields that same object.
+	 * <p>
+	 * NB: unlike {@link #of(Class)}, this cannot give each run its own
+	 * instance, so two concurrent runs would share parameter values. It exists
+	 * for the simple case of running an object one has in hand.
+	 * </p>
+	 */
+	public static Executable executableOf(final Runnable object) {
+		final Struct struct = struct(object.getClass());
+		return new Executable() {
+
+			@Override
+			public String name() {
+				return object.getClass().getName();
+			}
+
+			@Override
+			public Struct struct() {
+				return struct;
+			}
+
+			@Override
+			public ExecutableInstance create() {
+				final StructInstance<?> parameters = struct.createInstance(object);
+				return new ExecutableInstance() {
+
+					@Override
+					public Executable executable() {
+						return Executables.executableOf(object);
+					}
+
+					@Override
+					public StructInstance<?> parameters() {
+						return parameters;
+					}
+
+					@Override
+					public void run() {
+						object.run();
+					}
+				};
+			}
+		};
+	}
+
 	/** Describes the inputs and outputs of the given class. */
 	public static Struct struct(final Class<?> type) {
 		return Structs.from(type, type, PARSER);
@@ -85,7 +142,8 @@ public final class Executables {
 	public static Map<String, Object> run(final Runnable executable,
 		final Map<String, Object> inputs)
 	{
-		final StructInstance<?> instance = bind(executable, inputs, true);
+		final StructInstance<?> instance = bind(struct(executable.getClass())
+			.createInstance(executable), inputs, true);
 		checkCancellation();
 		executable.run();
 		checkCancellation();
@@ -113,11 +171,10 @@ public final class Executables {
 	 *          now. A {@link Runner} passes false, since a preprocessor may
 	 *          supply them later.
 	 */
-	static StructInstance<?> bind(final Object executable,
+	static StructInstance<?> bind(final StructInstance<?> instance,
 		final Map<String, Object> inputs, final boolean requireInputs)
 	{
-		final Struct struct = struct(executable.getClass());
-		final StructInstance<?> instance = struct.createInstance(executable);
+		final Struct struct = instance.struct();
 
 		for (final String key : inputs.keySet()) {
 			if (instance.member(key) == null) {

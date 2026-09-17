@@ -1,0 +1,169 @@
+/*
+ * #%L
+ * Discoverable commands, with the metadata a menu is built from.
+ * %%
+ * Copyright (C) 2026 SciJava developers.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+
+package org.scijava.command;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.Test;
+import org.scijava.context.Context;
+import org.scijava.execute.ExecutionResult;
+import org.scijava.execute.Runner;
+
+/**
+ * Tests {@link Commands}: discovery, the metadata a menu is built from, and
+ * running what was found.
+ *
+ * @author Curtis Rueden
+ */
+public class CommandsTest {
+
+	@Test
+	public void testDiscovery() {
+		try (final Context context = Context.create()) {
+			final List<String> names = Commands.discover(context).stream() //
+				.map(CommandInfo::className) //
+				.collect(Collectors.toList());
+			assertTrue(names.contains(SayHello.class.getName()), names.toString());
+			assertTrue(names.contains(CountBeans.class.getName()), names.toString());
+			assertTrue(names.contains(Headless.class.getName()), names.toString());
+		}
+	}
+
+	/**
+	 * The point of the two-index join: a menu is built from metadata alone,
+	 * with no command class loaded.
+	 */
+	@Test
+	public void testMenuMetadataWithoutLoadingCommands() {
+		try (final Context context = Context.create()) {
+			final CommandInfo hello = find(context, SayHello.class);
+
+			assertEquals("Help>Say Hello...", hello.menuPath().orElse(null));
+			assertEquals("Say Hello...", hello.label());
+			assertEquals("^H", hello.accelerator().orElse(null));
+			assertEquals("/icons/hello.png", hello.iconPath().orElse(null));
+			assertEquals(12.0, hello.weight());
+			assertTrue(hello.isVisible());
+
+			// NB: asserted on a command no test runs. A flag on SayHello would
+			// prove nothing, since another test runs it and JUnit does not order
+			// methods by declaration.
+			final CommandInfo never = find(context, NeverRun.class);
+			assertEquals("Help>Never Run", never.menuPath().orElse(null));
+			assertFalse(constructed("org.scijava.command.NeverRun"),
+				"building a menu must not construct commands");
+		}
+	}
+
+	/** Menu order is by weight: a whole menu sorts without loading anything. */
+	@Test
+	public void testMenuOrdering() {
+		try (final Context context = Context.create()) {
+			final List<String> labels = Commands.discover(context).stream() //
+				.filter(c -> c.menuPath().isPresent()) //
+				.map(CommandInfo::label) //
+				.collect(Collectors.toList());
+			// Weights: CountBeans 3, SayHello 12, NeverRun 50.
+			assertEquals(List.of("Count Beans", "Say Hello...", "Never Run"),
+				labels);
+		}
+	}
+
+	/** A command needs no menu entry; it is simply not shown. */
+	@Test
+	public void testCommandWithoutAMenuEntry() {
+		try (final Context context = Context.create()) {
+			final CommandInfo headless = find(context, Headless.class);
+			assertTrue(headless.menuPath().isEmpty());
+			// Its label falls back to something usable rather than being null.
+			assertEquals(Headless.class.getName(), headless.label());
+		}
+	}
+
+	/** What was discovered can then be run, through the ordinary runner. */
+	@Test
+	public void testRunADiscoveredCommand() throws Exception {
+		try (final Context context = Context.create()) {
+			final CommandInfo hello = find(context, SayHello.class);
+			final Runner runner = Runner.of(List.of(), List.of());
+
+			final ExecutionResult result = runner.run(hello, Map.of("name", "ada"))
+				.get(5, TimeUnit.SECONDS);
+
+			assertTrue(result.isCompleted());
+			assertEquals(Map.of("greeting", "hello ada"), result.outputs());
+			// Only now is the class loaded and constructed.
+			assertTrue(constructed("org.scijava.command.SayHello"));
+		}
+	}
+
+	/** Each run gets its own instance, so concurrent runs cannot collide. */
+	@Test
+	public void testEachRunHasItsOwnInstance() throws Exception {
+		try (final Context context = Context.create()) {
+			final CommandInfo beans = find(context, CountBeans.class);
+			final Runner runner = Runner.of(List.of(), List.of());
+
+			final ExecutionResult first = runner.run(beans, Map.of("beans", 3)).get(5,
+				TimeUnit.SECONDS);
+			final ExecutionResult second = runner.run(beans, Map.of("beans", 7)).get(
+				5, TimeUnit.SECONDS);
+
+			assertEquals(Map.of("tally", "3 beans"), first.outputs());
+			assertEquals(Map.of("tally", "7 beans"), second.outputs());
+		}
+	}
+
+	private static CommandInfo find(final Context context, final Class<?> type) {
+		return Commands.discover(context).stream() //
+			.filter(c -> type.getName().equals(c.className())) //
+			.findFirst().orElseThrow();
+	}
+
+	/**
+	 * NB: read reflectively. Referring to the class directly would load it,
+	 * which is the very thing under test.
+	 */
+	private static boolean constructed(final String className) {
+		try {
+			return Class.forName(className).getField("constructed").getBoolean(null);
+		}
+		catch (final ReflectiveOperationException exc) {
+			throw new AssertionError(exc);
+		}
+	}
+}

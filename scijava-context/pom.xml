@@ -86,12 +86,24 @@
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 
 		<!-- Note: These versions must match across all component POMs! -->
+		<scijava-discovery.version>1.0.1-SNAPSHOT</scijava-discovery.version>
 		<scijava-events.version>1.0.0-SNAPSHOT</scijava-events.version>
+		<scijava-index.version>1.0.0-SNAPSHOT</scijava-index.version>
 		<scijava-priority.version>1.0.1-SNAPSHOT</scijava-priority.version>
 		<scijava-spi.version>1.0.0-SNAPSHOT</scijava-spi.version>
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-discovery</artifactId>
+			<version>${scijava-discovery.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-index</artifactId>
+			<version>${scijava-index.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-events</artifactId>

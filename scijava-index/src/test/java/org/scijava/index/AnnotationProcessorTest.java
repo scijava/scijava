@@ -113,6 +113,92 @@ public class AnnotationProcessorTest {
 		assertEquals(List.of("test.Triangle"), found);
 	}
 
+	/**
+	 * Two indexable annotations on one class are indexed independently, each to
+	 * its own file.
+	 * <p>
+	 * This is what lets presentation metadata stack onto a plugin declaration -
+	 * {@code @Plugin} plus {@code @Menu} - instead of every plugin type's
+	 * attributes piling up in one annotation. A consumer wanting both reads
+	 * both indexes and joins on the class name, with no class loading and no
+	 * bytecode parsing.
+	 * </p>
+	 */
+	@Test
+	public void testStackedAnnotationsAreIndexedSeparately(
+		@TempDir final Path outputDir) throws IOException
+	{
+		final String menuAnnotation = "" + //
+			"package test;\n" + //
+			"import java.lang.annotation.*;\n" + //
+			"import org.scijava.index.Indexable;\n" + //
+			"@Indexable\n" + //
+			"@Retention(RetentionPolicy.RUNTIME)\n" + //
+			"@Target(ElementType.TYPE)\n" + //
+			"public @interface Menu { String path(); double weight() default 0; }\n";
+		final String command = "" + //
+			"package test;\n" + //
+			"import org.scijava.index.Shape;\n" + //
+			"import org.scijava.index.Widget;\n" + //
+			"@Widget(type = Shape.class, label = \"A pentagon\")\n" + //
+			"@Menu(path = \"Image>Adjust\", weight = 12)\n" + //
+			"public class Pentagon implements Shape {\n" + //
+			"  public String describe() { return \"pentagon\"; }\n" + //
+			"}\n";
+
+		final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+		final List<String> options = Arrays.asList( //
+			"-classpath", compilePath(), //
+			"-processorpath", compilePath(), //
+			"-processor", AnnotationProcessor.class.getName(), //
+			"-d", outputDir.toString());
+		final javax.tools.DiagnosticCollector<javax.tools.JavaFileObject> diags =
+			new javax.tools.DiagnosticCollector<>();
+		final boolean compiled = compiler.getTask(null, null, diags, options, null,
+			List.of(new SourceString("test.Menu", menuAnnotation), //
+				new SourceString("test.Pentagon", command))).call();
+		assertTrue(compiled, "test sources failed to compile: " + diags
+			.getDiagnostics());
+
+		// Each annotation gets its own index, keyed by the same class.
+		final Path widgetIndex = outputDir.resolve("META-INF/json/" + Widget.class
+			.getName());
+		final Path menuIndex = outputDir.resolve("META-INF/json/test.Menu");
+		assertTrue(Files.exists(widgetIndex), "no widget index");
+		assertTrue(Files.exists(menuIndex), "no menu index");
+
+		final String menuJson = new String(Files.readAllBytes(menuIndex),
+			StandardCharsets.UTF_8);
+		assertTrue(menuJson.contains("test.Pentagon"), menuJson);
+		assertTrue(menuJson.contains("Image>Adjust"), menuJson);
+		assertTrue(menuJson.contains("12"), menuJson);
+	}
+
+	/**
+	 * Gets a class path covering both this component's classes and its test
+	 * classes.
+	 * <p>
+	 * NB: {@code java.class.path} is not enough. These tests run on the module
+	 * path, so the component's own classes are not on the class path at all,
+	 * and a source importing {@code Indexable} would not compile.
+	 * </p>
+	 */
+	private static String compilePath() {
+		return location(Indexable.class) + File.pathSeparator + location(
+			AnnotationProcessorTest.class) + File.pathSeparator + System.getProperty(
+				"java.class.path");
+	}
+
+	private static String location(final Class<?> c) {
+		try {
+			return new File(c.getProtectionDomain().getCodeSource().getLocation()
+				.toURI()).getAbsolutePath();
+		}
+		catch (final java.net.URISyntaxException exc) {
+			throw new AssertionError(exc);
+		}
+	}
+
 	/** A source file held in a string. */
 	private static class SourceString extends SimpleJavaFileObject {
 

@@ -82,7 +82,8 @@ A **dropped** row is a successful outcome, not a gap.
 | `Cancelable` | **not ported** — cancellation is thread interruption, and the client API is `Future.cancel(true)`. See the cancellation section of [migration-plan.md](migration-plan.md) | dropped |
 | `ItemIO` | `org.scijava.struct.ItemIO` | ported |
 | `ItemVisibility` | input harvesting (Phase 4) | open |
-| `Context`, `Contextual`, `AbstractContextual`, `NullContextException`, `NoSuchServiceException` | `org.scijava.context` (Phase 2) | planned |
+| `Context`, `NoSuchServiceException` | `org.scijava.context.Context` and `org.scijava.context.NoSuchServiceException`. Services are created lazily rather than all at once, and a context is `AutoCloseable` | ported |
+| `Contextual`, `AbstractContextual`, `NullContextException` | dropped — a service receives its context in `Service.initialize(Context)`, so it need not carry one, and there is no null-context state to report | dropped |
 | `Gateway`, `AbstractGateway`, `SciJava` | Phase 2, if retained at all | open |
 | `Instantiable`, `InstantiableException` | subsumed by `Discovery` | planned |
 | `BasicDetails`, `AbstractBasicDetails`, `UIDetails`, `AbstractUIDetails`, `MenuEntry`, `MenuPath` | plugin/module metadata (Phases 2–4) | open |
@@ -111,7 +112,7 @@ A **dropped** row is a successful outcome, not a gap.
 | `thread` | `org.scijava.concurrent` | ported |
 | `task` | `org.scijava.progress` | ported |
 | `plugin` | `org.scijava.context` + `org.scijava.index` + `Discoverer` (Phase 2) | planned |
-| `service` | `org.scijava.context` — discovered via `ServiceLoader`; `Service` no longer extends `SciJavaPlugin` (Phase 2) | planned |
+| `service` | `org.scijava.context`: `Service` (no longer a plugin, and discovered via `ServiceLoader`), with `Context` holding them. `SciJavaService` has no equivalent — a marker is not needed. `ServiceHelper` and `ServiceIndex` are internal to `Context` | ported |
 | `object`, `prefs`, `app` | `org.scijava.context` core services (Phase 2) | planned |
 | `convert` | `scijava-convert3` (Phase 2) | planned |
 | `module`, `module.process`, `command` | execution layer on `scijava-struct` (Phase 3) | planned |

@@ -53,6 +53,8 @@ import org.scijava.discovery.Discovery;
  */
 public class PluginDiscoveryTest {
 
+	private static final String INJECTED =
+		"org.scijava.context.test.impl.InjectedShouter";
 	private static final String LOUD = "org.scijava.context.test.impl.LoudShouter";
 	private static final String QUIET =
 		"org.scijava.context.test.impl.QuietShouter";
@@ -64,8 +66,8 @@ public class PluginDiscoveryTest {
 			final List<String> names = context.plugins(Shouter.class).stream() //
 				.map(Discovery::implClassName) //
 				.collect(Collectors.toList());
-			// NB: highest priority first.
-			assertEquals(List.of(LOUD, QUIET), names);
+			// NB: highest priority first: VERY_HIGH, HIGH, LOW.
+			assertEquals(List.of(INJECTED, LOUD, QUIET), names);
 		}
 	}
 
@@ -76,7 +78,11 @@ public class PluginDiscoveryTest {
 	@Test
 	public void testMetadataWithoutLoadingTheClass() {
 		try (final Context context = Context.create()) {
-			final Discovery<Shouter> loud = context.plugins(Shouter.class).get(0);
+			// NB: select by name rather than position, so that adding a plugin
+			// elsewhere in this module does not break this test.
+			final Discovery<Shouter> loud = context.plugins(Shouter.class).stream() //
+				.filter(d -> LOUD.equals(d.implClassName())) //
+				.findFirst().orElseThrow();
 
 			assertEquals(LOUD, loud.implClassName());
 			assertEquals("loud", loud.attr("name").orElse(null));

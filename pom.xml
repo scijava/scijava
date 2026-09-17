@@ -59,6 +59,7 @@
 
 		<module>scijava-code-api</module>
 		<module>scijava-collections</module>
+		<module>scijava-command</module>
 		<module>scijava-common3</module>
 		<module>scijava-context</module>
 		<module>scijava-context-test</module>

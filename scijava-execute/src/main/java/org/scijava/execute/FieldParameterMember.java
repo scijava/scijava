@@ -37,7 +37,9 @@ import java.lang.reflect.Type;
 
 import org.scijava.common3.Types;
 import org.scijava.struct.ItemIO;
-import org.scijava.struct.Member;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.scijava.struct.MemberInstance;
 import org.scijava.struct.ValueAccessible;
 import org.scijava.struct.ValueAccessibleMemberInstance;
@@ -47,7 +49,9 @@ import org.scijava.struct.ValueAccessibleMemberInstance;
  *
  * @author Curtis Rueden
  */
-public class FieldParameterMember<T> implements Member<T>, ValueAccessible<T> {
+public class FieldParameterMember<T> implements ParameterMember<T>,
+	ValueAccessible<T>
+{
 
 	private final Field field;
 	private final Parameter parameter;
@@ -119,9 +123,21 @@ public class FieldParameterMember<T> implements Member<T>, ValueAccessible<T> {
 		return new ValueAccessibleMemberInstance<>(this, o);
 	}
 
-	/** Gets the label to display, falling back to the field name. */
-	public String label() {
-		return parameter.label().isEmpty() ? key() : parameter.label();
+	@Override
+	public Map<String, String> attrs() {
+		final Map<String, String> attrs = new LinkedHashMap<>();
+		put(attrs, LABEL, parameter.label());
+		put(attrs, CALLBACK, parameter.callback());
+		put(attrs, VALIDATOR, parameter.validator());
+		put(attrs, VISIBLE_WHEN, parameter.visibleWhen());
+		put(attrs, GROUP, parameter.group());
+		return attrs;
+	}
+
+	private static void put(final Map<String, String> attrs, final String key,
+		final String value)
+	{
+		if (!value.isEmpty()) attrs.put(key, value);
 	}
 
 	@Override
@@ -140,8 +156,7 @@ public class FieldParameterMember<T> implements Member<T>, ValueAccessible<T> {
 		if (handle == null) {
 			try {
 				final Lookup access = lookup != null ? lookup //
-					: MethodHandles.privateLookupIn(field.getDeclaringClass(),
-						MethodHandles.lookup());
+					: ownLookupIn(field.getDeclaringClass());
 				handle = access.unreflectVarHandle(field);
 			}
 			catch (final RuntimeException | IllegalAccessException exc) {
@@ -149,6 +164,23 @@ public class FieldParameterMember<T> implements Member<T>, ValueAccessible<T> {
 			}
 		}
 		return handle;
+	}
+
+	/**
+	 * Gets a lookup into the given class using this module's own access.
+	 * <p>
+	 * NB: {@code privateLookupIn} requires this module to <em>read</em> the
+	 * target's module as well as the package being open to it. A library never
+	 * declares a read edge to its callers, so it has to add one at runtime -
+	 * which only its own code may do. Callers with a container avoid all this
+	 * by passing a lookup from there instead.
+	 * </p>
+	 */
+	private static Lookup ownLookupIn(final Class<?> type)
+		throws IllegalAccessException
+	{
+		FieldParameterMember.class.getModule().addReads(type.getModule());
+		return MethodHandles.privateLookupIn(type, MethodHandles.lookup());
 	}
 
 	private String cannotAccess() {

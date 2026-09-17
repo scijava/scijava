@@ -29,6 +29,8 @@
 
 package org.scijava.execute;
 
+import java.util.Optional;
+
 import org.scijava.struct.StructInstance;
 
 /**
@@ -50,4 +52,21 @@ public interface ExecutableInstance {
 
 	/** Runs it, with whatever values its parameters currently hold. */
 	void run();
+
+	/**
+	 * Looks up a named piece of behavior belonging to this instance - a
+	 * callback, a validator, a function generating parameters.
+	 * <p>
+	 * A Java executable resolves the name by reflecting a method; a script
+	 * resolves it by asking its engine for a function of that name. Naming
+	 * behavior rather than reflecting a method is what lets both work, where
+	 * SciJava Common's callbacks were Java-only.
+	 * </p>
+	 *
+	 * @param name the behavior's name
+	 * @return the behavior, or empty if this instance has none by that name
+	 */
+	default Optional<Behavior> behavior(final String name) {
+		return Optional.empty();
+	}
 }

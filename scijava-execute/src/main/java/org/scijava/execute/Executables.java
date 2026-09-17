@@ -126,6 +126,12 @@ public final class Executables {
 					public void run() {
 						object.run();
 					}
+
+					@Override
+					public java.util.Optional<Behavior> behavior(final String name) {
+						return JavaExecutable.behaviorOf(object.getClass(), null, object,
+							name);
+					}
 				};
 			}
 		};

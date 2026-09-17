@@ -678,6 +678,90 @@ No application context required by anything in this phase.
   `#@` parameters parse into structs. The external `scripting-*` repositories
   migrate onto the facade.
 
+## Layering: how Fiji gets built on SJ3
+
+The problem with SciJava Common was never that it had menus. It is that the
+*core* had them: one artifact bundles the plugin framework, the application
+container, menus, displays, tools and a UI opinion, so a library wanting only
+plugin discovery inherits `MenuPath`, `Display` and a transitive AWT flavour.
+
+The remedy is **stratification, not deletion**. Everything Fiji needs still
+exists; it moves to a layer that can be depended on separately. Where this
+document says a subsystem is "dropped", that means *dropped from the core* —
+unless it says there is no replacement at all, which it says explicitly.
+
+| Layer | Contents | Depends on |
+| --- | --- | --- |
+| **0. Foundation** (built) | `spi`, `common3`, `collections`, `priority`, `progress`, `concurrent`, `discovery`, `index`, `struct`, `io3`, `events`, `context`, `execute` | nothing above |
+| **1. Application model** (to build) | `scijava-command` (a struct plus presentation metadata), `scijava-menu` (the menu tree), `scijava-ui-api` (toolkit-agnostic contracts), `scijava-desktop` | layer 0 |
+| **2. Toolkit bindings** | `scijava-ui-swing`, JavaFX, headless | layer 1 |
+| **3. Application** | Fiji: which menus exist, branding, update sites, defaults | layer 2 |
+
+Only layer 2 imports AWT or Swing. Layer 0 never mentions a user interface, so
+headless is not a mode — it is what the core does.
+
+### The mechanisms are already in place
+
+The machinery the application shell needs was built in phases 1-3, and in
+several cases was built *because* of it:
+
+| Fiji needs | Built |
+| --- | --- |
+| Menus over hundreds of commands, without loading their classes | the `@Plugin` index, and `Discovery.implClassName()`/`attrs()` before `type()`/`get()` |
+| Parameter dialogs | `Preprocessor`: harvesting is a preprocessing step |
+| "The user pressed Cancel" | `Execution.decline(reason)`, reported by `ExecutionResult` |
+| Showing outputs | `Postprocessor`: the `DisplayPostprocessor` seam |
+| Tool and input events, one handler claiming a keystroke | `scijava-events`, with `Consumable` |
+| Menu ordering | `scijava-priority`, plus a weight attribute in the index |
+
+NB: SciJava Common builds its menu from `ModuleInfo`, whose
+`getDelegateClassName()` names the class without loading it and whose
+`loadDelegateClass()` loads on demand. That is exactly the
+`implClassName()`/`type()`/`get()` split of `Discovery`, so the expensive part
+of the menu story is already solved and tested.
+
+### What changes, and what does not
+
+**All of the presentation metadata survives** — menu path, label, icon,
+accelerator, weight, selection group, visibility, enablement. Fiji's menus are
+built from it, and hundreds of commands depend on it.
+
+**It becomes data rather than an inheritance chain.** SciJava Common has
+`BasicDetails` → `UIDetails` → `AbstractUIDetails`, which every plugin extends
+in order to carry a label. Here it is attributes in the annotation index, read
+without loading, with a command-info view over `Discovery`. The same
+information, fewer types, a faster menu build. Expect commands to look like:
+
+```java
+@Command(menuPath = "Image>Adjust>Brightness/Contrast...", weight = 12,
+         accelerator = "^C", iconPath = "/icons/bc.png")
+public class BrightnessContrast implements Runnable {
+	@Parameter private Dataset image;
+}
+```
+
+`@Command` as its own `@Indexable` annotation: `IndexDiscoverer` is generic
+over the annotation type, so a dedicated, self-documenting annotation costs
+nothing compared with stuffing this into `@Plugin` attributes.
+
+**Reworked rather than ported:** `AbstractUIDetails`'s inheritance, the
+`display` package's `DisplayService`/`Display`/`DisplayViewer`/`DisplayPanel`
+layering, and the `Gateway`/`SciJava` convenience object. Those are shape
+problems; the capabilities survive.
+
+### The real risk is migration, not architecture
+
+Hundreds of commands live across dozens of repositories with different
+maintainers. Per command the change is mechanical, but there is no flag day on
+which they all update.
+
+So the **one-way legacy bridge matters more than its deferral implies**: for
+Fiji to run on SJ3 before every command is ported, an SJ3 application must
+present SciJava Common `ModuleInfo`s as SJ3 commands — metadata flowing both
+ways, dependency flowing one way. That is what makes the migration incremental
+rather than a big bang, and it should be sequenced *with* layer 1 rather than
+after it.
+
 ### Phase 4 — UI and desktop
 
 - **Input harvesting is a headline deliverable**, not a port. It is the
@@ -688,8 +772,10 @@ No application context required by anything in this phase.
   and the prototype preserved on the `historical/scijava-ops-prototype` branch
   (`widget/`, `swing-widget/`), which is the design starting point rather than
   `org.scijava.widget` as written.
-- **Drop** the opinionated application shell: `ApplicationFrame`, `Desktop`,
-  `StatusBar`, `ToolBar`. The SJ3 UI API is minimal.
+- **The application shell moves to layers 1 and 2**, it is not discarded:
+  `ApplicationFrame`, `Desktop`, `StatusBar` and `ToolBar` are contracts in
+  `scijava-ui-api` and implementations in the toolkit bindings. What the core
+  drops is any knowledge that they exist.
 - **`input` and `tool`** are re-framed, not frozen: UI-agnostic facades over
   GUI concepts, layered on `scijava-events`, letting code listen for GUI
   events or implement interactive behavior (e.g. a pencil tool) without
@@ -722,7 +808,7 @@ No application context required by anything in this phase.
 | `module`, `command` | → execution layer (Phase 3) |
 | `script` | → scripting facade + adapters (Phase 3) |
 | `widget` | → input harvesting, redesigned (Phase 4) |
-| `ui`, `menu` | Minimal UI API; app shell dropped (Phase 4) |
+| `ui`, `menu` | `scijava-ui-api` contracts and `scijava-menu` (layer 1), with toolkit bindings in layer 2 (Phase 4) |
 | `input`, `tool` | Re-framed as UI-agnostic facades (Phase 4) |
 | `display` | Overhauled, not ported (Phase 4) |
 | `platform`, `ui.dnd` | `scijava-desktop` modernization (Phase 4) |

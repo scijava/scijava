@@ -93,13 +93,17 @@ public class CommandsTest {
 	@Test
 	public void testMenuOrdering() {
 		try (final Context context = Context.create()) {
+			// NB: restricted to the commands this test is about. Asserting the
+			// whole list would break whenever another test adds a fixture, which
+			// is exactly what happened when the menu tree tests arrived.
+			final List<String> ofInterest = List.of("Count Beans", "Say Hello...",
+				"Never Run");
 			final List<String> labels = Commands.discover(context).stream() //
-				.filter(c -> c.menuPath().isPresent()) //
 				.map(CommandInfo::label) //
+				.filter(ofInterest::contains) //
 				.collect(Collectors.toList());
 			// Weights: CountBeans 3, SayHello 12, NeverRun 50.
-			assertEquals(List.of("Count Beans", "Say Hello...", "Never Run"),
-				labels);
+			assertEquals(ofInterest, labels);
 		}
 	}
 

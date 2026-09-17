@@ -93,7 +93,22 @@ public class Runner {
 	}
 
 	/**
-	 * Runs the given object: preprocess, run, postprocess.
+	 * Runs the given executable: preprocess, run, postprocess.
+	 *
+	 * @param executable what to run
+	 * @param inputs values for its input parameters, by name
+	 * @return the outcome - outputs, or why the run was declined
+	 */
+	public Future<ExecutionResult> run(final Executable executable,
+		final Map<String, Object> inputs)
+	{
+		return executor.submit(() -> execute(executable, inputs));
+	}
+
+	/**
+	 * Runs a Java class whose {@link Parameter} fields declare its parameters.
+	 * Sugar for the common case; the object itself is used, rather than a fresh
+	 * instance.
 	 *
 	 * @param executable the object to run
 	 * @param inputs values for its input parameters, by name
@@ -102,7 +117,7 @@ public class Runner {
 	public Future<ExecutionResult> run(final Runnable executable,
 		final Map<String, Object> inputs)
 	{
-		return executor.submit(() -> execute(executable, inputs));
+		return run(Executables.executableOf(executable), inputs);
 	}
 
 	/** Gets the preprocessors, highest priority first. */
@@ -117,11 +132,12 @@ public class Runner {
 
 	// -- Helper methods --
 
-	private ExecutionResult execute(final Runnable executable,
+	private ExecutionResult execute(final Executable executable,
 		final Map<String, Object> inputs)
 	{
-		final DefaultExecution execution = new DefaultExecution(executable, //
-			Executables.bind(executable, inputs, false));
+		final ExecutableInstance instance = executable.create();
+		final DefaultExecution execution = new DefaultExecution(instance, //
+			Executables.bind(instance.parameters(), inputs, false));
 
 		for (final Preprocessor preprocessor : preprocessors) {
 			Executables.checkCancellation();
@@ -138,7 +154,7 @@ public class Runner {
 		checkRequiredInputs(execution.instance());
 
 		Executables.checkCancellation();
-		executable.run();
+		instance.run();
 		Executables.checkCancellation();
 
 		execution.complete(Executables.outputs(execution.instance()));
@@ -181,17 +197,17 @@ public class Runner {
 	/** The execution handed to each processor. */
 	private static class DefaultExecution implements Execution {
 
-		private final Object executable;
-		private final StructInstance<?> instance;
+		private final ExecutableInstance instance;
+		private final StructInstance<?> parameters;
 		private String reason;
 		private boolean declined;
 		private Map<String, Object> outputs = Map.of();
 
-		DefaultExecution(final Object executable,
-			final StructInstance<?> instance)
+		DefaultExecution(final ExecutableInstance instance,
+			final StructInstance<?> parameters)
 		{
-			this.executable = executable;
 			this.instance = instance;
+			this.parameters = parameters;
 		}
 
 		void complete(final Map<String, Object> outputs) {
@@ -200,12 +216,12 @@ public class Runner {
 
 		@Override
 		public Object executable() {
-			return executable;
+			return instance;
 		}
 
 		@Override
 		public StructInstance<?> instance() {
-			return instance;
+			return parameters;
 		}
 
 		@Override

@@ -506,6 +506,30 @@ No application context required by anything in this phase.
   lifecycle and dependency injection; plugin metadata from `scijava-index`;
   instantiation via `Discoverer`; ordering via `scijava-priority`. Plus the
   core services: object registry, prefs, thread, app/status.
+  - **The container core is done**: `Service`, `Context`, lazy creation,
+    priority selection, lifecycle, disposal, and one `EventBus` per context.
+    `scijava-context-test` is a sibling module — the only way to test the
+    claims that matter, since a module must really declare `provides`, and its
+    implementation package must really be unexported, for the test to mean
+    anything. It verifies that a service in a package that is neither exported
+    nor opened is still discovered and constructed.
+  - **Services are discovered as `Service`, never as their own interface.**
+    `ServiceLoader` resolves `uses` against its *caller's* module, so a
+    container cannot look up an arbitrary third-party interface on that
+    module's behalf. Declaring one base type that this module `uses` is what
+    makes discovery work under JPMS at all; the container then sorts
+    implementations by the interfaces they implement. `Provider.type()` keeps
+    that cheap, since implementations of other types are never constructed.
+  - **Two services may depend on each other**, because dependencies are
+    acquired in `initialize` rather than in the constructor — a cycle that
+    constructor injection could not resolve at all. The cost is that a service
+    in a cycle may briefly see a peer that has not finished initializing.
+  - **Disposal reverses the order in which services finished initializing**,
+    not the order they were requested, so a service is always torn down before
+    the ones it depends on.
+  - Still to do here: the `@Plugin` tier via `scijava-index`, declarative
+    field injection through a qualified `opens`, `@EventHandler` scanning, the
+    one-way legacy bridge, and the core services themselves.
   - **Dependencies are not constructor arguments.** Constructor injection
     would publish every dependency in a signature, so changing an internal
     dependency would be an API change and a binary compatibility break unless

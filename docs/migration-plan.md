@@ -639,9 +639,32 @@ No application context required by anything in this phase.
   - **A required input must be supplied, not merely non-null.** Checking the
     field instead would let a missing required `double` run silently as `0.0`,
     since a primitive field is never null.
-  - Still to do here: the pre/postprocessor chain, and factoring the
-    framework-neutral member parsing out of `ops-engine` — which is a larger
-    job than it looks, see below.
+  - **The processor chain is done**: `Preprocessor` and `Postprocessor`
+    plugins, and `Runner.run`, which is always asynchronous and returns
+    `Future<ExecutionResult>`. One verb covers both cases, since a caller
+    wanting to block writes `run(...).get()` — as SciJava Common's
+    `ModuleService` has long demonstrated.
+  - **Declining is not cancellation.** A preprocessor may stop a run before it
+    happens — the user closed the dialog, or a precondition is unmet — which
+    is an ordinary outcome, not an error and not interruption of work under
+    way. It is reported by `ExecutionResult.isDeclined()`, with `reason()` for
+    the user and `declinedBy()` naming the preprocessor.
+  - **`ExecutionResult` is deliberately not a `Future`.** A future's
+    `isCancelled()` and `get()` are coupled by contract — whenever the former
+    is true the latter must throw — so modelling a declined run as a cancelled
+    future turns it back into an exception, which returning a result was meant
+    to avoid. The asynchrony lives in `Future<ExecutionResult>`; what happened
+    lives in the result.
+  - **`declinedBy()` returns the preprocessor instance, not its class**, since
+    a chain may hold two instances of one class and the useful question is
+    which of them objected.
+  - **Declining lives on the execution, not the preprocessor.** SciJava Common
+    put `isCanceled()`/`getCancelReason()` on the plugin, which made
+    preprocessors stateful and unsafe to share across runs. Telling the
+    execution keeps them stateless — which matters here, since `Context`
+    constructs a fresh plugin instance per call.
+  - Still to do here: factoring the framework-neutral member parsing out of
+    `ops-engine` — which is a larger job than it looks, see below.
 - **Commands:** a struct, plus menu metadata, plus `run`. Commands and Ops
   remain separate concepts sharing this layer.
 - **Scripting:** `javax.script` is not general enough. GraalVM's Truffle

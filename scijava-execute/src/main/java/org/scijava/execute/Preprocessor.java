@@ -27,12 +27,39 @@
  * #L%
  */
 
-open module org.scijava.execute {
+package org.scijava.execute;
 
-	exports org.scijava.execute;
+import org.scijava.priority.Priority;
 
-	requires org.scijava.common3;
-	requires transitive org.scijava.priority;
-	requires transitive org.scijava.struct;
+/**
+ * Prepares a run before it happens: filling in inputs, checking preconditions,
+ * harvesting values from the user.
+ * <p>
+ * Contribute one as a plugin:
+ * </p>
+ *
+ * <pre>
+ * &#64;Plugin(type = Preprocessor.class)
+ * public class MyPreprocessor implements Preprocessor { ... }
+ * </pre>
+ * <p>
+ * A preprocessor may stop the run by calling
+ * {@link Execution#decline(String)}; later preprocessors are then skipped.
+ * </p>
+ * <p>
+ * Implementations should be stateless: the container constructs one per run,
+ * and a caller may supply a chain containing several instances of one class.
+ * </p>
+ *
+ * @author Curtis Rueden
+ */
+public interface Preprocessor {
 
+	/** Prepares the given run. */
+	void process(Execution execution);
+
+	/** Sorts preprocessors, highest first. See {@link Priority}. */
+	default double priority() {
+		return Priority.NORMAL;
+	}
 }

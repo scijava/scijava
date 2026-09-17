@@ -70,6 +70,21 @@ public final class Executables {
 	}
 
 	/**
+	 * Describes the given class as an {@link Executable}, reflecting into it
+	 * through the given lookup.
+	 *
+	 * @param type a class whose {@link Parameter} fields declare its parameters
+	 * @param lookup a lookup with private access to it, as
+	 *          {@code Context.privateLookupIn} provides
+	 * @return a description of it
+	 */
+	public static Executable of(final Class<? extends Runnable> type,
+		final java.lang.invoke.MethodHandles.Lookup lookup)
+	{
+		return new JavaExecutable(type, lookup);
+	}
+
+	/**
 	 * Describes an already-constructed object as an {@link Executable} whose
 	 * {@code create} yields that same object.
 	 * <p>
@@ -118,7 +133,18 @@ public final class Executables {
 
 	/** Describes the inputs and outputs of the given class. */
 	public static Struct struct(final Class<?> type) {
-		return Structs.from(type, type, PARSER);
+		return struct(type, null);
+	}
+
+	/**
+	 * Describes the inputs and outputs of the given class, reflecting into it
+	 * through the given lookup.
+	 */
+	public static Struct struct(final Class<?> type,
+		final java.lang.invoke.MethodHandles.Lookup lookup)
+	{
+		return Structs.from(type, type, lookup == null ? PARSER //
+			: new FieldParameterMemberParser(lookup));
 	}
 
 	/**

@@ -1,0 +1,7 @@
+<factorypath>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/scijava/scijava-discovery/1.0.1-SNAPSHOT/scijava-discovery-1.0.1-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/scijava/scijava-index/1.0.0-SNAPSHOT/scijava-index-1.0.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/scijava/scijava-common3/1.0.0/scijava-common3-1.0.0.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/scijava/scijava-priority/1.0.1-SNAPSHOT/scijava-priority-1.0.1-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/scijava/scijava-spi/1.0.0-SNAPSHOT/scijava-spi-1.0.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+</factorypath>

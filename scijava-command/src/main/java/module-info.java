@@ -31,11 +31,11 @@ module org.scijava.command {
 
 	exports org.scijava.command;
 
-	// NB: a command's package must be opened to both modules that reflect into
-	// it: the context constructs the command, and the execution layer reads and
-	// writes its @Parameter fields. `opens` is not `exports` -- the classes stay
-	// invisible to ordinary callers either way.
-	opens org.scijava.command to org.scijava.context, org.scijava.execute;
+	// NB: one opens, to the container alone. The execution layer reads
+	// @Parameter fields through a lookup the context supplies, so it needs no
+	// opens of its own. `opens` is not `exports` -- these classes stay invisible
+	// to ordinary callers regardless.
+	opens org.scijava.command to org.scijava.context;
 
 	requires transitive org.scijava.context;
 	requires transitive org.scijava.execute;

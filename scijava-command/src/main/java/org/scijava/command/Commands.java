@@ -71,7 +71,7 @@ public final class Commands {
 		final List<CommandInfo> commands = new ArrayList<>();
 		for (final Discovery<Command> discovery : context.plugins(Command.class)) {
 			commands.add(new CommandInfo(discovery, menus.getOrDefault( //
-				discovery.implClassName(), Map.of())));
+				discovery.implClassName(), Map.of()), context));
 		}
 		commands.sort(Comparator.comparingDouble(CommandInfo::weight) //
 			.thenComparing(CommandInfo::label));

@@ -29,6 +29,8 @@
 
 package org.scijava.execute;
 
+import java.lang.invoke.MethodHandles.Lookup;
+
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 
@@ -44,8 +46,20 @@ public class JavaExecutable implements Executable {
 	private final Struct struct;
 
 	public JavaExecutable(final Class<? extends Runnable> type) {
+		this(type, null);
+	}
+
+	/**
+	 * @param type the class to describe
+	 * @param lookup a lookup with private access to it, or null to reflect with
+	 *          this module's own access. A container supplies one so that the
+	 *          class's package need only be opened to the container.
+	 */
+	public JavaExecutable(final Class<? extends Runnable> type,
+		final Lookup lookup)
+	{
 		this.type = type;
-		this.struct = Executables.struct(type);
+		this.struct = Executables.struct(type, lookup);
 	}
 
 	@Override

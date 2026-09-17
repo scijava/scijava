@@ -148,6 +148,28 @@ public class CommandsTest {
 		}
 	}
 
+	/**
+	 * A command author writes one {@code opens}, to the container.
+	 * <p>
+	 * The execution layer reads {@code @Parameter} fields through a lookup the
+	 * context supplies, so it needs no access of its own. Were that to regress,
+	 * running a command would fail - but this asserts the intent directly, so
+	 * the reason is obvious rather than inferred from a stack trace.
+	 * </p>
+	 */
+	@Test
+	public void testOneOpensIsEnough() {
+		final Module module = Command.class.getModule();
+		assertTrue(module.isNamed(), "not running on the module path");
+		final Module context = Context.class.getModule();
+		final Module execute = org.scijava.execute.Executables.class.getModule();
+
+		assertTrue(module.isOpen("org.scijava.command", context),
+			"commands must be open to the container");
+		assertFalse(module.isOpen("org.scijava.command", execute),
+			"commands should not need opening to the execution layer as well");
+	}
+
 	private static CommandInfo find(final Context context, final Class<?> type) {
 		return Commands.discover(context).stream() //
 			.filter(c -> type.getName().equals(c.className())) //

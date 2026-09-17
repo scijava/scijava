@@ -116,7 +116,10 @@ A **dropped** row is a successful outcome, not a gap.
 | `plugin` (`Plugin`, `Attr`, `PluginService`, `PluginInfo`, `PluginIndex`) | `org.scijava.context.Plugin` and `Attr`, discovered via `Context.plugins(Class)`. `PluginInfo` becomes `org.scijava.discovery.Discovery`, which reports class name, metadata and priority without loading the class; `PluginService` and `PluginIndex` are subsumed by `Context.plugins` | ported |
 | `plugin` (the `HandlerPlugin`/`WrapperPlugin`/`TypedPlugin`/`SingletonPlugin` hierarchy and their services) | not ported — each user of these inlines the small contract it needs, as `DataHandle` did | dropped |
 | `service` | `org.scijava.context`: `Service` (no longer a plugin, and discovered via `ServiceLoader`), with `Context` holding them. `SciJavaService` has no equivalent — a marker is not needed. `ServiceHelper` and `ServiceIndex` are internal to `Context` | ported |
-| `object`, `prefs`, `app` | `org.scijava.context` core services (Phase 2) | planned |
+| `object` | with the widgets and conversion layer that use it (Phase 3/4), so a consumer shapes it | planned |
+| `prefs` | split: a YAML settings store under `~/.config/fiji` (design settled in [migration-plan.md](migration-plan.md)), and widget value persistence, which belongs with the input harvester (Phase 4). Explicitly **not** `java.util.prefs` | planned |
+| `app` | mostly `org.scijava.meta` for version and title metadata; the rest is app-shell material, dropped | planned |
+| `thread` | EDT dispatch belongs with the UI layer (Phase 4); parallelism is `org.scijava.concurrent` | planned |
 | `convert` | `scijava-convert3` (Phase 2) | planned |
 | `module`, `module.process`, `command` | execution layer on `scijava-struct` (Phase 3) | planned |
 | `script`, `script.process` | scripting facade + `javax.script` / GraalVM polyglot / Appose adapters (Phase 3) | planned |

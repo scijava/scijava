@@ -86,7 +86,7 @@ A **dropped** row is a successful outcome, not a gap.
 | `Contextual`, `AbstractContextual`, `NullContextException` | dropped — a service receives its context in `Service.initialize(Context)`, so it need not carry one, and there is no null-context state to report | dropped |
 | `Gateway`, `AbstractGateway`, `SciJava` | Phase 2, if retained at all | open |
 | `Instantiable`, `InstantiableException` | subsumed by `Discovery` | planned |
-| `BasicDetails`, `AbstractBasicDetails`, `UIDetails`, `AbstractUIDetails`, `MenuEntry`, `MenuPath` | plugin/module metadata (Phases 2–4) | open |
+| `BasicDetails`, `AbstractBasicDetails`, `UIDetails`, `AbstractUIDetails`, `MenuEntry`, `MenuPath` | `scijava-command` presentation metadata (layer 1). All of it survives — menu path, label, icon, accelerator, weight, selection group, visibility, enablement — but as attributes in the annotation index rather than an inheritance chain every plugin extends | planned |
 | `Validated`, `ValidityProblem` | execution layer (Phase 3) | open |
 | `Optional` | `scijava-optional` (satellite repo, moves in later) | open |
 
@@ -125,7 +125,7 @@ A **dropped** row is a successful outcome, not a gap.
 | `command` | still to come: a command is a struct plus menu metadata plus `run` | planned |
 | `script`, `script.process` | scripting facade + `javax.script` / GraalVM polyglot / Appose adapters (Phase 3) | planned |
 | `widget` | input harvesting on `scijava-struct`, with dynamic subgroups (Phase 4) | planned |
-| `ui`, `menu` | minimal UI API; `ApplicationFrame`/`Desktop`/`StatusBar`/`ToolBar` dropped (Phase 4) | planned |
+| `ui`, `menu` | `scijava-ui-api` (toolkit-agnostic contracts) and `scijava-menu` (the menu tree), with `ApplicationFrame`/`Desktop`/`StatusBar`/`ToolBar` as contracts there and implementations in the toolkit bindings. Dropped from the *core*, not from the stack — see the layering section of [migration-plan.md](migration-plan.md) | planned |
 | `input`, `tool` | UI-agnostic facades on `scijava-events` (Phase 4) | planned |
 | `display` | overhauled, not ported (Phase 4) | open |
 | `platform`, `ui.dnd` | `scijava-desktop` modernization (Phase 4) | planned |

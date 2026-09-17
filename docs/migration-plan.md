@@ -224,6 +224,7 @@ These were measured, not reasoned about, with a three-module test project
 | `setAccessible` injection into a **private** field, with that qualified `opens` | **works** |
 | An ordinary module importing a class from that opened-but-unexported package | **compile error**: "package ... is declared in module ..., which does not export it" |
 | A service with a **private** constructor plus a `public static provider()` factory | **works** — `ServiceLoader` prefers the factory |
+| Reflective construction of a class in a package opened **to the container**, performed by a *different* module (e.g. a shared discovery library) | **fails**: `IllegalAccessException` — the check is against the module that performs it |
 
 The load-bearing conclusion is the second-to-last row: **`opens` is not
 `exports`.** A qualified `opens` grants the container deep reflective access at
@@ -231,6 +232,13 @@ runtime while leaving the package invisible to ordinary callers at compile
 time. Implementations therefore stay encapsulated — callers cannot import
 them, cannot cast to them, and cannot call their non-API methods — and the
 container can still construct and inject them.
+
+That last row is easy to design past and costly to discover late: it is not
+enough to know *that* reflection needs an `opens`, one must know **which
+module the `opens` names**. Generic discovery code cannot construct a plugin on
+a container's behalf, so the container passes an instantiator defined in its
+own module, and users open their packages to the container. `Discovery.of` and
+`IndexDiscoverer` therefore take an optional instantiator.
 
 So the SJ3 context keeps **declarative field injection**, as SciJava Common
 has always had. The cost to a plugin module is one line:
@@ -527,9 +535,23 @@ No application context required by anything in this phase.
   - **Disposal reverses the order in which services finished initializing**,
     not the order they were requested, so a service is always torn down before
     the ones it depends on.
-  - Still to do here: the `@Plugin` tier via `scijava-index`, declarative
-    field injection through a qualified `opens`, `@EventHandler` scanning, the
-    one-way legacy bridge, and the core services themselves.
+  - **The plugin tier is done**: `@Plugin` (indexable, with `@Attr`) and
+    `Context.plugins(Class)`, which returns `Discovery` descriptors from the
+    annotation index — class name, metadata and priority, with nothing loaded
+    until asked. Tested through a real build in `scijava-context-test`:
+    annotated classes in an unexported package, indexed by the annotation
+    processor at compile time, discovered with their metadata, and constructed
+    only on demand.
+  - **A downstream project must put the processor on the annotation processor
+    path** (as the Ops modules do for `scijava-ops-indexer`). javac will not
+    find it on the module path, and says nothing when it finds no processor at
+    all: the build simply produces no index and the plugins silently fail to
+    appear. This is the hazard noted above, met first-hand. `pom-scijava`
+    configuring this for SciJava components would remove the trap for the
+    people most likely to fall into it.
+  - Still to do here: declarative field injection through a qualified `opens`,
+    `@EventHandler` scanning, the one-way legacy bridge, and the core services
+    themselves.
   - **Dependencies are not constructor arguments.** Constructor injection
     would publish every dependency in a signature, so changing an internal
     dependency would be an API change and a binary compatibility break unless

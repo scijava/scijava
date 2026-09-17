@@ -117,7 +117,7 @@ A **dropped** row is a successful outcome, not a gap.
 | `plugin` (the `HandlerPlugin`/`WrapperPlugin`/`TypedPlugin`/`SingletonPlugin` hierarchy and their services) | not ported — each user of these inlines the small contract it needs, as `DataHandle` did | dropped |
 | `service` | `org.scijava.context`: `Service` (no longer a plugin, and discovered via `ServiceLoader`), with `Context` holding them. `SciJavaService` has no equivalent — a marker is not needed. `ServiceHelper` and `ServiceIndex` are internal to `Context` | ported |
 | `object` | with the widgets and conversion layer that use it (Phase 3/4), so a consumer shapes it | planned |
-| `prefs` | split: a YAML settings store under `~/.config/fiji` (design settled in [migration-plan.md](migration-plan.md)), and widget value persistence, which belongs with the input harvester (Phase 4). Explicitly **not** `java.util.prefs` | planned |
+| `prefs` | split: a TOML settings store under `~/.config/fiji` (design settled in [migration-plan.md](migration-plan.md)), and widget value persistence, which belongs with the input harvester (Phase 4). Explicitly **not** `java.util.prefs` | planned |
 | `app` | mostly `org.scijava.meta` for version and title metadata; the rest is app-shell material, dropped | planned |
 | `thread` | EDT dispatch belongs with the UI layer (Phase 4); parallelism is `org.scijava.concurrent` | planned |
 | `convert` | `scijava-convert3` (Phase 2) | planned |

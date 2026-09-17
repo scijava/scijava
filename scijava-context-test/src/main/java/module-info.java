@@ -39,6 +39,7 @@ module org.scijava.context.test {
 	requires org.scijava.discovery;
 
 	provides org.scijava.context.Service with
-			org.scijava.context.test.impl.HiddenGreeter;
+			org.scijava.context.test.impl.HiddenGreeter,
+			org.scijava.context.test.impl.DefaultRecordingService;
 
 }

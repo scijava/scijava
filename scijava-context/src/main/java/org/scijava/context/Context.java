@@ -29,7 +29,6 @@
 
 package org.scijava.context;
 
-import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -252,52 +251,6 @@ public class Context implements Disposable, AutoCloseable {
 			}
 		}
 		return subscriptions;
-	}
-
-	/**
-	 * Gets a {@link java.lang.invoke.MethodHandles.Lookup} able to reflect into
-	 * the given class, for a collaborator that cannot obtain one itself.
-	 * <p>
-	 * This exists so that a plugin author writes <em>one</em> line rather than
-	 * two:
-	 * </p>
-	 *
-	 * <pre>
-	 * opens com.example to org.scijava.context;
-	 * </pre>
-	 * <p>
-	 * Reflective access is checked against the module performing it, so any
-	 * other SciJava module that must read a plugin's fields - the execution
-	 * layer, reading {@code @Parameter} values - would otherwise need its own
-	 * {@code opens}. Handing it a lookup created here means the single
-	 * {@code opens} to this module covers them all.
-	 * </p>
-	 * <p>
-	 * NB: the returned lookup is scoped to {@code type} alone, not a
-	 * general-purpose capability: its holder can reflect into that one class
-	 * and nothing else.
-	 * </p>
-	 * <p>
-	 * NB: {@code privateLookupIn} also requires this module to <em>read</em> the
-	 * target's module, which a container never declares - plugins depend on it,
-	 * not the reverse. A module may only add that edge from its own code, which
-	 * is the other reason this method has to live here.
-	 * </p>
-	 *
-	 * @param type the class to be reflected into
-	 * @return a lookup with private access to that class
-	 * @throws ServiceException if the class's package is not open to this module
-	 */
-	public MethodHandles.Lookup privateLookupIn(final Class<?> type) {
-		try {
-			Context.class.getModule().addReads(type.getModule());
-			return MethodHandles.privateLookupIn(type, MethodHandles.lookup());
-		}
-		catch (final IllegalAccessException exc) {
-			throw new ServiceException("Cannot reflect into " + type.getName() + //
-				". Does its module declare `opens " + type.getPackageName() + //
-				" to org.scijava.context;`?", exc);
-		}
 	}
 
 	/** Gets this context's event bus. */

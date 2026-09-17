@@ -59,6 +59,9 @@ The deliverable is not a reimplementation of SJC. It is:
     needs tooling support that `release-version.sh` does not yet have. The
     realignment opportunity is the removal of the interfaces that moved to
     `scijava-spi`, which breaks compatibility anyway and could land as `3.0.0`.
+    `scijava-io3` is unreleased, so it starts at `3.0.0-SNAPSHOT` already;
+    releasing a reactor with heterogeneous versions still awaits the
+    `release-version.sh` work.
 - **Names are otherwise case by case.** Where an SJ3 package would collide
   with an SJC one and no incarnation digit applies, pick a natural
   collision-free noun. Every decision is recorded in

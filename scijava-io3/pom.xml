@@ -10,7 +10,12 @@
 	</parent>
 
 	<artifactId>scijava-io3</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<!--
+	NB: the major version tracks the incarnation, per the incubator README.
+	The 1.x.y of the other components is a legacy of the first monoversioned
+	release, not the intended scheme.
+	-->
+	<version>3.0.0-SNAPSHOT</version>
 
 	<name>SciJava I/O</name>
 	<description>Locations and data handles: a uniform way to address and read bytes.</description>

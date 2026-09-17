@@ -187,9 +187,47 @@ public class ParameterTree {
 		/** Builds the node for one parameter, expanding it if it is a struct. */
 		private ParameterNode nodeFor(final MemberInstance<?> member) {
 			final DefaultNode node = new DefaultNode(label(member), member);
+			node.choices = choices(member);
 			for (final MemberInstance<?> child : subMembers(member))
 				node.children.add(nodeFor(child));
 			return node;
+		}
+
+		/**
+		 * Gets the values a parameter may take, declared or computed.
+		 * <p>
+		 * NB: computing them is what SciJava Common used {@code DynamicCommand}
+		 * for, by mutating the command's own description. Here the parameter
+		 * stays statically visible and only its values are dynamic.
+		 * </p>
+		 */
+		private List<Object> choices(final MemberInstance<?> member) {
+			final Optional<String> from = attr(member,
+				ParameterMember.CHOICES_FROM);
+			if (from.isPresent()) {
+				final Optional<Behavior> behavior = executable.behavior(from.get());
+				if (behavior.isPresent()) return asList(behavior.get().invoke());
+			}
+			return attr(member, ParameterMember.CHOICES) //
+				.map(csv -> (List<Object>) new ArrayList<Object>(List.of(csv.split(
+					",")))) //
+				.orElse(List.of());
+		}
+
+		private static List<Object> asList(final Object result) {
+			if (result == null) return List.of();
+			if (result instanceof List) {
+				return new ArrayList<>((List<?>) result);
+			}
+			if (result instanceof Object[]) {
+				return new ArrayList<>(List.of((Object[]) result));
+			}
+			if (result instanceof Iterable) {
+				final List<Object> list = new ArrayList<>();
+				((Iterable<?>) result).forEach(list::add);
+				return list;
+			}
+			return List.of(result);
 		}
 
 		/**
@@ -206,7 +244,14 @@ public class ParameterTree {
 			final MemberInstance<?> member)
 		{
 			final Object value = member.isReadable() ? member.get() : null;
-			if (value == null) return List.of();
+			if (value == null) {
+				// NB: with no value there is nothing to read or write, but the
+				// group's shape is still known from the declared type, so a dialog
+				// can show it rather than an unexplained gap. Only a concrete type
+				// has fields; an unset `Joke` shows nothing until one is chosen,
+				// which is correct.
+				return List.of();
+			}
 			final Struct struct = Executables.struct(value.getClass());
 			final List<Member<?>> members = struct.members();
 			if (members.isEmpty()) return List.of();
@@ -315,6 +360,7 @@ public class ParameterTree {
 		private final List<ParameterNode> children = new ArrayList<>();
 		private boolean collapsible;
 		private boolean collapsed;
+		private List<Object> choices = List.of();
 
 		DefaultNode(final String label, final MemberInstance<?> member) {
 			this.label = label;
@@ -344,6 +390,11 @@ public class ParameterTree {
 		@Override
 		public boolean isCollapsed() {
 			return collapsed;
+		}
+
+		@Override
+		public List<Object> choices() {
+			return choices;
 		}
 
 		@Override

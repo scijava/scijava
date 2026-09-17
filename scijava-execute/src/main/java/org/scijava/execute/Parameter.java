@@ -100,4 +100,26 @@ public @interface Parameter {
 
 	/** The group this parameter belongs to, if any. */
 	String group() default "";
+
+	/**
+	 * The values this parameter may take, where they are known in advance.
+	 *
+	 * @see #choicesFrom()
+	 */
+	String[] choices() default {};
+
+	/**
+	 * A behavior producing the values this parameter may take, where they
+	 * depend on runtime state - the axes of the open image, the fields of the
+	 * chosen table.
+	 * <p>
+	 * NB: this is what SciJava Common needed {@code DynamicCommand} for. There,
+	 * a command mutated its own {@code ModuleInfo} to call {@code setChoices},
+	 * which made the description itself mutable and per-instance: a platform
+	 * could not know a command's parameters without constructing it. Declaring
+	 * that the choices come from a behavior keeps the parameter statically
+	 * visible while its values stay dynamic.
+	 * </p>
+	 */
+	String choicesFrom() default "";
 }

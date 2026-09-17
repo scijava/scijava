@@ -66,6 +66,12 @@ public interface ParameterMember<T> extends Member<T> {
 	/** Metadata key: a human-readable label. */
 	String LABEL = "label";
 
+	/** Metadata key: the values this parameter may take, comma-separated. */
+	String CHOICES = "choices";
+
+	/** Metadata key: the behavior producing the values it may take. */
+	String CHOICES_FROM = "choicesFrom";
+
 	/** Gets this parameter's metadata. */
 	Map<String, String> attrs();
 

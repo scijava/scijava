@@ -65,4 +65,15 @@ public interface ParameterNode {
 	default boolean isCollapsed() {
 		return false;
 	}
+
+	/**
+	 * Gets the values this parameter may take, as resolved right now.
+	 * <p>
+	 * A user interface renders a chooser when this is non-empty and does not
+	 * care whether the values were declared or computed.
+	 * </p>
+	 */
+	default List<Object> choices() {
+		return List.of();
+	}
 }

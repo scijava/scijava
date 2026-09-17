@@ -32,6 +32,7 @@ package org.scijava.discovery;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.scijava.priority.Priority;
@@ -210,6 +211,35 @@ public interface Discovery<T> {
 		final Class<T> superType, final ClassLoader classLoader,
 		final Map<String, String> attrs, final double priority)
 	{
+		return of(implClassName, superType, classLoader, attrs, priority, null);
+	}
+
+	/**
+	 * Creates a {@code Discovery} of a class that has not been loaded yet,
+	 * constructed by the given function.
+	 * <p>
+	 * The function matters under JPMS: reflective construction is checked
+	 * against the module that <em>performs</em> it, so a discovered class in a
+	 * package opened only to some container cannot be constructed by this
+	 * module on that container's behalf. A container therefore passes an
+	 * instantiator of its own, defined in its own module, and users open their
+	 * implementation packages to that container rather than to this one.
+	 * </p>
+	 *
+	 * @param implClassName the name of the implementation class
+	 * @param superType the type the implementation class is assignable to
+	 * @param classLoader the class loader with which to load the class
+	 * @param attrs the metadata
+	 * @param priority the priority
+	 * @param instantiator constructs the object, or null to construct it here
+	 *          with the no-argument constructor
+	 * @return a lazy discovery of that class
+	 */
+	static <T> Discovery<T> of(final String implClassName,
+		final Class<T> superType, final ClassLoader classLoader,
+		final Map<String, String> attrs, final double priority,
+		final Function<Class<? extends T>, ? extends T> instantiator)
+	{
 		return new Discovery<>() {
 
 			private Class<? extends T> type;
@@ -236,6 +266,7 @@ public interface Discovery<T> {
 
 			@Override
 			public T get() {
+				if (instantiator != null) return instantiator.apply(type());
 				try {
 					return type().getDeclaredConstructor().newInstance();
 				}

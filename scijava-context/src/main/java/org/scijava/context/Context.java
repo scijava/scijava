@@ -31,6 +31,7 @@ package org.scijava.context;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -41,7 +42,9 @@ import java.util.ServiceLoader.Provider;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.scijava.discovery.Discovery;
 import org.scijava.events.EventBus;
+import org.scijava.index.IndexDiscoverer;
 import org.scijava.spi.Disposable;
 
 /**
@@ -78,6 +81,9 @@ public class Context implements Disposable, AutoCloseable {
 		new IdentityHashMap<>());
 
 	private final EventBus events = EventBus.create();
+
+	/** Plugin discovery, from the annotation index. Built on first use. */
+	private IndexDiscoverer<Plugin> pluginDiscoverer;
 
 	private boolean disposed;
 
@@ -160,6 +166,35 @@ public class Context implements Disposable, AutoCloseable {
 		}
 	}
 
+	/**
+	 * Lists the plugins of the given type.
+	 * <p>
+	 * The result describes what is available without loading any plugin class:
+	 * each {@link Discovery} reports its implementation class name, its
+	 * {@link Plugin} metadata and its priority, and loads or constructs the
+	 * class only when asked to. Building a menu therefore costs no class
+	 * loading at all.
+	 * </p>
+	 * <p>
+	 * Plugins come back highest priority first.
+	 * </p>
+	 *
+	 * @param <P> the extension type
+	 * @param type the type of extension wanted
+	 * @return the plugins of that type, highest priority first
+	 */
+	public <P> List<Discovery<P>> plugins(final Class<P> type) {
+		if (type == null) throw new NullPointerException("type");
+		synchronized (this) {
+			checkNotDisposed();
+			if (pluginDiscoverer == null) pluginDiscoverer = createPluginDiscoverer();
+		}
+		final List<Discovery<P>> plugins = new ArrayList<>(pluginDiscoverer
+			.discover(type));
+		plugins.sort(Comparator.comparingDouble(Discovery<P>::priority).reversed());
+		return plugins;
+	}
+
 	/** Gets this context's event bus. */
 	public EventBus events() {
 		return events;
@@ -221,6 +256,57 @@ public class Context implements Disposable, AutoCloseable {
 	}
 
 	// -- Helper methods --
+
+	/**
+	 * Builds the index-backed plugin discoverer.
+	 * <p>
+	 * NB: which type a plugin provides has to be answerable from the index
+	 * alone, hence the function: reading {@code type()} from the recorded
+	 * annotation loads the <em>declared</em> type, never the implementation.
+	 * </p>
+	 */
+	private static IndexDiscoverer<Plugin> createPluginDiscoverer() {
+		return new IndexDiscoverer<>(Plugin.class, //
+			item -> item.annotation().type().getName(), //
+			item -> attrsOf(item.annotation()), //
+			item -> item.annotation().priority(), //
+			Thread.currentThread().getContextClassLoader(), //
+			Context::instantiate);
+	}
+
+	/**
+	 * Constructs a plugin.
+	 * <p>
+	 * NB: this must live in <em>this</em> module. Reflective construction is
+	 * checked against the module that performs it, so a plugin package opened
+	 * to this container cannot be constructed by the discovery or index module
+	 * on our behalf - which is why {@link Plugin} tells users to open their
+	 * packages to {@code org.scijava.context}.
+	 * </p>
+	 */
+	private static Object instantiate(final Class<?> type) {
+		try {
+			return type.getDeclaredConstructor().newInstance();
+		}
+		catch (final ReflectiveOperationException exc) {
+			throw new ServiceException("Cannot construct plugin: " + //
+				type.getName() + ". Does its module open the package to" + //
+				" org.scijava.context?", exc);
+		}
+	}
+
+	/** Flattens a plugin's metadata into the discovery's attribute map. */
+	private static Map<String, String> attrsOf(final Plugin plugin) {
+		final Map<String, String> attrs = new LinkedHashMap<>();
+		if (!plugin.name().isEmpty()) attrs.put("name", plugin.name());
+		if (!plugin.label().isEmpty()) attrs.put("label", plugin.label());
+		if (!plugin.description().isEmpty()) {
+			attrs.put("description", plugin.description());
+		}
+		for (final Attr attr : plugin.attrs())
+			attrs.put(attr.name(), attr.value());
+		return attrs;
+	}
 
 	/**
 	 * Initializes a service, unless that is already done or under way.

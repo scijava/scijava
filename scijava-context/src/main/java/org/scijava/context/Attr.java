@@ -1,8 +1,8 @@
-/*-
+/*
  * #%L
- * Integration tests for the scijava-context library.
+ * An application container: services, discovered and wired.
  * %%
- * Copyright (C) 2021 - 2025 SciJava developers.
+ * Copyright (C) 2026 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,18 +27,27 @@
  * #L%
  */
 
-module org.scijava.context.test {
+package org.scijava.context;
 
-	// NB: the implementation package is deliberately NOT exported. It is
-	// opened to the container only, which is what plugin construction needs --
-	// and opens is not exports, so callers still cannot reach these classes.
-	exports org.scijava.context.test;
-	opens org.scijava.context.test.impl to org.scijava.context;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-	requires org.scijava.context;
-	requires org.scijava.discovery;
+/**
+ * An arbitrary key/value pair attached to a {@link Plugin}.
+ * <p>
+ * Attributes land in the index, so they can be read without loading the
+ * plugin class.
+ * </p>
+ *
+ * @author Curtis Rueden
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.ANNOTATION_TYPE)
+public @interface Attr {
 
-	provides org.scijava.context.Service with
-			org.scijava.context.test.impl.HiddenGreeter;
+	String name();
 
+	String value() default "";
 }

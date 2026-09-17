@@ -69,6 +69,7 @@ public class IndexDiscoverer<A extends Annotation> implements Discoverer {
 	private final Function<IndexItem<A>, String> typeNameOf;
 	private final Function<IndexItem<A>, Map<String, String>> attrsOf;
 	private final ToDoubleFunction<IndexItem<A>> priorityOf;
+	private final Function<Class<?>, ?> instantiator;
 
 	/**
 	 * Creates a discoverer over the index of the given annotation.
@@ -80,7 +81,7 @@ public class IndexDiscoverer<A extends Annotation> implements Discoverer {
 		final Function<IndexItem<A>, String> typeNameOf)
 	{
 		this(annotation, typeNameOf, item -> Collections.emptyMap(),
-			item -> Priority.NORMAL, null);
+			item -> Priority.NORMAL, null, null);
 	}
 
 	/**
@@ -99,11 +100,41 @@ public class IndexDiscoverer<A extends Annotation> implements Discoverer {
 		final ToDoubleFunction<IndexItem<A>> priorityOf,
 		final ClassLoader classLoader)
 	{
+		this(annotation, typeNameOf, attrsOf, priorityOf, classLoader, null);
+	}
+
+	/**
+	 * Creates a discoverer over the index of the given annotation.
+	 *
+	 * @param annotation the indexed annotation
+	 * @param typeNameOf yields the name of the type an indexed item provides
+	 * @param attrsOf yields the metadata of an indexed item
+	 * @param priorityOf yields the priority of an indexed item
+	 * @param classLoader the class loader to query, or null for the thread's
+	 *          context class loader
+	 * @param instantiator constructs a discovered object, or null to construct
+	 *          it here with the no-argument constructor
+	 *          <p>
+	 *          NB: this matters under JPMS. Reflective construction is checked
+	 *          against the module performing it, so a class in a package opened
+	 *          only to some container cannot be constructed by this module on
+	 *          that container's behalf. A container passes an instantiator
+	 *          defined in its own module, and users open their implementation
+	 *          packages to that container rather than to this one.
+	 *          </p>
+	 */
+	public IndexDiscoverer(final Class<A> annotation,
+		final Function<IndexItem<A>, String> typeNameOf,
+		final Function<IndexItem<A>, Map<String, String>> attrsOf,
+		final ToDoubleFunction<IndexItem<A>> priorityOf,
+		final ClassLoader classLoader, final Function<Class<?>, ?> instantiator)
+	{
 		this.annotation = annotation;
 		this.typeNameOf = typeNameOf;
 		this.attrsOf = attrsOf;
 		this.priorityOf = priorityOf;
 		this.classLoader = classLoader;
+		this.instantiator = instantiator;
 	}
 
 	@Override
@@ -121,8 +152,12 @@ public class IndexDiscoverer<A extends Annotation> implements Discoverer {
 				continue;
 			}
 			if (!c.getName().equals(typeName)) continue;
+			@SuppressWarnings("unchecked")
+			final Function<Class<? extends U>, ? extends U> construct =
+				instantiator == null ? null //
+					: t -> (U) instantiator.apply(t);
 			discoveries.add(Discovery.of(item.className(), c, loader, //
-				attrsOf.apply(item), priorityOf.applyAsDouble(item)));
+				attrsOf.apply(item), priorityOf.applyAsDouble(item), construct));
 		}
 		return discoveries;
 	}

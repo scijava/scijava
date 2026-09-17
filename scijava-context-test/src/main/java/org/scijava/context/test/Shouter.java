@@ -27,18 +27,10 @@
  * #L%
  */
 
-module org.scijava.context.test {
+package org.scijava.context.test;
 
-	// NB: the implementation package is deliberately NOT exported. It is
-	// opened to the container only, which is what plugin construction needs --
-	// and opens is not exports, so callers still cannot reach these classes.
-	exports org.scijava.context.test;
-	opens org.scijava.context.test.impl to org.scijava.context;
+/** An extension type that plugins provide. */
+public interface Shouter {
 
-	requires org.scijava.context;
-	requires org.scijava.discovery;
-
-	provides org.scijava.context.Service with
-			org.scijava.context.test.impl.HiddenGreeter;
-
+	String shout();
 }

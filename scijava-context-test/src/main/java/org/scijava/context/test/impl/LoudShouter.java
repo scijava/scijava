@@ -27,18 +27,27 @@
  * #L%
  */
 
-module org.scijava.context.test {
+package org.scijava.context.test.impl;
 
-	// NB: the implementation package is deliberately NOT exported. It is
-	// opened to the container only, which is what plugin construction needs --
-	// and opens is not exports, so callers still cannot reach these classes.
-	exports org.scijava.context.test;
-	opens org.scijava.context.test.impl to org.scijava.context;
+import org.scijava.context.Attr;
+import org.scijava.context.Plugin;
+import org.scijava.context.test.Shouter;
+import org.scijava.priority.Priority;
 
-	requires org.scijava.context;
-	requires org.scijava.discovery;
+/** A high-priority {@link Shouter}, in an unexported package. */
+@Plugin(type = Shouter.class, name = "loud", label = "Loud shouter",
+	priority = Priority.HIGH, attrs = { @Attr(name = "volume", value = "11") })
+public class LoudShouter implements Shouter {
 
-	provides org.scijava.context.Service with
-			org.scijava.context.test.impl.HiddenGreeter;
+	/** Records whether this class has ever been constructed. */
+	public static volatile boolean constructed = false;
 
+	public LoudShouter() {
+		constructed = true;
+	}
+
+	@Override
+	public String shout() {
+		return "HELLO";
+	}
 }

@@ -31,7 +31,9 @@ module org.scijava.context {
 
 	exports org.scijava.context;
 
+	requires transitive org.scijava.discovery;
 	requires transitive org.scijava.events;
+	requires org.scijava.index;
 	requires transitive org.scijava.spi;
 	requires org.scijava.priority;
 

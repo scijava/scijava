@@ -131,6 +131,8 @@ public class FieldParameterMember<T> implements ParameterMember<T>,
 		put(attrs, VALIDATOR, parameter.validator());
 		put(attrs, VISIBLE_WHEN, parameter.visibleWhen());
 		put(attrs, GROUP, parameter.group());
+		put(attrs, CHOICES, String.join(",", parameter.choices()));
+		put(attrs, CHOICES_FROM, parameter.choicesFrom());
 		return attrs;
 	}
 

@@ -289,6 +289,56 @@ public class ParameterModelTest {
 		assertEquals(Map.of("name", "A name is required"), model.problems());
 	}
 
+	// -- Choices, static and computed --
+
+	public static class PickAxis implements Runnable {
+
+		/** Which axes exist depends on the image, so the values are computed. */
+		@Parameter(choicesFrom = "axisChoices")
+		private String axis = "X";
+
+		@Parameter(choices = { "Mean", "Median", "Max" })
+		private String statistic = "Mean";
+
+		/** Stands in for "the axes of the currently open image". */
+		private List<String> axes = List.of("X", "Y", "Z");
+
+		@SuppressWarnings("unused")
+		private List<String> axisChoices() {
+			return axes;
+		}
+
+		@Override
+		public void run() {}
+	}
+
+	/**
+	 * Computed choices are what SciJava Common needed DynamicCommand for: a
+	 * command mutating its own description to call setChoices. Here the
+	 * parameter stays statically visible and only its values are dynamic.
+	 */
+	@Test
+	public void testComputedChoices() {
+		final PickAxis command = new PickAxis();
+		final ParameterModel model = model(command);
+
+		assertEquals(List.of("X", "Y", "Z"), model.tree().find("axis")
+			.orElseThrow().choices());
+
+		// A different image: different axes, same declared parameter.
+		command.axes = List.of("Channel", "Time");
+		model.set("axis", "X");
+		assertEquals(List.of("Channel", "Time"), model.tree().find("axis")
+			.orElseThrow().choices());
+	}
+
+	@Test
+	public void testDeclaredChoices() {
+		final ParameterModel model = model(new PickAxis());
+		assertEquals(List.of("Mean", "Median", "Max"), model.tree().find(
+			"statistic").orElseThrow().choices());
+	}
+
 	private static ParameterModel model(final Runnable object) {
 		final Executable executable = Executables.executableOf(object);
 		return new ParameterModel(executable.create());

@@ -208,10 +208,18 @@ public class ParameterTree {
 				final Optional<Behavior> behavior = executable.behavior(from.get());
 				if (behavior.isPresent()) return asList(behavior.get().invoke());
 			}
-			return attr(member, ParameterMember.CHOICES) //
-				.map(csv -> (List<Object>) new ArrayList<Object>(List.of(csv.split(
-					",")))) //
-				.orElse(List.of());
+			final Optional<String> declared = attr(member, ParameterMember.CHOICES);
+			if (declared.isPresent()) {
+				return new ArrayList<>(List.of(declared.get().split(",")));
+			}
+			// NB: an enum declares its own values, so asking for them again in an
+			// annotation would only be a chance to get them wrong.
+			final Class<?> type = org.scijava.common3.Types.raw(member.member()
+				.type());
+			if (type != null && type.isEnum()) {
+				return new ArrayList<>(List.of(type.getEnumConstants()));
+			}
+			return List.of();
 		}
 
 		private static List<Object> asList(final Object result) {

@@ -33,5 +33,6 @@ open module org.scijava.harvest {
 
 	requires transitive org.scijava.execute;
 	requires transitive org.scijava.struct;
+	requires org.scijava.common3;
 
 }

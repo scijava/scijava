@@ -84,14 +84,34 @@ public final class Demos {
 	/** Every widget at once, to see how a full dialog reads. */
 	public static class KitchenSink implements Runnable {
 
+		@Parameter(style = "message", required = false)
+		private String message = "One of everything the widgets can do.";
+
 		@Parameter(description = "Shown as the tooltip of this parameter's label")
 		private String name = "ada";
 
-		@Parameter(min = "0", max = "100", style = "slider")
+		@Parameter(min = "0", max = "100", style = "slider,ticks:4")
 		private int percent = 50;
+
+		/** Permitted up to a million; the slider spans only the useful part. */
+		@Parameter(min = "0", max = "1000000", softMax = "100",
+			style = "scroll bar")
+		private long iterations = 10;
 
 		@Parameter(min = "0", max = "1", stepSize = "0.01")
 		private double weight = 0.25;
+
+		@Parameter(label = "Interpolation")
+		private Method method = Method.LINEAR;
+
+		@Parameter(label = "Boxed value, not a primitive", required = false)
+		private Integer boxed = 7;
+
+		@Parameter(label = "Exactly, however many digits")
+		private java.math.BigDecimal exact = new java.math.BigDecimal("1.25");
+
+		@Parameter
+		private char initial = 'a';
 
 		@Parameter
 		private boolean enabled = true;
@@ -116,10 +136,17 @@ public final class Demos {
 
 		@Override
 		public void run() {
-			summary = name + " " + percent + "% w=" + weight + " " + statistic +
+			summary = name + " " + percent + "% n=" + iterations + " w=" + weight +
+				" " + method + " boxed=" + boxed + " exact=" + exact + " '" +
+				initial + "' " + statistic +
 				(enabled ? " [enabled]" : "") + " in=" + input + " out=" + outputDir +
 				" notes=" + notes.length() + " chars";
 		}
+	}
+
+	/** Values with names of their own, which need declaring nowhere else. */
+	public enum Method {
+			NEAREST, LINEAR, CUBIC
 	}
 
 	// -- 2. A group that appears when a box is ticked --
@@ -281,6 +308,67 @@ public final class Demos {
 		public void run() {}
 	}
 
+	// -- 7. Two values linked only while a third says so --
+
+	/**
+	 * The harder version: whether the callbacks do anything is itself a value.
+	 * <p>
+	 * NB: a callback runs at most once per {@code set}, so width setting height
+	 * setting width settles rather than spinning.
+	 * </p>
+	 */
+	public static class LockAspectRatio implements Runnable {
+
+		@Parameter(callback = "widthChanged", min = "1", max = "4096")
+		private int width = 800;
+
+		@Parameter(callback = "heightChanged", min = "1", max = "4096")
+		private int height = 600;
+
+		@Parameter(label = "Lock aspect ratio", callback = "lockChanged")
+		private boolean lock = true;
+
+		@Parameter(style = "message", required = false)
+		private String ratio = "800 x 600 (1.333:1), locked";
+
+		private double aspect = 800.0 / 600.0;
+
+		@Parameter(io = ItemIO.OUTPUT)
+		private String summary;
+
+		@SuppressWarnings("unused")
+		private void widthChanged() {
+			if (lock) height = (int) Math.max(1, Math.round(width / aspect));
+			else aspect = (double) width / height;
+			describe();
+		}
+
+		@SuppressWarnings("unused")
+		private void heightChanged() {
+			if (lock) width = (int) Math.max(1, Math.round(height * aspect));
+			else aspect = (double) width / height;
+			describe();
+		}
+
+		@SuppressWarnings("unused")
+		private void lockChanged() {
+			// NB: locking adopts the ratio on screen, rather than restoring the
+			// one in force when it was last unlocked.
+			if (lock) aspect = (double) width / height;
+			describe();
+		}
+
+		private void describe() {
+			ratio = String.format("%d x %d (%.3f:1)%s", width, height, (double) width /
+				height, lock ? ", locked" : "");
+		}
+
+		@Override
+		public void run() {
+			summary = width + "x" + height;
+		}
+	}
+
 	// -- Launcher --
 
 	private static final Map<String, Class<? extends Runnable>> DEMOS =
@@ -293,6 +381,7 @@ public final class Demos {
 		DEMOS.put("Computed choices", ComputedChoices.class);
 		DEMOS.put("Live validation", LiveValidation.class);
 		DEMOS.put("Linked values", LinkedValues.class);
+		DEMOS.put("Lock aspect ratio", LockAspectRatio.class);
 	}
 
 	public static void main(final String... args) {

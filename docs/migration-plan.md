@@ -849,10 +849,30 @@ after it.
   - **MigLayout is gone**, replaced by `GridBagLayout`: two-column label-field
     layout is not worth a third-party dependency, still less an automatic
     module in a JPMS build.
-  - **Six widgets so far** — number (spinner, with an optional slider), text
-    (field, password, area), toggle, choice, file, and the panel itself. The
-    button, color, date, file-list, message and radio-choice widgets are not
-    ported; each earns its place when something asks for it.
+  - **Seven widgets so far** — number (spinner, with an optional slider or
+    scroll bar, and labelled tick marks), text (field, password, area, and the
+    arbitrary-precision numbers a spinner cannot step), toggle, choice, file,
+    message, and the panel itself. The button, color, date, file-list and
+    radio-choice widgets are not ported; each earns its place when something
+    asks for it.
+  - **An enum needs no annotation**: its constants are its choices, resolved
+    in `ParameterTree` so every toolkit gets it. `softMin`/`softMax` bound the
+    slider where the permitted range is far wider than the useful one, while
+    the spinner still enforces the hard `min`/`max`.
+  - **A widget reads its node out of the current tree**, not the one it was
+    built from. The tree is rebuilt on every `set`, so a captured node goes
+    stale — and since `ParameterModel` rebuilds the widgets only when the
+    tree's *shape* changes, a parameter whose computed choices changed while
+    its shape did not would otherwise keep offering the old values.
+  - **The dialog never moves and never shrinks.** After the first build it may
+    grow, to make room for parameters that have just appeared, but a dialog
+    that re-centred itself, or closed up around a group the user had just
+    collapsed, would move the controls out from under the pointer.
+  - **An empty dialog says why.** A missing annotation index — javac produces
+    one only when scijava-index is on the annotation processor path, and says
+    nothing when it is not — means no widget factories are discovered, and the
+    dialog comes up with nothing but OK and Cancel. That is now a warning
+    naming the missing index, as is a parameter no factory accepted.
   - **Style hints are advisory strings** (`@Parameter(style = "slider")`,
     `"format:0.00"`), which a toolkit is free to ignore, so a parameter styled
     for Swing still renders elsewhere. `min`, `max` and `stepSize` are strings

@@ -35,5 +35,6 @@ module org.scijava.ui3 {
 	requires transitive org.scijava.harvest;
 	requires transitive org.scijava.common3;
 	requires org.scijava.priority;
+	requires org.slf4j;
 
 }

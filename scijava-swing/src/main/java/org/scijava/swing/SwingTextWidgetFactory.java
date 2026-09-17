@@ -47,7 +47,12 @@ public class SwingTextWidgetFactory implements SwingWidgetFactory {
 
 	@Override
 	public boolean supports(final ParameterNode node) {
-		return node.choices().isEmpty() && Widgets.isText(node);
+		if (!node.choices().isEmpty()) return false;
+		// NB: also the arbitrary-precision numbers, which a spinner cannot step
+		// and which this widget parses exactly.
+		final Class<?> type = Widgets.box(Widgets.type(node));
+		return Widgets.isText(node) || type == java.math.BigInteger.class ||
+			type == java.math.BigDecimal.class;
 	}
 
 	@Override

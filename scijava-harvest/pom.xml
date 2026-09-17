@@ -86,11 +86,17 @@
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 
 		<!-- Note: These versions must match across all component POMs! -->
+		<scijava-common3.version>1.0.1-SNAPSHOT</scijava-common3.version>
 		<scijava-execute.version>1.0.0-SNAPSHOT</scijava-execute.version>
 		<scijava-struct.version>1.0.1-SNAPSHOT</scijava-struct.version>
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-common3</artifactId>
+			<version>${scijava-common3.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-execute</artifactId>

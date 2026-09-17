@@ -45,12 +45,15 @@ public abstract class SwingWidget implements Widget {
 
 	private final ParameterNode node;
 	private final ParameterModel model;
+	private final String key;
 
 	private boolean refreshing;
 
 	protected SwingWidget(final ParameterNode node, final ParameterModel model) {
 		this.node = node;
 		this.model = model;
+		this.key = node == null ? null : node.member() //
+			.map(m -> m.member().key()).orElse(null);
 	}
 
 	/** Gets the component to place in the dialog. */
@@ -66,7 +69,13 @@ public abstract class SwingWidget implements Widget {
 
 	@Override
 	public ParameterNode node() {
-		return node;
+		if (key == null) return node; // NB: a group, or the whole dialog
+		// NB: the tree is rebuilt whenever a value changes, so the node handed to
+		// this widget at construction goes stale -- its choices in particular,
+		// which a computed `choicesFrom` resolves afresh each time. Reading the
+		// node back out of the current tree is what keeps a chooser showing the
+		// values that the other widgets now imply.
+		return model.tree().find(key).orElse(node);
 	}
 
 	/** Gets the values this widget reads and writes. */
@@ -96,12 +105,13 @@ public abstract class SwingWidget implements Widget {
 
 	/** Gets the parameter's name. */
 	protected String key() {
-		return node.member().orElseThrow().member().key();
+		if (key == null) throw new IllegalStateException("Not a parameter widget");
+		return key;
 	}
 
 	/** Gets the parameter's current value. */
 	protected Object value() {
-		return node.member().orElseThrow().get();
+		return model.get(key());
 	}
 
 	/**

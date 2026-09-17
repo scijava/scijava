@@ -133,6 +133,20 @@ public @interface Parameter {
 	String stepSize() default "";
 
 	/**
+	 * The smallest value a slider should span, where the useful range is
+	 * narrower than the permitted one.
+	 * <p>
+	 * A slider between 0 and {@link Integer#MAX_VALUE} is unusable, so a
+	 * parameter may say that its interesting values stop at 100 while still
+	 * accepting a larger one typed into the spinner.
+	 * </p>
+	 */
+	String softMin() default "";
+
+	/** The largest value a slider should span. @see #softMin() */
+	String softMax() default "";
+
+	/**
 	 * A hint about how to display this parameter, for a user interface to
 	 * interpret: {@code "slider"}, {@code "password"}, {@code "directory"}.
 	 * <p>

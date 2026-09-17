@@ -86,8 +86,10 @@
 		<module>scijava-progress</module>
 		<module>scijava-spi</module>
 		<module>scijava-struct</module>
+		<module>scijava-swing</module>
 		<module>scijava-testutil</module>
 		<module>scijava-types</module>
+		<module>scijava-ui3</module>
 	</modules>
 
 	<scm>

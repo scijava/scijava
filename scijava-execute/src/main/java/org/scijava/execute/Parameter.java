@@ -122,4 +122,25 @@ public @interface Parameter {
 	 * </p>
 	 */
 	String choicesFrom() default "";
+
+	/** The smallest value this parameter may take, for a numeric parameter. */
+	String min() default "";
+
+	/** The largest value this parameter may take, for a numeric parameter. */
+	String max() default "";
+
+	/** How far one step moves a numeric parameter, in a spinner or slider. */
+	String stepSize() default "";
+
+	/**
+	 * A hint about how to display this parameter, for a user interface to
+	 * interpret: {@code "slider"}, {@code "password"}, {@code "directory"}.
+	 * <p>
+	 * Several hints are separated by commas, and one may carry a value after a
+	 * colon: {@code "slider,format:0.00"}. A user interface ignores hints it
+	 * does not recognize, so a parameter styled for one toolkit still renders
+	 * in another.
+	 * </p>
+	 */
+	String style() default "";
 }

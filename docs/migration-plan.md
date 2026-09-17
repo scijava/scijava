@@ -802,6 +802,25 @@ after it.
     come from whatever object the parameter holds; where that object came from
     is a separate question, for a chooser widget's candidate list. It is one
     source among several, so the harvester is not blocked on it.
+  - **`DynamicCommand` is supported in use, not in form.** Counting its uses
+    across the scijava and imagej repositories shows two different needs
+    wearing one coat: about 39 files mutate the metadata of a *declared*
+    parameter (`setChoices`, `setMinimumValue`), and about 31 add parameters
+    that do not exist statically (`addInput`). SciJava Common serves both by
+    making `ModuleInfo` mutable and per-instance, which is precisely what makes
+    harvesting hard: a platform cannot know a command's parameters without
+    constructing it.
+    - Adding parameters is the generated group above — and better, because it
+      is *declared*: `@Group(membersFrom = ...)` tells a platform exactly where
+      the dynamic part is and that everything else is fixed.
+    - Computing metadata is `@Parameter(choicesFrom = "behavior")`, which
+      leaves the parameter statically visible while its values follow the
+      state. `@Parameter(choices = {...})` covers the static case, and
+      `ParameterNode.choices()` hands a UI the resolved list either way. Being
+      a behavior, it works for scripts too.
+    - So there is no `DynamicCommand` base class and no mutable description.
+      If `min` and `max` want the same treatment, `minFrom`/`maxFrom` follow
+      the identical pattern — worth adding when a widget needs it, not before.
   - **Known rough edges**: group placement is provisional (a group appears
     where its first member would, and a generated group needs an explicit
     `after` anchor); `ParameterModel` decides the tree changed by comparing

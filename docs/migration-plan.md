@@ -42,9 +42,26 @@ The deliverable is not a reimplementation of SJC. It is:
   major version. There is no two-way bridge.
 - **Build bridges on demand.** Adapters between SJC and SJ3 are written when a
   concrete need appears, not on a schedule.
-- **Names are case by case.** Where an SJ3 package would collide with an SJC
-  one, pick a natural collision-free noun if one exists; otherwise use a `3`
-  suffix (`common3`, `io3`). Every decision is recorded in
+- **Incarnational versioning.** The `3` in `common3` and `io3` is not a
+  workaround for a package collision; it is the component's *incarnation*.
+  Breaking changes are made by forking to a new incarnation with a new
+  artifactId and package prefix, so both incarnations can sit on one classpath
+  and downstream code keeps working. See the
+  [incubator README](https://github.com/scijava/incubator/blob/-/README.md).
+  - **A major version bump within one incarnation should never happen.** If
+    compatibility must break, bump the incarnation digit — artifactId, package
+    prefix and major version together — so the old one can stay loaded
+    alongside.
+  - Ideally the major version equals the incarnation number
+    (`scijava-common3` at `3.x.y`). Today it is at `1.x.y`, because the first
+    release of this reactor was a single monoversioned `1.0.0` big bang:
+    releasing a multi-module reactor piecemeal with heterogeneous versions
+    needs tooling support that `release-version.sh` does not yet have. The
+    realignment opportunity is the removal of the interfaces that moved to
+    `scijava-spi`, which breaks compatibility anyway and could land as `3.0.0`.
+- **Names are otherwise case by case.** Where an SJ3 package would collide
+  with an SJC one and no incarnation digit applies, pick a natural
+  collision-free noun. Every decision is recorded in
   [migration.md](migration.md).
 
 ## Hard constraints
@@ -616,6 +633,19 @@ subsystems, with no dependency on external `scijava-<foo>` components.
 `scijava-search` and `scijava-log-slf4j` all move in over time. Components
 intended to work standalone — Parsington, for instance — keep their
 independence and should not carry the `scijava-` prefix.
+
+## Later, not now
+
+- **`scijava-persist`** (in the incubator): polymorphic serialization where
+  the implementations live in *other people's* repositories, resolved by
+  discovery — a real and recurring need, and the discovery half is exactly
+  SciJava-shaped. Worth rebuilding when a consumer appears, but not worth
+  lifting: it hard-wires Gson into its SPI (`IClassAdapter extends
+  JsonSerializer`), vendors a copy of Gson's `RuntimeTypeAdapterFactory`, and
+  is built on `Context` + `@Plugin`. A rewrite would be much smaller, since
+  Jackson has first-class polymorphic support and only the discovery-driven
+  subtype registration would be ours. Its author ended up inlining equivalent
+  logic downstream, and there is no concrete core consumer today.
 
 ## Open decisions
 

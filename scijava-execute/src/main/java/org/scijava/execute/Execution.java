@@ -42,8 +42,8 @@ import org.scijava.struct.StructInstance;
  */
 public interface Execution {
 
-	/** Gets the object being run. */
-	Object executable();
+	/** Gets the thing being run, whose parameters and behaviors it carries. */
+	ExecutableInstance executable();
 
 	/** Gets its parameters, bound to their values. */
 	StructInstance<?> instance();

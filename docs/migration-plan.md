@@ -693,7 +693,7 @@ unless it says there is no replacement at all, which it says explicitly.
 | Layer | Contents | Depends on |
 | --- | --- | --- |
 | **0. Foundation** (built) | `spi`, `common3`, `collections`, `priority`, `progress`, `concurrent`, `discovery`, `index`, `struct`, `io3`, `events`, `context`, `execute` | nothing above |
-| **1. Application model** (to build) | `scijava-command` (a struct plus presentation metadata), `scijava-menu` (the menu tree), `scijava-ui-api` (toolkit-agnostic contracts), `scijava-desktop` | layer 0 |
+| **1. Application model** (to build) | `scijava-command` (a struct plus presentation metadata), `scijava-menu` (the menu tree), `scijava-ui3` (toolkit-agnostic contracts), `scijava-desktop` | layer 0 |
 | **2. Toolkit bindings** | `scijava-ui-swing`, JavaFX, headless | layer 1 |
 | **3. Application** | Fiji: which menus exist, branding, update sites, defaults | layer 2 |
 
@@ -825,8 +825,43 @@ after it.
     where its first member would, and a generated group needs an explicit
     `after` anchor); `ParameterModel` decides the tree changed by comparing
     `toString()`, which is right for correctness and wrong for a UI that should
-    patch rather than rebuild; and nothing here has met a toolkit yet, which is
-    where the prototype's `WidgetFactory`/`WidgetPanelFactory` return.
+    patch rather than rebuild — the Swing dialog rebuilds its widgets whenever
+    the tree changes, which is correct and loses focus on a parameter whose
+    callback reshapes the dialog.
+
+- **`scijava-ui3`** (`org.scijava.ui3`) and **`scijava-swing`**
+  (`org.scijava.swing`): the contracts, and the first toolkit to meet them.
+  **Built**, and the shape of the split is the point:
+  - `Widget` is a view of a `ParameterNode`, and that is all it is. There is no
+    `WidgetModel`: SciJava Common needed one because a widget could not see the
+    module, whereas a widget here reads the node for label, description,
+    bounds, style and resolved choices, and writes through `ParameterModel`.
+    Writing through the model is what makes callbacks run and the dialog
+    reshape itself, so a widget gets the dynamic behavior by not doing anything
+    clever.
+  - `WidgetPanel` **is a `Widget`**, so a group nests in its parent's list with
+    no special case, however deep. `WidgetPanels` walks the tree the same way
+    for every toolkit; a binding supplies factories and a panel factory, some
+    150 lines of tree-walking it no longer writes.
+  - `InputHarvester` is a `Preprocessor`. Dismissing the dialog is
+    `Execution.decline`, an ordinary outcome that the `ExecutionResult`
+    reports, rather than a `canceled` flag on a stateful preprocessor.
+  - **MigLayout is gone**, replaced by `GridBagLayout`: two-column label-field
+    layout is not worth a third-party dependency, still less an automatic
+    module in a JPMS build.
+  - **Six widgets so far** — number (spinner, with an optional slider), text
+    (field, password, area), toggle, choice, file, and the panel itself. The
+    button, color, date, file-list, message and radio-choice widgets are not
+    ported; each earns its place when something asks for it.
+  - **Style hints are advisory strings** (`@Parameter(style = "slider")`,
+    `"format:0.00"`), which a toolkit is free to ignore, so a parameter styled
+    for Swing still renders elsewhere. `min`, `max` and `stepSize` are strings
+    too, read back in the parameter's own type — because metadata has to
+    survive a script header.
+  - **Demos with `main()`** (`Demos` in the test sources) put each tricky
+    behavior on screen: the kitchen sink, the advanced toggle, the generated
+    group, computed choices, live validation, and two values that keep each
+    other in step.
 
 - **Input harvesting is a headline deliverable**, not a port. It is the
   workhorse that lets Fiji users write scripts without UI-specific concerns.
@@ -838,7 +873,7 @@ after it.
   `org.scijava.widget` as written.
 - **The application shell moves to layers 1 and 2**, it is not discarded:
   `ApplicationFrame`, `Desktop`, `StatusBar` and `ToolBar` are contracts in
-  `scijava-ui-api` and implementations in the toolkit bindings. What the core
+  `scijava-ui3` and implementations in the toolkit bindings. What the core
   drops is any knowledge that they exist.
 - **`input` and `tool`** are re-framed, not frozen: UI-agnostic facades over
   GUI concepts, layered on `scijava-events`, letting code listen for GUI
@@ -872,7 +907,7 @@ after it.
 | `module`, `command` | → execution layer (Phase 3) |
 | `script` | → scripting facade + adapters (Phase 3) |
 | `widget` | → input harvesting, redesigned (Phase 4) |
-| `ui`, `menu` | `scijava-ui-api` contracts and `scijava-menu` (layer 1), with toolkit bindings in layer 2 (Phase 4) |
+| `ui`, `menu` | `scijava-ui3` contracts and `scijava-menu` (layer 1), with toolkit bindings in layer 2 (Phase 4) |
 | `input`, `tool` | Re-framed as UI-agnostic facades (Phase 4) |
 | `display` | Overhauled, not ported (Phase 4) |
 | `platform`, `ui.dnd` | `scijava-desktop` modernization (Phase 4) |

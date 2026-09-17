@@ -94,7 +94,23 @@ public final class Executables {
 	 * </p>
 	 */
 	public static Executable executableOf(final Runnable object) {
-		final Struct struct = struct(object.getClass());
+		return executableOf(object, null);
+	}
+
+	/**
+	 * Describes an already-constructed object as an {@link Executable},
+	 * reflecting into it through the given lookup.
+	 *
+	 * @param object the object to run
+	 * @param lookup a lookup with private access to its class, as
+	 *          {@code Access.lookupIn} provides, or null to reflect with this
+	 *          module's own access
+	 * @see #executableOf(Runnable)
+	 */
+	public static Executable executableOf(final Runnable object,
+		final java.lang.invoke.MethodHandles.Lookup lookup)
+	{
+		final Struct struct = struct(object.getClass(), lookup);
 		return new Executable() {
 
 			@Override
@@ -114,7 +130,7 @@ public final class Executables {
 
 					@Override
 					public Executable executable() {
-						return Executables.executableOf(object);
+						return Executables.executableOf(object, lookup);
 					}
 
 					@Override
@@ -129,7 +145,7 @@ public final class Executables {
 
 					@Override
 					public java.util.Optional<Behavior> behavior(final String name) {
-						return JavaExecutable.behaviorOf(object.getClass(), null, object,
+						return JavaExecutable.behaviorOf(object.getClass(), lookup, object,
 							name);
 					}
 				};

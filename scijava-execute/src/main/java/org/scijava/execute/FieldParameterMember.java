@@ -133,6 +133,10 @@ public class FieldParameterMember<T> implements ParameterMember<T>,
 		put(attrs, GROUP, parameter.group());
 		put(attrs, CHOICES, String.join(",", parameter.choices()));
 		put(attrs, CHOICES_FROM, parameter.choicesFrom());
+		put(attrs, MIN, parameter.min());
+		put(attrs, MAX, parameter.max());
+		put(attrs, STEP_SIZE, parameter.stepSize());
+		put(attrs, STYLE, parameter.style());
 		return attrs;
 	}
 

@@ -72,6 +72,18 @@ public interface ParameterMember<T> extends Member<T> {
 	/** Metadata key: the behavior producing the values it may take. */
 	String CHOICES_FROM = "choicesFrom";
 
+	/** Metadata key: the smallest value a numeric parameter may take. */
+	String MIN = "min";
+
+	/** Metadata key: the largest value a numeric parameter may take. */
+	String MAX = "max";
+
+	/** Metadata key: how far one step moves a numeric parameter. */
+	String STEP_SIZE = "stepSize";
+
+	/** Metadata key: a hint about how to display this parameter. */
+	String STYLE = "style";
+
 	/** Gets this parameter's metadata. */
 	Map<String, String> attrs();
 

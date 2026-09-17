@@ -182,7 +182,7 @@ public class ScriptLikeExecutableTest {
 	public void testProcessorsApplyToScriptsToo() throws Exception {
 		final List<String> seen = new ArrayList<>();
 		final Preprocessor filler = execution -> {
-			seen.add(((ExecutableInstance) execution.executable()).executable()
+			seen.add(execution.executable().executable()
 				.name());
 			execution.instance().member("name").set("grace");
 		};

@@ -215,7 +215,7 @@ public class Runner {
 		}
 
 		@Override
-		public Object executable() {
+		public ExecutableInstance executable() {
 			return instance;
 		}
 

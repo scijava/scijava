@@ -609,17 +609,39 @@ No application context required by anything in this phase.
 
 ### Phase 3 — Execution layer
 
-- **Factor the framework-neutral member parsing out of `scijava-ops-engine`**
-  into `scijava-struct` (or a `scijava-struct-reflect` beside it):
-  `ClassParameterMemberParser`, `Field`/`MethodParameterMemberParser`,
-  `FunctionalParameters`, `SynthesizedParameterMember`. The Op-specific pieces
-  (`OpDependency` members, retyping/resizing) stay in `ops-engine`. The
-  execution layer must **not** depend on `ops-engine`; if a dependency is
-  useful it runs the other way, `ops-engine` → execution layer.
-- **Execution module** (name TBD): pre/postprocessor chains, input resolution,
-  a `@Parameter` equivalent, and a runner — built on `scijava-struct`.
-  Cancellation needs nothing here: the runner hands back a `Future`, and
-  cancelling it interrupts the worker.
+- **Factoring the member parsing out of `scijava-ops-engine`** is wanted, but
+  the coupling is deeper than the file names suggest. Inspecting the nineteen
+  classes in `ops.engine.struct`, only a handful are framework-neutral
+  (`FieldInstance`, `ParameterData`, `FunctionalMethodType`,
+  `SynthesizedParameterMember`, `RetypingRequest`). The parsers themselves
+  reach into Op-specific exceptions (`FunctionalTypeOpException`,
+  `NullablesOnMultipleMethodsException`), Op-specific annotations
+  (`@Nullable`, `@OpDependency` in `scijava-ops-spi`), and `ops.engine.util`
+  helpers. Lifting them means first deciding where an "optional parameter"
+  annotation lives, and `scijava-ops-spi` is already released.
+  - So: build the execution layer first and let a **second real consumer**
+    show which abstractions are genuinely shared, rather than guessing from
+    the Ops side alone. That is the same discipline applied to `ObjectService`
+    and the settings store.
+  - The execution layer must **not** depend on `ops-engine`; if a dependency
+    is useful it runs the other way.
+- **`scijava-execute`** (`org.scijava.execute`): pre/postprocessor chains,
+  input resolution, a `@Parameter` equivalent, and a runner — built on
+  `scijava-struct`. Cancellation needs nothing of its own: a run is a
+  `Callable` for an executor, and cancelling the `Future` interrupts it.
+  - **Started**: `@Parameter` on fields, a `MemberParser` that reads them
+    (inherited ones included), and `Executables.run`, which binds inputs by
+    name and returns outputs by name.
+  - `@Parameter` here means only what it meant in SciJava Common's *module*
+    sense — an input or output of something runnable. Injecting a service is
+    `@Dependency`, in `scijava-context`. Conflating those two is what made the
+    original confusing.
+  - **A required input must be supplied, not merely non-null.** Checking the
+    field instead would let a missing required `double` run silently as `0.0`,
+    since a primitive field is never null.
+  - Still to do here: the pre/postprocessor chain, and factoring the
+    framework-neutral member parsing out of `ops-engine` — which is a larger
+    job than it looks, see below.
 - **Commands:** a struct, plus menu metadata, plus `run`. Commands and Ops
   remain separate concepts sharing this layer.
 - **Scripting:** `javax.script` is not general enough. GraalVM's Truffle

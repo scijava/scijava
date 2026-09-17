@@ -42,6 +42,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.scijava.events.EventDeliveryException;
+import org.scijava.events.Subscription;
 import org.scijava.priority.Priority;
 
 /**
@@ -267,6 +269,106 @@ public class ContextTest {
 				() -> context.service(Demanding.class));
 			assertTrue(exc.getMessage().contains("greeter"), exc.getMessage());
 			assertTrue(exc.getMessage().contains("Greeter"), exc.getMessage());
+		}
+	}
+
+	// -- Event handlers --
+
+	public static class Listening implements Service {
+
+		final List<String> heard = new ArrayList<>();
+
+		@EventHandler
+		private void onString(final String event) {
+			heard.add(event);
+		}
+
+		@EventHandler(priority = Priority.HIGH)
+		private void onStringFirst(final String event) {
+			heard.add("first:" + event);
+		}
+	}
+
+	/** A service's handlers are subscribed for it, with no cleanup to write. */
+	@Test
+	public void testServiceHandlersAreSubscribedAutomatically() {
+		final Context context = Context.of(new Listening());
+		final Listening service = context.service(Listening.class);
+		context.events().publish("hello");
+		// NB: higher priority first.
+		assertEquals(List.of("first:hello", "hello"), service.heard);
+
+		// Disposing the context unsubscribes them.
+		context.dispose();
+		assertEquals(2, service.heard.size());
+	}
+
+	public static class Manual {
+
+		final List<String> heard = new ArrayList<>();
+
+		@EventHandler
+		private void onString(final String event) {
+			heard.add(event);
+		}
+	}
+
+	/** Objects the context did not create are subscribed on request. */
+	@Test
+	public void testManualSubscription() {
+		try (final Context context = Context.of()) {
+			final Manual target = new Manual();
+			// NB: not subscribed until asked.
+			context.events().publish("ignored");
+			assertTrue(target.heard.isEmpty());
+
+			final List<Subscription> subscriptions = context.subscribe(target);
+			assertEquals(1, subscriptions.size());
+			context.events().publish("heard");
+			assertEquals(List.of("heard"), target.heard);
+
+			// The caller owns these, and can end them early.
+			subscriptions.forEach(Subscription::close);
+			context.events().publish("after");
+			assertEquals(List.of("heard"), target.heard);
+		}
+	}
+
+	public static class Malformed implements Service {
+
+		@EventHandler
+		private void twoParameters(final String a, final String b) {
+			// NB: not a valid handler.
+		}
+	}
+
+	/** A malformed handler is reported, naming the method. */
+	@Test
+	public void testMalformedHandler() {
+		try (final Context context = Context.of(new Malformed())) {
+			final ServiceException exc = assertThrows(ServiceException.class, //
+				() -> context.service(Malformed.class));
+			assertTrue(exc.getMessage().contains("twoParameters"), exc.getMessage());
+		}
+	}
+
+	public static class Throwing implements Service {
+
+		@EventHandler
+		private void onString(final String event) {
+			throw new IllegalStateException("handler blew up");
+		}
+	}
+
+	/** What a handler throws reaches the publisher, not a reflection wrapper. */
+	@Test
+	public void testHandlerExceptionIsUnwrapped() {
+		try (final Context context = Context.of(new Throwing())) {
+			context.service(Throwing.class);
+			final EventDeliveryException exc = assertThrows(
+				EventDeliveryException.class, () -> context.events().publish("boom"));
+			assertInstanceOf(IllegalStateException.class, exc.getCause());
+			assertEquals("handler blew up", exc.getCause().getMessage());
 		}
 	}
 

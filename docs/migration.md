@@ -111,6 +111,7 @@ A **dropped** row is a successful outcome, not a gap.
 | `cache` | `scijava-cache` moves in, keeping `org.scijava.cache` (Phase 2) | planned |
 | `thread` | `org.scijava.concurrent` | ported |
 | `task` | `org.scijava.progress` | ported |
+| `plugin.Parameter` (as dependency injection) | `org.scijava.context.Dependency`. Renamed because `@Parameter` meant both "inject this" and "this is a module input"; the latter is now `org.scijava.struct` | ported |
 | `plugin` (`Plugin`, `Attr`, `PluginService`, `PluginInfo`, `PluginIndex`) | `org.scijava.context.Plugin` and `Attr`, discovered via `Context.plugins(Class)`. `PluginInfo` becomes `org.scijava.discovery.Discovery`, which reports class name, metadata and priority without loading the class; `PluginService` and `PluginIndex` are subsumed by `Context.plugins` | ported |
 | `plugin` (the `HandlerPlugin`/`WrapperPlugin`/`TypedPlugin`/`SingletonPlugin` hierarchy and their services) | not ported — each user of these inlines the small contract it needs, as `DataHandle` did | dropped |
 | `service` | `org.scijava.context`: `Service` (no longer a plugin, and discovered via `ServiceLoader`), with `Context` holding them. `SciJavaService` has no equivalent — a marker is not needed. `ServiceHelper` and `ServiceIndex` are internal to `Context` | ported |

@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -184,6 +185,89 @@ public class ContextTest {
 		context.dispose();
 		context.events().publish("after");
 		assertEquals(List.of("before"), heard);
+	}
+
+	// -- Injection --
+
+	public interface Counter extends Service {
+
+		int count();
+	}
+
+	public static class DefaultCounter implements Counter {
+
+		@Override
+		public int count() {
+			return 42;
+		}
+	}
+
+	public static class InjectedService implements Service {
+
+		@Dependency
+		private Counter counter;
+
+		@Dependency
+		private Context context;
+
+		@Dependency(required = false)
+		private Greeter absent;
+
+		int countViaDependency() {
+			return counter.count();
+		}
+	}
+
+	@Test
+	public void testFieldInjection() {
+		try (final Context context = Context.of(new InjectedService(),
+			new DefaultCounter()))
+		{
+			final InjectedService service = context.service(InjectedService.class);
+			assertEquals(42, service.countViaDependency());
+			assertSame(context, service.context);
+			assertNull(service.absent, "an optional dependency should stay null");
+		}
+	}
+
+	/** Dependencies are in place before initialize runs. */
+	public static class EarlyUser implements Service {
+
+		@Dependency
+		private Counter counter;
+
+		private int seenDuringInit = -1;
+
+		@Override
+		public void initialize(final Context context) {
+			seenDuringInit = counter.count();
+		}
+	}
+
+	@Test
+	public void testInjectionHappensBeforeInitialize() {
+		try (final Context context = Context.of(new EarlyUser(),
+			new DefaultCounter()))
+		{
+			assertEquals(42, context.service(EarlyUser.class).seenDuringInit);
+		}
+	}
+
+	public static class Demanding implements Service {
+
+		@Dependency
+		private Greeter greeter;
+	}
+
+	/** A missing required dependency names the field and the type. */
+	@Test
+	public void testMissingRequiredDependency() {
+		try (final Context context = Context.of(new Demanding())) {
+			final ServiceException exc = assertThrows(ServiceException.class, //
+				() -> context.service(Demanding.class));
+			assertTrue(exc.getMessage().contains("greeter"), exc.getMessage());
+			assertTrue(exc.getMessage().contains("Greeter"), exc.getMessage());
+		}
 	}
 
 	// -- Mutual dependency --

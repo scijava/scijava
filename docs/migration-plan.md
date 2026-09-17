@@ -549,9 +549,18 @@ No application context required by anything in this phase.
     appear. This is the hazard noted above, met first-hand. `pom-scijava`
     configuring this for SciJava components would remove the trap for the
     people most likely to fall into it.
-  - Still to do here: declarative field injection through a qualified `opens`,
-    `@EventHandler` scanning, the one-way legacy bridge, and the core services
-    themselves.
+  - **Field injection is done**: `@Dependency` fills in services, the
+    `Context` and the `EventBus`, after construction and before
+    `Service.initialize`. It is deliberately not called `@Parameter` as in
+    SciJava Common, where that annotation meant two unrelated things — a
+    dependency to inject, and an input to a module — the second of which is
+    now `org.scijava.struct`'s business.
+    `scijava-context-test` injects **private** fields of a plugin across a
+    real module boundary, proving both halves of the earlier claim at once:
+    the qualified `opens` grants the container deep reflection, and the
+    package is still exported to nobody.
+  - Still to do here: `@EventHandler` scanning, the one-way legacy bridge, and
+    the core services themselves.
   - **Dependencies are not constructor arguments.** Constructor injection
     would publish every dependency in a signature, so changing an internal
     dependency would be an API change and a binary compatibility break unless

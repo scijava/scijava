@@ -19,3 +19,6 @@ target/
 
 # vim #
 *.swp
+
+# Eclipse annotation processing
+.factorypath

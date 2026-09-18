@@ -1,6 +1,6 @@
 /*
  * #%L
- * Swing widgets, and a dialog to harvest inputs with them.
+ * Discoverable commands, with the metadata a menu is built from.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,20 +27,45 @@
  * #L%
  */
 
-module org.scijava.swing {
+package org.scijava.command;
 
-	exports org.scijava.swing;
+/**
+ * Walks a {@link MenuTree} into a toolkit's menus.
+ *
+ * @author Curtis Rueden
+ */
+public final class Menus {
 
-	// NB: one opens, to the container alone, so that it can inject and
-	// construct these plugins. `opens` is not `exports`.
-	opens org.scijava.swing to org.scijava.context;
+	private Menus() {
+		// prevent instantiation of utility class
+	}
 
-	requires transitive java.desktop;
-	requires transitive org.scijava.ui3;
-	requires transitive org.scijava.command;
-	requires transitive org.scijava.context;
-	requires org.scijava.discovery;
-	requires org.scijava.priority;
-	requires org.slf4j;
+	/**
+	 * Builds the given menu tree into the given menu bar.
+	 *
+	 * @param root the tree to build, as {@link MenuTree#of} returns
+	 * @param bar the toolkit's menu bar, which is filled in
+	 * @param creator makes the toolkit's menus and items
+	 * @return the menu bar, for chaining
+	 */
+	public static <B, M> B build(final MenuTree root, final B bar,
+		final MenuCreator<B, M> creator)
+	{
+		for (final MenuTree child : root.children()) {
+			if (child.isLeaf()) creator.topItem(child, bar);
+			else fill(child, creator.topMenu(child, bar), creator);
+		}
+		return bar;
+	}
 
+	// -- Helper methods --
+
+	private static <B, M> void fill(final MenuTree node, final M menu,
+		final MenuCreator<B, M> creator)
+	{
+		for (final MenuTree child : node.children()) {
+			if (child.isLeaf()) creator.item(child, menu);
+			else fill(child, creator.subMenu(child, menu), creator);
+		}
+	}
 }

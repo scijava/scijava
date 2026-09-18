@@ -891,6 +891,36 @@ after it.
   and the prototype preserved on the `historical/scijava-ops-prototype` branch
   (`widget/`, `swing-widget/`), which is the design starting point rather than
   `org.scijava.widget` as written.
+- **A shell exists, as a demo**: `Shell` in `scijava-swing`'s test sources is
+  a window with menus, a search bar and a status line. It is the first thing
+  to put the whole stack together - commands found through the annotation
+  index, arranged by `MenuTree`, rendered by `SwingMenus`, run by `Runner`,
+  filled in by `SwingInputHarvester` - and starting it loads no command class.
+  `MenuCreator`/`Menus` (in `scijava-command`, beside the tree they walk) hold
+  the toolkit-free part of the walk, so a second toolkit implements four
+  methods and inherits the rest.
+
+- **From the `fijifx` experiment** (unpublished, since retired), which asked
+  the right questions before this design existed:
+  - *"Is there any way we can build the menus before loading the command
+    classes? Not if we use `@Plugin` annotations on the commands themselves
+    -- we can do it if all menu items are scripts."* That conclusion is now
+    wrong, and usefully so: the annotation index is read as **data**, and
+    `@Menu` is indexed separately from `@Plugin` and joined on the class name,
+    so a menu of ten thousand commands costs no class loading at all. The
+    experiment's own class-loading test - a static initializer that sleeps a
+    second - is the measurement that made the question urgent.
+  - **`AppLoader` is the legacy bridge's shape.** The experiment sketched one
+    loader per source of commands - SciJava's plugin index, ImageJ 1.x's
+    `plugins.config`, a Fiji `.toml`, a directory of scripts - each
+    contributing menu entries into one application model, and each able to
+    report progress for a splash screen. That is what the bridge needs:
+    several discovery sources feeding one `MenuTree`, with SciJava Common's
+    `ModuleInfo`s as one source among them rather than a special case.
+  - **The main window is menu bar, tool bar, progress bar, status bar and a
+    search field**, and the search field is not an afterthought: a command
+    that is in no menu is still reachable, which the demo shell shows.
+
 - **The application shell moves to layers 1 and 2**, it is not discarded:
   `ApplicationFrame`, `Desktop`, `StatusBar` and `ToolBar` are contracts in
   `scijava-ui3` and implementations in the toolkit bindings. What the core

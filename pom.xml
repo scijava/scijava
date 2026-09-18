@@ -57,6 +57,7 @@
 		<module>scijava-taglets</module>
 		<!-- End implicit dependencies -->
 
+		<module>scijava-awt</module>
 		<module>scijava-code-api</module>
 		<module>scijava-collections</module>
 		<module>scijava-command</module>

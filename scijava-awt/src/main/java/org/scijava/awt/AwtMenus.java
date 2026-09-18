@@ -1,6 +1,6 @@
 /*
  * #%L
- * JavaFX widgets, and a dialog to harvest inputs with them.
+ * AWT widgets and platform plumbing, with no Swing anywhere.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,21 +27,15 @@
  * #L%
  */
 
-package org.scijava.javafx;
+package org.scijava.awt;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.Menu;
+import java.awt.MenuBar;
+import java.awt.MenuItem;
+import java.awt.MenuShortcut;
+import java.awt.event.KeyEvent;
 import java.util.Optional;
 import java.util.function.Consumer;
-
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCharacterCombination;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyCombination.Modifier;
 
 import org.scijava.command.Accelerator;
 import org.scijava.command.CommandInfo;
@@ -52,17 +46,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Builds a JavaFX menu bar from a {@link MenuTree}.
+ * Builds an AWT menu bar from a {@link MenuTree}.
  *
  * @author Curtis Rueden
  */
-public class FxMenus implements MenuCreator<MenuBar, Menu> {
+public class AwtMenus implements MenuCreator<MenuBar, Menu> {
 
-	private static final Logger log = LoggerFactory.getLogger(FxMenus.class);
+	private static final Logger log = LoggerFactory.getLogger(AwtMenus.class);
 
 	private final Consumer<CommandInfo> onSelect;
 
-	public FxMenus(final Consumer<CommandInfo> onSelect) {
+	public AwtMenus(final Consumer<CommandInfo> onSelect) {
 		this.onSelect = onSelect;
 	}
 
@@ -70,20 +64,20 @@ public class FxMenus implements MenuCreator<MenuBar, Menu> {
 	public static MenuBar create(final MenuTree root,
 		final Consumer<CommandInfo> onSelect)
 	{
-		return Menus.build(root, new MenuBar(), new FxMenus(onSelect));
+		return Menus.build(root, new MenuBar(), new AwtMenus(onSelect));
 	}
 
 	@Override
 	public Menu topMenu(final MenuTree node, final MenuBar bar) {
 		final Menu menu = new Menu(node.label());
-		bar.getMenus().add(menu);
+		bar.add(menu);
 		return menu;
 	}
 
 	@Override
 	public Menu subMenu(final MenuTree node, final Menu parent) {
 		final Menu menu = new Menu(node.label());
-		parent.getItems().add(menu);
+		parent.add(menu);
 		return menu;
 	}
 
@@ -91,57 +85,34 @@ public class FxMenus implements MenuCreator<MenuBar, Menu> {
 	public void item(final MenuTree leaf, final Menu parent) {
 		final CommandInfo command = leaf.command().orElseThrow();
 		final MenuItem item = new MenuItem(leaf.label());
-		command.accelerator().map(FxMenus::accelerator).ifPresent(
-			item::setAccelerator);
-		command.iconPath().map(this::icon).ifPresent(item::setGraphic);
-		item.setOnAction(e -> onSelect.accept(command));
-		parent.getItems().add(item);
+		shortcut(command.accelerator().orElse(null)).ifPresent(item::setShortcut);
+		// NB: AWT menu items have no icon at all, so iconPath is ignored here.
+		item.addActionListener(e -> onSelect.accept(command));
+		parent.add(item);
 	}
 
 	// -- Helper methods --
 
 	/**
-	 * Turns an accelerator into a JavaFX key combination.
+	 * Turns an accelerator into an AWT menu shortcut.
 	 * <p>
-	 * One with no modifiers is handed to
-	 * {@link KeyCombination#keyCombination(String)}, so JavaFX's own notation
-	 * ({@code "Ctrl+Shift+N"}) works too.
+	 * NB: {@link MenuShortcut} can express the platform's menu shortcut and
+	 * shift, and nothing else - no alt, and no shortcut without the menu
+	 * modifier. An accelerator AWT cannot say is dropped rather than
+	 * approximated into a different key combination.
 	 * </p>
-	 *
-	 * @return the combination, or null if it cannot be read
 	 */
-	static KeyCombination accelerator(final String accelerator) {
+	static Optional<MenuShortcut> shortcut(final String accelerator) {
 		final Optional<Accelerator> parsed = Accelerator.parse(accelerator);
-		if (parsed.isEmpty()) return null;
+		if (parsed.isEmpty()) return Optional.empty();
 		final Accelerator a = parsed.get();
-		if (!a.hasModifiers()) {
-			try {
-				return KeyCombination.keyCombination(a.key());
+		if (!a.isShortcut() || a.isAlt() || !a.isCharacter()) {
+			if (a.hasModifiers()) {
+				log.debug("AWT cannot express the accelerator {}", accelerator);
 			}
-			catch (final IllegalArgumentException exc) {
-				log.warn("Unreadable accelerator: {}", accelerator);
-				return null;
-			}
+			return Optional.empty();
 		}
-		if (!a.isCharacter()) {
-			log.warn("Unreadable accelerator: {}", accelerator);
-			return null;
-		}
-		final List<Modifier> modifiers = new ArrayList<>();
-		// NB: SHORTCUT_DOWN is JavaFX saying what Swing needs a Toolkit call for.
-		if (a.isShortcut()) modifiers.add(KeyCombination.SHORTCUT_DOWN);
-		if (a.isAlt()) modifiers.add(KeyCombination.ALT_DOWN);
-		if (a.isShift()) modifiers.add(KeyCombination.SHIFT_DOWN);
-		return new KeyCharacterCombination(a.key(), modifiers.toArray(
-			new Modifier[0]));
-	}
-
-	private ImageView icon(final String path) {
-		final java.net.URL url = getClass().getResource(path);
-		if (url == null) {
-			log.warn("No such icon: {}", path);
-			return null;
-		}
-		return new ImageView(new Image(url.toExternalForm()));
+		final int key = KeyEvent.getExtendedKeyCodeForChar(a.key().charAt(0));
+		return Optional.of(new MenuShortcut(key, a.isShift()));
 	}
 }

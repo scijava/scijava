@@ -1,6 +1,6 @@
 /*
  * #%L
- * JavaFX widgets, and a dialog to harvest inputs with them.
+ * AWT widgets and platform plumbing, with no Swing anywhere.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,30 +27,59 @@
  * #L%
  */
 
-package org.scijava.javafx;
+package org.scijava.awt;
 
-import javafx.scene.Node;
+import java.awt.Checkbox;
+import java.awt.Component;
 
+import org.scijava.context.Plugin;
 import org.scijava.harvest.ParameterModel;
 import org.scijava.harvest.ParameterNode;
-import org.scijava.ui3.AbstractWidget;
+import org.scijava.ui3.WidgetFactory;
+import org.scijava.ui3.WidgetPanelFactory;
+import org.scijava.ui3.Widgets;
 
 /**
- * A {@link org.scijava.ui3.Widget} made of JavaFX controls.
- * <p>
- * NB: what is left here, once {@link AbstractWidget} holds the bookkeeping, is
- * exactly the toolkit-specific part: which type of control this binding deals
- * in. That is the whole of it.
- * </p>
+ * A widget for a true/false value.
  *
  * @author Curtis Rueden
  */
-public abstract class FxWidget extends AbstractWidget {
+public class AwtToggle extends AwtWidget {
 
-	protected FxWidget(final ParameterNode node, final ParameterModel model) {
+	private final Checkbox checkBox = new Checkbox();
+
+	public AwtToggle(final ParameterNode node, final ParameterModel model) {
 		super(node, model);
+		refresh();
+		checkBox.addItemListener(e -> update(checkBox.getState()));
 	}
 
-	/** Gets the control to place in the dialog. */
-	public abstract Node control();
+	@Override
+	public Component component() {
+		return checkBox;
+	}
+
+	@Override
+	protected void doRefresh() {
+		final Object value = value();
+		final boolean selected = value instanceof Boolean && (Boolean) value;
+		if (checkBox.getState() != selected) checkBox.setState(selected);
+	}
+
+	/** Makes {@link AwtToggle}s. */
+	@Plugin(type = WidgetFactory.class)
+	public static class Factory implements AwtWidgetFactory {
+
+		@Override
+		public boolean supports(final ParameterNode node) {
+			return Widgets.isBoolean(node);
+		}
+
+		@Override
+		public AwtWidget create(final ParameterNode node,
+			final ParameterModel model, final WidgetPanelFactory<AwtWidget> panels)
+		{
+			return new AwtToggle(node, model);
+		}
+	}
 }

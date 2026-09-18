@@ -33,6 +33,7 @@ import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.net.URL;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import javax.swing.ImageIcon;
@@ -41,6 +42,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import org.scijava.command.Accelerator;
 import org.scijava.command.CommandInfo;
 import org.scijava.command.MenuCreator;
 import org.scijava.command.MenuTree;
@@ -108,35 +110,30 @@ public class SwingMenus implements MenuCreator<JMenuBar, JMenu> {
 	// -- Helper methods --
 
 	/**
-	 * Reads an accelerator.
+	 * Turns an accelerator into a Swing keystroke.
 	 * <p>
-	 * {@code ^} is the platform's menu shortcut - control, or command on a Mac -
-	 * as ImageJ has always written it; {@code !} is alt and {@code +} is shift.
-	 * Anything else is handed to {@link KeyStroke#getKeyStroke(String)}, so
-	 * {@code "control shift N"} works too.
+	 * A shortcut with no modifiers is handed to
+	 * {@link KeyStroke#getKeyStroke(String)}, so Swing's own notation
+	 * ({@code "control shift N"}) works too.
 	 * </p>
 	 *
 	 * @return the keystroke, or null if it cannot be read
 	 */
 	static KeyStroke keyStroke(final String accelerator) {
-		if (accelerator == null || accelerator.isEmpty()) return null;
-		int modifiers = 0;
-		int i = 0;
-		for (; i < accelerator.length(); i++) {
-			final char c = accelerator.charAt(i);
-			if (c == '^') modifiers |= Toolkit.getDefaultToolkit()
-				.getMenuShortcutKeyMaskEx();
-			else if (c == '!') modifiers |= InputEvent.ALT_DOWN_MASK;
-			else if (c == '+') modifiers |= InputEvent.SHIFT_DOWN_MASK;
-			else break;
-		}
-		final String key = accelerator.substring(i);
-		if (modifiers == 0) return KeyStroke.getKeyStroke(key);
-		if (key.length() != 1) {
+		final Optional<Accelerator> parsed = Accelerator.parse(accelerator);
+		if (parsed.isEmpty()) return null;
+		final Accelerator a = parsed.get();
+		if (!a.hasModifiers()) return KeyStroke.getKeyStroke(a.key());
+		if (!a.isCharacter()) {
 			log.warn("Unreadable accelerator: {}", accelerator);
 			return null;
 		}
-		return KeyStroke.getKeyStroke(KeyEvent.getExtendedKeyCodeForChar(key
+		int modifiers = 0;
+		if (a.isShortcut()) modifiers |= Toolkit.getDefaultToolkit()
+			.getMenuShortcutKeyMaskEx();
+		if (a.isAlt()) modifiers |= InputEvent.ALT_DOWN_MASK;
+		if (a.isShift()) modifiers |= InputEvent.SHIFT_DOWN_MASK;
+		return KeyStroke.getKeyStroke(KeyEvent.getExtendedKeyCodeForChar(a.key()
 			.charAt(0)), modifiers);
 	}
 

@@ -50,9 +50,9 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import org.scijava.command.Commands;
-import org.scijava.command.CommandInfo;
-import org.scijava.command.MenuTree;
+import org.scijava.command3.Commands;
+import org.scijava.command3.CommandInfo;
+import org.scijava.command3.MenuTree;
 import org.scijava.context.Context;
 import org.scijava.execute.ExecutionResult;
 import org.scijava.execute.Runner;

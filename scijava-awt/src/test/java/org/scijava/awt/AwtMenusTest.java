@@ -45,7 +45,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIf;
-import org.scijava.command.MenuTree;
+import org.scijava.command3.MenuTree;
 import org.scijava.ui3.test.MenuConformance;
 
 /**

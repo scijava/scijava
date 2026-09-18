@@ -39,7 +39,7 @@ module org.scijava.javafx {
 	requires transitive javafx.controls;
 	requires transitive javafx.graphics;
 	requires transitive org.scijava.ui3;
-	requires transitive org.scijava.command;
+	requires transitive org.scijava.command3;
 	requires transitive org.scijava.context;
 	requires org.scijava.discovery;
 	requires org.scijava.priority;

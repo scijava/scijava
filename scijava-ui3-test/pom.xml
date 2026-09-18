@@ -89,7 +89,7 @@
 		<!-- NB: a test kit; there is nothing here to release. -->
 		<maven.deploy.skip>true</maven.deploy.skip>
 
-		<scijava-command.version>1.0.0-SNAPSHOT</scijava-command.version>
+		<scijava-command3.version>3.0.0-SNAPSHOT</scijava-command3.version>
 		<scijava-context.version>1.0.0-SNAPSHOT</scijava-context.version>
 		<scijava-index.version>1.0.0-SNAPSHOT</scijava-index.version>
 		<scijava-ui3.version>3.0.0-SNAPSHOT</scijava-ui3.version>
@@ -103,8 +103,8 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-command</artifactId>
-			<version>${scijava-command.version}</version>
+			<artifactId>scijava-command3</artifactId>
+			<version>${scijava-command3.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>

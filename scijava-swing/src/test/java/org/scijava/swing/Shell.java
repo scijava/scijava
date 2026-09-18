@@ -57,9 +57,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.scijava.command.Commands;
-import org.scijava.command.CommandInfo;
-import org.scijava.command.MenuTree;
+import org.scijava.command3.Commands;
+import org.scijava.command3.CommandInfo;
+import org.scijava.command3.MenuTree;
 import org.scijava.context.Context;
 import org.scijava.execute.ExecutionResult;
 import org.scijava.execute.Runner;

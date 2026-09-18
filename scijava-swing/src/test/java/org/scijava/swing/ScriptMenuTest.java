@@ -46,7 +46,7 @@ import javax.swing.JMenuItem;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIf;
-import org.scijava.command.ExecutableInfo;
+import org.scijava.command.CommandInfo;
 import org.scijava.command.MenuTree;
 import org.scijava.script3.ScriptFinder;
 
@@ -92,7 +92,7 @@ public class ScriptMenuTest {
 	/** What the menu holds is the thing to run, script or command alike. */
 	@Test
 	public void testScriptRunsFromItsMenuEntry() {
-		final ExecutableInfo hello = MenuTree.of(entries()) //
+		final CommandInfo hello = MenuTree.of(entries()) //
 			.find("Help>Say Hello From A Script").orElseThrow() //
 			.entry().orElseThrow();
 
@@ -105,8 +105,8 @@ public class ScriptMenuTest {
 
 	// -- Helper methods --
 
-	private static List<ExecutableInfo> entries() {
-		final List<ExecutableInfo> entries = new ArrayList<>();
+	private static List<CommandInfo> entries() {
+		final List<CommandInfo> entries = new ArrayList<>();
 		try (final org.scijava.context.Context context = //
 			org.scijava.context.Context.create())
 		{
@@ -114,7 +114,7 @@ public class ScriptMenuTest {
 				.filter(c -> c.className().contains("SampleCommands")) //
 				.forEach(entries::add);
 		}
-		new ScriptFinder().find(scripts()).forEach(found -> entries.add(ExecutableInfo
+		new ScriptFinder().find(scripts()).forEach(found -> entries.add(CommandInfo
 			.of(found.script(), found.metadata())));
 		return entries;
 	}

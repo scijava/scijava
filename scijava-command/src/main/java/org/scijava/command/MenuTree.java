@@ -64,10 +64,10 @@ public class MenuTree {
 	public static final String SEPARATOR = ">";
 
 	private final String label;
-	private final ExecutableInfo command;
+	private final CommandInfo command;
 	private final Map<String, MenuTree> children = new LinkedHashMap<>();
 
-	private MenuTree(final String label, final ExecutableInfo command) {
+	private MenuTree(final String label, final CommandInfo command) {
 		this.label = label;
 		this.command = command;
 	}
@@ -85,9 +85,9 @@ public class MenuTree {
 	 *          else an application has found
 	 * @return the root of the tree, whose children are the top-level menus
 	 */
-	public static MenuTree of(final Collection<? extends ExecutableInfo> commands) {
+	public static MenuTree of(final Collection<? extends CommandInfo> commands) {
 		final MenuTree root = new MenuTree("", null);
-		for (final ExecutableInfo command : commands) {
+		for (final CommandInfo command : commands) {
 			if (!command.isVisible()) continue;
 			final Optional<String> path = command.menuPath();
 			if (path.isEmpty()) continue;
@@ -103,7 +103,7 @@ public class MenuTree {
 	}
 
 	/** Gets what this entry runs, if it is a leaf. */
-	public Optional<ExecutableInfo> entry() {
+	public Optional<CommandInfo> entry() {
 		return Optional.ofNullable(command);
 	}
 
@@ -138,8 +138,8 @@ public class MenuTree {
 	}
 
 	/** Gets every command in this subtree, in display order. */
-	public List<ExecutableInfo> leaves() {
-		final List<ExecutableInfo> leaves = new ArrayList<>();
+	public List<CommandInfo> leaves() {
+		final List<CommandInfo> leaves = new ArrayList<>();
 		collectLeaves(leaves);
 		return leaves;
 	}
@@ -151,11 +151,11 @@ public class MenuTree {
 
 	// -- Helper methods --
 
-	private void add(final ExecutableInfo command, final String[] path) {
+	private void add(final CommandInfo command, final String[] path) {
 		add(command, path, 0);
 	}
 
-	private void add(final ExecutableInfo command, final String[] path,
+	private void add(final CommandInfo command, final String[] path,
 		final int depth)
 	{
 		final String element = path[depth].trim();
@@ -199,7 +199,7 @@ public class MenuTree {
 			.min().orElse(Double.POSITIVE_INFINITY);
 	}
 
-	private void collectLeaves(final List<ExecutableInfo> leaves) {
+	private void collectLeaves(final List<CommandInfo> leaves) {
 		if (isLeaf()) {
 			leaves.add(command);
 			return;

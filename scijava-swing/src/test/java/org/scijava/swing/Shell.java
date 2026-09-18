@@ -58,7 +58,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.scijava.command.Commands;
-import org.scijava.command.ExecutableInfo;
+import org.scijava.command.CommandInfo;
 import org.scijava.command.MenuTree;
 import org.scijava.context.Context;
 import org.scijava.execute.ExecutionResult;
@@ -79,7 +79,7 @@ import org.scijava.script3.ScriptFinder;
  * It is the first thing to put the whole stack together: commands declared in
  * {@code SampleCommands} and found through the annotation index - and Groovy
  * scripts found in a directory, which arrive in the same menus through the
- * same {@code ExecutableInfo} - arranged by
+ * same {@code CommandInfo} - arranged by
  * {@link MenuTree}, rendered by {@link SwingMenus}, run by
  * {@link org.scijava.execute.Runner} and filled in by
  * {@link SwingInputHarvester}. Starting it loads no command class; choosing
@@ -91,16 +91,16 @@ import org.scijava.script3.ScriptFinder;
 public class Shell {
 
 	private final Context context = Context.create();
-	private final List<ExecutableInfo> commands = entries();
+	private final List<CommandInfo> commands = entries();
 	private final Runner runner;
 
 	private final JFrame frame = new JFrame("SciJava");
 	private final JLabel status = new JLabel("Ready");
 	private final JProgressBar progress = new JProgressBar();
 	private final JTextField search = new JTextField(20);
-	private final DefaultListModel<ExecutableInfo> matchModel =
+	private final DefaultListModel<CommandInfo> matchModel =
 		new DefaultListModel<>();
-	private final JList<ExecutableInfo> matches = new JList<>(matchModel);
+	private final JList<CommandInfo> matches = new JList<>(matchModel);
 
 	public Shell() {
 		final SwingInputHarvester harvester = SwingInputHarvester.of(context);
@@ -124,16 +124,16 @@ public class Shell {
 	 * Gathers what this application can run, from every source it has.
 	 * <p>
 	 * NB: this is the shape the legacy bridge wants too. A menu is built from
-	 * {@code ExecutableInfo}s, and where each came from - the annotation index, a
+	 * {@code CommandInfo}s, and where each came from - the annotation index, a
 	 * directory of scripts, in time a SciJava Common {@code ModuleInfo} - is
 	 * the application's business and nobody else's.
 	 * </p>
 	 */
-	private List<ExecutableInfo> entries() {
-		final List<ExecutableInfo> entries = new ArrayList<>(Commands.discover(
+	private List<CommandInfo> entries() {
+		final List<CommandInfo> entries = new ArrayList<>(Commands.discover(
 			context));
 		scriptsDirectory().ifPresent(dir -> new ScriptFinder().find(dir).forEach( //
-			found -> entries.add(ExecutableInfo.of(found.script(), found.metadata()))));
+			found -> entries.add(CommandInfo.of(found.script(), found.metadata()))));
 		return entries;
 	}
 
@@ -224,7 +224,7 @@ public class Shell {
 	/** Narrows the list to the commands whose name contains what was typed. */
 	private void filter() {
 		final String text = search.getText().trim().toLowerCase(Locale.ROOT);
-		final List<ExecutableInfo> found = commands.stream() //
+		final List<CommandInfo> found = commands.stream() //
 			.filter(c -> describe(c).toLowerCase(Locale.ROOT).contains(text)) //
 			.collect(Collectors.toList());
 		matchModel.clear();
@@ -234,12 +234,12 @@ public class Shell {
 	}
 
 	private void runSelected() {
-		final ExecutableInfo command = matches.getSelectedValue();
+		final CommandInfo command = matches.getSelectedValue();
 		if (command != null) run(command);
 	}
 
 	/** Runs a command, and says what came back. */
-	private void run(final ExecutableInfo command) {
+	private void run(final CommandInfo command) {
 		status.setText("Running " + command.label() + "...");
 		progress.setIndeterminate(true);
 		progress.setVisible(true);
@@ -254,7 +254,7 @@ public class Shell {
 		}, "shell-" + command.name()).start();
 	}
 
-	private static String describe(final ExecutableInfo command) {
+	private static String describe(final CommandInfo command) {
 		return command.menuPath().map(path -> path.replace(">", " ▸ ")) //
 			.orElseGet(() -> command.label() + " (not in any menu)");
 	}

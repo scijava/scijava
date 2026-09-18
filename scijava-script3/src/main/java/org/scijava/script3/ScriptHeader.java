@@ -183,7 +183,7 @@ public class ScriptHeader {
 	 * <p>
 	 * These are the {@code #@script(...)} keys, and they are the same names a
 	 * {@code @Menu} annotation uses, so
-	 * {@code org.scijava.command.ExecutableInfo.of} turns them into a menu entry
+	 * {@code org.scijava.command.CommandInfo.of} turns them into a menu entry
 	 * directly.
 	 * </p>
 	 */

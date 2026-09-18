@@ -51,7 +51,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import org.scijava.command.Commands;
-import org.scijava.command.ExecutableInfo;
+import org.scijava.command.CommandInfo;
 import org.scijava.command.MenuTree;
 import org.scijava.context.Context;
 import org.scijava.execute.ExecutionResult;
@@ -80,14 +80,14 @@ import org.scijava.execute.Runner;
 public class FxShell {
 
 	private final Context context = Context.create();
-	private final List<ExecutableInfo> commands = entries();
+	private final List<CommandInfo> commands = entries();
 	private final Runner runner;
 
 	private final Stage stage = new Stage();
 	private final Label status = new Label("Ready");
 	private final ProgressBar progress = new ProgressBar();
 	private final TextField search = new TextField();
-	private final ListView<ExecutableInfo> matches = new ListView<>();
+	private final ListView<CommandInfo> matches = new ListView<>();
 
 	public FxShell() {
 		runner = Runner.of(List.of(FxInputHarvester.of(context)), List.of());
@@ -101,7 +101,7 @@ public class FxShell {
 		matches.setCellFactory(list -> new ListCell<>() {
 
 			@Override
-			protected void updateItem(final ExecutableInfo item, final boolean empty) {
+			protected void updateItem(final CommandInfo item, final boolean empty) {
 				super.updateItem(item, empty);
 				setText(empty || item == null ? null : describe(item));
 			}
@@ -126,14 +126,14 @@ public class FxShell {
 	// -- Helper methods --
 
 	/** Gathers what this application can run: commands, and scripts. */
-	private List<ExecutableInfo> entries() {
-		final List<ExecutableInfo> entries = new java.util.ArrayList<>(Commands.discover(
+	private List<CommandInfo> entries() {
+		final List<CommandInfo> entries = new java.util.ArrayList<>(Commands.discover(
 			context));
 		final java.net.URL url = FxShell.class.getResource("/scripts");
 		if (url != null) {
 			try {
 				new org.scijava.script3.ScriptFinder().find(java.nio.file.Paths.get(url
-					.toURI())).forEach(found -> entries.add(ExecutableInfo.of(found.script(),
+					.toURI())).forEach(found -> entries.add(CommandInfo.of(found.script(),
 						found.metadata())));
 			}
 			catch (final java.net.URISyntaxException exc) {
@@ -162,7 +162,7 @@ public class FxShell {
 	/** Narrows the list to the commands whose name contains what was typed. */
 	private void filter() {
 		final String text = search.getText().trim().toLowerCase(Locale.ROOT);
-		final List<ExecutableInfo> found = commands.stream() //
+		final List<CommandInfo> found = commands.stream() //
 			.filter(c -> describe(c).toLowerCase(Locale.ROOT).contains(text)) //
 			.collect(Collectors.toList());
 		matches.setItems(FXCollections.observableArrayList(found));
@@ -171,12 +171,12 @@ public class FxShell {
 	}
 
 	private void runSelected() {
-		final ExecutableInfo command = matches.getSelectionModel().getSelectedItem();
+		final CommandInfo command = matches.getSelectionModel().getSelectedItem();
 		if (command != null) run(command);
 	}
 
 	/** Runs a command, and says what came back. */
-	private void run(final ExecutableInfo command) {
+	private void run(final CommandInfo command) {
 		status.setText("Running " + command.label() + "...");
 		progress.setVisible(true);
 		final Future<ExecutionResult> future = runner.run(command, Map.of());
@@ -189,7 +189,7 @@ public class FxShell {
 		}, "shell-" + command.name()).start();
 	}
 
-	private static String describe(final ExecutableInfo command) {
+	private static String describe(final CommandInfo command) {
 		return command.menuPath().map(path -> path.replace(">", " ▸ ")) //
 			.orElseGet(() -> command.label() + " (not in any menu)");
 	}

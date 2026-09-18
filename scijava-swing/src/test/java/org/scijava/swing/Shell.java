@@ -32,7 +32,13 @@ package org.scijava.swing;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Future;
@@ -51,12 +57,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.scijava.command.CommandInfo;
 import org.scijava.command.Commands;
+import org.scijava.command.ExecutableInfo;
 import org.scijava.command.MenuTree;
 import org.scijava.context.Context;
 import org.scijava.execute.ExecutionResult;
 import org.scijava.execute.Runner;
+import org.scijava.script3.ScriptFinder;
 
 /**
  * A small application: menus, a search bar, a status line.
@@ -70,7 +77,9 @@ import org.scijava.execute.Runner;
  * </pre>
  * <p>
  * It is the first thing to put the whole stack together: commands declared in
- * {@code SampleCommands} and found through the annotation index, arranged by
+ * {@code SampleCommands} and found through the annotation index - and Groovy
+ * scripts found in a directory, which arrive in the same menus through the
+ * same {@code ExecutableInfo} - arranged by
  * {@link MenuTree}, rendered by {@link SwingMenus}, run by
  * {@link org.scijava.execute.Runner} and filled in by
  * {@link SwingInputHarvester}. Starting it loads no command class; choosing
@@ -82,16 +91,16 @@ import org.scijava.execute.Runner;
 public class Shell {
 
 	private final Context context = Context.create();
-	private final List<CommandInfo> commands = Commands.discover(context);
+	private final List<ExecutableInfo> commands = entries();
 	private final Runner runner;
 
 	private final JFrame frame = new JFrame("SciJava");
 	private final JLabel status = new JLabel("Ready");
 	private final JProgressBar progress = new JProgressBar();
 	private final JTextField search = new JTextField(20);
-	private final DefaultListModel<CommandInfo> matchModel =
+	private final DefaultListModel<ExecutableInfo> matchModel =
 		new DefaultListModel<>();
-	private final JList<CommandInfo> matches = new JList<>(matchModel);
+	private final JList<ExecutableInfo> matches = new JList<>(matchModel);
 
 	public Shell() {
 		final SwingInputHarvester harvester = SwingInputHarvester.of(context);
@@ -110,6 +119,35 @@ public class Shell {
 	}
 
 	// -- Helper methods --
+
+	/**
+	 * Gathers what this application can run, from every source it has.
+	 * <p>
+	 * NB: this is the shape the legacy bridge wants too. A menu is built from
+	 * {@code ExecutableInfo}s, and where each came from - the annotation index, a
+	 * directory of scripts, in time a SciJava Common {@code ModuleInfo} - is
+	 * the application's business and nobody else's.
+	 * </p>
+	 */
+	private List<ExecutableInfo> entries() {
+		final List<ExecutableInfo> entries = new ArrayList<>(Commands.discover(
+			context));
+		scriptsDirectory().ifPresent(dir -> new ScriptFinder().find(dir).forEach( //
+			found -> entries.add(ExecutableInfo.of(found.script(), found.metadata()))));
+		return entries;
+	}
+
+	/** Finds the demo scripts, wherever the test resources landed. */
+	private static Optional<Path> scriptsDirectory() {
+		final URL url = Shell.class.getResource("/scripts");
+		if (url == null) return Optional.empty();
+		try {
+			return Optional.of(Paths.get(url.toURI()));
+		}
+		catch (final URISyntaxException exc) {
+			return Optional.empty();
+		}
+	}
 
 	private JPanel content() {
 		matches.setVisibleRowCount(6);
@@ -186,7 +224,7 @@ public class Shell {
 	/** Narrows the list to the commands whose name contains what was typed. */
 	private void filter() {
 		final String text = search.getText().trim().toLowerCase(Locale.ROOT);
-		final List<CommandInfo> found = commands.stream() //
+		final List<ExecutableInfo> found = commands.stream() //
 			.filter(c -> describe(c).toLowerCase(Locale.ROOT).contains(text)) //
 			.collect(Collectors.toList());
 		matchModel.clear();
@@ -196,12 +234,12 @@ public class Shell {
 	}
 
 	private void runSelected() {
-		final CommandInfo command = matches.getSelectedValue();
+		final ExecutableInfo command = matches.getSelectedValue();
 		if (command != null) run(command);
 	}
 
 	/** Runs a command, and says what came back. */
-	private void run(final CommandInfo command) {
+	private void run(final ExecutableInfo command) {
 		status.setText("Running " + command.label() + "...");
 		progress.setIndeterminate(true);
 		progress.setVisible(true);
@@ -213,10 +251,10 @@ public class Shell {
 				progress.setIndeterminate(false);
 				status.setText(message);
 			});
-		}, "shell-" + command.className()).start();
+		}, "shell-" + command.name()).start();
 	}
 
-	private static String describe(final CommandInfo command) {
+	private static String describe(final ExecutableInfo command) {
 		return command.menuPath().map(path -> path.replace(">", " ▸ ")) //
 			.orElseGet(() -> command.label() + " (not in any menu)");
 	}

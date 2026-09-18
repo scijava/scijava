@@ -65,8 +65,8 @@ public class MenuTreeTest {
 			final MenuTree leaf = root.find("Image>Adjust>Brightness/Contrast...")
 				.orElseThrow();
 			assertTrue(leaf.isLeaf());
-			assertEquals(DeepCommand.class.getName(), leaf.command().orElseThrow()
-				.className());
+			assertEquals(DeepCommand.class.getName(), leaf.entry().orElseThrow()
+				.name());
 		}
 	}
 
@@ -106,7 +106,7 @@ public class MenuTreeTest {
 		try (final Context context = Context.create()) {
 			final MenuTree root = MenuTree.of(Commands.discover(context));
 			final List<String> classNames = root.leaves().stream() //
-				.map(CommandInfo::className) //
+				.map(ExecutableInfo::name) //
 				.collect(Collectors.toList());
 			assertFalse(classNames.contains(Headless.class.getName()));
 		}

@@ -43,7 +43,7 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 import org.scijava.command.Accelerator;
-import org.scijava.command.CommandInfo;
+import org.scijava.command.ExecutableInfo;
 import org.scijava.command.MenuCreator;
 import org.scijava.command.MenuTree;
 import org.scijava.command.Menus;
@@ -64,20 +64,20 @@ public class SwingMenus implements MenuCreator<JMenuBar, JMenu> {
 
 	private static final Logger log = LoggerFactory.getLogger(SwingMenus.class);
 
-	private final Consumer<CommandInfo> onSelect;
+	private final Consumer<ExecutableInfo> onSelect;
 
 	/**
 	 * @param onSelect what to do with the command the user chose. It is called
 	 *          on the event dispatch thread, so it should hand the work
 	 *          elsewhere rather than run it there.
 	 */
-	public SwingMenus(final Consumer<CommandInfo> onSelect) {
+	public SwingMenus(final Consumer<ExecutableInfo> onSelect) {
 		this.onSelect = onSelect;
 	}
 
 	/** Builds a menu bar holding the given menu tree. */
 	public static JMenuBar create(final MenuTree root,
-		final Consumer<CommandInfo> onSelect)
+		final Consumer<ExecutableInfo> onSelect)
 	{
 		return Menus.build(root, new JMenuBar(), new SwingMenus(onSelect));
 	}
@@ -98,7 +98,7 @@ public class SwingMenus implements MenuCreator<JMenuBar, JMenu> {
 
 	@Override
 	public void item(final MenuTree leaf, final JMenu parent) {
-		final CommandInfo command = leaf.command().orElseThrow();
+		final ExecutableInfo command = leaf.entry().orElseThrow();
 		final JMenuItem item = new JMenuItem(leaf.label());
 		command.accelerator().map(SwingMenus::keyStroke).ifPresent(
 			item::setAccelerator);

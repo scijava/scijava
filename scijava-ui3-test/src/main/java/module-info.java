@@ -31,7 +31,7 @@ open module org.scijava.ui3.test {
 
 	exports org.scijava.ui3.test;
 
-	requires transitive org.scijava.command;
+	requires transitive org.scijava.command3;
 	requires transitive org.scijava.context;
 	requires transitive org.scijava.ui3;
 	requires transitive org.junit.jupiter.api;

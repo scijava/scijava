@@ -36,9 +36,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.command.ClassCommandInfo;
-import org.scijava.command.Commands;
-import org.scijava.command.MenuTree;
+import org.scijava.command3.ClassCommandInfo;
+import org.scijava.command3.Commands;
+import org.scijava.command3.MenuTree;
 import org.scijava.context.Context;
 
 /**

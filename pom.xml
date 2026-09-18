@@ -58,8 +58,9 @@
 		<!-- End implicit dependencies -->
 
 		<module>scijava-awt</module>
+		<module>scijava-bridge</module>
 		<module>scijava-collections</module>
-		<module>scijava-command</module>
+		<module>scijava-command3</module>
 		<module>scijava-common3</module>
 		<module>scijava-context</module>
 		<module>scijava-convert3</module>

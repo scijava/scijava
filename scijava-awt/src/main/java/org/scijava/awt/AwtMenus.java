@@ -37,11 +37,11 @@ import java.awt.event.KeyEvent;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import org.scijava.command.Accelerator;
-import org.scijava.command.CommandInfo;
-import org.scijava.command.MenuCreator;
-import org.scijava.command.MenuTree;
-import org.scijava.command.Menus;
+import org.scijava.command3.Accelerator;
+import org.scijava.command3.CommandInfo;
+import org.scijava.command3.MenuCreator;
+import org.scijava.command3.MenuTree;
+import org.scijava.command3.Menus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

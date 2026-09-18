@@ -33,8 +33,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import org.scijava.command.Command;
-import org.scijava.command.Menu;
+import org.scijava.command3.Command;
+import org.scijava.command3.Menu;
 import org.scijava.context.Plugin;
 import org.scijava.execute.Parameter;
 import org.scijava.execute.Parameters;

@@ -43,11 +43,11 @@ import javafx.scene.input.KeyCharacterCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyCombination.Modifier;
 
-import org.scijava.command.Accelerator;
-import org.scijava.command.CommandInfo;
-import org.scijava.command.MenuCreator;
-import org.scijava.command.MenuTree;
-import org.scijava.command.Menus;
+import org.scijava.command3.Accelerator;
+import org.scijava.command3.CommandInfo;
+import org.scijava.command3.MenuCreator;
+import org.scijava.command3.MenuTree;
+import org.scijava.command3.Menus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

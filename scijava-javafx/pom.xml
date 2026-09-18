@@ -86,7 +86,7 @@
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 
 		<!-- Note: These versions must match across all component POMs! -->
-		<scijava-command.version>1.0.0-SNAPSHOT</scijava-command.version>
+		<scijava-command3.version>3.0.0-SNAPSHOT</scijava-command3.version>
 		<scijava-context.version>1.0.0-SNAPSHOT</scijava-context.version>
 		<scijava-discovery.version>1.0.1-SNAPSHOT</scijava-discovery.version>
 		<scijava-index.version>1.0.0-SNAPSHOT</scijava-index.version>
@@ -108,8 +108,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-command</artifactId>
-			<version>${scijava-command.version}</version>
+			<artifactId>scijava-command3</artifactId>
+			<version>${scijava-command3.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>

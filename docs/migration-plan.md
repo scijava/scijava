@@ -693,7 +693,7 @@ unless it says there is no replacement at all, which it says explicitly.
 | Layer | Contents | Depends on |
 | --- | --- | --- |
 | **0. Foundation** (built) | `spi`, `common3`, `collections`, `priority`, `progress`, `concurrent`, `discovery`, `index`, `struct`, `io3`, `events`, `context`, `execute` | nothing above |
-| **1. Application model** (built, less `scijava-desktop`) | `scijava-command` (a struct plus presentation metadata, the menu tree and its walk), `scijava-ui3` (toolkit-agnostic contracts), `scijava-desktop` | layer 0 |
+| **1. Application model** (built, less `scijava-desktop`) | `scijava-command3` (a struct plus presentation metadata, the menu tree and its walk), `scijava-ui3` (toolkit-agnostic contracts), `scijava-desktop` | layer 0 |
 | **2. Toolkit bindings** | `scijava-awt` (and the AWT platform layer the others use), `scijava-swing`, `scijava-javafx`, headless | layer 1 |
 | **3. Application** | Fiji: which menus exist, branding, update sites, defaults | layer 2 |
 
@@ -759,8 +759,52 @@ So the **one-way legacy bridge matters more than its deferral implies**: for
 Fiji to run on SJ3 before every command is ported, an SJ3 application must
 present SciJava Common `ModuleInfo`s as SJ3 commands — metadata flowing both
 ways, dependency flowing one way. That is what makes the migration incremental
-rather than a big bang, and it should be sequenced *with* layer 1 rather than
-after it.
+rather than a big bang.
+
+**`scijava-bridge` is built**, and it is the only component that depends on
+SciJava Common. `Legacy.commands(context)` turns everything a legacy context
+can run into `CommandInfo`s, which go into an application's menus beside its
+own commands and its scripts; `LegacyContext.start()` does the same without
+the caller naming a SciJava Common type at all.
+
+What it found, which is why bridges are worth building early:
+
+- **`org.scijava.command` was a split package.** SciJava Common owns it, and
+  SciJava3 had claimed it too. Two modules containing one package is a JVM
+  that refuses to start, and on the classpath it is worse — two different
+  `Command` interfaces with one name, first jar wins. The incarnation rule was
+  applied to `io3`, `convert3` and `script3` and simply missed here. Hence
+  `scijava-command3` / `org.scijava.command3`, and the two can now sit on the
+  module path together. **No other package collides**: 77 SciJava Common
+  packages against 34 SciJava3 ones, and that was the only one.
+- **SciJava Common's `@Parameter` means two things**, "this is an input" and
+  "inject this service", and its harvester tells them apart by having
+  preprocessors fill the services first. SciJava3 split the annotations so the
+  question never arises, so the bridge answers it once: a parameter whose type
+  is a `Service` or a `Context` is the legacy context's business and never
+  reaches a dialog.
+- **`DynamicCommand` needs no equivalent to be supported.** Its parameters
+  live on the *module's* own description rather than the shared one, so the
+  bridge initializes at `create()` time (as SciJava Common's `InitPreprocessor`
+  does) and reads the module's description. What SciJava3 declines to *offer*
+  as a way of writing commands, it presents without trouble.
+- **Callbacks and validators translate by name.** SciJava3 names a behavior
+  and asks the executable what the name means; for a legacy command it means a
+  method on the delegate object, which SciJava Common knows how to invoke. A
+  legacy dialog therefore behaves in a SciJava3 application exactly as it did
+  in an ImageJ2 one. SciJava Common's two validator protocols — throw, or
+  return a message — collapse into SciJava3's one, and the wrapper exception's
+  unhelpful "Error executing method" is unwrapped so the user sees what the
+  validator actually said.
+- **Accelerators are translated, not passed through.** `Accelerator.toString()`
+  renders Swing's format (`"control L"`), which Swing would parse back and
+  JavaFX would not; written as `^L`, all three bindings agree.
+- **Menu paths are rebuilt from their entries**, because
+  `MenuPath.getMenuString()` renders `"A > B > C"` with spaces that would end
+  up inside the menu labels.
+- **The bridge's own API names no SciJava Common type**, which is not tidiness:
+  a JPMS module would otherwise have to `requires org.scijava` merely to hold
+  the context, and a test-scoped use cannot say that at all.
 
 ### On the words
 
@@ -1030,7 +1074,7 @@ widgets and watching its callbacks fire.
   to put the whole stack together - commands found through the annotation
   index, arranged by `MenuTree`, rendered by `SwingMenus`, run by `Runner`,
   filled in by `SwingInputHarvester` - and starting it loads no command class.
-  `MenuCreator`/`Menus` (in `scijava-command`, beside the tree they walk) hold
+  `MenuCreator`/`Menus` (in `scijava-command3`, beside the tree they walk) hold
   the toolkit-free part of the walk, so a second toolkit implements four
   methods and inherits the rest.
 
@@ -1094,7 +1138,7 @@ widgets and watching its callbacks fire.
     written the same bookkeeping - find the node in the *current* tree, write
     through the model, do not mistake a refresh for the user typing. Two would
     have been a coincidence.
-  - `Accelerator` moved into `scijava-command`, because Swing wants a
+  - `Accelerator` moved into `scijava-command3`, because Swing wants a
     `KeyStroke`, JavaFX a `KeyCombination` and AWT a `MenuShortcut`: three ways
     of *saying* a shortcut, one thing being said. A binding that parses `^+C`
     itself is a binding that can disagree about what it means.

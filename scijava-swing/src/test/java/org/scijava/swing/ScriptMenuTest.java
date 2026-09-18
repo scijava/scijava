@@ -46,8 +46,8 @@ import javax.swing.JMenuItem;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIf;
-import org.scijava.command.CommandInfo;
-import org.scijava.command.MenuTree;
+import org.scijava.command3.CommandInfo;
+import org.scijava.command3.MenuTree;
 import org.scijava.script3.ScriptFinder;
 
 /**
@@ -110,7 +110,7 @@ public class ScriptMenuTest {
 		try (final org.scijava.context.Context context = //
 			org.scijava.context.Context.create())
 		{
-			org.scijava.command.Commands.discover(context).stream() //
+			org.scijava.command3.Commands.discover(context).stream() //
 				.filter(c -> c.className().contains("SampleCommands")) //
 				.forEach(entries::add);
 		}

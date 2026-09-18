@@ -1,6 +1,6 @@
 /*
  * #%L
- * Running things that declare their inputs and outputs.
+ * Converting a value to the type something else wants.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,13 +27,46 @@
  * #L%
  */
 
-open module org.scijava.execute {
+package org.scijava.convert3;
 
-	exports org.scijava.execute;
+import java.lang.reflect.Type;
 
-	requires org.scijava.common3;
-	requires transitive org.scijava.priority;
-	requires transitive org.scijava.struct;
-	requires transitive org.scijava.convert3;
+import org.scijava.common3.Types;
+import org.scijava.priority.Priority;
 
+/**
+ * Converts anything to text, with {@link Object#toString()}.
+ * <p>
+ * NB: low priority, since it accepts everything. Anything more specific -
+ * formatting a number, naming a file - should outrank it.
+ * </p>
+ *
+ * @author Curtis Rueden
+ */
+public class ToStringConverter implements Converter<Object, String> {
+
+	@Override
+	public Type sourceType() {
+		return Object.class;
+	}
+
+	@Override
+	public Type destType() {
+		return String.class;
+	}
+
+	@Override
+	public boolean supports(final Object source, final Type dest) {
+		return source != null && Types.raw(dest) == String.class;
+	}
+
+	@Override
+	public Object convert(final Object source, final Type dest) {
+		return source.toString();
+	}
+
+	@Override
+	public double priority() {
+		return Priority.LOW;
+	}
 }

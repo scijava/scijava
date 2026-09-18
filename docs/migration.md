@@ -28,7 +28,7 @@ A **dropped** row is a successful outcome, not a gap.
 | `ClassUtils` | `org.scijava.common3.Classes` (mostly already deprecated in SJC) | ported |
 | `ColorRGB`, `ColorRGBA`, `Colors` | UI layer (Phase 4) | open |
 | `CombineAnnotations`, `Combiner`, `MetaInfCombiner`, `ServiceCombiner` | build-time tooling; `scijava-maven-plugin` | dropped |
-| `ConversionUtils` | `scijava-convert3` (Phase 2); already deprecated in SJC | planned |
+| `ConversionUtils` | `org.scijava.convert3.Converters`; already deprecated in SJC | ported |
 | `DebugUtils` | `org.scijava.common3.Threads` | ported |
 | `DefaultTreeNode`, `TreeNode` | on hold — only `imagej-common` uses it; may move there | open |
 | `DigestUtils` | `org.scijava.common3.Digests`. `digest` now throws `IllegalArgumentException` for an unknown algorithm rather than returning `null`; `best*` is SHA-1, since every Java platform guarantees it | ported |
@@ -120,7 +120,7 @@ A **dropped** row is a successful outcome, not a gap.
 | `prefs` | split: a TOML settings store under `~/.config/fiji` (design settled in [migration-plan.md](migration-plan.md)), and widget value persistence, which belongs with the input harvester (Phase 4). Explicitly **not** `java.util.prefs` | planned |
 | `app` | mostly `org.scijava.meta` for version and title metadata; the rest is app-shell material, dropped | planned |
 | `thread` | EDT dispatch belongs with the UI layer (Phase 4); parallelism is `org.scijava.concurrent` | planned |
-| `convert` | `scijava-convert3` (Phase 2) | planned |
+| `convert` | `org.scijava.convert3`: `Converter` asks one question - can you turn *this value* into *that type* - where SciJava Common had eight `canConvert` overloads and a `ConversionRequest` to carry the combinations. `ConvertService` becomes `Converters`, backed by plain `ServiceLoader` so that conversion sits *below* the container: parameter binding converts, and a script or command line supplies strings for everything. `DefaultConverter`'s pile of special cases becomes one converter per concern (cast, number, string, to-string, array, collection, constructor, file/path), each contributable and orderable by priority. `Converter.of(String.class, Foo.class, Foo::parse)` covers the common case in a line | ported |
 | `module`, `module.process` | `org.scijava.execute`: `@Parameter` on fields, `Executables` for the plain case, and `Runner` for the processor chain. `ModuleService.run` becomes `Runner.run`, still returning a future, but of an `ExecutionResult` that reports a declined run with its reason and its author rather than through `ModulePreprocessor.isCanceled()` | ported |
 | `command` | `org.scijava.command`: `Command` is a `Runnable` whose `@Parameter` fields are its struct; `@Menu` (repeatable) carries the presentation metadata, read from the annotation index without loading the class. `CommandInfo` replaces `ModuleInfo` and needs no `Context`; `MenuTree` replaces `ShadowMenu`. There is no `DynamicCommand`: see `choicesFrom` and `@Group(membersFrom)` | ported |
 | `script`, `script.process` | scripting facade + `javax.script` / GraalVM polyglot / Appose adapters (Phase 3) | planned |

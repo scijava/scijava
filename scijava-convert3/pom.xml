@@ -9,11 +9,16 @@
 		<relativePath />
 	</parent>
 
-	<artifactId>scijava-execute</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<artifactId>scijava-convert3</artifactId>
+	<!--
+	NB: the major version tracks the incarnation, per the incubator README.
+	The 1.x.y of the other components is a legacy of the first monoversioned
+	release, not the intended scheme.
+	-->
+	<version>3.0.0-SNAPSHOT</version>
 
-	<name>SciJava Execute</name>
-	<description>Running things that declare their inputs and outputs.</description>
+	<name>SciJava Convert</name>
+	<description>Converting a value to the type something else wants.</description>
 	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2026</inceptionYear>
 	<organization>
@@ -80,24 +85,23 @@
 	</ciManagement>
 
 	<properties>
-		<package-name>org.scijava.execute</package-name>
+		<package-name>org.scijava.convert3</package-name>
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 
 		<!-- Note: These versions must match across all component POMs! -->
-		<scijava-convert3.version>3.0.0-SNAPSHOT</scijava-convert3.version>
 		<scijava-common3.version>1.0.1-SNAPSHOT</scijava-common3.version>
 		<scijava-priority.version>1.0.1-SNAPSHOT</scijava-priority.version>
-		<scijava-struct.version>1.0.1-SNAPSHOT</scijava-struct.version>
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-convert3</artifactId>
-			<version>${scijava-convert3.version}</version>
-		</dependency>
+		<!--
+		NB: Keep this component standalone, and in particular below the
+		execution layer: parameter binding converts, so convert cannot be
+		something only a container has. Converters come from plain
+		ServiceLoader.
+		-->
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-common3</artifactId>
@@ -107,11 +111,6 @@
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-priority</artifactId>
 			<version>${scijava-priority.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-struct</artifactId>
-			<version>${scijava-struct.version}</version>
 		</dependency>
 
 		<!-- Test scope dependencies -->

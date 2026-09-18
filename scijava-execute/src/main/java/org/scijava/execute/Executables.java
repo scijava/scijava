@@ -29,11 +29,14 @@
 
 package org.scijava.execute;
 
+import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 
+import org.scijava.common3.Types;
+import org.scijava.convert3.Converters;
 import org.scijava.struct.Member;
 import org.scijava.struct.MemberInstance;
 import org.scijava.struct.Struct;
@@ -153,6 +156,28 @@ public final class Executables {
 		};
 	}
 
+	/**
+	 * Converts a supplied value to the type its parameter wants.
+	 * <p>
+	 * NB: this is why conversion sits below the execution layer rather than
+	 * beside it. A caller supplies whatever it has - a script has strings, a
+	 * command line has strings, a user interface has whatever its widget
+	 * produced - and the parameter's declared type is the authority on what
+	 * that should become.
+	 * </p>
+	 *
+	 * @throws IllegalArgumentException if the value cannot become that type
+	 */
+	private static Object convert(final Object value, final Type type,
+		final String key)
+	{
+		if (type == null) return value;
+		return Converters.get().tryConvert(value, type).orElseThrow(
+			() -> new IllegalArgumentException("Cannot use " + //
+				(value == null ? "null" : value.getClass().getName()) + //
+				" as parameter '" + key + "' of type " + Types.name(type)));
+	}
+
 	/** Describes the inputs and outputs of the given class. */
 	public static Struct struct(final Class<?> type) {
 		return struct(type, null);
@@ -234,7 +259,7 @@ public final class Executables {
 			if (!member.member().isInput()) continue;
 			final String key = member.member().key();
 			if (inputs.containsKey(key)) {
-				member.set(inputs.get(key));
+				member.set(convert(inputs.get(key), member.member().type(), key));
 			}
 			else if (requireInputs && member.member().isRequired()) {
 				// NB: require the value to be supplied, rather than checking

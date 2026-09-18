@@ -762,6 +762,45 @@ ways, dependency flowing one way. That is what makes the migration incremental
 rather than a big bang, and it should be sequenced *with* layer 1 rather than
 after it.
 
+### Conversion
+
+**`scijava-convert3`** (`org.scijava.convert3`) is built, and deliberately
+sits *below* the execution layer rather than beside it: binding an input to a
+parameter converts, and a script, a command line and a text field all have
+only strings to offer. It therefore depends on nothing but `scijava-common3`
+and `scijava-priority`, and finds its converters through plain
+`ServiceLoader` - no container, no configuration.
+
+- **One question, not eight.** `Converter.supports(Object, Type)` asks whether
+  *this value* can become *that type*. SciJava Common had eight `canConvert`
+  overloads across `Object`/`Class`/`Type` pairings, plus a
+  `ConversionRequest` to carry the combinations, plus an `AbstractConverter`
+  to make the overloads bearable. The declared `sourceType()`/`destType()`
+  answer the common case by themselves, so
+  `Converter.of(String.class, Foo.class, Foo::parse)` is a whole converter.
+- **One converter per concern**, rather than one `DefaultConverter` holding
+  every special case in sequence: cast, number, string-to-value, to-string,
+  array, collection, file/path, and a wrapping constructor last. Each is
+  discoverable, orderable by priority, and replaceable by a downstream
+  component that disagrees.
+- **Unconvertible is not zero.** `tryConvert` returns empty where a value
+  cannot become the type, and `convert` throws. Text that is half-typed
+  converts to nothing, which is what lets a widget leave a parameter alone
+  while the user is still typing - a distinction SciJava Common could not
+  make, since it returned null for both "no" and "null".
+- **Exactness where the type asked for it**: a `BigDecimal` from a `double`
+  goes through the string, so `0.1` is `0.1` and not the binary double nearest
+  to it.
+- **It removed duplication rather than adding a layer.** The UI's
+  `Widgets.toType` - three bindings' worth of text parsing - is now one call
+  into it, so a widget turning text into a value does exactly what a script
+  does.
+
+Still open: an `ObjectService` equivalent (what values *exist* that could be
+converted into this parameter) is what a chooser widget wants, and is a
+separate question from what conversions are possible. It lands with the object
+widget.
+
 ### Phase 4 — UI and desktop
 
 - **`scijava-harvest`** (`org.scijava.harvest`): the model behind a parameter

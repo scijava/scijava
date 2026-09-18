@@ -839,6 +839,32 @@ widgets and watching its callbacks fire.
   which the header reader does directly. `ScriptService` has no equivalent -
   `Scripts.get().of(path)` is a line. `ScriptREPL`, `ScriptInterpreter`,
   `AutoCompleter` and `CodeGenerator` belong with the script editor.
+- **A script declares its presentation the way a command does.**
+  `#@script(menu = "Process>Filters>Blur It", accelerator = "^B", label = ...,
+  weight = ..., iconPath = ...)` carries the same keys `@Menu` does, and where
+  a script says nothing, the directory it sits in speaks for it:
+  `scripts/Process/Filters/Blur_It.groovy` means the same thing, underscores
+  read as spaces. That is how the scripts already in the wild are arranged, so
+  it had better keep working.
+- **A script names its own language** with `#@script(language = "jython")` or
+  a `#!` line, which is what settles the languages sharing an extension -
+  `.py` being Jython or Python depending on which is meant. Saying nothing
+  means the extension decides, as before.
+- **`ExecutableInfo` is how an application takes more than one source.** A
+  `CommandInfo` is one; `ExecutableInfo.of(executable, attrs)` makes one out
+  of a script and its directives; a SciJava Common `ModuleInfo` will make one
+  through the bridge. An application gathers what it can run from as many
+  sources as it has, and nothing downstream learns there was more than one.
+  **This is the `AppLoader` shape the `fijifx` notes sketched**, and it is now
+  load-bearing rather than planned: all three shells build their menus from
+  the annotation index *and* a directory of Groovy scripts, and nothing below
+  them can tell which came from where.
+  - It is **not** called `MenuEntry`, and the distinction matters: a menu path
+    is optional. A command invoked by name from a script, one reached only
+    through the search bar, one that exists to be called by something else -
+    all are ordinary things to have, and all are perfectly runnable.
+    `MenuTree` takes the subset with a path; the type is named for what it is
+    rather than for the one place it is most often shown.
 - **Open**: whether a parameter with declared choices and no value should
   preselect the first. SciJava Common does; the model here leaves it unset,
   which is honest but shows an empty chooser. It is a one-line change in

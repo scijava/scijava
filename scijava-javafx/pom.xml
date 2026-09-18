@@ -92,6 +92,7 @@
 		<scijava-index.version>1.0.0-SNAPSHOT</scijava-index.version>
 		<scijava-ui3.version>3.0.0-SNAPSHOT</scijava-ui3.version>
 		<scijava-ui3-test.version>3.0.0-SNAPSHOT</scijava-ui3-test.version>
+		<scijava-script3.version>3.0.0-SNAPSHOT</scijava-script3.version>
 		<scijava-common3.version>1.0.1-SNAPSHOT</scijava-common3.version>
 		<scijava-execute.version>1.0.0-SNAPSHOT</scijava-execute.version>
 		<scijava-harvest.version>1.0.0-SNAPSHOT</scijava-harvest.version>
@@ -173,6 +174,23 @@
 		</dependency>
 
 		<!-- Test scope dependencies -->
+		<!-- NB: so the demo shell can put scripts in its menus, as Fiji does. -->
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-script3</artifactId>
+			<version>${scijava-script3.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.groovy</groupId>
+			<artifactId>groovy</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.groovy</groupId>
+			<artifactId>groovy-jsr223</artifactId>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ui3-test</artifactId>

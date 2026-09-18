@@ -31,6 +31,7 @@ package org.scijava.command;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -190,6 +191,31 @@ public class CommandsTest {
 		}
 		catch (final ReflectiveOperationException exc) {
 			throw new AssertionError(exc);
+		}
+	}
+
+	/**
+	 * Something runnable need not be in a menu, and is no less runnable for it.
+	 * <p>
+	 * NB: this is why the type is {@code ExecutableInfo} rather than
+	 * {@code MenuEntry}. A command reached by name, by a search bar or by
+	 * another command is an ordinary thing to have; the menu tree simply takes
+	 * the subset with a path.
+	 * </p>
+	 */
+	@Test
+	public void testRunnableWithoutAMenuPath() {
+		try (final Context context = Context.create()) {
+			final ExecutableInfo hidden = Commands.discover(context).stream() //
+				.filter(c -> c.className().equals(Headless.class.getName())) //
+				.findFirst().orElseThrow();
+
+			assertTrue(hidden.menuPath().isEmpty(), "declares no menu path");
+			assertFalse(hidden.label().isEmpty(), "but still has a label");
+			assertNotNull(hidden.create(), "and is still runnable");
+
+			assertTrue(MenuTree.of(List.of(hidden)).children().isEmpty(),
+				"so the menu tree leaves it out");
 		}
 	}
 }

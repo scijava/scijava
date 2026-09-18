@@ -64,10 +64,10 @@ public class MenuTree {
 	public static final String SEPARATOR = ">";
 
 	private final String label;
-	private final CommandInfo command;
+	private final ExecutableInfo command;
 	private final Map<String, MenuTree> children = new LinkedHashMap<>();
 
-	private MenuTree(final String label, final CommandInfo command) {
+	private MenuTree(final String label, final ExecutableInfo command) {
 		this.label = label;
 		this.command = command;
 	}
@@ -75,16 +75,19 @@ public class MenuTree {
 	/**
 	 * Builds a menu tree from the given commands.
 	 * <p>
-	 * Commands with no menu path, and those marked not visible, are left out:
-	 * they remain perfectly runnable, they simply do not appear.
+	 * Anything with no menu path, and anything marked not visible, is left out:
+	 * it stays perfectly runnable, it simply does not appear here. Something
+	 * invoked by name, or reached through a search bar, is an ordinary thing to
+	 * have.
 	 * </p>
 	 *
-	 * @param commands the commands to arrange
+	 * @param commands the entries to arrange: commands, scripts, or whatever
+	 *          else an application has found
 	 * @return the root of the tree, whose children are the top-level menus
 	 */
-	public static MenuTree of(final Collection<CommandInfo> commands) {
+	public static MenuTree of(final Collection<? extends ExecutableInfo> commands) {
 		final MenuTree root = new MenuTree("", null);
-		for (final CommandInfo command : commands) {
+		for (final ExecutableInfo command : commands) {
 			if (!command.isVisible()) continue;
 			final Optional<String> path = command.menuPath();
 			if (path.isEmpty()) continue;
@@ -99,8 +102,8 @@ public class MenuTree {
 		return label;
 	}
 
-	/** Gets the command this entry runs, if it is a leaf. */
-	public Optional<CommandInfo> command() {
+	/** Gets what this entry runs, if it is a leaf. */
+	public Optional<ExecutableInfo> entry() {
 		return Optional.ofNullable(command);
 	}
 
@@ -135,8 +138,8 @@ public class MenuTree {
 	}
 
 	/** Gets every command in this subtree, in display order. */
-	public List<CommandInfo> leaves() {
-		final List<CommandInfo> leaves = new ArrayList<>();
+	public List<ExecutableInfo> leaves() {
+		final List<ExecutableInfo> leaves = new ArrayList<>();
 		collectLeaves(leaves);
 		return leaves;
 	}
@@ -148,11 +151,11 @@ public class MenuTree {
 
 	// -- Helper methods --
 
-	private void add(final CommandInfo command, final String[] path) {
+	private void add(final ExecutableInfo command, final String[] path) {
 		add(command, path, 0);
 	}
 
-	private void add(final CommandInfo command, final String[] path,
+	private void add(final ExecutableInfo command, final String[] path,
 		final int depth)
 	{
 		final String element = path[depth].trim();
@@ -196,7 +199,7 @@ public class MenuTree {
 			.min().orElse(Double.POSITIVE_INFINITY);
 	}
 
-	private void collectLeaves(final List<CommandInfo> leaves) {
+	private void collectLeaves(final List<ExecutableInfo> leaves) {
 		if (isLeaf()) {
 			leaves.add(command);
 			return;

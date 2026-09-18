@@ -38,7 +38,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.scijava.command.Accelerator;
-import org.scijava.command.CommandInfo;
+import org.scijava.command.ExecutableInfo;
 import org.scijava.command.MenuCreator;
 import org.scijava.command.MenuTree;
 import org.scijava.command.Menus;
@@ -54,15 +54,15 @@ public class AwtMenus implements MenuCreator<MenuBar, Menu> {
 
 	private static final Logger log = LoggerFactory.getLogger(AwtMenus.class);
 
-	private final Consumer<CommandInfo> onSelect;
+	private final Consumer<ExecutableInfo> onSelect;
 
-	public AwtMenus(final Consumer<CommandInfo> onSelect) {
+	public AwtMenus(final Consumer<ExecutableInfo> onSelect) {
 		this.onSelect = onSelect;
 	}
 
 	/** Builds a menu bar holding the given menu tree. */
 	public static MenuBar create(final MenuTree root,
-		final Consumer<CommandInfo> onSelect)
+		final Consumer<ExecutableInfo> onSelect)
 	{
 		return Menus.build(root, new MenuBar(), new AwtMenus(onSelect));
 	}
@@ -83,7 +83,7 @@ public class AwtMenus implements MenuCreator<MenuBar, Menu> {
 
 	@Override
 	public void item(final MenuTree leaf, final Menu parent) {
-		final CommandInfo command = leaf.command().orElseThrow();
+		final ExecutableInfo command = leaf.entry().orElseThrow();
 		final MenuItem item = new MenuItem(leaf.label());
 		shortcut(command.accelerator().orElse(null)).ifPresent(item::setShortcut);
 		// NB: AWT menu items have no icon at all, so iconPath is ignored here.

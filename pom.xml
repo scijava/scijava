@@ -59,6 +59,7 @@
 
 		<module>scijava-awt</module>
 		<module>scijava-compat</module>
+		<module>scijava-cli</module>
 		<module>scijava-code-api</module>
 		<module>scijava-collections</module>
 		<module>scijava-command3</module>

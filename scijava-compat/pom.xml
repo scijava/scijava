@@ -9,11 +9,16 @@
 		<relativePath />
 	</parent>
 
-	<artifactId>scijava-swing</artifactId>
+	<artifactId>scijava-compat</artifactId>
+	<!--
+	NB: the major version tracks the incarnation, per the incubator README.
+	The 1.x.y of the other components is a legacy of the first monoversioned
+	release, not the intended scheme.
+	-->
 	<version>1.0.0-SNAPSHOT</version>
 
-	<name>SciJava Swing</name>
-	<description>Swing widgets, and a dialog to harvest inputs with them.</description>
+	<name>SciJava Compat</name>
+	<description>Backwards compatibility with SciJava Common.</description>
 	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2026</inceptionYear>
 	<organization>
@@ -80,31 +85,31 @@
 	</ciManagement>
 
 	<properties>
-		<package-name>org.scijava.swing</package-name>
+		<package-name>org.scijava.compat</package-name>
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 
 		<!-- Note: These versions must match across all component POMs! -->
 		<scijava-command3.version>3.0.0-SNAPSHOT</scijava-command3.version>
-		<scijava-context.version>1.0.0-SNAPSHOT</scijava-context.version>
-		<scijava-discovery.version>1.0.1-SNAPSHOT</scijava-discovery.version>
-		<scijava-index.version>1.0.0-SNAPSHOT</scijava-index.version>
-		<scijava-ui3.version>3.0.0-SNAPSHOT</scijava-ui3.version>
-		<scijava-ui3-test.version>3.0.0-SNAPSHOT</scijava-ui3-test.version>
-		<scijava-script3.version>3.0.0-SNAPSHOT</scijava-script3.version>
 		<scijava-common3.version>1.0.1-SNAPSHOT</scijava-common3.version>
-		<scijava-execute.version>1.0.0-SNAPSHOT</scijava-execute.version>
 		<scijava-harvest.version>1.0.0-SNAPSHOT</scijava-harvest.version>
+		<scijava-ui3.version>3.0.0-SNAPSHOT</scijava-ui3.version>
+		<scijava-convert3.version>3.0.0-SNAPSHOT</scijava-convert3.version>
+		<scijava-execute.version>1.0.0-SNAPSHOT</scijava-execute.version>
 		<scijava-priority.version>1.0.1-SNAPSHOT</scijava-priority.version>
 		<scijava-struct.version>1.0.1-SNAPSHOT</scijava-struct.version>
 	</properties>
 
 	<dependencies>
+		<!--
+		NB: this is the only component that depends on SciJava Common, and the
+		dependency goes one way and stays here. Nothing in SciJava Common knows
+		this exists, and nothing else in SciJava3 sees it.
+		-->
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-common3</artifactId>
-			<version>${scijava-common3.version}</version>
+			<artifactId>scijava-common</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
@@ -113,33 +118,18 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-context</artifactId>
-			<version>${scijava-context.version}</version>
+			<artifactId>scijava-common3</artifactId>
+			<version>${scijava-common3.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-discovery</artifactId>
-			<version>${scijava-discovery.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-index</artifactId>
-			<version>${scijava-index.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-ui3</artifactId>
-			<version>${scijava-ui3.version}</version>
+			<artifactId>scijava-convert3</artifactId>
+			<version>${scijava-convert3.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-execute</artifactId>
 			<version>${scijava-execute.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-harvest</artifactId>
-			<version>${scijava-harvest.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
@@ -152,25 +142,31 @@
 			<version>${scijava-struct.version}</version>
 		</dependency>
 
-		<!-- Third-party dependencies -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
-
 		<!-- Test scope dependencies -->
 		<!--
-		NB: so that the widgets can be tested against a script, not only against
-		a command. A binding has no idea which it is rendering, and that claim
-		is worth checking. (The legacy case is tested in scijava-compat, which
-		is the only component that can see both worlds.)
+		NB: the dialog *model*, which is where this component's claim ends: a
+		legacy command described correctly enough for any toolkit to render it.
+		That a correct model becomes correct widgets is what the toolkit
+		bindings' shared conformance suite already establishes, three times
+		over, so the bridge has no business importing a toolkit even here.
 		-->
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-script3</artifactId>
-			<version>${scijava-script3.version}</version>
+			<artifactId>scijava-harvest</artifactId>
+			<version>${scijava-harvest.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-ui3</artifactId>
+			<version>${scijava-ui3.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!--
+		NB: a real engine, so that the tests exercise a language rather than a
+		stand-in. Any JSR-223 engine on the classpath is discovered the same
+		way; Groovy is simply the one Fiji users meet first.
+		-->
 		<dependency>
 			<groupId>org.apache.groovy</groupId>
 			<artifactId>groovy</artifactId>
@@ -179,21 +175,6 @@
 		<dependency>
 			<groupId>org.apache.groovy</groupId>
 			<artifactId>groovy-jsr223</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-ui3-test</artifactId>
-			<version>${scijava-ui3-test.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<!--
-		NB: so that the demos can say what they are doing. Turn it up with
-		-Dorg.slf4j.simpleLogger.defaultLogLevel=debug
-		-->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -206,10 +187,9 @@
 	<build>
 		<plugins>
 			<!--
-			NB: the annotation index comes from scijava-index's annotation
-			processor, which must be on the processor path: javac will not find
-			it on the module path, and says nothing when it finds no processor at
-			all, so the build would simply produce no index.
+			NB: SciJava Common's own annotation processor, so that the legacy
+			command in the tests is indexed by the old world's tooling, which
+			is the only honest way to test a bridge to it.
 			-->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -217,8 +197,8 @@
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.scijava</groupId>
-							<artifactId>scijava-index</artifactId>
-							<version>${scijava-index.version}</version>
+							<artifactId>scijava-common</artifactId>
+							<version>${scijava-common.version}</version>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>

@@ -58,7 +58,7 @@
 		<!-- End implicit dependencies -->
 
 		<module>scijava-awt</module>
-		<module>scijava-bridge</module>
+		<module>scijava-compat</module>
 		<module>scijava-code-api</module>
 		<module>scijava-collections</module>
 		<module>scijava-command3</module>
@@ -76,7 +76,8 @@
 		<module>scijava-index</module>
 		<module>scijava-io3</module>
 		<module>scijava-javafx</module>
-		<module>scijava-legacy</module>
+		<module>scijava-imagej-compat</module>
+		<module>scijava-ops-compat</module>
 		<module>scijava-meta</module>
 		<module>scijava-ops-api</module>
 		<module>scijava-ops-engine</module>

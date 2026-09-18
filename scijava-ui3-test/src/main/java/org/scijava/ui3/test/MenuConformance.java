@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.command.CommandInfo;
+import org.scijava.command.ClassCommandInfo;
 import org.scijava.command.Commands;
 import org.scijava.command.MenuTree;
 import org.scijava.context.Context;
@@ -94,14 +94,14 @@ public abstract class MenuConformance<B> {
 	protected B menuBar() {
 		// NB: only the sample commands, so that another component contributing
 		// one of its own does not make these assertions brittle.
-		final List<CommandInfo> mine = commands().stream() //
+		final List<ClassCommandInfo> mine = commands().stream() //
 			.filter(c -> c.className().contains("SampleCommands")) //
 			.collect(Collectors.toList());
 		return menuBar(MenuTree.of(mine));
 	}
 
 	/** Discovers the commands, as an application would. */
-	protected static List<CommandInfo> commands() {
+	protected static List<ClassCommandInfo> commands() {
 		try (Context context = Context.create()) {
 			return Commands.discover(context);
 		}

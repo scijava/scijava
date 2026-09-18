@@ -762,6 +762,32 @@ ways, dependency flowing one way. That is what makes the migration incremental
 rather than a big bang, and it should be sequenced *with* layer 1 rather than
 after it.
 
+### On the words
+
+The vocabulary is settled, and deliberately smaller than SciJava Common's:
+
+| word | means |
+| --- | --- |
+| **command** | anything a user can run, with declared parameters: `CommandInfo` |
+| **class command** | one whose implementation is a class - Java, Kotlin, Groovy, any of them: `ClassCommandInfo`, read from the annotation index |
+| **script command** | one whose implementation is source in some language, read by `scijava-script3` |
+| **executable** | the layer below: something with parameters that runs, knowing nothing of menus or discovery (`org.scijava.execute.Executable`) |
+| **module** | a JPMS module, and nothing else |
+| **plugin** | anything discovered by `@Plugin` - a widget factory, a converter, a preprocessor. A command is one kind |
+
+What went away: *module* in SciJava Common's sense (it is now "command",
+which is what users already called it); *macro*, which now means the ImageJ
+1.x macro language and nothing here; and *extension*, which was never a
+technical term.
+
+The `Command` interface is **not** the definition of a command - `CommandInfo`
+is. It is how to write one as a class, and a script implements nothing at all
+while being no less a command. Which is why the general type went from
+`ExecutableInfo` to `CommandInfo`, and the class-based one from `CommandInfo`
+to `ClassCommandInfo`: naming the general thing after what users actually call
+it costs one word, and the alternative was SciJava Common's design with
+"executable" substituted for "module".
+
 ### Conversion
 
 **`scijava-convert3`** (`org.scijava.convert3`) is built, and deliberately
@@ -850,8 +876,8 @@ widgets and watching its callbacks fire.
   a `#!` line, which is what settles the languages sharing an extension -
   `.py` being Jython or Python depending on which is meant. Saying nothing
   means the extension decides, as before.
-- **`ExecutableInfo` is how an application takes more than one source.** A
-  `CommandInfo` is one; `ExecutableInfo.of(executable, attrs)` makes one out
+- **`CommandInfo` is how an application takes more than one source.** A
+  `ClassCommandInfo` is one; `CommandInfo.of(executable, attrs)` makes one out
   of a script and its directives; a SciJava Common `ModuleInfo` will make one
   through the bridge. An application gathers what it can run from as many
   sources as it has, and nothing downstream learns there was more than one.

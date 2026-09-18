@@ -64,17 +64,17 @@ public final class Commands {
 	 * @param context the application context
 	 * @return the commands, ordered by menu weight and then by label
 	 */
-	public static List<CommandInfo> discover(final Context context) {
+	public static List<ClassCommandInfo> discover(final Context context) {
 		final Map<String, Map<String, String>> menus = menusByClassName( //
 			Thread.currentThread().getContextClassLoader());
 
-		final List<CommandInfo> commands = new ArrayList<>();
+		final List<ClassCommandInfo> commands = new ArrayList<>();
 		for (final Discovery<Command> discovery : context.plugins(Command.class)) {
-			commands.add(new CommandInfo(discovery, menus.getOrDefault( //
+			commands.add(new ClassCommandInfo(discovery, menus.getOrDefault( //
 				discovery.implClassName(), Map.of())));
 		}
-		commands.sort(Comparator.comparingDouble(CommandInfo::weight) //
-			.thenComparing(CommandInfo::label));
+		commands.sort(Comparator.comparingDouble(ClassCommandInfo::weight) //
+			.thenComparing(ClassCommandInfo::label));
 		return commands;
 	}
 

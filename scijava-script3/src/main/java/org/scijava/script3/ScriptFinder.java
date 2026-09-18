@@ -59,7 +59,7 @@ import java.util.stream.Stream;
  * <p>
  * NB: the metadata comes back as a map rather than as a menu entry, because
  * this component knows nothing about menus. An application turns it into one
- * with {@code ExecutableInfo.of(script, metadata)}, which is the same call any
+ * with {@code CommandInfo.of(script, metadata)}, which is the same call any
  * other source of runnable things makes.
  * </p>
  *

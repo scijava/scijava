@@ -106,7 +106,7 @@ public class MenuTreeTest {
 		try (final Context context = Context.create()) {
 			final MenuTree root = MenuTree.of(Commands.discover(context));
 			final List<String> classNames = root.leaves().stream() //
-				.map(ExecutableInfo::name) //
+				.map(CommandInfo::name) //
 				.collect(Collectors.toList());
 			assertFalse(classNames.contains(Headless.class.getName()));
 		}

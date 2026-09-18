@@ -32,139 +32,161 @@ package org.scijava.command;
 import java.util.Map;
 import java.util.Optional;
 
-import org.scijava.context.Access;
-import org.scijava.discovery.Discovery;
 import org.scijava.execute.Executable;
 import org.scijava.execute.ExecutableInstance;
-import org.scijava.execute.Executables;
 import org.scijava.struct.Struct;
 
 /**
- * A command as the application knows it before running one: its identity, its
- * parameters, and how it should appear in a menu.
+ * A command: something a user can run, and what is needed to present it.
  * <p>
- * The presentation metadata is read from the annotation index, so listing
- * every command and building a menu from them loads no command classes at all.
- * {@link #struct()} and {@link #create()} are the points at which the class is
- * finally needed.
+ * This is the word's whole meaning here. A {@link ClassCommandInfo} is a
+ * command whose implementation is a class, read from the annotation index; a
+ * script is a command whose implementation is source in some language, and
+ * says the same things in its {@code #@script} directives; a SciJava Common
+ * {@code ModuleInfo} will be a command through the legacy bridge. None is a
+ * special case of the others, and an application gathers them from as many
+ * sources as it has without anything downstream learning there was more than
+ * one.
  * </p>
  * <p>
- * NB: SciJava Common called this {@code ModuleInfo}, and its
- * {@code CommandInfo} was one implementation. The names have shifted by one:
- * "module" is now a JPMS module, so the general description is
- * {@link Executable}, and this is the command-shaped view of it.
+ * NB: SciJava Common called this a <em>module</em>, and had to, because
+ * "command" there meant the Java-class kind specifically. Naming the general
+ * thing after what users actually call it costs one word - the class-based
+ * kind is a {@code ClassCommandInfo} - and retires a vocabulary nobody
+ * enjoyed.
+ * </p>
+ * <p>
+ * NB: <strong>a menu path is optional, and this is not a menu entry.</strong>
+ * Plenty of runnable things belong in no menu: a command invoked by name from
+ * a script, one reached only through a search bar, one that exists to be
+ * called by something else. {@link MenuTree} takes the subset that has a path,
+ * and the rest stay perfectly runnable - which is why this is named for what
+ * it is rather than for the one place it is most often shown.
+ * </p>
+ * <p>
+ * NB: it is itself an {@link Executable}, so launching one needs no lookup:
+ * what the menu - or the search bar, or the command line - holds is the thing
+ * to run.
  * </p>
  *
  * @author Curtis Rueden
  */
-public class CommandInfo implements ExecutableInfo {
+public interface CommandInfo extends Executable {
 
-	private final Discovery<Command> discovery;
-	private final Map<String, String> menu;
-	private Executable delegate;
+	/**
+	 * Gets where this sits in the menus, if anywhere.
+	 * <p>
+	 * Empty means it appears in no menu, which is an ordinary thing to be.
+	 * </p>
+	 */
+	Optional<String> menuPath();
 
-	CommandInfo(final Discovery<Command> discovery,
-		final Map<String, String> menu)
-	{
-		this.discovery = discovery;
-		this.menu = menu;
+	/** Gets the label to display. */
+	String label();
+
+	/** Gets the keyboard shortcut, if there is one. */
+	default Optional<String> accelerator() {
+		return Optional.empty();
 	}
 
-	// -- Metadata, readable without loading the class --
-
-	/** Gets the command's implementation class name. */
-	public String className() {
-		return discovery.implClassName();
+	/** Gets the icon resource, if there is one. */
+	default Optional<String> iconPath() {
+		return Optional.empty();
 	}
 
-	/** Gets where this command sits in the menus, if anywhere. */
-	@Override
-	public Optional<String> menuPath() {
-		return attr("path");
+	/** Gets how this sorts among its menu siblings; lower comes first. */
+	default double weight() {
+		return Double.POSITIVE_INFINITY;
 	}
 
-	/** Gets the label to display, defaulting to the last menu path element. */
-	@Override
-	public String label() {
-		return menuPath() //
-			.map(path -> path.substring(path.lastIndexOf('>') + 1)) //
-			.orElseGet(this::name);
-	}
-
-	/** Gets this command's keyboard shortcut, if it has one. */
-	@Override
-	public Optional<String> accelerator() {
-		return attr("accelerator");
-	}
-
-	/** Gets this command's icon resource, if it has one. */
-	@Override
-	public Optional<String> iconPath() {
-		return attr("iconPath");
-	}
-
-	/** Gets how this command sorts among its menu siblings. */
-	@Override
-	public double weight() {
-		return attr("weight").map(Double::parseDouble) //
-			.orElse(Double.POSITIVE_INFINITY);
-	}
-
-	/** Gets whether this command should appear in menus. */
-	@Override
-	public boolean isVisible() {
-		return !"false".equals(menu.get("visible"));
-	}
-
-	/** Gets the priority with which this command was declared. */
-	public double priority() {
-		return discovery.priority();
-	}
-
-	/** Gets a menu attribute by name. */
-	public Optional<String> attr(final String key) {
-		final String value = menu.get(key);
-		return value == null || value.isEmpty() ? Optional.empty() //
-			: Optional.of(value);
-	}
-
-	// -- Executable methods --
-
-	@Override
-	public String name() {
-		return className();
-	}
-
-	@Override
-	public Struct struct() {
-		return delegate().struct();
-	}
-
-	@Override
-	public ExecutableInstance create() {
-		return delegate().create();
-	}
-
-	@Override
-	public String toString() {
-		return className() + menuPath().map(p -> " [" + p + "]").orElse("");
+	/** Gets whether this should appear in menus at all. */
+	default boolean isVisible() {
+		return true;
 	}
 
 	/**
-	 * Gets the executable behind this command, loading the class on first use.
+	 * Describes anything runnable, from metadata written the way a
+	 * {@code @Menu} annotation writes it.
 	 * <p>
-	 * NB: everything above this line answers from the index alone. This is
-	 * where a menu stops being free.
+	 * This is what a script's {@code #@script(...)} directives become, and what
+	 * any other source of runnable things can produce without knowing about
+	 * commands at all. Metadata it does not carry - a menu path included - is
+	 * simply absent.
 	 * </p>
+	 *
+	 * @param executable the thing to run - a script, typically
+	 * @param attrs its presentation metadata: {@code menu} or {@code path},
+	 *          {@code label}, {@code accelerator}, {@code iconPath},
+	 *          {@code weight}, {@code visible}. All of it is optional,
+	 *          including the menu path
+	 * @return the description
 	 */
-	private synchronized Executable delegate() {
-		if (delegate == null) {
-			final Class<? extends Command> type = discovery.type();
-			// NB: the lookup comes from the context, so a command's package need
-			// only be opened to org.scijava.context -- not additionally to the
-			// execution layer that reads its @Parameter fields.
-			delegate = Executables.of(type, Access.lookupIn(type));
-		}
-		return delegate;
+	static CommandInfo of(final Executable executable,
+		final Map<String, String> attrs)
+	{
+		return new CommandInfo() {
+
+			@Override
+			public Optional<String> menuPath() {
+				// NB: `menu` is what a script writer types; `path` is what the
+				// annotation calls it. Both mean the same thing, and insisting on
+				// one of them would only be a way to be unhelpful.
+				return attr("menu").or(() -> attr("path"));
+			}
+
+			@Override
+			public String label() {
+				return attr("label") //
+					.or(() -> menuPath().map(p -> p.substring(p.lastIndexOf('>') + 1))) //
+					.orElseGet(executable::name);
+			}
+
+			@Override
+			public Optional<String> accelerator() {
+				return attr("accelerator");
+			}
+
+			@Override
+			public Optional<String> iconPath() {
+				return attr("iconPath");
+			}
+
+			@Override
+			public double weight() {
+				return attr("weight").map(Double::parseDouble) //
+					.orElse(Double.POSITIVE_INFINITY);
+			}
+
+			@Override
+			public boolean isVisible() {
+				return !"false".equals(attrs.get("visible"));
+			}
+
+			@Override
+			public String name() {
+				return attr("name").orElseGet(executable::name);
+			}
+
+			@Override
+			public Struct struct() {
+				return executable.struct();
+			}
+
+			@Override
+			public ExecutableInstance create() {
+				return executable.create();
+			}
+
+			@Override
+			public String toString() {
+				return name() + menuPath().map(p -> " [" + p + "]").orElse("");
+			}
+
+			private Optional<String> attr(final String key) {
+				final String value = attrs.get(key);
+				return value == null || value.isEmpty() ? Optional.empty() //
+					: Optional.of(value);
+			}
+		};
 	}
 }

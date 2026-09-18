@@ -9,11 +9,16 @@
 		<relativePath />
 	</parent>
 
-	<artifactId>scijava-swing</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<artifactId>scijava-script3</artifactId>
+	<!--
+	NB: the major version tracks the incarnation, per the incubator README.
+	The 1.x.y of the other components is a legacy of the first monoversioned
+	release, not the intended scheme.
+	-->
+	<version>3.0.0-SNAPSHOT</version>
 
-	<name>SciJava Swing</name>
-	<description>Swing widgets, and a dialog to harvest inputs with them.</description>
+	<name>SciJava Script</name>
+	<description>Running scripts as things that declare their inputs and outputs.</description>
 	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2026</inceptionYear>
 	<organization>
@@ -80,27 +85,24 @@
 	</ciManagement>
 
 	<properties>
-		<package-name>org.scijava.swing</package-name>
+		<package-name>org.scijava.script3</package-name>
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 
 		<!-- Note: These versions must match across all component POMs! -->
-		<scijava-command.version>1.0.0-SNAPSHOT</scijava-command.version>
-		<scijava-context.version>1.0.0-SNAPSHOT</scijava-context.version>
-		<scijava-discovery.version>1.0.1-SNAPSHOT</scijava-discovery.version>
-		<scijava-index.version>1.0.0-SNAPSHOT</scijava-index.version>
-		<scijava-ui3.version>3.0.0-SNAPSHOT</scijava-ui3.version>
-		<scijava-ui3-test.version>3.0.0-SNAPSHOT</scijava-ui3-test.version>
-		<scijava-script3.version>3.0.0-SNAPSHOT</scijava-script3.version>
 		<scijava-common3.version>1.0.1-SNAPSHOT</scijava-common3.version>
+		<scijava-convert3.version>3.0.0-SNAPSHOT</scijava-convert3.version>
 		<scijava-execute.version>1.0.0-SNAPSHOT</scijava-execute.version>
-		<scijava-harvest.version>1.0.0-SNAPSHOT</scijava-harvest.version>
 		<scijava-priority.version>1.0.1-SNAPSHOT</scijava-priority.version>
 		<scijava-struct.version>1.0.1-SNAPSHOT</scijava-struct.version>
 	</properties>
 
 	<dependencies>
+		<!--
+		NB: no container here either. A script is an Executable like any
+		other, and languages come from plain ServiceLoader.
+		-->
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-common3</artifactId>
@@ -108,38 +110,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-command</artifactId>
-			<version>${scijava-command.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-context</artifactId>
-			<version>${scijava-context.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-discovery</artifactId>
-			<version>${scijava-discovery.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-index</artifactId>
-			<version>${scijava-index.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-ui3</artifactId>
-			<version>${scijava-ui3.version}</version>
+			<artifactId>scijava-convert3</artifactId>
+			<version>${scijava-convert3.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-execute</artifactId>
 			<version>${scijava-execute.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-harvest</artifactId>
-			<version>${scijava-harvest.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
@@ -152,24 +129,12 @@
 			<version>${scijava-struct.version}</version>
 		</dependency>
 
-		<!-- Third-party dependencies -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
-
 		<!-- Test scope dependencies -->
 		<!--
-		NB: so that the widgets can be tested against a script, not only against
-		a Java command. A binding has no idea which it is rendering, and that
-		claim is worth checking.
+		NB: a real engine, so that the tests exercise a language rather than a
+		stand-in. Any JSR-223 engine on the classpath is discovered the same
+		way; Groovy is simply the one Fiji users meet first.
 		-->
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-script3</artifactId>
-			<version>${scijava-script3.version}</version>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>org.apache.groovy</groupId>
 			<artifactId>groovy</artifactId>
@@ -181,21 +146,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-ui3-test</artifactId>
-			<version>${scijava-ui3-test.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<!--
-		NB: so that the demos can say what they are doing. Turn it up with
-		-Dorg.slf4j.simpleLogger.defaultLogLevel=debug
-		-->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 			<scope>test</scope>
@@ -204,24 +154,6 @@
 
 	<build>
 		<plugins>
-			<!--
-			NB: the annotation index comes from scijava-index's annotation
-			processor, which must be on the processor path: javac will not find
-			it on the module path, and says nothing when it finds no processor at
-			all, so the build would simply produce no index.
-			-->
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>org.scijava</groupId>
-							<artifactId>scijava-index</artifactId>
-							<version>${scijava-index.version}</version>
-						</path>
-					</annotationProcessorPaths>
-				</configuration>
-			</plugin>
 			<plugin>
 				<artifactId>maven-enforcer-plugin</artifactId>
 				<executions>

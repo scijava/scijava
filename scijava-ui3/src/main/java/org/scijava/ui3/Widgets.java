@@ -29,10 +29,9 @@
 
 package org.scijava.ui3;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Optional;
 
+import org.scijava.convert3.Converters;
 import org.scijava.execute.ParameterMember;
 import org.scijava.harvest.ParameterNode;
 import org.scijava.struct.MemberInstance;
@@ -151,31 +150,21 @@ public final class Widgets {
 	}
 
 	/**
-	 * Reads a number in the given type.
+	 * Reads a value in the given type, for a widget that has only text.
 	 * <p>
-	 * NB: bounds arrive as strings, because metadata has to survive a script
-	 * header; the widget wants them in the parameter's own type, so that a
-	 * {@code long} parameter is not silently bounded by a {@code double}.
+	 * NB: this is {@code scijava-convert3}, not a parser of its own: a widget
+	 * turning text into a value is doing exactly what a script or a command
+	 * line does, and one of them getting it differently right would be a bug
+	 * nobody could see. Half-typed text is not a value, so it converts to
+	 * nothing rather than to zero.
 	 * </p>
 	 *
-	 * @return the parsed number, or null if the text is not a number
+	 * @return the value, or null if the text is not one of that type
 	 */
 	public static Number toType(final String text, final Class<?> type) {
-		if (text == null || text.isEmpty()) return null;
-		try {
-			final Class<?> t = box(type);
-			if (t == Byte.class) return Byte.valueOf(text);
-			if (t == Short.class) return Short.valueOf(text);
-			if (t == Integer.class) return Integer.valueOf(text);
-			if (t == Long.class) return Long.valueOf(text);
-			if (t == Float.class) return Float.valueOf(text);
-			if (t == BigInteger.class) return new BigInteger(text);
-			if (t == BigDecimal.class) return new BigDecimal(text);
-			return Double.valueOf(text);
-		}
-		catch (final NumberFormatException exc) {
-			return null;
-		}
+		if (text == null || type == null) return null;
+		return Converters.get().tryConvert(text, box(type)) //
+			.filter(Number.class::isInstance).map(Number.class::cast).orElse(null);
 	}
 
 	/** Gets the wrapper type for a primitive, or the type itself. */

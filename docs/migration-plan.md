@@ -81,8 +81,10 @@ The deliverable is not a reimplementation of SJC. It is:
    on SJ3. Parity between an SJC class and its SJ3 replacement is *documented*,
    not enforced by delegation, and SJC bugfixes do not flow forward. This is
    acceptable for a component in wind-down.
-3. **`scijava-legacy` bridges the other way** (SJ3 → SJC), and is the only
-   place in this repository permitted to depend on `scijava-common`.
+3. **The compatibility components bridge the other way.** `scijava-compat`
+   (SJC commands usable from SJ3) and `scijava-ops-compat` (SJ3 ops usable
+   from SJC) are the only components in this repository permitted to depend
+   on `scijava-common`.
 4. **Every component POM must pin the version of every SciJava artifact it
    consumes, transitively included.** The modules here inherit from
    `pom-scijava`, not from this repository's aggregator POM, so a version
@@ -114,7 +116,8 @@ they need the corresponding SJC classes deprecated with pointers.
 
 Remaining SJC usage inside this repository:
 
-- `scijava-legacy` — intentional; it is the bridge.
+- `scijava-compat` and `scijava-ops-compat` — intentional; they are the
+  bridges.
 - `scijava-ops-image` / `scijava-ops-flim` tests — `io.location.FileLocation`,
   imposed by SCIFIO's `ImgOpener` API. Gone once SCIFIO migrates; the utility
   usages were removed in Phase 0.
@@ -569,8 +572,8 @@ No application context required by anything in this phase.
     returns the subscriptions for the caller to close.
   - What a handler throws reaches the publisher unwrapped, rather than as an
     `InvocationTargetException`.
-  - Still to do here: the one-way legacy bridge, and the core services
-    themselves.
+  - Still to do here: the core services themselves. The one-way legacy
+    bridge is built, as `scijava-compat`; see below.
   - **Dependencies are not constructor arguments.** Constructor injection
     would publish every dependency in a signature, so changing an internal
     dependency would be an API change and a binary compatibility break unless
@@ -598,8 +601,9 @@ No application context required by anything in this phase.
 - **`scijava-cache`** moves into this repository, keeping the
   `org.scijava.cache` package, with its SJC dependency repointed to
   `scijava-context`. It never reached 1.0.0, so there is no SemVer concern.
-- **One-way bridge only:** a service hosting an SJC `Context` inside the SJ3
-  context, plus preprocessors that inject legacy objects into existing
+- **One-way bridge only:** built as `scijava-compat`, which presents an SJC
+  context's modules as SJ3 commands (see *The real risk is migration*, below).
+  Still to do: preprocessors that inject legacy objects into existing
   scripts. Nothing is added to SJC.
 - Fiji startup can then construct the SJ3 `Context` instead of the SJC one.
 
@@ -751,17 +755,17 @@ Hundreds of commands live across dozens of repositories with different
 maintainers. Per command the change is mechanical, but there is no flag day on
 which they all update.
 
-So the **one-way legacy bridge matters more than its deferral implies**: for
-Fiji to run on SJ3 before every command is ported, an SJ3 application must
-present SciJava Common `ModuleInfo`s as SJ3 commands — metadata flowing both
-ways, dependency flowing one way. That is what makes the migration incremental
+So the **one-way legacy bridge matters more than its place in the phases
+implies**: for Fiji to run on SJ3 before every command is ported, an SJ3
+application must present SciJava Common `ModuleInfo`s as SJ3 commands —
+metadata flowing both ways, dependency flowing one way. That is what makes the migration incremental
 rather than a big bang.
 
-**`scijava-bridge` is built**, and it is the only component that depends on
-SciJava Common. `Legacy.commands(context)` turns everything a legacy context
-can run into `CommandInfo`s, which go into an application's menus beside its
-own commands and its scripts; `LegacyContext.start()` does the same without
-the caller naming a SciJava Common type at all.
+**`scijava-compat` is built**, and it is the only component that depends on
+SciJava Common in this direction. `Legacy.commands(context)` turns everything
+a legacy context can run into `CommandInfo`s, which go into an application's
+menus beside its own commands and its scripts; `LegacyContext.start()` does the
+same without the caller naming a SciJava Common type at all.
 
 What it found, which is why bridges are worth building early:
 
@@ -801,6 +805,35 @@ What it found, which is why bridges are worth building early:
 - **The bridge's own API names no SciJava Common type**, which is not tidiness:
   a JPMS module would otherwise have to `requires org.scijava` merely to hold
   the context, and a test-scoped use cannot say that at all.
+
+**The compatibility components are named for the foreign thing each adapts
+to**, which settled a name clash and shook out a mixed module:
+
+| component | what it does | depends on |
+| --- | --- | --- |
+| `scijava-compat` | SciJava Common's commands, usable from SciJava3 | scijava-common, command3 |
+| `scijava-ops-compat` | SciJava3's ops, usable from a SciJava Common application | scijava-common, ops-api, progress |
+| `scijava-imagej-compat` | teaches `scijava-types` to read a `Dataset`'s generic type | imagej-common, imglib2, types |
+
+The first two are the same boundary in opposite directions, and separate
+because their dependencies are disjoint: an application wanting Fiji's
+existing commands in its menus should not thereby acquire ops. The third was
+hiding inside the old `scijava-legacy`, whose `module-info` said
+`requires net.imagej` for *all* of it — so anyone wanting ops inside a
+SciJava Common application was acquiring ImageJ2 to get it, on account of one
+class that has nothing to do with SciJava Common at all. It is a candidate for
+moving into an ImageJ repository entirely.
+
+Splitting it cost five build iterations, every one of them a dependency that
+**no `import` names**: `scijava-discovery` arriving through `scijava-ops-api`
+in one module and through `scijava-types`'s `requires transitive` in the
+other; `net.imglib2`, because `Dataset`'s supertypes live there;
+`scijava-ops-engine`, because `OpEnvironment.build()` finds its implementation
+through `ServiceLoader`. **Module boundaries here cannot be drawn by reading
+imports**, and single-module `-pl` builds cannot check them - they resolve
+released artifacts, some of them a year old, rather than the reactor's own.
+The old POM already carried a warning to this effect, which was pruned past
+before it was read.
 
 ### On the words
 
@@ -1234,7 +1267,8 @@ widgets and watching its callbacks fire.
 
 1. Port the code and tests (JUnit 4 → JUnit 5) with a `module-info.java`, no
    SJC dependency, and no split packages.
-2. Add an adapter in `scijava-legacy` only if a concrete need exists.
+2. Add an adapter in `scijava-compat` (or `scijava-ops-compat`, for the
+   opposite direction) only if a concrete need exists.
 3. Mark the SJC counterpart `@deprecated` with a pointer, and add rows to
    [migration.md](migration.md).
 4. Update the downstream components that were using it.
@@ -1316,10 +1350,6 @@ design settled now, so that Phase 4 inherits decisions rather than a debate:
 ## Open decisions
 
 - **Names:** the execution-layer module, and `scijava-convert3`.
-- **Splitting `scijava-legacy`** into an SJC-only bridge and a separate
-  ImageJ-specific module, so that a bridge needing only SJC does not drag in
-  `imagej-common`. Agreed in principle; not blocking, so it is deferred until
-  the bridge content grows.
 - **`util.Timing` and `util.TreeNode`:** port or drop, pending evidence of
   downstream usage.
 - **A build-time check that every consumed SciJava artifact is version-pinned

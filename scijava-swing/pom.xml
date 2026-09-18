@@ -162,7 +162,7 @@
 		<!--
 		NB: so that the widgets can be tested against a script, not only against
 		a command. A binding has no idea which it is rendering, and that claim
-		is worth checking. (The legacy case is tested in scijava-bridge, which
+		is worth checking. (The legacy case is tested in scijava-compat, which
 		is the only component that can see both worlds.)
 		-->
 		<dependency>

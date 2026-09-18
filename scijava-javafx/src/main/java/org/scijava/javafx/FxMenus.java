@@ -29,7 +29,9 @@
 
 package org.scijava.javafx;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import javafx.scene.control.Menu;
@@ -41,6 +43,7 @@ import javafx.scene.input.KeyCharacterCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyCombination.Modifier;
 
+import org.scijava.command.Accelerator;
 import org.scijava.command.CommandInfo;
 import org.scijava.command.MenuCreator;
 import org.scijava.command.MenuTree;
@@ -98,40 +101,38 @@ public class FxMenus implements MenuCreator<MenuBar, Menu> {
 	// -- Helper methods --
 
 	/**
-	 * Reads an accelerator, in the same notation the Swing binding accepts:
-	 * {@code ^} for the platform's menu shortcut, {@code !} for alt, {@code +}
-	 * for shift.
+	 * Turns an accelerator into a JavaFX key combination.
+	 * <p>
+	 * One with no modifiers is handed to
+	 * {@link KeyCombination#keyCombination(String)}, so JavaFX's own notation
+	 * ({@code "Ctrl+Shift+N"}) works too.
+	 * </p>
 	 *
 	 * @return the combination, or null if it cannot be read
 	 */
 	static KeyCombination accelerator(final String accelerator) {
-		if (accelerator == null || accelerator.isEmpty()) return null;
-		final List<Modifier> modifiers = new java.util.ArrayList<>();
-		int i = 0;
-		for (; i < accelerator.length(); i++) {
-			final char c = accelerator.charAt(i);
-			// NB: SHORTCUT_DOWN is JavaFX saying what Swing needs a Toolkit call
-			// for: control, or command on a Mac.
-			if (c == '^') modifiers.add(KeyCombination.SHORTCUT_DOWN);
-			else if (c == '!') modifiers.add(KeyCombination.ALT_DOWN);
-			else if (c == '+') modifiers.add(KeyCombination.SHIFT_DOWN);
-			else break;
-		}
-		final String key = accelerator.substring(i);
-		if (modifiers.isEmpty()) {
+		final Optional<Accelerator> parsed = Accelerator.parse(accelerator);
+		if (parsed.isEmpty()) return null;
+		final Accelerator a = parsed.get();
+		if (!a.hasModifiers()) {
 			try {
-				return KeyCombination.keyCombination(key);
+				return KeyCombination.keyCombination(a.key());
 			}
 			catch (final IllegalArgumentException exc) {
 				log.warn("Unreadable accelerator: {}", accelerator);
 				return null;
 			}
 		}
-		if (key.length() != 1) {
+		if (!a.isCharacter()) {
 			log.warn("Unreadable accelerator: {}", accelerator);
 			return null;
 		}
-		return new KeyCharacterCombination(key, modifiers.toArray(
+		final List<Modifier> modifiers = new ArrayList<>();
+		// NB: SHORTCUT_DOWN is JavaFX saying what Swing needs a Toolkit call for.
+		if (a.isShortcut()) modifiers.add(KeyCombination.SHORTCUT_DOWN);
+		if (a.isAlt()) modifiers.add(KeyCombination.ALT_DOWN);
+		if (a.isShift()) modifiers.add(KeyCombination.SHIFT_DOWN);
+		return new KeyCharacterCombination(a.key(), modifiers.toArray(
 			new Modifier[0]));
 	}
 

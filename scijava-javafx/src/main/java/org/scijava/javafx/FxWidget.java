@@ -33,87 +33,24 @@ import javafx.scene.Node;
 
 import org.scijava.harvest.ParameterModel;
 import org.scijava.harvest.ParameterNode;
-import org.scijava.ui3.Widget;
+import org.scijava.ui3.AbstractWidget;
 
 /**
- * A {@link Widget} made of JavaFX controls.
+ * A {@link org.scijava.ui3.Widget} made of JavaFX controls.
  * <p>
- * NB: deliberately a near-copy of {@code org.scijava.swing.SwingWidget}, and
- * that is the finding: what a binding has to write is the toolkit-specific
- * part and a few lines of bookkeeping, not any part of the model.
+ * NB: what is left here, once {@link AbstractWidget} holds the bookkeeping, is
+ * exactly the toolkit-specific part: which type of control this binding deals
+ * in. That is the whole of it.
  * </p>
  *
  * @author Curtis Rueden
  */
-public abstract class FxWidget implements Widget {
-
-	private final ParameterNode node;
-	private final ParameterModel model;
-	private final String key;
-
-	private boolean refreshing;
+public abstract class FxWidget extends AbstractWidget {
 
 	protected FxWidget(final ParameterNode node, final ParameterModel model) {
-		this.node = node;
-		this.model = model;
-		this.key = node == null ? null : node.member() //
-			.map(m -> m.member().key()).orElse(null);
+		super(node, model);
 	}
 
 	/** Gets the control to place in the dialog. */
 	public abstract Node control();
-
-	@Override
-	public boolean isLabeled() {
-		return true;
-	}
-
-	@Override
-	public ParameterNode node() {
-		if (key == null) return node; // NB: a group, or the whole dialog
-		// NB: the tree is rebuilt on every change, so the node handed to this
-		// widget at construction goes stale; the current one is the one to ask.
-		return model.tree().find(key).orElse(node);
-	}
-
-	/** Gets the values this widget reads and writes. */
-	public ParameterModel model() {
-		return model;
-	}
-
-	@Override
-	public final void refresh() {
-		// NB: writing a value into a control fires its listeners, which would
-		// write it straight back into the model. The flag is what stops a
-		// refresh from looking like the user typing.
-		refreshing = true;
-		try {
-			doRefresh();
-		}
-		finally {
-			refreshing = false;
-		}
-	}
-
-	// -- Internal methods --
-
-	/** Re-reads the parameter's value into the controls. */
-	protected abstract void doRefresh();
-
-	/** Gets the parameter's name. */
-	protected String key() {
-		if (key == null) throw new IllegalStateException("Not a parameter widget");
-		return key;
-	}
-
-	/** Gets the parameter's current value. */
-	protected Object value() {
-		return model.get(key());
-	}
-
-	/** Reports that the user changed this widget's value. */
-	protected void update(final Object value) {
-		if (refreshing) return;
-		model.set(key(), value);
-	}
 }

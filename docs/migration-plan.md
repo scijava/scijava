@@ -761,7 +761,7 @@ present SciJava Common `ModuleInfo`s as SJ3 commands — metadata flowing both
 ways, dependency flowing one way. That is what makes the migration incremental
 rather than a big bang.
 
-**`scijava-bridge` is built**, and it is the only component that depends on
+**`scijava-compat` is built**, and it is the only component that depends on
 SciJava Common. `Legacy.commands(context)` turns everything a legacy context
 can run into `CommandInfo`s, which go into an application's menus beside its
 own commands and its scripts; `LegacyContext.start()` does the same without
@@ -805,6 +805,35 @@ What it found, which is why bridges are worth building early:
 - **The bridge's own API names no SciJava Common type**, which is not tidiness:
   a JPMS module would otherwise have to `requires org.scijava` merely to hold
   the context, and a test-scoped use cannot say that at all.
+
+**The compatibility components are named for the foreign thing each adapts
+to**, which settled a name clash and shook out a mixed module:
+
+| component | what it does | depends on |
+| --- | --- | --- |
+| `scijava-compat` | SciJava Common's commands, usable from SciJava3 | scijava-common, command3 |
+| `scijava-ops-compat` | SciJava3's ops, usable from a SciJava Common application | scijava-common, ops-api, progress |
+| `scijava-imagej-compat` | teaches `scijava-types` to read a `Dataset`'s generic type | imagej-common, imglib2, types |
+
+The first two are the same boundary in opposite directions, and separate
+because their dependencies are disjoint: an application wanting Fiji's
+existing commands in its menus should not thereby acquire ops. The third was
+hiding inside the old `scijava-legacy`, whose `module-info` said
+`requires net.imagej` for *all* of it — so anyone wanting ops inside a
+SciJava Common application was acquiring ImageJ2 to get it, on account of one
+class that has nothing to do with SciJava Common at all. It is a candidate for
+moving into an ImageJ repository entirely.
+
+Splitting it cost five build iterations, every one of them a dependency that
+**no `import` names**: `scijava-discovery` arriving through `scijava-ops-api`
+in one module and through `scijava-types`'s `requires transitive` in the
+other; `net.imglib2`, because `Dataset`'s supertypes live there;
+`scijava-ops-engine`, because `OpEnvironment.build()` finds its implementation
+through `ServiceLoader`. **Module boundaries here cannot be drawn by reading
+imports**, and single-module `-pl` builds cannot check them - they resolve
+released artifacts, some of them a year old, rather than the reactor's own.
+The old POM already carried a warning to this effect, which was pruned past
+before it was read.
 
 ### On the words
 

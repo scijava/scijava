@@ -801,6 +801,49 @@ converted into this parameter) is what a chooser widget wants, and is a
 separate question from what conversions are possible. It lands with the object
 widget.
 
+### Scripting
+
+**`scijava-script3`** (`org.scijava.script3`) is built, and the shape of it is
+one claim: **a script is an `Executable` like any other**. It runs through the
+same `Runner`, meets the same preprocessors, harvests its inputs through the
+same dialog in whichever toolkit, and can sit in a menu beside a Java command.
+Nothing above this layer knows which it is - a claim now tested, in
+`scijava-swing`, by rendering a Groovy script's parameters with the Swing
+widgets and watching its callbacks fire.
+
+- **`javax.script` is the first backend, not the only one.** `ScriptLanguage`
+  and `ScriptSession` are the SPI; `JsrLanguage` turns every JSR-223 engine on
+  the classpath into one, so Groovy, Jython, JRuby, Clojure and BeanShell cost
+  nothing and need declare nothing. GraalVM polyglot and Appose are further
+  `ScriptLanguage` implementations when they are wanted, and neither needs this
+  layer to change.
+- **Callbacks work for scripts**, which SciJava Common never managed.
+  `ExecutableInstance.behavior(String)` resolves a name however that kind of
+  code does, and for a script that means a function the script defined - so
+  `#@ double(callback = "celsiusChanged") celsius` behaves exactly as the Java
+  annotation does. What the function changed is converted back into the
+  parameters afterwards, because a callback exists precisely to change other
+  parameters. Validators and `choicesFrom` come along for the same ride.
+- **A session, not an `eval`.** Keeping the interpreter is what makes the
+  functions callable afterwards, and it is why `ScriptSession` exists rather
+  than a one-shot evaluation.
+- **Declarations are blanked, not removed**, so the language's own error
+  messages still point at the line the author is looking at. `#@` is a comment
+  in Python and a syntax error in Groovy, so leaving it in was not an option.
+- **Every declared parameter is bound, including the unfilled ones.** A
+  language that resolves names at run time fails on an unbound name rather
+  than seeing null, so a callback mentioning a parameter the user has not
+  reached would otherwise blow up instead of behaving.
+- **Not ported**: the `ScriptProcessor` chain, which existed to rewrite a
+  script before evaluation and was used for parameters and a shebang, both of
+  which the header reader does directly. `ScriptService` has no equivalent -
+  `Scripts.get().of(path)` is a line. `ScriptREPL`, `ScriptInterpreter`,
+  `AutoCompleter` and `CodeGenerator` belong with the script editor.
+- **Open**: whether a parameter with declared choices and no value should
+  preselect the first. SciJava Common does; the model here leaves it unset,
+  which is honest but shows an empty chooser. It is a one-line change in
+  either direction and wants a look at real dialogs before being made.
+
 ### Phase 4 — UI and desktop
 
 - **`scijava-harvest`** (`org.scijava.harvest`): the model behind a parameter

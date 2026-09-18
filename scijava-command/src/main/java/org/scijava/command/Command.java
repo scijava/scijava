@@ -52,12 +52,15 @@ package org.scijava.command;
  * <h2>On the word</h2>
  * <p>
  * "Command" here means what SciJava Common called a <em>module</em>: anything
- * runnable with declared parameters. A script is a command whose
+ * a user can run, with declared parameters. A script is a command whose
  * implementation is source in some language; a class like the one above is a
- * command whose implementation is Java. Neither is a special case of the
- * other, and both reach the menu, the harvester and the runner by one path -
- * see {@code org.scijava.execute.Executable}, which mentions no Java
- * reflection at all.
+ * command whose implementation is a class. Neither is a special case of the
+ * other, and both reach the menu, the harvester and the runner by one path.
+ * </p>
+ * <p>
+ * This interface is therefore not the definition of a command - {@link
+ * CommandInfo} is - but the way to <em>write</em> one as a class. A script
+ * implements nothing at all, and is no less a command for it.
  * </p>
  * <p>
  * The old vocabulary is retired: <em>module</em> now means a JPMS module,

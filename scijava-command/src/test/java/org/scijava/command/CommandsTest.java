@@ -56,7 +56,7 @@ public class CommandsTest {
 	public void testDiscovery() {
 		try (final Context context = Context.create()) {
 			final List<String> names = Commands.discover(context).stream() //
-				.map(CommandInfo::className) //
+				.map(ClassCommandInfo::className) //
 				.collect(Collectors.toList());
 			assertTrue(names.contains(SayHello.class.getName()), names.toString());
 			assertTrue(names.contains(CountBeans.class.getName()), names.toString());
@@ -71,7 +71,7 @@ public class CommandsTest {
 	@Test
 	public void testMenuMetadataWithoutLoadingCommands() {
 		try (final Context context = Context.create()) {
-			final CommandInfo hello = find(context, SayHello.class);
+			final ClassCommandInfo hello = find(context, SayHello.class);
 
 			assertEquals("Help>Say Hello...", hello.menuPath().orElse(null));
 			assertEquals("Say Hello...", hello.label());
@@ -83,7 +83,7 @@ public class CommandsTest {
 			// NB: asserted on a command no test runs. A flag on SayHello would
 			// prove nothing, since another test runs it and JUnit does not order
 			// methods by declaration.
-			final CommandInfo never = find(context, NeverRun.class);
+			final ClassCommandInfo never = find(context, NeverRun.class);
 			assertEquals("Help>Never Run", never.menuPath().orElse(null));
 			assertFalse(constructed("org.scijava.command.NeverRun"),
 				"building a menu must not construct commands");
@@ -100,7 +100,7 @@ public class CommandsTest {
 			final List<String> ofInterest = List.of("Count Beans", "Say Hello...",
 				"Never Run");
 			final List<String> labels = Commands.discover(context).stream() //
-				.map(CommandInfo::label) //
+				.map(ClassCommandInfo::label) //
 				.filter(ofInterest::contains) //
 				.collect(Collectors.toList());
 			// Weights: CountBeans 3, SayHello 12, NeverRun 50.
@@ -112,7 +112,7 @@ public class CommandsTest {
 	@Test
 	public void testCommandWithoutAMenuEntry() {
 		try (final Context context = Context.create()) {
-			final CommandInfo headless = find(context, Headless.class);
+			final ClassCommandInfo headless = find(context, Headless.class);
 			assertTrue(headless.menuPath().isEmpty());
 			// Its label falls back to something usable rather than being null.
 			assertEquals(Headless.class.getName(), headless.label());
@@ -123,7 +123,7 @@ public class CommandsTest {
 	@Test
 	public void testRunADiscoveredCommand() throws Exception {
 		try (final Context context = Context.create()) {
-			final CommandInfo hello = find(context, SayHello.class);
+			final ClassCommandInfo hello = find(context, SayHello.class);
 			final Runner runner = Runner.of(List.of(), List.of());
 
 			final ExecutionResult result = runner.run(hello, Map.of("name", "ada"))
@@ -140,7 +140,7 @@ public class CommandsTest {
 	@Test
 	public void testEachRunHasItsOwnInstance() throws Exception {
 		try (final Context context = Context.create()) {
-			final CommandInfo beans = find(context, CountBeans.class);
+			final ClassCommandInfo beans = find(context, CountBeans.class);
 			final Runner runner = Runner.of(List.of(), List.of());
 
 			final ExecutionResult first = runner.run(beans, Map.of("beans", 3)).get(5,
@@ -175,7 +175,7 @@ public class CommandsTest {
 			"commands should not need opening to the execution layer as well");
 	}
 
-	private static CommandInfo find(final Context context, final Class<?> type) {
+	private static ClassCommandInfo find(final Context context, final Class<?> type) {
 		return Commands.discover(context).stream() //
 			.filter(c -> type.getName().equals(c.className())) //
 			.findFirst().orElseThrow();
@@ -197,7 +197,7 @@ public class CommandsTest {
 	/**
 	 * Something runnable need not be in a menu, and is no less runnable for it.
 	 * <p>
-	 * NB: this is why the type is {@code ExecutableInfo} rather than
+	 * NB: this is why the type is {@code CommandInfo} rather than
 	 * {@code MenuEntry}. A command reached by name, by a search bar or by
 	 * another command is an ordinary thing to have; the menu tree simply takes
 	 * the subset with a path.
@@ -206,7 +206,7 @@ public class CommandsTest {
 	@Test
 	public void testRunnableWithoutAMenuPath() {
 		try (final Context context = Context.create()) {
-			final ExecutableInfo hidden = Commands.discover(context).stream() //
+			final CommandInfo hidden = Commands.discover(context).stream() //
 				.filter(c -> c.className().equals(Headless.class.getName())) //
 				.findFirst().orElseThrow();
 

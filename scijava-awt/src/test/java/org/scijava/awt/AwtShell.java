@@ -43,7 +43,7 @@ import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 import org.scijava.command.Commands;
-import org.scijava.command.ExecutableInfo;
+import org.scijava.command.CommandInfo;
 import org.scijava.command.MenuTree;
 import org.scijava.context.Context;
 import org.scijava.execute.ExecutionResult;
@@ -72,7 +72,7 @@ import org.scijava.execute.Runner;
 public class AwtShell {
 
 	private final Context context = Context.create();
-	private final java.util.List<ExecutableInfo> commands = entries();
+	private final java.util.List<CommandInfo> commands = entries();
 	private final Runner runner;
 
 	private final Frame frame = new Frame("SciJava");
@@ -80,7 +80,7 @@ public class AwtShell {
 	private final TextField search = new TextField(24);
 	private final List matches = new List(8);
 
-	private java.util.List<ExecutableInfo> shown = java.util.List.of();
+	private java.util.List<CommandInfo> shown = java.util.List.of();
 
 	public AwtShell() {
 		runner = Runner.of(java.util.List.of(AwtInputHarvester.of(context)),
@@ -118,14 +118,14 @@ public class AwtShell {
 	// -- Helper methods --
 
 	/** Gathers what this application can run: commands, and scripts. */
-	private java.util.List<ExecutableInfo> entries() {
-		final java.util.List<ExecutableInfo> entries = new java.util.ArrayList<>(
+	private java.util.List<CommandInfo> entries() {
+		final java.util.List<CommandInfo> entries = new java.util.ArrayList<>(
 			Commands.discover(context));
 		final java.net.URL url = AwtShell.class.getResource("/scripts");
 		if (url != null) {
 			try {
 				new org.scijava.script3.ScriptFinder().find(java.nio.file.Paths.get(url
-					.toURI())).forEach(found -> entries.add(ExecutableInfo.of(found.script(),
+					.toURI())).forEach(found -> entries.add(CommandInfo.of(found.script(),
 						found.metadata())));
 			}
 			catch (final java.net.URISyntaxException exc) {
@@ -153,7 +153,7 @@ public class AwtShell {
 	}
 
 	/** Runs a command, and says what came back. */
-	private void run(final ExecutableInfo command) {
+	private void run(final CommandInfo command) {
 		status.setText("Running " + command.label() + "...");
 		final Future<ExecutionResult> future = runner.run(command, Map.of());
 		new Thread(() -> {
@@ -162,7 +162,7 @@ public class AwtShell {
 		}, "shell-" + command.name()).start();
 	}
 
-	private static String describe(final ExecutableInfo command) {
+	private static String describe(final CommandInfo command) {
 		return command.menuPath().map(path -> path.replace(">", " ▸ ")) //
 			.orElseGet(() -> command.label() + " (not in any menu)");
 	}

@@ -1,6 +1,6 @@
 /*
  * #%L
- * Toolkit-agnostic contracts for widgets and input harvesting.
+ * JavaFX widgets, and a dialog to harvest inputs with them.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,44 +27,59 @@
  * #L%
  */
 
-package org.scijava.ui3;
+package org.scijava.javafx;
 
+import javafx.scene.Node;
+import javafx.scene.control.CheckBox;
+
+import org.scijava.context.Plugin;
+import org.scijava.harvest.ParameterModel;
 import org.scijava.harvest.ParameterNode;
+import org.scijava.ui3.WidgetFactory;
+import org.scijava.ui3.WidgetPanelFactory;
+import org.scijava.ui3.Widgets;
 
 /**
- * A view of one parameter.
- * <p>
- * A widget knows the parameter it edits and nothing about the dialog it sits
- * in. Toolkit bindings extend this with whatever component type they deal in;
- * this interface stays free of any toolkit, so that the model, the builder and
- * the tests can speak of widgets without importing Swing.
- * </p>
+ * A widget for a true/false value.
  *
  * @author Curtis Rueden
  */
-public interface Widget {
+public class FxToggle extends FxWidget {
 
-	/**
-	 * Gets what this widget edits: the parameter, its label, its choices.
-	 *
-	 * @return the node, or null for a panel that stands for no parameter
-	 */
-	ParameterNode node();
+	private final CheckBox checkBox = new CheckBox();
 
-	/** Re-reads the parameter, in case something else changed its value. */
-	void refresh();
+	public FxToggle(final ParameterNode node, final ParameterModel model) {
+		super(node, model);
+		refresh();
+		checkBox.selectedProperty().addListener((obs, old, value) -> update(value));
+	}
 
-	/**
-	 * Gets whether the dialog should put a label beside this widget. A widget
-	 * that says no gets the whole row.
-	 * <p>
-	 * NB: this lives here rather than in a toolkit because it is a statement
-	 * about the <em>parameter</em>'s presentation - a group carries its own
-	 * title, a message is its own text - and every toolkit would otherwise
-	 * answer it identically.
-	 * </p>
-	 */
-	default boolean isLabeled() {
-		return true;
+	@Override
+	public Node control() {
+		return checkBox;
+	}
+
+	@Override
+	protected void doRefresh() {
+		final Object value = value();
+		final boolean selected = value instanceof Boolean && (Boolean) value;
+		if (checkBox.isSelected() != selected) checkBox.setSelected(selected);
+	}
+
+	/** Makes {@link FxToggle}s. */
+	@Plugin(type = WidgetFactory.class)
+	public static class Factory implements FxWidgetFactory {
+
+		@Override
+		public boolean supports(final ParameterNode node) {
+			return Widgets.isBoolean(node);
+		}
+
+		@Override
+		public FxWidget create(final ParameterNode node, final ParameterModel model,
+			final WidgetPanelFactory<FxWidget> panels)
+		{
+			return new FxToggle(node, model);
+		}
 	}
 }

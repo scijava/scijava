@@ -1,6 +1,6 @@
 /*
  * #%L
- * Swing widgets, and a dialog to harvest inputs with them.
+ * JavaFX widgets, and a dialog to harvest inputs with them.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,13 +27,15 @@
  * #L%
  */
 
-package org.scijava.swing;
+package org.scijava.javafx;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.awt.GraphicsEnvironment;
 import java.util.List;
+
+import javafx.scene.input.KeyCharacterCombination;
+import javafx.scene.input.KeyCombination;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIf;
@@ -44,48 +46,68 @@ import org.scijava.ui3.test.SampleCommands;
 import org.scijava.ui3.test.WidgetConformance;
 
 /**
- * Runs the shared conformance suite against the Swing widgets, and adds what
- * is Swing's own.
+ * Runs the shared conformance suite against the JavaFX widgets.
+ * <p>
+ * It is the same suite the Swing binding runs, which is the point: the
+ * assertions are about the contracts, so two bindings passing them behave
+ * alike wherever a caller can tell.
+ * </p>
+ * <p>
+ * NB: JavaFX controls cannot be constructed at all before the toolkit is
+ * running, so every widget here is built on the JavaFX thread.
+ * </p>
  *
  * @author Curtis Rueden
  */
 @DisabledIf("isHeadless")
-public class SwingWidgetsTest extends WidgetConformance<SwingWidget> {
+public class FxWidgetsTest extends WidgetConformance<FxWidget> {
 
+	/**
+	 * NB: not {@code GraphicsEnvironment.isHeadless()} - that is AWT's answer,
+	 * and this module does not read {@code java.desktop} at all. Whether JavaFX
+	 * can start is a question only JavaFX can answer.
+	 */
 	static boolean isHeadless() {
-		return GraphicsEnvironment.isHeadless();
+		try {
+			FxThread.start();
+			return false;
+		}
+		catch (final Throwable t) {
+			return true;
+		}
 	}
 
-	private static final List<WidgetFactory<SwingWidget>> FACTORIES = List.of( //
-		new SwingMessageWidgetFactory(), //
-		new SwingChoiceWidgetFactory(), //
-		new SwingNumberWidgetFactory(), //
-		new SwingToggleWidgetFactory(), //
-		new SwingFileWidgetFactory(), //
-		new SwingTextWidgetFactory());
+	private static final List<WidgetFactory<FxWidget>> FACTORIES = List.of( //
+		new FxMessage.Factory(), //
+		new FxChoice.Factory(), //
+		new FxNumber.Factory(), //
+		new FxToggle.Factory(), //
+		new FxFile.Factory(), //
+		new FxText.Factory());
 
 	@Override
-	protected WidgetPanel<SwingWidget> panel(final ParameterModel model) {
-		return build(model, FACTORIES, new SwingPanelFactory(model));
+	protected WidgetPanel<FxWidget> panel(final ParameterModel model) {
+		return FxThread.get(() -> build(model, FACTORIES, new FxPanel.Factory(
+			model)));
 	}
 
 	@Override
 	protected Class<?> widgetType(final Kind kind) {
 		switch (kind) {
 			case MESSAGE:
-				return SwingMessageWidget.class;
+				return FxMessage.class;
 			case TEXT:
-				return SwingTextWidget.class;
+				return FxText.class;
 			case NUMBER:
-				return SwingNumberWidget.class;
+				return FxNumber.class;
 			case TOGGLE:
-				return SwingToggleWidget.class;
+				return FxToggle.class;
 			case CHOICE:
-				return SwingChoiceWidget.class;
+				return FxChoice.class;
 			case FILE:
-				return SwingFileWidget.class;
+				return FxFile.class;
 			case PANEL:
-				return SwingPanel.class;
+				return FxPanel.class;
 			default:
 				throw new IllegalArgumentException(String.valueOf(kind));
 		}
@@ -95,21 +117,24 @@ public class SwingWidgetsTest extends WidgetConformance<SwingWidget> {
 	@Test
 	public void testWidgetEditRunsCallback() {
 		final ParameterModel model = model(new SampleCommands.LinkedValues());
-		final SwingPanel panel = (SwingPanel) panel(model);
-		final SwingNumberWidget celsius = assertInstanceOf(SwingNumberWidget.class,
-			panel.widgets().get(0));
+		final FxPanel panel = (FxPanel) panel(model);
+		final FxNumber celsius = (FxNumber) panel.widgets().get(0);
 
-		celsius.update(100.0);
+		FxThread.runAndWait(() -> celsius.update(100.0));
 
 		assertEquals(212.0, model.get("fahrenheit"));
 	}
 
-	/** The panel puts a label beside a widget that wants one, and not else. */
+	/** Accelerators read the same notation the Swing binding accepts. */
 	@Test
-	public void testLabeling() {
-		final SwingPanel panel = (SwingPanel) panel(model(
-			new SampleCommands.KitchenSink()));
-		assertEquals(false, panel.widgets().get(0).isLabeled()); // the message
-		assertEquals(true, panel.widgets().get(1).isLabeled()); // the name
+	public void testAccelerators() {
+		final KeyCombination shortcutO = FxMenus.accelerator("^O");
+		assertNotNull(shortcutO);
+		assertEquals(new KeyCharacterCombination("O", KeyCombination.SHORTCUT_DOWN),
+			shortcutO);
+		assertEquals(new KeyCharacterCombination("C", KeyCombination.SHORTCUT_DOWN,
+			KeyCombination.SHIFT_DOWN), FxMenus.accelerator("^+C"));
+		assertEquals(KeyCombination.keyCombination("Ctrl+Shift+N"), FxMenus
+			.accelerator("Ctrl+Shift+N"));
 	}
 }

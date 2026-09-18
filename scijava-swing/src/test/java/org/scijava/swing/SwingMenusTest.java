@@ -32,7 +32,6 @@ package org.scijava.swing;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
@@ -40,7 +39,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -49,48 +47,44 @@ import javax.swing.KeyStroke;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIf;
-import org.scijava.command.CommandInfo;
-import org.scijava.command.Commands;
 import org.scijava.command.MenuTree;
-import org.scijava.context.Context;
+import org.scijava.ui3.test.MenuConformance;
 
 /**
- * Tests that the menu bar matches the commands the index describes.
+ * Runs the shared menu conformance suite against the Swing menus, and adds
+ * what is Swing's own.
  *
  * @author Curtis Rueden
  */
 @DisabledIf("isHeadless")
-public class SwingMenusTest {
+public class SwingMenusTest extends MenuConformance<JMenuBar> {
 
 	static boolean isHeadless() {
 		return GraphicsEnvironment.isHeadless();
 	}
 
-	/** The menus come out in the declared order, not alphabetically. */
-	@Test
-	public void testMenuOrder() {
-		final JMenuBar bar = menuBar();
-		assertEquals(List.of("File", "Image", "Process", "Analyze", "Help"),
-			labels(bar));
+	@Override
+	protected JMenuBar menuBar(final MenuTree root) {
+		return SwingMenus.create(root, command -> {});
 	}
 
-	/** A menu path becomes menus, however deep, and a command becomes an item. */
-	@Test
-	public void testNesting() {
-		final JMenuBar bar = menuBar();
-		final JMenu image = menu(bar, "Image");
-		assertEquals(List.of("Adjust"), labels(image));
-		final JMenu adjust = (JMenu) image.getItem(0);
-		assertEquals(List.of("Brightness/Contrast..."), labels(adjust));
+	@Override
+	protected List<String> topMenus(final JMenuBar bar) {
+		final List<String> labels = new ArrayList<>();
+		for (int i = 0; i < bar.getMenuCount(); i++)
+			labels.add(bar.getMenu(i).getText());
+		return labels;
 	}
 
-	/** A command with no menu path is absent from the menus, not lost. */
-	@Test
-	public void testCommandWithNoMenuPath() {
-		final List<CommandInfo> commands = commands();
-		assertTrue(commands.stream().anyMatch(c -> c.className().endsWith(
-			"ShellCommands$Hidden")), "the hidden command should be discovered");
-		assertEquals(List.of("About..."), labels(menu(menuBar(), "Help")));
+	@Override
+	protected List<String> items(final JMenuBar bar, final String... path) {
+		JMenu menu = menu(bar, path[0]);
+		for (int i = 1; i < path.length; i++)
+			menu = (JMenu) item(menu, path[i]);
+		final List<String> labels = new ArrayList<>();
+		for (int i = 0; i < menu.getItemCount(); i++)
+			labels.add(menu.getItem(i).getText());
+		return labels;
 	}
 
 	/** Accelerators reach the items, in ImageJ's notation and in Swing's. */
@@ -108,26 +102,12 @@ public class SwingMenusTest {
 			"control shift N"));
 		assertNull(SwingMenus.keyStroke(""));
 
-		final JMenuItem open = (JMenuItem) menu(menuBar(), "File").getItem(0);
+		final JMenuItem open = (JMenuItem) item(menu(menuBar(), "File"),
+			"Open...");
 		assertNotNull(open.getAccelerator());
 	}
 
 	// -- Helper methods --
-
-	private static List<CommandInfo> commands() {
-		try (Context context = Context.create()) {
-			return Commands.discover(context);
-		}
-	}
-
-	private static JMenuBar menuBar() {
-		// NB: the commands under test are the shell's; anything else another
-		// test contributes would only make this brittle.
-		final List<CommandInfo> mine = commands().stream() //
-			.filter(c -> c.className().contains("ShellCommands")) //
-			.collect(Collectors.toList());
-		return SwingMenus.create(MenuTree.of(mine), command -> {});
-	}
 
 	private static JMenu menu(final JMenuBar bar, final String label) {
 		for (int i = 0; i < bar.getMenuCount(); i++) {
@@ -136,17 +116,10 @@ public class SwingMenusTest {
 		throw new AssertionError("No such menu: " + label);
 	}
 
-	private static List<String> labels(final JMenuBar bar) {
-		final List<String> labels = new ArrayList<>();
-		for (int i = 0; i < bar.getMenuCount(); i++)
-			labels.add(bar.getMenu(i).getText());
-		return labels;
-	}
-
-	private static List<String> labels(final JMenu menu) {
-		final List<String> labels = new ArrayList<>();
-		for (int i = 0; i < menu.getItemCount(); i++)
-			labels.add(menu.getItem(i).getText());
-		return labels;
+	private static JMenuItem item(final JMenu menu, final String label) {
+		for (int i = 0; i < menu.getItemCount(); i++) {
+			if (menu.getItem(i).getText().equals(label)) return menu.getItem(i);
+		}
+		throw new AssertionError("No such item: " + label);
 	}
 }

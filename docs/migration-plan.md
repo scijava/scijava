@@ -693,8 +693,8 @@ unless it says there is no replacement at all, which it says explicitly.
 | Layer | Contents | Depends on |
 | --- | --- | --- |
 | **0. Foundation** (built) | `spi`, `common3`, `collections`, `priority`, `progress`, `concurrent`, `discovery`, `index`, `struct`, `io3`, `events`, `context`, `execute` | nothing above |
-| **1. Application model** (to build) | `scijava-command` (a struct plus presentation metadata), `scijava-menu` (the menu tree), `scijava-ui3` (toolkit-agnostic contracts), `scijava-desktop` | layer 0 |
-| **2. Toolkit bindings** | `scijava-ui-swing`, JavaFX, headless | layer 1 |
+| **1. Application model** (built, less `scijava-desktop`) | `scijava-command` (a struct plus presentation metadata, the menu tree and its walk), `scijava-ui3` (toolkit-agnostic contracts), `scijava-desktop` | layer 0 |
+| **2. Toolkit bindings** | `scijava-swing`, `scijava-javafx`, headless | layer 1 |
 | **3. Application** | Fiji: which menus exist, branding, update sites, defaults | layer 2 |
 
 Only layer 2 imports AWT or Swing. Layer 0 never mentions a user interface, so
@@ -920,6 +920,45 @@ after it.
   - **The main window is menu bar, tool bar, progress bar, status bar and a
     search field**, and the search field is not an afterthought: a command
     that is in no menu is still reachable, which the demo shell shows.
+
+- **A second binding, `scijava-javafx`**, is what turns "toolkit-agnostic"
+  from an assertion into a measurement. The whole of `scijava-ui3` survived it
+  with **two changes**, both of which were Swing keeping something that was
+  never Swing's:
+  - `Widget.isLabeled()` - whether a parameter wants a label beside it is a
+    statement about the parameter, and every toolkit would have answered it
+    identically.
+  - `WidgetPanel.showProblems(Map)` - how a problem *looks* is a toolkit's
+    business, but that there is one, shown per parameter and cleared when
+    fixed, is not.
+  Everything else - `Widget`, `WidgetFactory`, `WidgetPanelFactory`,
+  `WidgetPanels`, `Widgets`, `InputHarvester`, `MenuCreator`, `Menus` - was
+  untouched, and `ParameterModel` and `ParameterTree` never came into
+  question.
+
+- **What the second binding had to do differently** is worth recording,
+  because it is what a third will face too:
+  - **The toolkit must be started, once**, and JavaFX has no `invokeAndWait`.
+    `FxThread` is that plumbing, and it deliberately does not use
+    `Application.launch`, which takes over the process and returns only when
+    the last window closes - wrong for a binding that an application, a script
+    or a test may use.
+  - **`showAndWait` runs a nested event loop**, so the dialog must be built
+    and shown in one visit to the JavaFX thread, where Swing wanted two.
+  - **JavaFX spinners do not preserve a parameter's type** - their value
+    factories are `Integer` or `Double` and nothing else - so the widget
+    converts on the way out, and an editable spinner needs its editor watched
+    or a typed value is silently lost when focus moves.
+  - **Some things are simply easier**: a collapsible group is a `TitledPane`,
+    where Swing needs a hand-rolled header button; `KeyCombination.SHORTCUT_DOWN`
+    says what Swing needs a `Toolkit` call to compute.
+
+- **`scijava-ui3-test` is the anti-drift mechanism**: the sample commands and
+  a conformance suite that every binding extends - eight assertions about
+  widgets, three about menus. Swing and JavaFX render the same declarations
+  and are held to the same behavior, and a third binding starts by making the
+  suite pass. A binding's own tests then cover only what is genuinely its own:
+  which control it chose, how it parses an accelerator.
 
 - **The application shell moves to layers 1 and 2**, it is not discarded:
   `ApplicationFrame`, `Desktop`, `StatusBar` and `ToolBar` are contracts in

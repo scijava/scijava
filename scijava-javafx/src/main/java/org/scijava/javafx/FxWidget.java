@@ -1,6 +1,6 @@
 /*
  * #%L
- * Swing widgets, and a dialog to harvest inputs with them.
+ * JavaFX widgets, and a dialog to harvest inputs with them.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,21 +27,25 @@
  * #L%
  */
 
-package org.scijava.swing;
+package org.scijava.javafx;
 
-import javax.swing.JComponent;
-import javax.swing.JPanel;
+import javafx.scene.Node;
 
 import org.scijava.harvest.ParameterModel;
 import org.scijava.harvest.ParameterNode;
 import org.scijava.ui3.Widget;
 
 /**
- * A {@link Widget} made of Swing components.
+ * A {@link Widget} made of JavaFX controls.
+ * <p>
+ * NB: deliberately a near-copy of {@code org.scijava.swing.SwingWidget}, and
+ * that is the finding: what a binding has to write is the toolkit-specific
+ * part and a few lines of bookkeeping, not any part of the model.
+ * </p>
  *
  * @author Curtis Rueden
  */
-public abstract class SwingWidget implements Widget {
+public abstract class FxWidget implements Widget {
 
 	private final ParameterNode node;
 	private final ParameterModel model;
@@ -49,15 +53,15 @@ public abstract class SwingWidget implements Widget {
 
 	private boolean refreshing;
 
-	protected SwingWidget(final ParameterNode node, final ParameterModel model) {
+	protected FxWidget(final ParameterNode node, final ParameterModel model) {
 		this.node = node;
 		this.model = model;
 		this.key = node == null ? null : node.member() //
 			.map(m -> m.member().key()).orElse(null);
 	}
 
-	/** Gets the component to place in the dialog. */
-	public abstract JComponent component();
+	/** Gets the control to place in the dialog. */
+	public abstract Node control();
 
 	@Override
 	public boolean isLabeled() {
@@ -67,11 +71,8 @@ public abstract class SwingWidget implements Widget {
 	@Override
 	public ParameterNode node() {
 		if (key == null) return node; // NB: a group, or the whole dialog
-		// NB: the tree is rebuilt whenever a value changes, so the node handed to
-		// this widget at construction goes stale -- its choices in particular,
-		// which a computed `choicesFrom` resolves afresh each time. Reading the
-		// node back out of the current tree is what keeps a chooser showing the
-		// values that the other widgets now imply.
+		// NB: the tree is rebuilt on every change, so the node handed to this
+		// widget at construction goes stale; the current one is the one to ask.
 		return model.tree().find(key).orElse(node);
 	}
 
@@ -82,10 +83,9 @@ public abstract class SwingWidget implements Widget {
 
 	@Override
 	public final void refresh() {
-		// NB: writing a value into a Swing component fires its listeners, which
-		// would write it straight back into the model and, where a callback is
-		// involved, keep going. The flag is what stops a refresh from looking
-		// like the user typing.
+		// NB: writing a value into a control fires its listeners, which would
+		// write it straight back into the model. The flag is what stops a
+		// refresh from looking like the user typing.
 		refreshing = true;
 		try {
 			doRefresh();
@@ -97,7 +97,7 @@ public abstract class SwingWidget implements Widget {
 
 	// -- Internal methods --
 
-	/** Re-reads the parameter's value into the components. */
+	/** Re-reads the parameter's value into the controls. */
 	protected abstract void doRefresh();
 
 	/** Gets the parameter's name. */
@@ -111,23 +111,9 @@ public abstract class SwingWidget implements Widget {
 		return model.get(key());
 	}
 
-	/**
-	 * Reports that the user changed this widget's value.
-	 * <p>
-	 * It goes through the model rather than to the parameter directly, which is
-	 * what runs the callback and, if the shape of the dialog depends on this
-	 * value, rebuilds it.
-	 * </p>
-	 */
+	/** Reports that the user changed this widget's value. */
 	protected void update(final Object value) {
 		if (refreshing) return;
 		model.set(key(), value);
-	}
-
-	/** Makes a panel with no padding, for a widget of several components. */
-	protected static JPanel panel() {
-		final JPanel panel = new JPanel();
-		panel.setOpaque(false);
-		return panel;
 	}
 }

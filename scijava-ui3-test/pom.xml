@@ -9,11 +9,11 @@
 		<relativePath />
 	</parent>
 
-	<artifactId>scijava-swing</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<artifactId>scijava-ui3-test</artifactId>
+	<version>3.0.0-SNAPSHOT</version>
 
-	<name>SciJava Swing</name>
-	<description>Swing widgets, and a dialog to harvest inputs with them.</description>
+	<name>SciJava UI: Test Kit</name>
+	<description>Sample commands and conformance tests, for every toolkit binding.</description>
 	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2026</inceptionYear>
 	<organization>
@@ -80,18 +80,19 @@
 	</ciManagement>
 
 	<properties>
-		<package-name>org.scijava.swing</package-name>
+		<package-name>org.scijava.ui3.test</package-name>
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 
 		<!-- Note: These versions must match across all component POMs! -->
+		<!-- NB: a test kit; there is nothing here to release. -->
+		<maven.deploy.skip>true</maven.deploy.skip>
+
 		<scijava-command.version>1.0.0-SNAPSHOT</scijava-command.version>
 		<scijava-context.version>1.0.0-SNAPSHOT</scijava-context.version>
-		<scijava-discovery.version>1.0.1-SNAPSHOT</scijava-discovery.version>
 		<scijava-index.version>1.0.0-SNAPSHOT</scijava-index.version>
 		<scijava-ui3.version>3.0.0-SNAPSHOT</scijava-ui3.version>
-		<scijava-ui3-test.version>3.0.0-SNAPSHOT</scijava-ui3-test.version>
 		<scijava-common3.version>1.0.1-SNAPSHOT</scijava-common3.version>
 		<scijava-execute.version>1.0.0-SNAPSHOT</scijava-execute.version>
 		<scijava-harvest.version>1.0.0-SNAPSHOT</scijava-harvest.version>
@@ -100,11 +101,6 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-common3</artifactId>
-			<version>${scijava-common3.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-command</artifactId>
@@ -117,18 +113,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-discovery</artifactId>
-			<version>${scijava-discovery.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-index</artifactId>
-			<version>${scijava-index.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ui3</artifactId>
 			<version>${scijava-ui3.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-common3</artifactId>
+			<version>${scijava-common3.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
@@ -158,36 +149,20 @@
 		</dependency>
 
 		<!-- Test scope dependencies -->
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-ui3-test</artifactId>
-			<version>${scijava-ui3-test.version}</version>
-			<scope>test</scope>
-		</dependency>
 		<!--
-		NB: so that the demos can say what they are doing. Turn it up with
-		-Dorg.slf4j.simpleLogger.defaultLogLevel=debug
+		NB: compile scope, not test: this component *is* a test kit, and its
+		conformance suite is what other components extend. pom-scijava manages
+		JUnit at test scope, so the scope has to be said explicitly.
 		-->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<scope>test</scope>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
-			<!--
-			NB: the annotation index comes from scijava-index's annotation
-			processor, which must be on the processor path: javac will not find
-			it on the module path, and says nothing when it finds no processor at
-			all, so the build would simply produce no index.
-			-->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>

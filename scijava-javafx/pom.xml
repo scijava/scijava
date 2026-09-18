@@ -9,11 +9,11 @@
 		<relativePath />
 	</parent>
 
-	<artifactId>scijava-swing</artifactId>
+	<artifactId>scijava-javafx</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 
-	<name>SciJava Swing</name>
-	<description>Swing widgets, and a dialog to harvest inputs with them.</description>
+	<name>SciJava JavaFX</name>
+	<description>JavaFX widgets, and a dialog to harvest inputs with them.</description>
 	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2026</inceptionYear>
 	<organization>
@@ -80,7 +80,7 @@
 	</ciManagement>
 
 	<properties>
-		<package-name>org.scijava.swing</package-name>
+		<package-name>org.scijava.javafx</package-name>
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
@@ -152,6 +152,21 @@
 		</dependency>
 
 		<!-- Third-party dependencies -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-base</artifactId>
+			<version>${javafx-base.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-graphics</artifactId>
+			<version>${javafx-graphics.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>${javafx-controls.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>

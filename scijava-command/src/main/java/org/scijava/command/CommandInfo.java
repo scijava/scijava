@@ -57,7 +57,7 @@ import org.scijava.struct.Struct;
  *
  * @author Curtis Rueden
  */
-public class CommandInfo implements Executable {
+public class CommandInfo implements ExecutableInfo {
 
 	private final Discovery<Command> discovery;
 	private final Map<String, String> menu;
@@ -78,11 +78,13 @@ public class CommandInfo implements Executable {
 	}
 
 	/** Gets where this command sits in the menus, if anywhere. */
+	@Override
 	public Optional<String> menuPath() {
 		return attr("path");
 	}
 
 	/** Gets the label to display, defaulting to the last menu path element. */
+	@Override
 	public String label() {
 		return menuPath() //
 			.map(path -> path.substring(path.lastIndexOf('>') + 1)) //
@@ -90,22 +92,26 @@ public class CommandInfo implements Executable {
 	}
 
 	/** Gets this command's keyboard shortcut, if it has one. */
+	@Override
 	public Optional<String> accelerator() {
 		return attr("accelerator");
 	}
 
 	/** Gets this command's icon resource, if it has one. */
+	@Override
 	public Optional<String> iconPath() {
 		return attr("iconPath");
 	}
 
 	/** Gets how this command sorts among its menu siblings. */
+	@Override
 	public double weight() {
 		return attr("weight").map(Double::parseDouble) //
 			.orElse(Double.POSITIVE_INFINITY);
 	}
 
 	/** Gets whether this command should appear in menus. */
+	@Override
 	public boolean isVisible() {
 		return !"false".equals(menu.get("visible"));
 	}

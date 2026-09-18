@@ -106,19 +106,53 @@ public class Scripts {
 	 */
 	public ScriptExecutable of(final Path path) {
 		final String fileName = path.getFileName().toString();
-		final int dot = fileName.lastIndexOf('.');
-		final String extension = dot < 0 ? "" : fileName.substring(dot + 1);
-		final ScriptLanguage language = language(extension).orElseThrow(
-			() -> new ScriptException("No language for '." + extension +
-				"'. Available: " + names()));
+		final String code;
 		try {
-			final String code = new String(Files.readAllBytes(path),
-				StandardCharsets.UTF_8);
-			return new ScriptExecutable(fileName, code, language);
+			code = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
 		}
 		catch (final IOException exc) {
 			throw new ScriptException("Cannot read script: " + path, exc);
 		}
+		return of(fileName, code, languageOf(fileName, code));
+	}
+
+	/**
+	 * Takes script source as something that declares its inputs and outputs,
+	 * with the language the script itself names.
+	 *
+	 * @param name what to call it
+	 * @param code the script, which may name its language
+	 * @return the script, ready to run through a {@code Runner}
+	 * @throws ScriptException if nothing here speaks its language
+	 */
+	public ScriptExecutable of(final String name, final String code) {
+		return of(name, code, languageOf(name, code));
+	}
+
+	/**
+	 * Works out which language a script is written in.
+	 * <p>
+	 * What the script says wins over what its extension implies: a
+	 * {@code #@script(language = "jython")} directive or a {@code #!} line
+	 * settles which of the languages sharing {@code .py} is meant. An
+	 * extension no language claims is an error naming what is available,
+	 * rather than a silent failure to run.
+	 * </p>
+	 *
+	 * @param name the script's file name, whose extension is the fallback
+	 * @param code the script itself
+	 * @return the language it is written in
+	 */
+	public ScriptLanguage languageOf(final String name, final String code) {
+		final Optional<String> declared = ScriptHeader.parse(code).language();
+		if (declared.isPresent()) {
+			return language(declared.get()).orElseThrow(() -> new ScriptException(
+				"No such language: " + declared.get() + ". Available: " + names()));
+		}
+		final int dot = name.lastIndexOf('.');
+		final String extension = dot < 0 ? "" : name.substring(dot + 1);
+		return language(extension).orElseThrow(() -> new ScriptException(
+			"No language for '." + extension + "'. Available: " + names()));
 	}
 
 	/**
@@ -133,9 +167,15 @@ public class Scripts {
 	public ScriptExecutable of(final String name, final String code,
 		final String nameOrExtension)
 	{
-		final ScriptLanguage language = language(nameOrExtension).orElseThrow(
+		return of(name, code, language(nameOrExtension).orElseThrow(
 			() -> new ScriptException("No such language: " + nameOrExtension +
-				". Available: " + names()));
+				". Available: " + names())));
+	}
+
+	/** Takes script source, in the given language. */
+	public ScriptExecutable of(final String name, final String code,
+		final ScriptLanguage language)
+	{
 		return new ScriptExecutable(name, code, language);
 	}
 

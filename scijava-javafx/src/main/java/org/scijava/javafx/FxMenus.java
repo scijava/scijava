@@ -44,7 +44,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyCombination.Modifier;
 
 import org.scijava.command.Accelerator;
-import org.scijava.command.CommandInfo;
+import org.scijava.command.ExecutableInfo;
 import org.scijava.command.MenuCreator;
 import org.scijava.command.MenuTree;
 import org.scijava.command.Menus;
@@ -60,15 +60,15 @@ public class FxMenus implements MenuCreator<MenuBar, Menu> {
 
 	private static final Logger log = LoggerFactory.getLogger(FxMenus.class);
 
-	private final Consumer<CommandInfo> onSelect;
+	private final Consumer<ExecutableInfo> onSelect;
 
-	public FxMenus(final Consumer<CommandInfo> onSelect) {
+	public FxMenus(final Consumer<ExecutableInfo> onSelect) {
 		this.onSelect = onSelect;
 	}
 
 	/** Builds a menu bar holding the given menu tree. */
 	public static MenuBar create(final MenuTree root,
-		final Consumer<CommandInfo> onSelect)
+		final Consumer<ExecutableInfo> onSelect)
 	{
 		return Menus.build(root, new MenuBar(), new FxMenus(onSelect));
 	}
@@ -89,7 +89,7 @@ public class FxMenus implements MenuCreator<MenuBar, Menu> {
 
 	@Override
 	public void item(final MenuTree leaf, final Menu parent) {
-		final CommandInfo command = leaf.command().orElseThrow();
+		final ExecutableInfo command = leaf.entry().orElseThrow();
 		final MenuItem item = new MenuItem(leaf.label());
 		command.accelerator().map(FxMenus::accelerator).ifPresent(
 			item::setAccelerator);

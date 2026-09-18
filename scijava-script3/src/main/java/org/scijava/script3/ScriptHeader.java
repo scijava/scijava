@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -111,7 +112,7 @@ public class ScriptHeader {
 	private static final Pattern LINE = Pattern.compile("^\\s*#@\\s*(\\S.*)$");
 
 	// NB: a script may be executable in its own right.
-	private static final Pattern SHEBANG = Pattern.compile("^#!.*$");
+	private static final Pattern SHEBANG = Pattern.compile("^#!(.*)$");
 
 	private static final Pattern DIRECTION = Pattern.compile(
 		"^(input|output|both)\\b(.*)$");
@@ -121,6 +122,7 @@ public class ScriptHeader {
 
 	private final List<Parameter> parameters = new ArrayList<>();
 	private final Map<String, String> directives = new LinkedHashMap<>();
+	private String shebang;
 	private String body;
 
 	/** Reads what the given script declares. */
@@ -144,7 +146,19 @@ public class ScriptHeader {
 			// numbers in the language's own error messages still point at the
 			// line the author is looking at. `#@` is a comment in some languages
 			// and a syntax error in others, so leaving it in is not an option.
-			if (declaration || SHEBANG.matcher(line).matches()) lines[i] = "";
+			final Matcher shebang = SHEBANG.matcher(line);
+			if (i == 0 && shebang.matches()) {
+				// NB: as SciJava Common reads it: everything after #! names the
+				// language, so `#!jython` and `#!/usr/bin/env jython` both say
+				// Jython. A path is taken apart because that is how people write
+				// shebangs everywhere else.
+				final String said = shebang.group(1).trim();
+				final String[] words = said.split("[\\s/]+");
+				header.shebang = words.length == 0 ? said : words[words.length - 1];
+				lines[i] = "";
+				continue;
+			}
+			if (declaration) lines[i] = "";
 		}
 		header.body = String.join("\n", lines);
 		return header;
@@ -163,9 +177,34 @@ public class ScriptHeader {
 		return List.copyOf(parameters);
 	}
 
-	/** Gets the script's own metadata: its menu path, its label. */
+	/**
+	 * Gets what the script says about itself: where it belongs in the menus,
+	 * what to call it, what shortcut it answers to.
+	 * <p>
+	 * These are the {@code #@script(...)} keys, and they are the same names a
+	 * {@code @Menu} annotation uses, so
+	 * {@code org.scijava.command.ExecutableInfo.of} turns them into a menu entry
+	 * directly.
+	 * </p>
+	 */
 	public Map<String, String> directives() {
 		return Map.copyOf(directives);
+	}
+
+	/**
+	 * Gets the language this script says it is written in, if it says.
+	 * <p>
+	 * Two ways of saying it, because both are in use: {@code #@script(language
+	 * = "jython")}, and a shebang line. This is what disambiguates the
+	 * languages that share an extension - {@code .py} being Jython or Python
+	 * depending on which is meant - and a script that says nothing is read
+	 * according to its extension, as before.
+	 * </p>
+	 */
+	public Optional<String> language() {
+		final String declared = directives.get("language");
+		if (declared != null && !declared.isEmpty()) return Optional.of(declared);
+		return Optional.ofNullable(shebang);
 	}
 
 	// -- Helper methods --

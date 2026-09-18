@@ -134,7 +134,7 @@ A **dropped** row is a successful outcome, not a gap.
 | `input`, `tool` | UI-agnostic facades on `scijava-events` (Phase 4) | planned |
 | `display` | overhauled, not ported (Phase 4) | open |
 | `platform`, `ui.dnd` | `scijava-desktop` modernization (Phase 4) | planned |
-| `console`, `main`, `run` | single CLI module (Phase 4) | planned |
-| `startup` | standalone module (Phase 4) | planned |
+| `console`, `main`, `run` | `org.scijava.cli`: one component where SciJava Common had three packages. `Cli.run(args)` finds a command by menu path, label or class name, binds `--option value` pairs as its inputs (converted by `scijava-convert3`, so a shell's strings reach typed parameters), runs it through the same `Runner` a dialog uses, and prints its outputs. `--list [text]` and `--help <command>` read the same metadata the menus do. `ConsoleService`/`ConsoleArgument` have no equivalent yet: the pluggable-argument mechanism earns its place when a component actually needs to add an argument. `CodeRunner`/`RunService` are subsumed - a script path is a command like any other. `MainService` has no equivalent: `main` is a method | ported |
+| `startup` | folded into the application layer rather than ported: `StartupService` is a registry of hooks, and the thing actually missing is the assembly - gather commands from the index, from scripts, from the legacy bridge - which the three demo shells and the CLI each do for themselves (Phase 4) | planned |
 | `welcome`, `download`, `text`, `options` | likely dropped | open |
 | `minimaven`, `test` | out of scope | dropped |

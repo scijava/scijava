@@ -969,6 +969,41 @@ widgets and watching its callbacks fire.
   which is honest but shows an empty chooser. It is a one-line change in
   either direction and wants a look at real dialogs before being made.
 
+### The command line
+
+**`scijava-cli`** (`org.scijava.cli`) is built: one component where SciJava
+Common had three packages (`console`, `main`, `run`).
+
+```
+scijava "Gaussian Blur" --sigma 2.5 --edges Wrap
+scijava blur.groovy --sigma=2.5
+scijava --list filters
+scijava --help "Gaussian Blur"
+```
+
+- **A command is named the way a person would name it** - by menu path, by
+  label, by the tail of its class name - and matching is forgiving about case,
+  spacing and a trailing ellipsis. An exact label beats a partial one, so
+  "Brightness" still reaches `Brightness...` although
+  `Brightness/Contrast...` exists; where two answer equally, it lists them
+  rather than guessing.
+- **`--option value` pairs are the inputs**, and they arrive as strings that
+  `scijava-convert3` turns into whatever the parameters declared. That is the
+  same path a script header and a text field take, which is why the command
+  line needed no conversion code of its own.
+- **There is no `canRunHeadless()`.** SciJava Common needed it because
+  harvesting was tangled with the UI; here the harvester is one preprocessor
+  among several and this runner simply does not install one. A command that
+  cannot get an input it needs is declined, with a reason, through the
+  mechanism a dismissed dialog already uses.
+- **`--help` reads the same metadata the menus and dialogs read**: labels,
+  types, choices, which inputs are optional. Nothing describes a command
+  twice.
+- **Not ported**: `ConsoleService` and `ConsoleArgument`, the pluggable
+  argument mechanism. It earns its place when a component actually needs to
+  add an argument, and until then a parser of some forty lines does. `MainService`
+  has no equivalent either - `main` is a method.
+
 ### Phase 4 — UI and desktop
 
 - **`scijava-harvest`** (`org.scijava.harvest`): the model behind a parameter

@@ -126,12 +126,7 @@ public class SwingPanel extends SwingWidget implements
 		return false; // NB: a group carries its own title.
 	}
 
-	/**
-	 * Marks the parameters the model reports problems with, and clears the
-	 * marks on the rest.
-	 *
-	 * @param problems what is wrong, by parameter name
-	 */
+	@Override
 	public void showProblems(final Map<String, String> problems) {
 		for (final Map.Entry<String, JLabel> entry : labels.entrySet()) {
 			final String problem = problems.get(entry.getKey());

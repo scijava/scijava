@@ -70,7 +70,7 @@ import org.scijava.execute.Runner;
  * </pre>
  * <p>
  * It is the first thing to put the whole stack together: commands declared in
- * {@link ShellCommands} and found through the annotation index, arranged by
+ * {@code SampleCommands} and found through the annotation index, arranged by
  * {@link MenuTree}, rendered by {@link SwingMenus}, run by
  * {@link org.scijava.execute.Runner} and filled in by
  * {@link SwingInputHarvester}. Starting it loads no command class; choosing

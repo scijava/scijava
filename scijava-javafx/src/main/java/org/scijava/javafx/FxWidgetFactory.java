@@ -1,6 +1,6 @@
 /*
  * #%L
- * Toolkit-agnostic contracts for widgets and input harvesting.
+ * JavaFX widgets, and a dialog to harvest inputs with them.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,44 +27,19 @@
  * #L%
  */
 
-package org.scijava.ui3;
+package org.scijava.javafx;
 
-import org.scijava.harvest.ParameterNode;
+import org.scijava.ui3.WidgetFactory;
 
 /**
- * A view of one parameter.
- * <p>
- * A widget knows the parameter it edits and nothing about the dialog it sits
- * in. Toolkit bindings extend this with whatever component type they deal in;
- * this interface stays free of any toolkit, so that the model, the builder and
- * the tests can speak of widgets without importing Swing.
- * </p>
+ * A {@link WidgetFactory} that makes JavaFX widgets.
  *
  * @author Curtis Rueden
  */
-public interface Widget {
+public interface FxWidgetFactory extends WidgetFactory<FxWidget> {
 
-	/**
-	 * Gets what this widget edits: the parameter, its label, its choices.
-	 *
-	 * @return the node, or null for a panel that stands for no parameter
-	 */
-	ParameterNode node();
-
-	/** Re-reads the parameter, in case something else changed its value. */
-	void refresh();
-
-	/**
-	 * Gets whether the dialog should put a label beside this widget. A widget
-	 * that says no gets the whole row.
-	 * <p>
-	 * NB: this lives here rather than in a toolkit because it is a statement
-	 * about the <em>parameter</em>'s presentation - a group carries its own
-	 * title, a message is its own text - and every toolkit would otherwise
-	 * answer it identically.
-	 * </p>
-	 */
-	default boolean isLabeled() {
-		return true;
+	@Override
+	default Class<FxWidget> widgetType() {
+		return FxWidget.class;
 	}
 }

@@ -53,4 +53,18 @@ public interface Widget {
 
 	/** Re-reads the parameter, in case something else changed its value. */
 	void refresh();
+
+	/**
+	 * Gets whether the dialog should put a label beside this widget. A widget
+	 * that says no gets the whole row.
+	 * <p>
+	 * NB: this lives here rather than in a toolkit because it is a statement
+	 * about the <em>parameter</em>'s presentation - a group carries its own
+	 * title, a message is its own text - and every toolkit would otherwise
+	 * answer it identically.
+	 * </p>
+	 */
+	default boolean isLabeled() {
+		return true;
+	}
 }

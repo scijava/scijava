@@ -30,30 +30,27 @@
 package org.scijava.swing;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.GraphicsEnvironment;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIf;
-import org.scijava.context.Access;
-import org.scijava.execute.Executables;
 import org.scijava.harvest.ParameterModel;
 import org.scijava.ui3.WidgetFactory;
-import org.scijava.ui3.WidgetPanels;
+import org.scijava.ui3.WidgetPanel;
+import org.scijava.ui3.test.SampleCommands;
+import org.scijava.ui3.test.WidgetConformance;
 
 /**
- * Tests that the widgets a dialog builds match the parameters it was given,
- * and that they follow the parameters as values change.
+ * Runs the shared conformance suite against the Swing widgets, and adds what
+ * is Swing's own.
  *
  * @author Curtis Rueden
  */
 @DisabledIf("isHeadless")
-public class SwingWidgetsTest {
+public class SwingWidgetsTest extends WidgetConformance<SwingWidget> {
 
 	static boolean isHeadless() {
 		return GraphicsEnvironment.isHeadless();
@@ -67,123 +64,38 @@ public class SwingWidgetsTest {
 		new SwingFileWidgetFactory(), //
 		new SwingTextWidgetFactory());
 
-	@Test
-	public void testWidgetPerParameterType() {
-		final ParameterModel model = model(new Demos.KitchenSink());
-		final SwingPanel panel = panel(model);
-
-		assertEquals(List.of( //
-			SwingMessageWidget.class, // message
-			SwingTextWidget.class, // name
-			SwingNumberWidget.class, // percent
-			SwingNumberWidget.class, // iterations
-			SwingNumberWidget.class, // weight
-			SwingChoiceWidget.class, // method, an enum
-			SwingNumberWidget.class, // boxed, an Integer rather than an int
-			SwingTextWidget.class, // exact, a BigDecimal a spinner cannot step
-			SwingTextWidget.class, // initial, a char
-			SwingToggleWidget.class, // enabled
-			SwingChoiceWidget.class, // statistic
-			SwingFileWidget.class, // input
-			SwingFileWidget.class, // outputDir
-			SwingTextWidget.class, // secret
-			SwingTextWidget.class), // notes
-			types(panel));
+	@Override
+	protected WidgetPanel<SwingWidget> panel(final ParameterModel model) {
+		return build(model, FACTORIES, new SwingPanelFactory(model));
 	}
 
-	/** A group appears, with its own widgets, when the value asks for it. */
-	@Test
-	public void testGroupAppearsWhenToggled() {
-		final ParameterModel model = model(new Demos.AdvancedToggle());
-		assertEquals(2, panel(model).widgets().size());
-
-		model.set("advanced", true);
-
-		final SwingPanel panel = panel(model);
-		assertEquals(3, panel.widgets().size());
-		final SwingWidget group = panel.widgets().get(2);
-		final SwingPanel nested = assertInstanceOf(SwingPanel.class, group);
-		assertFalse(nested.isLabeled()); // NB: a group carries its own title
-		assertEquals(List.of(SwingNumberWidget.class, SwingToggleWidget.class),
-			types(nested));
+	@Override
+	protected Class<?> widgetType(final Kind kind) {
+		switch (kind) {
+			case MESSAGE:
+				return SwingMessageWidget.class;
+			case TEXT:
+				return SwingTextWidget.class;
+			case NUMBER:
+				return SwingNumberWidget.class;
+			case TOGGLE:
+				return SwingToggleWidget.class;
+			case CHOICE:
+				return SwingChoiceWidget.class;
+			case FILE:
+				return SwingFileWidget.class;
+			case PANEL:
+				return SwingPanel.class;
+			default:
+				throw new IllegalArgumentException(String.valueOf(kind));
+		}
 	}
 
-	/** The number of widgets follows a value, not the class's fields. */
-	@Test
-	public void testGeneratedGroupGrows() {
-		final ParameterModel model = model(new Demos.GeneratedGroup());
-		assertEquals(2, nested(panel(model)).widgets().size());
-
-		model.set("numDims", 4);
-
-		assertEquals(4, nested(panel(model)).widgets().size());
-	}
-
-	/** A choice widget offers whatever the other value implies, right now. */
-	@Test
-	public void testComputedChoicesFollowAnotherValue() {
-		final ParameterModel model = model(new Demos.ComputedChoices());
-		assertEquals(List.of("X", "Y", "Z", "Channel"), model.tree().find("column")
-			.orElseThrow().choices());
-
-		model.set("file", "table.csv");
-
-		final SwingPanel panel = panel(model);
-		final SwingChoiceWidget column = assertInstanceOf(SwingChoiceWidget.class,
-			panel.widgets().get(1));
-		assertEquals(List.of("id", "label", "area", "mean"), column.node()
-			.choices());
-	}
-
-	/** An enum offers its own constants, with no annotation. */
-	@Test
-	public void testEnumChoices() {
-		final ParameterModel model = model(new Demos.KitchenSink());
-		final SwingChoiceWidget method = assertInstanceOf(SwingChoiceWidget.class,
-			panel(model).widgets().get(5));
-		assertEquals(List.of(Demos.Method.values()), method.node().choices());
-	}
-
-	/**
-	 * A widget reads its node out of the current tree, not the one it was built
-	 * from - so computed choices stay in step even when the dialog's shape has
-	 * not changed and nothing was rebuilt.
-	 */
-	@Test
-	public void testWidgetSeesRecomputedChoices() {
-		final ParameterModel model = model(new Demos.ComputedChoices());
-		final SwingPanel panel = panel(model);
-		final SwingChoiceWidget column = assertInstanceOf(SwingChoiceWidget.class,
-			panel.widgets().get(1));
-		assertEquals(List.of("X", "Y", "Z", "Channel"), column.node().choices());
-
-		model.set("file", "table.csv");
-
-		// NB: the same widget object, never rebuilt.
-		assertEquals(List.of("id", "label", "area", "mean"), column.node()
-			.choices());
-		panel.refresh();
-		assertEquals("id", model.get("column"));
-	}
-
-	/** A third value decides whether two others move together. */
-	@Test
-	public void testLockedAspectRatio() {
-		final ParameterModel model = model(new Demos.LockAspectRatio());
-
-		model.set("width", 400);
-		assertEquals(300, model.get("height"));
-
-		model.set("lock", false);
-		model.set("width", 800);
-		assertEquals(300, model.get("height"));
-	}
-
-	/** A widget writes through the model, so callbacks run. */
+	/** A widget's own update path runs the callback, not only the model's. */
 	@Test
 	public void testWidgetEditRunsCallback() {
-		final ParameterModel model = model(new Demos.LinkedValues());
-		final SwingPanel panel = panel(model);
+		final ParameterModel model = model(new SampleCommands.LinkedValues());
+		final SwingPanel panel = (SwingPanel) panel(model);
 		final SwingNumberWidget celsius = assertInstanceOf(SwingNumberWidget.class,
 			panel.widgets().get(0));
 
@@ -192,42 +104,12 @@ public class SwingWidgetsTest {
 		assertEquals(212.0, model.get("fahrenheit"));
 	}
 
-	/** Problems are reported per parameter, and clear when fixed. */
+	/** The panel puts a label beside a widget that wants one, and not else. */
 	@Test
-	public void testValidationMarksTheOffendingParameter() {
-		final ParameterModel model = model(new Demos.LiveValidation());
-		final SwingPanel panel = panel(model);
-		assertTrue(model.problems().isEmpty());
-
-		model.set("count", 42);
-		panel.showProblems(model.problems());
-		assertEquals("Count must be between 1 and 10", model.problems().get(
-			"count"));
-
-		model.set("count", 3);
-		assertTrue(model.problems().isEmpty());
-	}
-
-	// -- Helper methods --
-
-	private static ParameterModel model(final Runnable object) {
-		return new ParameterModel(Executables.executableOf(object, Access.lookupIn(
-			object.getClass())).create());
-	}
-
-	private static SwingPanel panel(final ParameterModel model) {
-		return (SwingPanel) new WidgetPanels<>(FACTORIES, new SwingPanelFactory(
-			model)).build(model);
-	}
-
-	private static SwingPanel nested(final SwingPanel panel) {
-		return panel.widgets().stream() //
-			.filter(SwingPanel.class::isInstance).map(SwingPanel.class::cast) //
-			.findFirst().orElseThrow();
-	}
-
-	private static List<Class<?>> types(final SwingPanel panel) {
-		return panel.widgets().stream().map(Object::getClass) //
-			.collect(Collectors.toList());
+	public void testLabeling() {
+		final SwingPanel panel = (SwingPanel) panel(model(
+			new SampleCommands.KitchenSink()));
+		assertEquals(false, panel.widgets().get(0).isLabeled()); // the message
+		assertEquals(true, panel.widgets().get(1).isLabeled()); // the name
 	}
 }

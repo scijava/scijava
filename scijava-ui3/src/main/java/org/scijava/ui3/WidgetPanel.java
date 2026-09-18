@@ -30,6 +30,7 @@
 package org.scijava.ui3;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * A widget that holds other widgets: a whole dialog, or one box within it.
@@ -50,5 +51,25 @@ public interface WidgetPanel<W extends Widget> extends Widget {
 	@Override
 	default void refresh() {
 		widgets().forEach(Widget::refresh);
+	}
+
+	/**
+	 * Marks the parameters the model reports problems with, and clears the
+	 * marks on the rest.
+	 * <p>
+	 * NB: a panel decides how a problem looks - a red label, an icon, a tooltip
+	 * - but that there is something to show, and that it is shown per
+	 * parameter and cleared when fixed, is the same everywhere.
+	 * </p>
+	 *
+	 * @param problems what is wrong, by parameter name, as
+	 *          {@link org.scijava.harvest.ParameterModel#problems()} reports
+	 */
+	default void showProblems(final Map<String, String> problems) {
+		for (final Widget widget : widgets()) {
+			if (widget instanceof WidgetPanel) {
+				((WidgetPanel<?>) widget).showProblems(problems);
+			}
+		}
 	}
 }

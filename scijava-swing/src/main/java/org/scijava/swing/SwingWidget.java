@@ -59,10 +59,7 @@ public abstract class SwingWidget implements Widget {
 	/** Gets the component to place in the dialog. */
 	public abstract JComponent component();
 
-	/**
-	 * Gets whether the dialog should put a label beside this widget. A widget
-	 * that says no gets the whole row.
-	 */
+	@Override
 	public boolean isLabeled() {
 		return true;
 	}

@@ -32,8 +32,12 @@ package org.scijava.swing;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.GraphicsEnvironment;
 import java.util.List;
+
+import javax.swing.JSpinner;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIf;
@@ -91,17 +95,32 @@ public class SwingWidgetsTest extends WidgetConformance<SwingWidget> {
 		}
 	}
 
-	/** A widget's own update path runs the callback, not only the model's. */
+	/**
+	 * Driving the actual control runs the callback, which is the path a user
+	 * takes and the one a mocked-out test would miss.
+	 */
 	@Test
-	public void testWidgetEditRunsCallback() {
+	public void testTypingInTheControlRunsCallback() {
 		final ParameterModel model = model(new SampleCommands.LinkedValues());
 		final SwingPanel panel = (SwingPanel) panel(model);
 		final SwingNumberWidget celsius = assertInstanceOf(SwingNumberWidget.class,
 			panel.widgets().get(0));
 
-		celsius.update(100.0);
+		spinner(celsius.component()).setValue(100.0);
 
 		assertEquals(212.0, model.get("fahrenheit"));
+	}
+
+	/** Finds the spinner inside a widget's components. */
+	private static JSpinner spinner(final Container container) {
+		for (final Component child : container.getComponents()) {
+			if (child instanceof JSpinner) return (JSpinner) child;
+			if (child instanceof Container) {
+				final JSpinner found = spinner((Container) child);
+				if (found != null) return found;
+			}
+		}
+		return null;
 	}
 
 	/** The panel puts a label beside a widget that wants one, and not else. */

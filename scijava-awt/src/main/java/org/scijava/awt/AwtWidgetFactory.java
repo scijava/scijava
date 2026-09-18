@@ -1,6 +1,6 @@
 /*
  * #%L
- * JavaFX widgets, and a dialog to harvest inputs with them.
+ * AWT widgets and platform plumbing, with no Swing anywhere.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,30 +27,19 @@
  * #L%
  */
 
-package org.scijava.javafx;
+package org.scijava.awt;
 
-import javafx.scene.Node;
-
-import org.scijava.harvest.ParameterModel;
-import org.scijava.harvest.ParameterNode;
-import org.scijava.ui3.AbstractWidget;
+import org.scijava.ui3.WidgetFactory;
 
 /**
- * A {@link org.scijava.ui3.Widget} made of JavaFX controls.
- * <p>
- * NB: what is left here, once {@link AbstractWidget} holds the bookkeeping, is
- * exactly the toolkit-specific part: which type of control this binding deals
- * in. That is the whole of it.
- * </p>
+ * A {@link WidgetFactory} that makes AWT widgets.
  *
  * @author Curtis Rueden
  */
-public abstract class FxWidget extends AbstractWidget {
+public interface AwtWidgetFactory extends WidgetFactory<AwtWidget> {
 
-	protected FxWidget(final ParameterNode node, final ParameterModel model) {
-		super(node, model);
+	@Override
+	default Class<AwtWidget> widgetType() {
+		return AwtWidget.class;
 	}
-
-	/** Gets the control to place in the dialog. */
-	public abstract Node control();
 }

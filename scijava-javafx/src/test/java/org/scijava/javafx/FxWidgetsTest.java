@@ -34,6 +34,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.Spinner;
 import javafx.scene.input.KeyCharacterCombination;
 import javafx.scene.input.KeyCombination;
 
@@ -113,16 +116,33 @@ public class FxWidgetsTest extends WidgetConformance<FxWidget> {
 		}
 	}
 
-	/** A widget's own update path runs the callback, not only the model's. */
+	/**
+	 * Driving the actual control runs the callback, which is the path a user
+	 * takes and the one a mocked-out test would miss.
+	 */
 	@Test
-	public void testWidgetEditRunsCallback() {
+	public void testTypingInTheControlRunsCallback() {
 		final ParameterModel model = model(new SampleCommands.LinkedValues());
 		final FxPanel panel = (FxPanel) panel(model);
 		final FxNumber celsius = (FxNumber) panel.widgets().get(0);
 
-		FxThread.runAndWait(() -> celsius.update(100.0));
+		FxThread.runAndWait(() -> spinner(celsius.control()).getValueFactory()
+			.setValue(100.0));
 
 		assertEquals(212.0, model.get("fahrenheit"));
+	}
+
+	/** Finds the spinner inside a widget's controls. */
+	@SuppressWarnings("unchecked")
+	private static Spinner<Double> spinner(final Node node) {
+		if (node instanceof Spinner) return (Spinner<Double>) node;
+		if (node instanceof Parent) {
+			for (final Node child : ((Parent) node).getChildrenUnmodifiable()) {
+				final Spinner<Double> found = spinner(child);
+				if (found != null) return found;
+			}
+		}
+		return null;
 	}
 
 	/** Accelerators read the same notation the Swing binding accepts. */

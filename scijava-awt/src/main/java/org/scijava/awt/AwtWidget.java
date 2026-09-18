@@ -1,6 +1,6 @@
 /*
  * #%L
- * JavaFX widgets, and a dialog to harvest inputs with them.
+ * AWT widgets and platform plumbing, with no Swing anywhere.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,30 +27,36 @@
  * #L%
  */
 
-package org.scijava.javafx;
+package org.scijava.awt;
 
-import javafx.scene.Node;
+import java.awt.Component;
 
 import org.scijava.harvest.ParameterModel;
 import org.scijava.harvest.ParameterNode;
 import org.scijava.ui3.AbstractWidget;
+import org.scijava.ui3.WidgetFactory;
 
 /**
- * A {@link org.scijava.ui3.Widget} made of JavaFX controls.
+ * A {@link org.scijava.ui3.Widget} made of AWT components.
  * <p>
- * NB: what is left here, once {@link AbstractWidget} holds the bookkeeping, is
- * exactly the toolkit-specific part: which type of control this binding deals
- * in. That is the whole of it.
+ * NB: deliberately <em>not</em> a supertype of the Swing binding's widget,
+ * although {@code JComponent} is a {@code Component} and the hierarchy would
+ * allow it. Discovery filters factories by
+ * {@link WidgetFactory#widgetType()}, so making one a subtype of the other
+ * would mean a pure-AWT application silently filling its dialogs with Swing
+ * controls the moment scijava-swing appeared on the classpath - which is
+ * exactly what a pure-AWT application is trying to avoid. Sibling types keep
+ * that an explicit choice.
  * </p>
  *
  * @author Curtis Rueden
  */
-public abstract class FxWidget extends AbstractWidget {
+public abstract class AwtWidget extends AbstractWidget {
 
-	protected FxWidget(final ParameterNode node, final ParameterModel model) {
+	protected AwtWidget(final ParameterNode node, final ParameterModel model) {
 		super(node, model);
 	}
 
-	/** Gets the control to place in the dialog. */
-	public abstract Node control();
+	/** Gets the component to place in the dialog. */
+	public abstract Component component();
 }

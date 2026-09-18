@@ -694,7 +694,7 @@ unless it says there is no replacement at all, which it says explicitly.
 | --- | --- | --- |
 | **0. Foundation** (built) | `spi`, `common3`, `collections`, `priority`, `progress`, `concurrent`, `discovery`, `index`, `struct`, `io3`, `events`, `context`, `execute` | nothing above |
 | **1. Application model** (built, less `scijava-desktop`) | `scijava-command` (a struct plus presentation metadata, the menu tree and its walk), `scijava-ui3` (toolkit-agnostic contracts), `scijava-desktop` | layer 0 |
-| **2. Toolkit bindings** | `scijava-swing`, `scijava-javafx`, headless | layer 1 |
+| **2. Toolkit bindings** | `scijava-awt` (and the AWT platform layer the others use), `scijava-swing`, `scijava-javafx`, headless | layer 1 |
 | **3. Application** | Fiji: which menus exist, branding, update sites, defaults | layer 2 |
 
 Only layer 2 imports AWT or Swing. Layer 0 never mentions a user interface, so
@@ -952,6 +952,57 @@ after it.
   - **Some things are simply easier**: a collapsible group is a `TitledPane`,
     where Swing needs a hand-rolled header button; `KeyCombination.SHORTCUT_DOWN`
     says what Swing needs a `Toolkit` call to compute.
+
+- **A third binding, `scijava-awt`**, is where "toolkit-agnostic" stops being
+  a claim about two similar toolkits. It changed **nothing** in the contracts.
+  What it did change is where the shared code lives:
+  - `AbstractWidget` moved into `scijava-ui3`, because three bindings had
+    written the same bookkeeping - find the node in the *current* tree, write
+    through the model, do not mistake a refresh for the user typing. Two would
+    have been a coincidence.
+  - `Accelerator` moved into `scijava-command`, because Swing wants a
+    `KeyStroke`, JavaFX a `KeyCombination` and AWT a `MenuShortcut`: three ways
+    of *saying* a shortcut, one thing being said. A binding that parses `^+C`
+    itself is a binding that can disagree about what it means.
+  - AWT is the harshest case so far, and instructive for it: no spinner, no
+    slider, no titled border, no collapsible pane, no icons in menus, and a
+    `MenuShortcut` that cannot express alt. The number widget is a text field
+    and a scroll bar honoring `min`, `max`, `stepSize` and the soft bounds;
+    the collapsible group is a button that hides a panel; an accelerator AWT
+    cannot say is dropped rather than approximated into some other key.
+    **None of it asked the model or the contracts for anything.**
+  - It also found a difference worth knowing: AWT's `TextComponent.setText`
+    does not notify text listeners, where a Swing document would. Harmless
+    here - the refresh guard covers it either way - but it is the kind of
+    thing only a third toolkit tells you.
+
+- **On the structure of `scijava-awt` and `scijava-swing`**, which SciJava
+  Common got into four components (`scijava-ui-awt`, `scijava-ui-swing`,
+  `imagej-ui-awt`, `imagej-ui-swing`): the evidence says the toolkit axis is
+  not where the duplication was. `scijava-ui-swing` imported exactly six
+  things from `scijava-ui-awt` - `AWTInputEventDispatcher`,
+  `AWTDropTargetEventDispatcher`, `AWTColors`, `AWTWindowEventDispatcher`,
+  `AWTWindows`, `AWTClipboard` - and **not one widget**, because
+  `java.awt.Choice` and `JComboBox` have nothing whatever in common. So:
+  - **Swing depends on AWT for the platform, never for widgets.** `Edt` is the
+    first instance: the dispatch thread belongs to `java.awt.EventQueue`, and
+    `SwingUtilities` merely forwards to it, so code that needs to reach the
+    EDT need not drag in Swing. Colors, cursors, clipboard, drag-and-drop,
+    window placement and screen geometry follow the same way.
+  - **The widget types stay siblings.** `SwingWidget` could extend
+    `AwtWidget` - `JComponent` is a `Component` - but discovery filters on
+    `WidgetFactory.widgetType()`, so that would mean a pure-AWT application
+    silently filling its dialogs with Swing controls the moment scijava-swing
+    appeared on the classpath. Mixing the two is then an explicit adapter,
+    which is what embedding an ImageJ 1.x canvas in a Swing frame will want
+    anyway.
+  - **The image-processing layer should not repeat the matrix.** What made
+    four components was (generic | ImageJ) x (AWT | Swing), and the ImageJ
+    half of that is mostly one thing: a canvas that paints a `BufferedImage`
+    and handles a tool's events. That is AWT code, and it works unchanged
+    inside a Swing frame - which is precisely what ImageJ 1.x has always done.
+    So the image layer wants an AWT canvas plus per-toolkit frames, not two
+    parallel implementations.
 
 - **`scijava-ui3-test` is the anti-drift mechanism**: the sample commands and
   a conformance suite that every binding extends - eight assertions about

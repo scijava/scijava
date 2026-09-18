@@ -1,6 +1,6 @@
 /*
  * #%L
- * JavaFX widgets, and a dialog to harvest inputs with them.
+ * AWT widgets and platform plumbing, with no Swing anywhere.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,30 +27,68 @@
  * #L%
  */
 
-package org.scijava.javafx;
+package org.scijava.awt;
 
-import javafx.scene.Node;
+import java.awt.Component;
+import java.awt.Label;
 
+import org.scijava.context.Plugin;
 import org.scijava.harvest.ParameterModel;
 import org.scijava.harvest.ParameterNode;
-import org.scijava.ui3.AbstractWidget;
+import org.scijava.priority.Priority;
+import org.scijava.ui3.WidgetFactory;
+import org.scijava.ui3.WidgetPanelFactory;
+import org.scijava.ui3.Widgets;
 
 /**
- * A {@link org.scijava.ui3.Widget} made of JavaFX controls.
- * <p>
- * NB: what is left here, once {@link AbstractWidget} holds the bookkeeping, is
- * exactly the toolkit-specific part: which type of control this binding deals
- * in. That is the whole of it.
- * </p>
+ * A widget that shows text rather than collecting it.
  *
  * @author Curtis Rueden
  */
-public abstract class FxWidget extends AbstractWidget {
+public class AwtMessage extends AwtWidget {
 
-	protected FxWidget(final ParameterNode node, final ParameterModel model) {
+	private final Label label = new Label();
+
+	public AwtMessage(final ParameterNode node, final ParameterModel model) {
 		super(node, model);
+		refresh();
 	}
 
-	/** Gets the control to place in the dialog. */
-	public abstract Node control();
+	@Override
+	public Component component() {
+		return label;
+	}
+
+	@Override
+	public boolean isLabeled() {
+		return false; // NB: the message is the whole row.
+	}
+
+	@Override
+	protected void doRefresh() {
+		final Object value = value();
+		label.setText(value == null ? "" : value.toString());
+	}
+
+	/** Makes {@link AwtMessage}s. */
+	@Plugin(type = WidgetFactory.class)
+	public static class Factory implements AwtWidgetFactory {
+
+		@Override
+		public boolean supports(final ParameterNode node) {
+			return Widgets.isStyle(node, "message");
+		}
+
+		@Override
+		public AwtWidget create(final ParameterNode node,
+			final ParameterModel model, final WidgetPanelFactory<AwtWidget> panels)
+		{
+			return new AwtMessage(node, model);
+		}
+
+		@Override
+		public double priority() {
+			return Priority.VERY_HIGH;
+		}
+	}
 }

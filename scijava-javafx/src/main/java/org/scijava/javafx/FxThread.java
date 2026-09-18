@@ -49,7 +49,11 @@ import javafx.application.Platform;
  */
 public final class FxThread {
 
+	/** How long to wait for the toolkit itself to come up. */
+	private static final long STARTUP_TIMEOUT_SECONDS = 30;
+
 	private static boolean started;
+	private static boolean failed;
 
 	private FxThread() {
 		// prevent instantiation of utility class
@@ -67,19 +71,37 @@ public final class FxThread {
 	 */
 	public static synchronized void start() {
 		if (started) return;
-		final CountDownLatch ready = new CountDownLatch(1);
+		// NB: a toolkit that failed once fails the same way every time, and
+		// saying so immediately is the difference between a skipped test and a
+		// build that hangs. JavaFX throws IllegalStateException both for
+		// "already running" and for "startup called twice", so a second attempt
+		// after a failure would otherwise look like success - and every
+		// runLater after it would wait for a thread that does not exist.
+		if (failed) {
+			throw new IllegalStateException("JavaFX is not available here");
+		}
 		try {
-			Platform.startup(ready::countDown);
+			final CountDownLatch ready = new CountDownLatch(1);
+			try {
+				Platform.startup(ready::countDown);
+			}
+			catch (final IllegalStateException exc) {
+				// NB: already running, which is fine - somebody else started it.
+				ready.countDown();
+			}
+			if (!await(ready, STARTUP_TIMEOUT_SECONDS)) {
+				throw new IllegalStateException("JavaFX did not start within " +
+					STARTUP_TIMEOUT_SECONDS + " seconds");
+			}
+			// NB: otherwise the platform shuts down for good when the last window
+			// closes, and the next dialog would never appear.
+			Platform.setImplicitExit(false);
+			started = true;
 		}
-		catch (final IllegalStateException exc) {
-			// NB: already running, which is fine - somebody else started it.
-			ready.countDown();
+		catch (final RuntimeException | Error exc) {
+			failed = true;
+			throw exc;
 		}
-		await(ready);
-		// NB: otherwise the platform shuts down for good when the last window
-		// closes, and the next dialog would never appear.
-		Platform.setImplicitExit(false);
-		started = true;
 	}
 
 	/** Runs the given work on the JavaFX thread, and waits for it to finish. */
@@ -114,6 +136,9 @@ public final class FxThread {
 				done.countDown();
 			}
 		});
+		// NB: no timeout here, deliberately. A modal dialog is shown from inside
+		// this wait and stays up for as long as the user takes. Reaching here at
+		// all means start() succeeded, which is what makes the wait safe.
 		await(done);
 		if (failure.get() != null) throw failure.get();
 		return result.get();
@@ -124,6 +149,19 @@ public final class FxThread {
 	private static void await(final CountDownLatch latch) {
 		try {
 			latch.await();
+		}
+		catch (final InterruptedException exc) {
+			Thread.currentThread().interrupt();
+			throw new IllegalStateException("Interrupted waiting for JavaFX", exc);
+		}
+	}
+
+	/** Waits, up to a point. Gets whether the latch came down in time. */
+	private static boolean await(final CountDownLatch latch,
+		final long seconds)
+	{
+		try {
+			return latch.await(seconds, java.util.concurrent.TimeUnit.SECONDS);
 		}
 		catch (final InterruptedException exc) {
 			Thread.currentThread().interrupt();

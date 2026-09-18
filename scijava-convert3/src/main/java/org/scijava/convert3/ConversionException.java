@@ -1,6 +1,6 @@
 /*
  * #%L
- * Running things that declare their inputs and outputs.
+ * Converting a value to the type something else wants.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,13 +27,33 @@
  * #L%
  */
 
-open module org.scijava.execute {
+package org.scijava.convert3;
 
-	exports org.scijava.execute;
+import java.lang.reflect.Type;
 
-	requires org.scijava.common3;
-	requires transitive org.scijava.priority;
-	requires transitive org.scijava.struct;
-	requires transitive org.scijava.convert3;
+import org.scijava.common3.Types;
 
+/**
+ * Thrown when a value cannot be turned into the type something else wants.
+ *
+ * @author Curtis Rueden
+ */
+public class ConversionException extends RuntimeException {
+
+	private static final long serialVersionUID = 1L;
+
+	public ConversionException(final String message) {
+		super(message);
+	}
+
+	public ConversionException(final String message, final Throwable cause) {
+		super(message, cause);
+	}
+
+	/** Creates an exception naming what could not be converted into what. */
+	public static ConversionException of(final Object source, final Type dest) {
+		return new ConversionException("Cannot convert " + //
+			(source == null ? "null" : Types.name(source.getClass())) + " to " + //
+			Types.name(dest));
+	}
 }

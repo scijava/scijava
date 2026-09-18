@@ -1,6 +1,6 @@
 /*
  * #%L
- * Running things that declare their inputs and outputs.
+ * Converting a value to the type something else wants.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,13 +27,51 @@
  * #L%
  */
 
-open module org.scijava.execute {
+package org.scijava.convert3;
 
-	exports org.scijava.execute;
+import java.lang.reflect.Type;
 
-	requires org.scijava.common3;
-	requires transitive org.scijava.priority;
-	requires transitive org.scijava.struct;
-	requires transitive org.scijava.convert3;
+import org.scijava.common3.Classes;
+import org.scijava.common3.Types;
+import org.scijava.priority.Priority;
 
+/**
+ * Converts a value that is already of the wanted type: it returns it.
+ * <p>
+ * NB: first, and so the answer whenever no conversion is needed at all. That
+ * is the common case by far - most values arrive already right - and it costs
+ * one assignability check.
+ * </p>
+ *
+ * @author Curtis Rueden
+ */
+public class CastConverter implements Converter<Object, Object> {
+
+	@Override
+	public Type sourceType() {
+		return Object.class;
+	}
+
+	@Override
+	public Type destType() {
+		return Object.class;
+	}
+
+	@Override
+	public boolean supports(final Object source, final Type dest) {
+		if (source == null || dest == null) return false;
+		final Class<?> raw = Types.raw(dest);
+		if (raw == null) return false;
+		return Classes.box(raw).isInstance(source);
+	}
+
+	@Override
+	public Object convert(final Object source, final Type dest) {
+		return source;
+	}
+
+	@Override
+	public double priority() {
+		return Priority.VERY_HIGH;
+	}
 }

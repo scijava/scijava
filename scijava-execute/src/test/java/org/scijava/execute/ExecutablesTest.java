@@ -212,4 +212,41 @@ public class ExecutablesTest {
 			.map(Member::key) //
 			.collect(Collectors.toList());
 	}
+
+	// -- Conversion of supplied inputs --
+
+	/** A caller with only strings - a script, a command line - is served. */
+	@Test
+	public void testInputsAreConverted() {
+		final Map<String, Object> outputs = Executables.run(new Adder(), Map.of( //
+			"a", "1.5", "b", 2));
+
+		assertEquals(3.5, outputs.get("result"));
+	}
+
+	/** What cannot become the parameter's type says so, naming the parameter. */
+	@Test
+	public void testUnconvertibleInput() {
+		final IllegalArgumentException exc = assertThrows(
+			IllegalArgumentException.class, () -> Executables.run(new Adder(), Map.of( //
+				"a", new Object(), "b", 2)));
+		assertTrue(exc.getMessage().contains("'a'"), exc.getMessage());
+	}
+
+	public static class Adder implements Runnable {
+
+		@Parameter
+		private double a;
+
+		@Parameter
+		private double b;
+
+		@Parameter(io = ItemIO.OUTPUT)
+		private double result;
+
+		@Override
+		public void run() {
+			result = a + b;
+		}
+	}
 }

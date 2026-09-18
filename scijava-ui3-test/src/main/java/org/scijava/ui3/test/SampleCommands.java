@@ -473,7 +473,7 @@ public final class SampleCommands {
 
 		@Parameter(style = "message", required = false)
 		private String about = "A SciJava3 application: menus from the " +
-			"annotation index, dialogs from scijava-swing.";
+			"annotation index, dialogs from whichever toolkit binding is running.";
 
 		@Override
 		public void run() {}

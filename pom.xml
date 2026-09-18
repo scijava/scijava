@@ -63,6 +63,7 @@
 		<module>scijava-command</module>
 		<module>scijava-common3</module>
 		<module>scijava-context</module>
+		<module>scijava-convert3</module>
 		<module>scijava-context-test</module>
 		<module>scijava-concurrent</module>
 		<module>scijava-discovery</module>

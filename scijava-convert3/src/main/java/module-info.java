@@ -1,6 +1,6 @@
 /*
  * #%L
- * Running things that declare their inputs and outputs.
+ * Converting a value to the type something else wants.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,13 +27,25 @@
  * #L%
  */
 
-open module org.scijava.execute {
+module org.scijava.convert3 {
 
-	exports org.scijava.execute;
+	exports org.scijava.convert3;
 
-	requires org.scijava.common3;
-	requires transitive org.scijava.priority;
-	requires transitive org.scijava.struct;
-	requires transitive org.scijava.convert3;
+	requires transitive org.scijava.common3;
+	requires org.scijava.priority;
+
+	uses org.scijava.convert3.Converter;
+
+	provides org.scijava.convert3.Converter with
+		org.scijava.convert3.CastConverter,
+		org.scijava.convert3.NumberConverter,
+		org.scijava.convert3.StringConverter,
+		org.scijava.convert3.ToStringConverter,
+		org.scijava.convert3.ArrayConverter,
+		org.scijava.convert3.CollectionConverter,
+		org.scijava.convert3.PathConverters.FileToPath,
+		org.scijava.convert3.PathConverters.PathToFile,
+		org.scijava.convert3.PathConverters.StringToPath,
+		org.scijava.convert3.ConstructorConverter;
 
 }

@@ -29,7 +29,9 @@
 
 package org.scijava.convert3;
 
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Collection;
 
 import org.scijava.common3.Classes;
 import org.scijava.common3.Types;
@@ -62,7 +64,25 @@ public class CastConverter implements Converter<Object, Object> {
 		if (source == null || dest == null) return false;
 		final Class<?> raw = Types.raw(dest);
 		if (raw == null) return false;
-		return Classes.box(raw).isInstance(source);
+		if (!Classes.box(raw).isInstance(source)) return false;
+		// NB: a collection is only "already the right type" if what it holds is
+		// too, and erasure means we cannot tell by looking at the type. A
+		// List<String> handed to a List<File> would otherwise be returned
+		// unchanged -- the right raw type full of the wrong things -- so the
+		// element-wise converter gets it instead, and returns it untouched when
+		// the elements do match.
+		return !(source instanceof Collection && isParameterized(dest));
+	}
+
+	/** Gets whether the type says anything about what it contains. */
+	private static boolean isParameterized(final Type dest) {
+		if (!(dest instanceof ParameterizedType)) return false;
+		for (final Type argument : ((ParameterizedType) dest)
+			.getActualTypeArguments())
+		{
+			if (argument != Object.class) return true;
+		}
+		return false;
 	}
 
 	@Override

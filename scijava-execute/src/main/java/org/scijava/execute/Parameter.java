@@ -74,6 +74,26 @@ public @interface Parameter {
 	/** Whether a value must be supplied. */
 	boolean required() default true;
 
+	/**
+	 * Whether to remember this value between runs.
+	 * <p>
+	 * A dialog opens showing what the user chose last time, which is what makes
+	 * one feel like it remembers them. Say no for a value that should not carry
+	 * over - a file to overwrite, a one-off seed, anything whose staleness
+	 * would be a nasty surprise.
+	 * </p>
+	 */
+	boolean persist() default true;
+
+	/**
+	 * The name this value is remembered under, where its own would be wrong.
+	 * <p>
+	 * Renaming a field would otherwise lose what the user chose; naming it here
+	 * keeps the two apart.
+	 * </p>
+	 */
+	String persistKey() default "";
+
 	/** A human-readable label, for display. */
 	String label() default "";
 

@@ -91,6 +91,7 @@
 		<module>scijava-priority</module>
 		<module>scijava-progress</module>
 		<module>scijava-script3</module>
+		<module>scijava-settings</module>
 		<module>scijava-spi</module>
 		<module>scijava-struct</module>
 		<module>scijava-swing</module>

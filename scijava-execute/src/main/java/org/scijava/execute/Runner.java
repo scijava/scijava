@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -137,7 +138,7 @@ public class Runner {
 	{
 		final ExecutableInstance instance = executable.create();
 		final DefaultExecution execution = new DefaultExecution(instance, //
-			Executables.bind(instance.parameters(), inputs, false));
+			Executables.bind(instance.parameters(), inputs, false), inputs.keySet());
 
 		for (final Preprocessor preprocessor : preprocessors) {
 			Executables.checkCancellation();
@@ -203,11 +204,20 @@ public class Runner {
 		private boolean declined;
 		private Map<String, Object> outputs = Map.of();
 
+		/** The names the caller passed, as opposed to what a field holds. */
+		private final Set<String> supplied;
+
 		DefaultExecution(final ExecutableInstance instance,
-			final StructInstance<?> parameters)
+			final StructInstance<?> parameters, final Set<String> supplied)
 		{
 			this.instance = instance;
 			this.parameters = parameters;
+			this.supplied = Set.copyOf(supplied);
+		}
+
+		@Override
+		public boolean isSupplied(final String key) {
+			return supplied.contains(key);
 		}
 
 		void complete(final Map<String, Object> outputs) {

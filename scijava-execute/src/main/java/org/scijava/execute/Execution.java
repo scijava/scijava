@@ -76,6 +76,22 @@ public interface Execution {
 	Optional<String> reason();
 
 	/**
+	 * Gets whether the caller supplied this input.
+	 * <p>
+	 * NB: not the same question as whether the parameter holds a value, and the
+	 * difference matters. A {@code double} always holds one, so a preprocessor
+	 * filling in "empty" parameters by looking for nulls would never fill a
+	 * primitive - and one that overwrote them regardless would throw away what
+	 * the caller passed. SciJava Common answered this with a mutable
+	 * {@code resolved} flag on each parameter; here the run knows what it was
+	 * given, so it is asked instead.
+	 * </p>
+	 *
+	 * @param key the parameter's name
+	 */
+	boolean isSupplied(String key);
+
+	/**
 	 * Gets the outputs produced so far. Empty until the object has run, so this
 	 * is for postprocessors.
 	 */

@@ -1004,6 +1004,67 @@ scijava --help "Gaussian Blur"
   add an argument, and until then a parser of some forty lines does. `MainService`
   has no equivalent either - `main` is a method.
 
+### Settings
+
+**`scijava-settings`** (`org.scijava.settings`) is built: one TOML file a
+person can read, edit, copy between machines and name in a forum post.
+
+- **One path on every platform**: `~/.config/<app>/settings.toml`, honoring
+  `XDG_CONFIG_HOME`, overridable by a system property. Not what each platform
+  would prefer, and deliberately: what was wrong with `java.util.prefs` was
+  that the store was *opaque*, and the cure for that is one answer to "where
+  is it?" rather than three correct ones. Appose made the same choice.
+- **`Settings` is an object, not a singleton and not a service.** Settings
+  belong to an application, so two applications sharing a JVM get two. This is
+  the line the codebase had been drawing without saying: *static facades for
+  stateless capabilities* (`Converters`, `Locations`, `Scripts` - converting a
+  string to an `int` does not depend on which application you are), *scoped
+  objects for anything with identity or lifetime*. Making settings static
+  would have quietly spent the multiple-contexts promise, and the answer to
+  "why have a container at all, then" would have been "no reason".
+- **A table per command, a key per parameter**, keyed by the command's
+  identifier - the class name, or the script's path - and not by its
+  component's coordinates: a class moving between artifacts would otherwise
+  lose what the user chose, and that is a refactor nobody should be punished
+  for.
+- **Values map onto TOML's own types**, by a small hardcoded table, with a
+  string as the fallback for anything else. So a `List<File>` is an array of
+  strings rather than one mangled string, and reading it back converts
+  element-wise through `scijava-convert3`. Widgets need no serialization API
+  for this, which is just as well: serialization is a property of the *type*,
+  and a widget is a view. That is also why it needs no answer per toolkit.
+- **Comments survive a save.** The file is one people edit; a store that ate
+  the `# 0.7 because the detector is noisy` somebody left beside a value is a
+  store they would stop editing.
+- **The TOML is parsed here**, covering what settings need - tables, all four
+  string forms, integers in four bases, floats, booleans, all four
+  date-and-time types, arrays - and refusing inline tables and arrays of
+  tables by line number rather than misunderstanding them. Neither candidate
+  library is modular, and an automatic module in a foundation component is the
+  same trade that dropped MigLayout; the API is small enough that `tomlj` can
+  take its place if settings outgrow this.
+- **Persistence is two preprocessors**, `LoadInputs` and `SaveInputs`, so that
+  a caller can run a command without persistence interfering - which is what
+  the processor chain is for. Saving is a *pre*processor, after the harvester:
+  doing it after the run would lose the values whenever the run threw, which
+  is exactly when the user is about to try again and exactly when retyping
+  everything is most infuriating.
+
+It also turned up two things below it:
+
+- **`Execution.isSupplied(key)`** is new, because "did the caller pass this?"
+  is not the same question as "is this parameter empty?" - a `double` is never
+  empty, so loading remembered values by looking for nulls would never fill a
+  primitive, and overwriting regardless would make a remembered value beat an
+  explicit one. SciJava Common answered this with a mutable `resolved` flag on
+  each parameter; the run knows what it was given, so it is asked instead.
+- **A bug in `scijava-convert3`**: `CastConverter` saw a `List` going to a
+  `List<File>`, said "already the right type", and handed back a
+  `List<String>` unchanged - the right container full of the wrong things,
+  which surfaces much later as a `ClassCastException` somewhere else. It now
+  declines a parameterized collection and lets the element-wise converter have
+  it.
+
 ### Phase 4 — UI and desktop
 
 - **`scijava-harvest`** (`org.scijava.harvest`): the model behind a parameter

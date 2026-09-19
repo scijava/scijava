@@ -141,6 +141,27 @@ public class ConvertersTest {
 		assertEquals(Set.of(1, 2), set);
 	}
 
+	/**
+	 * A collection of the wrong element type is converted, not waved through.
+	 * <p>
+	 * NB: erasure makes {@code List<String>} and {@code List<File>} the same
+	 * raw type, so a cast would return the right kind of container full of the
+	 * wrong things - which is the sort of bug that surfaces much later, as a
+	 * ClassCastException somewhere else entirely.
+	 * </p>
+	 */
+	@Test
+	public void testCollectionElementsAreConverted() {
+		final List<?> converted = (List<?>) converters.convert(List.of("1", "2"),
+			Types.parameterize(List.class, Integer.class));
+
+		assertEquals(List.of(1, 2), converted);
+
+		// and a list that is already right comes back equal
+		assertEquals(List.of(1, 2), converters.convert(List.of(1, 2), Types
+			.parameterize(List.class, Integer.class)));
+	}
+
 	/** The three ways of naming a file all convert to one another. */
 	@Test
 	public void testFilesAndPaths() {

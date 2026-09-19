@@ -47,7 +47,7 @@ A **dropped** row is a successful outcome, not a gap.
 | `NumberUtils` | `org.scijava.common3.Numbers`. `getMinimumNumber`/`getMaximumNumber` → `minimum`/`maximum`; `asBigDecimal`/`asBigInteger` → `bigDecimal`/`bigInteger`; `clampToRange` → `clamp`. **`toNumber` no longer consults a conversion framework** — it handles numbers and strings only, so `common3` stays dependency-free | ported |
 | `PlatformUtils` | `org.scijava.common3.Platforms` | ported |
 | `POM` | `org.scijava.meta.POM` | ported |
-| `Prefs` | `scijava-context` prefs service (Phase 2); already deprecated in SJC | planned |
+| `Prefs` | `org.scijava.settings.Settings`; already deprecated in SJC | ported |
 | `ProcessUtils` | `org.scijava.common3.Processes`, reimplemented on `ProcessBuilder`; no longer needs `ReadInto` | ported |
 | `PropertiesHelper` | none — inline | dropped |
 | `Sizable`, `SizableArrayList` | none — the reflective-resizing rationale died with Java 17 | dropped |
@@ -117,7 +117,7 @@ A **dropped** row is a successful outcome, not a gap.
 | `plugin` (the `HandlerPlugin`/`WrapperPlugin`/`TypedPlugin`/`SingletonPlugin` hierarchy and their services) | not ported — each user of these inlines the small contract it needs, as `DataHandle` did | dropped |
 | `service` | `org.scijava.context`: `Service` (no longer a plugin, and discovered via `ServiceLoader`), with `Context` holding them. `SciJavaService` has no equivalent — a marker is not needed. `ServiceHelper` and `ServiceIndex` are internal to `Context` | ported |
 | `object` | with the widgets and conversion layer that use it (Phase 3/4), so a consumer shapes it | planned |
-| `prefs` | split: a TOML settings store under `~/.config/fiji` (design settled in [migration-plan.md](migration-plan.md)), and widget value persistence, which belongs with the input harvester (Phase 4). Explicitly **not** `java.util.prefs` | planned |
+| `prefs` | `org.scijava.settings`: one TOML file a person can read, edit and copy, at `~/.config/<app>/settings.toml` on every platform. `PrefService` becomes `Settings`, an ordinary object rather than a service or a singleton - settings belong to an application, and two applications in one JVM want two of them. A table per command (its identifier), a key per parameter; values map onto TOML's own types, so a `List<File>` is an array of strings rather than one mangled string, and reading converts through `scijava-convert3`. Widget value persistence is `LoadInputs` and `SaveInputs`, both **preprocessors**: saving after the run would lose the values exactly when a run failed and the user is about to try again | ported |
 | `app` | mostly `org.scijava.meta` for version and title metadata; the rest is app-shell material, dropped | planned |
 | `thread` | EDT dispatch belongs with the UI layer (Phase 4); parallelism is `org.scijava.concurrent` | planned |
 | `convert` | `org.scijava.convert3`: `Converter` asks one question - can you turn *this value* into *that type* - where SciJava Common had eight `canConvert` overloads and a `ConversionRequest` to carry the combinations. `ConvertService` becomes `Converters`, backed by plain `ServiceLoader` so that conversion sits *below* the container: parameter binding converts, and a script or command line supplies strings for everything. `DefaultConverter`'s pile of special cases becomes one converter per concern (cast, number, string, to-string, array, collection, constructor, file/path), each contributable and orderable by priority. `Converter.of(String.class, Foo.class, Foo::parse)` covers the common case in a line | ported |

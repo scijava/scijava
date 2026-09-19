@@ -139,6 +139,8 @@ public class FieldParameterMember<T> implements ParameterMember<T>,
 		put(attrs, SOFT_MIN, parameter.softMin());
 		put(attrs, SOFT_MAX, parameter.softMax());
 		put(attrs, STYLE, parameter.style());
+		if (!parameter.persist()) attrs.put(PERSIST, "false");
+		put(attrs, PERSIST_KEY, parameter.persistKey());
 		return attrs;
 	}
 

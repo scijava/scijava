@@ -87,6 +87,12 @@ public interface ParameterMember<T> extends Member<T> {
 	/** Metadata key: the largest value a slider should span. */
 	String SOFT_MAX = "softMax";
 
+	/** Metadata key: whether to remember this value between runs. */
+	String PERSIST = "persist";
+
+	/** Metadata key: the name to remember this value under. */
+	String PERSIST_KEY = "persistKey";
+
 	/** Metadata key: a hint about how to display this parameter. */
 	String STYLE = "style";
 

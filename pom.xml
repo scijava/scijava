@@ -53,52 +53,52 @@
 		- scijava-taglets is a javadoc taglet processor used at javadoc
 		  generation time to handle Ops's custom tags (@container, @mutable, etc.).
 		-->
-		<module>scijava-ops-indexer</module>
-		<module>scijava-taglets</module>
+		<module>ops-indexer</module>
+		<module>taglets</module>
 		<!-- End implicit dependencies -->
 
-		<module>scijava-awt</module>
-		<module>scijava-compat</module>
-		<module>scijava-cli</module>
-		<module>scijava-code-api</module>
-		<module>scijava-collections</module>
-		<module>scijava-command3</module>
-		<module>scijava-common3</module>
-		<module>scijava-context</module>
-		<module>scijava-convert3</module>
-		<module>scijava-context-test</module>
-		<module>scijava-concurrent</module>
-		<module>scijava-discovery</module>
-		<module>scijava-discovery-test</module>
-		<module>scijava-events</module>
-		<module>scijava-execute</module>
-		<module>scijava-function</module>
-		<module>scijava-harvest</module>
-		<module>scijava-index</module>
-		<module>scijava-io3</module>
-		<module>scijava-javafx</module>
-		<module>scijava-imagej-compat</module>
-		<module>scijava-ops-compat</module>
-		<module>scijava-meta</module>
-		<module>scijava-ops-api</module>
-		<module>scijava-ops-engine</module>
-		<module>scijava-ops-flim</module>
-		<module>scijava-ops-image</module>
-		<module>scijava-ops-opencv</module>
-		<module>scijava-ops-ext-parser</module>
-		<module>scijava-ops-spi</module>
-		<module>scijava-ops-tutorial</module>
-		<module>scijava-priority</module>
-		<module>scijava-progress</module>
-		<module>scijava-script3</module>
-		<module>scijava-settings</module>
-		<module>scijava-spi</module>
-		<module>scijava-struct</module>
-		<module>scijava-swing</module>
-		<module>scijava-testutil</module>
-		<module>scijava-types</module>
-		<module>scijava-ui3</module>
-		<module>scijava-ui3-test</module>
+		<module>awt</module>
+		<module>cli</module>
+		<module>code-api</module>
+		<module>collections</module>
+		<module>command3</module>
+		<module>common3</module>
+		<module>compat</module>
+		<module>concurrent</module>
+		<module>context-test</module>
+		<module>context</module>
+		<module>convert3</module>
+		<module>discovery-test</module>
+		<module>discovery</module>
+		<module>events</module>
+		<module>execute</module>
+		<module>function</module>
+		<module>harvest</module>
+		<module>imagej-compat</module>
+		<module>index</module>
+		<module>io3</module>
+		<module>javafx</module>
+		<module>meta</module>
+		<module>ops-api</module>
+		<module>ops-compat</module>
+		<module>ops-engine</module>
+		<module>ops-ext-parser</module>
+		<module>ops-flim</module>
+		<module>ops-image</module>
+		<module>ops-opencv</module>
+		<module>ops-spi</module>
+		<module>ops-tutorial</module>
+		<module>priority</module>
+		<module>progress</module>
+		<module>script3</module>
+		<module>settings</module>
+		<module>spi</module>
+		<module>struct</module>
+		<module>swing</module>
+		<module>testutil</module>
+		<module>types</module>
+		<module>ui3-test</module>
+		<module>ui3</module>
 	</modules>
 
 	<scm>
@@ -128,7 +128,7 @@
 		<profile>
 			<id>benchmarks</id>
 			<modules>
-				<module>scijava-ops-benchmarks</module>
+				<module>ops-benchmarks</module>
 			</modules>
 		</profile>
 	</profiles>

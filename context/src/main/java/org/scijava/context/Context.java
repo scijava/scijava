@@ -89,7 +89,7 @@ public class Context implements Disposable, AutoCloseable {
 	/** Plugin discovery, from the annotation index. Built on first use. */
 	private IndexDiscoverer<Plugin> pluginDiscoverer;
 
-	private boolean disposed;
+	private volatile boolean disposed;
 
 	private Context(final List<Provider<Service>> providers) {
 		this.providers = providers;
@@ -282,20 +282,31 @@ public class Context implements Disposable, AutoCloseable {
 	 * </p>
 	 */
 	@Override
-	public synchronized void dispose() {
+	public void dispose() {
 		if (disposed) return;
-		disposed = true;
+		final List<Service> toDispose;
+		synchronized (this) {
+			if (disposed) return;
+			disposed = true;
+			// NB: Snapshot and clear under the lock, but dispose the services
+			// themselves outside of it. A service's dispose() may block on
+			// another thread (e.g. a Swing UI's disposal round-tripping through
+			// the EDT); holding this context's lock for that entire time would
+			// risk deadlock against any other thread synchronizing on this
+			// context, such as one blocked inside optionalService(...).
+			toDispose = new ArrayList<>(created);
+			created.clear();
+			byRequestedType.clear();
+		}
 		final List<Throwable> failures = new ArrayList<>();
-		for (int i = created.size() - 1; i >= 0; i--) {
+		for (int i = toDispose.size() - 1; i >= 0; i--) {
 			try {
-				created.get(i).dispose();
+				toDispose.get(i).dispose();
 			}
 			catch (final Throwable exc) {
 				failures.add(exc);
 			}
 		}
-		created.clear();
-		byRequestedType.clear();
 		// NB: closing the bus is what frees services from arranging their own
 		// unsubscription.
 		events.close();

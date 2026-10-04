@@ -54,6 +54,7 @@ public final class CompletionResult {
 	private final List<Completion> completions;
 	private final int replaceStart;
 	private final ParameterChoices parameterChoices;
+	private final TypeResolver typeResolver;
 
 	public CompletionResult(final List<Completion> completions,
 		final int replaceStart)
@@ -64,9 +65,17 @@ public final class CompletionResult {
 	public CompletionResult(final List<Completion> completions,
 		final int replaceStart, final ParameterChoices parameterChoices)
 	{
+		this(completions, replaceStart, parameterChoices, null);
+	}
+
+	public CompletionResult(final List<Completion> completions,
+		final int replaceStart, final ParameterChoices parameterChoices,
+		final TypeResolver typeResolver)
+	{
 		this.completions = Collections.unmodifiableList(completions);
 		this.replaceStart = replaceStart;
 		this.parameterChoices = parameterChoices;
+		this.typeResolver = typeResolver;
 	}
 
 	/** The suggested completions, ordered by descending relevance. */
@@ -85,6 +94,14 @@ public final class CompletionResult {
 	 */
 	public ParameterChoices parameterChoices() {
 		return parameterChoices;
+	}
+
+	/**
+	 * A resolver for the types of expressions in this result's scope (e.g. the
+	 * arguments of a callable completion), or {@code null} if unsupported.
+	 */
+	public TypeResolver typeResolver() {
+		return typeResolver;
 	}
 
 	/** True iff there are no suggestions. */

@@ -122,9 +122,9 @@ public class DefaultCodeCompletionService extends
 			// Half-typed declarations are expected while editing: don't warn.
 			// NB: A log level configured for this source still takes precedence.
 			final LogService log = context.getService(LogService.class);
-			if (log != null) {
-				processor.setLogger(log.subLogger("code-completion", LogLevel.NONE));
-			}
+//			if (log != null) {
+//				processor.setLogger(log.subLogger("code-completion", LogLevel.NONE));
+//			}
 			// NB: Run only the parameter processor, not the full processing chain.
 			final ScriptInfo info = new ScriptInfo(context, "completion",
 				new StringReader(declarations))

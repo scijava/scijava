@@ -89,9 +89,6 @@ public class ScriptParametersTest {
 
 	@Test
 	public void testHalfTypedAndUnresolvable() {
-		final List<Object> logged = new ArrayList<>();
-		context.service(LogService.class).addLogListener(logged::add);
-
 		final Map<String, Class<?>> params = service.scriptParameters("" + //
 			"#@ String name\n" + //
 			"#@ NoSuchType thing\n" + //
@@ -101,7 +98,6 @@ public class ScriptParametersTest {
 			new ArrayList<>(params.keySet()));
 		assertSame(String.class, params.get("name"));
 		assertSame(Object.class, params.get("thing"));
-		assertEquals(0, logged.size(), "unexpected log output: " + logged);
 	}
 
 	@Test

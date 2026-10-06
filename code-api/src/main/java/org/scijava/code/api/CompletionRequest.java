@@ -55,10 +55,22 @@ public final class CompletionRequest {
 	private final ScriptLanguage language;
 	private final ScriptEngine engine;
 	private final ScriptContext context;
+	private final String path;
 
 	public CompletionRequest(final String text, final int offset,
 		final ScriptLanguage language, final ScriptEngine engine,
 		final ScriptContext context)
+	{
+		this(text, offset, language, engine, context, null);
+	}
+
+	/**
+	 * As {@link #CompletionRequest(String, int, ScriptLanguage, ScriptEngine,
+	 * ScriptContext)}, for a script saved at the given path.
+	 */
+	public CompletionRequest(final String text, final int offset,
+		final ScriptLanguage language, final ScriptEngine engine,
+		final ScriptContext context, final String path)
 	{
 		if (offset < 0 || offset > text.length()) {
 			throw new IndexOutOfBoundsException("offset " + offset + " out of [0, " +
@@ -69,6 +81,7 @@ public final class CompletionRequest {
 		this.language = language;
 		this.engine = engine;
 		this.context = context;
+		this.path = path;
 	}
 
 	/** Creates a request over the whole text with the caret at its end. */
@@ -102,6 +115,15 @@ public final class CompletionRequest {
 	/** A live script context, or {@code null}. */
 	public ScriptContext context() {
 		return context;
+	}
+
+	/**
+	 * The file system path of the script being edited, or {@code null} if it is
+	 * unsaved or unknown (e.g. in an interactive interpreter). Completers may
+	 * use it to resolve files relative to the script.
+	 */
+	public String path() {
+		return path;
 	}
 
 	/** The source text from the start of the document up to the caret. */

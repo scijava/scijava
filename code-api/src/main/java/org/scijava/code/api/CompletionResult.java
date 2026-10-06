@@ -31,6 +31,7 @@ package org.scijava.code.api;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * The result of a {@link CodeCompleter} query: the list of suggestions plus the
@@ -54,7 +55,7 @@ public final class CompletionResult {
 	private final List<Completion> completions;
 	private final int replaceStart;
 	private final ParameterChoices parameterChoices;
-	private final TypeResolver typeResolver;
+	private final CompletableFuture<CompletionResult> update;
 
 	public CompletionResult(final List<Completion> completions,
 		final int replaceStart)
@@ -68,14 +69,39 @@ public final class CompletionResult {
 		this(completions, replaceStart, parameterChoices, null);
 	}
 
-	public CompletionResult(final List<Completion> completions,
+	private CompletionResult(final List<Completion> completions,
 		final int replaceStart, final ParameterChoices parameterChoices,
-		final TypeResolver typeResolver)
+		final CompletableFuture<CompletionResult> update)
 	{
 		this.completions = Collections.unmodifiableList(completions);
 		this.replaceStart = replaceStart;
 		this.parameterChoices = parameterChoices;
-		this.typeResolver = typeResolver;
+		this.update = update;
+	}
+
+	/**
+	 * Gets a copy of this result which announces a better result for the same
+	 * request, to follow: e.g. this result is what a completer knows at once,
+	 * and the update adds what a slow analysis finds.
+	 *
+	 * @param future Completes with the better result (or with null, if there
+	 *          is none after all).
+	 */
+	public CompletionResult withUpdate(
+		final CompletableFuture<CompletionResult> future)
+	{
+		return new CompletionResult(completions, replaceStart, parameterChoices,
+			future);
+	}
+
+	/**
+	 * A better result for the same request, still to come, or {@code null} if
+	 * this result is final. Front ends that can refresh their display should do
+	 * so when it completes (with a non-null result), provided the document and
+	 * caret have not changed since the request; others can ignore it.
+	 */
+	public CompletableFuture<CompletionResult> update() {
+		return update;
 	}
 
 	/** The suggested completions, ordered by descending relevance. */
@@ -94,14 +120,6 @@ public final class CompletionResult {
 	 */
 	public ParameterChoices parameterChoices() {
 		return parameterChoices;
-	}
-
-	/**
-	 * A resolver for the types of expressions in this result's scope (e.g. the
-	 * arguments of a callable completion), or {@code null} if unsupported.
-	 */
-	public TypeResolver typeResolver() {
-		return typeResolver;
 	}
 
 	/** True iff there are no suggestions. */

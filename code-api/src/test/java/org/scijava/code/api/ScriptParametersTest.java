@@ -42,6 +42,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.scijava.Context;
+import org.scijava.log.LogLevel;
 import org.scijava.log.LogService;
 
 /**
@@ -98,6 +99,20 @@ public class ScriptParametersTest {
 			new ArrayList<>(params.keySet()));
 		assertSame(String.class, params.get("name"));
 		assertSame(Object.class, params.get("thing"));
+	}
+
+	@Test
+	public void testScriptDirective() {
+		final List<String> warnings = new ArrayList<>();
+		context.service(LogService.class).addLogListener(message -> {
+			if (message.level() == LogLevel.WARN) warnings.add(message.text());
+		});
+		final Map<String, Class<?>> params = service.scriptParameters("" + //
+			"#@script(env=\"env.toml\", scheme=\"pixi.toml\")\n" + //
+			"#@ String name\n");
+		assertEquals(Arrays.asList("name"), new ArrayList<>(params.keySet()));
+		// The directive is not a parameter, so it is not warned about.
+		assertTrue(warnings.isEmpty(), warnings.toString());
 	}
 
 	@Test

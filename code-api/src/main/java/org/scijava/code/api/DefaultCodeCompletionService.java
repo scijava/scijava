@@ -101,7 +101,11 @@ public class DefaultCodeCompletionService extends
 		final StringBuilder sb = new StringBuilder();
 		boolean header = true;
 		for (final String line : text.split("\r?\n")) {
-			if (line.startsWith("#@")) sb.append(line).append("\n");
+			if (line.startsWith("#@")) {
+				// NB: #@script(...) is a directive, which ScriptDirectiveScriptProcessor
+				// handles when the script runs; ParameterScriptProcessor would warn.
+				if (!line.matches("^#@script(?!\\w).*")) sb.append(line).append("\n");
+			}
 			else if (header) {
 				if (line.matches("^[^\\w]*[^\\w#]@.*")) {
 					sb.append(line).append("\n");

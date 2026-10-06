@@ -32,6 +32,7 @@ package org.scijava.code.api;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * A single code completion suggestion.
@@ -133,7 +134,8 @@ public final class Completion {
 	private final String insertionText;
 	private final String displayText;
 	private final String summary;
-	private final String description;
+	private volatile String description;
+	private volatile Supplier<String> lazyDescription;
 	private final Kind kind;
 	private final double relevance;
 	private final List<Parameter> parameters;
@@ -147,6 +149,7 @@ public final class Completion {
 		this.displayText = b.displayText == null ? b.insertionText : b.displayText;
 		this.summary = b.summary;
 		this.description = b.description;
+		this.lazyDescription = b.description == null ? b.lazyDescription : null;
 		this.kind = b.kind;
 		this.relevance = b.relevance;
 		this.parameters = b.parameters == null ? Collections.emptyList()
@@ -173,8 +176,24 @@ public final class Completion {
 		return summary;
 	}
 
-	/** A longer description, which may be HTML, or {@code null}. */
+	/**
+	 * A longer description, which may be HTML, or {@code null}.
+	 * <p>
+	 * It may be computed only now, on first request (see
+	 * {@link Builder#lazyDescription}), so front ends should ask for it only
+	 * when they are about to show it, e.g. when the completion is selected.
+	 * </p>
+	 */
 	public String description() {
+		final Supplier<String> lazy = lazyDescription;
+		if (lazy != null) {
+			synchronized (this) {
+				if (lazyDescription != null) {
+					description = lazyDescription.get();
+					lazyDescription = null;
+				}
+			}
+		}
 		return description;
 	}
 
@@ -242,6 +261,7 @@ public final class Completion {
 		private String displayText;
 		private String summary;
 		private String description;
+		private Supplier<String> lazyDescription;
 		private Kind kind = Kind.OTHER;
 		private double relevance = 0;
 		private List<Parameter> parameters;
@@ -266,6 +286,16 @@ public final class Completion {
 
 		public Builder description(final String v) {
 			this.description = v;
+			return this;
+		}
+
+		/**
+		 * Sets a description to compute only when first requested, e.g. because
+		 * it is expensive to obtain, and few completions are ever looked at.
+		 * The supplier is called at most once; it may return {@code null}.
+		 */
+		public Builder lazyDescription(final Supplier<String> v) {
+			this.lazyDescription = v;
 			return this;
 		}
 

@@ -60,4 +60,34 @@ public interface CodeCompleter {
 	 * @return the suggestions, never {@code null} (use {@link CompletionResult#EMPTY})
 	 */
 	CompletionResult complete(CompletionRequest request);
+
+	/**
+	 * Gives the completer a chance to get ready for completing in the given
+	 * script, e.g. when it is opened in an editor, so that the first completion
+	 * is fast. Implementations must return quickly, doing any slow work in the
+	 * background. The default does nothing.
+	 *
+	 * @param request the script, as for {@link #complete}
+	 */
+	default void prepare(final CompletionRequest request) {
+		// NB: Nothing to prepare.
+	}
+
+	/**
+	 * Gets the signatures of the call around the request's caret (e.g. all
+	 * overloads of {@code max} in {@code Math.max(1.5, |)}), rated against the
+	 * arguments typed so far, and ordered as the completer sees fit (e.g. best
+	 * fit first). The default offers none.
+	 * <p>
+	 * Like {@link #complete}, this is called as the user types, so it should
+	 * answer quickly, announcing slower answers via
+	 * {@link SignatureHelp#withUpdate}.
+	 * </p>
+	 *
+	 * @param request the source text and caret, as for {@link #complete}
+	 * @return the signatures, never {@code null} (use {@link SignatureHelp#NONE})
+	 */
+	default SignatureHelp signatureHelp(final CompletionRequest request) {
+		return SignatureHelp.NONE;
+	}
 }

@@ -74,6 +74,19 @@ public interface CodeCompleter {
 	}
 
 	/**
+	 * Tells the completer that a script is no longer edited (e.g. its editor
+	 * was closed), so that it can release what it keeps for completing in it,
+	 * e.g. the script's document in a language server. (Changes need no
+	 * notice: each request carries the script's whole text.) The default does
+	 * nothing.
+	 *
+	 * @param request the script, as for {@link #prepare}
+	 */
+	default void closed(final CompletionRequest request) {
+		// NB: Nothing to release.
+	}
+
+	/**
 	 * Gets the signatures of the call around the request's caret (e.g. all
 	 * overloads of {@code max} in {@code Math.max(1.5, |)}), rated against the
 	 * arguments typed so far, and ordered as the completer sees fit (e.g. best

@@ -29,6 +29,10 @@
 
 package org.scijava.code.api;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 /**
  * Generates code completion suggestions for a fragment of source code.
  * <p>
@@ -102,6 +106,38 @@ public interface CodeCompleter {
 	 */
 	default SignatureHelp signatureHelp(final CompletionRequest request) {
 		return SignatureHelp.NONE;
+	}
+
+	/**
+	 * Gets what is known about the code at the request's caret (e.g. the
+	 * documentation of the function named there), as shown when the mouse
+	 * rests on it. The default knows nothing.
+	 * <p>
+	 * Called as the mouse moves, so it should answer quickly, announcing
+	 * slower answers via {@link Hover#withUpdate}.
+	 * </p>
+	 *
+	 * @param request the source text, and the position asked about as caret
+	 * @return what is known, never {@code null} (use {@link Hover#NONE})
+	 */
+	default Hover hover(final CompletionRequest request) {
+		return Hover.NONE;
+	}
+
+	/**
+	 * Finds problems in a script (e.g. syntax errors), to show as the user
+	 * edits it. The default finds none.
+	 * <p>
+	 * Must return at once, finding the problems in the background.
+	 * </p>
+	 *
+	 * @param request the script
+	 * @return the problems, once found; never {@code null}
+	 */
+	default CompletableFuture<List<Diagnostic>> diagnose(
+		final CompletionRequest request)
+	{
+		return CompletableFuture.completedFuture(Collections.emptyList());
 	}
 
 	/**

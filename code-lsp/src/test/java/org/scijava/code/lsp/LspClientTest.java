@@ -264,6 +264,57 @@ public class LspClientTest {
 	}
 
 	@Test
+	public void testHover() throws Exception {
+		setUp(60_000);
+		final String script = "import json\njson.dumps";
+		final int at = script.indexOf("dumps") + 2;
+		final org.scijava.code.api.Hover hover = client.hover(doc(script),
+			"untitled:/a.py", at).get(10, TimeUnit.SECONDS);
+		assertEquals("<pre>Docs of dumps</pre>", hover.text());
+		// The word's range, in the original script.
+		assertEquals(script.indexOf("dumps"), hover.start());
+		assertEquals(script.length(), hover.end());
+		// Nothing there: nothing.
+		assertTrue(client.hover(doc(script + "\n\n"), "untitled:/a.py", script
+			.length() + 1).get(10, TimeUnit.SECONDS).isEmpty());
+	}
+
+	@Test
+	public void testDiagnostics() throws Exception {
+		setUp(60_000);
+		final String script = "x = 1\ny = !!\n";
+		List<org.scijava.code.api.Diagnostic> problems = client.diagnose(doc(
+			script), "untitled:/a.py", 10_000).get(10, TimeUnit.SECONDS);
+		// In the original script; the one in the declaration line left out.
+		assertEquals(1, problems.size());
+		final org.scijava.code.api.Diagnostic d = problems.get(0);
+		assertEquals(script.indexOf("!!"), d.start());
+		assertEquals(script.indexOf("!!") + 2, d.end());
+		assertEquals(org.scijava.code.api.Diagnostic.Severity.WARNING, d
+			.severity());
+		assertEquals("Bangs", d.message());
+		assertEquals("fake", d.source());
+		// Unchanged: the same, at once.
+		assertEquals(1, client.diagnose(doc(script), "untitled:/a.py", 10_000)
+			.get(10, TimeUnit.SECONDS).size());
+		// Changed: those of the new text.
+		assertTrue(client.diagnose(doc("x = 1\n"), "untitled:/a.py", 10_000).get(
+			10, TimeUnit.SECONDS).isEmpty());
+		// A server that does not answer: none, in time.
+		started.get(0).mute = true;
+		assertTrue(client.diagnose(doc("x = 2\n"), "untitled:/a.py", 200).get(10,
+			TimeUnit.SECONDS).isEmpty());
+	}
+
+	@Test
+	public void testOffset() {
+		assertEquals(4, LspClient.offset("ab\ncd", new Position(1, 1)));
+		// Clamped to the line, and the text.
+		assertEquals(2, LspClient.offset("ab\ncd", new Position(0, 9)));
+		assertEquals(5, LspClient.offset("ab\ncd", new Position(7, 0)));
+	}
+
+	@Test
 	public void testRestartAndIdle() throws Exception {
 		setUp(60_000);
 		final LspServer first = servers.server(ENV).get(10, TimeUnit.SECONDS);
@@ -328,8 +379,10 @@ public class LspClientTest {
 			final PipedInputStream serverIn = new PipedInputStream(1 << 16);
 			final PipedOutputStream clientOut = new PipedOutputStream(serverIn);
 			final FakeServer server = new FakeServer();
-			LSPLauncher.createServerLauncher(server, serverIn, serverOut)
-				.startListening();
+			final org.eclipse.lsp4j.jsonrpc.Launcher<org.eclipse.lsp4j.services.LanguageClient> launcher =
+				LSPLauncher.createServerLauncher(server, serverIn, serverOut);
+			server.client = launcher.getRemoteProxy();
+			launcher.startListening();
 			started.add(server);
 			return new LspConnection() {
 
@@ -381,7 +434,8 @@ public class LspClientTest {
 		TextDocumentService, WorkspaceService
 	{
 
-		private volatile boolean alive = true, shutdown, noActive;
+		private volatile boolean alive = true, shutdown, noActive, mute;
+		private volatile org.eclipse.lsp4j.services.LanguageClient client;
 		private volatile Object options;
 		private final Map<String, String> texts = new LinkedHashMap<>();
 		private final List<String> events = new CopyOnWriteArrayList<>();
@@ -473,6 +527,8 @@ public class LspClientTest {
 				.getText());
 			events.add("open " + params.getTextDocument().getUri() + " " + params
 				.getTextDocument().getVersion());
+			publish(params.getTextDocument().getUri(), params.getTextDocument()
+				.getVersion());
 		}
 
 		@Override
@@ -481,6 +537,52 @@ public class LspClientTest {
 				.get(0).getText());
 			events.add("change " + params.getTextDocument().getUri() + " " + params
 				.getTextDocument().getVersion());
+			publish(params.getTextDocument().getUri(), params.getTextDocument()
+				.getVersion());
+		}
+
+		/** Complains about each "!!", and about the first line, always. */
+		private void publish(final String uri, final int version) {
+			if (mute) return;
+			final List<org.eclipse.lsp4j.Diagnostic> list = new ArrayList<>();
+			list.add(diagnostic(0, 0, 1, "First line"));
+			final String[] lines = texts.get(uri).split("\n", -1);
+			for (int i = 0; i < lines.length; i++) {
+				final int bang = lines[i].indexOf("!!");
+				if (bang >= 0) list.add(diagnostic(i, bang, bang + 2, "Bangs"));
+			}
+			client.publishDiagnostics(new org.eclipse.lsp4j.PublishDiagnosticsParams(
+				uri, list, version));
+		}
+
+		private static org.eclipse.lsp4j.Diagnostic diagnostic(final int line,
+			final int start, final int end, final String message)
+		{
+			final org.eclipse.lsp4j.Diagnostic d = new org.eclipse.lsp4j.Diagnostic(
+				new org.eclipse.lsp4j.Range(new Position(line, start), new Position(
+					line, end)), message);
+			d.setSeverity(org.eclipse.lsp4j.DiagnosticSeverity.Warning);
+			d.setSource("fake");
+			return d;
+		}
+
+		@Override
+		public CompletableFuture<org.eclipse.lsp4j.Hover> hover(
+			final org.eclipse.lsp4j.HoverParams params)
+		{
+			final String text = texts.get(params.getTextDocument().getUri());
+			final String line = text.split("\n", -1)[params.getPosition()
+				.getLine()];
+			int start = params.getPosition().getCharacter(), end = start;
+			while (start > 0 && Character.isLetter(line.charAt(start - 1))) start--;
+			while (end < line.length() && Character.isLetter(line.charAt(end))) end++;
+			if (start == end) return CompletableFuture.completedFuture(null);
+			final org.eclipse.lsp4j.Hover h = new org.eclipse.lsp4j.Hover(
+				new org.eclipse.lsp4j.MarkupContent("plaintext", "Docs of " + line
+					.substring(start, end)), new org.eclipse.lsp4j.Range(new Position(
+						params.getPosition().getLine(), start), new Position(params
+							.getPosition().getLine(), end)));
+			return CompletableFuture.completedFuture(h);
 		}
 
 		@Override

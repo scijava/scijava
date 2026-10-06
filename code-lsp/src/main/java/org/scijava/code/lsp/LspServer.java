@@ -29,8 +29,10 @@
 
 package org.scijava.code.lsp;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -44,13 +46,16 @@ import org.eclipse.lsp4j.CompletionCapabilities;
 import org.eclipse.lsp4j.CompletionItemCapabilities;
 import org.eclipse.lsp4j.DidChangeTextDocumentParams;
 import org.eclipse.lsp4j.DidCloseTextDocumentParams;
+import org.eclipse.lsp4j.Diagnostic;
 import org.eclipse.lsp4j.DidOpenTextDocumentParams;
+import org.eclipse.lsp4j.HoverCapabilities;
 import org.eclipse.lsp4j.InitializeParams;
 import org.eclipse.lsp4j.InitializedParams;
 import org.eclipse.lsp4j.MarkupKind;
 import org.eclipse.lsp4j.MessageActionItem;
 import org.eclipse.lsp4j.MessageParams;
 import org.eclipse.lsp4j.MessageType;
+import org.eclipse.lsp4j.PublishDiagnosticsCapabilities;
 import org.eclipse.lsp4j.PublishDiagnosticsParams;
 import org.eclipse.lsp4j.ShowMessageRequestParams;
 import org.eclipse.lsp4j.SignatureHelpCapabilities;
@@ -93,12 +98,17 @@ public final class LspServer {
 	/** Open documents' versions and texts, by URI. */
 	private final Map<String, Document> documents = new HashMap<>();
 
+	/** Diagnostics the server published. */
+	private final Published published;
+
 	private volatile long lastUsed = System.currentTimeMillis();
 
 	private LspServer(final String languageId, final LspConnection connection,
-		final LanguageServer remote, final Future<Void> listening)
+		final LanguageServer remote, final Future<Void> listening,
+		final Published published)
 	{
 		this.languageId = languageId;
+		this.published = published;
 		this.connection = connection;
 		this.remote = remote;
 		this.listening = listening;
@@ -118,9 +128,10 @@ public final class LspServer {
 	{
 		final LspConnection connection = spec.start(env);
 		try {
+			final Published published = new Published();
 			final Launcher<LanguageServer> launcher = LSPLauncher
-				.createClientLauncher(new Client(log), connection.input(), connection
-					.output(), LISTENERS, null);
+				.createClientLauncher(new Client(log, published), connection.input(),
+					connection.output(), LISTENERS, null);
 			final Future<Void> listening = launcher.startListening();
 			final LanguageServer remote = launcher.getRemoteProxy();
 
@@ -137,7 +148,8 @@ public final class LspServer {
 			init.setInitializationOptions(spec.initializationOptions(env));
 			remote.initialize(init).get(timeout, TimeUnit.MILLISECONDS);
 			remote.initialized(new InitializedParams());
-			return new LspServer(spec.languageId(), connection, remote, listening);
+			return new LspServer(spec.languageId(), connection, remote, listening,
+				published);
 		}
 		catch (final Exception exc) {
 			connection.close();
@@ -162,6 +174,19 @@ public final class LspServer {
 		// update and this request.
 		sync(uri, text);
 		return request.apply(remote.getTextDocumentService());
+	}
+
+	/**
+	 * Gets the diagnostics of a document, as the server publishes them once
+	 * it has analyzed this text of it (first bringing the server's copy of the
+	 * document up to date).
+	 */
+	public synchronized CompletableFuture<List<Diagnostic>> diagnostics(
+		final String uri, final String text)
+	{
+		final boolean changed = sync(uri, text);
+		final int version = documents.get(uri).version;
+		return published.await(uri, version, !changed);
 	}
 
 	/** Opens a document, or brings the server's copy up to date. */
@@ -211,22 +236,26 @@ public final class LspServer {
 
 	// -- Helper methods --
 
-	private void sync(final String uri, final String text) {
+	/** Brings the server's copy of a document up to date: whether it was not. */
+	private boolean sync(final String uri, final String text) {
 		lastUsed = System.currentTimeMillis();
 		final TextDocumentService docs = remote.getTextDocumentService();
 		final Document doc = documents.get(uri);
 		if (doc == null) {
 			documents.put(uri, new Document(text));
+			published.sent(uri, 1);
 			docs.didOpen(new DidOpenTextDocumentParams(new TextDocumentItem(uri,
 				languageId, 1, text)));
+			return true;
 		}
-		else if (!doc.text.equals(text)) {
-			doc.text = text;
-			doc.version++;
-			docs.didChange(new DidChangeTextDocumentParams(
-				new VersionedTextDocumentIdentifier(uri, doc.version), Collections
-					.singletonList(new TextDocumentContentChangeEvent(text))));
-		}
+		if (doc.text.equals(text)) return false;
+		doc.text = text;
+		doc.version++;
+		published.sent(uri, doc.version);
+		docs.didChange(new DidChangeTextDocumentParams(
+			new VersionedTextDocumentIdentifier(uri, doc.version), Collections
+				.singletonList(new TextDocumentContentChangeEvent(text))));
+		return true;
 	}
 
 	/** What this client can do: plain text documentation, no snippets. */
@@ -243,6 +272,12 @@ public final class LspServer {
 			new TextDocumentClientCapabilities();
 		text.setCompletion(completion);
 		text.setSignatureHelp(new SignatureHelpCapabilities(signature, false));
+		text.setHover(new HoverCapabilities(Collections.singletonList(
+			MarkupKind.PLAINTEXT), false));
+		final PublishDiagnosticsCapabilities diagnostics =
+			new PublishDiagnosticsCapabilities();
+		diagnostics.setVersionSupport(true);
+		text.setPublishDiagnostics(diagnostics);
 		final ClientCapabilities capabilities = new ClientCapabilities();
 		capabilities.setTextDocument(text);
 		return capabilities;
@@ -258,13 +293,80 @@ public final class LspServer {
 		}
 	}
 
+	/**
+	 * Diagnostics the server published, by document URI; and those awaited.
+	 * A server publishes diagnostics whenever it likes (e.g. after each change
+	 * of a document), not on request.
+	 */
+	private static final class Published {
+
+		private final Map<String, List<Diagnostic>> latest = new HashMap<>();
+		/** The last version sent of each document. */
+		private final Map<String, Integer> sent = new HashMap<>();
+		/** Since when (which version) each document's latest diagnostics are. */
+		private final Map<String, Integer> since = new HashMap<>();
+		private final Map<String, List<Waiter>> waiting = new HashMap<>();
+
+		private synchronized void sent(final String uri, final int version) {
+			sent.put(uri, version);
+		}
+
+		/**
+		 * Gets the diagnostics for (at least) the given version of a document.
+		 *
+		 * @param known Whether this version was analyzed before (unchanged).
+		 */
+		private synchronized CompletableFuture<List<Diagnostic>> await(
+			final String uri, final int version, final boolean known)
+		{
+			final Integer have = since.get(uri);
+			if (known && have != null && have >= version) {
+				return CompletableFuture.completedFuture(latest.get(uri));
+			}
+			final Waiter w = new Waiter(version);
+			waiting.computeIfAbsent(uri, k -> new ArrayList<>()).add(w);
+			return w.future;
+		}
+
+		private synchronized void publish(final PublishDiagnosticsParams p) {
+			final String uri = p.getUri();
+			// NB: Without a version, the diagnostics are for the last one sent.
+			final int version = p.getVersion() != null ? p.getVersion() : sent
+				.getOrDefault(uri, 0);
+			final List<Diagnostic> list = p.getDiagnostics() == null ? Collections
+				.emptyList() : p.getDiagnostics();
+			latest.put(uri, list);
+			since.put(uri, version);
+			final List<Waiter> ws = waiting.get(uri);
+			if (ws == null) return;
+			ws.removeIf(w -> {
+				if (w.version > version) return false;
+				w.future.complete(list);
+				return true;
+			});
+		}
+
+		private static final class Waiter {
+
+			private final int version;
+			private final CompletableFuture<List<Diagnostic>> future =
+				new CompletableFuture<>();
+
+			private Waiter(final int version) {
+				this.version = version;
+			}
+		}
+	}
+
 	/** Receives the server's messages. */
 	private static final class Client implements LanguageClient {
 
 		private final Logger log;
+		private final Published published;
 
-		private Client(final Logger log) {
+		private Client(final Logger log, final Published published) {
 			this.log = log;
+			this.published = published;
 		}
 
 		@Override
@@ -274,7 +376,7 @@ public final class LspServer {
 
 		@Override
 		public void publishDiagnostics(final PublishDiagnosticsParams diagnostics) {
-			// NB: Not shown (yet).
+			published.publish(diagnostics);
 		}
 
 		@Override

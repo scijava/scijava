@@ -104,6 +104,14 @@
 			<artifactId>org.eclipse.lsp4j.jsonrpc</artifactId>
 			<version>${lsp4j.version}</version>
 		</dependency>
+		<!--
+		NB: lsp4j asks for a range of Gson versions; fix one, so that projects
+		without Gson's version managed do not resolve the range themselves.
+		-->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
 
 		<!-- Test scope dependencies -->
 		<dependency>
@@ -112,4 +120,21 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.scijava</groupId>
+							<artifactId>scijava-common</artifactId>
+							<version>${scijava-common.version}</version>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

@@ -554,7 +554,7 @@ public class LspClient {
 	 * Converts an offset to an LSP position: a line, and a character in that
 	 * line, counted in UTF-16 code units (as Java does).
 	 */
-	static Position position(final String text, final int offset) {
+	public static Position position(final String text, final int offset) {
 		int line = 0, start = 0;
 		for (int i = 0; i < offset; i++) {
 			if (text.charAt(i) == '\n') {
@@ -566,7 +566,7 @@ public class LspClient {
 	}
 
 	/** Converts an LSP position to an offset (clamped to the text). */
-	static int offset(final String text, final Position position) {
+	public static int offset(final String text, final Position position) {
 		int start = 0;
 		for (int line = 0; line < position.getLine(); line++) {
 			final int nl = text.indexOf('\n', start);

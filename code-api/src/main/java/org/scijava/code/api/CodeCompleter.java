@@ -90,4 +90,13 @@ public interface CodeCompleter {
 	default SignatureHelp signatureHelp(final CompletionRequest request) {
 		return SignatureHelp.NONE;
 	}
+
+	/**
+	 * Gets how this completer's language turns a SciJava script into plain code
+	 * of the language (see {@link ScriptDocument}), or null if it does not. The
+	 * default does not.
+	 */
+	default ScriptDialect dialect() {
+		return null;
+	}
 }

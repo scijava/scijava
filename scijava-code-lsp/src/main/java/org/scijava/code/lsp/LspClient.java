@@ -47,6 +47,10 @@ import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionItemKind;
 import org.eclipse.lsp4j.CompletionList;
 import org.eclipse.lsp4j.CompletionParams;
+import org.eclipse.lsp4j.Diagnostic;
+import org.eclipse.lsp4j.DiagnosticSeverity;
+import org.eclipse.lsp4j.HoverParams;
+import org.eclipse.lsp4j.MarkedString;
 import org.eclipse.lsp4j.MarkupContent;
 import org.eclipse.lsp4j.ParameterInformation;
 import org.eclipse.lsp4j.Position;
@@ -56,6 +60,7 @@ import org.eclipse.lsp4j.TextDocumentIdentifier;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.jsonrpc.messages.Tuple;
 import org.scijava.code.api.Completion;
+import org.scijava.code.api.Hover;
 import org.scijava.code.api.ScriptDocument;
 import org.scijava.code.api.SignatureHelp;
 import org.scijava.code.api.SignatureHelp.Fit;
@@ -138,7 +143,7 @@ public class LspClient {
 	/** Forgets a script (e.g. once its editor is closed). */
 	public void close(final String uri) {
 		synchronized (pending) {
-			pending.remove(uri);
+			pending.keySet().removeIf(k -> k.endsWith("\n" + uri));
 		}
 		servers.forEach(s -> s.close(uri));
 	}
@@ -209,6 +214,55 @@ public class LspClient {
 		});
 	}
 
+	/**
+	 * Gets what is known about the code at an offset of a script, e.g. the
+	 * documentation of the function named there.
+	 *
+	 * @param doc The script.
+	 * @param uri Its URI.
+	 * @param offset The offset, in the original script.
+	 * @return What is known, or {@link Hover#NONE}.
+	 */
+	public CompletableFuture<Hover> hover(final ScriptDocument doc,
+		final String uri, final int offset)
+	{
+		final int at = doc.map().toTransformed(offset);
+		final String key = "hover\n" + at + "\n" + doc.environment() + "\n" +
+			uri + "\n" + doc.text();
+		return ask(uri, key, () -> {
+			final Position position = position(doc.text(), at);
+			final List<CompletableFuture<?>> requests = new CopyOnWriteArrayList<>();
+			final CompletableFuture<Hover> answer = servers.server(doc.environment())
+				.thenCompose(server -> {
+					final CompletableFuture<org.eclipse.lsp4j.Hover> r = server.request(
+						uri, doc.text(), s -> s.hover(new HoverParams(
+							new TextDocumentIdentifier(uri), position)));
+					requests.add(r);
+					return r;
+				}).thenApply(h -> hover(h, doc, offset));
+			return new Pending(answer, requests);
+		});
+	}
+
+	/**
+	 * Gets the problems in a script (e.g. syntax errors), once the server has
+	 * found them; at offsets of the original script. Problems in the lines
+	 * the script's transformation added are left out.
+	 *
+	 * @param doc The script.
+	 * @param uri Its URI.
+	 * @param timeout How long to wait for the server, in milliseconds; without
+	 *          an answer by then, no problems.
+	 */
+	public CompletableFuture<List<org.scijava.code.api.Diagnostic>> diagnose(
+		final ScriptDocument doc, final String uri, final long timeout)
+	{
+		return servers.server(doc.environment()).thenCompose(server -> server
+			.diagnostics(uri, doc.text())).completeOnTimeout(Collections
+				.emptyList(), timeout, TimeUnit.MILLISECONDS).thenApply(
+					list -> diagnostics(list, doc));
+	}
+
 	// -- Conversions; override to refine --
 
 	/**
@@ -235,6 +289,23 @@ public class LspClient {
 		if (text == null || text.trim().isEmpty()) return null;
 		return "<pre>" + text.replace("&", "&amp;").replace("<", "&lt;").replace(
 			">", "&gt;") + "</pre>";
+	}
+
+	/** Maps the server's severities to SciJava's. */
+	protected org.scijava.code.api.Diagnostic.Severity severity(
+		final DiagnosticSeverity severity)
+	{
+		if (severity == null) return org.scijava.code.api.Diagnostic.Severity.ERROR;
+		switch (severity) {
+			case Warning:
+				return org.scijava.code.api.Diagnostic.Severity.WARNING;
+			case Information:
+				return org.scijava.code.api.Diagnostic.Severity.INFO;
+			case Hint:
+				return org.scijava.code.api.Diagnostic.Severity.HINT;
+			default:
+				return org.scijava.code.api.Diagnostic.Severity.ERROR;
+		}
 	}
 
 	/** Maps the server's completion kinds to SciJava's. */
@@ -279,6 +350,8 @@ public class LspClient {
 	private <T> CompletableFuture<T> ask(final String uri, final String key,
 		final Supplier<Pending> asker)
 	{
+		// NB: Questions of one kind (e.g. completion) supersede each other only.
+		final String kind = key.substring(0, key.indexOf('\n')) + "\n" + uri;
 		final long now = clock.getAsLong();
 		synchronized (answers) {
 			final Answer known = answers.get(key);
@@ -294,7 +367,7 @@ public class LspClient {
 		}
 		final Pending previous;
 		synchronized (pending) {
-			previous = pending.put(uri, p);
+			previous = pending.put(kind, p);
 		}
 		if (previous != null && !previous.answer.isDone()) {
 			// NB: Cancelling a request tells the server ($/cancelRequest). Cancel
@@ -418,6 +491,56 @@ public class LspClient {
 		return signature.substring(range.getFirst(), range.getSecond());
 	}
 
+	private Hover hover(final org.eclipse.lsp4j.Hover h,
+		final ScriptDocument doc, final int offset)
+	{
+		if (h == null || h.getContents() == null) return Hover.NONE;
+		final StringBuilder text = new StringBuilder();
+		final Either<List<Either<String, MarkedString>>, MarkupContent> contents = h
+			.getContents();
+		if (contents.isRight()) text.append(contents.getRight().getValue());
+		else {
+			for (final Either<String, MarkedString> part : contents.getLeft()) {
+				if (text.length() > 0) text.append("\n\n");
+				text.append(part.isLeft() ? part.getLeft() : part.getRight()
+					.getValue());
+			}
+		}
+		final String html = html(Either.forLeft(text.toString()));
+		if (html == null) return Hover.NONE;
+		int start = offset, end = offset;
+		if (h.getRange() != null) {
+			final int s = doc.map().toOriginal(offset(doc.text(), h.getRange()
+				.getStart()));
+			final int e = doc.map().toOriginal(offset(doc.text(), h.getRange()
+				.getEnd()));
+			if (s >= 0 && e >= s) {
+				start = s;
+				end = e;
+			}
+		}
+		return new Hover(html, start, end);
+	}
+
+	private List<org.scijava.code.api.Diagnostic> diagnostics(
+		final List<Diagnostic> list, final ScriptDocument doc)
+	{
+		final List<org.scijava.code.api.Diagnostic> out = new ArrayList<>();
+		if (list == null) return out;
+		for (final Diagnostic d : list) {
+			final int start = doc.map().toOriginal(offset(doc.text(), d.getRange()
+				.getStart()));
+			if (start < 0) continue; // NB: In the added lines.
+			final int end = Math.max(start, doc.map().toOriginal(offset(doc.text(), d
+				.getRange().getEnd())));
+			out.add(new org.scijava.code.api.Diagnostic(start, end, severity(d
+				.getSeverity()), d.getMessage() == null ? null : d.getMessage()
+					.isLeft() ? d.getMessage().getLeft() : d.getMessage().getRight()
+						.getValue(), d.getSource()));
+		}
+		return out;
+	}
+
 	private static List<CompletionItem> items(
 		final Either<List<CompletionItem>, CompletionList> items)
 	{
@@ -440,6 +563,19 @@ public class LspClient {
 			}
 		}
 		return new Position(line, offset - start);
+	}
+
+	/** Converts an LSP position to an offset (clamped to the text). */
+	static int offset(final String text, final Position position) {
+		int start = 0;
+		for (int line = 0; line < position.getLine(); line++) {
+			final int nl = text.indexOf('\n', start);
+			if (nl < 0) return text.length();
+			start = nl + 1;
+		}
+		int end = text.indexOf('\n', start);
+		if (end < 0) end = text.length();
+		return Math.min(start + position.getCharacter(), end);
 	}
 
 	/** A question asked: the answer to come, and the requests it awaits. */

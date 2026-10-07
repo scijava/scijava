@@ -74,8 +74,14 @@ public abstract class AbstractCodeCompleter implements CodeCompleter {
 
 	@Override
 	public CompletionResult complete(final CompletionRequest request) {
+		// NB: The live variables: the engine's, or (e.g. via a language server)
+		// those of the script context alone.
 		final ScriptEngine engine = request.engine();
-		if (engine == null) return CompletionResult.EMPTY;
+		final ScriptContext context = request.context();
+		final Bindings bindings = engine != null ? engine.getBindings(
+			ScriptContext.ENGINE_SCOPE) : context != null ? context.getBindings(
+				ScriptContext.ENGINE_SCOPE) : null;
+		if (bindings == null) return CompletionResult.EMPTY;
 
 		final String line = request.lineToCaret();
 		final int caret = request.offset();
@@ -85,27 +91,26 @@ public abstract class AbstractCodeCompleter implements CodeCompleter {
 			final String varName = dot.group(1);
 			final String prefix = dot.group(2);
 			final int replaceStart = caret - prefix.length();
-			return sorted(memberCompletions(engine, varName, prefix), replaceStart);
+			return sorted(memberCompletions(bindings, varName, prefix), replaceStart);
 		}
 
 		final Matcher word = WORD_TOKEN.matcher(line);
 		if (word.find()) {
 			final String prefix = word.group(1);
 			final int replaceStart = caret - prefix.length();
-			return sorted(variableCompletions(engine, prefix), replaceStart);
+			return sorted(variableCompletions(bindings, prefix), replaceStart);
 		}
 
-		return sorted(variableCompletions(engine, ""), caret);
+		return sorted(variableCompletions(bindings, ""), caret);
 	}
 
 	// -- Helper methods --
 
-	private List<Completion> variableCompletions(final ScriptEngine engine,
+	private List<Completion> variableCompletions(final Bindings bindings,
 		final String prefix)
 	{
 		final String lp = prefix.toLowerCase();
 		final List<Completion> matches = new ArrayList<>();
-		final Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
 		if (bindings == null) return matches;
 		for (final String key : bindings.keySet()) {
 			if (key.toLowerCase().startsWith(lp)) {
@@ -116,10 +121,9 @@ public abstract class AbstractCodeCompleter implements CodeCompleter {
 		return matches;
 	}
 
-	private List<Completion> memberCompletions(final ScriptEngine engine,
+	private List<Completion> memberCompletions(final Bindings bindings,
 		final String varName, final String prefix)
 	{
-		final Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
 		if (bindings == null || !bindings.containsKey(varName)) {
 			return new ArrayList<>();
 		}

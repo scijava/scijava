@@ -55,7 +55,10 @@ public interface LanguageServerPlugin extends SciJavaPlugin {
 	 * Gets where the given script will run, as far as this plugin's servers need
 	 * to know: read from its text (e.g. inline metadata) and its URI (e.g. a
 	 * file path). Servers are kept one per environment. Called whenever the
-	 * script changes, so it must be quick. The default: no particular
+	 * script changes, so it must be quick; and when told that environments
+	 * changed (see {@link LanguageServerService#environmentsChanged()}), which
+	 * a plugin should call when the answer may change without the script
+	 * changing (e.g. once an environment is built). The default: no particular
 	 * environment (one server for all scripts).
 	 */
 	default Environment environment(final TextDocumentItem document) {

@@ -29,6 +29,8 @@
 
 package org.scijava.code.lsp;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -48,10 +50,35 @@ import org.scijava.service.SciJavaService;
 public interface LanguageServerService extends SciJavaService {
 
 	/**
+	 * Starts a session about a script of the given language: where clients
+	 * (e.g. editors, or tools checking scripts) ask about it, in terms of its
+	 * text and offsets. Set its file, if it has one, then
+	 * {@link ScriptSession#update update} it with its text.
+	 */
+	ScriptSession session(ScriptLanguage language);
+
+	/**
+	 * As {@link #session(ScriptLanguage)}, for code typed into a running
+	 * interpreter: its state reaches the servers via their
+	 * {@link Environment#live()}. For a language no plugin serves, the
+	 * interpreter's variables are completed (see {@link BindingsLanguageServer}).
+	 */
+	ScriptSession session(ScriptLanguage language, ScriptContext live);
+
+	/**
+	 * Starts a session about a script file, as it is on disk: of its file
+	 * extension's language. Returns null if no language of that extension is
+	 * served.
+	 */
+	ScriptSession session(File file) throws IOException;
+
+	/**
 	 * Gets a server for scripts of the given language, standing for all the
 	 * servers plugins offer for it: it opens, changes and closes each document
 	 * on every server for that script, and merges their answers. Each call
-	 * gets its own (e.g. one per editor), sharing the servers behind it.
+	 * gets its own (e.g. one per editor), sharing the servers behind it. For
+	 * clients speaking the protocol themselves (e.g. via JSON-RPC); others
+	 * use a {@link #session}.
 	 */
 	MergedLanguageServer server(ScriptLanguage language);
 
@@ -61,6 +88,15 @@ public interface LanguageServerService extends SciJavaService {
 	 * {@link Environment#live()}.
 	 */
 	MergedLanguageServer server(ScriptLanguage language, ScriptContext live);
+
+	/**
+	 * Tells the servers that where scripts run may have changed without the
+	 * scripts changing, e.g. as an environment finished building, or packages
+	 * finished installing: each open script moves to the servers of where it
+	 * runs now (see {@link LanguageServerPlugin#environment}), if that
+	 * changed. For plugins, when what their environments depend on changes.
+	 */
+	void environmentsChanged();
 
 	/** Whether any plugin serves scripts of the given language. */
 	boolean supports(ScriptLanguage language);
@@ -76,16 +112,21 @@ public interface LanguageServerService extends SciJavaService {
 
 	/**
 	 * Finds the problems in a script, waiting for them: for tools that ask
-	 * once, rather than editors.
+	 * once, rather than editors. (For a script file, whose servers may depend
+	 * on where it is, use a {@link #session(File)}.)
 	 *
 	 * @param language The script's language.
-	 * @param uri The script's URI (e.g. {@code untitled:/check.py}).
 	 * @param text The script.
 	 * @param timeout How long to wait for all servers, in milliseconds; those
 	 *          not done by then are left out.
 	 */
-	List<Diagnostic> diagnose(ScriptLanguage language, String uri, String text,
-		long timeout);
+	default List<Diagnostic> diagnose(final ScriptLanguage language,
+		final String text, final long timeout)
+	{
+		try (ScriptSession session = session(language)) {
+			return session.update(text).diagnostics(timeout);
+		}
+	}
 
 	/**
 	 * Gets the variables a script's parameters ({@code #@} lines, and old-style

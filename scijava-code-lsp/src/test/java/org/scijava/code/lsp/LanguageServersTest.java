@@ -31,11 +31,11 @@ package org.scijava.code.lsp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -192,6 +192,28 @@ public class LanguageServersTest {
 	}
 
 	@Test
+	public void testEnvironmentReady() throws Exception {
+		// Where the script runs changes without it changing (e.g. its
+		// environment is built): requests alone move nothing...
+		final MergedLanguageServer server = open("y = 1");
+		awaitEvents("env:A", 1);
+		EnvPlugin.fallback = "C";
+		try {
+			complete(server, 0, 5);
+			assertEquals(1, SERVERS.get("env:A").events.size());
+			// ...but being told so does.
+			service.environmentsChanged();
+			awaitEvents("env:A", 2);
+			assertEquals("close", SERVERS.get("env:A").events.get(1));
+			awaitEvents("env:C", 1);
+			assertEquals("open 1 y = 1", SERVERS.get("env:C").events.get(0));
+		}
+		finally {
+			EnvPlugin.fallback = "A";
+		}
+	}
+
+	@Test
 	public void testLiveEnvironment() throws Exception {
 		final ScriptContext live = new SimpleScriptContext();
 		final MergedLanguageServer server = service.server(merge, live);
@@ -222,7 +244,46 @@ public class LanguageServersTest {
 
 		// For tools: diagnose and wait.
 		assertEquals(Arrays.asList("fast: bad", "slow: bad"), messages(service
-			.diagnose(merge, "untitled:/check.merge", "bad", 10_000)));
+			.diagnose(merge, "bad", 10_000)));
+	}
+
+	@Test
+	public void testSession() throws Exception {
+		final List<List<Diagnostic>> heard = new CopyOnWriteArrayList<>();
+		final ScriptSession session = service.session(merge)
+			.setDiagnosticsListener(heard::add);
+		// Opened with its first text; untitled, with its language's extension.
+		session.update("x = 1");
+		assertTrue(session.uri().startsWith("untitled:/script-"));
+		assertTrue(session.uri().endsWith(".merge"));
+		// The same text again: nothing sent; another: the next version.
+		session.update("x = 1").update("x.ma");
+		awaitEvents("fast", 2);
+		final List<String> events = SERVERS.get("fast").events;
+		assertEquals(Arrays.asList("open 1 x = 1", "change 2 x.ma"), events);
+
+		// Asked about a text (the current one: nothing sent), at an offset.
+		final CompletionList list = session.completion("x.ma", 4).get(10,
+			TimeUnit.SECONDS);
+		final List<Position> asked = SERVERS.get("fast").asked;
+		assertEquals(new Position(0, 4), asked.get(asked.size() - 1));
+		assertTrue(labels(list).contains("max"));
+		assertEquals(2, events.size());
+
+		// The problems in the current text: all servers', together.
+		assertEquals(Arrays.asList("fast: x.ma", "slow: x.ma"), messages(session
+			.diagnostics(10_000)));
+		assertFalse(heard.isEmpty());
+
+		// Saved as a file: closed, and opened anew as the file.
+		final File file = new File("scripts", "a.merge");
+		session.setFile(file).update("x.ma");
+		awaitEvents("fast", 4);
+		assertEquals(Arrays.asList("close", "open 1 x.ma"), events.subList(2, 4));
+		assertEquals(file.getAbsoluteFile().toURI().toString(), session.uri());
+		session.close();
+		awaitEvents("fast", 5);
+		assertNull(session.uri());
 	}
 
 	@Test
@@ -304,6 +365,20 @@ public class LanguageServersTest {
 			.getTextEdit().getLeft().getRange());
 		// Unknown variables: nothing.
 		assertTrue(complete(server, "nothing.x").getItems().isEmpty());
+
+		// A session about code typed into an interpreter of a language no plugin
+		// serves: the same.
+		final ScriptLanguage unserved = new AbstractScriptLanguage() {
+
+			@Override
+			public javax.script.ScriptEngine getScriptEngine() {
+				return null;
+			}
+		};
+		try (ScriptSession session = service.session(unserved, live)) {
+			assertEquals(Collections.singletonList("count"), labels(session
+				.completion("x = co", 6).get(10, TimeUnit.SECONDS)));
+		}
 	}
 
 	@Test
@@ -466,10 +541,13 @@ public class LanguageServersTest {
 			return language instanceof MergeLanguage;
 		}
 
+		/** Where scripts run when their text does not say (e.g. once built). */
+		static volatile String fallback = "A";
+
 		@Override
 		public Environment environment(final TextDocumentItem document) {
 			return new Environment(document.getText().contains("#env=B") ? "B"
-				: "A", null, null, null);
+				: fallback, null, null, null);
 		}
 
 		@Override

@@ -194,10 +194,17 @@ public class TransformingLanguageServer implements LanguageServer,
 		if (doc == null) return inner.getTextDocumentService().completion(params);
 		final CompletionParams p = new CompletionParams(params.getTextDocument(),
 			toTransformed(doc, params.getPosition()), params.getContext());
-		return inner.getTextDocumentService().completion(p).thenApply(
-			answer -> answer == null ? null : Either.forRight(back(doc, answer
-				.isRight() ? answer.getRight() : new CompletionList(answer
+		final CompletableFuture<Either<List<CompletionItem>, CompletionList>> raw =
+			inner.getTextDocumentService().completion(p);
+		final CompletableFuture<Either<List<CompletionItem>, CompletionList>> out =
+			raw.thenApply(answer -> answer == null ? null : Either.forRight(back(doc,
+				answer.isRight() ? answer.getRight() : new CompletionList(answer
 					.getLeft()))));
+		// NB: Cancelling the answer cancels the request.
+		out.whenComplete((r, error) -> {
+			if (out.isCancelled()) raw.cancel(true);
+		});
+		return out;
 	}
 
 	@Override

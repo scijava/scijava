@@ -258,6 +258,7 @@ public class MergedLanguageServer implements LanguageServer,
 			new CompletionList()));
 		final String uri = doc.item.getUri();
 		final String text = doc.item.getText();
+		final int caret = LspClient.offset(text, params.getPosition());
 		final List<CompletableFuture<CompletionList>> first = new ArrayList<>();
 		final List<CompletableFuture<CompletionList>> last = new ArrayList<>();
 		for (final Member m : doc.members) {
@@ -277,11 +278,11 @@ public class MergedLanguageServer implements LanguageServer,
 					now.add(last.get(i).isDone() ? last.get(i).getNow(null) : first.get(
 						i).getNow(null));
 				}
-				final CompletionList merged = merge(now, uri, text);
+				final CompletionList merged = merge(now, uri, text, caret);
 				if (settled) return merged;
 				final CompletableFuture<CompletionList> update = CompletableFuture
 					.allOf(last.toArray(new CompletableFuture[0])).thenApply(
-						y -> merge(joinAll(last), uri, text));
+						y -> merge(joinAll(last), uri, text, caret));
 				return (CompletionList) new UpdatingCompletionList(merged.getItems(),
 					update);
 			}).thenApply(Either::forRight);
@@ -499,7 +500,7 @@ public class MergedLanguageServer implements LanguageServer,
 	 * (sortText) order, leaving out those inserting what an earlier one does.
 	 */
 	private static CompletionList merge(final List<CompletionList> lists,
-		final String uri, final String text)
+		final String uri, final String text, final int caret)
 	{
 		final List<CompletionItem> out = new ArrayList<>();
 		// What each inserted name was seen with: its overloads' parameter lists
@@ -522,7 +523,7 @@ public class MergedLanguageServer implements LanguageServer,
 				before.put(e.getKey(), new HashSet<>(e.getValue()));
 			}
 			for (final CompletionItem item : items) {
-				final String inserted = insertedLine(item, text);
+				final String inserted = insertedLine(item, text, caret);
 				if (duplicate(before, inserted, item)) continue;
 				final String params = item.getLabelDetails() == null ? null : item
 					.getLabelDetails().getDetail();
@@ -553,11 +554,13 @@ public class MergedLanguageServer implements LanguageServer,
 
 	/**
 	 * What a completion leaves on its line before the caret, roughly: the line
-	 * up to the edit, then the inserted name (without a parameter snippet). Two
-	 * servers' completions doing the same have the same.
+	 * up to the edit (or, without an edit, up to the word before the caret),
+	 * then the inserted name (without a parameter snippet). Two servers'
+	 * completions doing the same have the same: e.g. one replacing "s.len" with
+	 * "s.length", another "len" with "length".
 	 */
 	private static String insertedLine(final CompletionItem item,
-		final String text)
+		final String text, final int caret)
 	{
 		String inserted;
 		String before = "";
@@ -573,6 +576,10 @@ public class MergedLanguageServer implements LanguageServer,
 		else {
 			inserted = item.getInsertText() != null ? item.getInsertText() : item
 				.getLabel();
+			int word = Math.min(caret, text.length());
+			while (word > 0 && Character.isJavaIdentifierPart(text.charAt(word -
+				1))) word--;
+			before = text.substring(text.lastIndexOf('\n', word - 1) + 1, word);
 		}
 		final int cut = indexOfAny(inserted, "($");
 		return before + (cut < 0 ? inserted : inserted.substring(0, cut));

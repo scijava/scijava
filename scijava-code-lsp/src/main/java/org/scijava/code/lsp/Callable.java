@@ -101,6 +101,38 @@ public final class Callable {
 		this.returnType = returnType;
 	}
 
+	/**
+	 * Reads a callable back from a completion made by {@link #toItem()} (or
+	 * any with typed label details, e.g. {@code (double a, double b)}); or
+	 * returns null if it is not one.
+	 */
+	public static Callable of(final CompletionItem item) {
+		final CompletionItemLabelDetails details = item.getLabelDetails();
+		if (details == null || details.getDetail() == null || !details.getDetail()
+			.startsWith("(")) return null;
+		final String list = details.getDetail();
+		final String inner = list.substring(1, list.endsWith(")") ? list.length() -
+			1 : list.length()).trim();
+		final List<Param> params = new ArrayList<>();
+		if (!inner.isEmpty()) {
+			int depth = 0, start = 0;
+			for (int i = 0; i <= inner.length(); i++) {
+				final char c = i < inner.length() ? inner.charAt(i) : ',';
+				if (c == '(' || c == '[' || c == '{' || c == '<') depth++;
+				else if (c == ')' || c == ']' || c == '}' || c == '>') depth--;
+				else if (c == ',' && depth == 0) {
+					final String p = inner.substring(start, i).trim();
+					final int space = p.lastIndexOf(' ');
+					params.add(space < 0 ? new Param(p, null) : new Param(p.substring(
+						space + 1), p.substring(0, space).trim()));
+					start = i + 1;
+				}
+			}
+		}
+		return new Callable(item.getLabel(), params, details.getDescription())
+			.kind(item.getKind()).detail(item.getDetail());
+	}
+
 	/** Sets the kind of completion (default: method). */
 	public Callable kind(final CompletionItemKind k) {
 		kind = k;

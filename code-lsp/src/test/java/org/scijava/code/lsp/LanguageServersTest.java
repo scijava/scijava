@@ -573,6 +573,7 @@ public class LanguageServersTest {
 		private void diagnose(final String uri, final int version,
 			final String text)
 		{
+			if (client == null) return;
 			if (silent || text.equals("fine")) {
 				client.publishDiagnostics(new PublishDiagnosticsParams(uri,
 					Collections.emptyList(), version));

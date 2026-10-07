@@ -221,8 +221,24 @@ public class LaunchedLanguageServer implements LanguageServer,
 		final Doc doc = docs.get(uri);
 		if (doc == null) return CompletableFuture.completedFuture(null);
 		final String text = doc.text;
-		return servers.server(environment).thenCompose(s -> s.request(uri, text,
-			request));
+		// NB: Cancelling the answer cancels the request, which tells the process
+		// ($/cancelRequest).
+		final CompletableFuture<T> answer = new CompletableFuture<>();
+		servers.server(environment).thenAccept(s -> {
+			if (answer.isDone()) return;
+			final CompletableFuture<T> raw = s.request(uri, text, request);
+			answer.whenComplete((r, error) -> {
+				if (answer.isCancelled()) raw.cancel(true);
+			});
+			raw.whenComplete((r, error) -> {
+				if (error != null) answer.completeExceptionally(error);
+				else answer.complete(r);
+			});
+		}).exceptionally(error -> {
+			answer.completeExceptionally(error);
+			return null;
+		});
+		return answer;
 	}
 
 	/** Notes a document's new text; asks for its problems after a pause. */

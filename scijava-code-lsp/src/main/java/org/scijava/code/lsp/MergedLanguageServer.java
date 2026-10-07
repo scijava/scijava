@@ -502,7 +502,9 @@ public class MergedLanguageServer implements LanguageServer,
 		final String uri, final String text)
 	{
 		final List<CompletionItem> out = new ArrayList<>();
-		final Set<String> seen = new HashSet<>();
+		// What each inserted name was seen with: its overloads' parameter lists
+		// (label details), or null for an item without any.
+		final Map<String, Set<String>> seen = new java.util.HashMap<>();
 		boolean incomplete = false;
 		for (int i = 0; i < lists.size(); i++) {
 			final CompletionList list = lists.get(i);
@@ -514,7 +516,7 @@ public class MergedLanguageServer implements LanguageServer,
 				.getSortText() : c.getLabel()));
 			int j = 0;
 			for (final CompletionItem item : items) {
-				if (!seen.add(insertedLine(item, text))) continue;
+				if (duplicate(seen, insertedLine(item, text), item)) continue;
 				final CompletionItem c = copy(item);
 				c.setData(new MergedData(uri, i, item.getData(), item.getSortText()));
 				c.setSortText(String.format("%02d%06d", i, j++));
@@ -522,6 +524,30 @@ public class MergedLanguageServer implements LanguageServer,
 			}
 		}
 		return new CompletionList(incomplete, out);
+	}
+
+	/**
+	 * Whether a completion inserts what an earlier one does: the same name, and
+	 * the same parameters (overloads differ in their label details), or either
+	 * without any (e.g. a server knowing only names). Notes it as seen, if not.
+	 */
+	private static boolean duplicate(final Map<String, Set<String>> seen,
+		final String name, final CompletionItem item)
+	{
+		final String params = item.getLabelDetails() == null ? null : item
+			.getLabelDetails().getDetail();
+		final Set<String> known = seen.get(name);
+		if (known == null) {
+			final Set<String> s = new HashSet<>();
+			s.add(params);
+			seen.put(name, s);
+			return false;
+		}
+		if (params == null || known.contains(null) || known.contains(params)) {
+			return true;
+		}
+		known.add(params);
+		return false;
 	}
 
 	/**

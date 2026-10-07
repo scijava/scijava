@@ -144,11 +144,13 @@ public class LanguageServersTest {
 		// The fast server's at once (by label, having no sortText); the slow
 		// one's to come.
 		assertTrue(first instanceof UpdatingCompletionList);
-		assertEquals(Arrays.asList("mass", "max"), labels(first));
+		assertEquals(Arrays.asList("mass", "max", "maz", "maz"), labels(first));
 		final CompletionList all = ((UpdatingCompletionList) first).update().get(10,
 			TimeUnit.SECONDS);
-		// In priority order; "max" once (the same text after inserting).
-		assertEquals(Arrays.asList("mass", "max", "map"), labels(all));
+		// In priority order; "max" once (the same text after inserting); both
+		// overloads of "maz" (different parameters).
+		assertEquals(Arrays.asList("mass", "max", "maz", "maz", "map"), labels(
+			all));
 		final List<String> sorted = all.getItems().stream().map(
 			CompletionItem::getSortText).collect(Collectors.toList());
 		final List<String> resorted = new ArrayList<>(sorted);
@@ -156,7 +158,7 @@ public class LanguageServersTest {
 		assertEquals(sorted, resorted);
 
 		// Resolving asks the server the completion came from, with its own data.
-		final CompletionItem map = all.getItems().get(2);
+		final CompletionItem map = all.getItems().get(4);
 		final CompletionItem resolved = server.resolveCompletionItem(map).get(10,
 			TimeUnit.SECONDS);
 		assertEquals("slow resolved map (data 3)", resolved.getDetail());
@@ -614,6 +616,18 @@ public class LanguageServersTest {
 				item.setTextEdit(Either.forLeft(new TextEdit(word, label)));
 				item.setData(label.length());
 				items.add(item);
+			}
+			if (!slow && name.equals("fast")) {
+				// Overloads: the same name, different parameters.
+				for (final String params : new String[] { "(int a)", "(double a)" }) {
+					final CompletionItem item = new CompletionItem("maz");
+					item.setTextEdit(Either.forLeft(new TextEdit(word, "maz")));
+					final org.eclipse.lsp4j.CompletionItemLabelDetails details =
+						new org.eclipse.lsp4j.CompletionItemLabelDetails();
+					details.setDetail(params);
+					item.setLabelDetails(details);
+					items.add(item);
+				}
 			}
 			final Either<List<CompletionItem>, CompletionList> answer = Either
 				.forRight(new CompletionList(items));

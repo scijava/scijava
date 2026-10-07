@@ -57,8 +57,9 @@ public class CodeCompleterServerPlugin implements LanguageServerPlugin {
 
 	@Override
 	public boolean supports(final ScriptLanguage language) {
-		// NB: Every language has a completer: its own, or the default one.
-		return true;
+		// NB: Languages with a completer of their own: editors fall back to other
+		// support for the others.
+		return completion.getCompleterPlugin(language) != null;
 	}
 
 	@Override

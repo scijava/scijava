@@ -31,7 +31,6 @@ package org.scijava.code.lsp;
 
 import java.io.IOException;
 
-import org.scijava.code.api.EnvironmentContext;
 
 /**
  * How to start a language server for scripts that run in a given environment,
@@ -51,14 +50,14 @@ public interface LspServerSpec {
 	 *
 	 * @param env Where the scripts the server will analyze run.
 	 */
-	LspConnection start(EnvironmentContext env) throws IOException;
+	LspConnection start(Environment env) throws IOException;
 
 	/**
 	 * The {@code initializationOptions} to send the server, e.g. the
 	 * interpreter and extra paths of {@code env}; or null for none. Must
 	 * serialize to JSON (e.g. maps, lists, strings, numbers, booleans).
 	 */
-	default Object initializationOptions(final EnvironmentContext env) {
+	default Object initializationOptions(final Environment env) {
 		return null;
 	}
 
@@ -67,7 +66,7 @@ public interface LspServerSpec {
 	 * jedi-language-server, apply their initialization options only with a
 	 * root.)
 	 */
-	default String rootUri(final EnvironmentContext env) {
+	default String rootUri(final Environment env) {
 		return null;
 	}
 }

@@ -27,43 +27,26 @@
  * #L%
  */
 
-package org.scijava.code.lsp.compat;
+package org.scijava.code.lsp;
 
-import org.eclipse.lsp4j.services.LanguageServer;
-import org.scijava.Priority;
-import org.scijava.code.api.CodeCompletionService;
-import org.scijava.code.lsp.Environment;
-import org.scijava.code.lsp.LanguageServerPlugin;
-import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
-import org.scijava.script.ScriptLanguage;
-import org.scijava.script.ScriptService;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 /**
- * Offers code-api's {@link org.scijava.code.api.CodeCompleter}s as a language
- * server, for every language (see {@link CodeCompleterLanguageServer}), until
- * each has a server of its own. TEMP: Removed with code-api.
+ * Tests {@link ClassIndex}.
  *
- * @author Gabriel Selzer
+ * @author Curtis Rueden
  */
-@Plugin(type = LanguageServerPlugin.class, priority = Priority.VERY_LOW)
-public class CodeCompleterServerPlugin implements LanguageServerPlugin {
+public class ClassIndexTest {
 
-	@Parameter
-	private CodeCompletionService completion;
-
-	@Parameter
-	private ScriptService scripts;
-
-	@Override
-	public boolean supports(final ScriptLanguage language) {
-		// NB: Languages with a completer of their own: editors fall back to other
-		// support for the others.
-		return completion.getCompleterPlugin(language) != null;
-	}
-
-	@Override
-	public LanguageServer create(final Environment environment) {
-		return new CodeCompleterLanguageServer(completion, scripts, environment);
+	/** The JDK's own classes must be indexed, including on Java 9+. */
+	@Test
+	public void testRuntimeClassesIndexed() {
+		assertTrue(ClassIndex.findSimpleClassNamesStartingWith("ArrayList")
+			.contains("java.util.ArrayList"));
+		assertTrue(ClassIndex.findClassNamesForPackage("java.util").anyMatch(
+			"java.util.HashMap"::equals));
+		assertTrue(ClassIndex.isCacheReady());
 	}
 }

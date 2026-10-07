@@ -87,6 +87,9 @@ public class DefaultLanguageServerService extends AbstractService implements
 	@Parameter(required = false)
 	private LogService log;
 
+	private final ScriptParameters parameters = new ScriptParameters(
+		this::context);
+
 	private List<LanguageServerPlugin> plugins;
 
 	/** The servers, by plugin and environment. */
@@ -140,6 +143,11 @@ public class DefaultLanguageServerService extends AbstractService implements
 		server.didClose(new DidCloseTextDocumentParams(new TextDocumentIdentifier(
 			uri)));
 		return found;
+	}
+
+	@Override
+	public Map<String, Class<?>> scriptParameters(final String text) {
+		return parameters.of(text);
 	}
 
 	@Override

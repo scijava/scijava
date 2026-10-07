@@ -71,7 +71,6 @@ import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.TextDocumentService;
-import org.scijava.code.api.EnvironmentContext;
 import org.scijava.log.Logger;
 
 /**
@@ -123,7 +122,7 @@ public final class LspServer {
 	 * @param timeout How long to wait for it to initialize, in milliseconds.
 	 */
 	public static LspServer start(final LspServerSpec spec,
-		final EnvironmentContext env, final Logger log, final long timeout)
+		final Environment env, final Logger log, final long timeout)
 		throws Exception
 	{
 		final LspConnection connection = spec.start(env);

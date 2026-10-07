@@ -258,7 +258,7 @@ public class MergedLanguageServer implements LanguageServer,
 			new CompletionList()));
 		final String uri = doc.item.getUri();
 		final String text = doc.item.getText();
-		final int caret = LspClient.offset(text, params.getPosition());
+		final int caret = Positions.offset(text, params.getPosition());
 		final List<CompletableFuture<CompletionList>> first = new ArrayList<>();
 		final List<CompletableFuture<CompletionList>> last = new ArrayList<>();
 		for (final Member m : doc.members) {
@@ -570,7 +570,7 @@ public class MergedLanguageServer implements LanguageServer,
 			inserted = item.getTextEdit().isLeft() ? item.getTextEdit().getLeft()
 				.getNewText() : item.getTextEdit().getRight().getNewText();
 			final Position start = range.getStart();
-			final int offset = LspClient.offset(text, start);
+			final int offset = Positions.offset(text, start);
 			before = text.substring(offset - start.getCharacter(), offset);
 		}
 		else {

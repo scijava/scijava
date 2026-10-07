@@ -26,49 +26,45 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.code.lsp;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
-import org.junit.jupiter.api.Test;
-import org.scijava.code.api.Completion;
+import org.eclipse.lsp4j.Position;
 
 /**
- * Tests {@link PythonLspClient}'s reading of signatures.
+ * Converts between offsets in a text and LSP positions: a line, and a
+ * character in that line, counted in UTF-16 code units (as Java does).
  *
  * @author Gabriel Selzer
  */
-public class PythonLspClientTest {
+public final class Positions {
 
-	@Test
-	public void testParse() {
-		Completion c = parse("dumps",
-			"def dumps(obj, *, skipkeys: bool=False, cls=None, **kw) -> str");
-		assertEquals("[obj, bool skipkeys, cls, kw]", String.valueOf(c
-			.parameters()));
-		assertEquals("str", c.returnType());
-
-		// Brackets and strings in annotations and defaults; positional-only.
-		c = parse("zeros", "def zeros(shape: tuple[int, ...], dtype: str=\"f,8\"" +
-			", /, order: Literal['C', 'F']='C') -> NDArray[float64]");
-		assertEquals("[tuple[int, ...] shape, str dtype, " +
-			"Literal['C', 'F'] order]", String.valueOf(c.parameters()));
-		assertEquals("NDArray[float64]", c.returnType());
-
-		// Classes (their constructors), without parameters or return type.
-		c = parse("Path", "class Path()");
-		assertEquals(0, c.parameters().size());
-		assertNull(c.returnType());
-		c = parse("f", "def f(*args)");
-		assertEquals("args", c.parameters().get(0).name());
-
-		// Not a signature.
-		assertNull(PythonLspClient.parse("x", "instance x"));
+	private Positions() {
+		// NB: Prevent instantiation of utility class.
 	}
 
-	private static Completion parse(final String name, final String sig) {
-		return PythonLspClient.parse(name, sig).kind(Completion.Kind.METHOD)
-			.build();
+	/** Converts an offset to an LSP position. */
+	public static Position position(final String text, final int offset) {
+		int line = 0, start = 0;
+		for (int i = 0; i < offset; i++) {
+			if (text.charAt(i) == '\n') {
+				line++;
+				start = i + 1;
+			}
+		}
+		return new Position(line, offset - start);
+	}
+
+	/** Converts an LSP position to an offset (clamped to the text). */
+	public static int offset(final String text, final Position position) {
+		int start = 0;
+		for (int line = 0; line < position.getLine(); line++) {
+			final int nl = text.indexOf('\n', start);
+			if (nl < 0) return text.length();
+			start = nl + 1;
+		}
+		int end = text.indexOf('\n', start);
+		if (end < 0) end = text.length();
+		return Math.min(start + position.getCharacter(), end);
 	}
 }

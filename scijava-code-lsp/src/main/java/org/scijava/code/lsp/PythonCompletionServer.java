@@ -144,7 +144,7 @@ public class PythonCompletionServer extends DelegatingLanguageServer {
 		final String uri = params.getTextDocument().getUri();
 		final String text = texts.get(uri);
 		if (text == null) return super.completion(params);
-		final int caret = Math.min(LspClient.offset(text, params.getPosition()),
+		final int caret = Math.min(Positions.offset(text, params.getPosition()),
 			text.length());
 		int start = caret;
 		while (start > 0 && Character.isJavaIdentifierPart(text.charAt(start -
@@ -169,7 +169,7 @@ public class PythonCompletionServer extends DelegatingLanguageServer {
 		}
 		if (answer == null) {
 			final CompletionParams p = new CompletionParams(params.getTextDocument(),
-				LspClient.position(text, ask), params.getContext());
+				Positions.position(text, ask), params.getContext());
 			final CompletableFuture<Either<List<CompletionItem>, CompletionList>> raw =
 				super.completion(p);
 			final int n = word.isEmpty() || importing ? 0 : signatures;
@@ -234,16 +234,11 @@ public class PythonCompletionServer extends DelegatingLanguageServer {
 		final String name = item.getInsertText() != null ? item.getInsertText()
 			: item.getLabel();
 		if (resolved.getDetail() == null) return null;
-		final org.scijava.code.api.Completion.Builder b = PythonLspClient.parse(
-			name, resolved.getDetail());
-		if (b == null) return null;
-		final org.scijava.code.api.Completion c = b.build();
-		final List<Callable.Param> params = new ArrayList<>();
-		for (final org.scijava.code.api.Completion.Parameter p : c.parameters()) {
-			params.add(new Callable.Param(p.name(), p.type()));
-		}
-		final CompletionItem out = new Callable(name, params, c.returnType()).kind(
-			CompletionItemKind.Method).detail(resolved.getDetail()).toItem();
+		final Callable parsed = parse(name, resolved.getDetail());
+		if (parsed == null) return null;
+		final CompletionItem out = new Callable(name, parsed.params(), parsed
+			.returnType()).kind(CompletionItemKind.Method).detail(resolved
+				.getDetail()).toItem();
 		out.setSortText(item.getSortText());
 		out.setDocumentation(resolved.getDocumentation());
 		out.setData(item.getData());
@@ -281,5 +276,91 @@ public class PythonCompletionServer extends DelegatingLanguageServer {
 			this.future = future;
 			this.time = time;
 		}
+	}
+
+	/**
+	 * Parses a Python signature (as Jedi writes them): the parameters, with
+	 * their annotations as types; and the return annotation. Returns null if it
+	 * is not a signature.
+	 */
+	static Callable parse(final String name,
+		final String signature)
+	{
+		final int open = signature.indexOf('(');
+		if (open < 0) return null;
+		final int close = closing(signature, open);
+		if (close < 0) return null;
+		final List<Callable.Param> params = new ArrayList<>();
+		for (final String part : split(signature.substring(open + 1, close))) {
+			final String p = part.trim();
+			// NB: Bare * and / only mark keyword-only and positional-only ones.
+			if (p.isEmpty() || p.equals("*") || p.equals("/")) continue;
+			final int colon = topLevel(p, ':'), eq = topLevel(p, '=');
+			String paramName = p, type = null;
+			if (colon >= 0 && (eq < 0 || colon < eq)) {
+				paramName = p.substring(0, colon);
+				type = p.substring(colon + 1, eq < 0 ? p.length() : eq).trim();
+			}
+			else if (eq >= 0) paramName = p.substring(0, eq);
+			paramName = paramName.trim().replaceFirst("^\\*{1,2}", "");
+			params.add(new Callable.Param(paramName, type == null || type
+				.isEmpty() ? null : type));
+		}
+		final String rest = signature.substring(close + 1).trim();
+		final String returns = rest.startsWith("->") ? rest.substring(2).trim()
+			: null;
+		return new Callable(name, params, returns == null || returns.isEmpty()
+			? null : returns);
+	}
+
+	/** The index of the bracket closing the one at {@code open}, or -1. */
+	private static int closing(final String s, final int open) {
+		int depth = 0;
+		char quote = 0;
+		for (int i = open; i < s.length(); i++) {
+			final char c = s.charAt(i);
+			if (quote != 0) {
+				if (c == '\\') i++;
+				else if (c == quote) quote = 0;
+			}
+			else if (c == '\'' || c == '"') quote = c;
+			else if (c == '(' || c == '[' || c == '{') depth++;
+			else if (c == ')' || c == ']' || c == '}') {
+				if (--depth == 0) return i;
+			}
+		}
+		return -1;
+	}
+
+	/** Splits at the commas outside brackets and strings. */
+	private static List<String> split(final String s) {
+		final List<String> parts = new ArrayList<>();
+		int start = 0;
+		while (true) {
+			final int comma = topLevel(s.substring(start), ',');
+			if (comma < 0) break;
+			parts.add(s.substring(start, start + comma));
+			start += comma + 1;
+		}
+		parts.add(s.substring(start));
+		return parts;
+	}
+
+	/** The index of the first {@code target} outside brackets and strings. */
+	private static int topLevel(final String s, final char target) {
+		int depth = 0;
+		char quote = 0;
+		for (int i = 0; i < s.length(); i++) {
+			final char c = s.charAt(i);
+			if (quote != 0) {
+				if (c == '\\') i++;
+				else if (c == quote) quote = 0;
+			}
+			else if (c == '\'' || c == '"') quote = c;
+			else if (c == '(' || c == '[' || c == '{') depth++;
+			else if (c == ')' || c == ']' || c == '}') depth--;
+			else if (c == target && depth == 0) return i;
+		}
+		return -1;
 	}
 }

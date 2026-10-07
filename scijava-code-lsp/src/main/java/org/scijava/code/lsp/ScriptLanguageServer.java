@@ -165,8 +165,8 @@ public abstract class ScriptLanguageServer implements LanguageServer,
 
 		/** The range between two offsets. */
 		public Range range(final int start, final int end) {
-			return new Range(LspClient.position(text, Math.min(start, text
-				.length())), LspClient.position(text, Math.min(end, text.length())));
+			return new Range(Positions.position(text, Math.min(start, text
+				.length())), Positions.position(text, Math.min(end, text.length())));
 		}
 	}
 
@@ -343,7 +343,7 @@ public abstract class ScriptLanguageServer implements LanguageServer,
 		final Document doc = docs.get(params.getTextDocument().getUri());
 		if (doc == null) return CompletableFuture.completedFuture(Either.forRight(
 			new CompletionList()));
-		final CompletionList list = complete(doc, LspClient.offset(doc.text,
+		final CompletionList list = complete(doc, Positions.offset(doc.text,
 			params.getPosition()));
 		return CompletableFuture.completedFuture(Either.forRight(list == null
 			? new CompletionList() : list));
@@ -370,14 +370,14 @@ public abstract class ScriptLanguageServer implements LanguageServer,
 	{
 		final Document doc = docs.get(params.getTextDocument().getUri());
 		return CompletableFuture.completedFuture(doc == null ? null
-			: signatureHelp(doc, LspClient.offset(doc.text, params.getPosition())));
+			: signatureHelp(doc, Positions.offset(doc.text, params.getPosition())));
 	}
 
 	@Override
 	public CompletableFuture<Hover> hover(final HoverParams params) {
 		final Document doc = docs.get(params.getTextDocument().getUri());
 		return CompletableFuture.completedFuture(doc == null ? null : hover(doc,
-			LspClient.offset(doc.text, params.getPosition())));
+			Positions.offset(doc.text, params.getPosition())));
 	}
 
 	// -- WorkspaceService --

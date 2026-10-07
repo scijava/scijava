@@ -62,7 +62,6 @@ import org.eclipse.lsp4j.services.LanguageClientAware;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
-import org.scijava.code.api.EnvironmentContext;
 
 /**
  * A language server process (see {@link LspServers}), seen as a
@@ -93,7 +92,7 @@ public class LaunchedLanguageServer implements LanguageServer,
 		});
 
 	private final LspServers servers;
-	private final EnvironmentContext environment;
+	private final Environment environment;
 	private volatile LanguageClient client;
 
 	/** The open documents' texts and versions, by URI. */
@@ -103,7 +102,7 @@ public class LaunchedLanguageServer implements LanguageServer,
 		final Environment environment)
 	{
 		this.servers = servers;
-		this.environment = environment.toContext();
+		this.environment = environment;
 	}
 
 	@Override

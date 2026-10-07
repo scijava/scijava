@@ -14,10 +14,17 @@ jedi-language-server, for Python run via Appose).
 
 `LanguageServerPlugin`s offer servers per script language, and say where a
 script runs (an `Environment`: interpreter, search paths, classpath, and a
-running interpreter's state, if any). The `LanguageServerService` hands
-callers (e.g. the Script Editor) one `MergedLanguageServer` per language,
-standing for all of its plugins' servers: it opens, changes and closes each
-document on every server for that script, and merges their answers.
+running interpreter's state, if any). For each language, the
+`LanguageServerService` makes a `MergedLanguageServer` standing for all of
+its plugins' servers: it opens, changes and closes each document on every
+server for that script, and merges their answers.
+
+Clients (e.g. the Script Editor, its REPL, or a tool checking scripts) ask
+about a script through a `ScriptSession` from the service: given a script's
+file, or text, or both, it keeps the servers' copy up to date, names it,
+takes offsets into its text, and reports the problems found in it. Clients
+that speak the protocol themselves (e.g. via JSON-RPC) use the merged server
+directly.
 Completions that take longer than a moment come later, as an
 `UpdatingCompletionList`'s update; signatures can be rated against the
 arguments typed (`RatedSignatureInformation`). Tools that ask once (e.g. to

@@ -43,16 +43,17 @@ public final class Positions {
 		// NB: Prevent instantiation of utility class.
 	}
 
-	/** Converts an offset to an LSP position. */
+	/** Converts an offset to an LSP position (clamped to the text). */
 	public static Position position(final String text, final int offset) {
+		final int end = Math.max(0, Math.min(offset, text.length()));
 		int line = 0, start = 0;
-		for (int i = 0; i < offset; i++) {
+		for (int i = 0; i < end; i++) {
 			if (text.charAt(i) == '\n') {
 				line++;
 				start = i + 1;
 			}
 		}
-		return new Position(line, offset - start);
+		return new Position(line, end - start);
 	}
 
 	/** Converts an LSP position to an offset (clamped to the text). */

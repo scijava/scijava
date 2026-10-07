@@ -209,24 +209,47 @@ public class MergedLanguageServer implements LanguageServer,
 					changes.size() - 1).getText());
 			doc.reported = new CompletableFuture<>();
 			for (final Member m : doc.members) {
-				final Environment env = environment(m.plugin, doc.item);
-				if (!env.equals(m.environment)) {
-					// The script runs elsewhere now: move it to that server.
-					// TODO: Settle how often this may happen while dependencies are
-					// edited (debounce?).
-					close(m, doc.item.getUri());
-					m.environment = env;
-					m.server = service.server(m.plugin, env);
-					m.diagnostics = Collections.emptyList();
-					open(m, doc.item);
-				}
-				else {
+				if (!relocate(doc, m)) {
 					final DidChangeTextDocumentParams p = new DidChangeTextDocumentParams(
 						new VersionedTextDocumentIdentifier(doc.item.getUri(), doc.item
 							.getVersion()), Collections.singletonList(
 								new TextDocumentContentChangeEvent(doc.item.getText())));
 					notify(m, s -> s.didChange(p));
 				}
+			}
+		}
+	}
+
+	/**
+	 * Moves a document to the server of where its script runs now, if that
+	 * changed: as its text says, or as its environment came to be since (e.g.
+	 * built, or its new dependencies installed; see {@link #relocateAll()}).
+	 *
+	 * @return Whether it moved (and the server has its current text).
+	 */
+	private boolean relocate(final Doc doc, final Member m) {
+		final Environment env = environment(m.plugin, doc.item);
+		if (env.equals(m.environment)) return false;
+		// TODO: Settle how often this may happen while dependencies are edited
+		// (debounce?).
+		close(m, doc.item.getUri());
+		m.environment = env;
+		m.server = service.server(m.plugin, env);
+		m.diagnostics = Collections.emptyList();
+		if (doc.reported.isDone()) doc.reported = new CompletableFuture<>();
+		open(m, doc.item);
+		return true;
+	}
+
+	/**
+	 * Moves each open document to the server of where its script runs now, if
+	 * that changed without the script changing (see
+	 * {@link LanguageServerService#environmentsChanged()}).
+	 */
+	void relocateAll() {
+		for (final Doc doc : docs.values()) {
+			synchronized (doc) {
+				for (final Member m : doc.members) relocate(doc, m);
 			}
 		}
 	}
@@ -360,6 +383,14 @@ public class MergedLanguageServer implements LanguageServer,
 		synchronized (doc) {
 			return doc.reported;
 		}
+	}
+
+	/**
+	 * Gets the problems the servers found in a document's current version, once
+	 * every server has reported them.
+	 */
+	CompletableFuture<List<Diagnostic>> allDiagnostics(final String uri) {
+		return awaitDiagnostics(uri).thenApply(x -> diagnostics(uri));
 	}
 
 	/** Receives a server's diagnostics (see the service's dispatcher). */

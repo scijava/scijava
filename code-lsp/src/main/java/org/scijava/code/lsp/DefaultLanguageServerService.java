@@ -29,9 +29,14 @@
 
 package org.scijava.code.lsp;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -42,16 +47,12 @@ import java.util.concurrent.TimeUnit;
 import javax.script.ScriptContext;
 
 import org.eclipse.lsp4j.Diagnostic;
-import org.eclipse.lsp4j.DidCloseTextDocumentParams;
-import org.eclipse.lsp4j.DidOpenTextDocumentParams;
 import org.eclipse.lsp4j.InitializeParams;
 import org.eclipse.lsp4j.InitializedParams;
 import org.eclipse.lsp4j.MessageActionItem;
 import org.eclipse.lsp4j.MessageParams;
 import org.eclipse.lsp4j.PublishDiagnosticsParams;
 import org.eclipse.lsp4j.ShowMessageRequestParams;
-import org.eclipse.lsp4j.TextDocumentIdentifier;
-import org.eclipse.lsp4j.TextDocumentItem;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageClientAware;
 import org.eclipse.lsp4j.services.LanguageServer;
@@ -60,6 +61,7 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.PluginService;
 import org.scijava.script.ScriptLanguage;
+import org.scijava.script.ScriptService;
 import org.scijava.service.AbstractService;
 import org.scijava.service.Service;
 
@@ -87,6 +89,9 @@ public class DefaultLanguageServerService extends AbstractService implements
 	@Parameter(required = false)
 	private LogService log;
 
+	@Parameter(required = false)
+	private ScriptService scriptService;
+
 	private final ScriptParameters parameters = new ScriptParameters(
 		this::context);
 
@@ -99,6 +104,46 @@ public class DefaultLanguageServerService extends AbstractService implements
 	/** Which merged server has each document open. */
 	private final Map<String, MergedLanguageServer> owners =
 		new ConcurrentHashMap<>();
+
+	@Override
+	public ScriptSession session(final ScriptLanguage language) {
+		return session(language, null);
+	}
+
+	@Override
+	public ScriptSession session(final ScriptLanguage language,
+		final ScriptContext live)
+	{
+		final ScriptSession session;
+		if (live != null && !supports(language)) {
+			session = new ScriptSession(new BindingsLanguageServer(live), language,
+				null);
+		}
+		else {
+			final MergedLanguageServer server = server(language, live);
+			session = new ScriptSession(server, language, server::allDiagnostics);
+		}
+		return session.connect().setLogger(log);
+	}
+
+	@Override
+	public ScriptSession session(final File file) throws IOException {
+		final String name = file.getName();
+		final int dot = name.lastIndexOf('.');
+		final ScriptLanguage language = scriptService == null || dot < 0 ? null
+			: scriptService.getLanguageByExtension(name.substring(dot + 1));
+		if (language == null || !supports(language)) return null;
+		final String text = new String(Files.readAllBytes(file.toPath()),
+			StandardCharsets.UTF_8);
+		return session(language).setFile(file).update(text);
+	}
+
+	@Override
+	public void environmentsChanged() {
+		for (final MergedLanguageServer server : new HashSet<>(owners.values())) {
+			server.relocateAll();
+		}
+	}
 
 	@Override
 	public MergedLanguageServer server(final ScriptLanguage language) {
@@ -124,25 +169,6 @@ public class DefaultLanguageServerService extends AbstractService implements
 		final LspServers s = lspService == null ? null : lspService.servers(
 			languageId);
 		return s == null ? null : new LaunchedLanguageServer(s, environment);
-	}
-
-	@Override
-	public List<Diagnostic> diagnose(final ScriptLanguage language,
-		final String uri, final String text, final long timeout)
-	{
-		final MergedLanguageServer server = server(language);
-		server.didOpen(new DidOpenTextDocumentParams(new TextDocumentItem(uri,
-			language.getLanguageName(), 1, text)));
-		try {
-			server.awaitDiagnostics(uri).get(timeout, TimeUnit.MILLISECONDS);
-		}
-		catch (final Exception exc) {
-			// NB: Not all servers in time: those that were.
-		}
-		final List<Diagnostic> found = server.diagnostics(uri);
-		server.didClose(new DidCloseTextDocumentParams(new TextDocumentIdentifier(
-			uri)));
-		return found;
 	}
 
 	@Override

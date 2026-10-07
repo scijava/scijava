@@ -1,0 +1,144 @@
+/*-
+ * #%L
+ * Language Server Protocol bridge for SciJava code intelligence.
+ * %%
+ * Copyright (C) 2026 SciJava developers.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+
+package org.scijava.code.lsp;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
+import javax.script.ScriptContext;
+
+import org.scijava.code.api.EnvironmentContext;
+
+/**
+ * Where a script will run, as far as analyzing it needs to know: the
+ * interpreter (or other executable) that runs it, extra paths to search for
+ * modules or packages, classpath entries, and, for code typed into a running
+ * interpreter, that interpreter's state. Every part is optional.
+ * <p>
+ * Language servers are kept one per environment (see
+ * {@link LanguageServerService}): e.g. jedi-language-server learns the Python
+ * to analyze against only when it starts.
+ * </p>
+ *
+ * @author Gabriel Selzer
+ */
+public final class Environment {
+
+	/** No particular environment. */
+	public static final Environment NONE = new Environment(null, null, null,
+		null);
+
+	private final String interpreter;
+	private final List<String> searchPaths;
+	private final List<String> classpath;
+	private final ScriptContext live;
+
+	/**
+	 * @param interpreter Path of the interpreter or executable, or null.
+	 * @param searchPaths Extra paths to search for modules, e.g. for Python.
+	 * @param classpath Classpath entries, e.g. for JVM languages.
+	 * @param live A running interpreter's state, or null.
+	 */
+	public Environment(final String interpreter, final List<String> searchPaths,
+		final List<String> classpath, final ScriptContext live)
+	{
+		this.interpreter = interpreter;
+		this.searchPaths = searchPaths == null ? Collections.emptyList()
+			: Collections.unmodifiableList(new ArrayList<>(searchPaths));
+		this.classpath = classpath == null ? Collections.emptyList() : Collections
+			.unmodifiableList(new ArrayList<>(classpath));
+		this.live = live;
+	}
+
+	/** Path of the interpreter or executable running the script, or null. */
+	public String interpreter() {
+		return interpreter;
+	}
+
+	/** Extra paths to search for modules or packages; never null. */
+	public List<String> searchPaths() {
+		return searchPaths;
+	}
+
+	/** Classpath entries; never null. */
+	public List<String> classpath() {
+		return classpath;
+	}
+
+	/** The state of the interpreter the code is typed into, or null. */
+	public ScriptContext live() {
+		return live;
+	}
+
+	/** A copy of this environment, for code typed into the given interpreter. */
+	public Environment withLive(final ScriptContext context) {
+		return context == live ? this : new Environment(interpreter, searchPaths,
+			classpath, context);
+	}
+
+	/**
+	 * As an {@link EnvironmentContext}, for code still using code-api's.
+	 * TEMP: Until code-api is removed.
+	 */
+	public EnvironmentContext toContext() {
+		return new EnvironmentContext(interpreter, searchPaths, classpath);
+	}
+
+	/** TEMP: Until code-api is removed. */
+	public static Environment of(final EnvironmentContext context) {
+		return context == null ? NONE : new Environment(context.interpreter(),
+			context.searchPaths(), context.classpath(), null);
+	}
+
+	@Override
+	public boolean equals(final Object o) {
+		if (!(o instanceof Environment)) return false;
+		final Environment that = (Environment) o;
+		// NB: Live interpreters are the same only if they are the same one.
+		return Objects.equals(interpreter, that.interpreter) && searchPaths.equals(
+			that.searchPaths) && classpath.equals(that.classpath) &&
+			live == that.live;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(interpreter, searchPaths, classpath, System
+			.identityHashCode(live));
+	}
+
+	@Override
+	public String toString() {
+		return "Environment[interpreter=" + interpreter + ", searchPaths=" +
+			searchPaths + ", classpath=" + classpath + (live == null ? ""
+				: ", live") + "]";
+	}
+}

@@ -315,6 +315,58 @@ public class LspClientTest {
 	}
 
 	@Test
+	public void testLaunched() throws Exception {
+		// A server process, seen as a LanguageServer (for LanguageServerPlugins).
+		setUp(60_000);
+		final LaunchedLanguageServer launched = new LaunchedLanguageServer(servers,
+			Environment.of(ENV));
+		final List<org.eclipse.lsp4j.PublishDiagnosticsParams> published =
+			new CopyOnWriteArrayList<>();
+		launched.connect(new org.eclipse.lsp4j.services.LanguageClient() {
+
+			@Override
+			public void telemetryEvent(final Object o) {}
+
+			@Override
+			public void publishDiagnostics(
+				final org.eclipse.lsp4j.PublishDiagnosticsParams p)
+			{
+				published.add(p);
+			}
+
+			@Override
+			public void showMessage(final org.eclipse.lsp4j.MessageParams m) {}
+
+			@Override
+			public CompletableFuture<org.eclipse.lsp4j.MessageActionItem>
+				showMessageRequest(final org.eclipse.lsp4j.ShowMessageRequestParams r)
+			{
+				return CompletableFuture.completedFuture(null);
+			}
+
+			@Override
+			public void logMessage(final org.eclipse.lsp4j.MessageParams m) {}
+		});
+		final String uri = "untitled:/l.py";
+		launched.didOpen(new DidOpenTextDocumentParams(
+			new org.eclipse.lsp4j.TextDocumentItem(uri, "python", 1, "y = !!")));
+		// Requests bring the process's copy up to date first.
+		final List<CompletionItem> items = launched.completion(new CompletionParams(
+			new org.eclipse.lsp4j.TextDocumentIdentifier(uri), new Position(0, 2)))
+			.get(10, TimeUnit.SECONDS).getRight().getItems();
+		assertEquals(3, items.size());
+		final FakeServer server = started.get(0);
+		assertEquals("y = !!", server.texts.get(uri));
+		// Problems: published a moment after the last change, for its version.
+		waitFor(() -> !published.isEmpty());
+		assertEquals(Integer.valueOf(1), published.get(0).getVersion());
+		assertEquals(2, published.get(0).getDiagnostics().size());
+		launched.didClose(new DidCloseTextDocumentParams(
+			new org.eclipse.lsp4j.TextDocumentIdentifier(uri)));
+		waitFor(() -> server.events.contains("close " + uri));
+	}
+
+	@Test
 	public void testRestartAndIdle() throws Exception {
 		setUp(60_000);
 		final LspServer first = servers.server(ENV).get(10, TimeUnit.SECONDS);

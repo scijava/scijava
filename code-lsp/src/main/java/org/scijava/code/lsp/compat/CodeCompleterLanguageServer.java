@@ -39,6 +39,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.lsp4j.CompletionItem;
@@ -112,9 +116,26 @@ public class CodeCompleterLanguageServer implements LanguageServer,
 	/** How many completions to remember, for resolving their documentation. */
 	private static final int REMEMBERED = 5000;
 
+	/**
+	 * How long a document must stay unchanged before its problems are looked
+	 * for, in milliseconds. (Editors send every keystroke.)
+	 */
+	private static final long PAUSE = Long.getLong("scijava.lsp.pause", 300);
+
+	private static final ScheduledExecutorService TIMER = Executors
+		.newSingleThreadScheduledExecutor(r -> {
+			final Thread t = new Thread(r, "scijava-completer-pause");
+			t.setDaemon(true);
+			return t;
+		});
+
 	private final CodeCompletionService completion;
 	private final ScriptService scripts;
 	private final Environment environment;
+
+	/** A completer for all documents, if given (instead of each language's). */
+	private final CodeCompleter fixed;
+	private final ScriptLanguage fixedLanguage;
 	private volatile LanguageClient client;
 
 	private final Map<String, Doc> docs = new ConcurrentHashMap<>();
@@ -127,6 +148,25 @@ public class CodeCompleterLanguageServer implements LanguageServer,
 		this.completion = completion;
 		this.scripts = scripts;
 		this.environment = environment;
+		fixed = null;
+		fixedLanguage = null;
+	}
+
+	/**
+	 * Offers one completer, for documents of any language identifier, e.g. in
+	 * tests.
+	 *
+	 * @param completer The completer.
+	 * @param language The language of the documents (may be null).
+	 */
+	public CodeCompleterLanguageServer(final CodeCompleter completer,
+		final ScriptLanguage language)
+	{
+		completion = null;
+		scripts = null;
+		environment = Environment.NONE;
+		fixed = completer;
+		fixedLanguage = language;
 	}
 
 	@Override
@@ -174,10 +214,11 @@ public class CodeCompleterLanguageServer implements LanguageServer,
 	@Override
 	public void didOpen(final DidOpenTextDocumentParams params) {
 		final TextDocumentItem item = params.getTextDocument();
-		final Doc doc = new Doc(item.getUri(), scripts.getLanguageByName(item
-			.getLanguageId()), item.getText(), item.getVersion());
+		final Doc doc = new Doc(item.getUri(), fixed != null ? fixedLanguage
+			: scripts.getLanguageByName(item.getLanguageId()), item.getText(), item
+				.getVersion());
 		docs.put(item.getUri(), doc);
-		if (doc.language == null) return;
+		if (!served(doc)) return;
 		final CompletionRequest request = request(doc, doc.text.length());
 		completer(doc).prepare(request);
 		diagnose(doc);
@@ -190,15 +231,13 @@ public class CodeCompleterLanguageServer implements LanguageServer,
 		doc.text = params.getContentChanges().get(params.getContentChanges()
 			.size() - 1).getText();
 		doc.version = params.getTextDocument().getVersion();
-		if (doc.language != null) diagnose(doc);
+		if (served(doc)) diagnose(doc);
 	}
 
 	@Override
 	public void didClose(final DidCloseTextDocumentParams params) {
 		final Doc doc = docs.remove(params.getTextDocument().getUri());
-		if (doc != null && doc.language != null) {
-			completer(doc).closed(request(doc, 0));
-		}
+		if (doc != null && served(doc)) completer(doc).closed(request(doc, 0));
 	}
 
 	@Override
@@ -211,7 +250,7 @@ public class CodeCompleterLanguageServer implements LanguageServer,
 		completion(final CompletionParams params)
 	{
 		final Doc doc = docs.get(params.getTextDocument().getUri());
-		if (doc == null || doc.language == null) {
+		if (doc == null || !served(doc)) {
 			return CompletableFuture.completedFuture(Either.forRight(
 				new CompletionList()));
 		}
@@ -250,7 +289,7 @@ public class CodeCompleterLanguageServer implements LanguageServer,
 		final SignatureHelpParams params)
 	{
 		final Doc doc = docs.get(params.getTextDocument().getUri());
-		if (doc == null || doc.language == null) {
+		if (doc == null || !served(doc)) {
 			return CompletableFuture.completedFuture(null);
 		}
 		final org.scijava.code.api.SignatureHelp h = completer(doc).signatureHelp(
@@ -265,7 +304,7 @@ public class CodeCompleterLanguageServer implements LanguageServer,
 	@Override
 	public CompletableFuture<Hover> hover(final HoverParams params) {
 		final Doc doc = docs.get(params.getTextDocument().getUri());
-		if (doc == null || doc.language == null) {
+		if (doc == null || !served(doc)) {
 			return CompletableFuture.completedFuture(null);
 		}
 		final String text = doc.text;
@@ -300,7 +339,11 @@ public class CodeCompleterLanguageServer implements LanguageServer,
 	// -- Helper methods --
 
 	private CodeCompleter completer(final Doc doc) {
-		return completion.getCompleter(doc.language);
+		return fixed != null ? fixed : completion.getCompleter(doc.language);
+	}
+
+	private boolean served(final Doc doc) {
+		return fixed != null || doc.language != null;
 	}
 
 	private CompletionRequest request(final Doc doc, final int offset) {
@@ -308,7 +351,16 @@ public class CodeCompleterLanguageServer implements LanguageServer,
 			doc.language, null, environment.live(), path(doc.uri));
 	}
 
+	/** Looks for a document's problems a moment after it last changed. */
 	private void diagnose(final Doc doc) {
+		synchronized (doc) {
+			if (doc.pending != null) doc.pending.cancel(false);
+			doc.pending = TIMER.schedule(() -> diagnoseNow(doc), PAUSE,
+				TimeUnit.MILLISECONDS);
+		}
+	}
+
+	private void diagnoseNow(final Doc doc) {
 		final String text = doc.text;
 		final int version = doc.version;
 		completer(doc).diagnose(request(doc, text.length())).thenAccept(found -> {
@@ -502,6 +554,7 @@ public class CodeCompleterLanguageServer implements LanguageServer,
 		private final ScriptLanguage language;
 		private volatile String text;
 		private volatile int version;
+		private ScheduledFuture<?> pending;
 
 		private Doc(final String uri, final ScriptLanguage language,
 			final String text, final int version)

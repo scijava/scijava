@@ -515,8 +515,18 @@ public class MergedLanguageServer implements LanguageServer,
 			items.sort(Comparator.comparing(c -> c.getSortText() != null ? c
 				.getSortText() : c.getLabel()));
 			int j = 0;
+			// NB: A server's own completions are all kept (e.g. the same method
+			// inherited twice): only those of earlier servers make duplicates.
+			final Map<String, Set<String>> before = new java.util.HashMap<>();
+			for (final Map.Entry<String, Set<String>> e : seen.entrySet()) {
+				before.put(e.getKey(), new HashSet<>(e.getValue()));
+			}
 			for (final CompletionItem item : items) {
-				if (duplicate(seen, insertedLine(item, text), item)) continue;
+				final String inserted = insertedLine(item, text);
+				if (duplicate(before, inserted, item)) continue;
+				final String params = item.getLabelDetails() == null ? null : item
+					.getLabelDetails().getDetail();
+				seen.computeIfAbsent(inserted, k -> new HashSet<>()).add(params);
 				final CompletionItem c = copy(item);
 				c.setData(new MergedData(uri, i, item.getData(), item.getSortText()));
 				c.setSortText(String.format("%02d%06d", i, j++));
@@ -527,27 +537,18 @@ public class MergedLanguageServer implements LanguageServer,
 	}
 
 	/**
-	 * Whether a completion inserts what an earlier one does: the same name, and
-	 * the same parameters (overloads differ in their label details), or either
-	 * without any (e.g. a server knowing only names). Notes it as seen, if not.
+	 * Whether a completion inserts what an earlier server's does: the same
+	 * name, and the same parameters (overloads differ in their label details),
+	 * or either without any (e.g. a server knowing only names).
 	 */
 	private static boolean duplicate(final Map<String, Set<String>> seen,
 		final String name, final CompletionItem item)
 	{
+		final Set<String> known = seen.get(name);
+		if (known == null) return false;
 		final String params = item.getLabelDetails() == null ? null : item
 			.getLabelDetails().getDetail();
-		final Set<String> known = seen.get(name);
-		if (known == null) {
-			final Set<String> s = new HashSet<>();
-			s.add(params);
-			seen.put(name, s);
-			return false;
-		}
-		if (params == null || known.contains(null) || known.contains(params)) {
-			return true;
-		}
-		known.add(params);
-		return false;
+		return params == null || known.contains(null) || known.contains(params);
 	}
 
 	/**

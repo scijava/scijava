@@ -30,6 +30,7 @@
 package org.scijava.code.lsp;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.script.ScriptContext;
 
@@ -85,4 +86,13 @@ public interface LanguageServerService extends SciJavaService {
 	 */
 	List<Diagnostic> diagnose(ScriptLanguage language, String uri, String text,
 		long timeout);
+
+	/**
+	 * Gets the variables a script's parameters ({@code #@} lines, and old-style
+	 * {@code // @} lines in its header) define before it runs, by name, with
+	 * their Java types ({@code Object} if unresolvable); in declaration order.
+	 * For servers to know them (see {@link ScriptDocument}). Half-typed
+	 * declarations are expected, and parsed quietly.
+	 */
+	Map<String, Class<?>> scriptParameters(String text);
 }

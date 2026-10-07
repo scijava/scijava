@@ -81,67 +81,27 @@ import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.scijava.code.api.Completion;
-import org.scijava.code.api.EnvironmentContext;
-import org.scijava.code.api.ScriptDialect;
-import org.scijava.code.api.ScriptDocument;
-import org.scijava.code.api.SignatureHelp.Fit;
 import org.scijava.log.StderrLogService;
 
 /**
- * Tests {@link LspClient} and {@link LspServers}, against a fake language
- * server.
+ * Tests {@link LspServers} and {@link LaunchedLanguageServer}, against a fake
+ * language server.
  *
  * @author Gabriel Selzer
  */
-public class LspClientTest {
+public class LspServersTest {
 
-	/** Declares parameters Python-style: {@code name: type}. */
-	private static final ScriptDialect DIALECT = new ScriptDialect() {
-
-		@Override
-		public String runtimeType(final Class<?> type) {
-			return type.getSimpleName().toLowerCase();
-		}
-
-		@Override
-		public String declare(final String name, final String type) {
-			return name + ": " + type;
-		}
-	};
-
-	private static final EnvironmentContext ENV = new EnvironmentContext(
-		"/env/python", Collections.singletonList("/overlay"), null);
+	private static final Environment ENV = new Environment(
+		"/env/python", Collections.singletonList("/overlay"), null, null);
 
 	private final List<FakeServer> started = new CopyOnWriteArrayList<>();
 	// NB: Servers note their use by the system clock.
 	private final AtomicLong now = new AtomicLong(System.currentTimeMillis());
 	private LspServers servers;
-	private LspClient client;
 
 	private void setUp(final long idle) {
 		servers = new LspServers(new FakeSpec(), new StderrLogService(), idle, 2,
 			now::get);
-		// Understands signatures like "def f(a, b) -> T".
-		client = new LspClient(servers, now::get) {
-
-			@Override
-			protected Completion.Builder callable(final String name,
-				final String signature)
-			{
-				final int open = signature.indexOf('('), close = signature.indexOf(
-					')');
-				if (open < 0 || close < 0) return null;
-				final List<Completion.Parameter> params = new ArrayList<>();
-				for (final String p : signature.substring(open + 1, close).split(",")) {
-					if (!p.trim().isEmpty()) params.add(new Completion.Parameter(p
-						.trim(), null));
-				}
-				final int arrow = signature.indexOf("->");
-				return Completion.builder(name).parameters(params).returnType(
-					arrow < 0 ? null : signature.substring(arrow + 2).trim());
-			}
-		};
 	}
 
 	@AfterEach
@@ -149,169 +109,12 @@ public class LspClientTest {
 		if (servers != null) servers.shutdown();
 	}
 
-	private static ScriptDocument doc(final String script) {
-		final Map<String, Class<?>> params = new LinkedHashMap<>();
-		params.put("sigma", Double.class);
-		return ScriptDocument.of(script, params, DIALECT, ENV);
-	}
-
-	@Test
-	public void testCompletion() throws Exception {
-		setUp(60_000);
-		final String script = "import json\njson.du";
-		final List<Completion> completions = client.complete(doc(script),
-			"untitled:/a.py", script.length(), 1).get(10, TimeUnit.SECONDS);
-		final FakeServer server = started.get(0);
-
-		// The server got the transformed script, and the options for its
-		// environment.
-		assertEquals("sigma: double\n" + script, server.texts.get(
-			"untitled:/a.py"));
-		assertEquals("{\"workspace\":{\"environmentPath\":\"/env/python\",\"" +
-			"extraPaths\":[\"/overlay\"]}}", String.valueOf(server.options));
-		// It was asked about the caret, shifted by the declaration line.
-		assertEquals(new Position(2, "json.du".length()), server.positions.get(0));
-
-		// In the server's (sortText) order; the first resolved, so callable.
-		assertEquals(Arrays.asList("dumps", "dump", "decoder"), names(completions));
-		final Completion dumps = completions.get(0);
-		assertEquals(Completion.Kind.METHOD, dumps.kind());
-		assertEquals("[obj, indent]", String.valueOf(dumps.parameters()));
-		assertEquals("str", dumps.returnType());
-		assertEquals("<pre>Docs of dumps &amp; co.</pre>", dumps.description());
-		// Unresolved functions are offered by name, with documentation on demand.
-		final Completion dump = completions.get(1);
-		assertEquals(Completion.Kind.OTHER, dump.kind());
-		assertTrue(dump.parameters().isEmpty());
-		assertEquals("<pre>Docs of dump &amp; co.</pre>", dump.description());
-		assertEquals(Completion.Kind.PACKAGE, completions.get(2).kind());
-	}
-
-	@Test
-	public void testReuseAndSupersede() throws Exception {
-		setUp(60_000);
-		final String script = "import json\njson.du";
-		final ScriptDocument doc = doc(script);
-		final CompletableFuture<List<Completion>> first = client.complete(doc,
-			"untitled:/a.py", script.length(), 0);
-		first.get(10, TimeUnit.SECONDS);
-		// The same question: the same answer, without asking the server again.
-		assertSame(first, client.complete(doc, "untitled:/a.py", script.length(),
-			0));
-		final FakeServer server = started.get(0);
-		assertEquals(1, server.positions.size());
-
-		// A slow question, superseded by another: cancelled, also on the server.
-		server.hold = new CompletableFuture<>();
-		final CompletableFuture<List<Completion>> slow = client.complete(doc,
-			"untitled:/a.py", script.length() - 1, 0);
-		waitFor(() -> server.held.size() == 1);
-		final CompletableFuture<List<Completion>> next = client.complete(doc,
-			"untitled:/a.py", script.length() - 2, 0);
-		assertThrows(CancellationException.class, () -> slow.get(10,
-			TimeUnit.SECONDS));
-		waitFor(() -> server.held.get(0).isCancelled());
-		server.hold.complete(null);
-		assertEquals(3, next.get(10, TimeUnit.SECONDS).size());
-		server.hold = null;
-		// A cancelled answer is not reused.
-		assertNotSame(slow, client.complete(doc, "untitled:/a.py", script.length() -
-			1, 0));
-	}
-
-	@Test
-	public void testDocumentSync() throws Exception {
-		setUp(60_000);
-		client.complete(doc("x = 1\nx."), "untitled:/a.py", 8, 0).get(10,
-			TimeUnit.SECONDS);
-		final FakeServer server = started.get(0);
-		client.complete(doc("x = 2\nx."), "untitled:/a.py", 8, 0).get(10,
-			TimeUnit.SECONDS);
-		assertEquals(Arrays.asList("open untitled:/a.py 1",
-			"change untitled:/a.py 2"), server.events);
-		assertEquals("sigma: double\nx = 2\nx.", server.texts.get(
-			"untitled:/a.py"));
-		client.close("untitled:/a.py");
-		waitFor(() -> server.events.size() == 3);
-		assertEquals("close untitled:/a.py", server.events.get(2));
-	}
-
-	@Test
-	public void testSignatureHelp() throws Exception {
-		setUp(60_000);
-		final String script = "f(1, ";
-		org.scijava.code.api.SignatureHelp help = client.signatureHelp(doc(script),
-			"untitled:/a.py", script.length(), 1, 5).get(10, TimeUnit.SECONDS);
-		assertEquals(2, help.signatures().size());
-		final Completion f = help.signatures().get(0).callable();
-		assertEquals("f", f.insertionText());
-		assertEquals("[x, y=1]", String.valueOf(f.parameters()));
-		assertEquals(Fit.UNKNOWN, help.signatures().get(0).fit());
-		assertEquals("<pre>Docs of f</pre>", f.description());
-		// The server's active parameter, and the caller's call start.
-		assertEquals(1, help.activeParameter());
-		assertEquals(1, help.callStart());
-
-		// Without an active parameter from the server: the caller's.
-		started.get(0).noActive = true;
-		help = client.signatureHelp(doc(script + "2, "), "untitled:/a.py", script
-			.length() + 3, 1, 2).get(10, TimeUnit.SECONDS);
-		assertEquals(2, help.activeParameter());
-		// No signatures: none.
-		help = client.signatureHelp(doc("x"), "untitled:/a.py", 1, 0, 0).get(10,
-			TimeUnit.SECONDS);
-		assertTrue(help.isEmpty());
-	}
-
-	@Test
-	public void testHover() throws Exception {
-		setUp(60_000);
-		final String script = "import json\njson.dumps";
-		final int at = script.indexOf("dumps") + 2;
-		final org.scijava.code.api.Hover hover = client.hover(doc(script),
-			"untitled:/a.py", at).get(10, TimeUnit.SECONDS);
-		assertEquals("<pre>Docs of dumps</pre>", hover.text());
-		// The word's range, in the original script.
-		assertEquals(script.indexOf("dumps"), hover.start());
-		assertEquals(script.length(), hover.end());
-		// Nothing there: nothing.
-		assertTrue(client.hover(doc(script + "\n\n"), "untitled:/a.py", script
-			.length() + 1).get(10, TimeUnit.SECONDS).isEmpty());
-	}
-
-	@Test
-	public void testDiagnostics() throws Exception {
-		setUp(60_000);
-		final String script = "x = 1\ny = !!\n";
-		List<org.scijava.code.api.Diagnostic> problems = client.diagnose(doc(
-			script), "untitled:/a.py", 10_000).get(10, TimeUnit.SECONDS);
-		// In the original script; the one in the declaration line left out.
-		assertEquals(1, problems.size());
-		final org.scijava.code.api.Diagnostic d = problems.get(0);
-		assertEquals(script.indexOf("!!"), d.start());
-		assertEquals(script.indexOf("!!") + 2, d.end());
-		assertEquals(org.scijava.code.api.Diagnostic.Severity.WARNING, d
-			.severity());
-		assertEquals("Bangs", d.message());
-		assertEquals("fake", d.source());
-		// Unchanged: the same, at once.
-		assertEquals(1, client.diagnose(doc(script), "untitled:/a.py", 10_000)
-			.get(10, TimeUnit.SECONDS).size());
-		// Changed: those of the new text.
-		assertTrue(client.diagnose(doc("x = 1\n"), "untitled:/a.py", 10_000).get(
-			10, TimeUnit.SECONDS).isEmpty());
-		// A server that does not answer: none, in time.
-		started.get(0).mute = true;
-		assertTrue(client.diagnose(doc("x = 2\n"), "untitled:/a.py", 200).get(10,
-			TimeUnit.SECONDS).isEmpty());
-	}
-
 	@Test
 	public void testOffset() {
-		assertEquals(4, LspClient.offset("ab\ncd", new Position(1, 1)));
+		assertEquals(4, Positions.offset("ab\ncd", new Position(1, 1)));
 		// Clamped to the line, and the text.
-		assertEquals(2, LspClient.offset("ab\ncd", new Position(0, 9)));
-		assertEquals(5, LspClient.offset("ab\ncd", new Position(7, 0)));
+		assertEquals(2, Positions.offset("ab\ncd", new Position(0, 9)));
+		assertEquals(5, Positions.offset("ab\ncd", new Position(7, 0)));
 	}
 
 	@Test
@@ -319,7 +122,7 @@ public class LspClientTest {
 		// A server process, seen as a LanguageServer (for LanguageServerPlugins).
 		setUp(60_000);
 		final LaunchedLanguageServer launched = new LaunchedLanguageServer(servers,
-			Environment.of(ENV));
+			ENV);
 		final List<org.eclipse.lsp4j.PublishDiagnosticsParams> published =
 			new CopyOnWriteArrayList<>();
 		launched.connect(new org.eclipse.lsp4j.services.LanguageClient() {
@@ -386,22 +189,14 @@ public class LspClientTest {
 
 	@Test
 	public void testPosition() {
-		assertEquals(new Position(0, 0), LspClient.position("ab\ncd", 0));
-		assertEquals(new Position(1, 1), LspClient.position("ab\ncd", 4));
+		assertEquals(new Position(0, 0), Positions.position("ab\ncd", 0));
+		assertEquals(new Position(1, 1), Positions.position("ab\ncd", 4));
 		// UTF-16 code units, as Java counts.
-		assertEquals(new Position(1, 3), LspClient.position("a\n😀b",
+		assertEquals(new Position(1, 3), Positions.position("a\n😀b",
 			5));
-		assertEquals("untitled:/script.py", LspClient.uri(null, "script.py"));
-		assertFalse(LspClient.uri("x.py", "script.py").startsWith("untitled"));
 	}
 
 	// -- Helper methods --
-
-	private static List<String> names(final List<Completion> completions) {
-		final List<String> names = new ArrayList<>();
-		for (final Completion c : completions) names.add(c.insertionText());
-		return names;
-	}
 
 	private static void waitFor(final java.util.function.BooleanSupplier c)
 		throws InterruptedException
@@ -423,7 +218,7 @@ public class LspClientTest {
 		}
 
 		@Override
-		public LspConnection start(final EnvironmentContext env)
+		public LspConnection start(final Environment env)
 			throws IOException
 		{
 			final PipedInputStream clientIn = new PipedInputStream(1 << 16);
@@ -468,7 +263,7 @@ public class LspClientTest {
 		}
 
 		@Override
-		public Object initializationOptions(final EnvironmentContext env) {
+		public Object initializationOptions(final Environment env) {
 			final Map<String, Object> workspace = new LinkedHashMap<>();
 			workspace.put("environmentPath", env.interpreter());
 			workspace.put("extraPaths", env.searchPaths());
@@ -476,7 +271,7 @@ public class LspClientTest {
 		}
 
 		@Override
-		public String rootUri(final EnvironmentContext env) {
+		public String rootUri(final Environment env) {
 			return "file:///scripts";
 		}
 	}

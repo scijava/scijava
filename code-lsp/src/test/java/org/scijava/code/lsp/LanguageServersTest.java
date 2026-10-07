@@ -92,9 +92,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.scijava.Context;
 import org.scijava.Priority;
-import org.scijava.code.api.CodeCompletionService;
-import org.scijava.code.api.ScriptDialect;
-import org.scijava.code.api.ScriptDocument;
 import org.scijava.code.lsp.RatedSignatureInformation.Fit;
 import org.scijava.plugin.Plugin;
 import org.scijava.script.AbstractScriptLanguage;
@@ -103,8 +100,8 @@ import org.scijava.script.ScriptService;
 
 /**
  * Tests {@link LanguageServerService} and {@link MergedLanguageServer}, with
- * fake in-process servers; and {@link TransformingLanguageServer}, and the
- * code-api adapter.
+ * fake in-process servers; and {@link TransformingLanguageServer} and
+ * {@link BindingsLanguageServer}.
  *
  * @author Gabriel Selzer
  */
@@ -126,7 +123,7 @@ public class LanguageServersTest {
 		synchronized (SERVERS) {
 			SERVERS.clear();
 		}
-		context = new Context(ScriptService.class, CodeCompletionService.class,
+		context = new Context(ScriptService.class,
 			LanguageServerService.class);
 		service = context.service(LanguageServerService.class);
 		merge = context.service(ScriptService.class).getLanguageByName("Merge");
@@ -287,54 +284,26 @@ public class LanguageServersTest {
 	}
 
 	@Test
-	public void testCodeCompleterAdapter() throws Exception {
-		// The "Fake" language's completer (see SciJavaLanguageServerTest), via
-		// the adapter.
-		final ScriptLanguage fake = context.service(ScriptService.class)
-			.getLanguageByName("Fake");
-		final MergedLanguageServer server = service.server(fake);
-		server.connect(new Client());
-		final String uri = "file:///scripts/hello.fake";
-		server.didOpen(new DidOpenTextDocumentParams(new TextDocumentItem(uri,
-			"fake", 1, "x = thing.ma")));
-		CompletionList list = server.completion(new CompletionParams(
-			new TextDocumentIdentifier(uri), new Position(0, 12))).get(10,
-				TimeUnit.SECONDS).getRight();
-		if (list instanceof UpdatingCompletionList) {
-			list = ((UpdatingCompletionList) list).update().get(10,
-				TimeUnit.SECONDS);
-		}
-		final CompletionItem max = list.getItems().get(0);
-		assertEquals("thing.max", max.getLabel());
-		// A callable: a snippet, with its typed parameters as label details.
-		assertEquals("thing.max(${1:a}, ${2:b})", max.getTextEdit().getLeft()
-			.getNewText());
-		assertEquals(new Range(new Position(0, 4), new Position(0, 12)), max
+	public void testBindings() throws Exception {
+		// Code typed into an interpreter whose language has no servers: its
+		// variables, and their values' members.
+		final javax.script.SimpleScriptContext live =
+			new javax.script.SimpleScriptContext();
+		live.setAttribute("text", "hello", javax.script.ScriptContext.ENGINE_SCOPE);
+		live.setAttribute("count", 3, javax.script.ScriptContext.ENGINE_SCOPE);
+		final BindingsLanguageServer server = new BindingsLanguageServer(live);
+		assertEquals(Collections.singletonList("count"), labels(complete(server,
+			"x = co")));
+		assertEquals(Arrays.asList("count", "text"), labels(complete(server, "")));
+		final CompletionList members = complete(server, "text.toUpp");
+		assertEquals(Arrays.asList("toUpperCase", "toUpperCase"), labels(members));
+		final CompletionItem upper = members.getItems().get(0);
+		assertTrue(upper.getTextEdit().getLeft().getNewText().startsWith(
+			"toUpperCase("));
+		assertEquals(new Range(new Position(0, 5), new Position(0, 10)), upper
 			.getTextEdit().getLeft().getRange());
-		assertEquals("(double a, double b)", max.getLabelDetails().getDetail());
-		assertEquals("double", max.getLabelDetails().getDescription());
-		final CompletionItem resolved = server.resolveCompletionItem(max).get(10,
-			TimeUnit.SECONDS);
-		assertEquals("<pre>The larger of a &amp; b.</pre>", resolved
-			.getDocumentation().getRight().getValue());
-
-		final SignatureHelp help = server.signatureHelp(new SignatureHelpParams(
-			new TextDocumentIdentifier(uri), new Position(0, 12))).get(10,
-				TimeUnit.SECONDS);
-		assertEquals("thing.max(double a, double b) -> double", help
-			.getSignatures().get(0).getLabel());
-		assertEquals(Fit.MATCH, RatedSignatureInformation.fitOf(help
-			.getSignatures().get(0)));
-		assertEquals(1, help.getActiveParameter());
-		assertNotNull(server.hover(new HoverParams(new TextDocumentIdentifier(uri),
-			new Position(0, 7))).get(10, TimeUnit.SECONDS));
-
-		server.didChange(new DidChangeTextDocumentParams(
-			new VersionedTextDocumentIdentifier(uri, 2), Collections.singletonList(
-				new TextDocumentContentChangeEvent("y = !!"))));
-		server.awaitDiagnostics(uri).get(10, TimeUnit.SECONDS);
-		assertEquals(Collections.singletonList("Bangs"), messages(server
-			.diagnostics(uri)));
+		// Unknown variables: nothing.
+		assertTrue(complete(server, "nothing.x").getItems().isEmpty());
 	}
 
 	@Test
@@ -368,6 +337,23 @@ public class LanguageServersTest {
 		return server.completion(new CompletionParams(new TextDocumentIdentifier(
 			URI), new Position(line, character))).get(10, TimeUnit.SECONDS)
 			.getRight();
+	}
+
+	private static CompletionList complete(final LanguageServer server,
+		final String text) throws Exception
+	{
+		final String uri = "untitled:/live";
+		server.getTextDocumentService().didOpen(new DidOpenTextDocumentParams(
+			new TextDocumentItem(uri, "live", 1, text)));
+		try {
+			return server.getTextDocumentService().completion(new CompletionParams(
+				new TextDocumentIdentifier(uri), Positions.position(text, text
+					.length()))).get(10, TimeUnit.SECONDS).getRight();
+		}
+		finally {
+			server.getTextDocumentService().didClose(new DidCloseTextDocumentParams(
+				new TextDocumentIdentifier(uri)));
+		}
 	}
 
 	private static List<String> labels(final CompletionList list) {

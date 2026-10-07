@@ -71,8 +71,6 @@ import org.eclipse.lsp4j.services.LanguageClientAware;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
-import org.scijava.code.api.PositionMap;
-import org.scijava.code.api.ScriptDocument;
 
 /**
  * Shows a language server SciJava scripts as plain code of its language (see
@@ -257,8 +255,8 @@ public class TransformingLanguageServer implements LanguageServer,
 
 	/** Maps a position in a script to one in its transformed text. */
 	static Position toTransformed(final ScriptDocument doc, final Position p) {
-		final int offset = LspClient.offset(doc.original(), p);
-		return LspClient.position(doc.text(), doc.map().toTransformed(offset));
+		final int offset = Positions.offset(doc.original(), p);
+		return Positions.position(doc.text(), doc.map().toTransformed(offset));
 	}
 
 	/**
@@ -267,8 +265,8 @@ public class TransformingLanguageServer implements LanguageServer,
 	 */
 	static Position toOriginal(final ScriptDocument doc, final Position p) {
 		final PositionMap map = doc.map();
-		final int offset = map.toOriginal(LspClient.offset(doc.text(), p));
-		return offset < 0 ? null : LspClient.position(doc.original(), offset);
+		final int offset = map.toOriginal(Positions.offset(doc.text(), p));
+		return offset < 0 ? null : Positions.position(doc.original(), offset);
 	}
 
 	/** Maps a range back; or returns null if it starts in the added lines. */

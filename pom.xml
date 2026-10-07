@@ -59,7 +59,6 @@
 
 		<module>awt</module>
 		<module>cli</module>
-		<module>code-api</module>
 		<module>code-lsp</module>
 		<module>collections</module>
 		<module>command3</module>

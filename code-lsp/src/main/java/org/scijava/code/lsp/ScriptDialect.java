@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Core API for SciJava code intelligence features.
+ * Language Server Protocol bridge for SciJava code intelligence.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.api;
+package org.scijava.code.lsp;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -45,7 +45,6 @@ import java.util.List;
  *
  * @author Gabriel Selzer
  * @see ScriptDocument
- * @see CodeCompleter#dialect()
  */
 public interface ScriptDialect {
 
@@ -99,15 +98,5 @@ public interface ScriptDialect {
 	 */
 	default boolean blanks(final String line) {
 		return false;
-	}
-
-	/**
-	 * Gets where the script runs, e.g. its environment's interpreter. The
-	 * default knows nothing.
-	 *
-	 * @param request The script (and its path, if saved).
-	 */
-	default EnvironmentContext environment(final CompletionRequest request) {
-		return EnvironmentContext.EMPTY;
 	}
 }

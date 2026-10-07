@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Core API for SciJava code intelligence features.
+ * Language Server Protocol bridge for SciJava code intelligence.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,9 +27,44 @@
  * #L%
  */
 
-open module org.scijava.code.api {
-	exports org.scijava.code.api;
+package org.scijava.code.lsp;
 
-	requires transitive java.scripting;
-	requires transitive org.scijava;
+import org.eclipse.lsp4j.Position;
+
+/**
+ * Converts between offsets in a text and LSP positions: a line, and a
+ * character in that line, counted in UTF-16 code units (as Java does).
+ *
+ * @author Gabriel Selzer
+ */
+public final class Positions {
+
+	private Positions() {
+		// NB: Prevent instantiation of utility class.
+	}
+
+	/** Converts an offset to an LSP position. */
+	public static Position position(final String text, final int offset) {
+		int line = 0, start = 0;
+		for (int i = 0; i < offset; i++) {
+			if (text.charAt(i) == '\n') {
+				line++;
+				start = i + 1;
+			}
+		}
+		return new Position(line, offset - start);
+	}
+
+	/** Converts an LSP position to an offset (clamped to the text). */
+	public static int offset(final String text, final Position position) {
+		int start = 0;
+		for (int line = 0; line < position.getLine(); line++) {
+			final int nl = text.indexOf('\n', start);
+			if (nl < 0) return text.length();
+			start = nl + 1;
+		}
+		int end = text.indexOf('\n', start);
+		if (end < 0) end = text.length();
+		return Math.min(start + position.getCharacter(), end);
+	}
 }

@@ -76,18 +76,13 @@
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 
-		<!-- TEMP: As scijava-code-api; remove after pom-scijava bump. -->
+		<!-- TEMP: Remove after pom-scijava bump. -->
 		<scijava-common.version>2.101.0</scijava-common.version>
 		<lsp4j.version>1.0.0</lsp4j.version>
 	</properties>
 
 	<dependencies>
 		<!-- SciJava dependencies -->
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-code-api</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
-		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-common</artifactId>

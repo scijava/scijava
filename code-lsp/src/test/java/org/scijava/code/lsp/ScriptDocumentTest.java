@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Core API for SciJava code intelligence features.
+ * Language Server Protocol bridge for SciJava code intelligence.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.api;
+package org.scijava.code.lsp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -121,7 +121,7 @@ public class ScriptDocumentTest {
 			.keySet().toArray()));
 		assertNull(doc.parameters().get("n"));
 		assertEquals("numpy.ndarray", doc.parameters().get("a"));
-		assertSame(EnvironmentContext.EMPTY, doc.environment());
+		assertSame(Environment.NONE, doc.environment());
 	}
 
 	@Test
@@ -175,13 +175,13 @@ public class ScriptDocumentTest {
 
 	@Test
 	public void testEnvironment() {
-		final EnvironmentContext env = new EnvironmentContext("/env/python",
-			Collections.singletonList("/overlay"), null);
+		final Environment env = new Environment("/env/python",
+			Collections.singletonList("/overlay"), null, null);
 		final ScriptDocument doc = ScriptDocument.of("", params(), PYTHON, env);
 		assertEquals("task: object\n", doc.text());
 		assertSame(env, doc.environment());
 		assertEquals(Collections.emptyList(), env.classpath());
-		assertEquals(env, new EnvironmentContext("/env/python", Collections
-			.singletonList("/overlay"), Collections.emptyList()));
+		assertEquals(env, new Environment("/env/python", Collections
+			.singletonList("/overlay"), Collections.emptyList(), null));
 	}
 }

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Core API for SciJava code intelligence features.
+ * Language Server Protocol bridge for SciJava code intelligence.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,33 +27,29 @@
  * #L%
  */
 
-package org.scijava.code.api;
+package org.scijava.code.lsp;
 
 import java.io.StringReader;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import org.scijava.Context;
-import org.scijava.log.LogLevel;
-import org.scijava.log.LogService;
 import org.scijava.module.ModuleItem;
-import org.scijava.plugin.AbstractSingletonService;
-import org.scijava.plugin.Plugin;
 import org.scijava.script.ScriptInfo;
 import org.scijava.script.ScriptModule;
 import org.scijava.script.process.ParameterScriptProcessor;
-import org.scijava.service.Service;
 
 /**
- * Default {@link CodeCompletionService} implementation.
+ * Parses the parameters of scripts, for
+ * {@link LanguageServerService#scriptParameters(String)}: as
+ * {@link ParameterScriptProcessor} does when they run, remembering recent
+ * declarations, since servers ask on every keystroke.
  *
- * @author Curtis Rueden
+ * @author Gabriel Selzer
  */
-@Plugin(type = Service.class)
-public class DefaultCodeCompletionService extends
-	AbstractSingletonService<CodeCompleterPlugin> implements CodeCompletionService
-{
+final class ScriptParameters {
 
 	/** Number of distinct parameter declarations to remember. */
 	private static final int CACHE_SIZE = 16;
@@ -71,10 +67,14 @@ public class DefaultCodeCompletionService extends
 			}
 		};
 
-	// -- CodeCompletionService methods --
+	private final Supplier<Context> context;
 
-	@Override
-	public Map<String, Class<?>> scriptParameters(final String text) {
+	ScriptParameters(final Supplier<Context> context) {
+		this.context = context;
+	}
+
+	/** See {@link LanguageServerService#scriptParameters(String)}. */
+	Map<String, Class<?>> of(final String text) {
 		if (text == null) return Collections.emptyMap();
 		final String declarations = parameterLines(text);
 		if (declarations.isEmpty()) return Collections.emptyMap();
@@ -120,15 +120,9 @@ public class DefaultCodeCompletionService extends
 	private Map<String, Class<?>> parseParameters(final String declarations) {
 		final Map<String, Class<?>> params = new LinkedHashMap<>();
 		try {
-			final Context context = context();
+			final Context context = this.context.get();
 			final ParameterScriptProcessor processor = new ParameterScriptProcessor();
 			context.inject(processor);
-			// Half-typed declarations are expected while editing: don't warn.
-			// NB: A log level configured for this source still takes precedence.
-			final LogService log = context.getService(LogService.class);
-//			if (log != null) {
-//				processor.setLogger(log.subLogger("code-completion", LogLevel.NONE));
-//			}
 			// NB: Run only the parameter processor, not the full processing chain.
 			final ScriptInfo info = new ScriptInfo(context, "completion",
 				new StringReader(declarations))

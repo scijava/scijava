@@ -43,7 +43,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.LongSupplier;
 
-import org.scijava.code.api.EnvironmentContext;
 import org.scijava.log.Logger;
 
 /**
@@ -69,7 +68,7 @@ public final class LspServers {
 	private final LongSupplier clock;
 
 	/** The servers, by environment; least recently used first. */
-	private final Map<EnvironmentContext, Entry> servers = new LinkedHashMap<>(
+	private final Map<Environment, Entry> servers = new LinkedHashMap<>(
 		16, 0.75f, true);
 
 	/** Starts servers, one at a time, off the callers' threads. */
@@ -114,7 +113,7 @@ public final class LspServers {
 	 * @return The server, once started; fails if it could not be.
 	 */
 	public synchronized CompletableFuture<LspServer> server(
-		final EnvironmentContext env)
+		final Environment env)
 	{
 		final Entry known = servers.get(env);
 		if (known != null && known.usable(clock.getAsLong())) return known.server;

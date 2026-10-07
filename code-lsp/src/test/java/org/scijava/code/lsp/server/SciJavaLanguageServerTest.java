@@ -48,21 +48,28 @@ import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionItemKind;
 import org.eclipse.lsp4j.CompletionList;
 import org.eclipse.lsp4j.CompletionParams;
+import org.eclipse.lsp4j.Diagnostic;
+import org.eclipse.lsp4j.DiagnosticSeverity;
 import org.eclipse.lsp4j.DidChangeTextDocumentParams;
 import org.eclipse.lsp4j.DidOpenTextDocumentParams;
+import org.eclipse.lsp4j.Hover;
 import org.eclipse.lsp4j.HoverParams;
 import org.eclipse.lsp4j.InitializeParams;
 import org.eclipse.lsp4j.InitializeResult;
+import org.eclipse.lsp4j.MarkupContent;
+import org.eclipse.lsp4j.MarkupKind;
 import org.eclipse.lsp4j.MessageActionItem;
 import org.eclipse.lsp4j.MessageParams;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.PublishDiagnosticsParams;
 import org.eclipse.lsp4j.ShowMessageRequestParams;
+import org.eclipse.lsp4j.SignatureHelp;
 import org.eclipse.lsp4j.SignatureHelpParams;
 import org.eclipse.lsp4j.TextDocumentContentChangeEvent;
 import org.eclipse.lsp4j.TextDocumentIdentifier;
 import org.eclipse.lsp4j.TextDocumentItem;
 import org.eclipse.lsp4j.VersionedTextDocumentIdentifier;
+import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageClient;
@@ -71,16 +78,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.scijava.Context;
-import org.scijava.code.api.AbstractCodeCompleterPlugin;
-import org.scijava.code.api.CodeCompleterPlugin;
-import org.scijava.code.api.CodeCompletionService;
-import org.scijava.code.api.Completion;
-import org.scijava.code.api.CompletionRequest;
-import org.scijava.code.api.CompletionResult;
-import org.scijava.code.api.Diagnostic;
-import org.scijava.code.api.Hover;
-import org.scijava.code.api.SignatureHelp;
-import org.scijava.code.api.SignatureHelp.Fit;
+import org.scijava.code.lsp.Callable;
+import org.scijava.code.lsp.Environment;
+import org.scijava.code.lsp.LanguageServerPlugin;
+import org.scijava.code.lsp.LanguageServerService;
+import org.scijava.code.lsp.RatedSignatureInformation.Fit;
+import org.scijava.code.lsp.ScriptLanguageServer;
 import org.scijava.plugin.Plugin;
 import org.scijava.script.AbstractScriptLanguage;
 import org.scijava.script.ScriptLanguage;
@@ -88,7 +91,7 @@ import org.scijava.script.ScriptService;
 
 /**
  * Tests {@link SciJavaLanguageServer}, as an editor would use it, with a fake
- * language and completer.
+ * language and server.
  *
  * @author Gabriel Selzer
  */
@@ -103,7 +106,7 @@ public class SciJavaLanguageServerTest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		context = new Context(ScriptService.class, CodeCompletionService.class);
+		context = new Context(ScriptService.class, LanguageServerService.class);
 		final SciJavaLanguageServer impl = new SciJavaLanguageServer(context);
 		final PipedInputStream clientIn = new PipedInputStream(1 << 16);
 		final PipedOutputStream serverOut = new PipedOutputStream(clientIn);
@@ -133,28 +136,28 @@ public class SciJavaLanguageServerTest {
 		final CompletionList list = server.getTextDocumentService().completion(
 			new CompletionParams(new TextDocumentIdentifier(URI), new Position(0,
 				12))).get(10, TimeUnit.SECONDS).getRight();
-		// The completer's slower, better answer: awaited.
+		// The server's slower answer: awaited.
 		assertEquals(2, list.getItems().size());
 		final CompletionItem max = list.getItems().get(0);
 		assertEquals("thing.max", max.getLabel());
 		assertEquals(CompletionItemKind.Method, max.getKind());
-		assertEquals("thing.max(double a, double b) -> double", max.getDetail());
-		// Replacing what the completer said to.
+		assertEquals("(double a, double b)", max.getLabelDetails().getDetail());
+		// Replacing what the server said to.
 		assertEquals(4, max.getTextEdit().getLeft().getRange().getStart()
 			.getCharacter());
 		assertEquals(12, max.getTextEdit().getLeft().getRange().getEnd()
 			.getCharacter());
-		// Documentation on demand, as plain text.
+		// Documentation on demand.
 		final CompletionItem resolved = server.getTextDocumentService()
 			.resolveCompletionItem(max).get(10, TimeUnit.SECONDS);
-		assertEquals("The larger of a & b.", resolved.getDocumentation().getRight()
-			.getValue());
+		assertEquals("The larger of a &amp; b.", resolved.getDocumentation()
+			.getRight().getValue());
 	}
 
 	@Test
 	public void testSignatureHelpAndHover() throws Exception {
 		open("thing.max(1, ");
-		final org.eclipse.lsp4j.SignatureHelp help = server
+		final SignatureHelp help = server
 			.getTextDocumentService().signatureHelp(new SignatureHelpParams(
 				new TextDocumentIdentifier(URI), new Position(0, 13))).get(10,
 					TimeUnit.SECONDS);
@@ -163,7 +166,7 @@ public class SciJavaLanguageServerTest {
 		assertEquals(1, help.getActiveParameter());
 		assertEquals(2, help.getSignatures().get(0).getParameters().size());
 
-		final org.eclipse.lsp4j.Hover hover = server.getTextDocumentService()
+		final Hover hover = server.getTextDocumentService()
 			.hover(new HoverParams(new TextDocumentIdentifier(URI), new Position(0,
 				7))).get(10, TimeUnit.SECONDS);
 		assertEquals("max: the larger.", hover.getContents().getRight()
@@ -198,13 +201,6 @@ public class SciJavaLanguageServerTest {
 		assertNull(server.getTextDocumentService().hover(new HoverParams(
 			new TextDocumentIdentifier("file:///x.cobol"), new Position(0, 0))).get(
 				10, TimeUnit.SECONDS));
-	}
-
-	@Test
-	public void testPlain() {
-		assertEquals("a < b\nc", SciJavaLanguageServer.plain(
-			"<pre>a &lt; b</pre><br>c"));
-		assertNull(SciJavaLanguageServer.plain("<p></p>"));
 	}
 
 	private void open(final String text) {
@@ -258,14 +254,8 @@ public class SciJavaLanguageServerTest {
 		}
 	}
 
-	@Plugin(type = CodeCompleterPlugin.class)
-	public static class FakeCompleter extends AbstractCodeCompleterPlugin {
-
-		private static final Completion MAX = Completion.builder("thing.max").kind(
-			Completion.Kind.METHOD).parameters(Arrays.asList(new Completion.Parameter(
-				"a", "double"), new Completion.Parameter("b", "double"))).returnType(
-					"double").description("<pre>The larger of a &amp; b.</pre>")
-			.build();
+	@Plugin(type = LanguageServerPlugin.class)
+	public static class FakeServerPlugin implements LanguageServerPlugin {
 
 		@Override
 		public boolean supports(final ScriptLanguage language) {
@@ -273,35 +263,67 @@ public class SciJavaLanguageServerTest {
 		}
 
 		@Override
-		public CompletionResult complete(final CompletionRequest request) {
-			final int start = request.text().lastIndexOf(' ', request.offset() -
-				1) + 1;
-			// At once: nothing; a moment later: more.
-			return new CompletionResult(Collections.emptyList(), start).withUpdate(
-				CompletableFuture.supplyAsync(() -> new CompletionResult(Arrays.asList(
-					MAX, Completion.of("thing.mass")), start)));
+		public LanguageServer create(final Environment environment) {
+			return new FakeServer();
+		}
+	}
+
+	private static class FakeServer extends ScriptLanguageServer {
+
+		private static final Callable MAX = new Callable("thing.max", Arrays.asList(
+			new Callable.Param("a", "double"), new Callable.Param("b", "double")),
+			"double");
+
+		private FakeServer() {
+			super(Environment.NONE);
 		}
 
 		@Override
-		public SignatureHelp signatureHelp(final CompletionRequest request) {
-			return new SignatureHelp(Collections.singletonList(
-				new SignatureHelp.Signature(MAX, Fit.MATCH)), 1, request.text()
-					.indexOf('('));
-		}
-
-		@Override
-		public Hover hover(final CompletionRequest request) {
-			return new Hover("max: the <i>larger</i>.", 6, 9);
-		}
-
-		@Override
-		public CompletableFuture<List<Diagnostic>> diagnose(
-			final CompletionRequest request)
+		public CompletableFuture<Either<List<CompletionItem>, CompletionList>>
+			completion(final CompletionParams params)
 		{
-			final int bangs = request.text().indexOf("!!");
-			return CompletableFuture.completedFuture(bangs < 0 ? Collections
-				.emptyList() : Collections.singletonList(new Diagnostic(bangs, bangs +
-					2, Diagnostic.Severity.ERROR, "Bangs", "fake")));
+			// Slower than the merged server waits.
+			return CompletableFuture.supplyAsync(() -> {
+				try {
+					Thread.sleep(200);
+				}
+				catch (final InterruptedException exc) {
+					Thread.currentThread().interrupt();
+				}
+				return FakeServer.super.completion(params).join();
+			});
+		}
+
+		@Override
+		protected CompletionList complete(final Document doc, final int offset) {
+			final int start = doc.text().lastIndexOf(' ', offset - 1) + 1;
+			return list(doc, start, offset, Arrays.asList(describe(MAX.kind(
+				CompletionItemKind.Method).toItem(), () -> "The larger of a &amp; b."),
+				new CompletionItem("thing.mass")));
+		}
+
+		@Override
+		protected SignatureHelp signatureHelp(final Document doc,
+			final int offset)
+		{
+			return new SignatureHelp(Collections.singletonList(MAX.toSignature(
+				Fit.MATCH)), 0, 1);
+		}
+
+		@Override
+		protected Hover hover(final Document doc, final int offset) {
+			final Hover hover = new Hover(new MarkupContent(MarkupKind.MARKDOWN,
+				"max: the larger."));
+			hover.setRange(doc.range(6, 9));
+			return hover;
+		}
+
+		@Override
+		protected List<Diagnostic> diagnose(final Document doc) {
+			final int bangs = doc.text().indexOf("!!");
+			return bangs < 0 ? Collections.emptyList() : Collections.singletonList(
+				diagnostic(doc, bangs, bangs + 2, DiagnosticSeverity.Error, "Bangs",
+					"fake"));
 		}
 	}
 }

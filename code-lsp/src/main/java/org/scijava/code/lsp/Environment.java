@@ -36,7 +36,6 @@ import java.util.Objects;
 
 import javax.script.ScriptContext;
 
-import org.scijava.code.api.EnvironmentContext;
 
 /**
  * Where a script will run, as far as analyzing it needs to know: the
@@ -103,20 +102,6 @@ public final class Environment {
 	public Environment withLive(final ScriptContext context) {
 		return context == live ? this : new Environment(interpreter, searchPaths,
 			classpath, context);
-	}
-
-	/**
-	 * As an {@link EnvironmentContext}, for code still using code-api's.
-	 * TEMP: Until code-api is removed.
-	 */
-	public EnvironmentContext toContext() {
-		return new EnvironmentContext(interpreter, searchPaths, classpath);
-	}
-
-	/** TEMP: Until code-api is removed. */
-	public static Environment of(final EnvironmentContext context) {
-		return context == null ? NONE : new Environment(context.interpreter(),
-			context.searchPaths(), context.classpath(), null);
 	}
 
 	@Override

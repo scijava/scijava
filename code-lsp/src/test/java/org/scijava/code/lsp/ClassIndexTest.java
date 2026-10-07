@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Core API for SciJava code intelligence features.
+ * Language Server Protocol bridge for SciJava code intelligence.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,17 +27,26 @@
  * #L%
  */
 
-package org.scijava.code.api;
+package org.scijava.code.lsp;
 
-import org.scijava.plugin.AbstractRichPlugin;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 /**
- * Convenience base class for {@link CodeCompleterPlugin} implementations.
+ * Tests {@link ClassIndex}.
  *
  * @author Curtis Rueden
  */
-public abstract class AbstractCodeCompleterPlugin extends AbstractRichPlugin
-	implements CodeCompleterPlugin
-{
-	// NB: Marker base class.
+public class ClassIndexTest {
+
+	/** The JDK's own classes must be indexed, including on Java 9+. */
+	@Test
+	public void testRuntimeClassesIndexed() {
+		assertTrue(ClassIndex.findSimpleClassNamesStartingWith("ArrayList")
+			.contains("java.util.ArrayList"));
+		assertTrue(ClassIndex.findClassNamesForPackage("java.util").anyMatch(
+			"java.util.HashMap"::equals));
+		assertTrue(ClassIndex.isCacheReady());
+	}
 }

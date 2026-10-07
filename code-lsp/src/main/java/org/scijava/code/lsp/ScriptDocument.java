@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Core API for SciJava code intelligence features.
+ * Language Server Protocol bridge for SciJava code intelligence.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.api;
+package org.scijava.code.lsp;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,11 +56,11 @@ public final class ScriptDocument {
 	private final String text;
 	private final PositionMap map;
 	private final Map<String, String> parameters;
-	private final EnvironmentContext environment;
+	private final Environment environment;
 
 	private ScriptDocument(final String original, final String text,
 		final PositionMap map, final Map<String, String> parameters,
-		final EnvironmentContext environment)
+		final Environment environment)
 	{
 		this.original = original;
 		this.text = text;
@@ -74,14 +74,14 @@ public final class ScriptDocument {
 	 *
 	 * @param script The script's source code.
 	 * @param parameters The variables defined before the script runs (e.g. its
-	 *          script parameters, as {@link CodeCompletionService#scriptParameters}
+	 *          script parameters, as {@link LanguageServerService#scriptParameters}
 	 *          gives them), by name, with their Java types.
 	 * @param dialect How the script's language declares them.
 	 * @param environment Where the script runs (null if unknown).
 	 */
 	public static ScriptDocument of(final String script,
 		final Map<String, Class<?>> parameters, final ScriptDialect dialect,
-		final EnvironmentContext environment)
+		final Environment environment)
 	{
 		// The parameters' run-time types, and their declarations.
 		final Map<String, String> types = new LinkedHashMap<>();
@@ -101,7 +101,7 @@ public final class ScriptDocument {
 
 		return new ScriptDocument(script, header + blank(script, dialect),
 			new PositionMap(header.length(), header.isEmpty() ? 0 : 1), types,
-			environment == null ? EnvironmentContext.EMPTY : environment);
+			environment == null ? Environment.NONE : environment);
 	}
 
 	/** The script, as given. */
@@ -128,7 +128,7 @@ public final class ScriptDocument {
 	}
 
 	/** Where the script runs. */
-	public EnvironmentContext environment() {
+	public Environment environment() {
 		return environment;
 	}
 

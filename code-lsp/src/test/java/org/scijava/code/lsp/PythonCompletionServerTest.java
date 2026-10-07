@@ -182,7 +182,7 @@ public class PythonCompletionServerTest {
 	// -- Helper methods --
 
 	private static CompletionParams params(final String text) {
-		return new CompletionParams(new TextDocumentIdentifier(URI), LspClient
+		return new CompletionParams(new TextDocumentIdentifier(URI), Positions
 			.position(text, text.length()));
 	}
 
@@ -211,5 +211,31 @@ public class PythonCompletionServerTest {
 	private static List<String> labels(final List<CompletionItem> items) {
 		return items.stream().map(CompletionItem::getLabel).collect(Collectors
 			.toList());
+	}
+
+	@Test
+	public void testParse() {
+		Callable c = PythonCompletionServer.parse("dumps",
+			"def dumps(obj, *, skipkeys: bool=False, cls=None, **kw) -> str");
+		assertEquals("[obj, bool skipkeys, cls, kw]", String.valueOf(c
+			.params()));
+		assertEquals("str", c.returnType());
+
+		// Brackets and strings in annotations and defaults; positional-only.
+		c = PythonCompletionServer.parse("zeros", "def zeros(shape: tuple[int, ...], dtype: str=\"f,8\"" +
+			", /, order: Literal['C', 'F']='C') -> NDArray[float64]");
+		assertEquals("[tuple[int, ...] shape, str dtype, " +
+			"Literal['C', 'F'] order]", String.valueOf(c.params()));
+		assertEquals("NDArray[float64]", c.returnType());
+
+		// Classes (their constructors), without parameters or return type.
+		c = PythonCompletionServer.parse("Path", "class Path()");
+		assertEquals(0, c.params().size());
+		assertNull(c.returnType());
+		c = PythonCompletionServer.parse("f", "def f(*args)");
+		assertEquals("args", c.params().get(0).name());
+
+		// Not a signature.
+		assertNull(PythonCompletionServer.parse("x", "instance x"));
 	}
 }

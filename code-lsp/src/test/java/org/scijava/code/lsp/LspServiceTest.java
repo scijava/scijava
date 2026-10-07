@@ -37,7 +37,6 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.Context;
-import org.scijava.code.api.EnvironmentContext;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -83,7 +82,7 @@ public class LspServiceTest {
 				}
 
 				@Override
-				public LspConnection start(final EnvironmentContext env)
+				public LspConnection start(final Environment env)
 					throws IOException
 				{
 					throw new IOException("Not a real server");

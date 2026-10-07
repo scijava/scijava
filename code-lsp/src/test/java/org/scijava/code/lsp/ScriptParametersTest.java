@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Core API for SciJava code intelligence features.
+ * Language Server Protocol bridge for SciJava code intelligence.
  * %%
  * Copyright (C) 2026 SciJava developers.
  * %%
@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.api;
+package org.scijava.code.lsp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -46,19 +46,19 @@ import org.scijava.log.LogLevel;
 import org.scijava.log.LogService;
 
 /**
- * Tests {@link CodeCompletionService#scriptParameters(String)}.
+ * Tests {@link LanguageServerService#scriptParameters(String)}.
  *
  * @author Curtis Rueden
  */
 public class ScriptParametersTest {
 
 	private Context context;
-	private CodeCompletionService service;
+	private LanguageServerService service;
 
 	@BeforeEach
 	public void setUp() {
 		context = new Context();
-		service = context.service(CodeCompletionService.class);
+		service = context.service(LanguageServerService.class);
 	}
 
 	@AfterEach

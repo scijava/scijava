@@ -31,7 +31,7 @@ package org.scijava.code.lsp.server;
 
 import java.io.File;
 import java.net.URI;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -42,12 +42,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.lsp4j.CompletionItem;
-import org.eclipse.lsp4j.CompletionItemKind;
 import org.eclipse.lsp4j.CompletionList;
 import org.eclipse.lsp4j.CompletionOptions;
 import org.eclipse.lsp4j.CompletionParams;
-import org.eclipse.lsp4j.Diagnostic;
-import org.eclipse.lsp4j.DiagnosticSeverity;
 import org.eclipse.lsp4j.DidChangeConfigurationParams;
 import org.eclipse.lsp4j.DidChangeTextDocumentParams;
 import org.eclipse.lsp4j.DidChangeWatchedFilesParams;
@@ -58,20 +55,16 @@ import org.eclipse.lsp4j.Hover;
 import org.eclipse.lsp4j.HoverParams;
 import org.eclipse.lsp4j.InitializeParams;
 import org.eclipse.lsp4j.InitializeResult;
-import org.eclipse.lsp4j.MarkupContent;
-import org.eclipse.lsp4j.MarkupKind;
-import org.eclipse.lsp4j.ParameterInformation;
-import org.eclipse.lsp4j.Position;
+import org.eclipse.lsp4j.MessageActionItem;
+import org.eclipse.lsp4j.MessageParams;
 import org.eclipse.lsp4j.PublishDiagnosticsParams;
-import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.ServerCapabilities;
 import org.eclipse.lsp4j.ServerInfo;
+import org.eclipse.lsp4j.ShowMessageRequestParams;
 import org.eclipse.lsp4j.SignatureHelp;
 import org.eclipse.lsp4j.SignatureHelpOptions;
 import org.eclipse.lsp4j.SignatureHelpParams;
-import org.eclipse.lsp4j.SignatureInformation;
 import org.eclipse.lsp4j.TextDocumentSyncKind;
-import org.eclipse.lsp4j.TextEdit;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageClientAware;
@@ -79,27 +72,22 @@ import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
 import org.scijava.Context;
-import org.scijava.code.api.CodeCompleter;
-import org.scijava.code.api.CodeCompletionService;
-import org.scijava.code.api.Completion;
-import org.scijava.code.api.CompletionRequest;
-import org.scijava.code.api.CompletionResult;
-import org.scijava.code.lsp.LspClient;
-import org.scijava.log.LogService;
+import org.scijava.code.lsp.LanguageServerService;
+import org.scijava.code.lsp.MergedLanguageServer;
+import org.scijava.code.lsp.UpdatingCompletionList;
 import org.scijava.script.ScriptLanguage;
 import org.scijava.script.ScriptService;
 
 /**
  * A language server for SciJava scripts, for editors outside SciJava (e.g. VS
- * Code): the completions, signature help, hover and diagnostics of SciJava's
- * code completers (see {@link CodeCompletionService}), for every script
+ * Code): the {@link LanguageServerService}'s servers, for every script
  * language they support, with SciJava's own understanding of scripts (e.g.
  * their {@code #@} parameters).
  * <p>
  * The language of a document is its file extension's, as the
- * {@link ScriptService} knows it. Slower answers (see
- * {@link CompletionResult#update()}) are awaited a while, since an external
- * editor shows nothing in between.
+ * {@link ScriptService} knows it. Slower completions (see
+ * {@link UpdatingCompletionList}) are awaited a while, since an outside
+ * editor would not ask again.
  * </p>
  *
  * @author Gabriel Selzer
@@ -109,21 +97,22 @@ public class SciJavaLanguageServer implements LanguageServer,
 	TextDocumentService, WorkspaceService, LanguageClientAware
 {
 
-	/** How long to wait for slower, better answers, in milliseconds. */
+	/** How long to wait for slower completions, in milliseconds. */
 	private static final long UPDATE_WAIT = 2000;
 
-	/** How many signatures get their documentation. */
-	private static final int DOCUMENTED_SIGNATURES = 3;
-
 	private final ScriptService scripts;
-	private final CodeCompletionService completion;
-	private final LogService log;
+	private final LanguageServerService servers;
 
-	/** The open documents' texts, by URI. */
-	private final Map<String, String> texts = new ConcurrentHashMap<>();
+	/** The server of each language, once asked about. */
+	private final Map<ScriptLanguage, MergedLanguageServer> merged =
+		new ConcurrentHashMap<>();
 
-	/** The last completions, for resolving their documentation. */
-	private volatile List<Completion> lastCompletions = Collections.emptyList();
+	/** The server of each open document, by URI. */
+	private final Map<String, MergedLanguageServer> open =
+		new ConcurrentHashMap<>();
+
+	/** The server whose completions were last given, for resolving them. */
+	private volatile MergedLanguageServer lastCompleted;
 
 	private final ExecutorService workers = Executors.newCachedThreadPool(r -> {
 		final Thread t = new Thread(r, "scijava-language-server");
@@ -136,8 +125,7 @@ public class SciJavaLanguageServer implements LanguageServer,
 
 	public SciJavaLanguageServer(final Context context) {
 		scripts = context.service(ScriptService.class);
-		completion = context.service(CodeCompletionService.class);
-		log = context.getService(LogService.class);
+		servers = context.service(LanguageServerService.class);
 	}
 
 	/** Sets what to do when the client says to exit (e.g. end the process). */
@@ -160,8 +148,8 @@ public class SciJavaLanguageServer implements LanguageServer,
 		capabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
 		capabilities.setCompletionProvider(new CompletionOptions(true,
 			Collections.singletonList(".")));
-		capabilities.setSignatureHelpProvider(new SignatureHelpOptions(
-			java.util.Arrays.asList("(", ",")));
+		capabilities.setSignatureHelpProvider(new SignatureHelpOptions(Arrays
+			.asList("(", ",")));
 		capabilities.setHoverProvider(true);
 		final InitializeResult result = new InitializeResult(capabilities);
 		result.setServerInfo(new ServerInfo("SciJava"));
@@ -170,6 +158,9 @@ public class SciJavaLanguageServer implements LanguageServer,
 
 	@Override
 	public CompletableFuture<Object> shutdown() {
+		for (final MergedLanguageServer server : merged.values()) {
+			server.shutdown();
+		}
 		workers.shutdown();
 		return CompletableFuture.completedFuture(null);
 	}
@@ -194,30 +185,24 @@ public class SciJavaLanguageServer implements LanguageServer,
 	@Override
 	public void didOpen(final DidOpenTextDocumentParams params) {
 		final String uri = params.getTextDocument().getUri();
-		texts.put(uri, params.getTextDocument().getText());
-		final CompletionRequest request = request(uri, 0);
-		if (request != null) {
-			workers.execute(() -> completer(request).prepare(request));
-		}
-		diagnose(uri);
+		final MergedLanguageServer server = serverFor(uri);
+		if (server == null) return;
+		open.put(uri, server);
+		server.didOpen(params);
 	}
 
 	@Override
 	public void didChange(final DidChangeTextDocumentParams params) {
-		final String uri = params.getTextDocument().getUri();
-		// NB: Full synchronization: the last change is the whole text.
-		if (params.getContentChanges().isEmpty()) return;
-		texts.put(uri, params.getContentChanges().get(params.getContentChanges()
-			.size() - 1).getText());
-		diagnose(uri);
+		final MergedLanguageServer server = open.get(params.getTextDocument()
+			.getUri());
+		if (server != null) server.didChange(params);
 	}
 
 	@Override
 	public void didClose(final DidCloseTextDocumentParams params) {
 		final String uri = params.getTextDocument().getUri();
-		final CompletionRequest request = request(uri, 0);
-		if (request != null) completer(request).closed(request);
-		texts.remove(uri);
+		final MergedLanguageServer server = open.remove(uri);
+		if (server != null) server.didClose(params);
 		final LanguageClient c = client;
 		if (c != null) c.publishDiagnostics(new PublishDiagnosticsParams(uri,
 			Collections.emptyList()));
@@ -234,25 +219,22 @@ public class SciJavaLanguageServer implements LanguageServer,
 	public CompletableFuture<Either<List<CompletionItem>, CompletionList>>
 		completion(final CompletionParams params)
 	{
-		return CompletableFuture.supplyAsync(() -> {
-			final String uri = params.getTextDocument().getUri();
-			final CompletionRequest request = request(uri, params.getPosition());
-			if (request == null) return Either.forRight(new CompletionList());
-			CompletionResult result = completer(request).complete(request);
-			if (result.update() != null) {
-				final CompletionResult better = await(result.update());
-				if (better != null) result = better;
+		final MergedLanguageServer server = open.get(params.getTextDocument()
+			.getUri());
+		if (server == null) return CompletableFuture.completedFuture(Either
+			.forRight(new CompletionList()));
+		return server.completion(params).thenApplyAsync(answer -> {
+			CompletionList list = answer.isRight() ? answer.getRight()
+				: new CompletionList(false, answer.getLeft());
+			if (list instanceof UpdatingCompletionList) {
+				final CompletionList better = await(((UpdatingCompletionList) list)
+					.update());
+				if (better != null) list = better;
 			}
-			final String text = request.text();
-			final Range range = new Range(LspClient.position(text, result
-				.replaceStart()), LspClient.position(text, request.offset()));
-			final List<CompletionItem> items = new ArrayList<>();
-			final List<Completion> completions = result.completions();
-			for (int i = 0; i < completions.size(); i++) {
-				items.add(item(completions.get(i), i, range, text));
-			}
-			lastCompletions = completions;
-			return Either.forRight(new CompletionList(false, items));
+			lastCompleted = server;
+			// NB: A plain list, for the wire.
+			return Either.forRight(new CompletionList(list.isIncomplete(), list
+				.getItems()));
 		}, workers);
 	}
 
@@ -260,81 +242,27 @@ public class SciJavaLanguageServer implements LanguageServer,
 	public CompletableFuture<CompletionItem> resolveCompletionItem(
 		final CompletionItem item)
 	{
-		return CompletableFuture.supplyAsync(() -> {
-			final List<Completion> completions = lastCompletions;
-			final Object data = item.getData();
-			final int index = data instanceof Number ? ((Number) data).intValue()
-				: data instanceof com.google.gson.JsonPrimitive
-					? ((com.google.gson.JsonPrimitive) data).getAsInt() : -1;
-			if (index >= 0 && index < completions.size()) {
-				final String doc = plain(completions.get(index).description());
-				if (doc != null) item.setDocumentation(new MarkupContent(
-					MarkupKind.PLAINTEXT, doc));
-			}
-			return item;
-		}, workers);
+		final MergedLanguageServer server = lastCompleted;
+		return server == null ? CompletableFuture.completedFuture(item) : server
+			.resolveCompletionItem(item);
 	}
 
 	@Override
 	public CompletableFuture<SignatureHelp> signatureHelp(
 		final SignatureHelpParams params)
 	{
-		return CompletableFuture.supplyAsync(() -> {
-			final CompletionRequest request = request(params.getTextDocument()
-				.getUri(), params.getPosition());
-			if (request == null) return null;
-			org.scijava.code.api.SignatureHelp help = completer(request)
-				.signatureHelp(request);
-			if (help.update() != null) {
-				final org.scijava.code.api.SignatureHelp better = await(help
-					.update());
-				if (better != null) help = better;
-			}
-			if (help.isEmpty()) return null;
-			final List<SignatureInformation> signatures = new ArrayList<>();
-			for (final org.scijava.code.api.SignatureHelp.Signature s : help
-				.signatures())
-			{
-				final Completion c = s.callable();
-				final List<ParameterInformation> params_ = new ArrayList<>();
-				for (final Completion.Parameter p : c.parameters()) {
-					params_.add(new ParameterInformation(p.toString()));
-				}
-				final SignatureInformation info = new SignatureInformation(signature(
-					c));
-				info.setParameters(params_);
-				if (signatures.size() < DOCUMENTED_SIGNATURES) {
-					final String doc = plain(c.description());
-					if (doc != null) info.setDocumentation(new MarkupContent(
-						MarkupKind.PLAINTEXT, doc));
-				}
-				signatures.add(info);
-			}
-			return new SignatureHelp(signatures, 0, Math.max(0, help
-				.activeParameter()));
-		}, workers);
+		final MergedLanguageServer server = open.get(params.getTextDocument()
+			.getUri());
+		return server == null ? CompletableFuture.completedFuture(null) : server
+			.signatureHelp(params);
 	}
 
 	@Override
 	public CompletableFuture<Hover> hover(final HoverParams params) {
-		return CompletableFuture.supplyAsync(() -> {
-			final CompletionRequest request = request(params.getTextDocument()
-				.getUri(), params.getPosition());
-			if (request == null) return null;
-			org.scijava.code.api.Hover hover = completer(request).hover(request);
-			if (hover.isEmpty() && hover.update() != null) {
-				final org.scijava.code.api.Hover better = await(hover.update());
-				if (better != null) hover = better;
-			}
-			final String text = plain(hover.text());
-			if (text == null) return null;
-			final Hover h = new Hover(new MarkupContent(MarkupKind.PLAINTEXT, text));
-			if (hover.start() >= 0 && hover.end() >= hover.start()) {
-				h.setRange(new Range(LspClient.position(request.text(), hover
-					.start()), LspClient.position(request.text(), hover.end())));
-			}
-			return h;
-		}, workers);
+		final MergedLanguageServer server = open.get(params.getTextDocument()
+			.getUri());
+		return server == null ? CompletableFuture.completedFuture(null) : server
+			.hover(params);
 	}
 
 	// -- WorkspaceService --
@@ -351,55 +279,22 @@ public class SciJavaLanguageServer implements LanguageServer,
 
 	// -- Helper methods --
 
-	/** Finds the problems in a document, and tells the client. */
-	private void diagnose(final String uri) {
-		final CompletionRequest request = request(uri, 0);
-		if (request == null) return;
-		final String text = request.text();
-		completer(request).diagnose(request).thenAccept(found -> {
-			final LanguageClient c = client;
-			// NB: Only if still current.
-			if (c == null || !text.equals(texts.get(uri))) return;
-			final List<Diagnostic> diagnostics = new ArrayList<>();
-			for (final org.scijava.code.api.Diagnostic d : found) {
-				final Diagnostic diagnostic = new Diagnostic(new Range(LspClient
-					.position(text, Math.min(d.start(), text.length())), LspClient
-						.position(text, Math.min(d.end(), text.length()))), d.message());
-				diagnostic.setSeverity(severity(d.severity()));
-				diagnostic.setSource(d.source() != null ? d.source() : "scijava");
-				diagnostics.add(diagnostic);
-			}
-			c.publishDiagnostics(new PublishDiagnosticsParams(uri, diagnostics));
-		}).exceptionally(error -> {
-			if (log != null) log.debug("Diagnosis failed: " + uri, error);
-			return null;
-		});
-	}
-
-	private CompletionRequest request(final String uri, final Position p) {
-		final String text = texts.get(uri);
-		return text == null ? null : request(uri, LspClient.offset(text, p));
-	}
-
 	/**
-	 * A request about a document, at an offset; or null if the document is not
-	 * open, or of no known language.
+	 * The server for a document, by its file extension's language; or null if
+	 * it is of no language served.
 	 */
-	private CompletionRequest request(final String uri, final int offset) {
-		final String text = texts.get(uri);
-		if (text == null) return null;
+	private MergedLanguageServer serverFor(final String uri) {
 		final String path = path(uri);
 		final String name = path != null ? path : uri;
 		final int dot = name.lastIndexOf('.');
 		final ScriptLanguage language = dot < 0 ? null : scripts
 			.getLanguageByExtension(name.substring(dot + 1));
-		if (language == null) return null;
-		return new CompletionRequest(text, Math.min(offset, text.length()),
-			language, null, null, path);
-	}
-
-	private CodeCompleter completer(final CompletionRequest request) {
-		return completion.getCompleter(request.language());
+		if (language == null || !servers.supports(language)) return null;
+		return merged.computeIfAbsent(language, l -> {
+			final MergedLanguageServer server = servers.server(l);
+			server.connect(new Forwarder());
+			return server;
+		});
 	}
 
 	/** The file path of a {@code file:} URI, or null. */
@@ -422,88 +317,35 @@ public class SciJavaLanguageServer implements LanguageServer,
 		}
 	}
 
-	private static CompletionItem item(final Completion c, final int index,
-		final Range range, final String text)
-	{
-		final CompletionItem item = new CompletionItem(c.displayText() != null ? c
-			.displayText() : c.insertionText());
-		item.setKind(kind(c.kind()));
-		item.setTextEdit(Either.forLeft(new TextEdit(range, c.insertionText())));
-		item.setFilterText(c.insertionText());
-		// NB: Keep the completer's order.
-		item.setSortText(String.format("%06d", index));
-		item.setDetail(c.isCallable() ? signature(c) : c.summary());
-		item.setData(index);
-		if (!c.additionalEdits().isEmpty()) {
-			final List<TextEdit> edits = new ArrayList<>();
-			for (final Completion.TextEdit e : c.additionalEdits()) {
-				edits.add(new TextEdit(new Range(LspClient.position(text, e.start()),
-					LspClient.position(text, e.end())), e.newText()));
-			}
-			item.setAdditionalTextEdits(edits);
+	/** Passes the servers' messages on to the editor. */
+	private final class Forwarder implements LanguageClient {
+
+		@Override
+		public void publishDiagnostics(final PublishDiagnosticsParams p) {
+			final LanguageClient c = client;
+			if (c != null) c.publishDiagnostics(p);
 		}
-		return item;
-	}
 
-	/** Renders a callable's signature, e.g. {@code max(double a, double b)}. */
-	static String signature(final Completion c) {
-		String name = c.insertionText();
-		if (name.endsWith("()")) name = name.substring(0, name.length() - 2);
-		final StringBuilder sb = new StringBuilder(name).append('(');
-		final List<Completion.Parameter> params = c.parameters();
-		for (int i = 0; i < params.size(); i++) {
-			if (i > 0) sb.append(", ");
-			sb.append(params.get(i));
+		@Override
+		public void telemetryEvent(final Object object) {}
+
+		@Override
+		public void showMessage(final MessageParams m) {
+			final LanguageClient c = client;
+			if (c != null) c.showMessage(m);
 		}
-		sb.append(')');
-		if (c.returnType() != null) sb.append(" -> ").append(c.returnType());
-		return sb.toString();
-	}
 
-	/** Converts the completers' HTML to plain text; null if empty. */
-	static String plain(final String html) {
-		if (html == null) return null;
-		final String text = html.replaceAll("(?i)<br\\s*/?>|</p>|<p>|<hr>", "\n")
-			.replaceAll("<[^>]+>", "").replace("&lt;", "<").replace("&gt;", ">")
-			.replace("&quot;", "\"").replace("&#39;", "'").replace("&nbsp;", " ")
-			.replace("&amp;", "&").trim();
-		return text.isEmpty() ? null : text;
-	}
-
-	private static CompletionItemKind kind(final Completion.Kind kind) {
-		switch (kind) {
-			case METHOD:
-				return CompletionItemKind.Method;
-			case FIELD:
-				return CompletionItemKind.Field;
-			case CLASS:
-				return CompletionItemKind.Class;
-			case PACKAGE:
-			case IMPORT:
-				return CompletionItemKind.Module;
-			case KEYWORD:
-				return CompletionItemKind.Keyword;
-			case VARIABLE:
-				return CompletionItemKind.Variable;
-			case SNIPPET:
-				return CompletionItemKind.Snippet;
-			default:
-				return CompletionItemKind.Text;
+		@Override
+		public CompletableFuture<MessageActionItem> showMessageRequest(
+			final ShowMessageRequestParams r)
+		{
+			return CompletableFuture.completedFuture(null);
 		}
-	}
 
-	private static DiagnosticSeverity severity(
-		final org.scijava.code.api.Diagnostic.Severity s)
-	{
-		switch (s) {
-			case WARNING:
-				return DiagnosticSeverity.Warning;
-			case INFO:
-				return DiagnosticSeverity.Information;
-			case HINT:
-				return DiagnosticSeverity.Hint;
-			default:
-				return DiagnosticSeverity.Error;
+		@Override
+		public void logMessage(final MessageParams m) {
+			final LanguageClient c = client;
+			if (c != null) c.logMessage(m);
 		}
 	}
 }

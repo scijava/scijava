@@ -40,8 +40,6 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 import org.eclipse.lsp4j.SignatureInformation;
-import org.scijava.code.lsp.RatedSignatureInformation.Fit;
-import org.scijava.code.lsp.RatedSignatureInformation;
 
 /**
  * Helpers for rating signatures against arguments, for language servers whose
@@ -51,6 +49,18 @@ import org.scijava.code.lsp.RatedSignatureInformation;
  * @author Gabriel Selzer
  */
 public final class Signatures {
+
+	/** How well arguments fit a signature. */
+	public enum Fit {
+			/** The arguments fit as they are. */
+			MATCH,
+			/** The arguments fit after a conversion (e.g. int to double). */
+			CONVERSION,
+			/** Not known (e.g. the arguments' types are unknown). */
+			UNKNOWN,
+			/** Some argument cannot fit. */
+			MISMATCH
+	}
 
 	private static final Map<String, Class<?>> PRIMITIVES = new HashMap<>();
 	static {
@@ -130,20 +140,20 @@ public final class Signatures {
 	}
 
 	/**
-	 * Rates each callable against the arguments, and orders them for display:
-	 * matches first, then those needing conversions, unrated ones, and
-	 * mismatches last; otherwise keeping their order.
+	 * Rates each callable against the arguments, and orders their signatures
+	 * for display: matches first, then those needing conversions, unrated ones,
+	 * and mismatches last; otherwise keeping their order.
 	 */
 	public static List<SignatureInformation> rateAll(
 		final List<Callable> callables, final List<String> argTypes,
 		final BiFunction<String, String, Fit> fit)
 	{
+		final List<Callable> sorted = new ArrayList<>(callables);
+		final Map<Callable, Integer> ranks = new HashMap<>();
+		for (final Callable c : sorted) ranks.put(c, rank(rate(c, argTypes, fit)));
+		sorted.sort(Comparator.comparingInt(ranks::get));
 		final List<SignatureInformation> out = new ArrayList<>();
-		for (final Callable c : callables) {
-			out.add(c.toSignature(rate(c, argTypes, fit)));
-		}
-		out.sort(Comparator.comparingInt(s -> rank(RatedSignatureInformation
-			.fitOf(s))));
+		for (final Callable c : sorted) out.add(c.toSignature());
 		return out;
 	}
 

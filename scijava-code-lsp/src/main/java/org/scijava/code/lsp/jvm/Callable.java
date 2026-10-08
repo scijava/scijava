@@ -40,8 +40,6 @@ import org.eclipse.lsp4j.CompletionItemLabelDetails;
 import org.eclipse.lsp4j.InsertTextFormat;
 import org.eclipse.lsp4j.ParameterInformation;
 import org.eclipse.lsp4j.SignatureInformation;
-import org.scijava.code.lsp.RatedSignatureInformation.Fit;
-import org.scijava.code.lsp.RatedSignatureInformation;
 
 /**
  * Something to call (a method, function or constructor), as in-process
@@ -191,14 +189,16 @@ public final class Callable {
 		return item;
 	}
 
-	/** As a signature, rated. */
-	public SignatureInformation toSignature(final Fit fit) {
+	/** As a signature. */
+	public SignatureInformation toSignature() {
 		final List<ParameterInformation> infos = new ArrayList<>();
 		for (final Param p : params) infos.add(new ParameterInformation(p
 			.toString()));
 		final String label = name + parameterList() + (returnType == null ? ""
 			: " -> " + returnType);
-		return new RatedSignatureInformation(label, infos, fit);
+		final SignatureInformation s = new SignatureInformation(label);
+		s.setParameters(infos);
+		return s;
 	}
 
 	/** E.g. {@code (double a, double b)}. */

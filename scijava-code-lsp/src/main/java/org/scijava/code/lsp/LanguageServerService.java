@@ -61,7 +61,7 @@ public interface LanguageServerService extends SciJavaService {
 	 * As {@link #session(ScriptLanguage)}, for code typed into a running
 	 * interpreter: its state reaches the servers via their
 	 * {@link Environment#live()}. For a language no plugin serves, the
-	 * interpreter's variables are completed (see {@link BindingsLanguageServer}).
+	 * interpreter's variables are completed.
 	 */
 	ScriptSession session(ScriptLanguage language, ScriptContext live);
 
@@ -71,23 +71,6 @@ public interface LanguageServerService extends SciJavaService {
 	 * served.
 	 */
 	ScriptSession session(File file) throws IOException;
-
-	/**
-	 * Gets a server for scripts of the given language, standing for all the
-	 * servers plugins offer for it: it opens, changes and closes each document
-	 * on every server for that script, and merges their answers. Each call
-	 * gets its own (e.g. one per editor), sharing the servers behind it. For
-	 * clients speaking the protocol themselves (e.g. via JSON-RPC); others
-	 * use a {@link #session}.
-	 */
-	MergedLanguageServer server(ScriptLanguage language);
-
-	/**
-	 * As {@link #server(ScriptLanguage)}, for code typed into a running
-	 * interpreter: its state reaches the servers via their
-	 * {@link Environment#live()}.
-	 */
-	MergedLanguageServer server(ScriptLanguage language, ScriptContext live);
 
 	/**
 	 * Tells the servers that where scripts run may have changed without the
@@ -103,8 +86,9 @@ public interface LanguageServerService extends SciJavaService {
 
 	/**
 	 * Starts (or reuses) a server process for an LSP language (e.g.
-	 * {@code python}), as a plugin offers it (see {@link LspServerPlugin}), for
-	 * scripts running in the given environment; or returns null if no plugin
+	 * {@code python}), as a plugin offers it (see
+	 * {@link org.scijava.code.lsp.launch.LspServerPlugin}), for scripts running
+	 * in the given environment; or returns null if no plugin
 	 * offers one. For {@link LanguageServerPlugin}s whose servers are
 	 * processes.
 	 */
@@ -132,8 +116,9 @@ public interface LanguageServerService extends SciJavaService {
 	 * Gets the variables a script's parameters ({@code #@} lines, and old-style
 	 * {@code // @} lines in its header) define before it runs, by name, with
 	 * their Java types ({@code Object} if unresolvable); in declaration order.
-	 * For servers to know them (see {@link ScriptDocument}). Half-typed
-	 * declarations are expected, and parsed quietly.
+	 * For servers to know them (see
+	 * {@link org.scijava.code.lsp.script.ScriptDocument}). Half-typed declarations
+	 * are expected, and parsed quietly.
 	 */
 	Map<String, Class<?>> scriptParameters(String text);
 }

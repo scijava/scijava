@@ -15,8 +15,8 @@ scripts.
  client (e.g. Script Editor)
    │  ScriptSession: a script's text, and offsets into it
    ▼
- LanguageServerService ──► the LanguageServerPlugins serving the language
-   │  one server standing for all of them (merged answers)
+ LanguageServerService ──► the LanguageServerPlugin serving the language
+   │  a server of the session's own
    ├──► in-process servers (e.g. Groovy, Jython), built on ScriptLanguageServer
    └──► server processes (e.g. jedi-language-server), via LspServerSpec
           seeing the script as plain code (TransformingLanguageServer)
@@ -27,17 +27,16 @@ It does four things, each in a package of its own.
 ## 1. Brokering between scripts and servers (`org.scijava.code.lsp`)
 
 The core. `LanguageServerPlugin`s offer lsp4j `LanguageServer`s for script
-languages, and say where a script runs (an `Environment`: interpreter, search
-paths, classpath, and a running interpreter's state, if any). For each
-script, the `LanguageServerService` gathers every server of its language, in
-its environment, behind one server: it opens, changes and closes the script
-on each, merges their answers, and moves the script to other servers should
-where it runs change.
+languages; each language is served by the highest-priority plugin supporting
+it. A server combining several sources (e.g. Jython's own analysis and
+jedi's) combines them itself.
 
-Clients ask about a script through a `ScriptSession` from the service: it
-keeps the servers' copy of the script up to date, names it (its file's URI,
-or an `untitled:` one), takes offsets into its text (see `Positions`), and
-reports the problems found in it. Tools that ask once (e.g. to check a
+Clients ask about a script through a `ScriptSession` from the service, with
+a server of its own: it keeps the server's copy of the script up to date,
+names it (its file's URI, or an `untitled:` one), takes offsets into its text
+(see `Positions`), and reports the problems found in it. For code typed into
+a running interpreter, the server learns the interpreter's state through its
+`Environment`. Tools that ask once (e.g. to check a
 script) can call `LanguageServerService.diagnose`. For code typed into an
 interpreter whose language no plugin serves, a session completes the
 interpreter's variables.

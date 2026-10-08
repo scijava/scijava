@@ -33,14 +33,13 @@
  * <p>
  * This package brokers between scripts and the language servers that know
  * about them. {@link org.scijava.code.lsp.LanguageServerPlugin}s offer lsp4j
- * {@link org.eclipse.lsp4j.services.LanguageServer}s for script languages,
- * and say where a script runs (an {@link org.scijava.code.lsp.Environment}).
+ * {@link org.eclipse.lsp4j.services.LanguageServer}s for script languages.
  * Clients (e.g. an editor) ask about a script through a
  * {@link org.scijava.code.lsp.ScriptSession} from the
  * {@link org.scijava.code.lsp.LanguageServerService}, in terms of the
  * script's text and offsets into it (see
- * {@link org.scijava.code.lsp.Positions}); behind it, the answers of all the
- * language's servers are merged.
+ * {@link org.scijava.code.lsp.Positions}); behind it is a server of its own,
+ * from the highest-priority plugin serving the script's language.
  * </p>
  * <p>
  * The subpackages are for those writing language servers:

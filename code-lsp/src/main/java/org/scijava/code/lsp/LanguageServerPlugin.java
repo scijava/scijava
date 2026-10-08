@@ -29,7 +29,6 @@
 
 package org.scijava.code.lsp;
 
-import org.eclipse.lsp4j.TextDocumentItem;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.scijava.plugin.SciJavaPlugin;
 import org.scijava.script.ScriptLanguage;
@@ -39,9 +38,9 @@ import org.scijava.script.ScriptLanguage;
  * implementations of lsp4j's {@link LanguageServer}, or proxies to server
  * processes (see {@link LanguageServerService#launch}).
  * <p>
- * Several plugins may serve one language (e.g. an instant in-process analysis
- * and a slower, smarter server process); {@link LanguageServerService} merges
- * their answers, in the plugins' priority order.
+ * Each language is served by the highest-priority plugin that supports it. A
+ * server combining several sources (e.g. an instant in-process analysis and a
+ * slower, smarter server process) combines them itself.
  * </p>
  *
  * @author Gabriel Selzer
@@ -52,22 +51,12 @@ public interface LanguageServerPlugin extends SciJavaPlugin {
 	boolean supports(ScriptLanguage language);
 
 	/**
-	 * Gets where the given script will run, as far as this plugin's servers need
-	 * to know: read from its text (e.g. inline metadata) and its URI (e.g. a
-	 * file path). Servers are kept one per environment. Called whenever the
-	 * script changes, so it must be quick; and when told that environments
-	 * changed (see {@link LanguageServerService#environmentsChanged()}), which
-	 * a plugin should call when the answer may change without the script
-	 * changing (e.g. once an environment is built). The default: no particular
-	 * environment (one server for all scripts).
-	 */
-	default Environment environment(final TextDocumentItem document) {
-		return Environment.NONE;
-	}
-
-	/**
-	 * Creates a server for scripts running in the given environment. The
-	 * service initializes it.
+	 * Creates a server for a session (see {@link LanguageServerService#session}):
+	 * the session initializes it, and shuts it down when closed.
+	 *
+	 * @param environment Where the session's script runs, as far as known: for
+	 *          code typed into a running interpreter, its state (see
+	 *          {@link Environment#live()}).
 	 */
 	LanguageServer create(Environment environment);
 }

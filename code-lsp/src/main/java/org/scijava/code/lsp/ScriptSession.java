@@ -36,7 +36,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.eclipse.lsp4j.CompletionItem;
@@ -48,6 +47,9 @@ import org.eclipse.lsp4j.DidCloseTextDocumentParams;
 import org.eclipse.lsp4j.DidOpenTextDocumentParams;
 import org.eclipse.lsp4j.Hover;
 import org.eclipse.lsp4j.HoverParams;
+import org.eclipse.lsp4j.InitializeParams;
+import org.eclipse.lsp4j.InitializeResult;
+import org.eclipse.lsp4j.InitializedParams;
 import org.eclipse.lsp4j.MessageActionItem;
 import org.eclipse.lsp4j.MessageParams;
 import org.eclipse.lsp4j.PublishDiagnosticsParams;
@@ -78,7 +80,8 @@ import org.scijava.script.ScriptLanguage;
  * {@link Positions}). Answers are lsp4j's own types.
  * </p>
  * <p>
- * A session owns its server: it is the server's client. Get one from the
+ * A session owns its server: it is the server's client, initializes it, and
+ * shuts it down when closed. Get one from the
  * {@link LanguageServerService#session service}, which makes it a server of
  * its own.
  * </p>
@@ -89,9 +92,11 @@ public class ScriptSession implements AutoCloseable {
 
 	private static final AtomicInteger UNTITLED = new AtomicInteger();
 
+	/** How long to wait for a server to initialize, in milliseconds. */
+	private static final long INITIALIZE_TIMEOUT = 10_000;
+
 	private final LanguageServer server;
 	private final ScriptLanguage language;
-	private final Function<String, CompletableFuture<List<Diagnostic>>> allReported;
 	private final String untitled;
 	private volatile Supplier<File> file = () -> null;
 	private volatile Logger log;
@@ -107,15 +112,12 @@ public class ScriptSession implements AutoCloseable {
 	/**
 	 * @param server The server, which the session owns.
 	 * @param language The script's language, or null if unknown.
-	 * @param allReported Gets the problems in a document once all its servers
-	 *          reported them; or null if the server reports them at once.
 	 */
-	ScriptSession(final LanguageServer server, final ScriptLanguage language,
-		final Function<String, CompletableFuture<List<Diagnostic>>> allReported)
+	private ScriptSession(final LanguageServer server,
+		final ScriptLanguage language)
 	{
 		this.server = server;
 		this.language = language;
-		this.allReported = allReported;
 		final List<String> extensions = language == null ? Collections
 			.emptyList() : language.getExtensions();
 		untitled = "untitled:/script-" + UNTITLED.incrementAndGet() + (extensions
@@ -125,8 +127,8 @@ public class ScriptSession implements AutoCloseable {
 	/**
 	 * Makes a session about a script, with the given server of its own (e.g. a
 	 * fake one, in tests): the session becomes its client, so the server must
-	 * not be shared. The server is taken to report each version's problems at
-	 * once.
+	 * not be shared. The server is initialized now, and shut down when the
+	 * session is closed.
 	 *
 	 * @param server The server, which the session owns.
 	 * @param language The script's language, or null if unknown.
@@ -134,31 +136,27 @@ public class ScriptSession implements AutoCloseable {
 	public static ScriptSession owning(final LanguageServer server,
 		final ScriptLanguage language)
 	{
-		return owning(server, language, null);
+		return new ScriptSession(server, language).connect();
 	}
 
 	/**
-	 * As {@link #owning(LanguageServer, ScriptLanguage)}, for a server that
-	 * stands for several (e.g. one per plugin), which report each version's
-	 * problems separately.
-	 *
-	 * @param server The server, which the session owns.
-	 * @param language The script's language, or null if unknown.
-	 * @param allReported Gets the problems in a document once all its servers
-	 *          reported them; or null if the server reports them at once.
+	 * Becomes the client of its server, and initializes it: as LSP says, it
+	 * awaits the server's answer before telling it anything else. (Servers in
+	 * process answer at once.)
 	 */
-	public static ScriptSession owning(final LanguageServer server,
-		final ScriptLanguage language,
-		final Function<String, CompletableFuture<List<Diagnostic>>> allReported)
-	{
-		return new ScriptSession(server, language, allReported).connect();
-	}
-
-	/** Becomes the client of its server. */
-	ScriptSession connect() {
+	private ScriptSession connect() {
 		if (server instanceof LanguageClientAware) {
 			((LanguageClientAware) server).connect(new Client());
 		}
+		try {
+			final CompletableFuture<InitializeResult> init = server.initialize(
+				new InitializeParams());
+			if (init != null) init.get(INITIALIZE_TIMEOUT, TimeUnit.MILLISECONDS);
+		}
+		catch (final Exception exc) {
+			// NB: Not initialized (in time): asked anyway, answering what it can.
+		}
+		server.initialized(new InitializedParams());
 		return this;
 	}
 
@@ -194,7 +192,7 @@ public class ScriptSession implements AutoCloseable {
 	 */
 	public synchronized ScriptSession update(final String newText) {
 		final String current = currentUri();
-		if (uri != null && !uri.equals(current)) close();
+		if (uri != null && !uri.equals(current)) closeDocument();
 		if (uri == null) {
 			uri = current;
 			version = 1;
@@ -262,8 +260,8 @@ public class ScriptSession implements AutoCloseable {
 	 * Waits for the problems in the text last sent: for tools that ask once,
 	 * rather than editors.
 	 *
-	 * @param timeout How long to wait, in milliseconds; servers not done by
-	 *          then are left out.
+	 * @param timeout How long to wait, in milliseconds; if the server is not
+	 *          done by then, the problems reported so far.
 	 */
 	public List<Diagnostic> diagnostics(final long timeout) {
 		final String u;
@@ -274,17 +272,30 @@ public class ScriptSession implements AutoCloseable {
 		}
 		if (u == null) return Collections.emptyList();
 		try {
-			return (allReported == null ? next : allReported.apply(u)).get(timeout,
-				TimeUnit.MILLISECONDS);
+			return next.get(timeout, TimeUnit.MILLISECONDS);
 		}
 		catch (final Exception exc) {
-			return diagnostics(); // NB: Not all in time: those that were.
+			return diagnostics(); // NB: Not in time: those reported so far.
 		}
 	}
 
-	/** Closes the server's copy of the script, if open. */
+	/** Closes the server's copy of the script, and shuts the server down. */
 	@Override
 	public synchronized void close() {
+		closeDocument();
+		try {
+			final CompletableFuture<Object> done = server.shutdown();
+			if (done != null) done.thenRun(server::exit);
+		}
+		catch (final RuntimeException | LinkageError exc) {
+			if (log != null) log.debug("Language server shutdown failed", exc);
+		}
+	}
+
+	// -- Helper methods --
+
+	/** Closes the server's copy of the script, if open. */
+	private void closeDocument() {
 		if (uri == null) return;
 		server.getTextDocumentService().didClose(new DidCloseTextDocumentParams(
 			new TextDocumentIdentifier(uri)));
@@ -292,8 +303,6 @@ public class ScriptSession implements AutoCloseable {
 		text = null;
 		diagnostics = Collections.emptyList();
 	}
-
-	// -- Helper methods --
 
 	private TextDocumentIdentifier identifier() {
 		return new TextDocumentIdentifier(uri);

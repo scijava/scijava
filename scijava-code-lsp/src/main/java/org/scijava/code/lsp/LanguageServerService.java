@@ -40,8 +40,9 @@ import org.scijava.script.ScriptLanguage;
 import org.scijava.service.SciJavaService;
 
 /**
- * Keeps the language servers of a context (see {@link LanguageServerPlugin}),
- * and hands callers one server per language that stands for all of them.
+ * Hands out sessions about scripts (see {@link ScriptSession}), each with a
+ * language server of its own, from the highest-priority
+ * {@link LanguageServerPlugin} serving the script's language.
  *
  * @author Gabriel Selzer
  */
@@ -62,15 +63,6 @@ public interface LanguageServerService extends SciJavaService {
 	 * interpreter's variables are completed.
 	 */
 	ScriptSession session(ScriptLanguage language, ScriptContext live);
-
-	/**
-	 * Tells the servers that where scripts run may have changed without the
-	 * scripts changing, e.g. as an environment finished building, or packages
-	 * finished installing: each open script moves to the servers of where it
-	 * runs now (see {@link LanguageServerPlugin#environment}), if that
-	 * changed. For plugins, when what their environments depend on changes.
-	 */
-	void environmentsChanged();
 
 	/** Whether any plugin serves scripts of the given language. */
 	boolean supports(ScriptLanguage language);

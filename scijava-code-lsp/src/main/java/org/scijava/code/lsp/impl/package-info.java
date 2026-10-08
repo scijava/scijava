@@ -29,8 +29,8 @@
 
 /**
  * The implementation of the module, internal to it (not exported): the
- * services, the server merging all of a language's servers for a script, the
- * life cycle of server processes, the fallback for interpreters of languages
- * no plugin serves, and the parsing of script parameters.
+ * services, the life cycle of server processes, the fallback for
+ * interpreters of languages no plugin serves, and the parsing of script
+ * parameters.
  */
 package org.scijava.code.lsp.impl;

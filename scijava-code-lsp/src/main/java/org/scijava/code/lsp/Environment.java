@@ -43,9 +43,9 @@ import javax.script.ScriptContext;
  * modules or packages, classpath entries, and, for code typed into a running
  * interpreter, that interpreter's state. Every part is optional.
  * <p>
- * Language servers are kept one per environment (see
- * {@link LanguageServerService}): e.g. jedi-language-server learns the Python
- * to analyze against only when it starts.
+ * Server processes are kept one per environment (see
+ * {@link LanguageServerService#launch}): e.g. jedi-language-server learns the
+ * Python to analyze against only when it starts.
  * </p>
  *
  * @author Gabriel Selzer

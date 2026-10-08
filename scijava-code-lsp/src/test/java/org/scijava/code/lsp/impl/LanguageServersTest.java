@@ -39,7 +39,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -65,6 +64,7 @@ import org.eclipse.lsp4j.Hover;
 import org.eclipse.lsp4j.HoverParams;
 import org.eclipse.lsp4j.InitializeParams;
 import org.eclipse.lsp4j.InitializeResult;
+import org.eclipse.lsp4j.InitializedParams;
 import org.eclipse.lsp4j.MarkupContent;
 import org.eclipse.lsp4j.MessageActionItem;
 import org.eclipse.lsp4j.MessageParams;
@@ -77,11 +77,9 @@ import org.eclipse.lsp4j.ShowMessageRequestParams;
 import org.eclipse.lsp4j.SignatureHelp;
 import org.eclipse.lsp4j.SignatureHelpParams;
 import org.eclipse.lsp4j.SignatureInformation;
-import org.eclipse.lsp4j.TextDocumentContentChangeEvent;
 import org.eclipse.lsp4j.TextDocumentIdentifier;
 import org.eclipse.lsp4j.TextDocumentItem;
 import org.eclipse.lsp4j.TextEdit;
-import org.eclipse.lsp4j.VersionedTextDocumentIdentifier;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageClientAware;
@@ -97,9 +95,9 @@ import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.LanguageServerPlugin;
 import org.scijava.code.lsp.LanguageServerService;
 import org.scijava.code.lsp.Positions;
+import org.scijava.code.lsp.ScriptSession;
 import org.scijava.code.lsp.script.ScriptDialect;
 import org.scijava.code.lsp.script.ScriptDocument;
-import org.scijava.code.lsp.ScriptSession;
 import org.scijava.code.lsp.script.TransformingLanguageServer;
 import org.scijava.plugin.Plugin;
 import org.scijava.script.AbstractScriptLanguage;
@@ -107,34 +105,32 @@ import org.scijava.script.ScriptLanguage;
 import org.scijava.script.ScriptService;
 
 /**
- * Tests {@link LanguageServerService} and {@link MergedLanguageServer}, with
- * fake in-process servers; and {@link TransformingLanguageServer} and
+ * Tests {@link LanguageServerService} and {@link ScriptSession}, with fake
+ * in-process servers; and {@link TransformingLanguageServer} and
  * {@link BindingsLanguageServer}.
  *
  * @author Gabriel Selzer
  */
 public class LanguageServersTest {
 
-	private static final String URI = "untitled:/a.merge";
+	private static final String URI = "untitled:/a.fake";
 
-	/** The fake servers created, by name ("fast", "slow", "env:A", ...). */
-	static final Map<String, FakeServer> SERVERS = new LinkedHashMap<>();
+	/** The fake servers created, in order. */
+	static final List<FakeServer> SERVERS = new CopyOnWriteArrayList<>();
 
 	private Context context;
-	private DefaultLanguageServerService service;
-	private ScriptLanguage merge;
+	private LanguageServerService service;
+	private ScriptLanguage fake;
 	private final List<PublishDiagnosticsParams> published =
 		new CopyOnWriteArrayList<>();
 
 	@BeforeEach
 	public void setUp() {
-		synchronized (SERVERS) {
-			SERVERS.clear();
-		}
+		SERVERS.clear();
 		context = new Context(ScriptService.class,
 			LanguageServerService.class);
-		service = context.service(DefaultLanguageServerService.class);
-		merge = context.service(ScriptService.class).getLanguageByName("Merge");
+		service = context.service(LanguageServerService.class);
+		fake = context.service(ScriptService.class).getLanguageByName("Fake");
 	}
 
 	@AfterEach
@@ -143,169 +139,148 @@ public class LanguageServersTest {
 	}
 
 	@Test
-	public void testCompletionsMerged() throws Exception {
-		final MergedLanguageServer server = open("x.ma");
-		final CompletionList all = complete(server, 0, 4);
-		// Both servers', the slow one's too, in priority order (the fast one's by
-		// label, having no sortText); "max" once (the slow server's is the same
-		// as the fast one's); all of the fast server's "maz" (its own, even the
-		// same twice, e.g. a method inherited twice).
-		assertEquals(Arrays.asList("mass", "max", "maz", "maz", "maz", "map"),
-			labels(all));
-		final List<String> sorted = all.getItems().stream().map(
-			CompletionItem::getSortText).collect(Collectors.toList());
-		final List<String> resorted = new ArrayList<>(sorted);
-		Collections.sort(resorted);
-		assertEquals(sorted, resorted);
-
-		// Resolving asks the server the completion came from, with its own data.
-		final CompletionItem map = all.getItems().get(5);
-		final CompletionItem resolved = server.resolveCompletionItem(map).get(10,
-			TimeUnit.SECONDS);
-		assertEquals("slow resolved map (data 3)", resolved.getDetail());
-		assertEquals(map.getData(), resolved.getData());
-	}
-
-	@Test
-	public void testDocumentSync() throws Exception {
-		final MergedLanguageServer server = open("x = 1");
-		change(server, "x = 2", 2);
-		awaitEvents("fast", 2);
-		assertEquals(Arrays.asList("open 1 x = 1", "change 2 x = 2"), SERVERS.get(
-			"fast").events);
-		awaitEvents("slow", 2);
-		assertEquals(SERVERS.get("fast").events, SERVERS.get("slow").events);
-		server.didClose(new DidCloseTextDocumentParams(new TextDocumentIdentifier(
-			URI)));
-		awaitEvents("fast", 3);
-		assertEquals("close", SERVERS.get("fast").events.get(2));
-	}
-
-	@Test
-	public void testEnvironmentMove() throws Exception {
-		final MergedLanguageServer server = open("y = 1");
-		awaitEvents("env:A", 1);
-		// The script now runs elsewhere: it moves to that environment's server.
-		change(server, "#env=B\ny = 1", 2);
-		awaitEvents("env:A", 2);
-		awaitEvents("env:B", 1);
-		assertEquals("close", SERVERS.get("env:A").events.get(1));
-		assertEquals("open 2 #env=B\ny = 1", SERVERS.get("env:B").events.get(0));
-	}
-
-	@Test
-	public void testEnvironmentReady() throws Exception {
-		// Where the script runs changes without it changing (e.g. its
-		// environment is built): requests alone move nothing...
-		final MergedLanguageServer server = open("y = 1");
-		awaitEvents("env:A", 1);
-		EnvPlugin.fallback = "C";
-		try {
-			complete(server, 0, 5);
-			assertEquals(1, SERVERS.get("env:A").events.size());
-			// ...but being told so does.
-			service.environmentsChanged();
-			awaitEvents("env:A", 2);
-			assertEquals("close", SERVERS.get("env:A").events.get(1));
-			awaitEvents("env:C", 1);
-			assertEquals("open 1 y = 1", SERVERS.get("env:C").events.get(0));
+	public void testHighestPriorityServes() throws Exception {
+		try (ScriptSession session = service.session(fake)) {
+			final CompletionList list = session.completion("x.ma", 4).get(10,
+				TimeUnit.SECONDS);
+			// Only the highest-priority plugin's server, created for the session.
+			assertEquals(Arrays.asList("max", "mass"), labels(list));
+			assertEquals(1, SERVERS.size());
+			assertEquals("high", SERVERS.get(0).name);
 		}
-		finally {
-			EnvPlugin.fallback = "A";
+		// Each session gets a server of its own.
+		try (ScriptSession other = service.session(fake)) {
+			assertEquals(2, SERVERS.size());
 		}
 	}
 
 	@Test
-	public void testLiveEnvironment() throws Exception {
+	public void testLifeCycle() throws Exception {
+		final ScriptSession session = service.session(fake);
+		final FakeServer server = SERVERS.get(0);
+		// Initialized at once; told about the script as it changes.
+		assertEquals(Collections.singletonList("initialized"), server.events);
+		session.update("x = 1").update("x = 2");
+		assertEquals(Arrays.asList("initialized", "open 1 x = 1",
+			"change 2 x = 2"), server.events);
+		// Closed: the script, then the server.
+		session.close();
+		assertEquals(Arrays.asList("close", "shutdown", "exit"), server.events
+			.subList(3, 6));
+	}
+
+	@Test
+	public void testAwaitsInitialization() {
+		// A server answering initialize later (e.g. a process starting).
+		final FakeServer late = new FakeServer("late", Environment.NONE) {
+
+			@Override
+			public CompletableFuture<InitializeResult> initialize(
+				final InitializeParams params)
+			{
+				return CompletableFuture.supplyAsync(() -> {
+					try {
+						Thread.sleep(100);
+					}
+					catch (final InterruptedException exc) {
+						Thread.currentThread().interrupt();
+					}
+					events.add("answered");
+					return new InitializeResult(new ServerCapabilities());
+				});
+			}
+		};
+		try (ScriptSession session = ScriptSession.owning(late, fake)) {
+			session.update("x");
+		}
+		// Told nothing before it answered.
+		assertEquals(Arrays.asList("answered", "initialized", "open 1 x"),
+			late.events.subList(0, 3));
+	}
+
+	@Test
+	public void testLiveEnvironment() {
 		final ScriptContext live = new SimpleScriptContext();
-		final MergedLanguageServer server = service.server(merge, live);
-		server.didOpen(new DidOpenTextDocumentParams(new TextDocumentItem(URI,
-			"merge", 1, "z")));
-		awaitEvents("env:A", 1);
-		assertSame(live, SERVERS.get("env:A").environment.live());
-	}
-
-	@Test
-	public void testDiagnostics() throws Exception {
-		final MergedLanguageServer server = service.server(merge);
-		server.connect(new Client());
-		server.didOpen(new DidOpenTextDocumentParams(new TextDocumentItem(URI,
-			"merge", 1, "oops")));
-		server.awaitDiagnostics(URI).get(10, TimeUnit.SECONDS);
-		// All servers' problems, together.
-		assertEquals(Arrays.asList("fast: oops", "slow: oops"), messages(server
-			.diagnostics(URI)));
-		final PublishDiagnosticsParams last = published.get(published.size() - 1);
-		assertEquals(2, last.getDiagnostics().size());
-
-		// Problems of an earlier version are out of date.
-		change(server, "fine", 2);
-		server.awaitDiagnostics(URI).get(10, TimeUnit.SECONDS);
-		SERVERS.get("slow").publish(URI, 1, "stale");
-		assertEquals(Collections.emptyList(), messages(server.diagnostics(URI)));
-
-		// For tools: diagnose and wait.
-		assertEquals(Arrays.asList("fast: bad", "slow: bad"), messages(service
-			.diagnose(merge, "bad", 10_000)));
+		try (ScriptSession session = service.session(fake, live)) {
+			assertSame(live, SERVERS.get(0).environment.live());
+		}
+		try (ScriptSession session = service.session(fake)) {
+			assertNull(SERVERS.get(1).environment.live());
+		}
 	}
 
 	@Test
 	public void testSession() throws Exception {
 		final List<List<Diagnostic>> heard = new CopyOnWriteArrayList<>();
-		final ScriptSession session = service.session(merge)
+		final ScriptSession session = service.session(fake)
 			.setDiagnosticsListener(heard::add);
+		final FakeServer server = SERVERS.get(0);
 		// Opened with its first text; untitled, with its language's extension.
 		session.update("x = 1");
 		// The same text again: nothing sent; another: the next version.
 		session.update("x = 1").update("x.ma");
-		awaitEvents("fast", 2);
-		final List<String> events = SERVERS.get("fast").events;
-		assertEquals(Arrays.asList("open 1 x = 1", "change 2 x.ma"), events);
-		final List<String> opened = SERVERS.get("fast").opened;
+		final List<String> events = server.events;
+		assertEquals(Arrays.asList("open 1 x = 1", "change 2 x.ma"), events
+			.subList(1, 3));
+		final List<String> opened = server.opened;
 		assertTrue(opened.get(0).startsWith("untitled:/script-"));
-		assertTrue(opened.get(0).endsWith(".merge"));
+		assertTrue(opened.get(0).endsWith(".fake"));
 
 		// Asked about a text (the current one: nothing sent), at an offset.
 		final CompletionList list = session.completion("x.ma", 4).get(10,
 			TimeUnit.SECONDS);
-		final List<Position> asked = SERVERS.get("fast").asked;
-		assertEquals(new Position(0, 4), asked.get(asked.size() - 1));
+		assertEquals(new Position(0, 4), server.asked.get(server.asked.size() -
+			1));
 		assertTrue(labels(list).contains("max"));
-		assertEquals(2, events.size());
+		assertEquals(3, events.size());
 
-		// The problems in the current text: all servers', together.
-		assertEquals(Arrays.asList("fast: x.ma", "slow: x.ma"), messages(session
+		// The problems in the current text.
+		assertEquals(Collections.singletonList("high: x.ma"), messages(session
 			.diagnostics(10_000)));
 		assertFalse(heard.isEmpty());
 
 		// Saved as a file: closed, and opened anew as the file.
-		final File file = new File("scripts", "a.merge");
+		final File file = new File("scripts", "a.fake");
 		session.setFile(() -> file).update("x.ma");
-		awaitEvents("fast", 4);
-		assertEquals(Arrays.asList("close", "open 1 x.ma"), events.subList(2, 4));
+		assertEquals(Arrays.asList("close", "open 1 x.ma"), events.subList(3, 5));
 		assertEquals(file.getAbsoluteFile().toURI().toString(), opened.get(1));
 		session.close();
-		awaitEvents("fast", 5);
-		assertEquals("close", events.get(4));
+		assertEquals("close", events.get(5));
+	}
+
+	@Test
+	public void testDiagnostics() throws Exception {
+		try (ScriptSession session = service.session(fake)) {
+			final FakeServer server = SERVERS.get(0);
+			assertEquals(Collections.singletonList("high: oops"), messages(session
+				.update("oops").diagnostics(10_000)));
+			// Problems of an earlier version are out of date.
+			assertEquals(Collections.emptyList(), messages(session.update("fine")
+				.diagnostics(10_000)));
+			server.publish(server.opened.get(0), 1, "stale");
+			assertEquals(Collections.emptyList(), messages(session.diagnostics()));
+		}
+		// For tools: diagnose and wait.
+		assertEquals(Collections.singletonList("high: bad"), messages(service
+			.diagnose(fake, "bad", 10_000)));
 	}
 
 	@Test
 	public void testSignatureHelpAndHover() throws Exception {
-		final MergedLanguageServer server = open("max(1, ");
-		// The fast server has none: the slow one's.
-		final SignatureHelp help = server.signatureHelp(new SignatureHelpParams(
-			new TextDocumentIdentifier(URI), new Position(0, 7))).get(10,
+		try (ScriptSession session = service.session(fake)) {
+			final SignatureHelp help = session.signatureHelp("max(1, ", 7).get(10,
 				TimeUnit.SECONDS);
-		assertEquals("max(int a, int b)", help.getSignatures().get(0).getLabel());
-		// Both have hover: the first's.
-		final Hover hover = server.hover(new HoverParams(new TextDocumentIdentifier(
-			URI), new Position(0, 1))).get(10, TimeUnit.SECONDS);
-		assertEquals("fast hover", hover.getContents().getRight().getValue());
+			assertEquals("max(int a, int b)", help.getSignatures().get(0)
+				.getLabel());
+			final Hover hover = session.hover("max(1, ", 1).get(10,
+				TimeUnit.SECONDS);
+			assertEquals("high hover", hover.getContents().getRight().getValue());
+		}
 	}
 
 	@Test
 	public void testTransforming() throws Exception {
-		final FakeServer inner = new FakeServer("inner", Environment.NONE, false);
+		final FakeServer inner = new FakeServer("inner", Environment.NONE);
 		final ScriptDialect dialect = new ScriptDialect() {
 
 			@Override
@@ -324,7 +299,7 @@ public class LanguageServersTest {
 			inner, text -> ScriptDocument.of(text, params, dialect, null));
 		server.connect(new Client());
 		server.didOpen(new DidOpenTextDocumentParams(new TextDocumentItem(URI,
-			"merge", 1, "x.ma")));
+			"fake", 1, "x.ma")));
 		// The server sees the transformed script.
 		assertEquals("open 1 sigma: float\nx.ma", inner.events.get(0));
 		final CompletionList list = server.completion(new CompletionParams(
@@ -347,10 +322,9 @@ public class LanguageServersTest {
 	public void testBindings() throws Exception {
 		// Code typed into an interpreter whose language has no servers: its
 		// variables, and their values' members.
-		final javax.script.SimpleScriptContext live =
-			new javax.script.SimpleScriptContext();
-		live.setAttribute("text", "hello", javax.script.ScriptContext.ENGINE_SCOPE);
-		live.setAttribute("count", 3, javax.script.ScriptContext.ENGINE_SCOPE);
+		final SimpleScriptContext live = new SimpleScriptContext();
+		live.setAttribute("text", "hello", ScriptContext.ENGINE_SCOPE);
+		live.setAttribute("count", 3, ScriptContext.ENGINE_SCOPE);
 		final BindingsLanguageServer server = new BindingsLanguageServer(live);
 		assertEquals(Collections.singletonList("count"), labels(complete(server,
 			"x = co")));
@@ -370,7 +344,7 @@ public class LanguageServersTest {
 		final ScriptLanguage unserved = new AbstractScriptLanguage() {
 
 			@Override
-			public javax.script.ScriptEngine getScriptEngine() {
+			public ScriptEngine getScriptEngine() {
 				return null;
 			}
 		};
@@ -378,40 +352,22 @@ public class LanguageServersTest {
 			assertEquals(Collections.singletonList("count"), labels(session
 				.completion("x = co", 6).get(10, TimeUnit.SECONDS)));
 		}
+		// Without an interpreter: nothing, and no server created.
+		try (ScriptSession session = service.session(unserved)) {
+			assertTrue(session.completion("x = co", 6).get(10, TimeUnit.SECONDS)
+				.getItems().isEmpty());
+		}
+		assertTrue(SERVERS.isEmpty());
 	}
 
 	@Test
 	public void testSupports() {
-		assertTrue(service.supports(merge));
-		assertFalse(service.server(merge).language() == null);
+		assertTrue(service.supports(fake));
+		assertFalse(service.supports(null));
 		assertNull(service.launch("cobol", Environment.NONE));
 	}
 
 	// -- Helper methods --
-
-	private MergedLanguageServer open(final String text) {
-		final MergedLanguageServer server = service.server(merge);
-		server.connect(new Client());
-		server.didOpen(new DidOpenTextDocumentParams(new TextDocumentItem(URI,
-			"merge", 1, text)));
-		return server;
-	}
-
-	private static void change(final MergedLanguageServer server,
-		final String text, final int version)
-	{
-		server.didChange(new DidChangeTextDocumentParams(
-			new VersionedTextDocumentIdentifier(URI, version), Collections
-				.singletonList(new TextDocumentContentChangeEvent(text))));
-	}
-
-	private static CompletionList complete(final MergedLanguageServer server,
-		final int line, final int character) throws Exception
-	{
-		return server.completion(new CompletionParams(new TextDocumentIdentifier(
-			URI), new Position(line, character))).get(10, TimeUnit.SECONDS)
-			.getRight();
-	}
 
 	private static CompletionList complete(final LanguageServer server,
 		final String text) throws Exception
@@ -438,22 +394,6 @@ public class LanguageServersTest {
 	private static List<String> messages(final List<Diagnostic> diagnostics) {
 		return diagnostics.stream().map(d -> d.getMessage().getLeft()).collect(
 			Collectors.toList());
-	}
-
-	private static void awaitEvents(final String server, final int n)
-		throws InterruptedException
-	{
-		final long end = System.currentTimeMillis() + 10_000;
-		while (true) {
-			final FakeServer s;
-			synchronized (SERVERS) {
-				s = SERVERS.get(server);
-			}
-			if (s != null && s.events.size() >= n) return;
-			if (System.currentTimeMillis() > end) throw new AssertionError(
-				"Timed out waiting for " + server);
-			Thread.sleep(10);
-		}
 	}
 
 	private final class Client implements LanguageClient {
@@ -483,7 +423,7 @@ public class LanguageServersTest {
 	// -- A fake language, and its servers --
 
 	@Plugin(type = ScriptLanguage.class)
-	public static class MergeLanguage extends AbstractScriptLanguage {
+	public static class FakeLanguage extends AbstractScriptLanguage {
 
 		@Override
 		public ScriptEngine getScriptEngine() {
@@ -492,76 +432,47 @@ public class LanguageServersTest {
 
 		@Override
 		public List<String> getNames() {
-			return Collections.singletonList("Merge");
+			return Collections.singletonList("Fake");
 		}
 
 		@Override
 		public List<String> getExtensions() {
-			return Collections.singletonList("merge");
+			return Collections.singletonList("fake");
 		}
 	}
 
-	/** Answers at once: max and mass; hover; no signatures. */
+	/** Serves the fake language: the one asked. */
 	@Plugin(type = LanguageServerPlugin.class, priority = Priority.HIGH)
-	public static class FastPlugin implements LanguageServerPlugin {
+	public static class HighPlugin implements LanguageServerPlugin {
 
 		@Override
 		public boolean supports(final ScriptLanguage language) {
-			return language instanceof MergeLanguage;
+			return language instanceof FakeLanguage;
 		}
 
 		@Override
 		public LanguageServer create(final Environment environment) {
-			return register(new FakeServer("fast", environment, false));
+			return register(new FakeServer("high", environment));
 		}
 	}
 
-	/** Answers slowly: max (again) and map; signatures; hover. */
-	@Plugin(type = LanguageServerPlugin.class, priority = Priority.NORMAL)
-	public static class SlowPlugin implements LanguageServerPlugin {
-
-		@Override
-		public boolean supports(final ScriptLanguage language) {
-			return language instanceof MergeLanguage;
-		}
-
-		@Override
-		public LanguageServer create(final Environment environment) {
-			return register(new FakeServer("slow", environment, true));
-		}
-	}
-
-	/** One server per environment: "#env=B" in the script means B. */
+	/** Serves the fake language too, at a lower priority: never asked. */
 	@Plugin(type = LanguageServerPlugin.class, priority = Priority.LOW)
-	public static class EnvPlugin implements LanguageServerPlugin {
+	public static class LowPlugin implements LanguageServerPlugin {
 
 		@Override
 		public boolean supports(final ScriptLanguage language) {
-			return language instanceof MergeLanguage;
-		}
-
-		/** Where scripts run when their text does not say (e.g. once built). */
-		static volatile String fallback = "A";
-
-		@Override
-		public Environment environment(final TextDocumentItem document) {
-			return new Environment(document.getText().contains("#env=B") ? "B"
-				: fallback, null, null, null);
+			return language instanceof FakeLanguage;
 		}
 
 		@Override
 		public LanguageServer create(final Environment environment) {
-			final FakeServer s = new FakeServer("env:" + environment.interpreter(),
-				environment, false);
-			s.silent = true;
-			return register(s);
+			return register(new FakeServer("low", environment));
 		}
 	}
 
 	private static FakeServer register(final FakeServer s) {
-		synchronized (SERVERS) {
-			SERVERS.put(s.name, s);
-		}
+		SERVERS.add(s);
 		return s;
 	}
 
@@ -572,20 +483,15 @@ public class LanguageServersTest {
 
 		final String name;
 		final Environment environment;
-		final boolean slow;
-		boolean silent;
 		final List<String> events = new CopyOnWriteArrayList<>();
 		/** The URIs of the documents opened, in order. */
 		final List<String> opened = new CopyOnWriteArrayList<>();
 		final List<Position> asked = new CopyOnWriteArrayList<>();
 		LanguageClient client;
 
-		FakeServer(final String name, final Environment environment,
-			final boolean slow)
-		{
+		FakeServer(final String name, final Environment environment) {
 			this.name = name;
 			this.environment = environment;
-			this.slow = slow;
 		}
 
 		@Override
@@ -602,12 +508,20 @@ public class LanguageServersTest {
 		}
 
 		@Override
+		public void initialized(final InitializedParams params) {
+			events.add("initialized");
+		}
+
+		@Override
 		public CompletableFuture<Object> shutdown() {
+			events.add("shutdown");
 			return CompletableFuture.completedFuture(null);
 		}
 
 		@Override
-		public void exit() {}
+		public void exit() {
+			events.add("exit");
+		}
 
 		@Override
 		public TextDocumentService getTextDocumentService() {
@@ -635,12 +549,12 @@ public class LanguageServersTest {
 				text);
 		}
 
-		/** Complains about the text; unless silent, or the text is "fine". */
+		/** Complains about the text, unless it is "fine". */
 		private void diagnose(final String uri, final int version,
 			final String text)
 		{
 			if (client == null) return;
-			if (silent || text.equals("fine")) {
+			if (text.equals("fine")) {
 				client.publishDiagnostics(new PublishDiagnosticsParams(uri,
 					Collections.emptyList(), version));
 			}
@@ -678,59 +592,22 @@ public class LanguageServersTest {
 			final Range word = new Range(new Position(at.getLine(), Math.max(0, at
 				.getCharacter() - 2)), at);
 			final List<CompletionItem> items = new ArrayList<>();
-			for (final String label : slow ? new String[] { "max", "map" }
-				: new String[] { "max", "mass" })
-			{
+			for (final String label : new String[] { "max", "mass" }) {
 				final CompletionItem item = new CompletionItem(label);
 				item.setTextEdit(Either.forLeft(new TextEdit(word, label)));
-				item.setData(label.length());
 				items.add(item);
 			}
-			if (!slow && name.equals("fast")) {
-				// Overloads: the same name, different parameters.
-				for (final String params : new String[] { "(int a)", "(int a)",
-					"(double a)" })
-				{
-					final CompletionItem item = new CompletionItem("maz");
-					item.setTextEdit(Either.forLeft(new TextEdit(word, "maz")));
-					final org.eclipse.lsp4j.CompletionItemLabelDetails details =
-						new org.eclipse.lsp4j.CompletionItemLabelDetails();
-					details.setDetail(params);
-					item.setLabelDetails(details);
-					items.add(item);
-				}
-			}
-			final Either<List<CompletionItem>, CompletionList> answer = Either
-				.forRight(new CompletionList(items));
-			if (!slow) return CompletableFuture.completedFuture(answer);
-			return CompletableFuture.supplyAsync(() -> {
-				try {
-					Thread.sleep(200);
-				}
-				catch (final InterruptedException exc) {
-					Thread.currentThread().interrupt();
-				}
-				return answer;
-			});
-		}
-
-		@Override
-		public CompletableFuture<CompletionItem> resolveCompletionItem(
-			final CompletionItem item)
-		{
-			item.setDetail(name + " resolved " + item.getLabel() + " (data " + item
-				.getData() + ")");
-			return CompletableFuture.completedFuture(item);
+			return CompletableFuture.completedFuture(Either.forRight(
+				new CompletionList(items)));
 		}
 
 		@Override
 		public CompletableFuture<SignatureHelp> signatureHelp(
 			final SignatureHelpParams p)
 		{
-			if (!slow) return CompletableFuture.completedFuture(null);
 			return CompletableFuture.completedFuture(new SignatureHelp(Collections
-				.singletonList(new SignatureInformation("max(int a, int b)", (String) null,
-					Arrays.asList(new ParameterInformation("int a"),
+				.singletonList(new SignatureInformation("max(int a, int b)",
+					(String) null, Arrays.asList(new ParameterInformation("int a"),
 						new ParameterInformation("int b")))), 0, 1));
 		}
 

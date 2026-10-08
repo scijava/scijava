@@ -29,28 +29,11 @@
 
 package org.scijava.code.lsp.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 import javax.script.ScriptContext;
 
-import org.eclipse.lsp4j.Diagnostic;
-import org.eclipse.lsp4j.InitializeParams;
-import org.eclipse.lsp4j.InitializedParams;
-import org.eclipse.lsp4j.MessageActionItem;
-import org.eclipse.lsp4j.MessageParams;
-import org.eclipse.lsp4j.PublishDiagnosticsParams;
-import org.eclipse.lsp4j.ShowMessageRequestParams;
-import org.eclipse.lsp4j.services.LanguageClient;
-import org.eclipse.lsp4j.services.LanguageClientAware;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.LanguageServerPlugin;
@@ -61,16 +44,15 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.PluginService;
 import org.scijava.script.ScriptLanguage;
-import org.scijava.script.ScriptService;
 import org.scijava.service.AbstractService;
 import org.scijava.service.Service;
 
 /**
  * Default implementation of {@link LanguageServerService}.
  * <p>
- * Servers are created once per plugin and {@link Environment}, initialized,
- * and shared by all {@link MergedLanguageServer}s. Each server's diagnostics
- * reach the merged server that has the document open.
+ * Each session gets a server of its own, from the highest-priority plugin
+ * serving its language. (Server processes behind them are shared; see
+ * {@link #launch}.)
  * </p>
  *
  * @author Gabriel Selzer
@@ -89,21 +71,10 @@ public class DefaultLanguageServerService extends AbstractService implements
 	@Parameter(required = false)
 	private LogService log;
 
-	@Parameter(required = false)
-	private ScriptService scriptService;
-
 	private final ScriptParameters parameters = new ScriptParameters(
 		this::context);
 
 	private List<LanguageServerPlugin> plugins;
-
-	/** The servers, by plugin and environment. */
-	private final Map<Key, CompletableFuture<LanguageServer>> servers =
-		new HashMap<>();
-
-	/** Which merged server has each document open. */
-	private final Map<String, MergedLanguageServer> owners =
-		new ConcurrentHashMap<>();
 
 	@Override
 	public ScriptSession session(final ScriptLanguage language) {
@@ -114,50 +85,32 @@ public class DefaultLanguageServerService extends AbstractService implements
 	public ScriptSession session(final ScriptLanguage language,
 		final ScriptContext live)
 	{
-		final ScriptSession session;
-		if (live != null && !supports(language)) {
-			session = ScriptSession.owning(new BindingsLanguageServer(live),
-				language);
+		// The highest-priority plugin serves the language.
+		// TODO: Consider adding a "merged" LanguageServer that can wrangle all
+		// matching servers. This could allow custom auto-completions (e.g.
+		// SciJava Ops) and/or simplify servers combining sources themselves
+		// (e.g. scripting-jython's PythonCompanion, scripting-appose-python's
+		// ApposePythonLanguageServer).
+		final LanguageServerPlugin plugin = plugin(language);
+		LanguageServer server = null;
+		if (plugin != null) {
+			try {
+				server = plugin.create(Environment.NONE.withLive(live));
+			}
+			catch (final RuntimeException | LinkageError exc) {
+				if (log != null) log.warn("Could not create a language server: " +
+					plugin.getClass().getName(), exc);
+			}
 		}
-		else {
-			final MergedLanguageServer server = server(language, live);
-			session = ScriptSession.owning(server, language,
-				server::allDiagnostics);
-		}
-		return session.setLogger(log);
-	}
-
-	@Override
-	public void environmentsChanged() {
-		for (final MergedLanguageServer server : new HashSet<>(owners.values())) {
-			server.relocateAll();
-		}
-	}
-
-	/**
-	 * Gets a server for scripts of the given language, standing for all the
-	 * servers plugins offer for it: it opens, changes and closes each document
-	 * on every server for that script, and merges their answers. Each call
-	 * gets its own (e.g. one per session), sharing the servers behind it.
-	 */
-	MergedLanguageServer server(final ScriptLanguage language) {
-		return server(language, null);
-	}
-
-	/**
-	 * As {@link #server(ScriptLanguage)}, for code typed into a running
-	 * interpreter: its state reaches the servers via their
-	 * {@link Environment#live()}.
-	 */
-	MergedLanguageServer server(final ScriptLanguage language,
-		final ScriptContext live)
-	{
-		return new MergedLanguageServer(this, language, plugins(language), live);
+		// NB: Without a server, the interpreter's variables (if any) are
+		// completed.
+		if (server == null) server = new BindingsLanguageServer(live);
+		return ScriptSession.owning(server, language).setLogger(log);
 	}
 
 	@Override
 	public boolean supports(final ScriptLanguage language) {
-		return !plugins(language).isEmpty();
+		return plugin(language) != null;
 	}
 
 	@Override
@@ -174,147 +127,30 @@ public class DefaultLanguageServerService extends AbstractService implements
 		return parameters.of(text);
 	}
 
-	@Override
-	public synchronized void dispose() {
-		for (final CompletableFuture<LanguageServer> f : servers.values()) {
-			f.thenAccept(s -> {
-				try {
-					s.shutdown().get(2, TimeUnit.SECONDS);
-					s.exit();
-				}
-				catch (final Exception exc) {
-					// NB: Stopping anyway.
-				}
-			});
-		}
-		servers.clear();
-	}
-
-	// -- Internal methods --
-
-	/** Gets the (initialized) server of a plugin for an environment. */
-	synchronized CompletableFuture<LanguageServer> server(
-		final LanguageServerPlugin plugin, final Environment environment)
-	{
-		final Key key = new Key(plugin, environment);
-		CompletableFuture<LanguageServer> known = servers.get(key);
-		if (known != null && !known.isCompletedExceptionally()) return known;
-		final LanguageServer server;
-		try {
-			server = plugin.create(environment);
-		}
-		catch (final RuntimeException | LinkageError exc) {
-			if (log != null) log.warn("Could not create a language server: " +
-				plugin.getClass().getName(), exc);
-			return failed(exc);
-		}
-		if (server instanceof LanguageClientAware) {
-			((LanguageClientAware) server).connect(new Dispatcher(server));
-		}
-		known = server.initialize(new InitializeParams()).thenApply(result -> {
-			server.initialized(new InitializedParams());
-			return server;
-		});
-		servers.put(key, known);
-		return known;
-	}
-
-	/** Notes which merged server has a document open (null: none). */
-	void own(final String uri, final MergedLanguageServer owner) {
-		if (owner == null) owners.remove(uri);
-		else owners.put(uri, owner);
-	}
-
-	LogService logger() {
-		return log;
-	}
-
 	// -- Helper methods --
 
-	/** The plugins serving a language, highest priority first. */
-	private synchronized List<LanguageServerPlugin> plugins(
+	/**
+	 * The highest-priority plugin serving a language, or null if none.
+	 *
+	 * @param language the {@link ScriptLanguage} to match
+	 * @return a {@link LanguageServerPlugin} handling {@code language}
+	 */
+	private synchronized LanguageServerPlugin plugin(
 		final ScriptLanguage language)
 	{
 		if (plugins == null) {
 			plugins = pluginService.createInstancesOfType(
 				LanguageServerPlugin.class);
 		}
-		final List<LanguageServerPlugin> out = new ArrayList<>();
-		if (language == null) return out;
+		if (language == null) return null;
 		for (final LanguageServerPlugin p : plugins) {
 			try {
-				if (p.supports(language)) out.add(p);
+				if (p.supports(language)) return p;
 			}
 			catch (final RuntimeException | LinkageError exc) {
 				if (log != null) log.debug(exc);
 			}
 		}
-		return Collections.unmodifiableList(out);
-	}
-
-	private static <T> CompletableFuture<T> failed(final Throwable t) {
-		final CompletableFuture<T> f = new CompletableFuture<>();
-		f.completeExceptionally(t);
-		return f;
-	}
-
-	private static final class Key {
-
-		private final LanguageServerPlugin plugin;
-		private final Environment environment;
-
-		private Key(final LanguageServerPlugin plugin,
-			final Environment environment)
-		{
-			this.plugin = plugin;
-			this.environment = environment;
-		}
-
-		@Override
-		public boolean equals(final Object o) {
-			return o instanceof Key && ((Key) o).plugin == plugin && ((Key) o).environment
-				.equals(environment);
-		}
-
-		@Override
-		public int hashCode() {
-			return Objects.hash(System.identityHashCode(plugin), environment);
-		}
-	}
-
-	/** Passes a server's diagnostics to the merged server owning the document. */
-	private final class Dispatcher implements LanguageClient {
-
-		private final LanguageServer server;
-
-		private Dispatcher(final LanguageServer server) {
-			this.server = server;
-		}
-
-		@Override
-		public void publishDiagnostics(final PublishDiagnosticsParams p) {
-			final MergedLanguageServer owner = owners.get(p.getUri());
-			if (owner != null) owner.received(server, p);
-		}
-
-		@Override
-		public void telemetryEvent(final Object object) {}
-
-		@Override
-		public void showMessage(final MessageParams m) {
-			if (log != null) log.debug("Language server: " + m.getMessage());
-		}
-
-		@Override
-		public CompletableFuture<MessageActionItem> showMessageRequest(
-			final ShowMessageRequestParams r)
-		{
-			return CompletableFuture.completedFuture(null);
-		}
-
-		@Override
-		public void logMessage(final MessageParams m) {
-			if (log != null) log.debug("Language server: " + m.getMessage());
-		}
+		return null;
 	}
 }

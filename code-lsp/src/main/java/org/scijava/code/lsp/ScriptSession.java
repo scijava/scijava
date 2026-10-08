@@ -134,7 +134,24 @@ public class ScriptSession implements AutoCloseable {
 	public static ScriptSession owning(final LanguageServer server,
 		final ScriptLanguage language)
 	{
-		return new ScriptSession(server, language, null).connect();
+		return owning(server, language, null);
+	}
+
+	/**
+	 * As {@link #owning(LanguageServer, ScriptLanguage)}, for a server that
+	 * stands for several (e.g. one per plugin), which report each version's
+	 * problems separately.
+	 *
+	 * @param server The server, which the session owns.
+	 * @param language The script's language, or null if unknown.
+	 * @param allReported Gets the problems in a document once all its servers
+	 *          reported them; or null if the server reports them at once.
+	 */
+	public static ScriptSession owning(final LanguageServer server,
+		final ScriptLanguage language,
+		final Function<String, CompletableFuture<List<Diagnostic>>> allReported)
+	{
+		return new ScriptSession(server, language, allReported).connect();
 	}
 
 	/** Becomes the client of its server. */

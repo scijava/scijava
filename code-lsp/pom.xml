@@ -135,6 +135,18 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<!--
+					NB: On the module path, the tests' plugin index would shadow the
+					module's own (both are META-INF/json/org.scijava.plugin.Plugin),
+					hiding its services from SciJava Common. On the classpath, as in
+					Fiji, both are found.
+					-->
+					<useModulePath>false</useModulePath>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 </project>

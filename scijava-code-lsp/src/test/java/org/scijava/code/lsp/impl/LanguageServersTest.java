@@ -264,13 +264,14 @@ public class LanguageServersTest {
 			.setDiagnosticsListener(heard::add);
 		// Opened with its first text; untitled, with its language's extension.
 		session.update("x = 1");
-		assertTrue(session.uri().startsWith("untitled:/script-"));
-		assertTrue(session.uri().endsWith(".merge"));
 		// The same text again: nothing sent; another: the next version.
 		session.update("x = 1").update("x.ma");
 		awaitEvents("fast", 2);
 		final List<String> events = SERVERS.get("fast").events;
 		assertEquals(Arrays.asList("open 1 x = 1", "change 2 x.ma"), events);
+		final List<String> opened = SERVERS.get("fast").opened;
+		assertTrue(opened.get(0).startsWith("untitled:/script-"));
+		assertTrue(opened.get(0).endsWith(".merge"));
 
 		// Asked about a text (the current one: nothing sent), at an offset.
 		final CompletionList list = session.completion("x.ma", 4).get(10,
@@ -287,13 +288,13 @@ public class LanguageServersTest {
 
 		// Saved as a file: closed, and opened anew as the file.
 		final File file = new File("scripts", "a.merge");
-		session.setFile(file).update("x.ma");
+		session.setFile(() -> file).update("x.ma");
 		awaitEvents("fast", 4);
 		assertEquals(Arrays.asList("close", "open 1 x.ma"), events.subList(2, 4));
-		assertEquals(file.getAbsoluteFile().toURI().toString(), session.uri());
+		assertEquals(file.getAbsoluteFile().toURI().toString(), opened.get(1));
 		session.close();
 		awaitEvents("fast", 5);
-		assertNull(session.uri());
+		assertEquals("close", events.get(4));
 	}
 
 	@Test
@@ -586,6 +587,8 @@ public class LanguageServersTest {
 		final boolean slow;
 		boolean silent;
 		final List<String> events = new CopyOnWriteArrayList<>();
+		/** The URIs of the documents opened, in order. */
+		final List<String> opened = new CopyOnWriteArrayList<>();
 		final List<Position> asked = new CopyOnWriteArrayList<>();
 		LanguageClient client;
 
@@ -631,6 +634,7 @@ public class LanguageServersTest {
 		@Override
 		public void didOpen(final DidOpenTextDocumentParams p) {
 			final TextDocumentItem d = p.getTextDocument();
+			opened.add(d.getUri());
 			events.add("open " + d.getVersion() + " " + d.getText());
 			diagnose(d.getUri(), d.getVersion(), d.getText());
 		}

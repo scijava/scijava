@@ -29,10 +29,6 @@
 
 package org.scijava.code.lsp.impl;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -129,18 +125,6 @@ public class DefaultLanguageServerService extends AbstractService implements
 				server::allDiagnostics);
 		}
 		return session.setLogger(log);
-	}
-
-	@Override
-	public ScriptSession session(final File file) throws IOException {
-		final String name = file.getName();
-		final int dot = name.lastIndexOf('.');
-		final ScriptLanguage language = scriptService == null || dot < 0 ? null
-			: scriptService.getLanguageByExtension(name.substring(dot + 1));
-		if (language == null || !supports(language)) return null;
-		final String text = new String(Files.readAllBytes(file.toPath()),
-			StandardCharsets.UTF_8);
-		return session(language).setFile(file).update(text);
 	}
 
 	@Override

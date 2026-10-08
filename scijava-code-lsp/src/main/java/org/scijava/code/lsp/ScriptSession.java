@@ -162,21 +162,6 @@ public class ScriptSession implements AutoCloseable {
 		return this;
 	}
 
-	/** The server this session asks. */
-	public LanguageServer server() {
-		return server;
-	}
-
-	/** The script's language, or null if unknown. */
-	public ScriptLanguage language() {
-		return language;
-	}
-
-	/** Sets the script's file (null if it has none). */
-	public ScriptSession setFile(final File file) {
-		return setFile(() -> file);
-	}
-
 	/**
 	 * Sets a supplier of the script's file, asked each time the script is
 	 * updated, e.g. so that Save As is followed.
@@ -227,16 +212,6 @@ public class ScriptSession implements AutoCloseable {
 					.singletonList(new TextDocumentContentChangeEvent(text))));
 		}
 		return this;
-	}
-
-	/** The text last sent, or null if the script is not open. */
-	public synchronized String text() {
-		return text;
-	}
-
-	/** The script's URI, or null if it is not open. */
-	public synchronized String uri() {
-		return uri;
 	}
 
 	// -- Requests: about the given text (sent first, if new), at an offset --

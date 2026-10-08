@@ -29,8 +29,6 @@
 
 package org.scijava.code.lsp;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -66,13 +64,6 @@ public interface LanguageServerService extends SciJavaService {
 	ScriptSession session(ScriptLanguage language, ScriptContext live);
 
 	/**
-	 * Starts a session about a script file, as it is on disk: of its file
-	 * extension's language. Returns null if no language of that extension is
-	 * served.
-	 */
-	ScriptSession session(File file) throws IOException;
-
-	/**
 	 * Tells the servers that where scripts run may have changed without the
 	 * scripts changing, e.g. as an environment finished building, or packages
 	 * finished installing: each open script moves to the servers of where it
@@ -97,7 +88,7 @@ public interface LanguageServerService extends SciJavaService {
 	/**
 	 * Finds the problems in a script, waiting for them: for tools that ask
 	 * once, rather than editors. (For a script file, whose servers may depend
-	 * on where it is, use a {@link #session(File)}.)
+	 * on where it is, use a {@link #session session} with its file set.)
 	 *
 	 * @param language The script's language.
 	 * @param text The script.

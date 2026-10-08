@@ -2,55 +2,93 @@
 
 Code intelligence for SciJava scripts (completions, signature help, hover and
 diagnostics), in the terms of the
-[Language Server Protocol](https://microsoft.github.io/language-server-protocol/),
-via [lsp4j](https://github.com/eclipse-lsp4j/lsp4j).
+[Language Server Protocol](https://microsoft.github.io/language-server-protocol/).
 
-## Language servers
-
-Every source of code intelligence is an lsp4j `LanguageServer`: in the
-SciJava process (e.g. Groovy's and Jython's, often built on
-`ScriptLanguageServer`), or a proxy to a server process (e.g.
-jedi-language-server, for Python run via Appose).
-
-`LanguageServerPlugin`s offer servers per script language, and say where a
-script runs (an `Environment`: interpreter, search paths, classpath, and a
-running interpreter's state, if any). For each language, the
-`LanguageServerService` makes a `MergedLanguageServer` standing for all of
-its plugins' servers: it opens, changes and closes each document on every
-server for that script, and merges their answers.
-
-Clients (e.g. the Script Editor, its REPL, or a tool checking scripts) ask
-about a script through a `ScriptSession` from the service: given a script's
-file, or text, or both, it keeps the servers' copy up to date, names it,
-takes offsets into its text, and reports the problems found in it. Clients
-that speak the protocol themselves (e.g. via JSON-RPC) use the merged server
-directly.
-Completions that take longer than a moment come later, as an
-`UpdatingCompletionList`'s update; signatures can be rated against the
-arguments typed (`RatedSignatureInformation`). Tools that ask once (e.g. to
-check a script) can call `LanguageServerService.diagnose`.
-
-Servers see a script as plain code of its language (a `ScriptDocument`: its
-`#@` parameters declared with their run-time types, per a `ScriptDialect`);
-`TransformingLanguageServer` does this for servers that know the language but
-not SciJava, and maps positions back.
-
-Server processes are started by `LspServers` (one per environment scripts run
-in), restarted if they stop, and stopped when idle; an `LspServerSpec` says
-how to start one, and `LspServerPlugin`s offer them per LSP language id
-(`LanguageServerService.launch`).
-
-## Being a language server
-
-`org.scijava.code.lsp.server.Main` runs a language server for SciJava
-scripts over standard input and output: the `LanguageServerService`'s
-servers, for every script language they support (by file extension). Editors
-outside SciJava can use it, e.g. VS Code via a generic language client
-extension, configured to run:
+[lsp4j](https://github.com/eclipse-lsp4j/lsp4j) supplies the protocol: its
+types, the `LanguageServer` and `LanguageClient` interfaces, and JSON-RPC over
+a pair of streams. This module is the client side that lsp4j leaves to its
+users (deciding which servers answer for a script, keeping them in sync with
+it, and starting server processes), plus what is particular to SciJava
+scripts.
 
 ```
-java -cp "<Fiji>/jars/*;<Fiji>/plugins/*" org.scijava.code.lsp.server.Main
+ client (e.g. Script Editor)
+   │  ScriptSession: a script's text, and offsets into it
+   ▼
+ LanguageServerService ──► the LanguageServerPlugins serving the language
+   │  one server standing for all of them (merged answers)
+   ├──► in-process servers (e.g. Groovy, Jython), built on ScriptLanguageServer
+   └──► server processes (e.g. jedi-language-server), via LspServerSpec
+          seeing the script as plain code (TransformingLanguageServer)
 ```
 
-(with `:` instead of `;` on Linux and macOS) for the file types of interest
-(e.g. `*.py` for Jython, `*.groovy`).
+It does five things, each in a package of its own (the first and the last
+share one).
+
+## 1. Brokering between scripts and servers (`org.scijava.code.lsp`)
+
+The core. `LanguageServerPlugin`s offer lsp4j `LanguageServer`s for script
+languages, and say where a script runs (an `Environment`: interpreter, search
+paths, classpath, and a running interpreter's state, if any). For each
+script, the `LanguageServerService` gathers every server of its language, in
+its environment, behind one server: it opens, changes and closes the script
+on each, merges their answers, and moves the script to other servers should
+where it runs change.
+
+Clients ask about a script through a `ScriptSession` from the service: it
+keeps the servers' copy of the script up to date, names it (its file's URI,
+or an `untitled:` one), takes offsets into its text (see `Positions`), and
+reports the problems found in it. Tools that ask once (e.g. to check a
+script) can call `LanguageServerService.diagnose`. For code typed into an
+interpreter whose language no plugin serves, a session completes the
+interpreter's variables.
+
+## 2. Running server processes (`org.scijava.code.lsp.launch`)
+
+For servers that are not Java in the SciJava process (e.g. jedi-language-server,
+for Python). An `LspServerPlugin` offers an `LspServerSpec` for an LSP
+language id (e.g. `python`), saying how to start a server for an environment
+and returning its streams (an `LspConnection`). Plugins get such a server via
+`LanguageServerService.launch`: started when first needed, one per
+environment, restarted if it stops, and stopped when idle.
+
+## 3. Translating SciJava scripts (`org.scijava.code.lsp.script`)
+
+A SciJava script is not quite plain code of its language: its `#@`
+parameters define variables before it runs. `LanguageServerService.scriptParameters`
+parses them; a `ScriptDocument` is the script as plain code, with them
+declared with their run-time types, as its language's `ScriptDialect` says.
+`TransformingLanguageServer` shows servers that know the language but not
+SciJava (e.g. jedi) this text, and maps positions in their answers back.
+In-process servers use `ScriptDocument` too, to know the parameters.
+
+## 4. A toolkit for in-process servers (`org.scijava.code.lsp.jvm`)
+
+For servers of JVM languages, written in Java (e.g. Groovy's and Jython's):
+`ScriptLanguageServer`, a base class keeping the open documents and turning
+requests into questions about a document and an offset; `Members`,
+completions for Java classes' members by reflection; `Callable`, something to
+call as a completion snippet; `Signatures`, rating overloads against the
+arguments typed; and `ClassIndex`, the classes on the classpath, with their
+javadoc.
+
+## 5. Additions to LSP (`org.scijava.code.lsp`)
+
+For in-process use, where both sides are SciJava's (over JSON-RPC, they
+degrade to plain LSP): `UpdatingCompletionList`, completions answered at once
+with better ones to follow (e.g. a slower server's); and
+`RatedSignatureInformation`, a signature rated by how well the arguments
+typed so far fit it.
+
+## Who uses what
+
+|                         | 1 | 2 | 3 | 4 | 5 |
+|-------------------------|---|---|---|---|---|
+| script-editor           | ✓ |   |   |   | ✓ |
+| scripting-groovy        | ✓ |   | ✓ | ✓ | ✓ |
+| scripting-jython        | ✓ | ✓ | ✓ | ✓ | ✓ |
+| scripting-appose-python | ✓ | ✓ | ✓ |   |   |
+
+The specialized packages depend only on `org.scijava.code.lsp`, never on each
+other. The module exports all four; its implementation
+(`org.scijava.code.lsp.impl`) is internal.

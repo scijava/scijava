@@ -100,8 +100,13 @@
 			<version>${lsp4j.version}</version>
 		</dependency>
 		<!--
-		NB: lsp4j asks for a range of Gson versions; fix one, so that projects
-		without Gson's version managed do not resolve the range themselves.
+		NB: lsp4j asks for a range of Gson versions ([2.9.1,3.0)), as is usual
+		for OSGi bundles. Maven resolves a range to the newest matching release
+		in the remote repositories: a network lookup, and a result that changes
+		as Gson releases. Declaring Gson here (its version managed by
+		pom-scijava) fixes one version in our published POM, which wins over
+		lsp4j's range for anyone depending on us (nearest wins), whether or not
+		their build manages Gson's version.
 		-->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>

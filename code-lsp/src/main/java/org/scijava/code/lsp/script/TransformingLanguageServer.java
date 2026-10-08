@@ -72,7 +72,6 @@ import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
 import org.scijava.code.lsp.Positions;
-import org.scijava.code.lsp.UpdatingCompletionList;
 
 /**
  * Shows a language server SciJava scripts as plain code of its language (see
@@ -311,11 +310,7 @@ public class TransformingLanguageServer implements LanguageServer,
 			}
 			items.add(c);
 		}
-		final CompletionList out = list instanceof UpdatingCompletionList
-			? new UpdatingCompletionList(items, ((UpdatingCompletionList) list)
-				.update().thenApply(u -> u == null ? null : back(doc, u)))
-			: new CompletionList(list.isIncomplete(), items);
-		return out;
+		return new CompletionList(list.isIncomplete(), items);
 	}
 
 	/** Passes the inner server's diagnostics on, mapped back. */

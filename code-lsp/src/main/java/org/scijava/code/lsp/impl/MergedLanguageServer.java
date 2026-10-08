@@ -39,7 +39,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -81,7 +80,6 @@ import org.eclipse.lsp4j.services.WorkspaceService;
 import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.LanguageServerPlugin;
 import org.scijava.code.lsp.Positions;
-import org.scijava.code.lsp.UpdatingCompletionList;
 import org.scijava.script.ScriptLanguage;
 
 
@@ -92,8 +90,7 @@ import org.scijava.script.ScriptLanguage;
  * their answers, in the plugins' priority order.
  * <ul>
  * <li>Completions: all servers', in order, without duplicates (the same text
- * after inserting). Those not answered within a moment follow as an
- * {@link UpdatingCompletionList#update() update}.</li>
+ * after inserting).</li>
  * <li>Signature help and hover: the first server's that has some.</li>
  * <li>Diagnostics: all servers', published together to this server's
  * client.</li>
@@ -109,9 +106,6 @@ import org.scijava.script.ScriptLanguage;
 public class MergedLanguageServer implements LanguageServer,
 	TextDocumentService, WorkspaceService, LanguageClientAware
 {
-
-	/** How long to wait for all servers' completions, in milliseconds. */
-	private static final long BUDGET = Long.getLong("scijava.lsp.budget", 25);
 
 	private final DefaultLanguageServerService service;
 	private final ScriptLanguage language;
@@ -284,33 +278,14 @@ public class MergedLanguageServer implements LanguageServer,
 		final String uri = doc.item.getUri();
 		final String text = doc.item.getText();
 		final int caret = Positions.offset(text, params.getPosition());
-		final List<CompletableFuture<CompletionList>> first = new ArrayList<>();
-		final List<CompletableFuture<CompletionList>> last = new ArrayList<>();
+		final List<CompletableFuture<CompletionList>> answers = new ArrayList<>();
 		for (final Member m : doc.members) {
-			final CompletableFuture<CompletionList> f = ask(m, s -> s.completion(
-				params)).thenApply(MergedLanguageServer::list);
-			first.add(f);
-			last.add(f.thenCompose(MergedLanguageServer::settled));
+			answers.add(ask(m, s -> s.completion(params)).thenApply(
+				MergedLanguageServer::list));
 		}
-		final CompletableFuture<Void> all = CompletableFuture.allOf(first.toArray(
-			new CompletableFuture[0]));
-		return all.completeOnTimeout(null, BUDGET, TimeUnit.MILLISECONDS)
-			.thenApply(x -> {
-				final boolean settled = last.stream().allMatch(
-					CompletableFuture::isDone);
-				final List<CompletionList> now = new ArrayList<>();
-				for (int i = 0; i < first.size(); i++) {
-					now.add(last.get(i).isDone() ? last.get(i).getNow(null) : first.get(
-						i).getNow(null));
-				}
-				final CompletionList merged = merge(now, uri, text, caret);
-				if (settled) return merged;
-				final CompletableFuture<CompletionList> update = CompletableFuture
-					.allOf(last.toArray(new CompletableFuture[0])).thenApply(
-						y -> merge(joinAll(last), uri, text, caret));
-				return (CompletionList) new UpdatingCompletionList(merged.getItems(),
-					update);
-			}).thenApply(Either::forRight);
+		return CompletableFuture.allOf(answers.toArray(new CompletableFuture[0]))
+			.thenApply(x -> Either.forRight(merge(joinAll(answers), uri, text,
+				caret)));
 	}
 
 	@Override
@@ -505,19 +480,6 @@ public class MergedLanguageServer implements LanguageServer,
 			.getLeft());
 	}
 
-	/** The final completions of a server: its update's, if announced. */
-	private static CompletableFuture<CompletionList> settled(
-		final CompletionList list)
-	{
-		if (!(list instanceof UpdatingCompletionList)) {
-			return CompletableFuture.completedFuture(list);
-		}
-		final CompletableFuture<CompletionList> update =
-			((UpdatingCompletionList) list).update();
-		if (update == null) return CompletableFuture.completedFuture(list);
-		return update.handle((better, error) -> better != null ? better : list);
-	}
-
 	private static List<CompletionList> joinAll(
 		final List<CompletableFuture<CompletionList>> lists)
 	{
@@ -543,8 +505,7 @@ public class MergedLanguageServer implements LanguageServer,
 		for (int i = 0; i < lists.size(); i++) {
 			final CompletionList list = lists.get(i);
 			if (list == null || list.getItems() == null) continue;
-			incomplete |= list.isIncomplete() &&
-				!(list instanceof UpdatingCompletionList);
+			incomplete |= list.isIncomplete();
 			final List<CompletionItem> items = new ArrayList<>(list.getItems());
 			items.sort(Comparator.comparing(c -> c.getSortText() != null ? c
 				.getSortText() : c.getLabel()));

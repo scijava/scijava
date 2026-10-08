@@ -22,8 +22,7 @@ scripts.
           seeing the script as plain code (TransformingLanguageServer)
 ```
 
-It does five things, each in a package of its own (the first and the last
-share one).
+It does four things, each in a package of its own.
 
 ## 1. Brokering between scripts and servers (`org.scijava.code.lsp`)
 
@@ -72,22 +71,14 @@ call as a completion snippet; `Signatures`, rating overloads against the
 arguments typed; and `ClassIndex`, the classes on the classpath, with their
 javadoc.
 
-## 5. Additions to LSP (`org.scijava.code.lsp`)
-
-For in-process use, where both sides are SciJava's (over JSON-RPC, they
-degrade to plain LSP): `UpdatingCompletionList`, completions answered at once
-with better ones to follow (e.g. a slower server's); and
-`RatedSignatureInformation`, a signature rated by how well the arguments
-typed so far fit it.
-
 ## Who uses what
 
-|                         | 1 | 2 | 3 | 4 | 5 |
-|-------------------------|---|---|---|---|---|
-| script-editor           | ✓ |   |   |   | ✓ |
-| scripting-groovy        | ✓ |   | ✓ | ✓ | ✓ |
-| scripting-jython        | ✓ | ✓ | ✓ | ✓ | ✓ |
-| scripting-appose-python | ✓ | ✓ | ✓ |   |   |
+|                         | 1 | 2 | 3 | 4 |
+|-------------------------|---|---|---|---|
+| script-editor           | ✓ |   |   |   |
+| scripting-groovy        | ✓ |   | ✓ | ✓ |
+| scripting-jython        | ✓ | ✓ | ✓ | ✓ |
+| scripting-appose-python | ✓ | ✓ | ✓ |   |
 
 The specialized packages depend only on `org.scijava.code.lsp`, never on each
 other. The module exports all four; its implementation

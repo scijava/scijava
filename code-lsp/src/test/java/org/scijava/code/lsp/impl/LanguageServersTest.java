@@ -76,6 +76,7 @@ import org.eclipse.lsp4j.ServerCapabilities;
 import org.eclipse.lsp4j.ShowMessageRequestParams;
 import org.eclipse.lsp4j.SignatureHelp;
 import org.eclipse.lsp4j.SignatureHelpParams;
+import org.eclipse.lsp4j.SignatureInformation;
 import org.eclipse.lsp4j.TextDocumentContentChangeEvent;
 import org.eclipse.lsp4j.TextDocumentIdentifier;
 import org.eclipse.lsp4j.TextDocumentItem;
@@ -96,13 +97,10 @@ import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.LanguageServerPlugin;
 import org.scijava.code.lsp.LanguageServerService;
 import org.scijava.code.lsp.Positions;
-import org.scijava.code.lsp.RatedSignatureInformation.Fit;
-import org.scijava.code.lsp.RatedSignatureInformation;
 import org.scijava.code.lsp.script.ScriptDialect;
 import org.scijava.code.lsp.script.ScriptDocument;
 import org.scijava.code.lsp.ScriptSession;
 import org.scijava.code.lsp.script.TransformingLanguageServer;
-import org.scijava.code.lsp.UpdatingCompletionList;
 import org.scijava.plugin.Plugin;
 import org.scijava.script.AbstractScriptLanguage;
 import org.scijava.script.ScriptLanguage;
@@ -147,17 +145,11 @@ public class LanguageServersTest {
 	@Test
 	public void testCompletionsMerged() throws Exception {
 		final MergedLanguageServer server = open("x.ma");
-		final CompletionList first = complete(server, 0, 4);
-		// The fast server's at once (by label, having no sortText); the slow
-		// one's to come.
-		assertTrue(first instanceof UpdatingCompletionList);
-		assertEquals(Arrays.asList("mass", "max", "maz", "maz", "maz"), labels(
-			first));
-		final CompletionList all = ((UpdatingCompletionList) first).update().get(10,
-			TimeUnit.SECONDS);
-		// In priority order; "max" once (the slow server's is the same as the
-		// fast one's); all of the fast server's "maz" (its own, even the same
-		// twice, e.g. a method inherited twice).
+		final CompletionList all = complete(server, 0, 4);
+		// Both servers', the slow one's too, in priority order (the fast one's by
+		// label, having no sortText); "max" once (the slow server's is the same
+		// as the fast one's); all of the fast server's "maz" (its own, even the
+		// same twice, e.g. a method inherited twice).
 		assertEquals(Arrays.asList("mass", "max", "maz", "maz", "maz", "map"),
 			labels(all));
 		final List<String> sorted = all.getItems().stream().map(
@@ -305,10 +297,6 @@ public class LanguageServersTest {
 			new TextDocumentIdentifier(URI), new Position(0, 7))).get(10,
 				TimeUnit.SECONDS);
 		assertEquals("max(int a, int b)", help.getSignatures().get(0).getLabel());
-		assertEquals(Fit.CONVERSION, RatedSignatureInformation.fitOf(help
-			.getSignatures().get(0)));
-		assertEquals(Fit.UNKNOWN, RatedSignatureInformation.fitOf(
-			new org.eclipse.lsp4j.SignatureInformation("plain")));
 		// Both have hover: the first's.
 		final Hover hover = server.hover(new HoverParams(new TextDocumentIdentifier(
 			URI), new Position(0, 1))).get(10, TimeUnit.SECONDS);
@@ -741,9 +729,9 @@ public class LanguageServersTest {
 		{
 			if (!slow) return CompletableFuture.completedFuture(null);
 			return CompletableFuture.completedFuture(new SignatureHelp(Collections
-				.singletonList(new RatedSignatureInformation("max(int a, int b)", Arrays
-					.asList(new ParameterInformation("int a"), new ParameterInformation(
-						"int b")), Fit.CONVERSION)), 0, 1));
+				.singletonList(new SignatureInformation("max(int a, int b)", (String) null,
+					Arrays.asList(new ParameterInformation("int a"),
+						new ParameterInformation("int b")))), 0, 1));
 		}
 
 		@Override

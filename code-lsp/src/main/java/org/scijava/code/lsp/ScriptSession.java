@@ -216,10 +216,7 @@ public class ScriptSession implements AutoCloseable {
 
 	// -- Requests: about the given text (sent first, if new), at an offset --
 
-	/**
-	 * Completions at an offset. If some servers are slower, the list is an
-	 * {@link UpdatingCompletionList}, whose update brings theirs.
-	 */
+	/** Completions at an offset: all servers', once all have answered. */
 	public synchronized CompletableFuture<CompletionList> completion(
 		final String script, final int offset)
 	{

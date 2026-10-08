@@ -43,13 +43,6 @@
  * language's servers are merged.
  * </p>
  * <p>
- * It also holds SciJava's additions to LSP, for in-process use:
- * {@link org.scijava.code.lsp.UpdatingCompletionList} (completions now,
- * better ones to follow) and
- * {@link org.scijava.code.lsp.RatedSignatureInformation} (signatures rated
- * against the arguments typed).
- * </p>
- * <p>
  * The subpackages are for those writing language servers:
  * {@link org.scijava.code.lsp.jvm} to write them in Java,
  * {@link org.scijava.code.lsp.launch} to run them as processes, and

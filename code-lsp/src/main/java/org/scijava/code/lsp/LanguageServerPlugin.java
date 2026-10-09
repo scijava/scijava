@@ -30,6 +30,7 @@
 package org.scijava.code.lsp;
 
 import org.eclipse.lsp4j.services.LanguageServer;
+import org.scijava.code.lsp.script.ScriptDialect;
 import org.scijava.plugin.SciJavaPlugin;
 import org.scijava.script.ScriptLanguage;
 
@@ -37,6 +38,12 @@ import org.scijava.script.ScriptLanguage;
  * Offers language servers for scripts of some languages: in-process
  * implementations of lsp4j's {@link LanguageServer}, or proxies to server
  * processes (see {@link LanguageServerService#launch}).
+ * <p>
+ * Servers need not know SciJava scripts: given the plugin's
+ * {@link #dialect() dialect}, sessions show them each script as plain code of
+ * its language, its parameters declared (see
+ * {@link org.scijava.code.lsp.script.ScriptDocument}).
+ * </p>
  * <p>
  * Each language is served by the highest-priority plugin that supports it. A
  * server combining several sources (e.g. an instant in-process analysis and a
@@ -59,4 +66,12 @@ public interface LanguageServerPlugin extends SciJavaPlugin {
 	 *          {@link Environment#live()}).
 	 */
 	LanguageServer create(Environment environment);
+
+	/**
+	 * How this plugin's servers see scripts: as plain code of their language,
+	 * written in this dialect; or, if null (the default), as written.
+	 */
+	default ScriptDialect dialect() {
+		return null;
+	}
 }

@@ -34,11 +34,11 @@
  * which plain code of its language would declare. A
  * {@link org.scijava.code.lsp.script.ScriptDocument} is the script as such
  * code, with its parameters declared with their run-time types, as its
- * language's {@link org.scijava.code.lsp.script.ScriptDialect} says.
- * {@link org.scijava.code.lsp.script.TransformingLanguageServer} shows this
- * text to servers that know the language but not SciJava (e.g.
- * jedi-language-server), and maps positions in their answers back to the
- * script.
+ * language's {@link org.scijava.code.lsp.script.ScriptDialect} says. A
+ * {@link org.scijava.code.lsp.ScriptSession} shows its server this text (in
+ * the dialect of the plugin offering the server), and maps positions in the
+ * server's answers back to the script: so servers need know nothing of
+ * SciJava.
  * </p>
  */
 package org.scijava.code.lsp.script;

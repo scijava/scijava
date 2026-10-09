@@ -30,12 +30,14 @@
 package org.scijava.code.lsp;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.eclipse.lsp4j.CompletionItem;
@@ -50,19 +52,25 @@ import org.eclipse.lsp4j.HoverParams;
 import org.eclipse.lsp4j.InitializeParams;
 import org.eclipse.lsp4j.InitializeResult;
 import org.eclipse.lsp4j.InitializedParams;
+import org.eclipse.lsp4j.InsertReplaceEdit;
 import org.eclipse.lsp4j.MessageActionItem;
 import org.eclipse.lsp4j.MessageParams;
+import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.PublishDiagnosticsParams;
+import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.ShowMessageRequestParams;
 import org.eclipse.lsp4j.SignatureHelp;
 import org.eclipse.lsp4j.SignatureHelpParams;
 import org.eclipse.lsp4j.TextDocumentContentChangeEvent;
 import org.eclipse.lsp4j.TextDocumentIdentifier;
 import org.eclipse.lsp4j.TextDocumentItem;
+import org.eclipse.lsp4j.TextEdit;
 import org.eclipse.lsp4j.VersionedTextDocumentIdentifier;
+import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageClientAware;
 import org.eclipse.lsp4j.services.LanguageServer;
+import org.scijava.code.lsp.script.ScriptDocument;
 import org.scijava.log.Logger;
 import org.scijava.script.ScriptLanguage;
 
@@ -78,6 +86,14 @@ import org.scijava.script.ScriptLanguage;
  * server finds in it. Each request carries the text it is about, and the
  * offset in that text; positions in answers are positions in that text (see
  * {@link Positions}). Answers are lsp4j's own types.
+ * </p>
+ * <p>
+ * The server need not know SciJava scripts: given a transformation (e.g. by
+ * the {@link LanguageServerPlugin#dialect() dialect} of the plugin offering
+ * the server), the session shows the server each script as plain code of its
+ * language (see {@link ScriptDocument}), and maps positions both ways.
+ * Whatever the server says about the lines the transformation added is left
+ * out.
  * </p>
  * <p>
  * A session owns its server: it is the server's client, initializes it, and
@@ -97,6 +113,7 @@ public class ScriptSession implements AutoCloseable {
 
 	private final LanguageServer server;
 	private final ScriptLanguage language;
+	private final Function<String, ScriptDocument> transform;
 	private final String untitled;
 	private volatile Supplier<File> file = () -> null;
 	private volatile Logger log;
@@ -104,6 +121,8 @@ public class ScriptSession implements AutoCloseable {
 
 	private String uri;
 	private String text;
+	/** The text, as the server sees it. */
+	private ScriptDocument doc;
 	private int version;
 	private List<Diagnostic> diagnostics = Collections.emptyList();
 	private CompletableFuture<List<Diagnostic>> nextDiagnostics =
@@ -112,12 +131,16 @@ public class ScriptSession implements AutoCloseable {
 	/**
 	 * @param server The server, which the session owns.
 	 * @param language The script's language, or null if unknown.
+	 * @param transform Makes scripts what the server sees; or null, to show
+	 *          them as they are.
 	 */
 	private ScriptSession(final LanguageServer server,
-		final ScriptLanguage language)
+		final ScriptLanguage language,
+		final Function<String, ScriptDocument> transform)
 	{
 		this.server = server;
 		this.language = language;
+		this.transform = transform == null ? ScriptDocument::of : transform;
 		final List<String> extensions = language == null ? Collections
 			.emptyList() : language.getExtensions();
 		untitled = "untitled:/script-" + UNTITLED.incrementAndGet() + (extensions
@@ -136,7 +159,23 @@ public class ScriptSession implements AutoCloseable {
 	public static ScriptSession owning(final LanguageServer server,
 		final ScriptLanguage language)
 	{
-		return new ScriptSession(server, language).connect();
+		return owning(server, language, null);
+	}
+
+	/**
+	 * As {@link #owning(LanguageServer, ScriptLanguage)}, showing the server
+	 * each script transformed (e.g. into plain code of its language).
+	 *
+	 * @param server The server, which the session owns.
+	 * @param language The script's language, or null if unknown.
+	 * @param transform Makes scripts what the server sees; or null, to show
+	 *          them as they are.
+	 */
+	public static ScriptSession owning(final LanguageServer server,
+		final ScriptLanguage language,
+		final Function<String, ScriptDocument> transform)
+	{
+		return new ScriptSession(server, language, transform).connect();
 	}
 
 	/**
@@ -197,17 +236,19 @@ public class ScriptSession implements AutoCloseable {
 			uri = current;
 			version = 1;
 			text = newText;
+			doc = transform.apply(text);
 			newVersion();
 			server.getTextDocumentService().didOpen(new DidOpenTextDocumentParams(
-				new TextDocumentItem(uri, languageId(), version, text)));
+				new TextDocumentItem(uri, languageId(), version, doc.text())));
 		}
 		else if (!newText.equals(text)) {
 			text = newText;
+			doc = transform.apply(text);
 			version++;
 			newVersion();
 			server.getTextDocumentService().didChange(new DidChangeTextDocumentParams(
 				new VersionedTextDocumentIdentifier(uri, version), Collections
-					.singletonList(new TextDocumentContentChangeEvent(text))));
+					.singletonList(new TextDocumentContentChangeEvent(doc.text()))));
 		}
 		return this;
 	}
@@ -219,10 +260,11 @@ public class ScriptSession implements AutoCloseable {
 		final String script, final int offset)
 	{
 		update(script);
+		final ScriptDocument d = doc;
 		return server.getTextDocumentService().completion(new CompletionParams(
-			identifier(), Positions.position(script, offset))).thenApply(
-				answer -> answer == null ? new CompletionList() : answer.isRight()
-					? answer.getRight() : new CompletionList(false, answer.getLeft()));
+			identifier(), position(offset))).thenApply(answer -> answer == null
+				? new CompletionList() : back(d, answer.isRight() ? answer.getRight()
+					: new CompletionList(false, answer.getLeft())));
 	}
 
 	/** A completion, with what it takes long to know (e.g. documentation). */
@@ -236,8 +278,7 @@ public class ScriptSession implements AutoCloseable {
 	{
 		update(script);
 		return server.getTextDocumentService().signatureHelp(
-			new SignatureHelpParams(identifier(), Positions.position(script,
-				offset)));
+			new SignatureHelpParams(identifier(), position(offset)));
 	}
 
 	/** What is known about the code at an offset (null if nothing). */
@@ -245,8 +286,15 @@ public class ScriptSession implements AutoCloseable {
 		final int offset)
 	{
 		update(script);
+		final ScriptDocument d = doc;
 		return server.getTextDocumentService().hover(new HoverParams(identifier(),
-			Positions.position(script, offset)));
+			position(offset))).thenApply(h -> {
+				if (h == null || h.getRange() == null) return h;
+				final Hover out = new Hover();
+				out.setContents(h.getContents());
+				out.setRange(d.toOriginal(h.getRange()));
+				return out;
+			});
 	}
 
 	// -- Problems --
@@ -301,7 +349,13 @@ public class ScriptSession implements AutoCloseable {
 			new TextDocumentIdentifier(uri)));
 		uri = null;
 		text = null;
+		doc = null;
 		diagnostics = Collections.emptyList();
+	}
+
+	/** Where an offset into the script is, in what the server sees. */
+	private Position position(final int offset) {
+		return Positions.position(doc.text(), doc.toTransformed(offset));
 	}
 
 	private TextDocumentIdentifier identifier() {
@@ -322,18 +376,68 @@ public class ScriptSession implements AutoCloseable {
 		if (nextDiagnostics.isDone()) nextDiagnostics = new CompletableFuture<>();
 	}
 
+	/** Maps completions' edits back, leaving out those in the added lines. */
+	private static CompletionList back(final ScriptDocument doc,
+		final CompletionList list)
+	{
+		final List<CompletionItem> items = new ArrayList<>();
+		for (final CompletionItem item : list.getItems()) {
+			if (item.getTextEdit() != null) {
+				if (item.getTextEdit().isLeft()) {
+					final TextEdit e = item.getTextEdit().getLeft();
+					final Range r = doc.toOriginal(e.getRange());
+					if (r == null) continue;
+					item.setTextEdit(Either.forLeft(new TextEdit(r, e.getNewText())));
+				}
+				else {
+					final InsertReplaceEdit e = item.getTextEdit().getRight();
+					final Range insert = doc.toOriginal(e.getInsert());
+					final Range replace = doc.toOriginal(e.getReplace());
+					if (insert == null || replace == null) continue;
+					item.setTextEdit(Either.forRight(new InsertReplaceEdit(e
+						.getNewText(), insert, replace)));
+				}
+			}
+			if (item.getAdditionalTextEdits() != null) {
+				final List<TextEdit> edits = new ArrayList<>();
+				for (final TextEdit e : item.getAdditionalTextEdits()) {
+					final Range r = doc.toOriginal(e.getRange());
+					if (r != null) edits.add(new TextEdit(r, e.getNewText()));
+				}
+				item.setAdditionalTextEdits(edits);
+			}
+			items.add(item);
+		}
+		return new CompletionList(list.isIncomplete(), items);
+	}
+
+	/** Maps problems back, leaving out those in the added lines. */
+	private static List<Diagnostic> back(final ScriptDocument doc,
+		final List<Diagnostic> diagnostics)
+	{
+		final List<Diagnostic> out = new ArrayList<>();
+		for (final Diagnostic d : diagnostics) {
+			final Range r = doc.toOriginal(d.getRange());
+			if (r == null) continue;
+			d.setRange(r);
+			out.add(d);
+		}
+		return out;
+	}
+
 	/** Receives the server's messages about the script. */
 	private final class Client implements LanguageClient {
 
 		@Override
 		public void publishDiagnostics(final PublishDiagnosticsParams p) {
-			final List<Diagnostic> found = p.getDiagnostics() == null ? Collections
-				.emptyList() : p.getDiagnostics();
+			final List<Diagnostic> found;
 			final CompletableFuture<List<Diagnostic>> next;
 			synchronized (ScriptSession.this) {
 				if (!p.getUri().equals(uri)) return;
 				// NB: Those of an earlier version are out of date.
 				if (p.getVersion() != null && p.getVersion() < version) return;
+				found = p.getDiagnostics() == null ? Collections.emptyList() : back(
+					doc, p.getDiagnostics());
 				diagnostics = found;
 				next = nextDiagnostics;
 			}

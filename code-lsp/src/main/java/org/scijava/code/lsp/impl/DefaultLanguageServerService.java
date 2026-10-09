@@ -39,6 +39,8 @@ import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.LanguageServerPlugin;
 import org.scijava.code.lsp.LanguageServerService;
 import org.scijava.code.lsp.ScriptSession;
+import org.scijava.code.lsp.script.ScriptDialect;
+import org.scijava.code.lsp.script.ScriptDocument;
 import org.scijava.log.LogService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
@@ -51,8 +53,8 @@ import org.scijava.service.Service;
  * Default implementation of {@link LanguageServerService}.
  * <p>
  * Each session gets a server of its own, from the highest-priority plugin
- * serving its language. (Server processes behind them are shared; see
- * {@link #launch}.)
+ * serving its language, and shows it scripts as plain code in the plugin's
+ * dialect. (Server processes behind them are shared; see {@link #launch}.)
  * </p>
  *
  * @author Gabriel Selzer
@@ -93,9 +95,11 @@ public class DefaultLanguageServerService extends AbstractService implements
 		// ApposePythonLanguageServer).
 		final LanguageServerPlugin plugin = plugin(language);
 		LanguageServer server = null;
+		ScriptDialect dialect = null;
 		if (plugin != null) {
 			try {
 				server = plugin.create(Environment.NONE.withLive(live));
+				dialect = plugin.dialect();
 			}
 			catch (final RuntimeException | LinkageError exc) {
 				if (log != null) log.warn("Could not create a language server: " +
@@ -105,7 +109,10 @@ public class DefaultLanguageServerService extends AbstractService implements
 		// NB: Without a server, the interpreter's variables (if any) are
 		// completed.
 		if (server == null) server = new BindingsLanguageServer(live);
-		return ScriptSession.owning(server, language).setLogger(log);
+		final ScriptDialect d = dialect;
+		return ScriptSession.owning(server, language, d == null ? null
+			: text -> ScriptDocument.of(text, scriptParameters(text), d)).setLogger(
+				log);
 	}
 
 	@Override

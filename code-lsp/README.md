@@ -13,13 +13,13 @@ scripts.
 
 ```
  client (e.g. Script Editor)
-   │  ScriptSession: a script's text, and offsets into it
+   │  ScriptSession: a script's text, and offsets into it;
+   │  shows its server the script as plain code (ScriptDocument)
    ▼
  LanguageServerService ──► the LanguageServerPlugin serving the language
-   │  a server of the session's own
+   │  a server of the session's own, and its ScriptDialect
    ├──► in-process servers (e.g. Groovy, Jython), built on ScriptLanguageServer
    └──► server processes (e.g. jedi-language-server), via LspServerSpec
-          seeing the script as plain code (TransformingLanguageServer)
 ```
 
 It does four things, each in a package of its own.
@@ -34,7 +34,8 @@ jedi's) combines them itself.
 Clients ask about a script through a `ScriptSession` from the service, with
 a server of its own: it keeps the server's copy of the script up to date,
 names it (its file's URI, or an `untitled:` one), takes offsets into its text
-(see `Positions`), and reports the problems found in it. For code typed into
+(see `Positions`), and reports the problems found in it. Servers need know
+nothing of SciJava scripts: the session shows them plain code (see 3). For code typed into
 a running interpreter, the server learns the interpreter's state through its
 `Environment`. Tools that ask once (e.g. to check a
 script) can call `LanguageServerService.diagnose`. For code typed into an
@@ -55,10 +56,10 @@ environment, restarted if it stops, and stopped when idle.
 A SciJava script is not quite plain code of its language: its `#@`
 parameters define variables before it runs. `LanguageServerService.scriptParameters`
 parses them; a `ScriptDocument` is the script as plain code, with them
-declared with their run-time types, as its language's `ScriptDialect` says.
-`TransformingLanguageServer` shows servers that know the language but not
-SciJava (e.g. jedi) this text, and maps positions in their answers back.
-In-process servers use `ScriptDocument` too, to know the parameters.
+declared with their run-time types, as a `ScriptDialect` says. Each
+`LanguageServerPlugin` names the dialect its servers read; a session shows its
+server the script in that dialect, and maps positions in the server's answers
+back.
 
 ## 4. A toolkit for in-process servers (`org.scijava.code.lsp.jvm`)
 

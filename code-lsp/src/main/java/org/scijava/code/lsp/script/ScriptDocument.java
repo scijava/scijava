@@ -36,7 +36,11 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.eclipse.lsp4j.Position;
+import org.eclipse.lsp4j.Range;
 import org.scijava.code.lsp.Environment;
+import org.scijava.code.lsp.Positions;
 
 /**
  * A SciJava script as plain code of its language (a "virtual document"), for
@@ -45,7 +49,10 @@ import org.scijava.code.lsp.Environment;
  * time, and lines that are not of the language blanked.
  * <p>
  * The transformation only prepends one header line and blanks lines in place
- * (with spaces), so {@link #map() positions} map back trivially.
+ * (with spaces), so positions in the script just shift by the header (see
+ * {@link #toTransformed(int)} and {@link #toOriginal(int)}). Offsets count
+ * {@code char}s, i.e. UTF-16 code units, as do Java strings and the Language
+ * Server Protocol.
  * </p>
  *
  * @author Gabriel Selzer
@@ -55,17 +62,18 @@ public final class ScriptDocument {
 
 	private final String original;
 	private final String text;
-	private final PositionMap map;
+	/** Number of characters prepended. */
+	private final int headerLength;
 	private final Map<String, String> parameters;
 	private final Environment environment;
 
 	private ScriptDocument(final String original, final String text,
-		final PositionMap map, final Map<String, String> parameters,
+		final int headerLength, final Map<String, String> parameters,
 		final Environment environment)
 	{
 		this.original = original;
 		this.text = text;
-		this.map = map;
+		this.headerLength = headerLength;
 		this.parameters = Collections.unmodifiableMap(parameters);
 		this.environment = environment;
 	}
@@ -102,7 +110,7 @@ public final class ScriptDocument {
 			.separator(), statements) + "\n";
 
 		return new ScriptDocument(script, header + blank(script, dialect),
-			new PositionMap(header.length(), header.isEmpty() ? 0 : 1), types,
+			header.length(), types,
 			environment == null ? Environment.NONE : environment);
 	}
 
@@ -116,9 +124,42 @@ public final class ScriptDocument {
 		return text;
 	}
 
-	/** Maps positions between {@link #original()} and {@link #text()}. */
-	public PositionMap map() {
-		return map;
+	/** Maps an offset in {@link #original()} to one in {@link #text()}. */
+	public int toTransformed(final int offset) {
+		return offset + headerLength;
+	}
+
+	/**
+	 * Maps an offset in {@link #text()} to one in {@link #original()}; or
+	 * returns -1 if it lies in the header prepended.
+	 */
+	public int toOriginal(final int offset) {
+		return offset < headerLength ? -1 : offset - headerLength;
+	}
+
+	/** Maps a position in {@link #original()} to one in {@link #text()}. */
+	public Position toTransformed(final Position p) {
+		return Positions.position(text, toTransformed(Positions.offset(original,
+			p)));
+	}
+
+	/**
+	 * Maps a position in {@link #text()} to one in {@link #original()}; or
+	 * returns null if it lies in the header prepended.
+	 */
+	public Position toOriginal(final Position p) {
+		final int offset = toOriginal(Positions.offset(text, p));
+		return offset < 0 ? null : Positions.position(original, offset);
+	}
+
+	/**
+	 * Maps a range in {@link #text()} to one in {@link #original()}; or returns
+	 * null if either end lies in the header prepended.
+	 */
+	public Range toOriginal(final Range r) {
+		final Position start = toOriginal(r.getStart());
+		final Position end = toOriginal(r.getEnd());
+		return start == null || end == null ? null : new Range(start, end);
 	}
 
 	/**

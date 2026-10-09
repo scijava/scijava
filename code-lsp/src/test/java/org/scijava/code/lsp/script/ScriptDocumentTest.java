@@ -41,11 +41,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
+import org.eclipse.lsp4j.Position;
+import org.eclipse.lsp4j.Range;
 import org.junit.jupiter.api.Test;
 import org.scijava.code.lsp.Environment;
 
 /**
- * Tests {@link ScriptDocument} and {@link PositionMap}.
+ * Tests {@link ScriptDocument}.
  *
  * @author Gabriel Selzer
  */
@@ -131,10 +133,9 @@ public class ScriptDocumentTest {
 		final ScriptDocument doc = ScriptDocument.of(script, params(), GROOVY,
 			null);
 		assertEquals(script, doc.text());
-		assertEquals(0, doc.map().headerLength());
-		assertEquals(0, doc.map().headerLines());
-		assertEquals(5, doc.map().toTransformed(5));
-		assertEquals(1, doc.map().lineToOriginal(1));
+		assertEquals(5, doc.toTransformed(5));
+		assertEquals(5, doc.toOriginal(5));
+		assertEquals(new Position(1, 1), doc.toTransformed(new Position(1, 1)));
 	}
 
 	@Test
@@ -145,7 +146,7 @@ public class ScriptDocumentTest {
 		assertEquals("java.lang.String s\n" +
 			"           \r\nprintln s\r\n          \n     ", doc.text());
 		// Blanking keeps every offset, and line breaks (incl. CR) in place.
-		assertEquals(doc.text().length() - doc.map().headerLength(), script
+		assertEquals(doc.text().length() - doc.toTransformed(0), script
 			.length());
 		assertEquals(doc.text().split("\n", -1).length - 1, script.split("\n",
 			-1).length);
@@ -157,21 +158,26 @@ public class ScriptDocumentTest {
 		final String script = "#@ String s\r\nt = \"😀\"\r\ns.len";
 		final ScriptDocument doc = ScriptDocument.of(script, params("s",
 			String.class), PYTHON, null);
-		final PositionMap map = doc.map();
 		for (int i = 0; i <= script.length(); i++) {
-			final int t = map.toTransformed(i);
-			assertEquals(i, map.toOriginal(t));
+			final int t = doc.toTransformed(i);
+			assertEquals(i, doc.toOriginal(t));
 			// The text after a position is the same in both.
 			assertEquals(script.substring(i), doc.text().substring(t));
 		}
 		for (int line = 0; line < 3; line++) {
-			assertEquals(line, map.lineToOriginal(map.lineToTransformed(line)));
+			final Position p = new Position(line, 2);
+			final Position t = doc.toTransformed(p);
+			assertEquals(new Position(line + 1, 2), t);
+			assertEquals(p, doc.toOriginal(t));
 		}
 		// The header maps to nothing.
-		assertEquals(-1, map.toOriginal(0));
-		assertEquals(-1, map.toOriginal(map.headerLength() - 1));
-		assertEquals(-1, map.lineToOriginal(0));
-		assertEquals(1, map.lineToTransformed(0));
+		assertEquals(-1, doc.toOriginal(0));
+		assertEquals(-1, doc.toOriginal(doc.toTransformed(0) - 1));
+		assertNull(doc.toOriginal(new Position(0, 0)));
+		assertNull(doc.toOriginal(new Range(new Position(0, 0), new Position(1,
+			1))));
+		assertEquals(new Range(new Position(0, 0), new Position(1, 1)), doc
+			.toOriginal(new Range(new Position(1, 0), new Position(2, 1))));
 	}
 
 	@Test

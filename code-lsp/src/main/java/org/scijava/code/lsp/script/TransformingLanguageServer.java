@@ -55,7 +55,6 @@ import org.eclipse.lsp4j.InitializedParams;
 import org.eclipse.lsp4j.InsertReplaceEdit;
 import org.eclipse.lsp4j.MessageActionItem;
 import org.eclipse.lsp4j.MessageParams;
-import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.PublishDiagnosticsParams;
 import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.ShowMessageRequestParams;
@@ -71,7 +70,6 @@ import org.eclipse.lsp4j.services.LanguageClientAware;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
-import org.scijava.code.lsp.Positions;
 
 /**
  * Shows a language server SciJava scripts as plain code of its language (see
@@ -192,7 +190,7 @@ public class TransformingLanguageServer implements LanguageServer,
 		final ScriptDocument doc = docs.get(params.getTextDocument().getUri());
 		if (doc == null) return inner.getTextDocumentService().completion(params);
 		final CompletionParams p = new CompletionParams(params.getTextDocument(),
-			toTransformed(doc, params.getPosition()), params.getContext());
+			doc.toTransformed(params.getPosition()), params.getContext());
 		final CompletableFuture<Either<List<CompletionItem>, CompletionList>> raw =
 			inner.getTextDocumentService().completion(p);
 		final CompletableFuture<Either<List<CompletionItem>, CompletionList>> out =
@@ -221,7 +219,7 @@ public class TransformingLanguageServer implements LanguageServer,
 		if (doc == null) return inner.getTextDocumentService().signatureHelp(
 			params);
 		return inner.getTextDocumentService().signatureHelp(new SignatureHelpParams(
-			params.getTextDocument(), toTransformed(doc, params.getPosition()),
+			params.getTextDocument(), doc.toTransformed(params.getPosition()),
 			params.getContext()));
 	}
 
@@ -230,12 +228,12 @@ public class TransformingLanguageServer implements LanguageServer,
 		final ScriptDocument doc = docs.get(params.getTextDocument().getUri());
 		if (doc == null) return inner.getTextDocumentService().hover(params);
 		return inner.getTextDocumentService().hover(new HoverParams(params
-			.getTextDocument(), toTransformed(doc, params.getPosition()))).thenApply(
+			.getTextDocument(), doc.toTransformed(params.getPosition()))).thenApply(
 				h -> {
 					if (h == null || h.getRange() == null) return h;
 					final Hover out = new Hover();
 					out.setContents(h.getContents());
-					out.setRange(toOriginal(doc, h.getRange()));
+					out.setRange(doc.toOriginal(h.getRange()));
 					return out;
 				});
 	}
@@ -252,31 +250,6 @@ public class TransformingLanguageServer implements LanguageServer,
 		inner.getWorkspaceService().didChangeWatchedFiles(p);
 	}
 
-	// -- Position mapping --
-
-	/** Maps a position in a script to one in its transformed text. */
-	static Position toTransformed(final ScriptDocument doc, final Position p) {
-		final int offset = Positions.offset(doc.original(), p);
-		return Positions.position(doc.text(), doc.map().toTransformed(offset));
-	}
-
-	/**
-	 * Maps a position in the transformed text to one in the script; or returns
-	 * null if it lies in the lines the transformation added.
-	 */
-	static Position toOriginal(final ScriptDocument doc, final Position p) {
-		final PositionMap map = doc.map();
-		final int offset = map.toOriginal(Positions.offset(doc.text(), p));
-		return offset < 0 ? null : Positions.position(doc.original(), offset);
-	}
-
-	/** Maps a range back; or returns null if it starts in the added lines. */
-	static Range toOriginal(final ScriptDocument doc, final Range r) {
-		final Position start = toOriginal(doc, r.getStart());
-		final Position end = toOriginal(doc, r.getEnd());
-		return start == null || end == null ? null : new Range(start, end);
-	}
-
 	/** Maps completions' edits back, leaving out those in the added lines. */
 	private static CompletionList back(final ScriptDocument doc,
 		final CompletionList list)
@@ -287,14 +260,14 @@ public class TransformingLanguageServer implements LanguageServer,
 			if (item.getTextEdit() != null) {
 				if (item.getTextEdit().isLeft()) {
 					final TextEdit e = item.getTextEdit().getLeft();
-					final Range r = toOriginal(doc, e.getRange());
+					final Range r = doc.toOriginal(e.getRange());
 					if (r == null) continue;
 					c.setTextEdit(Either.forLeft(new TextEdit(r, e.getNewText())));
 				}
 				else {
 					final InsertReplaceEdit e = item.getTextEdit().getRight();
-					final Range insert = toOriginal(doc, e.getInsert());
-					final Range replace = toOriginal(doc, e.getReplace());
+					final Range insert = doc.toOriginal(e.getInsert());
+					final Range replace = doc.toOriginal(e.getReplace());
 					if (insert == null || replace == null) continue;
 					c.setTextEdit(Either.forRight(new InsertReplaceEdit(e.getNewText(),
 						insert, replace)));
@@ -303,7 +276,7 @@ public class TransformingLanguageServer implements LanguageServer,
 			if (item.getAdditionalTextEdits() != null) {
 				final List<TextEdit> edits = new ArrayList<>();
 				for (final TextEdit e : item.getAdditionalTextEdits()) {
-					final Range r = toOriginal(doc, e.getRange());
+					final Range r = doc.toOriginal(e.getRange());
 					if (r != null) edits.add(new TextEdit(r, e.getNewText()));
 				}
 				c.setAdditionalTextEdits(edits);
@@ -327,7 +300,7 @@ public class TransformingLanguageServer implements LanguageServer,
 			}
 			final List<Diagnostic> mapped = new ArrayList<>();
 			for (final Diagnostic d : p.getDiagnostics()) {
-				final Range r = toOriginal(doc, d.getRange());
+				final Range r = doc.toOriginal(d.getRange());
 				if (r == null) continue; // NB: In the added lines.
 				final Diagnostic m = new Diagnostic();
 				m.setRange(r);

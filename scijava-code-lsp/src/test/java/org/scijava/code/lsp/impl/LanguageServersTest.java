@@ -97,7 +97,7 @@ import org.scijava.code.lsp.LanguageServerPlugin;
 import org.scijava.code.lsp.LanguageServerService;
 import org.scijava.code.lsp.Positions;
 import org.scijava.code.lsp.ScriptSession;
-import org.scijava.code.lsp.script.ScriptDialect;
+import org.scijava.code.lsp.ScriptDialect;
 import org.scijava.plugin.Plugin;
 import org.scijava.script.AbstractScriptLanguage;
 import org.scijava.script.ScriptLanguage;

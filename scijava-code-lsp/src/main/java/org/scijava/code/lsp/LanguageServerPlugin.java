@@ -30,7 +30,6 @@
 package org.scijava.code.lsp;
 
 import org.eclipse.lsp4j.services.LanguageServer;
-import org.scijava.code.lsp.script.ScriptDialect;
 import org.scijava.plugin.SciJavaPlugin;
 import org.scijava.script.ScriptLanguage;
 
@@ -42,7 +41,7 @@ import org.scijava.script.ScriptLanguage;
  * Servers need not know SciJava scripts: given the plugin's
  * {@link #dialect() dialect}, sessions show them each script as plain code of
  * its language, its parameters declared (see
- * {@link org.scijava.code.lsp.script.ScriptDocument}).
+ * {@link ScriptDocument}).
  * </p>
  * <p>
  * Each language is served by the highest-priority plugin that supports it. A

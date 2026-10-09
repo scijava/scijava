@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.lsp.script;
+package org.scijava.code.lsp;
 
 import java.util.Collection;
 import java.util.Collections;

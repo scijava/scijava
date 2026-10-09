@@ -100,7 +100,7 @@ public interface LanguageServerService extends SciJavaService {
 	 * {@code // @} lines in its header) define before it runs, by name, with
 	 * their Java types ({@code Object} if unresolvable); in declaration order.
 	 * Sessions declare them for their servers (see
-	 * {@link org.scijava.code.lsp.script.ScriptDocument}). Half-typed declarations
+	 * {@link ScriptDocument}). Half-typed declarations
 	 * are expected, and parsed quietly.
 	 */
 	Map<String, Class<?>> scriptParameters(String text);

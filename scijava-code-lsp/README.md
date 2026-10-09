@@ -22,7 +22,7 @@ scripts.
    └──► server processes (e.g. jedi-language-server), via LspServerSpec
 ```
 
-It does four things, each in a package of its own.
+It does three things, each in a package of its own.
 
 ## 1. Brokering between scripts and servers (`org.scijava.code.lsp`)
 
@@ -34,13 +34,20 @@ jedi's) combines them itself.
 Clients ask about a script through a `ScriptSession` from the service, with
 a server of its own: it keeps the server's copy of the script up to date,
 names it (its file's URI, or an `untitled:` one), takes offsets into its text
-(see `Positions`), and reports the problems found in it. Servers need know
-nothing of SciJava scripts: the session shows them plain code (see 3). For code typed into
+(see `Positions`), and reports the problems found in it. For code typed into
 a running interpreter, the server learns the interpreter's state through its
 `Environment`. Tools that ask once (e.g. to check a
 script) can call `LanguageServerService.diagnose`. For code typed into an
 interpreter whose language no plugin serves, a session completes the
 interpreter's variables.
+
+Servers need know nothing of SciJava scripts. A SciJava script is not quite
+plain code of its language: its `#@` parameters define variables before it
+runs. `LanguageServerService.scriptParameters` parses them; a `ScriptDocument`
+is the script as plain code, with them declared with their run-time types, as
+a `ScriptDialect` says. Each `LanguageServerPlugin` names the dialect its
+servers read; a session shows its server the script in that dialect, and maps
+positions in the server's answers back.
 
 ## 2. Running server processes (`org.scijava.code.lsp.launch`)
 
@@ -51,17 +58,7 @@ and returning its streams (an `LspConnection`). Plugins get such a server via
 `LanguageServerService.launch`: started when first needed, one per
 environment, restarted if it stops, and stopped when idle.
 
-## 3. Translating SciJava scripts (`org.scijava.code.lsp.script`)
-
-A SciJava script is not quite plain code of its language: its `#@`
-parameters define variables before it runs. `LanguageServerService.scriptParameters`
-parses them; a `ScriptDocument` is the script as plain code, with them
-declared with their run-time types, as a `ScriptDialect` says. Each
-`LanguageServerPlugin` names the dialect its servers read; a session shows its
-server the script in that dialect, and maps positions in the server's answers
-back.
-
-## 4. A toolkit for in-process servers (`org.scijava.code.lsp.jvm`)
+## 3. A toolkit for in-process servers (`org.scijava.code.lsp.jvm`)
 
 For servers of JVM languages, written in Java (e.g. Groovy's and Jython's):
 `ScriptLanguageServer`, a base class keeping the open documents and turning
@@ -73,13 +70,13 @@ javadoc.
 
 ## Who uses what
 
-|                         | 1 | 2 | 3 | 4 |
-|-------------------------|---|---|---|---|
-| script-editor           | ✓ |   |   |   |
-| scripting-groovy        | ✓ |   | ✓ | ✓ |
-| scripting-jython        | ✓ | ✓ | ✓ | ✓ |
-| scripting-appose-python | ✓ | ✓ | ✓ |   |
+|                         | 1 | 2 | 3 |
+|-------------------------|---|---|---|
+| script-editor           | ✓ |   |   |
+| scripting-groovy        | ✓ |   | ✓ |
+| scripting-jython        | ✓ | ✓ | ✓ |
+| scripting-appose-python | ✓ | ✓ |   |
 
 The specialized packages depend only on `org.scijava.code.lsp`, never on each
-other. The module exports all four; its implementation
+other. The module exports all three; its implementation
 (`org.scijava.code.lsp.impl`) is internal.

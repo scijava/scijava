@@ -70,7 +70,6 @@ import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageClientAware;
 import org.eclipse.lsp4j.services.LanguageServer;
-import org.scijava.code.lsp.script.ScriptDocument;
 import org.scijava.log.Logger;
 import org.scijava.script.ScriptLanguage;
 

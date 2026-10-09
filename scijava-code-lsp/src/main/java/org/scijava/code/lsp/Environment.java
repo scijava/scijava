@@ -38,10 +38,7 @@ import javax.script.ScriptContext;
 
 
 /**
- * Where a script will run, as far as analyzing it needs to know: the
- * interpreter (or other executable) that runs it, extra places its imports are
- * resolved from, and, for code typed into a running interpreter, that
- * interpreter's state. Every part is optional.
+ * The context needed to analyze a block of code.
  * <p>
  * Server processes are kept one per environment (see
  * {@link LanguageServerService#launch}): e.g. jedi-language-server learns the
@@ -60,10 +57,9 @@ public final class Environment {
 	private final ScriptContext live;
 
 	/**
-	 * @param interpreter Path of the interpreter or executable, or null.
-	 * @param paths Extra places imports are resolved from, in order; see
-	 *          {@link #paths()}.
-	 * @param live A running interpreter's state, or null.
+	 * @param interpreter Path of the interpreter or executable parsing the code.
+	 * @param paths Extra places imports are resolved from, in order. Language-dependent.
+	 * @param live Existing state (e.g. from a REPL)
 	 */
 	public Environment(final String interpreter, final List<String> paths,
 		final ScriptContext live)

@@ -96,7 +96,7 @@ import org.scijava.log.StderrLogService;
 public class LspServersTest {
 
 	private static final Environment ENV = new Environment(
-		"/env/python", Collections.singletonList("/overlay"), null, null);
+		"/env/python", Collections.singletonList("/overlay"), null);
 
 	private final List<FakeServer> started = new CopyOnWriteArrayList<>();
 	// NB: Servers note their use by the system clock.
@@ -270,7 +270,7 @@ public class LspServersTest {
 		public Object initializationOptions(final Environment env) {
 			final Map<String, Object> workspace = new LinkedHashMap<>();
 			workspace.put("environmentPath", env.interpreter());
-			workspace.put("extraPaths", env.searchPaths());
+			workspace.put("extraPaths", env.paths());
 			return Collections.singletonMap("workspace", workspace);
 		}
 

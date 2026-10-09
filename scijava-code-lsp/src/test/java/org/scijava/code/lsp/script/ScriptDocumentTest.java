@@ -177,12 +177,11 @@ public class ScriptDocumentTest {
 	@Test
 	public void testEnvironment() {
 		final Environment env = new Environment("/env/python",
-			Collections.singletonList("/overlay"), null, null);
+			Collections.singletonList("/overlay"), null);
 		final ScriptDocument doc = ScriptDocument.of("", params(), PYTHON, env);
 		assertEquals("task: object\n", doc.text());
 		assertSame(env, doc.environment());
-		assertEquals(Collections.emptyList(), env.classpath());
 		assertEquals(env, new Environment("/env/python", Collections
-			.singletonList("/overlay"), Collections.emptyList(), null));
+			.singletonList("/overlay"), null));
 	}
 }

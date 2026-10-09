@@ -39,9 +39,9 @@ import javax.script.ScriptContext;
 
 /**
  * Where a script will run, as far as analyzing it needs to know: the
- * interpreter (or other executable) that runs it, extra paths to search for
- * modules or packages, classpath entries, and, for code typed into a running
- * interpreter, that interpreter's state. Every part is optional.
+ * interpreter (or other executable) that runs it, extra places its imports are
+ * resolved from, and, for code typed into a running interpreter, that
+ * interpreter's state. Every part is optional.
  * <p>
  * Server processes are kept one per environment (see
  * {@link LanguageServerService#launch}): e.g. jedi-language-server learns the
@@ -53,28 +53,24 @@ import javax.script.ScriptContext;
 public final class Environment {
 
 	/** No particular environment. */
-	public static final Environment NONE = new Environment(null, null, null,
-		null);
+	public static final Environment NONE = new Environment(null, null, null);
 
 	private final String interpreter;
-	private final List<String> searchPaths;
-	private final List<String> classpath;
+	private final List<String> paths;
 	private final ScriptContext live;
 
 	/**
 	 * @param interpreter Path of the interpreter or executable, or null.
-	 * @param searchPaths Extra paths to search for modules, e.g. for Python.
-	 * @param classpath Classpath entries, e.g. for JVM languages.
+	 * @param paths Extra places imports are resolved from, in order; see
+	 *          {@link #paths()}.
 	 * @param live A running interpreter's state, or null.
 	 */
-	public Environment(final String interpreter, final List<String> searchPaths,
-		final List<String> classpath, final ScriptContext live)
+	public Environment(final String interpreter, final List<String> paths,
+		final ScriptContext live)
 	{
 		this.interpreter = interpreter;
-		this.searchPaths = searchPaths == null ? Collections.emptyList()
-			: Collections.unmodifiableList(new ArrayList<>(searchPaths));
-		this.classpath = classpath == null ? Collections.emptyList() : Collections
-			.unmodifiableList(new ArrayList<>(classpath));
+		this.paths = paths == null ? Collections.emptyList() : Collections
+			.unmodifiableList(new ArrayList<>(paths));
 		this.live = live;
 	}
 
@@ -83,14 +79,13 @@ public final class Environment {
 		return interpreter;
 	}
 
-	/** Extra paths to search for modules or packages; never null. */
-	public List<String> searchPaths() {
-		return searchPaths;
-	}
-
-	/** Classpath entries; never null. */
-	public List<String> classpath() {
-		return classpath;
+	/**
+	 * Extra places imports are resolved from, in order: e.g. directories added
+	 * to Python's {@code sys.path}, or a JVM classpath. Each server reads them as
+	 * its language does. Never null.
+	 */
+	public List<String> paths() {
+		return paths;
 	}
 
 	/** The state of the interpreter the code is typed into, or null. */
@@ -100,8 +95,8 @@ public final class Environment {
 
 	/** A copy of this environment, for code typed into the given interpreter. */
 	public Environment withLive(final ScriptContext context) {
-		return context == live ? this : new Environment(interpreter, searchPaths,
-			classpath, context);
+		return context == live ? this : new Environment(interpreter, paths,
+			context);
 	}
 
 	@Override
@@ -109,21 +104,18 @@ public final class Environment {
 		if (!(o instanceof Environment)) return false;
 		final Environment that = (Environment) o;
 		// NB: Live interpreters are the same only if they are the same one.
-		return Objects.equals(interpreter, that.interpreter) && searchPaths.equals(
-			that.searchPaths) && classpath.equals(that.classpath) &&
-			live == that.live;
+		return Objects.equals(interpreter, that.interpreter) && paths.equals(
+			that.paths) && live == that.live;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(interpreter, searchPaths, classpath, System
-			.identityHashCode(live));
+		return Objects.hash(interpreter, paths, System.identityHashCode(live));
 	}
 
 	@Override
 	public String toString() {
-		return "Environment[interpreter=" + interpreter + ", searchPaths=" +
-			searchPaths + ", classpath=" + classpath + (live == null ? ""
-				: ", live") + "]";
+		return "Environment[interpreter=" + interpreter + ", paths=" + paths +
+			(live == null ? "" : ", live") + "]";
 	}
 }

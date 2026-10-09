@@ -76,6 +76,16 @@ public interface ScriptDialect {
 	}
 
 	/**
+	 * Gets the name one of the {@link #imports} binds, e.g. {@code numpy} for
+	 * {@code import numpy}; or null if none. Unless the script itself mentions
+	 * it, the name is the declarations' alone: it is not completed (see
+	 * {@link ScriptDocument#added()}). The default binds none.
+	 */
+	default String imported(final String statement) {
+		return null;
+	}
+
+	/**
 	 * Gets declarations of other variables scripts can use, e.g. Appose's
 	 * {@code task}. The default declares none.
 	 */

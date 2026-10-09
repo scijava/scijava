@@ -36,6 +36,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
@@ -65,19 +66,23 @@ public final class ScriptDocument {
 	/** Number of characters prepended. */
 	private final int headerLength;
 	private final Map<String, String> parameters;
+	private final Set<String> added;
 
 	private ScriptDocument(final String original, final String text,
-		final int headerLength, final Map<String, String> parameters)
+		final int headerLength, final Map<String, String> parameters,
+		final Set<String> added)
 	{
 		this.original = original;
 		this.text = text;
 		this.headerLength = headerLength;
 		this.parameters = Collections.unmodifiableMap(parameters);
+		this.added = Collections.unmodifiableSet(added);
 	}
 
 	/** A script as it is: nothing declared, nothing blanked. */
 	public static ScriptDocument of(final String script) {
-		return new ScriptDocument(script, script, 0, Collections.emptyMap());
+		return new ScriptDocument(script, script, 0, Collections.emptyMap(),
+			Collections.emptySet());
 	}
 
 	/**
@@ -104,13 +109,28 @@ public final class ScriptDocument {
 		declarations.addAll(dialect.extraDeclarations());
 		final Set<String> used = new LinkedHashSet<>(types.values());
 		used.remove(null);
-		final List<String> statements = new ArrayList<>(dialect.imports(used));
+		final List<String> imports = dialect.imports(used);
+		final Set<String> added = new LinkedHashSet<>();
+		for (final String statement : imports) {
+			final String name = dialect.imported(statement);
+			if (name != null && !mentions(script, name)) added.add(name);
+		}
+		final List<String> statements = new ArrayList<>(imports);
 		statements.addAll(declarations);
 		final String header = statements.isEmpty() ? "" : String.join(dialect
 			.separator(), statements) + "\n";
 
 		return new ScriptDocument(script, header + blank(script, dialect),
-			header.length(), types);
+			header.length(), types, added);
+	}
+
+	/**
+	 * Names only the declarations bind, e.g. modules imported to declare the
+	 * parameters' types, which the script does not mention (see
+	 * {@link ScriptDialect#imported}): for completion to leave out.
+	 */
+	public Set<String> added() {
+		return added;
 	}
 
 	/** The script, as given. */
@@ -170,6 +190,12 @@ public final class ScriptDocument {
 	}
 
 	// -- Helper methods --
+
+	/** Whether the script mentions a name, e.g. to import it itself. */
+	private static boolean mentions(final String script, final String name) {
+		return Pattern.compile("(?<![\\w.])" + Pattern.quote(name) + "(?!\\w)")
+			.matcher(script).find();
+	}
 
 	/** Replaces the characters of the lines to blank with spaces. */
 	private static String blank(final String script, final ScriptDialect dialect) {

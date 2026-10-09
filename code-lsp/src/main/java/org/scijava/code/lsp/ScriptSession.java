@@ -93,7 +93,8 @@ import org.scijava.script.ScriptLanguage;
  * the server), the session shows the server each script as plain code of its
  * language (see {@link ScriptDocument}), and maps positions both ways.
  * Whatever the server says about the lines the transformation added is left
- * out.
+ * out, as are completions of names only those lines bind (see
+ * {@link ScriptDocument#added()}).
  * </p>
  * <p>
  * A session owns its server: it is the server's client, initializes it, and
@@ -376,12 +377,16 @@ public class ScriptSession implements AutoCloseable {
 		if (nextDiagnostics.isDone()) nextDiagnostics = new CompletableFuture<>();
 	}
 
-	/** Maps completions' edits back, leaving out those in the added lines. */
+	/**
+	 * Maps completions' edits back, leaving out those in the added lines, and
+	 * those of names only the added lines bind.
+	 */
 	private static CompletionList back(final ScriptDocument doc,
 		final CompletionList list)
 	{
 		final List<CompletionItem> items = new ArrayList<>();
 		for (final CompletionItem item : list.getItems()) {
+			if (doc.added().contains(leadingName(item.getLabel()))) continue;
 			if (item.getTextEdit() != null) {
 				if (item.getTextEdit().isLeft()) {
 					final TextEdit e = item.getTextEdit().getLeft();
@@ -409,6 +414,17 @@ public class ScriptSession implements AutoCloseable {
 			items.add(item);
 		}
 		return new CompletionList(list.isIncomplete(), items);
+	}
+
+	/**
+	 * The name a completion's label starts with, e.g. {@code java} for
+	 * {@code java.lang} and {@code max} for {@code max(a, b)}.
+	 */
+	private static String leadingName(final String label) {
+		int end = 0;
+		while (end < label.length() && (Character.isLetterOrDigit(label.charAt(
+			end)) || label.charAt(end) == '_')) end++;
+		return label.substring(0, end);
 	}
 
 	/** Maps problems back, leaving out those in the added lines. */

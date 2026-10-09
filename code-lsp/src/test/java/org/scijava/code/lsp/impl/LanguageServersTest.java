@@ -38,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -283,9 +284,12 @@ public class LanguageServersTest {
 			final CompletionList list = session.completion(script, script.length())
 				.get(10, TimeUnit.SECONDS);
 			// The server sees plain code, in its plugin's dialect.
-			assertEquals("open 1 sigma: double\n" + script, server.events.get(1));
+			assertEquals("open 1 import mass; sigma: double\n" + script, server.events
+				.get(1));
 			// Asked one line down; its edits mapped back up.
 			assertEquals(new Position(2, 4), server.asked.get(0));
+			// Names only the declarations import are not completed.
+			assertEquals(Collections.singletonList("max"), labels(list));
 			assertEquals(new Range(new Position(1, 2), new Position(1, 4)), list
 				.getItems().get(0).getTextEdit().getLeft().getRange());
 			// Problems mapped back; those in the added line left out.
@@ -447,6 +451,17 @@ public class LanguageServersTest {
 				@Override
 				public String declare(final String name, final String type) {
 					return name + ": " + type;
+				}
+
+				@Override
+				public List<String> imports(final Collection<String> types) {
+					return types.isEmpty() ? Collections.emptyList() : Collections
+						.singletonList("import mass");
+				}
+
+				@Override
+				public String imported(final String statement) {
+					return statement.substring("import ".length());
 				}
 			};
 		}

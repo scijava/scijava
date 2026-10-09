@@ -78,6 +78,11 @@ public class ScriptDocumentTest {
 		}
 
 		@Override
+		public String imported(final String statement) {
+			return statement.substring("import ".length());
+		}
+
+		@Override
 		public List<String> extraDeclarations() {
 			return Collections.singletonList("task: object");
 		}
@@ -123,6 +128,12 @@ public class ScriptDocumentTest {
 			.keySet().toArray()));
 		assertNull(doc.parameters().get("n"));
 		assertEquals("numpy.ndarray", doc.parameters().get("a"));
+		// The module is the declarations' alone, unless the script mentions it.
+		assertEquals(Collections.singleton("numpy"), doc.added());
+		assertTrue(ScriptDocument.of("import numpy as np\n" + script, params("a",
+			double[].class), PYTHON).added().isEmpty());
+		assertTrue(ScriptDocument.of(script + "\nnumpyish = 1", params("a",
+			double[].class), PYTHON).added().contains("numpy"));
 	}
 
 	@Test

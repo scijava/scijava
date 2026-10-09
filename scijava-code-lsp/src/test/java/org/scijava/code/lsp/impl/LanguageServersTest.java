@@ -97,8 +97,6 @@ import org.scijava.code.lsp.LanguageServerService;
 import org.scijava.code.lsp.Positions;
 import org.scijava.code.lsp.ScriptSession;
 import org.scijava.code.lsp.script.ScriptDialect;
-import org.scijava.code.lsp.script.ScriptDocument;
-import org.scijava.code.lsp.script.TransformingLanguageServer;
 import org.scijava.plugin.Plugin;
 import org.scijava.script.AbstractScriptLanguage;
 import org.scijava.script.ScriptLanguage;
@@ -106,8 +104,7 @@ import org.scijava.script.ScriptService;
 
 /**
  * Tests {@link LanguageServerService} and {@link ScriptSession}, with fake
- * in-process servers; and {@link TransformingLanguageServer} and
- * {@link BindingsLanguageServer}.
+ * in-process servers; and {@link BindingsLanguageServer}.
  *
  * @author Gabriel Selzer
  */
@@ -280,42 +277,25 @@ public class LanguageServersTest {
 
 	@Test
 	public void testTransforming() throws Exception {
-		final FakeServer inner = new FakeServer("inner", Environment.NONE);
-		final ScriptDialect dialect = new ScriptDialect() {
-
-			@Override
-			public String runtimeType(final Class<?> type) {
-				return "float";
-			}
-
-			@Override
-			public String declare(final String name, final String type) {
-				return name + ": " + type;
-			}
-		};
-		final Map<String, Class<?>> params = Collections.singletonMap("sigma",
-			double.class);
-		final TransformingLanguageServer server = new TransformingLanguageServer(
-			inner, text -> ScriptDocument.of(text, params, dialect, null));
-		server.connect(new Client());
-		server.didOpen(new DidOpenTextDocumentParams(new TextDocumentItem(URI,
-			"fake", 1, "x.ma")));
-		// The server sees the transformed script.
-		assertEquals("open 1 sigma: float\nx.ma", inner.events.get(0));
-		final CompletionList list = server.completion(new CompletionParams(
-			new TextDocumentIdentifier(URI), new Position(0, 4))).get(10,
-				TimeUnit.SECONDS).getRight();
-		// Asked one line down; its edits mapped back up.
-		assertEquals(new Position(1, 4), inner.asked.get(0));
-		assertEquals(new Range(new Position(0, 2), new Position(0, 4)), list
-			.getItems().get(0).getTextEdit().getLeft().getRange());
-		// Diagnostics mapped back; those in the added line left out.
-		inner.publish(URI, 1, "oops", new Range(new Position(0, 0), new Position(0,
-			5)), new Range(new Position(1, 0), new Position(1, 1)));
-		final PublishDiagnosticsParams p = published.get(published.size() - 1);
-		assertEquals(1, p.getDiagnostics().size());
-		assertEquals(new Range(new Position(0, 0), new Position(0, 1)), p
-			.getDiagnostics().get(0).getRange());
+		final String script = "#@ double sigma\nx.ma";
+		try (ScriptSession session = service.session(fake)) {
+			final FakeServer server = SERVERS.get(0);
+			final CompletionList list = session.completion(script, script.length())
+				.get(10, TimeUnit.SECONDS);
+			// The server sees plain code, in its plugin's dialect.
+			assertEquals("open 1 sigma: double\n" + script, server.events.get(1));
+			// Asked one line down; its edits mapped back up.
+			assertEquals(new Position(2, 4), server.asked.get(0));
+			assertEquals(new Range(new Position(1, 2), new Position(1, 4)), list
+				.getItems().get(0).getTextEdit().getLeft().getRange());
+			// Problems mapped back; those in the added line left out.
+			server.publish(server.opened.get(0), 1, "oops", new Range(new Position(
+				0, 0), new Position(0, 5)), new Range(new Position(2, 0),
+					new Position(2, 1)));
+			assertEquals(1, session.diagnostics().size());
+			assertEquals(new Range(new Position(1, 0), new Position(1, 1)), session
+				.diagnostics().get(0).getRange());
+		}
 	}
 
 	@Test
@@ -453,6 +433,22 @@ public class LanguageServersTest {
 		@Override
 		public LanguageServer create(final Environment environment) {
 			return register(new FakeServer("high", environment));
+		}
+
+		@Override
+		public ScriptDialect dialect() {
+			return new ScriptDialect() {
+
+				@Override
+				public String runtimeType(final Class<?> type) {
+					return type.getSimpleName();
+				}
+
+				@Override
+				public String declare(final String name, final String type) {
+					return name + ": " + type;
+				}
+			};
 		}
 	}
 

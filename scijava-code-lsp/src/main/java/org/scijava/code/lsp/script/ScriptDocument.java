@@ -39,14 +39,14 @@ import java.util.Set;
 
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
-import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.Positions;
 
 /**
  * A SciJava script as plain code of its language (a "virtual document"), for
  * tools that know the language but not SciJava, e.g. language servers: its
  * script parameters ({@code #@}) declared with the types they have at run
- * time, and lines that are not of the language blanked.
+ * time, and lines that are not of the language blanked. (A
+ * {@link org.scijava.code.lsp.ScriptSession} shows its server this text.)
  * <p>
  * The transformation only prepends one header line and blanks lines in place
  * (with spaces), so positions in the script just shift by the header (see
@@ -65,17 +65,19 @@ public final class ScriptDocument {
 	/** Number of characters prepended. */
 	private final int headerLength;
 	private final Map<String, String> parameters;
-	private final Environment environment;
 
 	private ScriptDocument(final String original, final String text,
-		final int headerLength, final Map<String, String> parameters,
-		final Environment environment)
+		final int headerLength, final Map<String, String> parameters)
 	{
 		this.original = original;
 		this.text = text;
 		this.headerLength = headerLength;
 		this.parameters = Collections.unmodifiableMap(parameters);
-		this.environment = environment;
+	}
+
+	/** A script as it is: nothing declared, nothing blanked. */
+	public static ScriptDocument of(final String script) {
+		return new ScriptDocument(script, script, 0, Collections.emptyMap());
 	}
 
 	/**
@@ -87,11 +89,9 @@ public final class ScriptDocument {
 	 *          {@link org.scijava.code.lsp.LanguageServerService#scriptParameters}
 	 *          gives them), by name, with their Java types.
 	 * @param dialect How the script's language declares them.
-	 * @param environment Where the script runs (null if unknown).
 	 */
 	public static ScriptDocument of(final String script,
-		final Map<String, Class<?>> parameters, final ScriptDialect dialect,
-		final Environment environment)
+		final Map<String, Class<?>> parameters, final ScriptDialect dialect)
 	{
 		// The parameters' run-time types, and their declarations.
 		final Map<String, String> types = new LinkedHashMap<>();
@@ -110,8 +110,7 @@ public final class ScriptDocument {
 			.separator(), statements) + "\n";
 
 		return new ScriptDocument(script, header + blank(script, dialect),
-			header.length(), types,
-			environment == null ? Environment.NONE : environment);
+			header.length(), types);
 	}
 
 	/** The script, as given. */
@@ -168,11 +167,6 @@ public final class ScriptDocument {
 	 */
 	public Map<String, String> parameters() {
 		return parameters;
-	}
-
-	/** Where the script runs. */
-	public Environment environment() {
-		return environment;
 	}
 
 	// -- Helper methods --

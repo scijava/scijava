@@ -31,7 +31,7 @@ package org.scijava.code.lsp.script;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -44,7 +44,6 @@ import java.util.TreeSet;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
 import org.junit.jupiter.api.Test;
-import org.scijava.code.lsp.Environment;
 
 /**
  * Tests {@link ScriptDocument}.
@@ -115,7 +114,7 @@ public class ScriptDocumentTest {
 	public void testDeclarations() {
 		final String script = "#@ double[] a\n#@ String s\n#@ Integer n\na.";
 		final ScriptDocument doc = ScriptDocument.of(script, params("a",
-			double[].class, "s", String.class, "n", Integer.class), PYTHON, null);
+			double[].class, "s", String.class, "n", Integer.class), PYTHON);
 		assertEquals("import numpy; a: numpy.ndarray; s: str; task: object\n" +
 			script, doc.text());
 		assertEquals(script, doc.original());
@@ -124,14 +123,12 @@ public class ScriptDocumentTest {
 			.keySet().toArray()));
 		assertNull(doc.parameters().get("n"));
 		assertEquals("numpy.ndarray", doc.parameters().get("a"));
-		assertSame(Environment.NONE, doc.environment());
 	}
 
 	@Test
 	public void testIdentity() {
 		final String script = "x = 1\nx.";
-		final ScriptDocument doc = ScriptDocument.of(script, params(), GROOVY,
-			null);
+		final ScriptDocument doc = ScriptDocument.of(script, params(), GROOVY);
 		assertEquals(script, doc.text());
 		assertEquals(5, doc.toTransformed(5));
 		assertEquals(5, doc.toOriginal(5));
@@ -142,7 +139,7 @@ public class ScriptDocumentTest {
 	public void testBlanking() {
 		final String script = "#@ String s\r\nprintln s\r\n#@output x\n# end";
 		final ScriptDocument doc = ScriptDocument.of(script, params("s",
-			String.class), GROOVY, null);
+			String.class), GROOVY);
 		assertEquals("java.lang.String s\n" +
 			"           \r\nprintln s\r\n          \n     ", doc.text());
 		// Blanking keeps every offset, and line breaks (incl. CR) in place.
@@ -157,7 +154,7 @@ public class ScriptDocumentTest {
 		// NB: Includes a CRLF and a surrogate pair (two Java chars).
 		final String script = "#@ String s\r\nt = \"😀\"\r\ns.len";
 		final ScriptDocument doc = ScriptDocument.of(script, params("s",
-			String.class), PYTHON, null);
+			String.class), PYTHON);
 		for (int i = 0; i <= script.length(); i++) {
 			final int t = doc.toTransformed(i);
 			assertEquals(i, doc.toOriginal(t));
@@ -181,13 +178,12 @@ public class ScriptDocumentTest {
 	}
 
 	@Test
-	public void testEnvironment() {
-		final Environment env = new Environment("/env/python",
-			Collections.singletonList("/overlay"), null);
-		final ScriptDocument doc = ScriptDocument.of("", params(), PYTHON, env);
-		assertEquals("task: object\n", doc.text());
-		assertSame(env, doc.environment());
-		assertEquals(env, new Environment("/env/python", Collections
-			.singletonList("/overlay"), null));
+	public void testAsIs() {
+		final String script = "#@ String s\ns.";
+		final ScriptDocument doc = ScriptDocument.of(script);
+		assertEquals(script, doc.text());
+		assertEquals(script, doc.original());
+		assertEquals(0, doc.toTransformed(0));
+		assertTrue(doc.parameters().isEmpty());
 	}
 }

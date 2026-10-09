@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.lsp.script;
+package org.scijava.code.lsp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;

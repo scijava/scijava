@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.lsp.script;
+package org.scijava.code.lsp;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,7 +40,6 @@ import java.util.regex.Pattern;
 
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
-import org.scijava.code.lsp.Positions;
 
 /**
  * A SciJava script as plain code of its language (a "virtual document"), for

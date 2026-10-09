@@ -42,11 +42,18 @@
  * from the highest-priority plugin serving the script's language.
  * </p>
  * <p>
+ * Servers need know nothing of SciJava scripts. A SciJava script's {@code #@}
+ * parameters define variables before it runs, which plain code of its
+ * language would declare. A {@link org.scijava.code.lsp.ScriptDocument} is
+ * the script as such code, with its parameters declared with their run-time
+ * types, as a {@link org.scijava.code.lsp.ScriptDialect} says. A session shows
+ * its server this text (in the dialect of the plugin offering the server),
+ * and maps positions in the server's answers back to the script.
+ * </p>
+ * <p>
  * The subpackages are for those writing language servers:
- * {@link org.scijava.code.lsp.jvm} to write them in Java,
- * {@link org.scijava.code.lsp.launch} to run them as processes, and
- * {@link org.scijava.code.lsp.script} to show them SciJava scripts as plain
- * code.
+ * {@link org.scijava.code.lsp.jvm} to write them in Java, and
+ * {@link org.scijava.code.lsp.launch} to run them as processes.
  * </p>
  */
 package org.scijava.code.lsp;

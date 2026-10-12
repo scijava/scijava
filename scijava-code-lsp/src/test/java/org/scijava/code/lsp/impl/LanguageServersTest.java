@@ -36,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -95,6 +96,7 @@ import org.scijava.Priority;
 import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.LanguageServerPlugin;
 import org.scijava.code.lsp.LanguageServerService;
+import org.scijava.code.lsp.ServerProcessPlugin;
 import org.scijava.code.lsp.Positions;
 import org.scijava.code.lsp.ScriptSession;
 import org.scijava.code.lsp.ScriptDialect;
@@ -348,6 +350,14 @@ public class LanguageServersTest {
 	public void testSupports() {
 		assertTrue(service.supports(fake));
 		assertFalse(service.supports(null));
+	}
+
+	@Test
+	public void testLaunch() {
+		// A server process a plugin offers, started only once asked.
+		assertTrue(service.launch("fake", Environment.NONE) instanceof
+			ProcessLanguageServer);
+		// No plugin, no server.
 		assertNull(service.launch("cobol", Environment.NONE));
 	}
 
@@ -422,6 +432,21 @@ public class LanguageServersTest {
 		@Override
 		public List<String> getExtensions() {
 			return Collections.singletonList("fake");
+		}
+	}
+
+	/** Offers a server process for "fake" documents, which cannot start. */
+	@Plugin(type = ServerProcessPlugin.class)
+	public static class FakeProcessPlugin implements ServerProcessPlugin {
+
+		@Override
+		public String languageId() {
+			return "fake";
+		}
+
+		@Override
+		public Process start(final Environment env) throws IOException {
+			throw new IOException("Not a real server");
 		}
 	}
 

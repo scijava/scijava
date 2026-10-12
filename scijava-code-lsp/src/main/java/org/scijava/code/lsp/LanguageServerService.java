@@ -70,7 +70,7 @@ public interface LanguageServerService extends SciJavaService {
 	/**
 	 * Starts (or reuses) a server process for an LSP language (e.g.
 	 * {@code python}), as a plugin offers it (see
-	 * {@link org.scijava.code.lsp.launch.LspServerPlugin}), for scripts running
+	 * {@link ServerProcessPlugin}), for scripts running
 	 * in the given environment; or returns null if no plugin
 	 * offers one. For {@link LanguageServerPlugin}s whose servers are
 	 * processes.

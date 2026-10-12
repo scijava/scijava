@@ -27,30 +27,39 @@
  * #L%
  */
 
-package org.scijava.code.lsp.launch;
+package org.scijava.code.lsp;
 
 import java.io.IOException;
-import org.scijava.code.lsp.Environment;
 
+import org.scijava.plugin.SciJavaPlugin;
 
 /**
- * How to start a language server for scripts that run in a given environment,
- * e.g. jedi-language-server, told to use the environment's Python.
+ * Offers a language server that runs as a process, for an LSP language (e.g.
+ * jedi-language-server, for {@code python}): how to start it for scripts
+ * running in a given environment. {@link LanguageServerPlugin}s get such a
+ * server via {@link LanguageServerService#launch}: started when first needed,
+ * one per environment, restarted if it stops, and stopped when idle.
+ * <p>
+ * For example, scripting-appose-python offers jedi-language-server, which
+ * scripting-jython's server uses too.
+ * </p>
  *
  * @author Gabriel Selzer
  */
-public interface LspServerSpec {
+public interface ServerProcessPlugin extends SciJavaPlugin {
 
 	/** The LSP language identifier of the documents, e.g. {@code python}. */
 	String languageId();
 
 	/**
-	 * Starts a server. Called on a background thread; may be slow (e.g. build
-	 * the environment the server runs in).
+	 * Starts a server, which speaks LSP over its standard input and output. (Its
+	 * standard error must be redirected, lest it block once the pipe fills.)
+	 * Called on a background thread; may be slow (e.g. build the environment
+	 * the server runs in).
 	 *
 	 * @param env Where the scripts the server will analyze run.
 	 */
-	LspConnection start(Environment env) throws IOException;
+	Process start(Environment env) throws IOException;
 
 	/**
 	 * The {@code initializationOptions} to send the server, e.g. the

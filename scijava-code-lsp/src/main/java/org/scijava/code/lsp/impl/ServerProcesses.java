@@ -44,18 +44,18 @@ import java.util.function.Consumer;
 import java.util.function.LongSupplier;
 
 import org.scijava.code.lsp.Environment;
-import org.scijava.code.lsp.launch.LspServerSpec;
+import org.scijava.code.lsp.ServerProcessPlugin;
 import org.scijava.log.Logger;
 
 /**
- * The language servers of one kind (see {@link LspServerSpec}), one per
+ * The language servers of one kind (see {@link ServerProcessPlugin}), one per
  * environment scripts run in: started when first needed (in the background),
  * restarted if they stop, and stopped when unused for a while or when too many
  * run.
  *
  * @author Gabriel Selzer
  */
-public final class LspServers {
+public final class ServerProcesses {
 
 	/** How long to wait for a server to initialize, in milliseconds. */
 	private static final long INIT_TIMEOUT = 60_000;
@@ -63,7 +63,7 @@ public final class LspServers {
 	/** How long to wait before starting a server that failed again, in ms. */
 	private static final long RETRY_DELAY = 30_000;
 
-	private final LspServerSpec spec;
+	private final ServerProcessPlugin plugin;
 	private final Logger log;
 	private final long idle;
 	private final int max;
@@ -80,26 +80,26 @@ public final class LspServers {
 	private final ScheduledExecutorService reaper;
 
 	/**
-	 * @param spec How to start a server.
+	 * @param plugin How to start a server.
 	 * @param log Where to report problems.
 	 * @param idle How long a server may go unused before it is stopped, in ms.
 	 * @param max How many servers may run at once.
 	 */
-	public LspServers(final LspServerSpec spec, final Logger log,
+	public ServerProcesses(final ServerProcessPlugin plugin, final Logger log,
 		final long idle, final int max)
 	{
-		this(spec, log, idle, max, System::currentTimeMillis);
+		this(plugin, log, idle, max, System::currentTimeMillis);
 	}
 
-	LspServers(final LspServerSpec spec, final Logger log, final long idle,
+	ServerProcesses(final ServerProcessPlugin plugin, final Logger log, final long idle,
 		final int max, final LongSupplier clock)
 	{
-		this.spec = spec;
+		this.plugin = plugin;
 		this.log = log;
 		this.idle = idle;
 		this.max = max;
 		this.clock = clock;
-		final String name = "scijava-lsp-" + spec.languageId();
+		final String name = "scijava-lsp-" + plugin.languageId();
 		starter = Executors.newSingleThreadExecutor(daemon(name));
 		reaper = Executors.newSingleThreadScheduledExecutor(daemon(name +
 			"-reaper"));
@@ -114,7 +114,7 @@ public final class LspServers {
 	 *
 	 * @return The server, once started; fails if it could not be.
 	 */
-	public synchronized CompletableFuture<LspServer> server(
+	public synchronized CompletableFuture<ServerProcess> server(
 		final Environment env)
 	{
 		final Entry known = servers.get(env);
@@ -124,12 +124,12 @@ public final class LspServers {
 		final Entry entry = new Entry();
 		entry.server = CompletableFuture.supplyAsync(() -> {
 			try {
-				log.debug("Starting " + spec.languageId() + " language server for " +
+				log.debug("Starting " + plugin.languageId() + " language server for " +
 					env);
-				return LspServer.start(spec, env, log, INIT_TIMEOUT);
+				return ServerProcess.start(plugin, env, log, INIT_TIMEOUT);
 			}
 			catch (final Exception exc) {
-				log.warn("Could not start " + spec.languageId() +
+				log.warn("Could not start " + plugin.languageId() +
 					" language server for " + env, exc);
 				throw new CompletionException(exc);
 			}
@@ -150,13 +150,13 @@ public final class LspServers {
 	}
 
 	/** Calls {@code action} on each running server. */
-	public void forEach(final Consumer<LspServer> action) {
+	public void forEach(final Consumer<ServerProcess> action) {
 		final List<Entry> entries;
 		synchronized (this) {
 			entries = new ArrayList<>(servers.values());
 		}
 		for (final Entry e : entries) {
-			final LspServer s = e.server.getNow(null);
+			final ServerProcess s = e.server.getNow(null);
 			if (s != null) action.accept(s);
 		}
 	}
@@ -175,10 +175,10 @@ public final class LspServers {
 		final Iterator<Entry> it = servers.values().iterator();
 		while (it.hasNext()) {
 			final Entry e = it.next();
-			final LspServer s = e.server.isDone() && !e.server
+			final ServerProcess s = e.server.isDone() && !e.server
 				.isCompletedExceptionally() ? e.server.join() : null;
 			if (s != null && now - s.lastUsed() > idle) {
-				log.debug("Stopping idle " + spec.languageId() + " language server");
+				log.debug("Stopping idle " + plugin.languageId() + " language server");
 				it.remove();
 				stop(e);
 			}
@@ -189,7 +189,7 @@ public final class LspServers {
 
 	private void stop(final Entry e) {
 		// NB: Stop it once started, should it still be starting.
-		e.server.thenAcceptAsync(LspServer::shutdown, starter);
+		e.server.thenAcceptAsync(ServerProcess::shutdown, starter);
 	}
 
 	private static java.util.concurrent.ThreadFactory daemon(final String name) {
@@ -202,7 +202,7 @@ public final class LspServers {
 
 	private final class Entry {
 
-		private CompletableFuture<LspServer> server;
+		private CompletableFuture<ServerProcess> server;
 		private volatile long failed = -1;
 
 		/** Whether the server is starting or running, or failed too recently. */

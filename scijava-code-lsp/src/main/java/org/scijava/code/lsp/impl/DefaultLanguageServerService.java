@@ -29,6 +29,7 @@
 
 package org.scijava.code.lsp.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +42,9 @@ import org.scijava.code.lsp.LanguageServerService;
 import org.scijava.code.lsp.ScriptSession;
 import org.scijava.code.lsp.ScriptDialect;
 import org.scijava.code.lsp.ScriptDocument;
+import org.scijava.code.lsp.ServerProcessPlugin;
 import org.scijava.log.LogService;
+import org.scijava.log.StderrLogService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.PluginService;
@@ -54,7 +57,8 @@ import org.scijava.service.Service;
  * <p>
  * Each session gets a server of its own, from the highest-priority plugin
  * serving its language, and shows it scripts as plain code in the plugin's
- * dialect. (Server processes behind them are shared; see {@link #launch}.)
+ * dialect. Server processes behind them (see {@link #launch}) are shared, and
+ * stopped when the context is disposed.
  * </p>
  *
  * @author Gabriel Selzer
@@ -64,14 +68,24 @@ public class DefaultLanguageServerService extends AbstractService implements
 	LanguageServerService
 {
 
+	/** How long a server process may go unused before it stops, in ms. */
+	private static final long IDLE = Long.getLong("scijava.lsp.idle", 10 * 60 *
+		1000);
+
+	/**
+	 * How many server processes of a language may run at once (one per
+	 * environment scripts run in).
+	 */
+	private static final int MAX = Integer.getInteger("scijava.lsp.max", 4);
+
 	@Parameter
 	private PluginService pluginService;
 
 	@Parameter(required = false)
-	private LspService lspService;
-
-	@Parameter(required = false)
 	private LogService log;
+
+	/** Server processes, by LSP language identifier; null if none offered. */
+	private final Map<String, ServerProcesses> processes = new HashMap<>();
 
 	private final ScriptParameters parameters = new ScriptParameters(
 		this::context);
@@ -124,9 +138,8 @@ public class DefaultLanguageServerService extends AbstractService implements
 	public LanguageServer launch(final String languageId,
 		final Environment environment)
 	{
-		final LspServers s = lspService == null ? null : lspService.servers(
-			languageId);
-		return s == null ? null : new LaunchedLanguageServer(s, environment);
+		final ServerProcesses s = processes(languageId);
+		return s == null ? null : new ProcessLanguageServer(s, environment);
 	}
 
 	@Override
@@ -134,7 +147,37 @@ public class DefaultLanguageServerService extends AbstractService implements
 		return parameters.of(text);
 	}
 
+	// -- Disposable methods --
+
+	@Override
+	public synchronized void dispose() {
+		for (final ServerProcesses s : processes.values()) {
+			if (s != null) s.shutdown();
+		}
+		processes.clear();
+	}
+
 	// -- Helper methods --
+
+	/**
+	 * The server processes for an LSP language, as the first plugin offering
+	 * them says; or null if none does.
+	 */
+	private synchronized ServerProcesses processes(final String languageId) {
+		if (processes.containsKey(languageId)) return processes.get(languageId);
+		ServerProcesses s = null;
+		for (final ServerProcessPlugin p : pluginService.createInstancesOfType(
+			ServerProcessPlugin.class))
+		{
+			if (languageId.equals(p.languageId())) {
+				s = new ServerProcesses(p, log != null ? log : new StderrLogService(),
+					IDLE, MAX);
+				break;
+			}
+		}
+		processes.put(languageId, s);
+		return s;
+	}
 
 	/**
 	 * The highest-priority plugin serving a language, or null if none.

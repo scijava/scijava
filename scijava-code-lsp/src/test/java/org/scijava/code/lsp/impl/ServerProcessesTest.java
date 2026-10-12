@@ -82,18 +82,17 @@ import org.eclipse.lsp4j.services.WorkspaceService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.scijava.code.lsp.Environment;
-import org.scijava.code.lsp.launch.LspConnection;
-import org.scijava.code.lsp.launch.LspServerSpec;
+import org.scijava.code.lsp.ServerProcessPlugin;
 import org.scijava.code.lsp.Positions;
 import org.scijava.log.StderrLogService;
 
 /**
- * Tests {@link LspServers} and {@link LaunchedLanguageServer}, against a fake
+ * Tests {@link ServerProcesses} and {@link ProcessLanguageServer}, against a fake
  * language server.
  *
  * @author Gabriel Selzer
  */
-public class LspServersTest {
+public class ServerProcessesTest {
 
 	private static final Environment ENV = new Environment(
 		"/env/python", Collections.singletonList("/overlay"), null);
@@ -101,10 +100,10 @@ public class LspServersTest {
 	private final List<FakeServer> started = new CopyOnWriteArrayList<>();
 	// NB: Servers note their use by the system clock.
 	private final AtomicLong now = new AtomicLong(System.currentTimeMillis());
-	private LspServers servers;
+	private ServerProcesses servers;
 
 	private void setUp(final long idle) {
-		servers = new LspServers(new FakeSpec(), new StderrLogService(), idle, 2,
+		servers = new ServerProcesses(new FakePlugin(), new StderrLogService(), idle, 2,
 			now::get);
 	}
 
@@ -125,7 +124,7 @@ public class LspServersTest {
 	public void testLaunched() throws Exception {
 		// A server process, seen as a LanguageServer (for LanguageServerPlugins).
 		setUp(60_000);
-		final LaunchedLanguageServer launched = new LaunchedLanguageServer(servers,
+		final ProcessLanguageServer launched = new ProcessLanguageServer(servers,
 			ENV);
 		final List<org.eclipse.lsp4j.PublishDiagnosticsParams> published =
 			new CopyOnWriteArrayList<>();
@@ -176,11 +175,11 @@ public class LspServersTest {
 	@Test
 	public void testRestartAndIdle() throws Exception {
 		setUp(60_000);
-		final LspServer first = servers.server(ENV).get(10, TimeUnit.SECONDS);
+		final ServerProcess first = servers.server(ENV).get(10, TimeUnit.SECONDS);
 		assertSame(first, servers.server(ENV).get(10, TimeUnit.SECONDS));
 		// The server dies: the next request starts another.
 		started.get(0).alive = false;
-		final LspServer second = servers.server(ENV).get(10, TimeUnit.SECONDS);
+		final ServerProcess second = servers.server(ENV).get(10, TimeUnit.SECONDS);
 		assertNotSame(first, second);
 		assertEquals(2, started.size());
 
@@ -214,7 +213,7 @@ public class LspServersTest {
 	}
 
 	/** Starts fake servers, connected by pipes. */
-	private final class FakeSpec implements LspServerSpec {
+	private final class FakePlugin implements ServerProcessPlugin {
 
 		@Override
 		public String languageId() {
@@ -222,7 +221,7 @@ public class LspServersTest {
 		}
 
 		@Override
-		public LspConnection start(final Environment env)
+		public Process start(final Environment env)
 			throws IOException
 		{
 			final PipedInputStream clientIn = new PipedInputStream(1 << 16);
@@ -235,16 +234,21 @@ public class LspServersTest {
 			server.client = launcher.getRemoteProxy();
 			launcher.startListening();
 			started.add(server);
-			return new LspConnection() {
+			return new Process() {
 
 				@Override
-				public InputStream input() {
+				public InputStream getInputStream() {
 					return clientIn;
 				}
 
 				@Override
-				public OutputStream output() {
+				public OutputStream getOutputStream() {
 					return clientOut;
+				}
+
+				@Override
+				public InputStream getErrorStream() {
+					return InputStream.nullInputStream();
 				}
 
 				@Override
@@ -253,7 +257,19 @@ public class LspServersTest {
 				}
 
 				@Override
-				public void close() {
+				public int exitValue() {
+					if (server.alive) throw new IllegalThreadStateException();
+					return 0;
+				}
+
+				@Override
+				public int waitFor() throws InterruptedException {
+					while (server.alive) Thread.sleep(10);
+					return 0;
+				}
+
+				@Override
+				public void destroy() {
 					server.alive = false;
 					try {
 						clientOut.close();

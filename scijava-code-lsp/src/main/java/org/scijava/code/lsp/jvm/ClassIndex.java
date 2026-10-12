@@ -68,7 +68,7 @@ import java.util.stream.Stream;
  * This is the toolkit-agnostic engine behind import and class-name completion:
  * given a partial name it can enumerate matching classes, locate documentation,
  * and build HTML summaries for fields, methods and constructors. It depends on no
- * widget toolkit, so completers in language adapters (e.g. Jython) can use it
+ * widget toolkit, so language servers (e.g. Jython's) can use it
  * without pulling in the Swing script editor.
  * </p>
  * <p>

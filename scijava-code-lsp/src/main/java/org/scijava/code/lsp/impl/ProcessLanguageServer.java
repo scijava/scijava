@@ -65,14 +65,14 @@ import org.eclipse.lsp4j.services.WorkspaceService;
 import org.scijava.code.lsp.Environment;
 
 /**
- * A language server process (see {@link LspServers}), seen as a
+ * A language server process (see {@link ServerProcesses}), seen as a
  * {@link LanguageServer}: started when first asked, restarted if it stops,
  * stopped when idle. Each document is brought up to date on the process just
  * before each request; and, for diagnostics, a moment after it last changed.
  *
  * @author Gabriel Selzer
  */
-public class LaunchedLanguageServer implements LanguageServer,
+public class ProcessLanguageServer implements LanguageServer,
 	TextDocumentService, WorkspaceService, LanguageClientAware
 {
 
@@ -92,14 +92,14 @@ public class LaunchedLanguageServer implements LanguageServer,
 			return t;
 		});
 
-	private final LspServers servers;
+	private final ServerProcesses servers;
 	private final Environment environment;
 	private volatile LanguageClient client;
 
 	/** The open documents' texts and versions, by URI. */
 	private final Map<String, Doc> docs = new ConcurrentHashMap<>();
 
-	public LaunchedLanguageServer(final LspServers servers,
+	public ProcessLanguageServer(final ServerProcesses servers,
 		final Environment environment)
 	{
 		this.servers = servers;
@@ -117,7 +117,7 @@ public class LaunchedLanguageServer implements LanguageServer,
 	public CompletableFuture<InitializeResult> initialize(
 		final InitializeParams params)
 	{
-		// NB: The process is initialized when started (see LspServers).
+		// NB: The process is initialized when started (see ServerProcesses).
 		return CompletableFuture.completedFuture(new InitializeResult(
 			new ServerCapabilities()));
 	}
@@ -133,7 +133,7 @@ public class LaunchedLanguageServer implements LanguageServer,
 
 	@Override
 	public void exit() {
-		// NB: The process belongs to the LspServers.
+		// NB: The process belongs to the ServerProcesses.
 	}
 
 	@Override

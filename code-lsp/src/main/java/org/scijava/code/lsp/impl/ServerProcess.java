@@ -72,17 +72,16 @@ import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.scijava.code.lsp.Environment;
-import org.scijava.code.lsp.launch.LspConnection;
-import org.scijava.code.lsp.launch.LspServerSpec;
+import org.scijava.code.lsp.ServerProcessPlugin;
 import org.scijava.log.Logger;
 
 /**
  * A running, initialized language server, and the documents opened in it.
  *
  * @author Gabriel Selzer
- * @see LspServers
+ * @see ServerProcesses
  */
-public final class LspServer {
+public final class ServerProcess {
 
 	/** Threads reading servers' messages; daemons, so as not to keep the JVM. */
 	private static final ExecutorService LISTENERS = Executors
@@ -93,7 +92,7 @@ public final class LspServer {
 		});
 
 	private final String languageId;
-	private final LspConnection connection;
+	private final Process process;
 	private final LanguageServer remote;
 	private final Future<Void> listening;
 
@@ -105,13 +104,13 @@ public final class LspServer {
 
 	private volatile long lastUsed = System.currentTimeMillis();
 
-	private LspServer(final String languageId, final LspConnection connection,
+	private ServerProcess(final String languageId, final Process process,
 		final LanguageServer remote, final Future<Void> listening,
 		final Published published)
 	{
 		this.languageId = languageId;
 		this.published = published;
-		this.connection = connection;
+		this.process = process;
 		this.remote = remote;
 		this.listening = listening;
 	}
@@ -119,21 +118,21 @@ public final class LspServer {
 	/**
 	 * Starts and initializes a server. Blocks until it is ready.
 	 *
-	 * @param spec How to start it.
+	 * @param plugin How to start it.
 	 * @param env Where the scripts it will analyze run.
 	 * @param log Where to report the server's messages.
 	 * @param timeout How long to wait for it to initialize, in milliseconds.
 	 */
-	public static LspServer start(final LspServerSpec spec,
+	public static ServerProcess start(final ServerProcessPlugin plugin,
 		final Environment env, final Logger log, final long timeout)
 		throws Exception
 	{
-		final LspConnection connection = spec.start(env);
+		final Process process = plugin.start(env);
 		try {
 			final Published published = new Published();
 			final Launcher<LanguageServer> launcher = LSPLauncher
-				.createClientLauncher(new Client(log, published), connection.input(),
-					connection.output(), LISTENERS, null);
+				.createClientLauncher(new Client(log, published), process
+					.getInputStream(), process.getOutputStream(), LISTENERS, null);
 			final Future<Void> listening = launcher.startListening();
 			final LanguageServer remote = launcher.getRemoteProxy();
 
@@ -141,20 +140,20 @@ public final class LspServer {
 			init.setProcessId((int) ProcessHandle.current().pid());
 			init.setClientInfo(new org.eclipse.lsp4j.ClientInfo("SciJava"));
 			init.setCapabilities(capabilities());
-			final String root = spec.rootUri(env);
+			final String root = plugin.rootUri(env);
 			if (root != null) {
 				init.setRootUri(root);
 				init.setWorkspaceFolders(Collections.singletonList(new WorkspaceFolder(
 					root, "scripts")));
 			}
-			init.setInitializationOptions(spec.initializationOptions(env));
+			init.setInitializationOptions(plugin.initializationOptions(env));
 			remote.initialize(init).get(timeout, TimeUnit.MILLISECONDS);
 			remote.initialized(new InitializedParams());
-			return new LspServer(spec.languageId(), connection, remote, listening,
+			return new ServerProcess(plugin.languageId(), process, remote, listening,
 				published);
 		}
 		catch (final Exception exc) {
-			connection.close();
+			process.destroy();
 			throw exc;
 		}
 	}
@@ -211,7 +210,7 @@ public final class LspServer {
 
 	/** Whether the server still runs. */
 	public boolean isAlive() {
-		return connection.isAlive() && !listening.isDone();
+		return process.isAlive() && !listening.isDone();
 	}
 
 	/** When the server was last used, in milliseconds since the epoch. */
@@ -231,7 +230,7 @@ public final class LspServer {
 			// NB: Stopped below, regardless.
 		}
 		finally {
-			connection.close();
+			process.destroy();
 			listening.cancel(true);
 		}
 	}

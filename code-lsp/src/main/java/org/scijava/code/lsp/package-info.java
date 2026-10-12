@@ -51,9 +51,14 @@
  * and maps positions in the server's answers back to the script.
  * </p>
  * <p>
- * The subpackages are for those writing language servers:
- * {@link org.scijava.code.lsp.jvm} to write them in Java, and
- * {@link org.scijava.code.lsp.launch} to run them as processes.
+ * Servers that run as processes (e.g. jedi-language-server, for Python) are
+ * offered by {@link org.scijava.code.lsp.ServerProcessPlugin}s, and shared:
+ * plugins get them via
+ * {@link org.scijava.code.lsp.LanguageServerService#launch}.
+ * </p>
+ * <p>
+ * The subpackage {@link org.scijava.code.lsp.jvm} is for those writing
+ * language servers in Java.
  * </p>
  */
 package org.scijava.code.lsp;

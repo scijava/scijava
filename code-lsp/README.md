@@ -19,10 +19,10 @@ scripts.
  LanguageServerService ──► the LanguageServerPlugin serving the language
    │  a server of the session's own, and its ScriptDialect
    ├──► in-process servers (e.g. Groovy, Jython), built on ScriptLanguageServer
-   └──► server processes (e.g. jedi-language-server), via LspServerSpec
+   └──► server processes (e.g. jedi-language-server), via ServerProcessPlugin
 ```
 
-It does three things, each in a package of its own.
+It does three things.
 
 ## 1. Brokering between scripts and servers (`org.scijava.code.lsp`)
 
@@ -49,14 +49,15 @@ a `ScriptDialect` says. Each `LanguageServerPlugin` names the dialect its
 servers read; a session shows its server the script in that dialect, and maps
 positions in the server's answers back.
 
-## 2. Running server processes (`org.scijava.code.lsp.launch`)
+## 2. Running server processes (`org.scijava.code.lsp`)
 
 For servers that are not Java in the SciJava process (e.g. jedi-language-server,
-for Python). An `LspServerPlugin` offers an `LspServerSpec` for an LSP
-language id (e.g. `python`), saying how to start a server for an environment
-and returning its streams (an `LspConnection`). Plugins get such a server via
-`LanguageServerService.launch`: started when first needed, one per
-environment, restarted if it stops, and stopped when idle.
+for Python). A `ServerProcessPlugin` says how to start one for an LSP language
+id (e.g. `python`) and an environment: the process, speaking LSP over its
+standard streams, and the options and workspace root to initialize it with.
+Plugins get such a server via `LanguageServerService.launch`: started when
+first needed, one per environment, restarted if it stops, and stopped when
+idle.
 
 ## 3. A toolkit for in-process servers (`org.scijava.code.lsp.jvm`)
 
@@ -77,6 +78,6 @@ javadoc.
 | scripting-jython        | ✓ | ✓ | ✓ |
 | scripting-appose-python | ✓ | ✓ |   |
 
-The specialized packages depend only on `org.scijava.code.lsp`, never on each
-other. The module exports all three; its implementation
+The toolkit (`org.scijava.code.lsp.jvm`) depends only on
+`org.scijava.code.lsp`. The module exports both; its implementation
 (`org.scijava.code.lsp.impl`) is internal.

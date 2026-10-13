@@ -32,9 +32,11 @@ package org.scijava.code.lsp.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import javax.script.ScriptContext;
 
+import org.eclipse.lsp4j.TextDocumentItem;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.LanguageServerPlugin;
@@ -105,8 +107,7 @@ public class DefaultLanguageServerService extends AbstractService implements
 		// TODO: Consider adding a "merged" LanguageServer that can wrangle all
 		// matching servers. This could allow custom auto-completions (e.g.
 		// SciJava Ops) and/or simplify servers combining sources themselves
-		// (e.g. scripting-jython's PythonCompanion, scripting-appose-python's
-		// ApposePythonLanguageServer).
+		// (e.g. scripting-jython's PythonCompanion).
 		final LanguageServerPlugin plugin = plugin(language);
 		LanguageServer server = null;
 		ScriptDialect dialect = null;
@@ -136,7 +137,7 @@ public class DefaultLanguageServerService extends AbstractService implements
 
 	@Override
 	public LanguageServer launch(final String languageId,
-		final Environment environment)
+		final Function<TextDocumentItem, Environment> environment)
 	{
 		final ServerProcesses s = processes(languageId);
 		return s == null ? null : new ProcessLanguageServer(s, environment);

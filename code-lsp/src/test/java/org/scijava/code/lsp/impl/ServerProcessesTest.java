@@ -125,7 +125,7 @@ public class ServerProcessesTest {
 		// A server process, seen as a LanguageServer (for LanguageServerPlugins).
 		setUp(60_000);
 		final ProcessLanguageServer launched = new ProcessLanguageServer(servers,
-			ENV);
+			doc -> ENV);
 		final List<org.eclipse.lsp4j.PublishDiagnosticsParams> published =
 			new CopyOnWriteArrayList<>();
 		launched.connect(new org.eclipse.lsp4j.services.LanguageClient() {
@@ -173,6 +173,41 @@ public class ServerProcessesTest {
 	}
 
 	@Test
+	public void testMoves() throws Exception {
+		// Each document is analyzed by the process of where its script runs, as
+		// its text says here.
+		setUp(60_000);
+		final ProcessLanguageServer launched = new ProcessLanguageServer(servers,
+			doc -> new Environment(doc.getText().startsWith("#B") ? "/b/python"
+				: "/a/python", null, null));
+		final String uri = "untitled:/m.py";
+		launched.didOpen(new DidOpenTextDocumentParams(
+			new org.eclipse.lsp4j.TextDocumentItem(uri, "python", 1, "x = 1")));
+		complete(launched, uri);
+		assertEquals(1, started.size());
+		final FakeServer a = started.get(0);
+		assertTrue(String.valueOf(a.options).contains("/a/python"));
+
+		// It runs elsewhere now: the next request goes there, and the process of
+		// where it ran lets it go.
+		launched.didChange(new DidChangeTextDocumentParams(
+			new org.eclipse.lsp4j.VersionedTextDocumentIdentifier(uri, 2),
+			Collections.singletonList(
+				new org.eclipse.lsp4j.TextDocumentContentChangeEvent("#B\nx = 1"))));
+		final List<CompletionItem> items = complete(launched, uri);
+		assertEquals(2, started.size());
+		final FakeServer b = started.get(1);
+		assertTrue(String.valueOf(b.options).contains("/b/python"));
+		assertEquals("#B\nx = 1", b.texts.get(uri));
+		waitFor(() -> a.events.contains("close " + uri));
+
+		// Completions are resolved by the process that made them.
+		launched.resolveCompletionItem(items.get(0)).get(10, TimeUnit.SECONDS);
+		assertTrue(b.events.contains("resolve decoder"));
+		assertFalse(a.events.contains("resolve decoder"));
+	}
+
+	@Test
 	public void testRestartAndIdle() throws Exception {
 		setUp(60_000);
 		final ServerProcess first = servers.server(ENV).get(10, TimeUnit.SECONDS);
@@ -200,6 +235,14 @@ public class ServerProcessesTest {
 	}
 
 	// -- Helper methods --
+
+	private static List<CompletionItem> complete(final ProcessLanguageServer s,
+		final String uri) throws Exception
+	{
+		return s.completion(new CompletionParams(
+			new org.eclipse.lsp4j.TextDocumentIdentifier(uri), new Position(0, 1)))
+			.get(10, TimeUnit.SECONDS).getRight().getItems();
+	}
 
 	private static void waitFor(final java.util.function.BooleanSupplier c)
 		throws InterruptedException
@@ -367,6 +410,7 @@ public class ServerProcessesTest {
 		public CompletableFuture<CompletionItem> resolveCompletionItem(
 			final CompletionItem item)
 		{
+			events.add("resolve " + item.getLabel());
 			item.setDetail("def " + item.getLabel() + "(obj, indent) -> str");
 			item.setDocumentation("Docs of " + item.getLabel() + " & co.");
 			return CompletableFuture.completedFuture(item);

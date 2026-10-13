@@ -31,10 +31,12 @@ package org.scijava.code.lsp;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import javax.script.ScriptContext;
 
 import org.eclipse.lsp4j.Diagnostic;
+import org.eclipse.lsp4j.TextDocumentItem;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.scijava.script.ScriptLanguage;
 import org.scijava.service.SciJavaService;
@@ -68,14 +70,33 @@ public interface LanguageServerService extends SciJavaService {
 	boolean supports(ScriptLanguage language);
 
 	/**
-	 * Starts (or reuses) a server process for an LSP language (e.g.
-	 * {@code python}), as a plugin offers it (see
-	 * {@link ServerProcessPlugin}), for scripts running
-	 * in the given environment; or returns null if no plugin
-	 * offers one. For {@link LanguageServerPlugin}s whose servers are
-	 * processes.
+	 * Starts (or reuses) server processes for an LSP language (e.g.
+	 * {@code python}), as a plugin offers them (see
+	 * {@link ServerProcessPlugin}), one per environment scripts run in; or
+	 * returns null if no plugin offers one. For {@link LanguageServerPlugin}s
+	 * whose servers are processes.
+	 * <p>
+	 * Each document is analyzed by the process of the environment its script
+	 * runs in, as {@code environment} says just before each request about it:
+	 * so that, as where it runs changes (e.g. as its dependencies are edited),
+	 * the document moves to another process.
+	 * </p>
+	 *
+	 * @param environment Where the script of a document runs (e.g. as its
+	 *          text says).
 	 */
-	LanguageServer launch(String languageId, Environment environment);
+	LanguageServer launch(String languageId,
+		Function<TextDocumentItem, Environment> environment);
+
+	/**
+	 * As {@link #launch(String, Function)}, for scripts that all run in the
+	 * given environment.
+	 */
+	default LanguageServer launch(final String languageId,
+		final Environment environment)
+	{
+		return launch(languageId, document -> environment);
+	}
 
 	/**
 	 * Finds the problems in a script, waiting for them: for tools that ask

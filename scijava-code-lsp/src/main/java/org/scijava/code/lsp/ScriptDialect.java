@@ -35,12 +35,17 @@ import java.util.List;
 
 /**
  * What a script language knows about turning a SciJava script into plain code
- * of that language (a {@link ScriptDocument}): how its script parameters look
- * at run time, how to declare them, and where the script runs.
+ * of that language (a {@link ScriptDocument})
  * <p>
- * For example, CPython scripts run via Appose receive images as NumPy arrays,
- * declared {@code image: numpy.ndarray}; Groovy scripts receive the Java
- * objects themselves, declared {@code net.imglib2.img.Img image;}.
+ * A dialect describes the translation, rather than doing it: a
+ * {@link ScriptDocument} translates every script the same way, prepending one
+ * line of declarations and blanking lines in place, and the dialect supplies
+ * only the pieces (types, declarations, imports). So, for every language,
+ * positions in a script and in its document differ by just that line's length,
+ * which is how a session maps servers' answers back to the script (and leaves
+ * out those about the line); and the translation is written, and tested, once.
+ * A language whose scripts need more (e.g. wrapping in a class) would extend
+ * that rule in {@link ScriptDocument}, for all languages.
  * </p>
  *
  * @author Gabriel Selzer

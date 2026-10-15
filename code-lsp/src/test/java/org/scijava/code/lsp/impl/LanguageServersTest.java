@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -147,6 +148,8 @@ public class LanguageServersTest {
 			assertEquals(Arrays.asList("max", "mass"), labels(list));
 			assertEquals(1, SERVERS.size());
 			assertEquals("high", SERVERS.get(0).name);
+			// For the script language: no LSP language asked for.
+			assertNull(SERVERS.get(0).languageId);
 		}
 		// Each session gets a server of its own.
 		try (ScriptSession other = service.session(fake)) {
@@ -202,10 +205,10 @@ public class LanguageServersTest {
 	public void testLiveEnvironment() {
 		final ScriptContext live = new SimpleScriptContext();
 		try (ScriptSession session = service.session(fake, live)) {
-			assertSame(live, SERVERS.get(0).environment.live());
+			assertSame(live, SERVERS.get(0).environment().live());
 		}
 		try (ScriptSession session = service.session(fake)) {
-			assertNull(SERVERS.get(1).environment.live());
+			assertNull(SERVERS.get(1).environment().live());
 		}
 	}
 
@@ -260,9 +263,6 @@ public class LanguageServersTest {
 			server.publish(server.opened.get(0), 1, "stale");
 			assertEquals(Collections.emptyList(), messages(session.diagnostics()));
 		}
-		// For tools: diagnose and wait.
-		assertEquals(Collections.singletonList("high: bad"), messages(service
-			.diagnose(fake, "bad", 10_000)));
 	}
 
 	@Test
@@ -349,16 +349,30 @@ public class LanguageServersTest {
 	@Test
 	public void testSupports() {
 		assertTrue(service.supports(fake));
-		assertFalse(service.supports(null));
+		assertFalse(service.supports((ScriptLanguage) null));
+		// By LSP language: in-process, or as server processes.
+		assertTrue(service.supports("fake"));
+		assertTrue(service.supports("fakeprocess"));
+		assertFalse(service.supports("cobol"));
 	}
 
 	@Test
 	public void testLaunch() {
 		// A server process a plugin offers, started only once asked.
-		assertTrue(service.launch("fake", Environment.NONE) instanceof
+		assertTrue(service.launch("fakeprocess", Environment.NONE) instanceof
 			ProcessLanguageServer);
+		// An in-process server, from the highest-priority plugin serving the
+		// language: a new one, in the environment given.
+		final Environment env = new Environment("/env/bin/fake", Collections
+			.emptyList(), null);
+		final LanguageServer server = service.launch("fake", env);
+		assertSame(SERVERS.get(0), server);
+		assertEquals("high", SERVERS.get(0).name);
+		assertEquals("fake", SERVERS.get(0).languageId);
+		assertSame(env, SERVERS.get(0).environment());
 		// No plugin, no server.
-		assertNull(service.launch("cobol", Environment.NONE));
+		assertThrows(IllegalArgumentException.class, () -> service.launch("cobol",
+			Environment.NONE));
 	}
 
 	// -- Helper methods --
@@ -435,13 +449,13 @@ public class LanguageServersTest {
 		}
 	}
 
-	/** Offers a server process for "fake" documents, which cannot start. */
+	/** Offers a server process for "fakeprocess" documents: it cannot start. */
 	@Plugin(type = ServerProcessPlugin.class)
 	public static class FakeProcessPlugin implements ServerProcessPlugin {
 
 		@Override
 		public String languageId() {
-			return "fake";
+			return "fakeprocess";
 		}
 
 		@Override
@@ -450,9 +464,14 @@ public class LanguageServersTest {
 		}
 	}
 
-	/** Serves the fake language: the one asked. */
+	/** Serves the fake language (as {@code fake}): the one asked. */
 	@Plugin(type = LanguageServerPlugin.class, priority = Priority.HIGH)
 	public static class HighPlugin implements LanguageServerPlugin {
+
+		@Override
+		public boolean supports(final String languageId) {
+			return "fake".equals(languageId);
+		}
 
 		@Override
 		public boolean supports(final ScriptLanguage language) {
@@ -460,8 +479,10 @@ public class LanguageServersTest {
 		}
 
 		@Override
-		public LanguageServer create(final Environment environment) {
-			return register(new FakeServer("high", environment));
+		public LanguageServer create(final String languageId,
+			final Environment environment)
+		{
+			return register(new FakeServer("high", languageId, environment));
 		}
 
 		@Override
@@ -497,13 +518,20 @@ public class LanguageServersTest {
 	public static class LowPlugin implements LanguageServerPlugin {
 
 		@Override
+		public boolean supports(final String languageId) {
+			return "fake".equals(languageId);
+		}
+
+		@Override
 		public boolean supports(final ScriptLanguage language) {
 			return language instanceof FakeLanguage;
 		}
 
 		@Override
-		public LanguageServer create(final Environment environment) {
-			return register(new FakeServer("low", environment));
+		public LanguageServer create(final String languageId,
+			final Environment environment)
+		{
+			return register(new FakeServer("low", languageId, environment));
 		}
 	}
 
@@ -518,6 +546,8 @@ public class LanguageServersTest {
 	{
 
 		final String name;
+		/** The LSP language it was created for, if any. */
+		final String languageId;
 		final Environment environment;
 		final List<String> events = new CopyOnWriteArrayList<>();
 		/** The URIs of the documents opened, in order. */
@@ -526,8 +556,20 @@ public class LanguageServersTest {
 		LanguageClient client;
 
 		FakeServer(final String name, final Environment environment) {
+			this(name, null, environment);
+		}
+
+		FakeServer(final String name, final String languageId,
+			final Environment environment)
+		{
 			this.name = name;
+			this.languageId = languageId;
 			this.environment = environment;
+		}
+
+		/** Where its scripts run. */
+		Environment environment() {
+			return environment;
 		}
 
 		@Override

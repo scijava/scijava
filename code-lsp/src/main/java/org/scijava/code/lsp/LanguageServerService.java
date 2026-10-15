@@ -29,14 +29,10 @@
 
 package org.scijava.code.lsp;
 
-import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 import javax.script.ScriptContext;
 
-import org.eclipse.lsp4j.Diagnostic;
-import org.eclipse.lsp4j.TextDocumentItem;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.scijava.script.ScriptLanguage;
 import org.scijava.service.SciJavaService;
@@ -70,51 +66,24 @@ public interface LanguageServerService extends SciJavaService {
 	boolean supports(ScriptLanguage language);
 
 	/**
-	 * Starts (or reuses) server processes for an LSP language (e.g.
-	 * {@code python}), as a plugin offers them (see
-	 * {@link ServerProcessPlugin}), one per environment scripts run in; or
-	 * returns null if no plugin offers one. For {@link LanguageServerPlugin}s
-	 * whose servers are processes.
-	 * <p>
-	 * Each document is analyzed by the process of the environment its script
-	 * runs in, as {@code environment} says just before each request about it:
-	 * so that, as where it runs changes (e.g. as its dependencies are edited),
-	 * the document moves to another process.
-	 * </p>
-	 *
-	 * @param environment Where the script of a document runs (e.g. as its
-	 *          text says).
+	 * Whether any plugin serves documents of the given LSP language (e.g.
+	 * {@code python}): i.e. whether {@link #launch} can give a server for it.
 	 */
-	LanguageServer launch(String languageId,
-		Function<TextDocumentItem, Environment> environment);
+	boolean supports(String languageId);
 
 	/**
-	 * As {@link #launch(String, Function)}, for scripts that all run in the
-	 * given environment.
-	 */
-	default LanguageServer launch(final String languageId,
-		final Environment environment)
-	{
-		return launch(languageId, document -> environment);
-	}
-
-	/**
-	 * Finds the problems in a script, waiting for them: for tools that ask
-	 * once, rather than editors. (For a script file, whose servers may depend
-	 * on where it is, use a {@link #session session} with its file set.)
+	 * Gets a new server for an LSP language (e.g. {@code groovy}, or
+	 * {@code python}), from the highest-priority {@link LanguageServerPlugin}
+	 * serving it: in-process, or a proxy to server processes (see
+	 * {@link ServerProcessPlugin}; shared, one per environment), whichever the
+	 * plugins offer. It sees documents as plain code of the language, and
+	 * analyzes them as running in the given environment. The caller
+	 * initializes it, and shuts it down.
 	 *
-	 * @param language The script's language.
-	 * @param text The script.
-	 * @param timeout How long to wait for all servers, in milliseconds; those
-	 *          not done by then are left out.
+	 * @param environment Where the scripts run.
+	 * @throws IllegalArgumentException If no plugin serves the language.
 	 */
-	default List<Diagnostic> diagnose(final ScriptLanguage language,
-		final String text, final long timeout)
-	{
-		try (ScriptSession session = session(language)) {
-			return session.update(text).diagnostics(timeout);
-		}
-	}
+	LanguageServer launch(String languageId, Environment environment);
 
 	/**
 	 * Gets the variables a script's parameters ({@code #@} lines, and old-style

@@ -31,7 +31,7 @@
  * A toolkit for in-process language servers of JVM languages, written in
  * Java (e.g. Groovy's and Jython's).
  * <p>
- * {@link org.scijava.code.lsp.jvm.ScriptLanguageServer} is a base class: it
+ * {@link org.scijava.code.lsp.jvm.AbstractLanguageServer} is a base class: it
  * keeps the open documents, and turns requests into questions about a
  * document and an offset. The rest help answer them for Java classes:
  * {@link org.scijava.code.lsp.jvm.Members} (completions for their members, by

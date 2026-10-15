@@ -45,8 +45,8 @@ import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionItemKind;
 import org.eclipse.lsp4j.CompletionList;
 import org.scijava.code.lsp.Environment;
+import org.scijava.code.lsp.jvm.AbstractLanguageServer;
 import org.scijava.code.lsp.jvm.Members;
-import org.scijava.code.lsp.jvm.ScriptLanguageServer;
 
 /**
  * A language server knowing only the variables of a running interpreter (see
@@ -57,7 +57,7 @@ import org.scijava.code.lsp.jvm.ScriptLanguageServer;
  *
  * @author Gabriel Selzer
  */
-public class BindingsLanguageServer extends ScriptLanguageServer {
+public class BindingsLanguageServer extends AbstractLanguageServer {
 
 	/** A trailing {@code variable.prefix} before the caret. */
 	private static final Pattern MEMBER = Pattern.compile(

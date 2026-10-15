@@ -30,12 +30,10 @@
 package org.scijava.code.lsp.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -125,7 +123,7 @@ public class ServerProcessesTest {
 		// A server process, seen as a LanguageServer (for LanguageServerPlugins).
 		setUp(60_000);
 		final ProcessLanguageServer launched = new ProcessLanguageServer(servers,
-			doc -> ENV);
+			ENV);
 		final List<org.eclipse.lsp4j.PublishDiagnosticsParams> published =
 			new CopyOnWriteArrayList<>();
 		launched.connect(new org.eclipse.lsp4j.services.LanguageClient() {
@@ -170,41 +168,6 @@ public class ServerProcessesTest {
 		launched.didClose(new DidCloseTextDocumentParams(
 			new org.eclipse.lsp4j.TextDocumentIdentifier(uri)));
 		waitFor(() -> server.events.contains("close " + uri));
-	}
-
-	@Test
-	public void testMoves() throws Exception {
-		// Each document is analyzed by the process of where its script runs, as
-		// its text says here.
-		setUp(60_000);
-		final ProcessLanguageServer launched = new ProcessLanguageServer(servers,
-			doc -> new Environment(doc.getText().startsWith("#B") ? "/b/python"
-				: "/a/python", null, null));
-		final String uri = "untitled:/m.py";
-		launched.didOpen(new DidOpenTextDocumentParams(
-			new org.eclipse.lsp4j.TextDocumentItem(uri, "python", 1, "x = 1")));
-		complete(launched, uri);
-		assertEquals(1, started.size());
-		final FakeServer a = started.get(0);
-		assertTrue(String.valueOf(a.options).contains("/a/python"));
-
-		// It runs elsewhere now: the next request goes there, and the process of
-		// where it ran lets it go.
-		launched.didChange(new DidChangeTextDocumentParams(
-			new org.eclipse.lsp4j.VersionedTextDocumentIdentifier(uri, 2),
-			Collections.singletonList(
-				new org.eclipse.lsp4j.TextDocumentContentChangeEvent("#B\nx = 1"))));
-		final List<CompletionItem> items = complete(launched, uri);
-		assertEquals(2, started.size());
-		final FakeServer b = started.get(1);
-		assertTrue(String.valueOf(b.options).contains("/b/python"));
-		assertEquals("#B\nx = 1", b.texts.get(uri));
-		waitFor(() -> a.events.contains("close " + uri));
-
-		// Completions are resolved by the process that made them.
-		launched.resolveCompletionItem(items.get(0)).get(10, TimeUnit.SECONDS);
-		assertTrue(b.events.contains("resolve decoder"));
-		assertFalse(a.events.contains("resolve decoder"));
 	}
 
 	@Test

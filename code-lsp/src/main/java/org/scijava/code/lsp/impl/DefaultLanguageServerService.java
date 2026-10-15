@@ -29,14 +29,12 @@
 
 package org.scijava.code.lsp.impl;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 import javax.script.ScriptContext;
 
-import org.eclipse.lsp4j.TextDocumentItem;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.LanguageServerPlugin;
@@ -44,9 +42,8 @@ import org.scijava.code.lsp.LanguageServerService;
 import org.scijava.code.lsp.ScriptSession;
 import org.scijava.code.lsp.ScriptDialect;
 import org.scijava.code.lsp.ScriptDocument;
-import org.scijava.code.lsp.ServerProcessPlugin;
+import org.scijava.Disposable;
 import org.scijava.log.LogService;
-import org.scijava.log.StderrLogService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.PluginService;
@@ -59,8 +56,9 @@ import org.scijava.service.Service;
  * <p>
  * Each session gets a server of its own, from the highest-priority plugin
  * serving its language, and shows it scripts as plain code in the plugin's
- * dialect. Server processes behind them (see {@link #launch}) are shared, and
- * stopped when the context is disposed.
+ * dialect. Server processes behind them (see
+ * {@link ProcessLanguageServerPlugin}) are shared, and stopped when the
+ * context is disposed.
  * </p>
  *
  * @author Gabriel Selzer
@@ -70,24 +68,11 @@ public class DefaultLanguageServerService extends AbstractService implements
 	LanguageServerService
 {
 
-	/** How long a server process may go unused before it stops, in ms. */
-	private static final long IDLE = Long.getLong("scijava.lsp.idle", 10 * 60 *
-		1000);
-
-	/**
-	 * How many server processes of a language may run at once (one per
-	 * environment scripts run in).
-	 */
-	private static final int MAX = Integer.getInteger("scijava.lsp.max", 4);
-
 	@Parameter
 	private PluginService pluginService;
 
 	@Parameter(required = false)
 	private LogService log;
-
-	/** Server processes, by LSP language identifier; null if none offered. */
-	private final Map<String, ServerProcesses> processes = new HashMap<>();
 
 	private final ScriptParameters parameters = new ScriptParameters(
 		this::context);
@@ -113,7 +98,8 @@ public class DefaultLanguageServerService extends AbstractService implements
 		ScriptDialect dialect = null;
 		if (plugin != null) {
 			try {
-				server = plugin.create(Environment.NONE.withLive(live));
+				// NB: Asked for a script language, not an LSP one.
+				server = plugin.create(null, Environment.NONE.withLive(live));
 				dialect = plugin.dialect();
 			}
 			catch (final RuntimeException | LinkageError exc) {
@@ -136,11 +122,20 @@ public class DefaultLanguageServerService extends AbstractService implements
 	}
 
 	@Override
+	public boolean supports(final String languageId) {
+		return plugin(languageId) != null;
+	}
+
+	@Override
 	public LanguageServer launch(final String languageId,
-		final Function<TextDocumentItem, Environment> environment)
+		final Environment environment)
 	{
-		final ServerProcesses s = processes(languageId);
-		return s == null ? null : new ProcessLanguageServer(s, environment);
+		final LanguageServerPlugin plugin = plugin(languageId);
+		if (plugin == null) {
+			throw new IllegalArgumentException(
+				"No LanguageServerPlugin serves language: " + languageId);
+		}
+		return plugin.create(languageId, environment);
 	}
 
 	@Override
@@ -152,33 +147,16 @@ public class DefaultLanguageServerService extends AbstractService implements
 
 	@Override
 	public synchronized void dispose() {
-		for (final ServerProcesses s : processes.values()) {
-			if (s != null) s.shutdown();
+		// NB: The plugins this created, e.g. those keeping server processes.
+		if (plugins == null) return;
+		for (final LanguageServerPlugin p : plugins) {
+			if (p instanceof Disposable) ((Disposable) p).dispose();
 		}
-		processes.clear();
+		plugins = null;
 	}
 
 	// -- Helper methods --
 
-	/**
-	 * The server processes for an LSP language, as the first plugin offering
-	 * them says; or null if none does.
-	 */
-	private synchronized ServerProcesses processes(final String languageId) {
-		if (processes.containsKey(languageId)) return processes.get(languageId);
-		ServerProcesses s = null;
-		for (final ServerProcessPlugin p : pluginService.createInstancesOfType(
-			ServerProcessPlugin.class))
-		{
-			if (languageId.equals(p.languageId())) {
-				s = new ServerProcesses(p, log != null ? log : new StderrLogService(),
-					IDLE, MAX);
-				break;
-			}
-		}
-		processes.put(languageId, s);
-		return s;
-	}
 
 	/**
 	 * The highest-priority plugin serving a language, or null if none.
@@ -186,17 +164,29 @@ public class DefaultLanguageServerService extends AbstractService implements
 	 * @param language the {@link ScriptLanguage} to match
 	 * @return a {@link LanguageServerPlugin} handling {@code language}
 	 */
+	private LanguageServerPlugin plugin(final ScriptLanguage language) {
+		if (language == null) return null;
+		return plugin(p -> p.supports(language));
+	}
+
+	/**
+	 * The highest-priority plugin serving an LSP language, or null if none.
+	 */
+	private LanguageServerPlugin plugin(final String languageId) {
+		return plugin(p -> p.supports(languageId));
+	}
+
+	/** The highest-priority plugin matching, or null if none. */
 	private synchronized LanguageServerPlugin plugin(
-		final ScriptLanguage language)
+		final Predicate<LanguageServerPlugin> matches)
 	{
 		if (plugins == null) {
 			plugins = pluginService.createInstancesOfType(
 				LanguageServerPlugin.class);
 		}
-		if (language == null) return null;
 		for (final LanguageServerPlugin p : plugins) {
 			try {
-				if (p.supports(language)) return p;
+				if (matches.test(p)) return p;
 			}
 			catch (final RuntimeException | LinkageError exc) {
 				if (log != null) log.debug(exc);

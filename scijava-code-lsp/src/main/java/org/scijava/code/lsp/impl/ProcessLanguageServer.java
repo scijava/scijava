@@ -33,12 +33,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.eclipse.lsp4j.CompletionItem;
@@ -68,13 +66,16 @@ import org.eclipse.lsp4j.services.WorkspaceService;
 import org.scijava.code.lsp.Environment;
 
 /**
- * Language server processes (see {@link ServerProcesses}), seen as one
- * {@link LanguageServer}: each started when first asked, restarted if it
- * stops, stopped when idle. Each document is analyzed by the process of the
- * environment its script runs in, as asked just before each request (so
- * that, as that changes, the document moves to another process); and brought
- * up to date on that process just before each request, and, for diagnostics,
- * a moment after it last changed.
+ * The language server process of an environment (see
+ * {@link ServerProcesses}), seen as a {@link LanguageServer} of its own:
+ * started when first asked, restarted if it stops, stopped when idle. Each
+ * document is brought up to date on the process just before each request,
+ * and, for diagnostics, a moment after it last changed.
+ * <p>
+ * NB: Not an {@link org.scijava.code.lsp.jvm.AbstractLanguageServer}, which
+ * answers requests itself, as questions about a document's text and an
+ * offset: this one passes them on as they are, and is answered later.
+ * </p>
  *
  * @author Gabriel Selzer
  */
@@ -98,19 +99,8 @@ public class ProcessLanguageServer implements LanguageServer,
 			return t;
 		});
 
-	/**
-	 * Finds where scripts run, off the callers' threads (e.g. an editor's):
-	 * that may look at files.
-	 */
-	private static final ExecutorService WHERE = Executors
-		.newSingleThreadExecutor(r -> {
-			final Thread t = new Thread(r, "scijava-lsp-environments");
-			t.setDaemon(true);
-			return t;
-		});
-
 	private final ServerProcesses servers;
-	private final Function<TextDocumentItem, Environment> environment;
+	private final Environment environment;
 	private volatile LanguageClient client;
 
 	/** The open documents' texts and versions, by URI. */
@@ -118,11 +108,10 @@ public class ProcessLanguageServer implements LanguageServer,
 
 	/**
 	 * @param servers The server processes.
-	 * @param environment Where the script of each document runs (e.g. as
-	 *          its text says): asked before each request about it.
+	 * @param environment Where the scripts run: whose process to ask.
 	 */
 	public ProcessLanguageServer(final ServerProcesses servers,
-		final Function<TextDocumentItem, Environment> environment)
+		final Environment environment)
 	{
 		this.servers = servers;
 		this.environment = environment;
@@ -203,26 +192,16 @@ public class ProcessLanguageServer implements LanguageServer,
 		completion(final CompletionParams params)
 	{
 		return request(params.getTextDocument().getUri(), s -> s.completion(
-			params), ProcessLanguageServer::mark);
+			params));
 	}
 
 	@Override
 	public CompletableFuture<CompletionItem> resolveCompletionItem(
 		final CompletionItem item)
 	{
-		// NB: Resolved by the process that completed it.
-		if (!(item.getData() instanceof Origin)) {
-			return CompletableFuture.completedFuture(item);
-		}
-		final Origin origin = (Origin) item.getData();
-		return servers.server(origin.environment).thenCompose(s -> {
-			item.setData(origin.data);
-			return s.remote().getTextDocumentService().resolveCompletionItem(item);
-		}).handle((resolved, error) -> {
-			final CompletionItem out = resolved != null ? resolved : item;
-			out.setData(origin);
-			return out;
-		});
+		return servers.server(environment).thenCompose(s -> s.remote()
+			.getTextDocumentService().resolveCompletionItem(item)).handle((
+				resolved, error) -> resolved != null ? resolved : item);
 	}
 
 	@Override
@@ -230,13 +209,12 @@ public class ProcessLanguageServer implements LanguageServer,
 		final SignatureHelpParams params)
 	{
 		return request(params.getTextDocument().getUri(), s -> s.signatureHelp(
-			params), (help, env) -> help);
+			params));
 	}
 
 	@Override
 	public CompletableFuture<Hover> hover(final HoverParams params) {
-		return request(params.getTextDocument().getUri(), s -> s.hover(params), (
-			hover, env) -> hover);
+		return request(params.getTextDocument().getUri(), s -> s.hover(params));
 	}
 
 	// -- WorkspaceService --
@@ -250,15 +228,12 @@ public class ProcessLanguageServer implements LanguageServer,
 	// -- Helper methods --
 
 	/**
-	 * Asks the process of where a document's script runs now, with the
-	 * document's current text.
+	 * Asks the process, with the document's current text.
 	 *
 	 * @param request Asks the process.
-	 * @param finish Completes its answer, given where the script runs.
 	 */
 	private <T> CompletableFuture<T> request(final String uri,
-		final Function<TextDocumentService, CompletableFuture<T>> request,
-		final BiFunction<T, Environment, T> finish)
+		final Function<TextDocumentService, CompletableFuture<T>> request)
 	{
 		final Doc doc = docs.get(uri);
 		if (doc == null) return CompletableFuture.completedFuture(null);
@@ -266,40 +241,21 @@ public class ProcessLanguageServer implements LanguageServer,
 		// NB: Cancelling the answer cancels the request, which tells the process
 		// ($/cancelRequest).
 		final CompletableFuture<T> answer = new CompletableFuture<>();
-		CompletableFuture.supplyAsync(() -> locate(doc, item), WHERE).thenCompose(
-			env -> servers.server(env).thenAccept(s -> {
-				if (answer.isDone()) return;
-				final CompletableFuture<T> raw = s.request(uri, item.getText(),
-					request);
-				answer.whenComplete((r, error) -> {
-					if (answer.isCancelled()) raw.cancel(true);
-				});
-				raw.whenComplete((r, error) -> {
-					if (error != null) answer.completeExceptionally(error);
-					else answer.complete(finish.apply(r, env));
-				});
-			})).exceptionally(error -> {
-				answer.completeExceptionally(error);
-				return null;
+		servers.server(environment).thenAccept(s -> {
+			if (answer.isDone()) return;
+			final CompletableFuture<T> raw = s.request(uri, item.getText(), request);
+			answer.whenComplete((r, error) -> {
+				if (answer.isCancelled()) raw.cancel(true);
 			});
+			raw.whenComplete((r, error) -> {
+				if (error != null) answer.completeExceptionally(error);
+				else answer.complete(r);
+			});
+		}).exceptionally(error -> {
+			answer.completeExceptionally(error);
+			return null;
+		});
 		return answer;
-	}
-
-	/**
-	 * Gets where a document's script runs now; if that changed, closes the
-	 * document on the process of where it ran, so that its next request opens
-	 * it on the process of where it runs now.
-	 */
-	private Environment locate(final Doc doc, final TextDocumentItem item) {
-		final Environment env = environment.apply(item);
-		final boolean moved;
-		synchronized (doc) {
-			if (env.equals(doc.environment)) return env;
-			moved = doc.environment != null;
-			doc.environment = env;
-		}
-		if (moved) servers.forEach(s -> s.close(item.getUri()));
-		return env;
 	}
 
 	/** Notes a document's new text; asks for its problems after a pause. */
@@ -321,14 +277,8 @@ public class ProcessLanguageServer implements LanguageServer,
 	private void diagnose(final Doc doc, final TextDocumentItem item) {
 		final String uri = item.getUri();
 		final int version = item.getVersion();
-		final Environment env;
-		try {
-			env = locate(doc, item);
-		}
-		catch (final RuntimeException exc) {
-			return; // NB: Nowhere to ask.
-		}
-		servers.server(env).thenCompose(s -> s.diagnostics(uri, item.getText()))
+		servers.server(environment).thenCompose(s -> s.diagnostics(uri, item
+			.getText()))
 			.orTimeout(DIAGNOSE_TIMEOUT, TimeUnit.MILLISECONDS).thenAccept(found -> {
 				final LanguageClient c = client;
 				// NB: Only if still current.
@@ -340,29 +290,11 @@ public class ProcessLanguageServer implements LanguageServer,
 			});
 	}
 
-	/** Marks each completion with where it was made, for resolving. */
-	private static Either<List<CompletionItem>, CompletionList> mark(
-		final Either<List<CompletionItem>, CompletionList> answer,
-		final Environment env)
-	{
-		if (answer == null) return null;
-		final List<CompletionItem> items = answer.isRight() ? answer.getRight()
-			.getItems() : answer.getLeft();
-		if (items != null) {
-			for (final CompletionItem item : items) {
-				item.setData(new Origin(env, item.getData()));
-			}
-		}
-		return answer;
-	}
-
 	private static final class Doc {
 
 		private final String languageId;
 		private String text;
 		private int version;
-		/** Where its script runs, as last asked. */
-		private Environment environment;
 		private ScheduledFuture<?> pending;
 
 		private Doc(final String languageId) {
@@ -371,18 +303,6 @@ public class ProcessLanguageServer implements LanguageServer,
 
 		private synchronized TextDocumentItem item(final String uri) {
 			return new TextDocumentItem(uri, languageId, version, text);
-		}
-	}
-
-	/** Where a completion was made, and the data it came with. */
-	private static final class Origin {
-
-		private final Environment environment;
-		private final Object data;
-
-		private Origin(final Environment environment, final Object data) {
-			this.environment = environment;
-			this.data = data;
 		}
 	}
 }

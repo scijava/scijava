@@ -34,37 +34,53 @@ import org.scijava.plugin.SciJavaPlugin;
 import org.scijava.script.ScriptLanguage;
 
 /**
- * Offers language servers for scripts of some languages: in-process
- * implementations of lsp4j's {@link LanguageServer}, or proxies to server
- * processes (see {@link LanguageServerService#launch}).
+ * A {@link SciJavaPlugin} that can create {@link LanguageServer}s.
  * <p>
  * Servers need not know SciJava scripts: given the plugin's
  * {@link #dialect() dialect}, sessions show them each script as plain code of
  * its language, its parameters declared (see
  * {@link ScriptDocument}).
  * </p>
- * <p>
- * Each language is served by the highest-priority plugin that supports it. A
- * server combining several sources (e.g. an instant in-process analysis and a
- * slower, smarter server process) combines them itself.
- * </p>
  *
  * @author Gabriel Selzer
  */
 public interface LanguageServerPlugin extends SciJavaPlugin {
 
-	/** Whether this serves scripts of the given language. */
+	/**
+	 * Declares whether {@link LanguageServer}s can be created to satisfy
+	 * scripts of
+	 * {@code groovy}), as {@link LanguageServerService#launch} asks. NB: Not
+	 * one whose servers this launches itself (e.g. a plugin building on
+	 * {@code python} servers serves a language of its own).
+	 */
+	boolean supports(String languageId);
+
+	/**
+	 * Whether this serves scripts of the given SciJava language, as sessions
+	 * ask (see {@link LanguageServerService#session}).
+	 */
 	boolean supports(ScriptLanguage language);
 
 	/**
-	 * Creates a server for a session (see {@link LanguageServerService#session}):
-	 * the session initializes it, and shuts it down when closed.
+	 * Creates a server for documents of an LSP language this serves: for a
+	 * session (see {@link LanguageServerService#session}), which initializes
+	 * it, and shuts it down when closed; or for whoever
+	 * {@link LanguageServerService#launch launches} it.
+	 * <p>
+	 * NB: A plugin may know better where its scripts run (e.g. as their text
+	 * says, which may change as they are edited), and analyze them there,
+	 * whatever {@code environment} says.
+	 * </p>
 	 *
-	 * @param environment Where the session's script runs, as far as known: for
+	 * @param languageId The LSP language asked for (one this
+	 *          {@link #supports(String) serves}, e.g. {@code groovy}); or null,
+	 *          for a session about a script of a language this
+	 *          {@link #supports(ScriptLanguage) serves}.
+	 * @param environment Where the scripts run, as far as known: e.g., for
 	 *          code typed into a running interpreter, its state (see
 	 *          {@link Environment#live()}).
 	 */
-	LanguageServer create(Environment environment);
+	LanguageServer create(String languageId, Environment environment);
 
 	/**
 	 * How this plugin's servers see scripts: as plain code of their language,

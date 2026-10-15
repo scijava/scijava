@@ -163,9 +163,14 @@ public final class ServerProcesses {
 
 	/** Stops all servers. */
 	public synchronized void shutdown() {
-		for (final Entry e : servers.values()) stop(e);
-		servers.clear();
 		reaper.shutdownNow();
+		for (final Entry e : servers.values()) {
+			// NB: Not via the starter, which stops next (dropping what it has not
+			// begun): those started, now; those starting, once started.
+			if (e.server.isDone()) e.server.thenAccept(ServerProcess::shutdown);
+			else e.server.thenAcceptAsync(ServerProcess::shutdown);
+		}
+		servers.clear();
 		starter.shutdownNow();
 	}
 

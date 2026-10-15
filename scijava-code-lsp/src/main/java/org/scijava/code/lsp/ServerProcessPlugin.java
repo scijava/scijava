@@ -40,8 +40,8 @@ import org.scijava.plugin.SciJavaPlugin;
  * server via {@link LanguageServerService#launch}: started when first needed,
  * one per environment, restarted if it stops, and stopped when idle.
  * <p>
- * For example, scripting-appose-python offers jedi-language-server, which
- * scripting-jython's server uses too.
+ * For example, code-lsp-jedi offers jedi-language-server, which
+ * scripting-appose-python's and scripting-jython's servers use.
  * </p>
  *
  * @author Gabriel Selzer

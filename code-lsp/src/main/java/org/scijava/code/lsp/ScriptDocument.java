@@ -101,7 +101,7 @@ public final class ScriptDocument {
 		final Map<String, String> types = new LinkedHashMap<>();
 		final List<String> declarations = new ArrayList<>();
 		for (final Map.Entry<String, Class<?>> p : parameters.entrySet()) {
-			final String type = dialect.runtimeType(p.getValue());
+			final String type = dialect.parameterType(p.getValue());
 			types.put(p.getKey(), type);
 			if (type != null) declarations.add(dialect.declare(p.getKey(), type));
 		}

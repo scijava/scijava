@@ -510,7 +510,7 @@ public class LanguageServersTest {
 		}
 
 		@Override
-		public String runtimeType(final Class<?> type) {
+		public String parameterType(final Class<?> type) {
 			return type.getSimpleName();
 		}
 

@@ -756,7 +756,7 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 		}
 
 		@Override
-		public String runtimeType(final Class<?> type) {
+		public String parameterType(final Class<?> type) {
 			return typeName(type);
 		}
 

@@ -79,7 +79,8 @@ public interface ScriptDialect extends SciJavaPlugin {
 	 * Gets where a script runs, as far as its text says (e.g. an Appose
 	 * environment it declares), to analyze it there. Asked before each request
 	 * about the script, as its text may change that; its servers are kept one
-	 * per environment (see {@link RoutingLanguageServer}). The default knows
+	 * per environment (see
+	 * {@link org.scijava.code.lsp.server.RoutingLanguageServer}). The default knows
 	 * nothing: {@link Environment#NONE}.
 	 *
 	 * @param text The script, as its servers see it (see

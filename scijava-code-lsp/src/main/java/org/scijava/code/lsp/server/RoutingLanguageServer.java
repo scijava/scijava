@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.lsp;
+package org.scijava.code.lsp.server;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -71,6 +71,8 @@ import org.eclipse.lsp4j.services.LanguageClientAware;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
+import org.scijava.code.lsp.Environment;
+import org.scijava.code.lsp.ScriptDialect;
 
 /**
  * A language server for scripts whose text says where they run (which may

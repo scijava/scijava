@@ -3,23 +3,25 @@
 Python code intelligence for SciJava scripts:
 [jedi-language-server](https://github.com/pappasam/jedi-language-server)
 (built on [Jedi](https://jedi.readthedocs.io/)), offered to
-`scijava-code-lsp` for two LSP languages:
+`scijava-code-lsp` for `python` by `PythonServerPlugin`, made to work well in
+editors:
 
-* `python`, by `PythonServerPlugin`: for editors. Completions are asked
-  about a word's first character only, and reused as the word is typed on;
-  questions no longer of interest are cancelled; and the first completions of
-  a word get their signatures, as snippets with their parameters and types.
-  Packages a script declares (in its PEP 723 `# /// script` block) but its
+* Completions are asked about a word's first character only, and reused as
+  the word is typed on; questions no longer of interest are cancelled; and
+  the first completions of a word get their signatures, as snippets with
+  their parameters and types.
+* Packages a script declares (in its PEP 723 `# /// script` block) but its
   environment lacks, e.g. a dependency just added, are installed for
   completion only, into a separate directory (an "overlay", which Jedi
   searches), a moment after the dependencies stop changing; so they are known
-  before the script's environment is (re)built. Script languages whose
-  scripts become plain Python (e.g. scripting-appose-python's) get it this
-  way.
-* `jedi`, by `JediServerProcessPlugin`: the server process itself, as is
-  (e.g. for scijava-code-lsp-jython, beside Jython's own analysis).
+  before the script's environment is (re)built.
 
-The server runs in a small environment of its own (`code-lsp-jedi`: Python,
+Script languages whose scripts become plain Python (e.g.
+scripting-appose-python's) get it this way; and servers building on Python's
+(e.g. scijava-code-lsp-jython's, beside Jython's own analysis).
+
+The server runs as a process, one per environment scripts run in (see
+`JediLauncher`), in a small environment of its own (`code-lsp-jedi`: Python,
 Jedi, jedi-language-server, NumPy, and uv to install overlays), which
 [Appose](https://github.com/apposed/appose) builds next to its other
 environments the first time the server is needed; that takes a while only
@@ -52,6 +54,5 @@ server.getTextDocumentService().completion(new CompletionParams(
 context.dispose(); // Stops the server, too.
 ```
 
-`JediLifecycleIntegrationTest` does all this with the `jedi` server (and
-asks for hover too), then checks that shutting down stops the server's
-process.
+`JediLifecycleIntegrationTest` does all this (and asks for hover too), then
+checks that disposing the context stops the server's process.

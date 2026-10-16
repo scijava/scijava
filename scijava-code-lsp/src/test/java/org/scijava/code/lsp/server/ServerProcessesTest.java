@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.lsp.impl;
+package org.scijava.code.lsp.server;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
@@ -80,7 +80,6 @@ import org.eclipse.lsp4j.services.WorkspaceService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.scijava.code.lsp.Environment;
-import org.scijava.code.lsp.ServerProcessPlugin;
 import org.scijava.code.lsp.Positions;
 import org.scijava.log.StderrLogService;
 
@@ -101,7 +100,7 @@ public class ServerProcessesTest {
 	private ServerProcesses servers;
 
 	private void setUp(final long idle) {
-		servers = new ServerProcesses(new FakePlugin(), new StderrLogService(), idle, 2,
+		servers = new ServerProcesses(new FakeLauncher(), new StderrLogService(), idle, 2,
 			now::get);
 	}
 
@@ -122,8 +121,8 @@ public class ServerProcessesTest {
 	public void testLaunched() throws Exception {
 		// A server process, seen as a LanguageServer (for LanguageServerPlugins).
 		setUp(60_000);
-		final ProcessLanguageServer launched = new ProcessLanguageServer(servers,
-			ENV);
+		final ProcessLanguageServer launched = (ProcessLanguageServer) servers
+			.server(ENV);
 		final List<org.eclipse.lsp4j.PublishDiagnosticsParams> published =
 			new CopyOnWriteArrayList<>();
 		launched.connect(new org.eclipse.lsp4j.services.LanguageClient() {
@@ -173,11 +172,11 @@ public class ServerProcessesTest {
 	@Test
 	public void testRestartAndIdle() throws Exception {
 		setUp(60_000);
-		final ServerProcess first = servers.server(ENV).get(10, TimeUnit.SECONDS);
-		assertSame(first, servers.server(ENV).get(10, TimeUnit.SECONDS));
+		final ServerProcess first = servers.process(ENV).get(10, TimeUnit.SECONDS);
+		assertSame(first, servers.process(ENV).get(10, TimeUnit.SECONDS));
 		// The server dies: the next request starts another.
 		started.get(0).alive = false;
-		final ServerProcess second = servers.server(ENV).get(10, TimeUnit.SECONDS);
+		final ServerProcess second = servers.process(ENV).get(10, TimeUnit.SECONDS);
 		assertNotSame(first, second);
 		assertEquals(2, started.size());
 
@@ -185,7 +184,7 @@ public class ServerProcessesTest {
 		now.addAndGet(120_000);
 		servers.stopIdle();
 		waitFor(() -> started.get(1).shutdown);
-		assertNotSame(second, servers.server(ENV).get(10, TimeUnit.SECONDS));
+		assertNotSame(second, servers.process(ENV).get(10, TimeUnit.SECONDS));
 	}
 
 	@Test
@@ -219,7 +218,7 @@ public class ServerProcessesTest {
 	}
 
 	/** Starts fake servers, connected by pipes. */
-	private final class FakePlugin implements ServerProcessPlugin {
+	private final class FakeLauncher implements ServerLauncher {
 
 		@Override
 		public String languageId() {

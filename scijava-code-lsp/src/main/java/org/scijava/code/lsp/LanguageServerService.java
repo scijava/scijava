@@ -74,9 +74,8 @@ public interface LanguageServerService extends SciJavaService {
 	/**
 	 * Gets a new server for an LSP language (e.g. {@code groovy}, or
 	 * {@code python}), from the highest-priority {@link LanguageServerPlugin}
-	 * serving it: in-process, or a proxy to server processes (see
-	 * {@link ServerProcessPlugin}; shared, one per environment), whichever the
-	 * plugins offer. It sees documents as plain code of the language, and
+	 * serving it (e.g. in-process, or a proxy to a server process). It sees
+	 * documents as plain code of the language, and
 	 * analyzes them as running in the given environment. The caller
 	 * initializes it, and shuts it down.
 	 *

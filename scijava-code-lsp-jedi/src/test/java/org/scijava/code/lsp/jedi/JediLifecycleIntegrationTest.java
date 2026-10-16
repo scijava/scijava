@@ -48,7 +48,7 @@ import org.scijava.code.lsp.Positions;
 
 
 /**
- * Integration tests for {@link JediServerProcessPlugin}.
+ * Integration tests for {@link PythonServerPlugin}.
  * Additionally useful for understanding usage.
  *
  * @author Gabriel Selzer
@@ -60,7 +60,7 @@ public class JediLifecycleIntegrationTest {
 		try (final Context context = new Context(LanguageServerService.class)){
 			// Get a LanguageServer Object
 			final LanguageServerService service = context.service(LanguageServerService.class);
-			final LanguageServer server = service.launch("jedi", Environment.NONE);
+			final LanguageServer server = service.launch("python", Environment.NONE);
 			// Start it up
 			server.initialize(new InitializeParams()).get();
 			server.initialized(new InitializedParams());

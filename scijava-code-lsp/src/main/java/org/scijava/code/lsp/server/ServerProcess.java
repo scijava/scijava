@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.lsp.impl;
+package org.scijava.code.lsp.server;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,7 +72,6 @@ import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.scijava.code.lsp.Environment;
-import org.scijava.code.lsp.ServerProcessPlugin;
 import org.scijava.log.Logger;
 
 /**
@@ -81,7 +80,7 @@ import org.scijava.log.Logger;
  * @author Gabriel Selzer
  * @see ServerProcesses
  */
-public final class ServerProcess {
+final class ServerProcess {
 
 	/** Threads reading servers' messages; daemons, so as not to keep the JVM. */
 	private static final ExecutorService LISTENERS = Executors
@@ -118,38 +117,38 @@ public final class ServerProcess {
 	/**
 	 * Starts and initializes a server. Blocks until it is ready.
 	 *
-	 * @param plugin How to start it.
+	 * @param launcher How to start it.
 	 * @param env Where the scripts it will analyze run.
 	 * @param log Where to report the server's messages.
 	 * @param timeout How long to wait for it to initialize, in milliseconds.
 	 */
-	public static ServerProcess start(final ServerProcessPlugin plugin,
+	static ServerProcess start(final ServerLauncher launcher,
 		final Environment env, final Logger log, final long timeout)
 		throws Exception
 	{
-		final Process process = plugin.start(env);
+		final Process process = launcher.start(env);
 		try {
 			final Published published = new Published();
-			final Launcher<LanguageServer> launcher = LSPLauncher
+			final Launcher<LanguageServer> connection = LSPLauncher
 				.createClientLauncher(new Client(log, published), process
 					.getInputStream(), process.getOutputStream(), LISTENERS, null);
-			final Future<Void> listening = launcher.startListening();
-			final LanguageServer remote = launcher.getRemoteProxy();
+			final Future<Void> listening = connection.startListening();
+			final LanguageServer remote = connection.getRemoteProxy();
 
 			final InitializeParams init = new InitializeParams();
 			init.setProcessId((int) ProcessHandle.current().pid());
 			init.setClientInfo(new org.eclipse.lsp4j.ClientInfo("SciJava"));
 			init.setCapabilities(capabilities());
-			final String root = plugin.rootUri(env);
+			final String root = launcher.rootUri(env);
 			if (root != null) {
 				init.setRootUri(root);
 				init.setWorkspaceFolders(Collections.singletonList(new WorkspaceFolder(
 					root, "scripts")));
 			}
-			init.setInitializationOptions(plugin.initializationOptions(env));
+			init.setInitializationOptions(launcher.initializationOptions(env));
 			remote.initialize(init).get(timeout, TimeUnit.MILLISECONDS);
 			remote.initialized(new InitializedParams());
-			return new ServerProcess(plugin.languageId(), process, remote, listening,
+			return new ServerProcess(launcher.languageId(), process, remote, listening,
 				published);
 		}
 		catch (final Exception exc) {

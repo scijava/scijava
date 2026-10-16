@@ -37,20 +37,18 @@ import org.apposed.appose.Appose;
 import org.apposed.appose.util.Environments;
 import org.apposed.appose.util.Platforms;
 import org.scijava.code.lsp.Environment;
-import org.scijava.code.lsp.ServerProcessPlugin;
-import org.scijava.plugin.Plugin;
+import org.scijava.code.lsp.server.ServerLauncher;
 
 /**
- * Offers jedi-language-server, as {@code jedi}: run in an environment of its
- * own (built by Appose the first time it is needed), to analyze scripts
- * against their environment's Python (if known) and extra search paths (e.g.
- * a dependency overlay, or stubs of Java packages). {@code python} documents
- * get it made to work well in editors (see {@link PythonServerPlugin}).
+ * Starts jedi-language-server: run in an environment of its own (built by
+ * Appose the first time it is needed), to analyze scripts against their
+ * environment's Python (if known) and extra search paths (e.g. a dependency
+ * overlay, or stubs of Java packages). {@link PythonServerPlugin} serves
+ * {@code python} with it.
  *
  * @author Gabriel Selzer
  */
-@Plugin(type = ServerProcessPlugin.class, name = "jedi-language-server")
-public class JediServerProcessPlugin implements ServerProcessPlugin {
+final class JediLauncher implements ServerLauncher {
 
 	/** Name of the environment in which the server runs. */
 	static final String ENV = "code-lsp-jedi";
@@ -96,7 +94,7 @@ public class JediServerProcessPlugin implements ServerProcessPlugin {
 	private final File log;
 
 	/** Runs the server in its own environment, building it if needed. */
-	public JediServerProcessPlugin() {
+	JediLauncher() {
 		final File envs = new File(Environments.apposeEnvsDir());
 		workspace = new File(envs, ENV + "-workspace");
 		log = new File(envs, ENV + "-server.log");
@@ -104,8 +102,7 @@ public class JediServerProcessPlugin implements ServerProcessPlugin {
 
 	@Override
 	public String languageId() {
-		// NB: Not "python", which PythonServerPlugin serves, building on this.
-		return "jedi";
+		return "python";
 	}
 
 	@Override

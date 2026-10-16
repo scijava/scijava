@@ -41,10 +41,10 @@ import org.eclipse.lsp4j.services.LanguageServer;
 import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.LanguageServerPlugin;
 import org.scijava.code.lsp.LanguageServerService;
-import org.scijava.code.lsp.RoutingLanguageServer;
 import org.scijava.code.lsp.ScriptSession;
 import org.scijava.code.lsp.ScriptDialect;
 import org.scijava.code.lsp.ScriptDocument;
+import org.scijava.code.lsp.server.RoutingLanguageServer;
 import org.scijava.Disposable;
 import org.scijava.log.LogService;
 import org.scijava.plugin.Parameter;
@@ -60,9 +60,8 @@ import org.scijava.service.Service;
  * Each session shows its servers the script as plain code, as the
  * highest-priority dialect of its language turns it; and gets servers of its
  * own, from the highest-priority plugin serving the code's language, one per
- * environment the script runs in. Server processes behind them (see
- * {@link ProcessLanguageServerPlugin}) are shared, and stopped when the
- * context is disposed.
+ * environment the script runs in. Plugins are disposed with the context, e.g.
+ * to stop the server processes they keep.
  * </p>
  *
  * @author Gabriel Selzer

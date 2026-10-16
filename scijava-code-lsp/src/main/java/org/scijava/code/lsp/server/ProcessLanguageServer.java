@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.lsp.impl;
+package org.scijava.code.lsp.server;
 
 import java.util.List;
 import java.util.Map;
@@ -79,7 +79,7 @@ import org.scijava.code.lsp.Environment;
  *
  * @author Gabriel Selzer
  */
-public class ProcessLanguageServer implements LanguageServer,
+class ProcessLanguageServer implements LanguageServer,
 	TextDocumentService, WorkspaceService, LanguageClientAware
 {
 
@@ -110,7 +110,7 @@ public class ProcessLanguageServer implements LanguageServer,
 	 * @param servers The server processes.
 	 * @param environment Where the scripts run: whose process to ask.
 	 */
-	public ProcessLanguageServer(final ServerProcesses servers,
+	ProcessLanguageServer(final ServerProcesses servers,
 		final Environment environment)
 	{
 		this.servers = servers;
@@ -199,7 +199,7 @@ public class ProcessLanguageServer implements LanguageServer,
 	public CompletableFuture<CompletionItem> resolveCompletionItem(
 		final CompletionItem item)
 	{
-		return servers.server(environment).thenCompose(s -> s.remote()
+		return servers.process(environment).thenCompose(s -> s.remote()
 			.getTextDocumentService().resolveCompletionItem(item)).handle((
 				resolved, error) -> resolved != null ? resolved : item);
 	}
@@ -241,7 +241,7 @@ public class ProcessLanguageServer implements LanguageServer,
 		// NB: Cancelling the answer cancels the request, which tells the process
 		// ($/cancelRequest).
 		final CompletableFuture<T> answer = new CompletableFuture<>();
-		servers.server(environment).thenAccept(s -> {
+		servers.process(environment).thenAccept(s -> {
 			if (answer.isDone()) return;
 			final CompletableFuture<T> raw = s.request(uri, item.getText(), request);
 			answer.whenComplete((r, error) -> {
@@ -277,7 +277,7 @@ public class ProcessLanguageServer implements LanguageServer,
 	private void diagnose(final Doc doc, final TextDocumentItem item) {
 		final String uri = item.getUri();
 		final int version = item.getVersion();
-		servers.server(environment).thenCompose(s -> s.diagnostics(uri, item
+		servers.process(environment).thenCompose(s -> s.diagnostics(uri, item
 			.getText()))
 			.orTimeout(DIAGNOSE_TIMEOUT, TimeUnit.MILLISECONDS).thenAccept(found -> {
 				final LanguageClient c = client;

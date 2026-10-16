@@ -29,11 +29,8 @@
 
 package org.scijava.code.lsp;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -45,12 +42,14 @@ import org.eclipse.lsp4j.Range;
  * A SciJava script as plain code of its language (a "virtual document"), for
  * tools that know the language but not SciJava, e.g. language servers: its
  * script parameters ({@code #@}) declared with the types they have at run
- * time, and lines that are not of the language blanked. (A
- * {@link org.scijava.code.lsp.ScriptSession} shows its server this text.)
+ * time, and the lines SciJava removes before it runs (e.g. those {@code #@}
+ * lines) blanked. (A {@link org.scijava.code.lsp.ScriptSession} shows its
+ * server this text.)
  * <p>
- * The transformation only prepends one header line and blanks lines in place
- * (with spaces), so positions in the script just shift by the header (see
- * {@link #toTransformed(int)} and {@link #toOriginal(int)}). Offsets count
+ * The transformation only prepends a header (see {@link ScriptDialect#header})
+ * and blanks lines in place (with spaces), so positions in the script just
+ * shift by the header (see {@link #toTransformed(int)} and
+ * {@link #toOriginal(int)}). Offsets count
  * {@code char}s, i.e. UTF-16 code units, as do Java strings and the Language
  * Server Protocol.
  * </p>
@@ -64,24 +63,20 @@ public final class ScriptDocument {
 	private final String text;
 	/** Number of characters prepended. */
 	private final int headerLength;
-	private final Map<String, String> parameters;
-	private final Set<String> added;
+	private final Set<String> hiddenNames;
 
 	private ScriptDocument(final String original, final String text,
-		final int headerLength, final Map<String, String> parameters,
-		final Set<String> added)
+		final int headerLength, final Set<String> hiddenNames)
 	{
 		this.original = original;
 		this.text = text;
 		this.headerLength = headerLength;
-		this.parameters = Collections.unmodifiableMap(parameters);
-		this.added = Collections.unmodifiableSet(added);
+		this.hiddenNames = Collections.unmodifiableSet(hiddenNames);
 	}
 
 	/** A script as it is: nothing declared, nothing blanked. */
 	public static ScriptDocument of(final String script) {
-		return new ScriptDocument(script, script, 0, Collections.emptyMap(),
-			Collections.emptySet());
+		return new ScriptDocument(script, script, 0, Collections.emptySet());
 	}
 
 	/**
@@ -92,44 +87,31 @@ public final class ScriptDocument {
 	 *          script parameters, as
 	 *          {@link org.scijava.code.lsp.LanguageServerService#scriptParameters}
 	 *          gives them), by name, with their Java types.
+	 * @param removedLines The lines (from 0) to blank: those SciJava removes
+	 *          before running the script (e.g. its {@code #@} lines).
 	 * @param dialect How the script's language declares them.
 	 */
 	public static ScriptDocument of(final String script,
-		final Map<String, Class<?>> parameters, final ScriptDialect dialect)
+		final Map<String, Class<?>> parameters, final Set<Integer> removedLines,
+		final ScriptDialect dialect)
 	{
-		// The parameters' run-time types, and their declarations.
-		final Map<String, String> types = new LinkedHashMap<>();
-		final List<String> declarations = new ArrayList<>();
-		for (final Map.Entry<String, Class<?>> p : parameters.entrySet()) {
-			final String type = dialect.parameterType(p.getValue());
-			types.put(p.getKey(), type);
-			if (type != null) declarations.add(dialect.declare(p.getKey(), type));
+		final ScriptDialect.Header h = dialect.header(parameters);
+		final String header = h.code().isEmpty() ? "" : h.code() + "\n";
+		final Set<String> hidden = new LinkedHashSet<>();
+		for (final String name : h.hiddenNames()) {
+			if (!mentions(script, name)) hidden.add(name);
 		}
-		declarations.addAll(dialect.extraDeclarations());
-		final Set<String> used = new LinkedHashSet<>(types.values());
-		used.remove(null);
-		final List<String> imports = dialect.imports(used);
-		final Set<String> added = new LinkedHashSet<>();
-		for (final String statement : imports) {
-			final String name = dialect.imported(statement);
-			if (name != null && !mentions(script, name)) added.add(name);
-		}
-		final List<String> statements = new ArrayList<>(imports);
-		statements.addAll(declarations);
-		final String header = statements.isEmpty() ? "" : String.join(dialect
-			.separator(), statements) + "\n";
-
-		return new ScriptDocument(script, header + blank(script, dialect),
-			header.length(), types, added);
+		return new ScriptDocument(script, header + blank(script, removedLines),
+			header.length(), hidden);
 	}
 
 	/**
-	 * Names only the declarations bind, e.g. modules imported to declare the
-	 * parameters' types, which the script does not mention (see
-	 * {@link ScriptDialect#imported}): for completion to leave out.
+	 * The names to leave out of completion: those only the header binds (see
+	 * {@link ScriptDialect.Header#hiddenNames()}), which the script does not
+	 * mention.
 	 */
-	public Set<String> added() {
-		return added;
+	public Set<String> hiddenNames() {
+		return hiddenNames;
 	}
 
 	/** The script, as given. */
@@ -180,14 +162,6 @@ public final class ScriptDocument {
 		return start == null || end == null ? null : new Range(start, end);
 	}
 
-	/**
-	 * The variables defined before the script runs, by name, with their
-	 * run-time types as written in the language (null if not declared).
-	 */
-	public Map<String, String> parameters() {
-		return parameters;
-	}
-
 	// -- Helper methods --
 
 	/** Whether the script mentions a name, e.g. to import it itself. */
@@ -196,17 +170,17 @@ public final class ScriptDocument {
 			.matcher(script).find();
 	}
 
-	/** Replaces the characters of the lines to blank with spaces. */
-	private static String blank(final String script, final ScriptDialect dialect) {
+	/** Replaces the characters of the given lines with spaces. */
+	private static String blank(final String script, final Set<Integer> lines) {
 		final StringBuilder sb = new StringBuilder(script);
 		int start = 0;
-		while (start <= script.length()) {
+		for (int line = 0; start <= script.length(); line++) {
 			int end = script.indexOf('\n', start);
 			if (end < 0) end = script.length();
 			// NB: Keep a carriage return, so the line structure is unchanged.
 			final int contentEnd = end > start && script.charAt(end - 1) == '\r'
 				? end - 1 : end;
-			if (dialect.blanks(script.substring(start, contentEnd))) {
+			if (lines.contains(line)) {
 				for (int i = start; i < contentEnd; i++) sb.setCharAt(i, ' ');
 			}
 			start = end + 1;

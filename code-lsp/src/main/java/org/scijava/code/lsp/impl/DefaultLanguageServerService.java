@@ -33,6 +33,7 @@ import java.io.File;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
 import javax.script.ScriptContext;
@@ -77,7 +78,7 @@ public class DefaultLanguageServerService extends AbstractService implements
 	@Parameter(required = false)
 	private LogService log;
 
-	private final ScriptParameters parameters = new ScriptParameters(
+	private final ScriptProcessing processing = new ScriptProcessing(
 		this::context);
 
 	private List<LanguageServerPlugin> plugins;
@@ -107,12 +108,19 @@ public class DefaultLanguageServerService extends AbstractService implements
 				.setLogger(log);
 		}
 		final String languageId = dialect.languageId();
+		// NB: Where the script runs, as written: its servers do not see the
+		// lines that may say (e.g. #@script). A session has one script at a
+		// time.
+		final AtomicReference<String> script = new AtomicReference<>("");
 		final LanguageServer server = new RoutingLanguageServer(env -> server(
-			languageId, env.withLive(live)), item -> dialect.environment(item
-				.getText(), file(item.getUri())));
-		return ScriptSession.owning(server, language, languageId,
-			text -> ScriptDocument.of(text, scriptParameters(text), dialect))
-			.setLogger(log);
+			languageId, env.withLive(live)), item -> dialect.environment(script
+				.get(), file(item.getUri())));
+		return ScriptSession.owning(server, language, languageId, text -> {
+			script.set(text);
+			final ScriptProcessing.Processed p = processing.of(text);
+			return ScriptDocument.of(text, p.parameters, p.removedLines,
+				dialect);
+		}).setLogger(log);
 	}
 
 	@Override
@@ -140,7 +148,7 @@ public class DefaultLanguageServerService extends AbstractService implements
 
 	@Override
 	public Map<String, Class<?>> scriptParameters(final String text) {
-		return parameters.of(text);
+		return processing.of(text).parameters;
 	}
 
 	// -- Disposable methods --

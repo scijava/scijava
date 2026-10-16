@@ -39,7 +39,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -218,9 +217,15 @@ public class LanguageServersTest {
 		}
 		// Where the script runs, as its dialect says.
 		try (ScriptSession session = service.session(fake, live)) {
-			session.update("#env /env/bin/fake\nx");
-			assertEquals("/env/bin/fake", server(2).environment().interpreter());
-			assertSame(live, server(2).environment().live());
+			// NB: As written: its server sees the line blanked.
+			final String directive = "#@script(env=/env/bin/fake)";
+			session.update(directive + "\nx");
+			final FakeServer server = server(2);
+			assertEquals("/env/bin/fake", server.environment().interpreter());
+			assertSame(live, server.environment().live());
+			waitFor(() -> server.events.size() >= 2);
+			assertEquals("open 1 " + directive.replaceAll(".", " ") + "\nx",
+				server.events.get(1));
 		}
 	}
 
@@ -302,8 +307,8 @@ public class LanguageServersTest {
 				.get(10, TimeUnit.SECONDS);
 			final FakeServer server = server(0);
 			// The server sees plain code, in the script language's dialect.
-			assertEquals("open 1 import mass; sigma: double\n" + script, server.events
-				.get(1));
+			assertEquals("open 1 import mass; sigma: double\n" + script.replace(
+				"#@ double sigma", "               "), server.events.get(1));
 			// Asked one line down; its edits mapped back up.
 			assertEquals(new Position(2, 4), server.asked.get(0));
 			// Names only the declarations import are not completed.
@@ -484,7 +489,7 @@ public class LanguageServersTest {
 
 	/**
 	 * Turns fake scripts into {@code fake} code; they run where a line
-	 * {@code #env <interpreter>} says, if any.
+	 * {@code #@script(env=<interpreter>)} says, if any.
 	 */
 	@Plugin(type = ScriptDialect.class)
 	public static class FakeDialect implements ScriptDialect {
@@ -502,32 +507,25 @@ public class LanguageServersTest {
 		@Override
 		public Environment environment(final String text, final File file) {
 			for (final String line : text.split("\n")) {
-				if (line.startsWith("#env ")) {
-					return new Environment(line.substring(5), null, null);
+				if (line.startsWith("#@script(env=")) {
+					final String env = line.substring(13, line.length() - 1);
+					return new Environment(env, null, null);
 				}
 			}
 			return Environment.NONE;
 		}
 
 		@Override
-		public String parameterType(final Class<?> type) {
-			return type.getSimpleName();
-		}
-
-		@Override
-		public String declare(final String name, final String type) {
-			return name + ": " + type;
-		}
-
-		@Override
-		public List<String> imports(final Collection<String> types) {
-			return types.isEmpty() ? Collections.emptyList() : Collections
-				.singletonList("import mass");
-		}
-
-		@Override
-		public String imported(final String statement) {
-			return statement.substring("import ".length());
+		public Header header(final Map<String, Class<?>> parameters) {
+			if (parameters.isEmpty()) {
+				return new Header("", Collections.emptySet());
+			}
+			final List<String> code = new ArrayList<>();
+			code.add("import mass");
+			parameters.forEach((name, type) -> code.add(name + ": " + type
+				.getSimpleName()));
+			return new Header(String.join("; ", code), Collections.singleton(
+				"mass"));
 		}
 	}
 

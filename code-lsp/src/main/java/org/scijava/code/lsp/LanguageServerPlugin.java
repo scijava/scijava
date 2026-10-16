@@ -49,8 +49,6 @@ public interface LanguageServerPlugin extends SciJavaPlugin {
 	 * scripts of the given LSP language (e.g. {@code groovy}), as
 	 * {@link LanguageServerService#launch} asks; and so sessions, for scripts
 	 * whose {@link ScriptDialect#languageId() dialect} makes them code of it.
-	 * NB: Not one whose servers this launches itself (e.g. a plugin building on
-	 * {@code jedi} servers serves {@code python}).
 	 */
 	boolean supports(String languageId);
 
@@ -62,7 +60,7 @@ public interface LanguageServerPlugin extends SciJavaPlugin {
 	 * <p>
 	 * NB: A plugin may analyze each document in an environment of its own,
 	 * based on the given one (e.g. with packages its text declares added; see
-	 * {@link RoutingLanguageServer}).
+	 * {@link org.scijava.code.lsp.server.RoutingLanguageServer}).
 	 * </p>
 	 *
 	 * @param languageId The LSP language asked for, one this

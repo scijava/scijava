@@ -56,8 +56,8 @@ import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.LanguageServerService;
 
 /**
- * A Python language server (jedi-language-server, as scijava-code-lsp-jedi
- * offers it, as {@code jedi}) beside Jython's own analysis (see {@link JythonLanguageServer}):
+ * A Python language server (e.g. scijava-code-lsp-jedi's) beside Jython's
+ * own analysis (see {@link JythonLanguageServer}):
  * for Python modules, and for Java classes, from Python stubs of the Java
  * packages a script imports (including those of its parameters' types,
  * declared in its text; see {@link JavaStubs}, written in the background).
@@ -93,9 +93,8 @@ final class PythonCompanion {
 	static PythonCompanion launch(final LanguageServerService servers,
 		final JavaStubs stubs)
 	{
-		// NB: Not "python": its completions, made for editors, are not merged.
-		if (servers == null || !servers.supports("jedi")) return null;
-		return new PythonCompanion(servers.launch("jedi", environment(stubs)),
+		if (servers == null || !servers.supports("python")) return null;
+		return new PythonCompanion(servers.launch("python", environment(stubs)),
 			stubs);
 	}
 

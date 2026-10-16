@@ -21,10 +21,11 @@ scripts.
    │  servers of the session's own, one per environment (RoutingLanguageServer),
    │  from the LanguageServerPlugin serving the LSP language
    ├──► in-process servers (e.g. Groovy, Jython), built on AbstractLanguageServer
-   └──► server processes (e.g. jedi-language-server), via ServerProcessPlugin
+   └──► server processes (e.g. jedi-language-server), kept by ServerProcesses
 ```
 
-It does three things.
+It does three things: the first for everyone, the others for those writing
+servers.
 
 ## 1. Brokering between scripts and servers (`org.scijava.code.lsp`)
 
@@ -68,15 +69,20 @@ parses them; a `ScriptDocument` is the script as plain code, with them
 declared with their run-time types, as its `ScriptDialect` says. A session
 shows its servers the script so, and maps positions in their answers back.
 
-## 2. Running server processes (`org.scijava.code.lsp`)
+## 2. Running server processes, and routing (`org.scijava.code.lsp.server`)
 
 For servers that are not Java in the SciJava process (e.g. jedi-language-server,
-for Python). A `ServerProcessPlugin` says how to start one for an LSP language
-id (e.g. `jedi`) and an environment: the process, speaking LSP over its
-standard streams, and the options and workspace root to initialize it with.
-Plugins get such a server via `LanguageServerService.launch`, as code-lsp's
-own `LanguageServerPlugin` for server processes offers it: started when first
-needed, one per environment, restarted if it stops, and stopped when idle. `scijava-code-lsp-jedi` offers jedi-language-server this way.
+for Python). A `ServerLauncher` says how to start one for an environment: the
+process, speaking LSP over its standard streams, and the options and
+workspace root to initialize it with. `ServerProcesses` keeps them: started
+when first needed, one per environment, restarted if they stop, and stopped
+when idle, or when its owner (e.g. a `LanguageServerPlugin`, when disposed)
+shuts them down; each seen as a `LanguageServer` of its own.
+`scijava-code-lsp-jedi`'s plugin serves `python` this way.
+
+`RoutingLanguageServer` sends each document to a server of where its script
+runs, as that changes (e.g. as the packages it declares do): sessions use it,
+and so may servers.
 
 ## 3. A toolkit for in-process servers (`org.scijava.code.lsp.jvm`)
 
@@ -97,9 +103,9 @@ javadoc.
 | scripting-jython        | ✓ |   |   | a dialect, of Jython scripts           |
 | scripting-appose-python | ✓ |   |   | a dialect, of Appose-Python scripts    |
 | code-lsp-groovy         | ✓ |   | ✓ | servers of `groovy`                    |
-| code-lsp-jython         | ✓ | ✓ | ✓ | servers of `jython`, building on `jedi` |
-| code-lsp-jedi           | ✓ | ✓ |   | servers of `jedi`, and of `python`     |
+| code-lsp-jython         | ✓ |   | ✓ | servers of `jython`, building on `python` |
+| code-lsp-jedi           | ✓ | ✓ |   | servers of `python`                    |
 
-The toolkit (`org.scijava.code.lsp.jvm`) depends only on
-`org.scijava.code.lsp`. The module exports both; its implementation
-(`org.scijava.code.lsp.impl`) is internal.
+The toolkits (`org.scijava.code.lsp.server` and `org.scijava.code.lsp.jvm`)
+depend only on `org.scijava.code.lsp`. The module exports all three; its
+implementation (`org.scijava.code.lsp.impl`) is internal.

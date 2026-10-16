@@ -33,6 +33,7 @@
 open module org.scijava.code.lsp {
 	exports org.scijava.code.lsp;
 	exports org.scijava.code.lsp.jvm;
+	exports org.scijava.code.lsp.server;
 
 	// NB: SciJava Common, whose plugins and services these are.
 	requires transitive org.scijava;

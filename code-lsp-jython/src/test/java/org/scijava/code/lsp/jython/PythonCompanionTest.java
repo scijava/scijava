@@ -76,7 +76,7 @@ public class PythonCompanionTest {
 
 	@Test
 	public void testOnlyWithAPythonServer() {
-		// NB: No plugin offers jedi here (scijava-code-lsp-jedi does, but is left
+		// NB: No plugin serves python here (scijava-code-lsp-jedi does, but is left
 		// out of the tests; see pom.xml): Jython is served by its own analysis
 		// alone.
 		assertNull(PythonCompanion.launch(context.service(

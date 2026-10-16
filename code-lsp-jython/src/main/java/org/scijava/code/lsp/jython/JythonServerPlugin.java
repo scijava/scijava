@@ -57,7 +57,7 @@ public class JythonServerPlugin implements LanguageServerPlugin {
 
 	@Override
 	public boolean supports(final String languageId) {
-		// NB: Not "jedi", which this builds on (see PythonCompanion).
+		// NB: Not "python", which this builds on (see PythonCompanion).
 		return "jython".equals(languageId);
 	}
 

@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.lsp.impl;
+package org.scijava.code.lsp.server;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -43,15 +43,16 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.LongSupplier;
 
+import org.eclipse.lsp4j.services.LanguageServer;
 import org.scijava.code.lsp.Environment;
-import org.scijava.code.lsp.ServerProcessPlugin;
 import org.scijava.log.Logger;
 
 /**
- * The language servers of one kind (see {@link ServerProcessPlugin}), one per
- * environment scripts run in: started when first needed (in the background),
- * restarted if they stop, and stopped when unused for a while or when too many
- * run.
+ * The language server processes of one kind (see {@link ServerLauncher}), one
+ * per environment scripts run in: started when first needed (in the
+ * background), restarted if they stop, and stopped when unused for a while or
+ * when too many run. Each is seen as a {@link LanguageServer} of its own via
+ * {@link #server}.
  *
  * @author Gabriel Selzer
  */
@@ -63,7 +64,14 @@ public final class ServerProcesses {
 	/** How long to wait before starting a server that failed again, in ms. */
 	private static final long RETRY_DELAY = 30_000;
 
-	private final ServerProcessPlugin plugin;
+	/** How long a server may go unused before it stops, by default, in ms. */
+	private static final long IDLE = Long.getLong("scijava.lsp.idle", 10 * 60 *
+		1000);
+
+	/** How many servers may run at once, by default. */
+	private static final int MAX = Integer.getInteger("scijava.lsp.max", 4);
+
+	private final ServerLauncher launcher;
 	private final Logger log;
 	private final long idle;
 	private final int max;
@@ -80,26 +88,26 @@ public final class ServerProcesses {
 	private final ScheduledExecutorService reaper;
 
 	/**
-	 * @param plugin How to start a server.
+	 * Servers stopped after ten minutes unused, four at most (or as the system
+	 * properties {@code scijava.lsp.idle}, in ms, and {@code scijava.lsp.max}
+	 * say).
+	 *
+	 * @param launcher How to start a server.
 	 * @param log Where to report problems.
-	 * @param idle How long a server may go unused before it is stopped, in ms.
-	 * @param max How many servers may run at once.
 	 */
-	public ServerProcesses(final ServerProcessPlugin plugin, final Logger log,
-		final long idle, final int max)
-	{
-		this(plugin, log, idle, max, System::currentTimeMillis);
+	public ServerProcesses(final ServerLauncher launcher, final Logger log) {
+		this(launcher, log, IDLE, MAX, System::currentTimeMillis);
 	}
 
-	ServerProcesses(final ServerProcessPlugin plugin, final Logger log, final long idle,
-		final int max, final LongSupplier clock)
+	ServerProcesses(final ServerLauncher launcher, final Logger log,
+		final long idle, final int max, final LongSupplier clock)
 	{
-		this.plugin = plugin;
+		this.launcher = launcher;
 		this.log = log;
 		this.idle = idle;
 		this.max = max;
 		this.clock = clock;
-		final String name = "scijava-lsp-" + plugin.languageId();
+		final String name = "scijava-lsp-" + launcher.languageId();
 		starter = Executors.newSingleThreadExecutor(daemon(name));
 		reaper = Executors.newSingleThreadScheduledExecutor(daemon(name +
 			"-reaper"));
@@ -109,12 +117,23 @@ public final class ServerProcesses {
 	}
 
 	/**
-	 * Gets the server for scripts running in the given environment, starting
+	 * Gets a server for scripts running in the given environment: the server
+	 * process of that environment, started when first asked (and again if it
+	 * stops), seen as a {@link LanguageServer} of its own. Requests fail while
+	 * the process cannot be started. Shutting it down closes its documents,
+	 * but leaves the process (see {@link #shutdown}).
+	 */
+	public LanguageServer server(final Environment env) {
+		return new ProcessLanguageServer(this, env);
+	}
+
+	/**
+	 * Gets the process for scripts running in the given environment, starting
 	 * it if needed. Never blocks.
 	 *
-	 * @return The server, once started; fails if it could not be.
+	 * @return The process, once started; fails if it could not be.
 	 */
-	public synchronized CompletableFuture<ServerProcess> server(
+	synchronized CompletableFuture<ServerProcess> process(
 		final Environment env)
 	{
 		final Entry known = servers.get(env);
@@ -124,12 +143,12 @@ public final class ServerProcesses {
 		final Entry entry = new Entry();
 		entry.server = CompletableFuture.supplyAsync(() -> {
 			try {
-				log.debug("Starting " + plugin.languageId() + " language server for " +
+				log.debug("Starting " + launcher.languageId() + " language server for " +
 					env);
-				return ServerProcess.start(plugin, env, log, INIT_TIMEOUT);
+				return ServerProcess.start(launcher, env, log, INIT_TIMEOUT);
 			}
 			catch (final Exception exc) {
-				log.warn("Could not start " + plugin.languageId() +
+				log.warn("Could not start " + launcher.languageId() +
 					" language server for " + env, exc);
 				throw new CompletionException(exc);
 			}
@@ -150,7 +169,7 @@ public final class ServerProcesses {
 	}
 
 	/** Calls {@code action} on each running server. */
-	public void forEach(final Consumer<ServerProcess> action) {
+	void forEach(final Consumer<ServerProcess> action) {
 		final List<Entry> entries;
 		synchronized (this) {
 			entries = new ArrayList<>(servers.values());
@@ -161,7 +180,7 @@ public final class ServerProcesses {
 		}
 	}
 
-	/** Stops all servers. */
+	/** Stops all servers; those asked for later start anew. */
 	public synchronized void shutdown() {
 		reaper.shutdownNow();
 		for (final Entry e : servers.values()) {
@@ -183,7 +202,7 @@ public final class ServerProcesses {
 			final ServerProcess s = e.server.isDone() && !e.server
 				.isCompletedExceptionally() ? e.server.join() : null;
 			if (s != null && now - s.lastUsed() > idle) {
-				log.debug("Stopping idle " + plugin.languageId() + " language server");
+				log.debug("Stopping idle " + launcher.languageId() + " language server");
 				it.remove();
 				stop(e);
 			}

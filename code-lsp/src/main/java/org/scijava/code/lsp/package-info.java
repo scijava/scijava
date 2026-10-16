@@ -43,7 +43,7 @@
  * {@link org.scijava.code.lsp.Positions}); behind it are servers of its own,
  * from the highest-priority plugin serving its dialect's language: one per
  * environment the script runs in (see
- * {@link org.scijava.code.lsp.RoutingLanguageServer}).
+ * {@link org.scijava.code.lsp.server.RoutingLanguageServer}).
  * </p>
  * <p>
  * Servers need know nothing of SciJava scripts. A SciJava script's {@code #@}
@@ -55,14 +55,10 @@
  * the script.
  * </p>
  * <p>
- * Servers that run as processes (e.g. jedi-language-server, for Python) are
- * offered by {@link org.scijava.code.lsp.ServerProcessPlugin}s, and shared:
- * plugins get them via
- * {@link org.scijava.code.lsp.LanguageServerService#launch}.
- * </p>
- * <p>
- * The subpackage {@link org.scijava.code.lsp.jvm} is for those writing
- * language servers in Java.
+ * The subpackages are for those writing language servers:
+ * {@link org.scijava.code.lsp.server} (servers that run as processes, and
+ * servers routing documents by where they run) and
+ * {@link org.scijava.code.lsp.jvm} (servers written in Java).
  * </p>
  */
 package org.scijava.code.lsp;

@@ -29,7 +29,7 @@
 
 /**
  * The implementation of the module, internal to it (not exported): the
- * services, the life cycle of server processes, the fallback for
+ * services, the fallback for
  * interpreters of languages no plugin serves, and the parsing of script
  * parameters.
  */

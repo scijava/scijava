@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.lsp;
+package org.scijava.code.lsp.server;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -69,6 +69,7 @@ import org.eclipse.lsp4j.services.LanguageClientAware;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
+import org.scijava.code.lsp.Environment;
 import org.junit.jupiter.api.Test;
 
 /**

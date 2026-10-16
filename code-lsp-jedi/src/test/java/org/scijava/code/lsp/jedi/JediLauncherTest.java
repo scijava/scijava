@@ -44,20 +44,19 @@ import org.junit.jupiter.api.Test;
 import org.scijava.code.lsp.Environment;
 
 /**
- * Unit tests for {@link JediServerProcessPlugin}.
+ * Unit tests for {@link JediLauncher}.
  *
  * @author Gabriel Selzer
  */
-public class JediServerProcessPluginTest {
+public class JediLauncherTest {
 
 	/**
 	 * Tests that the plugin offers servers for {@code python} documents
 	 */
 	@Test
 	public void testLanguageId() {
-		final JediServerProcessPlugin plugin = new JediServerProcessPlugin();
-		// Assert this plugin provides a "jedi" LSP (PythonServerPlugin serves "python")
-		assertEquals("jedi", plugin.languageId());
+		final JediLauncher plugin = new JediLauncher();
+		assertEquals("python", plugin.languageId());
 	}
 
 	/**
@@ -69,7 +68,7 @@ public class JediServerProcessPluginTest {
 	 */
 	@Test
 	public void testLanguageInitializationOptions() {
-		final JediServerProcessPlugin plugin = new JediServerProcessPlugin();
+		final JediLauncher plugin = new JediLauncher();
 		// Whatever the environment, Jedi reports syntax errors as a script is
 		// opened and edited (rather than only when it is saved).
 		final Map<String, Object> diagnostics = Map.of("enable", true, //
@@ -98,7 +97,7 @@ public class JediServerProcessPluginTest {
 	 */
 	@Test
 	public void testRootUri() {
-		final JediServerProcessPlugin plugin = new JediServerProcessPlugin();
+		final JediLauncher plugin = new JediLauncher();
 		final String root = plugin.rootUri(Environment.NONE);
 		assertTrue(new File(URI.create(root)).isDirectory(), root);
 	}
@@ -107,7 +106,7 @@ public class JediServerProcessPluginTest {
 	 * Ensures the server closes (eventually) when the parent is killed before
 	 * it can shut down the server (e.g. a crash): otherwise, each would leave a
 	 * Python process behind. The server runs under the
-	 * {@link JediServerProcessPlugin#LAUNCHER}, which watches its parent.
+	 * {@link JediLauncher#LAUNCHER}, which watches its parent.
 	 * Skipped unless the server's environment is already built.
 	 * <p>
 	 * This JVM cannot be killed here, so the launcher is told to watch a
@@ -121,7 +120,7 @@ public class JediServerProcessPluginTest {
 		// NB: Only once the server's environment is built (e.g. by using it):
 		// building it here would need network access.
 		final String python = python(new File(Environments.apposeEnvsDir(),
-			JediServerProcessPlugin.ENV));
+			JediLauncher.ENV));
 		assumeTrue(python != null, "The server's environment is not built");
 
 		// A "parent" that is already gone: a process that did nothing, and exited.
@@ -130,7 +129,7 @@ public class JediServerProcessPluginTest {
 
 		// The server, as the plugin starts it, but told to watch that process.
 		final Process process = new ProcessBuilder(python, "-c",
-			JediServerProcessPlugin.LAUNCHER, String.valueOf(gone.pid()))
+			JediLauncher.LAUNCHER, String.valueOf(gone.pid()))
 				.redirectErrorStream(true).start();
 
 		// It must exit soon after, rather than run on.

@@ -37,7 +37,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -98,7 +97,6 @@ import org.scijava.Priority;
 import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.LanguageServerPlugin;
 import org.scijava.code.lsp.LanguageServerService;
-import org.scijava.code.lsp.ServerProcessPlugin;
 import org.scijava.code.lsp.Positions;
 import org.scijava.code.lsp.ScriptSession;
 import org.scijava.code.lsp.ScriptDialect;
@@ -368,18 +366,14 @@ public class LanguageServersTest {
 	public void testSupports() {
 		assertTrue(service.supports(fake));
 		assertFalse(service.supports((ScriptLanguage) null));
-		// By LSP language: in-process, or as server processes.
+		// By LSP language.
 		assertTrue(service.supports("fake"));
-		assertTrue(service.supports("fakeprocess"));
 		assertFalse(service.supports("cobol"));
 	}
 
 	@Test
 	public void testLaunch() {
-		// A server process a plugin offers, started only once asked.
-		assertTrue(service.launch("fakeprocess", Environment.NONE) instanceof
-			ProcessLanguageServer);
-		// An in-process server, from the highest-priority plugin serving the
+		// A server, from the highest-priority plugin serving the
 		// language: a new one, in the environment given.
 		final Environment env = new Environment("/env/bin/fake", Collections
 			.emptyList(), null);
@@ -534,21 +528,6 @@ public class LanguageServersTest {
 		@Override
 		public String imported(final String statement) {
 			return statement.substring("import ".length());
-		}
-	}
-
-	/** Offers a server process for "fakeprocess" documents: it cannot start. */
-	@Plugin(type = ServerProcessPlugin.class)
-	public static class FakeProcessPlugin implements ServerProcessPlugin {
-
-		@Override
-		public String languageId() {
-			return "fakeprocess";
-		}
-
-		@Override
-		public Process start(final Environment env) throws IOException {
-			throw new IOException("Not a real server");
 		}
 	}
 

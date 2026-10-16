@@ -46,24 +46,27 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apposed.appose.util.Environments;
 import org.eclipse.lsp4j.services.LanguageServer;
+import org.scijava.Disposable;
 import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.LanguageServerPlugin;
-import org.scijava.code.lsp.LanguageServerService;
-import org.scijava.code.lsp.RoutingLanguageServer;
+import org.scijava.code.lsp.server.RoutingLanguageServer;
+import org.scijava.code.lsp.server.ServerProcesses;
+import org.scijava.log.LogService;
+import org.scijava.log.StderrLogService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 /**
- * Serves {@code python}: jedi-language-server (see
- * {@link JediServerProcessPlugin}, which offers it as {@code jedi}), made to
- * work well in an editor (see {@link PythonLanguageServer}); analyzing each
- * script with the packages it declares, but its environment lacks, too (see
- * {@link DependencyOverlays}).
+ * Serves {@code python}: jedi-language-server (see {@link JediLauncher}), one
+ * process per environment, made to work well in an editor (see
+ * {@link PythonLanguageServer}); analyzing each script with the packages it
+ * declares, but its environment lacks, too (see {@link DependencyOverlays}).
+ * The processes stop when this is disposed.
  *
  * @author Gabriel Selzer
  */
 @Plugin(type = LanguageServerPlugin.class, name = "Python")
-public class PythonServerPlugin implements LanguageServerPlugin {
+public class PythonServerPlugin implements LanguageServerPlugin, Disposable {
 
 	/** How many completions get signatures, once a word is begun. */
 	private static final int SIGNATURES = 30;
@@ -77,14 +80,15 @@ public class PythonServerPlugin implements LanguageServerPlugin {
 	/** How long installing an overlay may take, in minutes. */
 	private static final long INSTALL_TIMEOUT = 15;
 
-	@Parameter
-	private LanguageServerService servers;
+	@Parameter(required = false)
+	private LogService log;
+
+	private ServerProcesses jedi;
 
 	private DependencyOverlays overlays;
 
 	@Override
 	public boolean supports(final String languageId) {
-		// NB: Not "jedi", which this builds on.
 		return "python".equals(languageId);
 	}
 
@@ -94,9 +98,17 @@ public class PythonServerPlugin implements LanguageServerPlugin {
 	{
 		// NB: As a script's dependencies change, so does the overlay it is
 		// analyzed with, moving it to another jedi server.
-		return new PythonLanguageServer(new RoutingLanguageServer(env -> servers
-			.launch("jedi", env), doc -> overlays().environment(doc, environment)),
-			SIGNATURES);
+		final ServerProcesses processes = jedi();
+		return new PythonLanguageServer(new RoutingLanguageServer(processes::server,
+			doc -> overlays().environment(doc, environment)), SIGNATURES);
+	}
+
+	// -- Disposable methods --
+
+	@Override
+	public synchronized void dispose() {
+		if (jedi != null) jedi.shutdown();
+		jedi = null;
 	}
 
 	/** Sets the dependency overlays, e.g. to use fake ones in tests. */
@@ -105,6 +117,15 @@ public class PythonServerPlugin implements LanguageServerPlugin {
 	}
 
 	// -- Helper methods --
+
+	/** Gets the jedi-language-server processes, creating them on first use. */
+	private synchronized ServerProcesses jedi() {
+		if (jedi == null) {
+			jedi = new ServerProcesses(new JediLauncher(), log != null ? log
+				: new StderrLogService());
+		}
+		return jedi;
+	}
 
 	/** Gets the dependency overlays, creating them on first use. */
 	private synchronized DependencyOverlays overlays() {
@@ -117,7 +138,7 @@ public class PythonServerPlugin implements LanguageServerPlugin {
 
 	/** The directory holding the overlays. */
 	private static File root() {
-		return new File(Environments.apposeEnvsDir(), JediServerProcessPlugin.ENV +
+		return new File(Environments.apposeEnvsDir(), JediLauncher.ENV +
 			"-overlays");
 	}
 
@@ -144,7 +165,7 @@ public class PythonServerPlugin implements LanguageServerPlugin {
 			input.put("python", python);
 			input.put("dependencies", dependencies);
 			input.put("overlay", overlay.getAbsolutePath());
-			final Process p = new ProcessBuilder(JediServerProcessPlugin.python(),
+			final Process p = new ProcessBuilder(JediLauncher.python(),
 				script.getAbsolutePath()).redirectErrorStream(true).start();
 			try (final OutputStream out = p.getOutputStream()) {
 				out.write(new ObjectMapper().writeValueAsBytes(input));

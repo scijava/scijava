@@ -93,7 +93,7 @@ import org.scijava.script.ScriptLanguage;
  * {@link ScriptDocument}), and maps positions both ways.
  * Whatever the server says about the lines the transformation added is left
  * out, as are completions of names only those lines bind (see
- * {@link ScriptDocument#added()}).
+ * {@link ScriptDocument#hiddenNames()}).
  * </p>
  * <p>
  * A session owns its server: it is the server's client, initializes it, and
@@ -386,7 +386,9 @@ public class ScriptSession implements AutoCloseable {
 	{
 		final List<CompletionItem> items = new ArrayList<>();
 		for (final CompletionItem item : list.getItems()) {
-			if (doc.added().contains(leadingName(item.getLabel()))) continue;
+			if (doc.hiddenNames().contains(leadingName(item.getLabel()))) {
+				continue;
+			}
 			if (item.getTextEdit() != null) {
 				if (item.getTextEdit().isLeft()) {
 					final TextEdit e = item.getTextEdit().getLeft();

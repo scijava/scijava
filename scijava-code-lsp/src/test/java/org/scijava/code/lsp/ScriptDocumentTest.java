@@ -31,15 +31,17 @@ package org.scijava.code.lsp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeSet;
+import java.util.Set;
 
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
@@ -67,39 +69,22 @@ public class ScriptDocumentTest {
 		}
 
 		@Override
-		public String parameterType(final Class<?> type) {
-			if (type.isArray()) return "numpy.ndarray";
-			if (type == String.class) return "str";
-			return null;
-		}
-
-		@Override
-		public String declare(final String name, final String type) {
-			return name + ": " + type;
-		}
-
-		@Override
-		public List<String> imports(final Collection<String> types) {
-			final TreeSet<String> modules = new TreeSet<>();
-			for (final String t : types) {
-				final int dot = t.lastIndexOf('.');
-				if (dot > 0) modules.add("import " + t.substring(0, dot));
-			}
-			return Arrays.asList(modules.toArray(new String[0]));
-		}
-
-		@Override
-		public String imported(final String statement) {
-			return statement.substring("import ".length());
-		}
-
-		@Override
-		public List<String> extraDeclarations() {
-			return Collections.singletonList("task: object");
+		public Header header(final Map<String, Class<?>> parameters) {
+			final List<String> code = new ArrayList<>();
+			final boolean numpy = parameters.values().stream().anyMatch(
+				Class::isArray);
+			if (numpy) code.add("import numpy");
+			parameters.forEach((name, type) -> {
+				if (type.isArray()) code.add(name + ": numpy.ndarray");
+				else if (type == String.class) code.add(name + ": str");
+			});
+			code.add("task: object");
+			return new Header(String.join("; ", code), numpy ? Collections
+				.singleton("numpy") : Collections.emptySet());
 		}
 	};
 
-	/** A Groovy-like dialect: Java types; {@code #} lines are not Groovy. */
+	/** A Groovy-like dialect: Java types. */
 	private static final ScriptDialect GROOVY = new ScriptDialect() {
 
 		@Override
@@ -113,18 +98,11 @@ public class ScriptDocumentTest {
 		}
 
 		@Override
-		public String parameterType(final Class<?> type) {
-			return type.getName();
-		}
-
-		@Override
-		public String declare(final String name, final String type) {
-			return type + " " + name;
-		}
-
-		@Override
-		public boolean blanks(final String line) {
-			return line.startsWith("#");
+		public Header header(final Map<String, Class<?>> parameters) {
+			final List<String> code = new ArrayList<>();
+			parameters.forEach((name, type) -> code.add(type.getName() + " " +
+				name));
+			return new Header(String.join("; ", code), Collections.emptySet());
 		}
 	};
 
@@ -136,31 +114,35 @@ public class ScriptDocumentTest {
 		return params;
 	}
 
+	private static Set<Integer> lines(final Integer... lines) {
+		return new HashSet<>(Arrays.asList(lines));
+	}
+
 	@Test
 	public void testDeclarations() {
 		final String script = "#@ double[] a\n#@ String s\n#@ Integer n\na.";
 		final ScriptDocument doc = ScriptDocument.of(script, params("a",
-			double[].class, "s", String.class, "n", Integer.class), PYTHON);
+			double[].class, "s", String.class, "n", Integer.class), lines(0, 1,
+				2), PYTHON);
+		// The dialect's header, on a line of its own; the parameter lines
+		// blanked.
 		assertEquals("import numpy; a: numpy.ndarray; s: str; task: object\n" +
-			script, doc.text());
+			blanked(script.substring(0, script.lastIndexOf('\n'))) + "\na.", doc
+				.text());
 		assertEquals(script, doc.original());
-		// Parameters without a run-time type are kept, but not declared.
-		assertEquals(Arrays.asList("a", "s", "n"), Arrays.asList(doc.parameters()
-			.keySet().toArray()));
-		assertNull(doc.parameters().get("n"));
-		assertEquals("numpy.ndarray", doc.parameters().get("a"));
-		// The module is the declarations' alone, unless the script mentions it.
-		assertEquals(Collections.singleton("numpy"), doc.added());
+		// The module is the header's alone, unless the script mentions it.
+		assertEquals(Collections.singleton("numpy"), doc.hiddenNames());
 		assertTrue(ScriptDocument.of("import numpy as np\n" + script, params("a",
-			double[].class), PYTHON).added().isEmpty());
+			double[].class), lines(), PYTHON).hiddenNames().isEmpty());
 		assertTrue(ScriptDocument.of(script + "\nnumpyish = 1", params("a",
-			double[].class), PYTHON).added().contains("numpy"));
+			double[].class), lines(), PYTHON).hiddenNames().contains("numpy"));
 	}
 
 	@Test
 	public void testIdentity() {
 		final String script = "x = 1\nx.";
-		final ScriptDocument doc = ScriptDocument.of(script, params(), GROOVY);
+		final ScriptDocument doc = ScriptDocument.of(script, params(), lines(),
+			GROOVY);
 		assertEquals(script, doc.text());
 		assertEquals(5, doc.toTransformed(5));
 		assertEquals(5, doc.toOriginal(5));
@@ -171,9 +153,9 @@ public class ScriptDocumentTest {
 	public void testBlanking() {
 		final String script = "#@ String s\r\nprintln s\r\n#@output x\n# end";
 		final ScriptDocument doc = ScriptDocument.of(script, params("s",
-			String.class), GROOVY);
+			String.class), lines(0, 2), GROOVY);
 		assertEquals("java.lang.String s\n" +
-			"           \r\nprintln s\r\n          \n     ", doc.text());
+			"           \r\nprintln s\r\n          \n# end", doc.text());
 		// Blanking keeps every offset, and line breaks (incl. CR) in place.
 		assertEquals(doc.text().length() - doc.toTransformed(0), script
 			.length());
@@ -186,12 +168,17 @@ public class ScriptDocumentTest {
 		// NB: Includes a CRLF and a surrogate pair (two Java chars).
 		final String script = "#@ String s\r\nt = \"😀\"\r\ns.len";
 		final ScriptDocument doc = ScriptDocument.of(script, params("s",
-			String.class), PYTHON);
+			String.class), lines(0), PYTHON);
 		for (int i = 0; i <= script.length(); i++) {
 			final int t = doc.toTransformed(i);
 			assertEquals(i, doc.toOriginal(t));
-			// The text after a position is the same in both.
-			assertEquals(script.substring(i), doc.text().substring(t));
+			// The text after a position is the same in both, but for the
+			// blanked parameter line.
+			final String after = doc.text().substring(t);
+			assertEquals(script.length() - i, after.length());
+			if (i >= script.indexOf('\r')) {
+				assertEquals(script.substring(i), after);
+			}
 		}
 		for (int line = 0; line < 3; line++) {
 			final Position p = new Position(line, 2);
@@ -210,12 +197,27 @@ public class ScriptDocumentTest {
 	}
 
 	@Test
+	public void testOneLineHeader() {
+		// A header is one line: positions shift by just that line.
+		assertThrows(IllegalArgumentException.class,
+			() -> new ScriptDialect.Header("import numpy\nx: int", Collections
+				.emptySet()));
+		assertThrows(IllegalArgumentException.class,
+			() -> new ScriptDialect.Header("x: int\r", Collections.emptySet()));
+	}
+
+	@Test
 	public void testAsIs() {
 		final String script = "#@ String s\ns.";
 		final ScriptDocument doc = ScriptDocument.of(script);
 		assertEquals(script, doc.text());
 		assertEquals(script, doc.original());
 		assertEquals(0, doc.toTransformed(0));
-		assertTrue(doc.parameters().isEmpty());
+		assertTrue(doc.hiddenNames().isEmpty());
+	}
+
+	/** The script, with every character but its line breaks blanked. */
+	private static String blanked(final String script) {
+		return script.replaceAll("[^\r\n]", " ");
 	}
 }

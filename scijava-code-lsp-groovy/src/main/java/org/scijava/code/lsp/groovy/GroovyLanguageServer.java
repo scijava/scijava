@@ -112,6 +112,9 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 	 */
 	static final ScriptDialect DIALECT = new Declarations();
 
+	/** No lines to blank: the code is plain Groovy. */
+	private static final Set<Integer> NOTHING = Collections.emptySet();
+
 	/** An import statement being typed: "import a.b.C". */
 	private static final Pattern IMPORT = Pattern.compile(
 		"^\\s*import\\s+(static\\s+)?([\\w$.]*)$");
@@ -170,7 +173,7 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 
 		final Map<String, Class<?>> predefined = liveVariables();
 		final ScriptDocument sd = ScriptDocument.of(text.substring(0,
-			replaceStart), predefined, DIALECT);
+			replaceStart), predefined, NOTHING, DIALECT);
 		final TypedAST ast = typedAST(sd, predefined, line.substring(0,
 			line.length() - prefix.length()));
 		if (ast == null) return list(doc, caret, caret, none); // string, comment
@@ -178,8 +181,8 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 		final List<CompletionItem> items = new ArrayList<>();
 		if (member) items.addAll(memberCompletions(ast, before, prefix));
 		else {
-			items.addAll(variableCompletions(ast.variablesAtCaret(), sd
-				.parameters(), prefix));
+			items.addAll(variableCompletions(ast.variablesAtCaret(), predefined,
+				prefix));
 			items.addAll(keywordCompletions(prefix));
 			items.addAll(classCompletions(doc, prefix));
 		}
@@ -217,7 +220,7 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 	protected List<Diagnostic> diagnose(final Document doc) {
 		final String text = doc.text();
 		final ScriptDocument sd = ScriptDocument.of(text, liveVariables(),
-			DIALECT);
+			NOTHING, DIALECT);
 		final TypedAST ast = TypedAST.of(sd.text(), loader());
 		final List<Diagnostic> found = new ArrayList<>();
 		for (final TypedAST.Problem p : ast.problems()) {
@@ -265,9 +268,9 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 		final String prefix = id.group();
 		final int start = caret - prefix.length();
 		final Map<String, Class<?>> predefined = liveVariables();
-		final TypedAST ast = typedAST(ScriptDocument.of(text.substring(
-			0, start), predefined, DIALECT), predefined, line.substring(0, line
-				.length() - prefix.length()));
+		final TypedAST ast = typedAST(ScriptDocument.of(text.substring(0,
+			start), predefined, NOTHING, DIALECT), predefined, line.substring(0,
+				line.length() - prefix.length()));
 		if (ast == null) return null; // string or comment
 		final TypedAST.Call call = ast.callAtCaret();
 		return call == null ? null : new CallContext(ast, call);
@@ -333,7 +336,8 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 		final TypedAST ast = TypedAST.of(code, loader());
 		if (ast.isParsed()) return ast;
 		final String lineCode = TypedAST.closeBrackets(TypedAST
-			.markCaret(ScriptDocument.of(lineBefore, predefined, DIALECT)));
+			.markCaret(ScriptDocument.of(lineBefore, predefined, NOTHING,
+				DIALECT)));
 		return lineCode == null ? ast : TypedAST.of(lineCode, loader());
 	}
 
@@ -453,8 +457,8 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 	}
 
 	private static List<CompletionItem> variableCompletions(
-		final Map<String, ClassNode> vars, final Map<String, String> predefined,
-		final String prefix)
+		final Map<String, ClassNode> vars,
+		final Map<String, Class<?>> predefined, final String prefix)
 	{
 		final Set<String> names = new HashSet<>();
 		final List<CompletionItem> out = new ArrayList<>();
@@ -467,8 +471,8 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 				continue;
 			}
 			final ClassNode type = vars.get(name);
-			out.add(variable(name, type != null ? type.toString(false) : predefined
-				.get(name)));
+			out.add(variable(name, type != null ? type.toString(false)
+				: typeName(predefined.get(name))));
 		}
 		return out;
 	}
@@ -756,13 +760,13 @@ public class GroovyLanguageServer extends AbstractLanguageServer {
 		}
 
 		@Override
-		public String parameterType(final Class<?> type) {
-			return typeName(type);
-		}
-
-		@Override
-		public String declare(final String name, final String type) {
-			return type + " " + name;
+		public Header header(final Map<String, Class<?>> parameters) {
+			// NB: Full names need no imports.
+			final List<String> declarations = new ArrayList<>();
+			parameters.forEach((name, type) -> declarations.add(typeName(type) +
+				" " + name));
+			return new Header(String.join("; ", declarations), Collections
+				.emptySet());
 		}
 	}
 }

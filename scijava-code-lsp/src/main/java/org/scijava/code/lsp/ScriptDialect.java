@@ -32,7 +32,9 @@ package org.scijava.code.lsp;
 import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
 import org.scijava.plugin.SciJavaPlugin;
 import org.scijava.script.ScriptLanguage;
@@ -48,15 +50,15 @@ import org.scijava.script.ScriptLanguage;
  * know their language, not SciJava scripts (see {@link LanguageServerPlugin}).
  * </p>
  * <p>
- * A dialect describes the translation, rather than doing it: a
- * {@link ScriptDocument} translates every script the same way, prepending one
- * line of declarations and blanking lines in place, and the dialect supplies
- * only the pieces (types, declarations, imports). So, for every language,
- * positions in a script and in its document differ by just that line's length,
- * which is how a session maps servers' answers back to the script (and leaves
- * out those about the line); and the translation is written, and tested, once.
- * A language whose scripts need more (e.g. wrapping in a class) would extend
- * that rule in {@link ScriptDocument}, for all languages.
+ * A dialect supplies the declarations, rather than translating scripts: a
+ * {@link ScriptDocument} translates every script the same way, prepending the
+ * dialect's {@link #header}, and blanking in place the lines SciJava removes
+ * before a script runs (e.g. its {@code #@} lines). So, for every language,
+ * positions in a script and in its document differ by just the header's
+ * length, which is how a session maps servers' answers back to the script
+ * (and leaves out those about the header); and that mapping is written, and
+ * tested, once. A language whose scripts need more (e.g. wrapping in a class)
+ * would extend that rule in {@link ScriptDocument}, for all languages.
  * </p>
  *
  * @author Gabriel Selzer
@@ -83,8 +85,8 @@ public interface ScriptDialect extends SciJavaPlugin {
 	 * {@link org.scijava.code.lsp.server.RoutingLanguageServer}). The default knows
 	 * nothing: {@link Environment#NONE}.
 	 *
-	 * @param text The script, as its servers see it (see
-	 *          {@link ScriptDocument}).
+	 * @param text The script, as written (e.g. with its {@code #@script} line,
+	 *          which its servers do not see).
 	 * @param file The script's file, or null if it has none (e.g. unsaved).
 	 */
 	// TODO: Consider whether this is necessary: so far only Appose-Python
@@ -94,64 +96,59 @@ public interface ScriptDialect extends SciJavaPlugin {
 	}
 
 	/**
-	 * Gets the type, as written in this language, that a script parameter of
-	 * the given Java type has in a running script, e.g. {@code numpy.ndarray}
-	 * for an image in CPython; or null if it has no useful type (the parameter
-	 * is then not declared).
-	 */
-	String parameterType(Class<?> type);
-
-	/**
-	 * Declares a variable, e.g. {@code image: numpy.ndarray} (Python) or
-	 * {@code net.imglib2.img.Img image;} (Groovy), without a line break.
+	 * Gets the code declaring a script's parameters with the types they have
+	 * when it runs, for a {@link ScriptDocument} to prepend to the script: e.g.
+	 * {@code import numpy; image: numpy.ndarray} for an image in CPython. It
+	 * may also import what the declarations need, and declare other variables
+	 * scripts can use (e.g. Appose's {@code task}); parameters without a useful
+	 * type may be left out.
 	 *
-	 * @param name The variable's name.
-	 * @param type Its type, as given by {@link #parameterType}.
+	 * @param parameters The script's parameters (see
+	 *          {@link LanguageServerService#scriptParameters}), by name, with
+	 *          their Java types, in order.
 	 */
-	String declare(String name, String type);
+	Header header(Map<String, Class<?>> parameters);
 
 	/**
-	 * Gets statements needed before the declarations, e.g. imports of the types
-	 * they use ({@code import numpy}). The default needs none.
-	 *
-	 * @param types The types declared, as given by {@link #parameterType}.
+	 * One line of code to prepend to a script (see {@link #header}), e.g.
+	 * statements joined by {@code ;}.
 	 */
-	default List<String> imports(final Collection<String> types) {
-		return Collections.emptyList();
-	}
+	final class Header {
 
-	/**
-	 * Gets the name one of the {@link #imports} binds, e.g. {@code numpy} for
-	 * {@code import numpy}; or null if none. Unless the script itself mentions
-	 * it, the name is the declarations' alone: it is not completed (see
-	 * {@link ScriptDocument#added()}). The default binds none.
-	 */
-	default String imported(final String statement) {
-		return null;
-	}
+		private final String code;
+		private final Set<String> hiddenNames;
 
-	/**
-	 * Gets declarations of other variables scripts can use, e.g. Appose's
-	 * {@code task}. The default declares none.
-	 */
-	default List<String> extraDeclarations() {
-		return Collections.emptyList();
-	}
+		/**
+		 * @param code The code: one line, without a line break (the
+		 *          {@link ScriptDocument} adds one after it), or empty if none.
+		 * @param hiddenNames The names to leave out of completion: those the
+		 *          code binds only to declare the parameters, e.g.
+		 *          {@code numpy} for {@code import numpy}.
+		 * @throws IllegalArgumentException If the code has a line break.
+		 */
+		public Header(final String code, final Collection<String> hiddenNames) {
+			if (code.indexOf('\n') >= 0 || code.indexOf('\r') >= 0) {
+				throw new IllegalArgumentException(
+					"A header is one line, without line breaks: " + code);
+			}
+			this.code = code;
+			this.hiddenNames = Collections.unmodifiableSet(new LinkedHashSet<>(
+				hiddenNames));
+		}
 
-	/**
-	 * Gets the separator between statements on one line, e.g. {@code "; "}
-	 * (the default).
-	 */
-	default String separator() {
-		return "; ";
-	}
+		/** The code: one line, without a line break; or empty if none. */
+		public String code() {
+			return code;
+		}
 
-	/**
-	 * Whether a line of the script is not of this language, and must be blanked
-	 * (e.g. {@code #@} lines for languages whose comments start otherwise). The
-	 * default blanks none.
-	 */
-	default boolean blanks(final String line) {
-		return false;
+		/**
+		 * The names to leave out of completion: those the code binds only to
+		 * declare the parameters, e.g. {@code numpy} for {@code import numpy}
+		 * (unless the script itself mentions them, see
+		 * {@link ScriptDocument#hiddenNames()}).
+		 */
+		public Set<String> hiddenNames() {
+			return hiddenNames;
+		}
 	}
 }

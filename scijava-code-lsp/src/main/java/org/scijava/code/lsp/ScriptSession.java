@@ -33,6 +33,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -367,8 +368,13 @@ public class ScriptSession implements AutoCloseable {
 		return f == null ? untitled : f.getAbsoluteFile().toURI().toString();
 	}
 
+	/**
+	 * The LSP language of the script: its language's name, in lower case (see
+	 * {@link LanguageServerPlugin#supports(String)}).
+	 */
 	private String languageId() {
-		return language == null ? "plaintext" : language.getLanguageName();
+		return language == null ? "plaintext" : language.getLanguageName()
+			.toLowerCase(Locale.ROOT);
 	}
 
 	/** Problems reported from now on are those of a new version. */

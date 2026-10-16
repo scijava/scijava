@@ -52,8 +52,7 @@ import org.scijava.code.lsp.ScriptSession;
 import org.scijava.code.lsp.jvm.ClassIndex;
 
 /**
- * Tests {@link GroovyLanguageServer}: what it makes of plain Groovy, as its
- * clients send it.
+ * Tests {@link GroovyLanguageServer}
  *
  * @author Gabriel Selzer
  */

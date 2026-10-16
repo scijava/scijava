@@ -67,7 +67,7 @@ public class ScriptDocumentTest {
 		}
 
 		@Override
-		public String runtimeType(final Class<?> type) {
+		public String parameterType(final Class<?> type) {
 			if (type.isArray()) return "numpy.ndarray";
 			if (type == String.class) return "str";
 			return null;
@@ -113,7 +113,7 @@ public class ScriptDocumentTest {
 		}
 
 		@Override
-		public String runtimeType(final Class<?> type) {
+		public String parameterType(final Class<?> type) {
 			return type.getName();
 		}
 

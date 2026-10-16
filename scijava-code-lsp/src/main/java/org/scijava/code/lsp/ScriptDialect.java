@@ -94,19 +94,19 @@ public interface ScriptDialect extends SciJavaPlugin {
 	}
 
 	/**
-	 * Gets the type a script parameter of the given Java type has in a running
-	 * script, as written in this language, e.g. {@code numpy.ndarray} for an
-	 * image in CPython; or null if it has no useful type (the parameter is then
-	 * not declared).
+	 * Gets the type, as written in this language, that a script parameter of
+	 * the given Java type has in a running script, e.g. {@code numpy.ndarray}
+	 * for an image in CPython; or null if it has no useful type (the parameter
+	 * is then not declared).
 	 */
-	String runtimeType(Class<?> type);
+	String parameterType(Class<?> type);
 
 	/**
 	 * Declares a variable, e.g. {@code image: numpy.ndarray} (Python) or
 	 * {@code net.imglib2.img.Img image;} (Groovy), without a line break.
 	 *
 	 * @param name The variable's name.
-	 * @param type Its type, as given by {@link #runtimeType}.
+	 * @param type Its type, as given by {@link #parameterType}.
 	 */
 	String declare(String name, String type);
 
@@ -114,7 +114,7 @@ public interface ScriptDialect extends SciJavaPlugin {
 	 * Gets statements needed before the declarations, e.g. imports of the types
 	 * they use ({@code import numpy}). The default needs none.
 	 *
-	 * @param types The types declared, as given by {@link #runtimeType}.
+	 * @param types The types declared, as given by {@link #parameterType}.
 	 */
 	default List<String> imports(final Collection<String> types) {
 		return Collections.emptyList();

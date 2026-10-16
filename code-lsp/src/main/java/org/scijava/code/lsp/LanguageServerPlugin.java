@@ -35,10 +35,9 @@ import org.scijava.plugin.SciJavaPlugin;
 /**
  * A {@link SciJavaPlugin} that can create {@link LanguageServer}s.
  * <p>
- * Servers need not know SciJava scripts: given the plugin's
- * {@link #dialect() dialect}, sessions show them each script as plain code of
- * its language, its parameters declared (see
- * {@link ScriptDocument}).
+ * Servers need not know SciJava scripts: sessions show them each script as
+ * plain code of their language, as a {@link ScriptDialect} turns it, its
+ * parameters declared (see {@link ScriptDocument}).
  * </p>
  *
  * @author Gabriel Selzer
@@ -48,11 +47,10 @@ public interface LanguageServerPlugin extends SciJavaPlugin {
 	/**
 	 * Declares whether {@link LanguageServer}s can be created to satisfy
 	 * scripts of the given LSP language (e.g. {@code groovy}), as
-	 * {@link LanguageServerService#launch} asks; and so scripts of the SciJava
-	 * language of that name, in lower case (e.g. {@code Groovy}), as sessions
-	 * ask (see {@link LanguageServerService#session}). NB: Not one whose
-	 * servers this launches itself (e.g. a plugin building on {@code python}
-	 * servers serves a language of its own).
+	 * {@link LanguageServerService#launch} asks; and so sessions, for scripts
+	 * whose {@link ScriptDialect#languageId() dialect} makes them code of it.
+	 * NB: Not one whose servers this launches itself (e.g. a plugin building on
+	 * {@code jedi} servers serves {@code python}).
 	 */
 	boolean supports(String languageId);
 
@@ -62,9 +60,9 @@ public interface LanguageServerPlugin extends SciJavaPlugin {
 	 * it, and shuts it down when closed; or for whoever
 	 * {@link LanguageServerService#launch launches} it.
 	 * <p>
-	 * NB: A plugin may know better where its scripts run (e.g. as their text
-	 * says, which may change as they are edited), and analyze them there,
-	 * whatever {@code environment} says.
+	 * NB: A plugin may analyze each document in an environment of its own,
+	 * based on the given one (e.g. with packages its text declares added; see
+	 * {@link RoutingLanguageServer}).
 	 * </p>
 	 *
 	 * @param languageId The LSP language asked for, one this
@@ -74,12 +72,4 @@ public interface LanguageServerPlugin extends SciJavaPlugin {
 	 *          {@link Environment#live()}).
 	 */
 	LanguageServer create(String languageId, Environment environment);
-
-	/**
-	 * How this plugin's servers see scripts: as plain code of their language,
-	 * written in this dialect; or, if null (the default), as written.
-	 */
-	default ScriptDialect dialect() {
-		return null;
-	}
 }

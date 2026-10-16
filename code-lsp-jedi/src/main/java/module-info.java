@@ -32,4 +32,6 @@
 open module org.scijava.code.lsp.jedi {
 	requires org.scijava.code.lsp;
 	requires org.apposed.appose;
+	requires com.fasterxml.jackson.databind;
+	requires com.fasterxml.jackson.dataformat.toml;
 }

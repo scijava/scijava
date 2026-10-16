@@ -47,6 +47,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BooleanSupplier;
 import java.util.stream.Collectors;
 
 import javax.script.ScriptContext;
@@ -148,11 +149,12 @@ public class LanguageServersTest {
 			assertEquals(Arrays.asList("max", "mass"), labels(list));
 			assertEquals(1, SERVERS.size());
 			assertEquals("high", SERVERS.get(0).name);
-			// For the script language's LSP language: its name, in lower case.
+			// For the LSP language the script language's dialect names.
 			assertEquals("fake", SERVERS.get(0).languageId);
 		}
 		// Each session gets a server of its own.
 		try (ScriptSession other = service.session(fake)) {
+			other.completion("x", 1).get(10, TimeUnit.SECONDS);
 			assertEquals(2, SERVERS.size());
 		}
 	}
@@ -160,14 +162,18 @@ public class LanguageServersTest {
 	@Test
 	public void testLifeCycle() throws Exception {
 		final ScriptSession session = service.session(fake);
-		final FakeServer server = SERVERS.get(0);
-		// Initialized at once; told about the script as it changes.
-		assertEquals(Collections.singletonList("initialized"), server.events);
-		session.update("x = 1").update("x = 2");
+		// Created once there is a script, and initialized at once; told about the
+		// script as it changes.
+		session.update("x = 1");
+		final FakeServer server = server(0);
+		waitFor(() -> server.events.size() >= 2);
+		session.update("x = 2");
+		waitFor(() -> server.events.size() >= 3);
 		assertEquals(Arrays.asList("initialized", "open 1 x = 1",
 			"change 2 x = 2"), server.events);
 		// Closed: the script, then the server.
 		session.close();
+		waitFor(() -> server.events.size() >= 6);
 		assertEquals(Arrays.asList("close", "shutdown", "exit"), server.events
 			.subList(3, 6));
 	}
@@ -205,10 +211,18 @@ public class LanguageServersTest {
 	public void testLiveEnvironment() {
 		final ScriptContext live = new SimpleScriptContext();
 		try (ScriptSession session = service.session(fake, live)) {
-			assertSame(live, SERVERS.get(0).environment().live());
+			session.update("x");
+			assertSame(live, server(0).environment().live());
 		}
 		try (ScriptSession session = service.session(fake)) {
-			assertNull(SERVERS.get(1).environment().live());
+			session.update("x");
+			assertNull(server(1).environment().live());
+		}
+		// Where the script runs, as its dialect says.
+		try (ScriptSession session = service.session(fake, live)) {
+			session.update("#env /env/bin/fake\nx");
+			assertEquals("/env/bin/fake", server(2).environment().interpreter());
+			assertSame(live, server(2).environment().live());
 		}
 	}
 
@@ -217,12 +231,14 @@ public class LanguageServersTest {
 		final List<List<Diagnostic>> heard = new CopyOnWriteArrayList<>();
 		final ScriptSession session = service.session(fake)
 			.setDiagnosticsListener(heard::add);
-		final FakeServer server = SERVERS.get(0);
 		// Opened with its first text; untitled, with its language's extension.
 		session.update("x = 1");
+		final FakeServer server = server(0);
+		waitFor(() -> server.events.size() >= 2);
 		// The same text again: nothing sent; another: the next version.
 		session.update("x = 1").update("x.ma");
 		final List<String> events = server.events;
+		waitFor(() -> events.size() >= 3);
 		assertEquals(Arrays.asList("open 1 x = 1", "change 2 x.ma"), events
 			.subList(1, 3));
 		final List<String> opened = server.opened;
@@ -245,18 +261,20 @@ public class LanguageServersTest {
 		// Saved as a file: closed, and opened anew as the file.
 		final File file = new File("scripts", "a.fake");
 		session.setFile(() -> file).update("x.ma");
+		waitFor(() -> events.size() >= 5);
 		assertEquals(Arrays.asList("close", "open 1 x.ma"), events.subList(3, 5));
 		assertEquals(file.getAbsoluteFile().toURI().toString(), opened.get(1));
 		session.close();
+		waitFor(() -> events.size() >= 6);
 		assertEquals("close", events.get(5));
 	}
 
 	@Test
 	public void testDiagnostics() throws Exception {
 		try (ScriptSession session = service.session(fake)) {
-			final FakeServer server = SERVERS.get(0);
 			assertEquals(Collections.singletonList("high: oops"), messages(session
 				.update("oops").diagnostics(10_000)));
+			final FakeServer server = server(0);
 			// Problems of an earlier version are out of date.
 			assertEquals(Collections.emptyList(), messages(session.update("fine")
 				.diagnostics(10_000)));
@@ -282,10 +300,10 @@ public class LanguageServersTest {
 	public void testTransforming() throws Exception {
 		final String script = "#@ double sigma\nx.ma";
 		try (ScriptSession session = service.session(fake)) {
-			final FakeServer server = SERVERS.get(0);
 			final CompletionList list = session.completion(script, script.length())
 				.get(10, TimeUnit.SECONDS);
-			// The server sees plain code, in its plugin's dialect.
+			final FakeServer server = server(0);
+			// The server sees plain code, in the script language's dialect.
 			assertEquals("open 1 import mass; sigma: double\n" + script, server.events
 				.get(1));
 			// Asked one line down; its edits mapped back up.
@@ -377,6 +395,27 @@ public class LanguageServersTest {
 
 	// -- Helper methods --
 
+	/** The server created i-th, once created. */
+	private static FakeServer server(final int i) {
+		waitFor(() -> SERVERS.size() > i);
+		return SERVERS.get(i);
+	}
+
+	private static void waitFor(final BooleanSupplier condition) {
+		final long deadline = System.currentTimeMillis() + 10_000;
+		while (!condition.getAsBoolean()) {
+			if (System.currentTimeMillis() > deadline) {
+				throw new AssertionError("Timed out");
+			}
+			try {
+				Thread.sleep(10);
+			}
+			catch (final InterruptedException exc) {
+				throw new AssertionError(exc);
+			}
+		}
+	}
+
 	private static CompletionList complete(final LanguageServer server,
 		final String text) throws Exception
 	{
@@ -449,6 +488,55 @@ public class LanguageServersTest {
 		}
 	}
 
+	/**
+	 * Turns fake scripts into {@code fake} code; they run where a line
+	 * {@code #env <interpreter>} says, if any.
+	 */
+	@Plugin(type = ScriptDialect.class)
+	public static class FakeDialect implements ScriptDialect {
+
+		@Override
+		public boolean supports(final ScriptLanguage language) {
+			return language instanceof FakeLanguage;
+		}
+
+		@Override
+		public String languageId() {
+			return "fake";
+		}
+
+		@Override
+		public Environment environment(final String text, final File file) {
+			for (final String line : text.split("\n")) {
+				if (line.startsWith("#env ")) {
+					return new Environment(line.substring(5), null, null);
+				}
+			}
+			return Environment.NONE;
+		}
+
+		@Override
+		public String runtimeType(final Class<?> type) {
+			return type.getSimpleName();
+		}
+
+		@Override
+		public String declare(final String name, final String type) {
+			return name + ": " + type;
+		}
+
+		@Override
+		public List<String> imports(final Collection<String> types) {
+			return types.isEmpty() ? Collections.emptyList() : Collections
+				.singletonList("import mass");
+		}
+
+		@Override
+		public String imported(final String statement) {
+			return statement.substring("import ".length());
+		}
+	}
+
 	/** Offers a server process for "fakeprocess" documents: it cannot start. */
 	@Plugin(type = ServerProcessPlugin.class)
 	public static class FakeProcessPlugin implements ServerProcessPlugin {
@@ -479,33 +567,6 @@ public class LanguageServersTest {
 			final Environment environment)
 		{
 			return register(new FakeServer("high", languageId, environment));
-		}
-
-		@Override
-		public ScriptDialect dialect() {
-			return new ScriptDialect() {
-
-				@Override
-				public String runtimeType(final Class<?> type) {
-					return type.getSimpleName();
-				}
-
-				@Override
-				public String declare(final String name, final String type) {
-					return name + ": " + type;
-				}
-
-				@Override
-				public List<String> imports(final Collection<String> types) {
-					return types.isEmpty() ? Collections.emptyList() : Collections
-						.singletonList("import mass");
-				}
-
-				@Override
-				public String imported(final String statement) {
-					return statement.substring("import ".length());
-				}
-			};
 		}
 	}
 

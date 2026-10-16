@@ -41,10 +41,11 @@ import org.scijava.code.lsp.ServerProcessPlugin;
 import org.scijava.plugin.Plugin;
 
 /**
- * Offers jedi-language-server, for {@code python}: run in an environment of
- * its own (built by Appose the first time it is needed), to analyze scripts
+ * Offers jedi-language-server, as {@code jedi}: run in an environment of its
+ * own (built by Appose the first time it is needed), to analyze scripts
  * against their environment's Python (if known) and extra search paths (e.g.
- * a dependency overlay, or stubs of Java packages).
+ * a dependency overlay, or stubs of Java packages). {@code python} documents
+ * get it made to work well in editors (see {@link PythonServerPlugin}).
  *
  * @author Gabriel Selzer
  */
@@ -103,7 +104,8 @@ public class JediServerProcessPlugin implements ServerProcessPlugin {
 
 	@Override
 	public String languageId() {
-		return "python";
+		// NB: Not "python", which PythonServerPlugin serves, building on this.
+		return "jedi";
 	}
 
 	@Override
@@ -157,11 +159,11 @@ public class JediServerProcessPlugin implements ServerProcessPlugin {
 	// -- Helper methods --
 
 	/**
-	 * Gets the Python of the server's environment: Python, Jedi and
-	 * jedi-language-server; built first if needed (once per session, which is
-	 * quick if nothing changed).
+	 * Gets the Python of the server's environment: Python, Jedi,
+	 * jedi-language-server and uv; built first if needed (once per session,
+	 * which is quick if nothing changed).
 	 */
-	private static synchronized String python() throws Exception {
+	static synchronized String python() throws Exception {
 		if (python != null && new File(python).isFile()) return python;
 		final String found = pythonExecutable(Appose.content(config()).scheme(
 			"pixi.toml").build());
@@ -178,9 +180,9 @@ public class JediServerProcessPlugin implements ServerProcessPlugin {
 			"platforms = [\"" + condaPlatform() + "\"]\n" + //
 			"\n" + //
 			"[dependencies]\n" + //
-			// NB: Packages installed for the server's Python to find (e.g. by
-			// scripting-appose-python, for scripts whose environment is not built
-			// yet) must be for this version.
+			// NB: Overlays of scripts whose environment is not known are installed
+			// for this Python (see DependencyOverlays), as Jedi then analyzes
+			// against it.
 			"python = \"3.12.*\"\n" + //
 			"jedi = \">=0.19.2\"\n" + //
 			// NB: So that the types scientific scripts use most are known before
@@ -189,7 +191,9 @@ public class JediServerProcessPlugin implements ServerProcessPlugin {
 			"numpy = \"*\"\n" + //
 			"\n" + //
 			"[pypi-dependencies]\n" + //
-			"jedi-language-server = \">=0.47\"\n";
+			"jedi-language-server = \">=0.47\"\n" + //
+			// NB: To install dependency overlays (see overlay.py).
+			"uv = \"*\"\n";
 	}
 
 	/** The conda platform (e.g. {@code linux-64}) of this machine. */

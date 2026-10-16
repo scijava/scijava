@@ -1,0 +1,128 @@
+/*-
+ * #%L
+ * Jython code intelligence for SciJava, via Jython's own parser.
+ * %%
+ * Copyright (C) 2020 - 2025 SciJava developers.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package org.scijava.code.lsp.jython;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import org.scijava.code.lsp.jvm.ClassIndex;
+
+/**
+ * A mutable suggestion used internally by the Jython completion engine. It holds
+ * the replacement text plus optional documentation and (for callables) parameter
+ * and return-type metadata. {@link JythonAutoCompletions} converts these into
+ * LSP completion items at the boundary.
+ *
+ * @author Albert Cardona
+ */
+public class CompletionText {
+
+	private String replacementText;
+	private String description;
+	private String summary;
+	private List<Parameter> method_args = Collections.emptyList();
+	private String method_returnType = null;
+
+	public CompletionText(final String replacementText) {
+		this(replacementText, (String) null, (String) null);
+	}
+
+	public CompletionText(final String replacementText, final String summary,
+		final String description)
+	{
+		this.replacementText = replacementText;
+		this.summary = summary;
+		this.description = description;
+	}
+
+	public CompletionText(final String replacementText, final Class<?> c,
+		final Field f)
+	{
+		this(replacementText, ClassIndex.getSummaryCompletion(f, c), null);
+	}
+
+	public CompletionText(final String replacementText, final Class<?> c,
+		final Method m)
+	{
+		this(replacementText, ClassIndex.getSummaryCompletion(m, c), null);
+		this.method_args = Arrays.asList(m.getParameters());
+		this.method_returnType = m.getReturnType().getCanonicalName();
+	}
+
+	public CompletionText(final String replacementText, final Class<?> c,
+		final Constructor<?> constructor)
+	{
+		this(replacementText, ClassIndex.getSummaryCompletion(constructor, c),
+			null);
+		this.method_args = Arrays.asList(constructor.getParameters());
+		this.method_returnType = c.getCanonicalName();
+	}
+
+	public String getReplacementText() {
+		return replacementText;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public String getSummary() {
+		return summary;
+	}
+
+	public List<Parameter> getMethodArgs() {
+		return method_args;
+	}
+
+	public String getReturnType() {
+		return method_returnType;
+	}
+
+	public void setReplacementText(final String replacementText) {
+		this.replacementText = replacementText;
+	}
+
+	public void setDescription(final String description) {
+		this.description = description;
+	}
+
+	public void setSummary(final String summary) {
+		this.summary = summary;
+	}
+
+	@Override
+	public String toString() {
+		return replacementText + " | " + description + " | " + summary;
+	}
+}

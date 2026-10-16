@@ -60,7 +60,9 @@
 		<module>awt</module>
 		<module>cli</module>
 		<module>code-lsp</module>
+		<module>code-lsp-groovy</module>
 		<module>code-lsp-jedi</module>
+		<module>code-lsp-jython</module>
 		<module>collections</module>
 		<module>command3</module>
 		<module>common3</module>

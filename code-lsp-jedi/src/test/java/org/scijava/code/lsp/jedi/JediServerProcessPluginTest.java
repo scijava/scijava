@@ -56,8 +56,8 @@ public class JediServerProcessPluginTest {
 	@Test
 	public void testLanguageId() {
 		final JediServerProcessPlugin plugin = new JediServerProcessPlugin();
-		// Assert this plugin provides a "python" LSP
-		assertEquals("python", plugin.languageId());
+		// Assert this plugin provides a "jedi" LSP (PythonServerPlugin serves "python")
+		assertEquals("jedi", plugin.languageId());
 	}
 
 	/**

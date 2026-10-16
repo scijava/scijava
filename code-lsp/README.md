@@ -14,10 +14,12 @@ scripts.
 ```
  client (e.g. Script Editor)
    │  ScriptSession: a script's text, and offsets into it;
-   │  shows its server the script as plain code (ScriptDocument)
+   │  shows its servers the script as plain code (ScriptDocument)
    ▼
- LanguageServerService ──► the LanguageServerPlugin serving the language
-   │  a server of the session's own, and its ScriptDialect
+ LanguageServerService ──► the ScriptDialect of the script's language:
+   │                       the plain code's LSP language, and where it runs
+   │  servers of the session's own, one per environment (RoutingLanguageServer),
+   │  from the LanguageServerPlugin serving the LSP language
    ├──► in-process servers (e.g. Groovy, Jython), built on AbstractLanguageServer
    └──► server processes (e.g. jedi-language-server), via ServerProcessPlugin
 ```
@@ -26,42 +28,51 @@ It does three things.
 
 ## 1. Brokering between scripts and servers (`org.scijava.code.lsp`)
 
-The core. `LanguageServerPlugin`s offer lsp4j `LanguageServer`s for
-languages, by LSP language id (e.g. `groovy`), and so for the SciJava script
-languages of those names, in lower case (e.g. `Groovy`); each language is
-served by the highest-priority plugin supporting it. A server combining
-several sources (e.g. Jython's own analysis and jedi's) combines them itself.
+The core. Two kinds of plugins meet here, so that script languages need not
+offer servers, nor servers know SciJava scripts:
 
-Clients ask about a script through a `ScriptSession` from the service, with
-a server of its own: it keeps the server's copy of the script up to date,
-names it (its file's URI, or an `untitled:` one), takes offsets into its text
-(see `Positions`), and reports the problems found in it. For code typed into
-a running interpreter, the server learns the interpreter's state through its
-`Environment`. Tools that ask once (e.g. to check a script) can wait for a
-session's problems (`diagnostics(timeout)`). For code typed into an
-interpreter whose language no plugin serves, a session completes the
-interpreter's variables.
+* A `ScriptDialect` turns the scripts of a SciJava script language into plain
+  code of an LSP language (e.g. Appose-Python scripts into `python`): it is
+  what a script language contributes (e.g. scripting-groovy's, for Groovy
+  scripts).
+* A `LanguageServerPlugin` offers lsp4j `LanguageServer`s for an LSP language,
+  by its id (e.g. `groovy`): e.g. `scijava-code-lsp-groovy`'s. Each language
+  is served by the highest-priority plugin supporting it. A server combining
+  several sources (e.g. Jython's own analysis and jedi's) combines them
+  itself.
+
+Clients ask about a script through a `ScriptSession` from the service: it
+keeps its servers' copy of the script up to date, names it (its file's URI,
+or an `untitled:` one), takes offsets into its text (see `Positions`), and
+reports the problems found in it. Behind it are servers of its own, from the
+plugin serving its dialect's language: one per environment the script runs
+in, as the dialect says, asked before each request, since that may change as
+the script is edited (e.g. an Appose environment it declares; see
+`RoutingLanguageServer`). For code typed into a running interpreter, the
+servers learn the interpreter's state through their `Environment`. Tools that
+ask once (e.g. to check a script) can wait for a session's problems
+(`diagnostics(timeout)`). For code typed into an interpreter whose language
+has no dialect, or no servers, a session completes the interpreter's
+variables.
 
 Those wanting a server itself, for plain code of a language, get one via
 `LanguageServerService.launch`, by LSP language id (e.g. `groovy`, or
 `python`): in-process, or a server process (see below), whichever the plugins
-offer, analyzing scripts as running in the environment given. (Plugins whose
-scripts say where they run, which may change as they are edited, keep a
-server per environment: e.g. scripting-appose-python's.)
+offer, analyzing scripts as running in the environment given. (A server may
+analyze each document in an environment of its own, based on that one: e.g.
+`scijava-code-lsp-jedi`'s, with the packages a script declares added.)
 
-Servers need know nothing of SciJava scripts. A SciJava script is not quite
-plain code of its language: its `#@` parameters define variables before it
-runs. `LanguageServerService.scriptParameters` parses them; a `ScriptDocument`
-is the script as plain code, with them declared with their run-time types, as
-a `ScriptDialect` says. Each `LanguageServerPlugin` names the dialect its
-servers read; a session shows its server the script in that dialect, and maps
-positions in the server's answers back.
+A SciJava script is not quite plain code of its language: its `#@`
+parameters define variables before it runs. `LanguageServerService.scriptParameters`
+parses them; a `ScriptDocument` is the script as plain code, with them
+declared with their run-time types, as its `ScriptDialect` says. A session
+shows its servers the script so, and maps positions in their answers back.
 
 ## 2. Running server processes (`org.scijava.code.lsp`)
 
 For servers that are not Java in the SciJava process (e.g. jedi-language-server,
 for Python). A `ServerProcessPlugin` says how to start one for an LSP language
-id (e.g. `python`) and an environment: the process, speaking LSP over its
+id (e.g. `jedi`) and an environment: the process, speaking LSP over its
 standard streams, and the options and workspace root to initialize it with.
 Plugins get such a server via `LanguageServerService.launch`, as code-lsp's
 own `LanguageServerPlugin` for server processes offers it: started when first
@@ -79,13 +90,15 @@ javadoc.
 
 ## Who uses what
 
-|                         | 1 | 2 | 3 |
-|-------------------------|---|---|---|
-| script-editor           | ✓ |   |   |
-| scripting-groovy        | ✓ |   | ✓ |
-| scripting-jython        | ✓ | ✓ | ✓ |
-| scripting-appose-python | ✓ | ✓ |   |
-| code-lsp-jedi           |   | ✓ |   |
+|                         | 1 | 2 | 3 | offers                                 |
+|-------------------------|---|---|---|----------------------------------------|
+| script-editor           | ✓ |   |   | (a client)                             |
+| scripting-groovy        | ✓ |   |   | a dialect, of Groovy scripts           |
+| scripting-jython        | ✓ |   |   | a dialect, of Jython scripts           |
+| scripting-appose-python | ✓ |   |   | a dialect, of Appose-Python scripts    |
+| code-lsp-groovy         | ✓ |   | ✓ | servers of `groovy`                    |
+| code-lsp-jython         | ✓ | ✓ | ✓ | servers of `jython`, building on `jedi` |
+| code-lsp-jedi           | ✓ | ✓ |   | servers of `jedi`, and of `python`     |
 
 The toolkit (`org.scijava.code.lsp.jvm`) depends only on
 `org.scijava.code.lsp`. The module exports both; its implementation

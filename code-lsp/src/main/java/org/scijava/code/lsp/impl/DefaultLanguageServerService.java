@@ -30,6 +30,7 @@
 package org.scijava.code.lsp.impl;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -98,8 +99,8 @@ public class DefaultLanguageServerService extends AbstractService implements
 		ScriptDialect dialect = null;
 		if (plugin != null) {
 			try {
-				// NB: Asked for a script language, not an LSP one.
-				server = plugin.create(null, Environment.NONE.withLive(live));
+				server = plugin.create(languageId(language), Environment.NONE
+					.withLive(live));
 				dialect = plugin.dialect();
 			}
 			catch (final RuntimeException | LinkageError exc) {
@@ -166,7 +167,15 @@ public class DefaultLanguageServerService extends AbstractService implements
 	 */
 	private LanguageServerPlugin plugin(final ScriptLanguage language) {
 		if (language == null) return null;
-		return plugin(p -> p.supports(language));
+		return plugin(languageId(language));
+	}
+
+	/**
+	 * The LSP language of a SciJava language's scripts: its name, in lower case
+	 * (e.g. {@code groovy}).
+	 */
+	private static String languageId(final ScriptLanguage language) {
+		return language.getLanguageName().toLowerCase(Locale.ROOT);
 	}
 
 	/**

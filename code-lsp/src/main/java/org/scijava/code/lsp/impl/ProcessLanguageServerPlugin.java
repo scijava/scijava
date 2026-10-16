@@ -44,7 +44,6 @@ import org.scijava.log.StderrLogService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.PluginService;
-import org.scijava.script.ScriptLanguage;
 
 /**
  * Serves each LSP language a {@link ServerProcessPlugin} offers servers for
@@ -84,16 +83,6 @@ public class ProcessLanguageServerPlugin implements LanguageServerPlugin,
 	@Override
 	public boolean supports(final String languageId) {
 		return plugin(languageId) != null;
-	}
-
-	/**
-	 * Serves no SciJava language: server processes see scripts as written, so
-	 * they serve sessions only via plugins dedicated to a language (e.g.
-	 * declaring its scripts' parameters).
-	 */
-	@Override
-	public boolean supports(final ScriptLanguage language) {
-		return false;
 	}
 
 	@Override

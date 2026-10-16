@@ -28,9 +28,9 @@ It does three things.
 
 The core. `LanguageServerPlugin`s offer lsp4j `LanguageServer`s for
 languages, by LSP language id (e.g. `groovy`), and so for the SciJava script
-languages of those names; each language is served by the highest-priority
-plugin supporting it. A server combining several sources (e.g. Jython's own analysis and
-jedi's) combines them itself.
+languages of those names, in lower case (e.g. `Groovy`); each language is
+served by the highest-priority plugin supporting it. A server combining
+several sources (e.g. Jython's own analysis and jedi's) combines them itself.
 
 Clients ask about a script through a `ScriptSession` from the service, with
 a server of its own: it keeps the server's copy of the script up to date,

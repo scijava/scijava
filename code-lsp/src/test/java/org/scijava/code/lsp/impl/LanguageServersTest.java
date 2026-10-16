@@ -148,8 +148,8 @@ public class LanguageServersTest {
 			assertEquals(Arrays.asList("max", "mass"), labels(list));
 			assertEquals(1, SERVERS.size());
 			assertEquals("high", SERVERS.get(0).name);
-			// For the script language: no LSP language asked for.
-			assertNull(SERVERS.get(0).languageId);
+			// For the script language's LSP language: its name, in lower case.
+			assertEquals("fake", SERVERS.get(0).languageId);
 		}
 		// Each session gets a server of its own.
 		try (ScriptSession other = service.session(fake)) {
@@ -430,7 +430,7 @@ public class LanguageServersTest {
 
 	// -- A fake language, and its servers --
 
-	@Plugin(type = ScriptLanguage.class)
+	@Plugin(type = ScriptLanguage.class, name = "Fake")
 	public static class FakeLanguage extends AbstractScriptLanguage {
 
 		@Override
@@ -473,10 +473,6 @@ public class LanguageServersTest {
 			return "fake".equals(languageId);
 		}
 
-		@Override
-		public boolean supports(final ScriptLanguage language) {
-			return language instanceof FakeLanguage;
-		}
 
 		@Override
 		public LanguageServer create(final String languageId,
@@ -522,10 +518,6 @@ public class LanguageServersTest {
 			return "fake".equals(languageId);
 		}
 
-		@Override
-		public boolean supports(final ScriptLanguage language) {
-			return language instanceof FakeLanguage;
-		}
 
 		@Override
 		public LanguageServer create(final String languageId,

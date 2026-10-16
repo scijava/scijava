@@ -31,7 +31,6 @@ package org.scijava.code.lsp;
 
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.scijava.plugin.SciJavaPlugin;
-import org.scijava.script.ScriptLanguage;
 
 /**
  * A {@link SciJavaPlugin} that can create {@link LanguageServer}s.
@@ -48,18 +47,14 @@ public interface LanguageServerPlugin extends SciJavaPlugin {
 
 	/**
 	 * Declares whether {@link LanguageServer}s can be created to satisfy
-	 * scripts of
-	 * {@code groovy}), as {@link LanguageServerService#launch} asks. NB: Not
-	 * one whose servers this launches itself (e.g. a plugin building on
-	 * {@code python} servers serves a language of its own).
+	 * scripts of the given LSP language (e.g. {@code groovy}), as
+	 * {@link LanguageServerService#launch} asks; and so scripts of the SciJava
+	 * language of that name, in lower case (e.g. {@code Groovy}), as sessions
+	 * ask (see {@link LanguageServerService#session}). NB: Not one whose
+	 * servers this launches itself (e.g. a plugin building on {@code python}
+	 * servers serves a language of its own).
 	 */
 	boolean supports(String languageId);
-
-	/**
-	 * Whether this serves scripts of the given SciJava language, as sessions
-	 * ask (see {@link LanguageServerService#session}).
-	 */
-	boolean supports(ScriptLanguage language);
 
 	/**
 	 * Creates a server for documents of an LSP language this serves: for a
@@ -72,10 +67,8 @@ public interface LanguageServerPlugin extends SciJavaPlugin {
 	 * whatever {@code environment} says.
 	 * </p>
 	 *
-	 * @param languageId The LSP language asked for (one this
-	 *          {@link #supports(String) serves}, e.g. {@code groovy}); or null,
-	 *          for a session about a script of a language this
-	 *          {@link #supports(ScriptLanguage) serves}.
+	 * @param languageId The LSP language asked for, one this
+	 *          {@link #supports(String) serves} (e.g. {@code groovy}).
 	 * @param environment Where the scripts run, as far as known: e.g., for
 	 *          code typed into a running interpreter, its state (see
 	 *          {@link Environment#live()}).

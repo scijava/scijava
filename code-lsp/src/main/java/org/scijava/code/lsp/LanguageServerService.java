@@ -38,9 +38,8 @@ import org.scijava.script.ScriptLanguage;
 import org.scijava.service.SciJavaService;
 
 /**
- * Hands out sessions about scripts (see {@link ScriptSession}), each with a
- * language server of its own, from the highest-priority
- * {@link LanguageServerPlugin} serving the script's language.
+ * Manages {@link LanguageServer}s and creates {@link ScriptSession}s
+ * for mutating scripts, allowing for a stateful point of interaction.
  *
  * @author Gabriel Selzer
  */

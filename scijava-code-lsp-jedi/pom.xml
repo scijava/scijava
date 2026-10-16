@@ -102,6 +102,16 @@
 			<artifactId>appose</artifactId>
 			<version>${appose.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<!-- NB: To read scripts' PEP 723 metadata. -->
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-toml</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
 
 		<!-- Test scope dependencies -->
 		<dependency>

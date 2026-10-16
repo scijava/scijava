@@ -29,13 +29,24 @@
 
 package org.scijava.code.lsp;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.scijava.plugin.SciJavaPlugin;
+import org.scijava.script.ScriptLanguage;
+
 /**
- * What a script language knows about turning a SciJava script into plain code
- * of that language (a {@link ScriptDocument})
+ * A {@link SciJavaPlugin} that knows how to turn the scripts of a SciJava
+ * language into plain code of an LSP language (a {@link ScriptDocument}), for
+ * language servers of that language to analyze (see
+ * {@link LanguageServerService#session}). E.g. Appose-Python scripts become
+ * plain Python, their parameters declared as NumPy arrays and the like.
+ * <p>
+ * So script languages need not offer language servers themselves: servers
+ * know their language, not SciJava scripts (see {@link LanguageServerPlugin}).
+ * </p>
  * <p>
  * A dialect describes the translation, rather than doing it: a
  * {@link ScriptDocument} translates every script the same way, prepending one
@@ -51,7 +62,35 @@ import java.util.List;
  * @author Gabriel Selzer
  * @see ScriptDocument
  */
-public interface ScriptDialect {
+public interface ScriptDialect extends SciJavaPlugin {
+
+	/** Whether this turns scripts of the given SciJava language into code. */
+	boolean supports(ScriptLanguage language);
+
+	/**
+	 * Gets the LSP language (e.g. {@code python}) of the code scripts become:
+	 * whose servers analyze them (see {@link LanguageServerService#launch}).
+	 */
+	// TODO: Consider whether this is necessary: could the script language name
+	// it, or servers be found some other way (e.g. by the dialect's class)?
+	String languageId();
+
+	/**
+	 * Gets where a script runs, as far as its text says (e.g. an Appose
+	 * environment it declares), to analyze it there. Asked before each request
+	 * about the script, as its text may change that; its servers are kept one
+	 * per environment (see {@link RoutingLanguageServer}). The default knows
+	 * nothing: {@link Environment#NONE}.
+	 *
+	 * @param text The script, as its servers see it (see
+	 *          {@link ScriptDocument}).
+	 * @param file The script's file, or null if it has none (e.g. unsaved).
+	 */
+	// TODO: Consider whether this is necessary: so far only Appose-Python
+	// scripts say where they run, and dialects otherwise only translate.
+	default Environment environment(final String text, final File file) {
+		return Environment.NONE;
+	}
 
 	/**
 	 * Gets the type a script parameter of the given Java type has in a running

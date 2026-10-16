@@ -1,0 +1,51 @@
+/*-
+ * #%L
+ * Jython code intelligence for SciJava, via Jython's own parser.
+ * %%
+ * Copyright (C) 2020 - 2025 SciJava developers.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+package org.scijava.code.lsp.jython;
+
+/**
+ * Formats fully qualified class names as Jython import statements.
+ *
+ * @author Albert Cardona
+ */
+public class JythonImportFormat {
+
+	/** Given a fully-qualified class name, returns a Jython import statement. */
+	public final String singleToImportStatement(final String className) {
+		final int idot = className.lastIndexOf('.');
+		if (-1 == idot) return "import " + className;
+		return dualToImportStatement(className.substring(0, idot), className
+			.substring(idot + 1));
+	}
+
+	public String dualToImportStatement(final String packageName,
+		final String simpleClassName)
+	{
+		return "from " + packageName + " import " + simpleClassName;
+	}
+}

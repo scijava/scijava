@@ -29,8 +29,9 @@
 
 package org.scijava.code.lsp.impl;
 
+import java.io.File;
+import java.net.URI;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -40,6 +41,7 @@ import org.eclipse.lsp4j.services.LanguageServer;
 import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.LanguageServerPlugin;
 import org.scijava.code.lsp.LanguageServerService;
+import org.scijava.code.lsp.RoutingLanguageServer;
 import org.scijava.code.lsp.ScriptSession;
 import org.scijava.code.lsp.ScriptDialect;
 import org.scijava.code.lsp.ScriptDocument;
@@ -55,9 +57,10 @@ import org.scijava.service.Service;
 /**
  * Default implementation of {@link LanguageServerService}.
  * <p>
- * Each session gets a server of its own, from the highest-priority plugin
- * serving its language, and shows it scripts as plain code in the plugin's
- * dialect. Server processes behind them (see
+ * Each session shows its servers the script as plain code, as the
+ * highest-priority dialect of its language turns it; and gets servers of its
+ * own, from the highest-priority plugin serving the code's language, one per
+ * environment the script runs in. Server processes behind them (see
  * {@link ProcessLanguageServerPlugin}) are shared, and stopped when the
  * context is disposed.
  * </p>
@@ -80,6 +83,8 @@ public class DefaultLanguageServerService extends AbstractService implements
 
 	private List<LanguageServerPlugin> plugins;
 
+	private List<ScriptDialect> dialects;
+
 	@Override
 	public ScriptSession session(final ScriptLanguage language) {
 		return session(language, null);
@@ -89,37 +94,32 @@ public class DefaultLanguageServerService extends AbstractService implements
 	public ScriptSession session(final ScriptLanguage language,
 		final ScriptContext live)
 	{
-		// The highest-priority plugin serves the language.
+		// The script is code of the language its dialect says, analyzed by the
+		// highest-priority plugin serving that language.
 		// TODO: Consider adding a "merged" LanguageServer that can wrangle all
 		// matching servers. This could allow custom auto-completions (e.g.
 		// SciJava Ops) and/or simplify servers combining sources themselves
-		// (e.g. scripting-jython's PythonCompanion).
-		final LanguageServerPlugin plugin = plugin(language);
-		LanguageServer server = null;
-		ScriptDialect dialect = null;
-		if (plugin != null) {
-			try {
-				server = plugin.create(languageId(language), Environment.NONE
-					.withLive(live));
-				dialect = plugin.dialect();
-			}
-			catch (final RuntimeException | LinkageError exc) {
-				if (log != null) log.warn("Could not create a language server: " +
-					plugin.getClass().getName(), exc);
-			}
+		// (e.g. scijava-code-lsp-jython's PythonCompanion).
+		final ScriptDialect dialect = dialect(language);
+		if (dialect == null || !supports(dialect.languageId())) {
+			// NB: Without servers, the interpreter's variables (if any) are
+			// completed.
+			return ScriptSession.owning(new BindingsLanguageServer(live), language)
+				.setLogger(log);
 		}
-		// NB: Without a server, the interpreter's variables (if any) are
-		// completed.
-		if (server == null) server = new BindingsLanguageServer(live);
-		final ScriptDialect d = dialect;
-		return ScriptSession.owning(server, language, d == null ? null
-			: text -> ScriptDocument.of(text, scriptParameters(text), d)).setLogger(
-				log);
+		final String languageId = dialect.languageId();
+		final LanguageServer server = new RoutingLanguageServer(env -> server(
+			languageId, env.withLive(live)), item -> dialect.environment(item
+				.getText(), file(item.getUri())));
+		return ScriptSession.owning(server, language, languageId,
+			text -> ScriptDocument.of(text, scriptParameters(text), dialect))
+			.setLogger(log);
 	}
 
 	@Override
 	public boolean supports(final ScriptLanguage language) {
-		return plugin(language) != null;
+		final ScriptDialect dialect = dialect(language);
+		return dialect != null && supports(dialect.languageId());
 	}
 
 	@Override
@@ -148,6 +148,7 @@ public class DefaultLanguageServerService extends AbstractService implements
 
 	@Override
 	public synchronized void dispose() {
+		dialects = null;
 		// NB: The plugins this created, e.g. those keeping server processes.
 		if (plugins == null) return;
 		for (final LanguageServerPlugin p : plugins) {
@@ -158,42 +159,57 @@ public class DefaultLanguageServerService extends AbstractService implements
 
 	// -- Helper methods --
 
-
 	/**
-	 * The highest-priority plugin serving a language, or null if none.
-	 *
-	 * @param language the {@link ScriptLanguage} to match
-	 * @return a {@link LanguageServerPlugin} handling {@code language}
+	 * A session's server of an environment; or, if none can be created, one
+	 * completing the interpreter's variables (if any).
 	 */
-	private LanguageServerPlugin plugin(final ScriptLanguage language) {
-		if (language == null) return null;
-		return plugin(languageId(language));
+	private LanguageServer server(final String languageId,
+		final Environment environment)
+	{
+		try {
+			return launch(languageId, environment);
+		}
+		catch (final RuntimeException | LinkageError exc) {
+			if (log != null) log.warn("Could not create a language server for " +
+				languageId, exc);
+			return new BindingsLanguageServer(environment.live());
+		}
 	}
 
-	/**
-	 * The LSP language of a SciJava language's scripts: its name, in lower case
-	 * (e.g. {@code groovy}).
-	 */
-	private static String languageId(final ScriptLanguage language) {
-		return language.getLanguageName().toLowerCase(Locale.ROOT);
+	/** The file of a {@code file:} URI, or null. */
+	private static File file(final String uri) {
+		try {
+			final URI u = URI.create(uri);
+			return "file".equals(u.getScheme()) ? new File(u) : null;
+		}
+		catch (final IllegalArgumentException exc) {
+			return null;
+		}
+	}
+
+	/** The highest-priority dialect of a script language, or null if none. */
+	private synchronized ScriptDialect dialect(final ScriptLanguage language) {
+		if (language == null) return null;
+		if (dialects == null) {
+			dialects = pluginService.createInstancesOfType(ScriptDialect.class);
+		}
+		return first(dialects, d -> d.supports(language));
 	}
 
 	/**
 	 * The highest-priority plugin serving an LSP language, or null if none.
 	 */
-	private LanguageServerPlugin plugin(final String languageId) {
-		return plugin(p -> p.supports(languageId));
-	}
-
-	/** The highest-priority plugin matching, or null if none. */
-	private synchronized LanguageServerPlugin plugin(
-		final Predicate<LanguageServerPlugin> matches)
-	{
+	private synchronized LanguageServerPlugin plugin(final String languageId) {
 		if (plugins == null) {
 			plugins = pluginService.createInstancesOfType(
 				LanguageServerPlugin.class);
 		}
-		for (final LanguageServerPlugin p : plugins) {
+		return first(plugins, p -> p.supports(languageId));
+	}
+
+	/** The first plugin matching, or null if none. */
+	private <T> T first(final List<T> candidates, final Predicate<T> matches) {
+		for (final T p : candidates) {
 			try {
 				if (matches.test(p)) return p;
 			}

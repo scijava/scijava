@@ -33,7 +33,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -89,9 +88,9 @@ import org.scijava.script.ScriptLanguage;
  * </p>
  * <p>
  * The server need not know SciJava scripts: given a transformation (e.g. by
- * the {@link LanguageServerPlugin#dialect() dialect} of the plugin offering
- * the server), the session shows the server each script as plain code of its
- * language (see {@link ScriptDocument}), and maps positions both ways.
+ * the {@link ScriptDialect dialect} of the script's language), the session
+ * shows the server each script as plain code of its language (see
+ * {@link ScriptDocument}), and maps positions both ways.
  * Whatever the server says about the lines the transformation added is left
  * out, as are completions of names only those lines bind (see
  * {@link ScriptDocument#added()}).
@@ -113,7 +112,7 @@ public class ScriptSession implements AutoCloseable {
 	private static final long INITIALIZE_TIMEOUT = 10_000;
 
 	private final LanguageServer server;
-	private final ScriptLanguage language;
+	private final String languageId;
 	private final Function<String, ScriptDocument> transform;
 	private final String untitled;
 	private volatile Supplier<File> file = () -> null;
@@ -132,15 +131,17 @@ public class ScriptSession implements AutoCloseable {
 	/**
 	 * @param server The server, which the session owns.
 	 * @param language The script's language, or null if unknown.
+	 * @param languageId The LSP language of what the server sees, or null if
+	 *          unknown ({@code plaintext}).
 	 * @param transform Makes scripts what the server sees; or null, to show
 	 *          them as they are.
 	 */
 	private ScriptSession(final LanguageServer server,
-		final ScriptLanguage language,
+		final ScriptLanguage language, final String languageId,
 		final Function<String, ScriptDocument> transform)
 	{
 		this.server = server;
-		this.language = language;
+		this.languageId = languageId == null ? "plaintext" : languageId;
 		this.transform = transform == null ? ScriptDocument::of : transform;
 		final List<String> extensions = language == null ? Collections
 			.emptyList() : language.getExtensions();
@@ -160,7 +161,7 @@ public class ScriptSession implements AutoCloseable {
 	public static ScriptSession owning(final LanguageServer server,
 		final ScriptLanguage language)
 	{
-		return owning(server, language, null);
+		return owning(server, language, null, null);
 	}
 
 	/**
@@ -169,14 +170,17 @@ public class ScriptSession implements AutoCloseable {
 	 *
 	 * @param server The server, which the session owns.
 	 * @param language The script's language, or null if unknown.
+	 * @param languageId The LSP language of what the server sees (e.g.
+	 *          {@code python}), or null if unknown.
 	 * @param transform Makes scripts what the server sees; or null, to show
 	 *          them as they are.
 	 */
 	public static ScriptSession owning(final LanguageServer server,
-		final ScriptLanguage language,
+		final ScriptLanguage language, final String languageId,
 		final Function<String, ScriptDocument> transform)
 	{
-		return new ScriptSession(server, language, transform).connect();
+		return new ScriptSession(server, language, languageId, transform)
+			.connect();
 	}
 
 	/**
@@ -240,7 +244,7 @@ public class ScriptSession implements AutoCloseable {
 			doc = transform.apply(text);
 			newVersion();
 			server.getTextDocumentService().didOpen(new DidOpenTextDocumentParams(
-				new TextDocumentItem(uri, languageId(), version, doc.text())));
+				new TextDocumentItem(uri, languageId, version, doc.text())));
 		}
 		else if (!newText.equals(text)) {
 			text = newText;
@@ -366,15 +370,6 @@ public class ScriptSession implements AutoCloseable {
 	private String currentUri() {
 		final File f = file.get();
 		return f == null ? untitled : f.getAbsoluteFile().toURI().toString();
-	}
-
-	/**
-	 * The LSP language of the script: its language's name, in lower case (see
-	 * {@link LanguageServerPlugin#supports(String)}).
-	 */
-	private String languageId() {
-		return language == null ? "plaintext" : language.getLanguageName()
-			.toLowerCase(Locale.ROOT);
 	}
 
 	/** Problems reported from now on are those of a new version. */

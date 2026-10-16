@@ -44,6 +44,7 @@ import java.util.TreeSet;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
 import org.junit.jupiter.api.Test;
+import org.scijava.script.ScriptLanguage;
 
 /**
  * Tests {@link ScriptDocument}.
@@ -54,6 +55,16 @@ public class ScriptDocumentTest {
 
 	/** A Python-like dialect: arrays become NumPy arrays; strings stay. */
 	private static final ScriptDialect PYTHON = new ScriptDialect() {
+
+		@Override
+		public boolean supports(final ScriptLanguage language) {
+			return false;
+		}
+
+		@Override
+		public String languageId() {
+			return "python";
+		}
 
 		@Override
 		public String runtimeType(final Class<?> type) {
@@ -90,6 +101,16 @@ public class ScriptDocumentTest {
 
 	/** A Groovy-like dialect: Java types; {@code #} lines are not Groovy. */
 	private static final ScriptDialect GROOVY = new ScriptDialect() {
+
+		@Override
+		public boolean supports(final ScriptLanguage language) {
+			return false;
+		}
+
+		@Override
+		public String languageId() {
+			return "groovy";
+		}
 
 		@Override
 		public String runtimeType(final Class<?> type) {

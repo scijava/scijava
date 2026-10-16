@@ -32,23 +32,27 @@
  * and diagnostics), in the terms of the Language Server Protocol, via lsp4j.
  * <p>
  * This package brokers between scripts and the language servers that know
- * about them. {@link org.scijava.code.lsp.LanguageServerPlugin}s offer lsp4j
- * {@link org.eclipse.lsp4j.services.LanguageServer}s for script languages.
+ * about them. {@link org.scijava.code.lsp.ScriptDialect}s turn scripts of
+ * SciJava script languages into plain code of LSP languages (e.g.
+ * {@code python}); {@link org.scijava.code.lsp.LanguageServerPlugin}s offer
+ * lsp4j {@link org.eclipse.lsp4j.services.LanguageServer}s for LSP languages.
  * Clients (e.g. an editor) ask about a script through a
  * {@link org.scijava.code.lsp.ScriptSession} from the
  * {@link org.scijava.code.lsp.LanguageServerService}, in terms of the
  * script's text and offsets into it (see
- * {@link org.scijava.code.lsp.Positions}); behind it is a server of its own,
- * from the highest-priority plugin serving the script's language.
+ * {@link org.scijava.code.lsp.Positions}); behind it are servers of its own,
+ * from the highest-priority plugin serving its dialect's language: one per
+ * environment the script runs in (see
+ * {@link org.scijava.code.lsp.RoutingLanguageServer}).
  * </p>
  * <p>
  * Servers need know nothing of SciJava scripts. A SciJava script's {@code #@}
  * parameters define variables before it runs, which plain code of its
  * language would declare. A {@link org.scijava.code.lsp.ScriptDocument} is
  * the script as such code, with its parameters declared with their run-time
- * types, as a {@link org.scijava.code.lsp.ScriptDialect} says. A session shows
- * its server this text (in the dialect of the plugin offering the server),
- * and maps positions in the server's answers back to the script.
+ * types, as its {@link org.scijava.code.lsp.ScriptDialect} says. A session
+ * shows its servers this text, and maps positions in their answers back to
+ * the script.
  * </p>
  * <p>
  * Servers that run as processes (e.g. jedi-language-server, for Python) are

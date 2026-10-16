@@ -60,7 +60,7 @@ public class JediLifecycleIntegrationTest {
 		try (final Context context = new Context(LanguageServerService.class)){
 			// Get a LanguageServer Object
 			final LanguageServerService service = context.service(LanguageServerService.class);
-			final LanguageServer server = service.launch("python", Environment.NONE);
+			final LanguageServer server = service.launch("jedi", Environment.NONE);
 			// Start it up
 			server.initialize(new InitializeParams()).get();
 			server.initialized(new InitializedParams());

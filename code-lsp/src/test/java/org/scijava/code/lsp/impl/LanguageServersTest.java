@@ -42,6 +42,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
@@ -97,6 +98,7 @@ import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.LanguageServerPlugin;
 import org.scijava.code.lsp.LanguageServerService;
 import org.scijava.code.lsp.Positions;
+import org.scijava.code.lsp.ScriptDocument;
 import org.scijava.code.lsp.ScriptSession;
 import org.scijava.code.lsp.ScriptDialect;
 import org.scijava.plugin.Plugin;
@@ -196,7 +198,9 @@ public class LanguageServersTest {
 				});
 			}
 		};
-		try (ScriptSession session = ScriptSession.owning(late, fake)) {
+		try (ScriptSession session = new ScriptSession(late,
+			ScriptDocument::of))
+		{
 			session.update("x");
 		}
 		// Told nothing before it answered.
@@ -213,7 +217,7 @@ public class LanguageServersTest {
 		}
 		try (ScriptSession session = service.session(fake)) {
 			session.update("x");
-			assertNull(server(1).environment().live());
+			assertSame(Environment.NO_STATE, server(1).environment().live());
 		}
 		// Where the script runs, as its dialect says.
 		try (ScriptSession session = service.session(fake, live)) {
@@ -234,7 +238,7 @@ public class LanguageServersTest {
 		final List<List<Diagnostic>> heard = new CopyOnWriteArrayList<>();
 		final ScriptSession session = service.session(fake)
 			.setDiagnosticsListener(heard::add);
-		// Opened with its first text; untitled, with its language's extension.
+		// Opened with its first text; untitled.
 		session.update("x = 1");
 		final FakeServer server = server(0);
 		waitFor(() -> server.events.size() >= 2);
@@ -246,7 +250,6 @@ public class LanguageServersTest {
 			.subList(1, 3));
 		final List<String> opened = server.opened;
 		assertTrue(opened.get(0).startsWith("untitled:/script-"));
-		assertTrue(opened.get(0).endsWith(".fake"));
 
 		// Asked about a text (the current one: nothing sent), at an offset.
 		final CompletionList list = session.completion("x.ma", 4).get(10,
@@ -381,7 +384,7 @@ public class LanguageServersTest {
 		// A server, from the highest-priority plugin serving the
 		// language: a new one, in the environment given.
 		final Environment env = new Environment("/env/bin/fake", Collections
-			.emptyList(), null);
+			.emptyList());
 		final LanguageServer server = service.launch("fake", env);
 		assertSame(SERVERS.get(0), server);
 		assertEquals("high", SERVERS.get(0).name);
@@ -505,11 +508,13 @@ public class LanguageServersTest {
 		}
 
 		@Override
-		public Environment environment(final String text, final File file) {
+		public Environment environment(final String text,
+			final Optional<File> file)
+		{
 			for (final String line : text.split("\n")) {
 				if (line.startsWith("#@script(env=")) {
 					final String env = line.substring(13, line.length() - 1);
-					return new Environment(env, null, null);
+					return new Environment(env, null);
 				}
 			}
 			return Environment.NONE;

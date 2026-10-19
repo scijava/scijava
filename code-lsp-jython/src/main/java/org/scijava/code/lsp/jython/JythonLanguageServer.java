@@ -313,8 +313,7 @@ public class JythonLanguageServer extends AbstractLanguageServer {
 	private Map<String, DotAutocompletions> liveVariables() {
 		final Map<String, DotAutocompletions> vars = new LinkedHashMap<>();
 		final ScriptContext live = environment().live();
-		final Bindings bindings = live == null ? null : live.getBindings(
-			ScriptContext.ENGINE_SCOPE);
+		final Bindings bindings = live.getBindings(ScriptContext.ENGINE_SCOPE);
 		if (bindings != null) {
 			for (final Map.Entry<String, Object> entry : bindings.entrySet()) {
 				final String name = entry.getKey();

@@ -71,40 +71,21 @@ import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageClientAware;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.scijava.log.Logger;
-import org.scijava.script.ScriptLanguage;
 
 /**
- * A SciJava script, as language servers know it: the place where a client
- * (e.g. an editor, or a tool checking a script) asks about it, in terms of
- * its text and offsets into it.
+ * A {@link LanguageServerService} session for a given SciJava script.
  * <p>
- * The session keeps its server's copy of the script up to date (opening it,
- * sending each new text, closing it), names it (its file's URI if it has one,
- * otherwise an {@code untitled:} one; a new file, e.g. after Save As, closes
- * the old document and opens the new one), and receives the problems the
- * server finds in it. Each request carries the text it is about, and the
- * offset in that text; positions in answers are positions in that text (see
- * {@link Positions}). Answers are lsp4j's own types.
- * </p>
- * <p>
- * The server need not know SciJava scripts: given a transformation (e.g. by
- * the {@link ScriptDialect dialect} of the script's language), the session
- * shows the server each script as plain code of its language (see
- * {@link ScriptDocument}), and maps positions both ways.
- * Whatever the server says about the lines the transformation added is left
- * out, as are completions of names only those lines bind (see
- * {@link ScriptDocument#hiddenNames()}).
- * </p>
- * <p>
- * A session owns its server: it is the server's client, initializes it, and
- * shuts it down when closed. Get one from the
- * {@link LanguageServerService#session service}, which makes it a server of
- * its own.
+ * A session has a server of its own, which it shuts down when closed; it
+ * keeps the server's copy of the script up to date when mutated by the
+ * client. The server sees the script as plain code of its language (see
+ * {@link ScriptDocument}); the session maps positions in its answers back,
+ * leaving out what concerns only the lines it added.
  * </p>
  *
  * @author Gabriel Selzer
+ * @see LanguageServerService#session
  */
-public class ScriptSession implements AutoCloseable {
+public final class ScriptSession implements AutoCloseable {
 
 	private static final AtomicInteger UNTITLED = new AtomicInteger();
 
@@ -112,7 +93,6 @@ public class ScriptSession implements AutoCloseable {
 	private static final long INITIALIZE_TIMEOUT = 10_000;
 
 	private final LanguageServer server;
-	private final String languageId;
 	private final Function<String, ScriptDocument> transform;
 	private final String untitled;
 	private volatile Supplier<File> file = () -> null;
@@ -129,58 +109,24 @@ public class ScriptSession implements AutoCloseable {
 		new CompletableFuture<>();
 
 	/**
-	 * @param server The server, which the session owns.
-	 * @param language The script's language, or null if unknown.
-	 * @param languageId The LSP language of what the server sees, or null if
-	 *          unknown ({@code plaintext}).
-	 * @param transform Makes scripts what the server sees; or null, to show
+	 * Starts a session about a script
+	 * fake one, in tests): the session becomes the server's client, so the
+	 * server must not be shared. The server is initialized now, and shut down
+	 * when the session is closed.
+	 *
+	 * @param server The server, for this session alone.
+	 * @param transform Makes scripts what the server sees: e.g. plain code of
+	 *          their language; or {@link ScriptDocument#of(String)}, to show
 	 *          them as they are.
 	 */
-	private ScriptSession(final LanguageServer server,
-		final ScriptLanguage language, final String languageId,
+	public ScriptSession(final LanguageServer server,
 		final Function<String, ScriptDocument> transform)
 	{
 		this.server = server;
-		this.languageId = languageId == null ? "plaintext" : languageId;
-		this.transform = transform == null ? ScriptDocument::of : transform;
-		final List<String> extensions = language == null ? Collections
-			.emptyList() : language.getExtensions();
-		untitled = "untitled:/script-" + UNTITLED.incrementAndGet() + (extensions
-			.isEmpty() ? "" : "." + extensions.get(0));
-	}
-
-	/**
-	 * Makes a session about a script, with the given server of its own (e.g. a
-	 * fake one, in tests): the session becomes its client, so the server must
-	 * not be shared. The server is initialized now, and shut down when the
-	 * session is closed.
-	 *
-	 * @param server The server, which the session owns.
-	 * @param language The script's language, or null if unknown.
-	 */
-	public static ScriptSession owning(final LanguageServer server,
-		final ScriptLanguage language)
-	{
-		return owning(server, language, null, null);
-	}
-
-	/**
-	 * As {@link #owning(LanguageServer, ScriptLanguage)}, showing the server
-	 * each script transformed (e.g. into plain code of its language).
-	 *
-	 * @param server The server, which the session owns.
-	 * @param language The script's language, or null if unknown.
-	 * @param languageId The LSP language of what the server sees (e.g.
-	 *          {@code python}), or null if unknown.
-	 * @param transform Makes scripts what the server sees; or null, to show
-	 *          them as they are.
-	 */
-	public static ScriptSession owning(final LanguageServer server,
-		final ScriptLanguage language, final String languageId,
-		final Function<String, ScriptDocument> transform)
-	{
-		return new ScriptSession(server, language, languageId, transform)
-			.connect();
+		this.transform = transform;
+		untitled = "untitled:/script-" + UNTITLED.incrementAndGet();
+		// NB: Last, as the server may call back (on its own thread) at once.
+		connect();
 	}
 
 	/**
@@ -188,7 +134,7 @@ public class ScriptSession implements AutoCloseable {
 	 * awaits the server's answer before telling it anything else. (Servers in
 	 * process answer at once.)
 	 */
-	private ScriptSession connect() {
+	private void connect() {
 		if (server instanceof LanguageClientAware) {
 			((LanguageClientAware) server).connect(new Client());
 		}
@@ -201,7 +147,6 @@ public class ScriptSession implements AutoCloseable {
 			// NB: Not initialized (in time): asked anyway, answering what it can.
 		}
 		server.initialized(new InitializedParams());
-		return this;
 	}
 
 	/**
@@ -244,7 +189,8 @@ public class ScriptSession implements AutoCloseable {
 			doc = transform.apply(text);
 			newVersion();
 			server.getTextDocumentService().didOpen(new DidOpenTextDocumentParams(
-				new TextDocumentItem(uri, languageId, version, doc.text())));
+				new TextDocumentItem(uri, doc.languageId(), version, doc
+					.text())));
 		}
 		else if (!newText.equals(text)) {
 			text = newText;

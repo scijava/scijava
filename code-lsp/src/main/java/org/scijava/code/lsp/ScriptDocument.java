@@ -61,22 +61,29 @@ public final class ScriptDocument {
 
 	private final String original;
 	private final String text;
+	private final String languageId;
 	/** Number of characters prepended. */
 	private final int headerLength;
 	private final Set<String> hiddenNames;
 
 	private ScriptDocument(final String original, final String text,
-		final int headerLength, final Set<String> hiddenNames)
+		final String languageId, final int headerLength,
+		final Set<String> hiddenNames)
 	{
 		this.original = original;
 		this.text = text;
+		this.languageId = languageId;
 		this.headerLength = headerLength;
 		this.hiddenNames = Collections.unmodifiableSet(hiddenNames);
 	}
 
-	/** A script as it is: nothing declared, nothing blanked. */
+	/**
+	 * A script as it is, as plain text ({@code plaintext}): nothing declared,
+	 * nothing blanked.
+	 */
 	public static ScriptDocument of(final String script) {
-		return new ScriptDocument(script, script, 0, Collections.emptySet());
+		return new ScriptDocument(script, script, "plaintext", 0, Collections
+			.emptySet());
 	}
 
 	/**
@@ -102,7 +109,7 @@ public final class ScriptDocument {
 			if (!mentions(script, name)) hidden.add(name);
 		}
 		return new ScriptDocument(script, header + blank(script, removedLines),
-			header.length(), hidden);
+			dialect.languageId(), header.length(), hidden);
 	}
 
 	/**
@@ -122,6 +129,14 @@ public final class ScriptDocument {
 	/** The script as plain code of its language. */
 	public String text() {
 		return text;
+	}
+
+	/**
+	 * The LSP language of the {@link #text()} (e.g. {@code python}), as its
+	 * dialect says; or {@code plaintext}, for a script as it is.
+	 */
+	public String languageId() {
+		return languageId;
 	}
 
 	/** Maps an offset in {@link #original()} to one in {@link #text()}. */

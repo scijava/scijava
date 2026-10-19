@@ -92,7 +92,7 @@ import org.scijava.log.StderrLogService;
 public class ServerProcessesTest {
 
 	private static final Environment ENV = new Environment(
-		"/env/python", Collections.singletonList("/overlay"), null);
+		"/env/python", Collections.singletonList("/overlay"));
 
 	private final List<FakeServer> started = new CopyOnWriteArrayList<>();
 	// NB: Servers note their use by the system clock.

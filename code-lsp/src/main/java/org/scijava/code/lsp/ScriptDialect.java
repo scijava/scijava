@@ -34,6 +34,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.scijava.plugin.SciJavaPlugin;
@@ -87,11 +88,13 @@ public interface ScriptDialect extends SciJavaPlugin {
 	 *
 	 * @param text The script, as written (e.g. with its {@code #@script} line,
 	 *          which its servers do not see).
-	 * @param file The script's file, or null if it has none (e.g. unsaved).
+	 * @param file The script's file, if it has one (not if e.g. unsaved).
 	 */
 	// TODO: Consider whether this is necessary: so far only Appose-Python
 	// scripts say where they run, and dialects otherwise only translate.
-	default Environment environment(final String text, final File file) {
+	default Environment environment(final String text,
+		final Optional<File> file)
+	{
 		return Environment.NONE;
 	}
 

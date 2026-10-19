@@ -103,7 +103,7 @@ public class DependencyOverlaysTest {
 	@Test
 	public void testEnvironment() throws Exception {
 		final Environment env = new Environment("/env/python", Collections
-			.singletonList("/stubs"), null);
+			.singletonList("/stubs"));
 		// A script declaring a dependency, just opened: its dependencies are
 		// settled, so the overlay is installed; once ready, it is searched too.
 		final TextDocumentItem doc = new TextDocumentItem("untitled:/a.py",

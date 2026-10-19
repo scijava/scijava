@@ -33,6 +33,7 @@ import java.io.File;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
@@ -69,8 +70,7 @@ import org.scijava.service.Service;
  */
 @Plugin(type = Service.class)
 public class DefaultLanguageServerService extends AbstractService implements
-	LanguageServerService
-{
+	LanguageServerService {
 
 	@Parameter
 	private PluginService pluginService;
@@ -79,71 +79,69 @@ public class DefaultLanguageServerService extends AbstractService implements
 	private LogService log;
 
 	private final ScriptProcessing processing = new ScriptProcessing(
-		this::context);
+			this::context);
 
 	private List<LanguageServerPlugin> plugins;
 
-	private List<ScriptDialect> dialects;
-
 	@Override
 	public ScriptSession session(final ScriptLanguage language) {
-		return session(language, null);
+		return session(language, Environment.NO_STATE);
 	}
 
 	@Override
 	public ScriptSession session(final ScriptLanguage language,
 		final ScriptContext live)
 	{
-		// The script is code of the language its dialect says, analyzed by the
-		// highest-priority plugin serving that language.
-		// TODO: Consider adding a "merged" LanguageServer that can wrangle all
-		// matching servers. This could allow custom auto-completions (e.g.
-		// SciJava Ops) and/or simplify servers combining sources themselves
-		// (e.g. scijava-code-lsp-jython's PythonCompanion).
-		final ScriptDialect dialect = dialect(language);
-		if (dialect == null || !supports(dialect.languageId())) {
-			// NB: Without servers, the interpreter's variables (if any) are
-			// completed.
-			return ScriptSession.owning(new BindingsLanguageServer(live), language)
-				.setLogger(log);
+		try {
+			final ScriptDialect dialect = dialect(language);
+			final String languageId = dialect.languageId();
+			plugin(languageId);
+
+			final AtomicReference<String> written = new AtomicReference<>("");
+			final LanguageServer server = new RoutingLanguageServer( //
+				env -> server(languageId, env.withLive(live)), //
+				item -> dialect.environment(written.get(), file(item
+					.getUri())));
+			return new ScriptSession(server, text -> {
+				written.set(text);
+				final ScriptProcessing.Processed p = processing.of(text);
+				return ScriptDocument.of(text, p.parameters, p.removedLines,
+					dialect);
+			}).setLogger(log);
 		}
-		final String languageId = dialect.languageId();
-		// NB: Where the script runs, as written: its servers do not see the
-		// lines that may say (e.g. #@script). A session has one script at a
-		// time.
-		final AtomicReference<String> script = new AtomicReference<>("");
-		final LanguageServer server = new RoutingLanguageServer(env -> server(
-			languageId, env.withLive(live)), item -> dialect.environment(script
-				.get(), file(item.getUri())));
-		return ScriptSession.owning(server, language, languageId, text -> {
-			script.set(text);
-			final ScriptProcessing.Processed p = processing.of(text);
-			return ScriptDocument.of(text, p.parameters, p.removedLines,
-				dialect);
-		}).setLogger(log);
+		catch (final IllegalArgumentException exc) {
+			// Fall back to just autocompleting the bindings
+			return new ScriptSession(new BindingsLanguageServer(live),
+				ScriptDocument::of).setLogger(log);
+		}
 	}
 
 	@Override
 	public boolean supports(final ScriptLanguage language) {
-		final ScriptDialect dialect = dialect(language);
-		return dialect != null && supports(dialect.languageId());
+		try {
+			return supports(dialect(language).languageId());
+		}
+		catch (final IllegalArgumentException exc) {
+			return false;
+		}
 	}
 
 	@Override
 	public boolean supports(final String languageId) {
-		return plugin(languageId) != null;
+		try {
+			plugin(languageId);
+			return true;
+		}
+		catch (final IllegalArgumentException exc) {
+			return false;
+		}
 	}
 
 	@Override
 	public LanguageServer launch(final String languageId,
 		final Environment environment)
 	{
-		final LanguageServerPlugin plugin = plugin(languageId);
-		if (plugin == null) {
-			throw new IllegalArgumentException(
-				"No LanguageServerPlugin serves language: " + languageId);
-		}
-		return plugin.create(languageId, environment);
+		return plugin(languageId).create(languageId, environment);
 	}
 
 	@Override
@@ -155,7 +153,6 @@ public class DefaultLanguageServerService extends AbstractService implements
 
 	@Override
 	public synchronized void dispose() {
-		dialects = null;
 		// NB: The plugins this created, e.g. those keeping server processes.
 		if (plugins == null) return;
 		for (final LanguageServerPlugin p : plugins) {
@@ -183,47 +180,45 @@ public class DefaultLanguageServerService extends AbstractService implements
 		}
 	}
 
-	/** The file of a {@code file:} URI, or null. */
-	private static File file(final String uri) {
+	/** The file of a {@code file:} URI; none for other URIs. */
+	private static Optional<File> file(final String uri) {
 		try {
 			final URI u = URI.create(uri);
-			return "file".equals(u.getScheme()) ? new File(u) : null;
+			return "file".equals(u.getScheme()) ? Optional.of(new File(u))
+				: Optional.empty();
 		}
 		catch (final IllegalArgumentException exc) {
-			return null;
+			return Optional.empty();
 		}
-	}
-
-	/** The highest-priority dialect of a script language, or null if none. */
-	private synchronized ScriptDialect dialect(final ScriptLanguage language) {
-		if (language == null) return null;
-		if (dialects == null) {
-			dialects = pluginService.createInstancesOfType(ScriptDialect.class);
-		}
-		return first(dialects, d -> d.supports(language));
 	}
 
 	/**
-	 * The highest-priority plugin serving an LSP language, or null if none.
+	 * The highest-priority dialect of a script language.
+	 *
+	 * @throws IllegalArgumentException If the language has none.
+	 */
+	private synchronized ScriptDialect dialect(final ScriptLanguage language) {
+		for (var p : pluginService.createInstancesOfType(ScriptDialect.class)) {
+			if (p.supports(language)) return p;
+		}
+		throw new IllegalArgumentException(
+			"No ScriptDialect for script language: " + language);
+	}
+
+	/**
+	 * The highest-priority plugin serving an LSP language.
+	 *
+	 * @throws IllegalArgumentException If no plugin serves the language.
 	 */
 	private synchronized LanguageServerPlugin plugin(final String languageId) {
 		if (plugins == null) {
 			plugins = pluginService.createInstancesOfType(
 				LanguageServerPlugin.class);
 		}
-		return first(plugins, p -> p.supports(languageId));
-	}
-
-	/** The first plugin matching, or null if none. */
-	private <T> T first(final List<T> candidates, final Predicate<T> matches) {
-		for (final T p : candidates) {
-			try {
-				if (matches.test(p)) return p;
-			}
-			catch (final RuntimeException | LinkageError exc) {
-				if (log != null) log.debug(exc);
-			}
+		for (var p : plugins) {
+			if (p.supports(languageId)) return p;
 		}
-		return null;
+		throw new IllegalArgumentException(
+			"No LanguageServerPlugin serves language: " + languageId);
 	}
 }

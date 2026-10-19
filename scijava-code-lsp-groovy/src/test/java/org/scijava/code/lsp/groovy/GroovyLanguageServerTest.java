@@ -48,6 +48,7 @@ import org.eclipse.lsp4j.Diagnostic;
 import org.eclipse.lsp4j.SignatureHelp;
 import org.junit.jupiter.api.Test;
 import org.scijava.code.lsp.Environment;
+import org.scijava.code.lsp.ScriptDocument;
 import org.scijava.code.lsp.ScriptSession;
 import org.scijava.code.lsp.jvm.ClassIndex;
 
@@ -313,8 +314,8 @@ public class GroovyLanguageServerTest {
 
 	/** A session about plain Groovy, with a server of its own. */
 	private static ScriptSession session(final Environment env) {
-		return ScriptSession.owning(new GroovyLanguageServer(env), null, "groovy",
-			null);
+		return new ScriptSession(new GroovyLanguageServer(env),
+			ScriptDocument::of);
 	}
 
 	/** The problems found in a script, e.g. {@code Error@0:4-6 message}. */

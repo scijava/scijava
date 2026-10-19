@@ -47,6 +47,7 @@ import org.eclipse.lsp4j.SignatureHelp;
 import org.junit.jupiter.api.Test;
 import org.python.jsr223.PyScriptEngineFactory;
 import org.scijava.code.lsp.Environment;
+import org.scijava.code.lsp.ScriptDocument;
 import org.scijava.code.lsp.ScriptSession;
 import org.scijava.code.lsp.jvm.ClassIndex;
 
@@ -194,8 +195,8 @@ public class JythonLanguageServerTest {
 
 	/** A session about plain Jython, with a server of its own. */
 	private static ScriptSession session(final Environment env) {
-		return ScriptSession.owning(new JythonLanguageServer(env), null, "jython",
-			null);
+		return new ScriptSession(new JythonLanguageServer(env),
+			ScriptDocument::of);
 	}
 
 	private static SignatureHelp help(final String code) {

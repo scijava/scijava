@@ -75,8 +75,7 @@ public class BindingsLanguageServer extends AbstractLanguageServer {
 	@Override
 	protected CompletionList complete(final Document doc, final int offset) {
 		final ScriptContext live = environment().live();
-		final Bindings bindings = live == null ? null : live.getBindings(
-			ScriptContext.ENGINE_SCOPE);
+		final Bindings bindings = live.getBindings(ScriptContext.ENGINE_SCOPE);
 		if (bindings == null) return new CompletionList();
 		final String line = doc.lineTo(offset);
 

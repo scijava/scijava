@@ -29,12 +29,18 @@
 
 package org.scijava.code.lsp;
 
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import javax.script.Bindings;
 import javax.script.ScriptContext;
+import javax.script.SimpleBindings;
 
 
 /**
@@ -49,17 +55,35 @@ import javax.script.ScriptContext;
  */
 public final class Environment {
 
+	/**
+	 * The state of no interpreter, for code not typed into one: no variables,
+	 * and none can be set.
+	 */
+	public static final ScriptContext NO_STATE = new NoState();
+
 	/** No particular environment. */
-	public static final Environment NONE = new Environment(null, null, null);
+	public static final Environment NONE = new Environment(null, null);
 
 	private final String interpreter;
 	private final List<String> paths;
 	private final ScriptContext live;
 
 	/**
+	 * An environment for code not typed into an interpreter (see
+	 * {@link #NO_STATE}).
+	 *
 	 * @param interpreter Path of the interpreter or executable parsing the code.
 	 * @param paths Extra places imports are resolved from, in order. Language-dependent.
-	 * @param live Existing state (e.g. from a REPL)
+	 */
+	public Environment(final String interpreter, final List<String> paths) {
+		this(interpreter, paths, NO_STATE);
+	}
+
+	/**
+	 * @param interpreter Path of the interpreter or executable parsing the code.
+	 * @param paths Extra places imports are resolved from, in order. Language-dependent.
+	 * @param live The state of the interpreter the code is typed into (e.g. a
+	 *          REPL's), or {@link #NO_STATE}.
 	 */
 	public Environment(final String interpreter, final List<String> paths,
 		final ScriptContext live)
@@ -67,7 +91,7 @@ public final class Environment {
 		this.interpreter = interpreter;
 		this.paths = paths == null ? Collections.emptyList() : Collections
 			.unmodifiableList(new ArrayList<>(paths));
-		this.live = live;
+		this.live = Objects.requireNonNull(live, "live");
 	}
 
 	/** Path of the interpreter or executable running the script, or null. */
@@ -84,7 +108,10 @@ public final class Environment {
 		return paths;
 	}
 
-	/** The state of the interpreter the code is typed into, or null. */
+	/**
+	 * The state of the interpreter the code is typed into; or
+	 * {@link #NO_STATE}, if none.
+	 */
 	public ScriptContext live() {
 		return live;
 	}
@@ -112,6 +139,102 @@ public final class Environment {
 	@Override
 	public String toString() {
 		return "Environment[interpreter=" + interpreter + ", paths=" + paths +
-			(live == null ? "" : ", live") + "]";
+			(live == NO_STATE ? "" : ", live") + "]";
+	}
+
+	/** The state of no interpreter: see {@link #NO_STATE}. */
+	private static final class NoState implements ScriptContext {
+
+		private static final Bindings NONE = new SimpleBindings(Collections
+			.emptyMap());
+
+		private static final Writer NO_OUTPUT = new Writer() {
+
+			@Override
+			public void write(final char[] buf, final int off, final int len) {}
+
+			@Override
+			public void flush() {}
+
+			@Override
+			public void close() {}
+		};
+
+		@Override
+		public void setBindings(final Bindings bindings, final int scope) {
+			throw unmodifiable();
+		}
+
+		@Override
+		public Bindings getBindings(final int scope) {
+			return NONE;
+		}
+
+		@Override
+		public void setAttribute(final String name, final Object value,
+			final int scope)
+		{
+			throw unmodifiable();
+		}
+
+		@Override
+		public Object getAttribute(final String name, final int scope) {
+			return null;
+		}
+
+		@Override
+		public Object removeAttribute(final String name, final int scope) {
+			return null;
+		}
+
+		@Override
+		public Object getAttribute(final String name) {
+			return null;
+		}
+
+		@Override
+		public int getAttributesScope(final String name) {
+			return -1;
+		}
+
+		@Override
+		public Writer getWriter() {
+			return NO_OUTPUT;
+		}
+
+		@Override
+		public Writer getErrorWriter() {
+			return NO_OUTPUT;
+		}
+
+		@Override
+		public void setWriter(final Writer writer) {
+			throw unmodifiable();
+		}
+
+		@Override
+		public void setErrorWriter(final Writer writer) {
+			throw unmodifiable();
+		}
+
+		@Override
+		public Reader getReader() {
+			return new StringReader("");
+		}
+
+		@Override
+		public void setReader(final Reader reader) {
+			throw unmodifiable();
+		}
+
+		@Override
+		public List<Integer> getScopes() {
+			return Arrays.asList(ENGINE_SCOPE, GLOBAL_SCOPE);
+		}
+
+		private static UnsupportedOperationException unmodifiable() {
+			return new UnsupportedOperationException(
+				"The state of no interpreter cannot be changed");
+		}
 	}
 }

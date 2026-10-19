@@ -81,11 +81,9 @@ public class RoutingLanguageServerTest {
 
 	private static final String URI = "untitled:/m.py";
 
-	private static final Environment A = new Environment("/a/python", null,
-		null);
+	private static final Environment A = new Environment("/a/python", null);
 
-	private static final Environment B = new Environment("/b/python", null,
-		null);
+	private static final Environment B = new Environment("/b/python", null);
 
 	/** The servers launched, in order. */
 	private final List<Fake> launched = new CopyOnWriteArrayList<>();

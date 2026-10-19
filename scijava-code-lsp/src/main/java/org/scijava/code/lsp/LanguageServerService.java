@@ -38,8 +38,11 @@ import org.scijava.script.ScriptLanguage;
 import org.scijava.service.SciJavaService;
 
 /**
- * Manages {@link LanguageServer}s and creates {@link ScriptSession}s
- * for mutating scripts, allowing for a stateful point of interaction.
+ * Serves SciJava scripts with language servers: a {@link ScriptSession} about
+ * a script shows servers of its own (from the highest-priority
+ * {@link LanguageServerPlugin} serving its {@link ScriptDialect}'s language)
+ * the script as plain code. Servers of an LSP language can also be
+ * {@link #launch launched} directly.
  *
  * @author Gabriel Selzer
  */

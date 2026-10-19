@@ -78,7 +78,7 @@ public class JediLauncherTest {
 		// analyze it with that environment's Python, also searching its extra
 		// paths (e.g. a dependency overlay)...
 		final Environment env = new Environment("/env/bin/python", List.of(
-			"/overlay"), null);
+			"/overlay"));
 		assertEquals(Map.of( //
 			"workspace", Map.of("environmentPath", "/env/bin/python", //
 				"extraPaths", List.of("/overlay")), //

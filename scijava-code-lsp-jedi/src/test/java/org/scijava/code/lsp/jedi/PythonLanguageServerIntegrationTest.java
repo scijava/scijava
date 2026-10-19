@@ -50,6 +50,7 @@ import org.scijava.Context;
 import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.LanguageServerService;
 import org.scijava.code.lsp.Positions;
+import org.scijava.code.lsp.ScriptDocument;
 import org.scijava.code.lsp.ScriptSession;
 
 /**
@@ -165,8 +166,8 @@ public class PythonLanguageServerIntegrationTest {
 
 	/** A session about plain Python, with a server of its own. */
 	private static ScriptSession session() {
-		return ScriptSession.owning(servers.launch("python", Environment.NONE),
-			null, "python", null);
+		return new ScriptSession(servers.launch("python", Environment.NONE),
+			ScriptDocument::of);
 	}
 
 	/** The problems found in a script, in a session of its own. */

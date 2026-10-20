@@ -171,18 +171,16 @@ public final class ScriptSession implements AutoCloseable {
 	}
 
 	/**
-	 * Starts a session about a script, with servers of its own (e.g. fake ones,
-	 * in tests): the session becomes each server's client, so they must not be
-	 * shared. A server is launched, and initialized, when first needed; and
-	 * shut down when the session moves to another, or is closed.
+	 * Starts a session about a script, with servers of its own: the session
+	 * becomes each server's client, so they must not be shared. A server is
+	 * launched, and initialized, when first needed; and shut down when the
+	 * session moves to another, or is closed.
 	 *
 	 * @param launch Gets a new server, for the script running in an
 	 *          environment.
-	 * @param transform Makes scripts what the servers see: e.g. plain code of
-	 *          their language; or {@link ScriptDocument#of(String)}, to show
-	 *          them as they are.
+	 * @param transform Makes scripts what the servers see.
 	 */
-	public ScriptSession(final Function<Environment, LanguageServer> launch,
+	private ScriptSession(final Function<Environment, LanguageServer> launch,
 		final Function<String, ScriptDocument> transform)
 	{
 		this.launch = launch;

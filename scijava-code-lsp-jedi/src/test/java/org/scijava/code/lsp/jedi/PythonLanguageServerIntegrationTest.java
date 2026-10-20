@@ -36,7 +36,10 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import javax.script.ScriptEngine;
 
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionList;
@@ -47,11 +50,13 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.Context;
-import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.LanguageServerService;
 import org.scijava.code.lsp.Positions;
-import org.scijava.code.lsp.ScriptDocument;
+import org.scijava.code.lsp.ScriptDialect;
 import org.scijava.code.lsp.ScriptSession;
+import org.scijava.plugin.Plugin;
+import org.scijava.script.AbstractScriptLanguage;
+import org.scijava.script.ScriptLanguage;
 
 /**
  * End-to-end tests of the {@code python} server (see
@@ -68,6 +73,17 @@ public class PythonLanguageServerIntegrationTest {
 
 	/** How long to wait for environments to build. */
 	private static final long BUILD_TIMEOUT = TimeUnit.MINUTES.toMillis(15);
+
+	/** A test fixture: a script language whose scripts are plain Python. */
+	private static final ScriptLanguage TEST_LANGUAGE =
+		new AbstractScriptLanguage()
+	{
+
+		@Override
+		public ScriptEngine getScriptEngine() {
+			return null;
+		}
+	};
 
 	private static Context context;
 	private static LanguageServerService servers;
@@ -153,8 +169,26 @@ public class PythonLanguageServerIntegrationTest {
 
 	/** A session about plain Python, with a server of its own. */
 	private static ScriptSession session() {
-		return new ScriptSession(env -> servers.launch("python", env),
-			ScriptDocument::of);
+		return new ScriptSession(servers, TEST_LANGUAGE);
+	}
+
+	@Plugin(type = ScriptDialect.class)
+	public static class TestDialect implements ScriptDialect {
+
+		@Override
+		public boolean supports(final ScriptLanguage language) {
+			return language == TEST_LANGUAGE;
+		}
+
+		@Override
+		public String languageId() {
+			return "python";
+		}
+
+		@Override
+		public Header header(final Map<String, Class<?>> parameters) {
+			return new Header("", Collections.emptySet());
+		}
 	}
 
 	/** The problems found in a script, in a session of its own. */

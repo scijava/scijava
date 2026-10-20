@@ -191,10 +191,12 @@ public class LanguageServersTest {
 				});
 			}
 		};
-		try (ScriptSession session = new ScriptSession(env -> late,
-			ScriptDocument::of))
-		{
+		HighPlugin.next = late;
+		try (ScriptSession session = new ScriptSession(service, fake)) {
 			session.update("x");
+		}
+		finally {
+			HighPlugin.next = null;
 		}
 		// Told nothing before it answered.
 		assertEquals(Arrays.asList("answered", "initialized", "open 1 x"),
@@ -560,6 +562,9 @@ public class LanguageServersTest {
 	@Plugin(type = LanguageServerPlugin.class, priority = Priority.HIGH)
 	public static class HighPlugin implements LanguageServerPlugin {
 
+		/** The server to create next, if not a new one (e.g. a special one). */
+		static volatile FakeServer next;
+
 		@Override
 		public boolean supports(final String languageId) {
 			return "fake".equals(languageId);
@@ -570,7 +575,9 @@ public class LanguageServersTest {
 		public LanguageServer create(final String languageId,
 			final Environment environment)
 		{
-			return register(new FakeServer("high", languageId, environment));
+			final FakeServer special = next;
+			return register(special != null ? special : new FakeServer("high",
+				languageId, environment));
 		}
 	}
 

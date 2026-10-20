@@ -37,20 +37,31 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
 import javax.script.SimpleScriptContext;
 
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.Diagnostic;
 import org.eclipse.lsp4j.SignatureHelp;
+import org.eclipse.lsp4j.services.LanguageServer;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.scijava.Context;
 import org.scijava.code.lsp.Environment;
-import org.scijava.code.lsp.ScriptDocument;
+import org.scijava.code.lsp.LanguageServerPlugin;
+import org.scijava.code.lsp.LanguageServerService;
+import org.scijava.code.lsp.ScriptDialect;
 import org.scijava.code.lsp.ScriptSession;
 import org.scijava.code.lsp.jvm.ClassIndex;
+import org.scijava.plugin.Plugin;
+import org.scijava.script.AbstractScriptLanguage;
+import org.scijava.script.ScriptLanguage;
 
 /**
  * Tests {@link GroovyLanguageServer}
@@ -58,6 +69,29 @@ import org.scijava.code.lsp.jvm.ClassIndex;
  * @author Gabriel Selzer
  */
 public class GroovyLanguageServerTest {
+
+	/** A test fixture: a script language whose scripts are plain Groovy. */
+	private static final ScriptLanguage TEST_LANGUAGE =
+		new AbstractScriptLanguage()
+	{
+
+		@Override
+		public ScriptEngine getScriptEngine() {
+			return null;
+		}
+	};
+
+	private static Context context;
+
+	@BeforeAll
+	public static void startContext() {
+		context = new Context(LanguageServerService.class);
+	}
+
+	@AfterAll
+	public static void disposeContext() {
+		context.dispose();
+	}
 
 	@Test
 	public void testMembersOfInferredTypes() {
@@ -314,8 +348,8 @@ public class GroovyLanguageServerTest {
 
 	/** A session about plain Groovy, with a server of its own. */
 	private static ScriptSession session(final Environment env) {
-		return new ScriptSession(e -> new GroovyLanguageServer(env),
-			ScriptDocument::of);
+		return new ScriptSession(context.service(LanguageServerService.class),
+			TEST_LANGUAGE, env.live());
 	}
 
 	/** The problems found in a script, e.g. {@code Error@0:4-6 message}. */
@@ -376,5 +410,40 @@ public class GroovyLanguageServerTest {
 	private static List<String> labels(final List<CompletionItem> items) {
 		return items.stream().map(CompletionItem::getLabel).collect(Collectors
 			.toList());
+	}
+
+	@Plugin(type = ScriptDialect.class)
+	public static class TestDialect implements ScriptDialect {
+
+		@Override
+		public boolean supports(final ScriptLanguage language) {
+			return language == TEST_LANGUAGE;
+		}
+
+		@Override
+		public String languageId() {
+			return "test";
+		}
+
+		@Override
+		public Header header(final Map<String, Class<?>> parameters) {
+			return new Header("", Collections.emptySet());
+		}
+	}
+
+	@Plugin(type = LanguageServerPlugin.class)
+	public static class TestServers implements LanguageServerPlugin {
+
+		@Override
+		public boolean supports(final String languageId) {
+			return "test".equals(languageId);
+		}
+
+		@Override
+		public LanguageServer create(final String languageId,
+			final Environment environment)
+		{
+			return new GroovyLanguageServer(environment);
+		}
 	}
 }

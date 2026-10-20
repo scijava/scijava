@@ -24,9 +24,8 @@ then. Its error output goes to `code-lsp-jedi-server.log`, next to the
 environment.
 
 Each server analyzes scripts in exactly the environment it is given: its
-Python (if any; otherwise the server's own) and extra search paths (e.g. an
-overlay of packages a script declares, as scripting-appose-python's dialect
-adds).
+Python (if any; otherwise the server's own) and extra search paths (e.g.
+stubs of Java packages).
 
 ## Example
 

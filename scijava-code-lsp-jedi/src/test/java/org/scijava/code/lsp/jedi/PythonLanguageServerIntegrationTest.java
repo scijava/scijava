@@ -58,8 +58,8 @@ import org.scijava.code.lsp.ScriptSession;
  * {@link PythonServerPlugin}), with a real jedi-language-server, on plain
  * Python, as editors use it.
  * <p>
- * The first request builds jedi-language-server's environment, and a new
- * dependency installs an overlay; both require network access.
+ * The first request builds jedi-language-server's environment, which
+ * requires network access.
  * </p>
  *
  * @author Gabriel Selzer
@@ -149,24 +149,11 @@ public class PythonLanguageServerIntegrationTest {
 		assertTrue(problems(code.replace("(1 +", "(1 + 2)")).isEmpty());
 	}
 
-	@Test
-	public void testNewDependency() throws Exception {
-		// A script declaring a dependency that is installed nowhere: installed
-		// for completion only (in an overlay), once the dependencies settle.
-		final String header = "# /// script\n# dependencies = [\"tifffile\"]\n" +
-			"# ///\nimport tifffile\n";
-		try (ScriptSession script = session()) {
-			final String code = header + "tifffile.imr";
-			script.update(code);
-			completeUntil(script, code, "imread");
-		}
-	}
-
 	// -- Helper methods --
 
 	/** A session about plain Python, with a server of its own. */
 	private static ScriptSession session() {
-		return new ScriptSession(servers.launch("python", Environment.NONE),
+		return new ScriptSession(env -> servers.launch("python", env),
 			ScriptDocument::of);
 	}
 

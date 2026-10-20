@@ -31,15 +31,13 @@ package org.scijava.code.lsp;
 
 import java.util.Map;
 
-import javax.script.ScriptContext;
-
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.scijava.script.ScriptLanguage;
 import org.scijava.service.SciJavaService;
 
 /**
- * Serves SciJava scripts with language servers: a {@link ScriptSession} about
- * a script shows servers of its own (from the highest-priority
+ * Serves SciJava scripts with language servers: what a {@link ScriptSession}
+ * about a script uses, to show servers of its own (from the highest-priority
  * {@link LanguageServerPlugin} serving its {@link ScriptDialect}'s language)
  * the script as plain code. Servers of an LSP language can also be
  * {@link #launch launched} directly.
@@ -49,20 +47,19 @@ import org.scijava.service.SciJavaService;
 public interface LanguageServerService extends SciJavaService {
 
 	/**
-	 * Starts a session about a script of the given language: where clients
-	 * (e.g. editors, or tools checking scripts) ask about it, in terms of its
-	 * text and offsets. Set its file, if it has one, then
-	 * {@link ScriptSession#update update} it with its text.
+	 * Gets the highest-priority dialect of a script language: how its scripts
+	 * become plain code of an LSP language.
+	 *
+	 * @throws IllegalArgumentException If the language has none.
 	 */
-	ScriptSession session(ScriptLanguage language);
+	ScriptDialect dialect(ScriptLanguage language);
 
 	/**
-	 * As {@link #session(ScriptLanguage)}, for code typed into a running
-	 * interpreter: its state reaches the servers via their
-	 * {@link Environment#live()}. For a language no plugin serves, the
-	 * interpreter's variables are completed.
+	 * Gets a script as plain code of the LSP language of the given dialect: its
+	 * parameters declared, and the lines SciJava removes before it runs
+	 * blanked, as SciJava's own script processors find them.
 	 */
-	ScriptSession session(ScriptLanguage language, ScriptContext live);
+	ScriptDocument document(String script, ScriptDialect dialect);
 
 	/** Whether any plugin serves scripts of the given language. */
 	boolean supports(ScriptLanguage language);

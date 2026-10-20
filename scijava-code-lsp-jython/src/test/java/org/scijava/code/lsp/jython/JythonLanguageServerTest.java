@@ -195,7 +195,7 @@ public class JythonLanguageServerTest {
 
 	/** A session about plain Jython, with a server of its own. */
 	private static ScriptSession session(final Environment env) {
-		return new ScriptSession(new JythonLanguageServer(env),
+		return new ScriptSession(e -> new JythonLanguageServer(env),
 			ScriptDocument::of);
 	}
 

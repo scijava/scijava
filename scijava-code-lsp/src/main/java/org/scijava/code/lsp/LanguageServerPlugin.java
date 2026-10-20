@@ -54,13 +54,12 @@ public interface LanguageServerPlugin extends SciJavaPlugin {
 
 	/**
 	 * Creates a server for documents of an LSP language this serves: for a
-	 * session (see {@link LanguageServerService#session}), which initializes
+	 * session (see {@link ScriptSession}), which initializes
 	 * it, and shuts it down when closed; or for whoever
 	 * {@link LanguageServerService#launch launches} it.
 	 * <p>
-	 * NB: A plugin may analyze each document in an environment of its own,
-	 * based on the given one (e.g. with packages its text declares added; see
-	 * {@link org.scijava.code.lsp.server.RoutingLanguageServer}).
+	 * NB: The server analyzes documents in exactly the given environment: a
+	 * session moves to a new server as where its script runs changes.
 	 * </p>
 	 *
 	 * @param languageId The LSP language asked for, one this

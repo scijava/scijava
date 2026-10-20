@@ -33,12 +33,17 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+import javax.script.ScriptContext;
 
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionList;
@@ -70,20 +75,28 @@ import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageClientAware;
 import org.eclipse.lsp4j.services.LanguageServer;
+import org.scijava.log.LogService;
 import org.scijava.log.Logger;
+import org.scijava.script.ScriptLanguage;
 
 /**
  * A {@link LanguageServerService} session for a given SciJava script.
  * <p>
- * A session has a server of its own, which it shuts down when closed; it
+ * A session controls its own {@link LanguageServer}: it a server of its own, which it shuts down when closed; it
  * keeps the server's copy of the script up to date when mutated by the
  * client. The server sees the script as plain code of its language (see
  * {@link ScriptDocument}); the session maps positions in its answers back,
  * leaving out what concerns only the lines it added.
  * </p>
+ * <p>
+ * The server analyzes the script where it runs, as its document says (see
+ * {@link ScriptDocument#environment}). As that changes (e.g. as the script's
+ * declared environment is edited), the session moves to a new server, of the
+ * new environment. It talks to its server off the caller's thread, telling
+ * and asking it everything in order.
+ * </p>
  *
  * @author Gabriel Selzer
- * @see LanguageServerService#session
  */
 public final class ScriptSession implements AutoCloseable {
 
@@ -92,12 +105,28 @@ public final class ScriptSession implements AutoCloseable {
 	/** How long to wait for a server to initialize, in milliseconds. */
 	private static final long INITIALIZE_TIMEOUT = 10_000;
 
-	private final LanguageServer server;
+	/** Where sessions talk to their servers (each in order). */
+	private static final ExecutorService TALK = Executors.newCachedThreadPool(
+		r -> {
+			final Thread t = new Thread(r, "code-lsp-session");
+			t.setDaemon(true);
+			return t;
+		});
+
+	private final Function<Environment, LanguageServer> launch;
 	private final Function<String, ScriptDocument> transform;
 	private final String untitled;
 	private volatile Supplier<File> file = () -> null;
 	private volatile Logger log;
 	private volatile Consumer<List<Diagnostic>> diagnosticsListener;
+
+	/** The server, once all it was told or asked so far is sent. */
+	private CompletableFuture<Optional<LanguageServer>> server =
+		CompletableFuture.completedFuture(Optional.empty());
+	/** Where the script runs, as the server was launched for. */
+	private Optional<Environment> launchedFor = Optional.empty();
+	/** The server whose problems are heard (set as it is launched). */
+	private volatile LanguageServer current;
 
 	private String uri;
 	private String text;
@@ -109,44 +138,56 @@ public final class ScriptSession implements AutoCloseable {
 		new CompletableFuture<>();
 
 	/**
-	 * Starts a session about a script
-	 * fake one, in tests): the session becomes the server's client, so the
-	 * server must not be shared. The server is initialized now, and shut down
-	 * when the session is closed.
+	 * Starts a session about a script of the given language: its servers are
+	 * of the LSP language its dialect says, from the highest-priority plugin
+	 * serving it (see {@link LanguageServerService#launch}), and see the script
+	 * as plain code of that language. If the language has no dialect, or no
+	 * plugin serves it, the session completes nothing.
 	 *
-	 * @param server The server, for this session alone.
-	 * @param transform Makes scripts what the server sees: e.g. plain code of
-	 *          their language; or {@link ScriptDocument#of(String)}, to show
-	 *          them as they are.
+	 * @param servers Where the dialect and servers come from.
+	 * @param language The script's language.
 	 */
-	public ScriptSession(final LanguageServer server,
-		final Function<String, ScriptDocument> transform)
+	public ScriptSession(final LanguageServerService servers,
+		final ScriptLanguage language)
 	{
-		this.server = server;
-		this.transform = transform;
-		untitled = "untitled:/script-" + UNTITLED.incrementAndGet();
-		// NB: Last, as the server may call back (on its own thread) at once.
-		connect();
+		this(servers, language, Environment.NO_STATE);
 	}
 
 	/**
-	 * Becomes the client of its server, and initializes it: as LSP says, it
-	 * awaits the server's answer before telling it anything else. (Servers in
-	 * process answer at once.)
+	 * As {@link #ScriptSession(LanguageServerService, ScriptLanguage)}, for
+	 * code typed into a running interpreter: its state reaches the servers via
+	 * their {@link Environment#live()}. If the language has no dialect, or no
+	 * plugin serves it, the interpreter's variables are completed.
+	 *
+	 * @param servers Where the dialect and servers come from.
+	 * @param language The interpreter's language.
+	 * @param live The interpreter's state.
 	 */
-	private void connect() {
-		if (server instanceof LanguageClientAware) {
-			((LanguageClientAware) server).connect(new Client());
-		}
-		try {
-			final CompletableFuture<InitializeResult> init = server.initialize(
-				new InitializeParams());
-			if (init != null) init.get(INITIALIZE_TIMEOUT, TimeUnit.MILLISECONDS);
-		}
-		catch (final Exception exc) {
-			// NB: Not initialized (in time): asked anyway, answering what it can.
-		}
-		server.initialized(new InitializedParams());
+	public ScriptSession(final LanguageServerService servers,
+		final ScriptLanguage language, final ScriptContext live)
+	{
+		this(launcher(servers, language, live), transformer(servers, language));
+		setLogger(servers.context().getService(LogService.class));
+	}
+
+	/**
+	 * Starts a session about a script, with servers of its own (e.g. fake ones,
+	 * in tests): the session becomes each server's client, so they must not be
+	 * shared. A server is launched, and initialized, when first needed; and
+	 * shut down when the session moves to another, or is closed.
+	 *
+	 * @param launch Gets a new server, for the script running in an
+	 *          environment.
+	 * @param transform Makes scripts what the servers see: e.g. plain code of
+	 *          their language; or {@link ScriptDocument#of(String)}, to show
+	 *          them as they are.
+	 */
+	public ScriptSession(final Function<Environment, LanguageServer> launch,
+		final Function<String, ScriptDocument> transform)
+	{
+		this.launch = launch;
+		this.transform = transform;
+		untitled = "untitled:/script-" + UNTITLED.incrementAndGet();
 	}
 
 	/**
@@ -177,7 +218,9 @@ public final class ScriptSession implements AutoCloseable {
 
 	/**
 	 * Tells the server the script's text: opening it, the first time (or under
-	 * a new name); otherwise, if it changed, sending it as the new version.
+	 * a new name, or on a new server); otherwise, if it changed, sending it as
+	 * the new version. First, if where the script runs changed (which it may,
+	 * even if its text did not), moves to a server of where it runs now.
 	 */
 	public synchronized ScriptSession update(final String newText) {
 		final String current = currentUri();
@@ -188,19 +231,27 @@ public final class ScriptSession implements AutoCloseable {
 			text = newText;
 			doc = transform.apply(text);
 			newVersion();
-			server.getTextDocumentService().didOpen(new DidOpenTextDocumentParams(
-				new TextDocumentItem(uri, doc.languageId(), version, doc
-					.text())));
+			follow();
+			open();
 		}
 		else if (!newText.equals(text)) {
 			text = newText;
 			doc = transform.apply(text);
 			version++;
 			newVersion();
-			server.getTextDocumentService().didChange(new DidChangeTextDocumentParams(
-				new VersionedTextDocumentIdentifier(uri, version), Collections
-					.singletonList(new TextDocumentContentChangeEvent(doc.text()))));
+			if (follow()) open();
+			else {
+				final VersionedTextDocumentIdentifier id =
+					new VersionedTextDocumentIdentifier(uri, version);
+				final String code = doc.text();
+				tell(s -> s.getTextDocumentService().didChange(
+					new DidChangeTextDocumentParams(id, Collections.singletonList(
+						new TextDocumentContentChangeEvent(code)))));
+			}
 		}
+		// NB: Where it runs may change without its text changing, e.g. once its
+		// environment is built.
+		else if (follow()) open();
 		return this;
 	}
 
@@ -212,15 +263,19 @@ public final class ScriptSession implements AutoCloseable {
 	{
 		update(script);
 		final ScriptDocument d = doc;
-		return server.getTextDocumentService().completion(new CompletionParams(
-			identifier(), position(offset))).thenApply(answer -> answer == null
-				? new CompletionList() : back(d, answer.isRight() ? answer.getRight()
-					: new CompletionList(false, answer.getLeft())));
+		final CompletionParams params = new CompletionParams(identifier(),
+			position(offset));
+		return ask(s -> s.getTextDocumentService().completion(params)).thenApply(
+			answer -> answer == null ? new CompletionList() : back(d, answer
+				.isRight() ? answer.getRight() : new CompletionList(false, answer
+					.getLeft())));
 	}
 
 	/** A completion, with what it takes long to know (e.g. documentation). */
-	public CompletableFuture<CompletionItem> resolve(final CompletionItem item) {
-		return server.getTextDocumentService().resolveCompletionItem(item);
+	public synchronized CompletableFuture<CompletionItem> resolve(
+		final CompletionItem item)
+	{
+		return ask(s -> s.getTextDocumentService().resolveCompletionItem(item));
 	}
 
 	/** The signatures of the call around an offset (null if none). */
@@ -228,8 +283,9 @@ public final class ScriptSession implements AutoCloseable {
 		final String script, final int offset)
 	{
 		update(script);
-		return server.getTextDocumentService().signatureHelp(
-			new SignatureHelpParams(identifier(), position(offset)));
+		final SignatureHelpParams params = new SignatureHelpParams(identifier(),
+			position(offset));
+		return ask(s -> s.getTextDocumentService().signatureHelp(params));
 	}
 
 	/** What is known about the code at an offset (null if nothing). */
@@ -238,14 +294,15 @@ public final class ScriptSession implements AutoCloseable {
 	{
 		update(script);
 		final ScriptDocument d = doc;
-		return server.getTextDocumentService().hover(new HoverParams(identifier(),
-			position(offset))).thenApply(h -> {
-				if (h == null || h.getRange() == null) return h;
-				final Hover out = new Hover();
-				out.setContents(h.getContents());
-				out.setRange(d.toOriginal(h.getRange()));
-				return out;
-			});
+		final HoverParams params = new HoverParams(identifier(), position(
+			offset));
+		return ask(s -> s.getTextDocumentService().hover(params)).thenApply(h -> {
+			if (h == null || h.getRange() == null) return h;
+			final Hover out = new Hover();
+			out.setContents(h.getContents());
+			out.setRange(d.toOriginal(h.getRange()));
+			return out;
+		});
 	}
 
 	// -- Problems --
@@ -278,26 +335,190 @@ public final class ScriptSession implements AutoCloseable {
 		}
 	}
 
-	/** Closes the server's copy of the script, and shuts the server down. */
+	/**
+	 * Closes the server's copy of the script, and shuts the server down
+	 * (waiting a while for all it was told to be sent).
+	 */
 	@Override
-	public synchronized void close() {
-		closeDocument();
-		try {
-			final CompletableFuture<Object> done = server.shutdown();
-			if (done != null) done.thenRun(server::exit);
+	public void close() {
+		final CompletableFuture<Optional<LanguageServer>> done;
+		synchronized (this) {
+			closeDocument();
+			server = server.thenApplyAsync(s -> {
+				s.ifPresent(this::stop);
+				return Optional.empty();
+			}, TALK);
+			launchedFor = Optional.empty();
+			done = server;
 		}
-		catch (final RuntimeException | LinkageError exc) {
+		try {
+			done.get(INITIALIZE_TIMEOUT, TimeUnit.MILLISECONDS);
+		}
+		catch (final Exception exc) {
 			if (log != null) log.debug("Language server shutdown failed", exc);
 		}
 	}
 
 	// -- Helper methods --
 
+	/**
+	 * Gets servers for scripts of a language: of the LSP language its dialect
+	 * says; or, without one (or if one cannot be created), servers completing
+	 * the interpreter's variables (if any).
+	 */
+	private static Function<Environment, LanguageServer> launcher(
+		final LanguageServerService servers, final ScriptLanguage language,
+		final ScriptContext live)
+	{
+		final LogService log = servers.context().getService(LogService.class);
+		try {
+			final String languageId = servers.dialect(language).languageId();
+			if (servers.supports(languageId)) return env -> {
+				try {
+					return servers.launch(languageId, env.withLive(live));
+				}
+				catch (final RuntimeException | LinkageError exc) {
+					if (log != null) log.warn("Could not create a language server for " +
+						languageId, exc);
+					return new BindingsLanguageServer(live);
+				}
+			};
+		}
+		catch (final IllegalArgumentException exc) {
+			// NB: The language has no dialect.
+		}
+		return env -> new BindingsLanguageServer(live);
+	}
+
+	/**
+	 * Makes scripts of a language plain code of the LSP language its dialect
+	 * says, if served; otherwise, shows them as they are.
+	 */
+	private static Function<String, ScriptDocument> transformer(
+		final LanguageServerService servers, final ScriptLanguage language)
+	{
+		try {
+			final ScriptDialect dialect = servers.dialect(language);
+			if (servers.supports(dialect.languageId())) {
+				return text -> servers.document(text, dialect);
+			}
+		}
+		catch (final IllegalArgumentException exc) {
+			// NB: The language has no dialect.
+		}
+		return ScriptDocument::of;
+	}
+
+	/**
+	 * Moves to a server of where the script runs now, if that changed (or if
+	 * there is none yet).
+	 *
+	 * @return Whether it moved.
+	 */
+	private boolean follow() {
+		final Environment env = doc.environment(Optional.ofNullable(file.get()));
+		if (launchedFor.equals(Optional.of(env))) return false;
+		launchedFor = Optional.of(env);
+		server = server.thenApplyAsync(old -> {
+			old.ifPresent(this::stop);
+			try {
+				return Optional.of(start(env));
+			}
+			catch (final RuntimeException | LinkageError exc) {
+				if (log != null) log.warn("Could not start a language server", exc);
+				return Optional.empty();
+			}
+		}, TALK);
+		return true;
+	}
+
+	/**
+	 * Launches a server of an environment, becomes its client, and initializes
+	 * it: as LSP says, it awaits the server's answer before telling it anything
+	 * else. (Servers in process answer at once.)
+	 */
+	private LanguageServer start(final Environment env) {
+		final LanguageServer s = launch.apply(env);
+		current = s;
+		if (s instanceof LanguageClientAware) {
+			((LanguageClientAware) s).connect(new Client(s));
+		}
+		try {
+			final CompletableFuture<InitializeResult> init = s.initialize(
+				new InitializeParams());
+			if (init != null) init.get(INITIALIZE_TIMEOUT, TimeUnit.MILLISECONDS);
+		}
+		catch (final Exception exc) {
+			// NB: Not initialized (in time): asked anyway, answering what it can.
+		}
+		s.initialized(new InitializedParams());
+		return s;
+	}
+
+	/** Shuts a server down. */
+	private void stop(final LanguageServer s) {
+		try {
+			final CompletableFuture<Object> done = s.shutdown();
+			if (done != null) done.thenRun(s::exit);
+		}
+		catch (final RuntimeException | LinkageError exc) {
+			if (log != null) log.debug("Language server shutdown failed", exc);
+		}
+	}
+
+	/** Tells the server something, after all it was told so far. */
+	private void tell(final Consumer<LanguageServer> message) {
+		server = server.thenApplyAsync(s -> {
+			try {
+				s.ifPresent(message);
+			}
+			catch (final RuntimeException | LinkageError exc) {
+				if (log != null) log.debug("Language server failed", exc);
+			}
+			return s;
+		}, TALK);
+	}
+
+	/**
+	 * Asks the server something, after all it was told so far; the answer is
+	 * null if there is no server.
+	 */
+	private <T> CompletableFuture<T> ask(
+		final Function<LanguageServer, CompletableFuture<T>> question)
+	{
+		final CompletableFuture<T> answer = new CompletableFuture<>();
+		server = server.thenApplyAsync(s -> {
+			try {
+				final CompletableFuture<T> a = s.isPresent() ? question.apply(s.get())
+					: null;
+				if (a == null) answer.complete(null);
+				else a.whenComplete((r, exc) -> {
+					if (exc != null) answer.completeExceptionally(exc);
+					else answer.complete(r);
+				});
+			}
+			catch (final RuntimeException | LinkageError exc) {
+				answer.completeExceptionally(exc);
+			}
+			return s;
+		}, TALK);
+		return answer;
+	}
+
+	/** Opens the server's copy of the script. */
+	private void open() {
+		final TextDocumentItem item = new TextDocumentItem(uri, doc.languageId(),
+			version, doc.text());
+		tell(s -> s.getTextDocumentService().didOpen(new DidOpenTextDocumentParams(
+			item)));
+	}
+
 	/** Closes the server's copy of the script, if open. */
 	private void closeDocument() {
 		if (uri == null) return;
-		server.getTextDocumentService().didClose(new DidCloseTextDocumentParams(
-			new TextDocumentIdentifier(uri)));
+		final TextDocumentIdentifier id = new TextDocumentIdentifier(uri);
+		tell(s -> s.getTextDocumentService().didClose(
+			new DidCloseTextDocumentParams(id)));
 		uri = null;
 		text = null;
 		doc = null;
@@ -389,15 +610,23 @@ public final class ScriptSession implements AutoCloseable {
 		return out;
 	}
 
-	/** Receives the server's messages about the script. */
+	/** Receives a server's messages about the script. */
 	private final class Client implements LanguageClient {
+
+		/** The server whose messages these are. */
+		private final LanguageServer source;
+
+		private Client(final LanguageServer source) {
+			this.source = source;
+		}
 
 		@Override
 		public void publishDiagnostics(final PublishDiagnosticsParams p) {
 			final List<Diagnostic> found;
 			final CompletableFuture<List<Diagnostic>> next;
 			synchronized (ScriptSession.this) {
-				if (!p.getUri().equals(uri)) return;
+				// NB: Those of a server moved away from are out of date.
+				if (source != current || !p.getUri().equals(uri)) return;
 				// NB: Those of an earlier version are out of date.
 				if (p.getVersion() != null && p.getVersion() < version) return;
 				found = p.getDiagnostics() == null ? Collections.emptyList() : back(

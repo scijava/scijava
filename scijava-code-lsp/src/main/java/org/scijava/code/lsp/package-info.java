@@ -37,13 +37,12 @@
  * {@code python}); {@link org.scijava.code.lsp.LanguageServerPlugin}s offer
  * lsp4j {@link org.eclipse.lsp4j.services.LanguageServer}s for LSP languages.
  * Clients (e.g. an editor) ask about a script through a
- * {@link org.scijava.code.lsp.ScriptSession} from the
+ * {@link org.scijava.code.lsp.ScriptSession}, made with the
  * {@link org.scijava.code.lsp.LanguageServerService}, in terms of the
  * script's text and offsets into it (see
- * {@link org.scijava.code.lsp.Positions}); behind it are servers of its own,
- * from the highest-priority plugin serving its dialect's language: one per
- * environment the script runs in (see
- * {@link org.scijava.code.lsp.server.RoutingLanguageServer}).
+ * {@link org.scijava.code.lsp.Positions}); behind it is a server of its own,
+ * from the highest-priority plugin serving its dialect's language, for where
+ * the script runs (moving to another as that changes).
  * </p>
  * <p>
  * Servers need know nothing of SciJava scripts. A SciJava script's {@code #@}

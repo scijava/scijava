@@ -29,10 +29,13 @@
 
 package org.scijava.code.lsp;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.regex.Pattern;
 
 import org.eclipse.lsp4j.Position;
@@ -62,17 +65,21 @@ public final class ScriptDocument {
 	private final String original;
 	private final String text;
 	private final String languageId;
+	/** Where the script runs, as its dialect says, given its file. */
+	private final BiFunction<String, Optional<File>, Environment> where;
 	/** Number of characters prepended. */
 	private final int headerLength;
 	private final Set<String> hiddenNames;
 
 	private ScriptDocument(final String original, final String text,
-		final String languageId, final int headerLength,
-		final Set<String> hiddenNames)
+		final String languageId,
+		final BiFunction<String, Optional<File>, Environment> where,
+		final int headerLength, final Set<String> hiddenNames)
 	{
 		this.original = original;
 		this.text = text;
 		this.languageId = languageId;
+		this.where = where;
 		this.headerLength = headerLength;
 		this.hiddenNames = Collections.unmodifiableSet(hiddenNames);
 	}
@@ -82,8 +89,8 @@ public final class ScriptDocument {
 	 * nothing blanked.
 	 */
 	public static ScriptDocument of(final String script) {
-		return new ScriptDocument(script, script, "plaintext", 0, Collections
-			.emptySet());
+		return new ScriptDocument(script, script, "plaintext", (t,
+			f) -> Environment.NONE, 0, Collections.emptySet());
 	}
 
 	/**
@@ -109,7 +116,8 @@ public final class ScriptDocument {
 			if (!mentions(script, name)) hidden.add(name);
 		}
 		return new ScriptDocument(script, header + blank(script, removedLines),
-			dialect.languageId(), header.length(), hidden);
+			dialect.languageId(), dialect::environment, header.length(),
+			hidden);
 	}
 
 	/**
@@ -137,6 +145,17 @@ public final class ScriptDocument {
 	 */
 	public String languageId() {
 		return languageId;
+	}
+
+	/**
+	 * Gets where the script runs, as its dialect says (see
+	 * {@link ScriptDialect#environment}); or {@link Environment#NONE}, for a
+	 * script as it is.
+	 *
+	 * @param file The script's file, if it has one.
+	 */
+	public Environment environment(final Optional<File> file) {
+		return where.apply(original, file);
 	}
 
 	/** Maps an offset in {@link #original()} to one in {@link #text()}. */

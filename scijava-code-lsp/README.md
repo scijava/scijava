@@ -13,13 +13,15 @@ scripts.
 
 ```
  client (e.g. Script Editor)
-   │  ScriptSession: a script's text, and offsets into it;
-   │  shows its servers the script as plain code (ScriptDocument)
+   │
    ▼
- LanguageServerService ──► the ScriptDialect of the script's language:
+ ScriptSession: a script's text, and offsets into it; shows a server of its
+   │  own the script as plain code (ScriptDocument), and moves to another as
+   │  where the script runs changes
+   │                       LanguageServerService finds
+   │                  ──►  the ScriptDialect of the script's language:
    │                       the plain code's LSP language, and where it runs
-   │  servers of the session's own, one per environment (RoutingLanguageServer),
-   │  from the LanguageServerPlugin serving the LSP language
+   │  the server, from the LanguageServerPlugin serving the LSP language
    ├──► in-process servers (e.g. Groovy, Jython), built on AbstractLanguageServer
    └──► server processes (e.g. jedi-language-server), kept by ServerProcesses
 ```
@@ -42,15 +44,18 @@ offer servers, nor servers know SciJava scripts:
   several sources (e.g. Jython's own analysis and jedi's) combines them
   itself.
 
-Clients ask about a script through a `ScriptSession` from the service: it
+Clients ask about a script through a `ScriptSession`, made with the
+service (`new ScriptSession(service, language)`): it
 keeps its servers' copy of the script up to date, names it (its file's URI,
 or an `untitled:` one), takes offsets into its text (see `Positions`), and
-reports the problems found in it. Behind it are servers of its own, from the
-plugin serving its dialect's language: one per environment the script runs
-in, as the dialect says, asked before each request, since that may change as
-the script is edited (e.g. an Appose environment it declares; see
-`RoutingLanguageServer`). For code typed into a running interpreter, the
-servers learn the interpreter's state through their `Environment`. Tools that
+reports the problems found in it. Behind it is a server of its own, from the
+plugin serving its dialect's language, for the environment the script runs
+in, as the dialect says. That is asked before each request, since it may
+change as the script is edited (e.g. an Appose environment it declares): the
+session then moves to a new server, of the new environment, off the caller's
+thread. A server analyzes scripts in exactly the environment it is given.
+For code typed into a running interpreter, the server learns the
+interpreter's state through its `Environment`. Tools that
 ask once (e.g. to check a script) can wait for a session's problems
 (`diagnostics(timeout)`). For code typed into an interpreter whose language
 has no dialect, or no servers, a session completes the interpreter's
@@ -79,10 +84,6 @@ when first needed, one per environment, restarted if they stop, and stopped
 when idle, or when its owner (e.g. a `LanguageServerPlugin`, when disposed)
 shuts them down; each seen as a `LanguageServer` of its own.
 `scijava-code-lsp-jedi`'s plugin serves `python` this way.
-
-`RoutingLanguageServer` sends each document to a server of where its script
-runs, as that changes (e.g. as the packages it declares do): sessions use it,
-and so may servers.
 
 ## 3. A toolkit for in-process servers (`org.scijava.code.lsp.jvm`)
 

@@ -70,6 +70,7 @@
 		<module>scijava-ops-flim</module>
 		<module>scijava-ops-image</module>
 		<module>scijava-ops-image-gpl</module>
+		<module>scijava-ops-image-lgpl</module>
 		<module>scijava-ops-opencv</module>
 		<module>scijava-ops-ext-parser</module>
 		<module>scijava-ops-spi</module>

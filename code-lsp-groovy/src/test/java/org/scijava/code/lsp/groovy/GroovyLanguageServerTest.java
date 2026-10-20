@@ -314,7 +314,7 @@ public class GroovyLanguageServerTest {
 
 	/** A session about plain Groovy, with a server of its own. */
 	private static ScriptSession session(final Environment env) {
-		return new ScriptSession(new GroovyLanguageServer(env),
+		return new ScriptSession(e -> new GroovyLanguageServer(env),
 			ScriptDocument::of);
 	}
 

@@ -28,15 +28,13 @@
 
 /**
  * A toolkit for language servers: for those offering servers that run as
- * processes, and those analyzing scripts in environments of their own.
+ * processes.
  * <p>
  * {@link org.scijava.code.lsp.server.ServerProcesses} keeps the server
  * processes of one kind (see {@link org.scijava.code.lsp.server.ServerLauncher}):
  * one per environment, started when first needed, restarted if they stop,
  * and stopped when idle; each seen as a
  * {@link org.eclipse.lsp4j.services.LanguageServer}.
- * {@link org.scijava.code.lsp.server.RoutingLanguageServer} sends each
- * document to a server of where its script runs, as that changes.
  * </p>
  */
 package org.scijava.code.lsp.server;

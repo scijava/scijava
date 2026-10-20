@@ -10,11 +10,6 @@ editors:
   the word is typed on; questions no longer of interest are cancelled; and
   the first completions of a word get their signatures, as snippets with
   their parameters and types.
-* Packages a script declares (in its PEP 723 `# /// script` block) but its
-  environment lacks, e.g. a dependency just added, are installed for
-  completion only, into a separate directory (an "overlay", which Jedi
-  searches), a moment after the dependencies stop changing; so they are known
-  before the script's environment is (re)built.
 
 Script languages whose scripts become plain Python (e.g.
 scripting-appose-python's) get it this way; and servers building on Python's
@@ -22,15 +17,16 @@ scripting-appose-python's) get it this way; and servers building on Python's
 
 The server runs as a process, one per environment scripts run in (see
 `JediLauncher`), in a small environment of its own (`code-lsp-jedi`: Python,
-Jedi, jedi-language-server, NumPy, and uv to install overlays), which
+Jedi, jedi-language-server, and NumPy), which
 [Appose](https://github.com/apposed/appose) builds next to its other
 environments the first time the server is needed; that takes a while only
-then. Its error output goes to `code-lsp-jedi-server.log`, and overlays to
-`code-lsp-jedi-overlays`, next to the environment.
+then. Its error output goes to `code-lsp-jedi-server.log`, next to the
+environment.
 
-Each server analyzes scripts against the environment they run in, as given
-by the script language: its Python (if any; otherwise the server's own) and
-extra search paths.
+Each server analyzes scripts in exactly the environment it is given: its
+Python (if any; otherwise the server's own) and extra search paths (e.g. an
+overlay of packages a script declares, as scripting-appose-python's dialect
+adds).
 
 ## Example
 

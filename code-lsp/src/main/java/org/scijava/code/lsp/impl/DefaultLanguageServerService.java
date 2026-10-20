@@ -29,24 +29,15 @@
 
 package org.scijava.code.lsp.impl;
 
-import java.io.File;
-import java.net.URI;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Predicate;
-
-import javax.script.ScriptContext;
 
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.LanguageServerPlugin;
 import org.scijava.code.lsp.LanguageServerService;
-import org.scijava.code.lsp.ScriptSession;
 import org.scijava.code.lsp.ScriptDialect;
 import org.scijava.code.lsp.ScriptDocument;
-import org.scijava.code.lsp.server.RoutingLanguageServer;
 import org.scijava.Disposable;
 import org.scijava.log.LogService;
 import org.scijava.plugin.Parameter;
@@ -59,11 +50,10 @@ import org.scijava.service.Service;
 /**
  * Default implementation of {@link LanguageServerService}.
  * <p>
- * Each session shows its servers the script as plain code, as the
- * highest-priority dialect of its language turns it; and gets servers of its
- * own, from the highest-priority plugin serving the code's language, one per
- * environment the script runs in. Plugins are disposed with the context, e.g.
- * to stop the server processes they keep.
+ * The highest-priority dialect of a script language makes its scripts plain
+ * code; the highest-priority plugin serving that code's language serves it.
+ * Plugins are disposed with the context, e.g. to stop the server processes
+ * they keep.
  * </p>
  *
  * @author Gabriel Selzer
@@ -84,36 +74,11 @@ public class DefaultLanguageServerService extends AbstractService implements
 	private List<LanguageServerPlugin> plugins;
 
 	@Override
-	public ScriptSession session(final ScriptLanguage language) {
-		return session(language, Environment.NO_STATE);
-	}
-
-	@Override
-	public ScriptSession session(final ScriptLanguage language,
-		final ScriptContext live)
+	public ScriptDocument document(final String script,
+		final ScriptDialect dialect)
 	{
-		try {
-			final ScriptDialect dialect = dialect(language);
-			final String languageId = dialect.languageId();
-			plugin(languageId);
-
-			final AtomicReference<String> written = new AtomicReference<>("");
-			final LanguageServer server = new RoutingLanguageServer( //
-				env -> server(languageId, env.withLive(live)), //
-				item -> dialect.environment(written.get(), file(item
-					.getUri())));
-			return new ScriptSession(server, text -> {
-				written.set(text);
-				final ScriptProcessing.Processed p = processing.of(text);
-				return ScriptDocument.of(text, p.parameters, p.removedLines,
-					dialect);
-			}).setLogger(log);
-		}
-		catch (final IllegalArgumentException exc) {
-			// Fall back to just autocompleting the bindings
-			return new ScriptSession(new BindingsLanguageServer(live),
-				ScriptDocument::of).setLogger(log);
-		}
+		final ScriptProcessing.Processed p = processing.of(script);
+		return ScriptDocument.of(script, p.parameters, p.removedLines, dialect);
 	}
 
 	@Override
@@ -164,40 +129,12 @@ public class DefaultLanguageServerService extends AbstractService implements
 	// -- Helper methods --
 
 	/**
-	 * A session's server of an environment; or, if none can be created, one
-	 * completing the interpreter's variables (if any).
-	 */
-	private LanguageServer server(final String languageId,
-		final Environment environment)
-	{
-		try {
-			return launch(languageId, environment);
-		}
-		catch (final RuntimeException | LinkageError exc) {
-			if (log != null) log.warn("Could not create a language server for " +
-				languageId, exc);
-			return new BindingsLanguageServer(environment.live());
-		}
-	}
-
-	/** The file of a {@code file:} URI; none for other URIs. */
-	private static Optional<File> file(final String uri) {
-		try {
-			final URI u = URI.create(uri);
-			return "file".equals(u.getScheme()) ? Optional.of(new File(u))
-				: Optional.empty();
-		}
-		catch (final IllegalArgumentException exc) {
-			return Optional.empty();
-		}
-	}
-
-	/**
 	 * The highest-priority dialect of a script language.
 	 *
 	 * @throws IllegalArgumentException If the language has none.
 	 */
-	private synchronized ScriptDialect dialect(final ScriptLanguage language) {
+	@Override
+	public synchronized ScriptDialect dialect(final ScriptLanguage language) {
 		for (var p : pluginService.createInstancesOfType(ScriptDialect.class)) {
 			if (p.supports(language)) return p;
 		}

@@ -42,8 +42,8 @@ import org.scijava.code.lsp.server.ServerLauncher;
 /**
  * Starts jedi-language-server: run in an environment of its own (built by
  * Appose the first time it is needed), to analyze scripts against their
- * environment's Python (if known) and extra search paths (e.g. a dependency
- * overlay, or stubs of Java packages). {@link PythonServerPlugin} serves
+ * environment's Python (if known) and extra search paths (e.g. an overlay of
+ * a script's dependencies, or stubs of Java packages). {@link PythonServerPlugin} serves
  * {@code python} with it.
  *
  * @author Gabriel Selzer
@@ -177,9 +177,6 @@ final class JediLauncher implements ServerLauncher {
 			"platforms = [\"" + condaPlatform() + "\"]\n" + //
 			"\n" + //
 			"[dependencies]\n" + //
-			// NB: Overlays of scripts whose environment is not known are installed
-			// for this Python (see DependencyOverlays), as Jedi then analyzes
-			// against it.
 			"python = \"3.12.*\"\n" + //
 			"jedi = \">=0.19.2\"\n" + //
 			// NB: So that the types scientific scripts use most are known before
@@ -188,9 +185,7 @@ final class JediLauncher implements ServerLauncher {
 			"numpy = \"*\"\n" + //
 			"\n" + //
 			"[pypi-dependencies]\n" + //
-			"jedi-language-server = \">=0.47\"\n" + //
-			// NB: To install dependency overlays (see overlay.py).
-			"uv = \"*\"\n";
+			"jedi-language-server = \">=0.47\"\n";
 	}
 
 	/** The conda platform (e.g. {@code linux-64}) of this machine. */

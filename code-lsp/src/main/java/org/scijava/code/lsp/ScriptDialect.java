@@ -44,7 +44,7 @@ import org.scijava.script.ScriptLanguage;
  * A {@link SciJavaPlugin} that knows how to turn the scripts of a SciJava
  * language into plain code of an LSP language (a {@link ScriptDocument}), for
  * language servers of that language to analyze (see
- * {@link LanguageServerService#session}). E.g. Appose-Python scripts become
+ * {@link ScriptSession}). E.g. Appose-Python scripts become
  * plain Python, their parameters declared as NumPy arrays and the like.
  * <p>
  * So script languages need not offer language servers themselves: servers
@@ -81,10 +81,9 @@ public interface ScriptDialect extends SciJavaPlugin {
 	/**
 	 * Gets where a script runs, as far as its text says (e.g. an Appose
 	 * environment it declares), to analyze it there. Asked before each request
-	 * about the script, as its text may change that; its servers are kept one
-	 * per environment (see
-	 * {@link org.scijava.code.lsp.server.RoutingLanguageServer}). The default knows
-	 * nothing: {@link Environment#NONE}.
+	 * about the script, as that may change; its session then moves to a server
+	 * of where it runs now (see {@link ScriptSession#update}). The default
+	 * knows nothing: {@link Environment#NONE}.
 	 *
 	 * @param text The script, as written (e.g. with its {@code #@script} line,
 	 *          which its servers do not see).

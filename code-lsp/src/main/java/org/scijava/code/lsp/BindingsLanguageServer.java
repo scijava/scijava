@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.lsp.impl;
+package org.scijava.code.lsp;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -44,7 +44,6 @@ import javax.script.ScriptContext;
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionItemKind;
 import org.eclipse.lsp4j.CompletionList;
-import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.jvm.AbstractLanguageServer;
 import org.scijava.code.lsp.jvm.Members;
 
@@ -57,7 +56,7 @@ import org.scijava.code.lsp.jvm.Members;
  *
  * @author Gabriel Selzer
  */
-public class BindingsLanguageServer extends AbstractLanguageServer {
+class BindingsLanguageServer extends AbstractLanguageServer {
 
 	/** A trailing {@code variable.prefix} before the caret. */
 	private static final Pattern MEMBER = Pattern.compile(
@@ -68,7 +67,7 @@ public class BindingsLanguageServer extends AbstractLanguageServer {
 		"([A-Za-z_][A-Za-z0-9_]*)$");
 
 	/** @param live The interpreter's state. */
-	public BindingsLanguageServer(final ScriptContext live) {
+	BindingsLanguageServer(final ScriptContext live) {
 		super(Environment.NONE.withLive(live));
 	}
 

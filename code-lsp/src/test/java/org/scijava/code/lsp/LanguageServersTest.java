@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.lsp.impl;
+package org.scijava.code.lsp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -94,13 +94,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.scijava.Context;
 import org.scijava.Priority;
-import org.scijava.code.lsp.Environment;
-import org.scijava.code.lsp.LanguageServerPlugin;
-import org.scijava.code.lsp.LanguageServerService;
-import org.scijava.code.lsp.Positions;
-import org.scijava.code.lsp.ScriptDocument;
-import org.scijava.code.lsp.ScriptSession;
-import org.scijava.code.lsp.ScriptDialect;
 import org.scijava.plugin.Plugin;
 import org.scijava.script.AbstractScriptLanguage;
 import org.scijava.script.ScriptLanguage;
@@ -141,7 +134,7 @@ public class LanguageServersTest {
 
 	@Test
 	public void testHighestPriorityServes() throws Exception {
-		try (ScriptSession session = service.session(fake)) {
+		try (ScriptSession session = new ScriptSession(service, fake)) {
 			final CompletionList list = session.completion("x.ma", 4).get(10,
 				TimeUnit.SECONDS);
 			// Only the highest-priority plugin's server, created for the session.
@@ -152,7 +145,7 @@ public class LanguageServersTest {
 			assertEquals("fake", SERVERS.get(0).languageId);
 		}
 		// Each session gets a server of its own.
-		try (ScriptSession other = service.session(fake)) {
+		try (ScriptSession other = new ScriptSession(service, fake)) {
 			other.completion("x", 1).get(10, TimeUnit.SECONDS);
 			assertEquals(2, SERVERS.size());
 		}
@@ -160,7 +153,7 @@ public class LanguageServersTest {
 
 	@Test
 	public void testLifeCycle() throws Exception {
-		final ScriptSession session = service.session(fake);
+		final ScriptSession session = new ScriptSession(service, fake);
 		// Created once there is a script, and initialized at once; told about the
 		// script as it changes.
 		session.update("x = 1");
@@ -198,7 +191,7 @@ public class LanguageServersTest {
 				});
 			}
 		};
-		try (ScriptSession session = new ScriptSession(late,
+		try (ScriptSession session = new ScriptSession(env -> late,
 			ScriptDocument::of))
 		{
 			session.update("x");
@@ -211,16 +204,16 @@ public class LanguageServersTest {
 	@Test
 	public void testLiveEnvironment() {
 		final ScriptContext live = new SimpleScriptContext();
-		try (ScriptSession session = service.session(fake, live)) {
+		try (ScriptSession session = new ScriptSession(service, fake, live)) {
 			session.update("x");
 			assertSame(live, server(0).environment().live());
 		}
-		try (ScriptSession session = service.session(fake)) {
+		try (ScriptSession session = new ScriptSession(service, fake)) {
 			session.update("x");
 			assertSame(Environment.NO_STATE, server(1).environment().live());
 		}
 		// Where the script runs, as its dialect says.
-		try (ScriptSession session = service.session(fake, live)) {
+		try (ScriptSession session = new ScriptSession(service, fake, live)) {
 			// NB: As written: its server sees the line blanked.
 			final String directive = "#@script(env=/env/bin/fake)";
 			session.update(directive + "\nx");
@@ -236,7 +229,7 @@ public class LanguageServersTest {
 	@Test
 	public void testSession() throws Exception {
 		final List<List<Diagnostic>> heard = new CopyOnWriteArrayList<>();
-		final ScriptSession session = service.session(fake)
+		final ScriptSession session = new ScriptSession(service, fake)
 			.setDiagnosticsListener(heard::add);
 		// Opened with its first text; untitled.
 		session.update("x = 1");
@@ -277,7 +270,7 @@ public class LanguageServersTest {
 
 	@Test
 	public void testDiagnostics() throws Exception {
-		try (ScriptSession session = service.session(fake)) {
+		try (ScriptSession session = new ScriptSession(service, fake)) {
 			assertEquals(Collections.singletonList("high: oops"), messages(session
 				.update("oops").diagnostics(10_000)));
 			final FakeServer server = server(0);
@@ -291,7 +284,7 @@ public class LanguageServersTest {
 
 	@Test
 	public void testSignatureHelpAndHover() throws Exception {
-		try (ScriptSession session = service.session(fake)) {
+		try (ScriptSession session = new ScriptSession(service, fake)) {
 			final SignatureHelp help = session.signatureHelp("max(1, ", 7).get(10,
 				TimeUnit.SECONDS);
 			assertEquals("max(int a, int b)", help.getSignatures().get(0)
@@ -305,7 +298,7 @@ public class LanguageServersTest {
 	@Test
 	public void testTransforming() throws Exception {
 		final String script = "#@ double sigma\nx.ma";
-		try (ScriptSession session = service.session(fake)) {
+		try (ScriptSession session = new ScriptSession(service, fake)) {
 			final CompletionList list = session.completion(script, script.length())
 				.get(10, TimeUnit.SECONDS);
 			final FakeServer server = server(0);
@@ -358,12 +351,12 @@ public class LanguageServersTest {
 				return null;
 			}
 		};
-		try (ScriptSession session = service.session(unserved, live)) {
+		try (ScriptSession session = new ScriptSession(service, unserved, live)) {
 			assertEquals(Collections.singletonList("count"), labels(session
 				.completion("x = co", 6).get(10, TimeUnit.SECONDS)));
 		}
 		// Without an interpreter: nothing, and no server created.
-		try (ScriptSession session = service.session(unserved)) {
+		try (ScriptSession session = new ScriptSession(service, unserved)) {
 			assertTrue(session.completion("x = co", 6).get(10, TimeUnit.SECONDS)
 				.getItems().isEmpty());
 		}
@@ -377,6 +370,35 @@ public class LanguageServersTest {
 		// By LSP language.
 		assertTrue(service.supports("fake"));
 		assertFalse(service.supports("cobol"));
+	}
+
+	@Test
+	public void testMoving() throws Exception {
+		// Where the script runs changes as it is edited: the session moves to a
+		// server of where it runs now, which is told the script anew.
+		final String a = "#@script(env=/a)\nx.ma";
+		final String b = "#@script(env=/b)\nx.ma";
+		try (ScriptSession session = new ScriptSession(service, fake)) {
+			session.completion(a, a.length()).get(10, TimeUnit.SECONDS);
+			final FakeServer first = server(0);
+			assertEquals("/a", first.environment().interpreter());
+			session.completion(b, b.length()).get(10, TimeUnit.SECONDS);
+			final FakeServer second = server(1);
+			assertEquals("/b", second.environment().interpreter());
+			assertTrue(second.events.contains("open 2 " + b.replace(
+				"#@script(env=/b)", "                ")), second.events.toString());
+			// The server moved away from is let go...
+			waitFor(() -> first.events.contains("shutdown"));
+			// ...and what it still says, not heard.
+			first.publish(first.opened.get(0), 2, "stale");
+			assertTrue(session.diagnostics().stream().noneMatch(d -> d.getMessage()
+				.getLeft().contains("stale")));
+			// Edits stay with the server of where it runs.
+			session.update(b + "x");
+			waitFor(() -> second.events.stream().anyMatch(e -> e.startsWith(
+				"change 3 ")));
+			assertEquals(2, SERVERS.size());
+		}
 	}
 
 	@Test

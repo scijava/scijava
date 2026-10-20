@@ -42,8 +42,8 @@ import org.scijava.code.lsp.server.ServerLauncher;
 /**
  * Starts jedi-language-server: run in an environment of its own (built by
  * Appose the first time it is needed), to analyze scripts against their
- * environment's Python (if known) and extra search paths (e.g. an overlay of
- * a script's dependencies, or stubs of Java packages). {@link PythonServerPlugin} serves
+ * environment's Python (if known) and extra search paths (e.g. stubs of Java
+ * packages). {@link PythonServerPlugin} serves
  * {@code python} with it.
  *
  * @author Gabriel Selzer

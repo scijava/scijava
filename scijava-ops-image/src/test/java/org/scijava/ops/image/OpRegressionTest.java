@@ -42,7 +42,7 @@ public class OpRegressionTest {
 
 	@Test
 	public void testOpDiscoveryRegression() {
-		long expected = 1994;
+		long expected = 1999;
 		long actual = ops.infos().size();
 		assertEquals(expected, actual);
 	}

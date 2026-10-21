@@ -54,6 +54,22 @@ import net.imglib2.view.Views;
  * (2017) IEEE Signal Processing "Automated and Robust Quantification of
  * Colocalization in Dual-Color Fluorescence Microscopy: A Nonparametric
  * Statistical Approach".
+ * <p>
+ * The first image is shuffled block-wise {@code nrRandomizations} times, and
+ * the colocalization measure is computed between each shuffled image and the
+ * unshuffled second image. The p-value is the fraction of shuffles whose
+ * value exceeds the observed one, so values near 0 are significant.
+ * <p>
+ * With {@code coloc.pearsons} as the measure and PSF-sized blocks, this is
+ * the significance test of Costes et al. (2004) Biophys J 86(6):3993-4003,
+ * "Automatic and quantitative measurement of protein-protein colocalization
+ * in live cells". Costes et al. report the complementary value, the fraction
+ * of shuffles below the observed Pearson coefficient, and consider P &gt; 95%
+ * significant; this corresponds to a p-value &lt; 0.05 here (in the absence
+ * of ties). Note that Coloc 2 differs from the published test: it smooths
+ * each shuffled image with a Gaussian of the PSF width, and reports the
+ * normal cumulative distribution function at the z-score of the observed
+ * value instead of an empirical fraction.
  *
  * @implNote op names='coloc.pValue'
  */
@@ -63,15 +79,19 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>>
 {
 
 	/**
-	 * TODO
+	 * Computes the colocalization value of the two images and its p-value.
 	 *
-	 * @param image1 the first image
+	 * @param image1 the first image, which is shuffled
 	 * @param image2 the second image
-	 * @param op the op
-	 * @param nrRandomizations the number of randomizations
-	 * @param psfSize Size of blocks for random shufflings.
-	 * @param seed the seed
-	 * @param output the output
+	 * @param op the colocalization measure, such as {@code coloc.pearsons}
+	 * @param nrRandomizations the number of randomizations (default 100)
+	 * @param psfSize the size of the shuffled blocks, ideally the size of the
+	 *          point spread function in pixels (default: the square root of
+	 *          each image dimension); both images are trimmed to a multiple of
+	 *          it
+	 * @param seed the seed of the random shuffles
+	 * @param output the result: the observed value, the shuffled values and
+	 *          the fraction of shuffled values exceeding the observed one
 	 */
 	@Override
 	public void compute( //

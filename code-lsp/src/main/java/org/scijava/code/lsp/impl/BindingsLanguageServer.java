@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.code.lsp;
+package org.scijava.code.lsp.impl;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -45,15 +45,15 @@ import javax.script.SimpleBindings;
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionItemKind;
 import org.eclipse.lsp4j.CompletionList;
+import org.scijava.code.lsp.Environment;
 import org.scijava.code.lsp.jvm.AbstractLanguageServer;
 import org.scijava.code.lsp.jvm.Members;
 
 /**
  * A language server knowing only the variables of a running interpreter (see
  * {@link Environment#live()}): their names, and the members of their values'
- * classes. For code typed into an interpreter whose language has no servers
- * of its own (see
- * {@link org.scijava.code.lsp.LanguageServerService#supports}).
+ * classes. It serves {@code plaintext} (see {@link BindingsServerPlugin}), as
+ * scripts become whose languages have no servers of their own.
  *
  * @author Gabriel Selzer
  */

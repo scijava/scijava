@@ -24,6 +24,7 @@ package org.scijava.ops.image.lgpl.segment.watershed;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -109,6 +110,42 @@ public class ExtendedMinimaWatershedTest extends AbstractOpTest {
 			}
 		}
 		assertEquals(11, unlabeled);
+	}
+
+	@Test
+	public void testWatershedLabel() {
+		final var img = twoBasins();
+		final var shape = new DiamondShape(1);
+		final var all = ArrayImgs.bits(21, 11);
+		for (final var t : all)
+			t.set(true);
+		final var lines = ops.op("segment.watershedExtendedMinima").input(img, 1.0,
+			shape, true).outType(LABELING).apply();
+		final var labeled = ops.op("segment.watershedExtendedMinima").input(img,
+			1.0, shape, true, all, 0.0, -1).outType(LABELING).apply();
+		final var ra = lines.randomAccess();
+		var lineCount = 0;
+		for (final var c = labeled.localizingCursor(); c.hasNext();) {
+			final var l = c.next();
+			final var expected = ra.setPositionAndGet(c);
+			assertEquals(1, l.size());
+			if (expected.isEmpty()) {
+				assertEquals(Set.of(-1), l);
+				lineCount++;
+			}
+			else assertEquals(expected, l);
+		}
+		assertEquals(11, lineCount);
+
+		// Without watershed lines, the watershed label is not used.
+		final var noLines = ops.op("segment.watershedExtendedMinima").input(img,
+			1.0, shape, false, all, 0.0, -1).outType(LABELING).apply();
+		assertEquals(Set.of(1, 2), labels(noLines));
+
+		// A watershed label which is also a region label is rejected.
+		assertThrows(IllegalArgumentException.class, () -> ops.op(
+			"segment.watershedExtendedMinima").input(img, 1.0, shape, true, all, 0.0,
+				2).outType(LABELING).apply());
 	}
 
 	@Test

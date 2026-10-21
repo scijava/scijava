@@ -93,8 +93,9 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>>
 		}
 
 		final var blockSize = blockSize(image1, psfSize);
-		final var trimmedImage1 = trim(image1, blockSize);
-		final var trimmedImage2 = trim(image2, blockSize);
+		// Note: zero-min views keep the shuffled buffer aligned with image2.
+		final var trimmedImage1 = Views.zeroMin(trim(image1, blockSize));
+		final var trimmedImage2 = Views.zeroMin(trim(image2, blockSize));
 		final var type1 = Util.getTypeFromInterval(image1);
 
 		final var sampleDistribution = new double[nrRandomizations];

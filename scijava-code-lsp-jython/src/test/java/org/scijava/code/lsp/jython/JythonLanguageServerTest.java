@@ -37,6 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -186,8 +187,7 @@ public class JythonLanguageServerTest {
 		engine.eval("from java.util import Collections, HashMap\n" +
 			"m = HashMap()\n" +
 			"def helper(): pass\n");
-		final Environment env = new Environment(null, Collections.emptyList(),
-			engine.getContext());
+		final Environment env = new Environment().withLive(engine.getContext());
 		final Supplier<ScriptSession> live = () -> session(env);
 
 		assertTrue(labels(items(live.get(), "m.putIfAb")).contains(
@@ -228,8 +228,10 @@ public class JythonLanguageServerTest {
 
 	/** A session about plain Jython, with a server of its own. */
 	private static ScriptSession session(final Environment env) {
-		return new ScriptSession(context.service(LanguageServerService.class),
-			TEST_LANGUAGE, env.live());
+		final LanguageServerService servers = context.service(
+			LanguageServerService.class);
+		return env.live().map(live -> new ScriptSession(servers, TEST_LANGUAGE,
+			live)).orElseGet(() -> new ScriptSession(servers, TEST_LANGUAGE));
 	}
 
 	@Plugin(type = ScriptDialect.class)
@@ -268,7 +270,7 @@ public class JythonLanguageServerTest {
 	}
 
 	private static SignatureHelp help(final String code) {
-		try (ScriptSession session = session(Environment.NONE)) {
+		try (ScriptSession session = session(new Environment())) {
 			return session.signatureHelp(code, code.length()).get(30,
 				TimeUnit.SECONDS);
 		}
@@ -298,7 +300,7 @@ public class JythonLanguageServerTest {
 	}
 
 	private static List<CompletionItem> completions(final String code) {
-		return items(session(Environment.NONE), code);
+		return items(session(new Environment()), code);
 	}
 
 	private static List<CompletionItem> items(final ScriptSession session,

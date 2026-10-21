@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.eclipse.lsp4j.CompletionItem;
@@ -87,7 +88,7 @@ public class PythonCompanionTest {
 	public void testEnvironment() {
 		// The server's own Python, searching the Java stubs.
 		final Environment env = PythonCompanion.environment(stubs);
-		assertEquals(null, env.interpreter());
+		assertEquals(Optional.empty(), env.interpreter());
 		assertEquals(Collections.singletonList(stubsDir.getAbsolutePath()), env
 			.paths());
 	}

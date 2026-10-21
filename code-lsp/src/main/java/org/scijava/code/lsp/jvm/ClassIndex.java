@@ -43,16 +43,13 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.regex.Matcher;
@@ -72,11 +69,8 @@ import java.util.stream.Stream;
  * without pulling in the Swing script editor.
  * </p>
  * <p>
- * By default the index scans the runtime classpath ({@code java.class.path}), the
- * JRE/JDK home, and (on Java 9+) the runtime image's own modules. Applications that load classes from elsewhere (e.g. an ImageJ
- * {@code jars/} directory) can contribute additional roots via
- * {@link #addRoots(String...)} <em>before</em> the index is first built; this
- * keeps application-specific paths out of this neutral utility.
+ * The index scans the runtime classpath ({@code java.class.path}), the
+ * JRE/JDK home, and (on Java 9+) the runtime image's own modules.
  * </p>
  *
  * @author Albert Cardona
@@ -100,24 +94,10 @@ public final class ClassIndex {
 	private static final HashMap<String, String> scijava_javadoc_URLs =
 		new HashMap<>();
 
-	/** Extra roots (jar files or directories) contributed by applications. */
-	private static final Set<String> extraRoots = new LinkedHashSet<>();
-
 	private static boolean ready = false;
 
 	private ClassIndex() {
 		// prevent instantiation of static utility class
-	}
-
-	/**
-	 * Registers additional roots (jar files, or directories scanned recursively
-	 * for jars) to include when the index is built. Has no effect once the index
-	 * has been built.
-	 */
-	public static void addRoots(final String... roots) {
-		synchronized (class_urls) {
-			Collections.addAll(extraRoots, roots);
-		}
 	}
 
 	/** The default roots: the JRE/JDK home plus each classpath entry. */
@@ -137,9 +117,7 @@ public final class ClassIndex {
 	public static void ensureCache() {
 		synchronized (class_urls) {
 			if (!class_urls.isEmpty()) return;
-			final List<String> roots = defaultRoots();
-			roots.addAll(extraRoots);
-			class_urls.putAll(findAllClasses(roots));
+			class_urls.putAll(findAllClasses(defaultRoots()));
 			findRuntimeClasses(class_urls);
 			// Soft attempt at getting all packages (will get them wrong if
 			// multiple jars share the same packages).
@@ -162,7 +140,7 @@ public final class ClassIndex {
 	}
 
 	/** Builds the cache of SciJava javadoc aggregator sub-URLs, if not done. */
-	public static void ensureSciJavaSubURLCache() {
+	private static void ensureSciJavaSubURLCache() {
 		synchronized (scijava_javadoc_URLs) {
 			if (!scijava_javadoc_URLs.isEmpty()) return;
 			Scanner scanner = null;
@@ -191,7 +169,7 @@ public final class ClassIndex {
 		}
 	}
 
-	public static HashMap<String, JarProperties> findClassDocumentationURLs(
+	private static HashMap<String, JarProperties> findClassDocumentationURLs(
 		final String s)
 	{
 		ensureCache();
@@ -305,7 +283,7 @@ public final class ClassIndex {
 	}
 
 	/** Properties of a jar file: its display name and documentation URLs. */
-	public static final class JarProperties {
+	private static final class JarProperties {
 
 		public final ArrayList<String> urls;
 		public String name;
@@ -376,7 +354,7 @@ public final class ClassIndex {
 	 *
 	 * @param roots jar files, or directories scanned recursively for jars
 	 */
-	public static HashMap<String, JarProperties> findAllClasses(
+	private static HashMap<String, JarProperties> findAllClasses(
 		final List<String> roots)
 	{
 		// Find all jar files.
@@ -507,7 +485,7 @@ public final class ClassIndex {
 	}
 
 	/** Builds an HTML link to the SciJava javadoc for the given class. */
-	public static String getJavaDocLink(final Class<?> c) {
+	private static String getJavaDocLink(final Class<?> c) {
 		final String name = c.getCanonicalName();
 		final String pkg = getDocPackage(name);
 		if (pkg == null) return name;

@@ -124,7 +124,7 @@ public final class Signatures {
 	 * @param fit Rates an argument type against a parameter type, e.g.
 	 *          {@link #fit(String, String, ClassLoader)}.
 	 */
-	public static Fit rate(final Callable callable, final List<String> argTypes,
+	private static Fit rate(final Callable callable, final List<String> argTypes,
 		final BiFunction<String, String, Fit> fit)
 	{
 		final List<Callable.Param> params = callable.params();
@@ -158,43 +158,6 @@ public final class Signatures {
 	}
 
 	/**
-	 * Splits the arguments of the call whose opening parenthesis is at
-	 * {@code open} into their source text, up to {@code caret}: the last one
-	 * is the argument the caret is in. Understands nested brackets and quoted
-	 * strings (with {@code '} and {@code "}), as most scripting languages
-	 * write them.
-	 *
-	 * @return The arguments, or null if the call is closed before the caret.
-	 */
-	public static List<String> arguments(final String text, final int open,
-		final int caret)
-	{
-		final List<String> args = new ArrayList<>();
-		int start = open + 1, depth = 0;
-		char quote = 0;
-		for (int i = start; i < caret; i++) {
-			final char c = text.charAt(i);
-			if (quote != 0) {
-				if (c == '\\') i++;
-				else if (c == quote) quote = 0;
-				continue;
-			}
-			if (c == '"' || c == '\'') quote = c;
-			else if (c == '(' || c == '[' || c == '{') depth++;
-			else if (c == ')' || c == ']' || c == '}') {
-				if (depth == 0) return null;
-				depth--;
-			}
-			else if (c == ',' && depth == 0) {
-				args.add(text.substring(start, i));
-				start = i + 1;
-			}
-		}
-		args.add(text.substring(start, caret));
-		return args;
-	}
-
-	/**
 	 * Finds the opening parenthesis of the call around the caret: the nearest
 	 * unclosed {@code (} before it, on the same line; or -1 if none.
 	 */
@@ -213,7 +176,7 @@ public final class Signatures {
 	}
 
 	/** Loads a type such as {@code int}, {@code long[]} or {@code a.b.C}. */
-	public static Class<?> loadType(final String name, final ClassLoader loader) {
+	private static Class<?> loadType(final String name, final ClassLoader loader) {
 		if (name.endsWith("[]")) {
 			final Class<?> component = loadType(name.substring(0, name.length() -
 				2), loader);

@@ -156,10 +156,6 @@ public abstract class AbstractLanguageServer implements LanguageServer,
 			return text;
 		}
 
-		public int version() {
-			return version;
-		}
-
 		/** The text of the line of an offset, up to it. */
 		public String lineTo(final int offset) {
 			final String t = text;

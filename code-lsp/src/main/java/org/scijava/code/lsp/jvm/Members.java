@@ -109,7 +109,7 @@ public final class Members {
 	}
 
 	/** A completion for a field. */
-	public static CompletionItem field(final Field f) {
+	private static CompletionItem field(final Field f) {
 		final CompletionItem item = new CompletionItem(f.getName());
 		item.setKind(CompletionItemKind.Field);
 		item.setInsertText(f.getName());
@@ -121,7 +121,7 @@ public final class Members {
 	}
 
 	/** A method, as a callable. */
-	public static Callable method(final Method m) {
+	private static Callable method(final Method m) {
 		final List<Callable.Param> params = new ArrayList<>();
 		for (final java.lang.reflect.Parameter p : m.getParameters()) {
 			params.add(new Callable.Param(p.getName(), typeName(p.getType())));
@@ -131,7 +131,7 @@ public final class Members {
 	}
 
 	/** A readable method signature, e.g. {@code String concat(String)}. */
-	public static String signature(final Method m) {
+	private static String signature(final Method m) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(typeName(m.getReturnType())).append(' ').append(m.getName())
 			.append('(');

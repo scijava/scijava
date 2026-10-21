@@ -58,6 +58,7 @@ import org.scijava.ops.image.threshold.localSauvola.LocalSauvolaThreshold;
 import org.scijava.ops.image.util.TestImgGeneration;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.algorithm.neighborhood.CenteredRectangleShape;
 import net.imglib2.algorithm.neighborhood.RectangleShape;
 import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.img.Img;
@@ -831,6 +832,48 @@ public class LocalThresholdTest extends AbstractOpTest {
 				Boundary.SINGLE), out);
 
 		assertEquals(true, out.firstElement().get());
+	}
+
+	/**
+	 * Tests that the local threshold ops give the same masks when they compute
+	 * rectangular neighborhoods via integral images as when they compute them
+	 * directly.
+	 */
+	@Test
+	public void testIntegralMatchesNonIntegral() {
+		// Note: A CenteredRectangleShape yields the same neighborhoods as the
+		// RectangleShape, but is not computed via integral images.
+		final Shape integral = new RectangleShape(3, false);
+		final Shape direct = new CenteredRectangleShape(new int[] { 3, 3 }, false);
+		final var oob =
+			new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(
+				Boundary.SINGLE);
+		for (final var name : new String[] { "localMean", "localNiblack",
+			"localSauvola" })
+		{
+			final Img<BitType> expected = ArrayImgs.bits(in.dimensionsAsLongArray());
+			final Img<BitType> actual = ArrayImgs.bits(in.dimensionsAsLongArray());
+			computeLocal(name, direct, oob, expected);
+			computeLocal(name, integral, oob, actual);
+			testRandomAccessibleInterval(expected, actual);
+		}
+	}
+
+	private void computeLocal(final String name, final Shape shape,
+		final OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>> oob,
+		final Img<BitType> output)
+	{
+		final var op = "threshold." + name;
+		switch (name) {
+			case "localMean":
+				ops.op(op).input(in, shape, 0.0, oob).output(output).compute();
+				break;
+			case "localNiblack":
+				ops.op(op).input(in, shape, 0.0, 0.2, oob).output(output).compute();
+				break;
+			default:
+				ops.op(op).input(in, shape, 0.5, 128.0, oob).output(output).compute();
+		}
 	}
 
 	// /**

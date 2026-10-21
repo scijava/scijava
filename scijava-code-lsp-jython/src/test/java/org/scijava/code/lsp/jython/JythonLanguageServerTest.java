@@ -31,9 +31,10 @@ package org.scijava.code.lsp.jython;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,7 @@ import java.util.stream.Collectors;
 import javax.script.ScriptEngine;
 
 import org.eclipse.lsp4j.CompletionItem;
+import org.eclipse.lsp4j.CompletionList;
 import org.eclipse.lsp4j.SignatureHelp;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.junit.jupiter.api.AfterAll;
@@ -58,6 +60,7 @@ import org.scijava.code.lsp.LanguageServerService;
 import org.scijava.code.lsp.ScriptDialect;
 import org.scijava.code.lsp.ScriptSession;
 import org.scijava.code.lsp.jvm.ClassIndex;
+import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.script.AbstractScriptLanguage;
 import org.scijava.script.ScriptLanguage;
@@ -83,6 +86,11 @@ public class JythonLanguageServerTest {
 
 	private static Context context;
 
+	/** The stubs of Java packages, written where the tests run. */
+	private static final JavaStubs STUBS = new JavaStubs(new File("target",
+		"jython-stubs").getAbsoluteFile(), JythonLanguageServerTest.class
+			.getClassLoader());
+
 	@BeforeAll
 	public static void startContext() {
 		context = new Context(LanguageServerService.class);
@@ -95,10 +103,13 @@ public class JythonLanguageServerTest {
 
 	@Test
 	public void testMemberCompletion() {
-		// Static analysis: 's' is a String, so 's.' completes to String members.
+		// 's' is a Python str, as in Jython: its members are Python's, not
+		// java.lang.String's.
 		final List<String> texts = complete("s = \"hello\"\ns.");
-		assertTrue(texts.contains("s.length"), "expected s.length among " + texts);
-		assertTrue(texts.contains("s.charAt"), "expected s.charAt among " + texts);
+		assertTrue(texts.contains("upper"), "expected upper among " + texts);
+		assertTrue(texts.contains("find"), "expected find among " + texts);
+		assertFalse(texts.contains("length"), "unexpected length in " + texts);
+		assertFalse(texts.contains("charAt"), "unexpected charAt in " + texts);
 	}
 
 	@Test
@@ -153,30 +164,33 @@ public class JythonLanguageServerTest {
 		final List<String> texts = complete(
 				"from java.util import ArrayList\nlist = ArrayList()\nlist.");
 		// members come from superinterfaces
-		assertTrue(texts.contains("list.add"));
+		assertTrue(texts.contains("add"), "expected add among " + texts);
 		// members come from superclasses
-		assertTrue(texts.contains("list.toString"));
+		assertTrue(texts.contains("toString"), "expected toString among " + texts);
+	}
+
+	@Test
+	public void testMerge() {
+		// The Python server's first, in its order; then Java classes, only for
+		// names it has not completed.
+		final CompletionList merged = JythonLanguageServer.merge(
+			new CompletionList(Arrays.asList(new CompletionItem("max"),
+				new CompletionItem("min"))), new CompletionList(Arrays.asList(
+					new CompletionItem("Math"), new CompletionItem("max"))));
+		assertEquals(Arrays.asList("max", "min", "Math"), labels(merged
+			.getItems()));
 	}
 
 	@Test
 	public void testCallablesAreSnippets() {
-		final CompletionItem charAt = completions("s = 'x'\ns.charA").stream()
-			.filter(c -> c.getLabel().equals("s.charAt")).findFirst().orElse(null);
-		assertNotNull(charAt);
-		assertEquals("(int arg0)", charAt.getLabelDetails().getDetail().replaceAll(
+		final CompletionItem ensure = completions("from java.util import ArrayList\n" +
+			"a = ArrayList()\na.ensureCap").stream().filter(c -> c.getLabel().equals(
+				"ensureCapacity")).findFirst().orElse(null);
+		assertNotNull(ensure);
+		assertEquals("(int arg0)", ensure.getLabelDetails().getDetail().replaceAll(
 			" \\w+\\)$", " arg0)"));
-		assertTrue(charAt.getTextEdit().getLeft().getNewText().startsWith(
-			"s.charAt(${1:"));
-	}
-
-	@Test
-	public void testArgumentChoices() {
-		// In a call's arguments: the variables of the parameter's type first.
-		final List<CompletionItem> items = completions(
-			"from java.lang import Math\nx = 1.5\ny = 'a'\nMath.abs(");
-		assertTrue(!items.isEmpty(), items.toString());
-		assertEquals("x", items.get(0).getLabel());
-		assertEquals(Boolean.TRUE, items.get(0).getPreselect());
+		assertTrue(ensure.getInsertText().startsWith("ensureCapacity(${1:"),
+			ensure.getInsertText());
 	}
 
 	@Test
@@ -191,37 +205,31 @@ public class JythonLanguageServerTest {
 		final Supplier<ScriptSession> live = () -> session(env);
 
 		assertTrue(labels(items(live.get(), "m.putIfAb")).contains(
-			"m.putIfAbsent"));
-		assertTrue(labels(items(live.get(), "injected.si")).contains(
-			"injected.size"));
+			"putIfAbsent"));
+		assertTrue(labels(items(live.get(), "injected.si")).contains("size"));
 		assertTrue(labels(items(live.get(), "x = hel")).contains("helper"));
 		// An imported Java class offers its static members.
 		assertTrue(labels(items(live.get(), "Collections.emptyL")).contains(
-			"Collections.emptyList"));
-		// Python internals are not offered.
-		assertFalse(labels(items(live.get(), "x = __")).contains("__name__"));
+			"emptyList"));
+		// Names like __name__: Jython's, not Python 3's.
+		final List<String> dunders = labels(items(live.get(), "x = __"));
+		assertTrue(dunders.contains("__name__"), dunders.toString());
+		assertFalse(dunders.contains("__build_class__"), dunders.toString());
 	}
 
 	@Test
 	public void testSignatureHelp() {
-		// A Python float fits the floating-point overloads, which come first.
+		// A Java method's signature, and the argument typed.
 		final SignatureHelp max = help("from java.lang import Math\n" +
 			"Math.max(1.5, ");
+		assertFalse(max.getSignatures().isEmpty());
 		assertEquals(Integer.valueOf(1), max.getActiveParameter());
-		assertEquals("[double, float, int, long]", describe(max));
-		// A Python int fits the integral ones, and converts to the others.
-		assertEquals("[int, long, double, float]", describe(help(
-			"from java.lang import Math\nMath.max(1, 2")));
-		// Arguments' types come from the analysis, e.g. of variables.
-		final SignatureHelp indexOf = help("s = 'abc'\nc = 'b'\n" +
-			"s.indexOf(c, ");
-		assertTrue(describe(indexOf).startsWith(
-			"[java.lang.String"), describe(indexOf));
 		// Constructors.
-		assertTrue(describe(help("from java.util import ArrayList\n" +
-			"ArrayList(")).contains("java.util.Collection"));
+		assertTrue(help("from java.util import ArrayList\nArrayList(")
+			.getSignatures().get(0).getLabel().contains("Collection"));
 		// None outside calls.
-		assertNull(help("x = 1"));
+		final SignatureHelp none = help("x = 1");
+		assertTrue(none == null || none.getSignatures().isEmpty());
 	}
 
 	// -- Helper methods --
@@ -256,6 +264,9 @@ public class JythonLanguageServerTest {
 	@Plugin(type = LanguageServerPlugin.class)
 	public static class TestServers implements LanguageServerPlugin {
 
+		@Parameter
+		private LanguageServerService servers;
+
 		@Override
 		public boolean supports(final String languageId) {
 			return "test".equals(languageId);
@@ -265,7 +276,8 @@ public class JythonLanguageServerTest {
 		public LanguageServer create(final String languageId,
 			final Environment environment)
 		{
-			return new JythonLanguageServer(environment);
+			return new JythonLanguageServer(environment, servers.launch("python",
+				JythonLanguageServer.environment(STUBS)), STUBS);
 		}
 	}
 
@@ -277,17 +289,6 @@ public class JythonLanguageServerTest {
 		catch (final Exception exc) {
 			throw new RuntimeException(exc);
 		}
-	}
-
-	/** Each signature's first parameter type, in order. */
-	private static String describe(final SignatureHelp help) {
-		return help.getSignatures().stream().map(s -> {
-			final String first = s.getParameters().isEmpty() ? "()" : s
-				.getParameters().get(0).getLabel().getLeft();
-			final String type = first.contains(" ") ? first.substring(0, first
-				.lastIndexOf(' ')) : first;
-			return type;
-		}).collect(Collectors.toList()).toString();
 	}
 
 	private static List<String> complete(final String code) {

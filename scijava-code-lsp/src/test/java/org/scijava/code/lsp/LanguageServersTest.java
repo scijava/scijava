@@ -101,7 +101,8 @@ import org.scijava.script.ScriptService;
 
 /**
  * Tests {@link LanguageServerService} and {@link ScriptSession}, with fake
- * in-process servers; and {@link BindingsLanguageServer}.
+ * in-process servers; and the {@code plaintext} server, of an interpreter's
+ * variables.
  *
  * @author Gabriel Selzer
  */
@@ -341,7 +342,7 @@ public class LanguageServersTest {
 		final SimpleScriptContext live = new SimpleScriptContext();
 		live.setAttribute("text", "hello", ScriptContext.ENGINE_SCOPE);
 		live.setAttribute("count", 3, ScriptContext.ENGINE_SCOPE);
-		final BindingsLanguageServer server = new BindingsLanguageServer(
+		final LanguageServer server = service.launch("plaintext",
 			new Environment().withLive(live));
 		assertEquals(Collections.singletonList("count"), labels(complete(server,
 			"x = co")));
@@ -369,7 +370,7 @@ public class LanguageServersTest {
 			assertEquals(Collections.singletonList("count"), labels(session
 				.completion("x = co", 6).get(10, TimeUnit.SECONDS)));
 		}
-		// Without an interpreter: nothing, and no server created.
+		// Without an interpreter: nothing, and none of the fake servers.
 		try (ScriptSession session = new ScriptSession(service, unserved)) {
 			assertTrue(session.completion("x = co", 6).get(10, TimeUnit.SECONDS)
 				.getItems().isEmpty());
@@ -384,6 +385,8 @@ public class LanguageServersTest {
 		// By LSP language.
 		assertTrue(service.supports("fake"));
 		assertFalse(service.supports("cobol"));
+		// Scripts as they are: their interpreters' variables.
+		assertTrue(service.supports("plaintext"));
 	}
 
 	@Test

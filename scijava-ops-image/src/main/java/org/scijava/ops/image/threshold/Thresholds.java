@@ -29,6 +29,13 @@
 
 package org.scijava.ops.image.threshold;
 
+import java.util.function.Predicate;
+
+import net.imglib2.histogram.Histogram1d;
+import net.imglib2.histogram.Real1dBinMapper;
+import net.imglib2.type.numeric.IntegerType;
+import net.imglib2.type.numeric.RealType;
+
 // Ported from Antti Niemisto's HistThresh Matlab toolbox
 //   Relicensed BSD 2-12-13
 
@@ -103,5 +110,60 @@ public final class Thresholds {
 		for (var i = 0; i <= j; i++)
 			x += y[i] * i * i * i;
 		return x;
+	}
+
+	/**
+	 * Maximum number of grey levels for which {@link #histogram} uses one bin
+	 * per grey level.
+	 */
+	public static final long MAX_LEVEL_BINS = 65536;
+
+	/**
+	 * Number of bins {@link #histogram} uses for non-integer data and for
+	 * integer data with more than {@link #MAX_LEVEL_BINS} grey levels.
+	 */
+	public static final int DEFAULT_NUM_BINS = 256;
+
+	/**
+	 * Creates the histogram used by the histogram-based threshold methods.
+	 * <p>
+	 * The histogram spans the range {@code [min, max]} of the included values.
+	 * For {@link IntegerType} data with at most {@link #MAX_LEVEL_BINS} grey
+	 * levels in that range, it has exactly one bin per grey level, centered on
+	 * that grey level, as in ImageJ's Auto_Threshold plugin. Otherwise, it has
+	 * {@link #DEFAULT_NUM_BINS} equally sized bins.
+	 * </p>
+	 *
+	 * @param values the values to count
+	 * @param include which values to count, or {@code null} to count all values
+	 * @return the histogram, or {@code null} if no value is included
+	 */
+	public static <T extends RealType<T>> Histogram1d<T> histogram(
+		final Iterable<T> values, final Predicate<T> include)
+	{
+		var min = Double.POSITIVE_INFINITY;
+		var max = Double.NEGATIVE_INFINITY;
+		var integer = true;
+		for (final var v : values) {
+			if (include != null && !include.test(v)) continue;
+			integer &= v instanceof IntegerType;
+			final var d = v.getRealDouble();
+			if (d < min) min = d;
+			if (d > max) max = d;
+		}
+		if (min > max) return null;
+		final Real1dBinMapper<T> mapper;
+		final var levels = (long) (max - min) + 1;
+		if (min == max || integer && levels <= MAX_LEVEL_BINS) {
+			mapper = new Real1dBinMapper<>(min - 0.5, max + 0.5, levels, false);
+		}
+		else {
+			mapper = new Real1dBinMapper<>(min, max, DEFAULT_NUM_BINS, false);
+		}
+		final var histogram = new Histogram1d<>(mapper);
+		for (final var v : values) {
+			if (include == null || include.test(v)) histogram.increment(v);
+		}
+		return histogram;
 	}
 }

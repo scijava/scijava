@@ -36,6 +36,7 @@ import net.imglib2.type.numeric.RealType;
 
 import net.imglib2.util.Util;
 import org.scijava.function.Computers;
+import org.scijava.ops.spi.Nullable;
 import org.scijava.ops.spi.OpDependency;
 
 /**
@@ -44,8 +45,10 @@ import org.scijava.ops.spi.OpDependency;
  * <p>
  * The histogram is created by {@link Thresholds#histogram}: integer images get
  * one bin per grey level between their minimum and maximum, as in ImageJ's
- * Auto_Threshold plugin. Images with exactly two grey levels are split
- * between them, whatever the method.
+ * Auto_Threshold plugin. A histogram with a single grey level yields that
+ * level (no foreground). Images with exactly two grey levels are split between
+ * them (threshold = upper level - 1), whatever the method, as in
+ * Auto_Threshold.
  * </p>
  * <p>
  * Note the use of type parameters {@code I} and {@code J}, allowing
@@ -64,41 +67,51 @@ public abstract class AbstractApplyThresholdImg< //
 		T extends RealType<T>, //
 		I extends Iterable<T>, //
 		J extends Iterable<BitType> //
-	> implements Computers.Arity1<I, J> {
+	> implements Computers.Arity3<I, Boolean, Boolean, J> {
 
 	@OpDependency(name = "threshold.apply")
 	private Computers.Arity2<I, T, J> applyThresholdOp;
 
 	/**
-	 * Thresholds {@code input}, storing the result in {@code output}.
+	 * Thresholds {@code input}, storing the result in {@code output}. Pixels
+	 * strictly above the computed threshold are foreground.
 	 *
 	 * @param input the input dataset
+	 * @param ignoreBlack whether to exclude pixels with the minimum value of the
+	 *          type (e.g. 0 for unsigned types) from the histogram, like the
+	 *          "Ignore black" option of ImageJ Auto_Threshold (default false)
+	 * @param ignoreWhite whether to exclude pixels with the maximum value of the
+	 *          type (e.g. 255 for 8-bit) from the histogram, like the "Ignore
+	 *          white" option of ImageJ Auto_Threshold (default false)
 	 * @param output the output dataset
 	 */
 	@Override
-	public void compute(final I input, final J output) {
-		final var threshold = input.iterator().next().createVariable();
-		computeThreshold(Thresholds.histogram(input, null), threshold);
-		// Threshold the image against the computed value
-		applyThresholdOp.compute(input, threshold, output);
-	}
-
-	/**
-	 * Computes the threshold of a histogram created by
-	 * {@link Thresholds#histogram}. A histogram with a single bin (i.e. an image
-	 * with a single grey level) yields that grey level, so that no pixel is
-	 * foreground. A histogram with exactly two grey levels yields the level
-	 * below the upper one, as in ImageJ's Auto_Threshold plugin, regardless of
-	 * the method (some of which fail on such histograms).
-	 */
-	private void computeThreshold(final Histogram1d<T> histogram,
-		final T threshold)
+	public void compute(final I input, @Nullable Boolean ignoreBlack,
+		@Nullable Boolean ignoreWhite, final J output)
 	{
+		if (ignoreBlack == null) ignoreBlack = false;
+		if (ignoreWhite == null) ignoreWhite = false;
+		final var threshold = input.iterator().next().createVariable();
+		var histogram = Thresholds.histogram(input, null);
+		// Note: Like Auto_Threshold, detect bilevel images before ignoring.
 		final var bilevel = Thresholds.bilevelBin(histogram);
 		if (bilevel >= 0) histogram.getCenterValue(bilevel, threshold);
-		else if (histogram.getBinCount() < 2) histogram.getCenterValue(0,
-			threshold);
-		else getComputeThresholdOp().compute(histogram, threshold);
+		else {
+			if (ignoreBlack || ignoreWhite) {
+				final var black = threshold.getMinValue();
+				final var white = threshold.getMaxValue();
+				final boolean noBlack = ignoreBlack, noWhite = ignoreWhite;
+				histogram = Thresholds.histogram(input, v -> {
+					final var d = v.getRealDouble();
+					return !(noBlack && d == black || noWhite && d == white);
+				});
+			}
+			if (histogram == null) threshold.setReal(threshold.getMaxValue());
+			else if (histogram.getBinCount() < 2) histogram.getCenterValue(0,
+				threshold);
+			else getComputeThresholdOp().compute(histogram, threshold);
+		}
+		applyThresholdOp.compute(input, threshold, output);
 	}
 
 	protected abstract Computers.Arity1<Histogram1d<T>, T>

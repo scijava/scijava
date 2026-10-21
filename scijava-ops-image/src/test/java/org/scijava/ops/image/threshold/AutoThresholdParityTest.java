@@ -78,6 +78,19 @@ public class AutoThresholdParityTest extends AbstractOpTest {
 			156, 73, 67);
 	}
 
+	/** The "Ignore black" and "Ignore white" options. */
+	@Test
+	public void testBlobs8IgnoreBlackWhite() {
+		assertFiji(blobs8(), true, false, 112, 119, 113, 92, 71, 69, 69, 155, 108,
+			112, 45, 73, 156, 73, 67);
+		assertFiji(blobs8(), false, true, 111, 119, 111, 92, 71, 68, 68, 155, 105,
+			111, 45, 72, 155, 73, 67);
+		assertFiji(blobs8(), true, true, 111, 119, 111, 92, 71, 68, 68, 155, 106,
+			111, 45, 72, 156, 73, 67);
+		assertFiji(blobs8(), false, false, 112, 119, 112, 93, 71, 69, 69, 155,
+			107, 112, 45, 72, 156, 73, 67);
+	}
+
 	/** An 8-bit image whose values lie in [70, 150]. */
 	@Test
 	public void testNarrow8() {
@@ -119,6 +132,18 @@ public class AutoThresholdParityTest extends AbstractOpTest {
 			final var op = "threshold." + OPS[i];
 			final var t = expected[i];
 			checks.add(() -> assertMask(img, op, t));
+		}
+		assertAll(checks);
+	}
+
+	private <T extends RealType<T>> void assertFiji(final Img<T> img,
+		final Boolean ignoreBlack, final Boolean ignoreWhite, final int... expected)
+	{
+		final List<Executable> checks = new ArrayList<>();
+		for (var i = 0; i < OPS.length; i++) {
+			final var op = "threshold." + OPS[i];
+			final var t = expected[i];
+			checks.add(() -> assertMask(img, op, t, ignoreBlack, ignoreWhite));
 		}
 		assertAll(checks);
 	}

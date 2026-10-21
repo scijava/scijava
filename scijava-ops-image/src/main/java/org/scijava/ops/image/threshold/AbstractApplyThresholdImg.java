@@ -44,7 +44,8 @@ import org.scijava.ops.spi.OpDependency;
  * <p>
  * The histogram is created by {@link Thresholds#histogram}: integer images get
  * one bin per grey level between their minimum and maximum, as in ImageJ's
- * Auto_Threshold plugin.
+ * Auto_Threshold plugin. Images with exactly two grey levels are split
+ * between them, whatever the method.
  * </p>
  * <p>
  * Note the use of type parameters {@code I} and {@code J}, allowing
@@ -86,12 +87,17 @@ public abstract class AbstractApplyThresholdImg< //
 	 * Computes the threshold of a histogram created by
 	 * {@link Thresholds#histogram}. A histogram with a single bin (i.e. an image
 	 * with a single grey level) yields that grey level, so that no pixel is
-	 * foreground.
+	 * foreground. A histogram with exactly two grey levels yields the level
+	 * below the upper one, as in ImageJ's Auto_Threshold plugin, regardless of
+	 * the method (some of which fail on such histograms).
 	 */
 	private void computeThreshold(final Histogram1d<T> histogram,
 		final T threshold)
 	{
-		if (histogram.getBinCount() < 2) histogram.getCenterValue(0, threshold);
+		final var bilevel = Thresholds.bilevelBin(histogram);
+		if (bilevel >= 0) histogram.getCenterValue(bilevel, threshold);
+		else if (histogram.getBinCount() < 2) histogram.getCenterValue(0,
+			threshold);
 		else getComputeThresholdOp().compute(histogram, threshold);
 	}
 

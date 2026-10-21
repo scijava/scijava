@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -97,6 +98,17 @@ public class AutoThresholdParityTest extends AbstractOpTest {
 		assertFiji(shorts(blobs(3, 1200, 150, 3000, 300, 0, 65535, false)), 2047,
 			2047, 2047, 1842, 1533, 1575, 1584, 2001, 927, 2040, 1268, 1492, 2097,
 			1225, 1470);
+	}
+
+	/**
+	 * An 8-bit image with only the grey levels 50 and 180, for which Fiji
+	 * returns 179 with every method.
+	 */
+	@Test
+	public void testTwoLevel8() {
+		final var expected = new int[OPS.length];
+		Arrays.fill(expected, 179);
+		assertFiji(bytes(blobs(4, 50, 0, 180, 0, 0, 255, false)), expected);
 	}
 
 	private <T extends RealType<T>> void assertFiji(final Img<T> img,

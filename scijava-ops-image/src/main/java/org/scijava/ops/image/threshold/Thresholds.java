@@ -166,4 +166,24 @@ public final class Thresholds {
 		}
 		return histogram;
 	}
+
+	/**
+	 * Detects a bilevel histogram, i.e. one with exactly two non-empty bins.
+	 * Mirroring ImageJ's Auto_Threshold plugin, the threshold of such a
+	 * histogram is the bin just below the upper non-empty bin, so that exactly
+	 * the pixels of the upper level are foreground.
+	 *
+	 * @param histogram the histogram to check
+	 * @return the threshold bin, or -1 if the histogram is not bilevel
+	 */
+	public static long bilevelBin(final Histogram1d<?> histogram) {
+		var nonEmpty = 0;
+		var upper = -1L;
+		for (var i = 0L; i < histogram.getBinCount(); i++) {
+			if (histogram.frequency(i) == 0) continue;
+			if (++nonEmpty > 2) return -1;
+			upper = i;
+		}
+		return nonEmpty == 2 ? upper - 1 : -1;
+	}
 }

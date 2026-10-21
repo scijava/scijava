@@ -36,7 +36,7 @@ import net.imglib2.type.BooleanType;
 import net.imglib2.type.numeric.IntegerType;
 import net.imglib2.util.Intervals;
 
-import org.scijava.ops.image.lgpl.labeling.utils.LabelFiltering;
+import org.scijava.ops.image.labeling.utils.LabelFiltering;
 import org.scijava.ops.spi.Nullable;
 
 /**

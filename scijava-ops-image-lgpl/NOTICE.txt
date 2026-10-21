@@ -16,33 +16,10 @@ This component contains functionality derived from MorphoLibJ:
   library and plugins for mathematical morphology with ImageJ",
   Bioinformatics 32(22):3532-3534, 2016. doi:10.1093/bioinformatics/btw413
 
-Two kinds of derived code are included:
+It contains code adapted from MorphoLibJ's source code:
 
-1. Code adapted from MorphoLibJ's source code:
-
-   - org.scijava.ops.image.lgpl.intrinsicvolumes
-     (features.intrinsicVolumes.* ops)
-
-2. Reimplementations of MorphoLibJ functionality, written from the
-   published literature without reference to MorphoLibJ's source code
-   (MorphoLibJ was used only as a black-box oracle to produce expected
-   test results). They are kept in this component, rather than in the
-   BSD-2 licensed scijava-ops-image, while their licensing is discussed
-   with the MorphoLibJ authors:
-
-   - org.scijava.ops.image.lgpl.morphology.reconstruction
-     (reconstruction, regional/extended extrema, h-transforms, extrema
-     imposition, border killing, grayscale hole filling)
-   - org.scijava.ops.image.lgpl.morphology.attribute
-     (grayscale attribute openings and closings)
-   - org.scijava.ops.image.lgpl.morphology.gradient
-     (morphological gradients and Laplacian)
-   - org.scijava.ops.image.lgpl.labeling.utils
-     (label map filtering, editing and topology utilities)
-   - org.scijava.ops.image.lgpl.labeling.distance
-     (label distance maps, label morphology and influence zones)
-   - org.scijava.ops.image.lgpl.segment.watershed
-     (compact, extended-minima and distance transform watersheds)
+  - org.scijava.ops.image.lgpl.intrinsicvolumes
+    (features.intrinsicVolumes.* ops)
 
 Each class's javadoc credits the original authors and the papers it is
 based on.

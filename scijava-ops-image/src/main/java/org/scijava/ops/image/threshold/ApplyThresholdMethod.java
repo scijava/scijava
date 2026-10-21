@@ -68,6 +68,24 @@ public final class ApplyThresholdMethod {
 	}
 
 	/**
+	 * @implNote op names='threshold.huang2'
+	 */
+	public static class Huang2 < //
+		T extends RealType<T>, //
+		I extends Iterable<T>, //
+		J extends Iterable<BitType> //
+	> extends AbstractApplyThresholdImg<T, I, J> { //
+
+		@OpDependency(name = "threshold.huang2")
+		private Computers.Arity1<Histogram1d<T>, T> computeThresholdOp;
+
+		@Override
+		protected Computers.Arity1<Histogram1d<T>, T> getComputeThresholdOp() {
+			return computeThresholdOp;
+		}
+	}
+
+	/**
 	 * @implNote op names='threshold.ij1'
 	 */
 	public static class IJ1 < //

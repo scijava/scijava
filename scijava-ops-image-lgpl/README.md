@@ -13,3 +13,6 @@ the original authors, project and license in its javadoc.
 
 This component is licensed under the GNU Lesser General Public License v3 or
 later; see [LICENSE.txt](LICENSE.txt).
+
+See [NOTICE.txt](NOTICE.txt) for the projects this component's code derives
+from, notably [MorphoLibJ](https://github.com/ijpb/MorphoLibJ).

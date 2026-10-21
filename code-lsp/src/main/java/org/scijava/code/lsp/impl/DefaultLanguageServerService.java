@@ -30,7 +30,6 @@
 package org.scijava.code.lsp.impl;
 
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.scijava.code.lsp.Environment;
@@ -107,11 +106,6 @@ public class DefaultLanguageServerService extends AbstractService implements
 		final Environment environment)
 	{
 		return plugin(languageId).create(languageId, environment);
-	}
-
-	@Override
-	public Map<String, Class<?>> scriptParameters(final String text) {
-		return processing.of(text).parameters;
 	}
 
 	// -- Disposable methods --

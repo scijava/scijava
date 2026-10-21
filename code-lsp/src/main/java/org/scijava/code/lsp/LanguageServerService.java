@@ -29,7 +29,6 @@
 
 package org.scijava.code.lsp;
 
-import java.util.Map;
 
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.scijava.script.ScriptLanguage;
@@ -82,14 +81,4 @@ public interface LanguageServerService extends SciJavaService {
 	 * @throws IllegalArgumentException If no plugin serves the language.
 	 */
 	LanguageServer launch(String languageId, Environment environment);
-
-	/**
-	 * Gets the variables a script's parameters ({@code #@} lines, and old-style
-	 * {@code // @} lines in its header) define before it runs, by name, with
-	 * their Java types ({@code Object} if unresolvable); in declaration order.
-	 * Sessions declare them for their servers (see
-	 * {@link ScriptDocument}). Half-typed declarations
-	 * are expected, and parsed quietly.
-	 */
-	Map<String, Class<?>> scriptParameters(String text);
 }

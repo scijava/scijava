@@ -46,6 +46,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -91,8 +92,8 @@ import org.scijava.log.StderrLogService;
  */
 public class ServerProcessesTest {
 
-	private static final Environment ENV = new Environment(
-		"/env/python", Collections.singletonList("/overlay"));
+	private static final Environment ENV = new Environment().withInterpreter(
+		"/env/python").withPaths(Collections.singletonList("/overlay"));
 
 	private final List<FakeServer> started = new CopyOnWriteArrayList<>();
 	// NB: Servers note their use by the system clock.
@@ -290,7 +291,7 @@ public class ServerProcessesTest {
 		@Override
 		public Object initializationOptions(final Environment env) {
 			final Map<String, Object> workspace = new LinkedHashMap<>();
-			workspace.put("environmentPath", env.interpreter());
+			env.interpreter().ifPresent(p -> workspace.put("environmentPath", p));
 			workspace.put("extraPaths", env.paths());
 			return Collections.singletonMap("workspace", workspace);
 		}

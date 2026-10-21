@@ -117,6 +117,8 @@ public class LanguageServersTest {
 	private ScriptLanguage fake;
 	private final List<PublishDiagnosticsParams> published =
 		new CopyOnWriteArrayList<>();
+	/** The problems sessions' listeners heard, in order. */
+	private final List<List<Diagnostic>> heard = new CopyOnWriteArrayList<>();
 
 	@BeforeEach
 	public void setUp() {
@@ -168,12 +170,17 @@ public class LanguageServersTest {
 		waitFor(() -> server.events.size() >= 6);
 		assertEquals(Arrays.asList("close", "shutdown", "exit"), server.events
 			.subList(3, 6));
+		// Once closed: no server more, and no answers.
+		assertTrue(session.completion("x = 3", 5).get(10, TimeUnit.SECONDS)
+			.getItems().isEmpty());
+		assertEquals(1, SERVERS.size());
+		assertEquals(6, server.events.size());
 	}
 
 	@Test
 	public void testAwaitsInitialization() {
 		// A server answering initialize later (e.g. a process starting).
-		final FakeServer late = new FakeServer("late", Environment.NONE) {
+		final FakeServer late = new FakeServer("late", new Environment()) {
 
 			@Override
 			public CompletableFuture<InitializeResult> initialize(
@@ -208,11 +215,11 @@ public class LanguageServersTest {
 		final ScriptContext live = new SimpleScriptContext();
 		try (ScriptSession session = new ScriptSession(service, fake, live)) {
 			session.update("x");
-			assertSame(live, server(0).environment().live());
+			assertSame(live, server(0).environment().live().get());
 		}
 		try (ScriptSession session = new ScriptSession(service, fake)) {
 			session.update("x");
-			assertSame(Environment.NO_STATE, server(1).environment().live());
+			assertEquals(Optional.empty(), server(1).environment().live());
 		}
 		// Where the script runs, as its dialect says.
 		try (ScriptSession session = new ScriptSession(service, fake, live)) {
@@ -220,8 +227,9 @@ public class LanguageServersTest {
 			final String directive = "#@script(env=/env/bin/fake)";
 			session.update(directive + "\nx");
 			final FakeServer server = server(2);
-			assertEquals("/env/bin/fake", server.environment().interpreter());
-			assertSame(live, server.environment().live());
+			assertEquals(Optional.of("/env/bin/fake"), server.environment()
+				.interpreter());
+			assertSame(live, server.environment().live().get());
 			waitFor(() -> server.events.size() >= 2);
 			assertEquals("open 1 " + directive.replaceAll(".", " ") + "\nx",
 				server.events.get(1));
@@ -230,15 +238,15 @@ public class LanguageServersTest {
 
 	@Test
 	public void testSession() throws Exception {
-		final List<List<Diagnostic>> heard = new CopyOnWriteArrayList<>();
-		final ScriptSession session = new ScriptSession(service, fake)
-			.setDiagnosticsListener(heard::add);
+		final ScriptSession session = new ScriptSession(service, fake);
+		session.setDiagnosticsListener(heard::add);
 		// Opened with its first text; untitled.
 		session.update("x = 1");
 		final FakeServer server = server(0);
 		waitFor(() -> server.events.size() >= 2);
 		// The same text again: nothing sent; another: the next version.
-		session.update("x = 1").update("x.ma");
+		session.update("x = 1");
+		session.update("x.ma");
 		final List<String> events = server.events;
 		waitFor(() -> events.size() >= 3);
 		assertEquals(Arrays.asList("open 1 x = 1", "change 2 x.ma"), events
@@ -255,13 +263,12 @@ public class LanguageServersTest {
 		assertEquals(3, events.size());
 
 		// The problems in the current text.
-		assertEquals(Collections.singletonList("high: x.ma"), messages(session
-			.diagnostics(10_000)));
-		assertFalse(heard.isEmpty());
+		awaitHeard("high: x.ma");
 
 		// Saved as a file: closed, and opened anew as the file.
 		final File file = new File("scripts", "a.fake");
-		session.setFile(() -> file).update("x.ma");
+		session.setFile(() -> file);
+		session.update("x.ma");
 		waitFor(() -> events.size() >= 5);
 		assertEquals(Arrays.asList("close", "open 1 x.ma"), events.subList(3, 5));
 		assertEquals(file.getAbsoluteFile().toURI().toString(), opened.get(1));
@@ -273,14 +280,16 @@ public class LanguageServersTest {
 	@Test
 	public void testDiagnostics() throws Exception {
 		try (ScriptSession session = new ScriptSession(service, fake)) {
-			assertEquals(Collections.singletonList("high: oops"), messages(session
-				.update("oops").diagnostics(10_000)));
+			session.setDiagnosticsListener(heard::add);
+			session.update("oops");
+			awaitHeard("high: oops");
 			final FakeServer server = server(0);
 			// Problems of an earlier version are out of date.
-			assertEquals(Collections.emptyList(), messages(session.update("fine")
-				.diagnostics(10_000)));
+			session.update("fine");
+			awaitHeard();
+			final int before = heard.size();
 			server.publish(server.opened.get(0), 1, "stale");
-			assertEquals(Collections.emptyList(), messages(session.diagnostics()));
+			assertEquals(before, heard.size());
 		}
 	}
 
@@ -301,6 +310,7 @@ public class LanguageServersTest {
 	public void testTransforming() throws Exception {
 		final String script = "#@ double sigma\nx.ma";
 		try (ScriptSession session = new ScriptSession(service, fake)) {
+			session.setDiagnosticsListener(heard::add);
 			final CompletionList list = session.completion(script, script.length())
 				.get(10, TimeUnit.SECONDS);
 			final FakeServer server = server(0);
@@ -317,9 +327,10 @@ public class LanguageServersTest {
 			server.publish(server.opened.get(0), 1, "oops", new Range(new Position(
 				0, 0), new Position(0, 5)), new Range(new Position(2, 0),
 					new Position(2, 1)));
-			assertEquals(1, session.diagnostics().size());
-			assertEquals(new Range(new Position(1, 0), new Position(1, 1)), session
-				.diagnostics().get(0).getRange());
+			final List<Diagnostic> problems = heard.get(heard.size() - 1);
+			assertEquals(1, problems.size());
+			assertEquals(new Range(new Position(1, 0), new Position(1, 1)), problems
+				.get(0).getRange());
 		}
 	}
 
@@ -330,7 +341,8 @@ public class LanguageServersTest {
 		final SimpleScriptContext live = new SimpleScriptContext();
 		live.setAttribute("text", "hello", ScriptContext.ENGINE_SCOPE);
 		live.setAttribute("count", 3, ScriptContext.ENGINE_SCOPE);
-		final BindingsLanguageServer server = new BindingsLanguageServer(live);
+		final BindingsLanguageServer server = new BindingsLanguageServer(
+			new Environment().withLive(live));
 		assertEquals(Collections.singletonList("count"), labels(complete(server,
 			"x = co")));
 		assertEquals(Arrays.asList("count", "text"), labels(complete(server, "")));
@@ -381,20 +393,25 @@ public class LanguageServersTest {
 		final String a = "#@script(env=/a)\nx.ma";
 		final String b = "#@script(env=/b)\nx.ma";
 		try (ScriptSession session = new ScriptSession(service, fake)) {
+			session.setDiagnosticsListener(heard::add);
 			session.completion(a, a.length()).get(10, TimeUnit.SECONDS);
 			final FakeServer first = server(0);
-			assertEquals("/a", first.environment().interpreter());
+			assertEquals(Optional.of("/a"), first.environment().interpreter());
+			// What the server moved away from made: not asked of the next.
+			session.update(b);
+			assertNull(session.resolve(new CompletionItem("max")).get(10,
+				TimeUnit.SECONDS));
 			session.completion(b, b.length()).get(10, TimeUnit.SECONDS);
 			final FakeServer second = server(1);
-			assertEquals("/b", second.environment().interpreter());
+			assertEquals(Optional.of("/b"), second.environment().interpreter());
 			assertTrue(second.events.contains("open 2 " + b.replace(
 				"#@script(env=/b)", "                ")), second.events.toString());
 			// The server moved away from is let go...
 			waitFor(() -> first.events.contains("shutdown"));
 			// ...and what it still says, not heard.
 			first.publish(first.opened.get(0), 2, "stale");
-			assertTrue(session.diagnostics().stream().noneMatch(d -> d.getMessage()
-				.getLeft().contains("stale")));
+			assertTrue(heard.stream().flatMap(List::stream).noneMatch(d -> d
+				.getMessage().getLeft().contains("stale")));
 			// Edits stay with the server of where it runs.
 			session.update(b + "x");
 			waitFor(() -> second.events.stream().anyMatch(e -> e.startsWith(
@@ -407,8 +424,7 @@ public class LanguageServersTest {
 	public void testLaunch() {
 		// A server, from the highest-priority plugin serving the
 		// language: a new one, in the environment given.
-		final Environment env = new Environment("/env/bin/fake", Collections
-			.emptyList());
+		final Environment env = new Environment().withInterpreter("/env/bin/fake");
 		final LanguageServer server = service.launch("fake", env);
 		assertSame(SERVERS.get(0), server);
 		assertEquals("high", SERVERS.get(0).name);
@@ -416,7 +432,7 @@ public class LanguageServersTest {
 		assertSame(env, SERVERS.get(0).environment());
 		// No plugin, no server.
 		assertThrows(IllegalArgumentException.class, () -> service.launch("cobol",
-			Environment.NONE));
+			new Environment()));
 	}
 
 	// -- Helper methods --
@@ -462,6 +478,12 @@ public class LanguageServersTest {
 	private static List<String> labels(final CompletionList list) {
 		return list.getItems().stream().map(CompletionItem::getLabel).collect(
 			Collectors.toList());
+	}
+
+	/** Waits until the problems heard last are those given. */
+	private void awaitHeard(final String... expected) {
+		waitFor(() -> !heard.isEmpty() && messages(heard.get(heard.size() - 1))
+			.equals(Arrays.asList(expected)));
 	}
 
 	private static List<String> messages(final List<Diagnostic> diagnostics) {
@@ -538,10 +560,10 @@ public class LanguageServersTest {
 			for (final String line : text.split("\n")) {
 				if (line.startsWith("#@script(env=")) {
 					final String env = line.substring(13, line.length() - 1);
-					return new Environment(env, null);
+					return new Environment().withInterpreter(env);
 				}
 			}
-			return Environment.NONE;
+			return new Environment();
 		}
 
 		@Override

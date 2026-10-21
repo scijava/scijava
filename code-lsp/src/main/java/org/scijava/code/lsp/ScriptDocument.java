@@ -90,7 +90,7 @@ public final class ScriptDocument {
 	 */
 	public static ScriptDocument of(final String script) {
 		return new ScriptDocument(script, script, "plaintext", (t,
-			f) -> Environment.NONE, 0, Collections.emptySet());
+			f) -> new Environment(), 0, Collections.emptySet());
 	}
 
 	/**
@@ -98,9 +98,7 @@ public final class ScriptDocument {
 	 *
 	 * @param script The script's source code.
 	 * @param parameters The variables defined before the script runs (e.g. its
-	 *          script parameters, as
-	 *          {@link org.scijava.code.lsp.LanguageServerService#scriptParameters}
-	 *          gives them), by name, with their Java types.
+	 *          script parameters), by name, with their Java types.
 	 * @param removedLines The lines (from 0) to blank: those SciJava removes
 	 *          before running the script (e.g. its {@code #@} lines).
 	 * @param dialect How the script's language declares them.
@@ -125,13 +123,8 @@ public final class ScriptDocument {
 	 * {@link ScriptDialect.Header#hiddenNames()}), which the script does not
 	 * mention.
 	 */
-	public Set<String> hiddenNames() {
+	Set<String> hiddenNames() {
 		return hiddenNames;
-	}
-
-	/** The script, as given. */
-	public String original() {
-		return original;
 	}
 
 	/** The script as plain code of its language. */
@@ -143,54 +136,54 @@ public final class ScriptDocument {
 	 * The LSP language of the {@link #text()} (e.g. {@code python}), as its
 	 * dialect says; or {@code plaintext}, for a script as it is.
 	 */
-	public String languageId() {
+	String languageId() {
 		return languageId;
 	}
 
 	/**
 	 * Gets where the script runs, as its dialect says (see
-	 * {@link ScriptDialect#environment}); or {@link Environment#NONE}, for a
+	 * {@link ScriptDialect#environment}); or a blank {@link Environment}, for a
 	 * script as it is.
 	 *
 	 * @param file The script's file, if it has one.
 	 */
-	public Environment environment(final Optional<File> file) {
+	Environment environment(final Optional<File> file) {
 		return where.apply(original, file);
 	}
 
-	/** Maps an offset in {@link #original()} to one in {@link #text()}. */
-	public int toTransformed(final int offset) {
+	/** Maps an offset in the script to one in {@link #text()}. */
+	int toTransformed(final int offset) {
 		return offset + headerLength;
 	}
 
 	/**
-	 * Maps an offset in {@link #text()} to one in {@link #original()}; or
+	 * Maps an offset in {@link #text()} to one in the script; or
 	 * returns -1 if it lies in the header prepended.
 	 */
 	public int toOriginal(final int offset) {
 		return offset < headerLength ? -1 : offset - headerLength;
 	}
 
-	/** Maps a position in {@link #original()} to one in {@link #text()}. */
-	public Position toTransformed(final Position p) {
+	/** Maps a position in the script to one in {@link #text()}. */
+	Position toTransformed(final Position p) {
 		return Positions.position(text, toTransformed(Positions.offset(original,
 			p)));
 	}
 
 	/**
-	 * Maps a position in {@link #text()} to one in {@link #original()}; or
-	 * returns null if it lies in the header prepended.
+	 * Maps a position in {@link #text()} to one in the script; or returns null
+	 * if it lies in the header prepended.
 	 */
-	public Position toOriginal(final Position p) {
+	Position toOriginal(final Position p) {
 		final int offset = toOriginal(Positions.offset(text, p));
 		return offset < 0 ? null : Positions.position(original, offset);
 	}
 
 	/**
-	 * Maps a range in {@link #text()} to one in {@link #original()}; or returns
-	 * null if either end lies in the header prepended.
+	 * Maps a range in {@link #text()} to one in the script; or returns null if
+	 * either end lies in the header prepended.
 	 */
-	public Range toOriginal(final Range r) {
+	Range toOriginal(final Range r) {
 		final Position start = toOriginal(r.getStart());
 		final Position end = toOriginal(r.getEnd());
 		return start == null || end == null ? null : new Range(start, end);

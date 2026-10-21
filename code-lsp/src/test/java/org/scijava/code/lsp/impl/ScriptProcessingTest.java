@@ -31,21 +31,27 @@ package org.scijava.code.lsp.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.TreeSet;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.scijava.Context;
+import org.scijava.log.LogLevel;
+import org.scijava.log.LogService;
 
 /**
  * Tests {@link ScriptProcessing}.
  *
  * @author Gabriel Selzer
+ * @author Curtis Rueden
  */
 public class ScriptProcessingTest {
 
@@ -102,5 +108,69 @@ public class ScriptProcessingTest {
 		final ScriptProcessing.Processed p = processing.of("x = 1\n# comment");
 		assertEquals(Collections.emptySet(), p.removedLines);
 		assertEquals(Collections.emptyMap(), p.parameters);
+	}
+
+	@Test
+	public void testInputsAndOutputs() {
+		final Map<String, Class<?>> params = parameters("" + //
+			"#@ String (label=\"Please enter your name\") name\n" + //
+			"#@output String greeting\n" + //
+			"#@ int count\n" + //
+			"\n" + //
+			"greeting = \"Hello, \" + name + \"!\"\n");
+		assertEquals(Arrays.asList("name", "count", "greeting"), //
+			new ArrayList<>(params.keySet()));
+		assertSame(String.class, params.get("name"));
+		assertSame(int.class, params.get("count"));
+		assertSame(String.class, params.get("greeting"));
+	}
+
+	@Test
+	public void testNoParameters() {
+		assertTrue(parameters("x = 1\n").isEmpty());
+		// The implicit return value output is not a declared variable.
+		assertTrue(parameters("#@script(name=\"x\")\n").isEmpty());
+	}
+
+	@Test
+	public void testHalfTypedAndUnresolvable() {
+		final Map<String, Class<?>> params = parameters("" + //
+			"#@ String name\n" + //
+			"#@ NoSuchType thing\n" + //
+			"#@ Str\n" + //
+			"#@ String (label=\"Unfinished\n");
+		assertEquals(Arrays.asList("name", "thing"), //
+			new ArrayList<>(params.keySet()));
+		assertSame(String.class, params.get("name"));
+		assertSame(Object.class, params.get("thing"));
+	}
+
+	@Test
+	public void testScriptDirective() {
+		final List<String> warnings = new ArrayList<>();
+		context.service(LogService.class).addLogListener(message -> {
+			if (message.level() == LogLevel.WARN) warnings.add(message.text());
+		});
+		final Map<String, Class<?>> params = parameters("" + //
+			"#@script(env=\"env.toml\", scheme=\"pixi.toml\")\n" + //
+			"#@ String name\n");
+		assertEquals(Arrays.asList("name"), new ArrayList<>(params.keySet()));
+		// The directive is not a parameter, so it is not warned about.
+		assertTrue(warnings.isEmpty(), warnings.toString());
+	}
+
+	@Test
+	public void testCached() {
+		final Map<String, Class<?>> first = parameters(
+			"#@ String name\nx = 1\n");
+		// Non-declaration edits reuse the parse.
+		assertSame(first, parameters("#@ String name\nx = 12\n"));
+	}
+
+	// -- Helper methods --
+
+	/** The variables a script's parameters define, as processed. */
+	private Map<String, Class<?>> parameters(final String text) {
+		return processing.of(text).parameters;
 	}
 }

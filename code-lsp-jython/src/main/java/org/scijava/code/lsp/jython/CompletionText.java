@@ -46,7 +46,7 @@ import org.scijava.code.lsp.jvm.ClassIndex;
  *
  * @author Albert Cardona
  */
-public class CompletionText {
+class CompletionText {
 
 	private String replacementText;
 	private String description;

@@ -78,7 +78,7 @@ import org.scijava.code.lsp.jvm.ClassIndex;
  *
  * @author Gabriel Selzer
  */
-public class JavaStubs {
+class JavaStubs {
 
 	/** How many packages to write stubs for, at most, per session. */
 	private static final int MAX_PACKAGES = 400;

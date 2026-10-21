@@ -33,13 +33,14 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
 
-public interface DotAutocompletions {
+interface DotAutocompletions {
 	
-	static public final DotAutocompletions EMPTY = new EmptyDotAutocompletions();
+	static public final DotAutocompletions EMPTY = () -> Collections.emptyList();
 	
 	default public String getClassname() {
 		return null;
@@ -65,7 +66,7 @@ public interface DotAutocompletions {
 				for (final Method m: c.getMethods())
 					ac.add(new CompletionText(m.getName() + "()", c, m)); // TODO could do a parameter-driven autocompletion
 			} catch (final Exception e) {
-				JythonDev.print("Could not load class " + className, e);
+				// NB: Nothing to complete from it.
 			}
 		}
 		return ac;

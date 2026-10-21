@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 
-public class VarDotAutocompletions implements DotAutocompletions {
+class VarDotAutocompletions implements DotAutocompletions {
 	String className;
 	public VarDotAutocompletions(final String className) {
 		this.className = className;
@@ -51,7 +51,7 @@ public class VarDotAutocompletions implements DotAutocompletions {
 				final Class<?> c = Class.forName(className);
 				DotAutocompletions.fieldsAndMethodsInto(c, ac);
 			} catch (final Exception e) {
-				JythonDev.print("Could not load class " + className, e);
+				// NB: Nothing to complete from it.
 			}
 		}
 		return ac;
@@ -65,7 +65,7 @@ public class VarDotAutocompletions implements DotAutocompletions {
 					Arrays.stream(c.getFields()).map(f -> new CompletionText(f.getName(), c, f)),
 					Arrays.stream(c.getMethods()).map(m -> new CompletionText(m.getName(), c, m)));
 		} catch (final Exception e) {
-			JythonDev.print("Could not load class " + className, e);
+			// NB: Nothing to complete from it.
 		}
 		return Stream.empty();
 	}

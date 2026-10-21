@@ -39,16 +39,14 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 /**
- * Offers Jython's in-process language server (see
- * {@link JythonLanguageServer}), for {@code jython}: plain Jython code, e.g.
- * as SciJava's Jython scripts become (see scripting-jython); with a Python
- * language server beside it, if one is offered (see {@link PythonCompanion}).
+ * Offers an in-process Jython {@link LanguageServer}
  *
  * @author Gabriel Selzer
+ * @see JythonLanguageServer
  */
 @Plugin(type = LanguageServerPlugin.class, name = "Jython",
 	priority = Priority.HIGH)
-public class JythonServerPlugin implements LanguageServerPlugin {
+public class JythonLanguageServerPlugin implements LanguageServerPlugin {
 
 	@Parameter(required = false)
 	private LanguageServerService servers;
@@ -65,8 +63,10 @@ public class JythonServerPlugin implements LanguageServerPlugin {
 	public LanguageServer create(final String languageId,
 		final Environment environment)
 	{
-		return new JythonLanguageServer(environment, PythonCompanion.launch(
-			servers, stubs()));
+		return new JythonLanguageServer( //
+			environment, //
+			PythonCompanion.launch(servers, stubs()) //
+		);
 	}
 
 	/** Sets the stubs, e.g. to write them elsewhere in tests. */

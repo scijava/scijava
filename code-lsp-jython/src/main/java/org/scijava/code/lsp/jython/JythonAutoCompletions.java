@@ -65,7 +65,7 @@ import org.scijava.code.lsp.jvm.Callable;
  * @author Albert Cardona
  * @author Curtis Rueden
  */
-public class JythonAutoCompletions {
+class JythonAutoCompletions {
 
 	private static final Pattern
 		nameToken = Pattern.compile("^(|.*?[ \\t,\\[=\\(+\\-*/%<>!:]+)([a-zA-Z_][a-zA-Z0-9_]*)$"),
@@ -89,7 +89,6 @@ public class JythonAutoCompletions {
 		"is", "lambda", "not", "or", "pass", "print", "raise", "return", "try",
 		"while", "with", "yield", "None", "True", "False");
 
-	private final JythonImportFormat formatter = new JythonImportFormat();
 
 	/** Python standard library module names, discovered from the jython jar. */
 	private static final List<String> jython_jar_modules = findJythonModules();
@@ -194,7 +193,7 @@ public class JythonAutoCompletions {
 			}
 		}
 		catch (final Exception e) {
-			JythonDev.print("Failed to add path from sys.path.append expression.", e);
+			// NB: Nothing to complete from it.
 		}
 
 		// A python module import: "import x" or "from x".
@@ -240,7 +239,7 @@ public class JythonAutoCompletions {
 						}
 					}
 					catch (final ClassNotFoundException | LinkageError exc) {
-						JythonDev.printTrace("Can't load class: " + classname);
+						// NB: Nothing to complete from it.
 					}
 				}
 			}
@@ -337,7 +336,7 @@ public class JythonAutoCompletions {
 						null), "Custom python module")));
 			}
 			catch (final Exception e) {
-				JythonDev.print("Failed to read jython module file.", e);
+				// NB: Nothing to complete from it.
 			}
 		}
 	}
@@ -383,14 +382,14 @@ public class JythonAutoCompletions {
 		final Matcher m1 = fromImport.matcher(text);
 		if (m1.find()) {
 			ClassIndex.findClassNamesContaining(m1.group(3)).map(
-				formatter::singleToImportStatement).forEach(s -> completions.add(
+				JythonImports::importStatement).forEach(s -> completions.add(
 					item(s, CompletionItemKind.Module, null)));
 			return;
 		}
 		final Matcher m1f = fastImport.matcher(text);
 		if (m1f.find()) {
 			ClassIndex.findClassNamesForPackage(m1f.group(2)).map(
-				formatter::singleToImportStatement).forEach(s -> completions.add(
+				JythonImports::importStatement).forEach(s -> completions.add(
 					item(s, CompletionItemKind.Module, null)));
 			return;
 		}
@@ -425,7 +424,7 @@ public class JythonAutoCompletions {
 			for (final String className : classNames) {
 				final String simpleName = className.substring(className.lastIndexOf(
 					'.') + 1);
-				final String importStmt = formatter.singleToImportStatement(className);
+				final String importStmt = JythonImports.importStatement(className);
 				// Side effect on accept: insert the import near the top of the file.
 				final TextEdit edit = JythonImports.autoImportEdit(fullCode, className,
 					importStmt);
@@ -556,7 +555,6 @@ public class JythonAutoCompletions {
 			}
 		}
 		catch (final Exception e) {
-			JythonDev.print("Cannot locate the jython jar for stdlib modules", e);
 			return Collections.emptyList();
 		}
 	}

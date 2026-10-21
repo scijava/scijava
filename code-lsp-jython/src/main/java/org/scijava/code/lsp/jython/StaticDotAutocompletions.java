@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 
 import org.python.indexer.types.NModuleType;
 
-public class StaticDotAutocompletions implements DotAutocompletions
+class StaticDotAutocompletions implements DotAutocompletions
 {	
 	final String className;
 	public StaticDotAutocompletions(final String className) {
@@ -49,25 +49,21 @@ public class StaticDotAutocompletions implements DotAutocompletions
 	public List<CompletionText> get() {
 		final List<CompletionText> ac = new ArrayList<>();
 		if (null != this.className) {
-			String msg = "";
 			try {
 				// Check first if it's a python module
 				final NModuleType module = Scope.loadPythonModule(this.className); // Scope.indexer.getBuiltinModule(this.className);
-				JythonDev.printTrace("module is: " + module);
 				if (null != module) {
 					module.getTable().keySet().forEach( m -> ac.add(new CompletionText(m)));
 					// Not need to remove: a file system watcher will do so when the module file is updated or deleted.
 					// Scope.indexer.moduleTable.remove(this.className);
 					return ac;
-				} else {
-					msg += "Not a python module: " + this.className;
 				}
 				// Or a java class:
 				try {
 					DotAutocompletions.staticFieldsAndStaticMethodsInto(Class.forName(this.className), ac);
 					return ac;
 				} catch (ClassNotFoundException cnfe) {
-					msg += "\nCannot find java class " + this.className;
+					// NB: Not a java class.
 				}
 				// Or a static method of a java class
 				try {
@@ -84,14 +80,10 @@ public class StaticDotAutocompletions implements DotAutocompletions
 					}
 					return ac;
 				} catch (ClassNotFoundException cnfe) {
-					msg += "\nCannot derive static method or field from " + this.className;
-				}
-				
-				if (null != msg) {
-					JythonDev.print(msg);
+					// NB: Nor a static method or field of one.
 				}
 			} catch (Exception e) {
-				JythonDev.print(msg, e);
+				// NB: Nothing to complete from it.
 			}
 		}
 		return ac;

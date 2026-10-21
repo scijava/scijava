@@ -2,7 +2,7 @@
 
 Jython code intelligence for SciJava: an in-process language server for
 `jython` (`JythonLanguageServer`, offered to `scijava-code-lsp` by
-`JythonServerPlugin`), driven by Jython's own parser (see
+`JythonLanguageServerPlugin`), driven by Jython's own parser (see
 `JythonAutoCompletions`). It completes Java classes, their members and
 constructors, and the variables of the script and of a running interpreter;
 and it gives signature help and hover.

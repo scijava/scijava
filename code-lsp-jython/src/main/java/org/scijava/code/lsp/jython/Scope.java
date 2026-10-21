@@ -49,7 +49,7 @@ import org.python.indexer.types.NModuleType;
 
 
 
-public class Scope {
+class Scope {
 	final Scope parent;
 	final String className; // if any
 	final private List<Scope> children = new ArrayList<>();
@@ -80,7 +80,6 @@ public class Scope {
 							return;
 						}
 						if (keys.containsKey(key)) {
-							JythonDev.print("Python module at:\n" + keys.get(key) + "\n ... was updated. Clearing indexer cache.");
 							// One of the files changed: unload all, given that parent modules would have been loaded as well
 							// and it gets complicated quickly to find out which need to be reloaded and which don't.
 							keys.clear();
@@ -94,7 +93,7 @@ public class Scope {
 			module_watcher.setPriority(Thread.NORM_PRIORITY);
 			module_watcher.start();
 		} catch (Exception e ){
-			JythonDev.print("Failed to start filesystem watcher service for python modules", e);
+			// NB: Then, python modules are not reloaded as they change.
 		}
 	}
 	
@@ -114,7 +113,6 @@ public class Scope {
 				mod = indexer.loadModule(qname);
 				if (null == mod) return null;
 			} catch (Exception e) {
-				JythonDev.print("Could not load python module named " + qname, e);
 				return null;
 			}
 			try {
@@ -128,11 +126,9 @@ public class Scope {
 							StandardWatchEventKinds.ENTRY_MODIFY,
 							StandardWatchEventKinds.ENTRY_DELETE);
 					keys.put(key, path);
-				} else {
-					JythonDev.print("Python module " + qname + " doesn't have an associated file path.");
 				}
 			} catch (Exception e) {
-				JythonDev.print("Could not load python module named " + qname, e);	
+				// NB: Nothing to complete from it.
 			}
 			return mod;
 		}
@@ -239,18 +235,15 @@ public class Scope {
 	public Stream<String> findVarsByType(final String type, final Class<?> clazz) {
 		Stream<String> varNames = new ArrayList<String>().stream();
 		Scope scope = this;
-		JythonDev.printTrace("Scope.findVarsByType: searching for type " + type + " and class " + clazz.getCanonicalName());
 		while (null != scope) {
 			varNames = Stream.concat(varNames,
 					scope.vars.entrySet().stream()
 						.filter(e -> {
 							try {
-								JythonDev.printTrace("Scope.findVarsByType, testing: " + e.getKey() + " :: " + e.getValue() + " with class " + e.getValue().getClassname());
 								if (e.getKey().startsWith("____")) return false; // injected variables in JythonAutoCompletions.completionsFor
 								final String classname = e.getValue().getClassname();
 								if (null == classname) return false;
 								if (type.equals(classname)) {
-									JythonDev.printTrace("type == classname: " + type);
 									return true;
 								}
 								// Handle compatible numeric arguments
@@ -283,7 +276,7 @@ public class Scope {
 								// TODO: search for methods of non-matching classes that return a matching type
 								
 							} catch (ClassNotFoundException e1) {
-								JythonDev.print("Cannot load class " + e.getValue(), e1);
+								// NB: Nothing to complete from it.
 							}
 							return false;
 						})

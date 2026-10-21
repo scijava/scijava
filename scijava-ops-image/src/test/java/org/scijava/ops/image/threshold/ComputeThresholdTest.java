@@ -141,7 +141,8 @@ public class ComputeThresholdTest extends AbstractThresholdTest {
 	 */
 	@Test
 	public void testOtsu() {
-		testComputeThresholdOp(34103, "threshold.otsu");
+		// Note: Fiji Auto_Threshold.Otsu on the same histogram yields bin 128.
+		testComputeThresholdOp(32591, "threshold.otsu");
 	}
 
 	/**

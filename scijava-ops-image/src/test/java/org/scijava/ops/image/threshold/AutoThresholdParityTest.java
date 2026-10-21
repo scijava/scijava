@@ -133,6 +133,27 @@ public class AutoThresholdParityTest extends AbstractOpTest {
 		assertMask(bytes(gaps()), "threshold.minError", 41);
 	}
 
+	/**
+	 * Otsu ties: any threshold in an empty gap of the histogram yields the same
+	 * between-class variance. Fiji picks the lowest one (20 for the grey levels
+	 * 10, 20 and 200; 2040 for the 16-bit image).
+	 */
+	@Test
+	public void testOtsuTies() {
+		assertThresholdValue(bytes(gaps()), "threshold.otsu", 20);
+		assertThresholdValue(shorts(blobs(3, 1200, 150, 3000, 300, 0, 65535,
+			false)), "threshold.otsu", 2040);
+	}
+
+	static <T extends RealType<T>> void assertThresholdValue(final Img<T> img,
+		final String op, final double expected)
+	{
+		final var histogram = Thresholds.histogram(img, null);
+		final var threshold = img.firstElement().createVariable();
+		ops.op(op).input(histogram).output(threshold).compute();
+		assertEquals(expected, threshold.getRealDouble(), 0, op);
+	}
+
 	static int[] gaps() {
 		final var px = new int[W * H];
 		for (var i = 0; i < px.length; i++) {

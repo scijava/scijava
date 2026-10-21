@@ -33,9 +33,6 @@ import org.scijava.ops.image.threshold.AbstractComputeThresholdHistogram;
 import net.imglib2.histogram.Histogram1d;
 import net.imglib2.type.numeric.RealType;
 
-// NB - this plugin adapted from Gabriel Landini's code of his AutoThreshold
-// plugin found in Fiji (version 1.14).
-
 /**
  * Implements Otsu's threshold method.
  *
@@ -60,67 +57,43 @@ public class ComputeOtsuThreshold<T extends RealType<T>> extends
 	}
 
 	/**
-	 * Otsu's threshold algorithm<br>
-	 * C++ code by Jordan Bevik &lt;Jordan.Bevic@qtiworld.com&gt;<br>
-	 * ported to ImageJ plugin by G.Landini
+	 * Computes the bin maximizing the between-class variance
+	 * {@code (mu_T * omega(k) - mu(k))^2 / (omega(k) * (1 - omega(k)))}, where
+	 * {@code omega(k)} and {@code mu(k)} are the zeroth and first cumulative
+	 * moments of the normalized histogram up to bin {@code k}, and {@code mu_T}
+	 * is the mean (Otsu 1979, eq. 18). All bins are candidates, and ties are
+	 * resolved in favor of the lowest bin, as in ImageJ Auto_Threshold since
+	 * 2017.
+	 * <p>
+	 * N. Otsu, "A threshold selection method from gray-level histograms," IEEE
+	 * Trans. Systems, Man, and Cybernetics, vol. 9, no. 1, pp. 62-66, 1979.
+	 * </p>
 	 */
 	public static long computeBin(final long[] histogram) {
-		int k, kStar; // k = the current threshold; kStar = optimal threshold
-		final var L = histogram.length; // The total intensity of the image
-		long N1, N; // N1 = # points with intensity <=k; N = total number of
-		// points
-		long Sk; // The total intensity for all histogram points <=k
-		long S;
-		double BCV, BCVmax; // The current Between Class Variance and maximum
-		// BCV
-		double num, denom; // temporary bookkeeping
-
-		// Initialize values:
-		S = 0;
-		N = 0;
-		for (k = 0; k < L; k++) {
-			S += k * histogram[k]; // Total histogram intensity
-			N += histogram[k]; // Total number of data points
+		long total = 0;
+		double sum = 0;
+		for (var i = 0; i < histogram.length; i++) {
+			total += histogram[i];
+			sum += (double) i * histogram[i];
 		}
-
-		Sk = 0;
-		N1 = histogram[0]; // The entry for zero intensity
-		BCV = 0;
-		BCVmax = 0;
-		kStar = 0;
-
-		// Look at each possible threshold value,
-		// calculate the between-class variance, and decide if it's a max
-		for (k = 1; k < L - 1; k++) { // No need to check endpoints k = 0 or k =
-			// L-1
-			Sk += k * histogram[k];
-			N1 += histogram[k];
-
-			// The float casting here is to avoid compiler warning about loss of
-			// precision and
-			// will prevent overflow in the case of large saturated images
-			denom = (double) (N1) * (N - N1); // Maximum value of denom is
-			// (N^2)/4 =
-			// approx. 3E10
-
-			if (denom != 0) {
-				// Float here is to avoid loss of precision when dividing
-				num = ((double) N1 / N) * S - Sk; // Maximum value of num =
-				// 255*N =
-				// approx 8E7
-				BCV = (num * num) / denom;
-			}
-			else BCV = 0;
-
-			if (BCV >= BCVmax) { // Assign the best threshold found so far
-				BCVmax = BCV;
-				kStar = k;
+		final var meanTotal = sum / total;
+		// Note: Using counts rather than probabilities scales all variances by
+		// the same factor, and lets empty classes be detected exactly.
+		long count = 0;
+		double moment = 0, best = Double.NEGATIVE_INFINITY;
+		var bestBin = 0;
+		for (var k = 0; k < histogram.length; k++) {
+			count += histogram[k];
+			moment += (double) k * histogram[k];
+			if (count == 0 || count == total) continue;
+			final var d = meanTotal * count - moment;
+			final var bcv = d * d / ((double) count * (total - count));
+			if (bcv > best) {
+				best = bcv;
+				bestBin = k;
 			}
 		}
-		// kStar += 1; // Use QTI convention that intensity -> 1 if intensity >=
-		// k
-		// (the algorithm was developed for I-> 1 if I <= k.)
-		return kStar;
+		return bestBin;
 	}
 
 }

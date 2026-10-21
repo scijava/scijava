@@ -39,7 +39,10 @@ import org.scijava.ops.spi.Nullable;
  * the level of the smallest preserved component containing them. The
  * supported attributes are {@code area} (see {@code morphology.areaClosing}),
  * {@code boxDiagonal} (see {@code morphology.boxDiagonalClosing}) and
- * {@code volume} (see {@code morphology.volumeClosing}).
+ * {@code grayVolume} (see {@code morphology.grayVolumeClosing}). The name
+ * {@code volume} is rejected as ambiguous: the literature uses it for the
+ * grayscale volume, while MorphoLibJ uses it for the number of voxels of a
+ * 3D component, which is {@code area} here.
  * </p>
  * <p>
  * Implemented by pruning the min-tree of the image (Salembier, Oliveras and
@@ -65,8 +68,8 @@ public class AttributeClosing<T extends RealType<T>> implements
 	 * Computes the attribute closing.
 	 *
 	 * @param input the image to filter
-	 * @param attribute the name of the attribute: area, boxDiagonal or volume
-	 *          (case insensitive)
+	 * @param attribute the name of the attribute: area, boxDiagonal or
+	 *          grayVolume (case insensitive)
 	 * @param threshold the minimal attribute value of the preserved components
 	 * @param connectivity the neighborhood defining which pixels are adjacent,
 	 *          such as a {@code DiamondShape} of radius 1 for face connectivity

@@ -40,7 +40,7 @@ public class GroovyServerPluginTest {
     public void testServerLaunch() {
         LanguageServer server = servers.launch(
             "groovy",
-            Environment.NONE
+            new Environment()
         );
         assertTrue(server instanceof GroovyLanguageServer);
     }

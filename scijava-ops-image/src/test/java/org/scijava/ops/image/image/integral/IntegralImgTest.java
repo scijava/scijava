@@ -105,6 +105,25 @@ public class IntegralImgTest extends AbstractOpTest {
 			.offsetInterval(out2, interval)));
 	}
 
+	@Test
+	public void testIntegralImage3D() {
+		final var ones = ArrayImgs.bytes(4, 3, 2);
+		ones.forEach(t -> t.set((byte) 2));
+		final var sums = ArrayImgs.doubles(4, 3, 2);
+		final var squares = ArrayImgs.doubles(4, 3, 2);
+		ops.op("image.integral").input(ones).output(sums).compute();
+		ops.op("image.squareIntegral").input(ones).output(squares).compute();
+		final var sc = sums.localizingCursor();
+		final var qc = squares.cursor();
+		while (sc.hasNext()) {
+			final var sum = sc.next().get();
+			final long count = (sc.getLongPosition(0) + 1) * (sc.getLongPosition(1) +
+				1) * (sc.getLongPosition(2) + 1);
+			assertEquals(2 * count, sum, 0);
+			assertEquals(4 * count, qc.next().get(), 0);
+		}
+	}
+
 	public ArrayImg<ByteType, ByteArray> generateKnownByteArrayTestImgLarge() {
 		final long[] dims = new long[] { 3, 3 };
 		final byte[] array = new byte[9];

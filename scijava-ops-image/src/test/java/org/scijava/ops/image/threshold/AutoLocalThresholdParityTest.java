@@ -95,6 +95,20 @@ public class AutoLocalThresholdParityTest extends AbstractOpTest {
 		assertFiji("Sauvola", 10);
 	}
 
+	/**
+	 * Phansalkar with Fiji parameters k = 0.25 and r = 0.5, on the raw 8-bit
+	 * image, which the op stretches to [0, 1] as Fiji does. Before the op
+	 * stretched its input, all pixels were background (1490 and 1324 of 4096
+	 * pixels differed on blobs8, 2445 and 2205 on narrow8). Now 1, 0, 26 and 36
+	 * pixels differ, because ImageJ rounds the stretched image down to 8-bit
+	 * values and computes the population rather than the sample standard
+	 * deviation; emulating both gives identical masks on narrow8.
+	 */
+	@Test
+	public void testPhansalkar() throws IOException {
+		assertFiji("Phansalkar", 40);
+	}
+
 	private void assertFiji(final String method) throws IOException {
 		assertFiji(method, 0);
 	}
@@ -159,6 +173,10 @@ public class AutoLocalThresholdParityTest extends AbstractOpTest {
 			case "MidGrey":
 				ops.op("threshold.localMidGrey").input(img, shape, 0.0).output(out)
 					.compute();
+				break;
+			case "Phansalkar":
+				ops.op("threshold.localPhansalkar").input(img, shape, 0.25, 0.5)
+					.output(out).compute();
 				break;
 			case "Sauvola":
 				ops.op("threshold.localSauvola").input(img, shape, 0.5, 128.0).output(

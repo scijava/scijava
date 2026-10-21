@@ -81,6 +81,24 @@ public class ComputeLocalPhansalkarThreshold<T extends RealType<T>> implements
 	private Computers.Arity1<Iterable<T>, DoubleType> stdDeviationOp;
 
 	/**
+	 * Applies Phansalkar's rule to a pixel value of an image normalized to [0,
+	 * 1].
+	 *
+	 * @param value the pixel value
+	 * @param mean the mean of its neighborhood
+	 * @param stdDev the standard deviation of its neighborhood
+	 * @param k the k parameter
+	 * @param r the r parameter
+	 * @return whether the pixel is foreground, i.e. strictly above the threshold
+	 */
+	public static boolean isForeground(final double value, final double mean,
+		final double stdDev, final double k, final double r)
+	{
+		return value > mean * (1.0 + P * Math.exp(-Q * mean) + k * ((stdDev / r) -
+			1.0));
+	}
+
+	/**
 	 * TODO
 	 *
 	 * @param inputNeighborhood
@@ -103,9 +121,7 @@ public class ComputeLocalPhansalkarThreshold<T extends RealType<T>> implements
 		final var stdDevValue = new DoubleType();
 		stdDeviationOp.compute(inputNeighborhood, stdDevValue);
 
-		final var threshold = meanValue.get() * (1.0d + P * Math.exp(-Q *
-			meanValue.get()) + k * ((stdDevValue.get() / r) - 1.0));
-
-		output.set(inputCenterPixel.getRealDouble() >= threshold);
+		output.set(isForeground(inputCenterPixel.getRealDouble(), meanValue.get(),
+			stdDevValue.get(), k, r));
 	}
 }

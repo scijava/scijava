@@ -31,8 +31,6 @@ package org.scijava.ops.image.threshold.localPhansalkar;
 
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.RectangleNeighborhood;
-import net.imglib2.converter.Converter;
-import net.imglib2.converter.RealDoubleConverter;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
@@ -67,9 +65,6 @@ public class ComputeLocalPhansalkarThresholdIntegral<T extends RealType<T>>
 	public static final double DEFAULT_K = 0.25;
 	public static final double DEFAULT_R = 0.5;
 
-	private static final double P = 2.0;
-	private static final double Q = 10.0;
-
 	@OpDependency(name = "stats.integralMean")
 	private Computers.Arity1<RectangleNeighborhood<? extends Composite<DoubleType>>, DoubleType> integralMeanOp;
 
@@ -100,19 +95,8 @@ public class ComputeLocalPhansalkarThresholdIntegral<T extends RealType<T>>
 		final var variance = new DoubleType();
 		integralVarianceOp.compute(inputNeighborhood, variance);
 
-		final var stdDev = new DoubleType(Math.sqrt(variance.get()));
-
-		final var threshold = new DoubleType(mean.getRealDouble() * (1.0d +
-			P * Math.exp(-Q * mean.getRealDouble()) + k * ((stdDev.getRealDouble() /
-				r) - 1.0)));
-
-		// Set value
-		final Converter<T, DoubleType> conv = new RealDoubleConverter<>();
-		final var centerPixelAsDoubleType = variance; // NB: Reuse
-		// DoubleType
-		conv.convert(inputCenterPixel, centerPixelAsDoubleType);
-
-		output.set(centerPixelAsDoubleType.compareTo(threshold) > 0);
+		output.set(ComputeLocalPhansalkarThreshold.isForeground(inputCenterPixel
+			.getRealDouble(), mean.get(), Math.sqrt(variance.get()), k, r));
 	}
 
 }

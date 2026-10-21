@@ -29,7 +29,6 @@
 
 package org.scijava.ops.image.threshold;
 
-import java.util.function.Function;
 
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.Shape;
@@ -347,9 +346,6 @@ public final class ApplyThresholdMethodLocal {
 		Computers.Arity3<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
 				RandomAccessibleInterval<BitType>> {
 
-		@OpDependency(name = "image.histogram")
-		private Function<Iterable<T>, Histogram1d<T>> createHistogramOp;
-
 		// TODO: Would be cool if Computers.Arity2<T, T, BitType> would be matched.
 		@OpDependency(name = "threshold.apply")
 		private Computers.Arity2<Comparable<? super T>, T, BitType> applyThresholdOp;
@@ -389,11 +385,13 @@ public final class ApplyThresholdMethodLocal {
 				public void compute(final Iterable<T> inputNeighborhood,
 					final T inputCenterPixel, final BitType output)
 				{
-					final var histogram = createHistogramOp.apply(
-						inputNeighborhood);
+					final var histogram = Thresholds.histogram(inputNeighborhood,
+						null);
 					final var threshold = inputNeighborhood.iterator().next()
 						.createVariable();
-					computeThresholdOp.compute(histogram, threshold);
+					if (histogram.getBinCount() < 2) histogram.getCenterValue(0,
+						threshold);
+					else computeThresholdOp.compute(histogram, threshold);
 					applyThresholdOp.compute(inputCenterPixel, threshold, output);
 				}
 			};

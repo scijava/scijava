@@ -29,8 +29,6 @@
 
 package org.scijava.ops.image.threshold;
 
-import java.util.function.Function;
-
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.histogram.Histogram1d;
 import net.imglib2.type.logic.BitType;
@@ -43,6 +41,11 @@ import org.scijava.ops.spi.OpDependency;
 /**
  * An abstract base class for Ops using a {@link Histogram1d} to compute a
  * threshold across an {@link Iterable}.
+ * <p>
+ * The histogram is created by {@link Thresholds#histogram}: integer images get
+ * one bin per grey level between their minimum and maximum, as in ImageJ's
+ * Auto_Threshold plugin.
+ * </p>
  * <p>
  * Note the use of type parameters {@code I} and {@code J}, allowing
  * dependencies to be matched on the concrete input types instead of just on
@@ -62,9 +65,6 @@ public abstract class AbstractApplyThresholdImg< //
 		J extends Iterable<BitType> //
 	> implements Computers.Arity1<I, J> {
 
-	@OpDependency(name = "image.histogram")
-	private Function<I, Histogram1d<T>> createHistogramOp;
-
 	@OpDependency(name = "threshold.apply")
 	private Computers.Arity2<I, T, J> applyThresholdOp;
 
@@ -76,13 +76,23 @@ public abstract class AbstractApplyThresholdImg< //
 	 */
 	@Override
 	public void compute(final I input, final J output) {
-		// Compute the histogram
-		final var inputHistogram = createHistogramOp.apply(input);
-		// Compute the threshold value from the histogram
 		final var threshold = input.iterator().next().createVariable();
-		getComputeThresholdOp().compute(inputHistogram, threshold);
+		computeThreshold(Thresholds.histogram(input, null), threshold);
 		// Threshold the image against the computed value
 		applyThresholdOp.compute(input, threshold, output);
+	}
+
+	/**
+	 * Computes the threshold of a histogram created by
+	 * {@link Thresholds#histogram}. A histogram with a single bin (i.e. an image
+	 * with a single grey level) yields that grey level, so that no pixel is
+	 * foreground.
+	 */
+	private void computeThreshold(final Histogram1d<T> histogram,
+		final T threshold)
+	{
+		if (histogram.getBinCount() < 2) histogram.getCenterValue(0, threshold);
+		else getComputeThresholdOp().compute(histogram, threshold);
 	}
 
 	protected abstract Computers.Arity1<Histogram1d<T>, T>

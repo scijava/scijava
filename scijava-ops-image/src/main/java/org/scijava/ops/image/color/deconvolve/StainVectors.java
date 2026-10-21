@@ -37,11 +37,12 @@ import java.util.Locale;
  * <p>
  * Each stain is a vector of its relative absorbance in the red, green and blue
  * channels. The hematoxylin, eosin and DAB vectors are those determined by
- * Ruifrok and Johnston (2001). The other combinations are the values published
- * with the {@code skimage.color} module of scikit-image (BSD 3-Clause license,
- * Copyright (C) the scikit-image team), which were in turn determined by A. C.
- * Ruifrok. Combinations of two stains leave the third vector unspecified; it is
- * then completed as described in {@link ColourDeconvolution#stainMatrix}.
+ * Ruifrok and Johnston (2001); note that {@link #H_E} therefore uses the
+ * published hematoxylin and eosin vectors, not the measured "H&amp;E" set of
+ * ImageJ's Colour Deconvolution plugin. The other combinations are the
+ * measured values distributed with G. Landini's Colour Deconvolution plugin
+ * for ImageJ. Combinations of two stains leave the third vector unspecified;
+ * it is then completed as described in {@link ColourDeconvolution#stainMatrix}.
  * </p>
  * <p>
  * Stain vectors depend on the staining protocol and the imaging system, so for
@@ -53,7 +54,8 @@ import java.util.Locale;
  * @see <a href="https://pubmed.ncbi.nlm.nih.gov/11531144/">A. C. Ruifrok and
  *      D. A. Johnston, "Quantification of histochemical staining by color
  *      deconvolution", Anal. Quant. Cytol. Histol. 23(4):291-299, 2001</a>
- * @see <a href="https://scikit-image.org/">scikit-image</a>
+ * @see <a href="https://blog.bham.ac.uk/intellimic/g-landini-software/colour-deconvolution-2/">Colour
+ *      Deconvolution (G. Landini)</a>
  */
 public enum StainVectors {
 
@@ -98,7 +100,7 @@ public enum StainVectors {
 
 	/** Methyl green and DAB. */
 	METHYL_GREEN_DAB("Methyl Green DAB", //
-		new double[] { 0.98003, 0.144316, 0.133146 }, Stain.DAB),
+		new double[] { 0.98, 0.144316, 0.133146 }, Stain.DAB),
 
 	/** Azan-Mallory: aniline blue, azocarmine and orange G. */
 	AZAN_MALLORY("Azan-Mallory", //

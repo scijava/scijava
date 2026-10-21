@@ -53,77 +53,41 @@ public class DefaultMinorMajorAxis implements
 {
 
 	/**
-	 * Code taken from ImageJ ({@code EllipseFitter#getEllipseParam()}) and
-	 * adapted to work with a {@link Polygon2D}.
+	 * Computes the axes of the moment-equivalent ellipse, as ImageJ 1.x
+	 * ({@code EllipseFitter}) does: the axis lengths are proportional to the
+	 * square roots of the eigenvalues of the covariance matrix of the polygon,
+	 * scaled so that the ellipse has the same area as the polygon.
 	 *
-	 * @param input
-	 * @param points vertices of polygon in counter clockwise order.
+	 * @param input the polygon
+	 * @param points vertices of polygon, with the first vertex repeated last
 	 * @return the minor and major axis
 	 */
 	private double[] getMinorMajorAxis(final Polygon2D input,
 		final List<RealLocalizable> points)
 	{
-        var moments = getMoments(input, points);
+		final var moments = getMoments(input, points);
+		// Note: the area is negative for clockwise polygons.
+		final var area = Math.abs(moments[0]);
+		final var u20 = moments[1];
+		final var u11 = moments[2];
+		final var u02 = moments[3];
 
-        var m00 = moments[0];
-        var u20 = moments[1];
-        var u11 = moments[2];
-        var u02 = moments[3];
+		// Eigenvalues of the covariance matrix [[u20, u11], [u11, u02]].
+		final var mean = (u20 + u02) / 2;
+		final var diff = (u20 - u02) / 2;
+		final var root = Math.sqrt(diff * diff + u11 * u11);
+		final var l1 = mean + root;
+		final var l2 = Math.max(mean - root, 0);
 
-        var m4 = 4.0 * Math.abs(u02 * u20 - u11 * u11);
-		if (m4 < 0.000001) {
-			m4 = 0.000001;
+		// For an ellipse with semi-axes a, b: l1 = a^2 / 4 and l2 = b^2 / 4.
+		var major = 2 * Math.sqrt(l1);
+		var minor = 2 * Math.sqrt(l2);
+		if (major * minor > 0) {
+			final var scale = Math.sqrt(area / (Math.PI * major * minor));
+			major *= scale;
+			minor *= scale;
 		}
-
-        var a11 = u02 / m4;
-        var a12 = u11 / m4;
-        var a22 = u20 / m4;
-
-        var tmp = a11 - a22;
-		if (tmp == 0.0) {
-			tmp = 0.000001;
-		}
-
-        var ta = 0.5 * Math.atan(2.0 * a12 / tmp);
-		if (ta < 0.0) {
-			ta += Math.PI / 2d;
-		}
-		if (a12 > 0.0) {
-			ta += Math.PI / 2d;
-		}
-
-		else if (a12 == 0.0) {
-			if (a22 > a11) {
-				ta = 0.0;
-				tmp = a22;
-				a22 = a11;
-				a11 = tmp;
-			}
-			else if (a11 != a22) {
-				ta = Math.PI / 2d;
-			}
-		}
-
-		tmp = Math.sin(ta);
-		if (tmp == 0.0) tmp = 0.000001;
-        var z = a12 * Math.cos(ta) / tmp;
-        var major = Math.sqrt(1.0 / Math.abs(a22 + z));
-        var minor = Math.sqrt(1.0 / Math.abs(a11 - z));
-		// equalize areas
-        var scale = Math.sqrt(m00 / (Math.PI * major * minor));
-
-		major = major * scale * 2.0;
-		minor = minor * scale * 2.0;
-        var angle = 180.0 * ta / Math.PI;
-
-		if (angle == 180.0) angle = 0.0;
-		if (major < minor) {
-			tmp = major;
-			major = minor;
-			minor = tmp;
-		}
-
-		return new double[] { minor, major };
+		return new double[] { 2 * minor, 2 * major };
 	}
 
 	/**

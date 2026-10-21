@@ -83,6 +83,11 @@ import net.imglib2.view.Views;
  * <p>
  * Port of the tubeness filter of the VIB package, with original authors Mark
  * Longair and Stephan Preibisch, to ImageJ-ops.
+ * <p>
+ * Unlike VIB, which with calibration enabled smooths with calibrated sigmas
+ * but takes the second derivatives in pixel units, this op expresses the
+ * Hessian in calibrated units too, so that the same physical structure yields
+ * the same tubeness regardless of the (possibly anisotropic) sampling.
  *
  * @see <a href=
  *      "https://github.com/fiji/VIB/blob/master/src/main/java/features/Tubeness_.java">Tubeness
@@ -103,12 +108,14 @@ public class DefaultTubeness<T extends RealType<T>> implements
 	private Computers.Arity3<RandomAccessibleInterval<DoubleType>, Computers.Arity1<Iterable<DoubleType>, DoubleType>, Integer, IterableInterval<DoubleType>> projector;
 
 	/**
-	 * TODO
+	 * Computes the tubeness of the input image.
 	 *
-	 * @param input
-	 * @param sigma
-	 * @param calibration
-	 * @param tubeness
+	 * @param input the input image
+	 * @param sigma the scale of the Gaussian smoothing, in calibrated units
+	 * @param calibration the physical size of a pixel along each dimension
+	 *          (missing entries default to 1); both the Gaussian smoothing and
+	 *          the Hessian are computed in these calibrated units
+	 * @param tubeness the output tubeness image
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
@@ -119,9 +126,10 @@ public class DefaultTubeness<T extends RealType<T>> implements
 		final var numDimensions = input.numDimensions();
 		// Sigmas in pixel units.
 		final var sigmas = new double[numDimensions];
+		final var cals = new double[numDimensions];
 		for (var d = 0; d < sigmas.length; d++) {
-			final var cal = d < calibration.length ? calibration[d] : 1;
-			sigmas[d] = sigma / cal;
+			cals[d] = d < calibration.length ? calibration[d] : 1;
+			sigmas[d] = sigma / cals[d];
 		}
 
 		/*
@@ -156,7 +164,8 @@ public class DefaultTubeness<T extends RealType<T>> implements
 			// Hessian calculation.
 			HessianMatrix.calculateMatrix(Views.extendBorder(input), gaussian,
 				gradient, hessian, new OutOfBoundsBorderFactory<>(), nThreads, es,
-				sigma);
+				sigmas);
+			calibrateHessian(hessian, cals);
 
 			// Hessian eigenvalues.
 			final var evs = TensorEigenValues
@@ -186,6 +195,25 @@ public class DefaultTubeness<T extends RealType<T>> implements
 		{
 			e.printStackTrace();
 			return;
+		}
+	}
+
+	/**
+	 * Converts the Hessian from pixel units to calibrated units, dividing the
+	 * component {@code (i, j)} by {@code cal[i] * cal[j]}.
+	 */
+	private static void calibrateHessian(final Img<DoubleType> hessian,
+		final double[] cals)
+	{
+		final var n = cals.length;
+		var c = 0;
+		for (var i = 0; i < n; i++) {
+			for (var j = i; j < n; j++, c++) {
+				final var scale = 1 / (cals[i] * cals[j]);
+				if (scale == 1) continue;
+				for (final var t : Views.hyperSlice(hessian, n, c))
+					t.mul(scale);
+			}
 		}
 	}
 

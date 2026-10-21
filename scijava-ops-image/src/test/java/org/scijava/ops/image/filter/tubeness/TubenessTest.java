@@ -29,10 +29,13 @@
 
 package org.scijava.ops.image.filter.tubeness;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 import org.scijava.types.Nil;
 import org.scijava.ops.image.AbstractOpTest;
 import net.imglib2.img.Img;
+import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.test.ImgLib2Assert;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.real.DoubleType;
@@ -59,6 +62,46 @@ public class TubenessTest extends AbstractOpTest {
 		ops.op("filter.tubeness").input(input, sigma).output(actual).compute();
 
 		ImgLib2Assert.assertImageEquals(expected, actual);
+	}
+
+	/**
+	 * Tests that calibration is honored: a straight tube along X with a Gaussian
+	 * cross-section of physical standard deviation {@code s = 6} is sampled with
+	 * voxel size 1 x 1 x 2. At the tube axis, the Gaussian-smoothed Hessian has
+	 * two equal eigenvalues {@code -100 s² / (s² + σ²)²}, so the expected
+	 * tubeness is {@code σ² × 100 s² / (s² + σ²)²}, up to the finite difference
+	 * error of the Hessian (about 6% here).
+	 * <p>
+	 * Note: VIB's {@code TubenessProcessor} with calibration enabled smooths
+	 * with calibrated sigmas but differentiates in pixel units, which yields
+	 * twice the analytic value here (10.90 instead of 5.54 for σ = 1.5).
+	 */
+	@Test
+	public void testTubenessCalibrated() {
+		final double s = 6;
+		final double[] cal = { 1, 1, 2 };
+		final int w = 11, h = 61, d = 31;
+		final var input = ArrayImgs.doubles(w, h, d);
+		final var ra = input.randomAccess();
+		for (int z = 0; z < d; z++) {
+			for (int y = 0; y < h; y++) {
+				for (int x = 0; x < w; x++) {
+					final double dy = (y - 30) * cal[1], dz = (z - 15) * cal[2];
+					ra.setPositionAndGet(x, y, z).set(100 * Math.exp(-(dy * dy + dz *
+						dz) / (2 * s * s)));
+				}
+			}
+		}
+		for (final double sigma : new double[] { 1.5, 2.5 }) {
+			final var actual = ArrayImgs.doubles(w, h, d);
+			ops.op("filter.tubeness").input(input, sigma, cal).output(actual)
+				.compute();
+			final double v = actual.randomAccess().setPositionAndGet(5, 30, 15)
+				.get();
+			final double ss = s * s + sigma * sigma;
+			final double expected = sigma * sigma * 100 * s * s / (ss * ss);
+			assertEquals(expected, v, 0.1 * expected);
+		}
 	}
 
 }

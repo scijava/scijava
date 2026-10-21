@@ -49,6 +49,7 @@ import org.scijava.types.Nil;
  * Tests {@code color.deconvolveStains}.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class DeconvolveStainsTest extends AbstractOpTest {
 

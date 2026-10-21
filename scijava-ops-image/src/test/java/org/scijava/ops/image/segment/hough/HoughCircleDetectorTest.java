@@ -48,6 +48,7 @@ import org.scijava.types.Nil;
  * Tests {@link HoughCircleDetector}.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class HoughCircleDetectorTest extends AbstractOpTest {
 

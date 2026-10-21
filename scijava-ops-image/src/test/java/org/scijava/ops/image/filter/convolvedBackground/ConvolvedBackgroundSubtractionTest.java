@@ -44,6 +44,7 @@ import org.scijava.ops.image.AbstractOpTest;
  * Tests {@link ConvolvedBackgroundSubtraction}.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class ConvolvedBackgroundSubtractionTest extends AbstractOpTest {
 

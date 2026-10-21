@@ -44,6 +44,7 @@ import org.scijava.ops.spi.Nullable;
  * </p>
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  * @param <T> image type
  * @implNote op names='morphology.hMinima'
  */

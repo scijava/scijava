@@ -45,6 +45,7 @@ import org.scijava.ops.image.AbstractOpTest;
  * Tests {@link DefaultTVDenoise}.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class DefaultTVDenoiseTest extends AbstractOpTest {
 

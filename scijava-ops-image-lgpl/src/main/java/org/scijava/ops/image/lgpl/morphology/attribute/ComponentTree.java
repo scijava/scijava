@@ -69,6 +69,7 @@ import net.imglib2.view.Views;
  * </ul>
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 final class ComponentTree {
 

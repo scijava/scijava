@@ -48,6 +48,7 @@ import org.scijava.types.Nil;
  * Tests {@link DefaultBin} and {@link DefaultBinFunction}.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class BinTest extends AbstractOpTest {
 

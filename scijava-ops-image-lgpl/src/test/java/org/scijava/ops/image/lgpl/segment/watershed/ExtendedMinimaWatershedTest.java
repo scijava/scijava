@@ -52,6 +52,7 @@ import org.scijava.types.Nil;
  * Tests {@link ExtendedMinimaWatershed}.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class ExtendedMinimaWatershedTest extends AbstractOpTest {
 

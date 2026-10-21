@@ -34,6 +34,7 @@ import net.imglib2.type.numeric.RealType;
  * package, which prune the component tree of an image with the direct rule.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 final class AttributeFilters {
 

@@ -52,6 +52,7 @@ import net.imglib2.view.Views;
  * Tests {@link DefaultLocalThickness}.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class LocalThicknessTest extends AbstractOpTest {
 

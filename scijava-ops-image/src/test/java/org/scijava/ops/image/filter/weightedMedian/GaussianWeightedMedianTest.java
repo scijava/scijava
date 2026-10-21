@@ -43,6 +43,7 @@ import org.scijava.ops.image.AbstractOpTest;
  * Tests {@link GaussianWeightedMedian}.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class GaussianWeightedMedianTest extends AbstractOpTest {
 

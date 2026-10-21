@@ -46,6 +46,7 @@ import org.scijava.types.Nil;
  * Tests {@link LabelFiltering}.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class LabelFilteringTest extends AbstractOpTest {
 

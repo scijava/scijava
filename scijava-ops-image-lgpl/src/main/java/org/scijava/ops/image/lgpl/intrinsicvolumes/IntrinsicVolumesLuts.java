@@ -44,8 +44,9 @@ package org.scijava.ops.image.lgpl.intrinsicvolumes;
  * Structures</i>, Wiley, 2009 (Euler number tables 3.2 and 3.3).
  * </p>
  *
- * @author David Legland
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author David Legland
  */
 final class IntrinsicVolumesLuts {
 

@@ -45,8 +45,9 @@ import net.imglib2.RealPoint;
  * (<a href="https://github.com/tinevez/CircleSkinner">CircleSkinner</a>,
  * BSD-2-Clause).
  *
- * @author Jean-Yves Tinevez
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Jean-Yves Tinevez
  */
 public class HoughCircle extends RealPoint implements Comparable<HoughCircle> {
 

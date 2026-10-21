@@ -48,6 +48,7 @@ import org.scijava.types.Nil;
  * Tests {@link DefaultDetectSpotsDoG}.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class DetectSpotsDoGTest extends AbstractOpTest {
 

@@ -38,6 +38,7 @@ package org.scijava.ops.image.features.texture;
  * {@link Double#NaN} for an empty matrix.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public final class MatrixFeatures {
 

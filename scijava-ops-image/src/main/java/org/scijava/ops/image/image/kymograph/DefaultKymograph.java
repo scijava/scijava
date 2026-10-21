@@ -85,8 +85,9 @@ import org.scijava.ops.spi.OpDependency;
  * non-time dimensions are kept rather than a single z plane.
  * </p>
  *
- * @author Hadrien Mary
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Hadrien Mary
  * @param <T> image type
  * @implNote op names='image.kymograph'
  */

@@ -142,9 +142,10 @@ import org.scijava.ops.spi.OpDependency;
  * POSSIBILITY OF SUCH DAMAGE.
  * </pre>
  *
+ * @author Curtis Rueden
+ * @author Claude Opus 5.5
  * @author Nicolas Jaccard
  * @author Olivier Burri
- * @author Curtis Rueden
  * @param <T> the input type
  * @implNote op names='segment.phantast'
  */

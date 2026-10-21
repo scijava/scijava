@@ -49,6 +49,9 @@ import org.scijava.ops.image.lgpl.AbstractOpTest;
  * Extended extrema use {@code h = 2}. MorphoLibJ {@code killBorders} and
  * {@code fillHoles} have no connectivity parameter and use face connectivity.
  * </p>
+ *
+ * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class ReconstructionOracleTest extends AbstractOpTest {
 

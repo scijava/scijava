@@ -42,6 +42,7 @@ import org.scijava.ops.image.AbstractOpTest;
  * Tests {@link DefaultFeretAspectRatio}.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class FeretAspectRatioTest extends AbstractOpTest {
 

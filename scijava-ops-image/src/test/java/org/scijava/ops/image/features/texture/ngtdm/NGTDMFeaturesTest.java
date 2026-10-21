@@ -52,6 +52,7 @@ import org.scijava.ops.image.features.texture.IBSIPhantom;
  * As in IBSI, the 2D features are computed per slice and averaged.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class NGTDMFeaturesTest extends AbstractOpTest {
 

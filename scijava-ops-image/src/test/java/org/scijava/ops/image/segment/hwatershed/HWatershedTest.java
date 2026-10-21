@@ -58,6 +58,9 @@ import org.scijava.types.Nil;
  * synthetic images built by {@link #bumps}. Each string lists the labels of
  * the image in flat iteration order, one row of the first dimension per line.
  * </p>
+ *
+ * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class HWatershedTest extends AbstractOpTest {
 

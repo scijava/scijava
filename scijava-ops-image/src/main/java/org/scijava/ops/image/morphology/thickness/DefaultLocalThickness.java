@@ -127,6 +127,8 @@ import net.imglib2.view.Views;
  * than 2<sup>31</sup> elements.
  * </p>
  *
+ * @author Curtis Rueden
+ * @author Claude Opus 5.5
  * @author Bob Dougherty
  * @param <B> type of the binary input
  * @implNote op names='morphology.localThickness'

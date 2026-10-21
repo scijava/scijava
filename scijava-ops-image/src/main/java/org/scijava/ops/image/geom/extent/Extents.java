@@ -53,8 +53,9 @@ import org.scijava.ops.spi.OpDependency;
  * regions.
  * </p>
  *
- * @author Jan Brocher (BioVoxxel)
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Jan Brocher (BioVoxxel)
  * @see <a href="https://github.com/biovoxxel/BioVoxxel-Toolbox">BioVoxxel
  *      Toolbox</a>
  */

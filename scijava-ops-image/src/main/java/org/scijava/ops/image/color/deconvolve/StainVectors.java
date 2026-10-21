@@ -51,6 +51,7 @@ import java.util.Locale;
  * </p>
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  * @see <a href="https://pubmed.ncbi.nlm.nih.gov/11531144/">A. C. Ruifrok and
  *      D. A. Johnston, "Quantification of histochemical staining by color
  *      deconvolution", Anal. Quant. Cytol. Histol. 23(4):291-299, 2001</a>

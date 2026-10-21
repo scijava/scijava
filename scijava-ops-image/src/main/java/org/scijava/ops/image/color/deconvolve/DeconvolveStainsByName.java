@@ -46,6 +46,7 @@ import org.scijava.ops.spi.OpDependency;
  * from {@link StainVectors}. See {@link DeconvolveStains} for details.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  * @param <T> input pixel type
  * @see <a href="https://pubmed.ncbi.nlm.nih.gov/11531144/">A. C. Ruifrok and
  *      D. A. Johnston, "Quantification of histochemical staining by color

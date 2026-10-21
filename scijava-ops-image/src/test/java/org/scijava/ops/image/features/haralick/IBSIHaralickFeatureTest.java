@@ -46,6 +46,7 @@ import org.scijava.ops.image.image.cooccurrenceMatrix.MatrixOrientation2D;
  * themselves).
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class IBSIHaralickFeatureTest extends AbstractOpTest {
 

@@ -110,8 +110,9 @@ import org.scijava.ops.spi.OpDependency;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * </pre>
  *
- * @author Bob Dougherty
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
+ * @author Bob Dougherty
  */
 public final class HelmholtzAnalysis {
 

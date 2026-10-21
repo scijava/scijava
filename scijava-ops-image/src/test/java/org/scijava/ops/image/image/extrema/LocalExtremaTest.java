@@ -53,6 +53,7 @@ import org.scijava.types.Nil;
  * Tests {@link DefaultLocalExtrema} and {@link LocalExtremaMask}.
  *
  * @author Curtis Rueden
+ * @author Claude Opus 5.5
  */
 public class LocalExtremaTest extends AbstractOpTest {
 

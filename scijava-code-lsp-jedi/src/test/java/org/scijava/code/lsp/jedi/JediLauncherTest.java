@@ -37,6 +37,7 @@ import java.io.File;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import org.apposed.appose.util.Environments;
@@ -77,8 +78,8 @@ public class JediLauncherTest {
 		// For a script running in some environment, the options tell Jedi to
 		// analyze it with that environment's Python, also searching its extra
 		// paths (e.g. a dependency overlay)...
-		final Environment env = new Environment("/env/bin/python", List.of(
-			"/overlay"));
+		final Environment env = new Environment().withInterpreter("/env/bin/python")
+			.withPaths(List.of("/overlay"));
 		assertEquals(Map.of( //
 			"workspace", Map.of("environmentPath", "/env/bin/python", //
 				"extraPaths", List.of("/overlay")), //
@@ -89,7 +90,7 @@ public class JediLauncherTest {
 		assertEquals(Map.of( //
 			"workspace", Map.of("extraPaths", List.of()), //
 			"diagnostics", diagnostics), plugin.initializationOptions(
-				Environment.NONE));
+				new Environment()));
 	}
 
 	/**
@@ -98,7 +99,7 @@ public class JediLauncherTest {
 	@Test
 	public void testRootUri() {
 		final JediLauncher plugin = new JediLauncher();
-		final String root = plugin.rootUri(Environment.NONE);
+		final String root = plugin.rootUri(new Environment());
 		assertTrue(new File(URI.create(root)).isDirectory(), root);
 	}
 

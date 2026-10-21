@@ -67,9 +67,8 @@ import org.scijava.code.lsp.jvm.Callable;
 import org.scijava.code.lsp.Positions;
 
 /**
- * The language server of {@code python} documents (see
- * {@link PythonServerPlugin}): jedi-language-server, whose completions are
- * made to work well in an editor completing as the user types:
+ * A {@link LanguageServer} wrapping jedi-language-server, with a few nice
+ * additions:
  * <ul>
  * <li>Asks about a word's first character only, and reuses the answer
  * (filtered) as the word is typed on, for a while.</li>

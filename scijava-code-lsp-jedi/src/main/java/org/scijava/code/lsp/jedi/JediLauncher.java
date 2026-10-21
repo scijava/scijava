@@ -129,9 +129,8 @@ final class JediLauncher implements ServerLauncher {
 	public Object initializationOptions(final Environment env) {
 		final Map<String, Object> workspaceOptions = new LinkedHashMap<>();
 		// NB: Without an environment, Jedi uses the server's own Python.
-		if (env.interpreter() != null) {
-			workspaceOptions.put("environmentPath", env.interpreter());
-		}
+		env.interpreter().ifPresent(p -> workspaceOptions.put("environmentPath",
+			p));
 		workspaceOptions.put("extraPaths", env.paths());
 		final Map<String, Object> options = new LinkedHashMap<>();
 		options.put("workspace", workspaceOptions);

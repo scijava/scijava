@@ -37,6 +37,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 import javax.script.ScriptEngine;
@@ -192,9 +193,15 @@ public class PythonLanguageServerIntegrationTest {
 	}
 
 	/** The problems found in a script, in a session of its own. */
-	private static List<Diagnostic> problems(final String code) {
+	private static List<Diagnostic> problems(final String code)
+		throws Exception
+	{
+		final CompletableFuture<List<Diagnostic>> found =
+			new CompletableFuture<>();
 		try (ScriptSession s = session()) {
-			return s.update(code).diagnostics(120_000);
+			s.setDiagnosticsListener(found::complete);
+			s.update(code);
+			return found.get(120, TimeUnit.SECONDS);
 		}
 	}
 

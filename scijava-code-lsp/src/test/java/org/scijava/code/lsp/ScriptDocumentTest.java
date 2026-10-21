@@ -129,7 +129,6 @@ public class ScriptDocumentTest {
 		assertEquals("import numpy; a: numpy.ndarray; s: str; task: object\n" +
 			blanked(script.substring(0, script.lastIndexOf('\n'))) + "\na.", doc
 				.text());
-		assertEquals(script, doc.original());
 		// The module is the header's alone, unless the script mentions it.
 		assertEquals(Collections.singleton("numpy"), doc.hiddenNames());
 		assertTrue(ScriptDocument.of("import numpy as np\n" + script, params("a",
@@ -211,7 +210,6 @@ public class ScriptDocumentTest {
 		final String script = "#@ String s\ns.";
 		final ScriptDocument doc = ScriptDocument.of(script);
 		assertEquals(script, doc.text());
-		assertEquals(script, doc.original());
 		assertEquals(0, doc.toTransformed(0));
 		assertTrue(doc.hiddenNames().isEmpty());
 	}

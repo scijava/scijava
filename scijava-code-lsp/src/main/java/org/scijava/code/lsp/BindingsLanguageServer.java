@@ -40,6 +40,7 @@ import java.util.regex.Pattern;
 
 import javax.script.Bindings;
 import javax.script.ScriptContext;
+import javax.script.SimpleBindings;
 
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionItemKind;
@@ -66,16 +67,15 @@ class BindingsLanguageServer extends AbstractLanguageServer {
 	private static final Pattern WORD = Pattern.compile(
 		"([A-Za-z_][A-Za-z0-9_]*)$");
 
-	/** @param live The interpreter's state. */
-	BindingsLanguageServer(final ScriptContext live) {
-		super(Environment.NONE.withLive(live));
+	/** @param environment Where the code runs: its live interpreter, if any. */
+	BindingsLanguageServer(final Environment environment) {
+		super(environment);
 	}
 
 	@Override
 	protected CompletionList complete(final Document doc, final int offset) {
-		final ScriptContext live = environment().live();
-		final Bindings bindings = live.getBindings(ScriptContext.ENGINE_SCOPE);
-		if (bindings == null) return new CompletionList();
+		final Bindings bindings = environment().live().map(l -> l.getBindings(
+			ScriptContext.ENGINE_SCOPE)).orElseGet(SimpleBindings::new);
 		final String line = doc.lineTo(offset);
 
 		final Matcher member = MEMBER.matcher(line);

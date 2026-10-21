@@ -83,7 +83,7 @@ public interface ScriptDialect extends SciJavaPlugin {
 	 * environment it declares), to analyze it there. Asked before each request
 	 * about the script, as that may change; its session then moves to a server
 	 * of where it runs now (see {@link ScriptSession#update}). The default
-	 * knows nothing: {@link Environment#NONE}.
+	 * knows nothing: a blank {@link Environment}.
 	 *
 	 * @param text The script, as written (e.g. with its {@code #@script} line,
 	 *          which its servers do not see).
@@ -94,7 +94,7 @@ public interface ScriptDialect extends SciJavaPlugin {
 	default Environment environment(final String text,
 		final Optional<File> file)
 	{
-		return Environment.NONE;
+		return new Environment();
 	}
 
 	/**
@@ -106,7 +106,7 @@ public interface ScriptDialect extends SciJavaPlugin {
 	 * type may be left out.
 	 *
 	 * @param parameters The script's parameters (see
-	 *          {@link LanguageServerService#scriptParameters}), by name, with
+	 *          {@link ScriptDocument}), by name, with
 	 *          their Java types, in order.
 	 */
 	Header header(Map<String, Class<?>> parameters);

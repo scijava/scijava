@@ -35,6 +35,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -118,7 +119,7 @@ public abstract class AbstractLanguageServer implements LanguageServer,
 
 	/** @param environment Where the scripts run. */
 	protected AbstractLanguageServer(final Environment environment) {
-		this.environment = environment == null ? Environment.NONE : environment;
+		this.environment = Objects.requireNonNull(environment, "environment");
 	}
 
 	/** Where the scripts run (e.g. a live interpreter's state). */

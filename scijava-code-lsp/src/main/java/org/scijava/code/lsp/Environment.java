@@ -29,18 +29,12 @@
 
 package org.scijava.code.lsp;
 
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
-import javax.script.Bindings;
 import javax.script.ScriptContext;
-import javax.script.SimpleBindings;
 
 
 /**
@@ -55,47 +49,39 @@ import javax.script.SimpleBindings;
  */
 public final class Environment {
 
+	/** Path of the interpreter or executable running the script, if known. */
+	private final Optional<String> interpreter;
 	/**
-	 * The state of no interpreter, for code not typed into one: no variables,
-	 * and none can be set.
+	 * Extra places imports are resolved from, in order: e.g. directories added
+	 * to Python's {@code sys.path}, or a JVM classpath. Each server reads them as
+	 * its language does. Never null.
 	 */
-	public static final ScriptContext NO_STATE = new NoState();
-
-	/** No particular environment. */
-	public static final Environment NONE = new Environment(null, null);
-
-	private final String interpreter;
 	private final List<String> paths;
-	private final ScriptContext live;
+	private final Optional<ScriptContext> live;
 
 	/**
-	 * An environment for code not typed into an interpreter (see
-	 * {@link #NO_STATE}).
-	 *
-	 * @param interpreter Path of the interpreter or executable parsing the code.
-	 * @param paths Extra places imports are resolved from, in order. Language-dependent.
+	 * No particular environment: no interpreter, no extra paths, and no live
+	 * interpreter. Others are made from it, e.g.
+	 * {@code new Environment().withInterpreter(python)}.
 	 */
-	public Environment(final String interpreter, final List<String> paths) {
-		this(interpreter, paths, NO_STATE);
+	public Environment() {
+		this(Optional.empty(), Collections.emptyList(), Optional.empty());
 	}
 
 	/**
-	 * @param interpreter Path of the interpreter or executable parsing the code.
-	 * @param paths Extra places imports are resolved from, in order. Language-dependent.
-	 * @param live The state of the interpreter the code is typed into (e.g. a
-	 *          REPL's), or {@link #NO_STATE}.
+	 * Since different environments may or may not have any of these,
+	 * a builder pattern is nice here.
 	 */
-	public Environment(final String interpreter, final List<String> paths,
-		final ScriptContext live)
+	private Environment(final Optional<String> interpreter,
+		final List<String> paths, final Optional<ScriptContext> live)
 	{
 		this.interpreter = interpreter;
-		this.paths = paths == null ? Collections.emptyList() : Collections
-			.unmodifiableList(new ArrayList<>(paths));
-		this.live = Objects.requireNonNull(live, "live");
+		this.paths = paths;
+		this.live = live;
 	}
 
-	/** Path of the interpreter or executable running the script, or null. */
-	public String interpreter() {
+	/** Path of the interpreter or executable running the script, if known. */
+	public Optional<String> interpreter() {
 		return interpreter;
 	}
 
@@ -108,18 +94,35 @@ public final class Environment {
 		return paths;
 	}
 
-	/**
-	 * The state of the interpreter the code is typed into; or
-	 * {@link #NO_STATE}, if none.
-	 */
-	public ScriptContext live() {
+	/** The state of the interpreter the code is typed into, if any. */
+	public Optional<ScriptContext> live() {
 		return live;
 	}
 
-	/** A copy of this environment, for code typed into the given interpreter. */
+	/**
+	 * A copy of this environment, whose code is parsed by the given interpreter
+	 * or executable.
+	 *
+	 * @param path Path of the interpreter or executable.
+	 */
+	public Environment withInterpreter(final String path) {
+		return new Environment(Optional.of(path), paths, live);
+	}
+
+	/**
+	 * A copy of this environment, whose imports are also resolved from the
+	 * given places, in order. Language-dependent.
+	 */
+	public Environment withPaths(final List<String> places) {
+		return new Environment(interpreter, List.copyOf(places), live);
+	}
+
+	/**
+	 * A copy of this environment, for code typed into the given interpreter
+	 * (e.g. a REPL's).
+	 */
 	public Environment withLive(final ScriptContext context) {
-		return context == live ? this : new Environment(interpreter, paths,
-			context);
+		return new Environment(interpreter, paths, Optional.of(context));
 	}
 
 	@Override
@@ -127,114 +130,19 @@ public final class Environment {
 		if (!(o instanceof Environment)) return false;
 		final Environment that = (Environment) o;
 		// NB: Live interpreters are the same only if they are the same one.
-		return Objects.equals(interpreter, that.interpreter) && paths.equals(
-			that.paths) && live == that.live;
+		return interpreter.equals(that.interpreter) && paths.equals(that.paths) &&
+			live.orElse(null) == that.live.orElse(null);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(interpreter, paths, System.identityHashCode(live));
+		return Objects.hash(interpreter, paths, System.identityHashCode(live
+			.orElse(null)));
 	}
 
 	@Override
 	public String toString() {
-		return "Environment[interpreter=" + interpreter + ", paths=" + paths +
-			(live == NO_STATE ? "" : ", live") + "]";
-	}
-
-	/** The state of no interpreter: see {@link #NO_STATE}. */
-	private static final class NoState implements ScriptContext {
-
-		private static final Bindings NONE = new SimpleBindings(Collections
-			.emptyMap());
-
-		private static final Writer NO_OUTPUT = new Writer() {
-
-			@Override
-			public void write(final char[] buf, final int off, final int len) {}
-
-			@Override
-			public void flush() {}
-
-			@Override
-			public void close() {}
-		};
-
-		@Override
-		public void setBindings(final Bindings bindings, final int scope) {
-			throw unmodifiable();
-		}
-
-		@Override
-		public Bindings getBindings(final int scope) {
-			return NONE;
-		}
-
-		@Override
-		public void setAttribute(final String name, final Object value,
-			final int scope)
-		{
-			throw unmodifiable();
-		}
-
-		@Override
-		public Object getAttribute(final String name, final int scope) {
-			return null;
-		}
-
-		@Override
-		public Object removeAttribute(final String name, final int scope) {
-			return null;
-		}
-
-		@Override
-		public Object getAttribute(final String name) {
-			return null;
-		}
-
-		@Override
-		public int getAttributesScope(final String name) {
-			return -1;
-		}
-
-		@Override
-		public Writer getWriter() {
-			return NO_OUTPUT;
-		}
-
-		@Override
-		public Writer getErrorWriter() {
-			return NO_OUTPUT;
-		}
-
-		@Override
-		public void setWriter(final Writer writer) {
-			throw unmodifiable();
-		}
-
-		@Override
-		public void setErrorWriter(final Writer writer) {
-			throw unmodifiable();
-		}
-
-		@Override
-		public Reader getReader() {
-			return new StringReader("");
-		}
-
-		@Override
-		public void setReader(final Reader reader) {
-			throw unmodifiable();
-		}
-
-		@Override
-		public List<Integer> getScopes() {
-			return Arrays.asList(ENGINE_SCOPE, GLOBAL_SCOPE);
-		}
-
-		private static UnsupportedOperationException unmodifiable() {
-			return new UnsupportedOperationException(
-				"The state of no interpreter cannot be changed");
-		}
+		return "Environment[interpreter=" + interpreter.orElse("none") +
+			", paths=" + paths + (live.isPresent() ? ", live" : "") + "]";
 	}
 }

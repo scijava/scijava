@@ -48,14 +48,14 @@ import org.scijava.plugin.Plugin;
 	priority = Priority.HIGH)
 public class JythonLanguageServerPlugin implements LanguageServerPlugin {
 
-	@Parameter(required = false)
+	@Parameter
 	private LanguageServerService servers;
 
 	private JavaStubs stubs;
 
 	@Override
 	public boolean supports(final String languageId) {
-		// NB: Not "python", which this builds on (see PythonCompanion).
+		// NB: Not "python", which this builds on (see JythonLanguageServer).
 		return "jython".equals(languageId);
 	}
 
@@ -63,15 +63,9 @@ public class JythonLanguageServerPlugin implements LanguageServerPlugin {
 	public LanguageServer create(final String languageId,
 		final Environment environment)
 	{
-		return new JythonLanguageServer( //
-			environment, //
-			PythonCompanion.launch(servers, stubs()) //
-		);
-	}
-
-	/** Sets the stubs, e.g. to write them elsewhere in tests. */
-	synchronized void setStubs(final JavaStubs stubs) {
-		this.stubs = stubs;
+		final JavaStubs s = stubs();
+		return new JythonLanguageServer(environment, servers.launch("python",
+			JythonLanguageServer.environment(s)), s);
 	}
 
 	/** Gets the stubs of Java packages, creating them on first use. */

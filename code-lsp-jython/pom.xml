@@ -98,7 +98,7 @@
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-code-lsp-jedi</artifactId>
 			<version>${scijava-code-lsp-jedi.version}</version>
-			<!-- NB: Its server is found as a plugin, not used directly. -->
+			<!-- NB: Its server, found as a plugin, analyzes the scripts. -->
 			<scope>runtime</scope>
 		</dependency>
 
@@ -106,11 +106,6 @@
 		<dependency>
 			<groupId>org.python</groupId>
 			<artifactId>jython-slim</artifactId>
-		</dependency>
-		<dependency>
-			<!-- NB: To walk Jython's AST (see JythonScriptParser). -->
-			<groupId>org.antlr</groupId>
-			<artifactId>antlr-runtime</artifactId>
 		</dependency>
 
 		<!-- Test scope dependencies -->
@@ -145,14 +140,6 @@
 					Fiji, both are found.
 					-->
 					<useModulePath>false</useModulePath>
-					<!--
-					NB: Without jedi-language-server, whose environment would be built
-					(needing network access, and minutes) as tests first complete code:
-					they test Jython's own analysis.
-					-->
-					<classpathDependencyExcludes>
-						<classpathDependencyExclude>org.scijava:scijava-code-lsp-jedi</classpathDependencyExclude>
-					</classpathDependencyExcludes>
 				</configuration>
 			</plugin>
 		</plugins>

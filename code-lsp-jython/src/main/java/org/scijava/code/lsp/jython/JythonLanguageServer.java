@@ -28,19 +28,30 @@
  */
 package org.scijava.code.lsp.jython;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.script.Bindings;
 import javax.script.ScriptContext;
-import javax.script.SimpleBindings;
 
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionItemKind;
@@ -51,30 +62,39 @@ import org.eclipse.lsp4j.DidCloseTextDocumentParams;
 import org.eclipse.lsp4j.DidOpenTextDocumentParams;
 import org.eclipse.lsp4j.Hover;
 import org.eclipse.lsp4j.HoverParams;
+import org.eclipse.lsp4j.InitializeParams;
+import org.eclipse.lsp4j.InitializedParams;
+import org.eclipse.lsp4j.InsertReplaceEdit;
+import org.eclipse.lsp4j.Position;
+import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.SignatureHelp;
 import org.eclipse.lsp4j.SignatureHelpParams;
+import org.eclipse.lsp4j.TextDocumentContentChangeEvent;
+import org.eclipse.lsp4j.TextDocumentItem;
+import org.eclipse.lsp4j.TextEdit;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
+import org.eclipse.lsp4j.services.LanguageServer;
+import org.eclipse.lsp4j.services.TextDocumentService;
 import org.python.core.PyJavaType;
 import org.python.core.PyModule;
 import org.python.core.PyObject;
-import org.python.core.PyString;
-import org.scijava.code.lsp.jvm.ClassIndex;
-import org.scijava.code.lsp.jvm.Callable;
 import org.scijava.code.lsp.Environment;
+import org.scijava.code.lsp.Positions;
 import org.scijava.code.lsp.jvm.AbstractLanguageServer;
-import org.scijava.code.lsp.jvm.Signatures;
+import org.scijava.code.lsp.jvm.ClassIndex;
 
 /**
- * An in-process language server for Jython, driven by Jython's own analysis
- * (see {@link JythonAutoCompletions}): Java classes, their members and
- * constructors, Python names, keywords and imports; script parameters and, in
- * a live interpreter, its variables. In a call's arguments, with nothing
- * typed, the variables of the parameter's type come first. Signature help
- * rates the overloads against the arguments typed.
+ * A language server for Jython: a Python language server (e.g.
+ * scijava-code-lsp-jedi's), which knows Java classes from Python stubs of the
+ * Java packages a script imports (see {@link JavaStubs}, written in the
+ * background).
  * <p>
- * If a Python language server is offered (see {@link PythonCompanion}), its
- * completions follow Jython's own; and its signatures and hover serve where
- * Jython has none.
+ * The Python server analyzes scripts as CPython (Jython's standard library is
+ * Python 2's, but mostly the same), so it is never asked for problems. Beside
+ * its completions come those of Java classes not imported yet, which import
+ * them as they are accepted (see {@link ClassIndex}). In a live interpreter,
+ * its variables are declared to the server, as a module the script's text
+ * imports first.
  * </p>
  *
  * @author Albert Cardona
@@ -88,259 +108,492 @@ class JythonLanguageServer extends AbstractLanguageServer {
 		new Thread(ClassIndex::ensureCache, "Jython-ClassIndex-warmup").start();
 	}
 
-	private final JythonAutoCompletions engine = new JythonAutoCompletions();
+	/** Marks the completions made here, rather than by the Python server. */
+	private static final String OWN = "jython-class-name";
 
-	/** A Python language server beside Jython's analysis, or null if none. */
-	private final PythonCompanion python;
+	/** Numbers the modules declaring live interpreters' variables. */
+	private static final AtomicInteger LIVE = new AtomicInteger();
+
+	private static final Pattern //
+	fromImport = Pattern.compile(
+		"^((from|import)[ \\t]+)([a-zA-Z_][a-zA-Z0-9._]*)$"), //
+		fastImport = Pattern.compile(
+			"^(from[ \\t]+)([a-zA-Z_][a-zA-Z0-9._]*)[ \\t]+$"), //
+		importStatement = Pattern.compile(
+			"^((from[ \\t]+([a-zA-Z0-9._]+)[ \\t]+|[ \\t]*)import[ \\t]+)([a-zA-Z0-9_., \\t]*)$"), //
+		simpleClassName = Pattern.compile("^(.*[ \\t]+|)([A-Z_][a-zA-Z0-9_]+)$");
+
+	/** Names Python reserves, which cannot be declared. */
+	private static final Set<String> KEYWORDS = new HashSet<>(Arrays.asList(
+		"False", "None", "True", "and", "as", "assert", "async", "await", "break",
+		"class", "continue", "def", "del", "elif", "else", "except", "exec",
+		"finally", "for", "from", "global", "if", "import", "in", "is", "lambda",
+		"nonlocal", "not", "or", "pass", "print", "raise", "return", "try",
+		"while", "with", "yield"));
 
 	/**
-	 * @param environment Where the scripts run (e.g. a live interpreter).
+	 * The names like {@code __name__} that Jython 2.7 has, unqualified: its
+	 * module globals, builtins and modules. (The Python server knows Python 3's,
+	 * e.g. {@code __build_class__}.)
 	 */
-	public JythonLanguageServer(final Environment environment) {
-		this(environment, null);
-	}
+	private static final Set<String> DUNDERS = new HashSet<>(Arrays.asList(
+		"__builtins__", "__doc__", "__file__", "__name__", "__package__",
+		"__debug__", "__import__", "__future__", "__main__", "__builtin__"));
+
+	/** A name like {@code __name__}. */
+	private static final Pattern DUNDER = Pattern.compile("__\\w+__");
+
+	/** The Python server. */
+	private final LanguageServer python;
+	private final JavaStubs stubs;
+
+	/**
+	 * The module declaring the live interpreter's variables, if any (see
+	 * {@link Environment#live()}).
+	 */
+	private final File live;
+
+	/** The scripts' texts, by URI: to know the names they mention. */
+	private final Map<String, String> texts = new ConcurrentHashMap<>();
 
 	/**
 	 * @param environment Where the scripts run (e.g. a live interpreter).
-	 * @param python A Python language server beside Jython's analysis, or null.
+	 * @param python The Python server, e.g. of {@link #environment(JavaStubs)}.
+	 * @param stubs The stubs of Java packages, which the server searches.
 	 */
 	JythonLanguageServer(final Environment environment,
-		final PythonCompanion python)
+		final LanguageServer python, final JavaStubs stubs)
 	{
 		super(environment);
 		this.python = python;
+		this.stubs = stubs;
+		live = environment.live().isPresent() ? new File(stubs.dir(),
+			"_scijava_live_" + LIVE.incrementAndGet() + ".pyi") : null;
+		python.initialize(new InitializeParams()).thenRun(() -> python
+			.initialized(new InitializedParams()));
 	}
 
-	// -- LanguageServer, with the Python server beside --
+	/** Where the Python server runs: its own Python, searching the stubs. */
+	static Environment environment(final JavaStubs stubs) {
+		return new Environment().withPaths(Collections.singletonList(stubs.dir()
+			.getAbsolutePath()));
+	}
+
+	// -- LanguageServer, with the Python server --
 
 	@Override
 	public void didOpen(final DidOpenTextDocumentParams params) {
 		super.didOpen(params);
-		if (python != null) python.didOpen(params);
+		final TextDocumentItem item = params.getTextDocument();
+		texts.put(item.getUri(), item.getText());
+		final String text = prepare(item.getText());
+		documents().didOpen(new DidOpenTextDocumentParams(new TextDocumentItem(
+			item.getUri(), "python", item.getVersion(), text)));
 	}
 
 	@Override
 	public void didChange(final DidChangeTextDocumentParams params) {
 		super.didChange(params);
-		if (python != null) python.didChange(params);
+		if (params.getContentChanges().isEmpty()) return;
+		final String original = params.getContentChanges().get(params
+			.getContentChanges().size() - 1).getText();
+		texts.put(params.getTextDocument().getUri(), original);
+		final String text = prepare(original);
+		documents().didChange(new DidChangeTextDocumentParams(params
+			.getTextDocument(), Collections.singletonList(
+				new TextDocumentContentChangeEvent(text))));
 	}
 
 	@Override
 	public void didClose(final DidCloseTextDocumentParams params) {
 		super.didClose(params);
-		if (python != null) python.didClose(params);
+		texts.remove(params.getTextDocument().getUri());
+		documents().didClose(params);
 	}
 
+	/**
+	 * The server's completions, then those of Java classes not imported yet,
+	 * whose names the server has not completed; without names like
+	 * {@code __name__} that Jython does not have.
+	 */
 	@Override
 	public CompletableFuture<Either<List<CompletionItem>, CompletionList>>
 		completion(final CompletionParams params)
 	{
-		final CompletableFuture<Either<List<CompletionItem>, CompletionList>> own =
-			super.completion(params);
-		if (python == null) return own;
-		return own.thenCompose(answer -> python.completion(params, answer
-			.getRight()));
+		final CompletionList own = super.completion(params).join().getRight();
+		final CompletionParams theirs = new CompletionParams(params
+			.getTextDocument(), toServer(params.getPosition()), params.getContext());
+		final Set<String> dunders = dunders(params);
+		// TODO: In a call's arguments, with nothing typed, offer the variables of
+		// the parameter's type first, as Jython's own analysis did.
+		return orNull(documents().completion(theirs)).thenApply(answer -> {
+			final CompletionList merged = merge(back(list(answer)), own);
+			if (dunders != null) merged.getItems().removeIf(item -> DUNDER.matcher(
+				item.getLabel()).matches() && !dunders.contains(item.getLabel()));
+			return Either.forRight(merged);
+		});
 	}
 
 	@Override
 	public CompletableFuture<CompletionItem> resolveCompletionItem(
 		final CompletionItem item)
 	{
-		if (python == null) return super.resolveCompletionItem(item);
-		return python.resolveCompletionItem(item,
-			super::resolveCompletionItem);
+		if (OWN.equals(item.getData())) {
+			return CompletableFuture.completedFuture(item);
+		}
+		return orNull(documents().resolveCompletionItem(item)).thenApply(
+			resolved -> resolved == null ? item : back(resolved));
 	}
 
 	@Override
 	public CompletableFuture<SignatureHelp> signatureHelp(
 		final SignatureHelpParams params)
 	{
-		final CompletableFuture<SignatureHelp> own = super.signatureHelp(params);
-		if (python == null) return own;
-		return own.thenCompose(help -> python.signatureHelp(params, help));
+		// TODO: All of a Java method's overloads, rated against the arguments
+		// typed, as Jython's own analysis did: jedi-language-server offers only
+		// the last of a stub's typing.overloads.
+		return orNull(documents().signatureHelp(new SignatureHelpParams(params
+			.getTextDocument(), toServer(params.getPosition()), params
+				.getContext())));
 	}
 
 	@Override
 	public CompletableFuture<Hover> hover(final HoverParams params) {
-		final CompletableFuture<Hover> own = super.hover(params);
-		if (python == null) return own;
-		return own.thenCompose(h -> python.hover(params, h));
+		return orNull(documents().hover(new HoverParams(params.getTextDocument(),
+			toServer(params.getPosition())))).thenApply(h -> {
+				if (h != null && h.getRange() != null) h.setRange(back(h.getRange()));
+				return h;
+			});
 	}
 
 	@Override
 	public CompletableFuture<Object> shutdown() {
-		if (python != null) python.shutdown();
-		return super.shutdown();
+		if (live != null) live.delete();
+		return python.shutdown().thenCompose(done -> super.shutdown());
 	}
 
 	// -- AbstractLanguageServer --
 
+	/** Java classes, and their packages, as the caret's line is typed. */
 	@Override
 	protected CompletionList complete(final Document doc, final int caret) {
-		final String text = doc.text();
-		final String lastLine = doc.lineTo(caret);
-		if (lastLine.trim().startsWith("#")) {
+		final String line = doc.lineTo(caret);
+		if (line.trim().startsWith("#")) {
 			return list(doc, caret, caret, new ArrayList<>());
 		}
-		final String alreadyEntered = alreadyEnteredText(lastLine);
-		final int replaceStart = caret - alreadyEntered.length();
-		final JythonAutoCompletions.Result result = completionsAt(doc, caret);
-		final List<CompletionItem> items = new ArrayList<>();
-		if (alreadyEntered.isEmpty()) items.addAll(argumentChoices(doc, caret));
-		items.addAll(result.completions);
-		return list(doc, replaceStart, caret, items);
-	}
-
-	@Override
-	protected SignatureHelp signatureHelp(final Document doc, final int caret) {
-		final String text = doc.text();
-		if (doc.lineTo(caret).trim().startsWith("#")) return null;
-		final Call call = call(doc, caret);
-		if (call == null || call.callables.isEmpty()) return null;
-
-		// The types of the arguments before the caret's (which is being typed).
-		final List<String> argTypes = new ArrayList<>();
-		for (int i = 0; i < call.args.size(); i++) {
-			final String arg = call.args.get(i).trim();
-			argTypes.add(i == call.args.size() - 1 || arg.isEmpty() ? null
-				: call.result.types.apply(arg));
-		}
-		final ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		return new SignatureHelp(Signatures.rateAll(call.callables, argTypes, (a,
-			p) -> Signatures.fit(a, p, loader)), 0, call.args.size() - 1);
+		final String typed = alreadyEnteredText(line);
+		final List<CompletionItem> items = classNames(typed, doc.text());
+		for (final CompletionItem item : items) item.setData(OWN);
+		return list(doc, caret - typed.length(), caret, items);
 	}
 
 	// -- Helper methods --
 
-	/** The call around the caret: its signatures, and the arguments typed. */
-	private static final class Call {
-
-		private final JythonAutoCompletions.Result result;
-		private final List<Callable> callables;
-		private final List<String> args;
-
-		private Call(final JythonAutoCompletions.Result result,
-			final List<Callable> callables, final List<String> args)
-		{
-			this.result = result;
-			this.callables = callables;
-			this.args = args;
-		}
+	/**
+	 * The names like {@code __name__} to complete unqualified, at the position
+	 * asked about: Jython's, and those the script or the live interpreter has;
+	 * or null if completing a member (e.g. after {@code x.}), whose names the
+	 * server knows.
+	 */
+	private Set<String> dunders(final CompletionParams params) {
+		final String text = texts.getOrDefault(params.getTextDocument().getUri(),
+			"");
+		int start = Math.min(Positions.offset(text, params.getPosition()), text
+			.length());
+		while (start > 0 && (Character.isLetterOrDigit(text.charAt(start - 1)) ||
+			text.charAt(start - 1) == '_')) start--;
+		if (start > 0 && text.charAt(start - 1) == '.') return null;
+		final Set<String> names = new HashSet<>(DUNDERS);
+		final Matcher m = DUNDER.matcher(text);
+		while (m.find()) names.add(m.group());
+		environment().live().map(l -> l.getBindings(ScriptContext.ENGINE_SCOPE))
+			.ifPresent(b -> names.addAll(b.keySet()));
+		return names;
 	}
 
-	/** Finds the call around the caret, or returns null if none. */
-	private Call call(final Document doc, final int caret) {
-		final String text = doc.text();
-		final int open = Signatures.callStart(text, caret);
-		if (open < 0) return null;
-		final List<String> args = Signatures.arguments(text, open, caret);
-		if (args == null) return null;
+	private TextDocumentService documents() {
+		return python.getTextDocumentService();
+	}
 
-		// The callee, e.g. "Math.max" or "ArrayList".
-		final String callee = alreadyEnteredText(text.substring(text.lastIndexOf(
-			'\n', open - 1) + 1, open)).trim();
-		if (callee.isEmpty()) return null;
-
-		// Its signatures: what completion offers for it, as if the caret were
-		// just before the "(" (methods: "Math.max"), or just after it
-		// (constructors: offered by their class's simple name, "ArrayList").
-		final String simpleName = callee.substring(callee.lastIndexOf('.') + 1);
-		JythonAutoCompletions.Result result = null;
-		List<Callable> callables = Collections.emptyList();
-		for (final int at : new int[] { open, open + 1 }) {
-			final String name = at == open ? callee : simpleName;
-			result = completionsAt(doc, at);
-			callables = new ArrayList<>();
-			for (final CompletionItem item : result.completions) {
-				final Callable c = Callable.of(item);
-				if (c != null && c.name().equals(name)) callables.add(c);
+	/**
+	 * Gets a script ready for the server: writes the stubs of the packages it
+	 * imports (in the background), and the declarations of the live
+	 * interpreter's variables, which it then imports first.
+	 */
+	private String prepare(final String text) {
+		final Set<String> packages = new TreeSet<>(JavaStubs.imports(text));
+		if (live == null) {
+			stubs.ensure(packages);
+			return text;
+		}
+		final String declarations = declarations(packages);
+		stubs.ensure(packages);
+		try {
+			final byte[] bytes = declarations.getBytes(StandardCharsets.UTF_8);
+			// NB: Unchanged, so that the server need not reload it.
+			if (!live.isFile() || !Arrays.equals(Files.readAllBytes(live.toPath()),
+				bytes))
+			{
+				live.getParentFile().mkdirs();
+				Files.write(live.toPath(), bytes);
 			}
-			if (!callables.isEmpty()) break;
 		}
-		// NB: Reflection lists methods in no particular order: sort them by
-		// their parameter types, so that equally good fits come out the same.
-		callables.sort(Comparator.comparing(Callable::parameterTypes));
-		return new Call(result, callables, args);
+		catch (final IOException exc) {
+			// NB: Then, the variables are not known.
+		}
+		return "from " + module() + " import *\n" + text;
+	}
+
+	/** The name of the module declaring the live interpreter's variables. */
+	private String module() {
+		final String name = live.getName();
+		return name.substring(0, name.length() - ".pyi".length());
 	}
 
 	/**
-	 * In a call's arguments, with nothing typed: the variables of the
-	 * parameter's type (the first preselected).
+	 * Declares the live interpreter's variables, as a stub: Java ones by their
+	 * classes' Python types (noting their packages), Python ones by their
+	 * builtin types.
 	 */
-	private List<CompletionItem> argumentChoices(final Document doc,
-		final int caret)
-	{
-		final Call call = call(doc, caret);
-		if (call == null || call.result.variablesOfType == null) {
-			return Collections.emptyList();
-		}
-		final int active = call.args.size() - 1;
-		final Set<String> names = new LinkedHashSet<>();
-		for (final Callable c : call.callables) {
-			if (active >= c.params().size()) continue;
-			names.addAll(call.result.variablesOfType.apply(c.params().get(active)
-				.type()));
-		}
-		final List<CompletionItem> out = new ArrayList<>();
-		for (final String name : names) {
-			final CompletionItem item = new CompletionItem(name);
-			item.setKind(CompletionItemKind.Variable);
-			item.setInsertText(name);
-			item.setPreselect(out.isEmpty());
-			out.add(item);
-		}
-		return out;
-	}
-
-	/** Computes completions as if the caret were at the given offset. */
-	private JythonAutoCompletions.Result completionsAt(final Document doc,
-		final int offset)
-	{
-		final String text = doc.text();
-		final String textToCaret = text.substring(0, Math.min(offset, text
-			.length()));
-		final String lastLine = textToCaret.substring(textToCaret.lastIndexOf(
-			'\n') + 1);
-		return engine.completionsFor(textToCaret.substring(0, textToCaret
-			.length() - lastLine.length()), lastLine, alreadyEnteredText(lastLine),
-			liveVariables());
-	}
-
-	/**
-	 * Gets the variables defined before the code runs, when completing in a
-	 * live interpreter: its bindings. (A script's parameters are declared in
-	 * its text.)
-	 */
-	private Map<String, DotAutocompletions> liveVariables() {
-		final Map<String, DotAutocompletions> vars = new LinkedHashMap<>();
+	private String declarations(final Set<String> packages) {
+		final Map<String, String> declared = new TreeMap<>();
+		final Set<String> imports = new TreeSet<>();
 		final Bindings bindings = environment().live().map(l -> l.getBindings(
-			ScriptContext.ENGINE_SCOPE)).orElseGet(SimpleBindings::new);
-		for (final Map.Entry<String, Object> entry : bindings.entrySet()) {
-			final String name = entry.getKey();
-			if (name.startsWith("__") && name.endsWith("__")) continue;
-			vars.put(name, bindingCompletions(entry.getValue()));
+			ScriptContext.ENGINE_SCOPE)).orElse(null);
+		if (bindings != null) {
+			for (final Map.Entry<String, Object> entry : bindings.entrySet()) {
+				final String name = entry.getKey();
+				if (!name.matches("[A-Za-z_][A-Za-z0-9_]*") || name.startsWith("__") ||
+					KEYWORDS.contains(name)) continue;
+				declared.put(name, declaration(name, entry.getValue(), imports));
+			}
 		}
-		return vars.isEmpty() ? Collections.emptyMap() : vars;
+		packages.addAll(imports);
+		final StringBuilder sb = new StringBuilder(
+			"# The variables of a running interpreter. Generated; do not edit.\n");
+		sb.append("import typing\n");
+		for (final String p : imports) sb.append("import ").append(p).append('\n');
+		sb.append("__all__ = [").append(declared.keySet().stream().map(n -> "'" +
+			n + "'").collect(Collectors.joining(", "))).append("]\n");
+		declared.values().forEach(d -> sb.append(d).append('\n'));
+		return sb.toString();
 	}
 
-	/** Describes a live binding value for completion purposes. */
-	private static DotAutocompletions bindingCompletions(final Object value) {
-		if (value instanceof PyJavaType) {
-			// An imported Java class: offer its constructors and static members.
-			final Class<?> c = ((PyJavaType) value).getProxyType();
-			if (c != null) return new StaticDotAutocompletions(c.getName());
+	/** Declares a variable of the live interpreter, as a stub does. */
+	private String declaration(final String name, final Object value,
+		final Set<String> imports)
+	{
+		if (value instanceof PyJavaType && ((PyJavaType) value)
+			.getProxyType() != null)
+		{
+			return name + " = " + stubs.type(((PyJavaType) value).getProxyType(),
+				"", imports);
+		}
+		if (value instanceof Class) {
+			return name + " = " + stubs.type((Class<?>) value, "", imports);
 		}
 		if (value instanceof PyModule) {
-			final PyObject name = ((PyModule) value).__findattr__("__name__");
-			if (name instanceof PyString) {
-				return new StaticDotAutocompletions(name.toString());
+			final PyObject module = ((PyModule) value).__findattr__("__name__");
+			if (module != null && module.toString().matches("[\\w.]+")) {
+				return "import " + module + " as " + name;
 			}
 		}
-		if (value == null || value instanceof PyObject) {
-			// A python function, class or instance: known by name only.
-			return new VarDotAutocompletions(null);
+		if (value instanceof PyObject) {
+			return name + ": " + pythonType(((PyObject) value).getType().getName());
 		}
-		return new VarDotAutocompletions(value.getClass().getName());
+		if (value == null) return name + ": typing.Any";
+		return name + ": " + stubs.type(value.getClass(), "", imports);
+	}
+
+	/** The Python 3 type of a Python 2 builtin one; or {@code typing.Any}. */
+	private static String pythonType(final String type) {
+		switch (type) {
+			case "int":
+			case "long":
+				return "int";
+			case "unicode":
+				return "str";
+			case "bool":
+			case "float":
+			case "str":
+			case "list":
+			case "dict":
+			case "tuple":
+			case "set":
+				return type;
+			default:
+				return "typing.Any";
+		}
+	}
+
+	/** Positions in the script, as the server sees it. */
+	private Position toServer(final Position p) {
+		return new Position(p.getLine() + headerLines(), p.getCharacter());
+	}
+
+	/** Ranges as the server sees the script, in the script. */
+	private Range back(final Range r) {
+		final int n = headerLines();
+		return new Range(new Position(r.getStart().getLine() - n, r.getStart()
+			.getCharacter()), new Position(r.getEnd().getLine() - n, r.getEnd()
+				.getCharacter()));
+	}
+
+	private int headerLines() {
+		return live == null ? 0 : 1;
+	}
+
+	/** Completions as the server sees the script, in the script. */
+	private CompletionList back(final CompletionList list) {
+		if (list == null || headerLines() == 0) return list;
+		for (final CompletionItem item : list.getItems()) back(item);
+		return list;
+	}
+
+	private CompletionItem back(final CompletionItem item) {
+		if (headerLines() == 0) return item;
+		final Either<TextEdit, InsertReplaceEdit> edit = item.getTextEdit();
+		if (edit != null && edit.isLeft()) {
+			edit.getLeft().setRange(back(edit.getLeft().getRange()));
+		}
+		else if (edit != null) {
+			edit.getRight().setInsert(back(edit.getRight().getInsert()));
+			edit.getRight().setReplace(back(edit.getRight().getReplace()));
+		}
+		if (item.getAdditionalTextEdits() != null) {
+			item.getAdditionalTextEdits().forEach(e -> e.setRange(back(e
+				.getRange())));
+		}
+		return item;
+	}
+
+	/**
+	 * The server's completions first; then those made here, whose names it has
+	 * not completed. Each keeps its own order.
+	 */
+	static CompletionList merge(final CompletionList theirs,
+		final CompletionList own)
+	{
+		final List<CompletionItem> out = new ArrayList<>();
+		final Set<String> names = new HashSet<>();
+		if (theirs != null && theirs.getItems() != null) {
+			for (final CompletionItem item : theirs.getItems()) {
+				names.add(name(item));
+				out.add(item);
+			}
+		}
+		int i = 0;
+		for (final CompletionItem item : own.getItems()) {
+			if (names.contains(name(item))) continue;
+			// NB: After the server's.
+			item.setSortText(String.format("~%06d", i++));
+			out.add(item);
+		}
+		return new CompletionList(theirs != null && theirs.isIncomplete(), out);
+	}
+
+	/** What a completion completes: its label, without any parameters. */
+	private static String name(final CompletionItem item) {
+		final String label = item.getLabel();
+		final int paren = label.indexOf('(');
+		return (paren < 0 ? label : label.substring(0, paren)).trim();
+	}
+
+	private static CompletionList list(
+		final Either<List<CompletionItem>, CompletionList> answer)
+	{
+		if (answer == null) return null;
+		return answer.isRight() ? answer.getRight() : new CompletionList(answer
+			.getLeft());
+	}
+
+	/** The answer; or null, if the server failed (e.g. it is not ready). */
+	private static <T> CompletableFuture<T> orNull(
+		final CompletableFuture<T> answer)
+	{
+		return answer == null ? CompletableFuture.completedFuture(null) : answer
+			.exceptionally(error -> null);
+	}
+
+	/**
+	 * Java classes and packages, as an import statement or a class's simple
+	 * name is typed: classes not imported yet import themselves as they are
+	 * accepted.
+	 */
+	private static List<CompletionItem> classNames(final String typed,
+		final String code)
+	{
+		final List<CompletionItem> items = new ArrayList<>();
+		if (!ClassIndex.isCacheReady()) return items; // NB: Don't block.
+
+		final Matcher m1 = fromImport.matcher(typed);
+		if (m1.find()) {
+			ClassIndex.findClassNamesContaining(m1.group(3)).map(
+				JythonImports::importStatement).forEach(s -> items.add(item(s,
+					CompletionItemKind.Module, null)));
+			return items;
+		}
+		final Matcher m1f = fastImport.matcher(typed);
+		if (m1f.find()) {
+			ClassIndex.findClassNamesForPackage(m1f.group(2)).map(
+				JythonImports::importStatement).forEach(s -> items.add(item(s,
+					CompletionItemKind.Module, null)));
+			return items;
+		}
+		final Matcher m2 = importStatement.matcher(typed);
+		if (m2.find()) {
+			final String packageName = m2.group(3);
+			String className = m2.group(4);
+			final String[] bycomma = className.split(",");
+			String precomma = "";
+			if (bycomma.length > 1) {
+				className = bycomma[bycomma.length - 1].trim();
+				for (int i = 0; i < bycomma.length - 1; ++i)
+					precomma += bycomma[0] + ", ";
+			}
+			final Stream<String> stream;
+			if (className.length() > 0) stream = ClassIndex.findClassNamesStartingWith(
+				null == packageName ? className : packageName + "." + className);
+			else stream = ClassIndex.findClassNamesForPackage(packageName);
+			final String pre = m2.group(1) + precomma;
+			stream.map(s -> s.substring(Math.max(0, s.lastIndexOf('.') + 1))).forEach(
+				s -> items.add(item(pre + s, CompletionItemKind.Module, null)));
+			return items;
+		}
+		final Matcher m3 = simpleClassName.matcher(typed);
+		if (m3.find()) {
+			final String pre = m3.group(1);
+			final List<String> classNames = ClassIndex
+				.findSimpleClassNamesStartingWith(m3.group(2));
+			// Closest matches first: shortest simple name, then alphabetical.
+			classNames.sort(Comparator.comparingInt((String cn) -> cn.length() - cn
+				.lastIndexOf('.')).thenComparing(Comparator.naturalOrder()));
+			for (final String className : classNames) {
+				final String simpleName = className.substring(className.lastIndexOf(
+					'.') + 1);
+				final String importStmt = JythonImports.importStatement(className);
+				// Side effect on accept: insert the import near the top of the file.
+				final TextEdit edit = JythonImports.autoImportEdit(code, className,
+					importStmt);
+				final CompletionItem c = item(pre + simpleName, CompletionItemKind.Class,
+					importStmt);
+				if (edit != null) c.setAdditionalTextEdits(Collections.singletonList(
+					edit));
+				items.add(c);
+			}
+		}
+		return items;
+	}
+
+	/** A completion of the given text. */
+	private static CompletionItem item(final String text,
+		final CompletionItemKind kind, final String detail)
+	{
+		final CompletionItem item = new CompletionItem(text);
+		item.setKind(kind);
+		item.setInsertText(text);
+		item.setDetail(detail);
+		return item;
 	}
 
 	/**

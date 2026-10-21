@@ -75,14 +75,37 @@ public abstract class AbstractIntegralImg<I extends RealType<I>, O extends RealT
 			Views.iterable(output).firstElement().createVariable());
 
 		// Create integral image
-		for (var i = 0; i < input.numDimensions(); ++i) {
-			// Slicewise integral addition in one direction
+		final var n = input.numDimensions();
+		for (var i = 0; i < n; ++i) {
+			// Cumulative addition along each line in dimension i.
 			// TODO can we find a way to parallelize this?
-			for (var j = 0; j < input.dimension(i); j++)
-				getComputer(i).compute(Views.hyperSlice(generalizedInput, i, j), Views
-					.hyperSlice(output, i, j));
+			if (n == 1) {
+				getComputer(i).compute(generalizedInput, output);
+			}
+			else {
+				final var pos = new long[n];
+				final var lineStarts = Views.flatIterable(Views.hyperSlice(output, i,
+					output.min(i))).localizingCursor();
+				while (lineStarts.hasNext()) {
+					lineStarts.fwd();
+					for (var d = 0; d < n - 1; d++)
+						pos[d < i ? d : d + 1] = lineStarts.getLongPosition(d);
+					getComputer(i).compute(line(generalizedInput, i, pos), line(output,
+						i, pos));
+				}
+			}
 			generalizedInput = output;
 		}
+	}
+
+	/** Gets the 1-D line along dimension {@code dim} through {@code pos}. */
+	private static <T> RandomAccessibleInterval<T> line(
+		RandomAccessibleInterval<T> rai, final int dim, final long[] pos)
+	{
+		for (var d = rai.numDimensions() - 1; d >= 0; d--) {
+			if (d != dim) rai = Views.hyperSlice(rai, d, pos[d]);
+		}
+		return rai;
 	}
 
 	/**

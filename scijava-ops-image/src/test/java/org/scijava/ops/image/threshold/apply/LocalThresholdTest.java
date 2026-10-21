@@ -923,7 +923,8 @@ public class LocalThresholdTest extends AbstractOpTest {
 
 		opToTest.compute(in, new RectangleShape(2, false), out);
 
-		assertEquals(true, out.firstElement().get());
+		// Note: The first pixel is not above mean * (1 + k * (stdDev / r - 1)).
+		assertEquals(false, out.firstElement().get());
 	}
 
 	// /**

@@ -30,6 +30,7 @@
 package org.scijava.ops.image.threshold;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -84,7 +85,23 @@ public class AutoLocalThresholdParityTest extends AbstractOpTest {
 		assertFiji("MidGrey");
 	}
 
+	/**
+	 * Sauvola with Fiji parameters k = 0.5 and r = 128. A few pixels differ
+	 * because ops computes the sample standard deviation, where ImageJ
+	 * RankFilters computes the population standard deviation.
+	 */
+	@Test
+	public void testSauvola() throws IOException {
+		assertFiji("Sauvola", 10);
+	}
+
 	private void assertFiji(final String method) throws IOException {
+		assertFiji(method, 0);
+	}
+
+	private void assertFiji(final String method, final int maxDiff)
+		throws IOException
+	{
 		var checked = 0;
 		try (var in = new BufferedReader(new InputStreamReader(getClass()
 			.getResourceAsStream("fiji-local-masks.txt"), StandardCharsets.UTF_8)))
@@ -106,7 +123,9 @@ public class AutoLocalThresholdParityTest extends AbstractOpTest {
 					if (expected != b.get()) diff++;
 					i++;
 				}
-				assertEquals(0, diff, method + " on " + f[0] + " with radius " + r);
+				final var msg = method + " on " + f[0] + " with radius " + r + ": " +
+					diff + " differing pixels";
+				assertTrue(diff <= maxDiff, msg);
 				checked++;
 			}
 		}
@@ -140,6 +159,10 @@ public class AutoLocalThresholdParityTest extends AbstractOpTest {
 			case "MidGrey":
 				ops.op("threshold.localMidGrey").input(img, shape, 0.0).output(out)
 					.compute();
+				break;
+			case "Sauvola":
+				ops.op("threshold.localSauvola").input(img, shape, 0.5, 128.0).output(
+					out).compute();
 				break;
 			default:
 				throw new IllegalArgumentException(method);

@@ -102,10 +102,10 @@ public class ComputeLocalSauvolaThreshold<T extends RealType<T>> implements
 		final var stdDevValue = new DoubleType();
 		stdDeviationOp.compute(inputNeighborhood, stdDevValue);
 
-		final var threshold = meanValue.get() * (1.0d + k * ((Math.sqrt(
-			stdDevValue.get()) / r) - 1.0));
+		final var threshold = meanValue.get() * (1.0d + k * ((stdDevValue.get() /
+			r) - 1.0));
 
-		output.set(inputCenterPixel.getRealDouble() >= threshold);
+		output.set(inputCenterPixel.getRealDouble() > threshold);
 	}
 
 }

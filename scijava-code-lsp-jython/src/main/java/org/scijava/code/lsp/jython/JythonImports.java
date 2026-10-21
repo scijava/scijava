@@ -38,10 +38,13 @@ import org.eclipse.lsp4j.TextEdit;
 import org.scijava.code.lsp.Positions;
 
 /**
- * Parses the {@code import} statements in a Jython script, and computes the
- * {@link TextEdit} needed to auto-insert a missing import near the top of the
- * file. This is the toolkit-agnostic successor to the editor-side
- * auto-import-on-accept logic.
+ * Tools for importing Java classes as their completions are accepted.
+ * <p>
+ * For example, if you type {@code ArrayLi} and accept {@code ArrayList}, the
+ * completion also carries an edit that adds
+ * {@code from java.util import ArrayList} to the script (after its last
+ * import), unless the class is imported already (see {@link #autoImportEdit}).
+ * </p>
  *
  * @author Albert Cardona
  */
@@ -133,11 +136,6 @@ final class JythonImports {
 	}
 
 	/**
-	 * Computes the edit that inserts {@code importStatement} after the last
-	 * existing import (or at the top), or {@code null} if {@code className} is
-	 * already imported.
-	 */
-	/**
 	 * The statement importing a class, e.g. {@code from java.io import File}.
 	 */
 	static String importStatement(final String className) {
@@ -147,6 +145,11 @@ final class JythonImports {
 			.substring(idot + 1);
 	}
 
+	/**
+	 * Computes the edit that inserts {@code importStatement} after the last
+	 * existing import (or at the top), or {@code null} if {@code className} is
+	 * already imported.
+	 */
 	public static TextEdit autoImportEdit(final String text,
 		final String className, final String importStatement)
 	{

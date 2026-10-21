@@ -54,9 +54,10 @@ final class AttributeFilters {
 
 			/**
 			 * The sum, over the pixels of the component, of their height above the
-			 * level at which the component merges with another one.
+			 * level at which the component merges with another one, called the
+			 * volume in the literature (Vachier and Meyer).
 			 */
-			VOLUME("volume");
+			GRAY_VOLUME("grayVolume");
 
 		private final String label;
 
@@ -71,6 +72,12 @@ final class AttributeFilters {
 		 * @return the attribute
 		 */
 		static Attribute of(final String name) {
+			if ("volume".equalsIgnoreCase(name)) {
+				throw new IllegalArgumentException("Ambiguous attribute: volume " +
+					"(use \"area\" for the number of pixels or voxels of a component, " +
+					"as in the MorphoLibJ volume opening, or \"grayVolume\" for the " +
+					"grayscale volume of Vachier and Meyer)");
+			}
 			for (final var a : values()) {
 				if (a.label.equalsIgnoreCase(name)) return a;
 			}

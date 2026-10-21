@@ -44,9 +44,15 @@ import org.scijava.ops.spi.Nullable;
  * the whole image is always preserved.
  * </p>
  * <p>
- * This is a grayscale volume, not a 3D area: for a 3D size opening, use
- * {@code morphology.areaOpening}. Since the volume of a component decreases
- * when its sub-components are removed, this filter is not idempotent.
+ * The literature calls this attribute the <em>volume</em> (Vachier, 1995;
+ * Meyer, 1998), since it is the volume under (or above) the image surface
+ * restricted to the component. This op is named {@code grayVolumeOpening}
+ * rather than {@code volumeOpening} because MorphoLibJ uses the latter name
+ * for a different filter: its 3D "volume opening" is a size opening that
+ * counts the voxels of each component, which here is
+ * {@code morphology.areaOpening} applied to a 3D image. Since the grayscale
+ * volume of a component decreases when its sub-components are removed,
+ * this filter is not idempotent.
  * </p>
  * <p>
  * Implemented by pruning the max-tree of the image (Salembier, Oliveras and
@@ -64,14 +70,14 @@ import org.scijava.ops.spi.Nullable;
  *
  * @author Curtis Rueden
  * @param <T> image type
- * @implNote op names='morphology.volumeOpening'
+ * @implNote op names='morphology.grayVolumeOpening'
  */
-public class VolumeOpening<T extends RealType<T>> implements
+public class GrayVolumeOpening<T extends RealType<T>> implements
 	Computers.Arity3<RandomAccessibleInterval<T>, Double, Shape, RandomAccessibleInterval<T>>
 {
 
 	/**
-	 * Computes the volume opening.
+	 * Computes the grayscale volume opening.
 	 *
 	 * @param input the image to filter
 	 * @param minVolume the minimal volume of the preserved components, in pixels times intensity units
@@ -88,7 +94,7 @@ public class VolumeOpening<T extends RealType<T>> implements
 		final Double minVolume, @Nullable final Shape connectivity,
 		final RandomAccessibleInterval<T> output)
 	{
-		AttributeFilters.filter(input, Attribute.VOLUME, minVolume,
+		AttributeFilters.filter(input, Attribute.GRAY_VOLUME, minVolume,
 			connectivity, false, output);
 	}
 }

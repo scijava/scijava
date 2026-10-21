@@ -63,7 +63,7 @@ import org.scijava.ops.image.lgpl.AbstractOpTest;
 public class AttributeFilterTest extends AbstractOpTest {
 
 	private static final String[] ATTRIBUTES = { "area", "boxDiagonal",
-		"volume" };
+		"grayVolume" };
 
 	@Test
 	public void testRandom2D() {
@@ -74,7 +74,8 @@ public class AttributeFilterTest extends AbstractOpTest {
 				check(img, "area", new double[] { 1, 2, 4, 7, 15, 40, 64 }, shape);
 				check(img, "boxDiagonal", new double[] { 0.5, 1, 1.5, 2.5, 4, 7, 20 },
 					shape);
-				check(img, "volume", new double[] { 0.5, 2, 5, 12, 30, 100 }, shape);
+				check(img, "grayVolume", new double[] { 0.5, 2, 5, 12, 30, 100 },
+					shape);
 			}
 		}
 	}
@@ -87,7 +88,7 @@ public class AttributeFilterTest extends AbstractOpTest {
 			for (final var shape : shapes()) {
 				check(img, "area", new double[] { 2, 5, 11, 30 }, shape);
 				check(img, "boxDiagonal", new double[] { 1, 2, 3.2, 6 }, shape);
-				check(img, "volume", new double[] { 3, 10, 50 }, shape);
+				check(img, "grayVolume", new double[] { 3, 10, 50 }, shape);
 			}
 		}
 	}
@@ -102,7 +103,7 @@ public class AttributeFilterTest extends AbstractOpTest {
 		for (final var shape : shapes()) {
 			check(img, "area", new double[] { 3, 9 }, shape);
 			check(img, "boxDiagonal", new double[] { 2, 3.5 }, shape);
-			check(img, "volume", new double[] { 0.5, 4 }, shape);
+			check(img, "grayVolume", new double[] { 0.5, 4 }, shape);
 		}
 	}
 
@@ -139,8 +140,8 @@ public class AttributeFilterTest extends AbstractOpTest {
 			0L, null)), 0);
 		assertArrayEquals(expected, values(filter("morphology.boxDiagonalOpening",
 			img, 0.0, null)), 0);
-		assertArrayEquals(expected, values(filter("morphology.volumeClosing", img,
-			0.0, null)), 0);
+		assertArrayEquals(expected, values(filter(
+			"morphology.grayVolumeClosing", img, 0.0, null)), 0);
 
 		// A size larger than the image flattens it to its minimum or maximum.
 		final var min = Arrays.stream(expected).min().getAsDouble();
@@ -215,11 +216,17 @@ public class AttributeFilterTest extends AbstractOpTest {
 		assertArrayEquals(values(filter("morphology.boxDiagonalClosing", img, 2.5,
 			shape)), values(attribute("morphology.attributeClosing", img,
 				"BOXDIAGONAL", 2.5, shape)), 0);
-		assertArrayEquals(values(filter("morphology.volumeOpening", img, 6.0,
-			shape)), values(attribute("morphology.attributeOpening", img, "volume",
-				6, shape)), 0);
+		assertArrayEquals(values(filter("morphology.grayVolumeOpening", img, 6.0,
+			shape)), values(attribute("morphology.attributeOpening", img,
+				"grayVolume", 6, shape)), 0);
 		assertThrows(IllegalArgumentException.class, () -> attribute(
 			"morphology.attributeOpening", img, "perimeter", 1, shape));
+
+		// Note: "volume" means the voxel count in MorphoLibJ, so it is rejected.
+		final var e = assertThrows(IllegalArgumentException.class,
+			() -> attribute("morphology.attributeClosing", img, "Volume", 1, shape));
+		assertTrue(e.getMessage().contains("\"area\""));
+		assertTrue(e.getMessage().contains("\"grayVolume\""));
 	}
 
 	@Test
@@ -230,7 +237,7 @@ public class AttributeFilterTest extends AbstractOpTest {
 			0, 0, 3, 0, 0);
 		final var horizontal = new HorizontalLineShape(1, 0, true);
 		check(img, "area", new double[] { 2, 3 }, horizontal);
-		check(img, "volume", new double[] { 1, 5 }, horizontal);
+		check(img, "grayVolume", new double[] { 1, 5 }, horizontal);
 		assertArrayEquals(new double[] { //
 			1, 4, 4, 2, 2, //
 			0, 0, 0, 0, 0 }, values(filter("morphology.areaOpening", img, 2L,

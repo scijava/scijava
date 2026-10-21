@@ -479,7 +479,7 @@ public final class Conversions {
         var className = clazz.getSimpleName();
 		if (className.chars().allMatch(Character::isJavaIdentifierPart))
 			return className;
-		if (clazz.isArray()) return clazz.getComponentType().getSimpleName() +
+		if (clazz.isArray()) return getClassName(clazz.getComponentType()) +
 			"_Arr";
 		return className;
 	}

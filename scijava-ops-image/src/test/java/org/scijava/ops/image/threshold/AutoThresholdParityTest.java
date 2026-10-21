@@ -124,6 +124,23 @@ public class AutoThresholdParityTest extends AbstractOpTest {
 		assertFiji(bytes(blobs(4, 50, 0, 180, 0, 0, 255, false)), expected);
 	}
 
+	/**
+	 * An 8-bit image with the grey levels 10, 20 and 200, on which the MinError
+	 * iteration hits NaN; Fiji then keeps the previous estimate (41).
+	 */
+	@Test
+	public void testMinErrorNotConverging() {
+		assertMask(bytes(gaps()), "threshold.minError", 41);
+	}
+
+	static int[] gaps() {
+		final var px = new int[W * H];
+		for (var i = 0; i < px.length; i++) {
+			px[i] = i % 7 == 0 ? 200 : i % 2 == 0 ? 10 : 20;
+		}
+		return px;
+	}
+
 	private <T extends RealType<T>> void assertFiji(final Img<T> img,
 		final int... expected)
 	{

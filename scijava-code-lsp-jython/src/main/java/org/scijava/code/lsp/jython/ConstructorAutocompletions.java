@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class ConstructorAutocompletions implements DotAutocompletions
+class ConstructorAutocompletions implements DotAutocompletions
 {
 	private final Class<?> c;
 	

@@ -30,7 +30,7 @@ package org.scijava.code.lsp.jython;
 
 import java.util.List;
 
-public class DefVarDotAutocompletions extends VarDotAutocompletions {
+class DefVarDotAutocompletions extends VarDotAutocompletions {
 
 	String fnName;
 	final List<String> argumentNames;

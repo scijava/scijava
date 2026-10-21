@@ -81,7 +81,7 @@ import org.scijava.code.lsp.jvm.Signatures;
  * @author Curtis Rueden
  * @author Gabriel Selzer
  */
-public class JythonLanguageServer extends AbstractLanguageServer {
+class JythonLanguageServer extends AbstractLanguageServer {
 
 	static {
 		// Warm the class index in the background, as completion needs it.

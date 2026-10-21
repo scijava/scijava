@@ -43,7 +43,6 @@ import org.python.antlr.ast.Attribute;
 import org.python.antlr.ast.BinOp;
 import org.python.antlr.ast.Call;
 import org.python.antlr.ast.ClassDef;
-import org.python.antlr.ast.Expr;
 import org.python.antlr.ast.Expression;
 import org.python.antlr.ast.For;
 import org.python.antlr.ast.FunctionDef;
@@ -72,7 +71,7 @@ import org.python.core.PyInteger;
 import org.python.core.PyObject;
 import org.python.indexer.types.NModuleType;
 
-public class JythonScriptParser
+class JythonScriptParser
 {	
 	/**
 	 * Parse valid jython code.
@@ -105,7 +104,7 @@ public class JythonScriptParser
 			final mod m = ParserFacade.parse(code, CompileMode.exec, "<none>", new CompilerFlags());
 			if (null != m.getChildren()) parseNode(scope, m.getChildren(), null);
 		} catch (Throwable t) {
-			JythonDev.printError(t);
+			// NB: Code being typed often does not parse.
 		}
 		return scope;
 	}
@@ -129,7 +128,6 @@ public class JythonScriptParser
 	static public void parseNode(final Scope scope, final List<PythonTree> children, final String className) {
 		
 		for (final PythonTree child : children) {
-			JythonDev.printTrace(child.getClass());
 			
 			if (child instanceof ImportFrom)
 				scope.imports.putAll(parseImportFromStatement( (ImportFrom)child ));
@@ -141,24 +139,13 @@ public class JythonScriptParser
 				parseFunctionDef((FunctionDef)child, scope);
 			else if (child instanceof ClassDef)
 				parseClassDef((ClassDef)child, scope);
-			else if (child instanceof Expr)
-				parseExpr((Expr)child, scope);
 			else if (child instanceof If || child instanceof For || child instanceof While
 					|| child instanceof TryExcept || child instanceof TryFinally || child instanceof With)
 				// no new scope in if/for/while/with/try/ statements in python
 				parseNode(scope, child.getChildren(), null);
-			else
-				JythonDev.printTrace("IGNORING child: " + child + " -- " + (null != child.getChildren() ?
-						String.join("::", child.getChildren().stream().map(c -> c.toString()).collect(Collectors.toList()))
-						: ""));
 		}
 	}
 	
-	static public void parseExpr(final Expr child, final Scope scope) {
-		// child.getText() shows child is the base
-		JythonDev.printTrace("Expr: " + child.getText() + ", " + child.getInternalValue() + ", " + child.getValue() + ", children: " + String.join(", ", child.getChildren().stream().map(PythonTree::toString).collect(Collectors.toList())));
-	}
-
 	/**
 	 * Parse import statements, considering aliases.
 	 * There can be more than one if e.g. commas were used, as in "from ij import IJ, ImageJ".
@@ -188,7 +175,6 @@ public class JythonScriptParser
 	}
 	
 	static private DotAutocompletions maybeStaticToDot(final PythonTree node, final DotAutocompletions da) {
-		JythonDev.printTrace("children count:" + node.getChildCount() + ", children: " + (null != node.getChildren() ? node.getChildren().stream().map(c -> c.toString()).collect(Collectors.toList()) : ""));
 		if (node.getChildCount() > 0 && da instanceof StaticDotAutocompletions) {
 			// It's a right expression (a constructor invocation assigned to a variable on the left) so the left is an instance of the class
 			return new VarDotAutocompletions(da.getClassname());
@@ -215,7 +201,6 @@ public class JythonScriptParser
 			for (int i=0; i<right.getChildren().size(); ++i) {
 				final CommonTree ct = left.getChildren().get(i).getNode();
 				if (null == ct) {
-					JythonDev.printTrace("null for left: '" + left + "'" + " at child node " + i);
 					continue;
 				}
 				final String name = ct.toString();
@@ -321,9 +306,7 @@ public class JythonScriptParser
 		final List<String> superclassNames = new ArrayList<>();
 		for (final expr e: c.getInternalBases()) {
 			final DotAutocompletions da = parent.find(e.getText(), null);
-			if (null == da || null == da.getClassname())
-				JythonDev.print("Could not find completions and className for " + e.getText());
-			else
+			if (null != da && null != da.getClassname())
 				superclassNames.add(da.getClassname());
 		}
 		// Search for the constructor __init__ if any to get the constructor parameters
@@ -422,7 +405,7 @@ public class JythonScriptParser
 						return new VarDotAutocompletions(m.getReturnType().getName());
 				return new VarDotAutocompletions(c.getField(name).getType().getName());
 			} catch (Exception e) {
-				JythonDev.print("Could not find method or field " + name + " in class " + className, e);
+				// NB: Nothing to complete from it.
 			}
 			// Could also be a python module, e.g. attempting to autocomplete "os.path."
 			try {
@@ -430,7 +413,7 @@ public class JythonScriptParser
 				if (null != module)
 					return new StaticDotAutocompletions(className  + "." + name);
 			} catch (Exception e) {
-				JythonDev.printTrace("Not a python module: " + className + "." + name);
+				// NB: Nothing to complete from it.
 			}
 		}
 		if (right instanceof Call) {
@@ -449,7 +432,6 @@ public class JythonScriptParser
 			final BinOp binop = (BinOp)right;
 			// Weak attempt at finding out what is it (will not succeed if neither is a number)
 			// TODO this should be done recursively
-			JythonDev.printTrace("BinOp: weak attempt at finding out what kind of number it returns.");
 			// First, check if any is a number
 			final Class<?> typeL = binop.getLeft().isNumberType() ? ((Num)binop.getLeft()).getInternalN().getClass() : null,
 					 	   typeR = binop.getRight().isNumberType() ? ((Num)binop.getRight()).getInternalN().getClass() : null;
@@ -468,7 +450,6 @@ public class JythonScriptParser
 			return parseRight(binop.getRight(), scope);
 		}
 		
-		JythonDev.printTrace("Unsupported 'right' is: " + right + " " + (right != null ? right.getClass() : ""));
 		
 		return DotAutocompletions.EMPTY;
 	}

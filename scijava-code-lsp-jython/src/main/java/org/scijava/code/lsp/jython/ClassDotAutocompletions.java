@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ClassDotAutocompletions extends DefVarDotAutocompletions {
+class ClassDotAutocompletions extends DefVarDotAutocompletions {
 	final List<String> superclassNames; // List of superclasses
 	final List<CompletionText>dotAutocompletions; // List of class methods and fields
 	
@@ -56,11 +56,9 @@ public class ClassDotAutocompletions extends DefVarDotAutocompletions {
 		final List<CompletionText> ac = new ArrayList<>(this.dotAutocompletions);
 		for (final String className: this.superclassNames) {
 			List<CompletionText> fm = DotAutocompletions.getPublicFieldsAndMethods(className);
-			if (fm.isEmpty()) {
-				// Maybe it's a python class
-				// get them all via the org.python.indexer.Indexer and Builtins classes, see StaticDotAutocompletions
-				JythonDev.print("Don't know yet how to handle class " + className);
-			}
+			// TODO: If none, maybe it's a python class: get them all via the
+			// org.python.indexer.Indexer and Builtins classes, see
+			// StaticDotAutocompletions
 			ac.addAll(fm);
 		}
 		return ac;

@@ -45,7 +45,7 @@ import org.scijava.code.lsp.Positions;
  *
  * @author Albert Cardona
  */
-public final class JythonImports {
+final class JythonImports {
 
 	private static final Pattern importPattern = Pattern.compile(
 		"^(from[ \\t]+([a-zA-Z_][a-zA-Z0-9._]*)[ \\t]+|)import[ \\t]+([a-zA-Z_][a-zA-Z0-9_]*[ \\ta-zA-Z0-9_,]*)[ \\t]*([\\\\]*|)[  \\t]*(#.*|)$");
@@ -137,6 +137,16 @@ public final class JythonImports {
 	 * existing import (or at the top), or {@code null} if {@code className} is
 	 * already imported.
 	 */
+	/**
+	 * The statement importing a class, e.g. {@code from java.io import File}.
+	 */
+	static String importStatement(final String className) {
+		final int idot = className.lastIndexOf('.');
+		if (-1 == idot) return "import " + className;
+		return "from " + className.substring(0, idot) + " import " + className
+			.substring(idot + 1);
+	}
+
 	public static TextEdit autoImportEdit(final String text,
 		final String className, final String importStatement)
 	{

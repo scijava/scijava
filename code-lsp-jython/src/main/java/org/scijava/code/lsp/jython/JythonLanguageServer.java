@@ -84,18 +84,21 @@ import org.scijava.code.lsp.jvm.AbstractLanguageServer;
 import org.scijava.code.lsp.jvm.ClassIndex;
 
 /**
- * A language server for Jython: a Python language server (e.g.
- * scijava-code-lsp-jedi's), which knows Java classes from Python stubs of the
- * Java packages a script imports (see {@link JavaStubs}, written in the
- * background).
+ * A language server for Jython. Leans upon a Python server, with
+ * added Python stubs for Java types.
  * <p>
- * The Python server analyzes scripts as CPython (Jython's standard library is
- * Python 2's, but mostly the same), so it is never asked for problems. Beside
- * its completions come those of Java classes not imported yet, which import
- * them as they are accepted (see {@link ClassIndex}). In a live interpreter,
- * its variables are declared to the server, as a module the script's text
- * imports first.
- * </p>
+ * FIXME Diagnostics: the Python server reads scripts as Python 3, and so would
+ * report Jython's Python 2 (e.g. {@code print "x"}) as problems; it is never
+ * asked for them.
+ * FIXME Python 2: completions are of Python 3's builtins and standard library
+ * (mostly the same as Jython's); only names like {@code __name__} are kept to
+ * Jython's.
+ * FIXME Overloads: signature help shows only the last of a Java method's
+ * overloads, not all of them rated against the arguments typed.
+ * FIXME Arguments: in a call, the variables of the parameter's type are not
+ * offered first.
+ * FIXME Parameter names: Java methods' are named after their types (e.g.
+ * {@code long1}), as reflection does not know them.
  *
  * @author Albert Cardona
  * @author Curtis Rueden

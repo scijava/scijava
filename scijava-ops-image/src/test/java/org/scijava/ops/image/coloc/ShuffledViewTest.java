@@ -39,6 +39,12 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+
+import java.util.Arrays;
+
+import net.imglib2.view.Views;
+
 public class ShuffledViewTest extends AbstractColocalisationTest {
 
 	// for(UnsignedByteType t:Views.iterable(shuffled)) System.out.print(t + ",
@@ -235,4 +241,37 @@ public class ShuffledViewTest extends AbstractColocalisationTest {
 			}, 6, 6);
 		ImgLib2Assert.assertImageEquals(expected, shuffled);
 	}
+	/*
+	 *  Shuffling a view with a non-zero min must permute the pixels of that
+	 *  view (and only those).
+	 */
+	@Test
+	public void testNonZeroMin() {
+		final var image = ArrayImgs.unsignedBytes(8, 8);
+		int i = 0;
+		for (final var t : image)
+			t.set(i++);
+		final var view = Views.interval(image, new long[] { 1, 1 }, new long[] {
+			6, 6 });
+		final int[] blockSize = { 3, 2 };
+		final var shuffled = new ShuffledView<>(view, blockSize, 0xdeadbeefL);
+		final int[] expected = new int[36], actual = new int[36];
+		final var ra = shuffled.randomAccess();
+		int k = 0;
+		for (long y = 1; y <= 6; y++) {
+			for (long x = 1; x <= 6; x++, k++) {
+				expected[k] = (int) (8 * y + x);
+				actual[k] = ra.setPositionAndGet(x, y).get();
+			}
+		}
+		Arrays.sort(actual);
+		assertArrayEquals(expected, actual);
+
+		// Cropping a view with a non-zero min stays within that view.
+		final var cropped = ShuffledView.cropAtMin(Views.interval(image,
+			new long[] { 1, 1 }, new long[] { 7, 7 }), blockSize);
+		assertArrayEquals(new long[] { 1, 1 }, cropped.minAsLongArray());
+		assertArrayEquals(new long[] { 6, 6 }, cropped.maxAsLongArray());
+	}
+
 }

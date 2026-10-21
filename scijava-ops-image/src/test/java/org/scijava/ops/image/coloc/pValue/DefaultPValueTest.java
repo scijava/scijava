@@ -35,10 +35,12 @@ import java.util.Arrays;
 import java.util.function.BiFunction;
 
 import org.scijava.ops.image.AbstractColocalisationTest;
+import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.type.numeric.real.FloatType;
+import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.types.Nil;
@@ -69,6 +71,38 @@ public class DefaultPValueTest extends AbstractColocalisationTest {
 	public void testPValueSomeColoc() {
 		double[] array = { 0.25, 0.25, 0.75, 0.75, 0.75 };
 		assertColoc(0.6, 0.25, array, 0.25, 0.25, 0.25, 0.75, 0.75, 0.75);
+	}
+
+	/**
+	 * Tests that the shuffled images stay aligned with the second image when the
+	 * images are trimmed to a multiple of the block size: with a single block,
+	 * every shuffle is the identity, so each shuffled image must equal the
+	 * (trimmed) first image.
+	 */
+	@Test
+	public void testTrimmedAlignment() {
+		final Img<FloatType> image = ArrayImgs.floats(8, 8);
+		int i = 0;
+		for (final FloatType t : image)
+			t.setReal(i++);
+		// Returns the largest absolute difference between the two images.
+		final BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op =
+			ops.typeLambda(new Nil<>() {}, (a, b) -> {
+				final var ca = Views.flatIterable(a).cursor();
+				final var cb = Views.flatIterable(b).cursor();
+				double max = 0;
+				while (ca.hasNext()) {
+					max = Math.max(max, Math.abs(ca.next().get() - cb.next().get()));
+				}
+				return max;
+			});
+		final PValueResult output = new PValueResult();
+		ops.op("coloc.pValue").input(image, image, op, 4, new FinalDimensions(6,
+			6)).output(output).compute();
+		assertEquals(0.0, output.getColocValue(), 0.0);
+		for (final double v : output.getColocValuesArray()) {
+			assertEquals(0.0, v, 0.0);
+		}
 	}
 
 	/**

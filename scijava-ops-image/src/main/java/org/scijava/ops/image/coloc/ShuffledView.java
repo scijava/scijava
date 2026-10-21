@@ -159,8 +159,9 @@ public class ShuffledView<T> extends AbstractInterval implements
 		public T get() {
 			// Convert from image coordinates to block coordinates.
 			for (var d = 0; d < position.length; d++) {
-				blockPos[d] = position[d] / blockSize[d];
-				blockOffset[d] = position[d] % blockSize[d];
+				final var p = position[d] - image.min(d);
+				blockPos[d] = p / blockSize[d];
+				blockOffset[d] = p % blockSize[d];
 			}
 
 			// Convert N-D block coordinates to 1D block index.
@@ -178,7 +179,8 @@ public class ShuffledView<T> extends AbstractInterval implements
 			// Finally, position the original image according to our shuffled
 			// position.
 			for (var d = 0; d < position.length; d++) {
-				final var pd = shuffledBlockPos[d] * blockSize[d] + blockOffset[d];
+				final var pd = image.min(d) + shuffledBlockPos[d] * blockSize[d] +
+					blockOffset[d];
 				imageRA.setPosition(pd, d);
 			}
 			return imageRA.get();
@@ -223,7 +225,7 @@ public class ShuffledView<T> extends AbstractInterval implements
 		final var numDims = image.numDimensions();
 		final var minsize = new long[numDims * 2];
 		for (var d = 0; d < numDims; d++) {
-			minsize[d] = offset.getLongPosition(d);
+			minsize[d] = image.min(d) + offset.getLongPosition(d);
 			final var shaveSize = image.dimension(d) % blockSize[d];
 			minsize[numDims + d] = image.dimension(d) - shaveSize;
 		}
